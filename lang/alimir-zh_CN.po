@@ -1,0 +1,1049 @@
+#
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: WP ULike\n"
+"POT-Creation-Date: 2015-03-08 22:57+0330\n"
+"PO-Revision-Date: 2015-03-21 20:08+0330\n"
+"Last-Translator: Alimir <info@alimir.ir>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/wp-ulike/"
+"language/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ..\n"
+
+#: ../admin/about.php:74
+msgid "Welcome to WP ULike"
+msgstr "欢迎使用 WP ULike"
+
+#: ../admin/about.php:76
+msgid ""
+"Thank you for choosing WP ULike! This version is our leanest and most "
+"powerful version yet."
+msgstr "感谢您选择 WP ULike！这个版本是我们目前最轻巧、最强大的版本哦！"
+
+#: ../admin/about.php:77 ../admin/stats.php:32
+msgid "Visit our homepage"
+msgstr "访问我们的主页"
+
+#: ../admin/about.php:79
+msgid "Version"
+msgstr "版本"
+
+#: ../admin/about.php:82
+msgid "Getting Started"
+msgstr "开始"
+
+#: ../admin/about.php:83
+msgid "Credits"
+msgstr "积分"
+
+#: ../admin/about.php:84 ../admin/classes/class-settings.php:76
+#: ../admin/stats.php:45
+msgid "Support"
+msgstr "支持"
+
+#: ../admin/about.php:85 ../admin/classes/class-settings.php:76
+#: ../admin/stats.php:46
+msgid "FAQ"
+msgstr "常见问答"
+
+#: ../admin/about.php:86
+msgid "Reviews"
+msgstr "点评"
+
+#: ../admin/about.php:87 ../admin/stats.php:47
+msgid "Contact"
+msgstr "联系"
+
+#: ../admin/about.php:99
+msgid "Novelty Of WP ULike"
+msgstr "WP ULike 的新特色"
+
+#: ../admin/about.php:103
+msgid "New Statistics Design + Screen Option"
+msgstr ""
+
+#: ../admin/about.php:108
+msgid "New Statistics Page"
+msgstr ""
+
+#: ../admin/about.php:116
+msgid "New Class-based programming"
+msgstr ""
+
+#: ../admin/about.php:121 ../admin/classes/class-widget.php:236
+#: ../inc/wp-strings.php:27
+msgid "Most Liked Comments"
+msgstr "最多人喜欢的评论"
+
+#: ../admin/about.php:128 ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/tmp/settings.php:113 ../admin/classes/tmp/settings.php:179
+#: ../admin/classes/tmp/settings.php:295 ../admin/classes/tmp/settings.php:382
+msgid "Logging Method"
+msgstr "记录方法"
+
+#: ../admin/about.php:133
+msgid "New options in logs pages"
+msgstr ""
+
+#: ../admin/about.php:138
+msgid "New setting panel"
+msgstr "新设置面板"
+
+#: ../admin/about.php:145
+msgid "Better coding on plugin files"
+msgstr "更好的文件编码"
+
+#: ../admin/about.php:150
+msgid "Buddypress likes support"
+msgstr "Buddypress 喜欢支持"
+
+#: ../admin/about.php:155
+msgid "Likes logs support"
+msgstr "喜欢日志支持"
+
+#: ../admin/about.php:164
+msgid "WP ULike is created by many love and time. Enjoy it :)"
+msgstr "WP ULike 已经使用了很多关爱和时间来创建，好好享用吧 :)"
+
+#: ../admin/about.php:165
+msgid "Project Leaders"
+msgstr "项目负责人"
+
+#: ../admin/about.php:170
+msgid "Project Lead & Developer"
+msgstr "项目主管和开发"
+
+#: ../admin/about.php:174
+msgid "Translations"
+msgstr "翻译"
+
+#: ../admin/about.php:185
+msgid "Other Plugins"
+msgstr ""
+
+#: ../admin/about.php:204
+msgid "Like this plugin?"
+msgstr "喜欢这个插件？"
+
+#: ../admin/about.php:205
+msgid ""
+"Show your support by Rating 5 Star in <a href=\"http://wordpress.org/plugins/"
+"wp-ulike\"> Plugin Directory reviews</a>"
+msgstr ""
+"支持本插件，请在 <a href=\"http://wordpress.org/plugins/wp-ulike\"> 插件目录"
+"评论 </a> 提交 5 星级投票"
+
+#: ../admin/admin.php:39
+#, php-format
+msgid ""
+" Thank you for choosing <a href=\"%s\" title=\"Wordpress ULike\" target="
+"\"_blank\">WP ULike</a>. Created by <a href=\"%s\" title=\"Wordpress ULike\" "
+"target=\"_blank\">Ali Mirzaei</a>"
+msgstr ""
+
+#: ../admin/admin.php:72
+msgid "WP ULike Settings"
+msgstr "WP ULike 设置"
+
+#: ../admin/admin.php:75
+msgid "WP ULike"
+msgstr "WP ULike"
+
+#: ../admin/admin.php:83
+msgid "Settings saved."
+msgstr "设置已保存"
+
+#: ../admin/admin.php:109 ../admin/logs.php:139 ../admin/stats.php:37
+msgid "Post Likes Logs"
+msgstr "文章喜欢日志"
+
+#: ../admin/admin.php:113 ../admin/logs.php:262 ../admin/stats.php:38
+msgid "Comment Likes Logs"
+msgstr "评论喜欢日志"
+
+#: ../admin/admin.php:117 ../admin/logs.php:391 ../admin/stats.php:39
+msgid "Activity Likes Logs"
+msgstr "活动喜欢日志"
+
+#: ../admin/admin.php:121 ../admin/stats.php:18
+msgid "WP ULike Statistics"
+msgstr ""
+
+#: ../admin/admin.php:125 ../admin/stats.php:31
+msgid "About WP ULike"
+msgstr "关于 WP ULike"
+
+#: ../admin/classes/class-settings.php:17
+msgid "Custom Settings"
+msgstr "自定义设置"
+
+#: ../admin/classes/class-settings.php:28 ../admin/stats.php:280
+msgid "Save Settings"
+msgstr "保存设置"
+
+#: ../admin/classes/class-settings.php:29
+msgid "Reset Settings"
+msgstr "恢复默认设置"
+
+#: ../admin/classes/class-settings.php:44
+msgid "Overview"
+msgstr "概述"
+
+#: ../admin/classes/class-settings.php:46
+msgid ""
+"WP ULike plugin allows to integrate a beautiful Ajax Like Button into your "
+"wordPress website to allow your visitors to like and unlike pages, posts, "
+"comments AND buddypress activities. Its very simple to use and supports many "
+"options."
+msgstr ""
+"WP ULike 插件允许您集成一个漂亮的免刷新的喜欢按钮到你的 WordPress 站点，可以"
+"让访客喜欢或不喜欢页面、文章、评论和 buddypress 评论。它不仅简单易用，而且支"
+"持很多选项设置。"
+
+#: ../admin/classes/class-settings.php:52 ../admin/classes/tmp/settings.php:70
+msgid "Posts"
+msgstr "文章"
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71 ../admin/classes/tmp/settings.php:75
+#: ../admin/classes/tmp/settings.php:156 ../admin/classes/tmp/settings.php:273
+#: ../admin/classes/tmp/settings.php:360
+msgid "Automatic display"
+msgstr "自动显示"
+
+#: ../admin/classes/class-settings.php:54
+msgid ""
+"If you disable this option, you have to put manually this code on wordpress "
+"while loop"
+msgstr "如果你禁用这个选项，你必须手动添加这个代码到WordPress的循环代码中"
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/tmp/settings.php:144 ../admin/classes/tmp/settings.php:210
+#: ../admin/classes/tmp/settings.php:326 ../admin/classes/tmp/settings.php:413
+msgid "Users Like Box Template"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71
+msgid "Default Template:"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/tmp/settings.php:143 ../inc/classes/class-ulike.php:409
+msgid "Users who have LIKED this post:"
+msgstr "喜欢该文章的用户："
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71
+msgid ""
+"If you select <strong>\"Do Not Log\"</strong> method: Any data logs can't "
+"save, There is no limitation in the like/dislike, unlike/undislike capacity "
+"do not work"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71
+msgid ""
+"If you select <strong>\"Logged By Cookie\"</strong> method: Any data logs "
+"can't save, The like/dislike condition will be limited by SetCookie, unlike/"
+"undislike capacity do not work"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71
+msgid ""
+"If you select <strong>\"Logged By IP\"</strong> method: Data logs will save "
+"for all users, the convey of like/dislike condition will check by user IP"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71
+msgid ""
+"If you select <strong>\"Logged By Cookie & IP\"</strong> method: Data logs "
+"will save for all users, the convey of like/dislike condition will check by "
+"user IP & SetCookie"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:54
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:71
+msgid ""
+"If you select <strong>\"Logged By Username\"</strong> method: data logs only "
+"is saved for registered users, the convey of like/dislike condition will "
+"check by username, There is no permission for guest users to unlike/undislike"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:61
+#: ../admin/classes/tmp/settings.php:151
+msgid "Comments"
+msgstr "评论"
+
+#: ../admin/classes/class-settings.php:63
+msgid ""
+"If you disable this option, you have to put manually this code on comments "
+"text"
+msgstr "如果禁用此选项，你必须手动添加这个代码到评论文本"
+
+#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/tmp/settings.php:209
+msgid "Users who have LIKED this comment:"
+msgstr "谁也喜欢这个评论用户："
+
+#: ../admin/classes/class-settings.php:69
+#: ../admin/classes/tmp/settings.php:268
+msgid "BuddyPress"
+msgstr "BuddyPress"
+
+#: ../admin/classes/class-settings.php:71
+msgid ""
+"If you disable this option, you have to put manually this code on buddypres "
+"activities content"
+msgstr "如果你禁用这个选项，你必须手动添加这个代码到buddypres活动内容"
+
+#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/tmp/settings.php:325
+msgid "Users who have liked this activity:"
+msgstr "喜欢该活动的用户："
+
+#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/tmp/settings.php:339
+msgid "Post Activity Text"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/tmp/settings.php:345
+msgid "Comment Activity Text"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:76
+msgid "For more information:"
+msgstr "更多信息："
+
+#: ../admin/classes/class-settings.php:135
+msgid "Default settings have been reset."
+msgstr "已恢复为默认设置。"
+
+#: ../admin/classes/class-settings.php:212
+msgid ""
+"Do you really want to reset all these settings to their default values ?"
+msgstr "您确定要恢复所有设置为默认设置吗？"
+
+#: ../admin/classes/class-settings.php:277
+#: ../admin/classes/class-settings.php:288
+#: ../admin/classes/class-settings.php:312
+msgid "No options defined."
+msgstr "没有定义任何选项。"
+
+#: ../admin/classes/class-settings.php:299
+#, php-format
+msgid "Select %s"
+msgstr "选择 %s"
+
+#: ../admin/classes/class-settings.php:300
+#, php-format
+msgid "Remove %s"
+msgstr "移除 %s"
+
+#: ../admin/classes/class-settings.php:324
+msgid "No action defined."
+msgstr "没有定义任何操作。"
+
+#: ../admin/classes/class-widget.php:11
+msgid "WP Ulike Widget"
+msgstr "WP Ulike 小工具"
+
+#: ../admin/classes/class-widget.php:12
+msgid ""
+"An advanced widget that gives you all most liked records with different types"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:74
+msgid "you haven't liked any post yet!"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:103
+msgid "on"
+msgstr "on"
+
+#: ../admin/classes/class-widget.php:173 ../admin/classes/tmp/settings.php:19
+msgid "Like"
+msgstr "喜欢"
+
+#: ../admin/classes/class-widget.php:224
+msgid "Most Liked"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:228
+msgid "Title:"
+msgstr "标题："
+
+#: ../admin/classes/class-widget.php:233
+msgid "Type:"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:235 ../inc/wp-strings.php:26
+msgid "Most Liked Posts"
+msgstr "最多人喜欢的文章"
+
+#: ../admin/classes/class-widget.php:237
+msgid "Most Liked Activities"
+msgstr "最多人喜欢的活动"
+
+#: ../admin/classes/class-widget.php:238 ../inc/wp-strings.php:28
+msgid "Most Liked Users"
+msgstr "最多人喜欢的用户"
+
+#: ../admin/classes/class-widget.php:239
+msgid "Last Posts Liked By User"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:244
+msgid "Number of items to show:"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:249
+msgid "User avatar size:"
+msgstr "用户头像大小："
+
+#: ../admin/classes/class-widget.php:255
+msgid "Activate Like Counter"
+msgstr "启用喜欢计数"
+
+#: ../admin/classes/tmp/settings.php:7
+msgid "General"
+msgstr "常规"
+
+#: ../admin/classes/tmp/settings.php:11
+msgid "Button Type"
+msgstr "按钮样式"
+
+#: ../admin/classes/tmp/settings.php:14
+msgid "Icon"
+msgstr "图标"
+
+#: ../admin/classes/tmp/settings.php:15
+msgid "Text"
+msgstr "文本"
+
+#: ../admin/classes/tmp/settings.php:20
+msgid "Button Text"
+msgstr "按钮文本"
+
+#: ../admin/classes/tmp/settings.php:24
+msgid "Button Icon"
+msgstr "按钮图标"
+
+#: ../admin/classes/tmp/settings.php:25 ../admin/classes/tmp/settings.php:259
+msgid "Best size: 16x16"
+msgstr "最适合的大小： 16x16"
+
+#: ../admin/classes/tmp/settings.php:28
+msgid "Unlike"
+msgstr "不喜欢"
+
+#: ../admin/classes/tmp/settings.php:29
+msgid "Text After Like"
+msgstr "[喜欢]后的文字"
+
+#: ../admin/classes/tmp/settings.php:34
+msgid "Return To The Initial"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:35 ../admin/classes/tmp/settings.php:63
+#: ../admin/classes/tmp/settings.php:76 ../admin/classes/tmp/settings.php:107
+#: ../admin/classes/tmp/settings.php:126 ../admin/classes/tmp/settings.php:157
+#: ../admin/classes/tmp/settings.php:173 ../admin/classes/tmp/settings.php:192
+#: ../admin/classes/tmp/settings.php:224 ../admin/classes/tmp/settings.php:274
+#: ../admin/classes/tmp/settings.php:289 ../admin/classes/tmp/settings.php:308
+#: ../admin/classes/tmp/settings.php:333 ../admin/classes/tmp/settings.php:361
+#: ../admin/classes/tmp/settings.php:376 ../admin/classes/tmp/settings.php:395
+msgid "Activate"
+msgstr "激活"
+
+#: ../admin/classes/tmp/settings.php:36
+msgid ""
+"Return to the initial Like button after Unlike. (Not Showing text after "
+"unlike)"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:39
+msgid "Like Me Again!"
+msgstr "再喜欢一次！"
+
+#: ../admin/classes/tmp/settings.php:40
+msgid "Text After Unlike"
+msgstr "[不喜欢]后的文字"
+
+#: ../admin/classes/tmp/settings.php:43
+msgid "You have not permission to unlike"
+msgstr "您没有权限选择不喜欢"
+
+#: ../admin/classes/tmp/settings.php:44
+msgid "Permission Text"
+msgstr "权限文本"
+
+#: ../admin/classes/tmp/settings.php:48
+msgid "Users Login Type"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:51
+msgid "Alert Box"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:52
+msgid "Like Button"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:56
+msgid "You Should Login To Submit Your Like"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:57
+msgid "Users Login Text"
+msgstr "用户登录文本"
+
+#: ../admin/classes/tmp/settings.php:62
+msgid "Format Number"
+msgstr "格式化数字"
+
+#: ../admin/classes/tmp/settings.php:64
+msgid "Convert numbers of Likes with string (kilobyte) format."
+msgstr "使用字符串（千字节）格式化喜欢数目"
+
+#: ../admin/classes/tmp/settings.php:80 ../admin/classes/tmp/settings.php:161
+#: ../admin/classes/tmp/settings.php:278 ../admin/classes/tmp/settings.php:365
+msgid "Auto Display Position"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:83 ../admin/classes/tmp/settings.php:164
+#: ../admin/classes/tmp/settings.php:368
+msgid "Top of Content"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:84 ../admin/classes/tmp/settings.php:165
+msgid "Bottom of Content"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:85 ../admin/classes/tmp/settings.php:166
+#: ../admin/classes/tmp/settings.php:369
+msgid "Top and Bottom"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:90
+msgid "Auto Display Filter"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:92
+msgid "Home"
+msgstr "首页"
+
+#: ../admin/classes/tmp/settings.php:93
+msgid "Single Posts"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:94
+msgid "Pages"
+msgstr "页面"
+
+#: ../admin/classes/tmp/settings.php:95
+msgid "Archives"
+msgstr "归档"
+
+#: ../admin/classes/tmp/settings.php:96
+msgid "Categories"
+msgstr "分类"
+
+#: ../admin/classes/tmp/settings.php:97
+msgid "Search Results"
+msgstr "搜索结果"
+
+#: ../admin/classes/tmp/settings.php:98
+msgid "Tags"
+msgstr "标签"
+
+#: ../admin/classes/tmp/settings.php:99
+msgid "Author Page"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:101
+msgid "You can filter theses pages on auto display option."
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:106 ../admin/classes/tmp/settings.php:172
+#: ../admin/classes/tmp/settings.php:288 ../admin/classes/tmp/settings.php:375
+msgid "Only registered Users"
+msgstr "只有已注册的用户"
+
+#: ../admin/classes/tmp/settings.php:108
+msgid "<strong>Only</strong> registered users have permission to like posts."
+msgstr "<strong>只有</strong> 已注册的用户才有权限喜欢文章。"
+
+#: ../admin/classes/tmp/settings.php:115 ../admin/classes/tmp/settings.php:181
+#: ../admin/classes/tmp/settings.php:297 ../admin/classes/tmp/settings.php:384
+msgid "Do Not Log"
+msgstr "不记录"
+
+#: ../admin/classes/tmp/settings.php:116 ../admin/classes/tmp/settings.php:182
+#: ../admin/classes/tmp/settings.php:298 ../admin/classes/tmp/settings.php:385
+msgid "Logged By Cookie"
+msgstr "通过 Cookie 记录"
+
+#: ../admin/classes/tmp/settings.php:117 ../admin/classes/tmp/settings.php:183
+#: ../admin/classes/tmp/settings.php:299 ../admin/classes/tmp/settings.php:386
+msgid "Logged By IP"
+msgstr "通过 IP 记录"
+
+#: ../admin/classes/tmp/settings.php:118 ../admin/classes/tmp/settings.php:184
+#: ../admin/classes/tmp/settings.php:300 ../admin/classes/tmp/settings.php:387
+msgid "Logged By Cookie & IP"
+msgstr "通过 Cookie 和 IP 记录"
+
+#: ../admin/classes/tmp/settings.php:119 ../admin/classes/tmp/settings.php:185
+#: ../admin/classes/tmp/settings.php:301 ../admin/classes/tmp/settings.php:388
+msgid "Logged By Username"
+msgstr "通过用户名记录"
+
+#: ../admin/classes/tmp/settings.php:125 ../admin/classes/tmp/settings.php:191
+#: ../admin/classes/tmp/settings.php:307 ../admin/classes/tmp/settings.php:394
+msgid "Show Liked Users Box"
+msgstr "显示已喜欢的用户盒子"
+
+#: ../admin/classes/tmp/settings.php:127 ../admin/classes/tmp/settings.php:193
+#: ../admin/classes/tmp/settings.php:309 ../admin/classes/tmp/settings.php:396
+msgid ""
+"Active this option to show liked users avatars in the bottom of button like."
+msgstr "启用这个选项，可以在喜欢按钮的底部显示已喜欢的用户头像"
+
+#: ../admin/classes/tmp/settings.php:132 ../admin/classes/tmp/settings.php:198
+#: ../admin/classes/tmp/settings.php:314 ../admin/classes/tmp/settings.php:401
+msgid "Size of Gravatars"
+msgstr "头像大小"
+
+#: ../admin/classes/tmp/settings.php:133 ../admin/classes/tmp/settings.php:199
+#: ../admin/classes/tmp/settings.php:315 ../admin/classes/tmp/settings.php:402
+msgid "Size of Gravatars to return (max is 512)"
+msgstr "头像大小（最大为 512）"
+
+#: ../admin/classes/tmp/settings.php:138 ../admin/classes/tmp/settings.php:204
+#: ../admin/classes/tmp/settings.php:320 ../admin/classes/tmp/settings.php:407
+msgid "Number Of The Users"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:139 ../admin/classes/tmp/settings.php:205
+#: ../admin/classes/tmp/settings.php:321 ../admin/classes/tmp/settings.php:408
+msgid "The number of users to show in the users liked box"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:145 ../admin/classes/tmp/settings.php:211
+#: ../admin/classes/tmp/settings.php:327 ../admin/classes/tmp/settings.php:340
+#: ../admin/classes/tmp/settings.php:346 ../admin/classes/tmp/settings.php:414
+msgid "Allowed Variables:"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:174
+msgid ""
+"<strong>Only</strong> registered users have permission to like comments."
+msgstr "<strong>只有</strong> 已注册的用户才有权限喜欢评论。"
+
+#: ../admin/classes/tmp/settings.php:218
+msgid "Customize"
+msgstr "定制"
+
+#: ../admin/classes/tmp/settings.php:223
+msgid "Custom Style"
+msgstr "自定义样式"
+
+#: ../admin/classes/tmp/settings.php:228
+msgid "Active this option to see the custom style settings."
+msgstr "启用这个选项可以看到自定义样式设置。"
+
+#: ../admin/classes/tmp/settings.php:232
+msgid "Button style"
+msgstr "按钮样式"
+
+#: ../admin/classes/tmp/settings.php:233 ../admin/classes/tmp/settings.php:246
+msgid "Background"
+msgstr "背景"
+
+#: ../admin/classes/tmp/settings.php:237 ../admin/classes/tmp/settings.php:250
+msgid "Border Color"
+msgstr "背景颜色"
+
+#: ../admin/classes/tmp/settings.php:241 ../admin/classes/tmp/settings.php:254
+msgid "Text Color"
+msgstr "文本颜色"
+
+#: ../admin/classes/tmp/settings.php:245
+msgid "Counter Style"
+msgstr "计数样式"
+
+#: ../admin/classes/tmp/settings.php:258
+msgid "Loading Animation"
+msgstr "加载动画"
+
+#: ../admin/classes/tmp/settings.php:281
+msgid "Activity Content"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:282
+msgid "Activity Meta"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:290 ../admin/classes/tmp/settings.php:377
+msgid ""
+"<strong>Only</strong> registered users have permission to like activities."
+msgstr "<strong>只有</strong> 已注册的用户才有权限喜欢活动。"
+
+#: ../admin/classes/tmp/settings.php:332
+msgid "BuddyPress Activity"
+msgstr "BuddyPress 活动"
+
+#: ../admin/classes/tmp/settings.php:334
+msgid "insert new likes in buddyPress activity page"
+msgstr "插入喜欢按钮到buddyPress活动页面"
+
+#: ../admin/classes/tmp/settings.php:355
+msgid "bbPress"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:412
+msgid "Users who have liked this topic:"
+msgstr ""
+
+#: ../admin/logs.php:17 ../admin/logs.php:142 ../admin/logs.php:214
+#: ../admin/logs.php:265 ../admin/logs.php:341 ../admin/logs.php:394
+#: ../admin/logs.php:466
+msgid "Logs"
+msgstr "日志"
+
+#: ../admin/logs.php:80
+msgid "Are you sure to remove this item?!"
+msgstr ""
+
+#: ../admin/logs.php:138 ../admin/logs.php:261 ../admin/logs.php:390
+msgid "WP ULike Logs"
+msgstr "WP ULike 日志"
+
+#: ../admin/logs.php:149 ../admin/logs.php:272 ../admin/logs.php:401
+msgid "ID"
+msgstr "ID"
+
+#: ../admin/logs.php:150 ../admin/logs.php:273 ../admin/logs.php:402
+msgid "Username"
+msgstr "用户名"
+
+#: ../admin/logs.php:151 ../admin/logs.php:274 ../admin/logs.php:403
+msgid "Status"
+msgstr "状态"
+
+#: ../admin/logs.php:152
+msgid "Post ID"
+msgstr "文章ID"
+
+#: ../admin/logs.php:153
+msgid "Post Title"
+msgstr "文章标题"
+
+#: ../admin/logs.php:154 ../admin/logs.php:278 ../admin/logs.php:406
+msgid "Date / Time"
+msgstr "日期/时间"
+
+#: ../admin/logs.php:155 ../admin/logs.php:279 ../admin/logs.php:407
+msgid "IP"
+msgstr "IP"
+
+#: ../admin/logs.php:156 ../admin/logs.php:280 ../admin/logs.php:408
+msgid "Actions"
+msgstr "操作"
+
+#: ../admin/logs.php:174 ../admin/logs.php:298 ../admin/logs.php:426
+msgid "Guest User"
+msgstr ""
+
+#: ../admin/logs.php:221 ../admin/logs.php:349 ../admin/logs.php:474
+msgid ""
+"<strong>ERROR:</strong> No Record Found. (This problem is created because "
+"you don't have any data on this table)"
+msgstr ""
+"<strong>错误：</strong> 没有找到相关记录 (发生这个问题，是由于这个数据表中没"
+"有任何数据)"
+
+#: ../admin/logs.php:275
+msgid "Comment ID"
+msgstr "评论ID"
+
+#: ../admin/logs.php:276
+msgid "Comment Author"
+msgstr "评论作者"
+
+#: ../admin/logs.php:277
+msgid "Comment Text"
+msgstr ""
+
+#: ../admin/logs.php:404
+msgid "Activity ID"
+msgstr "活动ID"
+
+#: ../admin/logs.php:405
+msgid "Permalink"
+msgstr "固定链接"
+
+#: ../admin/logs.php:442
+#, php-format
+msgid "<a href=\"%1$s\">Activity Permalink</a>"
+msgstr ""
+
+#: ../admin/stats.php:25
+msgid "Welcome to WP ULike Statistics!"
+msgstr ""
+
+#: ../admin/stats.php:26
+msgid "We have provided some useful statistics tools in this page:"
+msgstr ""
+
+#: ../admin/stats.php:30
+msgid "Get Started"
+msgstr "开始使用"
+
+#: ../admin/stats.php:32
+msgid "or"
+msgstr "或"
+
+#: ../admin/stats.php:35
+msgid "Other Tools"
+msgstr ""
+
+#: ../admin/stats.php:43
+msgid "Documentation"
+msgstr "文档"
+
+#: ../admin/stats.php:72
+msgid "Posts Likes Summary"
+msgstr ""
+
+#: ../admin/stats.php:79
+msgid "Comments Likes Summary"
+msgstr ""
+
+#: ../admin/stats.php:86
+msgid "Activities Likes Summary"
+msgstr ""
+
+#: ../admin/stats.php:97 ../admin/stats.php:272
+msgid "Summary"
+msgstr "摘要"
+
+#: ../admin/stats.php:106
+msgid "Total Likes"
+msgstr ""
+
+#: ../admin/stats.php:121
+msgid "Today"
+msgstr "今天"
+
+#: ../admin/stats.php:126
+msgid "Yesterday"
+msgstr "昨天"
+
+#: ../admin/stats.php:131
+msgid "Week"
+msgstr ""
+
+#: ../admin/stats.php:136
+msgid "Month"
+msgstr "月份"
+
+#: ../admin/stats.php:141
+msgid "Total"
+msgstr "总计"
+
+#: ../admin/stats.php:155 ../admin/stats.php:276
+msgid "Likes Percent"
+msgstr ""
+
+#: ../admin/stats.php:155 ../admin/stats.php:180 ../admin/stats.php:186
+#: ../admin/stats.php:192
+#, php-format
+msgid "In The Last %s Days"
+msgstr ""
+
+#: ../admin/stats.php:179 ../admin/stats.php:185 ../admin/stats.php:191
+msgid "View Logs"
+msgstr ""
+
+#: ../admin/stats.php:180 ../admin/stats.php:273
+msgid "Posts Likes Stats"
+msgstr ""
+
+#: ../admin/stats.php:186 ../admin/stats.php:274
+msgid "Comments Likes Stats"
+msgstr ""
+
+#: ../admin/stats.php:192 ../admin/stats.php:275
+msgid "Activities Likes Stats"
+msgstr ""
+
+#: ../admin/stats.php:269
+msgid "Show on screen"
+msgstr "显示下列项目"
+
+#: ../admin/stats.php:271
+msgid "Welcome"
+msgstr "欢迎"
+
+#: ../admin/stats.php:279
+msgid "Days"
+msgstr ""
+
+#: ../inc/wp-functions.php:172
+msgid "WP ULike Activity"
+msgstr "WP ULike 活动"
+
+#: ../inc/wp-strings.php:3
+msgid "Allow To Like"
+msgstr "允许喜欢"
+
+#: ../inc/wp-strings.php:4
+msgid "Guests Only"
+msgstr "仅仅游客"
+
+#: ../inc/wp-strings.php:5
+msgid "Registered Users Only"
+msgstr "仅仅已注册用户"
+
+#: ../inc/wp-strings.php:6
+msgid "Registered Users And Guests"
+msgstr "已注册用户和游客"
+
+#: ../inc/wp-strings.php:7
+msgid "Who Is Allowed To Like?"
+msgstr "谁将被允许喜欢？"
+
+#: ../inc/wp-strings.php:8
+msgid "Filter Options:"
+msgstr "过滤选项："
+
+#: ../inc/wp-strings.php:9
+msgid "Sort Options:"
+msgstr "排序选项："
+
+#: ../inc/wp-strings.php:10
+msgid "Themes"
+msgstr "主题"
+
+#: ../inc/wp-strings.php:11
+msgid "Dislike"
+msgstr "不喜欢"
+
+#: ../inc/wp-strings.php:12
+msgid "Dislike Support"
+msgstr "[不喜欢]支持"
+
+#: ../inc/wp-strings.php:13
+msgid "Text After Dislike"
+msgstr "不喜欢后的文字"
+
+#: ../inc/wp-strings.php:14
+msgid "Show Counter"
+msgstr ""
+
+#: ../inc/wp-strings.php:15
+msgid "Show tooltips"
+msgstr ""
+
+#: ../inc/wp-strings.php:16
+msgid "Alignment"
+msgstr "对齐方式"
+
+#: ../inc/wp-strings.php:17
+msgid "Left"
+msgstr "左"
+
+#: ../inc/wp-strings.php:18
+msgid "Center"
+msgstr "中"
+
+#: ../inc/wp-strings.php:19
+msgid "Right"
+msgstr "右"
+
+#: ../inc/wp-strings.php:20
+msgid "Cookie Life time"
+msgstr ""
+
+#: ../inc/wp-strings.php:21
+msgid "BuddyPress Notifications"
+msgstr ""
+
+#: ../inc/wp-strings.php:22
+msgid "Liker Attempts"
+msgstr ""
+
+#: ../inc/wp-strings.php:23
+msgid "Liked Users Box Style"
+msgstr ""
+
+#: ../inc/wp-strings.php:24
+msgid "Tooltip"
+msgstr "提示工具"
+
+#: ../inc/wp-strings.php:25
+msgid "Default"
+msgstr "默认"
+
+#: ../inc/wp-strings.php:29
+msgid "Total Users Liked"
+msgstr ""
+
+#: ../inc/wp-strings.php:30
+msgid "Total Posts Liked"
+msgstr ""
+
+#: ../inc/wp-strings.php:31
+msgid "Total Comments Liked"
+msgstr ""
+
+#: ../inc/wp-strings.php:32
+msgid "Upvote"
+msgstr ""
+
+#: ../inc/wp-strings.php:33
+msgid "Downvote"
+msgstr ""
+
+#: ../inc/wp-ulike-bbpress.php:79 ../inc/wp-ulike-posts.php:79
+msgid "You need to login in order to like this post: "
+msgstr "你需要登录后才能喜欢这篇文章："
+
+#: ../inc/wp-ulike-bbpress.php:79 ../inc/wp-ulike-buddypress.php:74
+#: ../inc/wp-ulike-comments.php:69 ../inc/wp-ulike-posts.php:79
+msgid "click here"
+msgstr "点击这里"
+
+#: ../inc/wp-ulike-buddypress.php:74
+msgid "You need to login in order to like this activity: "
+msgstr "你需要登录后才能喜欢这个活动："
+
+#: ../inc/wp-ulike-comments.php:69
+msgid "You need to login in order to like this comment: "
+msgstr "你需要为了喜欢这个评论登陆"

@@ -1,0 +1,64 @@
+form.wrap h3,
+form.wrap p.submit {
+	padding-top: 20px;
+	border-top: 1px solid #ddd;
+}
+form.wrap td .settings-error {
+	overflow: hidden;
+}
+form.wrap td .settings-error p {
+	margin: 0.5em 0;
+}
+form.wrap .wm-settings-tabs h3 {
+	float: left;
+	padding: 10px 15px;
+	margin: 1em 0 0;
+	font-weight: 500;
+	border: 1px solid #ddd;
+	border-right: none;
+	border-bottom: none;
+	cursor: pointer;
+}
+form.wrap .wm-settings-tabs h3:hover {
+	background-color: #f9f9f9;
+}
+form.wrap .wm-settings-tabs h3.active {
+	background-color: #fff;
+}
+form.wrap .wm-settings-tabs h3:last-child {
+	border-right: 1px solid #ddd;
+}
+.wm-settings-tab {
+	padding: 1em 0.1em;
+	border-top: 1px solid #ddd;
+	clear: both;
+}
+.settings-error.info,
+.settings-error.warning {
+	margin: 5px 0 15px;
+	border-left: 4px solid #2ea2cc;
+	padding: 1px 12px;
+	background-color: #fff;
+	-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+.settings-error.warning {
+	border-color: #ffba00;
+}
+.settings-error.info p,
+.settings-error.warning p {
+	margin: 0.5em 0;
+	padding: 2px;
+}
+tr.hide-label th {
+	display: none;
+}
+tr.hide-label td {
+	padding-left: 0;
+}
+.dashicons-bbpress:before {
+	content: "\f449";
+}
+.dashicons-buddypress:before {
+	content: "\f452";
+}
