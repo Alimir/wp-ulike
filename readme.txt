@@ -2,25 +2,26 @@
 Contributors: alimir
 Donate link: http://alimir.ir
 Author: Ali Mirzaei
-Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, statistics, stats likes, bbpress, bbPress like, WP-Translations
+Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums
 Requires at least: 3.5
 Tested up to: 4.1.1
 Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WP ULike enables you to add Ajax Like button into your WordPress and allowing your visitors to like and unlike posts,comments AND BP activities.
+WP ULike enables you to add Ajax Like button into your WP and allowing your visitors to Like/unLike the posts, comments, activities & topics.
 
 == Description ==
 
-WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options and full Statistics tools. And all of these are free :)
+WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments, buddypress activities & bbPress Topics. Its very simple to use and supports many options + full Statistics tools. And all of these are free :)
 
-= Home & Demo =
-
-Visit <a target="_blank" href="http://preview.alimir.ir/developer/wp-ulike/">Home Page</a> & <a target="_blank" href="http://preview.alimir.ir/wp-ulike-plugin">Demo Page</a>
+= More Information =
+*   Visit Our <a target="_blank" href="http://preview.alimir.ir/developer/wp-ulike/">Home Page</a>.
+*   See Online <a target="_blank" href="http://preview.alimir.ir/wp-ulike-plugin">Demo</a>.
+*   Fork Us In <a target="_blank" href="https://github.com/Alimir/wp-ulike">Github</a>.
+*   WP Ulike <a target="_blank" href="http://alimir.github.io/wp-ulike/">Github</a> Page.
 
 = Features =
-
 *   Clean Design.
 *   Support full Statistics tools.
 *   Ajax feature to update the data without reloading.
@@ -45,16 +46,6 @@ Visit <a target="_blank" href="http://preview.alimir.ir/developer/wp-ulike/">Hom
 *   Powerful configuration panel.
 *   Support RTL & language file.
 *   And so on...
-
-= How To Use? =
-Just install the plugin and activate the "automatic display" in plugin configuration panel. (WP ULike has three auto options for the post, comments and buddypress activities.)
-
-Also you can use this function and shortcode for the post likes:
-
-*   Function:
-`<?php if(function_exists('wp_ulike')) wp_ulike('get'); ?>`
-*   Shortcode:
-`[wp_ulike]`
 
 = Translations =
 WP ULike has been translated into the following languages:
@@ -97,11 +88,11 @@ WP ULike has been translated into the following languages:
 
 Would you like to help translate the plugin into more languages? [Join our WP-Translations Community](https://www.transifex.com/projects/p/wp-ulike/).
 
-= Plugin Author =
-Website: <a href="http://about.alimir.ir" target="_blank">Ali Mirzaei</a><br />
-Novelty: <a href="http://preview.alimir.ir/all-abilities-that-coming-with-wp-ulike-2-0/" target="_blank">All Abilities That Coming With WP ULike 2.0</a><br />
-Follow on <a href="https://www.facebook.com/alimir.ir" target="_blank">Facebook</a><br />
-You can catch me on twitter as @alimirir
+= About Author =
+*   My personal website: <a href="http://about.alimir.ir" target="_blank">Ali Mirzaei</a>
+*   Follow me on <a href="https://www.facebook.com/alimir1993" target="_blank">Facebook</a>
+*   Catch me on twitter as @alimirir
+*   And Follow My Instagram Activities With <a href="https://instagram.com/alimir71/" target="_blank">Alimir71</a>
 
 == Installation ==
 
@@ -112,12 +103,15 @@ You can catch me on twitter as @alimirir
 
 == Screenshots ==
 
-Screenshots are available in <a href="http://preview.alimir.ir/wp-ulike-plugin" target="_blank">Here</a> & <a target="_blank" href="http://preview.alimir.ir/developer/wp-ulike/">Here</a>
+1. Screenshot 1
+2. Screenshot 2
+3. Screenshot 3
+4. Screenshot 4
 
 == Frequently Asked Questions ==
 
 = How To Use this plugin? =
-Just install the plugin and activate the "automatic display" in plugin configuration panel. (WP ULike has three auto options for the post, comments and buddypress activities.)
+Just install the plugin and activate the "automatic display" in plugin configuration panel. (WP ULike has three auto options for the post, comments, buddypress activities & bbPress Topics.)
 
 Also you can use this function and shortcode for the post likes:
 
@@ -174,7 +168,8 @@ endif;
 
 = 2.2 =
 * Added: bbPress Likes Support + All Options & Statistics Tools.
-* Added: New jquery process. (in wp-ulike-scripts.js)
+* Added: New JQuery process with optimized methods. (wp-ulike-scripts.js)
+* Added: Minified Script/CSS files.
 * Added: Delete ULike Logs/Data Buttons In The Settings Page.
 * Added: Portuguese (Brazil) Language File.
 * Added: Turkish (Turkey) Language File.
@@ -204,7 +199,7 @@ endif;
 * Added: Basque Language File.
 * Added: Bosnian (Bosnia and Herzegovina) Language File.
 * Fixes: Small Bugs.
-* Updated: French Language File. (Thanks WP-Translations Community)
+* Updated: French Language File. (Thanks WP-Translations)
 * Updated: Persian language file. (Thanks Me :))
 
 = 2.1 =
@@ -308,6 +303,9 @@ endif;
 * The initial version
 
 == Upgrade Notice ==
+
+= 2.2 =
+In this version, we made some changes in the plugin scripts (wp-ulike-scripts.js)! So, please clear your browser cache after the plugin update. Also, After the plugin update If the new database table won't fixed, try deactivating the plugin and reactivating that one at a time.
 
 = 2.1 =
 In this version, we made some changes in the plugin scripts! So, please clear your browser cache after the plugin update.

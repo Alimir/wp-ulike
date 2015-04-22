@@ -46,6 +46,7 @@
 				<li><a  target="_blank" href="https://wordpress.org/support/plugin/wp-ulike" class="welcome-icon welcome-learn-more">'.__('Support','alimir').'</a></li>
 				<li><a  target="_blank" href="https://wordpress.org/plugins/wp-ulike/faq/" class="welcome-icon welcome-learn-more">'.__('FAQ','alimir').'</a></li>
 				<li><a  target="_blank" href="http://preview.alimir.ir/contact/" class="welcome-icon welcome-learn-more">'.__('Contact','alimir').'</a></li>
+				<li><a  target="_blank" href="https://github.com/Alimir/wp-ulike" class="welcome-icon welcome-learn-more">'.__('GitHub Repository','alimir').'</a></li>
 			</ul>
 		</div>
 	';

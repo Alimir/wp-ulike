@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
-"POT-Creation-Date: 2015-03-21 22:37+0330\n"
-"PO-Revision-Date: 2015-03-21 22:44+0330\n"
+"POT-Creation-Date: 2015-03-22 02:43+0330\n"
+"PO-Revision-Date: 2015-03-22 17:35+0330\n"
 "Last-Translator: Alimir <info@alimir.ir>\n"
 "Language-Team: alimir.ir <info@alimir.ir>\n"
 "Language: fa_IR\n"
@@ -222,7 +222,7 @@ msgstr "درباره وردپرس یولایک"
 msgid "Custom Settings"
 msgstr "تنظیمات سفارشی"
 
-#: ../admin/classes/class-settings.php:28 ../admin/stats.php:296
+#: ../admin/classes/class-settings.php:28 ../admin/stats.php:297
 msgid "Save Settings"
 msgstr "ذخیره تغییرات"
 
@@ -960,90 +960,94 @@ msgstr "سایر ابزارها"
 msgid "Documentation"
 msgstr "مستندات"
 
-#: ../admin/stats.php:73
+#: ../admin/stats.php:49
+msgid "GitHub Repository"
+msgstr "مخزن گیت هاب"
+
+#: ../admin/stats.php:74
 msgid "Posts Likes Summary"
 msgstr "خلاصه لایک در نوشتارها"
 
-#: ../admin/stats.php:80
+#: ../admin/stats.php:81
 msgid "Comments Likes Summary"
 msgstr "خلاصه لایک در دیدگاه ها"
 
-#: ../admin/stats.php:87
+#: ../admin/stats.php:88
 msgid "Activities Likes Summary"
 msgstr "خلاصه لایک در فعالیت ها"
 
-#: ../admin/stats.php:94
+#: ../admin/stats.php:95
 msgid "Topics Likes Summary"
 msgstr "خلاصه لایک در تاپیک ها"
 
-#: ../admin/stats.php:105 ../admin/stats.php:287
+#: ../admin/stats.php:106 ../admin/stats.php:288
 msgid "Summary"
 msgstr "خلاصه"
 
-#: ../admin/stats.php:114
+#: ../admin/stats.php:115
 msgid "Total Likes"
 msgstr "مجموع کل لایک ها"
 
-#: ../admin/stats.php:129
+#: ../admin/stats.php:130
 msgid "Today"
 msgstr "امروز"
 
-#: ../admin/stats.php:134
+#: ../admin/stats.php:135
 msgid "Yesterday"
 msgstr "دیروز"
 
-#: ../admin/stats.php:139
+#: ../admin/stats.php:140
 msgid "Week"
 msgstr "هفته"
 
-#: ../admin/stats.php:144
+#: ../admin/stats.php:145
 msgid "Month"
 msgstr "ماه"
 
-#: ../admin/stats.php:149
+#: ../admin/stats.php:150
 msgid "Total"
 msgstr "کل"
 
-#: ../admin/stats.php:163 ../admin/stats.php:292
+#: ../admin/stats.php:164 ../admin/stats.php:293
 msgid "Likes Percent"
 msgstr "درصد تخصیص لایک ها"
 
-#: ../admin/stats.php:163 ../admin/stats.php:188 ../admin/stats.php:194
-#: ../admin/stats.php:200 ../admin/stats.php:206
+#: ../admin/stats.php:164 ../admin/stats.php:189 ../admin/stats.php:195
+#: ../admin/stats.php:201 ../admin/stats.php:207
 #, php-format
 msgid "In The Last %s Days"
 msgstr "در %s روز گذشته"
 
-#: ../admin/stats.php:187 ../admin/stats.php:193 ../admin/stats.php:199
-#: ../admin/stats.php:205
+#: ../admin/stats.php:188 ../admin/stats.php:194 ../admin/stats.php:200
+#: ../admin/stats.php:206
 msgid "View Logs"
 msgstr "مشاهده وقایع"
 
-#: ../admin/stats.php:188 ../admin/stats.php:288
+#: ../admin/stats.php:189 ../admin/stats.php:289
 msgid "Posts Likes Stats"
 msgstr "نمودار لایک در نوشتارها"
 
-#: ../admin/stats.php:194 ../admin/stats.php:289
+#: ../admin/stats.php:195 ../admin/stats.php:290
 msgid "Comments Likes Stats"
 msgstr "نمودار لایک در دیدگاه ها"
 
-#: ../admin/stats.php:200 ../admin/stats.php:290
+#: ../admin/stats.php:201 ../admin/stats.php:291
 msgid "Activities Likes Stats"
 msgstr "نمودار لایک در فعالیت ها"
 
-#: ../admin/stats.php:206 ../admin/stats.php:291
+#: ../admin/stats.php:207 ../admin/stats.php:292
 msgid "Topics Likes Stats"
 msgstr "نمودار لایک در تاپیک ها"
 
-#: ../admin/stats.php:284
+#: ../admin/stats.php:285
 msgid "Show on screen"
 msgstr "تنظیمات صفحه"
 
-#: ../admin/stats.php:286
+#: ../admin/stats.php:287
 msgid "Welcome"
 msgstr "خوش آمدید"
 
-#: ../admin/stats.php:295
+#: ../admin/stats.php:296
 msgid "Days"
 msgstr "روزها"
 
