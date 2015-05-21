@@ -10,7 +10,10 @@ More information can be found at [WP ULike](http://preview.alimir.ir/developer/w
 
 ## Features
 *   Clean Design.
-*   Support full Statistics tools.
+*   Full myCRED Points Support. (NEW)
+*   Full Statistics tools.
+*   Supporting UltimateMember & BuddyPress Profiles. (NEW)
+*  	Likers World Map & Top Likers Widget. (NEW)
 *   Ajax feature to update the data without reloading.
 *   Visitors do not have to register or log in to use the Like Button.
 *   Compatible with WP version 3.5 & above.
@@ -25,11 +28,7 @@ More information can be found at [WP ULike](http://preview.alimir.ir/developer/w
 *   Simple user like box with avatar support.
 *   Custom Like-UnLike Texts fields.
 *   Simple custom style with color picker settings.
-*   Widget to show 'Most Liked Posts'.
-*   Widget to show 'Most Liked Comments'.
-*   Widget to show 'Most Liked Activities'.
-*   Widget to show 'Most Liked Users' with avatar.
-*   Widget to show 'Last Posts Liked By Current User'.
+*   Advanced Widgets With Custom Tools. (Most Liked Posts,Comments,Users,...)
 *   Powerful configuration panel.
 *   Support RTL & language file.
 *   And so on...

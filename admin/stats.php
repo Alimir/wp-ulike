@@ -1,13 +1,18 @@
 <?php
-	//include wp_ulike_stats class
-	include( plugin_dir_path(__FILE__) . 'classes/class-charts.php');
+	//include wp_ulike_stats class & geoIPloc functions
+	if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false){
+		//include class charts
+		include( plugin_dir_path(__FILE__) . 'classes/class-charts.php');
+		//include PHP GeoIPLocation Library
+		include( plugin_dir_path(__FILE__) . 'classes/tmp/geoiploc.php');
+	} else return;
 	
 	/**
 	 * Create WP ULike statistics with wp_ulike_stats class
 	 *
 	 * @author       	Alimir	 	
 	 * @since           2.0	
-	 * @updated         2.1	
+	 * @updated         2.3	
 	 * @return			String
 	 */	
 	function wp_ulike_statistics(){
@@ -67,6 +72,7 @@
 		
 		$SummaryArr = array(
 			"posts" => array(
+				"id" 		=> "posts_likes_stats",
 				"type" 		=> "ulike",
 				"table" 	=> "postmeta",
 				"key" 		=> "_liked",
@@ -74,6 +80,7 @@
 				"title" 	=> __('Posts Likes Summary','alimir')
 			),
 			"comments" => array(
+				"id" 		=> "comments_likes_stats",
 				"type" 		=> "ulike_comments",
 				"table" 	=> "commentmeta",
 				"key" 		=> "_commentliked",
@@ -81,6 +88,7 @@
 				"title" 	=> __('Comments Likes Summary','alimir')
 			),
 			"activities" 	=> array(
+				"id" 		=> "activities_likes_stats",
 				"type" 		=> "ulike_activities",
 				"table" 	=> "bp_activity_meta",
 				"key" 		=> "_activityliked",
@@ -88,6 +96,7 @@
 				"title" 	=> __('Activities Likes Summary','alimir')
 			),
 			"topics" 		=> array(
+				"id" 		=> "topics_likes_stats",
 				"type" 		=> "ulike_forums",
 				"table" 	=> "postmeta",
 				"key" 		=> "_topicliked",
@@ -97,8 +106,7 @@
 		);	
 		
 		foreach ($SummaryArr as $SummaryTotal) {
-			$get_likes_num	=	$wp_ulike_stats->get_all_data_date($SummaryTotal["table"],$SummaryTotal["key"]);
-			$total_likes	+=	$get_likes_num;
+			$total_likes	+=	$wp_ulike_stats->get_all_data_date($SummaryTotal["table"],$SummaryTotal["key"]);
 		}
 		echo'
 			<div style="display: block;" class="postbox">
@@ -107,23 +115,23 @@
 			<div class="inside">';		
 		
 		foreach ($SummaryArr as $SummaryVal) {
+		
 			echo'<table class="widefat table-stats" id="summary-stats" width="100%"><tbody>';
 			
-			if($SummaryVal["type"] == 'ulike'){
-			echo'
-			<tr>
-				<th><i class="dashicons dashicons-pressthis"></i> '.__('Total Likes','alimir').':</th>
-				<th colspan="2" id="th-colspan"><span>'.$total_likes.'</span></th>
-			</tr>';
-			}
+			if($get_option[$SummaryVal['id']] == 1){
+			
+			if($SummaryVal["id"] == 'posts_likes_stats'){
+				echo'
+				<tr>
+					<th><i class="dashicons dashicons-pressthis"></i> '.__('Total Likes','alimir').':</th>
+					<th colspan="2" id="th-colspan"><span>'.$total_likes.'</span></th>
+				</tr>';
+			}	
 			
 			echo'
-			<tr>
-				<th colspan="3"><br><hr></th>
-			</tr>
 
 			<tr>
-				<th colspan="3" style="text-align: center;">'.$SummaryVal["title"].'</th>
+				<th colspan="3" style="text-align: center; font-weight:bold;"><br><hr>'.$SummaryVal["title"].'<hr><br></th>
 			</tr>			
 			
 			<tr>
@@ -151,25 +159,56 @@
 				<th class="th-center"><span>'. $wp_ulike_stats->get_all_data_date($SummaryVal["table"],$SummaryVal["key"]).'</span></th>
 			</tr>';
 			
+			}
+			
 			echo '</tbody></table>';
+			
 		}
 		
 		echo '</div></div>';
 	}
 	
-	if($get_option['piechart_stats'] == 1){
+	if($get_option['likers_map'] == 1){
 		echo '
-		<div id="piechart_stats" class="postbox">
+		<div id="world_map" class="postbox">
 			<div class="handlediv" title="Click to toggle"><br></div>
-			<h3 class="hndle"><span><i class="dashicons dashicons-chart-pie"></i> '.__('Likes Percent','alimir') . ' - ' . sprintf(__('In The Last %s Days','alimir'), $get_option['days_number']).' </span></h3>
+			<h3 class="hndle"><span><i class="dashicons dashicons-location-alt"></i> '.__('Likers World Map','alimir') . '</span></h3>
 			<div class="inside">
 				<div class="main">
 				<div>
-					<canvas id="piechart"></canvas>
+					<div id="vmap" style="width: 100%; min-height: 250px;"></div>
 				</div>
 				</div>
 			</div>
-		</div>';		
+		</div>';
+	}
+	
+	if($get_option['top_likers'] == 1){
+		$get_top_likers		= $wp_ulike_stats->get_top_likers();
+		$top_users_counter  = 1;
+		echo'
+		<div class="postbox">
+		<div class="handlediv" title="Click to toggle"><br></div>
+		<h3 class="hndle"><span><i class="dashicons dashicons-awards"></i> '.__('Top Likers','alimir') . '</span></h3>
+		<div class="inside">';
+		
+		foreach ($get_top_likers as $top_liker) {
+		$get_top_user_id 	= stripslashes($top_liker->user_id);
+		$get_top_user_info 	= get_userdata($get_top_user_id);
+		$final_user_name	= __('Guest User','alimir');
+		if($get_top_user_info != '')
+		$final_user_name	= $get_top_user_info->display_name;
+		echo'
+			<div class="log-latest">
+			<div class="log-item">
+			<div class="log-page-title">'. $top_users_counter++ . ' - ' .$final_user_name.'</div>
+			<div class="right-div badge"><strong>'.$top_liker->SumUser.'</strong> '.__('Like','alimir') . '</div>
+			<div class="left-div"><i class="dashicons dashicons-location"></i> <em dir="ltr">'.$top_liker->ip.'</em> | '.getCountryFromIP($top_liker->ip, "NamE").'</div>
+			</div>
+			</div>
+			';
+		}
+		echo '</div></div>';
 	}
 	
 	echo '</div></div></div>';
@@ -231,6 +270,21 @@
 			}
 		}
 		
+		if($get_option['piechart_stats'] == 1){
+			echo '
+			<div id="piechart_stats" class="postbox">
+				<div class="handlediv" title="Click to toggle"><br></div>
+				<h3 class="hndle"><span><i class="dashicons dashicons-chart-pie"></i> '.__('Likes Percent','alimir') . ' - ' . sprintf(__('In The Last %s Days','alimir'), $get_option['days_number']).' </span></h3>
+				<div class="inside">
+					<div class="main">
+					<div>
+						<canvas id="piechart"></canvas>
+					</div>
+					</div>
+				</div>
+			</div>';		
+		}
+		
 		echo '</div></div></div>';
 	}
 	
@@ -257,6 +311,7 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           2.1	
+	 * @updated         2.3	
 	 * @return			Void
 	 */	
 	function wp_ulike_statistics_display_option(){
@@ -268,12 +323,13 @@
 		  'summary_like_stats'		=> 1,
 		  'posts_likes_stats'		=> 1,
 		  'comments_likes_stats'	=> 1,
-		  'activities_likes_stats'	=> 1,
-		  'topics_likes_stats'		=> 1,
+		  'activities_likes_stats'	=> 0,
+		  'topics_likes_stats'		=> 0,
 		  'most_liked_posts'		=> 1,
 		  'most_liked_comments'		=> 1,
-		  'most_liked_users'		=> 1,
 		  'piechart_stats'			=> 1,
+		  'likers_map'				=> 1,
+		  'top_likers'				=> 1,
 		  'days_number'				=> 20
 		);
 		update_option('wp_ulike_statistics_screen',$options);	
@@ -291,6 +347,8 @@
 				<label><input class="hide-postbox-tog" name="wp_ulike_activities_stats" type="checkbox" value="1" <?php checked( '1', $get_option['activities_likes_stats'] ); ?>><?php echo _e('Activities Likes Stats','alimir'); ?></label>
 				<label><input class="hide-postbox-tog" name="wp_ulike_topics_stats" type="checkbox" value="1" <?php checked( '1', $get_option['topics_likes_stats'] ); ?>><?php echo _e('Topics Likes Stats','alimir'); ?></label>
 				<label><input class="hide-postbox-tog" name="wp_ulike_piechart_stats" type="checkbox" value="1" <?php checked( '1', $get_option['piechart_stats'] ); ?>><?php echo _e('Likes Percent','alimir'); ?></label>
+				<label><input class="hide-postbox-tog" name="wp_ulike_likers_map" type="checkbox" value="1" <?php checked( '1', $get_option['likers_map'] ); ?>><?php echo _e('Likers World Map','alimir'); ?></label>
+				<label><input class="hide-postbox-tog" name="wp_ulike_top_likers" type="checkbox" value="1" <?php checked( '1', $get_option['top_likers'] ); ?>><?php echo _e('Top Likers','alimir'); ?></label>
 				<br class="clear">
 				<input step="1" min="5" max="60" class="screen-per-page" name="wp_ulike_days_number" maxlength="3" value="<?php echo $get_option['days_number']; ?>" type="number">
 				<label><?php echo _e('Days','alimir'); ?></label>
@@ -307,7 +365,8 @@
 	 * Save screen options with "update_option" mehtod
 	 *
 	 * @author       	Alimir	 	
-	 * @since           2.1	
+	 * @since           2.1
+	 * @updated         2.3		 
 	 * @return			Void
 	 */	
 	add_action('admin_init', 'wp_ulike_statistics_save_option');
@@ -322,8 +381,9 @@
 			  'topics_likes_stats'		=> isset($_POST['wp_ulike_topics_stats']) 		? $_POST['wp_ulike_topics_stats'] 		: 0,
 			  'most_liked_posts'		=> isset($_POST['wp_ulike_most_liked_posts']) 	? $_POST['wp_ulike_most_liked_posts'] 	: 0,
 			  'most_liked_comments'		=> isset($_POST['wp_ulike_most_liked_cmt'])		? $_POST['wp_ulike_most_liked_cmt'] 	: 0,
-			  'most_liked_users'		=> isset($_POST['wp_ulike_most_liked_users']) 	? $_POST['wp_ulike_most_liked_users'] 	: 0,
 			  'piechart_stats'			=> isset($_POST['wp_ulike_piechart_stats']) 	? $_POST['wp_ulike_piechart_stats'] 	: 0,
+			  'likers_map'				=> isset($_POST['wp_ulike_likers_map']) 		? $_POST['wp_ulike_likers_map'] 		: 0,
+			  'top_likers'				=> isset($_POST['wp_ulike_top_likers']) 		? $_POST['wp_ulike_top_likers'] 		: 0,
 			  'days_number'				=> isset($_POST['wp_ulike_days_number']) 		? $_POST['wp_ulike_days_number'] 		: 20
 			);
 			update_option( 'wp_ulike_statistics_screen', $options );

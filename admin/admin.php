@@ -142,7 +142,7 @@
 		} else {
 			wp_send_json_success( __( 'Success! All ULike Logs/Data Have Been Deleted', 'alimir' ) );
 		}		 
-	}	
+	}
 	
 	/**
 	 * Add menu to admin

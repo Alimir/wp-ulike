@@ -163,8 +163,8 @@ jQuery(document).ready(function ($) {
 	
 	$('.wp_ulike_custom_style_activation').click(evaluate).each(evaluate);
 	
-	$('#wp-ulike-settings_wp_ulike_general tr:nth-child(2)').addClass('button-text-show');
-	$('#wp-ulike-settings_wp_ulike_general tr:nth-child(3)').addClass('button-icon-show');
+	$('#wp-ulike-settings_wp_ulike_general tr:nth-child(2), #wp-ulike-settings_wp_ulike_general tr:nth-child(3)').addClass('button-text-show');
+	$('#wp-ulike-settings_wp_ulike_general tr:nth-child(4), #wp-ulike-settings_wp_ulike_general tr:nth-child(5)').addClass('button-icon-show');
 
 	if (!$(".wp_ulike_check_text").is(":checked")) {
 		$('.button-text-show').hide();

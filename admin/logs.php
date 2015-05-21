@@ -191,9 +191,7 @@
 				</td>
 				<td>
 				<?php
-				$get_the_date = $get_ulike_log->date_time;
-				$get_the_date_timestamp = strtotime($get_the_date);
-				echo date_i18n(get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $get_the_date_timestamp );
+				echo wp_ulike_date_i18n($get_ulike_log->date_time);
 				?> 
 				</td>
 				<td>
@@ -318,9 +316,7 @@
 				</td>
 				<td>	
 				<?php
-				$get_the_date = $get_ulike_log->date_time;
-				$get_the_date_timestamp = strtotime($get_the_date);
-				echo date_i18n(get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $get_the_date_timestamp );			
+				echo wp_ulike_date_i18n($get_ulike_log->date_time);			
 				?> 
 				</td>
 				<td>
@@ -443,9 +439,7 @@
 					</td>
 					<td>
 					<?php
-					$get_the_date = $get_ulike_log->date_time;
-					$get_the_date_timestamp = strtotime($get_the_date);
-					echo date_i18n(get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $get_the_date_timestamp );			
+					echo wp_ulike_date_i18n($get_ulike_log->date_time);			
 					?>
 					</td>
 					<td>
@@ -567,9 +561,7 @@
 				</td>
 				<td>
 				<?php
-				$get_the_date = $get_ulike_log->date_time;
-				$get_the_date_timestamp = strtotime($get_the_date);
-				echo date_i18n(get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $get_the_date_timestamp );
+				echo wp_ulike_date_i18n($get_ulike_log->date_time);
 				?> 
 				</td>
 				<td>

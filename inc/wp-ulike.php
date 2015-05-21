@@ -5,7 +5,7 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           1.0
-	 * @updated         2.0
+	 * @updated         2.3
 	 * @return			String
 	 */
 	function wp_ulike($arg) {
@@ -16,6 +16,7 @@
 		$get_post_meta 	= get_post_meta($post_ID, '_liked', true);
 		$get_like 		= $get_post_meta != '' ? $get_post_meta : 0;
 		$return_userID 	= $wp_ulike_class->get_reutrn_id();
+		$theme_class 	= wp_ulike_get_setting( 'wp_ulike_posts', 'theme');		
 		
 		if(
 			(wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') != '1')
@@ -40,7 +41,7 @@
 		//call wp_get_ulike function from class-ulike calss
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
-		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike">';
+		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'">';
 		$wp_ulike  		.= '<div class="counter">'.$counter.'</div>';
 		$wp_ulike  		.= '</div>';
 		$wp_ulike  		.= $wp_ulike_class->get_liked_users($post_ID,'ulike','post_id','wp_ulike_posts');
@@ -59,10 +60,10 @@
 			if($login_type == "button"){
 				$template = $wp_ulike_class->get_template($post_ID,'likeThis',$get_like,1,0);
 				if (wp_ulike_get_setting( 'wp_ulike_general', 'button_type') == 'image') {
-					return '<div id="wp-ulike-'.$post_ID.'" class="wpulike"><div class="counter">' . $template['login_img'] . '</div></div>';		
+					return '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'"><div class="counter">' . $template['login_img'] . '</div></div>';		
 				}
 				else {
-					return '<div id="wp-ulike-'.$post_ID.'" class="wpulike"><div class="counter">' . $template['login_text'] . '</div></div>';	
+					return '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'"><div class="counter">' . $template['login_text'] . '</div></div>';	
 				}
 			}
 			else
@@ -76,7 +77,7 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           1.6
-	 * @updated         2.0
+	 * @updated         2.3
 	 * @return			String
 	 */
 	function wp_ulike_comments($arg) {
@@ -86,7 +87,8 @@
 		$CommentID 		= get_comment_ID();
 		$comment_meta 	= get_comment_meta($CommentID, '_commentliked', true);
 		$get_like 		= $comment_meta != '' ? $comment_meta : 0;
-		$return_userID 	= $wp_ulike_class->get_reutrn_id();	
+		$return_userID 	= $wp_ulike_class->get_reutrn_id();
+		$theme_class 	= wp_ulike_get_setting( 'wp_ulike_comments', 'theme');
 		
 		if(
 		(wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users') != '1')
@@ -111,7 +113,7 @@
 		//call wp_get_ulike function from class-ulike calss
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);		
 		
-		$wp_ulike 		= '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike">';
+		$wp_ulike 		= '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike '.$theme_class.'">';
 		$wp_ulike 		.= '<div class="counter">'.$counter.'</div>';
 		$wp_ulike 		.= '</div>';
 		$wp_ulike  		.= $wp_ulike_class->get_liked_users($CommentID,'ulike_comments','comment_id','wp_ulike_comments');
@@ -130,10 +132,10 @@
 			if($login_type == "button"){
 				$template = $wp_ulike_class->get_template($CommentID,'likeThisComment',$get_like,1,0);
 				if (wp_ulike_get_setting( 'wp_ulike_general', 'button_type') == 'image') {
-					return '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike"><div class="counter">' . $template['login_img'] . '</div></div>';		
+					return '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike '.$theme_class.'"><div class="counter">' . $template['login_img'] . '</div></div>';		
 				}
 				else {
-					return '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike"><div class="counter">' . $template['login_text'] . '</div></div>';	
+					return '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike '.$theme_class.'"><div class="counter">' . $template['login_text'] . '</div></div>';	
 				}
 			}
 			else
@@ -147,7 +149,7 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           1.7
-	 * @updated         2.0
+	 * @updated         2.3
 	 * @return			String
 	 */
 	function wp_ulike_buddypress($arg) {
@@ -157,7 +159,13 @@
 		$activityID 	= bp_get_activity_id();
 		$bp_get_meta	= bp_activity_get_meta($activityID, '_activityliked');
 		$get_like 		= $bp_get_meta != '' ? $bp_get_meta : 0;
-		$return_userID 	= $wp_ulike_class->get_reutrn_id();	
+		$return_userID 	= $wp_ulike_class->get_reutrn_id();
+		$theme_class 	= wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme');
+		
+		if (wp_ulike_get_setting( 'wp_ulike_buddypress', 'auto_display_position' ) == 'meta')
+		$html_tag = 'span';
+		else
+		$html_tag = 'div';		
 	
 		if(
 		(wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') != '1')
@@ -182,12 +190,7 @@
 		//call wp_get_ulike function from class-ulike calss
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
-		if (wp_ulike_get_setting( 'wp_ulike_buddypress', 'auto_display_position' ) == 'meta')
-		$html_tag = 'span';
-		else
-		$html_tag = 'div';
-		
-		$wp_ulike 		= '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike">';
+		$wp_ulike 		= '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike '.$theme_class.'">';
 		$wp_ulike 		.= '<'.$html_tag.' class="counter">'.$counter.'</'.$html_tag.'>';
 		$wp_ulike 		.= '</'.$html_tag.'>';
 		$wp_ulike  		.= $wp_ulike_class->get_liked_users($activityID,'ulike_activities','activity_id','wp_ulike_buddypress');
@@ -206,10 +209,10 @@
 			if($login_type == "button"){
 				$template = $wp_ulike_class->get_template($activityID,'likeThisActivity',$get_like,1,0);
 				if (wp_ulike_get_setting( 'wp_ulike_general', 'button_type') == 'image') {
-					return '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike"><'.$html_tag.' class="counter">' . $template['login_img'] . '</'.$html_tag.'></'.$html_tag.'>';		
+					return '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike '.$theme_class.'"><'.$html_tag.' class="counter">' . $template['login_img'] . '</'.$html_tag.'></'.$html_tag.'>';		
 				}
 				else {
-					return '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike"><'.$html_tag.' class="counter">' . $template['login_text'] . '</'.$html_tag.'></'.$html_tag.'>';	
+					return '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike '.$theme_class.'"><'.$html_tag.' class="counter">' . $template['login_text'] . '</'.$html_tag.'></'.$html_tag.'>';	
 				}
 			}
 			else		
@@ -223,6 +226,7 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           2.2
+	 * @updated         2.3
 	 * @return			String
 	 */
 	function wp_ulike_bbpress($arg) {
@@ -233,6 +237,7 @@
 		$get_post_meta 	= get_post_meta($post_ID, '_topicliked', true);
 		$get_like 		= $get_post_meta != '' ? $get_post_meta : 0;
 		$return_userID 	= $wp_ulike_class->get_reutrn_id();
+		$theme_class 	= wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme');		
 		
 		if(
 			(wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users') != '1')
@@ -257,7 +262,7 @@
 		//call wp_get_ulike function from class-ulike calss
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
-		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike">';
+		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'">';
 		$wp_ulike  		.= '<div class="counter">'.$counter.'</div>';
 		$wp_ulike  		.= '</div>';
 		$wp_ulike  		.= $wp_ulike_class->get_liked_users($post_ID,'ulike_forums','topic_id','wp_ulike_bbpress');
@@ -276,10 +281,10 @@
 			if($login_type == "button"){
 				$template = $wp_ulike_class->get_template($post_ID,'likeThisTopic',$get_like,1,0);
 				if (wp_ulike_get_setting( 'wp_ulike_general', 'button_type') == 'image') {
-					return '<div id="wp-ulike-'.$post_ID.'" class="wpulike"><div class="counter">' . $template['login_img'] . '</div></div>';		
+					return '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'"><div class="counter">' . $template['login_img'] . '</div></div>';		
 				}
 				else {
-					return '<div id="wp-ulike-'.$post_ID.'" class="wpulike"><div class="counter">' . $template['login_text'] . '</div></div>';	
+					return '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'"><div class="counter">' . $template['login_text'] . '</div></div>';	
 				}
 			}
 			else

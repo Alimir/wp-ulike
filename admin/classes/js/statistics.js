@@ -2,6 +2,7 @@
 	var comments_dataset_var = JSON.parse(wp_ulike_statistics.comments_dataset);
 	var activities_dataset_var = JSON.parse(wp_ulike_statistics.activities_dataset);
 	var topics_dataset_var = JSON.parse(wp_ulike_statistics.topics_dataset);
+	var world_map_data = JSON.parse(wp_ulike_statistics.data_map);
 	var activities_dataset_sum = topics_dataset_sum = comments_dataset_sum = posts_dataset_sum = 0;
 	
 	//posts dataset
@@ -186,6 +187,24 @@
 	
 
 	jQuery(document).on('ready', function($){
+	
+		jQuery('#vmap').vectorMap({
+		    map: 'world_en',
+		    backgroundColor: '#333333',
+		    color: '#ffffff',
+		    hoverOpacity: 0.7,
+		    selectedColor: '#666666',
+		    enableZoom: true,
+		    showTooltip: true,
+		    values: world_map_data,
+		    scaleColors: ['#C8EEFF', '#006491'],
+		    normalizeFunction: 'polynomial',
+			onLabelShow: function (event, label, code) {
+				if(world_map_data[code] > 0)
+					label.append(': '+world_map_data[code]+' Users'); 
+			}			
+		});	
+	
 		postboxes.save_state = function(){
 			return;
 		};

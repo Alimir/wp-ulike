@@ -3,15 +3,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
-"POT-Creation-Date: 2015-03-08 22:57+0330\n"
-"PO-Revision-Date: 2015-03-21 20:10+0330\n"
+"POT-Creation-Date: 2015-05-21 11:28+0330\n"
+"PO-Revision-Date: 2015-05-21 11:28+0330\n"
 "Last-Translator: Alimir <info@alimir.ir>\n"
 "Language-Team: Greek (http://www.transifex.com/projects/p/wp-ulike/language/"
 "el/)\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
 "X-Poedit-Basepath: .\n"
@@ -20,124 +20,171 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../admin/about.php:74
+#: ../admin/about.php:107
 msgid "Welcome to WP ULike"
 msgstr ""
 
-#: ../admin/about.php:76
+#: ../admin/about.php:109
 msgid ""
 "Thank you for choosing WP ULike! This version is our leanest and most "
 "powerful version yet."
 msgstr ""
 
-#: ../admin/about.php:77 ../admin/stats.php:32
+#: ../admin/about.php:110 ../admin/stats.php:37
 msgid "Visit our homepage"
 msgstr ""
 
-#: ../admin/about.php:79
+#: ../admin/about.php:112
 msgid "Version"
 msgstr "Έκδοση"
 
-#: ../admin/about.php:82
+#: ../admin/about.php:115
 msgid "Getting Started"
 msgstr "Ξεκινώντας"
 
-#: ../admin/about.php:83
+#: ../admin/about.php:116
 msgid "Credits"
 msgstr "Ευχαριστίες"
 
-#: ../admin/about.php:84 ../admin/classes/class-settings.php:76
-#: ../admin/stats.php:45
+#: ../admin/about.php:117 ../admin/classes/class-settings.php:111
+#: ../admin/stats.php:51
 msgid "Support"
 msgstr "Υποστήριξη"
 
-#: ../admin/about.php:85 ../admin/classes/class-settings.php:76
-#: ../admin/stats.php:46
+#: ../admin/about.php:118 ../admin/classes/class-settings.php:111
+#: ../admin/stats.php:52
 msgid "FAQ"
 msgstr "Κοινές απορίες"
 
-#: ../admin/about.php:86
+#: ../admin/about.php:119
 msgid "Reviews"
 msgstr "Κριτικές"
 
-#: ../admin/about.php:87 ../admin/stats.php:47
-msgid "Contact"
-msgstr "Επικοινωνία"
-
-#: ../admin/about.php:99
-msgid "Novelty Of WP ULike"
+#: ../admin/about.php:125
+msgid "Introducing WP ULike"
 msgstr ""
 
-#: ../admin/about.php:103
-msgid "New Statistics Design + Screen Option"
+#: ../admin/about.php:132 ../admin/admin.php:179 ../admin/stats.php:36
+msgid "About WP ULike"
 msgstr ""
 
-#: ../admin/about.php:108
-msgid "New Statistics Page"
-msgstr ""
-
-#: ../admin/about.php:116
-msgid "New Class-based programming"
-msgstr ""
-
-#: ../admin/about.php:121 ../admin/classes/class-widget.php:236
-#: ../inc/wp-strings.php:27
-msgid "Most Liked Comments"
-msgstr ""
-
-#: ../admin/about.php:128 ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71
-#: ../admin/classes/tmp/settings.php:113 ../admin/classes/tmp/settings.php:179
-#: ../admin/classes/tmp/settings.php:295 ../admin/classes/tmp/settings.php:382
-msgid "Logging Method"
-msgstr ""
-
-#: ../admin/about.php:133
-msgid "New options in logs pages"
-msgstr ""
-
-#: ../admin/about.php:138
-msgid "New setting panel"
-msgstr ""
-
-#: ../admin/about.php:145
-msgid "Better coding on plugin files"
-msgstr ""
-
-#: ../admin/about.php:150
-msgid "Buddypress likes support"
+#: ../admin/about.php:133 ../admin/classes/class-settings.php:46
+msgid ""
+"WP ULike plugin allows to integrate a beautiful Ajax Like Button into your "
+"wordPress website to allow your visitors to like and unlike pages, posts, "
+"comments AND buddypress activities. Its very simple to use and supports many "
+"options."
 msgstr ""
 
 #: ../admin/about.php:155
-msgid "Likes logs support"
+msgid "WP Ulike Extension"
 msgstr ""
 
-#: ../admin/about.php:164
-msgid "WP ULike is created by many love and time. Enjoy it :)"
+#: ../admin/about.php:156
+msgid ""
+"Right now, WP ULike support wordpress posts / comments, BuddyPress "
+"activities & bbPress Topics."
 msgstr ""
 
 #: ../admin/about.php:165
+msgid "Added More Than 20 Language Files"
+msgstr ""
+
+#: ../admin/about.php:166
+msgid ""
+"WP ULike is already translated into +20 languages, with more always in "
+"progress."
+msgstr ""
+
+#: ../admin/about.php:175
+msgid "User Profile Links"
+msgstr ""
+
+#: ../admin/about.php:176
+msgid ""
+"Since WP ULike 2.3, We have synced the likers profile with BuddyPress & "
+"UltimateMember plugins."
+msgstr ""
+
+#: ../admin/about.php:185
+msgid "New Themes And Styles"
+msgstr ""
+
+#: ../admin/about.php:186
+msgid ""
+"Since WP ULike 2.3, We have made some new styles and themes and you can "
+"customize them by your taste."
+msgstr ""
+
+#: ../admin/about.php:195
+msgid "myCRED Points Support"
+msgstr ""
+
+#: ../admin/about.php:196
+msgid ""
+"myCRED is an adaptive points management system that lets you award / charge "
+"your users for interacting with your WordPress."
+msgstr ""
+
+#: ../admin/about.php:205 ../admin/stats.php:175 ../admin/stats.php:350
+msgid "Likers World Map"
+msgstr ""
+
+#: ../admin/about.php:206
+msgid ""
+"Since WP ULike 2.3, We have made a new ability that you can track your "
+"likers by their country in the world map & Top Liker widget."
+msgstr ""
+
+#: ../admin/about.php:216 ../admin/admin.php:175 ../admin/stats.php:23
+msgid "WP ULike Statistics"
+msgstr ""
+
+#: ../admin/about.php:216 ../admin/classes/tmp/settings.php:103
+msgid "Home"
+msgstr "Αρχική"
+
+#: ../admin/about.php:216
+msgid "OR"
+msgstr ""
+
+#: ../admin/about.php:216 ../admin/admin.php:72
+msgid "WP ULike Settings"
+msgstr ""
+
+#: ../admin/about.php:222
+msgid "WP ULike is created by many love and time. Enjoy it :)"
+msgstr ""
+
+#: ../admin/about.php:223
 msgid "Project Leaders"
 msgstr "Κεντρική ομάδα"
 
-#: ../admin/about.php:170
+#: ../admin/about.php:228
 msgid "Project Lead & Developer"
 msgstr ""
 
-#: ../admin/about.php:174
+#: ../admin/about.php:232
 msgid "Translations"
 msgstr "Μεταφράσεις"
 
-#: ../admin/about.php:185
+#: ../admin/about.php:271
+msgid "Would you like to help translate the plugin into more languages?"
+msgstr ""
+
+#: ../admin/about.php:271
+msgid "Join our WP-Translations Community"
+msgstr ""
+
+#: ../admin/about.php:273
 msgid "Other Plugins"
 msgstr ""
 
-#: ../admin/about.php:204
+#: ../admin/about.php:292
 msgid "Like this plugin?"
 msgstr "Σας αρέσει αυτό το πρόσθετο;"
 
-#: ../admin/about.php:205
+#: ../admin/about.php:293
 msgid ""
 "Show your support by Rating 5 Star in <a href=\"http://wordpress.org/plugins/"
 "wp-ulike\"> Plugin Directory reviews</a>"
@@ -151,11 +198,7 @@ msgid ""
 "target=\"_blank\">Ali Mirzaei</a>"
 msgstr ""
 
-#: ../admin/admin.php:72
-msgid "WP ULike Settings"
-msgstr ""
-
-#: ../admin/admin.php:75
+#: ../admin/admin.php:75 ../inc/wp-functions.php:302
 msgid "WP ULike"
 msgstr ""
 
@@ -163,31 +206,35 @@ msgstr ""
 msgid "Settings saved."
 msgstr "Οι ρυθμίσεις αποθηκεύτηκαν."
 
-#: ../admin/admin.php:109 ../admin/logs.php:139 ../admin/stats.php:37
+#: ../admin/admin.php:113 ../admin/admin.php:141
+msgid "Failed! An Error Has Occurred While Deleting All ULike Logs/Data"
+msgstr ""
+
+#: ../admin/admin.php:115 ../admin/admin.php:143
+msgid "Success! All ULike Logs/Data Have Been Deleted"
+msgstr ""
+
+#: ../admin/admin.php:159 ../admin/logs.php:139 ../admin/stats.php:42
 msgid "Post Likes Logs"
 msgstr ""
 
-#: ../admin/admin.php:113 ../admin/logs.php:262 ../admin/stats.php:38
+#: ../admin/admin.php:163 ../admin/logs.php:260 ../admin/stats.php:43
 msgid "Comment Likes Logs"
 msgstr ""
 
-#: ../admin/admin.php:117 ../admin/logs.php:391 ../admin/stats.php:39
+#: ../admin/admin.php:167 ../admin/logs.php:387 ../admin/stats.php:44
 msgid "Activity Likes Logs"
 msgstr ""
 
-#: ../admin/admin.php:121 ../admin/stats.php:18
-msgid "WP ULike Statistics"
-msgstr ""
-
-#: ../admin/admin.php:125 ../admin/stats.php:31
-msgid "About WP ULike"
+#: ../admin/admin.php:171 ../admin/logs.php:509 ../admin/stats.php:45
+msgid "Topics Likes Logs"
 msgstr ""
 
 #: ../admin/classes/class-settings.php:17
 msgid "Custom Settings"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:28 ../admin/stats.php:280
+#: ../admin/classes/class-settings.php:28 ../admin/stats.php:355
 msgid "Save Settings"
 msgstr ""
 
@@ -196,83 +243,36 @@ msgid "Reset Settings"
 msgstr ""
 
 #: ../admin/classes/class-settings.php:44
-msgid "Overview"
-msgstr "Επισκόπηση"
-
-#: ../admin/classes/class-settings.php:46
-msgid ""
-"WP ULike plugin allows to integrate a beautiful Ajax Like Button into your "
-"wordPress website to allow your visitors to like and unlike pages, posts, "
-"comments AND buddypress activities. Its very simple to use and supports many "
-"options."
+msgid "Similar Settings"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:52 ../admin/classes/tmp/settings.php:70
-msgid "Posts"
-msgstr "Posts"
-
-#: ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71 ../admin/classes/tmp/settings.php:75
-#: ../admin/classes/tmp/settings.php:156 ../admin/classes/tmp/settings.php:273
-#: ../admin/classes/tmp/settings.php:360
-msgid "Automatic display"
+#: ../admin/classes/class-settings.php:48
+#: ../admin/classes/tmp/settings.php:124 ../admin/classes/tmp/settings.php:215
+#: ../admin/classes/tmp/settings.php:362 ../admin/classes/tmp/settings.php:474
+msgid "Logging Method"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:54
-msgid ""
-"If you disable this option, you have to put manually this code on wordpress "
-"while loop"
-msgstr ""
-
-#: ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71
-#: ../admin/classes/tmp/settings.php:144 ../admin/classes/tmp/settings.php:210
-#: ../admin/classes/tmp/settings.php:326 ../admin/classes/tmp/settings.php:413
-msgid "Users Like Box Template"
-msgstr ""
-
-#: ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71
-msgid "Default Template:"
-msgstr ""
-
-#: ../admin/classes/class-settings.php:54
-#: ../admin/classes/tmp/settings.php:143 ../inc/classes/class-ulike.php:409
-msgid "Users who have LIKED this post:"
-msgstr ""
-
-#: ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/class-settings.php:50
 msgid ""
 "If you select <strong>\"Do Not Log\"</strong> method: Any data logs can't "
 "save, There is no limitation in the like/dislike, unlike/undislike capacity "
 "do not work"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/class-settings.php:51
 msgid ""
 "If you select <strong>\"Logged By Cookie\"</strong> method: Any data logs "
 "can't save, The like/dislike condition will be limited by SetCookie, unlike/"
 "undislike capacity do not work"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/class-settings.php:52
 msgid ""
 "If you select <strong>\"Logged By IP\"</strong> method: Data logs will save "
 "for all users, the convey of like/dislike condition will check by user IP"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/class-settings.php:53
 msgid ""
 "If you select <strong>\"Logged By Cookie & IP\"</strong> method: Data logs "
 "will save for all users, the convey of like/dislike condition will check by "
@@ -280,86 +280,183 @@ msgid ""
 msgstr ""
 
 #: ../admin/classes/class-settings.php:54
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/class-settings.php:71
 msgid ""
 "If you select <strong>\"Logged By Username\"</strong> method: data logs only "
 "is saved for registered users, the convey of like/dislike condition will "
 "check by username, There is no permission for guest users to unlike/undislike"
 msgstr ""
 
+#: ../admin/classes/class-settings.php:57
+msgid "Template Variables"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:59
+msgid "Start the loop of logs"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:59
+#: ../admin/classes/class-settings.php:60
+msgid "required"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:60
+msgid "End of the while loop"
+msgstr ""
+
 #: ../admin/classes/class-settings.php:61
-#: ../admin/classes/tmp/settings.php:151
+#: ../admin/classes/class-settings.php:65
+#: ../admin/classes/class-settings.php:69
+msgid "Display the liker name"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:62
+msgid "Display the liker avatar (By Gravatar)"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:63
+msgid "Display the BuddyPress user profile url"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:64
+msgid "Display the UltimateMemebr user profile url"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:66
+msgid "Display the permalink"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:67
+#: ../admin/classes/class-settings.php:71
+msgid "Display the likes count number"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:68
+msgid "Display the post title"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:70
+msgid "Display the comment author name"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:79 ../admin/classes/tmp/settings.php:72
+msgid "Posts"
+msgstr "Posts"
+
+#: ../admin/classes/class-settings.php:81
+#: ../admin/classes/class-settings.php:90
+#: ../admin/classes/class-settings.php:98
+#: ../admin/classes/class-settings.php:106
+#: ../admin/classes/tmp/settings.php:86 ../admin/classes/tmp/settings.php:192
+#: ../admin/classes/tmp/settings.php:340 ../admin/classes/tmp/settings.php:452
+msgid "Automatic display"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:81
+msgid ""
+"If you disable this option, you have to put manually this code on wordpress "
+"while loop"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:81
+#: ../admin/classes/class-settings.php:90
+#: ../admin/classes/class-settings.php:98
+#: ../admin/classes/class-settings.php:106
+#: ../admin/classes/tmp/settings.php:155 ../admin/classes/tmp/settings.php:246
+#: ../admin/classes/tmp/settings.php:393 ../admin/classes/tmp/settings.php:505
+msgid "Users Like Box Template"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:81
+#: ../admin/classes/class-settings.php:90
+#: ../admin/classes/class-settings.php:98
+#: ../admin/classes/class-settings.php:106
+msgid "Default Template:"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:81
+#: ../admin/classes/tmp/settings.php:154 ../inc/classes/class-ulike.php:423
+msgid "Users who have LIKED this post:"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:88
+#: ../admin/classes/tmp/settings.php:178
 msgid "Comments"
 msgstr "Σχόλια"
 
-#: ../admin/classes/class-settings.php:63
+#: ../admin/classes/class-settings.php:90
 msgid ""
 "If you disable this option, you have to put manually this code on comments "
 "text"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:63
-#: ../admin/classes/tmp/settings.php:209
+#: ../admin/classes/class-settings.php:90
+#: ../admin/classes/tmp/settings.php:245
 msgid "Users who have LIKED this comment:"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:69
-#: ../admin/classes/tmp/settings.php:268
+#: ../admin/classes/class-settings.php:96
+#: ../admin/classes/class-widget.php:314 ../admin/classes/tmp/settings.php:326
 msgid "BuddyPress"
 msgstr "BuddyPress"
 
-#: ../admin/classes/class-settings.php:71
+#: ../admin/classes/class-settings.php:98
+#: ../admin/classes/class-settings.php:106
 msgid ""
 "If you disable this option, you have to put manually this code on buddypres "
 "activities content"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:71
-#: ../admin/classes/tmp/settings.php:325
+#: ../admin/classes/class-settings.php:98
+#: ../admin/classes/class-settings.php:106
+#: ../admin/classes/tmp/settings.php:392
 msgid "Users who have liked this activity:"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:71
-#: ../admin/classes/tmp/settings.php:339
+#: ../admin/classes/class-settings.php:98
+#: ../admin/classes/tmp/settings.php:406
 msgid "Post Activity Text"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:71
-#: ../admin/classes/tmp/settings.php:345
+#: ../admin/classes/class-settings.php:98
+#: ../admin/classes/tmp/settings.php:412
 msgid "Comment Activity Text"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:76
+#: ../admin/classes/class-settings.php:104
+#: ../admin/classes/tmp/settings.php:438
+msgid "bbPress"
+msgstr ""
+
+#: ../admin/classes/class-settings.php:111
 msgid "For more information:"
 msgstr "Για περισσότερα:"
 
-#: ../admin/classes/class-settings.php:135
+#: ../admin/classes/class-settings.php:170
 msgid "Default settings have been reset."
 msgstr ""
 
-#: ../admin/classes/class-settings.php:212
+#: ../admin/classes/class-settings.php:247
 msgid ""
 "Do you really want to reset all these settings to their default values ?"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:277
-#: ../admin/classes/class-settings.php:288
 #: ../admin/classes/class-settings.php:312
+#: ../admin/classes/class-settings.php:323
+#: ../admin/classes/class-settings.php:347
 msgid "No options defined."
 msgstr ""
 
-#: ../admin/classes/class-settings.php:299
+#: ../admin/classes/class-settings.php:334
 #, php-format
 msgid "Select %s"
 msgstr "Επιλογή %s"
 
-#: ../admin/classes/class-settings.php:300
+#: ../admin/classes/class-settings.php:335
 #, php-format
 msgid "Remove %s"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:324
+#: ../admin/classes/class-settings.php:359
 msgid "No action defined."
 msgstr ""
 
@@ -372,362 +469,411 @@ msgid ""
 "An advanced widget that gives you all most liked records with different types"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:74
+#: ../admin/classes/class-widget.php:79
 msgid "you haven't liked any post yet!"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:103
+#: ../admin/classes/class-widget.php:126
 msgid "on"
 msgstr "ενεργό"
 
-#: ../admin/classes/class-widget.php:173 ../admin/classes/tmp/settings.php:19
+#: ../admin/classes/class-widget.php:202 ../admin/classes/tmp/settings.php:23
+#: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:32
+#: ../admin/stats.php:205
 msgid "Like"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:224
+#: ../admin/classes/class-widget.php:266
 msgid "Most Liked"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:228
+#: ../admin/classes/class-widget.php:270
 msgid "Title:"
 msgstr "Τίτλος:"
 
-#: ../admin/classes/class-widget.php:233
+#: ../admin/classes/class-widget.php:275
 msgid "Type:"
 msgstr "Τύπος:"
 
-#: ../admin/classes/class-widget.php:235 ../inc/wp-strings.php:26
+#: ../admin/classes/class-widget.php:277 ../inc/wp-strings.php:26
 msgid "Most Liked Posts"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:237
+#: ../admin/classes/class-widget.php:278 ../inc/wp-strings.php:27
+msgid "Most Liked Comments"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:279
 msgid "Most Liked Activities"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:238 ../inc/wp-strings.php:28
+#: ../admin/classes/class-widget.php:280 ../inc/wp-strings.php:28
 msgid "Most Liked Users"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:239
+#: ../admin/classes/class-widget.php:281
 msgid "Last Posts Liked By User"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:244
+#: ../admin/classes/class-widget.php:286
+msgid "Style:"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:288
+msgid "Simple"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:289 ../admin/classes/tmp/settings.php:80
+#: ../admin/classes/tmp/settings.php:186 ../admin/classes/tmp/settings.php:334
+#: ../admin/classes/tmp/settings.php:446
+msgid "Heart"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:294
+msgid "Title Trim (Length):"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:300
 msgid "Number of items to show:"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:249
-msgid "User avatar size:"
+#: ../admin/classes/class-widget.php:306
+msgid "Thumbnail/Avatar size:"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:255
+#: ../admin/classes/class-widget.php:312
+msgid "Profile URL:"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:315
+msgid "UltimateMember"
+msgstr ""
+
+#: ../admin/classes/class-widget.php:321
 msgid "Activate Like Counter"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:7
+#: ../admin/classes/class-widget.php:326
+msgid "Activate Thumbnail/Avatar"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:11
 msgid "General"
 msgstr "Γενικά"
 
-#: ../admin/classes/tmp/settings.php:11
+#: ../admin/classes/tmp/settings.php:15
 msgid "Button Type"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:14
+#: ../admin/classes/tmp/settings.php:18
 msgid "Icon"
 msgstr "Εικονίδιο"
 
-#: ../admin/classes/tmp/settings.php:15
+#: ../admin/classes/tmp/settings.php:19
 msgid "Text"
 msgstr "Κείμενο"
 
-#: ../admin/classes/tmp/settings.php:20
+#: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:28
 msgid "Button Text"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:24
-msgid "Button Icon"
-msgstr ""
-
-#: ../admin/classes/tmp/settings.php:25 ../admin/classes/tmp/settings.php:259
-msgid "Best size: 16x16"
-msgstr ""
-
-#: ../admin/classes/tmp/settings.php:28
+#: ../admin/classes/tmp/settings.php:27 ../admin/classes/tmp/settings.php:28
+#: ../admin/classes/tmp/settings.php:37
 msgid "Unlike"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:29
-msgid "Text After Like"
+#: ../admin/classes/tmp/settings.php:32 ../admin/classes/tmp/settings.php:37
+msgid "Button Icon"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:34
-msgid "Return To The Initial"
+#: ../admin/classes/tmp/settings.php:33 ../admin/classes/tmp/settings.php:38
+#: ../admin/classes/tmp/settings.php:310
+msgid "Best size: 16x16"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:35 ../admin/classes/tmp/settings.php:63
-#: ../admin/classes/tmp/settings.php:76 ../admin/classes/tmp/settings.php:107
-#: ../admin/classes/tmp/settings.php:126 ../admin/classes/tmp/settings.php:157
-#: ../admin/classes/tmp/settings.php:173 ../admin/classes/tmp/settings.php:192
-#: ../admin/classes/tmp/settings.php:224 ../admin/classes/tmp/settings.php:274
-#: ../admin/classes/tmp/settings.php:289 ../admin/classes/tmp/settings.php:308
-#: ../admin/classes/tmp/settings.php:333 ../admin/classes/tmp/settings.php:361
-#: ../admin/classes/tmp/settings.php:376 ../admin/classes/tmp/settings.php:395
-msgid "Activate"
-msgstr "Ενεργοποίηση"
-
-#: ../admin/classes/tmp/settings.php:36
-msgid ""
-"Return to the initial Like button after Unlike. (Not Showing text after "
-"unlike)"
-msgstr ""
-
-#: ../admin/classes/tmp/settings.php:39
-msgid "Like Me Again!"
-msgstr ""
-
-#: ../admin/classes/tmp/settings.php:40
-msgid "Text After Unlike"
-msgstr ""
-
-#: ../admin/classes/tmp/settings.php:43
+#: ../admin/classes/tmp/settings.php:41
 msgid "You have not permission to unlike"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:44
+#: ../admin/classes/tmp/settings.php:42
 msgid "Permission Text"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:48
+#: ../admin/classes/tmp/settings.php:46
 msgid "Users Login Type"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:51
+#: ../admin/classes/tmp/settings.php:49
 msgid "Alert Box"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:52
+#: ../admin/classes/tmp/settings.php:50
 msgid "Like Button"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:56
+#: ../admin/classes/tmp/settings.php:54
 msgid "You Should Login To Submit Your Like"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:57
+#: ../admin/classes/tmp/settings.php:55
 msgid "Users Login Text"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:62
+#: ../admin/classes/tmp/settings.php:60
 msgid "Format Number"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:64
+#: ../admin/classes/tmp/settings.php:61 ../admin/classes/tmp/settings.php:87
+#: ../admin/classes/tmp/settings.php:118 ../admin/classes/tmp/settings.php:137
+#: ../admin/classes/tmp/settings.php:193 ../admin/classes/tmp/settings.php:209
+#: ../admin/classes/tmp/settings.php:228 ../admin/classes/tmp/settings.php:275
+#: ../admin/classes/tmp/settings.php:341 ../admin/classes/tmp/settings.php:356
+#: ../admin/classes/tmp/settings.php:375 ../admin/classes/tmp/settings.php:400
+#: ../admin/classes/tmp/settings.php:453 ../admin/classes/tmp/settings.php:468
+#: ../admin/classes/tmp/settings.php:487
+msgid "Activate"
+msgstr "Ενεργοποίηση"
+
+#: ../admin/classes/tmp/settings.php:62
 msgid "Convert numbers of Likes with string (kilobyte) format."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:80 ../admin/classes/tmp/settings.php:161
-#: ../admin/classes/tmp/settings.php:278 ../admin/classes/tmp/settings.php:365
+#: ../admin/classes/tmp/settings.php:77 ../admin/classes/tmp/settings.php:183
+#: ../admin/classes/tmp/settings.php:331 ../admin/classes/tmp/settings.php:443
+#: ../inc/wp-strings.php:10
+msgid "Themes"
+msgstr "Θέματα"
+
+#: ../admin/classes/tmp/settings.php:79 ../admin/classes/tmp/settings.php:185
+#: ../admin/classes/tmp/settings.php:333 ../admin/classes/tmp/settings.php:445
+#: ../inc/wp-strings.php:25
+msgid "Default"
+msgstr "Προεπιλεγμένο"
+
+#: ../admin/classes/tmp/settings.php:91 ../admin/classes/tmp/settings.php:197
+#: ../admin/classes/tmp/settings.php:345 ../admin/classes/tmp/settings.php:457
 msgid "Auto Display Position"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:83 ../admin/classes/tmp/settings.php:164
-#: ../admin/classes/tmp/settings.php:368
+#: ../admin/classes/tmp/settings.php:94 ../admin/classes/tmp/settings.php:200
+#: ../admin/classes/tmp/settings.php:460
 msgid "Top of Content"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:84 ../admin/classes/tmp/settings.php:165
+#: ../admin/classes/tmp/settings.php:95 ../admin/classes/tmp/settings.php:201
+#: ../admin/classes/tmp/settings.php:461
 msgid "Bottom of Content"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:85 ../admin/classes/tmp/settings.php:166
-#: ../admin/classes/tmp/settings.php:369
+#: ../admin/classes/tmp/settings.php:96 ../admin/classes/tmp/settings.php:202
 msgid "Top and Bottom"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:90
+#: ../admin/classes/tmp/settings.php:101
 msgid "Auto Display Filter"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:92
-msgid "Home"
-msgstr "Αρχική"
-
-#: ../admin/classes/tmp/settings.php:93
+#: ../admin/classes/tmp/settings.php:104
 msgid "Single Posts"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:94
+#: ../admin/classes/tmp/settings.php:105
 msgid "Pages"
 msgstr "Σελίδες"
 
-#: ../admin/classes/tmp/settings.php:95
+#: ../admin/classes/tmp/settings.php:106
 msgid "Archives"
 msgstr "Αρχείο"
 
-#: ../admin/classes/tmp/settings.php:96
+#: ../admin/classes/tmp/settings.php:107
 msgid "Categories"
 msgstr "Κατηγορίες"
 
-#: ../admin/classes/tmp/settings.php:97
+#: ../admin/classes/tmp/settings.php:108
 msgid "Search Results"
 msgstr "Αποτελέσματα αναζήτησης"
 
-#: ../admin/classes/tmp/settings.php:98
+#: ../admin/classes/tmp/settings.php:109
 msgid "Tags"
 msgstr "Ετικέτες"
 
-#: ../admin/classes/tmp/settings.php:99
+#: ../admin/classes/tmp/settings.php:110
 msgid "Author Page"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:101
+#: ../admin/classes/tmp/settings.php:112
 msgid "You can filter theses pages on auto display option."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:106 ../admin/classes/tmp/settings.php:172
-#: ../admin/classes/tmp/settings.php:288 ../admin/classes/tmp/settings.php:375
+#: ../admin/classes/tmp/settings.php:117 ../admin/classes/tmp/settings.php:208
+#: ../admin/classes/tmp/settings.php:355 ../admin/classes/tmp/settings.php:467
 msgid "Only registered Users"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:108
+#: ../admin/classes/tmp/settings.php:119
 msgid "<strong>Only</strong> registered users have permission to like posts."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:115 ../admin/classes/tmp/settings.php:181
-#: ../admin/classes/tmp/settings.php:297 ../admin/classes/tmp/settings.php:384
+#: ../admin/classes/tmp/settings.php:126 ../admin/classes/tmp/settings.php:217
+#: ../admin/classes/tmp/settings.php:364 ../admin/classes/tmp/settings.php:476
 msgid "Do Not Log"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:116 ../admin/classes/tmp/settings.php:182
-#: ../admin/classes/tmp/settings.php:298 ../admin/classes/tmp/settings.php:385
+#: ../admin/classes/tmp/settings.php:127 ../admin/classes/tmp/settings.php:218
+#: ../admin/classes/tmp/settings.php:365 ../admin/classes/tmp/settings.php:477
 msgid "Logged By Cookie"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:117 ../admin/classes/tmp/settings.php:183
-#: ../admin/classes/tmp/settings.php:299 ../admin/classes/tmp/settings.php:386
+#: ../admin/classes/tmp/settings.php:128 ../admin/classes/tmp/settings.php:219
+#: ../admin/classes/tmp/settings.php:366 ../admin/classes/tmp/settings.php:478
 msgid "Logged By IP"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:118 ../admin/classes/tmp/settings.php:184
-#: ../admin/classes/tmp/settings.php:300 ../admin/classes/tmp/settings.php:387
+#: ../admin/classes/tmp/settings.php:129 ../admin/classes/tmp/settings.php:220
+#: ../admin/classes/tmp/settings.php:367 ../admin/classes/tmp/settings.php:479
 msgid "Logged By Cookie & IP"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:119 ../admin/classes/tmp/settings.php:185
-#: ../admin/classes/tmp/settings.php:301 ../admin/classes/tmp/settings.php:388
+#: ../admin/classes/tmp/settings.php:130 ../admin/classes/tmp/settings.php:221
+#: ../admin/classes/tmp/settings.php:368 ../admin/classes/tmp/settings.php:480
 msgid "Logged By Username"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:125 ../admin/classes/tmp/settings.php:191
-#: ../admin/classes/tmp/settings.php:307 ../admin/classes/tmp/settings.php:394
+#: ../admin/classes/tmp/settings.php:136 ../admin/classes/tmp/settings.php:227
+#: ../admin/classes/tmp/settings.php:374 ../admin/classes/tmp/settings.php:486
 msgid "Show Liked Users Box"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:127 ../admin/classes/tmp/settings.php:193
-#: ../admin/classes/tmp/settings.php:309 ../admin/classes/tmp/settings.php:396
+#: ../admin/classes/tmp/settings.php:138 ../admin/classes/tmp/settings.php:229
+#: ../admin/classes/tmp/settings.php:376 ../admin/classes/tmp/settings.php:488
 msgid ""
 "Active this option to show liked users avatars in the bottom of button like."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:132 ../admin/classes/tmp/settings.php:198
-#: ../admin/classes/tmp/settings.php:314 ../admin/classes/tmp/settings.php:401
+#: ../admin/classes/tmp/settings.php:143 ../admin/classes/tmp/settings.php:234
+#: ../admin/classes/tmp/settings.php:381 ../admin/classes/tmp/settings.php:493
 msgid "Size of Gravatars"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:133 ../admin/classes/tmp/settings.php:199
-#: ../admin/classes/tmp/settings.php:315 ../admin/classes/tmp/settings.php:402
+#: ../admin/classes/tmp/settings.php:144 ../admin/classes/tmp/settings.php:235
+#: ../admin/classes/tmp/settings.php:382 ../admin/classes/tmp/settings.php:494
 msgid "Size of Gravatars to return (max is 512)"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:138 ../admin/classes/tmp/settings.php:204
-#: ../admin/classes/tmp/settings.php:320 ../admin/classes/tmp/settings.php:407
+#: ../admin/classes/tmp/settings.php:149 ../admin/classes/tmp/settings.php:240
+#: ../admin/classes/tmp/settings.php:387 ../admin/classes/tmp/settings.php:499
 msgid "Number Of The Users"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:139 ../admin/classes/tmp/settings.php:205
-#: ../admin/classes/tmp/settings.php:321 ../admin/classes/tmp/settings.php:408
+#: ../admin/classes/tmp/settings.php:150 ../admin/classes/tmp/settings.php:241
+#: ../admin/classes/tmp/settings.php:388 ../admin/classes/tmp/settings.php:500
 msgid "The number of users to show in the users liked box"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:145 ../admin/classes/tmp/settings.php:211
-#: ../admin/classes/tmp/settings.php:327 ../admin/classes/tmp/settings.php:340
-#: ../admin/classes/tmp/settings.php:346 ../admin/classes/tmp/settings.php:414
+#: ../admin/classes/tmp/settings.php:156 ../admin/classes/tmp/settings.php:247
+#: ../admin/classes/tmp/settings.php:394 ../admin/classes/tmp/settings.php:407
+#: ../admin/classes/tmp/settings.php:413 ../admin/classes/tmp/settings.php:506
 msgid "Allowed Variables:"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:174
+#: ../admin/classes/tmp/settings.php:160 ../admin/classes/tmp/settings.php:251
+#: ../admin/classes/tmp/settings.php:417 ../admin/classes/tmp/settings.php:510
+msgid "Delete All Logs"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:161 ../admin/classes/tmp/settings.php:252
+#: ../admin/classes/tmp/settings.php:418 ../admin/classes/tmp/settings.php:511
+msgid "You Are About To Delete All Likes Logs. This Action Is Not Reversible."
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:166 ../admin/classes/tmp/settings.php:257
+#: ../admin/classes/tmp/settings.php:423 ../admin/classes/tmp/settings.php:516
+msgid "Delete All Data"
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:167 ../admin/classes/tmp/settings.php:258
+#: ../admin/classes/tmp/settings.php:424 ../admin/classes/tmp/settings.php:517
+msgid "You Are About To Delete All Likes Data. This Action Is Not Reversible."
+msgstr ""
+
+#: ../admin/classes/tmp/settings.php:210
 msgid ""
 "<strong>Only</strong> registered users have permission to like comments."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:218
+#: ../admin/classes/tmp/settings.php:269
 msgid "Customize"
 msgstr "Προσαρμογή"
 
-#: ../admin/classes/tmp/settings.php:223
+#: ../admin/classes/tmp/settings.php:274
 msgid "Custom Style"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:228
+#: ../admin/classes/tmp/settings.php:279
 msgid "Active this option to see the custom style settings."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:232
+#: ../admin/classes/tmp/settings.php:283
 msgid "Button style"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:233 ../admin/classes/tmp/settings.php:246
+#: ../admin/classes/tmp/settings.php:284 ../admin/classes/tmp/settings.php:297
 msgid "Background"
 msgstr "Φόντο"
 
-#: ../admin/classes/tmp/settings.php:237 ../admin/classes/tmp/settings.php:250
+#: ../admin/classes/tmp/settings.php:288 ../admin/classes/tmp/settings.php:301
 msgid "Border Color"
 msgstr "Χρώμα Περιθωρίου"
 
-#: ../admin/classes/tmp/settings.php:241 ../admin/classes/tmp/settings.php:254
+#: ../admin/classes/tmp/settings.php:292 ../admin/classes/tmp/settings.php:305
 msgid "Text Color"
 msgstr "Χρώμα κειμένου"
 
-#: ../admin/classes/tmp/settings.php:245
+#: ../admin/classes/tmp/settings.php:296
 msgid "Counter Style"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:258
+#: ../admin/classes/tmp/settings.php:309
 msgid "Loading Animation"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:281
+#: ../admin/classes/tmp/settings.php:314
+#, fuzzy
+msgid "Custom CSS"
+msgstr "Προσαρμογή"
+
+#: ../admin/classes/tmp/settings.php:348
 msgid "Activity Content"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:282
+#: ../admin/classes/tmp/settings.php:349
 msgid "Activity Meta"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:290 ../admin/classes/tmp/settings.php:377
+#: ../admin/classes/tmp/settings.php:357
 msgid ""
 "<strong>Only</strong> registered users have permission to like activities."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:332
+#: ../admin/classes/tmp/settings.php:399
 msgid "BuddyPress Activity"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:334
+#: ../admin/classes/tmp/settings.php:401
 msgid "insert new likes in buddyPress activity page"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:355
-msgid "bbPress"
+#: ../admin/classes/tmp/settings.php:469
+msgid "<strong>Only</strong> registered users have permission to like Topics."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:412
+#: ../admin/classes/tmp/settings.php:504
 msgid "Users who have liked this topic:"
 msgstr ""
 
-#: ../admin/logs.php:17 ../admin/logs.php:142 ../admin/logs.php:214
-#: ../admin/logs.php:265 ../admin/logs.php:341 ../admin/logs.php:394
-#: ../admin/logs.php:466
+#: ../admin/logs.php:17 ../admin/logs.php:142 ../admin/logs.php:212
+#: ../admin/logs.php:263 ../admin/logs.php:337 ../admin/logs.php:390
+#: ../admin/logs.php:460 ../admin/logs.php:512 ../admin/logs.php:582
 msgid "Logs"
 msgstr "Αρχείο καταγραφής"
 
@@ -735,19 +881,23 @@ msgstr "Αρχείο καταγραφής"
 msgid "Are you sure to remove this item?!"
 msgstr ""
 
-#: ../admin/logs.php:138 ../admin/logs.php:261 ../admin/logs.php:390
+#: ../admin/logs.php:138 ../admin/logs.php:259 ../admin/logs.php:386
+#: ../admin/logs.php:508
 msgid "WP ULike Logs"
 msgstr ""
 
-#: ../admin/logs.php:149 ../admin/logs.php:272 ../admin/logs.php:401
+#: ../admin/logs.php:149 ../admin/logs.php:270 ../admin/logs.php:397
+#: ../admin/logs.php:519
 msgid "ID"
 msgstr "ID"
 
-#: ../admin/logs.php:150 ../admin/logs.php:273 ../admin/logs.php:402
+#: ../admin/logs.php:150 ../admin/logs.php:271 ../admin/logs.php:398
+#: ../admin/logs.php:520
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
-#: ../admin/logs.php:151 ../admin/logs.php:274 ../admin/logs.php:403
+#: ../admin/logs.php:151 ../admin/logs.php:272 ../admin/logs.php:399
+#: ../admin/logs.php:521
 msgid "Status"
 msgstr "Κατάσταση"
 
@@ -759,157 +909,250 @@ msgstr "ID δημοσιεύματος"
 msgid "Post Title"
 msgstr ""
 
-#: ../admin/logs.php:154 ../admin/logs.php:278 ../admin/logs.php:406
+#: ../admin/logs.php:154 ../admin/logs.php:276 ../admin/logs.php:402
+#: ../admin/logs.php:524
 msgid "Date / Time"
 msgstr ""
 
-#: ../admin/logs.php:155 ../admin/logs.php:279 ../admin/logs.php:407
+#: ../admin/logs.php:155 ../admin/logs.php:277 ../admin/logs.php:403
+#: ../admin/logs.php:525
 msgid "IP"
 msgstr ""
 
-#: ../admin/logs.php:156 ../admin/logs.php:280 ../admin/logs.php:408
+#: ../admin/logs.php:156 ../admin/logs.php:278 ../admin/logs.php:404
+#: ../admin/logs.php:526
 msgid "Actions"
 msgstr "Ενέργειες"
 
-#: ../admin/logs.php:174 ../admin/logs.php:298 ../admin/logs.php:426
+#: ../admin/logs.php:174 ../admin/logs.php:296 ../admin/logs.php:422
+#: ../admin/logs.php:544 ../admin/stats.php:198
 msgid "Guest User"
 msgstr ""
 
-#: ../admin/logs.php:221 ../admin/logs.php:349 ../admin/logs.php:474
+#: ../admin/logs.php:219 ../admin/logs.php:345 ../admin/logs.php:468
+#: ../admin/logs.php:590
 msgid ""
 "<strong>ERROR:</strong> No Record Found. (This problem is created because "
 "you don't have any data on this table)"
 msgstr ""
 
-#: ../admin/logs.php:275
+#: ../admin/logs.php:273
 msgid "Comment ID"
 msgstr ""
 
-#: ../admin/logs.php:276
+#: ../admin/logs.php:274
 msgid "Comment Author"
 msgstr ""
 
-#: ../admin/logs.php:277
+#: ../admin/logs.php:275
 msgid "Comment Text"
 msgstr ""
 
-#: ../admin/logs.php:404
+#: ../admin/logs.php:400
 msgid "Activity ID"
 msgstr ""
 
-#: ../admin/logs.php:405
+#: ../admin/logs.php:401
 msgid "Permalink"
 msgstr "Permalink"
 
-#: ../admin/logs.php:442
+#: ../admin/logs.php:438
 #, php-format
 msgid "<a href=\"%1$s\">Activity Permalink</a>"
 msgstr ""
 
-#: ../admin/stats.php:25
-msgid "Welcome to WP ULike Statistics!"
+#: ../admin/logs.php:522
+msgid "Topic ID"
 msgstr ""
 
-#: ../admin/stats.php:26
-msgid "We have provided some useful statistics tools in this page:"
+#: ../admin/logs.php:523
+msgid "Topic Title"
 msgstr ""
 
 #: ../admin/stats.php:30
+msgid "Welcome to WP ULike Statistics!"
+msgstr ""
+
+#: ../admin/stats.php:31
+msgid "We have provided some useful statistics tools in this page:"
+msgstr ""
+
+#: ../admin/stats.php:35
 msgid "Get Started"
 msgstr "Πρώτα βήματα"
 
-#: ../admin/stats.php:32
+#: ../admin/stats.php:37
 msgid "or"
 msgstr "ή"
 
-#: ../admin/stats.php:35
+#: ../admin/stats.php:40
 msgid "Other Tools"
 msgstr ""
 
-#: ../admin/stats.php:43
+#: ../admin/stats.php:49
 msgid "Documentation"
 msgstr "Τεκμηρίωση"
 
-#: ../admin/stats.php:72
+#: ../admin/stats.php:53
+msgid "Contact"
+msgstr "Επικοινωνία"
+
+#: ../admin/stats.php:54
+msgid "GitHub Repository"
+msgstr ""
+
+#: ../admin/stats.php:80
 msgid "Posts Likes Summary"
 msgstr ""
 
-#: ../admin/stats.php:79
+#: ../admin/stats.php:88
 msgid "Comments Likes Summary"
 msgstr ""
 
-#: ../admin/stats.php:86
+#: ../admin/stats.php:96
 msgid "Activities Likes Summary"
 msgstr ""
 
-#: ../admin/stats.php:97 ../admin/stats.php:272
+#: ../admin/stats.php:104
+msgid "Topics Likes Summary"
+msgstr ""
+
+#: ../admin/stats.php:114 ../admin/stats.php:344
 msgid "Summary"
 msgstr "Σύνοψη"
 
-#: ../admin/stats.php:106
+#: ../admin/stats.php:126
 msgid "Total Likes"
 msgstr ""
 
-#: ../admin/stats.php:121
+#: ../admin/stats.php:138
 msgid "Today"
 msgstr "Σήμερα"
 
-#: ../admin/stats.php:126
+#: ../admin/stats.php:143
 msgid "Yesterday"
 msgstr "Χθες"
 
-#: ../admin/stats.php:131
+#: ../admin/stats.php:148
 msgid "Week"
 msgstr ""
 
-#: ../admin/stats.php:136
+#: ../admin/stats.php:153
 msgid "Month"
 msgstr "Μήνας"
 
-#: ../admin/stats.php:141
+#: ../admin/stats.php:158
 msgid "Total"
 msgstr "Σύνολο"
 
-#: ../admin/stats.php:155 ../admin/stats.php:276
-msgid "Likes Percent"
+#: ../admin/stats.php:192 ../admin/stats.php:351
+msgid "Top Likers"
 msgstr ""
 
-#: ../admin/stats.php:155 ../admin/stats.php:180 ../admin/stats.php:186
-#: ../admin/stats.php:192
+#: ../admin/stats.php:227 ../admin/stats.php:233 ../admin/stats.php:239
+#: ../admin/stats.php:245
+msgid "View Logs"
+msgstr ""
+
+#: ../admin/stats.php:228 ../admin/stats.php:345
+msgid "Posts Likes Stats"
+msgstr ""
+
+#: ../admin/stats.php:228 ../admin/stats.php:234 ../admin/stats.php:240
+#: ../admin/stats.php:246 ../admin/stats.php:277
 #, php-format
 msgid "In The Last %s Days"
 msgstr ""
 
-#: ../admin/stats.php:179 ../admin/stats.php:185 ../admin/stats.php:191
-msgid "View Logs"
-msgstr ""
-
-#: ../admin/stats.php:180 ../admin/stats.php:273
-msgid "Posts Likes Stats"
-msgstr ""
-
-#: ../admin/stats.php:186 ../admin/stats.php:274
+#: ../admin/stats.php:234 ../admin/stats.php:346
 msgid "Comments Likes Stats"
 msgstr ""
 
-#: ../admin/stats.php:192 ../admin/stats.php:275
+#: ../admin/stats.php:240 ../admin/stats.php:347
 msgid "Activities Likes Stats"
 msgstr ""
 
-#: ../admin/stats.php:269
+#: ../admin/stats.php:246 ../admin/stats.php:348
+msgid "Topics Likes Stats"
+msgstr ""
+
+#: ../admin/stats.php:277 ../admin/stats.php:349
+msgid "Likes Percent"
+msgstr ""
+
+#: ../admin/stats.php:341
 msgid "Show on screen"
 msgstr "Προβολή"
 
-#: ../admin/stats.php:271
+#: ../admin/stats.php:343
 msgid "Welcome"
 msgstr "Καλώς ήρθατε"
 
-#: ../admin/stats.php:279
+#: ../admin/stats.php:354
 msgid "Days"
 msgstr "Ημέρες"
 
+#: ../inc/classes/class-mycred.php:202
+msgid "Points for Liking content"
+msgstr ""
+
+#: ../inc/classes/class-mycred.php:209 ../inc/classes/class-mycred.php:226
+msgid "Limit"
+msgstr ""
+
+#: ../inc/classes/class-mycred.php:214 ../inc/classes/class-mycred.php:231
+#: ../inc/classes/class-mycred.php:243 ../inc/classes/class-mycred.php:255
+msgid "Log template"
+msgstr ""
+
+#: ../inc/classes/class-mycred.php:219
+msgid "Points for Author Who Get Liked"
+msgstr ""
+
+#: ../inc/classes/class-mycred.php:236
+msgid "Points for unliking content"
+msgstr ""
+
+#: ../inc/classes/class-mycred.php:248
+msgid "Points for Author Who Get Unliked"
+msgstr ""
+
 #: ../inc/wp-functions.php:172
 msgid "WP ULike Activity"
+msgstr ""
+
+#: ../inc/wp-functions.php:303
+msgid ""
+"This hook award / deducts points from users who Like/Unlike any content of "
+"WordPress, bbPress, BuddyPress & ..."
+msgstr ""
+
+#: ../inc/wp-functions.php:311
+msgid "Liking Content"
+msgstr ""
+
+#: ../inc/wp-functions.php:312
+msgid "Liked Content"
+msgstr ""
+
+#: ../inc/wp-functions.php:313
+msgid "Unliking Content"
+msgstr ""
+
+#: ../inc/wp-functions.php:314
+msgid "Unliked Content"
+msgstr ""
+
+#: ../inc/wp-functions.php:336 ../inc/wp-functions.php:370
+msgid "Recent Posts Liked"
+msgstr ""
+
+#: ../inc/wp-functions.php:341 ../inc/wp-functions.php:410
+msgid "Recent Comments Liked"
+msgstr ""
+
+#: ../inc/wp-functions.php:386 ../inc/wp-functions.php:427
+msgid "This user has not made any likes."
 msgstr ""
 
 #: ../inc/wp-strings.php:3
@@ -939,10 +1182,6 @@ msgstr ""
 #: ../inc/wp-strings.php:9
 msgid "Sort Options:"
 msgstr ""
-
-#: ../inc/wp-strings.php:10
-msgid "Themes"
-msgstr "Θέματα"
 
 #: ../inc/wp-strings.php:11
 msgid "Dislike"
@@ -1000,10 +1239,6 @@ msgstr ""
 msgid "Tooltip"
 msgstr "Tooltip"
 
-#: ../inc/wp-strings.php:25
-msgid "Default"
-msgstr "Προεπιλεγμένο"
-
 #: ../inc/wp-strings.php:29
 msgid "Total Users Liked"
 msgstr ""
@@ -1024,19 +1259,40 @@ msgstr ""
 msgid "Downvote"
 msgstr ""
 
-#: ../inc/wp-ulike-bbpress.php:79 ../inc/wp-ulike-posts.php:79
+#: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:291
 msgid "You need to login in order to like this post: "
 msgstr ""
 
-#: ../inc/wp-ulike-bbpress.php:79 ../inc/wp-ulike-buddypress.php:74
-#: ../inc/wp-ulike-comments.php:69 ../inc/wp-ulike-posts.php:79
+#: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:142 ../inc/wp-ulike.php:219
+#: ../inc/wp-ulike.php:291
 msgid "click here"
 msgstr ""
 
-#: ../inc/wp-ulike-buddypress.php:74
+#: ../inc/wp-ulike.php:142
+msgid "You need to login in order to like this comment: "
+msgstr ""
+
+#: ../inc/wp-ulike.php:219
 msgid "You need to login in order to like this activity: "
 msgstr ""
 
-#: ../inc/wp-ulike-comments.php:69
-msgid "You need to login in order to like this comment: "
+#: ../inc/wp-ulike.php:343
+msgid "Error: This Method Is Not Exist!"
 msgstr ""
+
+#: ../wp-ulike.php:124
+#, fuzzy
+msgid "Settings"
+msgstr "Οι ρυθμίσεις αποθηκεύτηκαν."
+
+#: ../wp-ulike.php:125
+#, fuzzy
+msgid "Statistics"
+msgstr "Κατάσταση"
+
+#: ../wp-ulike.php:126
+msgid "About"
+msgstr ""
+
+#~ msgid "Overview"
+#~ msgstr "Επισκόπηση"

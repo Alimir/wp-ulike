@@ -62,3 +62,13 @@ tr.hide-label td {
 .dashicons-buddypress:before {
 	content: "\f452";
 }
+#wp_ulike_customize_custom_css{
+	font-family: Consolas,Monaco,monospace;
+	direction:ltr;
+	font-size: 13px;
+	width: 97%;
+	background: none repeat scroll 0% 0% #F9F9F9;
+	outline: 0px none;
+	width:60%;
+	min-height:300px;
+}

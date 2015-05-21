@@ -21,28 +21,22 @@
 			),
 			'button_text'   => array(
 			  'default'		=> __('Like','alimir'),
-			  'label' 		=> __( 'Button Text', 'alimir')
+			  'label' 		=> __( 'Button Text', 'alimir') . ' (' . __('Like', 'alimir') .')',
+			),
+			'button_text_u' => array(
+			  'default'			=> __('Unlike','alimir'),
+			  'label' 			=> __( 'Button Text', 'alimir') . ' (' . __('Unlike', 'alimir') .')',
 			),
 			'button_url'    => array(
 			  'type'  		=> 'media',
-			  'label' 		=> __( 'Button Icon', 'alimir'),
+			  'label' 		=> __( 'Button Icon', 'alimir') . ' (' . __('Like', 'alimir') .')',
 			  'description' => __( 'Best size: 16x16','alimir')
 			),
-			'text_after_like'   => array(
-			  'default'			=> __('Unlike','alimir'),
-			  'label' 			=> __( 'Text After Like', 'alimir')
-			),
-			'return_initial_after_unlike'  => array(
-			  'type'  			=> 'checkbox',
-			  'default'			=> 0,
-			  'label' 			=> __('Return To The Initial', 'alimir'),
-			  'checkboxlabel' 	=> __('Activate', 'alimir'),
-			  'description' 	=> __('Return to the initial Like button after Unlike. (Not Showing text after unlike)', 'alimir')
-			),			
-			'text_after_unlike'	=> array(
-			  'default'		=> __('Like Me Again!','alimir'),
-			  'label' 		=> __( 'Text After Unlike', 'alimir')
-			),
+			'button_url_u'  => array(
+			  'type'  		=> 'media',
+			  'label' 		=> __( 'Button Icon', 'alimir') . ' (' . __('Unlike', 'alimir') .')',
+			  'description' => __( 'Best size: 16x16','alimir')
+			),		
 			'permission_text'   => array(
 			  'default'		=> __('You have not permission to unlike','alimir'),
 			  'label' 		=> __( 'Permission Text', 'alimir')
@@ -66,7 +60,7 @@
 			  'label' 			=> __('Format Number', 'alimir'),
 			  'checkboxlabel' 	=> __('Activate', 'alimir'),
 			  'description' 	=> __('Convert numbers of Likes with string (kilobyte) format.', 'alimir') . '<strong> (WHEN? likes>=1000)</strong>'
-			)		
+			)
 		)
 	);//end wp_ulike_general
 	
@@ -77,6 +71,15 @@
 	$wp_ulike_posts 		= array(
 		'title'  			=> '<i class="dashicons-before dashicons-admin-post"></i>' . ' ' . __( 'Posts','alimir'),
 		'fields' 			=> array(
+		  'theme' 			=> array(
+			'type'    		=> 'select',
+			'default'		=> 'default',
+			'label'   		=> __( 'Themes','alimir'),
+			'options' 		=> array(
+			  'wpulike-default'	=> __('Default', 'alimir'),
+			  'wpulike-heart'	=> __('Heart', 'alimir')
+			)
+		  ),
 		  'auto_display'  	=> array(
 			'type'  		=> 'checkbox',
 			'default'		=> 1,
@@ -150,7 +153,7 @@
 			'type'  		=> 'textarea',
 			'default'		=> '<br /><p style="margin-top:5px"> '.__('Users who have LIKED this post:','alimir').'</p> <ul class="tiles">%START_WHILE%<li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
 			'label' 		=> __('Users Like Box Template', 'alimir'),
-			'description' 	=> __('Allowed Variables:', 'alimir') . ' <code>%USER_AVATAR%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
+			'description' 	=> __('Allowed Variables:', 'alimir') . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
 		  ),
 		  'delete_logs' 	=> array(
 		    'type'        	=> 'action',
@@ -174,6 +177,15 @@
 	$wp_ulike_comments 		= 	array(
 		'title'  			=> '<i class="dashicons-before dashicons-admin-comments"></i>' . ' ' . __( 'Comments','alimir'),
 		'fields' 			=> array(
+		  'theme' 			=> array(
+			'type'    		=> 'select',
+			'default'		=> 'default',
+			'label'   		=> __( 'Themes','alimir'),
+			'options' 		=> array(
+			  'wpulike-default'	=> __('Default', 'alimir'),
+			  'wpulike-heart'	=> __('Heart', 'alimir')
+			)
+		  ),		
 		  'auto_display'  	=> array(
 			'type'  		=> 'checkbox',
 			'default'		=> 1,
@@ -232,7 +244,7 @@
 			'type'  		=> 'textarea',
 			'default'		=> '<br /><p style="margin-top:5px"> '.__('Users who have LIKED this comment:','alimir').'</p> <ul class="tiles">%START_WHILE%<li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
 			'label' 		=> __('Users Like Box Template', 'alimir'),
-			'description' 	=> __('Allowed Variables:', 'alimir') . ' <code>%USER_AVATAR%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
+			'description' 	=> __('Allowed Variables:', 'alimir') . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
 		  ),
 		  'delete_logs' 	=> array(
 		    'type'        	=> 'action',
@@ -296,7 +308,11 @@
 			'type'  		=> 'media',
 			'label' 		=> __( 'Loading Animation', 'alimir') . ' (.GIF)',
 			'description' 	=> __( 'Best size: 16x16','alimir')
-		  )	  
+		  ),
+		  'custom_css'    	=> array(
+		    'type'			=> 'textarea',
+		    'label' 		=> __('Custom CSS', 'alimir'),
+		  )  
 		)
 	  );//end wp_ulike_customize
 	
@@ -309,6 +325,15 @@
 	$wp_ulike_buddypress 	= 	array(
 		'title'  			=> '<i class="dashicons-before dashicons-buddypress"></i>' . ' ' . __( 'BuddyPress','alimir'),
 		'fields' 	=> array(
+		  'theme' 			=> array(
+			'type'    		=> 'select',
+			'default'		=> 'default',
+			'label'   		=> __( 'Themes','alimir'),
+			'options' 		=> array(
+			  'wpulike-default'	=> __('Default', 'alimir'),
+			  'wpulike-heart'	=> __('Heart', 'alimir')
+			)
+		  ),		
 		  'auto_display'  => array(
 			'type'  		=> 'checkbox',
 			'default'		=> 0,
@@ -366,7 +391,7 @@
 			'type'  		=> 'textarea',
 			'default'		=> '<br /><p style="margin-top:5px"> '.__('Users who have liked this activity:','alimir').'</p> <ul class="tiles">%START_WHILE%<li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
 			'label' 		=> __('Users Like Box Template', 'alimir'),
-			'description' 	=> __('Allowed Variables:', 'alimir') . ' <code>%USER_AVATAR%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
+			'description' 	=> __('Allowed Variables:', 'alimir') . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
 		  ),
 		  'new_likes_activity'  => array(
 			'type'  		=> 'checkbox',
@@ -412,6 +437,15 @@
 	$wp_ulike_bbpress	= array(
 		'title'  			=> '<i class="dashicons-before dashicons-bbpress"></i>' . ' ' . __( 'bbPress','alimir'),
 		'fields' 	=> array(
+		  'theme' 			=> array(
+			'type'    		=> 'select',
+			'default'		=> 'default',
+			'label'   		=> __( 'Themes','alimir'),
+			'options' 		=> array(
+			  'wpulike-default'	=> __('Default', 'alimir'),
+			  'wpulike-heart'	=> __('Heart', 'alimir')
+			)
+		  ),		
 		  'auto_display'  => array(
 			'type'  		=> 'checkbox',
 			'default'		=> 0,
@@ -469,7 +503,7 @@
 			'type'  		=> 'textarea',
 			'default'		=> '<br /><p style="margin-top:5px"> '.__('Users who have liked this topic:','alimir').'</p> <ul class="tiles">%START_WHILE%<li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
 			'label' 		=> __('Users Like Box Template', 'alimir'),
-			'description' 	=> __('Allowed Variables:', 'alimir') . ' <code>%USER_AVATAR%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
+			'description' 	=> __('Allowed Variables:', 'alimir') . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
 		  ),
 		  'delete_logs' 	=> array(
 		    'type'        	=> 'action',

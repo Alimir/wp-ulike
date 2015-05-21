@@ -21,8 +21,8 @@
 	 * @return			String
 	 */ 	
 	function wp_ulike_about_page() {
+	include( plugin_dir_path(__FILE__) . 'classes/tmp/svg-source.php');
 	?>
-
 	<style>
 	.ulike-badge{
 		background: url('<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-badge.png') no-repeat scroll center 24px / 95px 95px #F3643A;
@@ -54,18 +54,51 @@
 		font-size: 13px;
 		font-weight: normal;
 	}
+	.about-wrap .headline-feature h2 {
+		margin: 1.1em 0px 0.2em;
+		font-size: 2.4em;
+		font-weight: 300;
+		line-height: 1.3;
+		text-align: center;
+	}
+	.about-wrap .feature-list h2 {
+		margin: 30px 0px 15px;
+		text-align: center;
+	}	
 	<?php if(is_rtl()): ?>
 	.about-wrap .ulike-badge {
 		position: absolute;
 		top: 0px;
 		left: 0px;
 	}
+	.about-wrap .feature-list svg {
+		float: right;
+		clear: right;
+		margin: 15px 0 0px 15px;
+		height: 90px;
+		width: 90px;
+		background-color: #CCC;
+		border-radius: 50%;
+		fill: #999;
+		border: 1px solid #C1C1C1;
+	}	
 	<?php else: ?>
 	.about-wrap .ulike-badge {
 		position: absolute;
 		top: 0px;
 		right: 0px;
 	}
+	.about-wrap .feature-list svg {
+		float: left;
+		clear: left;
+		margin: 15px 15px 0px 0px;
+		height: 90px;
+		width: 90px;
+		background-color: #CCC;
+		border-radius: 50%;
+		fill: #999;
+		border: 1px solid #C1C1C1;
+	}	
 	<?php endif; ?>
 	</style>
 
@@ -84,92 +117,104 @@
 			<a target="_blank" class="nav-tab" href="https://wordpress.org/support/plugin/wp-ulike"><?php echo _e('Support','alimir'); ?></a> 
 			<a target="_blank" class="nav-tab" href="https://wordpress.org/plugins/wp-ulike/faq/"><?php echo _e('FAQ','alimir'); ?></a> 
 			<a target="_blank" class="nav-tab" href="https://wordpress.org/support/view/plugin-reviews/wp-ulike"><?php echo _e('Reviews','alimir'); ?></a> 
-			<a target="_blank" class="nav-tab" href="http://preview.alimir.ir/contact/"><?php echo _e('Contact','alimir'); ?></a> 
 		</h2>
 		
 		<?php if(!isset($_GET["credit"])): ?>
 		
-		<div class="changelog">
-			<img class="about-overview-img" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-banner.png" alt="WP ULike" />
+<div class="changelog headline-feature">
+	<h2><?php echo _e('Introducing WP ULike','alimir'); ?></h2>
+	<div class="featured-image">
+		<img src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-intro.png">
+	</div>
+
+	<div class="feature-section">
+		<div class="col">
+			<h3><?php echo _e('About WP ULike','alimir'); ?></h3>
+			<p><?php echo _e('WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.','alimir'); ?></p>
 		</div>
+		<div class="col">
+			<img src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-thumb.png">
+		</div>
+	</div>
+
+	<div class="clear"></div>
+</div>
 		
 		<hr />
+<div class="changelog feature-list finer-points">
+	<h2>The Finer Points</h2>
+
+	<div class="feature-section col two-col">
+	
+	<div>
+		<svg viewBox="-10 -10 52 52">
+		<g filter="">
+		  <use xlink:href="#like"></use>
+		</g>
+		</svg>
+		<h4><?php echo _e('WP Ulike Extension','alimir'); ?></h4>
+		<p><?php echo _e('Right now, WP ULike support wordpress posts / comments, BuddyPress activities & bbPress Topics.','alimir'); ?></p>
+	</div>
+
+	<div class="last-feature">
+		<svg viewBox="-10 -10 52 52">
+		<g filter="">
+		  <use xlink:href="#globe"></use>
+		</g>
+		</svg>
+		<h4><?php echo _e('Added More Than 20 Language Files','alimir'); ?></h4>
+		<p><?php echo _e('WP ULike is already translated into +20 languages, with more always in progress.','alimir'); ?></p>
+	</div>
+	
+	<div>
+		<svg viewBox="-10 -10 52 52">
+		<g filter="">
+		  <use xlink:href="#happy-smiley"></use>
+		</g>
+		</svg>
+		<h4><?php echo _e('User Profile Links','alimir'); ?></h4>
+	<p><?php echo _e('Since WP ULike 2.3, We have synced the likers profile with BuddyPress & UltimateMember plugins.','alimir'); ?></p>
+	</div>
+
+	<div class="last-feature">
+		<svg viewBox="-10 -10 52 52">
+		<g filter="">
+		  <use xlink:href="#heart"></use>
+		</g>
+		</svg>
+		<h4><?php echo _e('New Themes And Styles','alimir'); ?></h4>
+		<p><?php echo _e('Since WP ULike 2.3, We have made some new styles and themes and you can customize them by your taste.','alimir'); ?></p>
+	</div>
+	
+	<div>
+		<svg viewBox="-10 -10 52 52">
+		<g filter="">
+		  <use xlink:href="#prize"></use>
+		</g>
+		</svg>
+		<h4><?php echo _e('myCRED Points Support','alimir'); ?></h4>
+	<p><?php echo _e('myCRED is an adaptive points management system that lets you award / charge your users for interacting with your WordPress.','alimir'); ?></p>
+	</div>
+
+	<div class="last-feature">
+		<svg viewBox="-10 -10 52 52">
+		<g filter="">
+		  <use xlink:href="#tag"></use>
+		</g>
+		</svg>
+		<h4><?php echo _e('Likers World Map','alimir'); ?></h4>
+		<p><?php echo _e('Since WP ULike 2.3, We have made a new ability that you can track your likers by their country in the world map & Top Liker widget.','alimir'); ?></p>
+	</div>	
+	
+	</div>
+</div>
+
+		<hr />
 		
-		<div class="changelog">
-			<h2 class="about-headline-callout"><?php echo _e('Novelty Of WP ULike','alimir'); ?></h2>
-
-			<div class="feature-section col two-col">
-				<div>
-					<h4><?php echo _e('bbPress Likes Support + Options & Statistics Tools','alimir'); ?> <small class="wp_ulike_version">WP ULike 2.2</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/bbpress-support.png" alt="WP ULike" />
-				</div>
-
-				<div class="last-feature">
-					<h4><?php echo _e('Added More Than 20 Language Files','alimir'); ?> <small class="wp_ulike_version">WP ULike 2.2</small></h4>
-					<a target="_blank" href="https://www.transifex.com/projects/p/wp-ulike/" title"WP-Translations"><img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/wp-translations.png" alt="WP ULike" /></a>
-				</div>
-			</div>	
-			
-			
-			<div class="feature-section col two-col">
-				<div>
-					<h4><?php echo _e('New Statistics Design + Screen Option','alimir'); ?> <small class="wp_ulike_version">WP ULike 2.1</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/new-statistics.jpg" alt="WP ULike" />
-				</div>
-
-				<div class="last-feature">
-					<h4><?php echo _e('New Statistics Page','alimir'); ?> <small class="wp_ulike_version">WP ULike 2.0</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/ulike-stats.png" alt="WP ULike" />
-				</div>
-			</div>	
-			
-			
-			<div class="feature-section col two-col">
-				<div>
-					<h4><?php echo _e('New Class-based programming','alimir'); ?> <small class="wp_ulike_version">WP ULike 2.0</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/new-classes.jpg" alt="WP ULike" />
-				</div>
-				
-				<div class="last-feature">
-					<h4><?php echo _e('Most Liked Comments','alimir'); ?> <small class="wp_ulike_version">WP ULike 1.9</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/most-liked-comments-widget.jpg" alt="WP ULike" />
-				</div>
+		<div class="changelog feature-list">
+			<div class="return-to-dashboard">
+				<a href="http://localhost/wp-english/wp-admin/"><?php echo _e('WP ULike Statistics','alimir'); ?> &rarr; <?php echo _e('Home','alimir'); ?></a> <?php echo _e('OR','alimir'); ?> <a href="http://localhost/wp-english/wp-admin/"><?php echo _e('WP ULike Settings','alimir'); ?></a>
 			</div>
-			
-			<div class="feature-section col three-col">
-				<div>
-					<h4><?php echo _e('Logging Method','alimir'); ?> <small class="wp_ulike_version">WP ULike 1.9</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/loggin-method-option.jpg" alt="WP ULike" />
-				</div>	
-			
-				<div>
-					<h4><?php echo _e('New options in logs pages','alimir'); ?> <small class="wp_ulike_version">WP ULike 1.9</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/logs-pages-options.jpg" alt="WP ULike" />
-				</div>
-				
-				<div class="last-feature">
-					<h4><?php echo _e('New setting panel','alimir'); ?> <small class="wp_ulike_version">WP ULike 1.8</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/new-setting.png" alt="WP ULike" />
-				</div>
-			</div>			
-			
-			<div class="feature-section col three-col">
-				<div>
-					<h4><?php echo _e('Better coding on plugin files','alimir'); ?> <small class="wp_ulike_version">WP ULike 1.8</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/new-coding.png" alt="WP ULike" />
-				</div>		
-			
-				<div>
-					<h4><?php echo _e('Buddypress likes support','alimir'); ?> <small class="wp_ulike_version">WP ULike 1.7</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/activity-likes.png" alt="WP ULike" />
-				</div>
-
-				<div class="last-feature">
-					<h4><?php echo _e('Likes logs support','alimir'); ?> <small class="wp_ulike_version">WP ULike 1.7</small></h4>
-					<img style="width:100%" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/new-tools/likes-logs.png" alt="WP ULike" />
-				</div>
-			</div>
-
 		</div>
 		
 		<?php else: ?>

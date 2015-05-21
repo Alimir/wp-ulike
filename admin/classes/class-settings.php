@@ -41,9 +41,36 @@ class wp_ulike_settings {
 	$this->admin_screen = WP_Screen::get($current_screen);
 	$this->admin_screen->add_help_tab(
 		array(
-			'title'    => __('Overview'),
+			'title'    => __('Similar Settings','alimir'),
 			'id'       => 'overview_tab',
-			'content'  => '<p>' . __('WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.', 'alimir') . '</p>',
+			'content'  => '<p>' . __('WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.', 'alimir') . '</p>'.
+			
+			'<p>'.'<strong>'.__( 'Logging Method','alimir').' : </strong></p>'.
+			'<ul>'.
+			'<li>'.__('If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', 'alimir').'</li>'.
+			'<li>'.__('If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', 'alimir').'</li>'.
+			'<li>'.__('If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', 'alimir').'</li>'.
+			'<li>'.__('If you select <strong>"Logged By Cookie & IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP & SetCookie', 'alimir').'</li>'.
+			'<li>'.__('If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', 'alimir').'</li>
+			</ul>'.
+			
+			'<p>'.'<strong>'.__( 'Template Variables','alimir').' : </strong></p>'.
+			'<ul>'.
+			'<li>'.'<code>%START_WHILE%</code> : '		. __('Start the loop of logs','alimir') .' <span style="color:red">('.__( 'required','alimir').')</span></li>'.
+			'<li>'.'<code>%END_WHILE%</code> : '		. __('End of the while loop','alimir') .' <span style="color:red">('.__( 'required','alimir').')</span></li>'.
+			'<li>'.'<code>%USER_NAME%</code> : '		. __('Display the liker name','alimir') .'</li>'.
+			'<li>'.'<code>%USER_AVATAR%</code> : '		. __('Display the liker avatar (By Gravatar)','alimir') .'</li>'.
+			'<li>'.'<code>%BP_PROFILE_URL%</code> : '	. __('Display the BuddyPress user profile url','alimir') .'</li>'.
+			'<li>'.'<code>%UM_PROFILE_URL%</code> : '	. __('Display the UltimateMemebr user profile url','alimir') .'</li><hr>'.
+			'<li>'.'<code>%POST_LIKER%</code> : '		. __('Display the liker name','alimir') .'</li>'.
+			'<li>'.'<code>%POST_PERMALINK%</code> : '	. __('Display the permalink','alimir') .'</li>'.
+			'<li>'.'<code>%POST_COUNT%</code> : '		. __('Display the likes count number','alimir') .'</li>'.
+			'<li>'.'<code>%POST_TITLE%</code> : '		. __('Display the post title','alimir') .'</li><hr>'.
+			'<li>'.'<code>%COMMENT_LIKER%</code> : '	. __('Display the liker name','alimir') .'</li>'.
+			'<li>'.'<code>%COMMENT_AUTHOR%</code> : '	. __('Display the comment author name','alimir') .'</li>'.
+			'<li>'.'<code>%COMMENT_COUNT%</code> : '	. __('Display the likes count number','alimir') .'</li>'.
+			'</ul>'			
+			,
 			'callback' => false
 		)
 	);
@@ -51,7 +78,7 @@ class wp_ulike_settings {
 		array(
 			'title'    => __( 'Posts','alimir'),
 			'id'       => 'posts_tab',
-			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on wordpress while loop', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike\')) wp_ulike(\'get\'); ?&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have LIKED this post:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__( 'Logging Method','alimir').' : </strong></p>'. '<ul>'.'<li>'.__('If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Cookie & IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP & SetCookie', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', 'alimir').'</li></ul>',
+			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on wordpress while loop', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike\')) wp_ulike(\'get\'); ?&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have LIKED this post:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
 			
 			'callback' => false
 		)
@@ -60,7 +87,7 @@ class wp_ulike_settings {
 		array(
 			'title'    => __( 'Comments','alimir'),
 			'id'       => 'comments_tab',
-			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on comments text', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_comments\')) wp_ulike_comments(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have LIKED this comment:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__( 'Logging Method','alimir').' : </strong></p>'. '<ul>'.'<li>'.__('If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Cookie & IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP & SetCookie', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', 'alimir').'</li></ul>',
+			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on comments text', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_comments\')) wp_ulike_comments(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have LIKED this comment:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
 			'callback' => false
 		)
 	);
@@ -68,14 +95,22 @@ class wp_ulike_settings {
 		array(
 			'title'    => __( 'BuddyPress','alimir'),
 			'id'       => 'bp_tab',
-			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on buddypres activities content', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_buddypress\')) wp_ulike_buddypress(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have liked this activity:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__( 'Logging Method','alimir').' : </strong></p>'. '<ul>'.'<li>'.__('If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Cookie & IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP & SetCookie', 'alimir').'</li>'.'<li>'.__('If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', 'alimir').'</li></ul>'.'<p>'.'<strong>'.__('Post Activity Text', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;strong&gt;%POST_LIKER%&lt;/strong&gt; liked &lt;a href="%POST_PERMALINK%" title="%POST_TITLE%"&gt;%POST_TITLE%&lt;/a&gt;. (So far, This post has &lt;span class="badge"&gt;%POST_COUNT%&lt;/span&gt; likes)</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Comment Activity Text', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;strong&gt;%COMMENT_LIKER%&lt;/strong&gt; liked &lt;strong&gt;%COMMENT_AUTHOR%&lt;/strong&gt; comment. (So far, %COMMENT_AUTHOR% has &lt;span class="badge"&gt;%COMMENT_COUNT%&lt;/span&gt; likes for this comment)</code>'.'</li></ul>',
+			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on buddypres activities content', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_buddypress\')) wp_ulike_buddypress(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have liked this activity:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__('Post Activity Text', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;strong&gt;%POST_LIKER%&lt;/strong&gt; liked &lt;a href="%POST_PERMALINK%" title="%POST_TITLE%"&gt;%POST_TITLE%&lt;/a&gt;. (So far, This post has &lt;span class="badge"&gt;%POST_COUNT%&lt;/span&gt; likes)</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Comment Activity Text', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;strong&gt;%COMMENT_LIKER%&lt;/strong&gt; liked &lt;strong&gt;%COMMENT_AUTHOR%&lt;/strong&gt; comment. (So far, %COMMENT_AUTHOR% has &lt;span class="badge"&gt;%COMMENT_COUNT%&lt;/span&gt; likes for this comment)</code>'.'</li></ul>',
+			'callback' => false
+		)
+	);
+	$this->admin_screen->add_help_tab(
+		array(
+			'title'    => __( 'bbPress','alimir'),
+			'id'       => 'bb_tab',
+			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on buddypres activities content', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_bbpress\')) wp_ulike_bbpress(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have liked this activity:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
 			'callback' => false
 		)
 	);
 	$this->admin_screen->set_help_sidebar(
 		'<p><strong>'.__('For more information:').'</strong></p><p><a href="https://wordpress.org/plugins/wp-ulike/faq/" target="_blank">'.__('FAQ','alimir').'</a></p><p><a href="https://wordpress.org/support/plugin/wp-ulike" target="_blank">'.__('Support','alimir').'</a></p>'
 	);
-  }  
+  }
 
   public function apply_settings( $settings )
   {
@@ -401,7 +436,7 @@ class wp_ulike_settings {
               break;
 
             default:
-              $values[$name] = sanitize_text_field( $input );
+              $values[$name] = html_entity_decode( $input );
               break;
           }
         }

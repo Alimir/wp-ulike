@@ -19,16 +19,15 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
-		 * @updated         2.2
+		 * @updated         2.3
 		 * @return			Void
 		 */		
 		public function enqueue_script($hook)
 		{
 			$currentScreen 	= get_current_screen();
+			$get_option 	= get_option( 'wp_ulike_statistics_screen' );
 			
-			if ( $currentScreen->id != $hook ) {
-				return;
-			}
+			if ( $currentScreen->id != $hook ) return;
 			
 			if(is_rtl())
 				wp_register_style( 'wp_ulike_stats_style', plugins_url( 'css/statistics-rtl.css' , __FILE__ ) );
@@ -40,6 +39,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			
 			wp_register_script('wp_ulike_chart', plugins_url( 'js/chart.min.js' , __FILE__ ), array('jquery'), null, true);
 			wp_enqueue_script('wp_ulike_chart');
+			wp_register_script('wp_ulike_vmap', plugins_url( 'js/jquery.vmap.min.js' , __FILE__ ), array('jquery'), null, true);
+			wp_enqueue_script('wp_ulike_vmap');
+			wp_register_script('wp_ulike_world', plugins_url( 'js/jquery.vmap.world.js' , __FILE__ ), array('jquery'), null, true);
+			wp_enqueue_script('wp_ulike_world');
 			wp_register_script('wp_ulike_stats', plugins_url( 'js/statistics.js' , __FILE__ ), array('jquery'), null, true);
 			wp_enqueue_script('wp_ulike_stats');
 			wp_localize_script( 'wp_ulike_stats', 'wp_ulike_statistics', array(
@@ -50,7 +53,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				'posts_dataset' 			=> $this->posts_dataset('dataset'),
 				'comments_dataset' 			=> $this->comments_dataset('dataset'),
 				'activities_dataset' 		=> $this->activities_dataset('dataset'),
-				'topics_dataset' 			=> $this->topics_dataset('dataset')
+				'topics_dataset' 			=> $this->topics_dataset('dataset'),
+				'data_map' 					=> $get_option['likers_map'] == 1 ? $this->data_map() : null
 			));			
 			wp_enqueue_script('postbox');
 		}
@@ -209,6 +213,78 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			}
 			else
 				return 0;
+		}
+		
+		
+		/**
+		 * Get Data Map
+		 *
+		 * @author       	Alimir
+		 * @since           2.3
+		 * @return			String
+		*/
+		public function data_map(){
+			$country_data = array();
+			$return_val = $this->wpdb->get_results(
+			"
+			SELECT T.user_ip AS get_user_ip , SUM(T.count_user_ip) get_count_user_ip
+			FROM(
+			SELECT ip AS user_ip, count(ip) AS count_user_ip
+			FROM ".$this->wpdb->prefix."ulike
+			GROUP BY user_ip
+			UNION ALL
+			SELECT ip AS user_ip, count(ip) AS count_user_ip
+			FROM ".$this->wpdb->prefix."ulike_activities
+			GROUP BY user_ip
+			UNION ALL
+			SELECT ip AS user_ip, count(ip) AS count_user_ip
+			FROM ".$this->wpdb->prefix."ulike_comments
+			GROUP BY user_ip
+			UNION ALL
+			SELECT ip AS user_ip, count(ip) AS count_user_ip
+			FROM ".$this->wpdb->prefix."ulike_forums
+			GROUP BY user_ip
+			) AS T
+			GROUP BY get_user_ip
+			");
+			
+			foreach($return_val as $return){
+				$country_data[strtolower(getCountryFromIP($return->get_user_ip, "code"))] += $return->get_count_user_ip;
+			}
+		
+			return json_encode($country_data);
+		}		
+		
+		/**
+		 * Top Likers Summary
+		 *
+		 * @author       	Alimir
+		 * @since           2.3
+		 * @return			Array
+		 */					
+		public function get_top_likers(){
+		$request = "SELECT T.user_id, SUM(T.CountUser) AS SumUser, T.ip
+					FROM(
+					SELECT user_id, count(user_id) AS CountUser, ip
+					FROM ".$this->wpdb->prefix."ulike
+					GROUP BY user_id
+					UNION ALL
+					SELECT user_id, count(user_id) AS CountUser, ip
+					FROM ".$this->wpdb->prefix."ulike_activities
+					GROUP BY user_id
+					UNION ALL
+					SELECT user_id, count(user_id) AS CountUser, ip
+					FROM ".$this->wpdb->prefix."ulike_comments
+					GROUP BY user_id
+					UNION ALL
+					SELECT user_id, count(user_id) AS CountUser, ip
+					FROM ".$this->wpdb->prefix."ulike_forums
+					GROUP BY user_id
+					) AS T
+					GROUP BY T.user_id
+					ORDER BY SumUser DESC LIMIT 10
+					";
+		return $this->wpdb->get_results($request);
 		}
 		
 	}

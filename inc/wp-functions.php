@@ -276,7 +276,158 @@
 		add_action( 'bbp_theme_before_reply_content', 'wp_ulike_put_bbpress' );	
 		else	
 		add_action( 'bbp_theme_after_reply_content', 'wp_ulike_put_bbpress' );
-	}	
+	}
+	
+	
+/*******************************************************
+  myCRED Points Functions
+*******************************************************/
+
+	/**
+	 * MyCred Hooks
+	 *
+	 * @author       	Gabriel Lemarie & Alimir
+	 * @since          	2.3
+	 */
+	if ( defined( 'myCRED_VERSION' ) ) {
+		include( plugin_dir_path(__FILE__) . 'classes/class-mycred.php');	
+		/**
+		 * Register Hooks
+		 *
+		 * @since 		2.3
+		 */
+		add_filter( 'mycred_setup_hooks', 'wp_ulike_register_myCRED_hook' );
+		function wp_ulike_register_myCRED_hook( $installed ) {
+			$installed['wp_ulike'] = array(
+				'title'       => __( 'WP ULike', 'alimir' ),
+				'description' => __( 'This hook award / deducts points from users who Like/Unlike any content of WordPress, bbPress, BuddyPress & ...', 'alimir' ),
+				'callback'    => array( 'wp_ulike_myCRED' )
+			);
+			return $installed;
+		}
+		
+		add_filter( 'mycred_all_references', 'wp_ulike_myCRED_references' );
+		function wp_ulike_myCRED_references( $hooks ) {
+			$hooks['wp_add_like'] 	= __( 'Liking Content', 'alimir' );
+			$hooks['wp_get_like'] 	= __( 'Liked Content', 'alimir' );
+			$hooks['wp_add_unlike'] = __( 'Unliking Content', 'alimir' );
+			$hooks['wp_get_unlike'] = __( 'Unliked Content', 'alimir' );
+			return $hooks;
+		}
+	}
+	
+	
+/*******************************************************
+  UltimateMember Functions
+*******************************************************/	
+
+	if ( defined( 'ultimatemember_version' ) ) {
+		/**
+		 * Add custom tabs in the UltimateMember profiles.
+		 *
+		 * @author       	Alimir
+		 * @since           2.3
+		 * @return          Array
+		 */
+		add_filter('um_profile_tabs', 'wp_ulike_add_custom_profile_tab', 1000 );
+		function wp_ulike_add_custom_profile_tab( $tabs ) {
+			
+			$tabs['wp-ulike-posts'] = array(
+				'name' => __('Recent Posts Liked','alimir'),
+				'icon' => 'um-faicon-thumbs-up',
+			);
+				
+			$tabs['wp-ulike-comments'] = array(
+				'name' => __('Recent Comments Liked','alimir'),
+				'icon' => 'um-faicon-thumbs-o-up',
+			);
+				
+			return $tabs;
+				
+		}
+
+		/**
+		 * Add content to the wp-ulike-posts tab
+		 *
+		 * @author       	Alimir
+		 * @since           2.3
+		 * @return          Void
+		 */
+		add_action('um_profile_content_wp-ulike-posts_default', 'wp_ulike_posts_um_profile_content');
+		function wp_ulike_posts_um_profile_content( $args ) {
+			global $wp_ulike_class,$ultimatemember;
+			
+			$args = array(
+				"user_id" 	=> um_profile_id(),			//User ID
+				"col" 		=> 'post_id',				//Table Column (post_id,comment_id,activity_id,topic_id)
+				"table" 	=> 'ulike',					//Table Name
+				"limit" 	=> 10,						//limit Number
+			);	
+			
+			$user_logs = $wp_ulike_class->get_current_user_likes($args);
+			
+			if($user_logs != null){
+				echo '<div class="um-profile-note"><span>'. __('Recent Posts Liked','alimir').'</span></div>';
+				foreach ($user_logs as $user_log) {
+					$get_post 	= get_post(stripslashes($user_log->post_id));
+					$get_date 	= $user_log->date_time;
+					
+					echo '<div class="um-item">';
+					echo '<div class="um-item-link">
+						  <i class="um-icon-ios-paper"></i>
+						  <a href="'.get_permalink($get_post->ID).'">'.$get_post->post_title.'</a>
+						  </div>';
+					echo '<div class="um-item-meta">
+						  <span>'.wp_ulike_date_i18n($get_date).'</span>
+						  <span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.get_post_meta( $get_post->ID, '_liked', true ).'</span>
+						  </div>';
+					echo '</div>';
+				}
+			} else echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. __('This user has not made any likes.','alimir').'</span></div>';
+		}	
+
+		/**
+		 * Add content to the wp-ulike-comments tab
+		 *
+		 * @author       	Alimir
+		 * @since           2.3
+		 * @return          Void
+		 */	
+		add_action('um_profile_content_wp-ulike-comments_default', 'wp_ulike_comments_um_profile_content');
+		function wp_ulike_comments_um_profile_content( $args ) {
+			global $wp_ulike_class,$ultimatemember;
+			
+			$args = array(
+				"user_id" 	=> um_profile_id(),			//User ID
+				"col" 		=> 'comment_id',			//Table Column (post_id,comment_id,activity_id,topic_id)
+				"table" 	=> 'ulike_comments',		//Table Name
+				"limit" 	=> 10,						//limit Number
+			);	
+			
+			$user_logs = $wp_ulike_class->get_current_user_likes($args);
+			
+			if($user_logs != null){
+				echo '<div class="um-profile-note"><span>'. __('Recent Comments Liked','alimir').'</span></div>';
+				foreach ($user_logs as $user_log) {
+					$comment 	= get_comment(stripslashes($user_log->comment_id));
+					$get_date 	= $user_log->date_time;
+					
+					echo '<div class="um-item">';
+					echo '<div class="um-item-link">
+						  <i class="um-icon-ios-chatboxes"></i>
+						  <a href="'.get_comment_link($comment->comment_ID).'">'.$comment->comment_content .'</a>
+						  <em style="font-size:.7em;padding:0 10px;"><span class="um-faicon-quote-left"></span> '.$comment->comment_author.' <span class="um-faicon-quote-right"></span></em>
+						  </div>';
+					echo '<div class="um-item-meta">
+						  <span>'.wp_ulike_date_i18n($get_date).'</span>
+						  <span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.get_comment_meta( $comment->comment_ID, '_commentliked', true ).'</span>
+						  </div>';
+					echo '</div>';
+				}
+			} else echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. __('This user has not made any likes.','alimir').'</span></div>';
+		}
+	}
+
 	
 /*******************************************************
   General Functions
@@ -316,97 +467,129 @@
 	 *
 	 * @author       	Alimir
 	 * @since           1.3
-	 * @updated         1.8
+	 * @updated         2.3
 	 * @return          Void (Print new CSS styles)
 	 */
 	function wp_ulike_get_custom_style(){
-		$btn_style = '';
-		$counter_style = '';
-		$customstyle = '';
-		$customloading = '';
+		$btn_style 		= '';
+		$counter_style 	= '';
+		$customstyle 	= '';
+		$customloading 	= '';
+		$return_style	= '';
 		
-		//get custom icon
-		$customicon = wp_ulike_get_setting( 'wp_ulike_general', 'button_url' );
-		$iconurl = wp_get_attachment_url( $customicon );
+		//get custom icons
+		$getlikeicon 	= wp_ulike_get_setting( 'wp_ulike_general', 'button_url' );
+		$getlikeurl 	= wp_get_attachment_url( $getlikeicon );
+				
+		$getunlikeicon 	= wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' );
+		$getunlikeurl 	= wp_get_attachment_url( $getunlikeicon );
 				
 		if(wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style') == '1'){
 		
 		//get custom options
-		$customstyle = get_option( 'wp_ulike_customize' );
+		$customstyle 	= get_option( 'wp_ulike_customize' );
 		
 		//button style
-		$btn_bg = $customstyle['btn_bg'];
-		$btn_border = $customstyle['btn_border'];
-		$btn_color = $customstyle['btn_color'];
+		$btn_bg 		= $customstyle['btn_bg'];
+		$btn_border		= $customstyle['btn_border'];
+		$btn_color 		= $customstyle['btn_color'];
 		
 		//counter style
-		$counter_bg = $customstyle['counter_bg'];
+		$counter_bg 	= $customstyle['counter_bg'];
 		$counter_border = $customstyle['counter_border'];
-		$counter_color = $customstyle['counter_color'];
+		$counter_color 	= $customstyle['counter_color'];
 		
 		//Loading animation
-		$customloading = $customstyle['loading_animation'];
-		$loadingurl = wp_get_attachment_url( $customloading );
+		$customloading 	= $customstyle['loading_animation'];
+		$loadingurl 	= wp_get_attachment_url( $customloading );
 		
+		$custom_css 	= $customstyle['custom_css'];
+
 		
 		if($btn_bg != ''){
-			$btn_style .= "background-color:$btn_bg !important; ";
+			$btn_style .= "background-color:$btn_bg;";
 		}			
 		if($btn_border != ''){
-			$btn_style .= "border-color:$btn_border !important; ";
+			$btn_style .= "border-color:$btn_border; ";
 		}			
 		if($btn_color != ''){
-			$btn_style .= "color:$btn_color !important;";
+			$btn_style .= "color:$btn_color;text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
 		}
 
 		if($counter_bg != ''){
-			$counter_style .= "background-color:$counter_bg !important; ";
+			$counter_style .= "background-color:$counter_bg; ";
 		}			
 		if($counter_border != ''){
-			$counter_style .= "border-color:$counter_border !important; ";
+			$counter_style .= "border-color:$counter_border; ";
 		}			
 		if($counter_color != ''){
-			$counter_style .= "color:$counter_color !important;";
+			$counter_style .= "color:$counter_color;";
+		}
+		if($counter_color != ''){
+			$before_style  .= "border-color:transparent; border-bottom-color:$counter_border; border-left-color:$counter_border;";
 		}
 		
 		}
 		
-		if($customicon != '' || $customstyle != ''){
-		
-		echo "<style>";
-		
-		if($customicon != ''){
-		echo '
+		if($getlikeicon != '' || $getunlikeicon != '' || $customstyle != ''){
+				
+		if($getlikeicon != ''){
+		$return_style .= '
 		.wpulike .counter a.image {
-			background-image: url('.$iconurl.') !important;
+			background-image: url('.$getlikeurl.') !important;
 		}
-		';
+		.wpulike-heart .counter a.image:hover {
+			background-image:  url('.$getlikeurl.') !important;
+		}
+		 ';
+		}
+		
+		if($getunlikeicon != ''){
+		$return_style .= '
+		.wpulike .counter a.image-unlike {
+			background-image: url('.$getunlikeurl.') !important;
+		}
+		.wpulike-heart .counter a.image-unlike:hover {
+			background-image:  url('.$getunlikeurl.') !important;
+		}
+		 ';
 		}
 		
 		if($customloading != ''){
-		echo '
+		$return_style .= '
 		.wpulike .counter a.loading {
 			background-image: url('.$loadingurl.') !important;
 		}
-		';
+		 ';
 		}
 		
 		if($btn_style != ''){
-		echo "
-		.wpulike .counter a{
+		$return_style .= "
+		.wpulike-default .counter a{
 			$btn_style	
-		}";
+		}
+		.wpulike-heart .counter{
+			$btn_style
+		}
+		";
 		}
 		
 		if($counter_style != ''){
-		echo"
-		.wpulike .count-box,.wpulike .count-box:before{
+		$return_style .= "
+		.wpulike-default .count-box,.wpulike-default .count-box:before{
 			$counter_style
-		}";
+		}
+		.wpulike-default .count-box:before{
+			$before_style
+		} ";
 		}
 		
-		echo "</style>";
+		if($custom_css != ''){
+		$return_style .= $custom_css;
 		}
+		}
+		
+		return $return_style;
 	}
 	
 	/**
@@ -427,6 +610,20 @@
 		$value = apply_filters( 'wp_ulike_format_number', $value, $num, $plus);
 		return $value;
 	}
+	
+	
+	/**
+	 * Date in localized format
+	 *
+	 * @author       	Alimir
+	 * @param           String (Date)
+	 * @since           2.3
+	 * @return          String
+	 */
+	function wp_ulike_date_i18n($date){
+		return date_i18n(get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), strtotime($date) );	
+	}
+	
 	
 /*******************************************************
   WP ULike Class

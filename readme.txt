@@ -2,10 +2,10 @@
 Contributors: alimir
 Donate link: http://alimir.ir
 Author: Ali Mirzaei
-Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums
+Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
-Tested up to: 4.1.1
-Stable tag: 2.2
+Tested up to: 4.2.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +23,10 @@ WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordP
 
 = Features =
 *   Clean Design.
-*   Support full Statistics tools.
+*   Full myCRED Points Support. (NEW)
+*   Full Statistics tools.
+*   Supporting UltimateMember & BuddyPress Profiles. (NEW)
+*  	Likers World Map & Top Likers Widget. (NEW)
 *   Ajax feature to update the data without reloading.
 *   Visitors do not have to register or log in to use the Like Button.
 *   Compatible with WP version 3.5 & above.
@@ -38,11 +41,7 @@ WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordP
 *   Simple user like box with avatar support.
 *   Custom Like-UnLike Texts fields.
 *   Simple custom style with color picker settings.
-*   Widget to show 'Most Liked Posts'.
-*   Widget to show 'Most Liked Comments'.
-*   Widget to show 'Most Liked Activities'.
-*   Widget to show 'Most Liked Users' with avatar.
-*   Widget to show 'Last Posts Liked By Current User'.
+*   Advanced Widgets With Custom Tools. (Most Liked Posts,Comments,Users,...)
 *   Powerful configuration panel.
 *   Support RTL & language file.
 *   And so on...
@@ -165,6 +164,23 @@ endif;
 * Attention: `%START_WHILE%` And `%END_WHILE%` variables are very important and you should use them out of the frequent string. (Such as `<li></li>` tags sample in default template)
 
 == Changelog ==
+
+= 2.3 =
+* Added: Full myCRED Support. (Special Thanks to the Gabriel Lemarie)
+* Added: "Recent Posts/Comments Liked" tab in the UltimateMember profile menu.
+* Added: Supporting User Profile URL. (for: BuddyPress & UltimateMember)
+* Added: Likers World Map.
+* Added: Theme Select option for the like button. (With the new "heart" style)
+* Added: Top Likers Summary in the statistics page.
+* Added: New CSS styles. (Don't forget to clear your browser cache)
+* Added: New Widget Options. (Style, Title Trim, Show Thumbnail/Avatar, Profile URL, ...)
+* Added: Unlike icon/text option.
+* Added: Custom CSS option.
+* Fixes: HTML code support in the settings pages. (Such as using font-awesome in the like button)
+* Fixes: Removing the user avatar in the likers box. (after the unlike)
+* Fixes: Small Bugs.
+* Removed: Text After Like/Unlike Option. (+ Return to the initial)
+* Updated: Persian language file. (Thanks Me :))
 
 = 2.2 =
 * Added: bbPress Likes Support + All Options & Statistics Tools.
@@ -303,6 +319,9 @@ endif;
 * The initial version
 
 == Upgrade Notice ==
+
+= 2.3 =
+In this version, we made some changes in the plugin scripts (wp-ulike-scripts.js)! So, please clear your browser cache after the plugin update. Also, After the plugin update If the new database table won't fixed, try deactivating the plugin and reactivating that one at a time.
 
 = 2.2 =
 In this version, we made some changes in the plugin scripts (wp-ulike-scripts.js)! So, please clear your browser cache after the plugin update. Also, After the plugin update If the new database table won't fixed, try deactivating the plugin and reactivating that one at a time.
