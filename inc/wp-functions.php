@@ -128,6 +128,19 @@
 		
 		add_filter('comment_text', 'wp_ulike_put_comments');
 	}
+
+	/**
+	 * Get the number of likes on a single comment
+	 *
+	 * @author          Wacław Jacek
+	 * @param           Integer $commentID
+	 * @since           2.4
+	 * @return          String
+	 */
+	function wp_ulike_get_comment_likes($commentID){
+		$val = get_comment_meta($commentID, '_commentliked', true);
+		return wp_ulike_format_number($val);
+	}
 	
 	
 	
