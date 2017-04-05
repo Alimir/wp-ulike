@@ -8,11 +8,11 @@
 	 * @updated         2.3
 	 * @return			String
 	 */
-	function wp_ulike($arg) {
+	function wp_ulike($arg, $postId) {
 		//global variables
 		global $post,$wp_ulike_class,$wp_user_IP;
 		
-		$post_ID 		= $post->ID;
+		$post_ID 		= $postId ? $postId : $post->ID;
 		$get_post_meta 	= get_post_meta($post_ID, '_liked', true);
 		$get_like 		= $get_post_meta != '' ? $get_post_meta : 0;
 		$return_userID 	= $wp_ulike_class->get_reutrn_id();
