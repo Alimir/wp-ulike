@@ -8,7 +8,7 @@
 	 * @updated         2.3
 	 * @return			String
 	 */
-	function wp_ulike($arg, $postId) {
+	function wp_ulike($arg, $postId=0) {
 		//global variables
 		global $post,$wp_ulike_class,$wp_user_IP;
 		
