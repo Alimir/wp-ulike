@@ -2,7 +2,7 @@
 
 ### Welcome to our GitHub Repository
 
-WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments, buddypress activities AND bbPress Topics. Its very simple to use and supports many options and full Statistics tools. And all of these are free :)
+WP ULike is a WordPress plugin that also supports BuddyPress, bbPress and a number of other plugins. It aims to be a comprehensive “Like” system for your site and enables site users to like a wide range of content types, including posts, forum topics and replies, comments and activity updates. It’s very simple to use and supports many options and full Statistics tools. Also, All are free :)
 
 More information can be found at [WP ULike](http://preview.alimir.ir/developer/wp-ulike/).
 
@@ -10,28 +10,30 @@ More information can be found at [WP ULike](http://preview.alimir.ir/developer/w
 
 ## Features
 *   Clean Design.
-*   Full myCRED Points Support. (NEW)
+*   Full myCRED Points Support.
 *   Full Statistics tools.
-*   Supporting UltimateMember & BuddyPress Profiles. (NEW)
-*  	Likers World Map & Top Likers Widget. (NEW)
+*   Supporting UltimateMember & BuddyPress Profiles.
+*   Likers World Map & Top Likers Widget.
 *   Ajax feature to update the data without reloading.
 *   Visitors do not have to register or log in to use the Like Button.
 *   Compatible with WP version 3.5 & above.
 *   Added automatically with filtering options (no Code required).
 *   Different logging method options.
+*   Notifications System. (Custom toast messages after each activity)
 *   Shortcode support.
 *   Support custom templates with separate variables.
 *   Comment likes support.
 *   Supporting the date in localized format. (date_i18n)
 *   Full likes logs support.
-*   BuddyPress activity support.
+*   BuddyPress add activity & notifications support.
 *   Simple user like box with avatar support.
 *   Custom Like-UnLike Texts fields.
 *   Simple custom style with color picker settings.
-*   Advanced Widgets With Custom Tools. (Most Liked Posts,Comments,Users,...)
+*   Advanced Widgets With Custom Tools. (Most Liked Posts,Comments,Users,Topics,…)
 *   Powerful configuration panel.
 *   Support RTL & language file.
-*   And so on...
+*   And so on…
+
 
 ## Translations
 WP ULike has been translated into the following languages:
