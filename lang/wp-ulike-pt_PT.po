@@ -1,38 +1,43 @@
-#
+# Copyright (C) 2015 WP ULike
+# This file is distributed under the same license as the WP ULike package.
 # Translators:
+# Manuela Silva <manuela.silva@sky.com>, 2016
+# Manuela Silva <manuela.silva@sky.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
-"POT-Creation-Date: 2015-05-21 11:28+0330\n"
-"PO-Revision-Date: 2015-05-21 11:28+0330\n"
-"Last-Translator: Alimir <info@alimir.ir>\n"
-"Language-Team: Portuguese (Portugal) (http://www.transifex.com/projects/p/wp-"
-"ulike/language/pt_PT/)\n"
-"Language: pt_PT\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/wp-ulike\n"
+"POT-Creation-Date: 2015-05-21 11:36+0330\n"
+"PO-Revision-Date: 2017-01-20 21:22+0330\n"
+"Last-Translator: Alimir <alimir71@yahoo.com>\n"
+"Language-Team: Portuguese (Portugal) (http://www.transifex.com/wp-"
+"translations/wp-ulike/language/pt_PT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt_PT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-KeywordsList: _e;__\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
 #: ../admin/about.php:107
 msgid "Welcome to WP ULike"
-msgstr ""
+msgstr "Bem-vindo ao WP ULike"
 
 #: ../admin/about.php:109
 msgid ""
 "Thank you for choosing WP ULike! This version is our leanest and most "
 "powerful version yet."
 msgstr ""
+"Obrigado por escolher WP ULike! Esta versão, é a nossa versão mais simples e "
+"mais poderosa de sempre."
 
 #: ../admin/about.php:110 ../admin/stats.php:37
 msgid "Visit our homepage"
-msgstr ""
+msgstr "Visite a nossa página principal"
 
 #: ../admin/about.php:112
 msgid "Version"
@@ -40,7 +45,7 @@ msgstr "Versão"
 
 #: ../admin/about.php:115
 msgid "Getting Started"
-msgstr ""
+msgstr "Iniciação"
 
 #: ../admin/about.php:116
 msgid "Credits"
@@ -54,19 +59,19 @@ msgstr "Suporte"
 #: ../admin/about.php:118 ../admin/classes/class-settings.php:111
 #: ../admin/stats.php:52
 msgid "FAQ"
-msgstr "FAQ"
+msgstr "Perguntas Mais Frequentes"
 
 #: ../admin/about.php:119
 msgid "Reviews"
-msgstr ""
+msgstr "Críticas"
 
 #: ../admin/about.php:125
 msgid "Introducing WP ULike"
-msgstr ""
+msgstr "Introduzindo WP ULike"
 
 #: ../admin/about.php:132 ../admin/admin.php:179 ../admin/stats.php:36
 msgid "About WP ULike"
-msgstr ""
+msgstr "Sobre WP ULike"
 
 #: ../admin/about.php:133 ../admin/classes/class-settings.php:46
 msgid ""
@@ -75,30 +80,36 @@ msgid ""
 "comments AND buddypress activities. Its very simple to use and supports many "
 "options."
 msgstr ""
+"O Plug-in WP ULike permite-lhe integrar um Botão Gostar Ajax no seu site da "
+"Web do WordPress para permitir que os seus visitantes gostem e removam o "
+"gosto das páginas, artigos, comentários e atividades do BuddyPress. É muito "
+"fácil de utilizar e suporta várias opções."
 
 #: ../admin/about.php:155
 msgid "WP Ulike Extension"
-msgstr ""
+msgstr "Extensão de WP Ulike"
 
 #: ../admin/about.php:156
 msgid ""
 "Right now, WP ULike support wordpress posts / comments, BuddyPress "
 "activities & bbPress Topics."
 msgstr ""
+"De momento, WP ULike suporta artigos / comentários do do WordPress, "
+"atividades do BuddyPress e tópicos do bbPress."
 
 #: ../admin/about.php:165
 msgid "Added More Than 20 Language Files"
-msgstr ""
+msgstr "Adicionados mais de 20 ficheiros de idioma"
 
 #: ../admin/about.php:166
 msgid ""
 "WP ULike is already translated into +20 languages, with more always in "
 "progress."
-msgstr ""
+msgstr "WP ULike já tem mais de +20 idiomas traduzidos, com mais em progresso."
 
 #: ../admin/about.php:175
 msgid "User Profile Links"
-msgstr ""
+msgstr "Hiperligações de Perfil do Utilizador"
 
 #: ../admin/about.php:176
 msgid ""
@@ -108,7 +119,7 @@ msgstr ""
 
 #: ../admin/about.php:185
 msgid "New Themes And Styles"
-msgstr ""
+msgstr "Novos Temas e Estilos"
 
 #: ../admin/about.php:186
 msgid ""
@@ -128,7 +139,7 @@ msgstr ""
 
 #: ../admin/about.php:205 ../admin/stats.php:175 ../admin/stats.php:350
 msgid "Likers World Map"
-msgstr ""
+msgstr "Mapa Mundo de Gostos"
 
 #: ../admin/about.php:206
 msgid ""
@@ -138,7 +149,7 @@ msgstr ""
 
 #: ../admin/about.php:216 ../admin/admin.php:175 ../admin/stats.php:23
 msgid "WP ULike Statistics"
-msgstr ""
+msgstr "Estatísticas do WP ULike"
 
 #: ../admin/about.php:216 ../admin/classes/tmp/settings.php:103
 msgid "Home"
@@ -146,23 +157,23 @@ msgstr "Início"
 
 #: ../admin/about.php:216
 msgid "OR"
-msgstr ""
+msgstr "OU"
 
 #: ../admin/about.php:216 ../admin/admin.php:72
 msgid "WP ULike Settings"
-msgstr ""
+msgstr "Definições do WP ULike"
 
 #: ../admin/about.php:222
 msgid "WP ULike is created by many love and time. Enjoy it :)"
-msgstr ""
+msgstr "WP ULike é criado com muita dedicação e tempo. Desfrute-o :)"
 
 #: ../admin/about.php:223
 msgid "Project Leaders"
-msgstr "Chefes de projecto"
+msgstr "Líderes do Projeto"
 
 #: ../admin/about.php:228
 msgid "Project Lead & Developer"
-msgstr ""
+msgstr "Líder do Projeto e Programador"
 
 #: ../admin/about.php:232
 msgid "Translations"
@@ -170,19 +181,19 @@ msgstr "Traduções"
 
 #: ../admin/about.php:271
 msgid "Would you like to help translate the plugin into more languages?"
-msgstr ""
+msgstr "Gostaria de traduzir o plug-in para mais idiomas?"
 
 #: ../admin/about.php:271
 msgid "Join our WP-Translations Community"
-msgstr ""
+msgstr "Junte-se à nossa Comunidade de Tradutores WP"
 
 #: ../admin/about.php:273
 msgid "Other Plugins"
-msgstr ""
+msgstr "Outros Plug-ins"
 
 #: ../admin/about.php:292
 msgid "Like this plugin?"
-msgstr ""
+msgstr "Gosta deste plug-in?"
 
 #: ../admin/about.php:293
 msgid ""
@@ -200,11 +211,11 @@ msgstr ""
 
 #: ../admin/admin.php:75 ../inc/wp-functions.php:302
 msgid "WP ULike"
-msgstr ""
+msgstr "WP ULike"
 
 #: ../admin/admin.php:83
 msgid "Settings saved."
-msgstr "Definições guardadas"
+msgstr "Definições guardadas."
 
 #: ../admin/admin.php:113 ../admin/admin.php:141
 msgid "Failed! An Error Has Occurred While Deleting All ULike Logs/Data"
@@ -216,7 +227,7 @@ msgstr ""
 
 #: ../admin/admin.php:159 ../admin/logs.php:139 ../admin/stats.php:42
 msgid "Post Likes Logs"
-msgstr ""
+msgstr "Registos de Gostos do Artigo"
 
 #: ../admin/admin.php:163 ../admin/logs.php:260 ../admin/stats.php:43
 msgid "Comment Likes Logs"
@@ -232,25 +243,25 @@ msgstr ""
 
 #: ../admin/classes/class-settings.php:17
 msgid "Custom Settings"
-msgstr ""
+msgstr "Definições Personalizadas"
 
 #: ../admin/classes/class-settings.php:28 ../admin/stats.php:355
 msgid "Save Settings"
-msgstr ""
+msgstr "Definições de Guardar "
 
 #: ../admin/classes/class-settings.php:29
 msgid "Reset Settings"
-msgstr ""
+msgstr "Redefinir Definições"
 
 #: ../admin/classes/class-settings.php:44
 msgid "Similar Settings"
-msgstr ""
+msgstr "Definições Similares"
 
 #: ../admin/classes/class-settings.php:48
 #: ../admin/classes/tmp/settings.php:124 ../admin/classes/tmp/settings.php:215
 #: ../admin/classes/tmp/settings.php:362 ../admin/classes/tmp/settings.php:474
 msgid "Logging Method"
-msgstr ""
+msgstr "Método de Registo"
 
 #: ../admin/classes/class-settings.php:50
 msgid ""
@@ -288,16 +299,16 @@ msgstr ""
 
 #: ../admin/classes/class-settings.php:57
 msgid "Template Variables"
-msgstr ""
+msgstr "Variáveis de Modelo"
 
 #: ../admin/classes/class-settings.php:59
 msgid "Start the loop of logs"
-msgstr ""
+msgstr "Iniciar a repetição dos registos"
 
 #: ../admin/classes/class-settings.php:59
 #: ../admin/classes/class-settings.php:60
 msgid "required"
-msgstr ""
+msgstr "obrigatório"
 
 #: ../admin/classes/class-settings.php:60
 msgid "End of the while loop"
@@ -323,20 +334,20 @@ msgstr ""
 
 #: ../admin/classes/class-settings.php:66
 msgid "Display the permalink"
-msgstr ""
+msgstr "Exibir a hiperligação permanente"
 
 #: ../admin/classes/class-settings.php:67
 #: ../admin/classes/class-settings.php:71
 msgid "Display the likes count number"
-msgstr ""
+msgstr "Exibir o número de contagem dos gostos"
 
 #: ../admin/classes/class-settings.php:68
 msgid "Display the post title"
-msgstr ""
+msgstr "Exibir o título do artigo"
 
 #: ../admin/classes/class-settings.php:70
 msgid "Display the comment author name"
-msgstr ""
+msgstr "Exibir o nome do autor do comentário"
 
 #: ../admin/classes/class-settings.php:79 ../admin/classes/tmp/settings.php:72
 msgid "Posts"
@@ -349,7 +360,7 @@ msgstr "Artigos"
 #: ../admin/classes/tmp/settings.php:86 ../admin/classes/tmp/settings.php:192
 #: ../admin/classes/tmp/settings.php:340 ../admin/classes/tmp/settings.php:452
 msgid "Automatic display"
-msgstr ""
+msgstr "Exibição Automática"
 
 #: ../admin/classes/class-settings.php:81
 msgid ""
@@ -371,12 +382,12 @@ msgstr ""
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/class-settings.php:106
 msgid "Default Template:"
-msgstr ""
+msgstr "Modelo predefinido:"
 
 #: ../admin/classes/class-settings.php:81
 #: ../admin/classes/tmp/settings.php:154 ../inc/classes/class-ulike.php:423
 msgid "Users who have LIKED this post:"
-msgstr ""
+msgstr "Utilizadores que GOSTARAM deste artigo:"
 
 #: ../admin/classes/class-settings.php:88
 #: ../admin/classes/tmp/settings.php:178
@@ -415,7 +426,7 @@ msgstr ""
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/tmp/settings.php:406
 msgid "Post Activity Text"
-msgstr ""
+msgstr "Texto da Atividade do Artigo"
 
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/tmp/settings.php:412
@@ -425,7 +436,7 @@ msgstr ""
 #: ../admin/classes/class-settings.php:104
 #: ../admin/classes/tmp/settings.php:438
 msgid "bbPress"
-msgstr ""
+msgstr "bbPress"
 
 #: ../admin/classes/class-settings.php:111
 msgid "For more information:"
@@ -444,25 +455,25 @@ msgstr ""
 #: ../admin/classes/class-settings.php:323
 #: ../admin/classes/class-settings.php:347
 msgid "No options defined."
-msgstr ""
+msgstr "Sem opções definidas."
 
 #: ../admin/classes/class-settings.php:334
 #, php-format
 msgid "Select %s"
-msgstr "Seleccionar %s"
+msgstr "Selecionar %s"
 
 #: ../admin/classes/class-settings.php:335
 #, php-format
 msgid "Remove %s"
-msgstr ""
+msgstr "Remover %s"
 
 #: ../admin/classes/class-settings.php:359
 msgid "No action defined."
-msgstr ""
+msgstr "Sem ação definida."
 
 #: ../admin/classes/class-widget.php:11
 msgid "WP Ulike Widget"
-msgstr ""
+msgstr "Widget do WP Ulike"
 
 #: ../admin/classes/class-widget.php:12
 msgid ""
@@ -471,7 +482,7 @@ msgstr ""
 
 #: ../admin/classes/class-widget.php:79
 msgid "you haven't liked any post yet!"
-msgstr ""
+msgstr "Ainda não gostou de nenhum artigo!"
 
 #: ../admin/classes/class-widget.php:126
 msgid "on"
@@ -481,7 +492,7 @@ msgstr "on"
 #: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:32
 #: ../admin/stats.php:205
 msgid "Like"
-msgstr ""
+msgstr "Gostar"
 
 #: ../admin/classes/class-widget.php:266
 msgid "Most Liked"
@@ -493,11 +504,11 @@ msgstr "Título:"
 
 #: ../admin/classes/class-widget.php:275
 msgid "Type:"
-msgstr ""
+msgstr "Tipo:"
 
 #: ../admin/classes/class-widget.php:277 ../inc/wp-strings.php:26
 msgid "Most Liked Posts"
-msgstr ""
+msgstr "Artigos com Mais 'Gostos'"
 
 #: ../admin/classes/class-widget.php:278 ../inc/wp-strings.php:27
 msgid "Most Liked Comments"
@@ -513,15 +524,15 @@ msgstr ""
 
 #: ../admin/classes/class-widget.php:281
 msgid "Last Posts Liked By User"
-msgstr ""
+msgstr "Últimos Artigos 'Gostar' pelo Utilizador"
 
 #: ../admin/classes/class-widget.php:286
 msgid "Style:"
-msgstr ""
+msgstr "Estilo:"
 
 #: ../admin/classes/class-widget.php:288
 msgid "Simple"
-msgstr ""
+msgstr "Simples"
 
 #: ../admin/classes/class-widget.php:289 ../admin/classes/tmp/settings.php:80
 #: ../admin/classes/tmp/settings.php:186 ../admin/classes/tmp/settings.php:334
@@ -543,7 +554,7 @@ msgstr ""
 
 #: ../admin/classes/class-widget.php:312
 msgid "Profile URL:"
-msgstr ""
+msgstr "URL do perfil:"
 
 #: ../admin/classes/class-widget.php:315
 msgid "UltimateMember"
@@ -563,11 +574,11 @@ msgstr "Geral"
 
 #: ../admin/classes/tmp/settings.php:15
 msgid "Button Type"
-msgstr ""
+msgstr "Tipo de Botão"
 
 #: ../admin/classes/tmp/settings.php:18
 msgid "Icon"
-msgstr ""
+msgstr "Ícone"
 
 #: ../admin/classes/tmp/settings.php:19
 msgid "Text"
@@ -575,25 +586,25 @@ msgstr "Texto"
 
 #: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:28
 msgid "Button Text"
-msgstr ""
+msgstr "Botão de Texto"
 
 #: ../admin/classes/tmp/settings.php:27 ../admin/classes/tmp/settings.php:28
 #: ../admin/classes/tmp/settings.php:37
 msgid "Unlike"
-msgstr ""
+msgstr "Remover Gostar"
 
 #: ../admin/classes/tmp/settings.php:32 ../admin/classes/tmp/settings.php:37
 msgid "Button Icon"
-msgstr ""
+msgstr "Ícone de Botão"
 
 #: ../admin/classes/tmp/settings.php:33 ../admin/classes/tmp/settings.php:38
 #: ../admin/classes/tmp/settings.php:310
 msgid "Best size: 16x16"
-msgstr ""
+msgstr "Melhor tamanho: 16x16"
 
 #: ../admin/classes/tmp/settings.php:41
 msgid "You have not permission to unlike"
-msgstr ""
+msgstr "Não tem permissão para remover o gosto"
 
 #: ../admin/classes/tmp/settings.php:42
 msgid "Permission Text"
@@ -605,15 +616,15 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:49
 msgid "Alert Box"
-msgstr ""
+msgstr "Caixa de Alerta"
 
 #: ../admin/classes/tmp/settings.php:50
 msgid "Like Button"
-msgstr "Botão de Like"
+msgstr "Botão de Gostar"
 
 #: ../admin/classes/tmp/settings.php:54
 msgid "You Should Login To Submit Your Like"
-msgstr ""
+msgstr "Deverá iniciar a sessão para submeter o seu gosto"
 
 #: ../admin/classes/tmp/settings.php:55
 msgid "Users Login Text"
@@ -648,7 +659,7 @@ msgstr "Temas"
 #: ../admin/classes/tmp/settings.php:333 ../admin/classes/tmp/settings.php:445
 #: ../inc/wp-strings.php:25
 msgid "Default"
-msgstr "Omissão"
+msgstr "Predefinição"
 
 #: ../admin/classes/tmp/settings.php:91 ../admin/classes/tmp/settings.php:197
 #: ../admin/classes/tmp/settings.php:345 ../admin/classes/tmp/settings.php:457
@@ -667,7 +678,7 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:96 ../admin/classes/tmp/settings.php:202
 msgid "Top and Bottom"
-msgstr ""
+msgstr "Topo e Base"
 
 #: ../admin/classes/tmp/settings.php:101
 msgid "Auto Display Filter"
@@ -675,7 +686,7 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:104
 msgid "Single Posts"
-msgstr ""
+msgstr "Artigo Único"
 
 #: ../admin/classes/tmp/settings.php:105
 msgid "Pages"
@@ -683,7 +694,7 @@ msgstr "Páginas"
 
 #: ../admin/classes/tmp/settings.php:106
 msgid "Archives"
-msgstr "Arquivo"
+msgstr "Arquivos"
 
 #: ../admin/classes/tmp/settings.php:107
 msgid "Categories"
@@ -691,7 +702,7 @@ msgstr "Categorias"
 
 #: ../admin/classes/tmp/settings.php:108
 msgid "Search Results"
-msgstr "Resultados da pesquisa"
+msgstr "Resultados de Procura"
 
 #: ../admin/classes/tmp/settings.php:109
 msgid "Tags"
@@ -699,25 +710,27 @@ msgstr "Etiquetas"
 
 #: ../admin/classes/tmp/settings.php:110
 msgid "Author Page"
-msgstr ""
+msgstr "Página do Autor"
 
 #: ../admin/classes/tmp/settings.php:112
 msgid "You can filter theses pages on auto display option."
-msgstr ""
+msgstr "Pode filtrar estas páginas na opções de exibição automática"
 
 #: ../admin/classes/tmp/settings.php:117 ../admin/classes/tmp/settings.php:208
 #: ../admin/classes/tmp/settings.php:355 ../admin/classes/tmp/settings.php:467
 msgid "Only registered Users"
-msgstr ""
+msgstr "Apenas Utilizadores registados"
 
 #: ../admin/classes/tmp/settings.php:119
 msgid "<strong>Only</strong> registered users have permission to like posts."
 msgstr ""
+"<strong>Apenas</strong> os utilizadores registados têm permissão para gostar "
+"de artigos."
 
 #: ../admin/classes/tmp/settings.php:126 ../admin/classes/tmp/settings.php:217
 #: ../admin/classes/tmp/settings.php:364 ../admin/classes/tmp/settings.php:476
 msgid "Do Not Log"
-msgstr ""
+msgstr "Não Registar Eventos"
 
 #: ../admin/classes/tmp/settings.php:127 ../admin/classes/tmp/settings.php:218
 #: ../admin/classes/tmp/settings.php:365 ../admin/classes/tmp/settings.php:477
@@ -753,7 +766,7 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:143 ../admin/classes/tmp/settings.php:234
 #: ../admin/classes/tmp/settings.php:381 ../admin/classes/tmp/settings.php:493
 msgid "Size of Gravatars"
-msgstr ""
+msgstr "Tamanho dos Gravatars"
 
 #: ../admin/classes/tmp/settings.php:144 ../admin/classes/tmp/settings.php:235
 #: ../admin/classes/tmp/settings.php:382 ../admin/classes/tmp/settings.php:494
@@ -763,7 +776,7 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:149 ../admin/classes/tmp/settings.php:240
 #: ../admin/classes/tmp/settings.php:387 ../admin/classes/tmp/settings.php:499
 msgid "Number Of The Users"
-msgstr ""
+msgstr "Número de Utilziadores"
 
 #: ../admin/classes/tmp/settings.php:150 ../admin/classes/tmp/settings.php:241
 #: ../admin/classes/tmp/settings.php:388 ../admin/classes/tmp/settings.php:500
@@ -774,12 +787,12 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:394 ../admin/classes/tmp/settings.php:407
 #: ../admin/classes/tmp/settings.php:413 ../admin/classes/tmp/settings.php:506
 msgid "Allowed Variables:"
-msgstr ""
+msgstr "Variáveis permitidas:"
 
 #: ../admin/classes/tmp/settings.php:160 ../admin/classes/tmp/settings.php:251
 #: ../admin/classes/tmp/settings.php:417 ../admin/classes/tmp/settings.php:510
 msgid "Delete All Logs"
-msgstr ""
+msgstr "Eliminar Todos os Registos"
 
 #: ../admin/classes/tmp/settings.php:161 ../admin/classes/tmp/settings.php:252
 #: ../admin/classes/tmp/settings.php:418 ../admin/classes/tmp/settings.php:511
@@ -789,7 +802,7 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:166 ../admin/classes/tmp/settings.php:257
 #: ../admin/classes/tmp/settings.php:423 ../admin/classes/tmp/settings.php:516
 msgid "Delete All Data"
-msgstr ""
+msgstr "Eliminar Todos os Dados"
 
 #: ../admin/classes/tmp/settings.php:167 ../admin/classes/tmp/settings.php:258
 #: ../admin/classes/tmp/settings.php:424 ../admin/classes/tmp/settings.php:517
@@ -807,7 +820,7 @@ msgstr "Personalizar"
 
 #: ../admin/classes/tmp/settings.php:274
 msgid "Custom Style"
-msgstr ""
+msgstr "Estilo Personalizado"
 
 #: ../admin/classes/tmp/settings.php:279
 msgid "Active this option to see the custom style settings."
@@ -823,11 +836,11 @@ msgstr "Fundo"
 
 #: ../admin/classes/tmp/settings.php:288 ../admin/classes/tmp/settings.php:301
 msgid "Border Color"
-msgstr ""
+msgstr "Cor da Margem"
 
 #: ../admin/classes/tmp/settings.php:292 ../admin/classes/tmp/settings.php:305
 msgid "Text Color"
-msgstr "Cor do texto"
+msgstr "Cor do Texto"
 
 #: ../admin/classes/tmp/settings.php:296
 msgid "Counter Style"
@@ -835,29 +848,30 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:309
 msgid "Loading Animation"
-msgstr ""
+msgstr "A Carregar Animação"
 
 #: ../admin/classes/tmp/settings.php:314
-#, fuzzy
 msgid "Custom CSS"
-msgstr "Personalizar"
+msgstr "Personalizar CSS"
 
 #: ../admin/classes/tmp/settings.php:348
 msgid "Activity Content"
-msgstr ""
+msgstr "Atividade de Conteúdo"
 
 #: ../admin/classes/tmp/settings.php:349
 msgid "Activity Meta"
-msgstr ""
+msgstr "Atividade de Metadados"
 
 #: ../admin/classes/tmp/settings.php:357
 msgid ""
 "<strong>Only</strong> registered users have permission to like activities."
 msgstr ""
+"<strong>Apenas</strong> os utilizadores registados têm permissão para gostar "
+"das atividades."
 
 #: ../admin/classes/tmp/settings.php:399
 msgid "BuddyPress Activity"
-msgstr ""
+msgstr "Atividade do BuddyPress"
 
 #: ../admin/classes/tmp/settings.php:401
 msgid "insert new likes in buddyPress activity page"
@@ -866,6 +880,8 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:469
 msgid "<strong>Only</strong> registered users have permission to like Topics."
 msgstr ""
+"<strong>Apenas</strong> os utilizadores registados têm permissão para gostar "
+"dos Tópicos."
 
 #: ../admin/classes/tmp/settings.php:504
 msgid "Users who have liked this topic:"
@@ -884,7 +900,7 @@ msgstr ""
 #: ../admin/logs.php:138 ../admin/logs.php:259 ../admin/logs.php:386
 #: ../admin/logs.php:508
 msgid "WP ULike Logs"
-msgstr ""
+msgstr "Registos de WP ULike"
 
 #: ../admin/logs.php:149 ../admin/logs.php:270 ../admin/logs.php:397
 #: ../admin/logs.php:519
@@ -903,21 +919,21 @@ msgstr "Estado"
 
 #: ../admin/logs.php:152
 msgid "Post ID"
-msgstr ""
+msgstr "Id. do Artigo"
 
 #: ../admin/logs.php:153
 msgid "Post Title"
-msgstr ""
+msgstr "Título do Artigo"
 
 #: ../admin/logs.php:154 ../admin/logs.php:276 ../admin/logs.php:402
 #: ../admin/logs.php:524
 msgid "Date / Time"
-msgstr ""
+msgstr "Data / Hora"
 
 #: ../admin/logs.php:155 ../admin/logs.php:277 ../admin/logs.php:403
 #: ../admin/logs.php:525
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: ../admin/logs.php:156 ../admin/logs.php:278 ../admin/logs.php:404
 #: ../admin/logs.php:526
@@ -927,7 +943,7 @@ msgstr "Ações"
 #: ../admin/logs.php:174 ../admin/logs.php:296 ../admin/logs.php:422
 #: ../admin/logs.php:544 ../admin/stats.php:198
 msgid "Guest User"
-msgstr ""
+msgstr "Utilizador Convidado"
 
 #: ../admin/logs.php:219 ../admin/logs.php:345 ../admin/logs.php:468
 #: ../admin/logs.php:590
@@ -938,32 +954,32 @@ msgstr ""
 
 #: ../admin/logs.php:273
 msgid "Comment ID"
-msgstr ""
+msgstr "Id. do Comentário"
 
 #: ../admin/logs.php:274
 msgid "Comment Author"
-msgstr ""
+msgstr "Autor do Comentário"
 
 #: ../admin/logs.php:275
 msgid "Comment Text"
-msgstr ""
+msgstr "Texto do Comentário"
 
 #: ../admin/logs.php:400
 msgid "Activity ID"
-msgstr ""
+msgstr "Id. da Atividade"
 
 #: ../admin/logs.php:401
 msgid "Permalink"
-msgstr ""
+msgstr "Hiperligação permanente"
 
 #: ../admin/logs.php:438
 #, php-format
 msgid "<a href=\"%1$s\">Activity Permalink</a>"
-msgstr ""
+msgstr "<a href=\"%1$s\">Hiperligação Permanente Atividade</a>"
 
 #: ../admin/logs.php:522
 msgid "Topic ID"
-msgstr ""
+msgstr "Id. do Tópico"
 
 #: ../admin/logs.php:523
 msgid "Topic Title"
@@ -971,7 +987,7 @@ msgstr ""
 
 #: ../admin/stats.php:30
 msgid "Welcome to WP ULike Statistics!"
-msgstr ""
+msgstr "Bem-vindo às Estatísticas de WP ULike"
 
 #: ../admin/stats.php:31
 msgid "We have provided some useful statistics tools in this page:"
@@ -979,7 +995,7 @@ msgstr ""
 
 #: ../admin/stats.php:35
 msgid "Get Started"
-msgstr "Começa aqui"
+msgstr "Comece Aqui"
 
 #: ../admin/stats.php:37
 msgid "or"
@@ -987,7 +1003,7 @@ msgstr "ou"
 
 #: ../admin/stats.php:40
 msgid "Other Tools"
-msgstr ""
+msgstr "Outras Ferramentas"
 
 #: ../admin/stats.php:49
 msgid "Documentation"
@@ -999,11 +1015,11 @@ msgstr "Contacto"
 
 #: ../admin/stats.php:54
 msgid "GitHub Repository"
-msgstr ""
+msgstr "Repositório do GitHub"
 
 #: ../admin/stats.php:80
 msgid "Posts Likes Summary"
-msgstr ""
+msgstr "Resumo dos Gostos de Artigos"
 
 #: ../admin/stats.php:88
 msgid "Comments Likes Summary"
@@ -1019,11 +1035,11 @@ msgstr ""
 
 #: ../admin/stats.php:114 ../admin/stats.php:344
 msgid "Summary"
-msgstr "Um resumo"
+msgstr "Resumo"
 
 #: ../admin/stats.php:126
 msgid "Total Likes"
-msgstr ""
+msgstr "Total de Gostos"
 
 #: ../admin/stats.php:138
 msgid "Today"
@@ -1031,15 +1047,15 @@ msgstr "Hoje"
 
 #: ../admin/stats.php:143
 msgid "Yesterday"
-msgstr ""
+msgstr "Ontem"
 
 #: ../admin/stats.php:148
 msgid "Week"
-msgstr ""
+msgstr "Semana"
 
 #: ../admin/stats.php:153
 msgid "Month"
-msgstr ""
+msgstr "Mês"
 
 #: ../admin/stats.php:158
 msgid "Total"
@@ -1047,22 +1063,22 @@ msgstr "Total"
 
 #: ../admin/stats.php:192 ../admin/stats.php:351
 msgid "Top Likers"
-msgstr ""
+msgstr "Melhores Gostos"
 
 #: ../admin/stats.php:227 ../admin/stats.php:233 ../admin/stats.php:239
 #: ../admin/stats.php:245
 msgid "View Logs"
-msgstr ""
+msgstr "Ver Registos"
 
 #: ../admin/stats.php:228 ../admin/stats.php:345
 msgid "Posts Likes Stats"
-msgstr ""
+msgstr "Estado dos Gostos de Artigos"
 
 #: ../admin/stats.php:228 ../admin/stats.php:234 ../admin/stats.php:240
 #: ../admin/stats.php:246 ../admin/stats.php:277
 #, php-format
 msgid "In The Last %s Days"
-msgstr ""
+msgstr "Nos últimos %s dias"
 
 #: ../admin/stats.php:234 ../admin/stats.php:346
 msgid "Comments Likes Stats"
@@ -1078,11 +1094,11 @@ msgstr ""
 
 #: ../admin/stats.php:277 ../admin/stats.php:349
 msgid "Likes Percent"
-msgstr ""
+msgstr "Percentagem de Gostos"
 
 #: ../admin/stats.php:341
 msgid "Show on screen"
-msgstr "Mostrar na página"
+msgstr "Mostrar no ecrã"
 
 #: ../admin/stats.php:343
 msgid "Welcome"
@@ -1090,7 +1106,7 @@ msgstr "Bem-vindo"
 
 #: ../admin/stats.php:354
 msgid "Days"
-msgstr ""
+msgstr "Dias"
 
 #: ../inc/classes/class-mycred.php:202
 msgid "Points for Liking content"
@@ -1098,7 +1114,7 @@ msgstr ""
 
 #: ../inc/classes/class-mycred.php:209 ../inc/classes/class-mycred.php:226
 msgid "Limit"
-msgstr ""
+msgstr "Limite"
 
 #: ../inc/classes/class-mycred.php:214 ../inc/classes/class-mycred.php:231
 #: ../inc/classes/class-mycred.php:243 ../inc/classes/class-mycred.php:255
@@ -1119,7 +1135,7 @@ msgstr ""
 
 #: ../inc/wp-functions.php:172
 msgid "WP ULike Activity"
-msgstr ""
+msgstr "Atividade do WP ULike"
 
 #: ../inc/wp-functions.php:303
 msgid ""
@@ -1157,35 +1173,35 @@ msgstr ""
 
 #: ../inc/wp-strings.php:3
 msgid "Allow To Like"
-msgstr ""
+msgstr "Permitir Gostar"
 
 #: ../inc/wp-strings.php:4
 msgid "Guests Only"
-msgstr ""
+msgstr "Apenas Convidados"
 
 #: ../inc/wp-strings.php:5
 msgid "Registered Users Only"
-msgstr ""
+msgstr "Apenas Utilizadores Registados"
 
 #: ../inc/wp-strings.php:6
 msgid "Registered Users And Guests"
-msgstr ""
+msgstr "Utilizadores e Convidados Registados"
 
 #: ../inc/wp-strings.php:7
 msgid "Who Is Allowed To Like?"
-msgstr ""
+msgstr "A quem é permitido gostar?"
 
 #: ../inc/wp-strings.php:8
 msgid "Filter Options:"
-msgstr ""
+msgstr "Opções de filtro:"
 
 #: ../inc/wp-strings.php:9
 msgid "Sort Options:"
-msgstr ""
+msgstr "Opções de ordenação:"
 
 #: ../inc/wp-strings.php:11
 msgid "Dislike"
-msgstr ""
+msgstr "Remover Gosto"
 
 #: ../inc/wp-strings.php:12
 msgid "Dislike Support"
@@ -1201,7 +1217,7 @@ msgstr ""
 
 #: ../inc/wp-strings.php:15
 msgid "Show tooltips"
-msgstr ""
+msgstr "Mostrar dicas da ferramenta"
 
 #: ../inc/wp-strings.php:16
 msgid "Alignment"
@@ -1209,11 +1225,11 @@ msgstr "Alinhamento"
 
 #: ../inc/wp-strings.php:17
 msgid "Left"
-msgstr "Links"
+msgstr "Esquerda"
 
 #: ../inc/wp-strings.php:18
 msgid "Center"
-msgstr "Center"
+msgstr "Centro"
 
 #: ../inc/wp-strings.php:19
 msgid "Right"
@@ -1237,7 +1253,7 @@ msgstr ""
 
 #: ../inc/wp-strings.php:24
 msgid "Tooltip"
-msgstr ""
+msgstr "Dica da Ferramenta"
 
 #: ../inc/wp-strings.php:29
 msgid "Total Users Liked"
@@ -1253,46 +1269,41 @@ msgstr ""
 
 #: ../inc/wp-strings.php:32
 msgid "Upvote"
-msgstr ""
+msgstr "Votar +"
 
 #: ../inc/wp-strings.php:33
 msgid "Downvote"
-msgstr ""
+msgstr "Votar -"
 
 #: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:291
 msgid "You need to login in order to like this post: "
-msgstr ""
+msgstr "Precisa de iniciar a sessão para poder gostar este artigo: "
 
 #: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:142 ../inc/wp-ulike.php:219
 #: ../inc/wp-ulike.php:291
 msgid "click here"
-msgstr ""
+msgstr "clique aqui"
 
 #: ../inc/wp-ulike.php:142
 msgid "You need to login in order to like this comment: "
-msgstr ""
+msgstr "Precisa de iniciar a sessão para gostar deste comentário:"
 
 #: ../inc/wp-ulike.php:219
 msgid "You need to login in order to like this activity: "
-msgstr ""
+msgstr "Precisa de iniciar a sessão para gostar desta atividade:"
 
 #: ../inc/wp-ulike.php:343
 msgid "Error: This Method Is Not Exist!"
-msgstr ""
+msgstr "Erro: este método não existe!"
 
 #: ../wp-ulike.php:124
-#, fuzzy
 msgid "Settings"
-msgstr "Definições guardadas"
+msgstr "Definições"
 
 #: ../wp-ulike.php:125
-#, fuzzy
 msgid "Statistics"
-msgstr "Estado"
+msgstr "Estatisticas"
 
 #: ../wp-ulike.php:126
 msgid "About"
-msgstr ""
-
-#~ msgid "Overview"
-#~ msgstr "Visão geral"
+msgstr "Sobre"

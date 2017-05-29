@@ -1,65 +1,68 @@
-#
+# Copyright (C) 2015 WP ULike
+# This file is distributed under the same license as the WP ULike package.
 # Translators:
+# evigiannakou <evigian@in.gr>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
-"POT-Creation-Date: 2015-05-21 11:28+0330\n"
-"PO-Revision-Date: 2015-05-21 11:28+0330\n"
-"Last-Translator: Alimir <info@alimir.ir>\n"
-"Language-Team: Russian (Russia) (http://www.transifex.com/projects/p/wp-"
-"ulike/language/ru_RU/)\n"
-"Language: ru_RU\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/wp-ulike\n"
+"POT-Creation-Date: 2015-05-21 11:36+0330\n"
+"PO-Revision-Date: 2017-01-20 21:23+0330\n"
+"Last-Translator: Alimir <alimir71@yahoo.com>\n"
+"Language-Team: Greek (http://www.transifex.com/wp-translations/wp-ulike/"
+"language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.6.10\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-KeywordsList: _e;__\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
 #: ../admin/about.php:107
 msgid "Welcome to WP ULike"
-msgstr ""
+msgstr "Καλώς ήρθατε στο WP ULike"
 
 #: ../admin/about.php:109
 msgid ""
 "Thank you for choosing WP ULike! This version is our leanest and most "
 "powerful version yet."
 msgstr ""
+"Σας ευχαριστούμε που επιλέξατε το WP ULike! Αυτή η έκδοση είναι η πιο λιτή "
+"και η πιο ισχυρή έκδοση ωστόσο."
 
 #: ../admin/about.php:110 ../admin/stats.php:37
 msgid "Visit our homepage"
-msgstr ""
+msgstr "Δείτε την αρχική μας σελίδα  "
 
 #: ../admin/about.php:112
 msgid "Version"
-msgstr "Версия"
+msgstr "Έκδοση"
 
 #: ../admin/about.php:115
 msgid "Getting Started"
-msgstr "Приступая к работе"
+msgstr "Ξεκινώντας"
 
 #: ../admin/about.php:116
 msgid "Credits"
-msgstr "Кредиты"
+msgstr "Ευχαριστίες"
 
 #: ../admin/about.php:117 ../admin/classes/class-settings.php:111
 #: ../admin/stats.php:51
 msgid "Support"
-msgstr "Поддержка"
+msgstr "Υποστήριξη"
 
 #: ../admin/about.php:118 ../admin/classes/class-settings.php:111
 #: ../admin/stats.php:52
 msgid "FAQ"
-msgstr "Часто задаваемые вопросы"
+msgstr "Κοινές απορίες"
 
 #: ../admin/about.php:119
 msgid "Reviews"
-msgstr "Отзывы"
+msgstr "Κριτικές"
 
 #: ../admin/about.php:125
 msgid "Introducing WP ULike"
@@ -67,7 +70,7 @@ msgstr ""
 
 #: ../admin/about.php:132 ../admin/admin.php:179 ../admin/stats.php:36
 msgid "About WP ULike"
-msgstr ""
+msgstr "Σχετικά με το WP ULike"
 
 #: ../admin/about.php:133 ../admin/classes/class-settings.php:46
 msgid ""
@@ -139,11 +142,11 @@ msgstr ""
 
 #: ../admin/about.php:216 ../admin/admin.php:175 ../admin/stats.php:23
 msgid "WP ULike Statistics"
-msgstr ""
+msgstr "Στατιστικά WP ULike"
 
 #: ../admin/about.php:216 ../admin/classes/tmp/settings.php:103
 msgid "Home"
-msgstr "Главная"
+msgstr "Αρχική"
 
 #: ../admin/about.php:216
 msgid "OR"
@@ -151,7 +154,7 @@ msgstr ""
 
 #: ../admin/about.php:216 ../admin/admin.php:72
 msgid "WP ULike Settings"
-msgstr ""
+msgstr "Ρυθμίσεις WP ULike"
 
 #: ../admin/about.php:222
 msgid "WP ULike is created by many love and time. Enjoy it :)"
@@ -159,7 +162,7 @@ msgstr ""
 
 #: ../admin/about.php:223
 msgid "Project Leaders"
-msgstr "Руководители проекта"
+msgstr "Κεντρική ομάδα"
 
 #: ../admin/about.php:228
 msgid "Project Lead & Developer"
@@ -167,7 +170,7 @@ msgstr ""
 
 #: ../admin/about.php:232
 msgid "Translations"
-msgstr "Переводы"
+msgstr "Μεταφράσεις"
 
 #: ../admin/about.php:271
 msgid "Would you like to help translate the plugin into more languages?"
@@ -183,7 +186,7 @@ msgstr ""
 
 #: ../admin/about.php:292
 msgid "Like this plugin?"
-msgstr "Нравится этот плагин?"
+msgstr "Σας αρέσει αυτό το πρόσθετο;"
 
 #: ../admin/about.php:293
 msgid ""
@@ -201,11 +204,11 @@ msgstr ""
 
 #: ../admin/admin.php:75 ../inc/wp-functions.php:302
 msgid "WP ULike"
-msgstr ""
+msgstr "WP ULike"
 
 #: ../admin/admin.php:83
 msgid "Settings saved."
-msgstr "Настройки сохранены."
+msgstr "Οι ρυθμίσεις αποθηκεύτηκαν."
 
 #: ../admin/admin.php:113 ../admin/admin.php:141
 msgid "Failed! An Error Has Occurred While Deleting All ULike Logs/Data"
@@ -237,16 +240,15 @@ msgstr ""
 
 #: ../admin/classes/class-settings.php:28 ../admin/stats.php:355
 msgid "Save Settings"
-msgstr "Сохранить настройки"
+msgstr "Αποθήκευση Ρυθμίσεων"
 
 #: ../admin/classes/class-settings.php:29
 msgid "Reset Settings"
-msgstr ""
+msgstr "Επαναφορά Ρυθμίσεων"
 
 #: ../admin/classes/class-settings.php:44
-#, fuzzy
 msgid "Similar Settings"
-msgstr "Сохранить настройки"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:48
 #: ../admin/classes/tmp/settings.php:124 ../admin/classes/tmp/settings.php:215
@@ -342,7 +344,7 @@ msgstr ""
 
 #: ../admin/classes/class-settings.php:79 ../admin/classes/tmp/settings.php:72
 msgid "Posts"
-msgstr "Записи"
+msgstr "Posts"
 
 #: ../admin/classes/class-settings.php:81
 #: ../admin/classes/class-settings.php:90
@@ -373,7 +375,7 @@ msgstr ""
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/class-settings.php:106
 msgid "Default Template:"
-msgstr ""
+msgstr "Προεπιλεγμένο Πρότυπο:"
 
 #: ../admin/classes/class-settings.php:81
 #: ../admin/classes/tmp/settings.php:154 ../inc/classes/class-ulike.php:423
@@ -383,7 +385,7 @@ msgstr ""
 #: ../admin/classes/class-settings.php:88
 #: ../admin/classes/tmp/settings.php:178
 msgid "Comments"
-msgstr "комментариев"
+msgstr "Σχόλια"
 
 #: ../admin/classes/class-settings.php:90
 msgid ""
@@ -427,15 +429,15 @@ msgstr ""
 #: ../admin/classes/class-settings.php:104
 #: ../admin/classes/tmp/settings.php:438
 msgid "bbPress"
-msgstr ""
+msgstr "bbPress"
 
 #: ../admin/classes/class-settings.php:111
 msgid "For more information:"
-msgstr "Для дополнительной информации:"
+msgstr "Για περισσότερα:"
 
 #: ../admin/classes/class-settings.php:170
 msgid "Default settings have been reset."
-msgstr ""
+msgstr "Οι προεπιλεγμένες ρυθμίσεις επαναφέρθηκαν."
 
 #: ../admin/classes/class-settings.php:247
 msgid ""
@@ -446,17 +448,17 @@ msgstr ""
 #: ../admin/classes/class-settings.php:323
 #: ../admin/classes/class-settings.php:347
 msgid "No options defined."
-msgstr ""
+msgstr "Δεν έχουν καθοριστεί επιλογές."
 
 #: ../admin/classes/class-settings.php:334
 #, php-format
 msgid "Select %s"
-msgstr "Выбор %s"
+msgstr "Επιλογή %s"
 
 #: ../admin/classes/class-settings.php:335
 #, php-format
 msgid "Remove %s"
-msgstr ""
+msgstr "Αφαίρεση %s"
 
 #: ../admin/classes/class-settings.php:359
 msgid "No action defined."
@@ -464,7 +466,7 @@ msgstr ""
 
 #: ../admin/classes/class-widget.php:11
 msgid "WP Ulike Widget"
-msgstr ""
+msgstr "Μονάδα WP Ulike"
 
 #: ../admin/classes/class-widget.php:12
 msgid ""
@@ -477,13 +479,13 @@ msgstr ""
 
 #: ../admin/classes/class-widget.php:126
 msgid "on"
-msgstr "on"
+msgstr "ενεργό"
 
 #: ../admin/classes/class-widget.php:202 ../admin/classes/tmp/settings.php:23
 #: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:32
 #: ../admin/stats.php:205
 msgid "Like"
-msgstr ""
+msgstr "Μου αρέσει"
 
 #: ../admin/classes/class-widget.php:266
 msgid "Most Liked"
@@ -491,11 +493,11 @@ msgstr ""
 
 #: ../admin/classes/class-widget.php:270
 msgid "Title:"
-msgstr "Заголовок:"
+msgstr "Τίτλος:"
 
 #: ../admin/classes/class-widget.php:275
 msgid "Type:"
-msgstr ""
+msgstr "Τύπος:"
 
 #: ../admin/classes/class-widget.php:277 ../inc/wp-strings.php:26
 msgid "Most Liked Posts"
@@ -523,7 +525,7 @@ msgstr ""
 
 #: ../admin/classes/class-widget.php:288
 msgid "Simple"
-msgstr ""
+msgstr "Απλό"
 
 #: ../admin/classes/class-widget.php:289 ../admin/classes/tmp/settings.php:80
 #: ../admin/classes/tmp/settings.php:186 ../admin/classes/tmp/settings.php:334
@@ -561,32 +563,32 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:11
 msgid "General"
-msgstr "Общие"
+msgstr "Γενικά"
 
 #: ../admin/classes/tmp/settings.php:15
 msgid "Button Type"
-msgstr ""
+msgstr "Τύπος Κουμπιού"
 
 #: ../admin/classes/tmp/settings.php:18
 msgid "Icon"
-msgstr "Иконка"
+msgstr "Εικονίδιο"
 
 #: ../admin/classes/tmp/settings.php:19
 msgid "Text"
-msgstr "Текст"
+msgstr "Κείμενο"
 
 #: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:28
 msgid "Button Text"
-msgstr ""
+msgstr "Κείμενο κουμπού"
 
 #: ../admin/classes/tmp/settings.php:27 ../admin/classes/tmp/settings.php:28
 #: ../admin/classes/tmp/settings.php:37
 msgid "Unlike"
-msgstr ""
+msgstr "Δεν μου αρέσει"
 
 #: ../admin/classes/tmp/settings.php:32 ../admin/classes/tmp/settings.php:37
 msgid "Button Icon"
-msgstr ""
+msgstr "Εικονίδιο Κουμπιού"
 
 #: ../admin/classes/tmp/settings.php:33 ../admin/classes/tmp/settings.php:38
 #: ../admin/classes/tmp/settings.php:310
@@ -634,7 +636,7 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:453 ../admin/classes/tmp/settings.php:468
 #: ../admin/classes/tmp/settings.php:487
 msgid "Activate"
-msgstr "Активировать"
+msgstr "Ενεργοποίηση"
 
 #: ../admin/classes/tmp/settings.php:62
 msgid "Convert numbers of Likes with string (kilobyte) format."
@@ -644,13 +646,13 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:331 ../admin/classes/tmp/settings.php:443
 #: ../inc/wp-strings.php:10
 msgid "Themes"
-msgstr "Темы"
+msgstr "Θέματα"
 
 #: ../admin/classes/tmp/settings.php:79 ../admin/classes/tmp/settings.php:185
 #: ../admin/classes/tmp/settings.php:333 ../admin/classes/tmp/settings.php:445
 #: ../inc/wp-strings.php:25
 msgid "Default"
-msgstr "По умолчанию"
+msgstr "Προεπιλεγμένο"
 
 #: ../admin/classes/tmp/settings.php:91 ../admin/classes/tmp/settings.php:197
 #: ../admin/classes/tmp/settings.php:345 ../admin/classes/tmp/settings.php:457
@@ -681,27 +683,27 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:105
 msgid "Pages"
-msgstr "Страницы"
+msgstr "Σελίδες"
 
 #: ../admin/classes/tmp/settings.php:106
 msgid "Archives"
-msgstr "Архивы"
+msgstr "Αρχείο"
 
 #: ../admin/classes/tmp/settings.php:107
 msgid "Categories"
-msgstr "Рубрики"
+msgstr "Κατηγορίες"
 
 #: ../admin/classes/tmp/settings.php:108
 msgid "Search Results"
-msgstr "Поиск результатов"
+msgstr "Αποτελέσματα αναζήτησης"
 
 #: ../admin/classes/tmp/settings.php:109
 msgid "Tags"
-msgstr "Метки"
+msgstr "Ετικέτες"
 
 #: ../admin/classes/tmp/settings.php:110
 msgid "Author Page"
-msgstr ""
+msgstr "Σελίδα Συντάκτη"
 
 #: ../admin/classes/tmp/settings.php:112
 msgid "You can filter theses pages on auto display option."
@@ -710,7 +712,7 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:117 ../admin/classes/tmp/settings.php:208
 #: ../admin/classes/tmp/settings.php:355 ../admin/classes/tmp/settings.php:467
 msgid "Only registered Users"
-msgstr ""
+msgstr "Μόνο εγγεγραμμένοι Χρήστες"
 
 #: ../admin/classes/tmp/settings.php:119
 msgid "<strong>Only</strong> registered users have permission to like posts."
@@ -805,7 +807,7 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:269
 msgid "Customize"
-msgstr "Настроить"
+msgstr "Προσαρμογή"
 
 #: ../admin/classes/tmp/settings.php:274
 msgid "Custom Style"
@@ -817,32 +819,31 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:283
 msgid "Button style"
-msgstr ""
+msgstr "Στυλ κουμπιού"
 
 #: ../admin/classes/tmp/settings.php:284 ../admin/classes/tmp/settings.php:297
 msgid "Background"
-msgstr "Фон"
+msgstr "Φόντο"
 
 #: ../admin/classes/tmp/settings.php:288 ../admin/classes/tmp/settings.php:301
 msgid "Border Color"
-msgstr "Цвет рамки"
+msgstr "Χρώμα Περιθωρίου"
 
 #: ../admin/classes/tmp/settings.php:292 ../admin/classes/tmp/settings.php:305
 msgid "Text Color"
-msgstr "Цвет текста"
+msgstr "Χρώμα κειμένου"
 
 #: ../admin/classes/tmp/settings.php:296
 msgid "Counter Style"
-msgstr ""
+msgstr "Στυλ Μετρητή"
 
 #: ../admin/classes/tmp/settings.php:309
 msgid "Loading Animation"
 msgstr ""
 
 #: ../admin/classes/tmp/settings.php:314
-#, fuzzy
 msgid "Custom CSS"
-msgstr "Настроить"
+msgstr "Προσαρμοσμένο CSS"
 
 #: ../admin/classes/tmp/settings.php:348
 msgid "Activity Content"
@@ -859,7 +860,7 @@ msgstr ""
 
 #: ../admin/classes/tmp/settings.php:399
 msgid "BuddyPress Activity"
-msgstr ""
+msgstr "Δραστηριότητα BuddyPress"
 
 #: ../admin/classes/tmp/settings.php:401
 msgid "insert new likes in buddyPress activity page"
@@ -877,16 +878,16 @@ msgstr ""
 #: ../admin/logs.php:263 ../admin/logs.php:337 ../admin/logs.php:390
 #: ../admin/logs.php:460 ../admin/logs.php:512 ../admin/logs.php:582
 msgid "Logs"
-msgstr "Логи"
+msgstr "Αρχείο καταγραφής"
 
 #: ../admin/logs.php:80
 msgid "Are you sure to remove this item?!"
-msgstr ""
+msgstr "Είστε σίγουροι ότι θέλετε να αφαιρέσετε αυτό το στοιχείο;!"
 
 #: ../admin/logs.php:138 ../admin/logs.php:259 ../admin/logs.php:386
 #: ../admin/logs.php:508
 msgid "WP ULike Logs"
-msgstr ""
+msgstr "Αρχείο καταγραφής WP ULike"
 
 #: ../admin/logs.php:149 ../admin/logs.php:270 ../admin/logs.php:397
 #: ../admin/logs.php:519
@@ -896,35 +897,35 @@ msgstr "ID"
 #: ../admin/logs.php:150 ../admin/logs.php:271 ../admin/logs.php:398
 #: ../admin/logs.php:520
 msgid "Username"
-msgstr "Имя пользователя"
+msgstr "Όνομα χρήστη"
 
 #: ../admin/logs.php:151 ../admin/logs.php:272 ../admin/logs.php:399
 #: ../admin/logs.php:521
 msgid "Status"
-msgstr "Статус"
+msgstr "Κατάσταση"
 
 #: ../admin/logs.php:152
 msgid "Post ID"
-msgstr "ID записи"
+msgstr "ID δημοσιεύματος"
 
 #: ../admin/logs.php:153
 msgid "Post Title"
-msgstr ""
+msgstr "Τίτλος Άρθρου"
 
 #: ../admin/logs.php:154 ../admin/logs.php:276 ../admin/logs.php:402
 #: ../admin/logs.php:524
 msgid "Date / Time"
-msgstr ""
+msgstr "Ημερομηνία / Ώρα"
 
 #: ../admin/logs.php:155 ../admin/logs.php:277 ../admin/logs.php:403
 #: ../admin/logs.php:525
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: ../admin/logs.php:156 ../admin/logs.php:278 ../admin/logs.php:404
 #: ../admin/logs.php:526
 msgid "Actions"
-msgstr "Действия"
+msgstr "Ενέργειες"
 
 #: ../admin/logs.php:174 ../admin/logs.php:296 ../admin/logs.php:422
 #: ../admin/logs.php:544 ../admin/stats.php:198
@@ -940,28 +941,28 @@ msgstr ""
 
 #: ../admin/logs.php:273
 msgid "Comment ID"
-msgstr ""
+msgstr "ID Σχολίου"
 
 #: ../admin/logs.php:274
 msgid "Comment Author"
-msgstr ""
+msgstr "Συντάκτης Σχολίου"
 
 #: ../admin/logs.php:275
 msgid "Comment Text"
-msgstr ""
+msgstr "Κείμενο Σχολίου"
 
 #: ../admin/logs.php:400
 msgid "Activity ID"
-msgstr ""
+msgstr "ID Δραστηριότητας"
 
 #: ../admin/logs.php:401
 msgid "Permalink"
-msgstr "Постоянная ссылка"
+msgstr "Permalink"
 
 #: ../admin/logs.php:438
 #, php-format
 msgid "<a href=\"%1$s\">Activity Permalink</a>"
-msgstr ""
+msgstr "<a href=\"%1$s\">Permalink Δραστηριότητας</a>"
 
 #: ../admin/logs.php:522
 msgid "Topic ID"
@@ -973,31 +974,31 @@ msgstr ""
 
 #: ../admin/stats.php:30
 msgid "Welcome to WP ULike Statistics!"
-msgstr ""
+msgstr "Καλώς ήρθατε στα Στατιστικά του WP ULike!"
 
 #: ../admin/stats.php:31
 msgid "We have provided some useful statistics tools in this page:"
-msgstr ""
+msgstr "Έχουμε παράσχει κάποια χρήσιμα εργαλεία στατιστικών σε αυτή τη σελίδα:"
 
 #: ../admin/stats.php:35
 msgid "Get Started"
-msgstr "Для начала"
+msgstr "Πρώτα βήματα"
 
 #: ../admin/stats.php:37
 msgid "or"
-msgstr "или"
+msgstr "ή"
 
 #: ../admin/stats.php:40
 msgid "Other Tools"
-msgstr ""
+msgstr "Άλλα Εργαλεία"
 
 #: ../admin/stats.php:49
 msgid "Documentation"
-msgstr "Документация"
+msgstr "Τεκμηρίωση"
 
 #: ../admin/stats.php:53
 msgid "Contact"
-msgstr "Контакт"
+msgstr "Επικοινωνία"
 
 #: ../admin/stats.php:54
 msgid "GitHub Repository"
@@ -1021,7 +1022,7 @@ msgstr ""
 
 #: ../admin/stats.php:114 ../admin/stats.php:344
 msgid "Summary"
-msgstr "Суммарно"
+msgstr "Σύνοψη"
 
 #: ../admin/stats.php:126
 msgid "Total Likes"
@@ -1029,23 +1030,23 @@ msgstr ""
 
 #: ../admin/stats.php:138
 msgid "Today"
-msgstr "Сегодня"
+msgstr "Σήμερα"
 
 #: ../admin/stats.php:143
 msgid "Yesterday"
-msgstr "Вчера"
+msgstr "Χθες"
 
 #: ../admin/stats.php:148
 msgid "Week"
-msgstr ""
+msgstr "Εβδομάδα"
 
 #: ../admin/stats.php:153
 msgid "Month"
-msgstr "Месяц"
+msgstr "Μήνας"
 
 #: ../admin/stats.php:158
 msgid "Total"
-msgstr "Общая стоимость"
+msgstr "Σύνολο"
 
 #: ../admin/stats.php:192 ../admin/stats.php:351
 msgid "Top Likers"
@@ -1054,7 +1055,7 @@ msgstr ""
 #: ../admin/stats.php:227 ../admin/stats.php:233 ../admin/stats.php:239
 #: ../admin/stats.php:245
 msgid "View Logs"
-msgstr ""
+msgstr "Προβολή Αρχείων καταγραφής"
 
 #: ../admin/stats.php:228 ../admin/stats.php:345
 msgid "Posts Likes Stats"
@@ -1064,7 +1065,7 @@ msgstr ""
 #: ../admin/stats.php:246 ../admin/stats.php:277
 #, php-format
 msgid "In The Last %s Days"
-msgstr ""
+msgstr "Στις Τελευταίες %s Ημέρες"
 
 #: ../admin/stats.php:234 ../admin/stats.php:346
 msgid "Comments Likes Stats"
@@ -1084,15 +1085,15 @@ msgstr ""
 
 #: ../admin/stats.php:341
 msgid "Show on screen"
-msgstr "На экране отображаются"
+msgstr "Προβολή"
 
 #: ../admin/stats.php:343
 msgid "Welcome"
-msgstr "Добро пожаловать"
+msgstr "Καλώς ήρθατε"
 
 #: ../admin/stats.php:354
 msgid "Days"
-msgstr "Дней"
+msgstr "Ημέρες"
 
 #: ../inc/classes/class-mycred.php:202
 msgid "Points for Liking content"
@@ -1100,7 +1101,7 @@ msgstr ""
 
 #: ../inc/classes/class-mycred.php:209 ../inc/classes/class-mycred.php:226
 msgid "Limit"
-msgstr ""
+msgstr "Όριο"
 
 #: ../inc/classes/class-mycred.php:214 ../inc/classes/class-mycred.php:231
 #: ../inc/classes/class-mycred.php:243 ../inc/classes/class-mycred.php:255
@@ -1121,7 +1122,7 @@ msgstr ""
 
 #: ../inc/wp-functions.php:172
 msgid "WP ULike Activity"
-msgstr ""
+msgstr "Δραστηριότητα WP ULike"
 
 #: ../inc/wp-functions.php:303
 msgid ""
@@ -1163,15 +1164,15 @@ msgstr ""
 
 #: ../inc/wp-strings.php:4
 msgid "Guests Only"
-msgstr ""
+msgstr "Μόνο Επισκέπτες"
 
 #: ../inc/wp-strings.php:5
 msgid "Registered Users Only"
-msgstr ""
+msgstr "Εγγεγραμμένοι Χρήστες Μόνο"
 
 #: ../inc/wp-strings.php:6
 msgid "Registered Users And Guests"
-msgstr ""
+msgstr "Εγγεγραμμένοι Χρήστες Και Επισκέπτες"
 
 #: ../inc/wp-strings.php:7
 msgid "Who Is Allowed To Like?"
@@ -1179,11 +1180,11 @@ msgstr ""
 
 #: ../inc/wp-strings.php:8
 msgid "Filter Options:"
-msgstr ""
+msgstr "Φίλτρο Επιλογών:"
 
 #: ../inc/wp-strings.php:9
 msgid "Sort Options:"
-msgstr ""
+msgstr "Ταξινόμηση Επιλογών:"
 
 #: ../inc/wp-strings.php:11
 msgid "Dislike"
@@ -1199,27 +1200,27 @@ msgstr ""
 
 #: ../inc/wp-strings.php:14
 msgid "Show Counter"
-msgstr ""
+msgstr "Προβολή Μετρητή"
 
 #: ../inc/wp-strings.php:15
 msgid "Show tooltips"
-msgstr ""
+msgstr "Προβολή επεξηγήσεων"
 
 #: ../inc/wp-strings.php:16
 msgid "Alignment"
-msgstr "Выравнивание"
+msgstr "Στοίχιση"
 
 #: ../inc/wp-strings.php:17
 msgid "Left"
-msgstr "Слева"
+msgstr "Αριστερά"
 
 #: ../inc/wp-strings.php:18
 msgid "Center"
-msgstr "По центру"
+msgstr "Κέντρο"
 
 #: ../inc/wp-strings.php:19
 msgid "Right"
-msgstr "Справа"
+msgstr "Δεξιά"
 
 #: ../inc/wp-strings.php:20
 msgid "Cookie Life time"
@@ -1227,7 +1228,7 @@ msgstr ""
 
 #: ../inc/wp-strings.php:21
 msgid "BuddyPress Notifications"
-msgstr ""
+msgstr "Ειδοποιήσεις BuddyPress"
 
 #: ../inc/wp-strings.php:22
 msgid "Liker Attempts"
@@ -1239,7 +1240,7 @@ msgstr ""
 
 #: ../inc/wp-strings.php:24
 msgid "Tooltip"
-msgstr "Подсказка"
+msgstr "Tooltip"
 
 #: ../inc/wp-strings.php:29
 msgid "Total Users Liked"
@@ -1268,7 +1269,7 @@ msgstr ""
 #: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:142 ../inc/wp-ulike.php:219
 #: ../inc/wp-ulike.php:291
 msgid "click here"
-msgstr ""
+msgstr "κάντε κλικ εδώ"
 
 #: ../inc/wp-ulike.php:142
 msgid "You need to login in order to like this comment: "
@@ -1283,18 +1284,13 @@ msgid "Error: This Method Is Not Exist!"
 msgstr ""
 
 #: ../wp-ulike.php:124
-#, fuzzy
 msgid "Settings"
-msgstr "Сохранить настройки"
+msgstr "Ρυθμίσεις"
 
 #: ../wp-ulike.php:125
-#, fuzzy
 msgid "Statistics"
-msgstr "Статус"
+msgstr "Στατιστικά"
 
 #: ../wp-ulike.php:126
 msgid "About"
-msgstr ""
-
-#~ msgid "Overview"
-#~ msgstr "Общая информация"
+msgstr "Περί"

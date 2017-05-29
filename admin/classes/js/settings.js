@@ -6,11 +6,11 @@ jQuery(document).ready(function ($) {
     current = parseInt(sessionStorage.getItem(page + '_current_tab'), 10) || 0;
   $('.wm-settings-section', form).each(function (i, el) {
     var setting = $(el).val(),
-      title = $(el).prev('h3'),
+      title = $(el).prev('h2'),
       section = $('<div>').attr('id', page + '_' + setting);
     $(el).nextAll().each(function () {
       var tag = $(this).prop('tagName');
-      if (tag === 'H3' || tag === 'INPUT') { return false; }
+      if (tag === 'H2' || tag === 'INPUT') { return false; }
       $(this).appendTo(section);
     });
     if (tabs.length && title.length) {

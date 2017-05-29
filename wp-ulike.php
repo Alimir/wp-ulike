@@ -3,19 +3,21 @@
 Plugin Name:WP ULike
 Plugin URI: http://preview.alimir.ir/developer/wp-ulike/
 Description: WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
-Version: 2.3
+Version: 2.5.1
 Author: Ali Mirzaei
 Author URI: http://about.alimir.ir
-Text Domain: alimir
+Text Domain: wp-ulike
 Domain Path: /lang/
 License: GPL2
 */
 
-//Load Translations
-load_plugin_textdomain( 'alimir', false, dirname( plugin_basename( __FILE__ ) ) .'/lang/' );
-
 //Do not change this value
-define( 'WP_ULIKE_DB_VERSION', '1.3' );
+define( 'WP_ULIKE_VERSION'      , '2.5.1' );
+define( 'WP_ULIKE_SLUG'         , 'wp-ulike' );
+define( 'WP_ULIKE_DB_VERSION'   , '1.3' );
+
+//Load Translations
+load_plugin_textdomain( WP_ULIKE_SLUG, false, dirname( plugin_basename( __FILE__ ) ) .'/lang/' );
 
 /**
  * When the plugin is activated, This function will install wp_ulike tables in database (If not exist table)
@@ -121,9 +123,9 @@ function wp_ulike_add_plugin_links( $actions, $plugin_file )
 		$plugin = plugin_basename(__FILE__);
 	if ($plugin == $plugin_file) {
 
-			$settings 	= array('settings' 	=> '<a href="admin.php?page=wp-ulike-settings">' . __('Settings', 'alimir') . '</a>');
-			$stats	 	= array('stats' 	=> '<a href="admin.php?page=wp-ulike-statistics">' . __('Statistics', 'alimir') . '</a>');
-			$about	 	= array('about' 	=> '<a href="admin.php?page=wp-ulike-about">' . __('About', 'alimir') . '</a>');
+			$settings 	= array('settings' 	=> '<a href="admin.php?page=wp-ulike-settings">' . __('Settings', WP_ULIKE_SLUG) . '</a>');
+			$stats	 	= array('stats' 	=> '<a href="admin.php?page=wp-ulike-statistics">' . __('Statistics', WP_ULIKE_SLUG) . '</a>');
+			$about	 	= array('about' 	=> '<a href="admin.php?page=wp-ulike-about">' . __('About', WP_ULIKE_SLUG) . '</a>');
     			
 			$actions	= array_merge($about, $actions);
 			$actions 	= array_merge($stats, $actions);
@@ -160,18 +162,6 @@ function wp_ulike_update_db_check() {
 	if ( get_site_option( 'wp_ulike_dbVersion' ) != WP_ULIKE_DB_VERSION ) {
 		wp_ulike_install();
 	}
-}
-
-/**
- * This function is getting the plugin version
- *
- * @author        	Alimir
- * @since           1.8
- * @return   		String
- */
-function wp_ulike_get_version() {
-	$plugin_data = get_plugin_data( __FILE__ );
-	return $plugin_data['Version'];
 }
 
 //Include plugin setting file

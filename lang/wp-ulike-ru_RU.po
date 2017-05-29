@@ -1,70 +1,76 @@
+# Copyright (C) 2015 WP ULike
+# This file is distributed under the same license as the WP ULike package.
+# Translators:
+# Victor Bychek, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
-"POT-Creation-Date: 2015-05-21 11:28+0330\n"
-"PO-Revision-Date: 2015-05-21 11:29+0330\n"
-"Last-Translator: Alimir <info@alimir.ir>\n"
-"Language-Team: alimir.ir <info@alimir.ir>\n"
-"Language: fa_IR\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/wp-ulike\n"
+"POT-Creation-Date: 2015-05-21 11:36+0330\n"
+"PO-Revision-Date: 2017-01-20 21:22+0330\n"
+"Last-Translator: Alimir <alimir71@yahoo.com>\n"
+"Language-Team: Russian (Russia) (http://www.transifex.com/wp-translations/wp-"
+"ulike/language/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
-"X-Poedit-KeywordsList: __;_e\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
 #: ../admin/about.php:107
 msgid "Welcome to WP ULike"
-msgstr "به وردپرس یولایک خوش آمدید"
+msgstr "Добро пожаловать в WP ULike"
 
 #: ../admin/about.php:109
 msgid ""
 "Thank you for choosing WP ULike! This version is our leanest and most "
 "powerful version yet."
 msgstr ""
-"از اینکه از افزونه وردپرس یولایک استفاده می کنید، خیلی ممنونیم! نسخه ی جدید، "
-"قویترین و کامل ترین نسخه منتشر شده از این افزونه است."
 
 #: ../admin/about.php:110 ../admin/stats.php:37
 msgid "Visit our homepage"
-msgstr "مشاهده صفحه افزونه"
+msgstr "Посетите наш сайт"
 
 #: ../admin/about.php:112
 msgid "Version"
-msgstr "نسخه"
+msgstr "Версия"
 
 #: ../admin/about.php:115
 msgid "Getting Started"
-msgstr "شروع "
+msgstr "Приступая к работе"
 
 #: ../admin/about.php:116
 msgid "Credits"
-msgstr "دست‌اندرکاران"
+msgstr "Кредиты"
 
 #: ../admin/about.php:117 ../admin/classes/class-settings.php:111
 #: ../admin/stats.php:51
 msgid "Support"
-msgstr "پشتیبانی"
+msgstr "Поддержка"
 
 #: ../admin/about.php:118 ../admin/classes/class-settings.php:111
 #: ../admin/stats.php:52
 msgid "FAQ"
-msgstr "سؤالات متداول"
+msgstr "Часто задаваемые вопросы"
 
 #: ../admin/about.php:119
 msgid "Reviews"
-msgstr "امتیازدهی"
+msgstr "Отзывы"
 
 #: ../admin/about.php:125
 msgid "Introducing WP ULike"
-msgstr "معرفی وردپرس یولاک"
+msgstr "Вступление в WP ULike"
 
 #: ../admin/about.php:132 ../admin/admin.php:179 ../admin/stats.php:36
 msgid "About WP ULike"
-msgstr "درباره وردپرس یولایک"
+msgstr "О WP ULike"
 
 #: ../admin/about.php:133 ../admin/classes/class-settings.php:46
 msgid ""
@@ -73,16 +79,10 @@ msgid ""
 "comments AND buddypress activities. Its very simple to use and supports many "
 "options."
 msgstr ""
-" افزونه ایرانی یولایک، یک سیستم آژاکسی ساده و کاربردی برای ایجاد قابلیت لایک "
-"(LIKE) در برگه ها، نوشته ها، دیدگاه های وردپرسی و همینطور فعالیت های بادی "
-"پرسی شماست. این افزونه با بهره گیری از پنل تنظیمات پیشرفته، پشتیبانی کامل از "
-"شیوه نامه  rtl، نمایش بیشترین مطالب/دیدگاه ها/فعالیت های  لایک شده، قابلیت "
-"سفارشی سازی استایل ها و… تمامی قابلیت های یک سیستم خوب و حرفه ای رو در "
-"اختیار شما قرار میده."
 
 #: ../admin/about.php:155
 msgid "WP Ulike Extension"
-msgstr "گسترش وردپرس یولایک"
+msgstr ""
 
 #: ../admin/about.php:156
 msgid ""
@@ -92,7 +92,7 @@ msgstr ""
 
 #: ../admin/about.php:165
 msgid "Added More Than 20 Language Files"
-msgstr "افزودن بیش از 20 فایل زبان جدید"
+msgstr ""
 
 #: ../admin/about.php:166
 msgid ""
@@ -102,7 +102,7 @@ msgstr ""
 
 #: ../admin/about.php:175
 msgid "User Profile Links"
-msgstr "لینک به حساب های کاربری"
+msgstr ""
 
 #: ../admin/about.php:176
 msgid ""
@@ -112,7 +112,7 @@ msgstr ""
 
 #: ../admin/about.php:185
 msgid "New Themes And Styles"
-msgstr "قالب ها و استایل های جدید"
+msgstr ""
 
 #: ../admin/about.php:186
 msgid ""
@@ -122,7 +122,7 @@ msgstr ""
 
 #: ../admin/about.php:195
 msgid "myCRED Points Support"
-msgstr "پشتیبانی کامل از امتیازات myCRED"
+msgstr ""
 
 #: ../admin/about.php:196
 msgid ""
@@ -132,7 +132,7 @@ msgstr ""
 
 #: ../admin/about.php:205 ../admin/stats.php:175 ../admin/stats.php:350
 msgid "Likers World Map"
-msgstr "نقشه جهانی لایک کنندگان"
+msgstr ""
 
 #: ../admin/about.php:206
 msgid ""
@@ -142,63 +142,57 @@ msgstr ""
 
 #: ../admin/about.php:216 ../admin/admin.php:175 ../admin/stats.php:23
 msgid "WP ULike Statistics"
-msgstr "آماره وردپرس یولایک"
+msgstr "Статистика WP ULike"
 
 #: ../admin/about.php:216 ../admin/classes/tmp/settings.php:103
 msgid "Home"
-msgstr "خانه"
+msgstr "Главная"
 
 #: ../admin/about.php:216
 msgid "OR"
-msgstr "یا"
+msgstr "ИЛИ"
 
 #: ../admin/about.php:216 ../admin/admin.php:72
 msgid "WP ULike Settings"
-msgstr "تنظیمات وردپرس یولایک"
+msgstr "Настройки WP ULike"
 
 #: ../admin/about.php:222
 msgid "WP ULike is created by many love and time. Enjoy it :)"
-msgstr ""
-"وردپرس یولایک با صرف کلی علاقه و زمان ساخته شده است. امیدواریم که از آن لذت "
-"ببرید :)"
+msgstr "WP ULike создан множеством любви и временем. Наслаждайтесь им:)"
 
 #: ../admin/about.php:223
 msgid "Project Leaders"
-msgstr "سازندگان اصلی"
+msgstr "Руководители проекта"
 
 #: ../admin/about.php:228
 msgid "Project Lead & Developer"
-msgstr "راهبر پروژه، توسعه دهنده ارشد"
+msgstr ""
 
 #: ../admin/about.php:232
 msgid "Translations"
-msgstr "ترجمه ها"
+msgstr "Переводы"
 
 #: ../admin/about.php:271
 msgid "Would you like to help translate the plugin into more languages?"
 msgstr ""
-"آیا علاقه ای  دارید که در ترجمه این افزونه به زبانهای دیگر با ما همکاری "
-"کنید؟!؟ "
 
 #: ../admin/about.php:271
 msgid "Join our WP-Translations Community"
-msgstr "به شبکه مترجمان ما بپیوندید"
+msgstr ""
 
 #: ../admin/about.php:273
 msgid "Other Plugins"
-msgstr "سایر افزونه ها"
+msgstr "Другие плагины"
 
 #: ../admin/about.php:292
 msgid "Like this plugin?"
-msgstr "این پلاگین چندتا لایک داره؟!؟ :)"
+msgstr "Нравится этот плагин?"
 
 #: ../admin/about.php:293
 msgid ""
 "Show your support by Rating 5 Star in <a href=\"http://wordpress.org/plugins/"
 "wp-ulike\"> Plugin Directory reviews</a>"
 msgstr ""
-"حمایتتون رو از این افزونه، با امتیاز 5 ستاره در <a href=\"http://wordpress."
-"org/plugins/wp-ulike\">مخزن وردپرس</a> مشخص کنید..."
 
 #: ../admin/admin.php:39
 #, php-format
@@ -207,63 +201,60 @@ msgid ""
 "\"_blank\">WP ULike</a>. Created by <a href=\"%s\" title=\"Wordpress ULike\" "
 "target=\"_blank\">Ali Mirzaei</a>"
 msgstr ""
-" ممنون از اينکه <a href=\"%s\" title=\"Wordpress ULike\" target=\"_blank"
-"\">وردپرس يولايک را</a> انتخاب کرده ايد. طراحي و کدنويسي توسط <a href=\"%s\" "
-"title=\"Wordpress ULike\" target=\"_blank\">علي ميرزائي</a>"
 
 #: ../admin/admin.php:75 ../inc/wp-functions.php:302
 msgid "WP ULike"
-msgstr "وردپرس یولایک"
+msgstr "WP ULike"
 
 #: ../admin/admin.php:83
 msgid "Settings saved."
-msgstr "تنظیمات ذخیره شد"
+msgstr "Настройки сохранены."
 
 #: ../admin/admin.php:113 ../admin/admin.php:141
 msgid "Failed! An Error Has Occurred While Deleting All ULike Logs/Data"
-msgstr "خطا! مشکلی در عملیات حذف وقایع/داده ها وجود دارد"
+msgstr "Не удалось! Произошла ошибка при удалении всех логов/данных ULike"
 
 #: ../admin/admin.php:115 ../admin/admin.php:143
 msgid "Success! All ULike Logs/Data Have Been Deleted"
-msgstr "هووورا! همه وقایع/داده ها با موفقیت حذف شدند"
+msgstr "Успех! Все логи/данные ULike удалены"
 
 #: ../admin/admin.php:159 ../admin/logs.php:139 ../admin/stats.php:42
 msgid "Post Likes Logs"
-msgstr "وقایع لایک در نوشتارها"
+msgstr ""
 
 #: ../admin/admin.php:163 ../admin/logs.php:260 ../admin/stats.php:43
 msgid "Comment Likes Logs"
-msgstr "وقایع لایک در دیدگاه ها"
+msgstr ""
 
 #: ../admin/admin.php:167 ../admin/logs.php:387 ../admin/stats.php:44
 msgid "Activity Likes Logs"
-msgstr "وقایع لایک در فعالیت ها"
+msgstr ""
 
 #: ../admin/admin.php:171 ../admin/logs.php:509 ../admin/stats.php:45
 msgid "Topics Likes Logs"
-msgstr "وقایع لایک در تاپیک ها"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:17
 msgid "Custom Settings"
-msgstr "تنظیمات سفارشی"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:28 ../admin/stats.php:355
 msgid "Save Settings"
-msgstr "ذخیره تغییرات"
+msgstr "Сохранить настройки"
 
 #: ../admin/classes/class-settings.php:29
 msgid "Reset Settings"
-msgstr "بازیابی تنظیمات"
+msgstr "Сбросить настройки"
 
 #: ../admin/classes/class-settings.php:44
 msgid "Similar Settings"
-msgstr "تنظیمات مشابه"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:48
 #: ../admin/classes/tmp/settings.php:124 ../admin/classes/tmp/settings.php:215
 #: ../admin/classes/tmp/settings.php:362 ../admin/classes/tmp/settings.php:474
 msgid "Logging Method"
-msgstr "روش وقایع نگاری"
+msgstr "Метод входа"
 
 #: ../admin/classes/class-settings.php:50
 msgid ""
@@ -271,9 +262,6 @@ msgid ""
 "save, There is no limitation in the like/dislike, unlike/undislike capacity "
 "do not work"
 msgstr ""
-"اگر گزینه <strong>\"بدون وقایع نگاری\"</strong> را انتخاب کنید: هیچ اطلاعات "
-"وقایعی ذخیره نمی شود، هیچ شرط محدود کننده ای برای  لایک/دیسلایک بررسی نمی "
-"شود، قابلیت لغو لایک/دیسلایک وجود نخواهد داشت"
 
 #: ../admin/classes/class-settings.php:51
 msgid ""
@@ -281,17 +269,12 @@ msgid ""
 "can't save, The like/dislike condition will be limited by SetCookie, unlike/"
 "undislike capacity do not work"
 msgstr ""
-"اگر گزینه <strong>\"با کوکی\"</strong> را انتخاب کنید: هیچ اطلاعات وقایعی "
-"ذخیره نمی شود، شرط بررسی  لایک/دیسلایک توسط  کوکی محدود می شود، قابلیت لغو "
-"لایک/دیسلایک وجود نخواهد داشت"
 
 #: ../admin/classes/class-settings.php:52
 msgid ""
 "If you select <strong>\"Logged By IP\"</strong> method: Data logs will save "
 "for all users, the convey of like/dislike condition will check by user IP"
 msgstr ""
-"اگر گزینه <strong>\"با آی پی\"</strong> را انتخاب کنید: اطلاعات وقایع همه ی "
-"کاربران ذخیره می شود، شرط بررسی  لایک/دیسلایک فقط توسط آی پی انجام میگیرد"
 
 #: ../admin/classes/class-settings.php:53
 msgid ""
@@ -299,9 +282,6 @@ msgid ""
 "will save for all users, the convey of like/dislike condition will check by "
 "user IP & SetCookie"
 msgstr ""
-"اگر گزینه <strong>\"با کوکی و آی پی\"</strong> را انتخاب کنید: اطلاعات وقایع "
-"همه ی کاربران ذخیره می شود، شرط بررسی  لایک/دیسلایک توسط  کوکی و آی پی انجام "
-"میگیرد"
 
 #: ../admin/classes/class-settings.php:54
 msgid ""
@@ -309,65 +289,62 @@ msgid ""
 "is saved for registered users, the convey of like/dislike condition will "
 "check by username, There is no permission for guest users to unlike/undislike"
 msgstr ""
-"اگر گزینه <strong>\"با نام کاربری\"</strong> را انتخاب کنید: اطلاعات وقایع "
-"تنها برای کابران عضو ذخیره می شود، شرط بررسی  لایک/دیسلایک توسط نام کاربری "
-"انجام میگیرد، کاربران مهمان اجازه لغو لایک/دیسلایک را نخواهند داشت"
 
 #: ../admin/classes/class-settings.php:57
 msgid "Template Variables"
-msgstr "تمپلیت متغیرها"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:59
 msgid "Start the loop of logs"
-msgstr "شروع حلقه وقایع"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:59
 #: ../admin/classes/class-settings.php:60
 msgid "required"
-msgstr "لازم"
+msgstr "обязательно"
 
 #: ../admin/classes/class-settings.php:60
 msgid "End of the while loop"
-msgstr "پایان حلقه وقایع"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:61
 #: ../admin/classes/class-settings.php:65
 #: ../admin/classes/class-settings.php:69
 msgid "Display the liker name"
-msgstr "نمایش نام کاربر لایک کرده"
+msgstr "Отображать имя лайкнувшего"
 
 #: ../admin/classes/class-settings.php:62
 msgid "Display the liker avatar (By Gravatar)"
-msgstr "نمایش آواتار کاربر لایک کرده (توسط Gravatar)"
+msgstr "Отображать аватар лайкнувшего (через Gravatar)"
 
 #: ../admin/classes/class-settings.php:63
 msgid "Display the BuddyPress user profile url"
-msgstr "نمایش پیوند مربوط به پروفایل های بادی پرس"
+msgstr "Отображать ссылку на профиль BuddyPress"
 
 #: ../admin/classes/class-settings.php:64
 msgid "Display the UltimateMemebr user profile url"
-msgstr "نمایش پیوند مربوط به پروفایل های افزونه UltimateMemebr"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:66
 msgid "Display the permalink"
-msgstr "نمایش پیوند ارجاعی"
+msgstr "Отображать постоянную ссылку"
 
 #: ../admin/classes/class-settings.php:67
 #: ../admin/classes/class-settings.php:71
 msgid "Display the likes count number"
-msgstr "نمایش شمارنده تعداد لایک ها"
+msgstr "Отображать количество лайков"
 
 #: ../admin/classes/class-settings.php:68
 msgid "Display the post title"
-msgstr "نمایش عنوان نوشته"
+msgstr "Отображать заголовок публикации"
 
 #: ../admin/classes/class-settings.php:70
 msgid "Display the comment author name"
-msgstr "نمایش نام نویسنده دیدگاه"
+msgstr "Отображать имя автора комментария"
 
 #: ../admin/classes/class-settings.php:79 ../admin/classes/tmp/settings.php:72
 msgid "Posts"
-msgstr "نوشته ها"
+msgstr "Записи"
 
 #: ../admin/classes/class-settings.php:81
 #: ../admin/classes/class-settings.php:90
@@ -376,15 +353,13 @@ msgstr "نوشته ها"
 #: ../admin/classes/tmp/settings.php:86 ../admin/classes/tmp/settings.php:192
 #: ../admin/classes/tmp/settings.php:340 ../admin/classes/tmp/settings.php:452
 msgid "Automatic display"
-msgstr "نمایش خودکار"
+msgstr "Автоматически отображать"
 
 #: ../admin/classes/class-settings.php:81
 msgid ""
 "If you disable this option, you have to put manually this code on wordpress "
 "while loop"
 msgstr ""
-"اگر این قابلیت را غیر فعال کنید، باید به صورت دستی این کد را در حلقه مطالب "
-"وردپرس قرار دهید "
 
 #: ../admin/classes/class-settings.php:81
 #: ../admin/classes/class-settings.php:90
@@ -393,42 +368,40 @@ msgstr ""
 #: ../admin/classes/tmp/settings.php:155 ../admin/classes/tmp/settings.php:246
 #: ../admin/classes/tmp/settings.php:393 ../admin/classes/tmp/settings.php:505
 msgid "Users Like Box Template"
-msgstr "قالب جعبه لایک کاربران"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:81
 #: ../admin/classes/class-settings.php:90
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/class-settings.php:106
 msgid "Default Template:"
-msgstr "قالب پیشفرض:"
+msgstr "Шаблон по умолчаниюЖ"
 
 #: ../admin/classes/class-settings.php:81
 #: ../admin/classes/tmp/settings.php:154 ../inc/classes/class-ulike.php:423
 msgid "Users who have LIKED this post:"
-msgstr "کاربرانی که این مطلب را پسندیده اند:"
+msgstr "Пользователи, которым ПОНРАВИЛСЯ этот пост:"
 
 #: ../admin/classes/class-settings.php:88
 #: ../admin/classes/tmp/settings.php:178
 msgid "Comments"
-msgstr "دیدگاه ها"
+msgstr "комментариев"
 
 #: ../admin/classes/class-settings.php:90
 msgid ""
 "If you disable this option, you have to put manually this code on comments "
 "text"
 msgstr ""
-"اگر این قابلیت را غیر فعال کنید، باید به صورت دستی این کد را در متن دیدگاه "
-"ها قرار دهید "
 
 #: ../admin/classes/class-settings.php:90
 #: ../admin/classes/tmp/settings.php:245
 msgid "Users who have LIKED this comment:"
-msgstr "کاربرانی که این دیدگاه را پسندیده اند:"
+msgstr "Пользователи, которым ПОНРАВИЛСЯ этот комментарий:"
 
 #: ../admin/classes/class-settings.php:96
 #: ../admin/classes/class-widget.php:314 ../admin/classes/tmp/settings.php:326
 msgid "BuddyPress"
-msgstr "بادی پرس"
+msgstr "BuddyPress"
 
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/class-settings.php:106
@@ -436,226 +409,223 @@ msgid ""
 "If you disable this option, you have to put manually this code on buddypres "
 "activities content"
 msgstr ""
-"اگر این قابلیت را غیر فعال کنید، باید به صورت دستی این کد را در متن فعالیت "
-"ها قرار دهید "
 
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/class-settings.php:106
 #: ../admin/classes/tmp/settings.php:392
 msgid "Users who have liked this activity:"
-msgstr "کاربرانی که این فعالیت را پسندیده اند:"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/tmp/settings.php:406
 msgid "Post Activity Text"
-msgstr "متن فعالیت مطالب"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:98
 #: ../admin/classes/tmp/settings.php:412
 msgid "Comment Activity Text"
-msgstr "متن فعالیت دیدگاه ها"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:104
 #: ../admin/classes/tmp/settings.php:438
 msgid "bbPress"
-msgstr "بی بی پرس"
+msgstr "bbPress"
 
 #: ../admin/classes/class-settings.php:111
 msgid "For more information:"
-msgstr "برای اطلاعات بیشتر:"
+msgstr "Для дополнительной информации:"
 
 #: ../admin/classes/class-settings.php:170
 msgid "Default settings have been reset."
-msgstr "تنظیمات پیشفرض، بازیابی شد."
+msgstr "Настройки успешно сброшены."
 
 #: ../admin/classes/class-settings.php:247
 msgid ""
 "Do you really want to reset all these settings to their default values ?"
-msgstr "آیا از بازیابی تنظیمات پیشفرض مطمئن هستید؟!؟"
+msgstr ""
 
 #: ../admin/classes/class-settings.php:312
 #: ../admin/classes/class-settings.php:323
 #: ../admin/classes/class-settings.php:347
 msgid "No options defined."
-msgstr "هیچ تنظیماتی تعریف نشده است."
+msgstr ""
 
 #: ../admin/classes/class-settings.php:334
 #, php-format
 msgid "Select %s"
-msgstr "انتخاب %s"
+msgstr "Выбор %s"
 
 #: ../admin/classes/class-settings.php:335
 #, php-format
 msgid "Remove %s"
-msgstr "حذف %s"
+msgstr "Удалить %s"
 
 #: ../admin/classes/class-settings.php:359
 msgid "No action defined."
-msgstr "هیچ کاری تعریف نشده است."
+msgstr "Действий не определено."
 
 #: ../admin/classes/class-widget.php:11
 msgid "WP Ulike Widget"
-msgstr "ابزارک یولایک"
+msgstr "Виджет WP Ulike"
 
 #: ../admin/classes/class-widget.php:12
 msgid ""
 "An advanced widget that gives you all most liked records with different types"
 msgstr ""
-"یک ابزارک ساده و کاربردی برای نمایش بیشترین لایک شده ها در چندین نوع مختلف"
 
 #: ../admin/classes/class-widget.php:79
 msgid "you haven't liked any post yet!"
-msgstr "شما هنوز هیچ نوشته ای را لایک نکرده اید! :("
+msgstr "вы ещё не лайкнули ни одного поста!"
 
 #: ../admin/classes/class-widget.php:126
 msgid "on"
-msgstr "در"
+msgstr "on"
 
 #: ../admin/classes/class-widget.php:202 ../admin/classes/tmp/settings.php:23
 #: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:32
 #: ../admin/stats.php:205
 msgid "Like"
-msgstr "لایک"
+msgstr "Нравится"
 
 #: ../admin/classes/class-widget.php:266
 msgid "Most Liked"
-msgstr "بیشترین لایک شده ها"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:270
 msgid "Title:"
-msgstr "عنوان:"
+msgstr "Заголовок:"
 
 #: ../admin/classes/class-widget.php:275
 msgid "Type:"
-msgstr "نوع:"
+msgstr "Тип:"
 
 #: ../admin/classes/class-widget.php:277 ../inc/wp-strings.php:26
 msgid "Most Liked Posts"
-msgstr "پرلایک ترین مطالب"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:278 ../inc/wp-strings.php:27
 msgid "Most Liked Comments"
-msgstr "پرلایک ترین دیدگاه ها"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:279
 msgid "Most Liked Activities"
-msgstr "پرلایک ترین فعالیت ها"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:280 ../inc/wp-strings.php:28
 msgid "Most Liked Users"
-msgstr "پرلایک ترین کاربران"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:281
 msgid "Last Posts Liked By User"
-msgstr "آخرین مطالب لایک شده توسط کاربر"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:286
 msgid "Style:"
-msgstr "قالب:"
+msgstr "Стиль:"
 
 #: ../admin/classes/class-widget.php:288
 msgid "Simple"
-msgstr "ساده"
+msgstr "Простой"
 
 #: ../admin/classes/class-widget.php:289 ../admin/classes/tmp/settings.php:80
 #: ../admin/classes/tmp/settings.php:186 ../admin/classes/tmp/settings.php:334
 #: ../admin/classes/tmp/settings.php:446
 msgid "Heart"
-msgstr "قلب"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:294
 msgid "Title Trim (Length):"
-msgstr "برش عنوان (طول):"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:300
 msgid "Number of items to show:"
-msgstr "تعداد آیتم ها:"
+msgstr "Количество элементов для показа:"
 
 #: ../admin/classes/class-widget.php:306
 msgid "Thumbnail/Avatar size:"
-msgstr "سایز تصویرشاخص/آواتار:"
+msgstr "Размер аватара/миниатюры:"
 
 #: ../admin/classes/class-widget.php:312
 msgid "Profile URL:"
-msgstr "لینک پروفایل به:"
+msgstr "URL профиля:"
 
 #: ../admin/classes/class-widget.php:315
 msgid "UltimateMember"
-msgstr "افزونه UltimateMember"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:321
 msgid "Activate Like Counter"
-msgstr "فعال سازی شمارنده"
+msgstr ""
 
 #: ../admin/classes/class-widget.php:326
 msgid "Activate Thumbnail/Avatar"
-msgstr "فعال سازی تصویرشاخص/آواتار"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:11
 msgid "General"
-msgstr "عمومی"
+msgstr "Общие"
 
 #: ../admin/classes/tmp/settings.php:15
 msgid "Button Type"
-msgstr "حالت دکمه"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:18
 msgid "Icon"
-msgstr "آیکن"
+msgstr "Иконка"
 
 #: ../admin/classes/tmp/settings.php:19
 msgid "Text"
-msgstr "متن"
+msgstr "Текст"
 
 #: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:28
 msgid "Button Text"
-msgstr "متن دکمه"
+msgstr "Текст кнопки"
 
 #: ../admin/classes/tmp/settings.php:27 ../admin/classes/tmp/settings.php:28
 #: ../admin/classes/tmp/settings.php:37
 msgid "Unlike"
-msgstr " لغو پسندیدن"
+msgstr "Не нравится"
 
 #: ../admin/classes/tmp/settings.php:32 ../admin/classes/tmp/settings.php:37
 msgid "Button Icon"
-msgstr "آیکن دکمه"
+msgstr "Значок Кнопки"
 
 #: ../admin/classes/tmp/settings.php:33 ../admin/classes/tmp/settings.php:38
 #: ../admin/classes/tmp/settings.php:310
 msgid "Best size: 16x16"
-msgstr "سایز مناسب : 16x16"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:41
 msgid "You have not permission to unlike"
-msgstr "شما اجازه لغو پسندیدن را ندارید"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:42
 msgid "Permission Text"
-msgstr "متن تولتیپ دسترسی"
+msgstr "Текст разрешения"
 
 #: ../admin/classes/tmp/settings.php:46
 msgid "Users Login Type"
-msgstr "متن ورود کاربران"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:49
 msgid "Alert Box"
-msgstr "جعبه پیغام"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:50
 msgid "Like Button"
-msgstr "دکمه لایک"
+msgstr "Кнопка Лайка"
 
 #: ../admin/classes/tmp/settings.php:54
 msgid "You Should Login To Submit Your Like"
-msgstr "برای ثبت لایک، باید وارد شوید"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:55
 msgid "Users Login Text"
-msgstr "متن ورود کاربران"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:60
 msgid "Format Number"
-msgstr "فرمت اعداد"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:61 ../admin/classes/tmp/settings.php:87
 #: ../admin/classes/tmp/settings.php:118 ../admin/classes/tmp/settings.php:137
@@ -666,322 +636,301 @@ msgstr "فرمت اعداد"
 #: ../admin/classes/tmp/settings.php:453 ../admin/classes/tmp/settings.php:468
 #: ../admin/classes/tmp/settings.php:487
 msgid "Activate"
-msgstr "فعال سازی"
+msgstr "Активировать"
 
 #: ../admin/classes/tmp/settings.php:62
 msgid "Convert numbers of Likes with string (kilobyte) format."
 msgstr ""
-"با فعال سازی این گزینه، می توانید اعداد بالای 1000 را با فرمت رشته ای "
-"(کیلوبایت) نمایش دهید."
 
 #: ../admin/classes/tmp/settings.php:77 ../admin/classes/tmp/settings.php:183
 #: ../admin/classes/tmp/settings.php:331 ../admin/classes/tmp/settings.php:443
 #: ../inc/wp-strings.php:10
 msgid "Themes"
-msgstr "قالب ها"
+msgstr "Темы"
 
 #: ../admin/classes/tmp/settings.php:79 ../admin/classes/tmp/settings.php:185
 #: ../admin/classes/tmp/settings.php:333 ../admin/classes/tmp/settings.php:445
 #: ../inc/wp-strings.php:25
 msgid "Default"
-msgstr "پیشفرض"
+msgstr "По умолчанию"
 
 #: ../admin/classes/tmp/settings.php:91 ../admin/classes/tmp/settings.php:197
 #: ../admin/classes/tmp/settings.php:345 ../admin/classes/tmp/settings.php:457
 msgid "Auto Display Position"
-msgstr "محل قرار گیری در نمایش خودکار"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:94 ../admin/classes/tmp/settings.php:200
 #: ../admin/classes/tmp/settings.php:460
 msgid "Top of Content"
-msgstr "بالای محتوا"
+msgstr "Верх контента"
 
 #: ../admin/classes/tmp/settings.php:95 ../admin/classes/tmp/settings.php:201
 #: ../admin/classes/tmp/settings.php:461
 msgid "Bottom of Content"
-msgstr "پایین محتوا"
+msgstr "Низ контента"
 
 #: ../admin/classes/tmp/settings.php:96 ../admin/classes/tmp/settings.php:202
 msgid "Top and Bottom"
-msgstr "بالا و پایین"
+msgstr "Верх и низ"
 
 #: ../admin/classes/tmp/settings.php:101
 msgid "Auto Display Filter"
-msgstr "فیلتر گذاری در نمایش خودکار"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:104
 msgid "Single Posts"
-msgstr "تک نوشته ها"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:105
 msgid "Pages"
-msgstr "برگه ها"
+msgstr "Страницы"
 
 #: ../admin/classes/tmp/settings.php:106
 msgid "Archives"
-msgstr "بایگانی"
+msgstr "Архивы"
 
 #: ../admin/classes/tmp/settings.php:107
 msgid "Categories"
-msgstr "دسته بندی ها"
+msgstr "Рубрики"
 
 #: ../admin/classes/tmp/settings.php:108
 msgid "Search Results"
-msgstr "نتایج جستجوها"
+msgstr "Поиск результатов"
 
 #: ../admin/classes/tmp/settings.php:109
 msgid "Tags"
-msgstr "برچسب ها"
+msgstr "Метки"
 
 #: ../admin/classes/tmp/settings.php:110
 msgid "Author Page"
-msgstr "صفحه نویسنده"
+msgstr "Страница автора"
 
 #: ../admin/classes/tmp/settings.php:112
 msgid "You can filter theses pages on auto display option."
 msgstr ""
-"شما می توانید بر روی این صفحات فیلتر گذاری کنید تا دکمه لایک نمایش داده نشود"
 
 #: ../admin/classes/tmp/settings.php:117 ../admin/classes/tmp/settings.php:208
 #: ../admin/classes/tmp/settings.php:355 ../admin/classes/tmp/settings.php:467
 msgid "Only registered Users"
-msgstr "محدودسازی لایک کاربران"
+msgstr "Только зарегистрированные пользователи"
 
 #: ../admin/classes/tmp/settings.php:119
 msgid "<strong>Only</strong> registered users have permission to like posts."
 msgstr ""
-"با فعال سازی این گزینه، <strong>تنها</strong> کاربران عضو شده، می توانند "
-"مطالب را لایک کنند."
 
 #: ../admin/classes/tmp/settings.php:126 ../admin/classes/tmp/settings.php:217
 #: ../admin/classes/tmp/settings.php:364 ../admin/classes/tmp/settings.php:476
 msgid "Do Not Log"
-msgstr "وقایع نگاری نکن"
+msgstr "Не логгировать"
 
 #: ../admin/classes/tmp/settings.php:127 ../admin/classes/tmp/settings.php:218
 #: ../admin/classes/tmp/settings.php:365 ../admin/classes/tmp/settings.php:477
 msgid "Logged By Cookie"
-msgstr "با کوکی"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:128 ../admin/classes/tmp/settings.php:219
 #: ../admin/classes/tmp/settings.php:366 ../admin/classes/tmp/settings.php:478
 msgid "Logged By IP"
-msgstr "با آی پی"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:129 ../admin/classes/tmp/settings.php:220
 #: ../admin/classes/tmp/settings.php:367 ../admin/classes/tmp/settings.php:479
 msgid "Logged By Cookie & IP"
-msgstr "با کوکی و آی پی"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:130 ../admin/classes/tmp/settings.php:221
 #: ../admin/classes/tmp/settings.php:368 ../admin/classes/tmp/settings.php:480
 msgid "Logged By Username"
-msgstr "با نام کاربری"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:136 ../admin/classes/tmp/settings.php:227
 #: ../admin/classes/tmp/settings.php:374 ../admin/classes/tmp/settings.php:486
 msgid "Show Liked Users Box"
-msgstr "نمایش باکس کاربران لایک کرده"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:138 ../admin/classes/tmp/settings.php:229
 #: ../admin/classes/tmp/settings.php:376 ../admin/classes/tmp/settings.php:488
 msgid ""
 "Active this option to show liked users avatars in the bottom of button like."
 msgstr ""
-"با فعال سازی این گزینه، می توانید آواتار کاربران لایک کرده، را در زیر دکمه "
-"لایک، نمایش دهید."
 
 #: ../admin/classes/tmp/settings.php:143 ../admin/classes/tmp/settings.php:234
 #: ../admin/classes/tmp/settings.php:381 ../admin/classes/tmp/settings.php:493
 msgid "Size of Gravatars"
-msgstr "سایز آوتار"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:144 ../admin/classes/tmp/settings.php:235
 #: ../admin/classes/tmp/settings.php:382 ../admin/classes/tmp/settings.php:494
 msgid "Size of Gravatars to return (max is 512)"
-msgstr "سایز تصاویر گراواتار (بیشترین اندازه 512)"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:149 ../admin/classes/tmp/settings.php:240
 #: ../admin/classes/tmp/settings.php:387 ../admin/classes/tmp/settings.php:499
 msgid "Number Of The Users"
-msgstr "تعداد کاربران قابل نمایش"
+msgstr "Количество пользователей"
 
 #: ../admin/classes/tmp/settings.php:150 ../admin/classes/tmp/settings.php:241
 #: ../admin/classes/tmp/settings.php:388 ../admin/classes/tmp/settings.php:500
 msgid "The number of users to show in the users liked box"
-msgstr "حداکثر چند کاربر در باکس لایک کنندگان، نمایش داده شوند؟!؟"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:156 ../admin/classes/tmp/settings.php:247
 #: ../admin/classes/tmp/settings.php:394 ../admin/classes/tmp/settings.php:407
 #: ../admin/classes/tmp/settings.php:413 ../admin/classes/tmp/settings.php:506
 msgid "Allowed Variables:"
-msgstr "متغیرهای قابل استفاده:"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:160 ../admin/classes/tmp/settings.php:251
 #: ../admin/classes/tmp/settings.php:417 ../admin/classes/tmp/settings.php:510
 msgid "Delete All Logs"
-msgstr "حذف تمام وقایع"
+msgstr "Удалить все логи"
 
 #: ../admin/classes/tmp/settings.php:161 ../admin/classes/tmp/settings.php:252
 #: ../admin/classes/tmp/settings.php:418 ../admin/classes/tmp/settings.php:511
 msgid "You Are About To Delete All Likes Logs. This Action Is Not Reversible."
 msgstr ""
-"شما قصد دارید که تمامی \"وقایع\" ثبت شده را حذف کنید! این عمل برگشت نا پذیر "
-"است."
 
 #: ../admin/classes/tmp/settings.php:166 ../admin/classes/tmp/settings.php:257
 #: ../admin/classes/tmp/settings.php:423 ../admin/classes/tmp/settings.php:516
 msgid "Delete All Data"
-msgstr "حذف تمام داده ها"
+msgstr "Удалить все данные"
 
 #: ../admin/classes/tmp/settings.php:167 ../admin/classes/tmp/settings.php:258
 #: ../admin/classes/tmp/settings.php:424 ../admin/classes/tmp/settings.php:517
 msgid "You Are About To Delete All Likes Data. This Action Is Not Reversible."
 msgstr ""
-"شما قصد دارید که تمامی \"داده ها\" ثبت شده را حذف کنید! این عمل برگشت نا "
-"پذیر است."
 
 #: ../admin/classes/tmp/settings.php:210
 msgid ""
 "<strong>Only</strong> registered users have permission to like comments."
 msgstr ""
-"با فعال سازی این گزینه، <strong>تنها</strong> کاربران عضو شده، می توانند "
-"دیدگاه ها را لایک کنند."
 
 #: ../admin/classes/tmp/settings.php:269
 msgid "Customize"
-msgstr "سفارشی سازی"
+msgstr "Настроить"
 
 #: ../admin/classes/tmp/settings.php:274
 msgid "Custom Style"
-msgstr "سفارشی سازی"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:279
 msgid "Active this option to see the custom style settings."
 msgstr ""
-"با فعال سازی این گزینه، می توانید استایل سفارشی خود را در افزونه به کار "
-"ببرید."
 
 #: ../admin/classes/tmp/settings.php:283
 msgid "Button style"
-msgstr "دکمه لایک"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:284 ../admin/classes/tmp/settings.php:297
 msgid "Background"
-msgstr "رنگ پس زمینه"
+msgstr "Фон"
 
 #: ../admin/classes/tmp/settings.php:288 ../admin/classes/tmp/settings.php:301
 msgid "Border Color"
-msgstr "رنگ حاشیه"
+msgstr "Цвет рамки"
 
 #: ../admin/classes/tmp/settings.php:292 ../admin/classes/tmp/settings.php:305
 msgid "Text Color"
-msgstr "رنگ متن"
+msgstr "Цвет текста"
 
 #: ../admin/classes/tmp/settings.php:296
 msgid "Counter Style"
-msgstr "باکس شمارنده"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:309
 msgid "Loading Animation"
-msgstr "انیمیشن بارگذاری"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:314
 msgid "Custom CSS"
-msgstr "سفارشی سازی css"
+msgstr "Произвольный CSS"
 
 #: ../admin/classes/tmp/settings.php:348
 msgid "Activity Content"
-msgstr "در متن فعالیت"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:349
 msgid "Activity Meta"
-msgstr "در متاباکس فعالیت"
+msgstr ""
 
 #: ../admin/classes/tmp/settings.php:357
 msgid ""
 "<strong>Only</strong> registered users have permission to like activities."
 msgstr ""
-"با فعال سازی این گزینه، <strong>تنها</strong> کاربران عضو شده، می توانند "
-"فعالیت های بادی پرس را لایک کنند."
 
 #: ../admin/classes/tmp/settings.php:399
 msgid "BuddyPress Activity"
-msgstr "فعالیت های بادی پرس"
+msgstr "Активность BuddyPress"
 
 #: ../admin/classes/tmp/settings.php:401
 msgid "insert new likes in buddyPress activity page"
 msgstr ""
-"با فعال سازی این گزینه، اطلاعات جدیدترین لایک ها به بخش فعالیت های بادی پرس "
-"اضافه خواهد شد."
 
 #: ../admin/classes/tmp/settings.php:469
 msgid "<strong>Only</strong> registered users have permission to like Topics."
 msgstr ""
-"با فعال سازی این گزینه، <strong>تنها</strong> کاربران عضو شده، می توانند "
-"تاپیک ها  را لایک کنند."
 
 #: ../admin/classes/tmp/settings.php:504
 msgid "Users who have liked this topic:"
-msgstr "کاربرانی که این تاپیک را پسندیده اند:"
+msgstr "Пользователи, которым понравилась эта тема:"
 
 #: ../admin/logs.php:17 ../admin/logs.php:142 ../admin/logs.php:212
 #: ../admin/logs.php:263 ../admin/logs.php:337 ../admin/logs.php:390
 #: ../admin/logs.php:460 ../admin/logs.php:512 ../admin/logs.php:582
 msgid "Logs"
-msgstr "وقایع"
+msgstr "Логи"
 
 #: ../admin/logs.php:80
 msgid "Are you sure to remove this item?!"
-msgstr "آیا از حذف این آیتم اطمینان دارید؟!"
+msgstr "Вы уверены, что хотите удалить этот элемент?"
 
 #: ../admin/logs.php:138 ../admin/logs.php:259 ../admin/logs.php:386
 #: ../admin/logs.php:508
 msgid "WP ULike Logs"
-msgstr "وقایع اتفاقیه در وردپرس یولایک"
+msgstr ""
 
 #: ../admin/logs.php:149 ../admin/logs.php:270 ../admin/logs.php:397
 #: ../admin/logs.php:519
 msgid "ID"
-msgstr "شناسه"
+msgstr "ID"
 
 #: ../admin/logs.php:150 ../admin/logs.php:271 ../admin/logs.php:398
 #: ../admin/logs.php:520
 msgid "Username"
-msgstr "نام کاربری"
+msgstr "Имя пользователя"
 
 #: ../admin/logs.php:151 ../admin/logs.php:272 ../admin/logs.php:399
 #: ../admin/logs.php:521
 msgid "Status"
-msgstr "وضعیت"
+msgstr "Статус"
 
 #: ../admin/logs.php:152
 msgid "Post ID"
-msgstr "شناسه نوشتار"
+msgstr "ID записи"
 
 #: ../admin/logs.php:153
 msgid "Post Title"
-msgstr "عنوان نوشتار"
+msgstr "Заголовок поста"
 
 #: ../admin/logs.php:154 ../admin/logs.php:276 ../admin/logs.php:402
 #: ../admin/logs.php:524
 msgid "Date / Time"
-msgstr "تاریخ / زمان"
+msgstr "Дата и время"
 
 #: ../admin/logs.php:155 ../admin/logs.php:277 ../admin/logs.php:403
 #: ../admin/logs.php:525
 msgid "IP"
-msgstr "آدرس IP"
+msgstr "IP"
 
 #: ../admin/logs.php:156 ../admin/logs.php:278 ../admin/logs.php:404
 #: ../admin/logs.php:526
 msgid "Actions"
-msgstr "کارها"
+msgstr "Действия"
 
 #: ../admin/logs.php:174 ../admin/logs.php:296 ../admin/logs.php:422
 #: ../admin/logs.php:544 ../admin/stats.php:198
 msgid "Guest User"
-msgstr "کاربر مهمان"
+msgstr ""
 
 #: ../admin/logs.php:219 ../admin/logs.php:345 ../admin/logs.php:468
 #: ../admin/logs.php:590
@@ -989,659 +938,361 @@ msgid ""
 "<strong>ERROR:</strong> No Record Found. (This problem is created because "
 "you don't have any data on this table)"
 msgstr ""
-"<strong>خطا:</strong> چیزی یافت نشد. (این مشکل به خاطر این مسأله ایجاد شده "
-"است که شما هیچ اطلاعاتی را در این جدول ندارید)"
 
 #: ../admin/logs.php:273
 msgid "Comment ID"
-msgstr "شناسه دیدگاه"
+msgstr "ID комментария"
 
 #: ../admin/logs.php:274
 msgid "Comment Author"
-msgstr "نویسنده دیدگاه"
+msgstr "Автор комментария"
 
 #: ../admin/logs.php:275
 msgid "Comment Text"
-msgstr "متن دیدگاه"
+msgstr "Текст комментария"
 
 #: ../admin/logs.php:400
 msgid "Activity ID"
-msgstr "شناسه فعالیت"
+msgstr ""
 
 #: ../admin/logs.php:401
 msgid "Permalink"
-msgstr "لینک همیشگی"
+msgstr "Постоянная ссылка"
 
 #: ../admin/logs.php:438
 #, php-format
 msgid "<a href=\"%1$s\">Activity Permalink</a>"
-msgstr "<a href=\"%1$s\">مشاهده فعالیت</a>"
+msgstr ""
 
 #: ../admin/logs.php:522
 msgid "Topic ID"
-msgstr "شناسه تاپیک"
+msgstr "ID темы"
 
 #: ../admin/logs.php:523
 msgid "Topic Title"
-msgstr "عنوان تاپیک"
+msgstr "Заголовок темы"
 
 #: ../admin/stats.php:30
 msgid "Welcome to WP ULike Statistics!"
-msgstr "به آماره وردپرس یولایک خوش آمدید!"
+msgstr "Добро пожаловать в статистику WP ULike!"
 
 #: ../admin/stats.php:31
 msgid "We have provided some useful statistics tools in this page:"
 msgstr ""
-"در این بخش، ما مجموعه ای از ابزارهای کاربردی را برای شما آماده کرده ایم:"
+"Мы предоставляем несколько полезных статистических инструментов на этой "
+"странице:"
 
 #: ../admin/stats.php:35
 msgid "Get Started"
-msgstr "آغاز کنید"
+msgstr "Для начала"
 
 #: ../admin/stats.php:37
 msgid "or"
-msgstr "یا"
+msgstr "или"
 
 #: ../admin/stats.php:40
 msgid "Other Tools"
-msgstr "سایر ابزارها"
+msgstr "Другие инструменты"
 
 #: ../admin/stats.php:49
 msgid "Documentation"
-msgstr "مستندات"
+msgstr "Документация"
 
 #: ../admin/stats.php:53
 msgid "Contact"
-msgstr "تماس با ما"
+msgstr "Контакт"
 
 #: ../admin/stats.php:54
 msgid "GitHub Repository"
-msgstr "مخزن گیت هاب"
+msgstr "GitHub репозиторий"
 
 #: ../admin/stats.php:80
 msgid "Posts Likes Summary"
-msgstr "خلاصه لایک در نوشتارها"
+msgstr ""
 
 #: ../admin/stats.php:88
 msgid "Comments Likes Summary"
-msgstr "خلاصه لایک در دیدگاه ها"
+msgstr ""
 
 #: ../admin/stats.php:96
 msgid "Activities Likes Summary"
-msgstr "خلاصه لایک در فعالیت ها"
+msgstr ""
 
 #: ../admin/stats.php:104
 msgid "Topics Likes Summary"
-msgstr "خلاصه لایک در تاپیک ها"
+msgstr ""
 
 #: ../admin/stats.php:114 ../admin/stats.php:344
 msgid "Summary"
-msgstr "خلاصه"
+msgstr "Суммарно"
 
 #: ../admin/stats.php:126
 msgid "Total Likes"
-msgstr "مجموع کل لایک ها"
+msgstr "Всего лайков"
 
 #: ../admin/stats.php:138
 msgid "Today"
-msgstr "امروز"
+msgstr "Сегодня"
 
 #: ../admin/stats.php:143
 msgid "Yesterday"
-msgstr "دیروز"
+msgstr "Вчера"
 
 #: ../admin/stats.php:148
 msgid "Week"
-msgstr "هفته"
+msgstr "Неделя"
 
 #: ../admin/stats.php:153
 msgid "Month"
-msgstr "ماه"
+msgstr "Месяц"
 
 #: ../admin/stats.php:158
 msgid "Total"
-msgstr "کل"
+msgstr "Общая стоимость"
 
 #: ../admin/stats.php:192 ../admin/stats.php:351
 msgid "Top Likers"
-msgstr "برترین لایک کنندگان"
+msgstr ""
 
 #: ../admin/stats.php:227 ../admin/stats.php:233 ../admin/stats.php:239
 #: ../admin/stats.php:245
 msgid "View Logs"
-msgstr "مشاهده وقایع"
+msgstr "Просмотреть журнал событий"
 
 #: ../admin/stats.php:228 ../admin/stats.php:345
 msgid "Posts Likes Stats"
-msgstr "نمودار لایک در نوشتارها"
+msgstr ""
 
 #: ../admin/stats.php:228 ../admin/stats.php:234 ../admin/stats.php:240
 #: ../admin/stats.php:246 ../admin/stats.php:277
 #, php-format
 msgid "In The Last %s Days"
-msgstr "در %s روز گذشته"
+msgstr "За последние %s дней"
 
 #: ../admin/stats.php:234 ../admin/stats.php:346
 msgid "Comments Likes Stats"
-msgstr "نمودار لایک در دیدگاه ها"
+msgstr ""
 
 #: ../admin/stats.php:240 ../admin/stats.php:347
 msgid "Activities Likes Stats"
-msgstr "نمودار لایک در فعالیت ها"
+msgstr ""
 
 #: ../admin/stats.php:246 ../admin/stats.php:348
 msgid "Topics Likes Stats"
-msgstr "نمودار لایک در تاپیک ها"
+msgstr ""
 
 #: ../admin/stats.php:277 ../admin/stats.php:349
 msgid "Likes Percent"
-msgstr "درصد تخصیص لایک ها"
+msgstr "Процент лайков"
 
 #: ../admin/stats.php:341
 msgid "Show on screen"
-msgstr "تنظیمات صفحه"
+msgstr "На экране отображаются"
 
 #: ../admin/stats.php:343
 msgid "Welcome"
-msgstr "خوش آمدید"
+msgstr "Добро пожаловать"
 
 #: ../admin/stats.php:354
 msgid "Days"
-msgstr "روزها"
+msgstr "Дней"
 
 #: ../inc/classes/class-mycred.php:202
 msgid "Points for Liking content"
-msgstr "امتیاز لایک یک نوشته"
+msgstr ""
 
 #: ../inc/classes/class-mycred.php:209 ../inc/classes/class-mycred.php:226
 msgid "Limit"
-msgstr "محدودیت"
+msgstr "Лимит"
 
 #: ../inc/classes/class-mycred.php:214 ../inc/classes/class-mycred.php:231
 #: ../inc/classes/class-mycred.php:243 ../inc/classes/class-mycred.php:255
 msgid "Log template"
-msgstr "قالب وقایع"
+msgstr ""
 
 #: ../inc/classes/class-mycred.php:219
 msgid "Points for Author Who Get Liked"
-msgstr "امتیاز به کاربری که لایک دریافت کرده است"
+msgstr ""
 
 #: ../inc/classes/class-mycred.php:236
 msgid "Points for unliking content"
-msgstr "امتیاز لغو لایک یک نوشته"
+msgstr ""
 
 #: ../inc/classes/class-mycred.php:248
 msgid "Points for Author Who Get Unliked"
-msgstr "امتیاز به کاربری که لغو لایک دریافت کرده است"
+msgstr ""
 
 #: ../inc/wp-functions.php:172
 msgid "WP ULike Activity"
-msgstr "فعالیت های وردپرس یولایک"
+msgstr "Активность WP ULike"
 
 #: ../inc/wp-functions.php:303
 msgid ""
 "This hook award / deducts points from users who Like/Unlike any content of "
 "WordPress, bbPress, BuddyPress & ..."
 msgstr ""
-"با استفاده از این هوک، کاربرانی که هر نوع مطلب وردپرس، بادی پرس، بی بی پرس "
-"و... را لایک/آنلایک کنند (بعلاوه افرادی که نوشته آنها لایک/آنلایک شده)، می "
-"توانند به ترتیب امتیازات مثبت و منفی دریافت کنند."
 
 #: ../inc/wp-functions.php:311
 msgid "Liking Content"
-msgstr "لایک نوشته"
+msgstr ""
 
 #: ../inc/wp-functions.php:312
 msgid "Liked Content"
-msgstr "نوشته لایک شده"
+msgstr ""
 
 #: ../inc/wp-functions.php:313
 msgid "Unliking Content"
-msgstr "لغو لایک نوشته"
+msgstr ""
 
 #: ../inc/wp-functions.php:314
 msgid "Unliked Content"
-msgstr "نوشته لغو لایک شده"
+msgstr ""
 
 #: ../inc/wp-functions.php:336 ../inc/wp-functions.php:370
 msgid "Recent Posts Liked"
-msgstr "تازه ترین مطالب لایک شده"
+msgstr ""
 
 #: ../inc/wp-functions.php:341 ../inc/wp-functions.php:410
 msgid "Recent Comments Liked"
-msgstr "تازه ترین دیدگاه های لایک شده"
+msgstr ""
 
 #: ../inc/wp-functions.php:386 ../inc/wp-functions.php:427
 msgid "This user has not made any likes."
-msgstr "این کاربر، هنوز هیچ موردی را نپسندیده است."
+msgstr "Этот пользователь не может ставить лайки."
 
 #: ../inc/wp-strings.php:3
 msgid "Allow To Like"
-msgstr "مجاز به لایک"
+msgstr "Разрешено лайкать"
 
 #: ../inc/wp-strings.php:4
 msgid "Guests Only"
-msgstr "فقط مهمانان"
+msgstr "Только гости"
 
 #: ../inc/wp-strings.php:5
 msgid "Registered Users Only"
-msgstr "فقط کاربران عضو شده"
+msgstr "Только зарегистрированные пользователи"
 
 #: ../inc/wp-strings.php:6
 msgid "Registered Users And Guests"
-msgstr "کاربران عضو و مهمان"
+msgstr "Зарегистрированные пользователи и гости"
 
 #: ../inc/wp-strings.php:7
 msgid "Who Is Allowed To Like?"
-msgstr "چه کسی اجازه‌ی امتیاز دادن دارد؟"
+msgstr "Кому разрешено лайкать?"
 
 #: ../inc/wp-strings.php:8
 msgid "Filter Options:"
-msgstr "گزینه‌های پالایش:"
+msgstr ""
 
 #: ../inc/wp-strings.php:9
 msgid "Sort Options:"
-msgstr "گزینه‌های مرتب‌سازی"
+msgstr "Параметры сортировки"
 
 #: ../inc/wp-strings.php:11
 msgid "Dislike"
-msgstr "دیسلایک"
+msgstr "Не нравится"
 
 #: ../inc/wp-strings.php:12
 msgid "Dislike Support"
-msgstr "پشتیبانی از دیسلایک"
+msgstr ""
 
 #: ../inc/wp-strings.php:13
 msgid "Text After Dislike"
-msgstr "متن پس از دیسلایک"
+msgstr ""
 
 #: ../inc/wp-strings.php:14
 msgid "Show Counter"
-msgstr "نمایش شمارنده"
+msgstr "Показать счётчик"
 
 #: ../inc/wp-strings.php:15
 msgid "Show tooltips"
-msgstr "نمایش تولتیپ"
+msgstr "Показать подсказки"
 
 #: ../inc/wp-strings.php:16
 msgid "Alignment"
-msgstr "قرارگیری"
+msgstr "Выравнивание"
 
 #: ../inc/wp-strings.php:17
 msgid "Left"
-msgstr "چپ"
+msgstr "Слева"
 
 #: ../inc/wp-strings.php:18
 msgid "Center"
-msgstr "وسط"
+msgstr "По центру"
 
 #: ../inc/wp-strings.php:19
 msgid "Right"
-msgstr "راست"
+msgstr "Справа"
 
 #: ../inc/wp-strings.php:20
 msgid "Cookie Life time"
-msgstr "عمر کوکی"
+msgstr ""
 
 #: ../inc/wp-strings.php:21
 msgid "BuddyPress Notifications"
-msgstr "اطلاعیه های بادی پرس"
+msgstr "Оповещения BuddyPress"
 
 #: ../inc/wp-strings.php:22
 msgid "Liker Attempts"
-msgstr "تعداد تلاش ها"
+msgstr ""
 
 #: ../inc/wp-strings.php:23
 msgid "Liked Users Box Style"
-msgstr "استایل باکس کاربران لایک کرده"
+msgstr ""
 
 #: ../inc/wp-strings.php:24
 msgid "Tooltip"
-msgstr "تولتیپ"
+msgstr "Подсказка"
 
 #: ../inc/wp-strings.php:29
 msgid "Total Users Liked"
-msgstr "مجموع کاربران لایک کرده"
+msgstr ""
 
 #: ../inc/wp-strings.php:30
 msgid "Total Posts Liked"
-msgstr "مجموع مطالب لایک شده"
+msgstr ""
 
 #: ../inc/wp-strings.php:31
 msgid "Total Comments Liked"
-msgstr "مجموع دیدگاه های لایک شده"
+msgstr ""
 
 #: ../inc/wp-strings.php:32
 msgid "Upvote"
-msgstr "امتیاز مثبت"
+msgstr ""
 
 #: ../inc/wp-strings.php:33
 msgid "Downvote"
-msgstr "امتیاز منفی"
+msgstr ""
 
 #: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:291
 msgid "You need to login in order to like this post: "
-msgstr "برای امتیاز دهی به این مطلب، لطفا وارد شوید: "
+msgstr "Вам нужно войти, чтобы лайкнуть этот пост:"
 
 #: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:142 ../inc/wp-ulike.php:219
 #: ../inc/wp-ulike.php:291
 msgid "click here"
-msgstr "برای ورود کلیک کنید"
+msgstr "нажмите здесь"
 
 #: ../inc/wp-ulike.php:142
 msgid "You need to login in order to like this comment: "
-msgstr "برای امتیاز دهی به این دیدگاه، لطفا وارد شوید: "
+msgstr "Вам нужно войти, чтобы лайкнуть этот комментарий:"
 
 #: ../inc/wp-ulike.php:219
 msgid "You need to login in order to like this activity: "
-msgstr "برای امتیاز دهی به این فعالیت، لطفا وارد شوید: "
+msgstr ""
 
 #: ../inc/wp-ulike.php:343
 msgid "Error: This Method Is Not Exist!"
-msgstr "خطا: این متد وجود خارجی ندارد!"
+msgstr "Ошибка: Этот метод не существует!"
 
 #: ../wp-ulike.php:124
 msgid "Settings"
-msgstr "تنظیمات"
+msgstr "Настройки"
 
 #: ../wp-ulike.php:125
 msgid "Statistics"
-msgstr "آماره"
+msgstr "Статистика"
 
 #: ../wp-ulike.php:126
 msgid "About"
-msgstr "درباره"
-
-#~ msgid "Overview"
-#~ msgstr "آغاز کنید"
-
-#, fuzzy
-#~ msgid "Love"
-#~ msgstr ""
-#~ "وردپرس یولایک با صرف کلی علاقه و زمان ساخته شده است. از آن لذت ببرید :)"
-
-#~ msgid "Novelty Of WP ULike"
-#~ msgstr "تازه های وردپرس یولایک"
-
-#~ msgid "bbPress Likes Support + Options & Statistics Tools"
-#~ msgstr "پشتیبانی کامل از بی بی پرس + تمامی تنظیمات و ابزارهای آماره"
-
-#~ msgid "New Statistics Design + Screen Option"
-#~ msgstr "استایل جدید صفحه آماره + افزودن تنظیمات صفحه"
-
-#~ msgid "New Statistics Page"
-#~ msgstr "صفحه جدید آماره"
-
-#~ msgid "New Class-based programming"
-#~ msgstr "کدنویسی جدید شیء گرا"
-
-#~ msgid "New options in logs pages"
-#~ msgstr "قابلیت های جدید در صفحات وقایع"
-
-#~ msgid "New setting panel"
-#~ msgstr "صفحه تنظیمات جدید و پیشرفته"
-
-#~ msgid "Better coding on plugin files"
-#~ msgstr "بهبود توابع و کدنویسی فایل های افزونه"
-
-#~ msgid "Buddypress likes support"
-#~ msgstr "پشتیبانی وردپرس یولایک از بادی پرس"
-
-#~ msgid "Likes logs support"
-#~ msgstr "پشتیبانی از نمایش آخرین وقایع در لایک ها"
-
-#~ msgid "Text After Like"
-#~ msgstr "متن پس از لایک"
-
-#~ msgid "Return To The Initial"
-#~ msgstr "بازگشت به حالت اولیه"
-
-#~ msgid ""
-#~ "Return to the initial Like button after Unlike. (Not Showing text after "
-#~ "unlike)"
-#~ msgstr ""
-#~ "با فعال کردن این گزینه، پس از لغو پسنیدن (unlike) دکمه به حالت اولیه "
-#~ "(آیکن/متن) باز میگردد. (در این حالت، تنظیمات \"متن پس از لغو لایک\" نمایش "
-#~ "داده نمی شود)"
-
-#~ msgid "Like Me Again!"
-#~ msgstr "پسندیدن مجدد!"
-
-#~ msgid "Text After Unlike"
-#~ msgstr "متن پس از لغو لایک"
-
-#~ msgid "<strong>On all buddypress activities</strong> at the top of activity"
-#~ msgstr ""
-#~ "<strong>نمایش در تمامی فعالیت های بادی پرس</strong> در بخش بالایی هر "
-#~ "فعالیت"
-
-#~ msgid "Pie Chart Percent"
-#~ msgstr "نمودار درصد پراکندگی"
-
-#~ msgid "Likes Percent In The Last 20 Days"
-#~ msgstr "درصد پراکندگی لایک ها در 20 روز گذشته"
-
-#~ msgid "In The Last %s"
-#~ msgstr "در %s روز گذشته"
-
-#~ msgid "Likes Percent In The Last %s Days"
-#~ msgstr "درصد تخصیص لایک ها در %s روز گذشته"
-
-#~ msgid "Attention!"
-#~ msgstr "توجه! "
-
-#~ msgid "All The Times"
-#~ msgstr "همه زمان ها"
-
-#, fuzzy
-#~ msgid "Login Type"
-#~ msgstr "نوع"
-
-#~ msgid "Users Like Box Title"
-#~ msgstr "عنوان باکس کاربران لایک کرده"
-
-#~ msgid "WP Ulike - Most Liked"
-#~ msgstr "وردپرس یولایک -ابزارک بیشترین لایک شده ها"
-
-#~ msgid "WP Ulike - Most Liked Users"
-#~ msgstr "وردپرس یولایک - نمایش پرلایک ترین کاربران"
-
-#~ msgid "This widget allows you to show most liked users avatars."
-#~ msgstr ""
-#~ "با استفاده از این ابزارک، میتونید لیستی از پرلایک ترین کاربران سایتتون رو "
-#~ "به همراه تصویر آواتار و تعداد لایکشون، نمایش بدید."
-
-#~ msgid "Number of users to show:"
-#~ msgstr "تعداد کاربران قابل نمایش:"
-
-#~ msgid "Posts Stats"
-#~ msgstr "آماره نوشته ها"
-
-#~ msgid "Comments Stats"
-#~ msgstr "آماره دیدگاه ها"
-
-#~ msgid "Activities Stats"
-#~ msgstr "آماره فعالیت ها"
-
-#~ msgid "WP ULike - Most Liked Activities"
-#~ msgstr "وردپرس یولایک - نمایش پرلایک ترین فعالیت های بادی پرس"
-
-#~ msgid "This widget allows you to show most liked activities."
-#~ msgstr ""
-#~ "با استفاده از این ابزارک، میتونید لیستی از پرلایک ترین فعالیت های بادی "
-#~ "پرس رو به همراه تعداد لایک در هر فعالیت، نمایش بدید."
-
-#~ msgid "This widget allows you to show most liked posts."
-#~ msgstr ""
-#~ "با استفاده از این ابزارک، میتونید لیستی از پرلایک ترین مطالب سایتتون رو "
-#~ "به همراه تعداد لایک هر نوشته، نمایش بدید."
-
-#~ msgid "WP ULike - Most Liked Comments"
-#~ msgstr "وردپرس یولایک - نمایش پرلایک ترین دیدگاه ها"
-
-#~ msgid "This widget allows you to show most liked comments."
-#~ msgstr ""
-#~ "با استفاده از این ابزارک، میتونید لیستی از پرلایک ترین دیدگاه های  "
-#~ "سایتتون رو به همراه تعداد لایک هر دیدگاه، نمایش بدید."
-
-#~ msgid "Number of comments to show:"
-#~ msgstr "تعداد دیدگاه های نمایشی:"
-
-#~ msgid "Post Likes Logs Stats"
-#~ msgstr "وضعیت وقایع لایک در نوشتارها"
-
-#~ msgid "Comment Likes Logs Stats"
-#~ msgstr "وضعیت وقایع لایک در دیدگاه ها"
-
-#~ msgid "Activity Likes Logs Stats"
-#~ msgstr "وضعیت وقایع لایک در فعالیت های بادی پرس"
-
-#~ msgid "Total Activities Liked:"
-#~ msgstr "مجموع فعالیت های لایک شده:"
-
-#~ msgid "Dashboard"
-#~ msgstr "پیشخوان"
-
-#~ msgid "Visit Post Logs Menu"
-#~ msgstr "نمایش منو وقایع لایک در نوشتارها"
-
-#~ msgid "If you deactivate this option, \"Post Likes Logs\" Menu will hidden."
-#~ msgstr ""
-#~ "اگر این گزینه را غیر فعال کنید، منو \"وقایع لایک در نوشتارها\" نمایش داده "
-#~ "نخواهد شد. "
-
-#~ msgid "Visit Comment Logs Menu"
-#~ msgstr "نمایش منو وقایع لایک در دیدگاه ها"
-
-#~ msgid ""
-#~ "If you deactivate this option, \"Comment Likes Logs\" Menu will hidden."
-#~ msgstr ""
-#~ "اگر این گزینه را غیر فعال کنید، منو \"وقایع لایک در دیدگاه ها\" نمایش "
-#~ "داده نخواهد شد. "
-
-#~ msgid "Visit Activity Logs Menu"
-#~ msgstr "نمایش منو وقایع لایک در فعالیت ها"
-
-#~ msgid ""
-#~ "If you deactivate this option, \"Activity Likes Logs\" Menu will hidden."
-#~ msgstr ""
-#~ "اگر این گزینه را غیر فعال کنید، منو \"وقایع لایک در فعالیت ها\" نمایش "
-#~ "داده نخواهد شد. "
-
-#~ msgid "liked"
-#~ msgstr " پسندید"
-
-#~ msgid ""
-#~ "If you select \"Do Not Log\" or \"Logged By Cookie\" methods, you can't "
-#~ "save any logs data and also users can not unlike/undislike."
-#~ msgstr ""
-#~ "در صورت انتخاب متد \"بدون وقایع نگاری\" و یا \"کوکی\"، هیچ وقایعی در "
-#~ "پایگاه داده ذخیره نمی شود و کاربران اجازه لغو لایک را نخواهند داشت و به "
-#~ "تعداد نا محدود  می توانند لایک کنند."
-
-#~ msgid "<strong>On all comments</strong> at the bottom of the comment"
-#~ msgstr "<strong>نمایش در تمامی دیدگاه ها</strong> در زیر متن هر دیدگاه"
-
-#~ msgid ""
-#~ "<strong>On all posts</strong> (home, archives, search) at the bottom of "
-#~ "the post"
-#~ msgstr ""
-#~ "<strong>نمایش در تمامی پست ها</strong> (خانه, بایگانی, جستجو)در بخش زیرین "
-#~ "مطالب."
-
-#~ msgid "Deactivate On"
-#~ msgstr "موارد غیر فعال"
-
-#~ msgid "Activate user like count"
-#~ msgstr "تعداد لایک های هر کاربر رو نمایش بده"
-
-#~ msgid ""
-#~ "WP ULike enables you to add Ajax Like button into your WordPress site and "
-#~ "allowing your visitors to like and dislike posts, pages, comments AND "
-#~ "buddypress activities. It features: Clean Design, Ajax feature to update "
-#~ "the data without reloading, Custom Like-Dislike Texts, Simple custom "
-#~ "style with color picker settings, BuddyPress activity support, Widget to "
-#~ "show Most Liked Posts And Most Liked Users avatars, Added automatically, "
-#~ "RTL language support, Simple configuration panel and many more..."
-#~ msgstr ""
-#~ " افزونه ایرانی یولایک، یک سیستم آژاکسی ساده و کاربردی برای ایجاد قابلیت "
-#~ "لایک (LIKE) در مطالب و دیدگاه های وردپرسی شماست و با بهره گیری از پنل "
-#~ "تنظیمات، پشتیبانی کامل از شیوه نامه  rtl، نمایش بیشترین مطالب لایک شده، "
-#~ "قابلیت سفارشی سازی استایل ها و… تمامی قابلیت های یک سیستم خوب و حرفه ای "
-#~ "رو در اختیار شما قرار میده."
-
-#~ msgid "New Administrative Tools"
-#~ msgstr "قابلیت های جدید مدیریتی"
-
-#~ msgid "Image or text?"
-#~ msgstr "متن یا تصویر؟"
-
-#~ msgid "What’s New"
-#~ msgstr "موارد تازه"
-
-#, fuzzy
-#~ msgid "General Settings"
-#~ msgstr "تنظیمات"
-
-#~ msgid "Show Users Like Box"
-#~ msgstr "نمایش باکس کاربران لایک کرده"
-
-#~ msgid "Configuration"
-#~ msgstr "پیکربندی"
-
-#~ msgid "wherever you want in your template."
-#~ msgstr "در قالب خود قرار دهید."
-
-#~ msgid "Comment likes"
-#~ msgstr "لایک در دیدگاه ها"
-
-#~ msgid "Activity likes"
-#~ msgstr "لایک در فعالیت ها"
-
-#~ msgid "Already Voted"
-#~ msgstr "قبلا لایک کرده اید"
-
-#~ msgid "You Like This"
-#~ msgstr "این را پسندیده اید"
-
-#~ msgid "You Dislike This"
-#~ msgstr "لغو پسندیدن"
-
-#~ msgid ""
-#~ "Follow me on <a href=\"https://www.facebook.com/alimir.ir\"> Facebook</a>"
-#~ msgstr ""
-#~ "دنیای وردپرس و برنامه نویسی را در  <a href=\"https://www.facebook.com/"
-#~ "alimir.ir\"> فیسبوک</a> دنبال کنید..."
-
-#~ msgid ""
-#~ "Plugin Author Blog: <a href=\"http://alimir.ir\"> Wordpress & Programming "
-#~ "World.</a>"
-#~ msgstr ""
-#~ "صفحه سازنده افزونه <a href=\"http://alimir.ir\"> دنیای وردپرس و برنامه "
-#~ "نویسی</a>."
-
-#~ msgid "WP Ulike"
-#~ msgstr "تنظیمات افزونه یولایک"
-
-#~ msgid "<strong>Active</strong> this option."
-#~ msgstr "می خواهم این قابلیت را<strong>فعال</strong> کنم"
-
-#~ msgid ""
-#~ "This plugin allows your visitors to simply like your posts instead of "
-#~ "comment it."
-#~ msgstr "یک پلاگین ساده و سبک برای راه اندازی سیستم لایک در وبلاگ شما"
-
-#~ msgid "jQuery framework"
-#~ msgstr "چارچوب جی کوئری"
-
-#~ msgid "Enabled"
-#~ msgstr "فعال"
-
-#~ msgid "Disabled"
-#~ msgstr "غیر فعال"
-
-#~ msgid ""
-#~ "Disable it if you already have the jQuery framework enabled in your theme."
-#~ msgstr ""
-#~ "اگر پیش ازاین، از چارچوب جی کوئری در قالب خود استفاده کرده اید، این "
-#~ "قابلیت را غیر فعال کنید."
+msgstr "Детали"

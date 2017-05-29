@@ -67,7 +67,7 @@
 				}
 			}
 			else
-				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this post: ','alimir').'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here','alimir').' </a></p>';
+				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>';
 		}//end only_registered_users condition
 		
 	}
@@ -139,7 +139,7 @@
 				}
 			}
 			else
-				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this comment: ','alimir').'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here','alimir').' </a></p>';	
+				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this comment: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>';	
 		}//end only_registered_users condition
 		
 	}	
@@ -150,13 +150,18 @@
 	 * @author       	Alimir	 	
 	 * @since           1.7
 	 * @updated         2.3
+	 * @updated         2.4
 	 * @return			String
 	 */
 	function wp_ulike_buddypress($arg) {
 		//global variables
 		global $wp_ulike_class,$wp_user_IP;
-		
-		$activityID 	= bp_get_activity_id();
+        
+        if ( bp_get_activity_comment_id() != null )
+            $activityID 	= bp_get_activity_comment_id();
+        else
+            $activityID 	= bp_get_activity_id();            
+
 		$bp_get_meta	= bp_activity_get_meta($activityID, '_activityliked');
 		$get_like 		= $bp_get_meta != '' ? $bp_get_meta : 0;
 		$return_userID 	= $wp_ulike_class->get_reutrn_id();
@@ -216,7 +221,7 @@
 				}
 			}
 			else		
-				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this activity: ','alimir').'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here','alimir').' </a></p>';
+				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this activity: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>';
 		}//end only_registered_users condition
 		
 	}	
@@ -227,13 +232,17 @@
 	 * @author       	Alimir	 	
 	 * @since           2.2
 	 * @updated         2.3
+	 * @updated         2.4.1
 	 * @return			String
 	 */
 	function wp_ulike_bbpress($arg) {
 		//global variables
 		global $post,$wp_ulike_class,$wp_user_IP;
-		
-		$post_ID 		= $post->ID;
+        
+        //Thanks to @Yehonal for this commit
+        $replyID        = bbp_get_reply_id();
+        $post_ID 		= !$replyID ? $post->ID : $replyID;
+
 		$get_post_meta 	= get_post_meta($post_ID, '_topicliked', true);
 		$get_like 		= $get_post_meta != '' ? $get_post_meta : 0;
 		$return_userID 	= $wp_ulike_class->get_reutrn_id();
@@ -288,7 +297,7 @@
 				}
 			}
 			else
-				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this post: ','alimir').'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here','alimir').' </a></p>';
+				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>';
 		}//end only_registered_users condition
 		
 	}	
@@ -299,6 +308,7 @@
 	 * @author       	Alimir	 	
 	 * @since           1.0
 	 * @updated         2.2
+	 * @updated         2.4.1
 	 * @return			String
 	 */
 	function wp_ulike_process(){
@@ -340,7 +350,7 @@
 			$cookie_name	= 'topic-liked-';		
 		}
 		else{
-			wp_die(__('Error: This Method Is Not Exist!','alimir'));
+			wp_die(__('Error: This Method Is Not Exist!',WP_ULIKE_SLUG));
 		}
 		
 		
@@ -348,23 +358,35 @@
 		$return_userID 	= $wp_ulike_class->get_reutrn_id();
 		
 		$data = array(
-			"id" 		=> $post_ID,				//Post ID
+			"id" 			=> $post_ID,				//Post ID
 			"user_id" 	=> $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
 			"user_ip" 	=> $wp_user_IP,				//User IP
 			"get_like" 	=> $get_like,				//Number Of Likes
 			"method" 	=> $post_type,				//JavaScript method
 			"setting" 	=> $setting_key,			//Setting Key
 			"type" 		=> 'process',				//Function type (post/process)
-			"table" 	=> $table_name,				//posts table
+			"table" 		=> $table_name,				//posts table
 			"column" 	=> $column_name,			//ulike table column name			
 			"key" 		=> $meta_key,				//meta key
 			"cookie" 	=> $cookie_name				//Cookie Name
-		);			
+		);
 		
-		if($post_ID != '') {
-			//call wp_get_ulike function from class-ulike calss
-			echo $wp_ulike_class->wp_get_ulike($data);
+		$response = new WP_Ajax_Response;
+		
+		if($post_ID != null) {
+			$response->add(
+				array(
+					'what'	=>'wpulike',
+					'action'	=>'wp_ulike_process',
+					'id'		=> $post_ID,
+					'data'		=> $wp_ulike_class->wp_get_ulike($data)
+				)
+			);
 		}
 		
-		wp_die(); // this is required to terminate immediately and return a proper response
+		// Whatever the outcome, send the Response back
+		$response->send();
+
+		// Always exit when doing Ajax
+		exit();
 	}

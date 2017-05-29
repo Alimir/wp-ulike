@@ -1,4 +1,4 @@
-form.wrap h3,
+form.wrap h2,
 form.wrap p.submit {
 	padding-top: 20px;
 	border-top: 1px solid #ddd;
@@ -9,7 +9,7 @@ form.wrap td .settings-error {
 form.wrap td .settings-error p {
 	margin: 0.5em 0;
 }
-form.wrap .wm-settings-tabs h3 {
+form.wrap .wm-settings-tabs h2 {
 	float: left;
 	padding: 10px 15px;
 	margin: 1em 0 0;
@@ -19,13 +19,13 @@ form.wrap .wm-settings-tabs h3 {
 	border-bottom: none;
 	cursor: pointer;
 }
-form.wrap .wm-settings-tabs h3:hover {
+form.wrap .wm-settings-tabs h2:hover {
 	background-color: #f9f9f9;
 }
-form.wrap .wm-settings-tabs h3.active {
+form.wrap .wm-settings-tabs h2.active {
 	background-color: #fff;
 }
-form.wrap .wm-settings-tabs h3:last-child {
+form.wrap .wm-settings-tabs h2:last-child {
 	border-right: 1px solid #ddd;
 }
 .wm-settings-tab {

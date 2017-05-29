@@ -104,132 +104,134 @@
 
 	<div class="wrap about-wrap">
 
-		<h1><?php echo _e('Welcome to WP ULike','alimir') . ' ' . wp_ulike_get_version(); ?></h1>
+		<h1><?php echo _e('Welcome to WP ULike',WP_ULIKE_SLUG) . ' ' . WP_ULIKE_VERSION; ?></h1>
 
-		<div class="about-text"><?php echo _e('Thank you for choosing WP ULike! This version is our leanest and most powerful version yet.', 'alimir') ; ?><br />
-		<a target="_blank" href="http://preview.alimir.ir/developer/wp-ulike/"> <?php _e('Visit our homepage','alimir'); ?></a>
+		<div class="about-text"><?php echo _e('Thank you for choosing WP ULike! This version is our leanest and most powerful version yet.', WP_ULIKE_SLUG) ; ?><br />
+		<a target="_blank" href="http://preview.alimir.ir/developer/wp-ulike/"> <?php _e('Visit our homepage',WP_ULIKE_SLUG); ?></a>
 		</div>
-		<div class="ulike-badge"><?php echo _e('Version','alimir') . ' ' . wp_ulike_get_version(); ?></div>
-
+		<div class="ulike-badge"><?php echo _e('Version',WP_ULIKE_SLUG) . ' ' . WP_ULIKE_VERSION; ?></div>
 		<h2 class="nav-tab-wrapper">
-			<a class="nav-tab <?php if(!isset($_GET["credit"])) echo 'nav-tab-active'; ?>" href="admin.php?page=wp-ulike-about"><?php echo _e('Getting Started','alimir'); ?></a> 
-			<a class="nav-tab <?php if(isset($_GET["credit"])) echo 'nav-tab-active'; ?>" href="admin.php?page=wp-ulike-about&credit=true"><?php echo _e('Credits','alimir'); ?></a> 
-			<a target="_blank" class="nav-tab" href="https://wordpress.org/support/plugin/wp-ulike"><?php echo _e('Support','alimir'); ?></a> 
-			<a target="_blank" class="nav-tab" href="https://wordpress.org/plugins/wp-ulike/faq/"><?php echo _e('FAQ','alimir'); ?></a> 
-			<a target="_blank" class="nav-tab" href="https://wordpress.org/support/view/plugin-reviews/wp-ulike"><?php echo _e('Reviews','alimir'); ?></a> 
+			<a class="nav-tab <?php if(!isset($_GET["credit"])) echo 'nav-tab-active'; ?>" href="admin.php?page=wp-ulike-about"><?php echo _e('Getting Started',WP_ULIKE_SLUG); ?></a> 
+			<a class="nav-tab <?php if(isset($_GET["credit"])) echo 'nav-tab-active'; ?>" href="admin.php?page=wp-ulike-about&credit=true"><?php echo _e('Credits',WP_ULIKE_SLUG); ?></a> 
+			<a target="_blank" class="nav-tab" href="https://wordpress.org/support/plugin/wp-ulike"><?php echo _e('Support',WP_ULIKE_SLUG); ?></a> 
+			<a target="_blank" class="nav-tab" href="https://wordpress.org/plugins/wp-ulike/faq/"><?php echo _e('FAQ',WP_ULIKE_SLUG); ?></a> 
+			<a target="_blank" class="nav-tab" href="https://wordpress.org/support/view/plugin-reviews/wp-ulike"><?php echo _e('Reviews',WP_ULIKE_SLUG); ?></a> 
 		</h2>
 		
 		<?php if(!isset($_GET["credit"])): ?>
 		
-<div class="changelog headline-feature">
-	<h2><?php echo _e('Introducing WP ULike','alimir'); ?></h2>
-	<div class="featured-image">
-		<img src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-intro.png">
-	</div>
+        <div class="changelog headline-feature">
+            <h2><?php echo _e('Introducing WP ULike',WP_ULIKE_SLUG); ?></h2>
+            <div class="featured-image">
+                <img src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-intro.png">
+            </div>       
 
-	<div class="feature-section">
-		<div class="col">
-			<h3><?php echo _e('About WP ULike','alimir'); ?></h3>
-			<p><?php echo _e('WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.','alimir'); ?></p>
-		</div>
-		<div class="col">
-			<img src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-thumb.png">
-		</div>
-	</div>
+            <div class="feature-section">
+                <div class="col">
+                    <h3><?php echo _e('About WP ULike',WP_ULIKE_SLUG); ?></h3>
+                    <span style="text-align:center">
+                    <?php $args = array(
+                       'rating' => 5,
+                       'type' => 'rating',
+                       'number' => 43,
+                    );
+                    wp_star_rating( $args ); ?>
+                    </span>          
+                    <p><?php echo _e('WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.',WP_ULIKE_SLUG); ?></p>
+                </div>
+            </div>
 
-	<div class="clear"></div>
-</div>
-		
-		<hr />
-<div class="changelog feature-list finer-points">
-	<h2>The Finer Points</h2>
-
-	<div class="feature-section col two-col">
-	
-	<div>
-		<svg viewBox="-10 -10 52 52">
-		<g filter="">
-		  <use xlink:href="#like"></use>
-		</g>
-		</svg>
-		<h4><?php echo _e('WP Ulike Extension','alimir'); ?></h4>
-		<p><?php echo _e('Right now, WP ULike support wordpress posts / comments, BuddyPress activities & bbPress Topics.','alimir'); ?></p>
-	</div>
-
-	<div class="last-feature">
-		<svg viewBox="-10 -10 52 52">
-		<g filter="">
-		  <use xlink:href="#globe"></use>
-		</g>
-		</svg>
-		<h4><?php echo _e('Added More Than 20 Language Files','alimir'); ?></h4>
-		<p><?php echo _e('WP ULike is already translated into +20 languages, with more always in progress.','alimir'); ?></p>
-	</div>
-	
-	<div>
-		<svg viewBox="-10 -10 52 52">
-		<g filter="">
-		  <use xlink:href="#happy-smiley"></use>
-		</g>
-		</svg>
-		<h4><?php echo _e('User Profile Links','alimir'); ?></h4>
-	<p><?php echo _e('Since WP ULike 2.3, We have synced the likers profile with BuddyPress & UltimateMember plugins.','alimir'); ?></p>
-	</div>
-
-	<div class="last-feature">
-		<svg viewBox="-10 -10 52 52">
-		<g filter="">
-		  <use xlink:href="#heart"></use>
-		</g>
-		</svg>
-		<h4><?php echo _e('New Themes And Styles','alimir'); ?></h4>
-		<p><?php echo _e('Since WP ULike 2.3, We have made some new styles and themes and you can customize them by your taste.','alimir'); ?></p>
-	</div>
-	
-	<div>
-		<svg viewBox="-10 -10 52 52">
-		<g filter="">
-		  <use xlink:href="#prize"></use>
-		</g>
-		</svg>
-		<h4><?php echo _e('myCRED Points Support','alimir'); ?></h4>
-	<p><?php echo _e('myCRED is an adaptive points management system that lets you award / charge your users for interacting with your WordPress.','alimir'); ?></p>
-	</div>
-
-	<div class="last-feature">
-		<svg viewBox="-10 -10 52 52">
-		<g filter="">
-		  <use xlink:href="#tag"></use>
-		</g>
-		</svg>
-		<h4><?php echo _e('Likers World Map','alimir'); ?></h4>
-		<p><?php echo _e('Since WP ULike 2.3, We have made a new ability that you can track your likers by their country in the world map & Top Liker widget.','alimir'); ?></p>
-	</div>	
-	
-	</div>
-</div>
-
-		<hr />
+            <div class="clear"></div>
+        </div>
+        
+        <div class="feature-section three-col">
+            <div class="col">
+                <div class="svg-container">
+                    <svg viewBox="-10 -10 52 52">
+                        <g filter="">
+                        <use xlink:href="#like"></use>
+                        </g>
+                    </svg>
+                </div>
+                <h3><?php echo _e('WP Ulike Extension',WP_ULIKE_SLUG); ?></h3>
+                <p><?php echo _e('Right now, WP ULike support wordpress posts / comments, BuddyPress activities & bbPress Topics.',WP_ULIKE_SLUG); ?></p>
+            </div>
+            <div class="col">
+                <div class="svg-container">
+                    <svg viewBox="-10 -10 52 52">
+                        <g filter="">
+                          <use xlink:href="#globe"></use>
+                        </g>
+                    </svg>
+                </div>
+                <h3><?php echo _e('Added More Than 20 Language Files',WP_ULIKE_SLUG); ?></h3>
+                <p><?php echo _e('WP ULike is already translated into +20 languages, with more always in progress.',WP_ULIKE_SLUG); ?></p>
+            </div>
+            <div class="col">
+                <div class="svg-container">
+                    <svg viewBox="-10 -10 52 52">
+                        <g filter="">
+                        <use xlink:href="#happy-smiley"></use>
+                        </g>
+                    </svg>
+                </div>
+                <h3><?php echo _e('User Profile Links',WP_ULIKE_SLUG); ?></h3>
+                <p><?php echo _e('Since WP ULike 2.3, We have synced the likers profile with BuddyPress & UltimateMember plugins.',WP_ULIKE_SLUG); ?></p>
+            </div>
+            <div class="col">
+                <div class="svg-container">
+                    <svg viewBox="-10 -10 52 52">
+                        <g filter="">
+                        <use xlink:href="#heart"></use>
+                        </g>
+                    </svg>
+                </div>
+                <h3><?php echo _e('New Themes And Styles',WP_ULIKE_SLUG); ?></h3>
+                <p><?php echo _e('Since WP ULike 2.3, We have made some new styles and themes and you can customize them by your taste.',WP_ULIKE_SLUG); ?></p>
+            </div>
+            <div class="col">
+                <div class="svg-container">
+                    <svg viewBox="-10 -10 52 52">
+                        <g filter="">
+                        <use xlink:href="#prize"></use>
+                        </g>
+                    </svg>
+                </div>
+                <h3><?php echo _e('myCRED Points Support',WP_ULIKE_SLUG); ?></h3>
+               <p><?php echo _e('myCRED is an adaptive points management system that lets you award / charge your users for interacting with your WordPress.',WP_ULIKE_SLUG); ?></p>
+            </div>
+            <div class="col">
+                <div class="svg-container">
+                    <svg viewBox="-10 -10 52 52">
+                        <g filter="">
+                        <use xlink:href="#tag"></use>
+                        </g>
+                    </svg>
+                </div>
+                <h3><?php echo _e('Likers World Map',WP_ULIKE_SLUG); ?></h3>
+                <p><?php echo _e('Since WP ULike 2.3, We have made a new ability that you can track your likers by their country in the world map & Top Liker widget.',WP_ULIKE_SLUG); ?></p>
+            </div>
+        </div>        
 		
 		<div class="changelog feature-list">
 			<div class="return-to-dashboard">
-				<a href="http://localhost/wp-english/wp-admin/"><?php echo _e('WP ULike Statistics','alimir'); ?> &rarr; <?php echo _e('Home','alimir'); ?></a> <?php echo _e('OR','alimir'); ?> <a href="http://localhost/wp-english/wp-admin/"><?php echo _e('WP ULike Settings','alimir'); ?></a>
+				<a href="admin.php?page=wp-ulike-statistics"><?php echo _e('WP ULike Statistics',WP_ULIKE_SLUG); ?> &rarr; <?php echo _e('Home',WP_ULIKE_SLUG); ?></a> <?php echo _e('OR',WP_ULIKE_SLUG); ?> <a href="admin.php?page=wp-ulike-settings"><?php echo _e('WP ULike Settings',WP_ULIKE_SLUG); ?></a>
 			</div>
 		</div>
 		
 		<?php else: ?>
 		
-		<p class="about-description"><?php echo _e('WP ULike is created by many love and time. Enjoy it :)','alimir'); ?></p>	
-		<h4 class="wp-people-group"><?php echo _e('Project Leaders','alimir'); ?></h4>
+		<p class="about-description"><?php echo _e('WP ULike is created by many love and time. Enjoy it :)',WP_ULIKE_SLUG); ?></p>	
+		<h4 class="wp-people-group"><?php echo _e('Project Leaders',WP_ULIKE_SLUG); ?></h4>
 		<ul class="wp-people-group">
 			<li class="wp-person" id="wp-person-alimirzaei">
-				<a href="http://about.alimir.ir"><?php echo get_avatar( 'info@alimir.ir', 64 ); ?></a>
-				<a class="web" href="https://profiles.wordpress.org/alimir/">Ali Mirzaei</a>
-				<span class="title"><?php echo _e('Project Lead & Developer','alimir'); ?></span>
+				<a href="https://profiles.wordpress.org/alimir/"><?php echo get_avatar( 'info@alimir.ir', 64 ); ?></a>
+				<a class="web" target="_blank" href="https://ir.linkedin.com/in/alimirir/">Ali Mirzaei</a>
+				<span class="title"><?php echo _e('Project Lead & Developer',WP_ULIKE_SLUG); ?></span>
 			</li>					
 		</ul>
 			
-		<h4 class="wp-people-group"><?php _e('Translations','alimir'); ?></h4>
+		<h4 class="wp-people-group"><?php _e('Translations',WP_ULIKE_SLUG); ?></h4>
 		<ul>
 		<li>English (United States)</li>
 		<li>Persian (Iran)</li>
@@ -268,9 +270,9 @@
 		<li>English (United Kingdom)</li>
 		</ul>
 		
-		<p class="about-description"><?php _e('Would you like to help translate the plugin into more languages?','alimir'); ?> <a target="_blank" href="https://www.transifex.com/projects/p/wp-ulike/" title"WP-Translations">[<?php _e('Join our WP-Translations Community','alimir'); ?>]</a></p>	
+		<p class="about-description"><?php _e('Would you like to help translate the plugin into more languages?',WP_ULIKE_SLUG); ?> <a target="_blank" href="https://www.transifex.com/projects/p/wp-ulike/" title"WP-Translations">[<?php _e('Join our WP-Translations Community',WP_ULIKE_SLUG); ?>]</a></p>	
 		
-		<h4 class="wp-people-group"><?php echo _e('Other Plugins','alimir'); ?></h4>
+		<h4 class="wp-people-group"><?php echo _e('Other Plugins',WP_ULIKE_SLUG); ?></h4>
 		<ul class="wp-people-group">
 			<li class="wp-person" id="wp-person-alimirzaei">
 				<a target="_blank" href="https://wordpress.org/plugins/blue-login-style"><img class="gravatar" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/blue-login-themes.jpg" alt="Blue Login Themes" /></a>
@@ -289,8 +291,8 @@
 			</li>									
 		</ul>	
 		
-		<h4 class="wp-people-group"><?php _e('Like this plugin?','alimir'); ?></h4>
-		<div class="boxstyle"><p><strong><?php _e('Show your support by Rating 5 Star in <a href="http://wordpress.org/plugins/wp-ulike"> Plugin Directory reviews</a>','alimir'); ?></strong></p></div>
+		<h4 class="wp-people-group"><?php _e('Like this plugin?',WP_ULIKE_SLUG); ?></h4>
+		<div class="boxstyle"><p><strong><?php _e('Show your support by Rating 5 Star in <a href="http://wordpress.org/plugins/wp-ulike"> Plugin Directory reviews</a>',WP_ULIKE_SLUG); ?></strong></p></div>
 		
 		<?php endif; ?>
 							

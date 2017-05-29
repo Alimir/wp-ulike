@@ -14,7 +14,7 @@ class wp_ulike_settings {
   public function __construct( $page = 'custom_settings', $title = null, $menu = array(), $settings = array(), $args = array() )
   {
     $this->page = $page;
-    $this->title = $title ? $title : __( 'Custom Settings', 'alimir' );
+    $this->title = $title ? $title : __( 'Custom Settings', WP_ULIKE_SLUG );
     $this->menu = is_array( $menu ) ? array_merge( array(
       'parent'     => 'themes.php',
       'title'      => $this->title,
@@ -25,8 +25,8 @@ class wp_ulike_settings {
     $this->apply_settings( $settings );
     $this->args  = array_merge( array(
       'description' => null,
-      'submit'      => __( 'Save Settings', 'alimir' ),
-      'reset'       => __( 'Reset Settings', 'alimir' ),
+      'submit'      => __( 'Save Settings', WP_ULIKE_SLUG ),
+      'reset'       => __( 'Reset Settings', WP_ULIKE_SLUG ),
       'tabs'        => false,
       'updated'     => null
     ), $args );
@@ -41,34 +41,35 @@ class wp_ulike_settings {
 	$this->admin_screen = WP_Screen::get($current_screen);
 	$this->admin_screen->add_help_tab(
 		array(
-			'title'    => __('Similar Settings','alimir'),
+			'title'    => __('Similar Settings',WP_ULIKE_SLUG),
 			'id'       => 'overview_tab',
-			'content'  => '<p>' . __('WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.', 'alimir') . '</p>'.
+			'content'  => '<p>' . __('WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.', WP_ULIKE_SLUG) . '</p>'.
 			
-			'<p>'.'<strong>'.__( 'Logging Method','alimir').' : </strong></p>'.
+			'<p>'.'<strong>'.__( 'Logging Method',WP_ULIKE_SLUG).' : </strong></p>'.
 			'<ul>'.
-			'<li>'.__('If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', 'alimir').'</li>'.
-			'<li>'.__('If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', 'alimir').'</li>'.
-			'<li>'.__('If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', 'alimir').'</li>'.
-			'<li>'.__('If you select <strong>"Logged By Cookie & IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP & SetCookie', 'alimir').'</li>'.
-			'<li>'.__('If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', 'alimir').'</li>
+			'<li>'.__('If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', WP_ULIKE_SLUG).'</li>'.
+			'<li>'.__('If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', WP_ULIKE_SLUG).'</li>'.
+			'<li>'.__('If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', WP_ULIKE_SLUG).'</li>'.
+			'<li>'.__('If you select <strong>"Logged By Cookie & IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP & SetCookie', WP_ULIKE_SLUG).'</li>'.
+			'<li>'.__('If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', WP_ULIKE_SLUG).'</li>
 			</ul>'.
 			
-			'<p>'.'<strong>'.__( 'Template Variables','alimir').' : </strong></p>'.
+			'<p>'.'<strong>'.__( 'Template Variables',WP_ULIKE_SLUG).' : </strong></p>'.
 			'<ul>'.
-			'<li>'.'<code>%START_WHILE%</code> : '		. __('Start the loop of logs','alimir') .' <span style="color:red">('.__( 'required','alimir').')</span></li>'.
-			'<li>'.'<code>%END_WHILE%</code> : '		. __('End of the while loop','alimir') .' <span style="color:red">('.__( 'required','alimir').')</span></li>'.
-			'<li>'.'<code>%USER_NAME%</code> : '		. __('Display the liker name','alimir') .'</li>'.
-			'<li>'.'<code>%USER_AVATAR%</code> : '		. __('Display the liker avatar (By Gravatar)','alimir') .'</li>'.
-			'<li>'.'<code>%BP_PROFILE_URL%</code> : '	. __('Display the BuddyPress user profile url','alimir') .'</li>'.
-			'<li>'.'<code>%UM_PROFILE_URL%</code> : '	. __('Display the UltimateMemebr user profile url','alimir') .'</li><hr>'.
-			'<li>'.'<code>%POST_LIKER%</code> : '		. __('Display the liker name','alimir') .'</li>'.
-			'<li>'.'<code>%POST_PERMALINK%</code> : '	. __('Display the permalink','alimir') .'</li>'.
-			'<li>'.'<code>%POST_COUNT%</code> : '		. __('Display the likes count number','alimir') .'</li>'.
-			'<li>'.'<code>%POST_TITLE%</code> : '		. __('Display the post title','alimir') .'</li><hr>'.
-			'<li>'.'<code>%COMMENT_LIKER%</code> : '	. __('Display the liker name','alimir') .'</li>'.
-			'<li>'.'<code>%COMMENT_AUTHOR%</code> : '	. __('Display the comment author name','alimir') .'</li>'.
-			'<li>'.'<code>%COMMENT_COUNT%</code> : '	. __('Display the likes count number','alimir') .'</li>'.
+			'<li>'.'<code>%START_WHILE%</code> : '		. __('Start the loop of logs',WP_ULIKE_SLUG) .' <span style="color:red">('.__( 'required',WP_ULIKE_SLUG).')</span></li>'.
+			'<li>'.'<code>%END_WHILE%</code> : '		. __('End of the while loop',WP_ULIKE_SLUG) .' <span style="color:red">('.__( 'required',WP_ULIKE_SLUG).')</span></li>'.
+			'<li>'.'<code>%USER_NAME%</code> : '		. __('Display the liker name',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%USER_AVATAR%</code> : '		. __('Display the liker avatar (By Gravatar)',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%BP_PROFILE_URL%</code> : '	. __('Display the BuddyPress user profile url',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%UM_PROFILE_URL%</code> : '	. __('Display the UltimateMemebr user profile url',WP_ULIKE_SLUG) .'</li><hr>'.
+			'<li>'.'<code>%POST_LIKER%</code> : '		. __('Display the liker name',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%POST_PERMALINK%</code> : '	. __('Display the permalink',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%POST_COUNT%</code> : '		. __('Display the likes count number',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%POST_TITLE%</code> : '		. __('Display the post title',WP_ULIKE_SLUG) .'</li><hr>'.
+			'<li>'.'<code>%COMMENT_LIKER%</code> : '	. __('Display the liker name',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%COMMENT_PERMALINK%</code> : '. __('Display the permalink',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%COMMENT_AUTHOR%</code> : '	. __('Display the comment author name',WP_ULIKE_SLUG) .'</li>'.
+			'<li>'.'<code>%COMMENT_COUNT%</code> : '	. __('Display the likes count number',WP_ULIKE_SLUG) .'</li>'.
 			'</ul>'			
 			,
 			'callback' => false
@@ -76,39 +77,39 @@ class wp_ulike_settings {
 	);
 	$this->admin_screen->add_help_tab(
 		array(
-			'title'    => __( 'Posts','alimir'),
+			'title'    => __( 'Posts',WP_ULIKE_SLUG),
 			'id'       => 'posts_tab',
-			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on wordpress while loop', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike\')) wp_ulike(\'get\'); ?&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have LIKED this post:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
+			'content'  => '<p>'.'<strong>'.__('Automatic display', WP_ULIKE_SLUG).' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on wordpress while loop', WP_ULIKE_SLUG) . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike\')) wp_ulike(\'get\'); ?&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__('Users Like Box Template', WP_ULIKE_SLUG) . ' - ' . __('Default Template:', WP_ULIKE_SLUG) .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have LIKED this post:',WP_ULIKE_SLUG).'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
 			
 			'callback' => false
 		)
 	);
 	$this->admin_screen->add_help_tab(
 		array(
-			'title'    => __( 'Comments','alimir'),
+			'title'    => __( 'Comments',WP_ULIKE_SLUG),
 			'id'       => 'comments_tab',
-			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on comments text', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_comments\')) wp_ulike_comments(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have LIKED this comment:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
+			'content'  => '<p>'.'<strong>'.__('Automatic display', WP_ULIKE_SLUG).' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on comments text', WP_ULIKE_SLUG) . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_comments\')) wp_ulike_comments(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', WP_ULIKE_SLUG) . ' - ' . __('Default Template:', WP_ULIKE_SLUG) .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have LIKED this comment:',WP_ULIKE_SLUG).'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
 			'callback' => false
 		)
 	);
 	$this->admin_screen->add_help_tab(
 		array(
-			'title'    => __( 'BuddyPress','alimir'),
+			'title'    => __( 'BuddyPress',WP_ULIKE_SLUG),
 			'id'       => 'bp_tab',
-			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on buddypres activities content', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_buddypress\')) wp_ulike_buddypress(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have liked this activity:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__('Post Activity Text', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;strong&gt;%POST_LIKER%&lt;/strong&gt; liked &lt;a href="%POST_PERMALINK%" title="%POST_TITLE%"&gt;%POST_TITLE%&lt;/a&gt;. (So far, This post has &lt;span class="badge"&gt;%POST_COUNT%&lt;/span&gt; likes)</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Comment Activity Text', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;strong&gt;%COMMENT_LIKER%&lt;/strong&gt; liked &lt;strong&gt;%COMMENT_AUTHOR%&lt;/strong&gt; comment. (So far, %COMMENT_AUTHOR% has &lt;span class="badge"&gt;%COMMENT_COUNT%&lt;/span&gt; likes for this comment)</code>'.'</li></ul>',
+			'content'  => '<p>'.'<strong>'.__('Automatic display', WP_ULIKE_SLUG).' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on buddypres activities content', WP_ULIKE_SLUG) . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_buddypress\')) wp_ulike_buddypress(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', WP_ULIKE_SLUG) . ' - ' . __('Default Template:', WP_ULIKE_SLUG) .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have liked this activity:',WP_ULIKE_SLUG).'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>'.'<p>'.'<strong>'.__('Post Activity Text', WP_ULIKE_SLUG) . ' - ' . __('Default Template:', WP_ULIKE_SLUG) .' </strong></p><ul><li><code>&lt;strong&gt;%POST_LIKER%&lt;/strong&gt; liked &lt;a href="%POST_PERMALINK%" title="%POST_TITLE%"&gt;%POST_TITLE%&lt;/a&gt;. (So far, This post has &lt;span class="badge"&gt;%POST_COUNT%&lt;/span&gt; likes)</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Comment Activity Text', WP_ULIKE_SLUG) . ' - ' . __('Default Template:', WP_ULIKE_SLUG) .' </strong></p><ul><li><code>&lt;strong&gt;%COMMENT_LIKER%&lt;/strong&gt; liked &lt;strong&gt;%COMMENT_AUTHOR%&lt;/strong&gt; comment. (So far, %COMMENT_AUTHOR% has &lt;span class="badge"&gt;%COMMENT_COUNT%&lt;/span&gt; likes for this comment)</code>'.'</li></ul>',
 			'callback' => false
 		)
 	);
 	$this->admin_screen->add_help_tab(
 		array(
-			'title'    => __( 'bbPress','alimir'),
+			'title'    => __( 'bbPress',WP_ULIKE_SLUG),
 			'id'       => 'bb_tab',
-			'content'  => '<p>'.'<strong>'.__('Automatic display', 'alimir').' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on buddypres activities content', 'alimir') . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_bbpress\')) wp_ulike_bbpress(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', 'alimir') . ' - ' . __('Default Template:', 'alimir') .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have liked this activity:','alimir').'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
+			'content'  => '<p>'.'<strong>'.__('Automatic display', WP_ULIKE_SLUG).' : </strong></p><ul><li>'.__('If you disable this option, you have to put manually this code on buddypres activities content', WP_ULIKE_SLUG) . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_bbpress\')) wp_ulike_bbpress(\'get\'); ?&gt;</code>'.'</li></ul>' . '<p>'.'<strong>'.__('Users Like Box Template', WP_ULIKE_SLUG) . ' - ' . __('Default Template:', WP_ULIKE_SLUG) .' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; '.__('Users who have liked this activity:',WP_ULIKE_SLUG).'&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" class="user-tooltip" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>'.'</li></ul>',
 			'callback' => false
 		)
 	);
 	$this->admin_screen->set_help_sidebar(
-		'<p><strong>'.__('For more information:').'</strong></p><p><a href="https://wordpress.org/plugins/wp-ulike/faq/" target="_blank">'.__('FAQ','alimir').'</a></p><p><a href="https://wordpress.org/support/plugin/wp-ulike" target="_blank">'.__('Support','alimir').'</a></p>'
+		'<p><strong>'.__('For more information:').'</strong></p><p><a href="https://wordpress.org/plugins/wp-ulike/faq/" target="_blank">'.__('FAQ',WP_ULIKE_SLUG).'</a></p><p><a href="https://wordpress.org/support/plugin/wp-ulike" target="_blank">'.__('Support',WP_ULIKE_SLUG).'</a></p>'
 	);
   }
 
@@ -167,7 +168,7 @@ class wp_ulike_settings {
     foreach ( $this->settings as $setting => $section ) {
       $_POST[$setting] = array_merge( $_POST[$setting], $this->get_defaults( $setting ) );
     }
-    add_settings_error( $this->page, 'settings_reset', __( 'Default settings have been reset.', 'alimir' ), 'updated' );
+    add_settings_error( $this->page, 'settings_reset', __( 'Default settings have been reset.', WP_ULIKE_SLUG ), 'updated' );
   }
 
   public function admin_menu()
@@ -218,6 +219,7 @@ class wp_ulike_settings {
   {
     wp_enqueue_media();
     wp_enqueue_script( 'wm-settings', plugins_url( 'js/settings.js' , __FILE__ ), array( 'jquery', 'wp-color-picker' ) );
+	  wp_enqueue_script("jquery-effects-core");
     wp_localize_script( 'wm-settings', 'ajax', array(
       'url' => admin_url( 'admin-ajax.php' ),
       'spinner' => admin_url( 'images/spinner.gif' )
@@ -244,7 +246,7 @@ class wp_ulike_settings {
           <?php }
           submit_button( $this->args['submit'], 'large primary' );
           if ( $this->args['reset'] ) {
-            submit_button( $this->args['reset'], 'small', "{$this->page}_reset", true, array( 'onclick' => "return confirm('" . __( 'Do you really want to reset all these settings to their default values ?', 'alimir' ) . "');" ) );
+            submit_button( $this->args['reset'], 'small', "{$this->page}_reset", true, array( 'onclick' => "return confirm('" . __( 'Do you really want to reset all these settings to their default values ?', WP_ULIKE_SLUG ) . "');" ) );
           }
         }
       ?>
@@ -309,7 +311,7 @@ class wp_ulike_settings {
         break;
 
       case 'radio':
-        if ( ! $options ) { _e( 'No options defined.', 'alimir' ); }
+        if ( ! $options ) { _e( 'No options defined.', WP_ULIKE_SLUG ); }
         echo "<fieldset id='{$id}'>";
         foreach ( $options as $v => $label ) {
           $check = checked( $v, $value, false );
@@ -320,7 +322,7 @@ class wp_ulike_settings {
         break;
 
       case 'select':
-        if ( ! $options ) { _e( 'No options defined.', 'alimir' ); }
+        if ( ! $options ) { _e( 'No options defined.', WP_ULIKE_SLUG ); }
         echo "<select {$attrs} id='{$id}'>";
         foreach ( $options as $v => $label ) {
           $select = selected( $v, $value, false );
@@ -331,8 +333,8 @@ class wp_ulike_settings {
 
       case 'media':
         echo "<fieldset class='wm-settings-media' id='{$id}'><input {$attrs} type='hidden' value='{$value}' />";
-        echo "<p><a class='button button-large wm-select-media' title='{$label}'>" . sprintf( __( 'Select %s', 'alimir' ), $label ) . "</a> ";
-        echo "<a class='button button-small wm-remove-media' title='{$label}'>" . sprintf( __( 'Remove %s', 'alimir' ), $label ) . "</a></p>";
+        echo "<p><a class='button button-large wm-select-media' title='{$label}'>" . sprintf( __( 'Select %s', WP_ULIKE_SLUG ), $label ) . "</a> ";
+        echo "<a class='button button-small wm-remove-media' title='{$label}'>" . sprintf( __( 'Remove %s', WP_ULIKE_SLUG ), $label ) . "</a></p>";
         if ( $value ) {
           echo wpautop( wp_get_attachment_image( $value, 'medium' ) );
         }
@@ -344,7 +346,7 @@ class wp_ulike_settings {
         break;
 
       case 'multi':
-        if ( ! $options ) { _e( 'No options defined.', 'alimir' ); }
+        if ( ! $options ) { _e( 'No options defined.', WP_ULIKE_SLUG ); }
         echo "<fieldset id='{$id}'>";
         foreach ( $options as $n => $label ) {
           $a = preg_replace( "/name\=\'(.+)\'/", "name='$1[{$n}]'", $attrs );
@@ -356,7 +358,7 @@ class wp_ulike_settings {
         break;
 
       case 'action':
-        if ( ! $action ) { _e( 'No action defined.', 'alimir' ); }
+        if ( ! $action ) { _e( 'No action defined.', WP_ULIKE_SLUG ); }
         echo "<p class='wm-settings-action'><input {$attrs} id='{$id}' type='button' class='button button-large' value='{$label}' /></p>{$desc}";
         break;
 

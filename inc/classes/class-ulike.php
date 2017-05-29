@@ -219,6 +219,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @param           Array $data
 		 * @since           2.0
 		 * @updated         2.3		 
+		 * @updated         2.4.2		 
 		 * @return			String
 		 */	
 		public function loggedby_other_ways(array $data){
@@ -229,12 +230,13 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$button_type 		= wp_ulike_get_setting( 'wp_ulike_general', 'button_type');
 			$second_condition 	= true; //check for by_username login method
 			
+			/* I removed this section (by_cookie_ip method) for some tests on v2.4.2
 			if($loggin_method		== 'by_cookie_ip'){
 				$condition 		= $this->wpdb->get_var("SELECT COUNT(*) FROM ".$this->wpdb->prefix.$data['table']." WHERE ".$data['column']." = '".$data['id']."' AND ip = '".$data['user_ip']."'");
 				$second_column 	= 'ip';
 				$second_val 	= $data['user_ip'];
-			}
-			else if($loggin_method 	== 'by_username'){
+			}*/
+			//else if($loggin_method 	== 'by_username'){
 				$condition 		= $this->wpdb->get_var("SELECT COUNT(*) FROM ".$this->wpdb->prefix.$data['table']." WHERE ".$data['column']." = '".$data['id']."' AND user_id = '".$data['user_id']."'");
 				$user_info 		= get_userdata($data['user_id']);// check for user data
 				if(!$user_info) $second_condition = false;// if user not exist, condition will be false
@@ -242,10 +244,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				$second_val 	= $data['user_id'];
 				if(!is_user_logged_in())
 				$tmp1 			= $this->get_template($data["id"],$data["method"],$liked,1,2);
-			}
+			//}
+			
 			
 			if($data["type"] == 'post'){
-				if($condition == 0 && !isset($_COOKIE[$data["cookie"].$data["id"]])){
+				if($condition == 0 /*&& !isset($_COOKIE[$data["cookie"].$data["id"]])*/){
 					if ($button_type == 'image') {
 						$counter = $tmp1['like_img'];
 					}
@@ -253,7 +256,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						$counter = $tmp1['like_text'];
 					}
 				}
-				else if($condition != 0 && isset($_COOKIE[$data["cookie"].$data["id"]]) && $second_condition){
+				else if($condition != 0 /*&& isset($_COOKIE[$data["cookie"].$data["id"]])*/ && $second_condition){
 					if($this->get_user_status($data['table'],$data['column'],$second_column,$data['id'],$second_val) == "like"){
 						if ($button_type == 'image') {
 							$counter = $tmp2['unlike_img'];	
@@ -280,18 +283,18 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					}						}
 			}//end post button
 			else if($data["type"] == 'process'){
-				if($condition == 0 && !isset($_COOKIE[$data["cookie"].$data["id"]])){
+				if($condition == 0 /*&& !isset($_COOKIE[$data["cookie"].$data["id"]])*/){
 					$newLike = $data["get_like"] + 1;
 					$this->update_meta_data($data["id"], $data["key"], $newLike);
 					$this->wpdb->query("INSERT INTO ".$this->wpdb->prefix.$data['table']." VALUES ('', '".$data['id']."', NOW(), '".$data['user_ip']."', '".$data['user_id']."', 'like')");
 					if(is_user_logged_in()){
 						wp_ulike_bp_activity_add($data['user_id'],$data['id'],$data['key']);
 					}	
-					setcookie($data["cookie"].$data["id"], time(), time()+3600*24*365, '/');
+					//setcookie($data["cookie"].$data["id"], time(), time()+3600*24*365, '/');
 					do_action('wp_ulike_mycred_like', $data['id'], $data['key']);	
 					$counter = wp_ulike_format_number($newLike);
 				}
-				else if($condition != 0 && isset($_COOKIE[$data["cookie"].$data["id"]]) && $second_condition){
+				else if($condition != 0  /*&&isset($_COOKIE[$data["cookie"].$data["id"]])*/ && $second_condition){
 					if($this->get_user_status($data['table'],$data['column'],$second_column,$data['id'],$second_val) == "like"){
 						$newLike = $data["get_like"] - 1;
 						$this->update_meta_data($data["id"], $data["key"], $newLike);
@@ -420,7 +423,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			if(wp_ulike_get_setting( $setting_key, 'users_liked_box') == '1' && !$get_users == ''){
 				$get_template = wp_ulike_get_setting( $setting_key, 'users_liked_box_template' );
 				if($get_template == '')
-				$get_template = '<br /><p style="margin-top:5px"> '.__('Users who have LIKED this post:','alimir').'</p> <ul class="tiles"> %START_WHILE% <li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li> %END_WHILE%</ul>';
+				$get_template = '<br /><p style="margin-top:5px"> '.__('Users who have LIKED this post:',WP_ULIKE_SLUG).'</p> <ul class="tiles"> %START_WHILE% <li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li> %END_WHILE%</ul>';
 				$inner_template = $this->get_template_between($get_template,"%START_WHILE%","%END_WHILE%");
 				foreach ( $get_users as $get_user ) 
 				{

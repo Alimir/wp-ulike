@@ -1,12 +1,6 @@
 <?php
-if ( ! class_exists( 'pagination' ) ) {
 
-class pagination{
-/*
-Script Name: *Digg Style Paginator Class
-Script Version: 0.4
-Author: Victor De la Rocha
-*/
+class wp_ulike_pagination{
 
 		/*Default values*/
 		var $total_pages = -1;//items
@@ -98,7 +92,7 @@ Author: Victor De la Rocha
 						echo "Especificaste un wildcard para sustituir, pero no existe en el target<br />";
 						$error = true;
 					}elseif($this->urlF and $this->urlF == '%' and strpos($this->target,$this->urlF)===false){
-						echo "Es necesario especificar en el target el comodin % para sustituir el número de página<br />";
+						echo "Es necesario especificar en el target el comodin % para sustituir el nÃºmero de pÃ¡gina<br />";
 						$error = true;
 					}
 
@@ -201,7 +195,3 @@ Author: Victor De la Rocha
 				return true;
 			}
 	}
-	
-}
-
-?>

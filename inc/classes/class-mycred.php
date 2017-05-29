@@ -51,7 +51,8 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		
 		
 		public function bp_get_auhtor_id($activity_id) {
-			return $this->wpdb->get_var("SELECT user_id FROM ".$this->wpdb->prefix."bp_activity WHERE $activity_id = id");
+			$activity = bp_activity_get_specific( array( 'activity_ids' => $activity_id ) );
+			return $activity['activities'][0]->user_id;
 		}
 		
 		/**
@@ -199,14 +200,14 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 			$prefs = $this->prefs;
  
 ?>
-<label class="subheader"><?php echo _e( 'Points for Liking content', 'alimir' ); ?></label>
+<label class="subheader"><?php echo _e( 'Points for Liking content', WP_ULIKE_SLUG ); ?></label>
 <ol>
 	<li>
 		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_like' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'add_like' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['add_like']['creds'] ); ?>" size="8" /></div>
 	</li>
 	<li class="empty"></li>
 	<li>
-		<label for="<?php echo $this->field_id( array( 'add_like' => 'limit' ) ); ?>"><?php _e( 'Limit', 'alimir' ); ?></label>
+		<label for="<?php echo $this->field_id( array( 'add_like' => 'limit' ) ); ?>"><?php _e( 'Limit', WP_ULIKE_SLUG ); ?></label>
 		<?php echo $this->hook_limit_setting( $this->field_name( array( 'add_like' => 'limit' ) ), $this->field_id( array( 'add_like' => 'limit' ) ), $prefs['add_like']['limit'] ); ?>
 	</li>	
 	<li class="empty"></li>
@@ -216,14 +217,14 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
 	</li>
 </ol>
-<label class="subheader"><?php _e( 'Points for Author Who Get Liked', 'alimir' ); ?></label>
+<label class="subheader"><?php _e( 'Points for Author Who Get Liked', WP_ULIKE_SLUG ); ?></label>
 <ol>
 	<li>
 		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_like' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'get_like' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['get_like']['creds'] ); ?>" size="8" /></div>
 	</li>
 	<li class="empty"></li>
 	<li>
-		<label for="<?php echo $this->field_id( array( 'get_like' => 'limit' ) ); ?>"><?php _e( 'Limit', 'alimir' ); ?></label>
+		<label for="<?php echo $this->field_id( array( 'get_like' => 'limit' ) ); ?>"><?php _e( 'Limit', WP_ULIKE_SLUG ); ?></label>
 		<?php echo $this->hook_limit_setting( $this->field_name( array( 'get_like' => 'limit' ) ), $this->field_id( array( 'get_like' => 'limit' ) ), $prefs['get_like']['limit'] ); ?>
 	</li>		
 	<li class="empty"></li>
@@ -233,7 +234,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
 	</li>
 </ol>
-<label class="subheader"><?php echo _e( 'Points for unliking content', 'alimir' ); ?></label>
+<label class="subheader"><?php echo _e( 'Points for unliking content', WP_ULIKE_SLUG ); ?></label>
 <ol>
 	<li>
 		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_unlike' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'add_unlike' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['add_unlike']['creds'] ); ?>" size="8" /></div>
@@ -245,7 +246,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
 	</li>
 </ol>
-<label class="subheader"><?php _e( 'Points for Author Who Get Unliked', 'alimir' ); ?></label>
+<label class="subheader"><?php _e( 'Points for Author Who Get Unliked', WP_ULIKE_SLUG ); ?></label>
 <ol>
 	<li>
 		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_unlike' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'get_unlike' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['get_unlike']['creds'] ); ?>" size="8" /></div>
