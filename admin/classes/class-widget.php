@@ -188,6 +188,7 @@ class wp_ulike_widget extends WP_Widget {
 	 * @author       	Alimir
 	 * @since           2.0
 	 * @updated         2.4
+	 * @updated         2.6 //added post counter value
 	 * @return			String
 	 */		
 	public function most_liked_activities(array $settings) {
@@ -217,12 +218,14 @@ class wp_ulike_widget extends WP_Widget {
 			$activity_action     = $activity->content;
             if (empty($activity_action))
             $activity_action     = $activity->action;
+			$post_count  		 = $activity->meta_value;
 			
 			echo $settings['before_item'];
 			//echo strip_tags($activity_action);
             echo '<a href="' . $activity_permalink . '" rel="nofollow">';
             echo wp_trim_words( $activity_action, $num_words = $settings['trim'], $more = null );
             echo '</a>';
+			echo $settings['show_count'] == '1' ? ' <span class="wp_counter_span">'.wp_ulike_format_number($post_count).'</span>' : '';
 			echo $settings['after_item'];
 		}
 	}
@@ -356,7 +359,7 @@ class wp_ulike_widget extends WP_Widget {
 			"show_thumb" 	=> (isset($instance['show_thumb']) == true ) ? 1 : 0,
 			"before_item" 	=> '<li>',
 			"after_item" 	=> '</li>'
-		);		        
+		);
 		
 		echo $args['before_widget'];
 		if ( ! empty( $title ) )

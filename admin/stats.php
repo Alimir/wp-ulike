@@ -3,8 +3,6 @@
 	if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false){
 		//include class charts
 		include( plugin_dir_path(__FILE__) . 'classes/class-charts.php');
-		//include PHP GeoIPLocation Library
-		include( plugin_dir_path(__FILE__) . 'classes/tmp/geoiploc.php');
 	} else return;
 	
 	/**
@@ -13,6 +11,7 @@
 	 * @author       	Alimir	 	
 	 * @since           2.0	
 	 * @updated         2.3	
+	 * @updated         2.6
 	 * @return			String
 	 */	
 	function wp_ulike_statistics(){
@@ -202,13 +201,53 @@
 			<div class="log-latest">
 			<div class="log-item">
 			<div class="log-page-title">'. $top_users_counter++ . ' - ' .$final_user_name.'</div>
-			<div class="right-div badge"><strong>'.$top_liker->SumUser.'</strong> '.__('Like',WP_ULIKE_SLUG) . '</div>
-			<div class="left-div"><i class="dashicons dashicons-location"></i> <em dir="ltr">'.$top_liker->ip.'</em> | '.getCountryFromIP($top_liker->ip, "NamE").'</div>
+			<div class="badge"><strong>'.$top_liker->SumUser.'</strong> '.__('Like',WP_ULIKE_SLUG) . '</div>
+			<div class="left-div"><i class="dashicons dashicons-location"></i> <em dir="ltr">'.$top_liker->ip.'</em> | '.wp_ulike_get_geoip($top_liker->ip,'name').'</div>
 			</div>
 			</div>
 			';
 		}
 		echo '</div></div>';
+	}
+		
+	if($get_option['top_posts'] == 1){
+			echo'
+			<div class="postbox">
+			<div class="handlediv" title="Click to toggle"><br></div>
+			<h3 class="hndle"><span><i class="dashicons dashicons-admin-post"></i> '.__('Most Liked Posts',WP_ULIKE_SLUG) . '</span></h3>
+			<div class="inside"><div class="top-widget"><ol>';
+			$wp_ulike_stats->get_tops('top_posts');
+			echo '</ol></div></div></div>';
+	}		
+	
+	if($get_option['top_comments'] == 1){
+			echo'
+			<div class="postbox">
+			<div class="handlediv" title="Click to toggle"><br></div>
+			<h3 class="hndle"><span><i class="dashicons dashicons-admin-comments"></i> '.__('Most Liked Comments',WP_ULIKE_SLUG) . '</span></h3>
+			<div class="inside"><div class="top-widget"><ol>';
+			$wp_ulike_stats->get_tops('top_comments');
+			echo '</ol></div></div></div>';
+	}		
+	
+	if($get_option['top_activities'] == 1){
+			echo'
+			<div class="postbox">
+			<div class="handlediv" title="Click to toggle"><br></div>
+			<h3 class="hndle"><span><i class="dashicons dashicons-groups"></i> '.__('Most Liked Activities',WP_ULIKE_SLUG) . '</span></h3>
+			<div class="inside"><div class="top-widget"><ol>';
+			$wp_ulike_stats->get_tops('top_activities');
+			echo '</ol></div></div></div>';
+		}
+
+	if($get_option['top_topics'] == 1){
+			echo'
+			<div class="postbox">
+			<div class="handlediv" title="Click to toggle"><br></div>
+			<h3 class="hndle"><span><i class="dashicons dashicons-index-card"></i> '.__('Most Liked Topics',WP_ULIKE_SLUG) . '</span></h3>
+			<div class="inside"><div class="top-widget"><ol>';
+			$wp_ulike_stats->get_tops('top_topics');
+			echo '</ol></div></div></div>';
 	}
 	
 	echo '</div></div></div>';
@@ -330,6 +369,10 @@
 		  'piechart_stats'			=> 1,
 		  'likers_map'				=> 1,
 		  'top_likers'				=> 1,
+		  'top_posts'				=> 1,
+		  'top_comments'			=> 1,
+		  'top_activities'			=> 1,
+		  'top_topics'				=> 1,
 		  'days_number'				=> 20
 		);
 		update_option('wp_ulike_statistics_screen',$options);	
@@ -349,6 +392,10 @@
 				<label><input class="hide-postbox-tog" name="wp_ulike_piechart_stats" type="checkbox" value="1" <?php checked( '1', $get_option['piechart_stats'] ); ?>><?php echo _e('Likes Percent',WP_ULIKE_SLUG); ?></label>
 				<label><input class="hide-postbox-tog" name="wp_ulike_likers_map" type="checkbox" value="1" <?php checked( '1', $get_option['likers_map'] ); ?>><?php echo _e('Likers World Map',WP_ULIKE_SLUG); ?></label>
 				<label><input class="hide-postbox-tog" name="wp_ulike_top_likers" type="checkbox" value="1" <?php checked( '1', $get_option['top_likers'] ); ?>><?php echo _e('Top Likers',WP_ULIKE_SLUG); ?></label>
+				<label><input class="hide-postbox-tog" name="wp_ulike_top_posts" type="checkbox" value="1" <?php checked( '1', $get_option['top_posts'] ); ?>><?php echo _e('Most Liked Posts',WP_ULIKE_SLUG); ?></label>
+				<label><input class="hide-postbox-tog" name="wp_ulike_top_comments" type="checkbox" value="1" <?php checked( '1', $get_option['top_comments'] ); ?>><?php echo _e('Most Liked Comments',WP_ULIKE_SLUG); ?></label>
+				<label><input class="hide-postbox-tog" name="wp_ulike_top_activities" type="checkbox" value="1" <?php checked( '1', $get_option['top_activities'] ); ?>><?php echo _e('Most Liked Activities',WP_ULIKE_SLUG); ?></label>
+				<label><input class="hide-postbox-tog" name="wp_ulike_top_topics" type="checkbox" value="1" <?php checked( '1', $get_option['top_topics'] ); ?>><?php echo _e('Most Liked Topics',WP_ULIKE_SLUG); ?></label>
 				<br class="clear">
 				<input step="1" min="5" max="60" class="screen-per-page" name="wp_ulike_days_number" maxlength="3" value="<?php echo $get_option['days_number']; ?>" type="number">
 				<label><?php echo _e('Days',WP_ULIKE_SLUG); ?></label>
@@ -384,6 +431,10 @@
 			  'piechart_stats'			=> isset($_POST['wp_ulike_piechart_stats']) 	? $_POST['wp_ulike_piechart_stats'] 	: 0,
 			  'likers_map'				=> isset($_POST['wp_ulike_likers_map']) 		? $_POST['wp_ulike_likers_map'] 		: 0,
 			  'top_likers'				=> isset($_POST['wp_ulike_top_likers']) 		? $_POST['wp_ulike_top_likers'] 		: 0,
+			  'top_posts'				=> isset($_POST['wp_ulike_top_posts']) 			? $_POST['wp_ulike_top_posts'] 			: 0,
+			  'top_comments'			=> isset($_POST['wp_ulike_top_comments']) 		? $_POST['wp_ulike_top_comments'] 		: 0,
+			  'top_activities'			=> isset($_POST['wp_ulike_top_activities']) 	? $_POST['wp_ulike_top_activities'] 	: 0,
+			  'top_topics'				=> isset($_POST['wp_ulike_top_topics']) 		? $_POST['wp_ulike_top_topics'] 		: 0,
 			  'days_number'				=> isset($_POST['wp_ulike_days_number']) 		? $_POST['wp_ulike_days_number'] 		: 20
 			);
 			update_option( 'wp_ulike_statistics_screen', $options );

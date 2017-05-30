@@ -3,7 +3,7 @@
 Plugin Name:WP ULike
 Plugin URI: http://preview.alimir.ir/developer/wp-ulike/
 Description: WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
-Version: 2.5.1
+Version: 2.6
 Author: Ali Mirzaei
 Author URI: http://about.alimir.ir
 Text Domain: wp-ulike
@@ -11,8 +11,11 @@ Domain Path: /lang/
 License: GPL2
 */
 
+require_once 'lib/autoload.php';
+use GeoIp2\Database\Reader;
+
 //Do not change this value
-define( 'WP_ULIKE_VERSION'      , '2.5.1' );
+define( 'WP_ULIKE_VERSION'      , '2.6' );
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' );
 define( 'WP_ULIKE_DB_VERSION'   , '1.3' );
 
@@ -163,6 +166,30 @@ function wp_ulike_update_db_check() {
 		wp_ulike_install();
 	}
 }
+
+
+/**
+ * Return GeoIP location by user IPv4
+ *
+ * @author        	Alimir
+ * @since           2.6
+ * @return   		String
+ */
+function wp_ulike_get_geoip($ip,$cd = ''){
+	try {
+		$reader = new Reader( plugin_dir_path( __FILE__ ) . '/GeoLite2-Country.mmdb' );
+		if($cd == 'code')
+			return $reader->country($ip)->country->isoCode;
+		else if ($cd == 'name')
+			return $reader->country($ip)->country->name;
+		else
+			return $reader->country($ip)->country;
+	} catch (\Exception $e) {
+		//nothing
+	}
+	return 'Localhost';
+}
+
 
 //Include plugin setting file
 include plugin_dir_path( __FILE__ ) . 'admin/admin.php';

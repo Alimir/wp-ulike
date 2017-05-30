@@ -114,15 +114,23 @@
 .map-html-marker p:last-child {
     border-bottom: 0 none;
 }
-.log-latest {
-}
-.log-item {
+.log-latest {}
+.log-item,.top-widget ol li {
     border-bottom: 1px solid #D3CDCD;
     border-top: 1px solid #FFFFFF;
     height: 46px;
-    padding: 3px 7px;
+    padding: 3px 7px
 }
-.log-item:hover {
+.top-widget ol li{
+	height: inherit;
+	padding: 12px 5px;
+	font-size: 16px;
+	margin-bottom: 0
+}
+.top-widget ol li a{
+	color: #616161;
+}
+.log-item:hover, .top-widget ol li:hover {
     background: none repeat scroll 0 0 #EEEEEE;
 }
 .show-map {
@@ -211,17 +219,29 @@
 .right-div {
     float: right;
 }
-
 .wp_ulike_logs .button{
 	line-height:20px;
 }
+.postbox .badge,.top-widget .wp_counter_span{
+	display: inline-block;
+	background-color: #D54E21;
+	color: #FFF;
+	font-size: 12px;
+	line-height: 17px;
+	font-weight: normal;
+	margin: 1px 0px 0px 2px;
+	vertical-align: top;
+	border-radius: 10px;
+	padding-left:5px;
+	padding-right:5px;
+	z-index: 26;
+	float: right;
+}
 
-/*!
- * jQVMap Version 1.0 
- *
+/**
+ *	jQVMap Version 1.5
  */
-.jqvmap-label
-{
+.jqvmap-label{
 	position: absolute;
 	display: none;
 	-webkit-border-radius: 3px;
@@ -232,9 +252,12 @@
 	font-family: sans-serif, Verdana;
 	font-size: smaller;
 	padding: 3px;
+  pointer-events:none;
 }
-.jqvmap-zoomin, .jqvmap-zoomout
-{
+.jqvmap-pin{
+  	pointer-events:none;
+}
+.jqvmap-zoomin, .jqvmap-zoomout{
 	position: absolute;
 	left: 10px;
 	-webkit-border-radius: 3px;
@@ -249,34 +272,46 @@
 	line-height: 10px;
 	text-align: center;
 }
-.jqvmap-zoomin
-{
+.jqvmap-zoomin{
 	top: 10px;
 }
-.jqvmap-zoomout
-{
+.jqvmap-zoomout{
 	top: 30px;
 }
-.jqvmap-region
-{
+.jqvmap-region{
 	cursor: pointer;
 }
-.jqvmap-ajax_response
-{
+.jqvmap-ajax_response{
 	width: 100%;
 	height: 500px;
 }
-.badge{
-	display: inline-block;
-	background-color: #D54E21;
-	color: #FFF;
-	font-size: 9px;
-	line-height: 17px;
-	font-weight: normal;
-	margin: 1px 0px 0px 2px;
-	vertical-align: top;
-	border-radius: 10px;
-	padding-left:5px;
-	padding-right:5px;
-	z-index: 26;
+
+/**
+ *	RTL support
+ */
+.rtl #left-log {
+	margin: 0 1% 0 0;
+}
+.rtl .th-center {
+    text-align: center !important;
+}
+.rtl .td-align {
+    text-align: right;
+}
+.rtl .log-referred {
+    float: right;
+}
+.rtl .log-ip {
+    float: left;
+
+}
+.rtl .left-div {
+    float: right;
+}
+.rtl .right-div {
+    float: left;
+}
+.rtl .postbox .badge,.rtl .top-widget .wp_counter_span{
+	margin: 1px 2px 0px 0;
+	float: left;
 }

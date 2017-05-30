@@ -1,7 +1,7 @@
 <?php 
 if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
-	class wp_ulike_stats{
+	class wp_ulike_stats extends wp_ulike_widget{
 		private $wpdb;
 		
 		/**
@@ -28,11 +28,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$get_option 	= get_option( 'wp_ulike_statistics_screen' );
 			
 			if ( $currentScreen->id != $hook ) return;
-			
-			if(is_rtl())
-				wp_register_style( 'wp_ulike_stats_style', plugins_url( 'css/statistics-rtl.css' , __FILE__ ) );
-			else
-				wp_register_style( 'wp_ulike_stats_style', plugins_url( 'css/statistics.css' , __FILE__ ) );
+			wp_register_style( 'wp_ulike_stats_style', plugins_url( 'css/statistics.css' , __FILE__ ) );
 			
 			//wp_enqueue_style 
 			wp_enqueue_style( 'wp_ulike_stats_style' );			
@@ -221,13 +217,14 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @author       	Alimir
 		 * @since           2.3
+		 * @updated         2.6 //added new GeoIP system
 		 * @return			String
 		*/
 		public function data_map(){
-			$country_data = array();
+			$country_data =  array();
 			$return_val = $this->wpdb->get_results(
 			"
-			SELECT T.user_ip AS get_user_ip , SUM(T.count_user_ip) get_count_user_ip
+			SELECT T.user_ip AS get_user_ip , SUM(T.count_user_ip) AS get_count_user_ip
 			FROM(
 			SELECT ip AS user_ip, count(ip) AS count_user_ip
 			FROM ".$this->wpdb->prefix."ulike
@@ -249,7 +246,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			");
 			
 			foreach($return_val as $return){
-				$country_data[strtolower(getCountryFromIP($return->get_user_ip, "code"))] += $return->get_count_user_ip;
+				$cdata = strtolower(wp_ulike_get_geoip($return->get_user_ip,'code'));
+				 if(!isset($country_data[$cdata]))
+					 $country_data[$cdata] = array();
+				$country_data[$cdata][] .= $return->get_count_user_ip;
 			}
 		
 			return json_encode($country_data);
@@ -287,6 +287,75 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		return $this->wpdb->get_results($request);
 		}
 		
+		/**
+		 * Tops Summaries
+		 *
+		 * @author       	Alimir
+		 * @since           2.6
+		 * @return			Array
+		 */					
+		public function get_tops($type){
+			switch($type){
+				case 'top_posts':
+					return parent::most_liked_posts(array(
+							"numberOf" 	    => 10,
+							"period" 	    => 'all',
+							"sizeOf" 	    => 32,
+							"trim" 		    => 10,
+							"profile_url" 	=> 'bp',
+							"show_count"	=> 1,		
+							"show_thumb" 	=> 0,
+							"before_item" 	=> '<li>',
+							"after_item" 	=> '</li>'
+							)
+					);
+					break;
+				case 'top_comments':
+					return parent::most_liked_comments(array(
+							"numberOf" 	    => 10,
+							"period" 	    => 'all',
+							"sizeOf" 	    => 32,
+							"trim" 		    => 10,
+							"profile_url" 	=> 'bp',
+							"show_count"	=> 1,		
+							"show_thumb" 	=> 0,
+							"before_item" 	=> '<li>',
+							"after_item" 	=> '</li>'
+							)
+					);
+				break;
+				case 'top_activities':
+					return parent::most_liked_activities(array(
+							"numberOf" 	    => 10,
+							"period" 	    => 'all',
+							"sizeOf" 	    => 32,
+							"trim" 		    => 18,
+							"profile_url" 	=> 'bp',
+							"show_count"	=> 1,		
+							"show_thumb" 	=> 0,
+							"before_item" 	=> '<li>',
+							"after_item" 	=> '</li>'
+							)
+					);
+				break;
+				case 'top_topics':
+					return parent::most_liked_topics(array(
+							"numberOf" 	    => 10,
+							"period" 	    => 'all',
+							"sizeOf" 	    => 32,
+							"trim" 		    => 10,
+							"profile_url" 	=> 'bp',
+							"show_count"	=> 1,		
+							"show_thumb" 	=> 0,
+							"before_item" 	=> '<li>',
+							"after_item" 	=> '</li>'
+							)
+					);
+				break;
+				default:
+					return;
+			}
+		}
 	}
 	
 	//create global variable
