@@ -2,9 +2,9 @@ jQuery(document).ready(function ($) {
   'use strict';
   var form = $('form.wrap'),
     page = $('input[name="option_page"]', form).val(),
-    tabs = $('.wm-settings-tabs', form),
+    tabs = $('.wp-ulike-settings-tabs', form),
     current = parseInt(sessionStorage.getItem(page + '_current_tab'), 10) || 0;
-  $('.wm-settings-section', form).each(function (i, el) {
+  $('.wp-ulike-settings-section', form).each(function (i, el) {
     var setting = $(el).val(),
       title = $(el).prev('h2'),
       section = $('<div>').attr('id', page + '_' + setting);
@@ -14,11 +14,11 @@ jQuery(document).ready(function ($) {
       $(this).appendTo(section);
     });
     if (tabs.length && title.length) {
-      section.addClass('wm-settings-tab').hide();
+      section.addClass('wp-ulike-settings-tab').hide();
       title.appendTo(tabs).click(function (e) {
         e.preventDefault();
         if (!title.hasClass('active')) {
-          $('.wm-settings-tab.active', form).fadeOut('fast', function () {
+          $('.wp-ulike-settings-tab.active', form).fadeOut('fast', function () {
             $('.active', form).removeClass('active');
             title.addClass('active');
             section.fadeIn('fast').addClass('active');
@@ -39,10 +39,10 @@ jQuery(document).ready(function ($) {
   $('label[for="hidden"]', form).each(function () {
     $(this).parents('tr').addClass('hide-label');
   });
-  $('.wm-settings-media', form).each(function () {
+  $('.wp-ulike-settings-media', form).each(function () {
     var frame,
-      select = $('.wm-select-media', this),
-      remove = $('.wm-remove-media', this),
+      select = $('.wp-ulike-select-media', this),
+      remove = $('.wp-ulike-remove-media', this),
       input = $('input', this),
       preview = $('img', this),
       title = select.attr('title'),
@@ -85,7 +85,7 @@ jQuery(document).ready(function ($) {
       remove.hide();
     });
   });
-  $('.wm-settings-action', form).each(function () {
+  $('.wp-ulike-settings-action', form).each(function () {
     var submit = $('[type="button"]', this),
       spinner = $('<img>').attr({
         src: ajax.spinner,
@@ -146,7 +146,7 @@ jQuery(document).ready(function ($) {
       });
     });
   });
-  $('.wm-settings-color').wpColorPicker();
+  $('.wp-ulike-settings-color').wpColorPicker();
   
 	$('#wp-ulike-settings_wp_ulike_customize tr:not(:first-child)').addClass('custom-style-show');
 	

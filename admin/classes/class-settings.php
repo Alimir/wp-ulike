@@ -218,22 +218,19 @@ class wp_ulike_settings {
   public static function admin_enqueue_scripts()
   {
     wp_enqueue_media();
-    wp_enqueue_script( 'wm-settings', plugins_url( 'js/settings.js' , __FILE__ ), array( 'jquery', 'wp-color-picker' ) );
+    wp_enqueue_script( 'wp-ulike-settings', plugins_url( 'js/settings.js' , __FILE__ ), array( 'jquery', 'wp-color-picker' ) );
 	  wp_enqueue_script("jquery-effects-core");
-    wp_localize_script( 'wm-settings', 'ajax', array(
+    wp_localize_script( 'wp-ulike-settings', 'ajax', array(
       'url' => admin_url( 'admin-ajax.php' ),
       'spinner' => admin_url( 'images/spinner.gif' )
     ) );
-	if(!is_rtl())
-    wp_enqueue_style( 'wm-settings', plugins_url( 'css/settings.css' , __FILE__ ) );
-	else
-	wp_enqueue_style( 'wm-settings', plugins_url( 'css/settings-rtl.css' , __FILE__ ) );
+    wp_enqueue_style( 'wp-ulike-settings', plugins_url( 'css/settings.css' , __FILE__ ) );
     wp_enqueue_style( 'wp-color-picker' );
   }
 
   public function do_page()
   { ?>
-    <form action="options.php" method="POST" enctype="multipart/form-data" class="wrap">
+    <form action="options.php" method="POST" enctype="multipart/form-data" class="wrap wp-ulike">
       <h2><?php echo $this->title; ?></h2>
       <?php
         settings_errors();
@@ -242,7 +239,7 @@ class wp_ulike_settings {
         if ( ! $this->empty ) {
           settings_fields( $this->page );
           if ( $this->args['tabs'] && count( $this->settings ) > 1 ) { ?>
-            <div class="wm-settings-tabs"></div>
+            <div class="wp-ulike-settings-tabs"></div>
           <?php }
           submit_button( $this->args['submit'], 'large primary' );
           if ( $this->args['reset'] ) {
@@ -284,7 +281,7 @@ class wp_ulike_settings {
   public function do_section( $args )
   {
     extract( $args );
-    echo "<input name='{$id}[{$this->page}_setting]' type='hidden' value='{$id}' class='wm-settings-section' />";
+    echo "<input name='{$id}[{$this->page}_setting]' type='hidden' value='{$id}' class='wp-ulike-settings-section' />";
     if ( $text = $this->settings[$id]['description'] ) {
       echo wpautop( $text );
     }
@@ -332,9 +329,9 @@ class wp_ulike_settings {
         break;
 
       case 'media':
-        echo "<fieldset class='wm-settings-media' id='{$id}'><input {$attrs} type='hidden' value='{$value}' />";
-        echo "<p><a class='button button-large wm-select-media' title='{$label}'>" . sprintf( __( 'Select %s', WP_ULIKE_SLUG ), $label ) . "</a> ";
-        echo "<a class='button button-small wm-remove-media' title='{$label}'>" . sprintf( __( 'Remove %s', WP_ULIKE_SLUG ), $label ) . "</a></p>";
+        echo "<fieldset class='wp-ulike-settings-media' id='{$id}'><input {$attrs} type='hidden' value='{$value}' />";
+        echo "<p><a class='button button-large wp-ulike-select-media' title='{$label}'>" . sprintf( __( 'Select %s', WP_ULIKE_SLUG ), $label ) . "</a> ";
+        echo "<a class='button button-small wp-ulike-remove-media' title='{$label}'>" . sprintf( __( 'Remove %s', WP_ULIKE_SLUG ), $label ) . "</a></p>";
         if ( $value ) {
           echo wpautop( wp_get_attachment_image( $value, 'medium' ) );
         }
@@ -359,12 +356,12 @@ class wp_ulike_settings {
 
       case 'action':
         if ( ! $action ) { _e( 'No action defined.', WP_ULIKE_SLUG ); }
-        echo "<p class='wm-settings-action'><input {$attrs} id='{$id}' type='button' class='button button-large' value='{$label}' /></p>{$desc}";
+        echo "<p class='wp-ulike-settings-action'><input {$attrs} id='{$id}' type='button' class='button button-large' value='{$label}' /></p>{$desc}";
         break;
 
       case 'color':
         $v = esc_attr( $value );
-        echo "<input {$attrs} id='{$id}' type='text' value='{$v}' class='wm-settings-color' />{$desc}";
+        echo "<input {$attrs} id='{$id}' type='text' value='{$v}' class='wp-ulike-settings-color' />{$desc}";
         break;
 
       default:
@@ -405,8 +402,8 @@ class wp_ulike_settings {
 
             case 'textarea':
               $text = '';
-              $nl = "WM-SETTINGS-NEW-LINE";
-              $tb = "WM-SETTINGS-TABULATION";
+              $nl = "WP-ULIKE-SETTINGS-NEW-LINE";
+              $tb = "WP-ULIKE-SETTINGS-TABULATION";
               $lines = explode( $nl, str_replace( "\t", $tb, str_replace( "\n", $nl, $input ) ) );
               foreach ( $lines as $line ) {
                 $text .= str_replace( $tb, "\t", trim( $line ) ) . "\n";
