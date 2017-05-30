@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
-"POT-Creation-Date: 2017-05-02 02:06+0330\n"
-"PO-Revision-Date: 2017-05-02 02:07+0330\n"
+"POT-Creation-Date: 2017-05-30 14:31+0330\n"
+"PO-Revision-Date: 2017-05-30 14:31+0330\n"
 "Last-Translator: Alimir <alimir71@yahoo.com>\n"
 "Language-Team: alimir.ir <info@alimir.ir>\n"
 "Language: fa_IR\n"
@@ -16,15 +16,15 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../wp-ulike.php:126
+#: ../wp-ulike.php:129
 msgid "Settings"
 msgstr "تنظیمات"
 
-#: ../wp-ulike.php:127
+#: ../wp-ulike.php:130
 msgid "Statistics"
 msgstr "آماره"
 
-#: ../wp-ulike.php:128
+#: ../wp-ulike.php:131
 msgid "About"
 msgstr "درباره"
 
@@ -40,7 +40,7 @@ msgstr ""
 "از اینکه از افزونه وردپرس یولایک استفاده می کنید، خیلی ممنونیم! نسخه ی جدید، "
 "قویترین و کامل ترین نسخه منتشر شده از این افزونه است."
 
-#: ../admin/about.php:110 ../admin/stats.php:37
+#: ../admin/about.php:110 ../admin/stats.php:36
 msgid "Visit our homepage"
 msgstr "مشاهده صفحه افزونه"
 
@@ -56,12 +56,12 @@ msgstr "شروع "
 msgid "Credits"
 msgstr "دست‌اندرکاران"
 
-#: ../admin/about.php:116 ../admin/stats.php:51
+#: ../admin/about.php:116 ../admin/stats.php:50
 #: ../admin/classes/class-settings.php:112
 msgid "Support"
 msgstr "پشتیبانی"
 
-#: ../admin/about.php:117 ../admin/stats.php:52
+#: ../admin/about.php:117 ../admin/stats.php:51
 #: ../admin/classes/class-settings.php:112
 msgid "FAQ"
 msgstr "سؤالات متداول"
@@ -74,7 +74,7 @@ msgstr "امتیازدهی"
 msgid "Introducing WP ULike"
 msgstr "معرفی وردپرس یولاک"
 
-#: ../admin/about.php:131 ../admin/stats.php:36 ../admin/admin.php:197
+#: ../admin/about.php:131 ../admin/stats.php:35 ../admin/admin.php:197
 msgid "About WP ULike"
 msgstr "درباره وردپرس یولایک"
 
@@ -154,7 +154,7 @@ msgstr ""
 "در آن بر اساس انواع فعالیت هایی که می کند ، امتیاز جایزه می گیرد ، بلکه می "
 "تواند این امتیازات را در سایت خود شما خرج کند."
 
-#: ../admin/about.php:211 ../admin/stats.php:175 ../admin/stats.php:350
+#: ../admin/about.php:211 ../admin/stats.php:174 ../admin/stats.php:393
 msgid "Likers World Map"
 msgstr "نقشه جهانی لایک کنندگان"
 
@@ -166,7 +166,7 @@ msgstr ""
 "از نسخه ۲.۳ افزونه یولایک،‌ امکان بررسی جغرافیایی لایک کنندگان  به همراه "
 "ابزراک ویژه برترین لایک کنندگان اضافه شده است."
 
-#: ../admin/about.php:218 ../admin/stats.php:23 ../admin/admin.php:193
+#: ../admin/about.php:218 ../admin/stats.php:22 ../admin/admin.php:193
 msgid "WP ULike Statistics"
 msgstr "آماره وردپرس یولایک"
 
@@ -241,7 +241,7 @@ msgstr "آیا از حذف این آیتم اطمینان دارید؟!"
 msgid "WP ULike Logs"
 msgstr "وقایع اتفاقیه در وردپرس یولایک"
 
-#: ../admin/logs.php:140 ../admin/stats.php:42 ../admin/admin.php:177
+#: ../admin/logs.php:140 ../admin/stats.php:41 ../admin/admin.php:177
 msgid "Post Likes Logs"
 msgstr "وقایع لایک در نوشتارها"
 
@@ -284,7 +284,7 @@ msgid "Actions"
 msgstr "کارها"
 
 #: ../admin/logs.php:175 ../admin/logs.php:298 ../admin/logs.php:425
-#: ../admin/logs.php:548 ../admin/stats.php:198
+#: ../admin/logs.php:548 ../admin/stats.php:197
 msgid "Guest User"
 msgstr "کاربر مهمان"
 
@@ -297,7 +297,7 @@ msgstr ""
 "<strong>خطا:</strong> چیزی یافت نشد. (این مشکل به خاطر این مسأله ایجاد شده "
 "است که شما هیچ اطلاعاتی را در این جدول ندارید)"
 
-#: ../admin/logs.php:262 ../admin/stats.php:43 ../admin/admin.php:181
+#: ../admin/logs.php:262 ../admin/stats.php:42 ../admin/admin.php:181
 msgid "Comment Likes Logs"
 msgstr "وقایع لایک در دیدگاه ها"
 
@@ -313,7 +313,7 @@ msgstr "نویسنده دیدگاه"
 msgid "Comment Text"
 msgstr "متن دیدگاه"
 
-#: ../admin/logs.php:390 ../admin/stats.php:44 ../admin/admin.php:185
+#: ../admin/logs.php:390 ../admin/stats.php:43 ../admin/admin.php:185
 msgid "Activity Likes Logs"
 msgstr "وقایع لایک در فعالیت ها"
 
@@ -330,7 +330,7 @@ msgstr "لینک همیشگی"
 msgid "<a href=\"%1$s\">Activity Permalink</a>"
 msgstr "<a href=\"%1$s\">مشاهده فعالیت</a>"
 
-#: ../admin/logs.php:513 ../admin/stats.php:45 ../admin/admin.php:189
+#: ../admin/logs.php:513 ../admin/stats.php:44 ../admin/admin.php:189
 msgid "Topics Likes Logs"
 msgstr "وقایع لایک در تاپیک ها"
 
@@ -342,137 +342,157 @@ msgstr "شناسه تاپیک"
 msgid "Topic Title"
 msgstr "عنوان تاپیک"
 
-#: ../admin/stats.php:30
+#: ../admin/stats.php:29
 msgid "Welcome to WP ULike Statistics!"
 msgstr "به آماره وردپرس یولایک خوش آمدید!"
 
-#: ../admin/stats.php:31
+#: ../admin/stats.php:30
 msgid "We have provided some useful statistics tools in this page:"
 msgstr ""
 "در این بخش، ما مجموعه ای از ابزارهای کاربردی را برای شما آماده کرده ایم:"
 
-#: ../admin/stats.php:35
+#: ../admin/stats.php:34
 msgid "Get Started"
 msgstr "آغاز کنید"
 
-#: ../admin/stats.php:37
+#: ../admin/stats.php:36
 msgid "or"
 msgstr "یا"
 
-#: ../admin/stats.php:40
+#: ../admin/stats.php:39
 msgid "Other Tools"
 msgstr "سایر ابزارها"
 
-#: ../admin/stats.php:49
+#: ../admin/stats.php:48
 msgid "Documentation"
 msgstr "مستندات"
 
-#: ../admin/stats.php:53
+#: ../admin/stats.php:52
 msgid "Contact"
 msgstr "تماس با ما"
 
-#: ../admin/stats.php:54
+#: ../admin/stats.php:53
 msgid "GitHub Repository"
 msgstr "مخزن گیت هاب"
 
-#: ../admin/stats.php:80
+#: ../admin/stats.php:79
 msgid "Posts Likes Summary"
 msgstr "خلاصه لایک در نوشتارها"
 
-#: ../admin/stats.php:88
+#: ../admin/stats.php:87
 msgid "Comments Likes Summary"
 msgstr "خلاصه لایک در دیدگاه ها"
 
-#: ../admin/stats.php:96
+#: ../admin/stats.php:95
 msgid "Activities Likes Summary"
 msgstr "خلاصه لایک در فعالیت ها"
 
-#: ../admin/stats.php:104
+#: ../admin/stats.php:103
 msgid "Topics Likes Summary"
 msgstr "خلاصه لایک در تاپیک ها"
 
-#: ../admin/stats.php:114 ../admin/stats.php:344
+#: ../admin/stats.php:113 ../admin/stats.php:387
 msgid "Summary"
 msgstr "خلاصه"
 
-#: ../admin/stats.php:126
+#: ../admin/stats.php:125
 msgid "Total Likes"
 msgstr "مجموع کل لایک ها"
 
-#: ../admin/stats.php:138 ../admin/classes/class-widget.php:419
+#: ../admin/stats.php:137 ../admin/classes/class-widget.php:422
 msgid "Today"
 msgstr "امروز"
 
-#: ../admin/stats.php:143 ../admin/classes/class-widget.php:418
+#: ../admin/stats.php:142 ../admin/classes/class-widget.php:421
 msgid "Yesterday"
 msgstr "دیروز"
 
-#: ../admin/stats.php:148 ../admin/classes/class-widget.php:417
+#: ../admin/stats.php:147 ../admin/classes/class-widget.php:420
 msgid "Week"
 msgstr "هفته"
 
-#: ../admin/stats.php:153 ../admin/classes/class-widget.php:416
+#: ../admin/stats.php:152 ../admin/classes/class-widget.php:419
 msgid "Month"
 msgstr "ماه"
 
-#: ../admin/stats.php:158
+#: ../admin/stats.php:157
 msgid "Total"
 msgstr "کل"
 
-#: ../admin/stats.php:192 ../admin/stats.php:351
+#: ../admin/stats.php:191 ../admin/stats.php:394
 msgid "Top Likers"
 msgstr "برترین لایک کنندگان"
 
-#: ../admin/stats.php:205 ../admin/classes/class-widget.php:278
+#: ../admin/stats.php:204 ../admin/classes/class-widget.php:281
 #: ../admin/classes/tmp/settings.php:23 ../admin/classes/tmp/settings.php:24
 #: ../admin/classes/tmp/settings.php:32
 msgid "Like"
 msgstr "لایک"
 
-#: ../admin/stats.php:227 ../admin/stats.php:233 ../admin/stats.php:239
-#: ../admin/stats.php:245
+#: ../admin/stats.php:217 ../admin/stats.php:395
+#: ../admin/classes/class-widget.php:405 ../inc/wp-strings.php:26
+msgid "Most Liked Posts"
+msgstr "پرلایک ترین مطالب"
+
+#: ../admin/stats.php:227 ../admin/stats.php:396
+#: ../admin/classes/class-widget.php:406 ../inc/wp-strings.php:27
+msgid "Most Liked Comments"
+msgstr "پرلایک ترین دیدگاه ها"
+
+#: ../admin/stats.php:237 ../admin/stats.php:397
+#: ../admin/classes/class-widget.php:407
+msgid "Most Liked Activities"
+msgstr "پرلایک ترین فعالیت ها"
+
+#: ../admin/stats.php:247 ../admin/stats.php:398
+#: ../admin/classes/class-widget.php:408
+msgid "Most Liked Topics"
+msgstr "پرلایک ترین تاپیک ها"
+
+#: ../admin/stats.php:266 ../admin/stats.php:272 ../admin/stats.php:278
+#: ../admin/stats.php:284
 msgid "View Logs"
 msgstr "مشاهده وقایع"
 
-#: ../admin/stats.php:228 ../admin/stats.php:345
+#: ../admin/stats.php:267 ../admin/stats.php:388
 msgid "Posts Likes Stats"
 msgstr "نمودار لایک در نوشتارها"
 
-#: ../admin/stats.php:228 ../admin/stats.php:234 ../admin/stats.php:240
-#: ../admin/stats.php:246 ../admin/stats.php:277
+#: ../admin/stats.php:267 ../admin/stats.php:273 ../admin/stats.php:279
+#: ../admin/stats.php:285 ../admin/stats.php:316
 #, php-format
 msgid "In The Last %s Days"
 msgstr "در %s روز گذشته"
 
-#: ../admin/stats.php:234 ../admin/stats.php:346
+#: ../admin/stats.php:273 ../admin/stats.php:389
 msgid "Comments Likes Stats"
 msgstr "نمودار لایک در دیدگاه ها"
 
-#: ../admin/stats.php:240 ../admin/stats.php:347
+#: ../admin/stats.php:279 ../admin/stats.php:390
 msgid "Activities Likes Stats"
 msgstr "نمودار لایک در فعالیت ها"
 
-#: ../admin/stats.php:246 ../admin/stats.php:348
+#: ../admin/stats.php:285 ../admin/stats.php:391
 msgid "Topics Likes Stats"
 msgstr "نمودار لایک در تاپیک ها"
 
-#: ../admin/stats.php:277 ../admin/stats.php:349
+#: ../admin/stats.php:316 ../admin/stats.php:392
 msgid "Likes Percent"
 msgstr "درصد تخصیص لایک ها"
 
-#: ../admin/stats.php:341
+#: ../admin/stats.php:384
 msgid "Show on screen"
 msgstr "تنظیمات صفحه"
 
-#: ../admin/stats.php:343
+#: ../admin/stats.php:386
 msgid "Welcome"
 msgstr "خوش آمدید"
 
-#: ../admin/stats.php:354
+#: ../admin/stats.php:401
 msgid "Days"
 msgstr "روزها"
 
-#: ../admin/stats.php:355 ../admin/classes/class-settings.php:28
+#: ../admin/stats.php:402 ../admin/classes/class-settings.php:28
 msgid "Save Settings"
 msgstr "ذخیره تغییرات"
 
@@ -521,99 +541,83 @@ msgstr "در"
 msgid "you haven't liked any post yet!"
 msgstr "شما هنوز هیچ نوشته ای را لایک نکرده اید! :("
 
-#: ../admin/classes/class-widget.php:391
+#: ../admin/classes/class-widget.php:394
 msgid "Most Liked"
 msgstr "بیشترین لایک شده ها"
 
-#: ../admin/classes/class-widget.php:395
+#: ../admin/classes/class-widget.php:398
 msgid "Title:"
 msgstr "عنوان:"
 
-#: ../admin/classes/class-widget.php:400
+#: ../admin/classes/class-widget.php:403
 msgid "Type:"
 msgstr "نوع:"
 
-#: ../admin/classes/class-widget.php:402 ../inc/wp-strings.php:26
-msgid "Most Liked Posts"
-msgstr "پرلایک ترین مطالب"
-
-#: ../admin/classes/class-widget.php:403 ../inc/wp-strings.php:27
-msgid "Most Liked Comments"
-msgstr "پرلایک ترین دیدگاه ها"
-
-#: ../admin/classes/class-widget.php:404
-msgid "Most Liked Activities"
-msgstr "پرلایک ترین فعالیت ها"
-
-#: ../admin/classes/class-widget.php:405
-msgid "Most Liked Topics"
-msgstr "پرلایک ترین تاپیک ها"
-
-#: ../admin/classes/class-widget.php:406 ../inc/wp-strings.php:28
+#: ../admin/classes/class-widget.php:409 ../inc/wp-strings.php:28
 msgid "Most Liked Users"
 msgstr "پرلایک ترین کاربران"
 
-#: ../admin/classes/class-widget.php:407
+#: ../admin/classes/class-widget.php:410
 msgid "Last Posts Liked By User"
 msgstr "آخرین مطالب لایک شده توسط کاربر"
 
-#: ../admin/classes/class-widget.php:412
+#: ../admin/classes/class-widget.php:415
 msgid "Period:"
 msgstr "دوره زمانی:"
 
-#: ../admin/classes/class-widget.php:414
+#: ../admin/classes/class-widget.php:417
 msgid "All The Times"
 msgstr "همه زمان ها"
 
-#: ../admin/classes/class-widget.php:415
+#: ../admin/classes/class-widget.php:418
 msgid "Year"
 msgstr "سال"
 
-#: ../admin/classes/class-widget.php:424
+#: ../admin/classes/class-widget.php:427
 msgid "Style:"
 msgstr "قالب:"
 
-#: ../admin/classes/class-widget.php:426
+#: ../admin/classes/class-widget.php:429
 msgid "Simple"
 msgstr "ساده"
 
-#: ../admin/classes/class-widget.php:427 ../admin/classes/tmp/settings.php:95
+#: ../admin/classes/class-widget.php:430 ../admin/classes/tmp/settings.php:95
 #: ../admin/classes/tmp/settings.php:201 ../admin/classes/tmp/settings.php:349
 #: ../admin/classes/tmp/settings.php:475
 msgid "Heart"
 msgstr "قلب"
 
-#: ../admin/classes/class-widget.php:432
+#: ../admin/classes/class-widget.php:435
 msgid "Title Trim (Length):"
 msgstr "برش عنوان (طول):"
 
-#: ../admin/classes/class-widget.php:438
+#: ../admin/classes/class-widget.php:441
 msgid "Number of items to show:"
 msgstr "تعداد آیتم ها:"
 
-#: ../admin/classes/class-widget.php:444
+#: ../admin/classes/class-widget.php:447
 msgid "Thumbnail/Avatar size:"
 msgstr "سایز تصویرشاخص/آواتار:"
 
-#: ../admin/classes/class-widget.php:450
+#: ../admin/classes/class-widget.php:453
 msgid "Profile URL:"
 msgstr "لینک پروفایل به:"
 
-#: ../admin/classes/class-widget.php:452
+#: ../admin/classes/class-widget.php:455
 #: ../admin/classes/class-settings.php:97
 #: ../admin/classes/tmp/settings.php:341
 msgid "BuddyPress"
 msgstr "بادی پرس"
 
-#: ../admin/classes/class-widget.php:453
+#: ../admin/classes/class-widget.php:456
 msgid "UltimateMember"
 msgstr "افزونه UltimateMember"
 
-#: ../admin/classes/class-widget.php:459
+#: ../admin/classes/class-widget.php:462
 msgid "Activate Like Counter"
 msgstr "فعال سازی شمارنده"
 
-#: ../admin/classes/class-widget.php:464
+#: ../admin/classes/class-widget.php:467
 msgid "Activate Thumbnail/Avatar"
 msgstr "فعال سازی تصویرشاخص/آواتار"
 
@@ -834,28 +838,28 @@ msgstr "برای اطلاعات بیشتر:"
 msgid "Default settings have been reset."
 msgstr "تنظیمات پیشفرض، بازیابی شد."
 
-#: ../admin/classes/class-settings.php:249
+#: ../admin/classes/class-settings.php:246
 msgid ""
 "Do you really want to reset all these settings to their default values ?"
 msgstr "آیا از بازیابی تنظیمات پیشفرض مطمئن هستید؟!؟"
 
-#: ../admin/classes/class-settings.php:314
-#: ../admin/classes/class-settings.php:325
-#: ../admin/classes/class-settings.php:349
+#: ../admin/classes/class-settings.php:311
+#: ../admin/classes/class-settings.php:322
+#: ../admin/classes/class-settings.php:346
 msgid "No options defined."
 msgstr "هیچ تنظیماتی تعریف نشده است."
 
-#: ../admin/classes/class-settings.php:336
+#: ../admin/classes/class-settings.php:333
 #, php-format
 msgid "Select %s"
 msgstr "انتخاب %s"
 
-#: ../admin/classes/class-settings.php:337
+#: ../admin/classes/class-settings.php:334
 #, php-format
 msgid "Remove %s"
 msgstr "حذف %s"
 
-#: ../admin/classes/class-settings.php:361
+#: ../admin/classes/class-settings.php:358
 msgid "No action defined."
 msgstr "هیچ کاری تعریف نشده است."
 

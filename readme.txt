@@ -4,8 +4,8 @@ Donate link: http://alimir.ir
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
-Tested up to: 4.7.4
-Stable tag: 2.5.1
+Tested up to: 4.7.5
+Stable tag: 2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -185,6 +185,13 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 2.6 =
+* Added: New GeoIP system for better stats.
+* Added: Most liked (posts,comments,activities,topics) widgets on statistics panel.
+* Updated: jQVMap library.
+* Updated: Back-end sources.
+* Updated: composer.json file.
 
 = 2.5.1 =
 * Added: "Likes" option in BuddyPress activity filter.
