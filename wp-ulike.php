@@ -11,9 +11,6 @@ Domain Path: /lang/
 License: GPL2
 */
 
-require_once 'lib/autoload.php';
-use GeoIp2\Database\Reader;
-
 //Do not change this value
 define( 'WP_ULIKE_VERSION'      , '2.6' );
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' );
@@ -166,30 +163,6 @@ function wp_ulike_update_db_check() {
 		wp_ulike_install();
 	}
 }
-
-
-/**
- * Return GeoIP location by user IPv4
- *
- * @author        	Alimir
- * @since           2.6
- * @return   		String
- */
-function wp_ulike_get_geoip($ip,$cd = ''){
-	try {
-		$reader = new Reader( plugin_dir_path( __FILE__ ) . '/GeoLite2-Country.mmdb' );
-		if($cd == 'code')
-			return $reader->country($ip)->country->isoCode;
-		else if ($cd == 'name')
-			return $reader->country($ip)->country->name;
-		else
-			return $reader->country($ip)->country;
-	} catch (\Exception $e) {
-		//nothing
-	}
-	return 'Localhost';
-}
-
 
 //Include plugin setting file
 include plugin_dir_path( __FILE__ ) . 'admin/admin.php';

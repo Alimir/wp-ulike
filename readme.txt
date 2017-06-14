@@ -187,8 +187,8 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 == Changelog ==
 
 = 2.6 =
-* Added: New GeoIP system for better stats.
 * Added: Most liked (posts,comments,activities,topics) widgets on statistics panel.
+* Fixed: Several bugs in GeoIP Location system.
 * Updated: jQVMap library.
 * Updated: Back-end sources.
 * Updated: composer.json file.

@@ -3,6 +3,8 @@
 	if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false){
 		//include class charts
 		include( plugin_dir_path(__FILE__) . 'classes/class-charts.php');
+		//include PHP GeoIPLocation Library
+		include( plugin_dir_path(__FILE__) . 'classes/tmp/geoiploc.php');
 	} else return;
 	
 	/**
@@ -202,7 +204,7 @@
 			<div class="log-item">
 			<div class="log-page-title">'. $top_users_counter++ . ' - ' .$final_user_name.'</div>
 			<div class="badge"><strong>'.$top_liker->SumUser.'</strong> '.__('Like',WP_ULIKE_SLUG) . '</div>
-			<div class="left-div"><i class="dashicons dashicons-location"></i> <em dir="ltr">'.$top_liker->ip.'</em> | '.wp_ulike_get_geoip($top_liker->ip,'name').'</div>
+			<div class="left-div"><i class="dashicons dashicons-location"></i> <em dir="ltr">'.$top_liker->ip.'</em> | '.getCountryFromIP($top_liker->ip, "NamE").'</div>
 			</div>
 			</div>
 			';

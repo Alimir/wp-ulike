@@ -30,6 +30,8 @@ form.wp-ulike .wp-ulike-settings-tabs h2:hover {
 }
 form.wp-ulike .wp-ulike-settings-tabs h2.active {
 	background-color: #fff;
+	border-bottom: 1px solid #fff;
+	margin-bottom: -1px;
 }
 form.wp-ulike .wp-ulike-settings-tabs h2:last-child {
 	border-right: 1px solid #e0e0e0;

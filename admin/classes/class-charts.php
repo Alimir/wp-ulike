@@ -246,12 +246,13 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			");
 			
 			foreach($return_val as $return){
-				$cdata = strtolower(wp_ulike_get_geoip($return->get_user_ip,'code'));
+				//$cdata = strtolower(wp_ulike_get_geoip($return->get_user_ip,'code'));
+				$cdata = strtolower(getCountryFromIP($return->get_user_ip, "code"));
 				 if(!isset($country_data[$cdata]))
-					 $country_data[$cdata] = array();
-				$country_data[$cdata][] .= $return->get_count_user_ip;
+					 $country_data[$cdata] = 0;
+				$country_data[$cdata] += $return->get_count_user_ip;
 			}
-		
+			
 			return json_encode($country_data);
 		}		
 		
