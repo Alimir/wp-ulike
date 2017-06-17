@@ -126,6 +126,13 @@
 			),
 			'description' => __('You can filter theses pages on auto display option.', WP_ULIKE_SLUG)
 		  ),
+		  'google_rich_snippets'  => array(
+			'type'  		=> 'checkbox',
+			'default'		=> 0,
+			'label' 		=> '*' . __('Google Rich Snippets', WP_ULIKE_SLUG),
+			'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+			'description' 	=> __('Add rich snippet for ratings in form of schema.org', WP_ULIKE_SLUG)
+		  ),
 		  'only_registered_users'  => array(
 			'type'  		=> 'checkbox',
 			'default'		=> 0,

@@ -6,6 +6,7 @@
 	 * @author       	Alimir	 	
 	 * @since           1.0
 	 * @updated         2.3
+	 * @updated         2.7 //added wp_ulike_posts_add_attr & wp_ulike_posts_microdata filters
 	 * @return			String
 	 */
 	function wp_ulike($arg) {
@@ -41,8 +42,9 @@
 		//call wp_get_ulike function from class-ulike calss
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
-		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'">';
+		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_posts_add_attr', null).'>';
 		$wp_ulike  		.= '<div class="counter">'.$counter.'</div>';
+		$wp_ulike  		.= apply_filters('wp_ulike_posts_microdata', null);
 		$wp_ulike  		.= '</div>';
 		$wp_ulike  		.= $wp_ulike_class->get_liked_users($post_ID,'ulike','post_id','wp_ulike_posts');
 		

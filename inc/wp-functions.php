@@ -83,13 +83,113 @@
 	 * Get The Post like number
 	 *
 	 * @author       	Alimir
-	 * @param           Integer $postID	 
+	 * @param           Integer $post_ID	 
 	 * @since           1.7 
 	 * @return          String
 	 */
-	function wp_ulike_get_post_likes($postID){
-		$val = get_post_meta($postID, '_liked', true);
+	function wp_ulike_get_post_likes($post_ID){
+		$val = get_post_meta($post_ID, '_liked', true);
 		return wp_ulike_format_number($val);
+	}
+
+	/**
+	 * Add itemtype to wp_ulike_posts_add_attr filter
+	 *
+	 * @author       	Alimir
+	 * @since           2.7 
+	 * @return          String
+	 */
+	add_filter('wp_ulike_posts_add_attr', 'wp_ulike_get_posts_microdata_itemtype');
+	function wp_ulike_get_posts_microdata_itemtype(){
+		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
+		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
+		return 'itemprop="review" itemscope itemtype="http://schema.org/CreativeWork"';
+	}
+	
+	/**
+	 * Add rich snippet for ratings in form of schema.org
+	 *
+	 * @author       	Alimir
+	 * @since           2.7 
+	 * @return          String
+	 */
+	add_filter( 'wp_ulike_posts_microdata', 'wp_ulike_get_posts_microdata');
+	function wp_ulike_get_posts_microdata(){
+		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
+		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
+        $post_meta 	= '<meta itemprop="name" content="' . get_the_title() . '" />';
+		$post_meta 	.= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . get_the_author() . '" /></span>';
+        $post_meta 	.= '<meta itemprop="datePublished" content="' . mysql2date( 'c', get_the_date(), false ) . '" />';
+		$post_meta 	.= '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
+		$post_meta	.= '<meta itemprop="bestRating" content="5" />';
+		$post_meta 	.= '<meta itemprop="worstRating" content="1" />';
+		$post_meta 	.= '<meta itemprop="ratingValue" content="'. wp_ulike_get_rating_value(get_the_ID()) .'" />';
+		$post_meta 	.= '<meta itemprop="ratingCount" content="' . $get_ulike_count . '" />';
+		$post_meta 	.= '</span>';
+        return apply_filters( 'wp_ulike_google_structured_data', $post_meta );
+	}
+
+	/**
+	 * Calculate rating value by user logs & date_time
+	 *
+	 * @author       	Alimir
+	 * @since           2.7 
+	 * @return          String
+	 */
+	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
+		global $wpdb;
+		//Get average, likes count & date_time columns by $post_ID
+        $request =  "SELECT
+						FORMAT(
+							(
+							SELECT
+								AVG(counted.total)
+							FROM
+								(
+								SELECT
+									COUNT(*) AS total
+								FROM
+									".$wpdb->prefix."ulike AS ulike
+								GROUP BY
+									ulike.post_id
+							) AS counted
+						),
+						0
+						) AS average,
+						COUNT(ulike.post_id) AS counter,
+						posts.post_date AS post_date
+					FROM
+						".$wpdb->prefix."ulike AS ulike
+					JOIN
+						".$wpdb->prefix."posts AS posts
+					ON
+						ulike.post_id = ".$post_ID." AND posts.ID = ulike.post_id;";
+		//get results
+		$likes 	= $wpdb->get_row($request);
+		$avg 	= $likes->average;
+		$count 	= $likes->counter;
+		$date 	= strtotime($likes->post_date);
+		//if there is no log data, return 4
+		if($count == 0 || $avg == 0) return 4;
+		$decimal = 0;
+		if($is_decimal){
+			list($whole, $decimal) = explode('.', number_format(($count*100/($avg*2)), 1));
+			$decimal = (int)$decimal;
+		}
+		if( $date > strtotime('-1 month')) {
+			if($count < $avg) return 4 + ".$decimal";
+			else return 5;
+		} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
+			if($count < $avg) return 3 + ".$decimal";
+			else if(($count >= $avg) && ($count < ($avg*3/2))) return 4 + ".$decimal";
+			else return 5;
+		} else {
+			if($count < ($avg/2)) return 1 + ".$decimal";
+			else if(($count >= ($avg/2)) && ($count < $avg)) return 2 + ".$decimal";
+			else if(($count >= $avg) && ($count < ($avg*3/2))) return 3 + ".$decimal";
+			else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) return 4 + ".$decimal";
+			else return 5;
+		}
 	}
 	
 	
@@ -138,8 +238,8 @@
 	 * @since           2.5
 	 * @return          String
 	 */
-	function wp_ulike_get_comment_likes($commentID){
-		$val = get_comment_meta($commentID, '_commentliked', true);
+	function wp_ulike_get_comment_likes($comment_ID){
+		$val = get_comment_meta($comment_ID, '_commentliked', true);
 		return wp_ulike_format_number($val);
 	}	
 	
