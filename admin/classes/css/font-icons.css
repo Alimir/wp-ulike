@@ -1,0 +1,154 @@
+/*
+/------------------------------------------\
+ _     __     _ _____      _  _  _   _ 
+| |   /  \   | | ___ \    | |(_)| | / /
+| |  / /\ \  | | |_/ /   _| || || |/ / ___
+| | / /  \ \ | |  __/ | | | || ||   | / _ \
+| |/ /    \ \| | |  | |_| | || || |\ \  __/
+\___/      \__/\_|   \__,_|_||_||_| \_\___|
+
+\--> Alimir, 2017 <--/
+
+Thanks for using WP ULike plugin...
+https://wordpress.org/plugins/wp-ulike/
+
+\------------------------------------------/
+*/
+
+@font-face {
+  font-family: 'wp-ulike';
+  src:  url('../fonts/wp-ulike.eot?113a2q');
+  src:  url('../fonts/wp-ulike.eot?113a2q#iefix') format('embedded-opentype'),
+    url('../fonts/wp-ulike.ttf?113a2q') format('truetype'),
+    url('../fonts/wp-ulike.woff?113a2q') format('woff'),
+    url('../fonts/wp-ulike.svg?113a2q#wp-ulike') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="wp-ulike-icons-"], [class*=" wp-ulike-icons-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'wp-ulike' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* wp-ulike dashicons */
+.dashicons.dashicons-wp-ulike, .dashicons-before.dashicons-wp-ulike::before {
+	font-family: 'wp-ulike' !important;
+}
+.dashicons-wp-ulike::before{
+	content: "\e905";
+}
+/* wp-ulike dashicons */
+
+.wp-ulike-icons-thumb_up:before {
+  content: "\e905";
+}
+.wp-ulike-icons-thumb_down:before {
+  content: "\e906";
+}
+.wp-ulike-icons-thumbs-up:before {
+  content: "\e900";
+}
+.wp-ulike-icons-thumbs-down:before {
+  content: "\e901";
+}
+.wp-ulike-icons-thumbs-down2:before {
+  content: "\e902";
+}
+.wp-ulike-icons-thumbs-up2:before {
+  content: "\e903";
+}
+.wp-ulike-icons-like:before {
+  content: "\e904";
+}
+.wp-ulike-icons-mobile:before {
+  content: "\e000";
+}
+.wp-ulike-icons-bargraph:before {
+  content: "\e018";
+}
+.wp-ulike-icons-adjustments:before {
+  content: "\e01d";
+}
+.wp-ulike-icons-hourglass:before {
+  content: "\e01f";
+}
+.wp-ulike-icons-trophy:before {
+  content: "\e023";
+}
+.wp-ulike-icons-map:before {
+  content: "\e025";
+}
+.wp-ulike-icons-puzzle:before {
+  content: "\e026";
+}
+.wp-ulike-icons-gears:before {
+  content: "\e02b";
+}
+.wp-ulike-icons-key:before {
+  content: "\e02c";
+}
+.wp-ulike-icons-paperclip:before {
+  content: "\e02d";
+}
+.wp-ulike-icons-attachment:before {
+  content: "\e02e";
+}
+.wp-ulike-icons-pricetags:before {
+  content: "\e02f";
+}
+.wp-ulike-icons-paintbrush:before {
+  content: "\e036";
+}
+.wp-ulike-icons-magnifying-glass:before {
+  content: "\e037";
+}
+.wp-ulike-icons-circle-compass:before {
+  content: "\e038";
+}
+.wp-ulike-icons-linegraph:before {
+  content: "\e039";
+}
+.wp-ulike-icons-mic:before {
+  content: "\e03a";
+}
+.wp-ulike-icons-strategy:before {
+  content: "\e03b";
+}
+.wp-ulike-icons-profile-male:before {
+  content: "\e040";
+}
+.wp-ulike-icons-bike:before {
+  content: "\e042";
+}
+.wp-ulike-icons-wine:before {
+  content: "\e043";
+}
+.wp-ulike-icons-hotairballoon:before {
+  content: "\e044";
+}
+.wp-ulike-icons-globe:before {
+  content: "\e045";
+}
+.wp-ulike-icons-genius:before {
+  content: "\e046";
+}
+.wp-ulike-icons-heart:before {
+  content: "\e04a";
+}
+.wp-ulike-icons-global:before {
+  content: "\e052";
+}
+.wp-ulike-icons-refresh:before {
+  content: "\e05a";
+}

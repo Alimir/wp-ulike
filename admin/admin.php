@@ -75,7 +75,7 @@
 		'parent'   => false,
 		'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
 		'position' =>  313,
-		'icon_url' => 'dashicons-smiley'
+		'icon_url' => 'dashicons-wp-ulike'
 	  ),
 	  array(
 		'wp_ulike_general' 	=> $wp_ulike_general

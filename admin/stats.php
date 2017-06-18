@@ -35,7 +35,7 @@
 		<div class="welcome-panel-column">
 			<h4>'.__('Get Started').'</h4>
 			<a class="button button-primary button-hero" href="admin.php?page=wp-ulike-about">'.__( 'About WP ULike', WP_ULIKE_SLUG ).'</a>
-			<p class="hide-if-no-customize">'.__('or',WP_ULIKE_SLUG).', <a href="http://preview.alimir.ir/developer/wp-ulike/">'.__( 'Visit our homepage', WP_ULIKE_SLUG ).'</a></p>
+			<p class="hide-if-no-customize">'.__('or',WP_ULIKE_SLUG).', <a target="_blank" href="'.WP_ULIKE_PLUGIN_URI.'">'.__( 'Visit our homepage', WP_ULIKE_SLUG ).'</a></p>
 		</div>
 		<div class="welcome-panel-column">
 			<h4>'.__('Other Tools',WP_ULIKE_SLUG).'</h4>
