@@ -118,6 +118,7 @@
 		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
 		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
         $post_meta 		= '<meta itemprop="name" content="' . get_the_title() . '" />';
+        $post_meta 		.= apply_filters( 'wp_ulike_extra_structured_data', NULL );
 		$post_meta 		.= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . get_the_author() . '" /></span>';
         $post_meta 		.= '<meta itemprop="datePublished" content="' . mysql2date( 'c', get_the_date(), false ) . '" />';
 		$ratings_meta 	= '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';

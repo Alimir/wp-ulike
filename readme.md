@@ -87,8 +87,8 @@ This will download the latest developer copy of WP ULike.
 
 
 ## How To Use this plugin? ##
-Just install the plugin and activate the "automatic display" in plugin configuration panel. (WP ULike has three auto options for the post, comments, buddypress activities & bbPress Topics.)
-Also you can use this function and shortcode for the post likes:
+Just install the plugin and activate "automatic display" in plugin configuration panel. (WP ULike has four auto options for posts, comments, buddypress activities & bbPress Topics.)
+Also you can use of the following function and shortcode for your posts:
 *   Function:
 ```php
 if(function_exists('wp_ulike')) wp_ulike('get');
@@ -98,8 +98,8 @@ if(function_exists('wp_ulike')) wp_ulike('get');
 [wp_ulike]
 ```
 
-## How To Change Format Number Function? ##
-Add your changes on `wp_ulike_format_number` function with a simple filter. for example, if you want to remove the "+" character you can use this filter:
+## How To Change The Counter Format? ##
+Just add a filter on `wp_ulike_format_number`. e.g. If you want to remove `+` character, you need to make use of the sample code below:
 ```php
 add_filter('wp_ulike_format_number','wp_ulike_new_format_number',10,3);
 function wp_ulike_new_format_number($value, $num, $plus){
@@ -113,7 +113,7 @@ function wp_ulike_new_format_number($value, $num, $plus){
 ```
 
 ## How To Change Schema Type? ##
-The default schema type is 'CreativeWork', if you want to change it to 'Article', you need to make use of the `wp_ulike_posts_add_attr` filter as shown in the sample code below:
+The default schema type is `CreativeWork`, if you want to change it to `Article`, you need to make use of the `wp_ulike_posts_add_attr` filter as shown in the sample code below:
 ```php  
 add_filter('wp_ulike_posts_add_attr', 'wp_ulike_change_posts_microdata_itemtype', 10);  
 function wp_ulike_change_posts_microdata_itemtype() {  
@@ -121,12 +121,26 @@ function wp_ulike_change_posts_microdata_itemtype() {
 }
 ```
 
+## How To Add Extra Microdata? ##
+Make use of the `wp_ulike_extra_structured_data` filter as shown in the sample code below:
+```php  
+add_filter('wp_ulike_extra_structured_data', 'wp_ulike_add_extra_structured_data', 10);
+function wp_ulike_add_extra_structured_data(){
+	$post_meta = '<div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">';
+	$post_meta .= '<meta itemprop="name" content="WordPress" />';
+	$post_meta .= '<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">';
+	$post_meta .= '<meta itemprop="url" content="https://s.w.org/about/images/logos/wordpress-logo-hoz-rgb.png" />';
+	$post_meta .= '</div>';
+	$post_meta .= '</div>';
+	return $post_meta;
+}
+```
+
 ## How To Remove All Schema Data Except Of aggregateRating? ##
-Make use of the `wp_ulike_remove_microdata_post_meta` & 'wp_ulike_posts_add_attr' filters as shown in the sample code below:
+Make use of the `wp_ulike_remove_microdata_post_meta` & `wp_ulike_posts_add_attr` filters as shown in the sample code below:
 ```php 
 add_filter('wp_ulike_remove_microdata_post_meta', '__return_true', 10);
 add_filter('wp_ulike_posts_add_attr', '__return_null', 10);
-</code>
 ```
 
 ## How To Remove "0" Count If There Are No Likes? ##
@@ -149,16 +163,16 @@ function wp_ulike_change_login_alert_template(){
 }
 ```
 
-## How To Get Posts Likes Number? ##
-* Use this function on WP Loop:
+## How To Get Post Likes Number? ##
+Make use of the following function in WP Loop:
 ```php 
 if (function_exists('wp_ulike_get_post_likes')):
 	echo wp_ulike_get_post_likes(get_the_ID());
 endif;
 ```
 
-## How To Get Comments Likes Number? ##
-* Use the following function in your comments loop:
+## How To Get Comment Likes Number? ##
+Make use of the following function in your comments loop:
 ```php
 if (function_exists('wp_ulike_get_comment_likes')):
 	echo wp_ulike_get_comment_likes(get_comment_ID());
@@ -166,7 +180,7 @@ endif;
 ```
 
 ## How To Sort Most Liked Posts?  ##
-* Use this query on your theme:
+Make use of the following query on a loop:
 ```php
 $the_query = new WP_Query(array(
 	'post_status' => 'published',
@@ -178,12 +192,12 @@ $the_query = new WP_Query(array(
 ```
 
 ## How Can I Create Custom Template In Users Liked Box?  ##
-* We have provided some variables in setting panel. You can use them in textarea and then save the new options. 
-* Attention: `%START_WHILE%` And `%END_WHILE%` variables are very important and you should use them out of the frequent string. (Such as `<li></li>` tags sample in default template)
+We have provided some variables in setting panel. You can use them in textarea and then save the new options. 
+Attention: `%START_WHILE%` And `%END_WHILE%` variables are very important and you should use them out of the frequent string. (Such as `<li></li>` tags sample in default template)
 
 ## Receive HTTP ERROR 500 on WP ULike > Statistics   ##
-* Increasing Your WordPress Memory Limit in wp-config.php to fix this error. It is located in your WordPress site's root folder, and you will need to use an FTP client or file manager in your web hosting control panel.
-* Next, you need to paste this code in wp-config.php file just before the line that says "That's all, stop editing! Happy blogging."
+Increasing Your WordPress Memory Limit in wp-config.php to fix this error. It is located in your WordPress site's root folder, and you will need to use an FTP client or file manager in your web hosting control panel.
+Next, you need to paste this code in wp-config.php file just before the line that says `That's all, stop editing! Happy blogging.`
 ```php 
 define( 'WP_MEMORY_LIMIT', '256M' );
 ```

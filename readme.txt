@@ -123,17 +123,15 @@ Want to add a new language to WP ULike? Well! You can contribute via [translate.
 == Frequently Asked Questions ==
 
 = How To Use this plugin? =
-Just install the plugin and activate the "automatic display" in plugin configuration panel. (WP ULike has three auto options for the post, comments, buddypress activities & bbPress Topics.)
-
-Also you can use this function and shortcode for the post likes:
-
+Just install the plugin and activate "automatic display" in plugin configuration panel. (WP ULike has four auto options for posts, comments, buddypress activities & bbPress Topics.)
+Also you can use of the following function and shortcode for your posts:
 *   Function:
 `if(function_exists('wp_ulike')) wp_ulike('get');`
 *   Shortcode:
 `[wp_ulike]`
 
-= How To Change Format Number Function? =
-* Add your changes on `wp_ulike_format_number` function with a simple filter. for example, if you want to remove the "+" character you can use this filter:
+= How To Change The Counter Format? =
+Just add a filter on `wp_ulike_format_number`. e.g. If you want to remove `+` character, you need to make use of the sample code below:
 <code> 
 add_filter('wp_ulike_format_number','wp_ulike_new_format_number',10,3);
 function wp_ulike_new_format_number($value, $num, $plus){
@@ -152,6 +150,21 @@ function wp_ulike_new_format_number($value, $num, $plus){
 add_filter('wp_ulike_posts_add_attr', 'wp_ulike_change_posts_microdata_itemtype', 10);  
 function wp_ulike_change_posts_microdata_itemtype() {  
 	return 'itemscope itemtype="http://schema.org/Article"';  
+}
+</code>
+
+= How To Add Extra Microdata? =
+* Make use of the `wp_ulike_extra_structured_data` filter as shown in the sample code below:
+<code>  
+add_filter('wp_ulike_extra_structured_data', 'wp_ulike_add_extra_structured_data', 10);
+function wp_ulike_add_extra_structured_data(){
+	$post_meta = '<div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">';
+	$post_meta .= '<meta itemprop="name" content="WordPress" />';
+	$post_meta .= '<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">';
+	$post_meta .= '<meta itemprop="url" content="https://s.w.org/about/images/logos/wordpress-logo-hoz-rgb.png" />';
+	$post_meta .= '</div>';
+	$post_meta .= '</div>';
+	return $post_meta;
 }
 </code>
 
@@ -184,16 +197,16 @@ function wp_ulike_change_login_alert_template(){
 }
 </code>
 
-= How To Get Posts Likes Number? =
-* Use this function on WP Loop:
+= How To Get Post Likes Number? =
+* Make use of the following function in WP Loop:
 <code> 
 if (function_exists('wp_ulike_get_post_likes')):
 	echo wp_ulike_get_post_likes(get_the_ID());
 endif;
 </code>
 
-= How To Get Comments Likes Number? =
-* Use the following function in your comments loop:
+= How To Get Comment Likes Number? =
+* Make use of the following function in your comments loop:
 <code> 
 if (function_exists('wp_ulike_get_comment_likes')):
 	echo wp_ulike_get_comment_likes(get_comment_ID());
@@ -201,7 +214,7 @@ endif;
 </code>
 
 = How To Sort Most Liked Posts?  =
-* Use this query in your themes loop:
+* Make use of the following query on a loop:
 <code> 
 $the_query = new WP_Query(array(
 	'post_status' => 'published',
@@ -226,7 +239,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 == Changelog ==
 
 = 2.7 =
-* Added: Google rich snippets support for posts. (Add rich snippet for ulikes in form of schema.org)
+* Added: Flexible google rich snippets for posts. (Add rich snippet for likes in form of schema.org)
 * Added: 'wp_ulike_count_box_template' filter to customize count box template.
 * Added: 'wp_ulike_login_alert_template' filter to customize login alert message.
 * Added: 'wp_ulike_bp_notifications_template' filter to customize buddypress notification message.
