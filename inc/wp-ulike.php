@@ -6,7 +6,7 @@
 	 * @author       	Alimir	 	
 	 * @since           1.0
 	 * @updated         2.3
-	 * @updated         2.7 //added wp_ulike_posts_add_attr & wp_ulike_posts_microdata filters
+	 * @updated         2.7 //added 'wp_ulike_posts_add_attr', 'wp_ulike_posts_microdata' & 'wp_ulike_login_alert_template' filters
 	 * @return			String
 	 */
 	function wp_ulike($arg) {
@@ -69,7 +69,7 @@
 				}
 			}
 			else
-				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>';
+				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
 		}//end only_registered_users condition
 		
 	}
@@ -80,6 +80,7 @@
 	 * @author       	Alimir	 	
 	 * @since           1.6
 	 * @updated         2.3
+	 * @updated         2.7 //added 'wp_ulike_login_alert_template' & 'wp_ulike_comments_add_attr' filters
 	 * @return			String
 	 */
 	function wp_ulike_comments($arg) {
@@ -115,7 +116,7 @@
 		//call wp_get_ulike function from class-ulike calss
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);		
 		
-		$wp_ulike 		= '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike '.$theme_class.'">';
+		$wp_ulike 		= '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_comments_add_attr', null).'>';
 		$wp_ulike 		.= '<div class="counter">'.$counter.'</div>';
 		$wp_ulike 		.= '</div>';
 		$wp_ulike  		.= $wp_ulike_class->get_liked_users($CommentID,'ulike_comments','comment_id','wp_ulike_comments');
@@ -141,7 +142,7 @@
 				}
 			}
 			else
-				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this comment: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>';	
+				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this comment: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
 		}//end only_registered_users condition
 		
 	}	
@@ -153,6 +154,7 @@
 	 * @since           1.7
 	 * @updated         2.3
 	 * @updated         2.4
+	 * @updated         2.7 //added 'wp_ulike_login_alert_template' & 'wp_ulike_activities_add_attr' filters
 	 * @return			String
 	 */
 	function wp_ulike_buddypress($arg) {
@@ -197,7 +199,7 @@
 		//call wp_get_ulike function from class-ulike calss
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
-		$wp_ulike 		= '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike '.$theme_class.'">';
+		$wp_ulike 		= '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_activities_add_attr', null).'>';
 		$wp_ulike 		.= '<'.$html_tag.' class="counter">'.$counter.'</'.$html_tag.'>';
 		$wp_ulike 		.= '</'.$html_tag.'>';
 		$wp_ulike  		.= $wp_ulike_class->get_liked_users($activityID,'ulike_activities','activity_id','wp_ulike_buddypress');
@@ -223,7 +225,7 @@
 				}
 			}
 			else		
-				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this activity: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>';
+				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this activity: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
 		}//end only_registered_users condition
 		
 	}	
@@ -235,6 +237,7 @@
 	 * @since           2.2
 	 * @updated         2.3
 	 * @updated         2.4.1
+	 * @updated         2.7 //added 'wp_ulike_login_alert_template' & 'wp_ulike_topics_add_attr' filters
 	 * @return			String
 	 */
 	function wp_ulike_bbpress($arg) {
@@ -273,7 +276,7 @@
 		//call wp_get_ulike function from class-ulike calss
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
-		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'">';
+		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_topics_add_attr', null).'>';
 		$wp_ulike  		.= '<div class="counter">'.$counter.'</div>';
 		$wp_ulike  		.= '</div>';
 		$wp_ulike  		.= $wp_ulike_class->get_liked_users($post_ID,'ulike_forums','topic_id','wp_ulike_bbpress');
@@ -299,7 +302,7 @@
 				}
 			}
 			else
-				return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>';
+				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
 		}//end only_registered_users condition
 		
 	}	
@@ -360,14 +363,14 @@
 		$return_userID 	= $wp_ulike_class->get_reutrn_id();
 		
 		$data = array(
-			"id" 			=> $post_ID,				//Post ID
+			"id" 		=> $post_ID,				//Post ID
 			"user_id" 	=> $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
 			"user_ip" 	=> $wp_user_IP,				//User IP
 			"get_like" 	=> $get_like,				//Number Of Likes
 			"method" 	=> $post_type,				//JavaScript method
 			"setting" 	=> $setting_key,			//Setting Key
 			"type" 		=> 'process',				//Function type (post/process)
-			"table" 		=> $table_name,				//posts table
+			"table" 	=> $table_name,				//posts table
 			"column" 	=> $column_name,			//ulike table column name			
 			"key" 		=> $meta_key,				//meta key
 			"cookie" 	=> $cookie_name				//Cookie Name
@@ -378,7 +381,7 @@
 		if($post_ID != null) {
 			$response->add(
 				array(
-					'what'	=>'wpulike',
+					'what'		=>'wpulike',
 					'action'	=>'wp_ulike_process',
 					'id'		=> $post_ID,
 					'data'		=> $wp_ulike_class->wp_get_ulike($data)
@@ -389,6 +392,6 @@
 		// Whatever the outcome, send the Response back
 		$response->send();
 
-		// Always exit when doing Ajax
+		// Exit when doing Ajax
 		exit();
 	}

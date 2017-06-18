@@ -360,11 +360,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @param           Integer $num2
 		 * @since           2.0
 		 * @updated         2.3
+		 * @updated         2.7 //Added 'wp_ulike_count_box_template' filter
 		 * @return			String
 		 */		
 		public function get_template($id,$method,$liked,$num1,$num2){
 		
-			$counter 			= '<span class="count-box">'.$liked.'</span>';
+			$counter 			= apply_filters('wp_ulike_count_box_template', '<span class="count-box">'.$liked.'</span>', $liked);
 			$button_text 		= html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text'));
 			$button_text_u	 	= html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u'));			
 			$permission_text 	= html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'permission_text'));
