@@ -4,8 +4,8 @@ Donate link: http://alimir.ir
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
-Tested up to: 4.7.5
-Stable tag: 2.6
+Tested up to: 4.8
+Stable tag: 2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,10 +16,9 @@ WP ULike enables you to add Ajax Like button into your WP and allowing your visi
 WP ULike is a WordPress plugin that also supports BuddyPress, bbPress and a number of other plugins. It aims to be a comprehensive "Like" system for your site and enables site users to like a wide range of content types, including posts, forum topics and replies, comments and activity updates. It's very simple to use and supports many options and full Statistics tools. Also, All are free :)
 
 = More Information =
-*   Visit Our <a target="_blank" href="http://preview.alimir.ir/developer/wp-ulike/">Home Page</a>.
-*   See Online <a target="_blank" href="http://preview.alimir.ir/wp-ulike-plugin">Demo</a>.
-*   Fork Us In <a target="_blank" href="https://github.com/Alimir/wp-ulike">Github</a>.
-*   WP Ulike <a target="_blank" href="http://alimir.github.io/wp-ulike/">Github</a> Page.
+*   Visit Our [Home Page](http://wp-ulike.alimir.ir/).
+*   See Online [Demo](http://preview.alimir.ir/wp-ulike-plugin).
+*   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
 = Features =
 *   Clean Design.
@@ -86,11 +85,13 @@ WP ULike has been translated into the following languages:
 *   Bosnian (Bosnia and Herzegovina)
 *   English (United Kingdom)
 
+Want to add a new language to WP ULike? Well! You can contribute via [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/wp-ulike).
+
 = About Author =
-*   My personal website: <a href="http://about.alimir.ir" target="_blank">Ali Mirzaei</a>
-*   Follow me on <a href="https://www.facebook.com/alimir1993" target="_blank">Facebook</a>
+*   My personal website: [Ali Mirzaei](http://about.alimir.ir)
+*   Follow me on [Facebook](https://www.facebook.com/alimir1993)
 *   Catch me on twitter as @alimirir
-*   And Connect me on <a href="https://ir.linkedin.com/in/alimirir" target="_blank">Linkedin</a>
+*   And Connect me on [Linkedin](https://ir.linkedin.com/in/alimirir)
 
 == Installation ==
 
@@ -132,7 +133,7 @@ Also you can use this function and shortcode for the post likes:
 `[wp_ulike]`
 
 = How To Change Format Number Function? =
-* You can adding your changes on `wp_ulike_format_number` function with a simple filter. for example, if you want to remove the "+" character you can use this filter:
+* Add your changes on `wp_ulike_format_number` function with a simple filter. for example, if you want to remove the "+" character you can use this filter:
 <code> 
 add_filter('wp_ulike_format_number','wp_ulike_new_format_number',10,3);
 function wp_ulike_new_format_number($value, $num, $plus){
@@ -142,6 +143,44 @@ function wp_ulike_new_format_number($value, $num, $plus){
 	$value = $num;
 	endif;
 	return $value;
+}
+</code>
+
+= How To Change Schema Type? =
+* The default schema type is 'CreativeWork', if you want to change it to 'Article', you need to make use of the `wp_ulike_posts_add_attr` filter as shown in the sample code below:
+<code>  
+add_filter('wp_ulike_posts_add_attr', 'wp_ulike_change_posts_microdata_itemtype', 10);  
+function wp_ulike_change_posts_microdata_itemtype() {  
+	return 'itemscope itemtype="http://schema.org/Article"';  
+}
+</code>
+
+= How To Remove All Schema Data Except Of aggregateRating? =
+* Make use of the `wp_ulike_remove_microdata_post_meta` & 'wp_ulike_posts_add_attr' filters as shown in the sample code below:
+<code> 
+add_filter('wp_ulike_remove_microdata_post_meta', '__return_true', 10);
+add_filter('wp_ulike_posts_add_attr', '__return_null', 10);
+</code>
+
+= How To Remove "0" Count If There Are No Likes? =
+* Make use of the `wp_ulike_count_box_template` filter as shown in the sample code below:
+<code>
+<?php  
+add_filter('wp_ulike_count_box_template', 'wp_ulike_change_my_count_box_template', 10, 2);
+function wp_ulike_change_my_count_box_template($string, $counter) {
+	$num = preg_replace("/[^0-9,.]/", "", $counter);
+	if($num == 0) return;
+	else return $string;
+}
+?>
+</code>
+
+= How To Change The Login Alert Template? =
+* Make use of the `wp_ulike_login_alert_template` filter as shown in the sample code below:
+<code> 
+add_filter('wp_ulike_login_alert_template', 'wp_ulike_change_login_alert_template', 10);
+function wp_ulike_change_login_alert_template(){
+	return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Please login to your account! :)</p>';
 }
 </code>
 
@@ -162,14 +201,14 @@ endif;
 </code>
 
 = How To Sort Most Liked Posts?  =
-* Use this query on your theme:
+* Use this query in your themes loop:
 <code> 
 $the_query = new WP_Query(array(
-'post_status' =>'published',
-'post_type' =>'post',
-'orderby' => 'meta_value_num',
-'meta_key' => '_liked',
-'paged' => (get_query_var('paged')) ? get_query_var('paged') : 1
+	'post_status' => 'published',
+	'post_type' => 'post',
+	'orderby' => 'meta_value_num',
+	'meta_key' => '_liked',
+	'paged' => (get_query_var('paged')) ? get_query_var('paged') : 1
 ));
 </code>
 
@@ -178,13 +217,24 @@ $the_query = new WP_Query(array(
 * Attention: `%START_WHILE%` And `%END_WHILE%` variables are very important and you should use them out of the frequent string. (Such as `<li></li>` tags sample in default template)
 
 = Receive HTTP ERROR 500 on WP ULike > Statistics   =
-* Increasing Your WordPress Memory Limit in wp-config.php to fix this error. It is located in your WordPress siteâ€™s root folder, and you will need to use an FTP client or file manager in your web hosting control panel.
-* Next, you need to paste this code in wp-config.php file just before the line that says â€˜Thatâ€™s all, stop editing! Happy blogging.â€™
+* Increasing Your WordPress Memory Limit in wp-config.php to fix this error. It is located in your WordPress site's root folder, and you will need to use an FTP client or file manager in your web hosting control panel.
+* Next, you need to paste this code in wp-config.php file just before the line that says "That's all, stop editing! Happy blogging."
 <code> 
 define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 2.7 =
+* Added: Google rich snippets support for posts. (Add rich snippet for ulikes in form of schema.org)
+* Added: 'wp_ulike_count_box_template' filter to customize count box template.
+* Added: 'wp_ulike_login_alert_template' filter to customize login alert message.
+* Added: 'wp_ulike_bp_notifications_template' filter to customize buddypress notification message.
+* Added: New admin font icons for dashboard area.
+* Removed: svg-source.php file.
+* Updated: WP ULike URI.
+* Updated: Some elements of "About WP ULike" area.
+* Updated: Persian language file.
 
 = 2.6 =
 * Added: Most liked (posts,comments,activities,topics) widgets on statistics panel.

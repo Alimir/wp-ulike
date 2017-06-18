@@ -1,10 +1,10 @@
 # [WP ULike](https://wordpress.org/plugins/wp-ulike/) #
 
-### Welcome to our GitHub Repository
+### WP ULike GitHub Repository
 
 WP ULike is a WordPress plugin that also supports BuddyPress, bbPress and a number of other plugins. It aims to be a comprehensive “Like” system for your site and enables site users to like a wide range of content types, including posts, forum topics and replies, comments and activity updates. It’s very simple to use and supports many options and full Statistics tools. Also, All are free :)
 
-More information can be found at [WP ULike](http://preview.alimir.ir/developer/wp-ulike/).
+More information can be found at [WP ULike](http://wp-ulike.alimir.ir/).
 
 <a href="https://wordpress.org/plugins/wp-ulike/"><img src="http://preview.alimir.ir/wp-content/uploads/wp-ulike-created-banner.png"></a>
 
@@ -84,6 +84,109 @@ For detailed setup instructions, visit the official [Documentation](https://word
 2. Or download it directly as a ZIP file: `https://github.com/Alimir/wp-ulike/archive/master.zip`
 
 This will download the latest developer copy of WP ULike.
+
+
+## How To Use this plugin? ##
+Just install the plugin and activate the "automatic display" in plugin configuration panel. (WP ULike has three auto options for the post, comments, buddypress activities & bbPress Topics.)
+Also you can use this function and shortcode for the post likes:
+*   Function:
+```php
+if(function_exists('wp_ulike')) wp_ulike('get');
+```
+*   Shortcode:
+```
+[wp_ulike]
+```
+
+## How To Change Format Number Function? ##
+Add your changes on `wp_ulike_format_number` function with a simple filter. for example, if you want to remove the "+" character you can use this filter:
+```php
+add_filter('wp_ulike_format_number','wp_ulike_new_format_number',10,3);
+function wp_ulike_new_format_number($value, $num, $plus){
+	if ($num >= 1000 && get_option('wp_ulike_format_number') == '1'):
+	$value = round($num/1000, 2) . 'K';
+	else:
+	$value = $num;
+	endif;
+	return $value;
+}
+```
+
+## How To Change Schema Type? ##
+The default schema type is 'CreativeWork', if you want to change it to 'Article', you need to make use of the `wp_ulike_posts_add_attr` filter as shown in the sample code below:
+```php  
+add_filter('wp_ulike_posts_add_attr', 'wp_ulike_change_posts_microdata_itemtype', 10);  
+function wp_ulike_change_posts_microdata_itemtype() {  
+	return 'itemscope itemtype="http://schema.org/Article"';  
+}
+```
+
+## How To Remove All Schema Data Except Of aggregateRating? ##
+Make use of the `wp_ulike_remove_microdata_post_meta` & 'wp_ulike_posts_add_attr' filters as shown in the sample code below:
+```php 
+add_filter('wp_ulike_remove_microdata_post_meta', '__return_true', 10);
+add_filter('wp_ulike_posts_add_attr', '__return_null', 10);
+</code>
+```
+
+## How To Remove "0" Count If There Are No Likes? ##
+Make use of the `wp_ulike_count_box_template` filter as shown in the sample code below:
+```php
+add_filter('wp_ulike_count_box_template', 'wp_ulike_change_my_count_box_template', 10, 2);
+function wp_ulike_change_my_count_box_template($string, $counter) {
+	$num = preg_replace("/[^0-9,.]/", "", $counter);
+	if($num == 0) return;
+	else return $string;
+}
+```
+
+## How To Change The Login Alert Template? ##
+Make use of the `wp_ulike_login_alert_template` filter as shown in the sample code below:
+```php 
+add_filter('wp_ulike_login_alert_template', 'wp_ulike_change_login_alert_template', 10);
+function wp_ulike_change_login_alert_template(){
+	return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Please login to your account! :)</p>';
+}
+```
+
+## How To Get Posts Likes Number? ##
+* Use this function on WP Loop:
+```php 
+if (function_exists('wp_ulike_get_post_likes')):
+	echo wp_ulike_get_post_likes(get_the_ID());
+endif;
+```
+
+## How To Get Comments Likes Number? ##
+* Use the following function in your comments loop:
+```php
+if (function_exists('wp_ulike_get_comment_likes')):
+	echo wp_ulike_get_comment_likes(get_comment_ID());
+endif;
+```
+
+## How To Sort Most Liked Posts?  ##
+* Use this query on your theme:
+```php
+$the_query = new WP_Query(array(
+	'post_status' => 'published',
+	'post_type' => 'post',
+	'orderby' => 'meta_value_num',
+	'meta_key' => '_liked',
+	'paged' => (get_query_var('paged')) ? get_query_var('paged') : 1
+));
+```
+
+## How Can I Create Custom Template In Users Liked Box?  ##
+* We have provided some variables in setting panel. You can use them in textarea and then save the new options. 
+* Attention: `%START_WHILE%` And `%END_WHILE%` variables are very important and you should use them out of the frequent string. (Such as `<li></li>` tags sample in default template)
+
+## Receive HTTP ERROR 500 on WP ULike > Statistics   ##
+* Increasing Your WordPress Memory Limit in wp-config.php to fix this error. It is located in your WordPress site's root folder, and you will need to use an FTP client or file manager in your web hosting control panel.
+* Next, you need to paste this code in wp-config.php file just before the line that says "That's all, stop editing! Happy blogging."
+```php 
+define( 'WP_MEMORY_LIMIT', '256M' );
+```
 
 ## Bugs ##
 If you find an issue, let us know [here](https://github.com/Alimir/wp-ulike/issues?state=open)!
