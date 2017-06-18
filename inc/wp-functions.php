@@ -103,7 +103,7 @@
 	function wp_ulike_get_posts_microdata_itemtype(){
 		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
 		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
-		return 'itemprop="review" itemscope itemtype="http://schema.org/CreativeWork"';
+		return 'itemscope itemtype="http://schema.org/CreativeWork"';
 	}
 	
 	/**
@@ -117,16 +117,17 @@
 	function wp_ulike_get_posts_microdata(){
 		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
 		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
-        $post_meta 	= '<meta itemprop="name" content="' . get_the_title() . '" />';
-		$post_meta 	.= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . get_the_author() . '" /></span>';
-        $post_meta 	.= '<meta itemprop="datePublished" content="' . mysql2date( 'c', get_the_date(), false ) . '" />';
-		$post_meta 	.= '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
-		$post_meta	.= '<meta itemprop="bestRating" content="5" />';
-		$post_meta 	.= '<meta itemprop="worstRating" content="1" />';
-		$post_meta 	.= '<meta itemprop="ratingValue" content="'. wp_ulike_get_rating_value(get_the_ID()) .'" />';
-		$post_meta 	.= '<meta itemprop="ratingCount" content="' . $get_ulike_count . '" />';
-		$post_meta 	.= '</span>';
-        return apply_filters( 'wp_ulike_google_structured_data', $post_meta );
+        $post_meta 		= '<meta itemprop="name" content="' . get_the_title() . '" />';
+		$post_meta 		.= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . get_the_author() . '" /></span>';
+        $post_meta 		.= '<meta itemprop="datePublished" content="' . mysql2date( 'c', get_the_date(), false ) . '" />';
+		$ratings_meta 	= '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
+		$ratings_meta	.= '<meta itemprop="bestRating" content="5" />';
+		$ratings_meta 	.= '<meta itemprop="worstRating" content="1" />';
+		$ratings_meta 	.= '<meta itemprop="ratingValue" content="'. wp_ulike_get_rating_value(get_the_ID()) .'" />';
+		$ratings_meta 	.= '<meta itemprop="ratingCount" content="' . $get_ulike_count . '" />';
+		$ratings_meta 	.= '</span>';
+		$itemtype 		= apply_filters( 'wp_ulike_remove_microdata_post_meta', false );
+        return apply_filters( 'wp_ulike_generate_google_structured_data', ( $itemtype ? $ratings_meta : ( $post_meta . $ratings_meta )));
 	}
 
 	/**
@@ -138,60 +139,66 @@
 	 */
 	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
 		global $wpdb;
-		//Get average, likes count & date_time columns by $post_ID
-        $request =  "SELECT
-						FORMAT(
-							(
-							SELECT
-								AVG(counted.total)
-							FROM
+		if (false === ($rating_value = wp_cache_get($cache_key = 'get_rich_rating_value_' . $post_ID, $cache_group = 'wp_ulike'))) {
+			//get the average, likes count & date_time columns by $post_ID
+			$request =  "SELECT
+							FORMAT(
 								(
 								SELECT
-									COUNT(*) AS total
+									AVG(counted.total)
 								FROM
-									".$wpdb->prefix."ulike AS ulike
-								GROUP BY
-									ulike.post_id
-							) AS counted
-						),
-						0
-						) AS average,
-						COUNT(ulike.post_id) AS counter,
-						posts.post_date AS post_date
-					FROM
-						".$wpdb->prefix."ulike AS ulike
-					JOIN
-						".$wpdb->prefix."posts AS posts
-					ON
-						ulike.post_id = ".$post_ID." AND posts.ID = ulike.post_id;";
-		//get results
-		$likes 	= $wpdb->get_row($request);
-		$avg 	= $likes->average;
-		$count 	= $likes->counter;
-		$date 	= strtotime($likes->post_date);
-		//if there is no log data, return 4
-		if($count == 0 || $avg == 0) return 4;
-		$decimal = 0;
-		if($is_decimal){
-			list($whole, $decimal) = explode('.', number_format(($count*100/($avg*2)), 1));
-			$decimal = (int)$decimal;
+									(
+									SELECT
+										COUNT(*) AS total
+									FROM
+										".$wpdb->prefix."ulike AS ulike
+									GROUP BY
+										ulike.post_id
+								) AS counted
+							),
+							0
+							) AS average,
+							COUNT(ulike.post_id) AS counter,
+							posts.post_date AS post_date
+						FROM
+							".$wpdb->prefix."ulike AS ulike
+						JOIN
+							".$wpdb->prefix."posts AS posts
+						ON
+							ulike.post_id = ".$post_ID." AND posts.ID = ulike.post_id;";
+			//get columns in a row
+			$likes 	= $wpdb->get_row($request);
+			$avg 	= $likes->average;
+			$count 	= $likes->counter;
+			$date 	= strtotime($likes->post_date);
+			//if there is no log data, set $rating_value = 4
+			if($count == 0 || $avg == 0){
+				$rating_value = 4;
+				return $rating_value;
+			}
+			$decimal = 0;
+			if($is_decimal){
+				list($whole, $decimal) = explode('.', number_format(($count*100/($avg*2)), 1));
+				$decimal = (int)$decimal;
+			}
+			if( $date > strtotime('-1 month')) {
+				if($count < $avg) $rating_value = 4 + ".$decimal";
+				else $rating_value = 5;
+			} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
+				if($count < $avg) $rating_value = 3 + ".$decimal";
+				else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 4 + ".$decimal";
+				else $rating_value = 5;
+			} else {
+				if($count < ($avg/2)) $rating_value = 1 + ".$decimal";
+				else if(($count >= ($avg/2)) && ($count < $avg)) $rating_value = 2 + ".$decimal";
+				else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 3 + ".$decimal";
+				else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) $rating_value = 4 + ".$decimal";
+				else $rating_value = 5;
+			}
+			wp_cache_add($cache_key, $rating_value, $cache_group, HOUR_IN_SECONDS);
 		}
-		if( $date > strtotime('-1 month')) {
-			if($count < $avg) return 4 + ".$decimal";
-			else return 5;
-		} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
-			if($count < $avg) return 3 + ".$decimal";
-			else if(($count >= $avg) && ($count < ($avg*3/2))) return 4 + ".$decimal";
-			else return 5;
-		} else {
-			if($count < ($avg/2)) return 1 + ".$decimal";
-			else if(($count >= ($avg/2)) && ($count < $avg)) return 2 + ".$decimal";
-			else if(($count >= $avg) && ($count < ($avg*3/2))) return 3 + ".$decimal";
-			else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) return 4 + ".$decimal";
-			else return 5;
-		}
+		return $rating_value;
 	}
-	
 	
 	
 /*******************************************************
