@@ -196,7 +196,7 @@
 			"cookie" 	=> 'activity-liked-'		//Cookie Name
 		);	
 	
-		//call wp_get_ulike function from class-ulike calss
+		//call wp_get_ulike function from class-ulike class
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
 		$wp_ulike 		= '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_activities_add_attr', null).'>';
