@@ -39,7 +39,7 @@
 			"cookie" 	=> 'liked-'					//Cookie Name
 		);		
 		
-		//call wp_get_ulike function from class-ulike calss
+		//call wp_get_ulike function from class-ulike class
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
 		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_posts_add_attr', null).'>';
@@ -113,7 +113,7 @@
 			"cookie" 	=> 'comment-liked-'			//Cookie Name
 		);		
 		
-		//call wp_get_ulike function from class-ulike calss
+		//call wp_get_ulike function from class-ulike class
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);		
 		
 		$wp_ulike 		= '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_comments_add_attr', null).'>';
@@ -273,7 +273,7 @@
 			"cookie" 	=> 'topic-liked-'			//Cookie Name
 		);		
 		
-		//call wp_get_ulike function from class-ulike calss
+		//call wp_get_ulike function from class-ulike class
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
 		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_topics_add_attr', null).'>';
