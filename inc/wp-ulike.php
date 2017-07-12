@@ -39,7 +39,7 @@
 			"cookie" 	=> 'liked-'					//Cookie Name
 		);		
 		
-		//call wp_get_ulike function from class-ulike calss
+		//call wp_get_ulike function from class-ulike class
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
 		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_posts_add_attr', null).'>';
@@ -113,7 +113,7 @@
 			"cookie" 	=> 'comment-liked-'			//Cookie Name
 		);		
 		
-		//call wp_get_ulike function from class-ulike calss
+		//call wp_get_ulike function from class-ulike class
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);		
 		
 		$wp_ulike 		= '<div id="wp-ulike-comment-'.$CommentID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_comments_add_attr', null).'>';
@@ -196,7 +196,7 @@
 			"cookie" 	=> 'activity-liked-'		//Cookie Name
 		);	
 	
-		//call wp_get_ulike function from class-ulike calss
+		//call wp_get_ulike function from class-ulike class
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
 		$wp_ulike 		= '<'.$html_tag.' id="wp-ulike-activity-'.$activityID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_activities_add_attr', null).'>';
@@ -273,7 +273,7 @@
 			"cookie" 	=> 'topic-liked-'			//Cookie Name
 		);		
 		
-		//call wp_get_ulike function from class-ulike calss
+		//call wp_get_ulike function from class-ulike class
 		$counter 		= $wp_ulike_class->wp_get_ulike($data);
 		
 		$wp_ulike 		= '<div id="wp-ulike-'.$post_ID.'" class="wpulike '.$theme_class.'" '.apply_filters('wp_ulike_topics_add_attr', null).'>';
@@ -321,7 +321,8 @@
 		global $wp_ulike_class,$wp_user_IP;
 		$post_ID 		= $_POST['id'];
 		$post_type 		= $_POST['type'];
-		
+		$action_type    = $_POST['action_type'];
+
 		if($post_type == 'likeThis'){
 			$get_meta_data 	= get_post_meta($post_ID, '_liked', true);
 			$setting_key	= 'wp_ulike_posts';
@@ -354,6 +355,14 @@
 			$meta_key		= '_topicliked';
 			$cookie_name	= 'topic-liked-';		
 		}
+		else if($post_type == 'getUserLikes'){
+			$get_meta_data 	= get_post_meta($post_ID, '_liked', true);
+			$setting_key	= 'wp_ulike_posts';
+			$table_name		= 'ulike';
+			$column_name	= 'post_id';
+			$meta_key		= '_liked';
+			$cookie_name	= 'liked-';
+		}
 		else{
 			wp_die(__('Error: This Method Is Not Exist!',WP_ULIKE_SLUG));
 		}
@@ -369,7 +378,7 @@
 			"get_like" 	=> $get_like,				//Number Of Likes
 			"method" 	=> $post_type,				//JavaScript method
 			"setting" 	=> $setting_key,			//Setting Key
-			"type" 		=> 'process',				//Function type (post/process)
+			"type" 		=> $action_type,				//Function type (post/process)
 			"table" 	=> $table_name,				//posts table
 			"column" 	=> $column_name,			//ulike table column name			
 			"key" 		=> $meta_key,				//meta key
