@@ -202,6 +202,30 @@
 	}
 
 	/**
+	 * Generate templates list
+	 *
+	 * @author       	Alimir	 	
+	 * @since           2.8
+	 * @return			Array
+	 */
+	function wp_ulike_generate_templates_list(){
+		return array(
+			'wpulike-default'	=> array(
+				'name' => __('Default', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_default_template'
+			),
+			'wpulike-heart'	=> array(
+				'name' => __('Heart', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_simple_heart_template'					
+			),
+			'wpulike-robeen'	=> array(
+				'name' => __('Robeen', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_robeen_template'					
+			)
+		);
+	}
+
+	/**
 	 * The counter of last likes by the admin last login time.
 	 *
 	 * @author       	Alimir	 	

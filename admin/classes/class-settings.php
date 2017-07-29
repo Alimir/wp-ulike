@@ -322,6 +322,9 @@ class wp_ulike_settings {
         if ( ! $options ) { _e( 'No options defined.', WP_ULIKE_SLUG ); }
         echo "<select {$attrs} id='{$id}'>";
         foreach ( $options as $v => $label ) {
+		  if(is_array($label)){
+			  $label = $label['name'];
+		  }
           $select = selected( $v, $value, false );
           echo "<option value='{$v}' {$select} />{$label}</option>";
         }
