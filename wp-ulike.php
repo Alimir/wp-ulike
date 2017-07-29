@@ -171,23 +171,27 @@ function wp_ulike_activation_redirect( $plugin ) {
  *
  * @author        	Alimir
  * @since         	1.7
+ * @updated         2.8 //Added 'call_user_func' for better callbacks 
  * @return   		Void
  */
 add_action( 'plugins_loaded', 'wp_ulike_update_db_check' );
 function wp_ulike_update_db_check() {
 	if ( get_site_option( 'wp_ulike_dbVersion' ) != WP_ULIKE_DB_VERSION ) {
-		wp_ulike_install();
+		call_user_func('wp_ulike_install');
 	}
 }
 
+/**
+ * Initialize the plugin
+ * ===========================================================================*/
+
 //Include plugin setting file
-include plugin_dir_path( __FILE__ ) . 'admin/admin.php';
-
+require_once( plugin_dir_path( __FILE__ ) . 'admin/admin.php' );
 //Include general functions
-include plugin_dir_path( __FILE__ ) . 'inc/wp-functions.php';
-
+require_once( plugin_dir_path( __FILE__ ) . 'inc/wp-functions.php' );
 //Include plugin scripts
-include plugin_dir_path( __FILE__ ) . 'inc/wp-script.php';
-
+require_once( plugin_dir_path( __FILE__ ) . 'inc/wp-script.php');
 //Load WP ULike functions
-include plugin_dir_path( __FILE__ ) . 'inc/wp-ulike.php';
+require_once( plugin_dir_path( __FILE__ ) . 'inc/wp-ulike.php' );
+
+/*============================================================================*/

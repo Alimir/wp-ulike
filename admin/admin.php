@@ -44,13 +44,13 @@
 	*******************************************************/
 
 	//include about menu functions
-	include( plugin_dir_path(__FILE__) . 'about.php');
+	require_once( plugin_dir_path(__FILE__) . 'about.php');
 
 	//include logs menu functions
-	include( plugin_dir_path(__FILE__) . 'logs.php');
+	require_once( plugin_dir_path(__FILE__) . 'logs.php');
 
 	//include statistics menu functions
-	include( plugin_dir_path(__FILE__) . 'stats.php');
+	require_once( plugin_dir_path(__FILE__) . 'stats.php');
 
 	/**
 	 * Start Setting Class Options
@@ -59,41 +59,41 @@
 	 * @since           1.7
 	 * @updated         2.0
 	 * @updated         2.4.2
+	 * @updated         2.8 //Added new hooks for default settings.
 	 * @return			String
 	 */
-	 
 	//include setting class
-	include( plugin_dir_path(__FILE__) . 'classes/class-settings.php' );
+	require_once( plugin_dir_path(__FILE__) . 'classes/class-settings.php' );
 	//include setting templates
-	include( plugin_dir_path(__FILE__) . 'classes/tmp/settings.php' );		
-
+	require_once( plugin_dir_path(__FILE__) . 'classes/tmp/settings.php' );
 	//activate general setting panel
 	$wp_ulike_setting = wp_ulike_create_settings_page(
 	  'wp-ulike-settings',
 	  __( 'WP ULike Settings', WP_ULIKE_SLUG ),
 	  array(
-		'parent'   => false,
-		'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
-		'position' =>  313,
-		'icon_url' => 'dashicons-wp-ulike'
+		  'parent'   => false,
+		  'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
+		  'position' =>  313,
+		  'icon_url' => 'dashicons-wp-ulike'
 	  ),
 	  array(
-		'wp_ulike_general' 	=> $wp_ulike_general
+		  'wp_ulike_general' 	=> $wp_ulike_general
 	  ),
 	  array(
-		'tabs'        		=> true,
-		'updated'     		=> __('Settings saved.',WP_ULIKE_SLUG)
+		  'tabs'        		=> true,
+		  'updated'     		=> __('Settings saved.',WP_ULIKE_SLUG)
 	  )
 	);
-	
+
 	//activate other settings panels
 	$wp_ulike_setting->apply_settings( array(
-	  'wp_ulike_posts' 		=> $wp_ulike_posts,
-	  'wp_ulike_comments' 	=> $wp_ulike_comments,
-	  'wp_ulike_buddypress' => $wp_ulike_buddypress,
-	  'wp_ulike_bbpress' 	=> $wp_ulike_bbpress,
-	  'wp_ulike_customize' 	=> $wp_ulike_customize
-	) );
+			'wp_ulike_posts' 		=> apply_filters( 'wp_ulike_posts_settings', $wp_ulike_posts ),
+			'wp_ulike_comments' 	=> apply_filters( 'wp_ulike_comments_settings', $wp_ulike_comments ),
+			'wp_ulike_buddypress' 	=> apply_filters( 'wp_ulike_buddypress_settings', $wp_ulike_buddypress ),
+			'wp_ulike_bbpress' 		=> apply_filters( 'wp_ulike_bbpress_settings', $wp_ulike_bbpress ),
+			'wp_ulike_customize' 	=> apply_filters( 'wp_ulike_customize_settings', $wp_ulike_customize )
+		)
+	);
 
 	/**
 	 * Delete all the users likes logs by ajax process. 
