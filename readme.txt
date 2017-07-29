@@ -5,7 +5,7 @@ Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
 Tested up to: 4.8
-Stable tag: 2.7
+Stable tag: 2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,9 +21,10 @@ WP ULike is a WordPress plugin that also supports BuddyPress, bbPress and a numb
 *   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
 = Features =
-*   Clean Design.
+*   Clean Design + Pretty styles. 
 *   Full myCRED Points Support.
-*   Full Statistics tools.
+*   Flexible google rich snippets support. (Microdata)
+*   Full Statistics tools with many widgets.
 *   Supporting UltimateMember & BuddyPress Profiles.
 *  	Likers World Map & Top Likers Widget.
 *   Ajax feature to update the data without reloading.
@@ -131,99 +132,31 @@ Also you can use of the following function and shortcode for your posts:
 `[wp_ulike]`
 
 = How To Change The Counter Format? =
-Just add a filter on `wp_ulike_format_number`. e.g. If you want to remove `+` character, you need to make use of the sample code below:
-<code> 
-add_filter('wp_ulike_format_number','wp_ulike_new_format_number',10,3);
-function wp_ulike_new_format_number($value, $num, $plus){
-	if ($num >= 1000 && get_option('wp_ulike_format_number') == '1'):
-	$value = round($num/1000, 2) . 'K';
-	else:
-	$value = $num;
-	endif;
-	return $value;
-}
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-change-the-counter-format
 
 = How To Change Schema Type? =
-* The default schema type is 'CreativeWork', if you want to change it to 'Article', you need to make use of the `wp_ulike_posts_add_attr` filter as shown in the sample code below:
-<code>  
-add_filter('wp_ulike_posts_add_attr', 'wp_ulike_change_posts_microdata_itemtype', 10);  
-function wp_ulike_change_posts_microdata_itemtype() {  
-	return 'itemscope itemtype="http://schema.org/Article"';  
-}
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-change-schema-type
 
 = How To Add Extra Microdata? =
-* Make use of the `wp_ulike_extra_structured_data` filter as shown in the sample code below:
-<code>  
-add_filter('wp_ulike_extra_structured_data', 'wp_ulike_add_extra_structured_data', 10);
-function wp_ulike_add_extra_structured_data(){
-	$post_meta = '<div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">';
-	$post_meta .= '<meta itemprop="name" content="WordPress" />';
-	$post_meta .= '<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">';
-	$post_meta .= '<meta itemprop="url" content="https://s.w.org/about/images/logos/wordpress-logo-hoz-rgb.png" />';
-	$post_meta .= '</div>';
-	$post_meta .= '</div>';
-	return $post_meta;
-}
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-add-extra-microdata
 
 = How To Remove All Schema Data Except Of aggregateRating? =
-* Make use of the `wp_ulike_remove_microdata_post_meta` & 'wp_ulike_posts_add_attr' filters as shown in the sample code below:
-<code> 
-add_filter('wp_ulike_remove_microdata_post_meta', '__return_true', 10);
-add_filter('wp_ulike_posts_add_attr', '__return_null', 10);
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-remove-all-schema-data-except-of-aggregaterating
 
 = How To Remove "0" Count If There Are No Likes? =
-* Make use of the `wp_ulike_count_box_template` filter as shown in the sample code below:
-<code>
-<?php  
-add_filter('wp_ulike_count_box_template', 'wp_ulike_change_my_count_box_template', 10, 2);
-function wp_ulike_change_my_count_box_template($string, $counter) {
-	$num = preg_replace("/[^0-9,.]/", "", $counter);
-	if($num == 0) return;
-	else return $string;
-}
-?>
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-remove-0-count-if-there-are-no-likes
 
 = How To Change The Login Alert Template? =
-* Make use of the `wp_ulike_login_alert_template` filter as shown in the sample code below:
-<code> 
-add_filter('wp_ulike_login_alert_template', 'wp_ulike_change_login_alert_template', 10);
-function wp_ulike_change_login_alert_template(){
-	return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Please login to your account! :)</p>';
-}
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-change-the-login-alert-template
 
 = How To Get Post Likes Number? =
-* Make use of the following function in WP Loop:
-<code> 
-if (function_exists('wp_ulike_get_post_likes')):
-	echo wp_ulike_get_post_likes(get_the_ID());
-endif;
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-get-post-likes-number
 
 = How To Get Comment Likes Number? =
-* Make use of the following function in your comments loop:
-<code> 
-if (function_exists('wp_ulike_get_comment_likes')):
-	echo wp_ulike_get_comment_likes(get_comment_ID());
-endif;
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-get-comment-likes-number
 
 = How To Sort Most Liked Posts?  =
-* Make use of the following query on a loop:
-<code> 
-$the_query = new WP_Query(array(
-	'post_status' => 'published',
-	'post_type' => 'post',
-	'orderby' => 'meta_value_num',
-	'meta_key' => '_liked',
-	'paged' => (get_query_var('paged')) ? get_query_var('paged') : 1
-));
-</code>
+Documentation : https://github.com/alimir/wp-ulike#how-to-sort-most-liked-posts
 
 = How Can I Create Custom Template In Users Liked Box?  =
 * We have provided some variables in setting panel. You can use them in textarea and then save the new options. 
@@ -237,6 +170,17 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 2.8 =
+* Added: Robeen (Animated Heart) template. (New Theme)
+* Added: New hooks for better front-end/back-end development.
+* Added: New library for AJAX functionalities.
+* Added: New hooks support for default settings.
+* Added: New response functionality with JSON.
+* Updated: 'wp_ulike' core class functionality.
+* Updated: FAQ documentation.
+* Removed: Old script files and enqueue new wp-ulike script. 
+* Removed: Old version of 'mysql2date' function.
 
 = 2.7 =
 * Added: Flexible google rich snippets for posts. (Add rich snippet for likes in form of schema.org)
@@ -458,6 +402,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * The initial version
 
 == Upgrade Notice ==
+
+= 2.8 =
+Please Attention! In this version, we've made a new script library (wp-ulike.js) & removed old ones! So, please clear your browser cache after the plugin update. (And if you've a development version, That's so important to review our new changes...)
 
 = 2.5 =
 In this version, we have made a new option for buddypress custom notifications with some bug fixes. Attention! This new option does not work with bbPress -V2.6.

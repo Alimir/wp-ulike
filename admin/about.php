@@ -124,9 +124,10 @@
 	<div class="wrap about-wrap">
 
 		<h1><?php echo _e('Welcome to WP ULike',WP_ULIKE_SLUG) . ' ' . WP_ULIKE_VERSION; ?></h1>
-
 		<div class="about-text"><?php echo _e('Thank you for choosing WP ULike! This version is our leanest and most powerful version yet.', WP_ULIKE_SLUG) ; ?><br />
-		<a target="_blank" href="<?php echo WP_ULIKE_PLUGIN_URI; ?>"> <?php _e('Visit our homepage',WP_ULIKE_SLUG); ?></a>
+		
+		<?php add_thickbox(); ?>
+		<a target="_blank" href="<?php echo WP_ULIKE_PLUGIN_URI . '?TB_iframe=true&amp;width=800&amp;height=600'; ?>" class="thickbox"> <?php _e('Visit our homepage',WP_ULIKE_SLUG); ?></a>
 		</div>
 		<div class="ulike-badge"><?php echo _e('Version',WP_ULIKE_SLUG) . ' ' . WP_ULIKE_VERSION; ?></div>
 		<h2 class="nav-tab-wrapper">
