@@ -1,4 +1,6 @@
 <?php
+
+	if ( ! defined( 'ABSPATH' ) ) exit; // No direct access allowed
 	
 /*******************************************************
   Posts Likes Functions
@@ -268,7 +270,7 @@
 	 */
 	if (wp_ulike_get_setting( 'wp_ulike_buddypress', 'auto_display' ) == '1') {
 		function wp_ulike_put_buddypress() {
-			echo wp_ulike_buddypress('put');
+			wp_ulike_buddypress('get');
 		}
 		
 		if (wp_ulike_get_setting( 'wp_ulike_buddypress', 'auto_display_position' ) == 'meta'){
@@ -550,7 +552,7 @@
 	if (wp_ulike_get_setting( 'wp_ulike_bbpress', 'auto_display' ) == '1') {	 
 		
 		function wp_ulike_put_bbpress() {
-			 echo wp_ulike_bbpress('put');
+			 wp_ulike_bbpress('get');
 		}
 		
 		if (wp_ulike_get_setting( 'wp_ulike_bbpress', 'auto_display_position' ) == 'top')
@@ -750,6 +752,7 @@
 	 * @since           1.3
 	 * @updated         2.3
 	 * @updated         2.4
+	 * @updated         2.8 //Added new element names
 	 * @return          Void (Print new CSS styles)
 	 */
 	function wp_ulike_get_custom_style(){
@@ -768,105 +771,103 @@
 				
 		if(wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style') == '1'){
 		
-		//get custom options
-		$customstyle 	= get_option( 'wp_ulike_customize' );
-		
-		//button style
-		$btn_bg 		= $customstyle['btn_bg'];
-		$btn_border		= $customstyle['btn_border'];
-		$btn_color 		= $customstyle['btn_color'];
-		
-		//counter style
-		$counter_bg 	= $customstyle['counter_bg'];
-		$counter_border = $customstyle['counter_border'];
-		$counter_color 	= $customstyle['counter_color'];
-		
-		//Loading animation
-		$customloading 	= $customstyle['loading_animation'];
-		$loadingurl 	= wp_get_attachment_url( $customloading );
-		
-		$custom_css 	= $customstyle['custom_css'];
+			//get custom options
+			$customstyle 	= get_option( 'wp_ulike_customize' );
 
-		
-		if($btn_bg != ''){
-			$btn_style .= "background-color:$btn_bg;";
-		}			
-		if($btn_border != ''){
-			$btn_style .= "border-color:$btn_border; ";
-		}			
-		if($btn_color != ''){
-			$btn_style .= "color:$btn_color;text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
-		}
+			//button style
+			$btn_bg 		= $customstyle['btn_bg'];
+			$btn_border		= $customstyle['btn_border'];
+			$btn_color 		= $customstyle['btn_color'];
 
-		if($counter_bg != ''){
-			$counter_style .= "background-color:$counter_bg; ";
-		}			
-		if($counter_border != ''){
-			$counter_style .= "border-color:$counter_border; ";
-            $before_style  = "border-color:transparent; border-bottom-color:$counter_border; border-left-color:$counter_border;";
-		}			
-		if($counter_color != ''){
-			$counter_style .= "color:$counter_color;";
-		}
+			//counter style
+			$counter_bg 	= $customstyle['counter_bg'];
+			$counter_border = $customstyle['counter_border'];
+			$counter_color 	= $customstyle['counter_color'];
+
+			//Loading animation
+			$customloading 	= $customstyle['loading_animation'];
+			$loadingurl 	= wp_get_attachment_url( $customloading );
+
+			$custom_css 	= $customstyle['custom_css'];
+
+
+			if($btn_bg != ''){
+				$btn_style .= "background-color:$btn_bg;";
+			}			
+			if($btn_border != ''){
+				$btn_style .= "border-color:$btn_border; ";
+			}			
+			if($btn_color != ''){
+				$btn_style .= "color:$btn_color;text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
+			}
+
+			if($counter_bg != ''){
+				$counter_style .= "background-color:$counter_bg; ";
+			}			
+			if($counter_border != ''){
+				$counter_style .= "border-color:$counter_border; ";
+				$before_style  = "border-color:transparent; border-bottom-color:$counter_border; border-left-color:$counter_border;";
+			}			
+			if($counter_color != ''){
+				$counter_style .= "color:$counter_color;";
+			}
 		
 		}
 		
 		if($getlikeicon != '' || $getunlikeicon != '' || $customstyle != ''){
 				
-		if($getlikeicon != ''){
-		$return_style .= '
-		.wpulike .counter a.image {
-			background-image: url('.$getlikeurl.') !important;
-		}
-		.wpulike-heart .counter a.image:hover {
-			background-image:  url('.$getlikeurl.') !important;
-		}
-		 ';
-		}
-		
-		if($getunlikeicon != ''){
-		$return_style .= '
-		.wpulike .counter a.image-unlike {
-			background-image: url('.$getunlikeurl.') !important;
-		}
-		.wpulike-heart .counter a.image-unlike:hover {
-			background-image:  url('.$getunlikeurl.') !important;
-		}
-		 ';
-		}
-		
-		if($customloading != ''){
-		$return_style .= '
-		.wpulike .counter a.loading {
-			background-image: url('.$loadingurl.') !important;
-		}
-		 ';
-		}
-		
-		if($btn_style != ''){
-		$return_style .= "
-		.wpulike-default .counter a{
-			$btn_style	
-		}
-		.wpulike-heart .counter{
-			$btn_style
-		}
-		";
-		}
-		
-		if($counter_style != ''){
-		$return_style .= "
-		.wpulike-default .count-box,.wpulike-default .count-box:before{
-			$counter_style
-		}
-		.wpulike-default .count-box:before{
-			$before_style
-		} ";
-		}
-		
-		if($custom_css != ''){
-		$return_style .= $custom_css;
-		}
+			if($getlikeicon != ''){
+				$return_style .= '
+					.wp_ulike_btn.wp_ulike_put_image {
+						background-image: url('.$getlikeurl.') !important;
+					}
+				';
+			}
+
+			if($getunlikeicon != ''){
+				$return_style .= '
+					.wp_ulike_btn.wp_ulike_put_image.image-unlike {
+						background-image: url('.$getunlikeurl.') !important;
+					}
+				 ';
+			}
+
+			if($customloading != ''){
+				$return_style .= '
+					.wpulike .wp_ulike_is_loading .wp_ulike_btn,
+	#buddypress .activity-content .wpulike .wp_ulike_is_loading .wp_ulike_btn,
+	#bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {
+						background-image: url('.$loadingurl.') !important;
+					}
+				 ';
+			}
+
+			if($btn_style != ''){
+				$return_style .= '
+					.wpulike-default .wp_ulike_btn, .wpulike-default .wp_ulike_btn:hover, #bbpress-forums .wpulike-default .wp_ulike_btn, #bbpress-forums .wpulike-default .wp_ulike_btn:hover{
+						'.$btn_style.'	
+					}
+					.wpulike-heart .wp_ulike_general_class{
+						'.$btn_style.'	
+					}
+				';
+			}
+
+			if($counter_style != ''){
+				$return_style .= '
+					.wpulike-default .count-box,.wpulike-default .count-box:before{
+						'.$counter_style.'
+					}
+					.wpulike-default .count-box:before{
+						'.$before_style.'
+					}
+				';
+			}	
+
+			if($custom_css != ''){
+				$return_style .= $custom_css;
+			}
+			
 		}
 		
 		return $return_style;
@@ -906,7 +907,9 @@
 	
 	
 /*******************************************************
-  WP ULike Class
+  WP ULike Class & Templates
 *******************************************************/
-	
-	include( plugin_dir_path(__FILE__) . 'classes/class-ulike.php');	
+	//Include wp_ulike class
+	require_once( plugin_dir_path( __FILE__ ) . 'classes/class-ulike.php' );	
+	//Include templates functions
+	require_once( plugin_dir_path( __FILE__ ) . 'wp-templates.php' );	
