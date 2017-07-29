@@ -111,6 +111,7 @@
 	 *
 	 * @author       	Alimir
 	 * @since           2.7 
+	 * @since           2.8 //Replaced 'mysql2date' with 'get_post_time' function
 	 * @return          String
 	 */
 	add_filter( 'wp_ulike_posts_microdata', 'wp_ulike_get_posts_microdata');
@@ -120,7 +121,7 @@
         $post_meta 		= '<meta itemprop="name" content="' . get_the_title() . '" />';
         $post_meta 		.= apply_filters( 'wp_ulike_extra_structured_data', NULL );
 		$post_meta 		.= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . get_the_author() . '" /></span>';
-        $post_meta 		.= '<meta itemprop="datePublished" content="' . mysql2date( 'c', get_the_date(), false ) . '" />';
+        $post_meta 		.= '<meta itemprop="datePublished" content="' . get_post_time('c') . '" />';
 		$ratings_meta 	= '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
 		$ratings_meta	.= '<meta itemprop="bestRating" content="5" />';
 		$ratings_meta 	.= '<meta itemprop="worstRating" content="1" />';
