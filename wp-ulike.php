@@ -3,7 +3,7 @@
 Plugin Name: WP ULike
 Plugin URI: http://wp-ulike.alimir.ir/
 Description: WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
-Version: 2.7
+Version: 2.8
 Author: Ali Mirzaei
 Author URI: http://about.alimir.ir
 Text Domain: wp-ulike
@@ -27,12 +27,12 @@ Thanks for using WP ULike plugin!
 */
 
 //Do not change this value
-define( 'WP_ULIKE_PLUGIN_URI'   , 'http://wp-ulike.alimir.ir/' );
-define( 'WP_ULIKE_VERSION'      , '2.7' );
+define( 'WP_ULIKE_PLUGIN_URI'   , 'http://wp-ulike.alimir.ir' );
+define( 'WP_ULIKE_VERSION'      , '2.8' );
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' );
 define( 'WP_ULIKE_DB_VERSION'   , '1.3' );
 
-//Load Translations
+//Load Translations 
 load_plugin_textdomain( WP_ULIKE_SLUG, false, dirname( plugin_basename( __FILE__ ) ) .'/lang/' );
 
 /**
@@ -171,23 +171,27 @@ function wp_ulike_activation_redirect( $plugin ) {
  *
  * @author        	Alimir
  * @since         	1.7
+ * @updated         2.8 //Added 'call_user_func' for better callbacks 
  * @return   		Void
  */
 add_action( 'plugins_loaded', 'wp_ulike_update_db_check' );
 function wp_ulike_update_db_check() {
 	if ( get_site_option( 'wp_ulike_dbVersion' ) != WP_ULIKE_DB_VERSION ) {
-		wp_ulike_install();
+		call_user_func('wp_ulike_install');
 	}
 }
 
+/**
+ * Initialize the plugin
+ * ===========================================================================*/
+
 //Include plugin setting file
-include plugin_dir_path( __FILE__ ) . 'admin/admin.php';
-
+require_once( plugin_dir_path( __FILE__ ) . 'admin/admin.php' );
 //Include general functions
-include plugin_dir_path( __FILE__ ) . 'inc/wp-functions.php';
-
+require_once( plugin_dir_path( __FILE__ ) . 'inc/wp-functions.php' );
 //Include plugin scripts
-include plugin_dir_path( __FILE__ ) . 'inc/wp-script.php';
-
+require_once( plugin_dir_path( __FILE__ ) . 'inc/wp-script.php');
 //Load WP ULike functions
-include plugin_dir_path( __FILE__ ) . 'inc/wp-ulike.php';
+require_once( plugin_dir_path( __FILE__ ) . 'inc/wp-ulike.php' );
+
+/*============================================================================*/

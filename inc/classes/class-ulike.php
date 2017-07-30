@@ -2,7 +2,14 @@
 if ( ! class_exists( 'wp_ulike' ) ) {
 
 	class wp_ulike{
+		
 		private $wpdb;
+		/**
+		 * Instance of this class.
+		 *
+		 * @var      object
+		 */
+		protected static $instance  = null;		
 
 		/**
 		 * Constructor
@@ -14,29 +21,31 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 		
 		/**
-		 * Select logging method
+		 * Select the logging type
 		 *
 		 * @author       	Alimir
 		 * @param           Array $data
 		 * @since           2.0
+		 * @since           2.8 //Added switch statement
 		 * @return			String
 		 */				
 		public function wp_get_ulike(array $data){
 			//get loggin method option
 			$loggin_method = wp_ulike_get_setting( $data['setting'], 'logging_method');
-			
-			//select function from logging method
-			if($loggin_method == 'do_not_log')
-			return $this->do_not_log_method($data);
-			
-			else if($loggin_method == 'by_cookie')
-			return $this->loggedby_cookie_method($data);
-			
-			else if($loggin_method == 'by_ip')
-			return $this->loggedby_ip_method($data);
-			
-			else
-			return $this->loggedby_other_ways($data);
+			//Select the logging functionality
+			switch($loggin_method){
+				case 'do_not_log':
+					return $this->do_not_log_method($data);
+					break;
+				case 'by_cookie':
+					return $this->loggedby_cookie_method($data);
+					break;
+				case 'by_ip':
+					return $this->loggedby_ip_method($data);
+					break;
+				default:
+					return $this->loggedby_other_ways($data);
+			}
 		}
 
 		/**
@@ -46,20 +55,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @param           Array $data
 		 * @since           2.0
 		 * @updated         2.3
+		 * @updated         2.8 //Added 'get_template' changes & Removed some variables
 		 * @return			String
 		 */			
 		public function do_not_log_method(array $data){
-			$liked 		= wp_ulike_format_number($data["get_like"]);
-			$template 	= $this->get_template($data["id"],$data["method"],$liked,2,2);
-			$counter 	= '';
+			$output 	= '';
 			
 			if($data["type"] == 'post'){
-				if (wp_ulike_get_setting( 'wp_ulike_general', 'button_type') == 'image') {
-					$counter = $template['like_img'];
-				}
-				else {
-					$counter = $template['like_text'];
-				}
+				$output = $this->get_template( $data, 1 );
 			}//end post button
 			else if($data["type"] == 'process'){
 				$newLike = $data["get_like"] + 1;
@@ -69,9 +72,9 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					wp_ulike_bp_activity_add($data['user_id'],$data['id'],$data['key']);
 				}
 				do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-				$counter = wp_ulike_format_number($newLike);
+				$output = wp_ulike_format_number($newLike);
 			}//end post process
-			return $counter;			
+			return $output;			
 		}
 
 		/**
@@ -81,31 +84,20 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @param           Array $data
 		 * @since           2.0
 		 * @updated         2.3
+		 * @updated         2.8 //Added 'get_template' changes & Removed some variables
 		 * @return			String
 		 */		
-		public function loggedby_cookie_method(array $data){
-			$liked 			= wp_ulike_format_number($data["get_like"]);
-			$template 		= $this->get_template($data["id"],$data["method"],$liked,1,2);
+		public function loggedby_cookie_method( array $data ){
 			$condition 		= isset($_COOKIE[$data["cookie"].$data["id"]]);
 			$button_type 	= wp_ulike_get_setting( 'wp_ulike_general', 'button_type');
-			$counter 		= '';
+			$output 		= '';
 			
 			if($data["type"] == 'post'){
 				if(!$condition){
-					if ($button_type == 'image') {
-						$counter = $template['like_img'];
-					}
-					else {
-						$counter = $template['like_text'];
-					}
+					$output = $this->get_template( $data, 1 );
 				}
 				else{
-					if ($button_type == 'image') {
-						$counter = $template['permission_img'];
-					}
-					else {
-						$counter = $template['permission_text'];
-					}				
+					$output = $this->get_template( $data, 4 );
 				}
 			}//end post button
 			else if($data["type"] == 'process'){
@@ -118,13 +110,13 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						wp_ulike_bp_activity_add($data['user_id'],$data['id'],$data['key']);
 					}
 					do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-					$counter = wp_ulike_format_number($newLike);
+					$output = wp_ulike_format_number($newLike);
 				}
 				else{
-					$counter = wp_ulike_format_number($data["get_like"]);
+					$output = wp_ulike_format_number($data["get_like"]);
 				}
 			}//end post process
-			return $counter;				
+			return $output;				
 		}
 		
 		/**
@@ -133,41 +125,24 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @author       	Alimir
 		 * @param           Array $data
 		 * @since           2.0
-		 * @updated         2.3		 
+		 * @updated         2.3
+		 * @updated         2.8 //Added 'get_template' changes & Removed some variables
 		 * @return			String
 		 */		
-		public function loggedby_ip_method(array $data){
-			$liked 			= wp_ulike_format_number($data["get_like"]);
-			$tmp1			= $this->get_template($data["id"],$data["method"],$liked,1,0);
-			$tmp2 			= $this->get_template($data["id"],$data["method"],$liked,1,1);
-			$button_type 	= wp_ulike_get_setting( 'wp_ulike_general', 'button_type');
+		public function loggedby_ip_method( array $data ){
 			$condition 		= $this->wpdb->get_var("SELECT COUNT(*) FROM ".$this->wpdb->prefix.$data['table']." WHERE ".$data['column']." = '".$data['id']."' AND ip = '".$data['user_ip']."'");
+			$output 		= '';
 			
 			if($data["type"] == 'post'){
 				if($condition == 0){
-					if ($button_type == 'image') {
-						$counter = $tmp1['like_img'];
-					}
-					else {
-						$counter = $tmp1['like_text'];
-					}
+					$output = $this->get_template( $data, 1 );
 				}
 				else{
 					if($this->get_user_status($data['table'],$data['column'],'ip',$data['id'],$data['user_ip']) == "like"){
-						if ($button_type == 'image') {
-							$counter = $tmp2['unlike_img'];	
-						}
-						else {
-							$counter = $tmp2['unlike_text'];
-						}						
+						$output = $this->get_template( $data, 2 );					
 					}
 					else{
-						if ($button_type == 'image') {
-							$counter = $tmp1['like_img'];		
-						}
-						else {
-							$counter = $tmp1['like_text'];
-						}
+						$output = $this->get_template( $data, 3 );
 					}			
 				}
 			}//end post button
@@ -180,7 +155,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						wp_ulike_bp_activity_add($data['user_id'],$data['id'],$data['key']);
 					}
 					do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-					$counter = wp_ulike_format_number($newLike);
+					$output = wp_ulike_format_number($newLike);
 				}
 				else{
 					if($this->get_user_status($data['table'],$data['column'],'ip',$data['id'],$data['user_ip']) == "like"){
@@ -193,7 +168,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 							WHERE ".$data['column']." = '".$data['id']."' AND ip = '".$data['user_ip']."'
 						");
 						do_action('wp_ulike_mycred_unlike', $data['id'], $data['key']);
-						$counter = wp_ulike_format_number($newLike);				
+						$output = wp_ulike_format_number($newLike);				
 					}
 					else{
 						$newLike = $data["get_like"] + 1;
@@ -205,11 +180,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 							WHERE ".$data['column']." = '".$data['id']."' AND ip = '".$data['user_ip']."'
 						");
 						do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-						$counter = wp_ulike_format_number($newLike);
+						$output = wp_ulike_format_number($newLike);
 					}
 				}
 			}//end post process
-			return $counter;			
+			return $output;			
 		}
 		
 		/**
@@ -219,16 +194,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @param           Array $data
 		 * @since           2.0
 		 * @updated         2.3		 
-		 * @updated         2.4.2		 
+		 * @updated         2.4.2
+		 * @updated         2.8 //Added 'get_template' changes & Removed some variables
 		 * @return			String
 		 */	
-		public function loggedby_other_ways(array $data){
-			$liked 				= wp_ulike_format_number($data["get_like"]);
-			$tmp1 				= $this->get_template($data["id"],$data["method"],$liked,1,0);
-			$tmp2 				= $this->get_template($data["id"],$data["method"],$liked,1,1);
-			$loggin_method 		= wp_ulike_get_setting( $data['setting'], 'logging_method');
-			$button_type 		= wp_ulike_get_setting( 'wp_ulike_general', 'button_type');
+		public function loggedby_other_ways( array $data ){
+			$loggin_method 		= wp_ulike_get_setting( $data['setting'], 'logging_method' );
 			$second_condition 	= true; //check for by_username login method
+			$output 			= '';
 			
 			/* I removed this section (by_cookie_ip method) for some tests on v2.4.2
 			if($loggin_method		== 'by_cookie_ip'){
@@ -237,50 +210,29 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				$second_val 	= $data['user_ip'];
 			}*/
 			//else if($loggin_method 	== 'by_username'){
-				$condition 		= $this->wpdb->get_var("SELECT COUNT(*) FROM ".$this->wpdb->prefix.$data['table']." WHERE ".$data['column']." = '".$data['id']."' AND user_id = '".$data['user_id']."'");
-				$user_info 		= get_userdata($data['user_id']);// check for user data
-				if(!$user_info) $second_condition = false;// if user not exist, condition will be false
-				$second_column 	= 'user_id';
-				$second_val 	= $data['user_id'];
-				if(!is_user_logged_in())
-				$tmp1 			= $this->get_template($data["id"],$data["method"],$liked,1,2);
+			$condition 		= $this->wpdb->get_var("SELECT COUNT(*) FROM ".$this->wpdb->prefix.$data['table']." WHERE ".$data['column']." = '".$data['id']."' AND user_id = '".$data['user_id']."'");
+			$user_info 		= get_userdata($data['user_id']);// check for user data
+			if(!$user_info) $second_condition = false;// if user not exist, condition will be false
+			$second_column 	= 'user_id';
+			$second_val 	= $data['user_id'];
 			//}
 			
 			
 			if($data["type"] == 'post'){
 				if($condition == 0 /*&& !isset($_COOKIE[$data["cookie"].$data["id"]])*/){
-					if ($button_type == 'image') {
-						$counter = $tmp1['like_img'];
-					}
-					else {
-						$counter = $tmp1['like_text'];
-					}
+					$output = $this->get_template( $data, 1 );
 				}
 				else if($condition != 0 /*&& isset($_COOKIE[$data["cookie"].$data["id"]])*/ && $second_condition){
 					if($this->get_user_status($data['table'],$data['column'],$second_column,$data['id'],$second_val) == "like"){
-						if ($button_type == 'image') {
-							$counter = $tmp2['unlike_img'];	
-						}
-						else {
-							$counter = $tmp2['unlike_text'];
-						}
+						$output = $this->get_template( $data, 2 );
 					}
 					else{
-						if ($button_type == 'image') {
-							$counter = $tmp1['like_img'];		
-						}
-						else {
-							$counter = $tmp1['like_text'];
-						}
+						$output = $this->get_template( $data, 3 );
 					}
 				}
-				else{
-					if ($button_type == 'image') {
-						$counter = $tmp1['permission_img'];
-					}
-					else {
-						$counter = $tmp1['permission_text'];
-					}						}
+				else {
+					$output = $this->get_template( $data, 4 );
+				}
 			}//end post button
 			else if($data["type"] == 'process'){
 				if($condition == 0 /*&& !isset($_COOKIE[$data["cookie"].$data["id"]])*/){
@@ -292,7 +244,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					}	
 					//setcookie($data["cookie"].$data["id"], time(), time()+3600*24*365, '/');
 					do_action('wp_ulike_mycred_like', $data['id'], $data['key']);	
-					$counter = wp_ulike_format_number($newLike);
+					$output = wp_ulike_format_number($newLike);
 				}
 				else if($condition != 0  /*&&isset($_COOKIE[$data["cookie"].$data["id"]])*/ && $second_condition){
 					if($this->get_user_status($data['table'],$data['column'],$second_column,$data['id'],$second_val) == "like"){
@@ -305,7 +257,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 							WHERE ".$data['column']." = '".$data['id']."' AND $second_column = '$second_val'
 						");
 						do_action('wp_ulike_mycred_unlike', $data['id'], $data['key']);
-						$counter = wp_ulike_format_number($newLike);				
+						$output = wp_ulike_format_number($newLike);				
 					}
 					else{
 						$newLike = $data["get_like"] + 1;
@@ -317,14 +269,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 							WHERE ".$data['column']." = '".$data['id']."' AND $second_column = '$second_val'
 						");
 						do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-						$counter = wp_ulike_format_number($newLike);
+						$output = wp_ulike_format_number($newLike);
 					}
 				}
 				else{
-					$counter = wp_ulike_format_number($data["get_like"]);
+					$output = wp_ulike_format_number($data["get_like"]);
 				}
 			}//end post process
-			return $counter;				
+			return $output;				
 		}
 
 		/**
@@ -348,40 +300,93 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			else
 				return 0;
 		}
+		
 
 		/**
 		 * Get template
 		 *
 		 * @author       	Alimir
-		 * @param           Integer $id
-		 * @param           String $method
-		 * @param           Integer $liked
-		 * @param           Integer $num1
-		 * @param           Integer $num2
+		 * @param           Array $args
+		 * @param           Integer $status ( 0 = Is not logged, 1 = Is not liked, 2 = Is liked in the past, 3 = Is unliked, 4 = Is already liked )
 		 * @since           2.0
 		 * @updated         2.3
 		 * @updated         2.7 //Added 'wp_ulike_count_box_template' filter
+		 * @updated         2.8 //Removed some old variables & added a new functionality
 		 * @return			String
 		 */		
-		public function get_template($id,$method,$liked,$num1,$num2){
-		
-			$counter 			= apply_filters('wp_ulike_count_box_template', '<span class="count-box">'.$liked.'</span>', $liked);
-			$button_text 		= html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text'));
-			$button_text_u	 	= html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u'));			
-			$permission_text 	= html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'permission_text'));
-			$login_text 		= html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'login_text'));
-			$status 			= $num1 + $num2;
+		public function get_template( array $args, $status ){		
 			
-			return array(
-			"like_img"			=> '<a data-ulike-id="'.$id.'" data-ulike-type="'.$method.'" data-ulike-status="'.$status.'" class="wp_ulike_btn image"></a>'.$counter.'',
-			"like_text" 		=> '<a data-ulike-id="'.$id.'" data-ulike-type="'.$method.'" data-ulike-status="'.$status.'" class="wp_ulike_btn text">'.$button_text.'</a>'.$counter.'',
-			"unlike_img" 		=> '<a data-ulike-id="'.$id.'" data-ulike-type="'.$method.'" data-ulike-status="'.$status.'" class="wp_ulike_btn image-unlike"></a>'.$counter.'',
-			"unlike_text" 		=> '<a data-ulike-id="'.$id.'" data-ulike-type="'.$method.'" data-ulike-status="'.$status.'" class="wp_ulike_btn text">'.$button_text_u.'</a>'.$counter.'',
-			"permission_text"	=> '<a title="'.$permission_text.'" class="text user-tooltip">'.$button_text_u.'</a>'.$counter.'',
-			"permission_img" 	=> '<a title="'.$permission_text.'" class="image-unlike user-tooltip"></a>'.$counter.'',
-			"login_img" 		=> '<a title="'.$login_text.'" class="image user-tooltip"></a>'.$counter.'',				
-			"login_text" 		=> '<a title="'.$login_text.'" class="text user-tooltip">'.$button_text.'</a>'.$counter.''				
+			$button_type 		= wp_ulike_get_setting( 'wp_ulike_general', 'button_type' );
+			//Primary button class name
+			$button_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_button_selector', 'wp_ulike_btn' ) );
+			//Button text value
+			$button_text		= '';
+			
+			if( $button_type == 'image' ){
+				$button_class_name .= ' wp_ulike_put_image';
+				if($status == 2){
+					$button_class_name .= ' image-unlike';
+				}
+			} else {
+				$button_class_name .= ' wp_ulike_put_text';
+				if($status == 2){
+					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u' ) );
+				} else {
+					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) );
+				}
+			}
+			
+			$general_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_general_selector', 'wp_ulike_general_class' ) );
+			
+			switch ($status){
+				case 0:
+					$general_class_name .= ' wp_ulike_is_not_logged';
+					break;
+				case 1:
+					$general_class_name .= ' wp_ulike_is_not_liked';
+					break;
+				case 2:
+					$general_class_name .= ' wp_ulike_is_liked';
+					break;
+				case 3:
+					$general_class_name .= ' wp_ulike_is_unliked';
+					break;
+				case 4:
+					$general_class_name .= ' wp_ulike_is_already_liked';  
+			}		
+			
+			$counter = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $args['get_like'] ) .'</span>' , $args['get_like'] );
+			
+			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(
+					"ID"      		=> $args['id'],
+					"slug"      	=> $args['slug'],
+					"counter"		=> $counter,
+					"type"			=> $args['method'],
+					"status"  		=> $status,
+					"attributes" 	=> $args['attributes'],
+					"microdata" 	=> $args['microdata'],
+					"style"  		=> $args['style'],
+					"button_type"	=> $button_type,
+					"button_text"  	=> $button_text,
+					"general_class"	=> $general_class_name,
+					"button_class"  => $button_class_name
+				)
 			);
+			
+			
+			$wp_ulike_callback = apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') );
+			
+			$output			= '';
+			
+			foreach( $wp_ulike_callback as $key => $value ){
+			   if ( $key === $args['style'] ) {
+				   $output = call_user_func( $value['callback'], $wp_ulike_template );
+				   break;
+			   }			
+			}
+			
+			return apply_filters( 'wp_ulike_return_final_templates', trim( preg_replace( '/\s+/',' ', $output ) ), $wp_ulike_template );
+		
 		}		
 		
 		/**
@@ -397,11 +402,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			String
 		 */
 		public function get_user_status($table,$first_column,$second_column,$first_val,$second_val){
+			
 			$like_status = $this->wpdb->get_var("SELECT status FROM ".$this->wpdb->prefix."$table WHERE $first_column = '$first_val' AND $second_column = '$second_val'");
-			if ($like_status == "like")
-			return "like";
-			else
-			return "unlike";
+			
+			if ($like_status == "like") {
+				return "like";
+			} else {
+				return "unlike";
+			}
 		}
 		
 		/**
@@ -521,18 +529,35 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */			
 		function get_reutrn_id(){
 			global $user_ID,$wp_user_IP;
+			
 			if(!is_user_logged_in()){
 				return ip2long($wp_user_IP);
 			}
-			else
+			else {
 				return $user_ID;
+			}
 		}
+		
+		/**
+		 * Return an instance of this class.
+		 *
+		 * @return    object    A single instance of this class.
+		 */
+		public static function get_instance() {
+
+			// If the single instance hasn't been set, set it now.
+			if ( null == self::$instance ) {
+				self::$instance = new self;
+			}
+
+			return self::$instance;
+		}		
 		
 		
 	}
 	
 	//global variables
 	global $wp_ulike_class;
-	$wp_ulike_class = new wp_ulike();
+	$wp_ulike_class = wp_ulike::get_instance();
 	
 }

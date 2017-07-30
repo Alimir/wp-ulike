@@ -9,6 +9,7 @@
 	 * @since           1.0		 
 	 * @updated         2.2	 
 	 * @updated         2.4.1	 
+	 * @updated         2.8 //Removed  like_notice & unlike_notice variables of 'wp_localize_script' function + Dequeued 'wp_ulike_plugins' script
 	 * @return          void
 	 */
 	add_action('init', 'wp_ulike_enqueue_scripts');
@@ -16,19 +17,16 @@
 	function wp_ulike_enqueue_scripts() {
 		//enqueue JQuery script
 		wp_enqueue_script( 'jquery' );
-		//Add ulike script file with special functions.
-		wp_enqueue_script('wp_ulike', plugins_url('assets/js/wp-ulike-scripts.min.js', dirname(__FILE__)), array('jquery'), '1.2.3');
-		//Add ulike plugin file, such as: tooltip, transaction, ...
-		wp_enqueue_script('wp_ulike_plugins', plugins_url('assets/js/wp-ulike-plugins.js', dirname(__FILE__)), array('jquery'), '1.0.1', true);	
+		//Add wp_ulike script file with special functions.
+		wp_enqueue_script('wp_ulike', plugins_url('assets/js/wp-ulike.min.js', dirname(__FILE__)), array('jquery'), '2.8');
 		//localize script
 		wp_localize_script( 'wp_ulike', 'ulike_obj', array(
-			'ajaxurl' 		=> admin_url( 'admin-ajax.php' ),
-			'button_text_u' => wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u'),
-			'button_text' 	=> wp_ulike_get_setting( 'wp_ulike_general', 'button_text'),
-			'button_type' 	=> wp_ulike_get_setting( 'wp_ulike_general', 'button_type'),
-			'notifications' => wp_ulike_get_setting( 'wp_ulike_general', 'notifications'),
-			'like_notice' 	=> wp_ulike_get_setting( 'wp_ulike_general', 'like_notice'),
-			'unlike_notice' => wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice')
+			'ajaxurl' 			=> admin_url( 'admin-ajax.php' ),
+			'counter_selector' 	=> apply_filters('wp_ulike_counter_selector', '.count-box'),
+			'button_selector' 	=> apply_filters('wp_ulike_button_selector', '.wp_ulike_btn'),
+			'general_selector' 	=> apply_filters('wp_ulike_general_selector', '.wp_ulike_general_class'),
+			'button_type' 		=> wp_ulike_get_setting( 'wp_ulike_general', 'button_type'),
+			'notifications' 	=> wp_ulike_get_setting( 'wp_ulike_general', 'notifications')
 		));
 		//wp_ajax hooks for the custom AJAX requests
 		add_action('wp_ajax_wp_ulike_process','wp_ulike_process');

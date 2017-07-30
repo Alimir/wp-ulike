@@ -81,7 +81,7 @@
 	
 	/*******************************************************
 	  Posts Settings
-	*******************************************************/	
+	*******************************************************/
 		
 	$wp_ulike_posts 		= array(
 		'title'  			=> '<i class="dashicons-before dashicons-admin-post"></i>' . ' ' . __( 'Posts',WP_ULIKE_SLUG),
@@ -90,10 +90,7 @@
 			'type'    		=> 'select',
 			'default'		=> 'default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
-			'options' 		=> array(
-			  'wpulike-default'	=> __('Default', WP_ULIKE_SLUG),
-			  'wpulike-heart'	=> __('Heart', WP_ULIKE_SLUG)
-			)
+			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),
 		  'auto_display'  	=> array(
 			'type'  		=> 'checkbox',
@@ -203,10 +200,7 @@
 			'type'    		=> 'select',
 			'default'		=> 'default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
-			'options' 		=> array(
-			  'wpulike-default'	=> __('Default', WP_ULIKE_SLUG),
-			  'wpulike-heart'	=> __('Heart', WP_ULIKE_SLUG)
-			)
+			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),		
 		  'auto_display'  	=> array(
 			'type'  		=> 'checkbox',
@@ -351,10 +345,7 @@
 			'type'    		=> 'select',
 			'default'		=> 'default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
-			'options' 		=> array(
-			  'wpulike-default'	=> __('Default', WP_ULIKE_SLUG),
-			  'wpulike-heart'	=> __('Heart', WP_ULIKE_SLUG)
-			)
+			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),
 		  'auto_display'  => array(
 			'type'  		=> 'checkbox',
@@ -477,10 +468,7 @@
 			'type'    		=> 'select',
 			'default'		=> 'default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
-			'options' 		=> array(
-			  'wpulike-default'	=> __('Default', WP_ULIKE_SLUG),
-			  'wpulike-heart'	=> __('Heart', WP_ULIKE_SLUG)
-			)
+			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),		
 		  'auto_display'  => array(
 			'type'  		=> 'checkbox',
