@@ -584,7 +584,7 @@
 					this.buttonElement.toggleClass('image-unlike');
 				}
 			} else if( ulike_obj.button_type === 'text' ) {
-				this.buttonElement.find('span').text(btnText);
+				this.buttonElement.find('span').html(btnText);
 			}
 			//Check notifications active mode
 			if(ulike_obj.notifications !== '1') return;
