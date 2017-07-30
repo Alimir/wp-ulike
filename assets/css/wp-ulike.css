@@ -58,7 +58,7 @@
 }
 
 .wpulike .wp_ulike_btn.wp_ulike_put_text {
-	padding: 2px 20px;
+	padding: 2px 10px;
 }
 
 .wpulike-default .wp_ulike_btn.wp_ulike_put_image{
@@ -144,11 +144,11 @@
 }
 
 #buddypress div.activity-meta .wpulike-default .wp_ulike_btn {
-    padding: 12px 20px!important
+    padding: 12px 10px!important
 }
 
 #buddypress div.activity-meta .wpulike-default .wp_ulike_btn.wp_ulike_put_text {
-    padding: 7px 20px!important
+    padding: 7px 10px!important
 }
 
 #bbpress-forums .wpulike-default .wp_ulike_btn {
