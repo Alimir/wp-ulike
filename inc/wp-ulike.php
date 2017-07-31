@@ -287,6 +287,7 @@
 		$post_ID 		= $_POST['id'];
 		$post_type 		= $_POST['type'];
 		$like_status 	= $_POST['status'];
+		$nonce_token 	= $_POST['nonce'];
 		$response		= array();
 		
 		if($post_type == 'likeThis'){
@@ -342,7 +343,7 @@
 			"cookie" 	=> $cookie_name				//Cookie Name
 		);
 				
-		if( $post_ID == null ) wp_die();
+		if( $post_ID == null || ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) ) wp_die();
 		
 		switch ( $like_status ){
 			case 0:

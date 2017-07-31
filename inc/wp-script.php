@@ -18,10 +18,10 @@
 		//enqueue JQuery script
 		wp_enqueue_script( 'jquery' );
 		//Add wp_ulike script file with special functions.
-		wp_enqueue_script('wp_ulike', plugins_url('assets/js/wp-ulike.min.js', dirname(__FILE__)), array('jquery'), '2.8');
+		wp_enqueue_script('wp_ulike', plugins_url('assets/js/wp-ulike.min.js', dirname(__FILE__)), array('jquery'), '2.8', true);
 		//localize script
-		wp_localize_script( 'wp_ulike', 'ulike_obj', array(
-			'ajaxurl' 			=> admin_url( 'admin-ajax.php' ),
+		wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
+			'ajax_url' 			=> admin_url( 'admin-ajax.php' ),
 			'counter_selector' 	=> apply_filters('wp_ulike_counter_selector', '.count-box'),
 			'button_selector' 	=> apply_filters('wp_ulike_button_selector', '.wp_ulike_btn'),
 			'general_selector' 	=> apply_filters('wp_ulike_general_selector', '.wp_ulike_general_class'),

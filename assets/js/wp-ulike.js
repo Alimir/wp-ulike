@@ -478,14 +478,16 @@
         $window = $(window),
         defaults = {
             ID              : 0, /*  Auto ID value by element type */
+            nonce           : 0, /*  Get nonce token */
             type            : '', /* Values : likeThis (Posts),likeThisComment, likeThisActivity, likeThisTopic */
 			likeStatus      : 0, /* Values : 0 (Is not logged-in), 1 (Is not liked), 2 (Is liked), 3 (Is unliked), 4 (Already liked) */
-            counterSelector : ulike_obj.counter_selector, /* You can change this value by add filter on 'wp_ulike_counter_selector' */
-            generalSelector	: ulike_obj.general_selector, /* You can change this value by add filter on 'wp_ulike_general_selector' */
-            buttonSelector  : ulike_obj.button_selector /* You can change this value by add filter on 'wp_ulike_button_selector' */
+            counterSelector : wp_ulike_params.counter_selector, /* You can change this value by add filter on 'wp_ulike_counter_selector' */
+            generalSelector	: wp_ulike_params.general_selector, /* You can change this value by add filter on 'wp_ulike_general_selector' */
+            buttonSelector  : wp_ulike_params.button_selector /* You can change this value by add filter on 'wp_ulike_button_selector' */
         },
         attributesMap = {
             'ulike-id'    : 'ID',
+            'ulike-nonce' : 'nonce',
             'ulike-type'  : 'type',
             'ulike-status': 'likeStatus'
         };
@@ -525,10 +527,11 @@
 				type:'POST',
 				cache: false,
 				dataType: 'json',
-				url: ulike_obj.ajaxurl,
+				url: wp_ulike_params.ajax_url,
 				data:{
 					action: 'wp_ulike_process',
 					id: this.settings.ID,
+					nonce: this.settings.nonce,
 					status: this.settings.likeStatus,
 					type: this.settings.type
 				},
@@ -579,15 +582,15 @@
 		
 		_actions: function( messageType, messageText, btnText, likeStatus ){
 			//check the button types
-			if( ulike_obj.button_type === 'image' ) {
+			if( wp_ulike_params.button_type === 'image' ) {
 				if( likeStatus === 3 || likeStatus === 2){
 					this.buttonElement.toggleClass('image-unlike');
 				}
-			} else if( ulike_obj.button_type === 'text' ) {
+			} else if( wp_ulike_params.button_type === 'text' ) {
 				this.buttonElement.find('span').html(btnText);
 			}
 			//Check notifications active mode
-			if(ulike_obj.notifications !== '1') return;
+			if(wp_ulike_params.notifications !== '1') return;
 			//Set 'toastr' options
 			toastr.options = {
 			  closeButton		: false,
@@ -624,9 +627,9 @@
 
 /* Run :) */
 
-jQuery(function ($) {
+(function( $ ) {
 	// init WordpressUlike
 	$(".wpulike").WordpressUlike();
 	// removes "empty" paragraphs
 	$('p').filter(function () { return this.innerHTML == "" }).remove();
-});
+})( jQuery );
