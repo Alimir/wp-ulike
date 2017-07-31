@@ -404,7 +404,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 == Upgrade Notice ==
 
 = 2.8 =
-Please Attention! In this version, we've made a new script library (wp-ulike.js) & removed old ones! So, please clear your browser cache after the plugin update. (And if you've a development version, That's so important to review our new changes...)
+Attention Please!! In this version, we have made a new script library (wp-ulike.js), variables, templates, and functionalities. Besides, we have removed old ones, which may destroy your previous changes. That is very important to clear your browser cache and reset your customization with our new class names after updating the plugin. If you have a development version, please take some time to review our new changes.
 
 = 2.5 =
 In this version, we have made a new option for buddypress custom notifications with some bug fixes. Attention! This new option does not work with bbPress -V2.6.
