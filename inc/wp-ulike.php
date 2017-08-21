@@ -279,6 +279,7 @@
 	 * @updated         2.2
 	 * @updated         2.4.1
 	 * @updated         2.8 //Replaced 'WP_Ajax_Response' class with 'wp_send_json' function + Added message respond
+	 * @updated         2.8.1 //Added 'wp_ulike_respond_for_not_liked_data' & 'wp_ulike_respond_for_unliked_data' & 'wp_ulike_respond_for_liked_data' filters
 	 * @return			String
 	 */
 	function wp_ulike_process(){
@@ -348,39 +349,38 @@
 		switch ( $like_status ){
 			case 0:
 				$response = array(
-							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'login_text'),
-							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text')),
+							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'login_text' ),
+							'btnText'	=> html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
 							'data'		=> NULL
 						);
 				break;				
 			case 1:
 				$response = array(
-							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'like_notice'),
-							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text')),
-							'data'		=> $wp_ulike_class->wp_get_ulike($args)
+							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'like_notice' ),
+							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
+							'data'		=> apply_filters( 'wp_ulike_respond_for_not_liked_data', $wp_ulike_class->wp_get_ulike( $args ) )
 						);
 				break;
 			case 2:
 				$response = array(
-							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice'),
-							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text')),
-							'data'		=> $wp_ulike_class->wp_get_ulike($args)
+							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice' ),
+							'btnText'	=> html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
+							'data'		=> apply_filters( 'wp_ulike_respond_for_unliked_data', $wp_ulike_class->wp_get_ulike( $args ) )
 						);
 				break;				
 			case 3:
 				$response = array(
 							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'like_notice'),
-							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u')),
-							'data'		=> $wp_ulike_class->wp_get_ulike($args)
+							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u' ) ),
+							'data'		=> apply_filters( 'wp_ulike_respond_for_liked_data', $wp_ulike_class->wp_get_ulike( $args ) )
 						);
 				break;
 			default:
 				$response = array(
-							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'permission_text'),
-							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text')),
+							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'permission_text' ),
+							'btnText'	=> html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
 							'data'		=> NULL
 						);
-				break;				
 		}
 
 		wp_send_json($response);
