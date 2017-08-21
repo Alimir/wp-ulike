@@ -51,7 +51,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		
 		
 		public function bp_get_auhtor_id($activity_id) {
-			$activity = bp_activity_get_specific( array( 'activity_ids' => $activity_id ) );
+			$activity = bp_activity_get_specific( array( 'activity_ids' => $activity_id, 'display_comments'  => true ) );
 			return $activity['activities'][0]->user_id;
 		}
 		
