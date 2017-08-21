@@ -135,7 +135,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			
 			if($data["type"] == 'post'){
 				if($condition == 0){
-					$output = $this->get_template( $data, 1 );
+					$output = $this->get_template( $data, 3 );
 				}
 				else{
 					if($this->get_user_status($data['table'],$data['column'],'ip',$data['id'],$data['user_ip']) == "like"){
@@ -220,7 +220,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			
 			if($data["type"] == 'post'){
 				if($condition == 0 /*&& !isset($_COOKIE[$data["cookie"].$data["id"]])*/){
-					$output = $this->get_template( $data, 1 );
+					$output = $this->get_template( $data, 3 );
 				}
 				else if($condition != 0 /*&& isset($_COOKIE[$data["cookie"].$data["id"]])*/ && $second_condition){
 					if($this->get_user_status($data['table'],$data['column'],$second_column,$data['id'],$second_val) == "like"){
