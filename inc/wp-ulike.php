@@ -366,21 +366,21 @@
 				$response = array(
 							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'like_notice' ),
 							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
-							'data'		=> apply_filters( 'wp_ulike_respond_for_not_liked_data', $wp_ulike_class->wp_get_ulike( $args ) )
+							'data'		=> apply_filters( 'wp_ulike_respond_for_not_liked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
 						);
 				break;
 			case 2:
 				$response = array(
 							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice' ),
 							'btnText'	=> html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
-							'data'		=> apply_filters( 'wp_ulike_respond_for_unliked_data', $wp_ulike_class->wp_get_ulike( $args ) )
+							'data'		=> apply_filters( 'wp_ulike_respond_for_unliked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
 						);
 				break;				
 			case 3:
 				$response = array(
 							'message'	=> wp_ulike_get_setting( 'wp_ulike_general', 'like_notice'),
 							'btnText'	=> html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u' ) ),
-							'data'		=> apply_filters( 'wp_ulike_respond_for_liked_data', $wp_ulike_class->wp_get_ulike( $args ) )
+							'data'		=> apply_filters( 'wp_ulike_respond_for_liked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
 						);
 				break;
 			default:
