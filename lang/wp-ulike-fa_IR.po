@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
-"POT-Creation-Date: 2017-07-24 13:30+0330\n"
-"PO-Revision-Date: 2017-07-24 13:30+0330\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/plugins/wp-ulike/\n"
+"POT-Creation-Date: 2017-08-23 15:08+0330\n"
+"PO-Revision-Date: 2017-08-23 15:09+0330\n"
 "Last-Translator: Alimir <alimir71@yahoo.com>\n"
 "Language-Team: alimir.ir <info@alimir.ir>\n"
 "Language: fa_IR\n"
@@ -16,23 +17,25 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../wp-ulike.php:141
+#: ../wp-ulike.php:142 ../build/wp-ulike/wp-ulike.php:142
 msgid "Settings"
 msgstr "تنظیمات"
 
-#: ../wp-ulike.php:142
+#: ../wp-ulike.php:143 ../build/wp-ulike/wp-ulike.php:143
 msgid "Statistics"
 msgstr "آماره"
 
-#: ../wp-ulike.php:143
+#: ../wp-ulike.php:144 ../build/wp-ulike/wp-ulike.php:144
 msgid "About"
 msgstr "درباره"
 
-#: ../admin/about.php:40 ../admin/about.php:289
+#: ../build/wp-ulike/admin/about.php:40 ../build/wp-ulike/admin/about.php:290
+#: ../admin/about.php:40 ../admin/about.php:290
 msgid "Like this plugin?"
 msgstr "این پلاگین چندتا لایک داره؟!؟ :)"
 
-#: ../admin/about.php:40 ../admin/about.php:290
+#: ../build/wp-ulike/admin/about.php:40 ../build/wp-ulike/admin/about.php:291
+#: ../admin/about.php:40 ../admin/about.php:291
 msgid ""
 "Show your support by Rating 5 Star in <a href=\"http://wordpress.org/plugins/"
 "wp-ulike\"> Plugin Directory reviews</a>"
@@ -40,11 +43,11 @@ msgstr ""
 "حمایتتون رو از این افزونه، با امتیاز 5 ستاره در <a href=\"http://wordpress."
 "org/plugins/wp-ulike\">مخزن وردپرس</a> ثبت کنید..."
 
-#: ../admin/about.php:126
+#: ../build/wp-ulike/admin/about.php:126 ../admin/about.php:126
 msgid "Welcome to WP ULike"
 msgstr "به وردپرس یولایک خوش آمدید"
 
-#: ../admin/about.php:128
+#: ../build/wp-ulike/admin/about.php:127 ../admin/about.php:127
 msgid ""
 "Thank you for choosing WP ULike! This version is our leanest and most "
 "powerful version yet."
@@ -52,45 +55,54 @@ msgstr ""
 "از اینکه از افزونه وردپرس یولایک استفاده می کنید، خیلی ممنونیم! نسخه ی جدید، "
 "قویترین و کامل ترین نسخه منتشر شده از این افزونه است."
 
-#: ../admin/about.php:129 ../admin/stats.php:38
+#: ../build/wp-ulike/admin/about.php:130 ../build/wp-ulike/admin/stats.php:38
+#: ../admin/about.php:130 ../admin/stats.php:38
 msgid "Visit our homepage"
 msgstr "مشاهده صفحه افزونه"
 
-#: ../admin/about.php:131
+#: ../build/wp-ulike/admin/about.php:132 ../admin/about.php:132
 msgid "Version"
 msgstr "نسخه"
 
-#: ../admin/about.php:133
+#: ../build/wp-ulike/admin/about.php:134 ../admin/about.php:134
 msgid "Getting Started"
 msgstr "شروع "
 
-#: ../admin/about.php:134
+#: ../build/wp-ulike/admin/about.php:135 ../admin/about.php:135
 msgid "Credits"
 msgstr "دست‌اندرکاران"
 
-#: ../admin/about.php:135 ../admin/stats.php:52
+#: ../build/wp-ulike/admin/about.php:136 ../build/wp-ulike/admin/stats.php:52
+#: ../build/wp-ulike/admin/classes/class-settings.php:112
+#: ../admin/about.php:136 ../admin/stats.php:52
 #: ../admin/classes/class-settings.php:112
 msgid "Support"
 msgstr "پشتیبانی"
 
-#: ../admin/about.php:136 ../admin/stats.php:53
+#: ../build/wp-ulike/admin/about.php:137 ../build/wp-ulike/admin/stats.php:53
+#: ../build/wp-ulike/admin/classes/class-settings.php:112
+#: ../admin/about.php:137 ../admin/stats.php:53
 #: ../admin/classes/class-settings.php:112
 msgid "FAQ"
 msgstr "سؤالات متداول"
 
-#: ../admin/about.php:137
+#: ../build/wp-ulike/admin/about.php:138 ../admin/about.php:138
 msgid "Reviews"
 msgstr "امتیازدهی"
 
-#: ../admin/about.php:143
+#: ../build/wp-ulike/admin/about.php:144 ../admin/about.php:144
 msgid "Introducing WP ULike"
 msgstr "معرفی وردپرس یولاک"
 
-#: ../admin/about.php:150 ../admin/stats.php:37 ../admin/admin.php:198
+#: ../build/wp-ulike/admin/about.php:151 ../build/wp-ulike/admin/stats.php:37
+#: ../build/wp-ulike/admin/admin.php:197 ../admin/about.php:151
+#: ../admin/stats.php:37 ../admin/admin.php:197
 msgid "About WP ULike"
 msgstr "درباره وردپرس یولایک"
 
-#: ../admin/about.php:159 ../admin/classes/class-settings.php:46
+#: ../build/wp-ulike/admin/about.php:160
+#: ../build/wp-ulike/admin/classes/class-settings.php:46
+#: ../admin/about.php:160 ../admin/classes/class-settings.php:46
 msgid ""
 "WP ULike plugin allows to integrate a beautiful Ajax Like Button into your "
 "wordPress website to allow your visitors to like and unlike pages, posts, "
@@ -104,11 +116,11 @@ msgstr ""
 "سفارشی سازی استایل ها و… تمامی قابلیت های یک سیستم خوب و حرفه ای رو در "
 "اختیار شما قرار میده."
 
-#: ../admin/about.php:171
+#: ../build/wp-ulike/admin/about.php:172 ../admin/about.php:172
 msgid "WP Ulike Extension"
 msgstr "گسترش وردپرس یولایک"
 
-#: ../admin/about.php:172
+#: ../build/wp-ulike/admin/about.php:173 ../admin/about.php:173
 msgid ""
 "Right now, WP ULike support wordpress posts / comments, BuddyPress "
 "activities & bbPress Topics."
@@ -116,11 +128,11 @@ msgstr ""
 "وردپرس یولایک سیستمی برای همه است و از نوشته های وردپرس،‌ دیدگاه ها،‌ فعالیت "
 "های بادی پرس و تاپیک های بی بی پرس و... پشتیبانی کامل دارد."
 
-#: ../admin/about.php:178
+#: ../build/wp-ulike/admin/about.php:179 ../admin/about.php:179
 msgid "Added More Than 20 Language Files"
 msgstr "افزودن بیش از 20 فایل زبان جدید"
 
-#: ../admin/about.php:179
+#: ../build/wp-ulike/admin/about.php:180 ../admin/about.php:180
 msgid ""
 "WP ULike is already translated into +20 languages, with more always in "
 "progress."
@@ -128,11 +140,11 @@ msgstr ""
 "افزونه وردپرس یولایک به بیش از ۲۰ زبان زنده دنیا ترجمه شده و همچنان در حال "
 "توسعه است... :)"
 
-#: ../admin/about.php:185
+#: ../build/wp-ulike/admin/about.php:186 ../admin/about.php:186
 msgid "User Profile Links"
 msgstr "لینک به حساب های کاربری"
 
-#: ../admin/about.php:186
+#: ../build/wp-ulike/admin/about.php:187 ../admin/about.php:187
 msgid ""
 "Since WP ULike 2.3, We have synced the likers profile with BuddyPress & "
 "UltimateMember plugins."
@@ -141,11 +153,11 @@ msgstr ""
 "از دو افزونه محبوب buddypress و Ultimate Member است که در پنل تنظیمات افزونه "
 "و ابزارک ها تنظیم می شود."
 
-#: ../admin/about.php:192
+#: ../build/wp-ulike/admin/about.php:193 ../admin/about.php:193
 msgid "New Themes And Styles"
 msgstr "قالب ها و استایل های جدید"
 
-#: ../admin/about.php:193
+#: ../build/wp-ulike/admin/about.php:194 ../admin/about.php:194
 msgid ""
 "Since WP ULike 2.3, We have made some new styles and themes and you can "
 "customize them by your taste."
@@ -153,11 +165,11 @@ msgstr ""
 "از نسخه ۲.۳ افزونه یولایک،‌ ما به مرور قالب های جدید و جذاب رو با امکان "
 "سفارشی سازی توسط شما به افزونه اضافه میکنیم."
 
-#: ../admin/about.php:199
+#: ../build/wp-ulike/admin/about.php:200 ../admin/about.php:200
 msgid "myCRED Points Support"
 msgstr "پشتیبانی کامل از امتیازات myCRED"
 
-#: ../admin/about.php:200
+#: ../build/wp-ulike/admin/about.php:201 ../admin/about.php:201
 msgid ""
 "myCRED is an adaptive points management system that lets you award / charge "
 "your users for interacting with your WordPress."
@@ -166,11 +178,13 @@ msgstr ""
 "در آن بر اساس انواع فعالیت هایی که می کند ، امتیاز جایزه می گیرد ، بلکه می "
 "تواند این امتیازات را در سایت خود شما خرج کند."
 
-#: ../admin/about.php:206 ../admin/stats.php:176 ../admin/stats.php:395
+#: ../build/wp-ulike/admin/about.php:207 ../build/wp-ulike/admin/stats.php:176
+#: ../build/wp-ulike/admin/stats.php:395 ../admin/about.php:207
+#: ../admin/stats.php:176 ../admin/stats.php:395
 msgid "Likers World Map"
 msgstr "نقشه جهانی لایک کنندگان"
 
-#: ../admin/about.php:207
+#: ../build/wp-ulike/admin/about.php:208 ../admin/about.php:208
 msgid ""
 "Since WP ULike 2.3, We have made a new ability that you can track your "
 "likers by their country in the world map & Top Liker widget."
@@ -178,116 +192,147 @@ msgstr ""
 "از نسخه ۲.۳ افزونه یولایک،‌ امکان بررسی جغرافیایی لایک کنندگان  به همراه "
 "ابزراک ویژه برترین لایک کنندگان اضافه شده است."
 
-#: ../admin/about.php:213 ../admin/stats.php:24 ../admin/admin.php:194
+#: ../build/wp-ulike/admin/about.php:214 ../build/wp-ulike/admin/stats.php:24
+#: ../build/wp-ulike/admin/admin.php:193 ../admin/about.php:214
+#: ../admin/stats.php:24 ../admin/admin.php:193
 msgid "WP ULike Statistics"
 msgstr "آماره وردپرس یولایک"
 
-#: ../admin/about.php:213 ../admin/classes/tmp/settings.php:115
+#: ../build/wp-ulike/admin/about.php:214
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:115 ../admin/about.php:214
+#: ../admin/classes/tmp/settings.php:115
 msgid "Home"
 msgstr "خانه"
 
-#: ../admin/about.php:213
+#: ../build/wp-ulike/admin/about.php:214 ../admin/about.php:214
 msgid "OR"
 msgstr "یا"
 
-#: ../admin/about.php:213 ../admin/admin.php:74
+#: ../build/wp-ulike/admin/about.php:214 ../build/wp-ulike/admin/admin.php:72
+#: ../admin/about.php:214 ../admin/admin.php:72
 msgid "WP ULike Settings"
 msgstr "تنظیمات وردپرس یولایک"
 
-#: ../admin/about.php:219
+#: ../build/wp-ulike/admin/about.php:220 ../admin/about.php:220
 msgid "WP ULike is created by many love and time. Enjoy it :)"
 msgstr ""
 "وردپرس یولایک با صرف کلی علاقه و زمان ساخته شده است. امیدواریم که از آن لذت "
 "ببرید :)"
 
-#: ../admin/about.php:220
+#: ../build/wp-ulike/admin/about.php:221 ../admin/about.php:221
 msgid "Project Leaders"
 msgstr "سازندگان اصلی"
 
-#: ../admin/about.php:225
+#: ../build/wp-ulike/admin/about.php:226 ../admin/about.php:226
 msgid "Project Lead & Developer"
 msgstr "راهبر پروژه، توسعه دهنده ارشد"
 
-#: ../admin/about.php:229
+#: ../build/wp-ulike/admin/about.php:230 ../admin/about.php:230
 msgid "Translations"
 msgstr "ترجمه ها"
 
-#: ../admin/about.php:268
+#: ../build/wp-ulike/admin/about.php:269 ../admin/about.php:269
 msgid "Would you like to help translate the plugin into more languages?"
 msgstr ""
 "آیا علاقه ای  دارید که در ترجمه این افزونه به زبانهای دیگر با ما همکاری "
 "کنید؟!؟ "
 
-#: ../admin/about.php:268
+#: ../build/wp-ulike/admin/about.php:269 ../admin/about.php:269
 msgid "Join our WP-Translations Community"
 msgstr "به شبکه مترجمان ما بپیوندید"
 
-#: ../admin/about.php:270
+#: ../build/wp-ulike/admin/about.php:271 ../admin/about.php:271
 msgid "Other Plugins"
 msgstr "سایر افزونه ها"
 
-#: ../admin/logs.php:17 ../admin/logs.php:143 ../admin/logs.php:213
-#: ../admin/logs.php:265 ../admin/logs.php:339 ../admin/logs.php:393
-#: ../admin/logs.php:463 ../admin/logs.php:516 ../admin/logs.php:586
+#: ../build/wp-ulike/admin/logs.php:17 ../build/wp-ulike/admin/logs.php:143
+#: ../build/wp-ulike/admin/logs.php:213 ../build/wp-ulike/admin/logs.php:265
+#: ../build/wp-ulike/admin/logs.php:339 ../build/wp-ulike/admin/logs.php:393
+#: ../build/wp-ulike/admin/logs.php:463 ../build/wp-ulike/admin/logs.php:516
+#: ../build/wp-ulike/admin/logs.php:586 ../admin/logs.php:17
+#: ../admin/logs.php:143 ../admin/logs.php:213 ../admin/logs.php:265
+#: ../admin/logs.php:339 ../admin/logs.php:393 ../admin/logs.php:463
+#: ../admin/logs.php:516 ../admin/logs.php:586
 msgid "Logs"
 msgstr "وقایع"
 
-#: ../admin/logs.php:80
+#: ../build/wp-ulike/admin/logs.php:80 ../admin/logs.php:80
 msgid "Are you sure to remove this item?!"
 msgstr "آیا از حذف این آیتم اطمینان دارید؟!"
 
+#: ../build/wp-ulike/admin/logs.php:139 ../build/wp-ulike/admin/logs.php:261
+#: ../build/wp-ulike/admin/logs.php:389 ../build/wp-ulike/admin/logs.php:512
 #: ../admin/logs.php:139 ../admin/logs.php:261 ../admin/logs.php:389
 #: ../admin/logs.php:512
 msgid "WP ULike Logs"
 msgstr "وقایع اتفاقیه در وردپرس یولایک"
 
-#: ../admin/logs.php:140 ../admin/stats.php:43 ../admin/admin.php:178
+#: ../build/wp-ulike/admin/logs.php:140 ../build/wp-ulike/admin/stats.php:43
+#: ../build/wp-ulike/admin/admin.php:177 ../admin/logs.php:140
+#: ../admin/stats.php:43 ../admin/admin.php:177
 msgid "Post Likes Logs"
 msgstr "وقایع لایک در نوشتارها"
 
+#: ../build/wp-ulike/admin/logs.php:150 ../build/wp-ulike/admin/logs.php:272
+#: ../build/wp-ulike/admin/logs.php:400 ../build/wp-ulike/admin/logs.php:523
 #: ../admin/logs.php:150 ../admin/logs.php:272 ../admin/logs.php:400
 #: ../admin/logs.php:523
 msgid "ID"
 msgstr "شناسه"
 
+#: ../build/wp-ulike/admin/logs.php:151 ../build/wp-ulike/admin/logs.php:273
+#: ../build/wp-ulike/admin/logs.php:401 ../build/wp-ulike/admin/logs.php:524
 #: ../admin/logs.php:151 ../admin/logs.php:273 ../admin/logs.php:401
 #: ../admin/logs.php:524
 msgid "Username"
 msgstr "نام کاربری"
 
+#: ../build/wp-ulike/admin/logs.php:152 ../build/wp-ulike/admin/logs.php:274
+#: ../build/wp-ulike/admin/logs.php:402 ../build/wp-ulike/admin/logs.php:525
 #: ../admin/logs.php:152 ../admin/logs.php:274 ../admin/logs.php:402
 #: ../admin/logs.php:525
 msgid "Status"
 msgstr "وضعیت"
 
-#: ../admin/logs.php:153
+#: ../build/wp-ulike/admin/logs.php:153 ../admin/logs.php:153
 msgid "Post ID"
 msgstr "شناسه نوشتار"
 
-#: ../admin/logs.php:154
+#: ../build/wp-ulike/admin/logs.php:154 ../admin/logs.php:154
 msgid "Post Title"
 msgstr "عنوان نوشتار"
 
+#: ../build/wp-ulike/admin/logs.php:155 ../build/wp-ulike/admin/logs.php:278
+#: ../build/wp-ulike/admin/logs.php:405 ../build/wp-ulike/admin/logs.php:528
 #: ../admin/logs.php:155 ../admin/logs.php:278 ../admin/logs.php:405
 #: ../admin/logs.php:528
 msgid "Date / Time"
 msgstr "تاریخ / زمان"
 
+#: ../build/wp-ulike/admin/logs.php:156 ../build/wp-ulike/admin/logs.php:279
+#: ../build/wp-ulike/admin/logs.php:406 ../build/wp-ulike/admin/logs.php:529
 #: ../admin/logs.php:156 ../admin/logs.php:279 ../admin/logs.php:406
 #: ../admin/logs.php:529
 msgid "IP"
 msgstr "آدرس IP"
 
+#: ../build/wp-ulike/admin/logs.php:157 ../build/wp-ulike/admin/logs.php:280
+#: ../build/wp-ulike/admin/logs.php:407 ../build/wp-ulike/admin/logs.php:530
 #: ../admin/logs.php:157 ../admin/logs.php:280 ../admin/logs.php:407
 #: ../admin/logs.php:530
 msgid "Actions"
 msgstr "کارها"
 
-#: ../admin/logs.php:175 ../admin/logs.php:298 ../admin/logs.php:425
-#: ../admin/logs.php:548 ../admin/stats.php:199
+#: ../build/wp-ulike/admin/logs.php:175 ../build/wp-ulike/admin/logs.php:298
+#: ../build/wp-ulike/admin/logs.php:425 ../build/wp-ulike/admin/logs.php:548
+#: ../build/wp-ulike/admin/stats.php:199 ../admin/logs.php:175
+#: ../admin/logs.php:298 ../admin/logs.php:425 ../admin/logs.php:548
+#: ../admin/stats.php:199
 msgid "Guest User"
 msgstr "کاربر مهمان"
 
+#: ../build/wp-ulike/admin/logs.php:220 ../build/wp-ulike/admin/logs.php:347
+#: ../build/wp-ulike/admin/logs.php:471 ../build/wp-ulike/admin/logs.php:594
 #: ../admin/logs.php:220 ../admin/logs.php:347 ../admin/logs.php:471
 #: ../admin/logs.php:594
 msgid ""
@@ -297,206 +342,246 @@ msgstr ""
 "<strong>خطا:</strong> چیزی یافت نشد. (این مشکل به خاطر این مسأله ایجاد شده "
 "است که شما هیچ اطلاعاتی را در این جدول ندارید)"
 
-#: ../admin/logs.php:262 ../admin/stats.php:44 ../admin/admin.php:182
+#: ../build/wp-ulike/admin/logs.php:262 ../build/wp-ulike/admin/stats.php:44
+#: ../build/wp-ulike/admin/admin.php:181 ../admin/logs.php:262
+#: ../admin/stats.php:44 ../admin/admin.php:181
 msgid "Comment Likes Logs"
 msgstr "وقایع لایک در دیدگاه ها"
 
-#: ../admin/logs.php:275
+#: ../build/wp-ulike/admin/logs.php:275 ../admin/logs.php:275
 msgid "Comment ID"
 msgstr "شناسه دیدگاه"
 
-#: ../admin/logs.php:276
+#: ../build/wp-ulike/admin/logs.php:276 ../admin/logs.php:276
 msgid "Comment Author"
 msgstr "نویسنده دیدگاه"
 
-#: ../admin/logs.php:277
+#: ../build/wp-ulike/admin/logs.php:277 ../admin/logs.php:277
 msgid "Comment Text"
 msgstr "متن دیدگاه"
 
-#: ../admin/logs.php:390 ../admin/stats.php:45 ../admin/admin.php:186
+#: ../build/wp-ulike/admin/logs.php:390 ../build/wp-ulike/admin/stats.php:45
+#: ../build/wp-ulike/admin/admin.php:185 ../admin/logs.php:390
+#: ../admin/stats.php:45 ../admin/admin.php:185
 msgid "Activity Likes Logs"
 msgstr "وقایع لایک در فعالیت ها"
 
-#: ../admin/logs.php:403
+#: ../build/wp-ulike/admin/logs.php:403 ../admin/logs.php:403
 msgid "Activity ID"
 msgstr "شناسه فعالیت"
 
-#: ../admin/logs.php:404
+#: ../build/wp-ulike/admin/logs.php:404 ../admin/logs.php:404
 msgid "Permalink"
 msgstr "لینک همیشگی"
 
-#: ../admin/logs.php:441
+#: ../build/wp-ulike/admin/logs.php:441 ../admin/logs.php:441
 #, php-format
 msgid "<a href=\"%1$s\">Activity Permalink</a>"
 msgstr "<a href=\"%1$s\">مشاهده فعالیت</a>"
 
-#: ../admin/logs.php:513 ../admin/stats.php:46 ../admin/admin.php:190
+#: ../build/wp-ulike/admin/logs.php:513 ../build/wp-ulike/admin/stats.php:46
+#: ../build/wp-ulike/admin/admin.php:189 ../admin/logs.php:513
+#: ../admin/stats.php:46 ../admin/admin.php:189
 msgid "Topics Likes Logs"
 msgstr "وقایع لایک در تاپیک ها"
 
-#: ../admin/logs.php:526
+#: ../build/wp-ulike/admin/logs.php:526 ../admin/logs.php:526
 msgid "Topic ID"
 msgstr "شناسه تاپیک"
 
-#: ../admin/logs.php:527
+#: ../build/wp-ulike/admin/logs.php:527 ../admin/logs.php:527
 msgid "Topic Title"
 msgstr "عنوان تاپیک"
 
-#: ../admin/stats.php:31
+#: ../build/wp-ulike/admin/stats.php:31 ../admin/stats.php:31
 msgid "Welcome to WP ULike Statistics!"
 msgstr "به آماره وردپرس یولایک خوش آمدید!"
 
-#: ../admin/stats.php:32
+#: ../build/wp-ulike/admin/stats.php:32 ../admin/stats.php:32
 msgid "We have provided some useful statistics tools in this page:"
 msgstr ""
 "در این بخش، ما مجموعه ای از ابزارهای کاربردی را برای شما آماده کرده ایم:"
 
-#: ../admin/stats.php:36
+#: ../build/wp-ulike/admin/stats.php:36 ../admin/stats.php:36
 msgid "Get Started"
 msgstr "آغاز کنید"
 
-#: ../admin/stats.php:38
+#: ../build/wp-ulike/admin/stats.php:38 ../admin/stats.php:38
 msgid "or"
 msgstr "یا"
 
-#: ../admin/stats.php:41
+#: ../build/wp-ulike/admin/stats.php:41 ../admin/stats.php:41
 msgid "Other Tools"
 msgstr "سایر ابزارها"
 
-#: ../admin/stats.php:50
+#: ../build/wp-ulike/admin/stats.php:50 ../admin/stats.php:50
 msgid "Documentation"
 msgstr "مستندات"
 
-#: ../admin/stats.php:54
+#: ../build/wp-ulike/admin/stats.php:54 ../admin/stats.php:54
 msgid "Contact"
 msgstr "تماس با ما"
 
-#: ../admin/stats.php:55
+#: ../build/wp-ulike/admin/stats.php:55 ../admin/stats.php:55
 msgid "GitHub Repository"
 msgstr "مخزن گیت هاب"
 
-#: ../admin/stats.php:81
+#: ../build/wp-ulike/admin/stats.php:81 ../admin/stats.php:81
 msgid "Posts Likes Summary"
 msgstr "خلاصه لایک در نوشتارها"
 
-#: ../admin/stats.php:89
+#: ../build/wp-ulike/admin/stats.php:89 ../admin/stats.php:89
 msgid "Comments Likes Summary"
 msgstr "خلاصه لایک در دیدگاه ها"
 
-#: ../admin/stats.php:97
+#: ../build/wp-ulike/admin/stats.php:97 ../admin/stats.php:97
 msgid "Activities Likes Summary"
 msgstr "خلاصه لایک در فعالیت ها"
 
-#: ../admin/stats.php:105
+#: ../build/wp-ulike/admin/stats.php:105 ../admin/stats.php:105
 msgid "Topics Likes Summary"
 msgstr "خلاصه لایک در تاپیک ها"
 
+#: ../build/wp-ulike/admin/stats.php:115 ../build/wp-ulike/admin/stats.php:389
 #: ../admin/stats.php:115 ../admin/stats.php:389
 msgid "Summary"
 msgstr "خلاصه"
 
-#: ../admin/stats.php:127
+#: ../build/wp-ulike/admin/stats.php:127 ../admin/stats.php:127
 msgid "Total Likes"
 msgstr "مجموع کل لایک ها"
 
-#: ../admin/stats.php:139 ../admin/classes/class-widget.php:422
+#: ../build/wp-ulike/admin/stats.php:139
+#: ../build/wp-ulike/admin/classes/class-widget.php:422 ../admin/stats.php:139
+#: ../admin/classes/class-widget.php:422
 msgid "Today"
 msgstr "امروز"
 
-#: ../admin/stats.php:144 ../admin/classes/class-widget.php:421
+#: ../build/wp-ulike/admin/stats.php:144
+#: ../build/wp-ulike/admin/classes/class-widget.php:421 ../admin/stats.php:144
+#: ../admin/classes/class-widget.php:421
 msgid "Yesterday"
 msgstr "دیروز"
 
-#: ../admin/stats.php:149 ../admin/classes/class-widget.php:420
+#: ../build/wp-ulike/admin/stats.php:149
+#: ../build/wp-ulike/admin/classes/class-widget.php:420 ../admin/stats.php:149
+#: ../admin/classes/class-widget.php:420
 msgid "Week"
 msgstr "هفته"
 
-#: ../admin/stats.php:154 ../admin/classes/class-widget.php:419
+#: ../build/wp-ulike/admin/stats.php:154
+#: ../build/wp-ulike/admin/classes/class-widget.php:419 ../admin/stats.php:154
+#: ../admin/classes/class-widget.php:419
 msgid "Month"
 msgstr "ماه"
 
-#: ../admin/stats.php:159
+#: ../build/wp-ulike/admin/stats.php:159 ../admin/stats.php:159
 msgid "Total"
 msgstr "کل"
 
+#: ../build/wp-ulike/admin/stats.php:193 ../build/wp-ulike/admin/stats.php:396
 #: ../admin/stats.php:193 ../admin/stats.php:396
 msgid "Top Likers"
 msgstr "برترین لایک کنندگان"
 
-#: ../admin/stats.php:206 ../admin/classes/class-widget.php:281
-#: ../admin/classes/tmp/settings.php:23 ../admin/classes/tmp/settings.php:24
-#: ../admin/classes/tmp/settings.php:32
+#: ../build/wp-ulike/admin/stats.php:206
+#: ../build/wp-ulike/admin/classes/class-widget.php:281
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:23
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:24
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:32 ../admin/stats.php:206
+#: ../admin/classes/class-widget.php:281 ../admin/classes/tmp/settings.php:23
+#: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:32
 msgid "Like"
 msgstr "لایک"
 
-#: ../admin/stats.php:219 ../admin/stats.php:397
-#: ../admin/classes/class-widget.php:405 ../inc/wp-strings.php:26
+#: ../build/wp-ulike/admin/stats.php:219 ../build/wp-ulike/admin/stats.php:397
+#: ../build/wp-ulike/admin/classes/class-widget.php:405
+#: ../build/wp-ulike/inc/wp-strings.php:26 ../admin/stats.php:219
+#: ../admin/stats.php:397 ../admin/classes/class-widget.php:405
+#: ../inc/wp-strings.php:26
 msgid "Most Liked Posts"
 msgstr "پرلایک ترین مطالب"
 
-#: ../admin/stats.php:229 ../admin/stats.php:398
-#: ../admin/classes/class-widget.php:406 ../inc/wp-strings.php:27
+#: ../build/wp-ulike/admin/stats.php:229 ../build/wp-ulike/admin/stats.php:398
+#: ../build/wp-ulike/admin/classes/class-widget.php:406
+#: ../build/wp-ulike/inc/wp-strings.php:27 ../admin/stats.php:229
+#: ../admin/stats.php:398 ../admin/classes/class-widget.php:406
+#: ../inc/wp-strings.php:27
 msgid "Most Liked Comments"
 msgstr "پرلایک ترین دیدگاه ها"
 
-#: ../admin/stats.php:239 ../admin/stats.php:399
-#: ../admin/classes/class-widget.php:407
+#: ../build/wp-ulike/admin/stats.php:239 ../build/wp-ulike/admin/stats.php:399
+#: ../build/wp-ulike/admin/classes/class-widget.php:407 ../admin/stats.php:239
+#: ../admin/stats.php:399 ../admin/classes/class-widget.php:407
 msgid "Most Liked Activities"
 msgstr "پرلایک ترین فعالیت ها"
 
-#: ../admin/stats.php:249 ../admin/stats.php:400
-#: ../admin/classes/class-widget.php:408
+#: ../build/wp-ulike/admin/stats.php:249 ../build/wp-ulike/admin/stats.php:400
+#: ../build/wp-ulike/admin/classes/class-widget.php:408 ../admin/stats.php:249
+#: ../admin/stats.php:400 ../admin/classes/class-widget.php:408
 msgid "Most Liked Topics"
 msgstr "پرلایک ترین تاپیک ها"
 
+#: ../build/wp-ulike/admin/stats.php:268 ../build/wp-ulike/admin/stats.php:274
+#: ../build/wp-ulike/admin/stats.php:280 ../build/wp-ulike/admin/stats.php:286
 #: ../admin/stats.php:268 ../admin/stats.php:274 ../admin/stats.php:280
 #: ../admin/stats.php:286
 msgid "View Logs"
 msgstr "مشاهده وقایع"
 
+#: ../build/wp-ulike/admin/stats.php:269 ../build/wp-ulike/admin/stats.php:390
 #: ../admin/stats.php:269 ../admin/stats.php:390
 msgid "Posts Likes Stats"
 msgstr "نمودار لایک در نوشتارها"
 
-#: ../admin/stats.php:269 ../admin/stats.php:275 ../admin/stats.php:281
-#: ../admin/stats.php:287 ../admin/stats.php:318
+#: ../build/wp-ulike/admin/stats.php:269 ../build/wp-ulike/admin/stats.php:275
+#: ../build/wp-ulike/admin/stats.php:281 ../build/wp-ulike/admin/stats.php:287
+#: ../build/wp-ulike/admin/stats.php:318 ../admin/stats.php:269
+#: ../admin/stats.php:275 ../admin/stats.php:281 ../admin/stats.php:287
+#: ../admin/stats.php:318
 #, php-format
 msgid "In The Last %s Days"
 msgstr "در %s روز گذشته"
 
+#: ../build/wp-ulike/admin/stats.php:275 ../build/wp-ulike/admin/stats.php:391
 #: ../admin/stats.php:275 ../admin/stats.php:391
 msgid "Comments Likes Stats"
 msgstr "نمودار لایک در دیدگاه ها"
 
+#: ../build/wp-ulike/admin/stats.php:281 ../build/wp-ulike/admin/stats.php:392
 #: ../admin/stats.php:281 ../admin/stats.php:392
 msgid "Activities Likes Stats"
 msgstr "نمودار لایک در فعالیت ها"
 
+#: ../build/wp-ulike/admin/stats.php:287 ../build/wp-ulike/admin/stats.php:393
 #: ../admin/stats.php:287 ../admin/stats.php:393
 msgid "Topics Likes Stats"
 msgstr "نمودار لایک در تاپیک ها"
 
+#: ../build/wp-ulike/admin/stats.php:318 ../build/wp-ulike/admin/stats.php:394
 #: ../admin/stats.php:318 ../admin/stats.php:394
 msgid "Likes Percent"
 msgstr "درصد تخصیص لایک ها"
 
-#: ../admin/stats.php:386
+#: ../build/wp-ulike/admin/stats.php:386 ../admin/stats.php:386
 msgid "Show on screen"
 msgstr "تنظیمات صفحه"
 
-#: ../admin/stats.php:388
+#: ../build/wp-ulike/admin/stats.php:388 ../admin/stats.php:388
 msgid "Welcome"
 msgstr "خوش آمدید"
 
-#: ../admin/stats.php:403
+#: ../build/wp-ulike/admin/stats.php:403 ../admin/stats.php:403
 msgid "Days"
 msgstr "روزها"
 
+#: ../build/wp-ulike/admin/stats.php:404
+#: ../build/wp-ulike/admin/classes/class-settings.php:28
 #: ../admin/stats.php:404 ../admin/classes/class-settings.php:28
 msgid "Save Settings"
 msgstr "ذخیره تغییرات"
 
-#: ../admin/admin.php:39
+#: ../build/wp-ulike/admin/admin.php:39 ../admin/admin.php:39
 #, php-format
 msgid ""
 " Thank you for choosing <a href=\"%s\" title=\"Wordpress ULike\" target="
@@ -507,144 +592,186 @@ msgstr ""
 "\">وردپرس يولايک را</a> انتخاب کرده ايد. طراحي و کدنويسي توسط <a href=\"%s\" "
 "title=\"Wordpress ULike\" target=\"_blank\">علي ميرزائي</a>"
 
-#: ../admin/admin.php:77 ../inc/wp-functions.php:585
+#: ../build/wp-ulike/admin/admin.php:75
+#: ../build/wp-ulike/inc/wp-functions.php:586 ../admin/admin.php:75
+#: ../inc/wp-functions.php:586
 msgid "WP ULike"
 msgstr "وردپرس یولایک"
 
-#: ../admin/admin.php:86
+#: ../build/wp-ulike/admin/admin.php:84 ../admin/admin.php:84
 msgid "Settings saved."
 msgstr "تنظیمات ذخیره شد"
 
-#: ../admin/admin.php:122 ../admin/admin.php:157
+#: ../build/wp-ulike/admin/admin.php:121 ../build/wp-ulike/admin/admin.php:156
+#: ../admin/admin.php:121 ../admin/admin.php:156
 msgid "Failed! An Error Has Occurred While Deleting All ULike Logs/Data"
 msgstr "خطا! مشکلی در عملیات حذف وقایع/داده ها وجود دارد"
 
-#: ../admin/admin.php:124 ../admin/admin.php:159
+#: ../build/wp-ulike/admin/admin.php:123 ../build/wp-ulike/admin/admin.php:158
+#: ../admin/admin.php:123 ../admin/admin.php:158
 msgid "Success! All ULike Logs/Data Have Been Deleted"
 msgstr "هووورا! همه وقایع/داده ها با موفقیت حذف شدند"
 
-#: ../admin/admin.php:215 ../inc/wp-strings.php:25
+#: ../build/wp-ulike/admin/admin.php:214
+#: ../build/wp-ulike/inc/wp-strings.php:25 ../admin/admin.php:214
+#: ../inc/wp-strings.php:25
 msgid "Default"
 msgstr "پیشفرض"
 
-#: ../admin/admin.php:219 ../admin/classes/class-widget.php:430
+#: ../build/wp-ulike/admin/admin.php:218
+#: ../build/wp-ulike/admin/classes/class-widget.php:430 ../admin/admin.php:218
+#: ../admin/classes/class-widget.php:430
 msgid "Heart"
 msgstr "قلب"
 
-#: ../admin/admin.php:223
+#: ../build/wp-ulike/admin/admin.php:222 ../admin/admin.php:222
 msgid "Robeen"
 msgstr "روبین"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:11
 #: ../admin/classes/class-widget.php:11
 msgid "WP Ulike Widget"
 msgstr "ابزارک یولایک"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:12
 #: ../admin/classes/class-widget.php:12
 msgid ""
 "An advanced widget that gives you all most liked records with different types"
 msgstr ""
 "یک ابزارک ساده و کاربردی برای نمایش بیشترین لایک شده ها در چندین نوع مختلف"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:96
 #: ../admin/classes/class-widget.php:96
 msgid "on"
 msgstr "در"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:139
 #: ../admin/classes/class-widget.php:139
 msgid "you haven't liked any post yet!"
 msgstr "شما هنوز هیچ نوشته ای را لایک نکرده اید! :("
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:394
 #: ../admin/classes/class-widget.php:394
 msgid "Most Liked"
 msgstr "بیشترین لایک شده ها"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:398
 #: ../admin/classes/class-widget.php:398
 msgid "Title:"
 msgstr "عنوان:"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:403
 #: ../admin/classes/class-widget.php:403
 msgid "Type:"
 msgstr "نوع:"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:409
+#: ../build/wp-ulike/inc/wp-strings.php:28
 #: ../admin/classes/class-widget.php:409 ../inc/wp-strings.php:28
 msgid "Most Liked Users"
 msgstr "پرلایک ترین کاربران"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:410
 #: ../admin/classes/class-widget.php:410
 msgid "Last Posts Liked By User"
 msgstr "آخرین مطالب لایک شده توسط کاربر"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:415
 #: ../admin/classes/class-widget.php:415
 msgid "Period:"
 msgstr "دوره زمانی:"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:417
 #: ../admin/classes/class-widget.php:417
 msgid "All The Times"
 msgstr "همه زمان ها"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:418
 #: ../admin/classes/class-widget.php:418
 msgid "Year"
 msgstr "سال"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:427
 #: ../admin/classes/class-widget.php:427
 msgid "Style:"
 msgstr "قالب:"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:429
 #: ../admin/classes/class-widget.php:429
 msgid "Simple"
 msgstr "ساده"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:435
 #: ../admin/classes/class-widget.php:435
 msgid "Title Trim (Length):"
 msgstr "برش عنوان (طول):"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:441
 #: ../admin/classes/class-widget.php:441
 msgid "Number of items to show:"
 msgstr "تعداد آیتم ها:"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:447
 #: ../admin/classes/class-widget.php:447
 msgid "Thumbnail/Avatar size:"
 msgstr "سایز تصویرشاخص/آواتار:"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:453
 #: ../admin/classes/class-widget.php:453
 msgid "Profile URL:"
 msgstr "لینک پروفایل به:"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:455
+#: ../build/wp-ulike/admin/classes/class-settings.php:97
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:342
 #: ../admin/classes/class-widget.php:455
 #: ../admin/classes/class-settings.php:97
 #: ../admin/classes/tmp/settings.php:342
 msgid "BuddyPress"
 msgstr "بادی پرس"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:456
 #: ../admin/classes/class-widget.php:456
 msgid "UltimateMember"
 msgstr "افزونه UltimateMember"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:462
 #: ../admin/classes/class-widget.php:462
 msgid "Activate Like Counter"
 msgstr "فعال سازی شمارنده"
 
+#: ../build/wp-ulike/admin/classes/class-widget.php:467
 #: ../admin/classes/class-widget.php:467
 msgid "Activate Thumbnail/Avatar"
 msgstr "فعال سازی تصویرشاخص/آواتار"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:17
 #: ../admin/classes/class-settings.php:17
 msgid "Custom Settings"
 msgstr "تنظیمات سفارشی"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:29
 #: ../admin/classes/class-settings.php:29
 msgid "Reset Settings"
 msgstr "بازیابی تنظیمات"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:44
 #: ../admin/classes/class-settings.php:44
 msgid "Similar Settings"
 msgstr "تنظیمات مشابه"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:48
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:143
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:231
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:382
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:498
 #: ../admin/classes/class-settings.php:48
 #: ../admin/classes/tmp/settings.php:143 ../admin/classes/tmp/settings.php:231
 #: ../admin/classes/tmp/settings.php:382 ../admin/classes/tmp/settings.php:498
 msgid "Logging Method"
 msgstr "روش وقایع نگاری"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:50
 #: ../admin/classes/class-settings.php:50
 msgid ""
 "If you select <strong>\"Do Not Log\"</strong> method: Any data logs can't "
@@ -655,6 +782,7 @@ msgstr ""
 "وقایعی ذخیره نمی شود، هیچ شرط محدود کننده ای برای  لایک/دیسلایک بررسی نمی "
 "شود، قابلیت لغو لایک/دیسلایک وجود نخواهد داشت"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:51
 #: ../admin/classes/class-settings.php:51
 msgid ""
 "If you select <strong>\"Logged By Cookie\"</strong> method: Any data logs "
@@ -665,6 +793,7 @@ msgstr ""
 "ذخیره نمی شود، شرط بررسی  لایک/دیسلایک توسط  کوکی محدود می شود، قابلیت لغو "
 "لایک/دیسلایک وجود نخواهد داشت"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:52
 #: ../admin/classes/class-settings.php:52
 msgid ""
 "If you select <strong>\"Logged By IP\"</strong> method: Data logs will save "
@@ -673,6 +802,7 @@ msgstr ""
 "اگر گزینه <strong>\"با آی پی\"</strong> را انتخاب کنید: اطلاعات وقایع همه ی "
 "کاربران ذخیره می شود، شرط بررسی  لایک/دیسلایک فقط توسط آی پی انجام میگیرد"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:53
 #: ../admin/classes/class-settings.php:53
 msgid ""
 "If you select <strong>\"Logged By Cookie & IP\"</strong> method: Data logs "
@@ -683,6 +813,7 @@ msgstr ""
 "همه ی کاربران ذخیره می شود، شرط بررسی  لایک/دیسلایک توسط  کوکی و آی پی انجام "
 "میگیرد"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:54
 #: ../admin/classes/class-settings.php:54
 msgid ""
 "If you select <strong>\"Logged By Username\"</strong> method: data logs only "
@@ -693,63 +824,90 @@ msgstr ""
 "تنها برای کابران عضو ذخیره می شود، شرط بررسی  لایک/دیسلایک توسط نام کاربری "
 "انجام میگیرد، کاربران مهمان اجازه لغو لایک/دیسلایک را نخواهند داشت"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:57
 #: ../admin/classes/class-settings.php:57
 msgid "Template Variables"
 msgstr "تمپلیت متغیرها"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:59
 #: ../admin/classes/class-settings.php:59
 msgid "Start the loop of logs"
 msgstr "شروع حلقه وقایع"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:59
+#: ../build/wp-ulike/admin/classes/class-settings.php:60
 #: ../admin/classes/class-settings.php:59
 #: ../admin/classes/class-settings.php:60
 msgid "required"
 msgstr "لازم"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:60
 #: ../admin/classes/class-settings.php:60
 msgid "End of the while loop"
 msgstr "پایان حلقه وقایع"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:61
+#: ../build/wp-ulike/admin/classes/class-settings.php:65
+#: ../build/wp-ulike/admin/classes/class-settings.php:69
 #: ../admin/classes/class-settings.php:61
 #: ../admin/classes/class-settings.php:65
 #: ../admin/classes/class-settings.php:69
 msgid "Display the liker name"
 msgstr "نمایش نام کاربر لایک کرده"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:62
 #: ../admin/classes/class-settings.php:62
 msgid "Display the liker avatar (By Gravatar)"
 msgstr "نمایش آواتار کاربر لایک کرده (توسط Gravatar)"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:63
 #: ../admin/classes/class-settings.php:63
 msgid "Display the BuddyPress user profile url"
 msgstr "نمایش پیوند مربوط به پروفایل های بادی پرس"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:64
 #: ../admin/classes/class-settings.php:64
 msgid "Display the UltimateMemebr user profile url"
 msgstr "نمایش پیوند مربوط به پروفایل های افزونه UltimateMemebr"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:66
+#: ../build/wp-ulike/admin/classes/class-settings.php:70
 #: ../admin/classes/class-settings.php:66
 #: ../admin/classes/class-settings.php:70
 msgid "Display the permalink"
 msgstr "نمایش پیوند ارجاعی"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:67
+#: ../build/wp-ulike/admin/classes/class-settings.php:72
 #: ../admin/classes/class-settings.php:67
 #: ../admin/classes/class-settings.php:72
 msgid "Display the likes count number"
 msgstr "نمایش شمارنده تعداد لایک ها"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:68
 #: ../admin/classes/class-settings.php:68
 msgid "Display the post title"
 msgstr "نمایش عنوان نوشته"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:71
 #: ../admin/classes/class-settings.php:71
 msgid "Display the comment author name"
 msgstr "نمایش نام نویسنده دیدگاه"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:80
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:87
 #: ../admin/classes/class-settings.php:80 ../admin/classes/tmp/settings.php:87
 msgid "Posts"
 msgstr "نوشته ها"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:82
+#: ../build/wp-ulike/admin/classes/class-settings.php:91
+#: ../build/wp-ulike/admin/classes/class-settings.php:99
+#: ../build/wp-ulike/admin/classes/class-settings.php:107
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:98
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:208
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:353
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:476
 #: ../admin/classes/class-settings.php:82
 #: ../admin/classes/class-settings.php:91
 #: ../admin/classes/class-settings.php:99
@@ -759,6 +917,7 @@ msgstr "نوشته ها"
 msgid "Automatic display"
 msgstr "نمایش خودکار"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:82
 #: ../admin/classes/class-settings.php:82
 msgid ""
 "If you disable this option, you have to put manually this code on wordpress "
@@ -767,6 +926,14 @@ msgstr ""
 "اگر این قابلیت را غیر فعال کنید، باید به صورت دستی این کد را در حلقه مطالب "
 "وردپرس قرار دهید "
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:82
+#: ../build/wp-ulike/admin/classes/class-settings.php:91
+#: ../build/wp-ulike/admin/classes/class-settings.php:99
+#: ../build/wp-ulike/admin/classes/class-settings.php:107
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:174
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:262
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:413
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:529
 #: ../admin/classes/class-settings.php:82
 #: ../admin/classes/class-settings.php:91
 #: ../admin/classes/class-settings.php:99
@@ -776,6 +943,10 @@ msgstr ""
 msgid "Users Like Box Template"
 msgstr "قالب جعبه لایک کاربران"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:82
+#: ../build/wp-ulike/admin/classes/class-settings.php:91
+#: ../build/wp-ulike/admin/classes/class-settings.php:99
+#: ../build/wp-ulike/admin/classes/class-settings.php:107
 #: ../admin/classes/class-settings.php:82
 #: ../admin/classes/class-settings.php:91
 #: ../admin/classes/class-settings.php:99
@@ -783,16 +954,22 @@ msgstr "قالب جعبه لایک کاربران"
 msgid "Default Template:"
 msgstr "قالب پیشفرض:"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:82
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:173
+#: ../build/wp-ulike/inc/classes/class-ulike.php:435
 #: ../admin/classes/class-settings.php:82
-#: ../admin/classes/tmp/settings.php:173 ../inc/classes/class-ulike.php:470
+#: ../admin/classes/tmp/settings.php:173 ../inc/classes/class-ulike.php:435
 msgid "Users who have LIKED this post:"
 msgstr "کاربرانی که این مطلب را پسندیده اند:"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:89
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:197
 #: ../admin/classes/class-settings.php:89
 #: ../admin/classes/tmp/settings.php:197
 msgid "Comments"
 msgstr "دیدگاه ها"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:91
 #: ../admin/classes/class-settings.php:91
 msgid ""
 "If you disable this option, you have to put manually this code on comments "
@@ -801,11 +978,15 @@ msgstr ""
 "اگر این قابلیت را غیر فعال کنید، باید به صورت دستی این کد را در متن دیدگاه "
 "ها قرار دهید "
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:91
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:261
 #: ../admin/classes/class-settings.php:91
 #: ../admin/classes/tmp/settings.php:261
 msgid "Users who have LIKED this comment:"
 msgstr "کاربرانی که این دیدگاه را پسندیده اند:"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:99
+#: ../build/wp-ulike/admin/classes/class-settings.php:107
 #: ../admin/classes/class-settings.php:99
 #: ../admin/classes/class-settings.php:107
 msgid ""
@@ -815,126 +996,185 @@ msgstr ""
 "اگر این قابلیت را غیر فعال کنید، باید به صورت دستی این کد را در متن فعالیت "
 "ها قرار دهید "
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:99
+#: ../build/wp-ulike/admin/classes/class-settings.php:107
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:412
 #: ../admin/classes/class-settings.php:99
 #: ../admin/classes/class-settings.php:107
 #: ../admin/classes/tmp/settings.php:412
 msgid "Users who have liked this activity:"
 msgstr "کاربرانی که این فعالیت را پسندیده اند:"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:99
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:433
 #: ../admin/classes/class-settings.php:99
 #: ../admin/classes/tmp/settings.php:433
 msgid "Post Activity Text"
 msgstr "متن فعالیت مطالب"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:99
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:439
 #: ../admin/classes/class-settings.php:99
 #: ../admin/classes/tmp/settings.php:439
 msgid "Comment Activity Text"
 msgstr "متن فعالیت دیدگاه ها"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:105
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:465
 #: ../admin/classes/class-settings.php:105
 #: ../admin/classes/tmp/settings.php:465
 msgid "bbPress"
 msgstr "بی بی پرس"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:112
 #: ../admin/classes/class-settings.php:112
 msgid "For more information:"
 msgstr "برای اطلاعات بیشتر:"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:171
 #: ../admin/classes/class-settings.php:171
 msgid "Default settings have been reset."
 msgstr "تنظیمات پیشفرض، بازیابی شد."
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:246
 #: ../admin/classes/class-settings.php:246
 msgid ""
 "Do you really want to reset all these settings to their default values ?"
 msgstr "آیا از بازیابی تنظیمات پیشفرض مطمئن هستید؟!؟"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:311
+#: ../build/wp-ulike/admin/classes/class-settings.php:322
+#: ../build/wp-ulike/admin/classes/class-settings.php:349
 #: ../admin/classes/class-settings.php:311
 #: ../admin/classes/class-settings.php:322
 #: ../admin/classes/class-settings.php:349
 msgid "No options defined."
 msgstr "هیچ تنظیماتی تعریف نشده است."
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:336
 #: ../admin/classes/class-settings.php:336
 #, php-format
 msgid "Select %s"
 msgstr "انتخاب %s"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:337
 #: ../admin/classes/class-settings.php:337
 #, php-format
 msgid "Remove %s"
 msgstr "حذف %s"
 
+#: ../build/wp-ulike/admin/classes/class-settings.php:361
 #: ../admin/classes/class-settings.php:361
 msgid "No action defined."
 msgstr "هیچ کاری تعریف نشده است."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:11
 #: ../admin/classes/tmp/settings.php:11
 msgid "General"
 msgstr "عمومی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:15
 #: ../admin/classes/tmp/settings.php:15
 msgid "Button Type"
 msgstr "حالت دکمه"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:18
 #: ../admin/classes/tmp/settings.php:18
 msgid "Icon"
 msgstr "آیکن"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:19
 #: ../admin/classes/tmp/settings.php:19
 msgid "Text"
 msgstr "متن"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:24
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:28
 #: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:28
 msgid "Button Text"
 msgstr "متن دکمه"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:27
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:28
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:37
 #: ../admin/classes/tmp/settings.php:27 ../admin/classes/tmp/settings.php:28
 #: ../admin/classes/tmp/settings.php:37
 msgid "Unlike"
 msgstr " لغو پسندیدن"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:32
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:37
 #: ../admin/classes/tmp/settings.php:32 ../admin/classes/tmp/settings.php:37
 msgid "Button Icon"
 msgstr "آیکن دکمه"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:33
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:38
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:326
 #: ../admin/classes/tmp/settings.php:33 ../admin/classes/tmp/settings.php:38
 #: ../admin/classes/tmp/settings.php:326
 msgid "Best size: 16x16"
 msgstr "سایز مناسب : 16x16"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:41
 #: ../admin/classes/tmp/settings.php:41
 msgid "You have not permission to unlike"
 msgstr "شما اجازه لغو پسندیدن را ندارید"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:42
 #: ../admin/classes/tmp/settings.php:42
 msgid "Permission Text"
 msgstr "متن تولتیپ دسترسی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:46
 #: ../admin/classes/tmp/settings.php:46
 msgid "Users Login Type"
 msgstr "متن ورود کاربران"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:49
 #: ../admin/classes/tmp/settings.php:49
 msgid "Alert Box"
 msgstr "جعبه پیغام"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:50
 #: ../admin/classes/tmp/settings.php:50
 msgid "Like Button"
 msgstr "دکمه لایک"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:54
 #: ../admin/classes/tmp/settings.php:54
 msgid "You Should Login To Submit Your Like"
 msgstr "برای ثبت لایک، باید وارد شوید"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:55
 #: ../admin/classes/tmp/settings.php:55
 msgid "Users Login Text"
 msgstr "متن ورود کاربران"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:60
 #: ../admin/classes/tmp/settings.php:60
 msgid "Format Number"
 msgstr "فرمت اعداد"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:61
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:68
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:99
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:130
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:137
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:156
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:209
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:225
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:244
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:291
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:354
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:369
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:376
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:395
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:420
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:427
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:477
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:492
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:511
 #: ../admin/classes/tmp/settings.php:61 ../admin/classes/tmp/settings.php:68
 #: ../admin/classes/tmp/settings.php:99 ../admin/classes/tmp/settings.php:130
 #: ../admin/classes/tmp/settings.php:137 ../admin/classes/tmp/settings.php:156
@@ -948,147 +1188,215 @@ msgstr "فرمت اعداد"
 msgid "Activate"
 msgstr "فعال سازی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:62
 #: ../admin/classes/tmp/settings.php:62
 msgid "Convert numbers of Likes with string (kilobyte) format."
 msgstr ""
 "با فعال سازی این گزینه، می توانید اعداد بالای 1000 را با فرمت رشته ای "
 "(کیلوبایت) نمایش دهید."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:67
 #: ../admin/classes/tmp/settings.php:67
 msgid "Notifications"
 msgstr "اطلاعیه ها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:69
 #: ../admin/classes/tmp/settings.php:69
 msgid "Custom toast messages after each activity"
 msgstr "نمایش پیام های سفارشی بعد از هر فعالیت"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:72
 #: ../admin/classes/tmp/settings.php:72
 msgid "Thanks! You Liked This."
 msgstr "متشکریم! شما این را لایک کردید."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:73
 #: ../admin/classes/tmp/settings.php:73
 msgid "Liked Notice Message"
 msgstr "پیغام اطلاعیه پسندیدن"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:76
 #: ../admin/classes/tmp/settings.php:76
 msgid "Sorry! You unliked this."
 msgstr "متأسفیم! شما این را نپسندیدید."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:77
 #: ../admin/classes/tmp/settings.php:77
 msgid "Unliked Notice Message"
 msgstr "پیغام اطلاعیه لغو پسندیدن"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:92
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:202
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:347
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:470
+#: ../build/wp-ulike/inc/wp-strings.php:10
 #: ../admin/classes/tmp/settings.php:92 ../admin/classes/tmp/settings.php:202
 #: ../admin/classes/tmp/settings.php:347 ../admin/classes/tmp/settings.php:470
 #: ../inc/wp-strings.php:10
 msgid "Themes"
 msgstr "قالب ها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:103
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:213
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:358
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:481
 #: ../admin/classes/tmp/settings.php:103 ../admin/classes/tmp/settings.php:213
 #: ../admin/classes/tmp/settings.php:358 ../admin/classes/tmp/settings.php:481
 msgid "Auto Display Position"
 msgstr "محل قرار گیری در نمایش خودکار"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:106
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:216
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:484
 #: ../admin/classes/tmp/settings.php:106 ../admin/classes/tmp/settings.php:216
 #: ../admin/classes/tmp/settings.php:484
 msgid "Top of Content"
 msgstr "بالای محتوا"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:107
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:217
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:485
 #: ../admin/classes/tmp/settings.php:107 ../admin/classes/tmp/settings.php:217
 #: ../admin/classes/tmp/settings.php:485
 msgid "Bottom of Content"
 msgstr "پایین محتوا"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:108
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:218
 #: ../admin/classes/tmp/settings.php:108 ../admin/classes/tmp/settings.php:218
 msgid "Top and Bottom"
 msgstr "بالا و پایین"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:113
 #: ../admin/classes/tmp/settings.php:113
 msgid "Auto Display Filter"
 msgstr "فیلتر گذاری در نمایش خودکار"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:116
 #: ../admin/classes/tmp/settings.php:116
 msgid "Single Posts"
 msgstr "تک نوشته ها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:117
 #: ../admin/classes/tmp/settings.php:117
 msgid "Pages"
 msgstr "برگه ها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:118
 #: ../admin/classes/tmp/settings.php:118
 msgid "Archives"
 msgstr "بایگانی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:119
 #: ../admin/classes/tmp/settings.php:119
 msgid "Categories"
 msgstr "دسته بندی ها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:120
 #: ../admin/classes/tmp/settings.php:120
 msgid "Search Results"
 msgstr "نتایج جستجوها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:121
 #: ../admin/classes/tmp/settings.php:121
 msgid "Tags"
 msgstr "برچسب ها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:122
 #: ../admin/classes/tmp/settings.php:122
 msgid "Author Page"
 msgstr "صفحه نویسنده"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:124
 #: ../admin/classes/tmp/settings.php:124
 msgid "You can filter theses pages on auto display option."
 msgstr ""
 "شما می توانید بر روی این صفحات فیلتر گذاری کنید تا دکمه لایک نمایش داده نشود"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:129
 #: ../admin/classes/tmp/settings.php:129
 msgid "Google Rich Snippets"
 msgstr "گوگل ریچ اسنیپت"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:131
 #: ../admin/classes/tmp/settings.php:131
 msgid "Add rich snippet for ratings in form of schema.org"
 msgstr "این آپشن، رتبه ی نوشته شما را از بین 5 ستاره مشخص می کند."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:136
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:224
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:375
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:491
 #: ../admin/classes/tmp/settings.php:136 ../admin/classes/tmp/settings.php:224
 #: ../admin/classes/tmp/settings.php:375 ../admin/classes/tmp/settings.php:491
 msgid "Only registered Users"
 msgstr "محدودسازی لایک کاربران"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:138
 #: ../admin/classes/tmp/settings.php:138
 msgid "<strong>Only</strong> registered users have permission to like posts."
 msgstr ""
 "با فعال سازی این گزینه، <strong>تنها</strong> کاربران عضو شده، می توانند "
 "مطالب را لایک کنند."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:145
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:233
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:384
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:500
 #: ../admin/classes/tmp/settings.php:145 ../admin/classes/tmp/settings.php:233
 #: ../admin/classes/tmp/settings.php:384 ../admin/classes/tmp/settings.php:500
 msgid "Do Not Log"
 msgstr "وقایع نگاری نکن"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:146
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:234
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:385
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:501
 #: ../admin/classes/tmp/settings.php:146 ../admin/classes/tmp/settings.php:234
 #: ../admin/classes/tmp/settings.php:385 ../admin/classes/tmp/settings.php:501
 msgid "Logged By Cookie"
 msgstr "با کوکی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:147
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:235
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:386
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:502
 #: ../admin/classes/tmp/settings.php:147 ../admin/classes/tmp/settings.php:235
 #: ../admin/classes/tmp/settings.php:386 ../admin/classes/tmp/settings.php:502
 msgid "Logged By IP"
 msgstr "با آی پی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:148
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:236
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:387
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:503
 #: ../admin/classes/tmp/settings.php:148 ../admin/classes/tmp/settings.php:236
 #: ../admin/classes/tmp/settings.php:387 ../admin/classes/tmp/settings.php:503
 msgid "Logged By Cookie & IP"
 msgstr "با کوکی و آی پی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:149
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:237
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:388
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:504
 #: ../admin/classes/tmp/settings.php:149 ../admin/classes/tmp/settings.php:237
 #: ../admin/classes/tmp/settings.php:388 ../admin/classes/tmp/settings.php:504
 msgid "Logged By Username"
 msgstr "با نام کاربری"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:155
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:243
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:394
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:510
 #: ../admin/classes/tmp/settings.php:155 ../admin/classes/tmp/settings.php:243
 #: ../admin/classes/tmp/settings.php:394 ../admin/classes/tmp/settings.php:510
 msgid "Show Liked Users Box"
 msgstr "نمایش باکس کاربران لایک کرده"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:157
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:245
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:396
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:512
 #: ../admin/classes/tmp/settings.php:157 ../admin/classes/tmp/settings.php:245
 #: ../admin/classes/tmp/settings.php:396 ../admin/classes/tmp/settings.php:512
 msgid ""
@@ -1097,37 +1405,67 @@ msgstr ""
 "با فعال سازی این گزینه، می توانید آواتار کاربران لایک کرده، را در زیر دکمه "
 "لایک، نمایش دهید."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:162
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:250
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:401
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:517
 #: ../admin/classes/tmp/settings.php:162 ../admin/classes/tmp/settings.php:250
 #: ../admin/classes/tmp/settings.php:401 ../admin/classes/tmp/settings.php:517
 msgid "Size of Gravatars"
 msgstr "سایز آوتار"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:163
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:251
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:402
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:518
 #: ../admin/classes/tmp/settings.php:163 ../admin/classes/tmp/settings.php:251
 #: ../admin/classes/tmp/settings.php:402 ../admin/classes/tmp/settings.php:518
 msgid "Size of Gravatars to return (max is 512)"
 msgstr "سایز تصاویر گراواتار (بیشترین اندازه 512)"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:168
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:256
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:407
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:523
 #: ../admin/classes/tmp/settings.php:168 ../admin/classes/tmp/settings.php:256
 #: ../admin/classes/tmp/settings.php:407 ../admin/classes/tmp/settings.php:523
 msgid "Number Of The Users"
 msgstr "تعداد کاربران قابل نمایش"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:169
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:257
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:408
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:524
 #: ../admin/classes/tmp/settings.php:169 ../admin/classes/tmp/settings.php:257
 #: ../admin/classes/tmp/settings.php:408 ../admin/classes/tmp/settings.php:524
 msgid "The number of users to show in the users liked box"
 msgstr "حداکثر چند کاربر در باکس لایک کنندگان، نمایش داده شوند؟!؟"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:175
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:263
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:414
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:434
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:440
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:530
 #: ../admin/classes/tmp/settings.php:175 ../admin/classes/tmp/settings.php:263
 #: ../admin/classes/tmp/settings.php:414 ../admin/classes/tmp/settings.php:434
 #: ../admin/classes/tmp/settings.php:440 ../admin/classes/tmp/settings.php:530
 msgid "Allowed Variables:"
 msgstr "متغیرهای قابل استفاده:"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:179
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:267
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:444
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:534
 #: ../admin/classes/tmp/settings.php:179 ../admin/classes/tmp/settings.php:267
 #: ../admin/classes/tmp/settings.php:444 ../admin/classes/tmp/settings.php:534
 msgid "Delete All Logs"
 msgstr "حذف تمام وقایع"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:180
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:268
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:445
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:535
 #: ../admin/classes/tmp/settings.php:180 ../admin/classes/tmp/settings.php:268
 #: ../admin/classes/tmp/settings.php:445 ../admin/classes/tmp/settings.php:535
 msgid "You Are About To Delete All Likes Logs. This Action Is Not Reversible."
@@ -1135,11 +1473,19 @@ msgstr ""
 "شما قصد دارید که تمامی \"وقایع\" ثبت شده را حذف کنید! این عمل برگشت نا پذیر "
 "است."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:185
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:273
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:450
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:540
 #: ../admin/classes/tmp/settings.php:185 ../admin/classes/tmp/settings.php:273
 #: ../admin/classes/tmp/settings.php:450 ../admin/classes/tmp/settings.php:540
 msgid "Delete All Data"
 msgstr "حذف تمام داده ها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:186
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:274
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:451
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:541
 #: ../admin/classes/tmp/settings.php:186 ../admin/classes/tmp/settings.php:274
 #: ../admin/classes/tmp/settings.php:451 ../admin/classes/tmp/settings.php:541
 msgid "You Are About To Delete All Likes Data. This Action Is Not Reversible."
@@ -1147,6 +1493,7 @@ msgstr ""
 "شما قصد دارید که تمامی \"داده ها\" ثبت شده را حذف کنید! این عمل برگشت نا "
 "پذیر است."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:226
 #: ../admin/classes/tmp/settings.php:226
 msgid ""
 "<strong>Only</strong> registered users have permission to like comments."
@@ -1154,66 +1501,84 @@ msgstr ""
 "با فعال سازی این گزینه، <strong>تنها</strong> کاربران عضو شده، می توانند "
 "دیدگاه ها را لایک کنند."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:285
 #: ../admin/classes/tmp/settings.php:285
 msgid "Customize"
 msgstr "سفارشی سازی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:290
 #: ../admin/classes/tmp/settings.php:290
 msgid "Custom Style"
 msgstr "سفارشی سازی"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:295
 #: ../admin/classes/tmp/settings.php:295
 msgid "Active this option to see the custom style settings."
 msgstr ""
 "با فعال سازی این گزینه، می توانید استایل سفارشی خود را در افزونه به کار "
 "ببرید."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:299
 #: ../admin/classes/tmp/settings.php:299
 msgid "Button style"
 msgstr "دکمه لایک"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:300
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:313
 #: ../admin/classes/tmp/settings.php:300 ../admin/classes/tmp/settings.php:313
 msgid "Background"
 msgstr "رنگ پس زمینه"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:304
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:317
 #: ../admin/classes/tmp/settings.php:304 ../admin/classes/tmp/settings.php:317
 msgid "Border Color"
 msgstr "رنگ حاشیه"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:308
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:321
 #: ../admin/classes/tmp/settings.php:308 ../admin/classes/tmp/settings.php:321
 msgid "Text Color"
 msgstr "رنگ متن"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:312
 #: ../admin/classes/tmp/settings.php:312
 msgid "Counter Style"
 msgstr "باکس شمارنده"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:325
 #: ../admin/classes/tmp/settings.php:325
 msgid "Loading Animation"
 msgstr "انیمیشن بارگذاری"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:330
 #: ../admin/classes/tmp/settings.php:330
 msgid "Custom CSS"
 msgstr "سفارشی سازی css"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:361
 #: ../admin/classes/tmp/settings.php:361
 msgid "Activity Content"
 msgstr "در متن فعالیت"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:362
 #: ../admin/classes/tmp/settings.php:362
 msgid "Activity Meta"
 msgstr "در متاباکس فعالیت"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:368
 #: ../admin/classes/tmp/settings.php:368
 msgid "Activity Comment"
 msgstr "نظرات فعالیت ها"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:370
 #: ../admin/classes/tmp/settings.php:370
 msgid "Add the possibility to like Buddypress comments in the activity stream"
 msgstr ""
 " با فعال سازی این گزینه،‌ سیستم لایک در بخش دیدگاه های مربوط به بادی پرس فعال "
 "می شود."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:377
 #: ../admin/classes/tmp/settings.php:377
 msgid ""
 "<strong>Only</strong> registered users have permission to like activities."
@@ -1221,68 +1586,79 @@ msgstr ""
 "با فعال سازی این گزینه، <strong>تنها</strong> کاربران عضو شده، می توانند "
 "فعالیت های بادی پرس را لایک کنند."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:419
 #: ../admin/classes/tmp/settings.php:419
 msgid "BuddyPress Activity"
 msgstr "فعالیت های بادی پرس"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:421
 #: ../admin/classes/tmp/settings.php:421
 msgid "insert new likes in buddyPress activity page"
 msgstr ""
 "با فعال سازی این گزینه، اطلاعات جدیدترین لایک ها به بخش فعالیت های بادی پرس "
 "اضافه خواهد شد."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:426
 #: ../admin/classes/tmp/settings.php:426
 msgid "BuddyPress Custom Notification"
 msgstr "اطلاعیه های خصوصی بادی پرس"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:428
 #: ../admin/classes/tmp/settings.php:428
 msgid "Sends out notifications when you get a like from someone"
 msgstr "ارسال اطلاعیه های خصوصی به کاربران هنگامی که مطالب آنها لایک می شود"
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:493
 #: ../admin/classes/tmp/settings.php:493
 msgid "<strong>Only</strong> registered users have permission to like Topics."
 msgstr ""
 "با فعال سازی این گزینه، <strong>تنها</strong> کاربران عضو شده، می توانند "
 "تاپیک ها  را لایک کنند."
 
+#: ../build/wp-ulike/admin/classes/tmp/settings.php:528
 #: ../admin/classes/tmp/settings.php:528
 msgid "Users who have liked this topic:"
 msgstr "کاربرانی که این تاپیک را پسندیده اند:"
 
-#: ../inc/wp-ulike.php:56 ../inc/wp-ulike.php:240
+#: ../build/wp-ulike/inc/wp-ulike.php:65
+#: ../build/wp-ulike/inc/wp-ulike.php:276 ../inc/wp-ulike.php:65
+#: ../inc/wp-ulike.php:276
 msgid "You need to login in order to like this post: "
 msgstr "برای امتیاز دهی به این مطلب، لطفا وارد شوید: "
 
-#: ../inc/wp-ulike.php:56 ../inc/wp-ulike.php:113 ../inc/wp-ulike.php:177
-#: ../inc/wp-ulike.php:240
+#: ../build/wp-ulike/inc/wp-ulike.php:65
+#: ../build/wp-ulike/inc/wp-ulike.php:131
+#: ../build/wp-ulike/inc/wp-ulike.php:204
+#: ../build/wp-ulike/inc/wp-ulike.php:276 ../inc/wp-ulike.php:65
+#: ../inc/wp-ulike.php:131 ../inc/wp-ulike.php:204 ../inc/wp-ulike.php:276
 msgid "click here"
 msgstr "برای ورود کلیک کنید"
 
-#: ../inc/wp-ulike.php:113
+#: ../build/wp-ulike/inc/wp-ulike.php:131 ../inc/wp-ulike.php:131
 msgid "You need to login in order to like this comment: "
 msgstr "برای امتیاز دهی به این دیدگاه، لطفا وارد شوید: "
 
-#: ../inc/wp-ulike.php:177
+#: ../build/wp-ulike/inc/wp-ulike.php:204 ../inc/wp-ulike.php:204
 msgid "You need to login in order to like this activity: "
 msgstr "برای امتیاز دهی به این فعالیت، لطفا وارد شوید: "
 
-#: ../inc/wp-ulike.php:297
+#: ../build/wp-ulike/inc/wp-ulike.php:335 ../inc/wp-ulike.php:335
 msgid "Error: This Method Is Not Exist!"
 msgstr "خطا: این متد وجود خارجی ندارد!"
 
-#: ../inc/wp-functions.php:300
+#: ../build/wp-ulike/inc/wp-functions.php:300 ../inc/wp-functions.php:300
 msgid "WP ULike Activity"
 msgstr "فعالیت های وردپرس یولایک"
 
-#: ../inc/wp-functions.php:420
+#: ../build/wp-ulike/inc/wp-functions.php:420 ../inc/wp-functions.php:420
 msgid "Likes"
 msgstr "لایک ها"
 
-#: ../inc/wp-functions.php:486
+#: ../build/wp-ulike/inc/wp-functions.php:487 ../inc/wp-functions.php:487
 msgid "You have a new like from"
 msgstr "شما یک لایک جدید دریافت کرده اید! توسط :"
 
-#: ../inc/wp-functions.php:586
+#: ../build/wp-ulike/inc/wp-functions.php:587 ../inc/wp-functions.php:587
 msgid ""
 "This hook award / deducts points from users who Like/Unlike any content of "
 "WordPress, bbPress, BuddyPress & ..."
@@ -1291,162 +1667,204 @@ msgstr ""
 "و... را لایک/آنلایک کنند (بعلاوه افرادی که نوشته آنها لایک/آنلایک شده)، می "
 "توانند به ترتیب امتیازات مثبت و منفی دریافت کنند."
 
-#: ../inc/wp-functions.php:594
+#: ../build/wp-ulike/inc/wp-functions.php:595 ../inc/wp-functions.php:595
 msgid "Liking Content"
 msgstr "لایک نوشته"
 
-#: ../inc/wp-functions.php:595
+#: ../build/wp-ulike/inc/wp-functions.php:596 ../inc/wp-functions.php:596
 msgid "Liked Content"
 msgstr "نوشته لایک شده"
 
-#: ../inc/wp-functions.php:596
+#: ../build/wp-ulike/inc/wp-functions.php:597 ../inc/wp-functions.php:597
 msgid "Unliking Content"
 msgstr "لغو لایک نوشته"
 
-#: ../inc/wp-functions.php:597
+#: ../build/wp-ulike/inc/wp-functions.php:598 ../inc/wp-functions.php:598
 msgid "Unliked Content"
 msgstr "نوشته لغو لایک شده"
 
-#: ../inc/wp-functions.php:619 ../inc/wp-functions.php:653
+#: ../build/wp-ulike/inc/wp-functions.php:620
+#: ../build/wp-ulike/inc/wp-functions.php:654 ../inc/wp-functions.php:620
+#: ../inc/wp-functions.php:654
 msgid "Recent Posts Liked"
 msgstr "تازه ترین مطالب لایک شده"
 
-#: ../inc/wp-functions.php:624 ../inc/wp-functions.php:693
+#: ../build/wp-ulike/inc/wp-functions.php:625
+#: ../build/wp-ulike/inc/wp-functions.php:694 ../inc/wp-functions.php:625
+#: ../inc/wp-functions.php:694
 msgid "Recent Comments Liked"
 msgstr "تازه ترین دیدگاه های لایک شده"
 
-#: ../inc/wp-functions.php:669 ../inc/wp-functions.php:710
+#: ../build/wp-ulike/inc/wp-functions.php:670
+#: ../build/wp-ulike/inc/wp-functions.php:711 ../inc/wp-functions.php:670
+#: ../inc/wp-functions.php:711
 msgid "This user has not made any likes."
 msgstr "این کاربر، هنوز هیچ موردی را نپسندیده است."
 
-#: ../inc/wp-strings.php:3
+#: ../build/wp-ulike/inc/wp-strings.php:3 ../inc/wp-strings.php:3
 msgid "Allow To Like"
 msgstr "مجاز به لایک"
 
-#: ../inc/wp-strings.php:4
+#: ../build/wp-ulike/inc/wp-strings.php:4 ../inc/wp-strings.php:4
 msgid "Guests Only"
 msgstr "فقط مهمانان"
 
-#: ../inc/wp-strings.php:5
+#: ../build/wp-ulike/inc/wp-strings.php:5 ../inc/wp-strings.php:5
 msgid "Registered Users Only"
 msgstr "فقط کاربران عضو شده"
 
-#: ../inc/wp-strings.php:6
+#: ../build/wp-ulike/inc/wp-strings.php:6 ../inc/wp-strings.php:6
 msgid "Registered Users And Guests"
 msgstr "کاربران عضو و مهمان"
 
-#: ../inc/wp-strings.php:7
+#: ../build/wp-ulike/inc/wp-strings.php:7 ../inc/wp-strings.php:7
 msgid "Who Is Allowed To Like?"
 msgstr "چه کسی اجازه‌ی امتیاز دادن دارد؟"
 
-#: ../inc/wp-strings.php:8
+#: ../build/wp-ulike/inc/wp-strings.php:8 ../inc/wp-strings.php:8
 msgid "Filter Options:"
 msgstr "گزینه‌های پالایش:"
 
-#: ../inc/wp-strings.php:9
+#: ../build/wp-ulike/inc/wp-strings.php:9 ../inc/wp-strings.php:9
 msgid "Sort Options:"
 msgstr "گزینه‌های مرتب‌سازی"
 
-#: ../inc/wp-strings.php:11
+#: ../build/wp-ulike/inc/wp-strings.php:11 ../inc/wp-strings.php:11
 msgid "Dislike"
 msgstr "دیسلایک"
 
-#: ../inc/wp-strings.php:12
+#: ../build/wp-ulike/inc/wp-strings.php:12 ../inc/wp-strings.php:12
 msgid "Dislike Support"
 msgstr "پشتیبانی از دیسلایک"
 
-#: ../inc/wp-strings.php:13
+#: ../build/wp-ulike/inc/wp-strings.php:13 ../inc/wp-strings.php:13
 msgid "Text After Dislike"
 msgstr "متن پس از دیسلایک"
 
-#: ../inc/wp-strings.php:14
+#: ../build/wp-ulike/inc/wp-strings.php:14 ../inc/wp-strings.php:14
 msgid "Show Counter"
 msgstr "نمایش شمارنده"
 
-#: ../inc/wp-strings.php:15
+#: ../build/wp-ulike/inc/wp-strings.php:15 ../inc/wp-strings.php:15
 msgid "Show tooltips"
 msgstr "نمایش تولتیپ"
 
-#: ../inc/wp-strings.php:16
+#: ../build/wp-ulike/inc/wp-strings.php:16 ../inc/wp-strings.php:16
 msgid "Alignment"
 msgstr "قرارگیری"
 
-#: ../inc/wp-strings.php:17
+#: ../build/wp-ulike/inc/wp-strings.php:17 ../inc/wp-strings.php:17
 msgid "Left"
 msgstr "چپ"
 
-#: ../inc/wp-strings.php:18
+#: ../build/wp-ulike/inc/wp-strings.php:18 ../inc/wp-strings.php:18
 msgid "Center"
 msgstr "وسط"
 
-#: ../inc/wp-strings.php:19
+#: ../build/wp-ulike/inc/wp-strings.php:19 ../inc/wp-strings.php:19
 msgid "Right"
 msgstr "راست"
 
-#: ../inc/wp-strings.php:20
+#: ../build/wp-ulike/inc/wp-strings.php:20 ../inc/wp-strings.php:20
 msgid "Cookie Life time"
 msgstr "عمر کوکی"
 
-#: ../inc/wp-strings.php:21
+#: ../build/wp-ulike/inc/wp-strings.php:21 ../inc/wp-strings.php:21
 msgid "BuddyPress Notifications"
 msgstr "اطلاعیه های بادی پرس"
 
-#: ../inc/wp-strings.php:22
+#: ../build/wp-ulike/inc/wp-strings.php:22 ../inc/wp-strings.php:22
 msgid "Liker Attempts"
 msgstr "تعداد تلاش ها"
 
-#: ../inc/wp-strings.php:23
+#: ../build/wp-ulike/inc/wp-strings.php:23 ../inc/wp-strings.php:23
 msgid "Liked Users Box Style"
 msgstr "استایل باکس کاربران لایک کرده"
 
-#: ../inc/wp-strings.php:24
+#: ../build/wp-ulike/inc/wp-strings.php:24 ../inc/wp-strings.php:24
 msgid "Tooltip"
 msgstr "تولتیپ"
 
-#: ../inc/wp-strings.php:29
+#: ../build/wp-ulike/inc/wp-strings.php:29 ../inc/wp-strings.php:29
 msgid "Total Users Liked"
 msgstr "مجموع کاربران لایک کرده"
 
-#: ../inc/wp-strings.php:30
+#: ../build/wp-ulike/inc/wp-strings.php:30 ../inc/wp-strings.php:30
 msgid "Total Posts Liked"
 msgstr "مجموع مطالب لایک شده"
 
-#: ../inc/wp-strings.php:31
+#: ../build/wp-ulike/inc/wp-strings.php:31 ../inc/wp-strings.php:31
 msgid "Total Comments Liked"
 msgstr "مجموع دیدگاه های لایک شده"
 
-#: ../inc/wp-strings.php:32
+#: ../build/wp-ulike/inc/wp-strings.php:32 ../inc/wp-strings.php:32
 msgid "Upvote"
 msgstr "امتیاز مثبت"
 
-#: ../inc/wp-strings.php:33
+#: ../build/wp-ulike/inc/wp-strings.php:33 ../inc/wp-strings.php:33
 msgid "Downvote"
 msgstr "امتیاز منفی"
 
+#: ../build/wp-ulike/inc/classes/class-mycred.php:203
 #: ../inc/classes/class-mycred.php:203
 msgid "Points for Liking content"
 msgstr "امتیاز لایک یک نوشته"
 
+#: ../build/wp-ulike/inc/classes/class-mycred.php:210
+#: ../build/wp-ulike/inc/classes/class-mycred.php:227
 #: ../inc/classes/class-mycred.php:210 ../inc/classes/class-mycred.php:227
 msgid "Limit"
 msgstr "محدودیت"
 
+#: ../build/wp-ulike/inc/classes/class-mycred.php:215
+#: ../build/wp-ulike/inc/classes/class-mycred.php:232
+#: ../build/wp-ulike/inc/classes/class-mycred.php:244
+#: ../build/wp-ulike/inc/classes/class-mycred.php:256
 #: ../inc/classes/class-mycred.php:215 ../inc/classes/class-mycred.php:232
 #: ../inc/classes/class-mycred.php:244 ../inc/classes/class-mycred.php:256
 msgid "Log template"
 msgstr "قالب وقایع"
 
+#: ../build/wp-ulike/inc/classes/class-mycred.php:220
 #: ../inc/classes/class-mycred.php:220
 msgid "Points for Author Who Get Liked"
 msgstr "امتیاز به کاربری که لایک دریافت کرده است"
 
+#: ../build/wp-ulike/inc/classes/class-mycred.php:237
 #: ../inc/classes/class-mycred.php:237
 msgid "Points for unliking content"
 msgstr "امتیاز لغو لایک یک نوشته"
 
+#: ../build/wp-ulike/inc/classes/class-mycred.php:249
 #: ../inc/classes/class-mycred.php:249
 msgid "Points for Author Who Get Unliked"
 msgstr "امتیاز به کاربری که لغو لایک دریافت کرده است"
+
+#: ../node_modules/grunt-wp-i18n/test/fixtures/translator-comments/translator-comments.php:7
+msgid "A"
+msgstr ""
+
+#: ../node_modules/grunt-wp-i18n/test/fixtures/translator-comments/translator-comments.php:15
+msgid "B"
+msgstr ""
+
+#: ../node_modules/grunt-wp-i18n/test/fixtures/plugin-include/plugin-include.php:6
+#: ../node_modules/grunt-wp-i18n/test/fixtures/basic-theme/exclude/file.php:3
+msgid "Exclude"
+msgstr ""
+
+#: ../node_modules/grunt-wp-i18n/test/fixtures/plugin-include/include/file.php:2
+msgid "Include"
+msgstr ""
+
+#: ../node_modules/grunt-wp-i18n/test/fixtures/text-domains/add-domain.php:2
+#: ../node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-domains.php:2
+#: ../node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-domains.php:3
+#: ../node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:2
+#: ../node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:3
+#: ../node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:4
+msgid "String"
+msgstr ""
 
 #~ msgid "Liked Your Post"
 #~ msgstr "نوشته شما را پسندید"
