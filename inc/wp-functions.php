@@ -427,6 +427,7 @@
 	 * @param           Integer $cp_ID (Post/Comment/... ID)	 
 	 * @param           String $type (Get ulike Type)
 	 * @since           2.5
+	 * @updated         2.8.1
 	 * @return          String
 	 */
 	function wp_ulike_get_auhtor_id($cp_ID,$type) {
@@ -439,7 +440,7 @@
 			return $comment->user_id;					
 		}
 		else if($type == '_activityliked'){
-			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID ) );
+			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID, 'display_comments'  => true ) );
 			return $activity['activities'][0]->user_id;				
 		}
 		else return;
