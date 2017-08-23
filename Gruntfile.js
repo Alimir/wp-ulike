@@ -140,9 +140,6 @@ module.exports = function(grunt) {
         // JS minification
         uglify: {
             options: {
-                compress: {
-                    //drop_console: true
-                },
                 mangle: true,
                 preserveComments: 'some'
             }, 
@@ -190,19 +187,8 @@ module.exports = function(grunt) {
             }
         },
 
-        lineending: {
-            build: {
-                options: {
-                    overwrite: true,
-                    eol: 'lf'
-                },
-                files: {
-                    '': ['<%= meta.buildPath %>/**/*']
-                }
-            }
-        },
-
         shell:{
+
             install:{
                 command: "brew install jpegoptim; brew install pngquant; mkdir <%= meta.buildPath %>"
             },
@@ -247,32 +233,15 @@ module.exports = function(grunt) {
             getLiteJpgsSize:{
                 command: "find ./<%= meta.buildPath %>/ -name '*.jpg' -exec du -ch {} + | grep total$ "
             }
-        },
-
-        // image optimization
-        imagemin: {
-            dist: {
-                options: {
-                    optimizationLevel: 7,
-                    progressive: true,
-                    interlaced: true
-                },
-                files: [{
-                    expand: true,
-                    cwd: 'assets/img/',
-                    src: ['**/*.{png,jpg,gif}'],
-                    dest: 'assets/img/'
-                }]
-            }
-        },        
+        },   
 
         // deploy via rsync
         deploy: {
             options: {
                 args: ["--verbose --delete-after"], // z:compress while transfering data, P: display progress
                 exclude: [
-                        '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'assets/js/*.map', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json'
+                        '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
+                        'assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json'
                 ],
                 recursive: true,
                 syncDestIgnoreExcl: true
@@ -288,8 +257,8 @@ module.exports = function(grunt) {
             lite: {
                 options: {
                     exclude: [
-                        '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'assets/js/*.map', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json'
+                        '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
+                        'assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json'
                     ],
                     src: ['./'],
                     dest: "<%= meta.buildPath %>"
@@ -300,16 +269,10 @@ module.exports = function(grunt) {
 
     });
 
-
     grunt.registerTask( 'install'       , ['shell:install'] );
     grunt.registerTask( 'compress'      , ['shell:compressLitePngs', 'shell:compressLiteJpgs'] );
 
     grunt.registerTask( 'buildVersion'  , ['clean:version', 'shell:createTextVersion'] );
-
-    grunt.registerTask( 'towprepo'      , ['deploy:allToLocalRepo'] );
-    grunt.registerTask( 'backup'        , ['towprepo'] );
-
-    grunt.registerTask( 'prepack'       , ['buildVersion']  );
 
     // rename tasks
     grunt.renameTask('rsync', 'deploy');
@@ -325,12 +288,12 @@ module.exports = function(grunt) {
     grunt.registerTask( 'pack'          , ['shell:zipBuild'] );
 
     // deploy the lite version in /build folder
-    grunt.registerTask( 'beta'           , ['clean:build', 'deploy:lite', 'shell:cleanBuildDotFiles', 'lineending', 'compress'] );
+    grunt.registerTask( 'beta'           , ['clean:build', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
 
     // build the final lite version in /build folder and pack the product
-    grunt.registerTask( 'build'           , ['concat', 'cssmin','uglify', 'i18n', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
+    grunt.registerTask( 'build'           , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
 
     // register task
-    grunt.registerTask( 'default'       , ['concat','cssmin', 'uglify', 'i18n']);
+    grunt.registerTask( 'default'       , ['concat','cssmin', 'uglify']);
 
 };
