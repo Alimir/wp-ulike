@@ -607,7 +607,7 @@
 			  hideEasing		: 'linear',
 			  showMethod		: 'fadeIn',
 			  hideMethod		: 'fadeOut'
-			}
+			};
 			//Toast my notification
 			toastr[messageType]( messageText );			
 		}
@@ -637,5 +637,5 @@
 		});			
 	});	
 	// removes "empty" paragraphs
-	$('p').filter(function () { return this.innerHTML == "" }).remove();
+	$('p').filter(function () { return this.innerHTML == ""; }).remove();
 })( jQuery );
