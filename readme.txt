@@ -171,6 +171,13 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 == Changelog ==
 
+= 2.8.1 =
+* Added: Parse args functionality on wp ulike inputs.
+* Added: New filters (wp_ulike_respond_for_) on the json respond.
+* Fixed: Upgrading 'WordpressUlike' datasheets when new DOM has been inserted. (It was a bug on buddypress)
+* Fixed: Fix some JS syntax errors.
+* Fixed: Infinite loading problem in buddypress comments.
+
 = 2.8 =
 * Added: Robeen (Animated Heart) template. (New Theme)
 * Added: New hooks for better front-end/back-end development.
