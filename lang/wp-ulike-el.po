@@ -5,16 +5,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/wp-ulike\n"
-"POT-Creation-Date: 2015-05-21 11:36+0330\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/plugins/wp-ulike/\n"
+"POT-Creation-Date: 2017-08-23 11:11:14+00:00\n"
 "PO-Revision-Date: 2017-01-20 21:23+0330\n"
 "Last-Translator: Alimir <alimir71@yahoo.com>\n"
 "Language-Team: Greek (http://www.transifex.com/wp-translations/wp-ulike/"
 "language/el/)\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: .\n"
@@ -22,11 +22,23 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../admin/about.php:107
+#: admin/about.php:40 admin/about.php:290 build/wp-ulike/admin/about.php:40
+#: build/wp-ulike/admin/about.php:290
+msgid "Like this plugin?"
+msgstr "Σας αρέσει αυτό το πρόσθετο;"
+
+#: admin/about.php:40 admin/about.php:291 build/wp-ulike/admin/about.php:40
+#: build/wp-ulike/admin/about.php:291
+msgid ""
+"Show your support by Rating 5 Star in <a href=\"http://wordpress.org/plugins/"
+"wp-ulike\"> Plugin Directory reviews</a>"
+msgstr ""
+
+#: admin/about.php:126 build/wp-ulike/admin/about.php:126
 msgid "Welcome to WP ULike"
 msgstr "Καλώς ήρθατε στο WP ULike"
 
-#: ../admin/about.php:109
+#: admin/about.php:127 build/wp-ulike/admin/about.php:127
 msgid ""
 "Thank you for choosing WP ULike! This version is our leanest and most "
 "powerful version yet."
@@ -34,45 +46,52 @@ msgstr ""
 "Σας ευχαριστούμε που επιλέξατε το WP ULike! Αυτή η έκδοση είναι η πιο λιτή "
 "και η πιο ισχυρή έκδοση ωστόσο."
 
-#: ../admin/about.php:110 ../admin/stats.php:37
+#: admin/about.php:130 admin/stats.php:38 build/wp-ulike/admin/about.php:130
+#: build/wp-ulike/admin/stats.php:38
 msgid "Visit our homepage"
 msgstr "Δείτε την αρχική μας σελίδα  "
 
-#: ../admin/about.php:112
+#: admin/about.php:132 build/wp-ulike/admin/about.php:132
 msgid "Version"
 msgstr "Έκδοση"
 
-#: ../admin/about.php:115
+#: admin/about.php:134 build/wp-ulike/admin/about.php:134
 msgid "Getting Started"
 msgstr "Ξεκινώντας"
 
-#: ../admin/about.php:116
+#: admin/about.php:135 build/wp-ulike/admin/about.php:135
 msgid "Credits"
 msgstr "Ευχαριστίες"
 
-#: ../admin/about.php:117 ../admin/classes/class-settings.php:111
-#: ../admin/stats.php:51
+#: admin/about.php:136 admin/classes/class-settings.php:112 admin/stats.php:52
+#: build/wp-ulike/admin/about.php:136
+#: build/wp-ulike/admin/classes/class-settings.php:112
+#: build/wp-ulike/admin/stats.php:52
 msgid "Support"
 msgstr "Υποστήριξη"
 
-#: ../admin/about.php:118 ../admin/classes/class-settings.php:111
-#: ../admin/stats.php:52
+#: admin/about.php:137 admin/classes/class-settings.php:112 admin/stats.php:53
+#: build/wp-ulike/admin/about.php:137
+#: build/wp-ulike/admin/classes/class-settings.php:112
+#: build/wp-ulike/admin/stats.php:53
 msgid "FAQ"
 msgstr "Κοινές απορίες"
 
-#: ../admin/about.php:119
+#: admin/about.php:138 build/wp-ulike/admin/about.php:138
 msgid "Reviews"
 msgstr "Κριτικές"
 
-#: ../admin/about.php:125
+#: admin/about.php:144 build/wp-ulike/admin/about.php:144
 msgid "Introducing WP ULike"
 msgstr ""
 
-#: ../admin/about.php:132 ../admin/admin.php:179 ../admin/stats.php:36
+#: admin/about.php:151 admin/admin.php:197 admin/stats.php:37
+#: build/wp-ulike/admin/about.php:151 build/wp-ulike/admin/admin.php:197
+#: build/wp-ulike/admin/stats.php:37
 msgid "About WP ULike"
 msgstr "Σχετικά με το WP ULike"
 
-#: ../admin/about.php:133 ../admin/classes/class-settings.php:46
+#. Description of the plugin/theme
 msgid ""
 "WP ULike plugin allows to integrate a beautiful Ajax Like Button into your "
 "wordPress website to allow your visitors to like and unlike pages, posts, "
@@ -80,1217 +99,1640 @@ msgid ""
 "options."
 msgstr ""
 
-#: ../admin/about.php:155
+#: admin/about.php:172 build/wp-ulike/admin/about.php:172
 msgid "WP Ulike Extension"
 msgstr ""
 
-#: ../admin/about.php:156
+#: admin/about.php:173 build/wp-ulike/admin/about.php:173
 msgid ""
 "Right now, WP ULike support wordpress posts / comments, BuddyPress "
 "activities & bbPress Topics."
 msgstr ""
 
-#: ../admin/about.php:165
+#: admin/about.php:179 build/wp-ulike/admin/about.php:179
 msgid "Added More Than 20 Language Files"
 msgstr ""
 
-#: ../admin/about.php:166
+#: admin/about.php:180 build/wp-ulike/admin/about.php:180
 msgid ""
 "WP ULike is already translated into +20 languages, with more always in "
 "progress."
 msgstr ""
 
-#: ../admin/about.php:175
+#: admin/about.php:186 build/wp-ulike/admin/about.php:186
 msgid "User Profile Links"
 msgstr ""
 
-#: ../admin/about.php:176
+#: admin/about.php:187 build/wp-ulike/admin/about.php:187
 msgid ""
 "Since WP ULike 2.3, We have synced the likers profile with BuddyPress & "
 "UltimateMember plugins."
 msgstr ""
 
-#: ../admin/about.php:185
+#: admin/about.php:193 build/wp-ulike/admin/about.php:193
 msgid "New Themes And Styles"
 msgstr ""
 
-#: ../admin/about.php:186
+#: admin/about.php:194 build/wp-ulike/admin/about.php:194
 msgid ""
 "Since WP ULike 2.3, We have made some new styles and themes and you can "
 "customize them by your taste."
 msgstr ""
 
-#: ../admin/about.php:195
+#: admin/about.php:200 build/wp-ulike/admin/about.php:200
 msgid "myCRED Points Support"
 msgstr ""
 
-#: ../admin/about.php:196
+#: admin/about.php:201 build/wp-ulike/admin/about.php:201
 msgid ""
 "myCRED is an adaptive points management system that lets you award / charge "
 "your users for interacting with your WordPress."
 msgstr ""
 
-#: ../admin/about.php:205 ../admin/stats.php:175 ../admin/stats.php:350
+#: admin/about.php:207 admin/stats.php:176 admin/stats.php:395
+#: build/wp-ulike/admin/about.php:207 build/wp-ulike/admin/stats.php:176
+#: build/wp-ulike/admin/stats.php:395
 msgid "Likers World Map"
 msgstr ""
 
-#: ../admin/about.php:206
+#: admin/about.php:208 build/wp-ulike/admin/about.php:208
 msgid ""
 "Since WP ULike 2.3, We have made a new ability that you can track your "
 "likers by their country in the world map & Top Liker widget."
 msgstr ""
 
-#: ../admin/about.php:216 ../admin/admin.php:175 ../admin/stats.php:23
+#: admin/about.php:214 admin/admin.php:193 admin/stats.php:24
+#: build/wp-ulike/admin/about.php:214 build/wp-ulike/admin/admin.php:193
+#: build/wp-ulike/admin/stats.php:24
 msgid "WP ULike Statistics"
 msgstr "Στατιστικά WP ULike"
 
-#: ../admin/about.php:216 ../admin/classes/tmp/settings.php:103
+#: admin/about.php:214 admin/classes/tmp/settings.php:115
+#: build/wp-ulike/admin/about.php:214
+#: build/wp-ulike/admin/classes/tmp/settings.php:115
 msgid "Home"
 msgstr "Αρχική"
 
-#: ../admin/about.php:216
+#: admin/about.php:214 build/wp-ulike/admin/about.php:214
 msgid "OR"
 msgstr ""
 
-#: ../admin/about.php:216 ../admin/admin.php:72
+#: admin/about.php:214 admin/admin.php:72 build/wp-ulike/admin/about.php:214
+#: build/wp-ulike/admin/admin.php:72
 msgid "WP ULike Settings"
 msgstr "Ρυθμίσεις WP ULike"
 
-#: ../admin/about.php:222
+#: admin/about.php:220 build/wp-ulike/admin/about.php:220
 msgid "WP ULike is created by many love and time. Enjoy it :)"
 msgstr ""
 
-#: ../admin/about.php:223
+#: admin/about.php:221 build/wp-ulike/admin/about.php:221
 msgid "Project Leaders"
 msgstr "Κεντρική ομάδα"
 
-#: ../admin/about.php:228
+#: admin/about.php:226 build/wp-ulike/admin/about.php:226
 msgid "Project Lead & Developer"
 msgstr ""
 
-#: ../admin/about.php:232
+#: admin/about.php:230 build/wp-ulike/admin/about.php:230
 msgid "Translations"
 msgstr "Μεταφράσεις"
 
-#: ../admin/about.php:271
+#: admin/about.php:269 build/wp-ulike/admin/about.php:269
 msgid "Would you like to help translate the plugin into more languages?"
 msgstr ""
 
-#: ../admin/about.php:271
+#: admin/about.php:269 build/wp-ulike/admin/about.php:269
 msgid "Join our WP-Translations Community"
 msgstr ""
 
-#: ../admin/about.php:273
+#: admin/about.php:271 build/wp-ulike/admin/about.php:271
 msgid "Other Plugins"
 msgstr ""
 
-#: ../admin/about.php:292
-msgid "Like this plugin?"
-msgstr "Σας αρέσει αυτό το πρόσθετο;"
-
-#: ../admin/about.php:293
-msgid ""
-"Show your support by Rating 5 Star in <a href=\"http://wordpress.org/plugins/"
-"wp-ulike\"> Plugin Directory reviews</a>"
-msgstr ""
-
-#: ../admin/admin.php:39
-#, php-format
+#: admin/admin.php:39 build/wp-ulike/admin/admin.php:39
 msgid ""
 " Thank you for choosing <a href=\"%s\" title=\"Wordpress ULike\" target="
 "\"_blank\">WP ULike</a>. Created by <a href=\"%s\" title=\"Wordpress ULike\" "
 "target=\"_blank\">Ali Mirzaei</a>"
 msgstr ""
 
-#: ../admin/admin.php:75 ../inc/wp-functions.php:302
+#. Plugin Name of the plugin/theme
 msgid "WP ULike"
 msgstr "WP ULike"
 
-#: ../admin/admin.php:83
+#: admin/admin.php:84 build/wp-ulike/admin/admin.php:84
 msgid "Settings saved."
 msgstr "Οι ρυθμίσεις αποθηκεύτηκαν."
 
-#: ../admin/admin.php:113 ../admin/admin.php:141
+#: admin/admin.php:121 admin/admin.php:156 build/wp-ulike/admin/admin.php:121
+#: build/wp-ulike/admin/admin.php:156
 msgid "Failed! An Error Has Occurred While Deleting All ULike Logs/Data"
 msgstr ""
 
-#: ../admin/admin.php:115 ../admin/admin.php:143
+#: admin/admin.php:123 admin/admin.php:158 build/wp-ulike/admin/admin.php:123
+#: build/wp-ulike/admin/admin.php:158
 msgid "Success! All ULike Logs/Data Have Been Deleted"
 msgstr ""
 
-#: ../admin/admin.php:159 ../admin/logs.php:139 ../admin/stats.php:42
+#: admin/admin.php:177 admin/logs.php:140 admin/stats.php:43
+#: build/wp-ulike/admin/admin.php:177 build/wp-ulike/admin/logs.php:140
+#: build/wp-ulike/admin/stats.php:43
 msgid "Post Likes Logs"
 msgstr ""
 
-#: ../admin/admin.php:163 ../admin/logs.php:260 ../admin/stats.php:43
+#: admin/admin.php:181 admin/logs.php:262 admin/stats.php:44
+#: build/wp-ulike/admin/admin.php:181 build/wp-ulike/admin/logs.php:262
+#: build/wp-ulike/admin/stats.php:44
 msgid "Comment Likes Logs"
 msgstr ""
 
-#: ../admin/admin.php:167 ../admin/logs.php:387 ../admin/stats.php:44
+#: admin/admin.php:185 admin/logs.php:390 admin/stats.php:45
+#: build/wp-ulike/admin/admin.php:185 build/wp-ulike/admin/logs.php:390
+#: build/wp-ulike/admin/stats.php:45
 msgid "Activity Likes Logs"
 msgstr ""
 
-#: ../admin/admin.php:171 ../admin/logs.php:509 ../admin/stats.php:45
+#: admin/admin.php:189 admin/logs.php:513 admin/stats.php:46
+#: build/wp-ulike/admin/admin.php:189 build/wp-ulike/admin/logs.php:513
+#: build/wp-ulike/admin/stats.php:46
 msgid "Topics Likes Logs"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:17
+#: admin/admin.php:214 build/wp-ulike/admin/admin.php:214
+#: build/wp-ulike/inc/wp-strings.php:25 inc/wp-strings.php:25
+msgid "Default"
+msgstr "Προεπιλεγμένο"
+
+#: admin/admin.php:218 admin/classes/class-widget.php:430
+#: build/wp-ulike/admin/admin.php:218
+#: build/wp-ulike/admin/classes/class-widget.php:430
+msgid "Heart"
+msgstr ""
+
+#: admin/admin.php:222 build/wp-ulike/admin/admin.php:222
+msgid "Robeen"
+msgstr ""
+
+#: admin/classes/class-settings.php:17
+#: build/wp-ulike/admin/classes/class-settings.php:17
 msgid "Custom Settings"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:28 ../admin/stats.php:355
+#: admin/classes/class-settings.php:28 admin/stats.php:404
+#: build/wp-ulike/admin/classes/class-settings.php:28
+#: build/wp-ulike/admin/stats.php:404
 msgid "Save Settings"
 msgstr "Αποθήκευση Ρυθμίσεων"
 
-#: ../admin/classes/class-settings.php:29
+#: admin/classes/class-settings.php:29
+#: build/wp-ulike/admin/classes/class-settings.php:29
 msgid "Reset Settings"
 msgstr "Επαναφορά Ρυθμίσεων"
 
-#: ../admin/classes/class-settings.php:44
+#: admin/classes/class-settings.php:44
+#: build/wp-ulike/admin/classes/class-settings.php:44
 msgid "Similar Settings"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:48
-#: ../admin/classes/tmp/settings.php:124 ../admin/classes/tmp/settings.php:215
-#: ../admin/classes/tmp/settings.php:362 ../admin/classes/tmp/settings.php:474
+#: admin/classes/class-settings.php:48 admin/classes/tmp/settings.php:143
+#: admin/classes/tmp/settings.php:231 admin/classes/tmp/settings.php:382
+#: admin/classes/tmp/settings.php:498
+#: build/wp-ulike/admin/classes/class-settings.php:48
+#: build/wp-ulike/admin/classes/tmp/settings.php:143
+#: build/wp-ulike/admin/classes/tmp/settings.php:231
+#: build/wp-ulike/admin/classes/tmp/settings.php:382
+#: build/wp-ulike/admin/classes/tmp/settings.php:498
 msgid "Logging Method"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:50
+#: admin/classes/class-settings.php:50
+#: build/wp-ulike/admin/classes/class-settings.php:50
 msgid ""
 "If you select <strong>\"Do Not Log\"</strong> method: Any data logs can't "
 "save, There is no limitation in the like/dislike, unlike/undislike capacity "
 "do not work"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:51
+#: admin/classes/class-settings.php:51
+#: build/wp-ulike/admin/classes/class-settings.php:51
 msgid ""
 "If you select <strong>\"Logged By Cookie\"</strong> method: Any data logs "
 "can't save, The like/dislike condition will be limited by SetCookie, unlike/"
 "undislike capacity do not work"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:52
+#: admin/classes/class-settings.php:52
+#: build/wp-ulike/admin/classes/class-settings.php:52
 msgid ""
 "If you select <strong>\"Logged By IP\"</strong> method: Data logs will save "
 "for all users, the convey of like/dislike condition will check by user IP"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:53
+#: admin/classes/class-settings.php:53
+#: build/wp-ulike/admin/classes/class-settings.php:53
 msgid ""
 "If you select <strong>\"Logged By Cookie & IP\"</strong> method: Data logs "
 "will save for all users, the convey of like/dislike condition will check by "
 "user IP & SetCookie"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:54
+#: admin/classes/class-settings.php:54
+#: build/wp-ulike/admin/classes/class-settings.php:54
 msgid ""
 "If you select <strong>\"Logged By Username\"</strong> method: data logs only "
 "is saved for registered users, the convey of like/dislike condition will "
 "check by username, There is no permission for guest users to unlike/undislike"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:57
+#: admin/classes/class-settings.php:57
+#: build/wp-ulike/admin/classes/class-settings.php:57
 msgid "Template Variables"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:59
+#: admin/classes/class-settings.php:59
+#: build/wp-ulike/admin/classes/class-settings.php:59
 msgid "Start the loop of logs"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:59
-#: ../admin/classes/class-settings.php:60
+#: admin/classes/class-settings.php:59 admin/classes/class-settings.php:60
+#: build/wp-ulike/admin/classes/class-settings.php:59
+#: build/wp-ulike/admin/classes/class-settings.php:60
 msgid "required"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:60
+#: admin/classes/class-settings.php:60
+#: build/wp-ulike/admin/classes/class-settings.php:60
 msgid "End of the while loop"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:61
-#: ../admin/classes/class-settings.php:65
-#: ../admin/classes/class-settings.php:69
+#: admin/classes/class-settings.php:61 admin/classes/class-settings.php:65
+#: admin/classes/class-settings.php:69
+#: build/wp-ulike/admin/classes/class-settings.php:61
+#: build/wp-ulike/admin/classes/class-settings.php:65
+#: build/wp-ulike/admin/classes/class-settings.php:69
 msgid "Display the liker name"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:62
+#: admin/classes/class-settings.php:62
+#: build/wp-ulike/admin/classes/class-settings.php:62
 msgid "Display the liker avatar (By Gravatar)"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:63
+#: admin/classes/class-settings.php:63
+#: build/wp-ulike/admin/classes/class-settings.php:63
 msgid "Display the BuddyPress user profile url"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:64
+#: admin/classes/class-settings.php:64
+#: build/wp-ulike/admin/classes/class-settings.php:64
 msgid "Display the UltimateMemebr user profile url"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:66
+#: admin/classes/class-settings.php:66 admin/classes/class-settings.php:70
+#: build/wp-ulike/admin/classes/class-settings.php:66
+#: build/wp-ulike/admin/classes/class-settings.php:70
 msgid "Display the permalink"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:67
-#: ../admin/classes/class-settings.php:71
+#: admin/classes/class-settings.php:67 admin/classes/class-settings.php:72
+#: build/wp-ulike/admin/classes/class-settings.php:67
+#: build/wp-ulike/admin/classes/class-settings.php:72
 msgid "Display the likes count number"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:68
+#: admin/classes/class-settings.php:68
+#: build/wp-ulike/admin/classes/class-settings.php:68
 msgid "Display the post title"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:70
+#: admin/classes/class-settings.php:71
+#: build/wp-ulike/admin/classes/class-settings.php:71
 msgid "Display the comment author name"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:79 ../admin/classes/tmp/settings.php:72
+#: admin/classes/class-settings.php:80 admin/classes/tmp/settings.php:87
+#: build/wp-ulike/admin/classes/class-settings.php:80
+#: build/wp-ulike/admin/classes/tmp/settings.php:87
 msgid "Posts"
 msgstr "Posts"
 
-#: ../admin/classes/class-settings.php:81
-#: ../admin/classes/class-settings.php:90
-#: ../admin/classes/class-settings.php:98
-#: ../admin/classes/class-settings.php:106
-#: ../admin/classes/tmp/settings.php:86 ../admin/classes/tmp/settings.php:192
-#: ../admin/classes/tmp/settings.php:340 ../admin/classes/tmp/settings.php:452
+#: admin/classes/class-settings.php:82 admin/classes/class-settings.php:91
+#: admin/classes/class-settings.php:99 admin/classes/class-settings.php:107
+#: admin/classes/tmp/settings.php:98 admin/classes/tmp/settings.php:208
+#: admin/classes/tmp/settings.php:353 admin/classes/tmp/settings.php:476
+#: build/wp-ulike/admin/classes/class-settings.php:82
+#: build/wp-ulike/admin/classes/class-settings.php:91
+#: build/wp-ulike/admin/classes/class-settings.php:99
+#: build/wp-ulike/admin/classes/class-settings.php:107
+#: build/wp-ulike/admin/classes/tmp/settings.php:98
+#: build/wp-ulike/admin/classes/tmp/settings.php:208
+#: build/wp-ulike/admin/classes/tmp/settings.php:353
+#: build/wp-ulike/admin/classes/tmp/settings.php:476
 msgid "Automatic display"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:81
+#: admin/classes/class-settings.php:82
+#: build/wp-ulike/admin/classes/class-settings.php:82
 msgid ""
 "If you disable this option, you have to put manually this code on wordpress "
 "while loop"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:81
-#: ../admin/classes/class-settings.php:90
-#: ../admin/classes/class-settings.php:98
-#: ../admin/classes/class-settings.php:106
-#: ../admin/classes/tmp/settings.php:155 ../admin/classes/tmp/settings.php:246
-#: ../admin/classes/tmp/settings.php:393 ../admin/classes/tmp/settings.php:505
+#: admin/classes/class-settings.php:82 admin/classes/class-settings.php:91
+#: admin/classes/class-settings.php:99 admin/classes/class-settings.php:107
+#: admin/classes/tmp/settings.php:174 admin/classes/tmp/settings.php:262
+#: admin/classes/tmp/settings.php:413 admin/classes/tmp/settings.php:529
+#: build/wp-ulike/admin/classes/class-settings.php:82
+#: build/wp-ulike/admin/classes/class-settings.php:91
+#: build/wp-ulike/admin/classes/class-settings.php:99
+#: build/wp-ulike/admin/classes/class-settings.php:107
+#: build/wp-ulike/admin/classes/tmp/settings.php:174
+#: build/wp-ulike/admin/classes/tmp/settings.php:262
+#: build/wp-ulike/admin/classes/tmp/settings.php:413
+#: build/wp-ulike/admin/classes/tmp/settings.php:529
 msgid "Users Like Box Template"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:81
-#: ../admin/classes/class-settings.php:90
-#: ../admin/classes/class-settings.php:98
-#: ../admin/classes/class-settings.php:106
+#: admin/classes/class-settings.php:82 admin/classes/class-settings.php:91
+#: admin/classes/class-settings.php:99 admin/classes/class-settings.php:107
+#: build/wp-ulike/admin/classes/class-settings.php:82
+#: build/wp-ulike/admin/classes/class-settings.php:91
+#: build/wp-ulike/admin/classes/class-settings.php:99
+#: build/wp-ulike/admin/classes/class-settings.php:107
 msgid "Default Template:"
 msgstr "Προεπιλεγμένο Πρότυπο:"
 
-#: ../admin/classes/class-settings.php:81
-#: ../admin/classes/tmp/settings.php:154 ../inc/classes/class-ulike.php:423
+#: admin/classes/class-settings.php:82 admin/classes/tmp/settings.php:173
+#: build/wp-ulike/admin/classes/class-settings.php:82
+#: build/wp-ulike/admin/classes/tmp/settings.php:173
+#: build/wp-ulike/inc/classes/class-ulike.php:435
+#: inc/classes/class-ulike.php:435
 msgid "Users who have LIKED this post:"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:88
-#: ../admin/classes/tmp/settings.php:178
+#: admin/classes/class-settings.php:89 admin/classes/tmp/settings.php:197
+#: build/wp-ulike/admin/classes/class-settings.php:89
+#: build/wp-ulike/admin/classes/tmp/settings.php:197
 msgid "Comments"
 msgstr "Σχόλια"
 
-#: ../admin/classes/class-settings.php:90
+#: admin/classes/class-settings.php:91
+#: build/wp-ulike/admin/classes/class-settings.php:91
 msgid ""
 "If you disable this option, you have to put manually this code on comments "
 "text"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:90
-#: ../admin/classes/tmp/settings.php:245
+#: admin/classes/class-settings.php:91 admin/classes/tmp/settings.php:261
+#: build/wp-ulike/admin/classes/class-settings.php:91
+#: build/wp-ulike/admin/classes/tmp/settings.php:261
 msgid "Users who have LIKED this comment:"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:96
-#: ../admin/classes/class-widget.php:314 ../admin/classes/tmp/settings.php:326
+#: admin/classes/class-settings.php:97 admin/classes/class-widget.php:455
+#: admin/classes/tmp/settings.php:342
+#: build/wp-ulike/admin/classes/class-settings.php:97
+#: build/wp-ulike/admin/classes/class-widget.php:455
+#: build/wp-ulike/admin/classes/tmp/settings.php:342
 msgid "BuddyPress"
 msgstr "BuddyPress"
 
-#: ../admin/classes/class-settings.php:98
-#: ../admin/classes/class-settings.php:106
+#: admin/classes/class-settings.php:99 admin/classes/class-settings.php:107
+#: build/wp-ulike/admin/classes/class-settings.php:99
+#: build/wp-ulike/admin/classes/class-settings.php:107
 msgid ""
 "If you disable this option, you have to put manually this code on buddypres "
 "activities content"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:98
-#: ../admin/classes/class-settings.php:106
-#: ../admin/classes/tmp/settings.php:392
+#: admin/classes/class-settings.php:99 admin/classes/class-settings.php:107
+#: admin/classes/tmp/settings.php:412
+#: build/wp-ulike/admin/classes/class-settings.php:99
+#: build/wp-ulike/admin/classes/class-settings.php:107
+#: build/wp-ulike/admin/classes/tmp/settings.php:412
 msgid "Users who have liked this activity:"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:98
-#: ../admin/classes/tmp/settings.php:406
+#: admin/classes/class-settings.php:99 admin/classes/tmp/settings.php:433
+#: build/wp-ulike/admin/classes/class-settings.php:99
+#: build/wp-ulike/admin/classes/tmp/settings.php:433
 msgid "Post Activity Text"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:98
-#: ../admin/classes/tmp/settings.php:412
+#: admin/classes/class-settings.php:99 admin/classes/tmp/settings.php:439
+#: build/wp-ulike/admin/classes/class-settings.php:99
+#: build/wp-ulike/admin/classes/tmp/settings.php:439
 msgid "Comment Activity Text"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:104
-#: ../admin/classes/tmp/settings.php:438
+#: admin/classes/class-settings.php:105 admin/classes/tmp/settings.php:465
+#: build/wp-ulike/admin/classes/class-settings.php:105
+#: build/wp-ulike/admin/classes/tmp/settings.php:465
 msgid "bbPress"
 msgstr "bbPress"
 
-#: ../admin/classes/class-settings.php:111
+#: admin/classes/class-settings.php:112
+#: build/wp-ulike/admin/classes/class-settings.php:112
 msgid "For more information:"
 msgstr "Για περισσότερα:"
 
-#: ../admin/classes/class-settings.php:170
+#: admin/classes/class-settings.php:171
+#: build/wp-ulike/admin/classes/class-settings.php:171
 msgid "Default settings have been reset."
 msgstr "Οι προεπιλεγμένες ρυθμίσεις επαναφέρθηκαν."
 
-#: ../admin/classes/class-settings.php:247
+#: admin/classes/class-settings.php:246
+#: build/wp-ulike/admin/classes/class-settings.php:246
 msgid ""
 "Do you really want to reset all these settings to their default values ?"
 msgstr ""
 
-#: ../admin/classes/class-settings.php:312
-#: ../admin/classes/class-settings.php:323
-#: ../admin/classes/class-settings.php:347
+#: admin/classes/class-settings.php:311 admin/classes/class-settings.php:322
+#: admin/classes/class-settings.php:349
+#: build/wp-ulike/admin/classes/class-settings.php:311
+#: build/wp-ulike/admin/classes/class-settings.php:322
+#: build/wp-ulike/admin/classes/class-settings.php:349
 msgid "No options defined."
 msgstr "Δεν έχουν καθοριστεί επιλογές."
 
-#: ../admin/classes/class-settings.php:334
-#, php-format
+#: admin/classes/class-settings.php:336
+#: build/wp-ulike/admin/classes/class-settings.php:336
 msgid "Select %s"
 msgstr "Επιλογή %s"
 
-#: ../admin/classes/class-settings.php:335
-#, php-format
+#: admin/classes/class-settings.php:337
+#: build/wp-ulike/admin/classes/class-settings.php:337
 msgid "Remove %s"
 msgstr "Αφαίρεση %s"
 
-#: ../admin/classes/class-settings.php:359
+#: admin/classes/class-settings.php:361
+#: build/wp-ulike/admin/classes/class-settings.php:361
 msgid "No action defined."
 msgstr ""
 
-#: ../admin/classes/class-widget.php:11
+#: admin/classes/class-widget.php:11
+#: build/wp-ulike/admin/classes/class-widget.php:11
 msgid "WP Ulike Widget"
 msgstr "Μονάδα WP Ulike"
 
-#: ../admin/classes/class-widget.php:12
+#: admin/classes/class-widget.php:12
+#: build/wp-ulike/admin/classes/class-widget.php:12
 msgid ""
 "An advanced widget that gives you all most liked records with different types"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:79
-msgid "you haven't liked any post yet!"
-msgstr ""
-
-#: ../admin/classes/class-widget.php:126
+#: admin/classes/class-widget.php:96
+#: build/wp-ulike/admin/classes/class-widget.php:96
 msgid "on"
 msgstr "ενεργό"
 
-#: ../admin/classes/class-widget.php:202 ../admin/classes/tmp/settings.php:23
-#: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:32
-#: ../admin/stats.php:205
+#: admin/classes/class-widget.php:139
+#: build/wp-ulike/admin/classes/class-widget.php:139
+msgid "you haven't liked any post yet!"
+msgstr ""
+
+#: admin/classes/class-widget.php:281 admin/classes/tmp/settings.php:23
+#: admin/classes/tmp/settings.php:24 admin/classes/tmp/settings.php:32
+#: admin/stats.php:206 build/wp-ulike/admin/classes/class-widget.php:281
+#: build/wp-ulike/admin/classes/tmp/settings.php:23
+#: build/wp-ulike/admin/classes/tmp/settings.php:24
+#: build/wp-ulike/admin/classes/tmp/settings.php:32
+#: build/wp-ulike/admin/stats.php:206
 msgid "Like"
 msgstr "Μου αρέσει"
 
-#: ../admin/classes/class-widget.php:266
+#: admin/classes/class-widget.php:394
+#: build/wp-ulike/admin/classes/class-widget.php:394
 msgid "Most Liked"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:270
+#: admin/classes/class-widget.php:398
+#: build/wp-ulike/admin/classes/class-widget.php:398
 msgid "Title:"
 msgstr "Τίτλος:"
 
-#: ../admin/classes/class-widget.php:275
+#: admin/classes/class-widget.php:403
+#: build/wp-ulike/admin/classes/class-widget.php:403
 msgid "Type:"
 msgstr "Τύπος:"
 
-#: ../admin/classes/class-widget.php:277 ../inc/wp-strings.php:26
+#: admin/classes/class-widget.php:405 admin/stats.php:219 admin/stats.php:397
+#: build/wp-ulike/admin/classes/class-widget.php:405
+#: build/wp-ulike/admin/stats.php:219 build/wp-ulike/admin/stats.php:397
+#: build/wp-ulike/inc/wp-strings.php:26 inc/wp-strings.php:26
 msgid "Most Liked Posts"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:278 ../inc/wp-strings.php:27
+#: admin/classes/class-widget.php:406 admin/stats.php:229 admin/stats.php:398
+#: build/wp-ulike/admin/classes/class-widget.php:406
+#: build/wp-ulike/admin/stats.php:229 build/wp-ulike/admin/stats.php:398
+#: build/wp-ulike/inc/wp-strings.php:27 inc/wp-strings.php:27
 msgid "Most Liked Comments"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:279
+#: admin/classes/class-widget.php:407 admin/stats.php:239 admin/stats.php:399
+#: build/wp-ulike/admin/classes/class-widget.php:407
+#: build/wp-ulike/admin/stats.php:239 build/wp-ulike/admin/stats.php:399
 msgid "Most Liked Activities"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:280 ../inc/wp-strings.php:28
+#: admin/classes/class-widget.php:408 admin/stats.php:249 admin/stats.php:400
+#: build/wp-ulike/admin/classes/class-widget.php:408
+#: build/wp-ulike/admin/stats.php:249 build/wp-ulike/admin/stats.php:400
+msgid "Most Liked Topics"
+msgstr ""
+
+#: admin/classes/class-widget.php:409
+#: build/wp-ulike/admin/classes/class-widget.php:409
+#: build/wp-ulike/inc/wp-strings.php:28 inc/wp-strings.php:28
 msgid "Most Liked Users"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:281
+#: admin/classes/class-widget.php:410
+#: build/wp-ulike/admin/classes/class-widget.php:410
 msgid "Last Posts Liked By User"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:286
+#: admin/classes/class-widget.php:415
+#: build/wp-ulike/admin/classes/class-widget.php:415
+msgid "Period:"
+msgstr ""
+
+#: admin/classes/class-widget.php:417
+#: build/wp-ulike/admin/classes/class-widget.php:417
+msgid "All The Times"
+msgstr ""
+
+#: admin/classes/class-widget.php:418
+#: build/wp-ulike/admin/classes/class-widget.php:418
+msgid "Year"
+msgstr ""
+
+#: admin/classes/class-widget.php:419 admin/stats.php:154
+#: build/wp-ulike/admin/classes/class-widget.php:419
+#: build/wp-ulike/admin/stats.php:154
+msgid "Month"
+msgstr "Μήνας"
+
+#: admin/classes/class-widget.php:420 admin/stats.php:149
+#: build/wp-ulike/admin/classes/class-widget.php:420
+#: build/wp-ulike/admin/stats.php:149
+msgid "Week"
+msgstr "Εβδομάδα"
+
+#: admin/classes/class-widget.php:421 admin/stats.php:144
+#: build/wp-ulike/admin/classes/class-widget.php:421
+#: build/wp-ulike/admin/stats.php:144
+msgid "Yesterday"
+msgstr "Χθες"
+
+#: admin/classes/class-widget.php:422 admin/stats.php:139
+#: build/wp-ulike/admin/classes/class-widget.php:422
+#: build/wp-ulike/admin/stats.php:139
+msgid "Today"
+msgstr "Σήμερα"
+
+#: admin/classes/class-widget.php:427
+#: build/wp-ulike/admin/classes/class-widget.php:427
 msgid "Style:"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:288
+#: admin/classes/class-widget.php:429
+#: build/wp-ulike/admin/classes/class-widget.php:429
 msgid "Simple"
 msgstr "Απλό"
 
-#: ../admin/classes/class-widget.php:289 ../admin/classes/tmp/settings.php:80
-#: ../admin/classes/tmp/settings.php:186 ../admin/classes/tmp/settings.php:334
-#: ../admin/classes/tmp/settings.php:446
-msgid "Heart"
-msgstr ""
-
-#: ../admin/classes/class-widget.php:294
+#: admin/classes/class-widget.php:435
+#: build/wp-ulike/admin/classes/class-widget.php:435
 msgid "Title Trim (Length):"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:300
+#: admin/classes/class-widget.php:441
+#: build/wp-ulike/admin/classes/class-widget.php:441
 msgid "Number of items to show:"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:306
+#: admin/classes/class-widget.php:447
+#: build/wp-ulike/admin/classes/class-widget.php:447
 msgid "Thumbnail/Avatar size:"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:312
+#: admin/classes/class-widget.php:453
+#: build/wp-ulike/admin/classes/class-widget.php:453
 msgid "Profile URL:"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:315
+#: admin/classes/class-widget.php:456
+#: build/wp-ulike/admin/classes/class-widget.php:456
 msgid "UltimateMember"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:321
+#: admin/classes/class-widget.php:462
+#: build/wp-ulike/admin/classes/class-widget.php:462
 msgid "Activate Like Counter"
 msgstr ""
 
-#: ../admin/classes/class-widget.php:326
+#: admin/classes/class-widget.php:467
+#: build/wp-ulike/admin/classes/class-widget.php:467
 msgid "Activate Thumbnail/Avatar"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:11
+#: admin/classes/tmp/settings.php:11
+#: build/wp-ulike/admin/classes/tmp/settings.php:11
 msgid "General"
 msgstr "Γενικά"
 
-#: ../admin/classes/tmp/settings.php:15
+#: admin/classes/tmp/settings.php:15
+#: build/wp-ulike/admin/classes/tmp/settings.php:15
 msgid "Button Type"
 msgstr "Τύπος Κουμπιού"
 
-#: ../admin/classes/tmp/settings.php:18
+#: admin/classes/tmp/settings.php:18
+#: build/wp-ulike/admin/classes/tmp/settings.php:18
 msgid "Icon"
 msgstr "Εικονίδιο"
 
-#: ../admin/classes/tmp/settings.php:19
+#: admin/classes/tmp/settings.php:19
+#: build/wp-ulike/admin/classes/tmp/settings.php:19
 msgid "Text"
 msgstr "Κείμενο"
 
-#: ../admin/classes/tmp/settings.php:24 ../admin/classes/tmp/settings.php:28
+#: admin/classes/tmp/settings.php:24 admin/classes/tmp/settings.php:28
+#: build/wp-ulike/admin/classes/tmp/settings.php:24
+#: build/wp-ulike/admin/classes/tmp/settings.php:28
 msgid "Button Text"
 msgstr "Κείμενο κουμπού"
 
-#: ../admin/classes/tmp/settings.php:27 ../admin/classes/tmp/settings.php:28
-#: ../admin/classes/tmp/settings.php:37
+#: admin/classes/tmp/settings.php:27 admin/classes/tmp/settings.php:28
+#: admin/classes/tmp/settings.php:37
+#: build/wp-ulike/admin/classes/tmp/settings.php:27
+#: build/wp-ulike/admin/classes/tmp/settings.php:28
+#: build/wp-ulike/admin/classes/tmp/settings.php:37
 msgid "Unlike"
 msgstr "Δεν μου αρέσει"
 
-#: ../admin/classes/tmp/settings.php:32 ../admin/classes/tmp/settings.php:37
+#: admin/classes/tmp/settings.php:32 admin/classes/tmp/settings.php:37
+#: build/wp-ulike/admin/classes/tmp/settings.php:32
+#: build/wp-ulike/admin/classes/tmp/settings.php:37
 msgid "Button Icon"
 msgstr "Εικονίδιο Κουμπιού"
 
-#: ../admin/classes/tmp/settings.php:33 ../admin/classes/tmp/settings.php:38
-#: ../admin/classes/tmp/settings.php:310
+#: admin/classes/tmp/settings.php:33 admin/classes/tmp/settings.php:38
+#: admin/classes/tmp/settings.php:326
+#: build/wp-ulike/admin/classes/tmp/settings.php:33
+#: build/wp-ulike/admin/classes/tmp/settings.php:38
+#: build/wp-ulike/admin/classes/tmp/settings.php:326
 msgid "Best size: 16x16"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:41
+#: admin/classes/tmp/settings.php:41
+#: build/wp-ulike/admin/classes/tmp/settings.php:41
 msgid "You have not permission to unlike"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:42
+#: admin/classes/tmp/settings.php:42
+#: build/wp-ulike/admin/classes/tmp/settings.php:42
 msgid "Permission Text"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:46
+#: admin/classes/tmp/settings.php:46
+#: build/wp-ulike/admin/classes/tmp/settings.php:46
 msgid "Users Login Type"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:49
+#: admin/classes/tmp/settings.php:49
+#: build/wp-ulike/admin/classes/tmp/settings.php:49
 msgid "Alert Box"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:50
+#: admin/classes/tmp/settings.php:50
+#: build/wp-ulike/admin/classes/tmp/settings.php:50
 msgid "Like Button"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:54
+#: admin/classes/tmp/settings.php:54
+#: build/wp-ulike/admin/classes/tmp/settings.php:54
 msgid "You Should Login To Submit Your Like"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:55
+#: admin/classes/tmp/settings.php:55
+#: build/wp-ulike/admin/classes/tmp/settings.php:55
 msgid "Users Login Text"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:60
+#: admin/classes/tmp/settings.php:60
+#: build/wp-ulike/admin/classes/tmp/settings.php:60
 msgid "Format Number"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:61 ../admin/classes/tmp/settings.php:87
-#: ../admin/classes/tmp/settings.php:118 ../admin/classes/tmp/settings.php:137
-#: ../admin/classes/tmp/settings.php:193 ../admin/classes/tmp/settings.php:209
-#: ../admin/classes/tmp/settings.php:228 ../admin/classes/tmp/settings.php:275
-#: ../admin/classes/tmp/settings.php:341 ../admin/classes/tmp/settings.php:356
-#: ../admin/classes/tmp/settings.php:375 ../admin/classes/tmp/settings.php:400
-#: ../admin/classes/tmp/settings.php:453 ../admin/classes/tmp/settings.php:468
-#: ../admin/classes/tmp/settings.php:487
+#: admin/classes/tmp/settings.php:61 admin/classes/tmp/settings.php:68
+#: admin/classes/tmp/settings.php:99 admin/classes/tmp/settings.php:130
+#: admin/classes/tmp/settings.php:137 admin/classes/tmp/settings.php:156
+#: admin/classes/tmp/settings.php:209 admin/classes/tmp/settings.php:225
+#: admin/classes/tmp/settings.php:244 admin/classes/tmp/settings.php:291
+#: admin/classes/tmp/settings.php:354 admin/classes/tmp/settings.php:369
+#: admin/classes/tmp/settings.php:376 admin/classes/tmp/settings.php:395
+#: admin/classes/tmp/settings.php:420 admin/classes/tmp/settings.php:427
+#: admin/classes/tmp/settings.php:477 admin/classes/tmp/settings.php:492
+#: admin/classes/tmp/settings.php:511
+#: build/wp-ulike/admin/classes/tmp/settings.php:61
+#: build/wp-ulike/admin/classes/tmp/settings.php:68
+#: build/wp-ulike/admin/classes/tmp/settings.php:99
+#: build/wp-ulike/admin/classes/tmp/settings.php:130
+#: build/wp-ulike/admin/classes/tmp/settings.php:137
+#: build/wp-ulike/admin/classes/tmp/settings.php:156
+#: build/wp-ulike/admin/classes/tmp/settings.php:209
+#: build/wp-ulike/admin/classes/tmp/settings.php:225
+#: build/wp-ulike/admin/classes/tmp/settings.php:244
+#: build/wp-ulike/admin/classes/tmp/settings.php:291
+#: build/wp-ulike/admin/classes/tmp/settings.php:354
+#: build/wp-ulike/admin/classes/tmp/settings.php:369
+#: build/wp-ulike/admin/classes/tmp/settings.php:376
+#: build/wp-ulike/admin/classes/tmp/settings.php:395
+#: build/wp-ulike/admin/classes/tmp/settings.php:420
+#: build/wp-ulike/admin/classes/tmp/settings.php:427
+#: build/wp-ulike/admin/classes/tmp/settings.php:477
+#: build/wp-ulike/admin/classes/tmp/settings.php:492
+#: build/wp-ulike/admin/classes/tmp/settings.php:511
 msgid "Activate"
 msgstr "Ενεργοποίηση"
 
-#: ../admin/classes/tmp/settings.php:62
+#: admin/classes/tmp/settings.php:62
+#: build/wp-ulike/admin/classes/tmp/settings.php:62
 msgid "Convert numbers of Likes with string (kilobyte) format."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:77 ../admin/classes/tmp/settings.php:183
-#: ../admin/classes/tmp/settings.php:331 ../admin/classes/tmp/settings.php:443
-#: ../inc/wp-strings.php:10
+#: admin/classes/tmp/settings.php:67
+#: build/wp-ulike/admin/classes/tmp/settings.php:67
+#, fuzzy
+msgid "Notifications"
+msgstr "Ειδοποιήσεις BuddyPress"
+
+#: admin/classes/tmp/settings.php:69
+#: build/wp-ulike/admin/classes/tmp/settings.php:69
+msgid "Custom toast messages after each activity"
+msgstr ""
+
+#: admin/classes/tmp/settings.php:72
+#: build/wp-ulike/admin/classes/tmp/settings.php:72
+msgid "Thanks! You Liked This."
+msgstr ""
+
+#: admin/classes/tmp/settings.php:73
+#: build/wp-ulike/admin/classes/tmp/settings.php:73
+msgid "Liked Notice Message"
+msgstr ""
+
+#: admin/classes/tmp/settings.php:76
+#: build/wp-ulike/admin/classes/tmp/settings.php:76
+msgid "Sorry! You unliked this."
+msgstr ""
+
+#: admin/classes/tmp/settings.php:77
+#: build/wp-ulike/admin/classes/tmp/settings.php:77
+msgid "Unliked Notice Message"
+msgstr ""
+
+#: admin/classes/tmp/settings.php:92 admin/classes/tmp/settings.php:202
+#: admin/classes/tmp/settings.php:347 admin/classes/tmp/settings.php:470
+#: build/wp-ulike/admin/classes/tmp/settings.php:92
+#: build/wp-ulike/admin/classes/tmp/settings.php:202
+#: build/wp-ulike/admin/classes/tmp/settings.php:347
+#: build/wp-ulike/admin/classes/tmp/settings.php:470
+#: build/wp-ulike/inc/wp-strings.php:10 inc/wp-strings.php:10
 msgid "Themes"
 msgstr "Θέματα"
 
-#: ../admin/classes/tmp/settings.php:79 ../admin/classes/tmp/settings.php:185
-#: ../admin/classes/tmp/settings.php:333 ../admin/classes/tmp/settings.php:445
-#: ../inc/wp-strings.php:25
-msgid "Default"
-msgstr "Προεπιλεγμένο"
-
-#: ../admin/classes/tmp/settings.php:91 ../admin/classes/tmp/settings.php:197
-#: ../admin/classes/tmp/settings.php:345 ../admin/classes/tmp/settings.php:457
+#: admin/classes/tmp/settings.php:103 admin/classes/tmp/settings.php:213
+#: admin/classes/tmp/settings.php:358 admin/classes/tmp/settings.php:481
+#: build/wp-ulike/admin/classes/tmp/settings.php:103
+#: build/wp-ulike/admin/classes/tmp/settings.php:213
+#: build/wp-ulike/admin/classes/tmp/settings.php:358
+#: build/wp-ulike/admin/classes/tmp/settings.php:481
 msgid "Auto Display Position"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:94 ../admin/classes/tmp/settings.php:200
-#: ../admin/classes/tmp/settings.php:460
+#: admin/classes/tmp/settings.php:106 admin/classes/tmp/settings.php:216
+#: admin/classes/tmp/settings.php:484
+#: build/wp-ulike/admin/classes/tmp/settings.php:106
+#: build/wp-ulike/admin/classes/tmp/settings.php:216
+#: build/wp-ulike/admin/classes/tmp/settings.php:484
 msgid "Top of Content"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:95 ../admin/classes/tmp/settings.php:201
-#: ../admin/classes/tmp/settings.php:461
+#: admin/classes/tmp/settings.php:107 admin/classes/tmp/settings.php:217
+#: admin/classes/tmp/settings.php:485
+#: build/wp-ulike/admin/classes/tmp/settings.php:107
+#: build/wp-ulike/admin/classes/tmp/settings.php:217
+#: build/wp-ulike/admin/classes/tmp/settings.php:485
 msgid "Bottom of Content"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:96 ../admin/classes/tmp/settings.php:202
+#: admin/classes/tmp/settings.php:108 admin/classes/tmp/settings.php:218
+#: build/wp-ulike/admin/classes/tmp/settings.php:108
+#: build/wp-ulike/admin/classes/tmp/settings.php:218
 msgid "Top and Bottom"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:101
+#: admin/classes/tmp/settings.php:113
+#: build/wp-ulike/admin/classes/tmp/settings.php:113
 msgid "Auto Display Filter"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:104
+#: admin/classes/tmp/settings.php:116
+#: build/wp-ulike/admin/classes/tmp/settings.php:116
 msgid "Single Posts"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:105
+#: admin/classes/tmp/settings.php:117
+#: build/wp-ulike/admin/classes/tmp/settings.php:117
 msgid "Pages"
 msgstr "Σελίδες"
 
-#: ../admin/classes/tmp/settings.php:106
+#: admin/classes/tmp/settings.php:118
+#: build/wp-ulike/admin/classes/tmp/settings.php:118
 msgid "Archives"
 msgstr "Αρχείο"
 
-#: ../admin/classes/tmp/settings.php:107
+#: admin/classes/tmp/settings.php:119
+#: build/wp-ulike/admin/classes/tmp/settings.php:119
 msgid "Categories"
 msgstr "Κατηγορίες"
 
-#: ../admin/classes/tmp/settings.php:108
+#: admin/classes/tmp/settings.php:120
+#: build/wp-ulike/admin/classes/tmp/settings.php:120
 msgid "Search Results"
 msgstr "Αποτελέσματα αναζήτησης"
 
-#: ../admin/classes/tmp/settings.php:109
+#: admin/classes/tmp/settings.php:121
+#: build/wp-ulike/admin/classes/tmp/settings.php:121
 msgid "Tags"
 msgstr "Ετικέτες"
 
-#: ../admin/classes/tmp/settings.php:110
+#: admin/classes/tmp/settings.php:122
+#: build/wp-ulike/admin/classes/tmp/settings.php:122
 msgid "Author Page"
 msgstr "Σελίδα Συντάκτη"
 
-#: ../admin/classes/tmp/settings.php:112
+#: admin/classes/tmp/settings.php:124
+#: build/wp-ulike/admin/classes/tmp/settings.php:124
 msgid "You can filter theses pages on auto display option."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:117 ../admin/classes/tmp/settings.php:208
-#: ../admin/classes/tmp/settings.php:355 ../admin/classes/tmp/settings.php:467
+#: admin/classes/tmp/settings.php:129
+#: build/wp-ulike/admin/classes/tmp/settings.php:129
+msgid "Google Rich Snippets"
+msgstr ""
+
+#: admin/classes/tmp/settings.php:131
+#: build/wp-ulike/admin/classes/tmp/settings.php:131
+msgid "Add rich snippet for ratings in form of schema.org"
+msgstr ""
+
+#: admin/classes/tmp/settings.php:136 admin/classes/tmp/settings.php:224
+#: admin/classes/tmp/settings.php:375 admin/classes/tmp/settings.php:491
+#: build/wp-ulike/admin/classes/tmp/settings.php:136
+#: build/wp-ulike/admin/classes/tmp/settings.php:224
+#: build/wp-ulike/admin/classes/tmp/settings.php:375
+#: build/wp-ulike/admin/classes/tmp/settings.php:491
 msgid "Only registered Users"
 msgstr "Μόνο εγγεγραμμένοι Χρήστες"
 
-#: ../admin/classes/tmp/settings.php:119
+#: admin/classes/tmp/settings.php:138
+#: build/wp-ulike/admin/classes/tmp/settings.php:138
 msgid "<strong>Only</strong> registered users have permission to like posts."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:126 ../admin/classes/tmp/settings.php:217
-#: ../admin/classes/tmp/settings.php:364 ../admin/classes/tmp/settings.php:476
+#: admin/classes/tmp/settings.php:145 admin/classes/tmp/settings.php:233
+#: admin/classes/tmp/settings.php:384 admin/classes/tmp/settings.php:500
+#: build/wp-ulike/admin/classes/tmp/settings.php:145
+#: build/wp-ulike/admin/classes/tmp/settings.php:233
+#: build/wp-ulike/admin/classes/tmp/settings.php:384
+#: build/wp-ulike/admin/classes/tmp/settings.php:500
 msgid "Do Not Log"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:127 ../admin/classes/tmp/settings.php:218
-#: ../admin/classes/tmp/settings.php:365 ../admin/classes/tmp/settings.php:477
+#: admin/classes/tmp/settings.php:146 admin/classes/tmp/settings.php:234
+#: admin/classes/tmp/settings.php:385 admin/classes/tmp/settings.php:501
+#: build/wp-ulike/admin/classes/tmp/settings.php:146
+#: build/wp-ulike/admin/classes/tmp/settings.php:234
+#: build/wp-ulike/admin/classes/tmp/settings.php:385
+#: build/wp-ulike/admin/classes/tmp/settings.php:501
 msgid "Logged By Cookie"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:128 ../admin/classes/tmp/settings.php:219
-#: ../admin/classes/tmp/settings.php:366 ../admin/classes/tmp/settings.php:478
+#: admin/classes/tmp/settings.php:147 admin/classes/tmp/settings.php:235
+#: admin/classes/tmp/settings.php:386 admin/classes/tmp/settings.php:502
+#: build/wp-ulike/admin/classes/tmp/settings.php:147
+#: build/wp-ulike/admin/classes/tmp/settings.php:235
+#: build/wp-ulike/admin/classes/tmp/settings.php:386
+#: build/wp-ulike/admin/classes/tmp/settings.php:502
 msgid "Logged By IP"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:129 ../admin/classes/tmp/settings.php:220
-#: ../admin/classes/tmp/settings.php:367 ../admin/classes/tmp/settings.php:479
+#: admin/classes/tmp/settings.php:148 admin/classes/tmp/settings.php:236
+#: admin/classes/tmp/settings.php:387 admin/classes/tmp/settings.php:503
+#: build/wp-ulike/admin/classes/tmp/settings.php:148
+#: build/wp-ulike/admin/classes/tmp/settings.php:236
+#: build/wp-ulike/admin/classes/tmp/settings.php:387
+#: build/wp-ulike/admin/classes/tmp/settings.php:503
 msgid "Logged By Cookie & IP"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:130 ../admin/classes/tmp/settings.php:221
-#: ../admin/classes/tmp/settings.php:368 ../admin/classes/tmp/settings.php:480
+#: admin/classes/tmp/settings.php:149 admin/classes/tmp/settings.php:237
+#: admin/classes/tmp/settings.php:388 admin/classes/tmp/settings.php:504
+#: build/wp-ulike/admin/classes/tmp/settings.php:149
+#: build/wp-ulike/admin/classes/tmp/settings.php:237
+#: build/wp-ulike/admin/classes/tmp/settings.php:388
+#: build/wp-ulike/admin/classes/tmp/settings.php:504
 msgid "Logged By Username"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:136 ../admin/classes/tmp/settings.php:227
-#: ../admin/classes/tmp/settings.php:374 ../admin/classes/tmp/settings.php:486
+#: admin/classes/tmp/settings.php:155 admin/classes/tmp/settings.php:243
+#: admin/classes/tmp/settings.php:394 admin/classes/tmp/settings.php:510
+#: build/wp-ulike/admin/classes/tmp/settings.php:155
+#: build/wp-ulike/admin/classes/tmp/settings.php:243
+#: build/wp-ulike/admin/classes/tmp/settings.php:394
+#: build/wp-ulike/admin/classes/tmp/settings.php:510
 msgid "Show Liked Users Box"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:138 ../admin/classes/tmp/settings.php:229
-#: ../admin/classes/tmp/settings.php:376 ../admin/classes/tmp/settings.php:488
+#: admin/classes/tmp/settings.php:157 admin/classes/tmp/settings.php:245
+#: admin/classes/tmp/settings.php:396 admin/classes/tmp/settings.php:512
+#: build/wp-ulike/admin/classes/tmp/settings.php:157
+#: build/wp-ulike/admin/classes/tmp/settings.php:245
+#: build/wp-ulike/admin/classes/tmp/settings.php:396
+#: build/wp-ulike/admin/classes/tmp/settings.php:512
 msgid ""
 "Active this option to show liked users avatars in the bottom of button like."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:143 ../admin/classes/tmp/settings.php:234
-#: ../admin/classes/tmp/settings.php:381 ../admin/classes/tmp/settings.php:493
+#: admin/classes/tmp/settings.php:162 admin/classes/tmp/settings.php:250
+#: admin/classes/tmp/settings.php:401 admin/classes/tmp/settings.php:517
+#: build/wp-ulike/admin/classes/tmp/settings.php:162
+#: build/wp-ulike/admin/classes/tmp/settings.php:250
+#: build/wp-ulike/admin/classes/tmp/settings.php:401
+#: build/wp-ulike/admin/classes/tmp/settings.php:517
 msgid "Size of Gravatars"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:144 ../admin/classes/tmp/settings.php:235
-#: ../admin/classes/tmp/settings.php:382 ../admin/classes/tmp/settings.php:494
+#: admin/classes/tmp/settings.php:163 admin/classes/tmp/settings.php:251
+#: admin/classes/tmp/settings.php:402 admin/classes/tmp/settings.php:518
+#: build/wp-ulike/admin/classes/tmp/settings.php:163
+#: build/wp-ulike/admin/classes/tmp/settings.php:251
+#: build/wp-ulike/admin/classes/tmp/settings.php:402
+#: build/wp-ulike/admin/classes/tmp/settings.php:518
 msgid "Size of Gravatars to return (max is 512)"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:149 ../admin/classes/tmp/settings.php:240
-#: ../admin/classes/tmp/settings.php:387 ../admin/classes/tmp/settings.php:499
+#: admin/classes/tmp/settings.php:168 admin/classes/tmp/settings.php:256
+#: admin/classes/tmp/settings.php:407 admin/classes/tmp/settings.php:523
+#: build/wp-ulike/admin/classes/tmp/settings.php:168
+#: build/wp-ulike/admin/classes/tmp/settings.php:256
+#: build/wp-ulike/admin/classes/tmp/settings.php:407
+#: build/wp-ulike/admin/classes/tmp/settings.php:523
 msgid "Number Of The Users"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:150 ../admin/classes/tmp/settings.php:241
-#: ../admin/classes/tmp/settings.php:388 ../admin/classes/tmp/settings.php:500
+#: admin/classes/tmp/settings.php:169 admin/classes/tmp/settings.php:257
+#: admin/classes/tmp/settings.php:408 admin/classes/tmp/settings.php:524
+#: build/wp-ulike/admin/classes/tmp/settings.php:169
+#: build/wp-ulike/admin/classes/tmp/settings.php:257
+#: build/wp-ulike/admin/classes/tmp/settings.php:408
+#: build/wp-ulike/admin/classes/tmp/settings.php:524
 msgid "The number of users to show in the users liked box"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:156 ../admin/classes/tmp/settings.php:247
-#: ../admin/classes/tmp/settings.php:394 ../admin/classes/tmp/settings.php:407
-#: ../admin/classes/tmp/settings.php:413 ../admin/classes/tmp/settings.php:506
+#: admin/classes/tmp/settings.php:175 admin/classes/tmp/settings.php:263
+#: admin/classes/tmp/settings.php:414 admin/classes/tmp/settings.php:434
+#: admin/classes/tmp/settings.php:440 admin/classes/tmp/settings.php:530
+#: build/wp-ulike/admin/classes/tmp/settings.php:175
+#: build/wp-ulike/admin/classes/tmp/settings.php:263
+#: build/wp-ulike/admin/classes/tmp/settings.php:414
+#: build/wp-ulike/admin/classes/tmp/settings.php:434
+#: build/wp-ulike/admin/classes/tmp/settings.php:440
+#: build/wp-ulike/admin/classes/tmp/settings.php:530
 msgid "Allowed Variables:"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:160 ../admin/classes/tmp/settings.php:251
-#: ../admin/classes/tmp/settings.php:417 ../admin/classes/tmp/settings.php:510
+#: admin/classes/tmp/settings.php:179 admin/classes/tmp/settings.php:267
+#: admin/classes/tmp/settings.php:444 admin/classes/tmp/settings.php:534
+#: build/wp-ulike/admin/classes/tmp/settings.php:179
+#: build/wp-ulike/admin/classes/tmp/settings.php:267
+#: build/wp-ulike/admin/classes/tmp/settings.php:444
+#: build/wp-ulike/admin/classes/tmp/settings.php:534
 msgid "Delete All Logs"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:161 ../admin/classes/tmp/settings.php:252
-#: ../admin/classes/tmp/settings.php:418 ../admin/classes/tmp/settings.php:511
+#: admin/classes/tmp/settings.php:180 admin/classes/tmp/settings.php:268
+#: admin/classes/tmp/settings.php:445 admin/classes/tmp/settings.php:535
+#: build/wp-ulike/admin/classes/tmp/settings.php:180
+#: build/wp-ulike/admin/classes/tmp/settings.php:268
+#: build/wp-ulike/admin/classes/tmp/settings.php:445
+#: build/wp-ulike/admin/classes/tmp/settings.php:535
 msgid "You Are About To Delete All Likes Logs. This Action Is Not Reversible."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:166 ../admin/classes/tmp/settings.php:257
-#: ../admin/classes/tmp/settings.php:423 ../admin/classes/tmp/settings.php:516
+#: admin/classes/tmp/settings.php:185 admin/classes/tmp/settings.php:273
+#: admin/classes/tmp/settings.php:450 admin/classes/tmp/settings.php:540
+#: build/wp-ulike/admin/classes/tmp/settings.php:185
+#: build/wp-ulike/admin/classes/tmp/settings.php:273
+#: build/wp-ulike/admin/classes/tmp/settings.php:450
+#: build/wp-ulike/admin/classes/tmp/settings.php:540
 msgid "Delete All Data"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:167 ../admin/classes/tmp/settings.php:258
-#: ../admin/classes/tmp/settings.php:424 ../admin/classes/tmp/settings.php:517
+#: admin/classes/tmp/settings.php:186 admin/classes/tmp/settings.php:274
+#: admin/classes/tmp/settings.php:451 admin/classes/tmp/settings.php:541
+#: build/wp-ulike/admin/classes/tmp/settings.php:186
+#: build/wp-ulike/admin/classes/tmp/settings.php:274
+#: build/wp-ulike/admin/classes/tmp/settings.php:451
+#: build/wp-ulike/admin/classes/tmp/settings.php:541
 msgid "You Are About To Delete All Likes Data. This Action Is Not Reversible."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:210
+#: admin/classes/tmp/settings.php:226
+#: build/wp-ulike/admin/classes/tmp/settings.php:226
 msgid ""
 "<strong>Only</strong> registered users have permission to like comments."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:269
+#: admin/classes/tmp/settings.php:285
+#: build/wp-ulike/admin/classes/tmp/settings.php:285
 msgid "Customize"
 msgstr "Προσαρμογή"
 
-#: ../admin/classes/tmp/settings.php:274
+#: admin/classes/tmp/settings.php:290
+#: build/wp-ulike/admin/classes/tmp/settings.php:290
 msgid "Custom Style"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:279
+#: admin/classes/tmp/settings.php:295
+#: build/wp-ulike/admin/classes/tmp/settings.php:295
 msgid "Active this option to see the custom style settings."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:283
+#: admin/classes/tmp/settings.php:299
+#: build/wp-ulike/admin/classes/tmp/settings.php:299
 msgid "Button style"
 msgstr "Στυλ κουμπιού"
 
-#: ../admin/classes/tmp/settings.php:284 ../admin/classes/tmp/settings.php:297
+#: admin/classes/tmp/settings.php:300 admin/classes/tmp/settings.php:313
+#: build/wp-ulike/admin/classes/tmp/settings.php:300
+#: build/wp-ulike/admin/classes/tmp/settings.php:313
 msgid "Background"
 msgstr "Φόντο"
 
-#: ../admin/classes/tmp/settings.php:288 ../admin/classes/tmp/settings.php:301
+#: admin/classes/tmp/settings.php:304 admin/classes/tmp/settings.php:317
+#: build/wp-ulike/admin/classes/tmp/settings.php:304
+#: build/wp-ulike/admin/classes/tmp/settings.php:317
 msgid "Border Color"
 msgstr "Χρώμα Περιθωρίου"
 
-#: ../admin/classes/tmp/settings.php:292 ../admin/classes/tmp/settings.php:305
+#: admin/classes/tmp/settings.php:308 admin/classes/tmp/settings.php:321
+#: build/wp-ulike/admin/classes/tmp/settings.php:308
+#: build/wp-ulike/admin/classes/tmp/settings.php:321
 msgid "Text Color"
 msgstr "Χρώμα κειμένου"
 
-#: ../admin/classes/tmp/settings.php:296
+#: admin/classes/tmp/settings.php:312
+#: build/wp-ulike/admin/classes/tmp/settings.php:312
 msgid "Counter Style"
 msgstr "Στυλ Μετρητή"
 
-#: ../admin/classes/tmp/settings.php:309
+#: admin/classes/tmp/settings.php:325
+#: build/wp-ulike/admin/classes/tmp/settings.php:325
 msgid "Loading Animation"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:314
+#: admin/classes/tmp/settings.php:330
+#: build/wp-ulike/admin/classes/tmp/settings.php:330
 msgid "Custom CSS"
 msgstr "Προσαρμοσμένο CSS"
 
-#: ../admin/classes/tmp/settings.php:348
+#: admin/classes/tmp/settings.php:361
+#: build/wp-ulike/admin/classes/tmp/settings.php:361
 msgid "Activity Content"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:349
+#: admin/classes/tmp/settings.php:362
+#: build/wp-ulike/admin/classes/tmp/settings.php:362
 msgid "Activity Meta"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:357
+#: admin/classes/tmp/settings.php:368
+#: build/wp-ulike/admin/classes/tmp/settings.php:368
+#, fuzzy
+msgid "Activity Comment"
+msgstr "ID Δραστηριότητας"
+
+#: admin/classes/tmp/settings.php:370
+#: build/wp-ulike/admin/classes/tmp/settings.php:370
+msgid "Add the possibility to like Buddypress comments in the activity stream"
+msgstr ""
+
+#: admin/classes/tmp/settings.php:377
+#: build/wp-ulike/admin/classes/tmp/settings.php:377
 msgid ""
 "<strong>Only</strong> registered users have permission to like activities."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:399
+#: admin/classes/tmp/settings.php:419
+#: build/wp-ulike/admin/classes/tmp/settings.php:419
 msgid "BuddyPress Activity"
 msgstr "Δραστηριότητα BuddyPress"
 
-#: ../admin/classes/tmp/settings.php:401
+#: admin/classes/tmp/settings.php:421
+#: build/wp-ulike/admin/classes/tmp/settings.php:421
 msgid "insert new likes in buddyPress activity page"
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:469
+#: admin/classes/tmp/settings.php:426
+#: build/wp-ulike/admin/classes/tmp/settings.php:426
+#, fuzzy
+msgid "BuddyPress Custom Notification"
+msgstr "Ειδοποιήσεις BuddyPress"
+
+#: admin/classes/tmp/settings.php:428
+#: build/wp-ulike/admin/classes/tmp/settings.php:428
+msgid "Sends out notifications when you get a like from someone"
+msgstr ""
+
+#: admin/classes/tmp/settings.php:493
+#: build/wp-ulike/admin/classes/tmp/settings.php:493
 msgid "<strong>Only</strong> registered users have permission to like Topics."
 msgstr ""
 
-#: ../admin/classes/tmp/settings.php:504
+#: admin/classes/tmp/settings.php:528
+#: build/wp-ulike/admin/classes/tmp/settings.php:528
 msgid "Users who have liked this topic:"
 msgstr ""
 
-#: ../admin/logs.php:17 ../admin/logs.php:142 ../admin/logs.php:212
-#: ../admin/logs.php:263 ../admin/logs.php:337 ../admin/logs.php:390
-#: ../admin/logs.php:460 ../admin/logs.php:512 ../admin/logs.php:582
+#: admin/logs.php:17 admin/logs.php:143 admin/logs.php:213 admin/logs.php:265
+#: admin/logs.php:339 admin/logs.php:393 admin/logs.php:463 admin/logs.php:516
+#: admin/logs.php:586 build/wp-ulike/admin/logs.php:17
+#: build/wp-ulike/admin/logs.php:143 build/wp-ulike/admin/logs.php:213
+#: build/wp-ulike/admin/logs.php:265 build/wp-ulike/admin/logs.php:339
+#: build/wp-ulike/admin/logs.php:393 build/wp-ulike/admin/logs.php:463
+#: build/wp-ulike/admin/logs.php:516 build/wp-ulike/admin/logs.php:586
 msgid "Logs"
 msgstr "Αρχείο καταγραφής"
 
-#: ../admin/logs.php:80
+#: admin/logs.php:80 build/wp-ulike/admin/logs.php:80
 msgid "Are you sure to remove this item?!"
 msgstr "Είστε σίγουροι ότι θέλετε να αφαιρέσετε αυτό το στοιχείο;!"
 
-#: ../admin/logs.php:138 ../admin/logs.php:259 ../admin/logs.php:386
-#: ../admin/logs.php:508
+#: admin/logs.php:139 admin/logs.php:261 admin/logs.php:389 admin/logs.php:512
+#: build/wp-ulike/admin/logs.php:139 build/wp-ulike/admin/logs.php:261
+#: build/wp-ulike/admin/logs.php:389 build/wp-ulike/admin/logs.php:512
 msgid "WP ULike Logs"
 msgstr "Αρχείο καταγραφής WP ULike"
 
-#: ../admin/logs.php:149 ../admin/logs.php:270 ../admin/logs.php:397
-#: ../admin/logs.php:519
+#: admin/logs.php:150 admin/logs.php:272 admin/logs.php:400 admin/logs.php:523
+#: build/wp-ulike/admin/logs.php:150 build/wp-ulike/admin/logs.php:272
+#: build/wp-ulike/admin/logs.php:400 build/wp-ulike/admin/logs.php:523
 msgid "ID"
 msgstr "ID"
 
-#: ../admin/logs.php:150 ../admin/logs.php:271 ../admin/logs.php:398
-#: ../admin/logs.php:520
+#: admin/logs.php:151 admin/logs.php:273 admin/logs.php:401 admin/logs.php:524
+#: build/wp-ulike/admin/logs.php:151 build/wp-ulike/admin/logs.php:273
+#: build/wp-ulike/admin/logs.php:401 build/wp-ulike/admin/logs.php:524
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
-#: ../admin/logs.php:151 ../admin/logs.php:272 ../admin/logs.php:399
-#: ../admin/logs.php:521
+#: admin/logs.php:152 admin/logs.php:274 admin/logs.php:402 admin/logs.php:525
+#: build/wp-ulike/admin/logs.php:152 build/wp-ulike/admin/logs.php:274
+#: build/wp-ulike/admin/logs.php:402 build/wp-ulike/admin/logs.php:525
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: ../admin/logs.php:152
+#: admin/logs.php:153 build/wp-ulike/admin/logs.php:153
 msgid "Post ID"
 msgstr "ID δημοσιεύματος"
 
-#: ../admin/logs.php:153
+#: admin/logs.php:154 build/wp-ulike/admin/logs.php:154
 msgid "Post Title"
 msgstr "Τίτλος Άρθρου"
 
-#: ../admin/logs.php:154 ../admin/logs.php:276 ../admin/logs.php:402
-#: ../admin/logs.php:524
+#: admin/logs.php:155 admin/logs.php:278 admin/logs.php:405 admin/logs.php:528
+#: build/wp-ulike/admin/logs.php:155 build/wp-ulike/admin/logs.php:278
+#: build/wp-ulike/admin/logs.php:405 build/wp-ulike/admin/logs.php:528
 msgid "Date / Time"
 msgstr "Ημερομηνία / Ώρα"
 
-#: ../admin/logs.php:155 ../admin/logs.php:277 ../admin/logs.php:403
-#: ../admin/logs.php:525
+#: admin/logs.php:156 admin/logs.php:279 admin/logs.php:406 admin/logs.php:529
+#: build/wp-ulike/admin/logs.php:156 build/wp-ulike/admin/logs.php:279
+#: build/wp-ulike/admin/logs.php:406 build/wp-ulike/admin/logs.php:529
 msgid "IP"
 msgstr "IP"
 
-#: ../admin/logs.php:156 ../admin/logs.php:278 ../admin/logs.php:404
-#: ../admin/logs.php:526
+#: admin/logs.php:157 admin/logs.php:280 admin/logs.php:407 admin/logs.php:530
+#: build/wp-ulike/admin/logs.php:157 build/wp-ulike/admin/logs.php:280
+#: build/wp-ulike/admin/logs.php:407 build/wp-ulike/admin/logs.php:530
 msgid "Actions"
 msgstr "Ενέργειες"
 
-#: ../admin/logs.php:174 ../admin/logs.php:296 ../admin/logs.php:422
-#: ../admin/logs.php:544 ../admin/stats.php:198
+#: admin/logs.php:175 admin/logs.php:298 admin/logs.php:425 admin/logs.php:548
+#: admin/stats.php:199 build/wp-ulike/admin/logs.php:175
+#: build/wp-ulike/admin/logs.php:298 build/wp-ulike/admin/logs.php:425
+#: build/wp-ulike/admin/logs.php:548 build/wp-ulike/admin/stats.php:199
 msgid "Guest User"
 msgstr ""
 
-#: ../admin/logs.php:219 ../admin/logs.php:345 ../admin/logs.php:468
-#: ../admin/logs.php:590
+#: admin/logs.php:220 admin/logs.php:347 admin/logs.php:471 admin/logs.php:594
+#: build/wp-ulike/admin/logs.php:220 build/wp-ulike/admin/logs.php:347
+#: build/wp-ulike/admin/logs.php:471 build/wp-ulike/admin/logs.php:594
 msgid ""
 "<strong>ERROR:</strong> No Record Found. (This problem is created because "
 "you don't have any data on this table)"
 msgstr ""
 
-#: ../admin/logs.php:273
+#: admin/logs.php:275 build/wp-ulike/admin/logs.php:275
 msgid "Comment ID"
 msgstr "ID Σχολίου"
 
-#: ../admin/logs.php:274
+#: admin/logs.php:276 build/wp-ulike/admin/logs.php:276
 msgid "Comment Author"
 msgstr "Συντάκτης Σχολίου"
 
-#: ../admin/logs.php:275
+#: admin/logs.php:277 build/wp-ulike/admin/logs.php:277
 msgid "Comment Text"
 msgstr "Κείμενο Σχολίου"
 
-#: ../admin/logs.php:400
+#: admin/logs.php:403 build/wp-ulike/admin/logs.php:403
 msgid "Activity ID"
 msgstr "ID Δραστηριότητας"
 
-#: ../admin/logs.php:401
+#: admin/logs.php:404 build/wp-ulike/admin/logs.php:404
 msgid "Permalink"
 msgstr "Permalink"
 
-#: ../admin/logs.php:438
-#, php-format
+#: admin/logs.php:441 build/wp-ulike/admin/logs.php:441
 msgid "<a href=\"%1$s\">Activity Permalink</a>"
 msgstr "<a href=\"%1$s\">Permalink Δραστηριότητας</a>"
 
-#: ../admin/logs.php:522
+#: admin/logs.php:526 build/wp-ulike/admin/logs.php:526
 msgid "Topic ID"
 msgstr ""
 
-#: ../admin/logs.php:523
+#: admin/logs.php:527 build/wp-ulike/admin/logs.php:527
 msgid "Topic Title"
 msgstr ""
 
-#: ../admin/stats.php:30
+#: admin/stats.php:31 build/wp-ulike/admin/stats.php:31
 msgid "Welcome to WP ULike Statistics!"
 msgstr "Καλώς ήρθατε στα Στατιστικά του WP ULike!"
 
-#: ../admin/stats.php:31
+#: admin/stats.php:32 build/wp-ulike/admin/stats.php:32
 msgid "We have provided some useful statistics tools in this page:"
 msgstr "Έχουμε παράσχει κάποια χρήσιμα εργαλεία στατιστικών σε αυτή τη σελίδα:"
 
-#: ../admin/stats.php:35
+#: admin/stats.php:36 build/wp-ulike/admin/stats.php:36
 msgid "Get Started"
 msgstr "Πρώτα βήματα"
 
-#: ../admin/stats.php:37
+#: admin/stats.php:38 build/wp-ulike/admin/stats.php:38
 msgid "or"
 msgstr "ή"
 
-#: ../admin/stats.php:40
+#: admin/stats.php:41 build/wp-ulike/admin/stats.php:41
 msgid "Other Tools"
 msgstr "Άλλα Εργαλεία"
 
-#: ../admin/stats.php:49
+#: admin/stats.php:50 build/wp-ulike/admin/stats.php:50
 msgid "Documentation"
 msgstr "Τεκμηρίωση"
 
-#: ../admin/stats.php:53
+#: admin/stats.php:54 build/wp-ulike/admin/stats.php:54
 msgid "Contact"
 msgstr "Επικοινωνία"
 
-#: ../admin/stats.php:54
+#: admin/stats.php:55 build/wp-ulike/admin/stats.php:55
 msgid "GitHub Repository"
 msgstr ""
 
-#: ../admin/stats.php:80
+#: admin/stats.php:81 build/wp-ulike/admin/stats.php:81
 msgid "Posts Likes Summary"
 msgstr ""
 
-#: ../admin/stats.php:88
+#: admin/stats.php:89 build/wp-ulike/admin/stats.php:89
 msgid "Comments Likes Summary"
 msgstr ""
 
-#: ../admin/stats.php:96
+#: admin/stats.php:97 build/wp-ulike/admin/stats.php:97
 msgid "Activities Likes Summary"
 msgstr ""
 
-#: ../admin/stats.php:104
+#: admin/stats.php:105 build/wp-ulike/admin/stats.php:105
 msgid "Topics Likes Summary"
 msgstr ""
 
-#: ../admin/stats.php:114 ../admin/stats.php:344
+#: admin/stats.php:115 admin/stats.php:389 build/wp-ulike/admin/stats.php:115
+#: build/wp-ulike/admin/stats.php:389
 msgid "Summary"
 msgstr "Σύνοψη"
 
-#: ../admin/stats.php:126
+#: admin/stats.php:127 build/wp-ulike/admin/stats.php:127
 msgid "Total Likes"
 msgstr ""
 
-#: ../admin/stats.php:138
-msgid "Today"
-msgstr "Σήμερα"
-
-#: ../admin/stats.php:143
-msgid "Yesterday"
-msgstr "Χθες"
-
-#: ../admin/stats.php:148
-msgid "Week"
-msgstr "Εβδομάδα"
-
-#: ../admin/stats.php:153
-msgid "Month"
-msgstr "Μήνας"
-
-#: ../admin/stats.php:158
+#: admin/stats.php:159 build/wp-ulike/admin/stats.php:159
 msgid "Total"
 msgstr "Σύνολο"
 
-#: ../admin/stats.php:192 ../admin/stats.php:351
+#: admin/stats.php:193 admin/stats.php:396 build/wp-ulike/admin/stats.php:193
+#: build/wp-ulike/admin/stats.php:396
 msgid "Top Likers"
 msgstr ""
 
-#: ../admin/stats.php:227 ../admin/stats.php:233 ../admin/stats.php:239
-#: ../admin/stats.php:245
+#: admin/stats.php:268 admin/stats.php:274 admin/stats.php:280
+#: admin/stats.php:286 build/wp-ulike/admin/stats.php:268
+#: build/wp-ulike/admin/stats.php:274 build/wp-ulike/admin/stats.php:280
+#: build/wp-ulike/admin/stats.php:286
 msgid "View Logs"
 msgstr "Προβολή Αρχείων καταγραφής"
 
-#: ../admin/stats.php:228 ../admin/stats.php:345
+#: admin/stats.php:269 admin/stats.php:390 build/wp-ulike/admin/stats.php:269
+#: build/wp-ulike/admin/stats.php:390
 msgid "Posts Likes Stats"
 msgstr ""
 
-#: ../admin/stats.php:228 ../admin/stats.php:234 ../admin/stats.php:240
-#: ../admin/stats.php:246 ../admin/stats.php:277
-#, php-format
+#: admin/stats.php:269 admin/stats.php:275 admin/stats.php:281
+#: admin/stats.php:287 admin/stats.php:318 build/wp-ulike/admin/stats.php:269
+#: build/wp-ulike/admin/stats.php:275 build/wp-ulike/admin/stats.php:281
+#: build/wp-ulike/admin/stats.php:287 build/wp-ulike/admin/stats.php:318
 msgid "In The Last %s Days"
 msgstr "Στις Τελευταίες %s Ημέρες"
 
-#: ../admin/stats.php:234 ../admin/stats.php:346
+#: admin/stats.php:275 admin/stats.php:391 build/wp-ulike/admin/stats.php:275
+#: build/wp-ulike/admin/stats.php:391
 msgid "Comments Likes Stats"
 msgstr ""
 
-#: ../admin/stats.php:240 ../admin/stats.php:347
+#: admin/stats.php:281 admin/stats.php:392 build/wp-ulike/admin/stats.php:281
+#: build/wp-ulike/admin/stats.php:392
 msgid "Activities Likes Stats"
 msgstr ""
 
-#: ../admin/stats.php:246 ../admin/stats.php:348
+#: admin/stats.php:287 admin/stats.php:393 build/wp-ulike/admin/stats.php:287
+#: build/wp-ulike/admin/stats.php:393
 msgid "Topics Likes Stats"
 msgstr ""
 
-#: ../admin/stats.php:277 ../admin/stats.php:349
+#: admin/stats.php:318 admin/stats.php:394 build/wp-ulike/admin/stats.php:318
+#: build/wp-ulike/admin/stats.php:394
 msgid "Likes Percent"
 msgstr ""
 
-#: ../admin/stats.php:341
+#: admin/stats.php:386 build/wp-ulike/admin/stats.php:386
 msgid "Show on screen"
 msgstr "Προβολή"
 
-#: ../admin/stats.php:343
+#: admin/stats.php:388 build/wp-ulike/admin/stats.php:388
 msgid "Welcome"
 msgstr "Καλώς ήρθατε"
 
-#: ../admin/stats.php:354
+#: admin/stats.php:403 build/wp-ulike/admin/stats.php:403
 msgid "Days"
 msgstr "Ημέρες"
 
-#: ../inc/classes/class-mycred.php:202
+#: build/wp-ulike/inc/classes/class-mycred.php:203
+#: inc/classes/class-mycred.php:203
 msgid "Points for Liking content"
 msgstr ""
 
-#: ../inc/classes/class-mycred.php:209 ../inc/classes/class-mycred.php:226
+#: build/wp-ulike/inc/classes/class-mycred.php:210
+#: build/wp-ulike/inc/classes/class-mycred.php:227
+#: inc/classes/class-mycred.php:210 inc/classes/class-mycred.php:227
 msgid "Limit"
 msgstr "Όριο"
 
-#: ../inc/classes/class-mycred.php:214 ../inc/classes/class-mycred.php:231
-#: ../inc/classes/class-mycred.php:243 ../inc/classes/class-mycred.php:255
+#: build/wp-ulike/inc/classes/class-mycred.php:215
+#: build/wp-ulike/inc/classes/class-mycred.php:232
+#: build/wp-ulike/inc/classes/class-mycred.php:244
+#: build/wp-ulike/inc/classes/class-mycred.php:256
+#: inc/classes/class-mycred.php:215 inc/classes/class-mycred.php:232
+#: inc/classes/class-mycred.php:244 inc/classes/class-mycred.php:256
 msgid "Log template"
 msgstr ""
 
-#: ../inc/classes/class-mycred.php:219
+#: build/wp-ulike/inc/classes/class-mycred.php:220
+#: inc/classes/class-mycred.php:220
 msgid "Points for Author Who Get Liked"
 msgstr ""
 
-#: ../inc/classes/class-mycred.php:236
+#: build/wp-ulike/inc/classes/class-mycred.php:237
+#: inc/classes/class-mycred.php:237
 msgid "Points for unliking content"
 msgstr ""
 
-#: ../inc/classes/class-mycred.php:248
+#: build/wp-ulike/inc/classes/class-mycred.php:249
+#: inc/classes/class-mycred.php:249
 msgid "Points for Author Who Get Unliked"
 msgstr ""
 
-#: ../inc/wp-functions.php:172
+#: build/wp-ulike/inc/wp-functions.php:300 inc/wp-functions.php:300
 msgid "WP ULike Activity"
 msgstr "Δραστηριότητα WP ULike"
 
-#: ../inc/wp-functions.php:303
+#: build/wp-ulike/inc/wp-functions.php:420 inc/wp-functions.php:420
+#, fuzzy
+msgid "Likes"
+msgstr "Μου αρέσει"
+
+#: build/wp-ulike/inc/wp-functions.php:487 inc/wp-functions.php:487
+msgid "You have a new like from"
+msgstr ""
+
+#: build/wp-ulike/inc/wp-functions.php:587 inc/wp-functions.php:587
 msgid ""
 "This hook award / deducts points from users who Like/Unlike any content of "
 "WordPress, bbPress, BuddyPress & ..."
 msgstr ""
 
-#: ../inc/wp-functions.php:311
+#: build/wp-ulike/inc/wp-functions.php:595 inc/wp-functions.php:595
 msgid "Liking Content"
 msgstr ""
 
-#: ../inc/wp-functions.php:312
+#: build/wp-ulike/inc/wp-functions.php:596 inc/wp-functions.php:596
 msgid "Liked Content"
 msgstr ""
 
-#: ../inc/wp-functions.php:313
+#: build/wp-ulike/inc/wp-functions.php:597 inc/wp-functions.php:597
 msgid "Unliking Content"
 msgstr ""
 
-#: ../inc/wp-functions.php:314
+#: build/wp-ulike/inc/wp-functions.php:598 inc/wp-functions.php:598
 msgid "Unliked Content"
 msgstr ""
 
-#: ../inc/wp-functions.php:336 ../inc/wp-functions.php:370
+#: build/wp-ulike/inc/wp-functions.php:620
+#: build/wp-ulike/inc/wp-functions.php:654 inc/wp-functions.php:620
+#: inc/wp-functions.php:654
 msgid "Recent Posts Liked"
 msgstr ""
 
-#: ../inc/wp-functions.php:341 ../inc/wp-functions.php:410
+#: build/wp-ulike/inc/wp-functions.php:625
+#: build/wp-ulike/inc/wp-functions.php:694 inc/wp-functions.php:625
+#: inc/wp-functions.php:694
 msgid "Recent Comments Liked"
 msgstr ""
 
-#: ../inc/wp-functions.php:386 ../inc/wp-functions.php:427
+#: build/wp-ulike/inc/wp-functions.php:670
+#: build/wp-ulike/inc/wp-functions.php:711 inc/wp-functions.php:670
+#: inc/wp-functions.php:711
 msgid "This user has not made any likes."
 msgstr ""
 
-#: ../inc/wp-strings.php:3
+#: build/wp-ulike/inc/wp-strings.php:3 inc/wp-strings.php:3
 msgid "Allow To Like"
 msgstr ""
 
-#: ../inc/wp-strings.php:4
+#: build/wp-ulike/inc/wp-strings.php:4 inc/wp-strings.php:4
 msgid "Guests Only"
 msgstr "Μόνο Επισκέπτες"
 
-#: ../inc/wp-strings.php:5
+#: build/wp-ulike/inc/wp-strings.php:5 inc/wp-strings.php:5
 msgid "Registered Users Only"
 msgstr "Εγγεγραμμένοι Χρήστες Μόνο"
 
-#: ../inc/wp-strings.php:6
+#: build/wp-ulike/inc/wp-strings.php:6 inc/wp-strings.php:6
 msgid "Registered Users And Guests"
 msgstr "Εγγεγραμμένοι Χρήστες Και Επισκέπτες"
 
-#: ../inc/wp-strings.php:7
+#: build/wp-ulike/inc/wp-strings.php:7 inc/wp-strings.php:7
 msgid "Who Is Allowed To Like?"
 msgstr ""
 
-#: ../inc/wp-strings.php:8
+#: build/wp-ulike/inc/wp-strings.php:8 inc/wp-strings.php:8
 msgid "Filter Options:"
 msgstr "Φίλτρο Επιλογών:"
 
-#: ../inc/wp-strings.php:9
+#: build/wp-ulike/inc/wp-strings.php:9 inc/wp-strings.php:9
 msgid "Sort Options:"
 msgstr "Ταξινόμηση Επιλογών:"
 
-#: ../inc/wp-strings.php:11
+#: build/wp-ulike/inc/wp-strings.php:11 inc/wp-strings.php:11
 msgid "Dislike"
 msgstr ""
 
-#: ../inc/wp-strings.php:12
+#: build/wp-ulike/inc/wp-strings.php:12 inc/wp-strings.php:12
 msgid "Dislike Support"
 msgstr ""
 
-#: ../inc/wp-strings.php:13
+#: build/wp-ulike/inc/wp-strings.php:13 inc/wp-strings.php:13
 msgid "Text After Dislike"
 msgstr ""
 
-#: ../inc/wp-strings.php:14
+#: build/wp-ulike/inc/wp-strings.php:14 inc/wp-strings.php:14
 msgid "Show Counter"
 msgstr "Προβολή Μετρητή"
 
-#: ../inc/wp-strings.php:15
+#: build/wp-ulike/inc/wp-strings.php:15 inc/wp-strings.php:15
 msgid "Show tooltips"
 msgstr "Προβολή επεξηγήσεων"
 
-#: ../inc/wp-strings.php:16
+#: build/wp-ulike/inc/wp-strings.php:16 inc/wp-strings.php:16
 msgid "Alignment"
 msgstr "Στοίχιση"
 
-#: ../inc/wp-strings.php:17
+#: build/wp-ulike/inc/wp-strings.php:17 inc/wp-strings.php:17
 msgid "Left"
 msgstr "Αριστερά"
 
-#: ../inc/wp-strings.php:18
+#: build/wp-ulike/inc/wp-strings.php:18 inc/wp-strings.php:18
 msgid "Center"
 msgstr "Κέντρο"
 
-#: ../inc/wp-strings.php:19
+#: build/wp-ulike/inc/wp-strings.php:19 inc/wp-strings.php:19
 msgid "Right"
 msgstr "Δεξιά"
 
-#: ../inc/wp-strings.php:20
+#: build/wp-ulike/inc/wp-strings.php:20 inc/wp-strings.php:20
 msgid "Cookie Life time"
 msgstr ""
 
-#: ../inc/wp-strings.php:21
+#: build/wp-ulike/inc/wp-strings.php:21 inc/wp-strings.php:21
 msgid "BuddyPress Notifications"
 msgstr "Ειδοποιήσεις BuddyPress"
 
-#: ../inc/wp-strings.php:22
+#: build/wp-ulike/inc/wp-strings.php:22 inc/wp-strings.php:22
 msgid "Liker Attempts"
 msgstr ""
 
-#: ../inc/wp-strings.php:23
+#: build/wp-ulike/inc/wp-strings.php:23 inc/wp-strings.php:23
 msgid "Liked Users Box Style"
 msgstr ""
 
-#: ../inc/wp-strings.php:24
+#: build/wp-ulike/inc/wp-strings.php:24 inc/wp-strings.php:24
 msgid "Tooltip"
 msgstr "Tooltip"
 
-#: ../inc/wp-strings.php:29
+#: build/wp-ulike/inc/wp-strings.php:29 inc/wp-strings.php:29
 msgid "Total Users Liked"
 msgstr ""
 
-#: ../inc/wp-strings.php:30
+#: build/wp-ulike/inc/wp-strings.php:30 inc/wp-strings.php:30
 msgid "Total Posts Liked"
 msgstr ""
 
-#: ../inc/wp-strings.php:31
+#: build/wp-ulike/inc/wp-strings.php:31 inc/wp-strings.php:31
 msgid "Total Comments Liked"
 msgstr ""
 
-#: ../inc/wp-strings.php:32
+#: build/wp-ulike/inc/wp-strings.php:32 inc/wp-strings.php:32
 msgid "Upvote"
 msgstr ""
 
-#: ../inc/wp-strings.php:33
+#: build/wp-ulike/inc/wp-strings.php:33 inc/wp-strings.php:33
 msgid "Downvote"
 msgstr ""
 
-#: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:291
+#: build/wp-ulike/inc/wp-ulike.php:65 build/wp-ulike/inc/wp-ulike.php:276
+#: inc/wp-ulike.php:65 inc/wp-ulike.php:276
 msgid "You need to login in order to like this post: "
 msgstr ""
 
-#: ../inc/wp-ulike.php:70 ../inc/wp-ulike.php:142 ../inc/wp-ulike.php:219
-#: ../inc/wp-ulike.php:291
+#: build/wp-ulike/inc/wp-ulike.php:65 build/wp-ulike/inc/wp-ulike.php:131
+#: build/wp-ulike/inc/wp-ulike.php:204 build/wp-ulike/inc/wp-ulike.php:276
+#: inc/wp-ulike.php:65 inc/wp-ulike.php:131 inc/wp-ulike.php:204
+#: inc/wp-ulike.php:276
 msgid "click here"
 msgstr "κάντε κλικ εδώ"
 
-#: ../inc/wp-ulike.php:142
+#: build/wp-ulike/inc/wp-ulike.php:131 inc/wp-ulike.php:131
 msgid "You need to login in order to like this comment: "
 msgstr ""
 
-#: ../inc/wp-ulike.php:219
+#: build/wp-ulike/inc/wp-ulike.php:204 inc/wp-ulike.php:204
 msgid "You need to login in order to like this activity: "
 msgstr ""
 
-#: ../inc/wp-ulike.php:343
+#: build/wp-ulike/inc/wp-ulike.php:335 inc/wp-ulike.php:335
 msgid "Error: This Method Is Not Exist!"
 msgstr ""
 
-#: ../wp-ulike.php:124
+#: build/wp-ulike/wp-ulike.php:142 wp-ulike.php:142
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
-#: ../wp-ulike.php:125
+#: build/wp-ulike/wp-ulike.php:143 wp-ulike.php:143
 msgid "Statistics"
 msgstr "Στατιστικά"
 
-#: ../wp-ulike.php:126
+#: build/wp-ulike/wp-ulike.php:144 wp-ulike.php:144
 msgid "About"
 msgstr "Περί"
+
+#. Plugin URI of the plugin/theme
+msgid "http://wp-ulike.alimir.ir/"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Ali Mirzaei"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://about.alimir.ir"
+msgstr ""

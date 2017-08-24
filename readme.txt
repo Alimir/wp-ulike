@@ -4,8 +4,8 @@ Donate link: http://alimir.ir
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
-Tested up to: 4.8
-Stable tag: 2.8
+Tested up to: 4.8.1
+Stable tag: 2.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,31 +132,31 @@ Also you can use of the following function and shortcode for your posts:
 `[wp_ulike]`
 
 = How To Change The Counter Format? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-change-the-counter-format
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-the-counter-format)
 
 = How To Change Schema Type? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-change-schema-type
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-schema-type)
 
 = How To Add Extra Microdata? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-add-extra-microdata
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-add-extra-microdata)
 
 = How To Remove All Schema Data Except Of aggregateRating? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-remove-all-schema-data-except-of-aggregaterating
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-remove-all-schema-data-except-of-aggregaterating)
 
 = How To Remove "0" Count If There Are No Likes? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-remove-0-count-if-there-are-no-likes
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-remove-0-count-if-there-are-no-likes)
 
 = How To Change The Login Alert Template? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-change-the-login-alert-template
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-the-login-alert-template)
 
 = How To Get Post Likes Number? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-get-post-likes-number
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-get-post-likes-number)
 
 = How To Get Comment Likes Number? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-get-comment-likes-number
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-get-comment-likes-number)
 
 = How To Sort Most Liked Posts?  =
-Documentation : https://github.com/alimir/wp-ulike#how-to-sort-most-liked-posts
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-sort-most-liked-posts)
 
 = How Can I Create Custom Template In Users Liked Box?  =
 * We have provided some variables in setting panel. You can use them in textarea and then save the new options. 
@@ -170,6 +170,13 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 2.8.1 =
+* Added: Parse args functionality on wp ulike inputs.
+* Added: New filters (wp_ulike_respond_for_) on the json respond.
+* Fixed: Upgrading 'WordpressUlike' datasheets when new DOM has been inserted. (It was a bug on buddypress)
+* Fixed: Fix some JS syntax errors.
+* Fixed: Infinite loading problem in buddypress comments.
 
 = 2.8 =
 * Added: Robeen (Animated Heart) template. (New Theme)

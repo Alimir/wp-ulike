@@ -18,7 +18,7 @@
 		//enqueue JQuery script
 		wp_enqueue_script( 'jquery' );
 		//Add wp_ulike script file with special functions.
-		wp_enqueue_script('wp_ulike', plugins_url('assets/js/wp-ulike.min.js', dirname(__FILE__)), array('jquery'), '2.8', true);
+		wp_enqueue_script('wp_ulike', plugins_url('assets/js/wp-ulike.min.js', dirname(__FILE__)), array('jquery'), '2.8.1', true);
 		//localize script
 		wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
 			'ajax_url' 			=> admin_url( 'admin-ajax.php' ),
