@@ -4,8 +4,8 @@ Donate link: http://alimir.ir
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
-Tested up to: 4.8
-Stable tag: 2.8
+Tested up to: 4.8.1
+Stable tag: 2.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
