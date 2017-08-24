@@ -132,31 +132,31 @@ Also you can use of the following function and shortcode for your posts:
 `[wp_ulike]`
 
 = How To Change The Counter Format? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-change-the-counter-format
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-the-counter-format)
 
 = How To Change Schema Type? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-change-schema-type
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-schema-type)
 
 = How To Add Extra Microdata? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-add-extra-microdata
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-add-extra-microdata)
 
 = How To Remove All Schema Data Except Of aggregateRating? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-remove-all-schema-data-except-of-aggregaterating
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-remove-all-schema-data-except-of-aggregaterating)
 
 = How To Remove "0" Count If There Are No Likes? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-remove-0-count-if-there-are-no-likes
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-remove-0-count-if-there-are-no-likes)
 
 = How To Change The Login Alert Template? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-change-the-login-alert-template
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-the-login-alert-template)
 
 = How To Get Post Likes Number? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-get-post-likes-number
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-get-post-likes-number)
 
 = How To Get Comment Likes Number? =
-Documentation : https://github.com/alimir/wp-ulike#how-to-get-comment-likes-number
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-get-comment-likes-number)
 
 = How To Sort Most Liked Posts?  =
-Documentation : https://github.com/alimir/wp-ulike#how-to-sort-most-liked-posts
+Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-sort-most-liked-posts)
 
 = How Can I Create Custom Template In Users Liked Box?  =
 * We have provided some variables in setting panel. You can use them in textarea and then save the new options. 
