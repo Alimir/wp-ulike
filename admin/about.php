@@ -22,25 +22,7 @@
 	 */ 
 	add_action('admin_enqueue_scripts', 'wp_ulike_enqueue_font_icons');
 	function wp_ulike_enqueue_font_icons($avatar) {
-		wp_enqueue_style( 'wp_ulike_font_icons', plugins_url( 'classes/css/font-icons.css' , __FILE__ ) );
-	}
-
-	/**
-	 * Add rating us notification on wp-ulike admin pages
-	 *
-	 * @author       	Alimir	 	
-	 * @since           2.7
-	 * @return			String
-	 */ 
-	add_action( 'admin_notices', 'wp_ulike_add_rating_star_notice', 999);
-	function wp_ulike_add_rating_star_notice() {
-		if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike") !== false){
-			?>
-			<div class="notice notice-success" style="margin:15px 0">
-				<p style="font-size:16px"><strong><?php _e('Like this plugin?',WP_ULIKE_SLUG); ?></strong> <?php _e('Show your support by Rating 5 Star in <a href="http://wordpress.org/plugins/wp-ulike"> Plugin Directory reviews</a>',WP_ULIKE_SLUG); ?></p>
-			</div>
-			<?php
-		} else return;
+		wp_enqueue_style( 'wp_ulike_font_icons', WP_ULIKE_ADMIN_URL . '/classes/css/font-icons.css' );
 	}
 
 	/**

@@ -6,7 +6,7 @@
 	/*******************************************************
 	  Widget
 	*******************************************************/
-	include( plugin_dir_path(__FILE__) . 'classes/class-widget.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/classes/class-widget.php');
 	
 	/**
 	 * Register WP ULike Widgets
@@ -44,13 +44,13 @@
 	*******************************************************/
 
 	//include about menu functions
-	require_once( plugin_dir_path(__FILE__) . 'about.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/about.php');
 
 	//include logs menu functions
-	require_once( plugin_dir_path(__FILE__) . 'logs.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/logs.php');
 
 	//include statistics menu functions
-	require_once( plugin_dir_path(__FILE__) . 'stats.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/stats.php');
 
 	/**
 	 * Start Setting Class Options
@@ -63,9 +63,9 @@
 	 * @return			String
 	 */
 	//include setting class
-	require_once( plugin_dir_path(__FILE__) . 'classes/class-settings.php' );
+	require_once( WP_ULIKE_ADMIN_DIR . '/classes/class-settings.php' );
 	//include setting templates
-	require_once( plugin_dir_path(__FILE__) . 'classes/tmp/settings.php' );
+	require_once( WP_ULIKE_ADMIN_DIR . '/classes/tmp/settings.php' );
 	//activate general setting panel
 	$wp_ulike_setting = wp_ulike_create_settings_page(
 	  'wp-ulike-settings',

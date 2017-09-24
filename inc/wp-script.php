@@ -18,7 +18,7 @@
 		//enqueue JQuery script
 		wp_enqueue_script( 'jquery' );
 		//Add wp_ulike script file with special functions.
-		wp_enqueue_script('wp_ulike', plugins_url('assets/js/wp-ulike.min.js', dirname(__FILE__)), array('jquery'), '2.8.1', true);
+		wp_enqueue_script('wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array('jquery'), '2.8.1', true);
 		//localize script
 		wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
 			'ajax_url' 			=> admin_url( 'admin-ajax.php' ),
@@ -45,7 +45,7 @@
 	add_action('wp_enqueue_scripts', 'wp_ulike_enqueue_style');
 	
 	function wp_ulike_enqueue_style() {
-		wp_enqueue_style( 'wp-ulike', plugins_url('assets/css/wp-ulike.min.css', dirname(__FILE__)) );
+		wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css' );
 		//add your custom style from setting panel.
 		wp_add_inline_style( 'wp-ulike', wp_ulike_get_custom_style() );
 	}

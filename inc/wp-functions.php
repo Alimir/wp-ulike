@@ -574,7 +574,7 @@
 	 * @since          	2.3
 	 */
 	if ( defined( 'myCRED_VERSION' ) ) {
-		include( plugin_dir_path(__FILE__) . 'classes/class-mycred.php');	
+		require_once( WP_ULIKE_INC_DIR . '/classes/class-mycred.php');	
 		/**
 		 * Register Hooks
 		 *

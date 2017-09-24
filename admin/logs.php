@@ -1,7 +1,7 @@
 <?php
 
 	//include pagination class
-	include( plugin_dir_path(__FILE__) . 'classes/class-pagination.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/classes/class-pagination.php');
 	
 	
 	/**
@@ -71,7 +71,7 @@
 		
 		wp_enqueue_script( 'jquery' );
 		
-		wp_register_script('wp_ulike_logs', plugins_url( 'classes/js/logs.js' , __FILE__ ), array('jquery'), null, true);
+		wp_register_script('wp_ulike_logs', WP_ULIKE_ADMIN_URL . '/classes/js/logs.js', array('jquery'), null, true);
 		wp_enqueue_script('wp_ulike_logs');
 		
 		//localize script
