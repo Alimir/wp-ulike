@@ -1,0 +1,76 @@
+
+/**
+ *	RTL support
+ */
+ 
+.rtl {
+	form.wp-ulike {
+		p.submit {
+			margin-right: inherit;
+			margin-left: 20px;
+		}
+		.wp-ulike-settings-tabs {
+			h2 {
+				float: right;
+				border-right: 1px solid #e0e0e0;
+				border-left: none;
+			}
+		}
+	}
+	form.wrap {
+		.wp-ulike-settings-tabs {
+			h2 {
+				&:last-child {
+					border-left: 1px solid #ddd;
+				}
+			}
+		}
+	}
+	.settings-error.info {
+		border-left: none;
+		border-right: 4px solid #2ea2cc;
+	}
+	.settings-error.warning {
+		border-left: none;
+		border-right: 4px solid #2ea2cc;
+	}
+	tr.hide-label {
+		td {
+			padding-right: 0;
+			padding-left: inherit !important;
+		}
+	}
+	#left-log {
+		margin: 0 1% 0 0;
+	}
+	.th-center {
+		text-align: center !important;
+	}
+	.td-align {
+		text-align: right;
+	}
+	.log-referred {
+		float: right;
+	}
+	.log-ip {
+		float: left;
+	}
+	.left-div {
+		float: right;
+	}
+	.right-div {
+		float: left;
+	}
+	.postbox {
+		.badge {
+			margin: 1px 2px 0px 0;
+			float: left;
+		}
+	}
+	.top-widget {
+		.wp_counter_span {
+			margin: 1px 2px 0px 0;
+			float: left;
+		}
+	}
+}
