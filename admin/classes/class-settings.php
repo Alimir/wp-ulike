@@ -218,13 +218,12 @@ class wp_ulike_settings {
   public static function admin_enqueue_scripts()
   {
     wp_enqueue_media();
-    wp_enqueue_script( 'wp-ulike-settings', plugins_url( 'js/settings.js' , __FILE__ ), array( 'jquery', 'wp-color-picker' ) );
+    wp_enqueue_script( 'wp-ulike-settings', WP_ULIKE_ADMIN_URL . '/classes/js/settings.js', array( 'jquery', 'wp-color-picker' ) );
 	  wp_enqueue_script("jquery-effects-core");
     wp_localize_script( 'wp-ulike-settings', 'ajax', array(
       'url' => admin_url( 'admin-ajax.php' ),
       'spinner' => admin_url( 'images/spinner.gif' )
     ) );
-    wp_enqueue_style( 'wp-ulike-settings', plugins_url( 'css/settings.css' , __FILE__ ) );
     wp_enqueue_style( 'wp-color-picker' );
   }
 

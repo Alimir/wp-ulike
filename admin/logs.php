@@ -68,14 +68,20 @@
 		if ( $currentScreen->id != $hook ) {
 			return;
 		}
-		
-		wp_enqueue_script( 'jquery' );
-		
-		wp_register_script('wp_ulike_logs', WP_ULIKE_ADMIN_URL . '/classes/js/logs.js', array('jquery'), null, true);
-		wp_enqueue_script('wp_ulike_logs');
+				
+		// Register Script
+		wp_register_script(
+			'wp_ulike_stats',
+			WP_ULIKE_ADMIN_URL . '/classes/js/statistics.js',
+			array('jquery'),
+			null,
+			true
+		);
+		// Enqueue Script
+		wp_enqueue_script('wp_ulike_stats');
 		
 		//localize script
-		wp_localize_script( 'wp_ulike_logs', 'wp_ulike_logs', array(
+		wp_localize_script( 'wp_ulike_stats', 'wp_ulike_logs', array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'message' => __('Are you sure to remove this item?!',WP_ULIKE_SLUG)
 		));

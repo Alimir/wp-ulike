@@ -202,6 +202,18 @@
 	}
 
 	/**
+	 * Load a set of scripts to all admin pages
+	 *
+	 * @author       	Alimir	 	
+	 * @since           2.9
+	 * @return			Void
+	 */
+	add_action( 'admin_enqueue_scripts', 'wp_ulike_enqueue_admin_style' );
+	function wp_ulike_enqueue_admin_style($hook) {
+		wp_enqueue_style( 'wp-ulike-admin', WP_ULIKE_ADMIN_URL . '/classes/css/admin.css' );
+	}
+
+	/**
 	 * Generate templates list
 	 *
 	 * @author       	Alimir	 	
