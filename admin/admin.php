@@ -277,3 +277,51 @@
 		else
 		return;
 	}
+
+	/**
+	 * Add rating us notification on wp-ulike admin pages
+	 *
+	 * @author       	Alimir	 	
+	 * @since           2.7
+	 * @updated         2.9
+	 * @return			String
+	 */ 
+	add_action( 'admin_notices', 'wp_ulike_admin_notice', 999);
+	function wp_ulike_admin_notice() {
+		if( get_option( 'wp-ulike-notice-dismissed', FALSE ) ) return;
+		?>
+		<script>
+			jQuery(document).on( 'click', '.wp-ulike-notice .notice-dismiss', function() {
+			    jQuery.ajax({
+			        url: ajaxurl,
+			        data: {
+			            action: 'wp_ulike_dismissed_notice'
+			        }
+			    })
+			});			
+		</script>
+		<div class="notice wp-ulike-notice is-dismissible">
+            <img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-badge.png" alt="Instagram Feed">
+            <div class="wp-ulike-notice-text">
+                <p><?php echo _e( "It's great to see that you've been using the WP ULike plugin for a while now. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ); ?> </p>
+                <p class="links">
+                    <a href="https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5" target="_blank"><?php echo _e( "Sure, I'd love to!", WP_ULIKE_SLUG ); ?></a>
+                </p>
+            </div>
+        </div>			
+		<?php
+	}
+
+	add_action( 'wp_ajax_wp_ulike_dismissed_notice', 'wp_ulike_ajax_notice_handler' );
+
+	/**
+	 * AJAX handler to store the state of dismissible notices.
+	 *
+	 * @author       	Alimir	 	
+	 * @since           2.9
+	 * @return			Void
+	 */	
+	function wp_ulike_ajax_notice_handler() {
+	    // Store it in the options table
+	    update_option( 'wp-ulike-notice-dismissed', TRUE );
+	}	
