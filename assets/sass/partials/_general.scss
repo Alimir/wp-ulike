@@ -1,0 +1,47 @@
+
+.wpulike {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    overflow: hidden;
+    line-height: normal;
+    margin: 0;
+    .wp_ulike_btn {
+        margin: 0;
+        display: inline-block;
+        border-radius: .25em;
+        border: 1px solid #d3d3d3;
+        vertical-align: middle;
+        line-height: normal;
+        padding: 10px 20px;
+        font-size: .75em;
+        cursor: pointer;
+        color: #777;
+        background: #dfdfdf;
+        box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5) inset;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+        text-decoration: none;
+        -webkit-transition: .25s;
+        -moz-transition: .25s;
+        -ms-transition: .25s;
+        -o-transition: .25s;
+        transition: .25s;
+    }
+    .wp_ulike_btn.wp_ulike_put_text {
+        padding: 2px 10px;
+    }
+    .wp_ulike_is_loading {
+        .wp_ulike_btn {
+            background-image: url(../img/icons/loading.gif) !important;
+            background-repeat: no-repeat;
+            background-position: center center;
+            span {
+                visibility: hidden;
+            }
+        }
+    }
+}
+.wp_ulike_click_is_disabled {
+    pointer-events: none;
+    cursor: default;
+}

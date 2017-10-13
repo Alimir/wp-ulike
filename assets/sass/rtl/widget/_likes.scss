@@ -1,0 +1,27 @@
+
+.rtl {
+    .commentlist {
+        .tiles {
+            .avatar {
+                left: inherit !important;
+                right: 0 !important;
+            }
+        }
+    }
+    .wp_ulike_thumbnail {
+        margin: 0 0 0 10px;
+    }
+    .most_liked_comment {
+        .avatar {
+            margin: 0 0 0 10px;
+        }
+    }
+    .wp_ulike_style_love {
+        .wp_counter_span {
+            float: left;
+            background: #F1F1F1 url(../img/icons/heart.png) no-repeat scroll 85% center;
+            margin: 2px 2px 0 0;
+            padding: 0 23px 0 5px;
+        }
+    }
+}
