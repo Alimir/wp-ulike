@@ -222,17 +222,20 @@
 	 */
 	function wp_ulike_generate_templates_list(){
 		return array(
-			'wpulike-default'	=> array(
-				'name' => __('Default', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_default_template'
+			'wpulike-default' => array(
+				'name'     => __('Default', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_default_template',
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg'
 			),
-			'wpulike-heart'	=> array(
-				'name' => __('Heart', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_simple_heart_template'					
+			'wpulike-heart'   => array(
+				'name'     => __('Heart', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_simple_heart_template',				
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg'				
 			),
-			'wpulike-robeen'	=> array(
-				'name' => __('Robeen', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_robeen_template'					
+			'wpulike-robeen'  => array(
+				'name'     => __('Robeen', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_robeen_template',				
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'					
 			)
 		);
 	}

@@ -300,9 +300,9 @@ class wp_ulike_settings {
     {
       case 'checkbox':
         $check = checked( 1, $value, false );
-        echo "<label><input {$attrs} id='{$id}' type='checkbox' value='1' {$check} />";
+        echo "<div class='toggle-switch'><input {$attrs} id='{$id}' type='checkbox' value='1' {$check} /><label for='{$id}'>";
         if ( $checkboxlabel ) { echo " {$checkboxlabel}"; }
-        echo "</label>";
+        echo "</label></div>";
 		if ( $desc ) { echo " {$desc}"; }
         break;
 
@@ -311,7 +311,7 @@ class wp_ulike_settings {
         echo "<fieldset id='{$id}'>";
         foreach ( $options as $v => $label ) {
           $check = checked( $v, $value, false );
-          $options[$v] = "<label><input {$attrs} class='wp_ulike_check_{$v}' type='radio' value='{$v}' {$check} /> {$label}</label>";
+          $options[$v] = "<label><input {$attrs} class='radio wp_ulike_check_{$v}' type='radio' value='{$v}' {$check} /> {$label}</label>";
         }
         echo implode( '<br />', $options );
         echo "{$desc}</fieldset>";
@@ -329,6 +329,19 @@ class wp_ulike_settings {
         }
         echo "</select>{$desc}";
         break;
+
+      case 'visual-select':
+        if ( ! $options ) { _e( 'No options defined.', WP_ULIKE_SLUG ); }
+        echo "<fieldset class='visual-select' id='{$id}'>";
+        foreach ( $options as $v => $label ) {
+          $name   = $label['name'];
+          $symbol = $label['symbol'];
+          $check  = checked( $v, $value, false );
+          $options[$v] = "<input {$attrs} class='wp_ulike_check_{$v}' data-image='{$symbol}' type='radio' value='{$v}' {$check} />";
+        }
+        echo implode( '', $options );
+        echo "{$desc}</fieldset>";
+        break;              
 
       case 'media':
         echo "<fieldset class='wp-ulike-settings-media' id='{$id}'><input {$attrs} type='hidden' value='{$value}' />";
