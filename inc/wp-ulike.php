@@ -10,6 +10,7 @@
 	 * @updated         2.3
 	 * @updated         2.7 //added 'wp_ulike_posts_add_attr', 'wp_ulike_posts_microdata' & 'wp_ulike_login_alert_template' filters
 	 * @updated         2.8 //Removed some old functions & added new filters support.
+	 * @updated         2.9 // Modify get_liked_users functionality
 	 * @return			String
 	 */
 	function wp_ulike( $type = 'get', $args = array() ) {
@@ -48,7 +49,7 @@
 		if( ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
 			//call wp_get_ulike function from wp_ulike class
 			$wp_ulike  		= $wp_ulike_class->wp_get_ulike( $parsed_args );
-			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $post_ID, 'ulike', 'post_id', 'wp_ulike_posts' );
+			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $parsed_args );
 
 			if ($type == 'put') {
 				return $wp_ulike;
@@ -60,7 +61,7 @@
 		}//end !only_registered_users condition
 		elseif ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
 			if(wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button") {
-				return $wp_ulike_class->get_template( $parsed_args, 0 );		
+				return $wp_ulike_class->get_template( $parsed_args, 0 ) . $wp_ulike_class->get_liked_users( $parsed_args );		
 			} else {
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
 			}
@@ -74,8 +75,9 @@
 	 * @author       	Alimir	 	
 	 * @since           1.6
 	 * @updated         2.3
-	 * @updated         2.7 //added 'wp_ulike_login_alert_template' & 'wp_ulike_comments_add_attr' filters
-	 * @updated         2.8 //Removed some old functions & added new filters support. 
+	 * @updated         2.7 // added 'wp_ulike_login_alert_template' & 'wp_ulike_comments_add_attr' filters
+	 * @updated         2.8 // Removed some old functions & added new filters support.
+	 * @updated         2.9 // Modify get_liked_users functionality
 	 * @return			String
 	 */
 	function wp_ulike_comments( $type = 'get', $args = array() ) {
@@ -114,7 +116,7 @@
 		if( ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {	
 			//call wp_get_ulike function from wp_ulike class
 			$wp_ulike 		= $wp_ulike_class->wp_get_ulike( $parsed_args );		
-			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $CommentID, 'ulike_comments', 'comment_id', 'wp_ulike_comments' );
+			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $parsed_args );
 
 			if ($type == 'put') {
 				return $wp_ulike;
@@ -126,7 +128,7 @@
 		}//end !only_registered_users condition
 		elseif (wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users') == '1' && ! is_user_logged_in()){
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type' ) == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );	
+				return $wp_ulike_class->get_template( $parsed_args, 0 ) . $wp_ulike_class->get_liked_users( $parsed_args );	
 			} else {
 				return apply_filters( 'wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this comment: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>' );
 			}
@@ -143,6 +145,7 @@
 	 * @updated         2.4
 	 * @updated         2.7 //added 'wp_ulike_login_alert_template' & 'wp_ulike_activities_add_attr' filters
 	 * @updated         2.8 //Removed some old functions & added new filters support.
+	 * @updated         2.9 // Modify get_liked_users functionality
 	 * @return			String
 	 */
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
@@ -186,7 +189,7 @@
 		if( ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
 			//call wp_get_ulike function from wp_ulike class
 			$wp_ulike 		= $wp_ulike_class->wp_get_ulike( $parsed_args );
-			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $activityID, 'ulike_activities', 'activity_id', 'wp_ulike_buddypress' );
+			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $parsed_args );
 
 			if ($type == 'put') {
 				return $wp_ulike;
@@ -198,7 +201,7 @@
 		}//end !only_registered_users condition
 		elseif ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
+				return $wp_ulike_class->get_template( $parsed_args, 0 ) . $wp_ulike_class->get_liked_users( $parsed_args );
 			}
 			else{
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this activity: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
@@ -216,6 +219,7 @@
 	 * @updated         2.4.1
 	 * @updated         2.7 //added 'wp_ulike_login_alert_template' & 'wp_ulike_topics_add_attr' filters
 	 * @updated         2.8 //Removed some old functions & added new filters support.
+	 * @updated         2.9 // Modify get_liked_users functionality
 	 * @return			String
 	 */
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
@@ -257,7 +261,7 @@
 		if( ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
 			//call wp_get_ulike function from wp_ulike class
 			$wp_ulike 		= $wp_ulike_class->wp_get_ulike( $parsed_args );
-			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $post_ID, 'ulike_forums', 'topic_id', 'wp_ulike_bbpress' );
+			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $parsed_args );
 
 			if ($type == 'put') {
 				return $wp_ulike;
@@ -270,7 +274,7 @@
 		
 		else if ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && !is_user_logged_in()) {
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );	
+				return $wp_ulike_class->get_template( $parsed_args, 0 ) . $wp_ulike_class->get_liked_users( $parsed_args );	
 			}
 			else {
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
