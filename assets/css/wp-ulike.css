@@ -230,7 +230,7 @@
   background-color: transparent;
   padding: .25em .5em;
   margin-left: 0;
-  color: #525252;
+  color: #505050;
   font-size: .8em;
 }
 .wpulike-heart .count-box:before {
@@ -712,9 +712,9 @@ button.toast-close-button {
   border-radius: 3px;
   background-position: 15px center;
   background-repeat: no-repeat;
-  -moz-box-shadow: 0 0 12px #999;
-  -webkit-box-shadow: 0 0 12px #999;
-  box-shadow: 0 0 12px #999;
+  -moz-box-shadow: 0 0 12px #888;
+  -webkit-box-shadow: 0 0 12px #888;
+  box-shadow: 0 0 12px #888;
   color: #FFFFFF;
   opacity: .8;
   filter: alpha(opacity=80);

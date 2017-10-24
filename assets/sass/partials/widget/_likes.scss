@@ -1,4 +1,3 @@
-$color_1: #333;
 
 /**
  * Widgets & Likers Box
@@ -72,7 +71,7 @@ $color_1: #333;
         float: right;
         display: inline-block;
         background: #f1f1f1 url(../img/icons/heart.png) 5px center no-repeat;
-        color: $color_1;
+        color: $wp-ulike-color-dark-90;
         font-size: 9px;
         line-height: 17px;
         font-weight: 400;

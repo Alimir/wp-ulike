@@ -1,9 +1,3 @@
-$background_color_1: #030303;
-$background_color_2: #51A351;
-$background_color_3: #BD362F;
-$background_color_4: #2F96B4;
-$background_color_5: #F89406;
-
 /**
  * Toastr plugin styles
  */
@@ -123,9 +117,9 @@ button.toast-close-button {
         border-radius: 3px;
         background-position: 15px center;
         background-repeat: no-repeat;
-        -moz-box-shadow: 0 0 12px #999;
-        -webkit-box-shadow: 0 0 12px #999;
-        box-shadow: 0 0 12px #999;
+        -moz-box-shadow: 0 0 12px $wp-ulike-color-dark-60;
+        -webkit-box-shadow: 0 0 12px $wp-ulike-color-dark-60;
+        box-shadow: 0 0 12px $wp-ulike-color-dark-60;
         color: $wp-ulike-color-light;
         opacity: .8;
         filter: alpha(opacity=80);
@@ -185,19 +179,19 @@ button.toast-close-button {
     }
 }
 .toast {
-    background-color: $background_color_1;
+    background-color: #030303;
 }
 .toast-success {
-    background-color: $background_color_2;
+    background-color: #51A351;
 }
 .toast-error {
-    background-color: $background_color_3;
+    background-color: #BD362F;
 }
 .toast-info {
-    background-color: $background_color_4;
+    background-color: #2F96B4;
 }
 .toast-warning {
-    background-color: $background_color_5;
+    background-color: #F89406;
 }
 .toast-progress {
     position: absolute;

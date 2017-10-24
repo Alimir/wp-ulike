@@ -1,4 +1,3 @@
-$border_color_1: #898F9C #898F9C transparent transparent;
 
 .rtl {
     .wpulike-default {
@@ -8,7 +7,7 @@ $border_color_1: #898F9C #898F9C transparent transparent;
             &:before {
                 right: -.2125em;
                 left: inherit;
-                border-color: $border_color_1;
+                border-color:  #898F9C #898F9C transparent transparent;
             }
         }
     }

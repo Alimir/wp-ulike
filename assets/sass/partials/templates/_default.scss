@@ -1,9 +1,3 @@
-$background_color_1: #bdc3c7;
-$wp-ulike-color-light: $wp-ulike-color-light;
-$border_color_1: #999;
-$border_color_2: #95a5a6;
-$border_bottom_color_1: #898F9C;
-$border_left_color_1: #898F9C;
 
 /**
  * Default template
@@ -12,21 +6,21 @@ $border_left_color_1: #898F9C;
     .wp_ulike_btn {
         &:focus {
             outline: none;
-            border-color: $border_color_1;
+            border-color: #999;
         }
         &:hover {
             text-decoration: none;
             color: $wp-ulike-color-light-70;
             text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-            background-color: $background_color_1;
-            border-color: $border_color_2;
+            background-color: #bdc3c7;
+            border-color: #95a5a6;
         }
         &:active {
             text-decoration: none;
             color: $wp-ulike-color-light-70;
             text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-            background-color: $background_color_1;
-            border-color: $border_color_2;
+            background-color:#bdc3c7;
+            border-color: #95a5a6;
         }
     }
     .wp_ulike_btn.wp_ulike_put_image {
@@ -62,11 +56,11 @@ $border_left_color_1: #898F9C;
             position: absolute;
             border: 1px solid transparent;
             background: $wp-ulike-color-light;
-            border-bottom-color: $border_bottom_color_1;
+            border-bottom-color: #898F9C;
             left: -.2125em;
             top: 50%;
             margin-top: -.2em;
-            border-left-color: $border_left_color_1;
+            border-left-color: #898F9C;
             -webkit-transform: rotate(45deg);
             -moz-transform: rotate(45deg);
             -ms-transform: rotate(45deg);
