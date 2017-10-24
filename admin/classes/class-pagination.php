@@ -53,7 +53,7 @@ class wp_ulike_pagination{
 
 		#to change urlFriendly
 		function urlFriendly($value="%"){
-				if(eregi('^ *$',$value)){
+				if( preg_match('^ *$',$value) ){
 						$this->urlF=false;
 						return false;
 					}
