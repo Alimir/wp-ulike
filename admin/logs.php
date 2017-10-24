@@ -68,7 +68,7 @@
 		if ( $currentScreen->id != $hook ) {
 			return;
 		}
-				
+
 		// Register Script
 		wp_register_script(
 			'wp_ulike_stats',
@@ -185,9 +185,9 @@
 				<?php
 				$get_the_status = $get_ulike_log->status;
 				if($get_the_status == 'like')
-				echo '<img src="'.plugin_dir_url( __FILE__ ).'/classes/img/like.png" alt="like" width="24"/>';
+					echo '<i class="wp-ulike-icons-thumb_up"></i>';
 				else
-				echo '<img src="'.plugin_dir_url( __FILE__ ).'/classes/img/unlike.png" alt="unlike" width="24"/>';
+					echo '<i class="wp-ulike-icons-thumb_down"></i>';
 				?>
 				</td>
 				<td>
@@ -286,7 +286,7 @@
 					<th><?php _e('Actions', WP_ULIKE_SLUG); ?></th>					
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="wp_ulike_logs">
 				<?php
 				foreach ( $get_ulike_logs as $get_ulike_log ) 
 				{
@@ -308,9 +308,9 @@
 				<?php
 				$get_the_status = $get_ulike_log->status;
 				if($get_the_status == 'like')
-				echo '<img src="'.plugin_dir_url( __FILE__ ).'/classes/img/like.png" alt="like" width="24"/>';
+					echo '<i class="wp-ulike-icons-thumb_up"></i>';
 				else
-				echo '<img src="'.plugin_dir_url( __FILE__ ).'/classes/img/unlike.png" alt="unlike" width="24"/>';
+					echo '<i class="wp-ulike-icons-thumb_down"></i>';
 				?>
 				</td>
 				<td>
@@ -413,7 +413,7 @@
 						<th><?php _e('Actions', WP_ULIKE_SLUG); ?></th>	
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="wp_ulike_logs">
 					<?php
 					foreach ( $get_ulike_logs as $get_ulike_log ) 
 					{
@@ -435,9 +435,9 @@
 					<?php
 					$get_the_status = $get_ulike_log->status;
 					if($get_the_status == 'like')
-					echo '<img src="'.plugin_dir_url( __FILE__ ).'/classes/img/like.png" alt="like" width="24"/>';
+						echo '<i class="wp-ulike-icons-thumb_up"></i>';
 					else
-					echo '<img src="'.plugin_dir_url( __FILE__ ).'/classes/img/unlike.png" alt="unlike" width="24"/>';
+						echo '<i class="wp-ulike-icons-thumb_down"></i>';
 					?>
 					</td>
 					<td>
@@ -558,9 +558,9 @@
 				<?php
 				$get_the_status = $get_ulike_log->status;
 				if($get_the_status == 'like')
-				echo '<img src="'.plugin_dir_url( __FILE__ ).'/classes/img/like.png" alt="like" width="24"/>';
+					echo '<i class="wp-ulike-icons-thumb_up"></i>';
 				else
-				echo '<img src="'.plugin_dir_url( __FILE__ ).'/classes/img/unlike.png" alt="unlike" width="24"/>';
+					echo '<i class="wp-ulike-icons-thumb_down"></i>';
 				?>
 				</td>
 				<td>
