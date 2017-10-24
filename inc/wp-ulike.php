@@ -336,7 +336,7 @@
 			$cookie_name	= 'topic-liked-';		
 		}
 		else{
-			wp_die(__('Error: This Method Is Not Exist!',WP_ULIKE_SLUG));
+			wp_die( __( 'Error: This Method Is Not Exist!', WP_ULIKE_SLUG ) );
 		}
 		
 		$get_like 		= $get_meta_data != '' ? $get_meta_data : 0;

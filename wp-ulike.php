@@ -3,7 +3,7 @@
 Plugin Name: WP ULike
 Plugin URI: http://wp-ulike.alimir.ir/
 Description: WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
-Version: 2.8.1
+Version: 2.9
 Author: Ali Mirzaei
 Author URI: http://about.alimir.ir
 Text Domain: wp-ulike
@@ -144,25 +144,19 @@ function wp_ulike_install() {
  */
 $prefix = is_network_admin() ? 'network_admin_' : '';
 add_filter( "{$prefix}plugin_action_links", 'wp_ulike_add_plugin_links', 10, 5 );
-function wp_ulike_add_plugin_links( $actions, $plugin_file ) 
-{
-	static $plugin;
+function wp_ulike_add_plugin_links( $actions, $plugin_file ) {
 
-	if (!isset($plugin))
-		$plugin = WP_ULIKE_BASENAME;
-	if ($plugin == $plugin_file) {
-
-			$settings 	= array('settings' 	=> '<a href="admin.php?page=wp-ulike-settings">' . __('Settings', WP_ULIKE_SLUG) . '</a>');
-			$stats	 	= array('stats' 	=> '<a href="admin.php?page=wp-ulike-statistics">' . __('Statistics', WP_ULIKE_SLUG) . '</a>');
-			$about	 	= array('about' 	=> '<a href="admin.php?page=wp-ulike-about">' . __('About', WP_ULIKE_SLUG) . '</a>');
-    			
-			$actions	= array_merge($about, $actions);
-			$actions 	= array_merge($stats, $actions);
-			$actions 	= array_merge($settings, $actions);
-				
-		}
+	if (  $plugin_file === WP_ULIKE_BASENAME ) {
+		$settings 	= array('settings' 	=> '<a href="admin.php?page=wp-ulike-settings">' . __('Settings', WP_ULIKE_SLUG) . '</a>');
+		$stats	 	= array('stats' 	=> '<a href="admin.php?page=wp-ulike-statistics">' . __('Statistics', WP_ULIKE_SLUG) . '</a>');
+		$about	 	= array('about' 	=> '<a href="admin.php?page=wp-ulike-about">' . __('About', WP_ULIKE_SLUG) . '</a>');
+		// Merge on actions array
+		$actions	= array_merge( $about, $actions );
+		$actions 	= array_merge( $stats, $actions );
+		$actions 	= array_merge( $settings, $actions );		
+	}
 		
-		return $actions;
+	return $actions;
 }
 
 /**
@@ -175,6 +169,9 @@ function wp_ulike_add_plugin_links( $actions, $plugin_file )
 add_action( 'activated_plugin', 'wp_ulike_activation_redirect' );
 function wp_ulike_activation_redirect( $plugin ) {
     if( $plugin == WP_ULIKE_BASENAME ) {
+        // Display WP ULike Notification
+        update_option( 'wp-ulike-notice-dismissed', FALSE );
+        // Redirect to the about page
         exit( wp_redirect( admin_url( 'admin.php?page=wp-ulike-about' ) ) );
     }
 }
