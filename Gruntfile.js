@@ -215,7 +215,7 @@ module.exports = function(grunt) {
             frontJsScripts: {
                 src: '<%= concat.frontJsScripts.dest %>',
                 dest: 'assets/js/wp-ulike.min.js'
-            }         
+            }     
         },
 
         preprocess : {
@@ -317,7 +317,7 @@ module.exports = function(grunt) {
         watch: {
             concat_front_js_scripts: {
                 files: ['assets/js/src/*.js'],
-                tasks: ['concat:frontJsScripts']
+                tasks: ['concat:frontJsScripts', 'uglify:frontJsScripts']
             },
 
             concat_admin_js_scripts: {
@@ -390,10 +390,10 @@ module.exports = function(grunt) {
     grunt.registerTask( 'pack'          , ['shell:zipBuild'] );
 
     // deploy the lite version in /build folder
-    grunt.registerTask( 'beta'           , ['clean:build', 'compass:front_build', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
+    grunt.registerTask( 'beta'          , ['clean:build', 'compass:front_build', 'cssmin', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
 
     // build the final lite version in /build folder and pack the product
-    grunt.registerTask( 'build'           , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
+    grunt.registerTask( 'build'         , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
 
     // register task
     grunt.registerTask( 'default'       , ['concat','cssmin', 'uglify']);
