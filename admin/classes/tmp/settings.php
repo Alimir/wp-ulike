@@ -151,7 +151,6 @@
 			  'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
 			  'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
 			  'by_ip' 		=> __('Logged By IP', WP_ULIKE_SLUG),
-			  'by_cookie_ip'=> __('Logged By Cookie & IP', WP_ULIKE_SLUG),
 			  'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 			)
 		  ),
@@ -239,7 +238,6 @@
 			  'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
 			  'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
 			  'by_ip' 		=> __('Logged By IP', WP_ULIKE_SLUG),
-			  'by_cookie_ip'=> __('Logged By Cookie & IP', WP_ULIKE_SLUG),
 			  'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 			)
 		  ),		  
@@ -390,7 +388,6 @@
 			  'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
 			  'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
 			  'by_ip' 		=> __('Logged By IP', WP_ULIKE_SLUG),
-			  'by_cookie_ip'=> __('Logged By Cookie & IP', WP_ULIKE_SLUG),
 			  'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 			)
 		  ),		    
@@ -506,7 +503,6 @@
 			  'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
 			  'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
 			  'by_ip' 		=> __('Logged By IP', WP_ULIKE_SLUG),
-			  'by_cookie_ip'=> __('Logged By Cookie & IP', WP_ULIKE_SLUG),
 			  'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 			)
 		  ),
