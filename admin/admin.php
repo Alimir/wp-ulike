@@ -25,8 +25,9 @@
 	  WP ULike CopyRight
 	*******************************************************/
 	//check for wp ulike page
-	if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike") !== false)
-	add_filter( 'admin_footer_text', 'wp_ulike_copyright');
+	if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike") !== false) {
+		add_filter( 'admin_footer_text', 'wp_ulike_copyright');
+	}
 	/**
 	 * Add WP ULike CopyRight in footer
 	 *
@@ -251,8 +252,9 @@
 	{
 		global $wpdb;
 		
-		if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false && is_super_admin())
+		if( isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false && is_super_admin() ) {
 			update_option('wpulike_lastvisit', current_time('mysql',0));
+		}
 		
         $request =  "SELECT
 					(SELECT COUNT(*) FROM ".$wpdb->prefix."ulike WHERE (date_time<=NOW() AND date_time>='".get_option( 'wpulike_lastvisit')."'))
@@ -275,10 +277,8 @@
 	 */
 	add_action('wp_logout', 'wp_ulike_set_lastvisit');
 	function wp_ulike_set_lastvisit() {
-		if (is_super_admin())
+		if ( ! is_super_admin() ) return;
 		update_option('wpulike_lastvisit', current_time('mysql',0));
-		else
-		return;
 	}
 
 	/**
