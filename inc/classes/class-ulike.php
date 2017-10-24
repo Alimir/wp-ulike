@@ -425,54 +425,58 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		public function get_liked_users( array $args ){
 			// Extract input array
 			extract( $args );
+			// If likers box has been disabled
+			if ( ! wp_ulike_get_setting( $setting, 'users_liked_box' ) ) return;
+			// Get any existing copy of our transient data
+			if ( false === ( $users_list = get_transient( 'wp_ulike_likers_box_for_' . $key . $id ) ) ) {
+				// Get user's limit number value
+				$limit_num 		= wp_ulike_get_setting( $setting, 'number_of_users');
+				// Set default value if limit_num equals to zero 
+				$limit_num		= $limit_num != 0 ? $limit_num : 10;
+				// Get likers list
+				$get_users 		= $this->wpdb->get_results( "SELECT user_id FROM ".$this->wpdb->prefix."$table WHERE $column = '$id' AND status = 'like' AND user_id BETWEEN 1 AND 999999 GROUP BY user_id LIMIT $limit_num" );
 
-			$users_list 	= '';
+				if( ! empty( $get_users ) ){
 
-			// Get user's limit number value
-			$limit_num 		= wp_ulike_get_setting( $setting, 'number_of_users');
-			// Set default value if limit_num equals to zero 
-			$limit_num		= $limit_num != 0 ? $limit_num : 10;
-			// Get likers list
-			$get_users 		= $this->wpdb->get_results( "SELECT user_id FROM ".$this->wpdb->prefix."$table WHERE $column = '$id' AND status = 'like' AND user_id BETWEEN 1 AND 999999 GROUP BY user_id LIMIT $limit_num" );
+					// Get likers html template
+					$get_template 	= wp_ulike_get_setting( $setting, 'users_liked_box_template' );
+					// Set default template if get_template was empty
+					$get_template 	= empty( $get_template ) ? '<br /><p style="margin-top:5px">'. __('Users who have LIKED this post:',WP_ULIKE_SLUG) .'</p> <ul class="tiles"> %START_WHILE% <li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li> %END_WHILE%</ul>' : $get_template;
+					
+					$inner_template = $this->get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
-			if( wp_ulike_get_setting( $setting, 'users_liked_box' ) == '1' && ! $get_users == '' ){
+					foreach ( $get_users as $get_user ) {
+						$user_info 		= get_userdata($get_user->user_id);
+						$out_template 	= $inner_template;
+						if ($user_info):
+							if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
+								$avatar_size 	= wp_ulike_get_setting( $setting, 'users_liked_box_avatar_size' );
+								$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
+								$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
+							}
+							if( strpos( $out_template, '%USER_NAME%' ) !== false) {
+								$USER_NAME 		= $user_info->display_name;
+								$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
+							}
+							if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
+								global $ultimatemember;
+								um_fetch_user( $user_info->ID );
+								$UM_PROFILE_URL = um_user_profile_url();
+								$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
+							}
+							if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
+								$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
+								$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
+							}
+							$users_list .= $out_template;
+						endif;
+					}
 
-				// Get likers html template
-				$get_template 	= wp_ulike_get_setting( $setting, 'users_liked_box_template' );
-				// Set default template if get_template was empty
-				$get_template 	= empty( $get_template ) ? '<br /><p style="margin-top:5px">'. __('Users who have LIKED this post:',WP_ULIKE_SLUG) .'</p> <ul class="tiles"> %START_WHILE% <li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li> %END_WHILE%</ul>' : $get_template;
-				
-				$inner_template = $this->get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
+					if( ! empty($users_list) ) {
+						$users_list = $this->put_template_between( $get_template,$users_list, "%START_WHILE%", "%END_WHILE%" );
+					}
 
-				foreach ( $get_users as $get_user ) {
-					$user_info 		= get_userdata($get_user->user_id);
-					$out_template 	= $inner_template;
-					if ($user_info):
-						if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
-							$avatar_size 	= wp_ulike_get_setting( $setting, 'users_liked_box_avatar_size' );
-							$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
-							$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
-						}
-						if( strpos( $out_template, '%USER_NAME%' ) !== false) {
-							$USER_NAME 		= $user_info->display_name;
-							$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
-						}
-						if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
-							global $ultimatemember;
-							um_fetch_user( $user_info->ID );
-							$UM_PROFILE_URL = um_user_profile_url();
-							$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
-						}
-						if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
-							$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
-							$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
-						}
-						$users_list .= $out_template;
-					endif;
-				}
-
-				if( ! empty($users_list) ) {
-					$users_list = $this->put_template_between($get_template,$users_list,"%START_WHILE%","%END_WHILE%");
+					set_transient( 'wp_ulike_likers_box_for_' . $key . $id, $users_list, 12 * HOUR_IN_SECONDS );
 				}
 			}
 
