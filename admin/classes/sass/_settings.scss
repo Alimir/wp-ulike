@@ -1,7 +1,3 @@
-$font_family_1: Consolas,Monaco,monospace;
-$background_color_1: #f9f9f9;
-$background_color_2: #fff;
-$border_color_1: #ffba00;
 
 /**
  *	Settings Page
@@ -53,7 +49,7 @@ form.wp-ulike {
 			cursor: pointer;
 
 			&:hover {
-				background-color: $background_color_1;
+				background-color: #f9f9f9;
 			}
 
 			&:last-child {
@@ -63,7 +59,7 @@ form.wp-ulike {
 		}
 
 		h2.active {
-			background-color: $background_color_2;
+			background-color: #ffffff;
 			border-bottom: 1px solid #fff;
 			margin-bottom: -1px;
 		}
@@ -141,7 +137,7 @@ form.wp-ulike {
 	margin: 5px 0 15px;
 	border-left: 4px solid #2ea2cc;
 	padding: 1px 12px;
-	background-color: $background_color_2;
+	background-color: #ffffff;
 	-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 	p {
@@ -153,10 +149,10 @@ form.wp-ulike {
 	margin: 5px 0 15px;
 	border-left: 4px solid #2ea2cc;
 	padding: 1px 12px;
-	background-color: $background_color_2;
+	background-color: #ffffff;
 	-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-	border-color: $border_color_1;
+	border-color: #ffba00;
 	p {
 		margin: 0.5em 0;
 		padding: 2px;
@@ -181,7 +177,7 @@ tr.hide-label {
 	}
 }
 #wp_ulike_customize_custom_css {
-	font-family: $font_family_1;
+	font-family: Consolas,Monaco,monospace;
 	direction: ltr;
 	font-size: 13px;
 	width: 97%;
@@ -191,51 +187,58 @@ tr.hide-label {
 	min-height: 300px;
 }
 
-.wp-ulike-notice{
-    position: relative;
-    overflow: hidden;
-    max-width: 870px;
-    margin-top: 10px;
-    padding: 10px 10px 7px 10px;
+.wp-ulike-notice {
+	position: relative;
+	overflow: hidden;
+	max-width: 870px;
+	margin-top: 10px;
+	padding: 10px 10px 7px 10px;
+	background: #F26439;
+	border: 1px solid #F2653A;
+	color: #FFFCD6;
+	img {
+		width: 84px;
+		margin: 0 0 0 -100% !important;
+		-moz-border-radius: 4px;
+		-webkit-border-radius: 4px;
+		border-radius: 4px;
+	}
+	.wp-ulike-notice-text {
+		float: left;
+		clear: none;
+		width: 100%;
+		padding: 4px 0;
+	}
+	p {
+		float: left;
+		clear: both;
+		width: auto;
+		margin: 0 0 0 100px !important;
+		padding: 4px 40px 4px 0;
+	}
+	a {
+		display: inline-block;
+		padding: 0 8px;
+		color: #FFFCD6;
+		&:hover {
+			color: #212121;
+		}
+		&:focus {
+			color: #212121;
+		}
+	}
+	.links {
+		margin: 0 0 0 92px !important;
+		padding: 4px 0 0 0;
+	}
+	.notice-dismiss {
+		opacity: 0.6;
 
-    background: #F26439;
-    border: 1px solid #F2653A;
-    color: #FFFCD6;
-}
-.wp-ulike-notice img{
-    width: 84px;
-    margin: 0 0 0 -100% !important;
-
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-}
-.wp-ulike-notice .wp-ulike-notice-text{
-    float: left;
-    clear: none;
-    width: 100%;
-    padding: 4px 0;
-}
-.wp-ulike-notice p{
-    float: left;
-    clear: both;
-    width: auto;
-    margin: 0 0 0 100px !important;
-    padding: 4px 40px 4px 0;
-}
-.wp-ulike-notice a{
-    display: inline-block;
-    padding: 0 8px;
-    color: #FFFCD6;
-}
-.wp-ulike-notice a:hover,
-.wp-ulike-notice a:focus{
-    color: #212121;
-}
-.wp-ulike-notice .links{
-    margin: 0 0 0 92px !important;
-    padding: 4px 0 0 0;
-}
-.wp-ulike-notice .links a:first-child{
-    /*padding-left: 0;*/
+		&:before{
+			color: #ffffff !important;
+		}
+		&:hover{
+			opacity: 1;
+		}		
+	}
 }
