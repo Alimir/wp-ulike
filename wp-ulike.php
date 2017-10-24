@@ -67,7 +67,7 @@ function wp_ulike_install() {
 				`post_id` int(11) NOT NULL,
 				`date_time` datetime NOT NULL,
 				`ip` varchar(30) NOT NULL,
-				`user_id` int(11) NOT NULL,
+				`user_id` int(11) UNSIGNED NOT NULL,
 				`status` varchar(15) NOT NULL,
 				PRIMARY KEY (`id`)
 			);";
@@ -85,7 +85,7 @@ function wp_ulike_install() {
 				`comment_id` int(11) NOT NULL,
 				`date_time` datetime NOT NULL,
 				`ip` varchar(30) NOT NULL,
-				`user_id` int(11) NOT NULL,
+				`user_id` int(11) UNSIGNED NOT NULL,
 				`status` varchar(15) NOT NULL,
 				PRIMARY KEY (`id`)
 			);";
@@ -103,7 +103,7 @@ function wp_ulike_install() {
 				`activity_id` int(11) NOT NULL,
 				`date_time` datetime NOT NULL,
 				`ip` varchar(30) NOT NULL,
-				`user_id` int(11) NOT NULL,
+				`user_id` int(11) UNSIGNED NOT NULL,
 				`status` varchar(15) NOT NULL,
 				PRIMARY KEY (`id`)
 			);";
@@ -121,7 +121,7 @@ function wp_ulike_install() {
 				`topic_id` int(11) NOT NULL,
 				`date_time` datetime NOT NULL,
 				`ip` varchar(30) NOT NULL,
-				`user_id` int(11) NOT NULL,
+				`user_id` int(11) UNSIGNED NOT NULL,
 				`status` varchar(15) NOT NULL,
 				PRIMARY KEY (`id`)
 			);";
