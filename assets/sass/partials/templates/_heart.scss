@@ -1,0 +1,129 @@
+
+/**
+ * Heart template
+ */
+.wpulike-heart {
+    .wp_ulike_general_class {
+        display: block;
+        border: 1px solid #E0E0E0;
+        background: url(../img/bg/button-love.png) no-repeat center right;
+        border-radius: 5px;
+        padding: 3px;
+    }
+    .wp_ulike_btn {
+        border: none;
+        padding: 0 10px;
+        font-weight: 600;
+        box-shadow: none;
+        background: transparent;
+        border-right: 1px solid #d3d3d3;
+        border-radius: 0;
+        &:hover {
+            background-color: transparent;
+            box-shadow: none;
+            color: #ef0000;
+        }
+        &:active {
+            background-color: transparent;
+            box-shadow: none;
+            color: #ef0000;
+        }
+    }
+    .wp_ulike_btn.wp_ulike_put_image {
+        border: none;
+        box-shadow: none;
+        background-image: url(../img/icons/add-heart-16.png);
+        background-repeat: no-repeat !important;
+        background-position: center center !important;
+        padding: 11px 16px !important;
+        border-right: 1px solid #E0E0E0;
+        &:hover {
+            background-image: url(../img/icons/add-heart-hover.png);
+        }
+    }
+    .wp_ulike_btn.wp_ulike_put_image.image-unlike {
+        background-image: url(../img/icons/remove-heart-16.png);
+        &:hover {
+            background-image: url(../img/icons/remove-heart-hover.png);
+        }
+    }
+    .count-box {
+        border: none;
+        vertical-align: middle;
+        background-color: transparent;
+        padding: .25em .5em;
+        margin-left: 0;
+        color: $wp-ulike-color-dark-70;
+        font-size: .8em;
+        &:before {
+            border: none;
+            background: transparent;
+        }
+    }
+}
+#buddypress {
+    .activity-content {
+        .wpulike-heart {
+            .wp_ulike_btn {
+                border: none;
+                padding: 0 10px;
+                font-weight: 600;
+                box-shadow: none;
+                background: transparent;
+                border-right: 1px solid #d3d3d3;
+                border-radius: 0;
+            }
+            .wp_ulike_btn.wp_ulike_put_image {
+                border: none;
+                box-shadow: none;
+                background-image: url(../img/icons/add-heart-16.png);
+                background-repeat: no-repeat !important;
+                background-position: center center !important;
+                padding: 11px 16px !important;
+                border-right: 1px solid #E0E0E0;
+                &:hover {
+                    background-image: url(../img/icons/add-heart-hover.png);
+                }
+            }
+            .wp_ulike_btn.wp_ulike_put_image.image-unlike {
+                background-image: url(../img/icons/remove-heart-16.png);
+                &:hover {
+                    background-image: url(../img/icons/remove-heart-hover.png);
+                }
+            }
+        }
+    }
+}
+#bbpress-forums {
+    .bbp-reply-content {
+        .wpulike-heart {
+            .wp_ulike_btn {
+                border: none;
+                padding: 0 10px;
+                font-weight: 600;
+                box-shadow: none;
+                background: transparent;
+                border-right: 1px solid #d3d3d3;
+                border-radius: 0;
+            }
+            .wp_ulike_btn.wp_ulike_put_image {
+                border: none;
+                box-shadow: none;
+                background-image: url(../img/icons/add-heart-16.png);
+                background-repeat: no-repeat !important;
+                background-position: center center !important;
+                padding: 11px 16px !important;
+                border-right: 1px solid #E0E0E0;
+                &:hover {
+                    background-image: url(../img/icons/add-heart-hover.png);
+                }
+            }
+            .wp_ulike_btn.wp_ulike_put_image.image-unlike {
+                background-image: url(../img/icons/remove-heart-16.png);
+                &:hover {
+                    background-image: url(../img/icons/remove-heart-hover.png);
+                }
+            }
+        }
+    }
+}

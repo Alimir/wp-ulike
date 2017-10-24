@@ -1,0 +1,51 @@
+
+/**
+ *  About Page
+ */
+ 
+.wp-ulike-about-page {
+	.ulike-badge{
+		background: url(../../../assets/img/wp-ulike-badge.png) no-repeat scroll center 24px / 95px 95px #F3643A;
+		color: #FFFFFF;
+		position: absolute;
+		top: 0px;
+		right: 0px;		
+		font-size: 14px;
+		text-align: center;
+		font-weight: 600;
+		margin: 5px 0px 0px;
+		padding-top: 120px;
+		height: 40px;
+		display: inline-block;
+		width: 150px;
+		text-rendering: optimizelegibility;
+		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+	}
+	.wp_ulike_version {
+		display: inline-block;
+		position: absolute;
+		top: 54px;
+		left:0;
+		padding: 5px 10px;
+		background: #e74c3c;
+		color: #FFFFFF;
+		font-size: 13px;
+		font-weight: normal;
+	}
+	.headline-feature h2 {
+		margin: 1.1em 0px 0.2em;
+		font-size: 2.4em;
+		font-weight: 300;
+		line-height: 1.3;
+		text-align: center;
+	}
+	.icon-container {
+		text-align: center;
+		font-size: 6vw;
+		border: 1px solid #757575;
+		padding: 35px 5px;
+	}	
+	.featured-image img {
+		border: none;
+	}
+}

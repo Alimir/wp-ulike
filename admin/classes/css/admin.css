@@ -1,0 +1,275 @@
+/*
+/------------------------------------------\ _     __     _ _____      _  _  _   _ 
+| |   /  \   | | ___ \    | |(_)| | / /
+| |  / /\ \  | | |_/ /   _| || || |/ / ___
+| | / /  \ \ | |  __/ | | | || ||   | / _ \
+| |/ /    \ \| | |  | |_| | || || |\ \  __/
+\___/      \__/\_|   \__,_|_||_||_| \_\___|
+
+\--> Alimir, 2017 <--/
+
+Thanks for using WP ULike plugin...
+https://wordpress.org/plugins/wp-ulike/
+
+\------------------------------------------/
+*/
+/** WP ULike Icons */
+@font-face { font-family: 'wp-ulike'; src: url("../fonts/wp-ulike.eot?113a2q"); src: url("../fonts/wp-ulike.eot?113a2q#iefix") format("embedded-opentype"), url("../fonts/wp-ulike.ttf?113a2q") format("truetype"), url("../fonts/wp-ulike.woff?113a2q") format("woff"), url("../fonts/wp-ulike.svg?113a2q#wp-ulike") format("svg"); font-weight: normal; font-style: normal; }
+[class^="wp-ulike-icons-"], [class*=" wp-ulike-icons-"] { /* use !important to prevent issues with browser extensions that change fonts */ font-family: 'wp-ulike' !important; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; /* Better Font Rendering =========== */ -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* wp-ulike dashicons */
+.dashicons.dashicons-wp-ulike, .dashicons-before.dashicons-wp-ulike::before { font-family: 'wp-ulike' !important; }
+
+.dashicons-wp-ulike::before { content: "\e905"; }
+
+/* wp-ulike dashicons */
+.wp-ulike-icons-thumb_up:before { content: "\e905"; }
+
+.wp-ulike-icons-thumb_down:before { content: "\e906"; }
+
+.wp-ulike-icons-thumbs-up:before { content: "\e900"; }
+
+.wp-ulike-icons-thumbs-down:before { content: "\e901"; }
+
+.wp-ulike-icons-thumbs-down2:before { content: "\e902"; }
+
+.wp-ulike-icons-thumbs-up2:before { content: "\e903"; }
+
+.wp-ulike-icons-like:before { content: "\e904"; }
+
+.wp-ulike-icons-mobile:before { content: "\e000"; }
+
+.wp-ulike-icons-bargraph:before { content: "\e018"; }
+
+.wp-ulike-icons-adjustments:before { content: "\e01d"; }
+
+.wp-ulike-icons-hourglass:before { content: "\e01f"; }
+
+.wp-ulike-icons-trophy:before { content: "\e023"; }
+
+.wp-ulike-icons-map:before { content: "\e025"; }
+
+.wp-ulike-icons-puzzle:before { content: "\e026"; }
+
+.wp-ulike-icons-gears:before { content: "\e02b"; }
+
+.wp-ulike-icons-key:before { content: "\e02c"; }
+
+.wp-ulike-icons-paperclip:before { content: "\e02d"; }
+
+.wp-ulike-icons-attachment:before { content: "\e02e"; }
+
+.wp-ulike-icons-pricetags:before { content: "\e02f"; }
+
+.wp-ulike-icons-paintbrush:before { content: "\e036"; }
+
+.wp-ulike-icons-magnifying-glass:before { content: "\e037"; }
+
+.wp-ulike-icons-circle-compass:before { content: "\e038"; }
+
+.wp-ulike-icons-linegraph:before { content: "\e039"; }
+
+.wp-ulike-icons-mic:before { content: "\e03a"; }
+
+.wp-ulike-icons-strategy:before { content: "\e03b"; }
+
+.wp-ulike-icons-profile-male:before { content: "\e040"; }
+
+.wp-ulike-icons-bike:before { content: "\e042"; }
+
+.wp-ulike-icons-wine:before { content: "\e043"; }
+
+.wp-ulike-icons-hotairballoon:before { content: "\e044"; }
+
+.wp-ulike-icons-globe:before { content: "\e045"; }
+
+.wp-ulike-icons-genius:before { content: "\e046"; }
+
+.wp-ulike-icons-heart:before { content: "\e04a"; }
+
+.wp-ulike-icons-global:before { content: "\e052"; }
+
+.wp-ulike-icons-refresh:before { content: "\e05a"; }
+
+/** 	Settings Page */
+form.wp-ulike h2 { display: inline-block; margin-right: 20px; }
+form.wp-ulike p.submit { display: inline-block; margin-right: 20px; }
+form.wp-ulike p.submit .button { height: 34px !important; line-height: 32px !important; padding: 0 18px 1px !important; font-size: 14px !important; }
+form.wp-ulike td .settings-error { overflow: hidden; }
+form.wp-ulike td .settings-error p { margin: 0.5em 0; }
+form.wp-ulike .wp-ulike-settings-tabs h2 { float: left; padding: 10px 15px; margin: 1em 0 0; font-weight: 500; border: 1px solid #e0e0e0; border-right: none; border-bottom: none; cursor: pointer; }
+form.wp-ulike .wp-ulike-settings-tabs h2:hover { background-color: #f9f9f9; }
+form.wp-ulike .wp-ulike-settings-tabs h2:last-child { border-right: 1px solid #e0e0e0; }
+form.wp-ulike .wp-ulike-settings-tabs h2.active { background-color: #ffffff; border-bottom: 1px solid #fff; margin-bottom: -1px; }
+form.wp-ulike .visual-select .radio-img-item { padding: 5px; border: 3px solid #424242; border-radius: 5px; cursor: pointer; width: 100px; height: 45px; margin: 0 5px; }
+form.wp-ulike .visual-select .radio-img-item.item-checked { border-color: #F2653A; }
+form.wp-ulike .toggle-switch input[type=checkbox] { display: none; }
+form.wp-ulike .toggle-switch label { cursor: pointer; text-indent: -9999px; width: 50px; height: 30px; background: #757575; display: block; border-radius: 100px; position: relative; }
+form.wp-ulike .toggle-switch label:after { content: ''; position: absolute; top: 5px; left: 5px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: 0.3s; }
+form.wp-ulike .toggle-switch input:checked + label { background: #F2653A; }
+form.wp-ulike .toggle-switch input:checked + label:after { left: calc(100% - 5px); transform: translateX(-100%); }
+
+.wp-ulike-settings-tab { padding: 2em; border: 1px solid #e0e0e0; clear: both; background: #fff; }
+
+.settings-error.info { margin: 5px 0 15px; border-left: 4px solid #2ea2cc; padding: 1px 12px; background-color: #ffffff; -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1); box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1); }
+.settings-error.info p { margin: 0.5em 0; padding: 2px; }
+
+.settings-error.warning { margin: 5px 0 15px; border-left: 4px solid #2ea2cc; padding: 1px 12px; background-color: #ffffff; -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1); box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1); border-color: #ffba00; }
+.settings-error.warning p { margin: 0.5em 0; padding: 2px; }
+
+tr.hide-label th { display: none; }
+tr.hide-label td { padding-left: 0; }
+
+.dashicons-bbpress:before { content: "\f449"; }
+
+.dashicons-buddypress:before { content: "\f452"; }
+
+#wp_ulike_customize_custom_css { font-family: Consolas,Monaco,monospace; direction: ltr; font-size: 13px; width: 97%; background: none repeat scroll 0% 0% #F9F9F9; outline: 0px none; width: 60%; min-height: 300px; }
+
+.wp-ulike-notice { position: relative; overflow: hidden; max-width: 870px; margin-top: 10px; padding: 10px 10px 7px 10px; background: #F26439; border: 1px solid #F2653A; color: #FFFCD6; }
+.wp-ulike-notice img { width: 84px; margin: 0 0 0 -100% !important; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
+.wp-ulike-notice .wp-ulike-notice-text { float: left; clear: none; width: 100%; padding: 4px 0; }
+.wp-ulike-notice p { float: left; clear: both; width: auto; margin: 0 0 0 100px !important; padding: 4px 40px 4px 0; }
+.wp-ulike-notice a { display: inline-block; padding: 0 8px; color: #FFFCD6; }
+.wp-ulike-notice a:hover { color: #212121; }
+.wp-ulike-notice a:focus { color: #212121; }
+.wp-ulike-notice .links { margin: 0 0 0 92px !important; padding: 4px 0 0 0; }
+.wp-ulike-notice .notice-dismiss { opacity: 0.6; }
+.wp-ulike-notice .notice-dismiss:before { color: #ffffff !important; }
+.wp-ulike-notice .notice-dismiss:hover { opacity: 1; }
+
+/** Statistics Page */
+#right-log { width: 31%; }
+#right-log a { text-decoration: none; }
+
+#left-log { margin: 0 0 0 1%; width: 68%; }
+#left-log a { text-decoration: none; }
+
+#last-log { width: 100%; }
+#last-log a { text-decoration: none; }
+
+#summary-stats { background: none repeat scroll 0 0 transparent; border: 1px none; margin: 0 0 10px; }
+#summary-stats tr:first-child th { border-top: 0 none; }
+#summary-stats span { color: #27ae60 !important; font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif; font-size: 21px; }
+
+#th-colspan { text-align: center; }
+#th-colspan span { color: #21759B !important; font-size: 30px; }
+
+#last-visitor tr { text-align: center; }
+#last-visitor tr:first-child { background: none repeat scroll 0 0 #EEEEEE; font-weight: bold; text-align: center; }
+
+#last-search tr { text-align: center; }
+#last-search tr:first-child { background: none repeat scroll 0 0 #EEEEEE; font-weight: bold; text-align: center; }
+
+#last-referrer tr { text-align: left; }
+#last-referrer tr:first-child { background: none repeat scroll 0 0 #EEEEEE; font-weight: bold; text-align: center; }
+
+.th-center { text-align: center !important; }
+
+.td-align { text-align: left; }
+
+.td-url { color: #009936 !important; direction: ltr; font-size: 10px !important; text-align: left; white-space: nowrap; }
+
+#map_canvas { direction: ltr; height: 380px; width: 100%; }
+
+.map-html-marker { max-height: 170px; width: 200px; }
+.map-html-marker p { border-bottom: 1px dashed #EFEFEF; font-size: 10px; margin: 2px 0; padding: 3px 0; text-align: left; }
+.map-html-marker p:last-child { border-bottom: 0 none; }
+
+.log-item { border-bottom: 1px solid #D3CDCD; border-top: 1px solid #FFFFFF; height: 46px; padding: 3px 7px; }
+.log-item:hover { background: none repeat scroll 0 0 #EEEEEE; }
+
+.top-widget ol li { border-bottom: 1px solid #D3CDCD; border-top: 1px solid #FFFFFF; height: 46px; padding: 3px 7px; height: inherit; padding: 12px 5px; font-size: 16px; margin-bottom: 0; }
+.top-widget ol li a { color: #616161; }
+.top-widget ol li:hover { background: none repeat scroll 0 0 #EEEEEE; }
+.top-widget .wp_counter_span { display: inline-block; background-color: #D54E21; color: #FFFFFF; font-size: 12px; line-height: 19px; font-weight: normal; margin: 1px 0px 0px 2px; vertical-align: top; border-radius: 10px; padding-left: 5px; padding-right: 5px; z-index: 26; float: right; }
+
+.show-map { float: left; }
+
+.log-referred { float: left; overflow: hidden; white-space: nowrap; width: 79%; }
+
+.log-ip { direction: ltr; float: right; font-size: 10px; margin-bottom: 5px; white-space: pre; width: 20%; }
+
+.log-tools { float: left; margin: 0 2px; }
+
+.log-agent { float: left; }
+
+.log-url { direction: ltr; float: left; font-size: 10px; margin: 0 0 0 2px; white-space: nowrap; width: 85%; }
+
+#time_zone a { font-size: 11px; text-decoration: none; }
+
+#visits-log { direction: ltr; height: 290px; width: 100%; }
+
+#search-engine-log { direction: ltr; }
+
+#browsers-log { direction: ltr; height: 330px; margin: 0 auto; width: 100%; }
+
+#platform-log { direction: ltr; }
+
+#visits-stats { direction: ltr; }
+
+#exclusion-stats { direction: ltr; }
+
+#search-stats { direction: ltr; }
+
+#about-links { margin: 0 0 10px; }
+#about-links p { display: inline; font-size: 11px; margin: 0 2px; }
+
+#donate-button { float: left; padding: 7px 0 0; text-align: center; width: 100%; }
+
+.left-div { float: left; }
+
+.right-div { float: right; }
+
+.wp_ulike_logs .button { line-height: 20px; }
+.wp_ulike_logs i { font-size: 1.9em; }
+.wp_ulike_logs i.wp-ulike-icons-thumb_up:before { color: #4caf50; }
+.wp_ulike_logs i.wp-ulike-icons-thumb_down:before { color: #f44336; }
+
+.postbox .badge { display: inline-block; background-color: #D54E21; color: #FFFFFF; font-size: 12px; line-height: 19px; font-weight: normal; margin: 1px 0px 0px 2px; vertical-align: top; border-radius: 10px; padding-left: 5px; padding-right: 5px; z-index: 26; float: right; }
+
+@media screen and (max-width: 960px) { #right-log { width: 35%; }
+  #left-log { margin: 0 0 0 1%; width: 63%; } }
+@media screen and (max-width: 758px) { #right-log { width: 100%; }
+  #left-log { margin: 0 0 0 1%; width: 100%; } }
+@media screen and (max-width: 524px) { #right-log { width: 100%; }
+  #left-log { margin: 0 0 0 1%; width: 100%; } }
+/** 	jQVMap Version 1.5 */
+.jqvmap-label { position: absolute; display: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background: #292929; color: white; font-family: sans-serif, Verdana; font-size: smaller; padding: 3px; pointer-events: none; }
+
+.jqvmap-pin { pointer-events: none; }
+
+.jqvmap-zoomin, .jqvmap-zoomout { position: absolute; left: 10px; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background: #000000; padding: 3px; color: white; width: 10px; height: 10px; cursor: pointer; line-height: 10px; text-align: center; }
+
+.jqvmap-zoomin { top: 10px; }
+
+.jqvmap-zoomout { top: 30px; }
+
+.jqvmap-region { cursor: pointer; }
+
+.jqvmap-ajax_response { width: 100%; height: 500px; }
+
+/** About Page */
+.wp-ulike-about-page .ulike-badge { background: url(../../../assets/img/wp-ulike-badge.png) no-repeat scroll center 24px/95px 95px #F3643A; color: #FFFFFF; position: absolute; top: 0px; right: 0px; font-size: 14px; text-align: center; font-weight: 600; margin: 5px 0px 0px; padding-top: 120px; height: 40px; display: inline-block; width: 150px; text-rendering: optimizelegibility; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2); }
+.wp-ulike-about-page .wp_ulike_version { display: inline-block; position: absolute; top: 54px; left: 0; padding: 5px 10px; background: #e74c3c; color: #FFFFFF; font-size: 13px; font-weight: normal; }
+.wp-ulike-about-page .headline-feature h2 { margin: 1.1em 0px 0.2em; font-size: 2.4em; font-weight: 300; line-height: 1.3; text-align: center; }
+.wp-ulike-about-page .icon-container { text-align: center; font-size: 6vw; border: 1px solid #757575; padding: 35px 5px; }
+.wp-ulike-about-page .featured-image img { border: none; }
+
+/** 	RTL support */
+.rtl form.wp-ulike p.submit { margin-right: inherit; margin-left: 20px; }
+.rtl form.wp-ulike .wp-ulike-settings-tabs h2 { float: right; border-right: 1px solid #e0e0e0; border-left: none; }
+.rtl form.wrap .wp-ulike-settings-tabs h2:last-child { border-left: 1px solid #ddd; }
+.rtl .settings-error.info { border-left: none; border-right: 4px solid #2ea2cc; }
+.rtl .settings-error.warning { border-left: none; border-right: 4px solid #2ea2cc; }
+.rtl tr.hide-label td { padding-right: 0; padding-left: inherit !important; }
+.rtl #left-log { margin: 0 1% 0 0; }
+.rtl .th-center { text-align: center !important; }
+.rtl .td-align { text-align: right; }
+.rtl .log-referred { float: right; }
+.rtl .log-ip { float: left; }
+.rtl .left-div { float: right; }
+.rtl .right-div { float: left; }
+.rtl .postbox .badge { margin: 1px 2px 0px 0; float: left; }
+.rtl .top-widget .wp_counter_span { margin: 1px 2px 0px 0; float: left; }
+.rtl .wp-ulike-about-page .ulike-badge { right: inherit; left: 0px; }

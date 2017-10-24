@@ -4,8 +4,8 @@ Donate link: http://alimir.ir
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
-Tested up to: 4.8.1
-Stable tag: 2.8.1
+Tested up to: 4.8.2
+Stable tag: 2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,9 @@ WP ULike enables you to add Ajax Like button into your WP and allowing your visi
 
 == Description ==
 
-WP ULike is a WordPress plugin that also supports BuddyPress, bbPress and a number of other plugins. It aims to be a comprehensive "Like" system for your site and enables site users to like a wide range of content types, including posts, forum topics and replies, comments and activity updates. It's very simple to use and supports many options and full Statistics tools. Also, All are free :)
+If you’re looking for one of the best and fastest ways to add like and dislike functionality to your WordPress website, then the WP ULike plugin is for you! WP ULike is a FREE WordPress plugin that will allow your website visitors to engage with your wide range of content types including posts, forum topics and replies, comments and activity updates.
+
+Also WP ULike’s amazing statistics tools help you to track your content effectiveness with a real-time report system and detailed statistics. What’s more, WP ULike have a wide variety of options available to customize your plugin. It will allow you to customize your like button in your favorite style.
 
 = More Information =
 *   Visit Our [Home Page](http://wp-ulike.alimir.ir/).
@@ -170,6 +172,18 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 2.9 =
+* Added: New visual options in admin area.
+* Added: New constants for better optimization and more flexibility.
+* Added: New front-end SASS modules.
+* Added: New back-end SASS modules.
+* Fixed: Some issues with myCred points.
+* Fixed: Some issues on admin.php.
+* Fixed: eregi bug in pagination class.
+* Modified: The wp-ulike's core functionality.
+* Modified: The get_liked_users (The Likers Box) functionality with better query selection.
+* Replaced: The log page's images with new icons.
 
 = 2.8.1 =
 * Added: Parse args functionality on wp ulike inputs.

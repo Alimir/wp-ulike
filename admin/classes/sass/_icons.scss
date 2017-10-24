@@ -1,20 +1,8 @@
-/*
-/------------------------------------------\
- _     __     _ _____      _  _  _   _ 
-| |   /  \   | | ___ \    | |(_)| | / /
-| |  / /\ \  | | |_/ /   _| || || |/ / ___
-| | / /  \ \ | |  __/ | | | || ||   | / _ \
-| |/ /    \ \| | |  | |_| | || || |\ \  __/
-\___/      \__/\_|   \__,_|_||_||_| \_\___|
 
-\--> Alimir, 2017 <--/
-
-Thanks for using WP ULike plugin...
-https://wordpress.org/plugins/wp-ulike/
-
-\------------------------------------------/
-*/
-
+/**
+ *  WP ULike Icons
+ */
+ 
 @font-face {
   font-family: 'wp-ulike';
   src:  url('../fonts/wp-ulike.eot?113a2q');
@@ -43,10 +31,10 @@ https://wordpress.org/plugins/wp-ulike/
 
 /* wp-ulike dashicons */
 .dashicons.dashicons-wp-ulike, .dashicons-before.dashicons-wp-ulike::before {
-	font-family: 'wp-ulike' !important;
+  font-family: 'wp-ulike' !important;
 }
 .dashicons-wp-ulike::before{
-	content: "\e905";
+  content: "\e905";
 }
 /* wp-ulike dashicons */
 

@@ -11,12 +11,18 @@
 	  'title'  => '<i class="dashicons-before dashicons-admin-settings"></i>' . ' ' . __( 'General',WP_ULIKE_SLUG),
 	  'fields' => array(
 			'button_type'  	=> array(
-				'type'    	=> 'radio',
+				'type'    	=> 'visual-select',
 				'label'   	=> __( 'Button Type', WP_ULIKE_SLUG),
 				'default'	=> 'image',
 				'options' 	=> array(
-					'image' => __( 'Icon', WP_ULIKE_SLUG),
-					'text'  => __( 'Text', WP_ULIKE_SLUG)
+					'image'    	=> array(
+						'name'     => __('Icon', WP_ULIKE_SLUG),
+						'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/icon.svg'
+					),
+					'text'   	=> array(
+						'name'     => __('Text', WP_ULIKE_SLUG),
+						'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/text.svg'				
+					)
 				)
 			),
 			'button_text'   => array(
@@ -87,7 +93,7 @@
 		'title'  			=> '<i class="dashicons-before dashicons-admin-post"></i>' . ' ' . __( 'Posts',WP_ULIKE_SLUG),
 		'fields' 			=> array(
 		  'theme' 			=> array(
-			'type'    		=> 'select',
+			'type'    		=> 'visual-select',
 			'default'		=> 'default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
@@ -145,7 +151,6 @@
 			  'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
 			  'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
 			  'by_ip' 		=> __('Logged By IP', WP_ULIKE_SLUG),
-			  'by_cookie_ip'=> __('Logged By Cookie & IP', WP_ULIKE_SLUG),
 			  'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 			)
 		  ),
@@ -197,7 +202,7 @@
 		'title'  			=> '<i class="dashicons-before dashicons-admin-comments"></i>' . ' ' . __( 'Comments',WP_ULIKE_SLUG),
 		'fields' 			=> array(
 		  'theme' 			=> array(
-			'type'    		=> 'select',
+			'type'    		=> 'visual-select',
 			'default'		=> 'default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
@@ -233,7 +238,6 @@
 			  'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
 			  'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
 			  'by_ip' 		=> __('Logged By IP', WP_ULIKE_SLUG),
-			  'by_cookie_ip'=> __('Logged By Cookie & IP', WP_ULIKE_SLUG),
 			  'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 			)
 		  ),		  
@@ -342,7 +346,7 @@
 		'title'  			=> '<i class="dashicons-before dashicons-buddypress"></i>' . ' ' . __( 'BuddyPress',WP_ULIKE_SLUG),
 		'fields' 	=> array(
 		  'theme' 			=> array(
-			'type'    		=> 'select',
+			'type'    		=> 'visual-select',
 			'default'		=> 'default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
@@ -384,7 +388,6 @@
 			  'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
 			  'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
 			  'by_ip' 		=> __('Logged By IP', WP_ULIKE_SLUG),
-			  'by_cookie_ip'=> __('Logged By Cookie & IP', WP_ULIKE_SLUG),
 			  'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 			)
 		  ),		    
@@ -465,7 +468,7 @@
 		'title'  			=> '<i class="dashicons-before dashicons-bbpress"></i>' . ' ' . __( 'bbPress',WP_ULIKE_SLUG),
 		'fields' 	=> array(
 		  'theme' 			=> array(
-			'type'    		=> 'select',
+			'type'    		=> 'visual-select',
 			'default'		=> 'default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
@@ -500,7 +503,6 @@
 			  'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
 			  'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
 			  'by_ip' 		=> __('Logged By IP', WP_ULIKE_SLUG),
-			  'by_cookie_ip'=> __('Logged By Cookie & IP', WP_ULIKE_SLUG),
 			  'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 			)
 		  ),

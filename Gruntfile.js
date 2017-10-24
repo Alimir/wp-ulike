@@ -12,7 +12,7 @@ module.exports = function(grunt) {
         // Meta definitions
         meta: {
             project:   "wp-ulike",
-            version:   "<%= pkg.title || pkg.name %> - v<%= pkg.version %> (<%= grunt.template.today('yyyy-mm-dd') %>)",
+            version:   "<%= pkg.title || pkg.name %> - v<%= pkg.version %>",
             copyright: "<%= pkg.author.name %> <%= grunt.template.today('yyyy') %>",
 
             header: "/*\n" +
@@ -61,6 +61,52 @@ module.exports = function(grunt) {
             }
         },
 
+        // watch and compile scss files to css
+        compass: {
+            options: {
+                config: 'assets/sass/config.rb',
+                sassDir: 'assets/sass',
+                cssDir: 'assets/css',
+                sourcemap: false
+            },
+
+            back_dev: {
+                options: {
+                    sassDir: 'admin/classes/sass',
+                    cssDir: 'admin/classes/css/',
+                    environment: 'development',
+                    watch:true,
+                    trace:true,
+                    outputStyle: 'compact' // nested, expanded, compact, compressed.
+                }
+            },
+
+            front_dev: {
+                options: {
+                    sassDir: 'assets/sass',
+                    cssDir: 'assets/css',
+                    specify: ['assets/sass/wp-ulike.scss'],
+                    environment: 'development',
+                    watch:true,
+                    trace:true,
+                    //noLineComments:true,
+                    //specify: ['css/sass/*.{scss,sass}'],
+                    outputStyle: 'expanded' // nested, expanded, compact, compressed.
+                }
+            },
+
+            front_build: {
+                options: {
+                    sassDir: 'assets/sass',
+                    cssDir: 'assets/css',
+                    specify: ['assets/sass/wp-ulike.scss'],
+                    watch:false,
+                    trace:true,
+                    outputStyle: 'compressed' // nested, expanded, compact, compressed.
+                }
+            }
+        },        
+
         // Generate POT file
         makepot: {
             target: {
@@ -87,7 +133,7 @@ module.exports = function(grunt) {
             files: {
                 src: 'lang/*.po',
                 expand: true,
-            },
+            }
         },
 
         // merge js files
@@ -112,6 +158,28 @@ module.exports = function(grunt) {
                     'assets/js/src/scripts.js'
                 ],
                 dest: 'assets/js/wp-ulike.js'
+            },
+
+            adminJsScripts: {
+                options: {
+
+                    banner: "/*! <%= meta.version %>\n" + 
+                        " *  <%= pkg.homepage %>\n" +
+                        " *  <%= meta.copyright %>;\n" +
+                        " */\n",
+
+                    process: function(src, filepath) {
+                        var separator = "\n\n/* ================== " + filepath + " =================== */\n\n\n";
+                        return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
+                    },
+                },
+                src: [
+                    'admin/classes/js/src/chart.min.js',
+                    'admin/classes/js/src/jquery.vmap.min.js',
+                    'admin/classes/js/src/jquery.vmap.world.js',
+                    'admin/classes/js/src/scripts.js',
+                ],
+                dest: 'admin/classes/js/statistics.js'
             }
 
         },
@@ -123,7 +191,7 @@ module.exports = function(grunt) {
             },
             target: {
                 files: {
-                    'assets/css/wp-ulike.min.css': ['assets/css/*.css']
+                    'assets/css/wp-ulike.min.css': ['assets/css/wp-ulike.css']
                 }
             }
         },     
@@ -147,7 +215,7 @@ module.exports = function(grunt) {
             frontJsScripts: {
                 src: '<%= concat.frontJsScripts.dest %>',
                 dest: 'assets/js/wp-ulike.min.js'
-            }         
+            }     
         },
 
         preprocess : {
@@ -233,7 +301,38 @@ module.exports = function(grunt) {
             getLiteJpgsSize:{
                 command: "find ./<%= meta.buildPath %>/ -name '*.jpg' -exec du -ch {} + | grep total$ "
             }
-        },   
+        },
+
+        // Running multiple blocking tasks
+        concurrent: {
+            watch_frontend_scss: {
+                tasks: [ 'compass_dev', 'watch', 'compass:front_dev' ],
+                options: {
+                    logConcurrentOutput: true
+                }
+            }
+        },
+
+        // watch for changes and trigger sass, jshint, uglify and livereload
+        watch: {
+            concat_front_js_scripts: {
+                files: ['assets/js/src/*.js'],
+                tasks: ['concat:frontJsScripts', 'uglify:frontJsScripts']
+            },
+
+            concat_admin_js_scripts: {
+                files: ['admin/classes/js/src/*.js'],
+                tasks: ['concat:adminJsScripts']
+            },
+
+            livereload: {
+                options: { livereload: true },
+                files: ['*.css', 'assets/css/*.css',
+                        'assets/js/src/*.js', 'assets/js/*.js',
+                        'assets/img/**/*.{png,jpg,jpeg,gif,webp,svg}'
+                        ]
+            }
+        },         
 
         // deploy via rsync
         deploy: {
@@ -241,7 +340,8 @@ module.exports = function(grunt) {
                 args: ["--verbose --delete-after"], // z:compress while transfering data, P: display progress
                 exclude: [
                         '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json'
+                        'assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
+                        'config.rb', 'assets/scss/'
                 ],
                 recursive: true,
                 syncDestIgnoreExcl: true
@@ -258,7 +358,8 @@ module.exports = function(grunt) {
                 options: {
                     exclude: [
                         '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json'
+                        'assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
+                        'config.rb', 'assets/scss/'
                     ],
                     src: ['./'],
                     dest: "<%= meta.buildPath %>"
@@ -283,17 +384,20 @@ module.exports = function(grunt) {
 
     grunt.registerTask( 'i18n'          , [ 'makepot' , 'po2mo' ] );
 
+    grunt.registerTask( 'compass_dev'   , ['compass:back_dev'] );
 
     // compress the product in one pack
     grunt.registerTask( 'pack'          , ['shell:zipBuild'] );
 
     // deploy the lite version in /build folder
-    grunt.registerTask( 'beta'           , ['clean:build', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
+    grunt.registerTask( 'beta'          , ['clean:build', 'compass:front_build', 'cssmin', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
 
     // build the final lite version in /build folder and pack the product
-    grunt.registerTask( 'build'           , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
+    grunt.registerTask( 'build'         , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
 
     // register task
     grunt.registerTask( 'default'       , ['concat','cssmin', 'uglify']);
+
+    grunt.registerTask( 'dev', ['concurrent'] );
 
 };

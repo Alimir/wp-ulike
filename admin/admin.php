@@ -6,7 +6,7 @@
 	/*******************************************************
 	  Widget
 	*******************************************************/
-	include( plugin_dir_path(__FILE__) . 'classes/class-widget.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/classes/class-widget.php');
 	
 	/**
 	 * Register WP ULike Widgets
@@ -25,8 +25,9 @@
 	  WP ULike CopyRight
 	*******************************************************/
 	//check for wp ulike page
-	if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike") !== false)
-	add_filter( 'admin_footer_text', 'wp_ulike_copyright');
+	if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike") !== false) {
+		add_filter( 'admin_footer_text', 'wp_ulike_copyright');
+	}
 	/**
 	 * Add WP ULike CopyRight in footer
 	 *
@@ -44,13 +45,13 @@
 	*******************************************************/
 
 	//include about menu functions
-	require_once( plugin_dir_path(__FILE__) . 'about.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/about.php');
 
 	//include logs menu functions
-	require_once( plugin_dir_path(__FILE__) . 'logs.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/logs.php');
 
 	//include statistics menu functions
-	require_once( plugin_dir_path(__FILE__) . 'stats.php');
+	require_once( WP_ULIKE_ADMIN_DIR . '/stats.php');
 
 	/**
 	 * Start Setting Class Options
@@ -63,9 +64,9 @@
 	 * @return			String
 	 */
 	//include setting class
-	require_once( plugin_dir_path(__FILE__) . 'classes/class-settings.php' );
+	require_once( WP_ULIKE_ADMIN_DIR . '/classes/class-settings.php' );
 	//include setting templates
-	require_once( plugin_dir_path(__FILE__) . 'classes/tmp/settings.php' );
+	require_once( WP_ULIKE_ADMIN_DIR . '/classes/tmp/settings.php' );
 	//activate general setting panel
 	$wp_ulike_setting = wp_ulike_create_settings_page(
 	  'wp-ulike-settings',
@@ -202,6 +203,18 @@
 	}
 
 	/**
+	 * Load a set of scripts to all admin pages
+	 *
+	 * @author       	Alimir	 	
+	 * @since           2.9
+	 * @return			Void
+	 */
+	add_action( 'admin_enqueue_scripts', 'wp_ulike_enqueue_admin_style' );
+	function wp_ulike_enqueue_admin_style($hook) {
+		wp_enqueue_style( 'wp-ulike-admin', WP_ULIKE_ADMIN_URL . '/classes/css/admin.css' );
+	}
+
+	/**
 	 * Generate templates list
 	 *
 	 * @author       	Alimir	 	
@@ -210,17 +223,20 @@
 	 */
 	function wp_ulike_generate_templates_list(){
 		return array(
-			'wpulike-default'	=> array(
-				'name' => __('Default', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_default_template'
+			'wpulike-default' => array(
+				'name'     => __('Default', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_default_template',
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg'
 			),
-			'wpulike-heart'	=> array(
-				'name' => __('Heart', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_simple_heart_template'					
+			'wpulike-heart'   => array(
+				'name'     => __('Heart', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_simple_heart_template',				
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg'				
 			),
-			'wpulike-robeen'	=> array(
-				'name' => __('Robeen', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_robeen_template'					
+			'wpulike-robeen'  => array(
+				'name'     => __('Robeen', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_robeen_template',				
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'					
 			)
 		);
 	}
@@ -236,8 +252,9 @@
 	{
 		global $wpdb;
 		
-		if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false && is_super_admin())
+		if( isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false && is_super_admin() ) {
 			update_option('wpulike_lastvisit', current_time('mysql',0));
+		}
 		
         $request =  "SELECT
 					(SELECT COUNT(*) FROM ".$wpdb->prefix."ulike WHERE (date_time<=NOW() AND date_time>='".get_option( 'wpulike_lastvisit')."'))
@@ -260,8 +277,54 @@
 	 */
 	add_action('wp_logout', 'wp_ulike_set_lastvisit');
 	function wp_ulike_set_lastvisit() {
-		if (is_super_admin())
+		if ( ! is_super_admin() ) return;
 		update_option('wpulike_lastvisit', current_time('mysql',0));
-		else
-		return;
 	}
+
+	/**
+	 * Add rating us notification on wp-ulike admin pages
+	 *
+	 * @author       	Alimir	 	
+	 * @since           2.7
+	 * @updated         2.9
+	 * @return			String
+	 */ 
+	add_action( 'admin_notices', 'wp_ulike_admin_notice', 999);
+	function wp_ulike_admin_notice() {
+		if( get_option( 'wp-ulike-notice-dismissed', FALSE ) ) return;
+		?>
+		<script>
+			jQuery(document).on( 'click', '.wp-ulike-notice .notice-dismiss', function() {
+			    jQuery.ajax({
+			        url: ajaxurl,
+			        data: {
+			            action: 'wp_ulike_dismissed_notice'
+			        }
+			    })
+			});			
+		</script>
+		<div class="notice wp-ulike-notice is-dismissible">
+            <img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-badge.png" alt="Instagram Feed">
+            <div class="wp-ulike-notice-text">
+                <p><?php echo _e( "It's great to see that you've been using the WP ULike plugin for a while now. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ); ?> </p>
+                <p class="links">
+                    <a href="https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5" target="_blank"><?php echo _e( "Sure, I'd love to!", WP_ULIKE_SLUG ); ?></a>
+                </p>
+            </div>
+        </div>			
+		<?php
+	}
+
+	add_action( 'wp_ajax_wp_ulike_dismissed_notice', 'wp_ulike_ajax_notice_handler' );
+
+	/**
+	 * AJAX handler to store the state of dismissible notices.
+	 *
+	 * @author       	Alimir	 	
+	 * @since           2.9
+	 * @return			Void
+	 */	
+	function wp_ulike_ajax_notice_handler() {
+	    // Store it in the options table
+	    update_option( 'wp-ulike-notice-dismissed', TRUE );
+	}	

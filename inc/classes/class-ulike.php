@@ -26,25 +26,26 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @author       	Alimir
 		 * @param           Array $data
 		 * @since           2.0
-		 * @since           2.8 //Added switch statement
+		 * @updated         2.8 //Added switch statement
+		 * @updated         2.9
 		 * @return			String
 		 */				
-		public function wp_get_ulike(array $data){
+		public function wp_get_ulike( array $data ){
 			//get loggin method option
 			$loggin_method = wp_ulike_get_setting( $data['setting'], 'logging_method');
 			//Select the logging functionality
-			switch($loggin_method){
+			switch( $loggin_method ){
 				case 'do_not_log':
-					return $this->do_not_log_method($data);
+					return $this->do_not_log_method( $data );
 					break;
 				case 'by_cookie':
-					return $this->loggedby_cookie_method($data);
+					return $this->loggedby_cookie_method( $data );
 					break;
 				case 'by_ip':
-					return $this->loggedby_ip_method($data);
+					return $this->loggedby_ip_method( $data );
 					break;
 				default:
-					return $this->loggedby_other_ways($data);
+					return $this->loggedby_username( $data );
 			}
 		}
 
@@ -52,28 +53,46 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * Do not log method
 		 *
 		 * @author       	Alimir
-		 * @param           Array $data
+		 * @param           Array 	$data
+		 * @param           String 	$output
 		 * @since           2.0
 		 * @updated         2.3
 		 * @updated         2.8 //Added 'get_template' changes & Removed some variables
+		 * @updated         2.9
 		 * @return			String
 		 */			
-		public function do_not_log_method(array $data){
-			$output 	= '';
-			
-			if($data["type"] == 'post'){
+		public function do_not_log_method( array $data, $output = '' ){
+			// Extract data
+			extract( $data );
+	
+			if( $type == 'post' ){
 				$output = $this->get_template( $data, 1 );
-			}//end post button
-			else if($data["type"] == 'process'){
-				$newLike = $data["get_like"] + 1;
-				$this->update_meta_data($data["id"], $data["key"], $newLike);
-				$this->wpdb->query("INSERT INTO ".$this->wpdb->prefix.$data['table']." VALUES ('', '".$data['id']."', NOW(), '".$data['user_ip']."', '".$data['user_id']."', 'like')");
-				if(is_user_logged_in()){
-					wp_ulike_bp_activity_add($data['user_id'],$data['id'],$data['key']);
+
+			} elseif( $type == 'process' ){
+				// Update data
+				$this->update_meta_data( $id, $key, $get_like + 1 );
+				// Insert log data
+				$this->wpdb->insert( 
+					$this->wpdb->prefix . $table, 
+					array( 
+						$column 		=> $id, 
+						'date_time' 	=> current_time( 'mysql', true ),
+						'ip' 			=> $user_ip,
+						'user_id' 		=> $user_id,
+						'status' 		=> 'like' 
+					)
+				);
+				// Add buddypress activity 
+				if( is_user_logged_in() ){
+					wp_ulike_bp_activity_add( $user_id, $id, $key );
 				}
-				do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-				$output = wp_ulike_format_number($newLike);
-			}//end post process
+				// Mycred points
+				do_action( 'wp_ulike_mycred_like', $id, $key );
+				// Output format
+				$output = wp_ulike_format_number( $get_like + 1 );
+
+			}
+
 			return $output;			
 		}
 
@@ -81,41 +100,60 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * Logged by cookie method
 		 *
 		 * @author       	Alimir
-		 * @param           Array $data
+		 * @param           Array 	$data
+		 * @param           String 	$output
 		 * @since           2.0
 		 * @updated         2.3
 		 * @updated         2.8 //Added 'get_template' changes & Removed some variables
+		 * @updated         2.9
 		 * @return			String
 		 */		
-		public function loggedby_cookie_method( array $data ){
-			$condition 		= isset($_COOKIE[$data["cookie"].$data["id"]]);
-			$button_type 	= wp_ulike_get_setting( 'wp_ulike_general', 'button_type');
-			$output 		= '';
-			
-			if($data["type"] == 'post'){
-				if(!$condition){
+		public function loggedby_cookie_method( array $data, $output = '' ){
+			// Extract data
+			extract( $data );			
+
+			if( $type == 'post' ){
+
+				if( ! isset( $_COOKIE[ $cookie . $id ] ) ){
 					$output = $this->get_template( $data, 1 );
 				}
 				else{
 					$output = $this->get_template( $data, 4 );
 				}
-			}//end post button
-			else if($data["type"] == 'process'){
-				if(!$condition){
-					$newLike = $data["get_like"] + 1;
-					$this->update_meta_data($data["id"], $data["key"], $newLike);
-					setcookie($data["cookie"].$data["id"], time(), time()+3600*24*365, '/');
-					$this->wpdb->query("INSERT INTO ".$this->wpdb->prefix.$data['table']." VALUES ('', '".$data['id']."', NOW(), '".$data['user_ip']."', '".$data['user_id']."', 'like')");
-					if(is_user_logged_in()){
-						wp_ulike_bp_activity_add($data['user_id'],$data['id'],$data['key']);
+
+			} elseif( $type == 'process' ) {
+
+				if( ! isset( $_COOKIE[ $cookie . $id ] ) ){
+					// Update data
+					$this->update_meta_data( $id, $key, $get_like + 1 );
+					// Set cookie
+					setcookie( $cookie . $id, time(), 2147483647, '/' );
+					// Insert log data
+					$this->wpdb->insert( 
+						$this->wpdb->prefix . $table, 
+						array( 
+							$column 		=> $id, 
+							'date_time' 	=> current_time( 'mysql', true ),
+							'ip' 			=> $user_ip,
+							'user_id' 		=> $user_id,
+							'status' 		=> 'like' 
+						)
+					);					
+					// Add buddypress activity 
+					if( is_user_logged_in() ){
+						wp_ulike_bp_activity_add( $user_id, $id, $key );
 					}
-					do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-					$output = wp_ulike_format_number($newLike);
+					// Mycred points
+					do_action( 'wp_ulike_mycred_like', $id, $key );
+					// Output format
+					$output = wp_ulike_format_number( $get_like + 1 );
+
+				} else {
+					$output = wp_ulike_format_number( $get_like );
 				}
-				else{
-					$output = wp_ulike_format_number($data["get_like"]);
-				}
-			}//end post process
+
+			}
+
 			return $output;				
 		}
 		
@@ -127,63 +165,97 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @updated         2.3
 		 * @updated         2.8 //Added 'get_template' changes & Removed some variables
+		 * @updated         2.9
 		 * @return			String
 		 */		
-		public function loggedby_ip_method( array $data ){
-			$condition 		= $this->wpdb->get_var("SELECT COUNT(*) FROM ".$this->wpdb->prefix.$data['table']." WHERE ".$data['column']." = '".$data['id']."' AND ip = '".$data['user_ip']."'");
-			$output 		= '';
-			
-			if($data["type"] == 'post'){
-				if($condition == 0){
-					$output = $this->get_template( $data, 3 );
-				}
-				else{
-					if($this->get_user_status($data['table'],$data['column'],'ip',$data['id'],$data['user_ip']) == "like"){
+		public function loggedby_ip_method( array $data, $output = '' ){
+			// Extract data
+			extract( $data );			
+			// Check the user's likes history
+			$is_user_liked_before 	= $this->wpdb->get_var( "
+														SELECT COUNT(*) 
+														FROM ".$this->wpdb->prefix.$table." 
+														WHERE $column = '$id' 
+														AND ip = '$user_ip'
+													");
+			if( $type == 'post' ) {
+
+				if( ! $is_user_liked_before ){
+					$output 	= $this->get_template( $data, 3 );
+
+				} else {
+
+					if( $this->get_user_status( $table, $column, 'ip', $id, $user_ip ) == "like" ){
 						$output = $this->get_template( $data, 2 );					
-					}
-					else{
+					} else{
 						$output = $this->get_template( $data, 3 );
-					}			
+					}
+
 				}
-			}//end post button
-			else if($data["type"] == 'process'){
-				if($condition == 0){
-					$newLike = $data["get_like"] + 1;
-					$this->update_meta_data($data["id"], $data["key"], $newLike);
-					$this->wpdb->query("INSERT INTO ".$this->wpdb->prefix.$data['table']." VALUES ('', '".$data['id']."', NOW(), '".$data['user_ip']."', '".$data['user_id']."', 'like')");
+
+			} elseif( $type == 'process' ) {
+
+				if( ! $is_user_liked_before ){
+					// Update data
+					$this->update_meta_data( $id, $key, $get_like + 1 );
+					// Insert log data
+					$this->wpdb->insert( 
+						$this->wpdb->prefix . $table, 
+						array( 
+							$column 		=> $id, 
+							'date_time' 	=> current_time( 'mysql', true ),
+							'ip' 			=> $user_ip,
+							'user_id' 		=> $user_id,
+							'status' 		=> 'like' 
+						)
+					);
+					// Add buddypress activity 			
 					if(is_user_logged_in()){
-						wp_ulike_bp_activity_add($data['user_id'],$data['id'],$data['key']);
+						wp_ulike_bp_activity_add( $user_id, $id, $key );
 					}
-					do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-					$output = wp_ulike_format_number($newLike);
+					// Mycred points
+					do_action( 'wp_ulike_mycred_like', $id, $key );
+					// Output format
+					$output = wp_ulike_format_number( $get_like + 1 );
+
+				} else {
+
+					if( $this->get_user_status( $table, $column,'ip', $id, $user_ip ) == "like" ){
+						// Update data (Unlike)
+						$this->update_meta_data( $id, $key, $get_like - 1 );
+						// Update status to unlike
+						$this->wpdb->update( 
+							$this->wpdb->prefix . $table, 
+							array( 
+								'status' 	=> 'unlike'
+							), 
+							array( $column => $id, 'ip' => $user_ip )
+						);
+						// Update Mycred points					
+						do_action( 'wp_ulike_mycred_unlike', $id, $key );
+						// Output format
+						$output = wp_ulike_format_number( $get_like - 1 );	
+
+					} else {
+						// Update data
+						$this->update_meta_data( $id, $key, $get_like + 1 );
+						// Update status to like
+						$this->wpdb->update( 
+							$this->wpdb->prefix . $table, 
+							array( 
+								'status' 	=> 'like'
+							), 
+							array( $column => $id, 'ip' => $user_ip )
+						);						
+						// Update Mycred points
+						do_action( 'wp_ulike_mycred_like', $id, $key );
+						// Output format
+						$output = wp_ulike_format_number( $get_like + 1 );
+					}
 				}
-				else{
-					if($this->get_user_status($data['table'],$data['column'],'ip',$data['id'],$data['user_ip']) == "like"){
-						$newLike = $data["get_like"] - 1;
-						$this->update_meta_data($data["id"], $data["key"], $newLike);
-						
-						$this->wpdb->query("
-							UPDATE ".$this->wpdb->prefix.$data['table']."
-							SET status = 'unlike'
-							WHERE ".$data['column']." = '".$data['id']."' AND ip = '".$data['user_ip']."'
-						");
-						do_action('wp_ulike_mycred_unlike', $data['id'], $data['key']);
-						$output = wp_ulike_format_number($newLike);				
-					}
-					else{
-						$newLike = $data["get_like"] + 1;
-						$this->update_meta_data($data["id"], $data["key"], $newLike);
-						
-						$this->wpdb->query("
-							UPDATE ".$this->wpdb->prefix.$data['table']."
-							SET status = 'like'
-							WHERE ".$data['column']." = '".$data['id']."' AND ip = '".$data['user_ip']."'
-						");
-						do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-						$output = wp_ulike_format_number($newLike);
-					}
-				}
-			}//end post process
+
+			}
+
 			return $output;			
 		}
 		
@@ -191,91 +263,111 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * Logged by IP/UserName method
 		 *
 		 * @author       	Alimir
-		 * @param           Array $data
+		 * @param           Array 	$data
+		 * @param           String 	$output
 		 * @since           2.0
 		 * @updated         2.3		 
 		 * @updated         2.4.2
-		 * @updated         2.8 //Added 'get_template' changes & Removed some variables
+		 * @updated         2.8 // Added 'get_template' changes & Removed some variables
+		 * @updated         2.9 // Removed some old functionalities
 		 * @return			String
 		 */	
-		public function loggedby_other_ways( array $data ){
-			$loggin_method 		= wp_ulike_get_setting( $data['setting'], 'logging_method' );
-			$second_condition 	= true; //check for by_username login method
-			$output 			= '';
+		public function loggedby_username( array $data, $output = '' ){
+			// Extract data
+			extract( $data );			
+			// Check the user's likes history
+			$is_user_liked_before 	= $this->wpdb->get_var( "
+														SELECT COUNT(*) 
+														FROM ".$this->wpdb->prefix.$table." 
+														WHERE $column = '$id' 
+														AND user_id = '$user_id'
+													");
+			// check for user data
+			// @TODO: Maybe we should skip this condition!
+			// $is_user_exist 			= get_userdata( $user_id ) ? true : false;			
 			
-			/* I removed this section (by_cookie_ip method) for some tests on v2.4.2
-			if($loggin_method		== 'by_cookie_ip'){
-				$condition 		= $this->wpdb->get_var("SELECT COUNT(*) FROM ".$this->wpdb->prefix.$data['table']." WHERE ".$data['column']." = '".$data['id']."' AND ip = '".$data['user_ip']."'");
-				$second_column 	= 'ip';
-				$second_val 	= $data['user_ip'];
-			}*/
-			//else if($loggin_method 	== 'by_username'){
-			$condition 		= $this->wpdb->get_var("SELECT COUNT(*) FROM ".$this->wpdb->prefix.$data['table']." WHERE ".$data['column']." = '".$data['id']."' AND user_id = '".$data['user_id']."'");
-			$user_info 		= get_userdata($data['user_id']);// check for user data
-			if(!$user_info) $second_condition = false;// if user not exist, condition will be false
-			$second_column 	= 'user_id';
-			$second_val 	= $data['user_id'];
-			//}
-			
-			
-			if($data["type"] == 'post'){
-				if($condition == 0 /*&& !isset($_COOKIE[$data["cookie"].$data["id"]])*/){
-					$output = $this->get_template( $data, 3 );
-				}
-				else if($condition != 0 /*&& isset($_COOKIE[$data["cookie"].$data["id"]])*/ && $second_condition){
-					if($this->get_user_status($data['table'],$data['column'],$second_column,$data['id'],$second_val) == "like"){
+			if( $type == 'post' ){
+
+				if( ! $is_user_liked_before ){
+					$output 	= $this->get_template( $data, 3 );
+
+				} elseif( $is_user_liked_before /*&& $is_user_exist*/ ) {
+
+					if( $this->get_user_status( $table, $column, 'user_id', $id, $user_id ) == "like" ) {
 						$output = $this->get_template( $data, 2 );
-					}
-					else{
+
+					} else {
 						$output = $this->get_template( $data, 3 );
 					}
-				}
-				else {
-					$output = $this->get_template( $data, 4 );
-				}
-			}//end post button
-			else if($data["type"] == 'process'){
-				if($condition == 0 /*&& !isset($_COOKIE[$data["cookie"].$data["id"]])*/){
-					$newLike = $data["get_like"] + 1;
-					$this->update_meta_data($data["id"], $data["key"], $newLike);
-					$this->wpdb->query("INSERT INTO ".$this->wpdb->prefix.$data['table']." VALUES ('', '".$data['id']."', NOW(), '".$data['user_ip']."', '".$data['user_id']."', 'like')");
-					if(is_user_logged_in()){
-						wp_ulike_bp_activity_add($data['user_id'],$data['id'],$data['key']);
-					}	
-					//setcookie($data["cookie"].$data["id"], time(), time()+3600*24*365, '/');
-					do_action('wp_ulike_mycred_like', $data['id'], $data['key']);	
-					$output = wp_ulike_format_number($newLike);
-				}
-				else if($condition != 0  /*&&isset($_COOKIE[$data["cookie"].$data["id"]])*/ && $second_condition){
-					if($this->get_user_status($data['table'],$data['column'],$second_column,$data['id'],$second_val) == "like"){
-						$newLike = $data["get_like"] - 1;
-						$this->update_meta_data($data["id"], $data["key"], $newLike);
-						
-						$this->wpdb->query("
-							UPDATE ".$this->wpdb->prefix.$data['table']."
-							SET status = 'unlike'
-							WHERE ".$data['column']." = '".$data['id']."' AND $second_column = '$second_val'
-						");
-						do_action('wp_ulike_mycred_unlike', $data['id'], $data['key']);
-						$output = wp_ulike_format_number($newLike);				
+
+				}/* else {
+					$output 	= $this->get_template( $data, 4 );
+				}*/
+
+			} elseif( $type == 'process' ) {
+
+				if( ! $is_user_liked_before ){
+					// Update meta data
+					$this->update_meta_data( $id, $key, $get_like + 1 );
+					// Insert log data
+					$this->wpdb->insert( 
+						$this->wpdb->prefix . $table, 
+						array( 
+							$column 		=> $id, 
+							'date_time' 	=> current_time( 'mysql', true ),
+							'ip' 			=> $user_ip,
+							'user_id' 		=> $user_id,
+							'status' 		=> 'like' 
+						)
+					);	
+					// Add buddypress activity				
+					if( is_user_logged_in() ){
+						wp_ulike_bp_activity_add( $user_id, $id, $key );
 					}
-					else{
-						$newLike = $data["get_like"] + 1;
-						$this->update_meta_data($data["id"], $data["key"], $newLike);
-						
-						$this->wpdb->query("
-							UPDATE ".$this->wpdb->prefix.$data['table']."
-							SET status = 'like'
-							WHERE ".$data['column']." = '".$data['id']."' AND $second_column = '$second_val'
-						");
-						do_action('wp_ulike_mycred_like', $data['id'], $data['key']);
-						$output = wp_ulike_format_number($newLike);
+					// Update mycred points
+					do_action( 'wp_ulike_mycred_like', $id, $key );
+					// Set new output
+					$output 	= wp_ulike_format_number( $get_like + 1 );
+
+				} elseif( $is_user_liked_before /*&& $is_user_exist*/ ) {
+
+					if( $this->get_user_status( $table, $column, 'user_id', $id, $user_id ) == "like") {
+						$this->update_meta_data( $id, $key, $get_like - 1 );
+						// Update status to unlike
+						$this->wpdb->update( 
+							$this->wpdb->prefix . $table, 
+							array( 
+								'status' 	=> 'unlike'
+							), 
+							array( $column => $id, 'user_id' => $user_id )
+						);						
+						// Update mycred points
+						do_action( 'wp_ulike_mycred_unlike', $id, $key );
+						// Set new output
+						$output = wp_ulike_format_number( $get_like - 1 );
+
+					} else {
+						// Update meta data
+						$this->update_meta_data( $id, $key, $get_like + 1 );
+						// Update status to like
+						$this->wpdb->update( 
+							$this->wpdb->prefix . $table, 
+							array( 
+								'status' 	=> 'like'
+							), 
+							array( $column => $id, 'user_id' => $user_id )
+						);	
+						// Update mycred points
+						do_action( 'wp_ulike_mycred_like', $id, $key );
+						// Set new output
+						$output = wp_ulike_format_number( $get_like + 1 );
 					}
-				}
-				else{
-					$output = wp_ulike_format_number($data["get_like"]);
-				}
-			}//end post process
+
+				}/* else {
+					$output 	= wp_ulike_format_number( $get_like );
+				}*/
+			}
+
 			return $output;				
 		}
 
@@ -288,17 +380,29 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @param           Integer $data
 		 * @since           2.0
 		 * @updated         2.2
+		 * @updated         2.9
 		 * @return			Void
 		 */			
 		public function update_meta_data($id, $key, $data){
-			if($key == "_liked" || $key == "_topicliked")
-				update_post_meta($id, $key, $data);
-			else if($key == "_commentliked")
-				update_comment_meta($id, $key, $data);
-			else if($key == "_activityliked")
-				bp_activity_update_meta($id, $key, $data);
-			else
-				return 0;
+			// Update Likers box by removing the old transient
+			delete_transient( 'wp_ulike_likers_box_for_' . $key . $id );
+			// Update Values
+			switch ( $key ) {
+				case '_liked'		 :
+				case '_topicliked'	 :
+					update_post_meta( $id, $key, $data );
+					update_postmeta_cache( $id );
+					break;
+				case '_commentliked' :
+					update_comment_meta( $id, $key, $data );
+					update_meta_cache( 'comment', $id );
+					break;
+				case '_activityliked':
+					bp_activity_update_meta( $id, $key, $data );
+					break;
+				default:
+					return 0;
+			}
 		}
 		
 
@@ -401,69 +505,84 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		public function get_user_status($table,$first_column,$second_column,$first_val,$second_val){
-			
-			$like_status = $this->wpdb->get_var("SELECT status FROM ".$this->wpdb->prefix."$table WHERE $first_column = '$first_val' AND $second_column = '$second_val'");
-			
-			if ($like_status == "like") {
-				return "like";
-			} else {
-				return "unlike";
-			}
+		public function get_user_status( $table, $first_column, $second_column, $first_val, $second_val ){
+			// This will return like|unlike
+			return $this->wpdb->get_var( "
+									SELECT status 
+									FROM ".$this->wpdb->prefix."$table 
+									WHERE $first_column = '$first_val' 
+									AND $second_column = '$second_val'
+								");
 		}
 		
 		/**
 		 * Get Liked User
 		 *
 		 * @author       	Alimir
-		 * @param           Integer $id
-		 * @param           String $table
-		 * @param           String $column_id
-		 * @param           String $setting_key
+		 * @param           Array $arg
 		 * @since           2.0
 		 * @updated         2.3
+		 * @updated         2.9
 		 * @return			String
 		 */
-		public function get_liked_users($id,$table,$column_id,$setting_key){
-			$users_list = '';
-			$limit_num 	= wp_ulike_get_setting( $setting_key, 'number_of_users');
-			if($limit_num == 0) $limit_num = 10;
-			$get_users 	= $this->wpdb->get_results("SELECT user_id FROM ".$this->wpdb->prefix."$table WHERE $column_id = '$id' AND status = 'like' AND user_id BETWEEN 1 AND 999999 GROUP BY user_id LIMIT $limit_num");
-			if(wp_ulike_get_setting( $setting_key, 'users_liked_box') == '1' && !$get_users == ''){
-				$get_template = wp_ulike_get_setting( $setting_key, 'users_liked_box_template' );
-				if($get_template == '')
-				$get_template = '<br /><p style="margin-top:5px"> '.__('Users who have LIKED this post:',WP_ULIKE_SLUG).'</p> <ul class="tiles"> %START_WHILE% <li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li> %END_WHILE%</ul>';
-				$inner_template = $this->get_template_between($get_template,"%START_WHILE%","%END_WHILE%");
-				foreach ( $get_users as $get_user ) 
-				{
-					$user_info = get_userdata($get_user->user_id);
-					$out_template = $inner_template;
-					if ($user_info):
-						if (strpos($out_template, '%USER_AVATAR%') !== false) {
-							$avatar_size = wp_ulike_get_setting( $setting_key, 'users_liked_box_avatar_size');
-							$USER_AVATAR = get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar');
-							$out_template = str_replace("%USER_AVATAR%", $USER_AVATAR, $out_template);
-						}
-						if (strpos($out_template, '%USER_NAME%') !== false) {
-							$USER_NAME = $user_info->display_name;
-							$out_template = str_replace("%USER_NAME%", $USER_NAME, $out_template);
-						}
-						if (strpos($out_template, '%UM_PROFILE_URL%') !== false && function_exists('um_fetch_user')) {
-							global $ultimatemember;
-							um_fetch_user($user_info->ID);
-							$UM_PROFILE_URL = um_user_profile_url();
-							$out_template = str_replace("%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template);
-						}
-						if (strpos($out_template, '%BP_PROFILE_URL%') !== false && function_exists('bp_core_get_user_domain')) {
-							$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
-							$out_template = str_replace("%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template);
-						}
-						$users_list .= $out_template;
-					endif;
+		public function get_liked_users( array $args ){
+			// Extract input array
+			extract( $args );
+			// If likers box has been disabled
+			if ( ! wp_ulike_get_setting( $setting, 'users_liked_box' ) ) return;
+			// Get any existing copy of our transient data
+			if ( false === ( $users_list = get_transient( 'wp_ulike_likers_box_for_' . $key . $id ) ) ) {
+				// Get user's limit number value
+				$limit_num 		= wp_ulike_get_setting( $setting, 'number_of_users');
+				// Set default value if limit_num equals to zero 
+				$limit_num		= $limit_num != 0 ? $limit_num : 10;
+				// Get likers list
+				$get_users 		= $this->wpdb->get_results( "SELECT user_id FROM ".$this->wpdb->prefix."$table WHERE $column = '$id' AND status = 'like' AND user_id BETWEEN 1 AND 999999 GROUP BY user_id LIMIT $limit_num" );
+
+				if( ! empty( $get_users ) ){
+
+					// Get likers html template
+					$get_template 	= wp_ulike_get_setting( $setting, 'users_liked_box_template' );
+					// Set default template if get_template was empty
+					$get_template 	= empty( $get_template ) ? '<br /><p style="margin-top:5px">'. __('Users who have LIKED this post:',WP_ULIKE_SLUG) .'</p> <ul class="tiles"> %START_WHILE% <li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li> %END_WHILE%</ul>' : $get_template;
+					
+					$inner_template = $this->get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
+
+					foreach ( $get_users as $get_user ) {
+						$user_info 		= get_userdata($get_user->user_id);
+						$out_template 	= $inner_template;
+						if ($user_info):
+							if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
+								$avatar_size 	= wp_ulike_get_setting( $setting, 'users_liked_box_avatar_size' );
+								$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
+								$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
+							}
+							if( strpos( $out_template, '%USER_NAME%' ) !== false) {
+								$USER_NAME 		= $user_info->display_name;
+								$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
+							}
+							if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
+								global $ultimatemember;
+								um_fetch_user( $user_info->ID );
+								$UM_PROFILE_URL = um_user_profile_url();
+								$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
+							}
+							if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
+								$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
+								$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
+							}
+							$users_list .= $out_template;
+						endif;
+					}
+
+					if( ! empty($users_list) ) {
+						$users_list = $this->put_template_between( $get_template,$users_list, "%START_WHILE%", "%END_WHILE%" );
+					}
+
+					set_transient( 'wp_ulike_likers_box_for_' . $key . $id, $users_list, 12 * HOUR_IN_SECONDS );
 				}
-				if($users_list!='')
-				$users_list = $this->put_template_between($get_template,$users_list,"%START_WHILE%","%END_WHILE%");
 			}
+
 			return $users_list;
 		}
 		
@@ -475,8 +594,18 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.3
 		 * @return			Array
 		 */		
-		public function get_current_user_likes(array $args){
-			return $this->wpdb->get_results("SELECT ".$args['col'].", date_time FROM ".$this->wpdb->prefix.$args['table']." WHERE user_id = ".$args['user_id']." AND status = 'like' ORDER BY date_time DESC LIMIT ".$args['limit']."");
+		public function get_current_user_likes( array $args ){
+			extract( $args );
+			// Get user likes
+			return $this->wpdb->get_results( "
+										SELECT $col, date_time 
+										FROM ".$this->wpdb->prefix.$table." 
+										WHERE user_id = '$user_id' 
+										AND status = 'like' 
+										ORDER BY date_time 
+										DESC 
+										LIMIT $limit
+									");
 		}
 
 		
@@ -490,13 +619,16 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		public function get_template_between($string, $start, $end){
-			$string = " ".$string;
-			$ini = strpos($string,$start);
-			if ($ini == 0) return "";
-			$ini += strlen($start);
-			$len = strpos($string,$end,$ini) - $ini;
-			return substr($string,$ini,$len);
+		public function get_template_between( $string, $start, $end ){
+			$string 	= " ".$string;
+			$ini 		= strpos($string,$start);
+			if ( $ini == 0 ){
+				return "";
+			}
+			$ini 		+= strlen($start);
+			$len 		= strpos($string,$end,$ini) - $ini;
+
+			return substr( $string, $ini, $len );
 		}
 
 		/**
@@ -510,14 +642,22 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */		
-		public function put_template_between($string,$inner_string, $start, $end){
-			$string = " ".$string;
-			$ini = strpos($string,$start);
-			if ($ini == 0) return "";
-			$ini += strlen($start);
-			$len = strpos($string,$end,$ini) - $ini;
-			$newstr = substr_replace($string,$inner_string,$ini,$len);
-			return str_replace(array("%START_WHILE%", "%END_WHILE%"),array("", ""), $newstr);
+		public function put_template_between( $string, $inner_string, $start, $end ){
+			$string 	= " ".$string;
+			$ini 		= strpos($string,$start);
+			if ($ini == 0){
+				return "";
+			}
+
+			$ini 		+= strlen($start);
+			$len		= strpos($string,$end,$ini) - $ini;
+			$newstr 	= substr_replace($string,$inner_string,$ini,$len);
+			
+			return str_replace(
+				array( "%START_WHILE%", "%END_WHILE%" ),
+				array( "", "" ),
+				$newstr
+			);
 		}
 
 		/**
@@ -530,10 +670,9 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		function get_reutrn_id(){
 			global $user_ID,$wp_user_IP;
 			
-			if(!is_user_logged_in()){
+			if( ! is_user_logged_in() ){
 				return ip2long($wp_user_IP);
-			}
-			else {
+			} else {
 				return $user_ID;
 			}
 		}

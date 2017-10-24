@@ -41,11 +41,13 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 */
 		public function run() {
  
-			if ( $this->prefs['add_like']['creds'] != 0 || $this->prefs['get_like']['creds'] != 0)
-				add_action( 'wp_ulike_mycred_like', array( $this, 'like' ), 10, 2 );
+			if ( $this->prefs['add_like']['creds'] || $this->prefs['get_like']['creds'] ) {
+				add_action( 'wp_ulike_mycred_like'	, array( $this, 'like' )	, 10, 2 );
+			}
 
-			if ( $this->prefs['add_unlike']['creds'] != 0 || $this->prefs['get_unlike']['creds'] != 0 )
-				add_action( 'wp_ulike_mycred_unlike', array( $this, 'unlike' ), 10, 2 );
+			if ( $this->prefs['add_unlike']['creds'] || $this->prefs['get_unlike']['creds'] ) {
+				add_action( 'wp_ulike_mycred_unlike', array( $this, 'unlike' )	, 10, 2 );
+			}
  
 		}
 		
@@ -60,63 +62,67 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 *
 		 * @since		2.3
 		 */
-		public function like( $id , $key ) {
+		public function like( $id , $key, $author_id = 0 ) {
 			
-			$author_id 	= 0;
 			$user_id 	= get_current_user_id();
 			
 			// Check for exclusion
-			if ( $this->core->exclude_user( $user_id ) ) return;			
-			
-			if($key == '_liked' || $key == '_topicliked' ){
-				$author_id 	= get_post_field( 'post_author', $id );
-			}
-			else if($key == '_commentliked'){
-				$comment_id = get_comment( $id ); 
-				$author_id 	= $comment_id->user_id;						
-			}
-			else if($key == '_activityliked'){
-				$author_id 	= $this->bp_get_auhtor_id($id);
+			if ( $this->core->exclude_user( $user_id ) ) return;
+
+			switch ( $key ) {
+				case '_liked':
+				case '_topicliked':
+					$author_id 	= get_post_field( 'post_author', $id );
+					break;
+				case '_commentliked':
+					$comment_id = get_comment( $id ); 
+					$author_id 	= $comment_id->user_id;	
+					break;
+				case '_activityliked':
+					$author_id 	= $this->bp_get_auhtor_id($id);
+					break;
 			}
 						
 			
 			if ( $user_id != $author_id ){
 
 				// Award the user liking
-				if ( $this->prefs['add_like']['creds'] != 0) {
-					// Limit
-					if ( $this->over_hook_limit( 'add_like', 'wp_add_like', $user_id ) ) return;
-					// Make sure this is unique event
-					if ( ! $this->core->has_entry( 'wp_add_like', $id, $user_id ) ) {
-						// Execute
-						$this->core->add_creds(
-							'wp_add_like',
-							$user_id,
-							$this->prefs['add_like']['creds'],
-							$this->prefs['add_like']['log'],
-							$id,
-							array( 'ref_type' => $key ),
-							$this->mycred_type
-						);
+				if ( $this->prefs['add_like']['creds'] ) {
+					// If not over limit
+					if ( ! $this->over_hook_limit( 'add_like', 'wp_add_like', $user_id ) ) {
+						// Make sure this is unique event
+						if ( ! $this->core->has_entry( 'wp_add_like', $id, $user_id ) ) {
+							// Execute
+							$this->core->add_creds(
+								'wp_add_like',
+								$user_id,
+								$this->prefs['add_like']['creds'],
+								$this->prefs['add_like']['log'],
+								$id,
+								array( 'ref_type' => $key ),
+								$this->mycred_type
+							);
+						}
 					}
-				}
+				}		
 
 				// Award post author for being liked
-				if ( $this->prefs['get_like']['creds'] != 0 && $author_id != 0 ) {
+				if ( $this->prefs['get_like']['creds'] && $author_id ) {
 					// Make sure this is unique event
-					if ( $this->over_hook_limit( 'get_like', 'wp_get_like', $author_id ) ) return;
-					// Make sure this is unique event
-					if ( ! $this->core->has_entry( 'wp_get_like', $id, $author_id ) ) {
-						// Execute
-						$this->core->add_creds(
-							'wp_get_like',
-							$author_id,
-							$this->prefs['get_like']['creds'],
-							$this->prefs['get_like']['log'],
-							$id,
-							array( 'ref_type' => $key, 'by' => $user_id ),
-							$this->mycred_type
-						);
+					if ( ! $this->over_hook_limit( 'get_like', 'wp_get_like', $author_id ) ) {
+						// Make sure this is unique event
+						if ( ! $this->core->has_entry( 'wp_get_like', $id, $author_id ) ) {
+							// Execute
+							$this->core->add_creds(
+								'wp_get_like',
+								$author_id,
+								$this->prefs['get_like']['creds'],
+								$this->prefs['get_like']['log'],
+								$id,
+								array( 'ref_type' => $key, 'by' => $user_id ),
+								$this->mycred_type
+							);
+						}
 					}
 				}
 				
@@ -129,30 +135,32 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 *
 		 * @since		2.3
 		 */
-		public function unlike( $id , $key  ) {
+		public function unlike( $id , $key, $author_id 	= 0  ) {
 		
-			$author_id 	= 0;
 			$user_id 	= get_current_user_id();		
 		
 			// Check for exclusion
 			if ( $this->core->exclude_user( $user_id ) ) return;
-			
-			if($key == '_liked' || $key == '_topicliked' ){
-				$author_id 	= get_post_field( 'post_author', $id );
-			}
-			else if($key == '_commentliked'){
-				$comment_id = get_comment( $id ); 
-				$author_id 	= $comment_id->user_id;						
-			}
-			else if($key == '_activityliked'){
-				$author_id 	= $this->bp_get_auhtor_id($id);
-			}
+
+			switch ( $key ) {
+				case '_liked':
+				case '_topicliked':
+					$author_id 	= get_post_field( 'post_author', $id );
+					break;
+				case '_commentliked':
+					$comment_id = get_comment( $id ); 
+					$author_id 	= $comment_id->user_id;	
+					break;
+				case '_activityliked':
+					$author_id 	= $this->bp_get_auhtor_id( $id );
+					break;
+			}			
 						
 			
 			if ( $user_id != $author_id ){
 
 				// Award the user liking
-				if ( $this->prefs['add_unlike']['creds'] != 0) {
+				if ( $this->prefs['add_unlike']['creds'] ) {
 					// Make sure this is unique event
 					if ( ! $this->core->has_entry( 'wp_add_unlike', $id, $user_id ) ) {
 						// Execute
@@ -169,7 +177,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 				}
 
 				// Award post author for being liked
-				if ( $this->prefs['get_unlike']['creds'] != 0 && $author_id != 0 ) {
+				if ( $this->prefs['get_unlike']['creds'] && $author_id ) {
 					// Make sure this is unique event
 					if ( ! $this->core->has_entry( 'wp_get_unlike', $id, $author_id ) ) {
 						// Execute
@@ -199,67 +207,66 @@ if ( class_exists( 'myCRED_Hook' ) ) :
  
 			$prefs = $this->prefs;
  
-?>
-<label class="subheader"><?php echo _e( 'Points for Liking content', WP_ULIKE_SLUG ); ?></label>
-<ol>
-	<li>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_like' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'add_like' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['add_like']['creds'] ); ?>" size="8" /></div>
-	</li>
-	<li class="empty"></li>
-	<li>
-		<label for="<?php echo $this->field_id( array( 'add_like' => 'limit' ) ); ?>"><?php _e( 'Limit', WP_ULIKE_SLUG ); ?></label>
-		<?php echo $this->hook_limit_setting( $this->field_name( array( 'add_like' => 'limit' ) ), $this->field_id( array( 'add_like' => 'limit' ) ), $prefs['add_like']['limit'] ); ?>
-	</li>	
-	<li class="empty"></li>
-	<li>
-		<label for="<?php echo $this->field_id( array( 'add_like' => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_like' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'add_like' => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs['add_like']['log'] ); ?>" class="long" /></div>
-		<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
-	</li>
-</ol>
-<label class="subheader"><?php _e( 'Points for Author Who Get Liked', WP_ULIKE_SLUG ); ?></label>
-<ol>
-	<li>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_like' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'get_like' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['get_like']['creds'] ); ?>" size="8" /></div>
-	</li>
-	<li class="empty"></li>
-	<li>
-		<label for="<?php echo $this->field_id( array( 'get_like' => 'limit' ) ); ?>"><?php _e( 'Limit', WP_ULIKE_SLUG ); ?></label>
-		<?php echo $this->hook_limit_setting( $this->field_name( array( 'get_like' => 'limit' ) ), $this->field_id( array( 'get_like' => 'limit' ) ), $prefs['get_like']['limit'] ); ?>
-	</li>		
-	<li class="empty"></li>
-	<li>
-		<label for="<?php echo $this->field_id( array( 'get_like' => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_like' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'get_like' => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs['get_like']['log'] ); ?>" class="long" /></div>
-		<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
-	</li>
-</ol>
-<label class="subheader"><?php echo _e( 'Points for unliking content', WP_ULIKE_SLUG ); ?></label>
-<ol>
-	<li>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_unlike' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'add_unlike' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['add_unlike']['creds'] ); ?>" size="8" /></div>
-	</li>
-	<li class="empty"></li>
-	<li>
-		<label for="<?php echo $this->field_id( array( 'add_unlike' => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_unlike' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'add_unlike' => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs['add_unlike']['log'] ); ?>" class="long" /></div>
-		<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
-	</li>
-</ol>
-<label class="subheader"><?php _e( 'Points for Author Who Get Unliked', WP_ULIKE_SLUG ); ?></label>
-<ol>
-	<li>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_unlike' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'get_unlike' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['get_unlike']['creds'] ); ?>" size="8" /></div>
-	</li>
-	<li class="empty"></li>
-	<li>
-		<label for="<?php echo $this->field_id( array( 'get_unlike' => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_unlike' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'get_unlike' => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs['get_unlike']['log'] ); ?>" class="long" /></div>
-		<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
-	</li>
-</ol>
-<?php
- 
+		?>
+			<label class="subheader"><?php echo _e( 'Points for Liking content', WP_ULIKE_SLUG ); ?></label>
+			<ol>
+				<li>
+					<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_like' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'add_like' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['add_like']['creds'] ); ?>" size="8" /></div>
+				</li>
+				<li class="empty"></li>
+				<li>
+					<label for="<?php echo $this->field_id( array( 'add_like' => 'limit' ) ); ?>"><?php _e( 'Limit', WP_ULIKE_SLUG ); ?></label>
+					<?php echo $this->hook_limit_setting( $this->field_name( array( 'add_like' => 'limit' ) ), $this->field_id( array( 'add_like' => 'limit' ) ), $prefs['add_like']['limit'] ); ?>
+				</li>	
+				<li class="empty"></li>
+				<li>
+					<label for="<?php echo $this->field_id( array( 'add_like' => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
+					<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_like' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'add_like' => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs['add_like']['log'] ); ?>" class="long" /></div>
+					<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+				</li>
+			</ol>
+			<label class="subheader"><?php _e( 'Points for Author Who Get Liked', WP_ULIKE_SLUG ); ?></label>
+			<ol>
+				<li>
+					<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_like' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'get_like' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['get_like']['creds'] ); ?>" size="8" /></div>
+				</li>
+				<li class="empty"></li>
+				<li>
+					<label for="<?php echo $this->field_id( array( 'get_like' => 'limit' ) ); ?>"><?php _e( 'Limit', WP_ULIKE_SLUG ); ?></label>
+					<?php echo $this->hook_limit_setting( $this->field_name( array( 'get_like' => 'limit' ) ), $this->field_id( array( 'get_like' => 'limit' ) ), $prefs['get_like']['limit'] ); ?>
+				</li>		
+				<li class="empty"></li>
+				<li>
+					<label for="<?php echo $this->field_id( array( 'get_like' => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
+					<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_like' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'get_like' => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs['get_like']['log'] ); ?>" class="long" /></div>
+					<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+				</li>
+			</ol>
+			<label class="subheader"><?php echo _e( 'Points for unliking content', WP_ULIKE_SLUG ); ?></label>
+			<ol>
+				<li>
+					<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_unlike' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'add_unlike' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['add_unlike']['creds'] ); ?>" size="8" /></div>
+				</li>
+				<li class="empty"></li>
+				<li>
+					<label for="<?php echo $this->field_id( array( 'add_unlike' => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
+					<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'add_unlike' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'add_unlike' => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs['add_unlike']['log'] ); ?>" class="long" /></div>
+					<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+				</li>
+			</ol>
+			<label class="subheader"><?php _e( 'Points for Author Who Get Unliked', WP_ULIKE_SLUG ); ?></label>
+			<ol>
+				<li>
+					<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_unlike' => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( 'get_unlike' => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs['get_unlike']['creds'] ); ?>" size="8" /></div>
+				</li>
+				<li class="empty"></li>
+				<li>
+					<label for="<?php echo $this->field_id( array( 'get_unlike' => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
+					<div class="h2"><input type="text" name="<?php echo $this->field_name( array( 'get_unlike' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'get_unlike' => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs['get_unlike']['log'] ); ?>" class="long" /></div>
+					<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+				</li>
+			</ol>
+		<?php
 		}
 		
 		/**

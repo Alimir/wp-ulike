@@ -1,0 +1,61 @@
+
+.rtl {
+    .wpulike-heart {
+        .wp_ulike_btn {
+            border-left: 1px solid #d3d3d3;
+            border-right: 0;
+        }
+        .wp_ulike_btn.wp_ulike_put_image {
+            border-left: 1px solid #E0E0E0;
+            border-right: 0;
+        }
+        .wp_ulike_is_loading {
+            .wp_ulike_btn {
+                border-left: 1px solid #E0E0E0;
+                border-right: 0;
+            }
+        }
+        .count-box {
+            margin-right: 0;
+            margin-left: inherit;
+        }
+    }
+    #buddypress {
+        .activity-content {
+            .wpulike-heart {
+                .wp_ulike_btn {
+                    border-left: 1px solid #d3d3d3;
+                    border-right: 0;
+                }
+                .wp_ulike_btn.wp_ulike_put_image {
+                    border-left: 1px solid #E0E0E0;
+                    border-right: 0;
+                }
+                wp_ulike_is_loading {
+                    .wp_ulike_btn {
+                        border-left: 1px solid #E0E0E0;
+                        border-right: 0;
+                    }
+                }
+            }
+        }
+    }
+    #bbpress-forums {
+        .wpulike-heart {
+            .wp_ulike_btn {
+                border-left: 1px solid #d3d3d3;
+                border-right: 0;
+            }
+            .wp_ulike_btn.wp_ulike_put_image {
+                border-left: 1px solid #E0E0E0;
+                border-right: 0;
+            }
+            wp_ulike_is_loading {
+                .wp_ulike_btn {
+                    border-left: 1px solid #E0E0E0;
+                    border-right: 0;
+                }
+            }
+        }
+    }
+}

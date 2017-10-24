@@ -1,0 +1,14 @@
+
+.rtl {
+    .wpulike-default {
+        .count-box {
+            margin-right: .5em;
+            margin-left: inherit;
+            &:before {
+                right: -.2125em;
+                left: inherit;
+                border-color:  #898F9C #898F9C transparent transparent;
+            }
+        }
+    }
+}

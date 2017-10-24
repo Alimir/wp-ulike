@@ -20,6 +20,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @author       	Alimir
 		 * @since           2.0
 		 * @updated         2.3
+		 * @updated         2.9
 		 * @return			Void
 		 */		
 		public function enqueue_script($hook)
@@ -27,20 +28,19 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$currentScreen 	= get_current_screen();
 			$get_option 	= get_option( 'wp_ulike_statistics_screen' );
 			
-			if ( $currentScreen->id != $hook ) return;
-			wp_register_style( 'wp_ulike_stats_style', plugins_url( 'css/statistics.css' , __FILE__ ) );
-			
-			//wp_enqueue_style 
-			wp_enqueue_style( 'wp_ulike_stats_style' );			
-			
-			wp_register_script('wp_ulike_chart', plugins_url( 'js/chart.min.js' , __FILE__ ), array('jquery'), null, true);
-			wp_enqueue_script('wp_ulike_chart');
-			wp_register_script('wp_ulike_vmap', plugins_url( 'js/jquery.vmap.min.js' , __FILE__ ), array('jquery'), null, true);
-			wp_enqueue_script('wp_ulike_vmap');
-			wp_register_script('wp_ulike_world', plugins_url( 'js/jquery.vmap.world.js' , __FILE__ ), array('jquery'), null, true);
-			wp_enqueue_script('wp_ulike_world');
-			wp_register_script('wp_ulike_stats', plugins_url( 'js/statistics.js' , __FILE__ ), array('jquery'), null, true);
+			// if ( $currentScreen->id != $hook ) return;	
+
+			// Register Script
+			wp_register_script(
+				'wp_ulike_stats',
+				WP_ULIKE_ADMIN_URL . '/classes/js/statistics.js',
+				array('jquery'),
+				null,
+				true
+			);
+			// Enqueue Script
 			wp_enqueue_script('wp_ulike_stats');
+
 			wp_localize_script( 'wp_ulike_stats', 'wp_ulike_statistics', array(
 				'posts_date_labels' 		=> $this->posts_dataset('label'),
 				'comments_date_labels' 		=> $this->comments_dataset('label'),

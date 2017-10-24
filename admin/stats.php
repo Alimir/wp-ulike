@@ -2,9 +2,9 @@
 	//include wp_ulike_stats class & geoIPloc functions
 	if(isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false){
 		//include class charts
-		include( plugin_dir_path(__FILE__) . 'classes/class-charts.php');
+		require_once( WP_ULIKE_ADMIN_DIR . '/classes/class-charts.php');
 		//include PHP GeoIPLocation Library
-		include( plugin_dir_path(__FILE__) . 'classes/tmp/geoiploc.php');
+		require_once( WP_ULIKE_ADMIN_DIR . '/classes/tmp/geoiploc.php');
 	} else return;
 	
 	/**
