@@ -14,98 +14,20 @@
 	}
 
 	/**
-	 * Admin enqueue scripts for font-icons stylesheet
-	 *
-	 * @author       	Alimir	 	
-	 * @since           2.7
-	 * @return			Action
-	 */ 
-	add_action('admin_enqueue_scripts', 'wp_ulike_enqueue_font_icons');
-	function wp_ulike_enqueue_font_icons($avatar) {
-		wp_enqueue_style( 'wp_ulike_font_icons', WP_ULIKE_ADMIN_URL . '/classes/css/font-icons.css' );
-	}
-
-	/**
 	 * Create WP ULike About page
 	 *
 	 * @author       	Alimir	 	
 	 * @since           1.7
 	 * @updated         2.1
 	 * @updated         2.7 //Removed svg-source & updated some elements
+	 * @updated         2.9
 	 * @return			String
 	 */ 	
 	function wp_ulike_about_page() {
 	?>
-	<style>
-	.ulike-badge{
-		background: url('<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-badge.png') no-repeat scroll center 24px / 95px 95px #F3643A;
-		color: #fff;
-		font-size: 14px;
-		text-align: center;
-		font-weight: 600;
-		margin: 5px 0px 0px;
-		padding-top: 120px;
-		height: 40px;
-		display: inline-block;
-		width: 150px;
-		text-rendering: optimizelegibility;
-		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
-	}
-	.wp_ulike_version {
-		display: inline-block;
-		position: absolute;
-		top: 54px;
-		left:0;
-		padding: 5px 10px;
-		background: #e74c3c;
-		color: #FFF;
-		font-size: 13px;
-		font-weight: normal;
-	}
-	.about-wrap .headline-feature h2 {
-		margin: 1.1em 0px 0.2em;
-		font-size: 2.4em;
-		font-weight: 300;
-		line-height: 1.3;
-		text-align: center;
-	}
-	.about-wrap .icon-container {
-		text-align: center;
-		font-size: 6vw;
-		border: 1px solid #757575;
-		padding: 35px 5px;
-	}	
-	.about-wrap .featured-image img {
-		border: none;
-	}	
-	<?php if(is_rtl()): ?>
-	.about-wrap .ulike-badge {
-		position: absolute;
-		top: 0px;
-		left: 0px;
-	}
-	.boxstyle {
-		padding: 1px 12px;
-		background-color: #FFF;
-		border-right: 3px solid #757575;
-	}		
-	<?php else: ?>
-	.about-wrap .ulike-badge {
-		position: absolute;
-		top: 0px;
-		right: 0px;
-	}
-	.boxstyle {
-		padding: 1px 12px;
-		background-color: #FFF;
-		border-left: 3px solid #757575;
-	}		
-	<?php endif; ?>
-	</style>
+	<div class="wrap about-wrap wp-ulike-about-page">
 
-	<div class="wrap about-wrap">
-
-		<h1><?php echo _e('Welcome to WP ULike',WP_ULIKE_SLUG) . ' ' . WP_ULIKE_VERSION; ?></h1>
+		<h1><?php echo _e( 'Welcome to WP ULike', WP_ULIKE_SLUG ) . ' ' . WP_ULIKE_VERSION; ?></h1>
 		<div class="about-text"><?php echo _e('Thank you for choosing WP ULike! This version is our leanest and most powerful version yet.', WP_ULIKE_SLUG) ; ?><br />
 		
 		<?php add_thickbox(); ?>
@@ -125,7 +47,7 @@
         <div class="changelog headline-feature">
             <h2><?php echo _e('Introducing WP ULike',WP_ULIKE_SLUG); ?> <img draggable="false" class="emoji" alt="emoji" src="https://s.w.org/images/core/emoji/2.2.1/svg/1f60a.svg"></h2>
             <div class="featured-image">
-                <img alt="wp ulike intro" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/wp-ulike-intro.png">
+                <img alt="wp ulike intro" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-intro.png">
             </div>       
 
             <div class="feature-section">
@@ -211,41 +133,41 @@
 			
 		<h3 class="wp-people-group"><?php _e('Translations',WP_ULIKE_SLUG); ?></h3>
 		<ul>
-		<li>English (United States)</li>
-		<li>Persian (Iran)</li>
-		<li>French (France)</li>
-		<li>Chinese (China)</li>
-		<li>Chinese (Taiwan)</li>
-		<li>Dutch (Netherlands) </li>
-		<li>Arabic</li>
-		<li>Portuguese (Brazil)</li>
-		<li>Turkish (Turkey)</li>
-		<li>Greek</li>
-		<li>Russian (Russia)</li>
-		<li>Spanish (Spain)</li>
-		<li>German (Germany)</li>
-		<li>Japanese</li>
-		<li>Romanian (Romania)</li>
-		<li>Slovak (Slovakia)</li>
-		<li>Czech (Czech Republic)</li>
-		<li>Hebrew (Israel)</li>
-		<li>Italian (Italy)</li>
-		<li>Polish (Poland)</li>
-		<li>Finnish</li>
-		<li>Hungarian (Hungary)</li>
-		<li>Lithuanian (Lithuania)</li>
-		<li>Indonesian (Indonesia)</li>
-		<li>Khmer</li>
-		<li>Norwegian Bokmal (Norway)</li>
-		<li>Portuguese (Portugal)</li>
-		<li>Swedish (Sweden)</li>
-		<li>Danish (Denmark)</li>
-		<li>Estonian</li>
-		<li>Korean (Korea)</li>
-		<li>Vietnamese</li>
-		<li>Basque</li>
-		<li>Bosnian (Bosnia and Herzegovina)</li>
-		<li>English (United Kingdom)</li>
+			<li>English (United States)</li>
+			<li>Persian (Iran)</li>
+			<li>French (France)</li>
+			<li>Chinese (China)</li>
+			<li>Chinese (Taiwan)</li>
+			<li>Dutch (Netherlands) </li>
+			<li>Arabic</li>
+			<li>Portuguese (Brazil)</li>
+			<li>Turkish (Turkey)</li>
+			<li>Greek</li>
+			<li>Russian (Russia)</li>
+			<li>Spanish (Spain)</li>
+			<li>German (Germany)</li>
+			<li>Japanese</li>
+			<li>Romanian (Romania)</li>
+			<li>Slovak (Slovakia)</li>
+			<li>Czech (Czech Republic)</li>
+			<li>Hebrew (Israel)</li>
+			<li>Italian (Italy)</li>
+			<li>Polish (Poland)</li>
+			<li>Finnish</li>
+			<li>Hungarian (Hungary)</li>
+			<li>Lithuanian (Lithuania)</li>
+			<li>Indonesian (Indonesia)</li>
+			<li>Khmer</li>
+			<li>Norwegian Bokmal (Norway)</li>
+			<li>Portuguese (Portugal)</li>
+			<li>Swedish (Sweden)</li>
+			<li>Danish (Denmark)</li>
+			<li>Estonian</li>
+			<li>Korean (Korea)</li>
+			<li>Vietnamese</li>
+			<li>Basque</li>
+			<li>Bosnian (Bosnia and Herzegovina)</li>
+			<li>English (United Kingdom)</li>
 		</ul>
 		
 		<p class="about-description"><?php _e('Would you like to help translate the plugin into more languages?',WP_ULIKE_SLUG); ?> <a target="_blank" href="https://www.transifex.com/projects/p/wp-ulike/" title"WP-Translations">[<?php _e('Join our WP-Translations Community',WP_ULIKE_SLUG); ?>]</a></p>	
@@ -253,24 +175,32 @@
 		<h3 class="wp-people-group"><?php echo _e('Other Plugins',WP_ULIKE_SLUG); ?></h3>
 		<ul class="wp-people-group">
 			<li class="wp-person" id="wp-person-alimirzaei">
-				<a target="_blank" href="https://wordpress.org/plugins/blue-login-style"><img class="gravatar" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/blue-login-themes.jpg" alt="Blue Login Themes" /></a>
+				<a target="_blank" href="https://wordpress.org/plugins/blue-login-style"><img class="gravatar" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/blue-login-themes.jpg" alt="Blue Login Themes" /></a>
 				<a class="web" href="https://profiles.wordpress.org/alimir/">Ali Mirzaei</a>
 				<span class="title">Blue Login Themes</span>
 			</li>									
 			<li class="wp-person" id="wp-person-alimirzaei">
-				<a target="_blank" href="https://wordpress.org/plugins/custom-fields-notifications/"><img class="gravatar" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/custom-fileds-notifications.png" alt="Custom Fields Notifications" /></a>
+				<a target="_blank" href="https://wordpress.org/plugins/custom-fields-notifications/"><img class="gravatar" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/custom-fileds-notifications.png" alt="Custom Fields Notifications" /></a>
 				<a class="web" href="https://profiles.wordpress.org/alimir/">Ali Mirzaei</a>
 				<span class="title">Custom Fields Notifications</span>
 			</li>									
 			<li class="wp-person" id="wp-person-alimirzaei">
-				<a target="_blank" href="http://wordpress.org/plugins/ajax-bootmodal-login/"><img class="gravatar" src="<?php echo plugins_url('/assets', dirname(__FILE__)); ?>/img/ajax-bootmodal-login.jpg" alt="Ajax BootModal Login" /></a>
+				<a target="_blank" href="http://wordpress.org/plugins/ajax-bootmodal-login/"><img class="gravatar" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/ajax-bootmodal-login.jpg" alt="Ajax BootModal Login" /></a>
 				<a class="web" href="https://profiles.wordpress.org/alimir/">Ali Mirzaei</a>
 				<span class="title">Ajax BootModal Login</span>
 			</li>									
 		</ul>	
 		
 		<h3 class="wp-people-group"><?php _e('Like this plugin?',WP_ULIKE_SLUG); ?></h3>
-		<div class="boxstyle"><p><strong><?php _e('Show your support by Rating 5 Star in <a href="http://wordpress.org/plugins/wp-ulike"> Plugin Directory reviews</a>',WP_ULIKE_SLUG); ?></strong></p></div>
+		<div class="wp-ulike-notice">
+            <img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-badge.png" alt="Instagram Feed">
+            <div class="wp-ulike-notice-text">
+                <p><?php echo _e( "It's great to see that you've been using the WP ULike plugin for a while now. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ); ?> </p>
+                <p class="links">
+                    <a href="https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5" target="_blank"><?php echo _e( "Sure, I'd love to!", WP_ULIKE_SLUG ); ?></a>
+                </p>
+            </div>
+        </div>
 		
 		<?php endif; ?>
 							
