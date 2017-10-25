@@ -81,4 +81,22 @@
 		}
 	}
 
+	.wp-ulike-notice {
+		img {
+			width: 84px;
+			margin: 0 -100% 0 0 !important;
+		}
+		.wp-ulike-notice-text {
+			float: right;
+		}
+		p {
+			float: right;
+			margin: 0 100px 0 0 !important;
+			padding: 4px 0 4px 40px;
+		}
+		.links {
+			margin: 0 92px 0 0 !important;
+		}
+	}	
+
 }
