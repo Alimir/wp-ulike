@@ -13,7 +13,7 @@
 			'button_type'  	=> array(
 				'type'    	=> 'visual-select',
 				'label'   	=> __( 'Button Type', WP_ULIKE_SLUG),
-				'default'	=> 'image',
+				'default'	=> 'wpulike-default',
 				'options' 	=> array(
 					'image'    	=> array(
 						'name'     => __('Icon', WP_ULIKE_SLUG),
@@ -203,7 +203,7 @@
 		'fields' 			=> array(
 		  'theme' 			=> array(
 			'type'    		=> 'visual-select',
-			'default'		=> 'default',
+			'default'		=> 'wpulike-default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),		
@@ -347,7 +347,7 @@
 		'fields' 	=> array(
 		  'theme' 			=> array(
 			'type'    		=> 'visual-select',
-			'default'		=> 'default',
+			'default'		=> 'wpulike-default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),
@@ -469,7 +469,7 @@
 		'fields' 	=> array(
 		  'theme' 			=> array(
 			'type'    		=> 'visual-select',
-			'default'		=> 'default',
+			'default'		=> 'wpulike-default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),		
