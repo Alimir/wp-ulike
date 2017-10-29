@@ -13,7 +13,7 @@
 			'button_type'  	=> array(
 				'type'    	=> 'visual-select',
 				'label'   	=> __( 'Button Type', WP_ULIKE_SLUG),
-				'default'	=> 'wpulike-default',
+				'default'	=> 'text',
 				'options' 	=> array(
 					'image'    	=> array(
 						'name'     => __('Icon', WP_ULIKE_SLUG),
@@ -50,7 +50,7 @@
 			'login_type'  		=> array(
 			  'type'    	=> 'radio',
 			  'label'   	=> __( 'Users Login Type',WP_ULIKE_SLUG),
-			  'default'		=> 'alert',
+			  'default'		=> 'button',
 			  'options' 	=> array(
 				'alert'   	=> __('Alert Box', WP_ULIKE_SLUG),
 				'button'	=> __('Like Button', WP_ULIKE_SLUG)
@@ -69,7 +69,7 @@
 			),
 			'notifications'    	=> array(
 			  'type'			=> 'checkbox',
-			  'default'			=> 0,
+			  'default'			=> 1,
 			  'label' 			=> __('Notifications', WP_ULIKE_SLUG),
 			  'checkboxlabel' 	=> __('Activate', WP_ULIKE_SLUG),
 			  'description' 	=> __('Custom toast messages after each activity', WP_ULIKE_SLUG)
@@ -94,7 +94,7 @@
 		'fields' 			=> array(
 		  'theme' 			=> array(
 			'type'    		=> 'visual-select',
-			'default'		=> 'default',
+			'default'		=> 'wpulike-default',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),
@@ -203,7 +203,7 @@
 		'fields' 			=> array(
 		  'theme' 			=> array(
 			'type'    		=> 'visual-select',
-			'default'		=> 'wpulike-default',
+			'default'		=> 'wpulike-heart',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),		
@@ -347,20 +347,20 @@
 		'fields' 	=> array(
 		  'theme' 			=> array(
 			'type'    		=> 'visual-select',
-			'default'		=> 'wpulike-default',
+			'default'		=> 'wpulike-robeen',
 			'label'   		=> __( 'Themes',WP_ULIKE_SLUG),
 			'options' 		=> apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
 		  ),
 		  'auto_display'  => array(
 			'type'  		=> 'checkbox',
-			'default'		=> 0,
+			'default'		=> 1,
 			'label' 		=> __('Automatic display', WP_ULIKE_SLUG),
 			'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
 		  ),
 		  'auto_display_position'  => array(
 			'type'    		=> 'radio',
 			'label'   		=> __( 'Auto Display Position',WP_ULIKE_SLUG),
-			'default'		=> 'bottom',
+			'default'		=> 'meta',
 			'options' 		=> array(
 			  'content'   	=> __('Activity Content', WP_ULIKE_SLUG),
 			  'meta' 		=> __('Activity Meta', WP_ULIKE_SLUG)
@@ -475,7 +475,7 @@
 		  ),		
 		  'auto_display'  => array(
 			'type'  		=> 'checkbox',
-			'default'		=> 0,
+			'default'		=> 1,
 			'label' 		=> __('Automatic display', WP_ULIKE_SLUG),
 			'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
 		  ),
