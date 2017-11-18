@@ -6,7 +6,7 @@
 		var value=$(this).data('id');
 		var table=$(this).data('table');
 		var r = confirm(wp_ulike_logs.message);
-		if (r == true) {
+		if (r === true) {
 			jQuery.ajax({
 			  type:'POST',
 			  url: wp_ulike_logs.ajaxurl,
@@ -32,181 +32,189 @@
 	var activities_dataset_var 	= JSON.parse(wp_ulike_statistics.activities_dataset);
 	var topics_dataset_var 		= JSON.parse(wp_ulike_statistics.topics_dataset);
 	var world_map_data 			= JSON.parse(wp_ulike_statistics.data_map);
-	var activities_dataset_sum 	= topics_dataset_sum = comments_dataset_sum = posts_dataset_sum = 0;
-
+	var activities_dataset_sum  = 0;
+	var topics_dataset_sum  	= 0;
+	var comments_dataset_sum 	= 0;
+	var posts_dataset_sum  		= 0;
 	//posts dataset
 	if(posts_dataset_var  !== null){
-	for (var i = 0; i < posts_dataset_var.length; i++) {
-		posts_dataset_sum += parseInt(posts_dataset_var[i]);
-	}
-	var posts_date = {
-		labels : JSON.parse(wp_ulike_statistics.posts_date_labels),
-		datasets : [
-			{
-				label: "Posts Likes Stats",
-				fillColor: "rgba(151,187,205,0.2)",
-				strokeColor: "rgba(151,187,205,1)",
-				pointColor: "rgba(151,187,205,1)",
-				pointStrokeColor : "#fff",
-				pointHighlightFill : "#fff",
-				pointHighlightStroke : "rgba(220,220,220,1)",
-				data : posts_dataset_var
-			}
-		]
-	}
+		for (var postNum = 0; postNum < posts_dataset_var.length; postNum++) {
+			posts_dataset_sum += parseInt(posts_dataset_var[postNum]);
+		}
+		var posts_date = {
+			labels : JSON.parse(wp_ulike_statistics.posts_date_labels),
+			datasets : [
+				{
+					label: "Liked Posts",
+					data : posts_dataset_var,
+					backgroundColor: "rgba(66, 165, 245,0.8)",
+					borderColor: "rgba(21, 101, 192,1)",
+					pointBackgroundColor: "rgba(255,255,255,1)",
+					borderWidth: 1
+				}
+			]
+		};
 	}
 
 	//comments dataset
 	if(comments_dataset_var  !== null){
-	for (var i = 0; i < comments_dataset_var.length; i++) {
-		comments_dataset_sum += parseInt(comments_dataset_var[i]);
-	}
-	var comments_date = {
-		labels : JSON.parse(wp_ulike_statistics.comments_date_labels),
-		datasets : [
-			{
-				label: "Comments Likes Stats",
-				fillColor : "rgba(253,180,92,0.2)",
-				strokeColor: "rgba(255,200,112,1)",
-				pointColor : "rgba(255,200,112,1)",
-				pointStrokeColor : "#fff",
-				pointHighlightFill : "#fff",
-				pointHighlightStroke : "rgba(255,200,112,1)",
-				data : comments_dataset_var
-			}
-		]
-	}
+		for (var commentNum = 0; commentNum < comments_dataset_var.length; commentNum++) {
+			comments_dataset_sum += parseInt(comments_dataset_var[commentNum]);
+		}
+		var comments_date = {
+			labels : JSON.parse(wp_ulike_statistics.comments_date_labels),
+			datasets : [
+				{
+					label: "Liked Comments",
+					data : comments_dataset_var,
+					backgroundColor : "rgba(255, 202, 40,0.8)",
+					borderColor : "rgba(255, 143, 0,1)",
+					pointBackgroundColor: "rgba(255,255,255,1)",
+					borderWidth: 1
+					
+				}
+			]
+		};
 	}
 
 
 	//activities dataset
 	if(activities_dataset_var  !== null){
-	for (var i = 0; i < activities_dataset_var.length; i++) {
-		activities_dataset_sum += parseInt(activities_dataset_var[i]);
-	}
-	var activities_date = {
-		labels : JSON.parse(wp_ulike_statistics.activities_date_labels),
-		datasets : [
-			{
-				label: "Activities Likes Stats",
-				fillColor: "rgba(231,79,64,0.2)",
-				strokeColor: "rgba(247,70,74,1)",
-				pointColor: "rgba(247,70,74,1)",
-				pointStrokeColor : "#fff",
-				pointHighlightFill : "#fff",
-				pointHighlightStroke : "rgba(247,70,74,1)",
-				data : activities_dataset_var
-			}
-		]
-	}
+		for (var activityNum = 0; activityNum < activities_dataset_var.length; activityNum++) {
+			activities_dataset_sum += parseInt(activities_dataset_var[activityNum]);
+		}
+		var activities_date = {
+			labels : JSON.parse(wp_ulike_statistics.activities_date_labels),
+			datasets : [
+				{
+					label: "Liked Activities",
+					data : activities_dataset_var,
+					backgroundColor: "rgba(239, 83, 80,0.8)",
+					borderColor: "rgba(198, 40, 40,1)",
+					pointBackgroundColor: "rgba(255,255,255,1)",
+					borderWidth: 1
+				}
+			]
+		};
 	}
 
 	//Topics dataset
 	if(topics_dataset_var  !== null){
-	for (var i = 0; i < topics_dataset_var.length; i++) {
-		topics_dataset_sum += parseInt(topics_dataset_var[i]);
-	}
-	var topics_date = {
-		labels : JSON.parse(wp_ulike_statistics.topics_date_labels),
-		datasets : [
-			{
-				label: "Topics Likes Stats",
-				fillColor: "rgba(141,199,112,0.2)",
-				strokeColor: "rgba(102,153,102,1)",
-				pointColor: "rgba(102,153,102,1)",
-				pointStrokeColor : "#fff",
-				pointHighlightFill : "#fff",
-				pointHighlightStroke : "rgba(102,153,102,1)",
-				data : topics_dataset_var
-			}
-		]
-	}
-	}
-
-	var pieData = [
-		{
-			value: posts_dataset_sum,
-			color:"#5cc6fd",
-			highlight: "#7dd1fd",
-			label: "Posts"
-		},
-		{
-			value: comments_dataset_sum,
-			color: "#FDB45C",
-			highlight: "#FFC870",
-			label: "Comment"
-		},
-		{
-			value: activities_dataset_sum,
-			color: "#F7464A",
-			highlight: "#FF5A5E",
-			label: "Activities"
-		},
-		{
-			value: topics_dataset_sum,
-			color: "#8DC770",
-			highlight: "#696",
-			label: "Topics"
+		for (var topicNum = 0; topicNum < topics_dataset_var.length; topicNum++) {
+			topics_dataset_sum += parseInt(topics_dataset_var[topicNum]);
 		}
-	];
+		var topics_date = {
+			labels : JSON.parse(wp_ulike_statistics.topics_date_labels),
+			datasets : [
+				{
+					label: "Liked Topics",
+					data : topics_dataset_var,
+					backgroundColor: "rgba(102, 187, 106,0.8)",
+					borderColor: "rgba(27, 94, 32,1)",
+					pointBackgroundColor: "rgba(255,255,255,1)",
+					borderWidth: 1
+				}
+			]
+		};
+	}
+
+	var pieData = {
+	    datasets: [{
+	        data: [
+	        	posts_dataset_sum,
+	        	comments_dataset_sum,
+	        	activities_dataset_sum,
+	        	topics_dataset_sum
+	        ],
+            backgroundColor: [
+                "#42a5f5",
+                "#ffca28",
+                "#F7464A",
+                "#66bb6a",
+            ],	        
+	    }],
+
+	    // These labels appear in the legend and in the tooltips when hovering different arcs
+	    labels: [
+	        'Posts',
+	        'Comments',
+	        'Activities',
+	        'Topics',
+	    ]		
+	};
 
 
-	var chart1 		= document.getElementById('chart1');
-	var chart2 		= document.getElementById('chart2');
-	var chart3		= document.getElementById('chart3');
-	var chart4		= document.getElementById('chart4');
-	var piechart 	= document.getElementById('piechart');
+	var postsChart 		= document.getElementById('chart1');
+	var commentsChart 	= document.getElementById('chart2');
+	var activitiesChart	= document.getElementById('chart3');
+	var topicsChart		= document.getElementById('chart4');
+	var allocationChart = document.getElementById('piechart');
 	
-	if (chart1 != null) {
-		if(posts_dataset_var  !== null){
-			var ctx1 = chart1.getContext("2d");
-			new Chart(ctx1).Line(posts_date, {
-				responsive: true
-			});
+	if ( postsChart !== null ) {
+		if( posts_dataset_var  !== null ){
+			var ctx1 = postsChart.getContext("2d");
+			postsChart = new Chart(ctx1, {
+			    // The type of chart we want to create
+			    type: 'line',
+			    // The data for our dataset
+			    data: posts_date
+			});			
 		}else{
 			document.getElementById("posts_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
 		}
 	}
 	
-	if (chart2 != null) {
-		if(comments_dataset_var  !== null){
-			var ctx2 = chart2.getContext("2d");
-			new Chart(ctx2).Line(comments_date, {
-				responsive: true
-			});
+	if ( commentsChart !== null ) {
+		if( comments_dataset_var  !== null ){
+			var ctx2 = commentsChart.getContext("2d");
+			commentsChart = new Chart(ctx2, {
+			    // The type of chart we want to create
+			    type: 'line',
+			    // The data for our dataset
+			    data: comments_date
+			});			
 		}else{
 			document.getElementById("comments_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
 		}
 	}
 	
-	if (chart3 != null) {
-		if(activities_dataset_var  !== null){
-			var ctx3 = chart3.getContext("2d");
-			new Chart(ctx3).Line(activities_date, {
-				responsive: true
-			});
+	if ( activitiesChart !== null ) {
+		if( activities_dataset_var  !== null ){
+			var ctx3 = activitiesChart.getContext("2d");
+			activitiesChart = new Chart(ctx3, {
+			    // The type of chart we want to create
+			    type: 'line',
+			    // The data for our dataset
+			    data: activities_date
+			});				
 		}else{
 			document.getElementById("activities_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
 		}
 	}
 	
-	if (chart4 != null) {
-		if(topics_dataset_var  !== null){
-			var ctx3 = chart4.getContext("2d");
-			new Chart(ctx3).Line(topics_date, {
-				responsive: true
-			});
+	if ( topicsChart !== null ) {
+		if( topics_dataset_var  !== null ){
+			var ctx4 = topicsChart.getContext("2d");
+			topicsChart = new Chart(ctx4, {
+			    // The type of chart we want to create
+			    type: 'line',
+			    // The data for our dataset
+			    data: topics_date
+			});				
 		}else{
 			document.getElementById("topics_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
 		}
 	}
 	
-	if (piechart != null) {
-		if(activities_dataset_var  !== null || topics_dataset_var  !== null || comments_dataset_var  || null && posts_dataset_var  || null){
-			var ctx4 = piechart.getContext("2d");
-			new Chart(ctx4).Pie(pieData, {
-				responsive: true
-			});
+	if( allocationChart !== null ) {
+		if( activities_dataset_var  !== null || topics_dataset_var  !== null || comments_dataset_var  || null && posts_dataset_var  || null ){
+			var ctx5 = allocationChart.getContext("2d");
+			allocationChart = new Chart(ctx5, {
+			    // The type of chart we want to create
+			    type: 'pie',
+			    // The data for our dataset
+			    data: pieData
+			});				
 		}else{
 			document.getElementById("piechart_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
 		}
