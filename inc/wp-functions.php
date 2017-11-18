@@ -11,11 +11,40 @@
 	 *
 	 * @author       	Alimir
 	 * @since           1.4
-	 * @return			wp_ulike button
+	 * @updated         3.0
+	 * @return			wp ulike button
 	 */
 	add_shortcode( 'wp_ulike', 'wp_ulike_shortcode' );	
-	function  wp_ulike_shortcode(){
-		return wp_ulike('put');
+	function  wp_ulike_shortcode( $atts, $content = null ){
+		// Final result
+		$result = '';
+		// Default Args
+		$args   = shortcode_atts( array(
+					"for"        => 'post',	//shortcode Type (post, comment, activity, topic)
+					"id"         => '',		//Post ID
+					"slug"       => 'post',	//Slug Name
+					"style"      => '',		//Get Default Theme
+					"attributes" => ''		//Get Attributes Filter
+			    ), $atts );
+
+	    switch ( $args['for'] ) {
+	    	case 'comment':
+	    		$result = $content . wp_ulike_comments( 'put', array_filter( $args ) );
+	    		break;
+	    	
+	    	case 'activity':
+	    		$result = $content . wp_ulike_buddypress( 'put', array_filter( $args ) );
+	    		break;
+	    	
+	    	case 'topic':
+	    		$result = $content . wp_ulike_bbpress( 'put', array_filter( $args ) );
+	    		break;
+	    	
+	    	default:
+	    		$result = $content . wp_ulike( 'put', array_filter( $args ) );
+	    }
+
+		return $result;
 	}
 		
 	/**
