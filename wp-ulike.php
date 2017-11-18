@@ -44,8 +44,8 @@ define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/inc' 		);
 
 define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . '/assets' 		);
 define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		);
-
-//Load Translations 
+  
+// Load Translations 
 load_plugin_textdomain( WP_ULIKE_SLUG, false, dirname( WP_ULIKE_BASENAME ) .'/lang/' );
 
 /**
@@ -182,10 +182,12 @@ function wp_ulike_activation_redirect( $plugin ) {
  * @author        	Alimir
  * @since         	1.7
  * @updated         2.8 //Added 'call_user_func' for better callbacks 
+ * @updated         3.0
  * @return   		Void
  */
-add_action( 'plugins_loaded', 'wp_ulike_update_db_check' );
-function wp_ulike_update_db_check() {
+add_action( 'plugins_loaded', 'wp_ulike_plugins_loaded' );
+function wp_ulike_plugins_loaded() {
+	// Update database
 	if ( get_site_option( 'wp_ulike_dbVersion' ) != WP_ULIKE_DB_VERSION ) {
 		call_user_func('wp_ulike_install');
 	}
