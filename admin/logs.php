@@ -65,20 +65,18 @@
 	function wp_ulike_logs_enqueue_script($hook){
 		$currentScreen 	= get_current_screen();
 		
-		if ( $currentScreen->id != $hook ) {
+		if ( $currentScreen->id !== $hook || ! preg_match( '/logs/', $currentScreen->id ) ) {
 			return;
 		}
 
 		// Register Script
-		wp_register_script(
+		wp_enqueue_script(
 			'wp_ulike_stats',
 			WP_ULIKE_ADMIN_URL . '/classes/js/statistics.js',
 			array('jquery'),
 			null,
 			true
 		);
-		// Enqueue Script
-		wp_enqueue_script('wp_ulike_stats');
 		
 		//localize script
 		wp_localize_script( 'wp_ulike_stats', 'wp_ulike_logs', array(
