@@ -218,7 +218,7 @@
 			<div class="handlediv" title="Click to toggle"><br></div>
 			<h3 class="hndle"><span><i class="dashicons dashicons-admin-post"></i> '.__('Most Liked Posts',WP_ULIKE_SLUG) . '</span></h3>
 			<div class="inside"><div class="top-widget"><ol>';
-			$wp_ulike_stats->get_tops('top_posts');
+			echo $wp_ulike_stats->get_tops('top_posts');
 			echo '</ol></div></div></div>';
 	}		
 	
@@ -228,7 +228,7 @@
 			<div class="handlediv" title="Click to toggle"><br></div>
 			<h3 class="hndle"><span><i class="dashicons dashicons-admin-comments"></i> '.__('Most Liked Comments',WP_ULIKE_SLUG) . '</span></h3>
 			<div class="inside"><div class="top-widget"><ol>';
-			$wp_ulike_stats->get_tops('top_comments');
+			echo $wp_ulike_stats->get_tops('top_comments');
 			echo '</ol></div></div></div>';
 	}		
 	
@@ -238,7 +238,7 @@
 			<div class="handlediv" title="Click to toggle"><br></div>
 			<h3 class="hndle"><span><i class="dashicons dashicons-groups"></i> '.__('Most Liked Activities',WP_ULIKE_SLUG) . '</span></h3>
 			<div class="inside"><div class="top-widget"><ol>';
-			$wp_ulike_stats->get_tops('top_activities');
+			echo $wp_ulike_stats->get_tops('top_activities');
 			echo '</ol></div></div></div>';
 		}
 
@@ -248,7 +248,7 @@
 			<div class="handlediv" title="Click to toggle"><br></div>
 			<h3 class="hndle"><span><i class="dashicons dashicons-index-card"></i> '.__('Most Liked Topics',WP_ULIKE_SLUG) . '</span></h3>
 			<div class="inside"><div class="top-widget"><ol>';
-			$wp_ulike_stats->get_tops('top_topics');
+			echo $wp_ulike_stats->get_tops('top_topics');
 			echo '</ol></div></div></div>';
 	}
 	
