@@ -381,6 +381,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @updated         2.2
 		 * @updated         2.9
+		 * @updated         3.0
 		 * @return			Void
 		 */			
 		public function update_meta_data($id, $key, $data){
@@ -389,16 +390,23 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			// Update Values
 			switch ( $key ) {
 				case '_liked'		 :
+					update_post_meta( $id, $key, $data );
+					update_postmeta_cache( $id );
+					delete_transient( 'wp_ulike_get_most_liked_posts' );
+					break;
 				case '_topicliked'	 :
 					update_post_meta( $id, $key, $data );
 					update_postmeta_cache( $id );
+					delete_transient( 'wp_ulike_get_most_liked_topics' );
 					break;
 				case '_commentliked' :
 					update_comment_meta( $id, $key, $data );
 					update_meta_cache( 'comment', $id );
+					delete_transient( 'wp_ulike_get_most_liked_comments' );
 					break;
 				case '_activityliked':
 					bp_activity_update_meta( $id, $key, $data );
+					delete_transient( 'wp_ulike_get_most_liked_activities' );
 					break;
 				default:
 					return 0;
