@@ -1,4 +1,4 @@
-/*! WP ULike - v2.9
+/*! WP ULike - v3.0
  *  http://wp-ulike.alimir.ir/
  *  Alimir 2017;
  */
@@ -641,15 +641,20 @@
 
 
 /* Run :) */
-(function( $ ) {
-    // init WordpressUlike
-    $(".wpulike").WordpressUlike();
-    // Upgrading 'WordpressUlike' datasheets when new DOM has been inserted
-    $(document).ready(function(){
+;(function($){
+
+    // on document ready
+    $(function(){
+        // Upgrading 'WordpressUlike' datasheets when new DOM has been inserted
         $(this).bind('DOMNodeInserted', function(e) {
             $(".wpulike").WordpressUlike();
-        });         
-    }); 
+        });
+    });
+    
+    // init WordpressUlike
+    $(".wpulike").WordpressUlike();
+
     // removes "empty" paragraphs
     $('p').filter(function () { return this.innerHTML == "" }).remove();
+
 })( jQuery );
