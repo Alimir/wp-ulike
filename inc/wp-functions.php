@@ -63,7 +63,7 @@
 			$button = '';
 			
 			//add wp_ulike function
-			if(	!is_feed() && wp_ulike_post_auto_display_filters()){
+			if(	!is_feed() && is_wp_ulike( wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display_filter') ) ){
 				$button = wp_ulike('put');
 			}
 			
@@ -82,32 +82,39 @@
 	}
 	
 	/**
-	 * Auto display filtering on posts/pages content
+	 * Check wp ulike callback
 	 *
 	 * @author       	Alimir
 	 * @since           1.9
+	 * @since           1.9
+	 * @updated         3.0
 	 * @return			boolean
 	 */		
-	function wp_ulike_post_auto_display_filters(){
-		$filter = wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display_filter');
-		if(is_home() && $filter['home'] == '1')
-		return 0;
-		else if(is_single() && $filter['single'] == '1')
-		return 0;
-		else if(is_page() && $filter['page'] == '1')
-		return 0;
-		else if(is_archive() && $filter['archive'] == '1')
-		return 0;
-		else if(is_category() && $filter['category'] == '1')
-		return 0;
-		else if( is_search() && $filter['search'] == '1')
-		return 0;
-		else if(is_tag() && $filter['tag'] == '1')
-		return 0;
-		else if(is_author() && $filter['author'] == '1')
-		return 0;
-		else
-		return 1;
+	function is_wp_ulike( $options, $args = array() ){
+
+		$defaults = array(
+			'is_home'     => is_home() && $options['home'] == '1',
+			'is_single'   => is_single() && $options['single'] == '1',
+			'is_page'     => is_page() && $options['page'] == '1',
+			'is_archive'  => is_archive() && $options['archive'] == '1',
+			'is_category' => is_category() && $options['category'] == '1',
+			'is_search'   => is_search() && $options['search'] == '1',
+			'is_tag'      => is_tag() && $options['tag'] == '1',
+			'is_author'   => is_author() && $options['author'] == '1',
+			'is_bp'       => function_exists('is_buddypress') && is_buddypress() && isset( $options['buddypress'] ) && $options['buddypress'] == '1',
+			'is_bbpress'  => function_exists('is_bbpress') && is_bbpress() && isset( $options['bbpress'] ) && $options['bbpress'] == '1',
+			'is_wc'       => function_exists('is_woocommerce') && is_woocommerce() && isset( $options['woocommerce'] ) && $options['woocommerce'] == '1',
+		);
+
+		$parsed_args = wp_parse_args( $args, $defaults );
+
+		foreach ( $parsed_args as $key => $value ) {
+			if( $value ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -142,7 +149,7 @@
 	 *
 	 * @author       	Alimir
 	 * @since           2.7 
-	 * @since           2.8 //Replaced 'mysql2date' with 'get_post_time' function
+	 * @updated         2.8 // Replaced 'mysql2date' with 'get_post_time' function
 	 * @return          String
 	 */
 	add_filter( 'wp_ulike_posts_microdata', 'wp_ulike_get_posts_microdata');
