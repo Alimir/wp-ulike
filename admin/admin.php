@@ -66,33 +66,33 @@
 	//include setting class
 	require_once( WP_ULIKE_ADMIN_DIR . '/classes/class-settings.php' );
 	//include setting templates
-	require_once( WP_ULIKE_ADMIN_DIR . '/classes/tmp/settings.php' );
+	require_once( WP_ULIKE_ADMIN_DIR . '/classes/tmp/options.php' );
 	//activate general setting panel
 	$wp_ulike_setting = wp_ulike_create_settings_page(
-	  'wp-ulike-settings',
-	  __( 'WP ULike Settings', WP_ULIKE_SLUG ),
-	  array(
-		  'parent'   => false,
-		  'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
-		  'position' =>  313,
-		  'icon_url' => 'dashicons-wp-ulike'
-	  ),
-	  array(
-		  'wp_ulike_general' 	=> $wp_ulike_general
-	  ),
-	  array(
-		  'tabs'        		=> true,
-		  'updated'     		=> __('Settings saved.',WP_ULIKE_SLUG)
-	  )
+		'wp-ulike-settings',
+		__( 'WP ULike Settings', WP_ULIKE_SLUG ),
+		array(
+			'parent'   => false,
+			'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
+			'position' =>  313,
+			'icon_url' => 'dashicons-wp-ulike'
+		),
+		array(
+			'wp_ulike_general' => wp_ulike_get_options_info('general')
+		),
+		array(
+			'tabs'    => true,
+			'updated' => __('Settings saved.',WP_ULIKE_SLUG)
+		)
 	);
 
 	//activate other settings panels
 	$wp_ulike_setting->apply_settings( array(
-			'wp_ulike_posts' 		=> apply_filters( 'wp_ulike_posts_settings', $wp_ulike_posts ),
-			'wp_ulike_comments' 	=> apply_filters( 'wp_ulike_comments_settings', $wp_ulike_comments ),
-			'wp_ulike_buddypress' 	=> apply_filters( 'wp_ulike_buddypress_settings', $wp_ulike_buddypress ),
-			'wp_ulike_bbpress' 		=> apply_filters( 'wp_ulike_bbpress_settings', $wp_ulike_bbpress ),
-			'wp_ulike_customize' 	=> apply_filters( 'wp_ulike_customize_settings', $wp_ulike_customize )
+			'wp_ulike_posts'      => apply_filters( 'wp_ulike_posts_settings'		, wp_ulike_get_options_info('posts') 		),
+			'wp_ulike_comments'   => apply_filters( 'wp_ulike_comments_settings'	,  wp_ulike_get_options_info('comments') 	),
+			'wp_ulike_buddypress' => apply_filters( 'wp_ulike_buddypress_settings', wp_ulike_get_options_info('buddypress') 	),
+			'wp_ulike_bbpress'    => apply_filters( 'wp_ulike_bbpress_settings'	, wp_ulike_get_options_info('bbpress') 		),
+			'wp_ulike_customize'  => apply_filters( 'wp_ulike_customize_settings'	, wp_ulike_get_options_info('customizer') 	)
 		)
 	);
 
@@ -228,12 +228,12 @@
 				'callback' => 'wp_ulike_set_default_template',
 				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg'
 			),
-			'wpulike-heart'   => array(
+			'wpulike-heart' => array(
 				'name'     => __('Heart', WP_ULIKE_SLUG),
 				'callback' => 'wp_ulike_set_simple_heart_template',				
 				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg'				
 			),
-			'wpulike-robeen'  => array(
+			'wpulike-robeen' => array(
 				'name'     => __('Robeen', WP_ULIKE_SLUG),
 				'callback' => 'wp_ulike_set_robeen_template',				
 				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'					
