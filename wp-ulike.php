@@ -201,8 +201,6 @@ function wp_ulike_plugins_loaded() {
 require_once( WP_ULIKE_ADMIN_DIR 	. '/admin.php' 			);
 //Include general functions
 require_once( WP_ULIKE_INC_DIR 		. '/wp-functions.php' 	);
-//Include plugin scripts
-require_once( WP_ULIKE_INC_DIR 		. '/wp-script.php'		);
 //Load WP ULike functions
 require_once( WP_ULIKE_INC_DIR 		. '/wp-ulike.php' 		);
 
