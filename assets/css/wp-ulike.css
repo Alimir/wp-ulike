@@ -367,6 +367,9 @@
   right: 8px;
   font-weight: 600;
 }
+.wpulike-robeen label {
+  margin: 0;
+}
 .wpulike-robeen svg {
   cursor: pointer;
   overflow: visible;
