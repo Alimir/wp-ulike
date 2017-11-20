@@ -3,7 +3,7 @@
 Plugin Name: WP ULike
 Plugin URI: http://wp-ulike.alimir.ir/
 Description: WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
-Version: 2.9
+Version: 3.0
 Author: Ali Mirzaei
 Author URI: http://about.alimir.ir
 Text Domain: wp-ulike
@@ -28,7 +28,7 @@ Thanks for using WP ULike plugin!
 
 //Do not change this value
 define( 'WP_ULIKE_PLUGIN_URI'   , 'http://wp-ulike.alimir.ir' 	);
-define( 'WP_ULIKE_VERSION'      , '2.9' 						);
+define( 'WP_ULIKE_VERSION'      , '3.0' 						);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					);
 define( 'WP_ULIKE_DB_VERSION'   , '1.3' 						);
 
@@ -44,8 +44,8 @@ define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/inc' 		);
 
 define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . '/assets' 		);
 define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		);
-
-//Load Translations 
+  
+// Load Translations 
 load_plugin_textdomain( WP_ULIKE_SLUG, false, dirname( WP_ULIKE_BASENAME ) .'/lang/' );
 
 /**
@@ -182,10 +182,12 @@ function wp_ulike_activation_redirect( $plugin ) {
  * @author        	Alimir
  * @since         	1.7
  * @updated         2.8 //Added 'call_user_func' for better callbacks 
+ * @updated         3.0
  * @return   		Void
  */
-add_action( 'plugins_loaded', 'wp_ulike_update_db_check' );
-function wp_ulike_update_db_check() {
+add_action( 'plugins_loaded', 'wp_ulike_plugins_loaded' );
+function wp_ulike_plugins_loaded() {
+	// Update database
 	if ( get_site_option( 'wp_ulike_dbVersion' ) != WP_ULIKE_DB_VERSION ) {
 		call_user_func('wp_ulike_install');
 	}
@@ -199,8 +201,6 @@ function wp_ulike_update_db_check() {
 require_once( WP_ULIKE_ADMIN_DIR 	. '/admin.php' 			);
 //Include general functions
 require_once( WP_ULIKE_INC_DIR 		. '/wp-functions.php' 	);
-//Include plugin scripts
-require_once( WP_ULIKE_INC_DIR 		. '/wp-script.php'		);
 //Load WP ULike functions
 require_once( WP_ULIKE_INC_DIR 		. '/wp-ulike.php' 		);
 

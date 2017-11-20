@@ -50,7 +50,6 @@ class wp_ulike_settings {
 			'<li>'.__('If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', WP_ULIKE_SLUG).'</li>'.
 			'<li>'.__('If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', WP_ULIKE_SLUG).'</li>'.
 			'<li>'.__('If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', WP_ULIKE_SLUG).'</li>'.
-			'<li>'.__('If you select <strong>"Logged By Cookie & IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP & SetCookie', WP_ULIKE_SLUG).'</li>'.
 			'<li>'.__('If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', WP_ULIKE_SLUG).'</li>
 			</ul>'.
 			

@@ -12,6 +12,7 @@
 	function wp_ulike_set_default_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
 		ob_start();
+		do_action( 'wp_ulike_before_template' );
 	?>
 		<div id="wp-ulike-<?php echo $wp_ulike_template['slug'] . '-' . $wp_ulike_template['ID']; ?>" class="wpulike wpulike-default" <?php echo $wp_ulike_template['attributes']; ?>>
 			<div class="<?php echo $wp_ulike_template['general_class']; ?>">
@@ -28,6 +29,7 @@
 			<?php echo $wp_ulike_template['microdata']; ?>
 		</div>
 	<?php
+		do_action( 'wp_ulike_after_template' );
 		return ob_get_clean(); // data is now in here
 	}
 
@@ -40,7 +42,8 @@
 	 */
 	function wp_ulike_set_simple_heart_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
-		ob_start();		
+		ob_start();
+		do_action( 'wp_ulike_before_template' );
 	?>
 		<div id="wp-ulike-<?php echo $wp_ulike_template['slug'] . '-' . $wp_ulike_template['ID']; ?>" class="wpulike wpulike-heart" <?php echo $wp_ulike_template['attributes']; ?>>
 			<div class="<?php echo $wp_ulike_template['general_class']; ?>">
@@ -57,6 +60,7 @@
 			<?php echo $wp_ulike_template['microdata']; ?>
 		</div>
 	<?php
+		do_action( 'wp_ulike_after_template' );
 		return ob_get_clean(); // data is now in here
 	}
 
@@ -73,7 +77,8 @@
 			$checked = 'checked="checked"';
 		}
 		//This function will turn output buffering on
-		ob_start();			
+		ob_start();
+		do_action( 'wp_ulike_before_template' );	
 	?>
 		<div id="wp-ulike-<?php echo $wp_ulike_template['slug'] . '-' . $wp_ulike_template['ID']; ?>" class="wpulike wpulike-robeen" <?php echo $wp_ulike_template['attributes']; ?>>
 			<div class="<?php echo $wp_ulike_template['general_class']; ?>">
@@ -87,5 +92,6 @@
 			<?php echo $wp_ulike_template['microdata']; ?>
 		</div>
 	<?php
+		do_action( 'wp_ulike_after_template' );
 		return ob_get_clean(); // data is now in here
 	}
