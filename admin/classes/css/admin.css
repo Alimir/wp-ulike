@@ -273,3 +273,7 @@ tr.hide-label td { padding-left: 0; }
 .rtl .postbox .badge { margin: 1px 2px 0px 0; float: left; }
 .rtl .top-widget .wp_counter_span { margin: 1px 2px 0px 0; float: left; }
 .rtl .wp-ulike-about-page .ulike-badge { right: inherit; left: 0px; }
+.rtl .wp-ulike-notice img { width: 84px; margin: 0 -100% 0 0 !important; }
+.rtl .wp-ulike-notice .wp-ulike-notice-text { float: right; }
+.rtl .wp-ulike-notice p { float: right; margin: 0 100px 0 0 !important; padding: 4px 0 4px 40px; }
+.rtl .wp-ulike-notice .links { margin: 0 92px 0 0 !important; }

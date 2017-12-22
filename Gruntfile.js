@@ -89,8 +89,6 @@ module.exports = function(grunt) {
                     environment: 'development',
                     watch:true,
                     trace:true,
-                    //noLineComments:true,
-                    //specify: ['css/sass/*.{scss,sass}'],
                     outputStyle: 'expanded' // nested, expanded, compact, compressed.
                 }
             },
@@ -100,9 +98,10 @@ module.exports = function(grunt) {
                     sassDir: 'assets/sass',
                     cssDir: 'assets/css',
                     specify: ['assets/sass/wp-ulike.scss'],
+                    environment: 'development',
                     watch:false,
                     trace:true,
-                    outputStyle: 'compressed' // nested, expanded, compact, compressed.
+                    outputStyle: 'expanded' // nested, expanded, compact, compressed.
                 }
             }
         },        
@@ -340,8 +339,8 @@ module.exports = function(grunt) {
                 args: ["--verbose --delete-after"], // z:compress while transfering data, P: display progress
                 exclude: [
                         '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
-                        'config.rb', 'assets/scss/'
+                        'assets/js/src', 'admin/classes/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
+                        'config.rb', 'assets/sass/', 'admin/classes/sass/'
                 ],
                 recursive: true,
                 syncDestIgnoreExcl: true
@@ -358,8 +357,8 @@ module.exports = function(grunt) {
                 options: {
                     exclude: [
                         '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
-                        'config.rb', 'assets/scss/'
+                        'assets/js/src', 'admin/classes/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
+                        'config.rb', 'assets/sass/', 'admin/classes/sass/'
                     ],
                     src: ['./'],
                     dest: "<%= meta.buildPath %>"
