@@ -755,8 +755,4 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		
 	}
 	
-	//global variables
-	global $wp_ulike_class;
-	$wp_ulike_class = wp_ulike::get_instance();
-	
 }
