@@ -105,7 +105,7 @@ if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
  */
 if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){		
 	function wp_ulike_generate_templates_list(){
-		return array(
+		$default = array(
 			'wpulike-default' => array(
 				'name'     => __('Default', WP_ULIKE_SLUG),
 				'callback' => 'wp_ulike_set_default_template',
@@ -122,6 +122,8 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'					
 			)
 		);
+
+		return apply_filters( 'wp_ulike_add_templates_list', $default );
 	}
 }
 
@@ -242,7 +244,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'type'    => 'visual-select',
 							'default' => 'wpulike-default',
 							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
+							'options' => call_user_func('wp_ulike_generate_templates_list')
 						),                 
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -349,7 +351,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'type'    => 'visual-select',
 							'default' => 'wpulike-heart',
 							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
+							'options' => call_user_func('wp_ulike_generate_templates_list')
 						),		
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -434,7 +436,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'type'    => 'visual-select',
 							'default' => 'wpulike-robeen',
 							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
+							'options' => call_user_func('wp_ulike_generate_templates_list')
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -551,7 +553,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'type'    => 'visual-select',
 							'default' => 'wpulike-default',
 							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') )
+							'options' => call_user_func('wp_ulike_generate_templates_list')
 						),		
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -1283,37 +1285,6 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 /*******************************************************
   General
 *******************************************************/
-	
-/**
- * Get the real IP
- *
- * @author       	Alimir
- * @since           1.1
- * @return          Void
- */
-if( ! function_exists( 'wp_ulike_get_real_ip' ) ){	
-	function wp_ulike_get_real_ip() {
-		if (getenv('HTTP_CLIENT_IP')) {
-			$ip = getenv('HTTP_CLIENT_IP');
-		} elseif (getenv('HTTP_X_FORWARDED_FOR')) {
-			$ip = getenv('HTTP_X_FORWARDED_FOR');
-		} elseif (getenv('HTTP_X_FORWARDED')) {
-			$ip = getenv('HTTP_X_FORWARDED');
-		} elseif (getenv('HTTP_FORWARDED_FOR')) {
-			$ip = getenv('HTTP_FORWARDED_FOR');
-		} elseif (getenv('HTTP_FORWARDED')) {
-			$ip = getenv('HTTP_FORWARDED');
-		} else {
-			$ip = $_SERVER['REMOTE_ADDR'];
-		}
-		
-		return $ip;
-	}
-}
-
-//Create global variable of user IP
-global $wp_user_IP;
-$wp_user_IP = wp_ulike_get_real_ip();
 	
 /**
  * Get custom style setting from customize options

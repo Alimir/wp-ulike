@@ -538,7 +538,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			);
 			
 			
-			$wp_ulike_callback = apply_filters( 'wp_ulike_add_templates_list', call_user_func('wp_ulike_generate_templates_list') );
+			$wp_ulike_callback = call_user_func( 'wp_ulike_generate_templates_list' );
 			
 			$output			= '';
 			
