@@ -18,7 +18,7 @@ License: GPL2
 | |/ /    \ \| | |  | |_| | || || |\ \  __/
 \___/      \__/\_|   \__,_|_||_||_| \_\___|
 
-\--> Alimir, 2017 <--/
+\--> Alimir, 2018 <--/
 
 Thanks for using WP ULike plugin!
 
@@ -26,7 +26,7 @@ Thanks for using WP ULike plugin!
 
 */
 
-//Do not change this value
+// Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'http://wp-ulike.alimir.ir' 	);
 define( 'WP_ULIKE_VERSION'      , '3.1' 						);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					);
@@ -97,22 +97,37 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	        do_action( 'wp_ulike_loaded' );
 	    }
 
+	    /**
+	     * Add custom links too plugin info
+	     *
+	     * @since    3.1
+	     *
+	     * @return   Array
+	    */
 	    public function add_links( $actions, $plugin_file ) {
 
 	        if (  $plugin_file === WP_ULIKE_BASENAME ) {
-	            $settings   = array('settings'  => '<a href="admin.php?page=wp-ulike-settings">' . __('Settings', WP_ULIKE_SLUG) . '</a>');
-	            $stats      = array('stats'     => '<a href="admin.php?page=wp-ulike-statistics">' . __('Statistics', WP_ULIKE_SLUG) . '</a>');
-	            $about      = array('about'     => '<a href="admin.php?page=wp-ulike-about">' . __('About', WP_ULIKE_SLUG) . '</a>');
-	            // Merge on actions array
-	            $actions    = array_merge( $about, $actions );
-	            $actions    = array_merge( $stats, $actions );
-	            $actions    = array_merge( $settings, $actions );       
+				$settings = array('settings'  => '<a href="admin.php?page=wp-ulike-settings">' . __('Settings', WP_ULIKE_SLUG) . '</a>');
+				$stats    = array('stats'     => '<a href="admin.php?page=wp-ulike-statistics">' . __('Statistics', WP_ULIKE_SLUG) . '</a>');
+				$about    = array('about'     => '<a href="admin.php?page=wp-ulike-about">' . __('About', WP_ULIKE_SLUG) . '</a>');
+				// Merge on actions array
+				$actions  = array_merge( $about, $actions );
+				$actions  = array_merge( $stats, $actions );
+				$actions  = array_merge( $settings, $actions );       
 	        }
-	            
+				
 	        return $actions;
 	    }
 
+	    /**
+	     * Create settings page
+	     *
+	     * @since    3.1
+	     *
+	     * @return   Array
+	    */
 	    public function settings() {
+
 			$wp_ulike_setting = new wp_ulike_settings(
 				'wp-ulike-settings',
 				__( 'WP ULike Settings', WP_ULIKE_SLUG ),
@@ -150,6 +165,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	     * @return void
 	     */
 	    public function autoload( $class ) {
+
 	        $path  = null;
 	        $class = strtolower( $class );
 	        $file = 'class-' . str_replace( '_', '-', $class ) . '.php';
@@ -178,17 +194,22 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	    */
 	    private function includes() {
 
+	    	// Global Variables
+	    	global $wp_user_IP, $wp_ulike_class;
+
 	        // Auto-load classes on demand
 	        if ( function_exists( "__autoload" ) ) {
 	            spl_autoload_register( "__autoload" );
 	        }
 	        spl_autoload_register( array( $this, 'autoload' ) );
 
-	        // load common functionalities
-	        include_once( WP_ULIKE_INC_DIR . '/index.php' );
-
-	        //global wp_ulike_class
-			global $wp_ulike_class;
+			// global variable of user IP
+			$wp_user_IP     = $this->get_ip();	        
+			
+			// load common functionalities
+			include_once( WP_ULIKE_INC_DIR . '/index.php' );
+			
+			// global wp_ulike_class
 			$wp_ulike_class = wp_ulike::get_instance();	        
 
 	        // Dashboard and Administrative Functionality
@@ -199,13 +220,46 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 					include( WP_ULIKE_ADMIN_DIR . '/admin-ajax.php'  );
 	            }
 		       	// Add Settings Page
-		        $this->settings();	            
+		        $this->settings();	
+		        
+				//include wp_ulike_stats class & geoIPloc functions
+				if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false ){
+					//include PHP GeoIPLocation Library
+					require_once( WP_ULIKE_ADMIN_DIR . '/includes/geoiploc.php');
+					// global variable
+					global $wp_ulike_stats;
+					$wp_ulike_stats = wp_ulike_stats::get_instance();			
+				};	
+
 	            // Load admin spesific codes
 	            include( WP_ULIKE_ADMIN_DIR . '/index.php' );          
 	        }
 
 	    }
 
+	    /**
+	     * Get Client IP address
+	     *
+	     * @since    3.1
+	     *
+	     * @return   String
+	    */
+		public function get_ip() {
+
+			if ( getenv( 'HTTP_CLIENT_IP' ) ) {
+				return getenv( 'HTTP_CLIENT_IP' );
+			} elseif ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
+				return getenv( 'HTTP_X_FORWARDED_FOR' );
+			} elseif ( getenv( 'HTTP_X_FORWARDED' ) ) {
+				return getenv( 'HTTP_X_FORWARDED' );
+			} elseif ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
+				return getenv( 'HTTP_FORWARDED_FOR' );
+			} elseif ( getenv( 'HTTP_FORWARDED' ) ) {
+				return getenv( 'HTTP_FORWARDED' );
+			} else {
+				return $_SERVER['REMOTE_ADDR'];
+			}
+		}	    
 
 	   /**
 	    * Init the plugin when WordPress Initialises.
