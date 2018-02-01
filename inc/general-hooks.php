@@ -398,7 +398,7 @@ if ( defined( 'ultimatemember_version' ) ) {
 	 * @since           2.3
 	 * @return          Array
 	 */
-	if( ! function_exists( 'wp_ulike_myCRED_references' ) ){
+	if( ! function_exists( 'wp_ulike_add_custom_profile_tab' ) ){
 		function wp_ulike_add_custom_profile_tab( $tabs ) {
 			
 			$tabs['wp-ulike-posts'] = array(
@@ -423,7 +423,7 @@ if ( defined( 'ultimatemember_version' ) ) {
 	 * @since           2.3
 	 * @return          Void
 	 */
-	if( ! function_exists( 'wp_ulike_myCRED_references' ) ){
+	if( ! function_exists( 'wp_ulike_posts_um_profile_content' ) ){
 		function wp_ulike_posts_um_profile_content( $args ) {
 			global $wp_ulike_class,$ultimatemember;
 			
@@ -465,7 +465,7 @@ if ( defined( 'ultimatemember_version' ) ) {
 	 * @since           2.3
 	 * @return          Void
 	 */	
-	if( ! function_exists( 'wp_ulike_myCRED_references' ) ){
+	if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
 		function wp_ulike_comments_um_profile_content( $args ) {
 			global $wp_ulike_class,$ultimatemember;
 			
