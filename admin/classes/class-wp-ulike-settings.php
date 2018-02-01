@@ -192,7 +192,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
         
         public static function admin_enqueue_scripts() {
             wp_enqueue_media();
-            wp_enqueue_script( 'wp-ulike-settings', WP_ULIKE_ADMIN_URL . '/classes/js/settings.js', array(
+            wp_enqueue_script( 'wp-ulike-settings', WP_ULIKE_ADMIN_URL . '/assets/js/settings.js', array(
                 'jquery',
                 'wp-color-picker' 
             ) );

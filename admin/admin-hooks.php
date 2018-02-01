@@ -23,8 +23,11 @@
 	 * @since           2.1
 	 * @return			Void
 	 */		
-	add_action('admin_enqueue_scripts', 'wp_ulike_logs_enqueue_script');
-	function wp_ulike_logs_enqueue_script($hook){
+	function wp_ulike_logs_enqueue_script( $hook ){
+
+		// Enqueue admin styles
+		wp_enqueue_style( 'wp-ulike-admin', WP_ULIKE_ADMIN_URL . '/assets/css/admin.css' );
+
 		$currentScreen 	= get_current_screen();
 		
 		if ( $currentScreen->id !== $hook || ! preg_match( '/logs/', $currentScreen->id ) ) {
@@ -34,7 +37,7 @@
 		// Register Script
 		wp_enqueue_script(
 			'wp_ulike_stats',
-			WP_ULIKE_ADMIN_URL . '/classes/js/statistics.js',
+			WP_ULIKE_ADMIN_URL . '/assets/js/statistics.js',
 			array('jquery'),
 			null,
 			true
@@ -47,23 +50,7 @@
 		));
 		
 	}
-
-	/**
-	 * Add screen option for per_page value
-	 *
-	 * @author       	Alimir	 	
-	 * @since           2.1
-	 * @return			String
-	 */			
-	function wp_ulike_logs_per_page() {
-		$option = 'per_page';
-		$args = array(
-			'label' => __('Logs',WP_ULIKE_SLUG),
-			'default' => 20,
-			'option' => 'wp_ulike_logs_per_page'
-		);
-		add_screen_option( $option, $args );
-	}
+	add_action('admin_enqueue_scripts', 'wp_ulike_logs_enqueue_script');
 	
 	/**
 	 * Set the option of per_page
@@ -72,24 +59,11 @@
 	 * @since           2.1
 	 * @return			String
 	 */		 
-	add_filter('set-screen-option', 'wp_ulike_logs_per_page_set_option', 10, 3);
 	function wp_ulike_logs_per_page_set_option($status, $option, $value) {
 		if ( 'wp_ulike_logs_per_page' == $option ) return $value;
 		return $status;
-	}		
-
-	/**
-	 * Register Screen Options
-	 *
-	 * @author       	Alimir	 	
-	 * @since           2.1	
-	 * @return			Void
-	 */
-	function wp_ulike_statistics_register_option(){
-		$screen = get_current_screen();
-		add_filter('screen_layout_columns', 'wp_ulike_statistics_display_option');
-		$screen->add_option('wp_ulike_statistics_screen');
 	}	
+	add_filter('set-screen-option', 'wp_ulike_logs_per_page_set_option', 10, 3);	
 
 	/**
 	 * remove photo class from gravatar
@@ -110,8 +84,7 @@
 	 * @author       	Alimir	 	
 	 * @since           2.1 
 	 * @return			Void
-	 */	
-	add_action('admin_init', 'wp_ulike_statistics_save_option');
+	 */		
 	function wp_ulike_statistics_save_option(){
 		if(isset($_POST['wp_ulike_statistics_screen']) AND wp_verify_nonce($_POST['wp_ulike_statistics_screen'], 'wp_ulike_statistics_nonce_field' ) ){
 			$options = array(
@@ -135,6 +108,7 @@
 			update_option( 'wp_ulike_statistics_screen', $options );
 		}
 	}
+	add_action('admin_init', 'wp_ulike_statistics_save_option');
 
 	/**
 	 * Add menu to admin
@@ -177,18 +151,6 @@
 		
 	}
 	add_action('admin_menu', 'wp_ulike_admin_menu');
-
-	/**
-	 * Load a set of scripts to all admin pages
-	 *
-	 * @author       	Alimir	 	
-	 * @since           2.9
-	 * @return			Void
-	 */
-	function wp_ulike_enqueue_admin_style($hook) {
-		wp_enqueue_style( 'wp-ulike-admin', WP_ULIKE_ADMIN_URL . '/classes/css/admin.css' );
-	}
-	add_action( 'admin_enqueue_scripts', 'wp_ulike_enqueue_admin_style' );
 
 	/**
 	 * Set the admin login time.

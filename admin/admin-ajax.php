@@ -22,8 +22,8 @@
 	 */
 	function wp_ulike_logs_process(){
 		global $wpdb;
-		$id 	= $_POST['id'];
-		$table 	= $_POST['table'];
+		$id    = $_POST['id'];
+		$table = $_POST['table'];
 		$wpdb->delete( $wpdb->prefix.$table ,array( 'id' => $id ));
 		wp_die();
 	}

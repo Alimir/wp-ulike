@@ -43,7 +43,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			// Register Script
 			wp_enqueue_script(
 				'wp_ulike_stats',
-				WP_ULIKE_ADMIN_URL . '/classes/js/statistics.js',
+				WP_ULIKE_ADMIN_URL . '/assets/js/statistics.js',
 				array('jquery'),
 				null,
 				true
