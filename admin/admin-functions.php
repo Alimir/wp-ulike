@@ -242,8 +242,6 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           1.7
-	 * @updated         2.1	
-	 * @updated         2.4.2	
 	 * @return			String
 	 */		
 	function wp_ulike_post_likes_logs(){
@@ -362,8 +360,6 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           1.7
-	 * @updated         2.1	
-	 * @updated         2.4.2	
 	 * @return			String
 	 */
 	function wp_ulike_comment_likes_logs(){
@@ -486,11 +482,14 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           1.7
-	 * @updated         2.1	
-	 * @updated         2.4.2
 	 * @return			String
 	 */	
 	function wp_ulike_buddypress_likes_logs(){
+
+		if( ! defined( 'BP_VERSION' ) ) {
+			wp_die( sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ),__( 'BuddyPress', WP_ULIKE_SLUG ) ) );
+		}
+
 		global $wpdb;
 		$alternate 	= true;
 		$items 		= $wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."ulike_activities");
@@ -611,6 +610,11 @@
 	 * @return			String
 	 */	
 	function wp_ulike_bbpress_likes_logs(){
+		
+		if( ! function_exists( 'is_bbpress' ) ) {
+			wp_die( sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ),__( 'bbPress', WP_ULIKE_SLUG ) ) );
+		}
+
 		global $wpdb;
 		$alternate 	= true;
 		$items 		= $wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."ulike_forums");
@@ -1071,7 +1075,6 @@
 	 *
 	 * @author       	Alimir	 	
 	 * @since           2.1	
-	 * @updated         2.3	
 	 * @return			Void
 	 */	
 	function wp_ulike_statistics_display_option(){

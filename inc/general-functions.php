@@ -985,7 +985,7 @@ if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){
  * @since           1.7
  * @return			String
  */
-if( ! function_exists( 'wp_ulike_buddypress' ) ){	
+if( ! function_exists( 'wp_ulike_buddypress' ) && defined( 'BP_VERSION' ) ){
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
 		//global variables
 		global $wp_ulike_class, $wp_user_IP;
@@ -1059,7 +1059,7 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
  * @since           1.6
  * @return          Void
  */
-if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){	
+if( ! function_exists( 'wp_ulike_bp_activity_add' ) && defined( 'BP_VERSION' ) ){	
 	function wp_ulike_bp_activity_add($user_ID,$cp_ID,$type){
 		//Create a new activity when an user likes something
 		if (function_exists('bp_is_active') && wp_ulike_get_setting( 'wp_ulike_buddypress', 'new_likes_activity' ) == '1') {
@@ -1172,7 +1172,7 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
 			$comment = get_comment( $cp_ID );
 			return $comment->user_id;					
 		}
-		else if($type == '_activityliked'){
+		else if( $type == '_activityliked' && defined( 'BP_VERSION' ) ){
 			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID, 'display_comments'  => true ) );
 			return $activity['activities'][0]->user_id;				
 		}
@@ -1187,7 +1187,7 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
  * @since           2.5.1
  * @return          String
  */
-if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ){
+if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) && defined( 'BP_VERSION' ) ){
 	function wp_ulike_bbp_format_buddypress_notifications($action, $item_id, $secondary_item_id, $total_items, $format = 'string') {
 
 		$result = bbp_format_buddypress_notifications( 
@@ -1218,7 +1218,7 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ){
  * @since           2.2
  * @return			String
  */
-if( ! function_exists( 'wp_ulike_bbpress' ) ){
+if( ! function_exists( 'wp_ulike_bbpress' ) && function_exists( 'is_bbpress' ) ){
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
 		//global variables
 		global $post,$wp_ulike_class,$wp_user_IP;
