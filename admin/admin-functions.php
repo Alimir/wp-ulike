@@ -487,7 +487,8 @@
 	function wp_ulike_buddypress_likes_logs(){
 
 		if( ! defined( 'BP_VERSION' ) ) {
-			wp_die( sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ),__( 'BuddyPress', WP_ULIKE_SLUG ) ) );
+			echo sprintf( '<div class="wrap">' . __( '%s is Not Activated!', WP_ULIKE_SLUG ) . '</div>' ,__( 'BuddyPress', WP_ULIKE_SLUG ) );
+			return;
 		}
 
 		global $wpdb;
@@ -610,9 +611,10 @@
 	 * @return			String
 	 */	
 	function wp_ulike_bbpress_likes_logs(){
-		
+
 		if( ! function_exists( 'is_bbpress' ) ) {
-			wp_die( sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ),__( 'bbPress', WP_ULIKE_SLUG ) ) );
+			echo sprintf( '<div class="wrap">' . __( '%s is Not Activated!', WP_ULIKE_SLUG ) . '</div>' ,__( 'bbPress', WP_ULIKE_SLUG ) );
+			return;			
 		}
 
 		global $wpdb;

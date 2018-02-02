@@ -208,6 +208,10 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function most_liked_topics( $args = array(), $result = '' ) {
 			global $wpdb;
 
+			if( ! function_exists( 'is_bbpress' ) ) {
+				return sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ) ,__( 'bbPress', WP_ULIKE_SLUG ) );
+			}			
+
 			$defaults = array(
 				"numberOf"    => 10,
 				"period"      => 'all',
@@ -266,6 +270,10 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 */		
 		public function most_liked_activities( $args = array(), $result = '' ) {
 			global $wpdb;
+
+			if( ! defined( 'BP_VERSION' ) ) {
+				return sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ) ,__( 'BuddyPress', WP_ULIKE_SLUG ) );
+			}
 
 			$defaults = array(
 				"numberOf"    => 10,
