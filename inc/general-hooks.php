@@ -31,11 +31,12 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 		$result = '';
 		// Default Args
 		$args   = shortcode_atts( array(
-					"for"        => 'post',	//shortcode Type (post, comment, activity, topic)
-					"id"         => '',		//Post ID
-					"slug"       => 'post',	//Slug Name
-					"style"      => '',		//Get Default Theme
-					"attributes" => ''		//Get Attributes Filter
+					"for"           => 'post',	//shortcode Type (post, comment, activity, topic)
+					"id"            => '',		//Post ID
+					"slug"          => 'post',	//Slug Name
+					"style"         => '',		//Get Default Theme
+					"attributes"    => '',		//Get Attributes Filter
+					"wrapper_class" => ''		//Extra Wrapper class
 			    ), $atts );
 
 	    switch ( $args['for'] ) {

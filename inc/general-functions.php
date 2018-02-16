@@ -716,21 +716,22 @@ if( ! function_exists( 'wp_ulike' ) ){
 		
 		//Main data
 		$defaults      = array(
-			"id"         => $post_ID,				//Post ID
-			"user_id"    => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"    => $wp_user_IP,			//User IP
-			"get_like"   => $get_like,				//Number Of Likes
-			"method"     => 'likeThis',				//JavaScript method
-			"setting"    => 'wp_ulike_posts',		//Setting Key
-			"type"       => 'post',					//Function type (post/process)
-			"table"      => 'ulike',				//posts table
-			"column"     => 'post_id',				//ulike table column name
-			"key"        => '_liked',				//meta key
-			"cookie"     => 'liked-',				//Cookie Name
-			"slug"       => 'post',					//Slug Name
-			"style"      => $style,					//Get Default Theme
-			"microdata"  => $microdata,				//Get Microdata Filter
-			"attributes" => $attributes				//Get Attributes Filter
+			"id"            => $post_ID,				//Post ID
+			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
+			"user_ip"       => $wp_user_IP,				//User IP
+			"get_like"      => $get_like,				//Number Of Likes
+			"method"        => 'likeThis',				//JavaScript method
+			"setting"       => 'wp_ulike_posts',		//Setting Key
+			"type"          => 'post',					//Function type (post/process)
+			"table"         => 'ulike',					//posts table
+			"column"        => 'post_id',				//ulike table column name
+			"key"           => '_liked',				//meta key
+			"cookie"        => 'liked-',				//Cookie Name
+			"slug"          => 'post',					//Slug Name
+			"style"         => $style,					//Get Default Theme
+			"microdata"     => $microdata,				//Get Microdata Filter
+			"attributes"    => $attributes,				//Get Attributes Filter
+			"wrapper_class" => ''						//Extra Wrapper class
 		);
 		
         $parsed_args = wp_parse_args( $args, $defaults );		
@@ -915,21 +916,22 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 		
 		//Main Data
 		$defaults      = array(
-			"id"         => $comment_ID,			//Comment ID
-			"user_id"    => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"    => $wp_user_IP,			//User IP
-			"get_like"   => $get_like,				//Number Of Likes
-			"method"     => 'likeThisComment',		//JavaScript method
-			"setting"    => 'wp_ulike_comments',	//Setting Key
-			"type"       => 'post',					//Function type (post/process)
-			"table"      => 'ulike_comments',		//Comments table
-			"column"     => 'comment_id',			//ulike_comments table column name
-			"key"        => '_commentliked',		//meta key
-			"cookie"     => 'comment-liked-',		//Cookie Name
-			"slug"       => 'comment',				//Slug Name
-			"style"      => $style,					//Get Default Theme
-			"microdata"  => $microdata,				//Get Microdata Filter
-			"attributes" => $attributes				//Get Attributes Filter
+			"id"            => $comment_ID,				//Comment ID
+			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
+			"user_ip"       => $wp_user_IP,				//User IP
+			"get_like"      => $get_like,				//Number Of Likes
+			"method"        => 'likeThisComment',		//JavaScript method
+			"setting"       => 'wp_ulike_comments',		//Setting Key
+			"type"          => 'post',					//Function type (post/process)
+			"table"         => 'ulike_comments',		//Comments table
+			"column"        => 'comment_id',			//ulike_comments table column name
+			"key"           => '_commentliked',			//meta key
+			"cookie"        => 'comment-liked-',		//Cookie Name
+			"slug"          => 'comment',				//Slug Name
+			"style"         => $style,					//Get Default Theme
+			"microdata"     => $microdata,				//Get Microdata Filter
+			"attributes"    => $attributes,				//Get Attributes Filter
+			"wrapper_class" => ''						//Extra Wrapper class
 		);
 		
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1005,21 +1007,22 @@ if( ! function_exists( 'wp_ulike_buddypress' ) && defined( 'BP_VERSION' ) ){
 		
 		//Main Data
 		$defaults      = array(
-			"id"         => $activityID,			//Activity ID
-			"user_id"    => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"    => $wp_user_IP,			//User IP
-			"get_like"   => $get_like,				//Number Of Likes
-			"method"     => 'likeThisActivity',		//JavaScript method
-			"setting"    => 'wp_ulike_buddypress',	//Setting Key
-			"type"       => 'post',					//Function type (post/process)
-			"table"      => 'ulike_activities',		//Activities table
-			"column"     => 'activity_id',			//ulike_activities table column name			
-			"key"        => '_activityliked',		//meta key
-			"cookie"     => 'activity-liked-',		//Cookie Name
-			"slug"       => 'activity',				//Slug Name
-			"style"      => $style,					//Get Default Theme
-			"microdata"  => $microdata,				//Get Microdata Filter
-			"attributes" => $attributes				//Get Attributes Filter
+			"id"            => $activityID,				//Activity ID
+			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
+			"user_ip"       => $wp_user_IP,				//User IP
+			"get_like"      => $get_like,				//Number Of Likes
+			"method"        => 'likeThisActivity',		//JavaScript method
+			"setting"       => 'wp_ulike_buddypress',	//Setting Key
+			"type"          => 'post',					//Function type (post/process)
+			"table"         => 'ulike_activities',		//Activities table
+			"column"        => 'activity_id',			//ulike_activities table column name			
+			"key"           => '_activityliked',		//meta key
+			"cookie"        => 'activity-liked-',		//Cookie Name
+			"slug"          => 'activity',				//Slug Name
+			"style"         => $style,					//Get Default Theme
+			"microdata"     => $microdata,				//Get Microdata Filter
+			"attributes"    => $attributes,				//Get Attributes Filter
+			"wrapper_class" => ''						//Extra Wrapper class
 		);
 		
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1237,21 +1240,22 @@ if( ! function_exists( 'wp_ulike_bbpress' ) && function_exists( 'is_bbpress' ) )
 		
 		//Main Data
 		$defaults      = array(
-			"id"         => $post_ID,				//Post ID
-			"user_id"    => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"    => $wp_user_IP,			//User IP
-			"get_like"   => $get_like,				//Number Of Likes
-			"method"     => 'likeThisTopic',		//JavaScript method
-			"setting"    => 'wp_ulike_bbpress',		//Setting Key
-			"type"       => 'post',					//Function type (post/process)
-			"table"      => 'ulike_forums',			//posts table
-			"column"     => 'topic_id',				//ulike table column name
-			"key"        => '_topicliked',			//meta key
-			"cookie"     => 'topic-liked-',			//Cookie Name
-			"slug"       => 'topic',				//Slug Name
-			"style"      => $style,					//Get Default Theme
-			"microdata"  => $microdata,				//Get Microdata Filter
-			"attributes" => $attributes				//Get Attributes Filter
+			"id"            => $post_ID,				//Post ID
+			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
+			"user_ip"       => $wp_user_IP,			//User IP
+			"get_like"      => $get_like,				//Number Of Likes
+			"method"        => 'likeThisTopic',		//JavaScript method
+			"setting"       => 'wp_ulike_bbpress',		//Setting Key
+			"type"          => 'post',					//Function type (post/process)
+			"table"         => 'ulike_forums',			//posts table
+			"column"        => 'topic_id',				//ulike table column name
+			"key"           => '_topicliked',			//meta key
+			"cookie"        => 'topic-liked-',			//Cookie Name
+			"slug"          => 'topic',				//Slug Name
+			"style"         => $style,					//Get Default Theme
+			"microdata"     => $microdata,				//Get Microdata Filter
+			"attributes"    => $attributes,				//Get Attributes Filter
+			"wrapper_class" => ''						//Extra Wrapper class
 		);
 		
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1468,20 +1472,22 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 		//This function will turn output buffering on
 		ob_start();
 		do_action( 'wp_ulike_before_template' );
+		// Extract input array
+		extract( $wp_ulike_template );
 	?>
-		<div id="wp-ulike-<?php echo $wp_ulike_template['slug'] . '-' . $wp_ulike_template['ID']; ?>" class="wpulike wpulike-default" <?php echo $wp_ulike_template['attributes']; ?>>
-			<div class="<?php echo $wp_ulike_template['general_class']; ?>">
-				<a data-ulike-id="<?php echo $wp_ulike_template['ID']; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $wp_ulike_template['type'] . $wp_ulike_template['ID'] ); ?>" data-ulike-type="<?php echo $wp_ulike_template['type']; ?>"
-				data-ulike-status="<?php echo $wp_ulike_template['status']; ?>" class="<?php echo $wp_ulike_template['button_class']; ?>">
+		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+			<div class="<?php echo $general_class; ?>">
+				<a data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
+				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
 					<?php
-						if($wp_ulike_template['button_type'] == 'text'){
-							echo '<span>' . $wp_ulike_template['button_text'] . '</span>';
+						if($button_type == 'text'){
+							echo '<span>' . $button_text . '</span>';
 						}
 					?>
 				</a>
-				<?php echo $wp_ulike_template['counter']; ?>
+				<?php echo $counter; ?>
 			</div>
-			<?php echo $wp_ulike_template['microdata']; ?>
+			<?php echo $microdata; ?>
 		</div>
 	<?php
 		do_action( 'wp_ulike_after_template' );
@@ -1501,20 +1507,22 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 		//This function will turn output buffering on
 		ob_start();
 		do_action( 'wp_ulike_before_template' );
+		// Extract input array
+		extract( $wp_ulike_template );		
 	?>
-		<div id="wp-ulike-<?php echo $wp_ulike_template['slug'] . '-' . $wp_ulike_template['ID']; ?>" class="wpulike wpulike-heart" <?php echo $wp_ulike_template['attributes']; ?>>
-			<div class="<?php echo $wp_ulike_template['general_class']; ?>">
-				<a data-ulike-id="<?php echo $wp_ulike_template['ID']; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $wp_ulike_template['type']  . $wp_ulike_template['ID'] ); ?>" data-ulike-type="<?php echo $wp_ulike_template['type']; ?>"
-				data-ulike-status="<?php echo $wp_ulike_template['status']; ?>" class="<?php echo $wp_ulike_template['button_class']; ?>">
+		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+			<div class="<?php echo $general_class; ?>">
+				<a data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
+				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
 					<?php
-						if($wp_ulike_template['button_type'] == 'text'){
-							echo '<span>' . $wp_ulike_template['button_text'] . '</span>';
+						if($button_type == 'text'){
+							echo '<span>' . $button_text . '</span>';
 						}
 					?>
 				</a>
-				<?php echo $wp_ulike_template['counter']; ?>
+				<?php echo $counter; ?>
 			</div>
-			<?php echo $wp_ulike_template['microdata']; ?>
+			<?php echo $microdata; ?>
 		</div>
 	<?php
 		do_action( 'wp_ulike_after_template' );
@@ -1532,23 +1540,25 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){		
 	function wp_ulike_set_robeen_template( array $wp_ulike_template ){
 		$checked = '';
-		if( $wp_ulike_template['status'] == 2 ){
+		if( $status == 2 ){
 			$checked = 'checked="checked"';
 		}
 		//This function will turn output buffering on
 		ob_start();
 		do_action( 'wp_ulike_before_template' );	
+		// Extract input array
+		extract( $wp_ulike_template );		
 	?>
-		<div id="wp-ulike-<?php echo $wp_ulike_template['slug'] . '-' . $wp_ulike_template['ID']; ?>" class="wpulike wpulike-robeen" <?php echo $wp_ulike_template['attributes']; ?>>
-			<div class="<?php echo $wp_ulike_template['general_class']; ?>">
+		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+			<div class="<?php echo $general_class; ?>">
 					<label>
-					<input type="checkbox" data-ulike-id="<?php echo $wp_ulike_template['ID']; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $wp_ulike_template['type'] . $wp_ulike_template['ID'] ); ?>" data-ulike-type="<?php echo $wp_ulike_template['type']; ?>"
-				data-ulike-status="<?php echo $wp_ulike_template['status']; ?>" class="<?php echo $wp_ulike_template['button_class']; ?>" <?php echo  $checked; ?> />
+					<input type="checkbox" data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
+				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>" <?php echo  $checked; ?> />
 					<svg class="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg"><g class="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)"><path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" class="heart" fill="#AAB8C2"/><circle class="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5"/><g class="grp7" opacity="0" transform="translate(7 6)"><circle class="oval1" fill="#9CD8C3" cx="2" cy="6" r="2"/><circle class="oval2" fill="#8CE8C3" cx="5" cy="2" r="2"/></g><g class="grp6" opacity="0" transform="translate(0 28)"><circle class="oval1" fill="#CC8EF5" cx="2" cy="7" r="2"/><circle class="oval2" fill="#91D2FA" cx="3" cy="2" r="2"/></g><g class="grp3" opacity="0" transform="translate(52 28)"><circle class="oval2" fill="#9CD8C3" cx="2" cy="7" r="2"/><circle class="oval1" fill="#8CE8C3" cx="4" cy="2" r="2"/></g><g class="grp2" opacity="0" transform="translate(44 6)" fill="#CC8EF5"><circle class="oval2" transform="matrix(-1 0 0 1 10 0)" cx="5" cy="6" r="2"/><circle class="oval1" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp5" opacity="0" transform="translate(14 50)" fill="#91D2FA"><circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2"/><circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp4" opacity="0" transform="translate(35 50)" fill="#F48EA7"><circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2"/><circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp1" opacity="0" transform="translate(24)" fill="#9FC7FA"><circle class="oval1" cx="2.5" cy="3" r="2"/><circle class="oval2" cx="7.5" cy="2" r="2"/></g></g></svg>
-					<?php echo $wp_ulike_template['counter']; ?>
+					<?php echo $counter; ?>
 					</label>
 			</div>
-			<?php echo $wp_ulike_template['microdata']; ?>
+			<?php echo $microdata; ?>
 		</div>
 	<?php
 		do_action( 'wp_ulike_after_template' );
