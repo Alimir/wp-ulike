@@ -1085,9 +1085,10 @@ function wp_ulike_statistics(){
  * @return			Void
  */	
 function wp_ulike_statistics_display_option(){
+// get user options
 $get_option = get_option( 'wp_ulike_statistics_screen' );
 
-if(!$get_option){
+if( ! $get_option ){
 	$options = array(
 	  'welcome_panel'			=> 1,
 	  'summary_like_stats'		=> 1,
@@ -1098,7 +1099,7 @@ if(!$get_option){
 	  'most_liked_posts'		=> 1,
 	  'most_liked_comments'		=> 1,
 	  'piechart_stats'			=> 1,
-	  'likers_map'				=> 1,
+	  'likers_map'				=> 0,
 	  'top_likers'				=> 1,
 	  'top_posts'				=> 1,
 	  'top_comments'			=> 1,
