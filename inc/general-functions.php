@@ -1312,123 +1312,72 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
  * @return          Void (Print new CSS styles)
  */
 if( ! function_exists( 'wp_ulike_get_custom_style' ) ){	
-	function wp_ulike_get_custom_style(){
-		$btn_style 		= '';
-		$counter_style 	= '';
-		$customstyle 	= '';
-		$customloading 	= '';
-		$return_style	= '';
+	function wp_ulike_get_custom_style( $return_style = null ){
 		
-		//get custom icons
-		$getlikeicon 	= wp_ulike_get_setting( 'wp_ulike_general', 'button_url' );
-		$getlikeurl 	= wp_get_attachment_url( $getlikeicon );
+		// Like Icon
+		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url' ) ) ) {
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image { background-image: url('.$get_like_icon.') !important; }';
+		}
+
+		// Unlike Icon
+		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' ) ) ) {
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.image-unlike { background-image: url('.$get_like_icon.') !important; }';
+		}
 				
-		$getunlikeicon 	= wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' );
-		$getunlikeurl 	= wp_get_attachment_url( $getunlikeicon );
-				
-		if(wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style') == '1'){
+		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) ) {
 		
 			//get custom options
-			$customstyle 	= get_option( 'wp_ulike_customize' );
+			$customstyle   = get_option( 'wp_ulike_customize' );
+			$btn_style     = '';
+			$counter_style = '';
+			$before_style  = '';
 
-			//button style
-			$btn_bg 		= $customstyle['btn_bg'];
-			$btn_border		= $customstyle['btn_border'];
-			$btn_color 		= $customstyle['btn_color'];
-
-			//counter style
-			$counter_bg 	= $customstyle['counter_bg'];
-			$counter_border = $customstyle['counter_border'];
-			$counter_color 	= $customstyle['counter_color'];
-
-			//Loading animation
-			$customloading 	= $customstyle['loading_animation'];
-			$loadingurl 	= wp_get_attachment_url( $customloading );
-
-			$custom_css 	= $customstyle['custom_css'];
-
-
-			if($btn_bg != ''){
-				$btn_style .= "background-color:$btn_bg;";
+			// Button Style
+			if( isset( $customstyle['btn_bg'] ) ) {
+				$btn_style .= "background-color:".$customstyle['btn_bg'].";";
 			}			
-			if($btn_border != ''){
-				$btn_style .= "border-color:$btn_border; ";
+			if( isset( $customstyle['btn_border'] ) ) {
+				$btn_style .= "border-color:".$customstyle['btn_border']."; ";
 			}			
-			if($btn_color != ''){
-				$btn_style .= "color:$btn_color;text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
+			if( isset( $customstyle['btn_color'] ) ) {
+				$btn_style .= "color:".$customstyle['btn_color'].";text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
 			}
 
-			if($counter_bg != ''){
-				$counter_style .= "background-color:$counter_bg; ";
+			if( $btn_style != '' ){
+				$return_style .= '.wpulike-default .wp_ulike_btn, .wpulike-default .wp_ulike_btn:hover, #bbpress-forums .wpulike-default .wp_ulike_btn, #bbpress-forums .wpulike-default .wp_ulike_btn:hover{'.$btn_style.'}.wpulike-heart .wp_ulike_general_class{'.$btn_style.'}';
 			}			
-			if($counter_border != ''){
-				$counter_style .= "border-color:$counter_border; ";
-				$before_style  = "border-color:transparent; border-bottom-color:$counter_border; border-left-color:$counter_border;";
+
+			// Counter Style
+			if( isset( $customstyle['counter_bg'] ) ) {
+				$counter_style .= "background-color:".$customstyle['counter_bg'].";";
 			}			
-			if($counter_color != ''){
-				$counter_style .= "color:$counter_color;";
+			if( isset( $customstyle['counter_border'] ) ) {
+				$counter_style .= "border-color:".$customstyle['counter_border']."; ";
+				$before_style  = "border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
+			}			
+			if( isset( $customstyle['counter_color'] ) ) {
+				$counter_style .= "color:".$customstyle['counter_color'].";";
+			}
+
+			if( $counter_style != '' ){
+				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box:before{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
+			}		
+
+			// Loading Spinner
+			if( isset( $customstyle['loading_animation'] ) ) {
+				$return_style .= '.wpulike .wp_ulike_is_loading .wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading .wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {background-image: url('.wp_get_attachment_url( $customstyle['loading_animation'] ).') !important;}';
+			}
+
+			// Custom Styles
+			if( isset( $customstyle['custom_css'] ) ) {
+				$return_style .= $customstyle['custom_css'];
 			}
 		
 		}
-		
-		if($getlikeicon != '' || $getunlikeicon != '' || $customstyle != ''){
-				
-			if($getlikeicon != ''){
-				$return_style .= '
-					.wp_ulike_btn.wp_ulike_put_image {
-						background-image: url('.$getlikeurl.') !important;
-					}
-				';
-			}
 
-			if($getunlikeicon != ''){
-				$return_style .= '
-					.wp_ulike_btn.wp_ulike_put_image.image-unlike {
-						background-image: url('.$getunlikeurl.') !important;
-					}
-				 ';
-			}
-
-			if($customloading != ''){
-				$return_style .= '
-					.wpulike .wp_ulike_is_loading .wp_ulike_btn,
-	#buddypress .activity-content .wpulike .wp_ulike_is_loading .wp_ulike_btn,
-	#bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {
-						background-image: url('.$loadingurl.') !important;
-					}
-				 ';
-			}
-
-			if($btn_style != ''){
-				$return_style .= '
-					.wpulike-default .wp_ulike_btn, .wpulike-default .wp_ulike_btn:hover, #bbpress-forums .wpulike-default .wp_ulike_btn, #bbpress-forums .wpulike-default .wp_ulike_btn:hover{
-						'.$btn_style.'	
-					}
-					.wpulike-heart .wp_ulike_general_class{
-						'.$btn_style.'	
-					}
-				';
-			}
-
-			if($counter_style != ''){
-				$return_style .= '
-					.wpulike-default .count-box,.wpulike-default .count-box:before{
-						'.$counter_style.'
-					}
-					.wpulike-default .count-box:before{
-						'.$before_style.'
-					}
-				';
-			}	
-
-			if($custom_css != ''){
-				$return_style .= $custom_css;
-			}
-			
-		}
-		
 		return $return_style;
 	}
+
 }
 	
 /**
