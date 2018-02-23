@@ -1150,8 +1150,8 @@ if( ! $get_option ){
 function wp_ulike_get_number_of_new_likes() {
 	global $wpdb;
 	
-	if( isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike-statistics") !== false && is_super_admin() ) {
-		update_option('wpulike_lastvisit', current_time('mysql',0));
+	if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false && is_super_admin() ) {
+		update_option( 'wpulike_lastvisit', current_time( 'mysql' ) );
 	}
 	
     $request =  "SELECT

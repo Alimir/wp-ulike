@@ -133,7 +133,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$this->wpdb->prefix . $table, 
 					array( 
 						$column 		=> $id, 
-						'date_time' 	=> current_time( 'mysql', true ),
+						'date_time' 	=> current_time( 'mysql' ),
 						'ip' 			=> $user_ip,
 						'user_id' 		=> $user_id,
 						'status' 		=> 'like' 
@@ -190,7 +190,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						$this->wpdb->prefix . $table, 
 						array( 
 							$column 		=> $id, 
-							'date_time' 	=> current_time( 'mysql', true ),
+							'date_time' 	=> current_time( 'mysql' ),
 							'ip' 			=> $user_ip,
 							'user_id' 		=> $user_id,
 							'status' 		=> 'like' 
@@ -260,7 +260,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						$this->wpdb->prefix . $table, 
 						array( 
 							$column 		=> $id, 
-							'date_time' 	=> current_time( 'mysql', true ),
+							'date_time' 	=> current_time( 'mysql' ),
 							'ip' 			=> $user_ip,
 							'user_id' 		=> $user_id,
 							'status' 		=> 'like' 
@@ -371,7 +371,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						$this->wpdb->prefix . $table, 
 						array( 
 							$column 		=> $id, 
-							'date_time' 	=> current_time( 'mysql', true ),
+							'date_time' 	=> current_time( 'mysql' ),
 							'ip' 			=> $user_ip,
 							'user_id' 		=> $user_id,
 							'status' 		=> 'like' 

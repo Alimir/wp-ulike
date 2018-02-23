@@ -168,8 +168,10 @@ add_action('admin_menu', 'wp_ulike_admin_menu');
  * @return			Void
  */
 function wp_ulike_set_lastvisit() {
-	if ( ! is_super_admin() ) return;
-	update_option( 'wpulike_lastvisit', current_time( 'mysql',0 ) );
+	if ( ! is_super_admin() ) {
+		return;
+	}
+	update_option( 'wpulike_lastvisit', current_time( 'mysql' ) );
 }
 add_action('wp_logout', 'wp_ulike_set_lastvisit');
 
