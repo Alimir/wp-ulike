@@ -54,17 +54,6 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	class WPULIKE {
 
 	  /**
-	   * Unique identifier for your plugin.
-	   *
-	   * The variable name is used as the text domain when internationalizing strings of text.
-	   *
-	   * @since    3.1
-	   *
-	   * @var      string
-	   */
-		protected $plugin_slug = WP_ULIKE_SLUG;
-
-	  /**
 	    * Instance of this class.
 	    *
 	    * @since    3.1
@@ -79,22 +68,22 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	    *
 	    * @since     3.1
 	    */
-	    private function __construct() {    	
-	    	// Include Files
-	        $this->includes();
+	    private function __construct() {    
 
-	        add_action( 'init', array( $this, 'init' ) );
-
-	        // Activate plugin when new blog is added
-	        add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
-
-	        add_action( 'activated_plugin', array( $this, 'after_activation' ) );
-
-	        $prefix = is_network_admin() ? 'network_admin_' : '';
-	        add_filter( "{$prefix}plugin_action_links",  array( $this, 'add_links' ), 10, 5 );        
-
-	        // Loaded action
-	        do_action( 'wp_ulike_loaded' );
+	    	add_action( 'init', array( $this, 'init' ) );	
+			// Include Files
+			$this->includes();
+			
+			// Activate plugin when new blog is added
+			add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
+			
+			add_action( 'activated_plugin', array( $this, 'after_activation' ) );
+			
+			$prefix = is_network_admin() ? 'network_admin_' : '';
+			add_filter( "{$prefix}plugin_action_links",  array( $this, 'add_links' ), 10, 5 );        
+			
+			// Loaded action
+			do_action( 'wp_ulike_loaded' );
 	    }
 
 	    /**
@@ -134,7 +123,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 				array(
 					'parent'   => false,
 					'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
-					'position' =>  313,
+					'position' => 313,
 					'icon_url' => 'dashicons-wp-ulike'
 				),
 				array(
@@ -392,7 +381,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	        if ( get_site_option( 'wp_ulike_dbVersion' ) != WP_ULIKE_DB_VERSION ) {
 
 	            $posts_table = $wpdb->prefix . "ulike";
-	            if ( $wpdb->get_var( "show tables like '$posts_table'" ) != $table_name ) {
+	            if ( $wpdb->get_var( "show tables like '$posts_table'" ) != $posts_table ) {
 	                $sql = "CREATE TABLE " . $posts_table . " (
 	                        `id` bigint(11) NOT NULL AUTO_INCREMENT,
 	                        `post_id` int(11) NOT NULL,
@@ -523,9 +512,9 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	     * @since    3.1
 	     */
 	    public function load_plugin_textdomain() {
-	        $locale = apply_filters( 'plugin_locale', get_locale(), $plugin_slug );
-	        load_textdomain( $plugin_slug, trailingslashit( WP_LANG_DIR ) . $plugin_slug . '/' . $plugin_slug . '-' . $locale . '.mo' );
-	        load_plugin_textdomain( $plugin_slug, FALSE, dirname( WP_ULIKE_BASENAME ) . '/lang/' );
+	        $locale = apply_filters( 'plugin_locale', get_locale(), WP_ULIKE_SLUG );
+	        load_textdomain( WP_ULIKE_SLUG, trailingslashit( WP_LANG_DIR ) . WP_ULIKE_SLUG . '/' . WP_ULIKE_SLUG . '-' . $locale . '.mo' );
+	        load_plugin_textdomain( WP_ULIKE_SLUG, FALSE, dirname( WP_ULIKE_BASENAME ) . '/lang/' );
 	    }
 
 	}
