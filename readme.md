@@ -4,7 +4,7 @@
 
 WP ULike is a WordPress plugin that also supports BuddyPress, bbPress and a number of other plugins. It aims to be a comprehensive “Like” system for your site and enables site users to like a wide range of content types, including posts, forum topics and replies, comments and activity updates. It’s very simple to use and supports many options and full Statistics tools. Also, All are free :)
 
-More information can be found at [WP ULike](http://wp-ulike.alimir.ir/).
+More information can be found at [WP ULike](https://wpulike.com/).
 
 <a href="https://wordpress.org/plugins/wp-ulike/"><img src="http://preview.alimir.ir/wp-content/uploads/wp-ulike-created-banner.png"></a>
 

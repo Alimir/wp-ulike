@@ -1,4 +1,9 @@
 <?php
+/**
+ * WP ULike myCred support Class
+ * // @echo HEADER
+ */
+
 if ( class_exists( 'myCRED_Hook' ) ) :
 	class wp_ulike_myCRED extends myCRED_Hook {
  

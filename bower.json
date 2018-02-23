@@ -1,0 +1,21 @@
+{
+  "name": "wp-ulike",
+  "description": "WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.",
+  "main": "Gruntfile.js",
+  "authors": [
+    "Alimir <info@wpulike.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chart.js": "^2.7.1"
+  }
+}
