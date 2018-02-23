@@ -4,6 +4,10 @@
  * // @echo HEADER
  */
 
+/*******************************************************
+  Start AJAX From Here
+*******************************************************/
+
 /**
  * AJAX handler to store the state of dismissible notices.
  *

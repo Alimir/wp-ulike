@@ -4,6 +4,10 @@
  * // @echo HEADER
  */
 
+/*******************************************************
+  Start AJAX From Here
+*******************************************************/
+
 /**
  * AJAX function for all like/unlike process
  *
