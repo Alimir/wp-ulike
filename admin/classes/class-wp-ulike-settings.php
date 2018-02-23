@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class for settings panel
+ * // @echo HEADER
+ */
+
 if ( !class_exists( 'wp_ulike_settings' ) ) {
     
     class wp_ulike_settings {

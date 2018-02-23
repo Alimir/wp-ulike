@@ -1,0 +1,19 @@
+.wp-ulike-advertisement{
+	text-align: center;
+	line-height: 4em;
+
+	a{
+		display:block;
+
+		> img {
+			max-width: 100%;
+			height: auto;
+		}		
+
+		&:focus{
+			box-shadow: none;
+			outline: 0;
+		}
+		
+	}
+}

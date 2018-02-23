@@ -1,5 +1,5 @@
 /*! WP ULike - v3.1
- *  http://wp-ulike.alimir.ir/
+ *  https://wpulike.com
  *  Alimir 2018;
  */
 

@@ -1,4 +1,8 @@
 <?php 
+/**
+ * Class for statistics process
+ * // @echo HEADER
+ */
 
 if ( ! class_exists( 'wp_ulike_stats' ) ) {
 

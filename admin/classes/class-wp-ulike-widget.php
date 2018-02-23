@@ -1,4 +1,8 @@
 <?php 
+/**
+ * Class for our widget support
+ * // @echo HEADER
+ */
 
 if ( ! class_exists( 'wp_ulike_widget' ) ) {
 

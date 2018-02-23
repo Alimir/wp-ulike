@@ -1,4 +1,8 @@
 <?php
+/**
+ * Class for pagination functionality
+ * // @echo HEADER
+ */
 
 if ( ! class_exists( 'wp_ulike_pagination' ) ) {
 

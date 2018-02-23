@@ -1,4 +1,8 @@
 <?php
+/**
+ * General Functions
+ * // @echo HEADER
+ */
 
 /*******************************************************
   Settings
@@ -987,7 +991,7 @@ if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){
  * @since           1.7
  * @return			String
  */
-if( ! function_exists( 'wp_ulike_buddypress' ) && defined( 'BP_VERSION' ) ){
+if( ! function_exists( 'wp_ulike_buddypress' ) ){
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
 		//global variables
 		global $wp_ulike_class, $wp_user_IP;
@@ -1062,97 +1066,103 @@ if( ! function_exists( 'wp_ulike_buddypress' ) && defined( 'BP_VERSION' ) ){
  * @since           1.6
  * @return          Void
  */
-if( ! function_exists( 'wp_ulike_bp_activity_add' ) && defined( 'BP_VERSION' ) ){	
-	function wp_ulike_bp_activity_add($user_ID,$cp_ID,$type){
+if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){	
+	function wp_ulike_bp_activity_add( $user_ID, $cp_ID, $type ){
+
 		//Create a new activity when an user likes something
-		if (function_exists('bp_is_active') && wp_ulike_get_setting( 'wp_ulike_buddypress', 'new_likes_activity' ) == '1') {
-			// Replace the post variables
-			$post_template = wp_ulike_get_setting( 'wp_ulike_buddypress', 'bp_post_activity_add_header' );
-			if($post_template == '')
-			$post_template = '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)';
-			
-			if (strpos($post_template, '%POST_LIKER%') !== false) {
-				$POST_LIKER = bp_core_get_userlink($user_ID);
-				$post_template = str_replace("%POST_LIKER%", $POST_LIKER, $post_template);
+		if ( function_exists( 'bp_is_active' ) && wp_ulike_get_setting( 'wp_ulike_buddypress', 'new_likes_activity' ) == '1' ) {
+
+			switch ( $type ) {
+				case '_liked':
+					// Replace the post variables
+					$post_template = wp_ulike_get_setting( 'wp_ulike_buddypress', 'bp_post_activity_add_header' );
+
+					$post_template = $post_template == '' ? '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)' : $post_template;
+					
+					if ( strpos( $post_template, '%POST_LIKER%' ) !== false ) {
+						$POST_LIKER    = bp_core_get_userlink( $user_ID );
+						$post_template = str_replace( "%POST_LIKER%", $POST_LIKER, $post_template );
+					}
+					if ( strpos( $post_template, '%POST_PERMALINK%' ) !== false ) {
+						$POST_PERMALINK = get_permalink($cp_ID);
+						$post_template  = str_replace( "%POST_PERMALINK%", $POST_PERMALINK, $post_template );
+					}
+					if ( strpos( $post_template, '%POST_COUNT%' ) !== false ) {
+						$POST_COUNT    = get_post_meta( $cp_ID, '_liked', true );
+						$post_template = str_replace( "%POST_COUNT%", $POST_COUNT, $post_template );
+					}
+					if ( strpos( $post_template, '%POST_TITLE%' ) !== false ) {
+						$POST_TITLE    = get_the_title( $cp_ID );
+						$post_template = str_replace( "%POST_TITLE%", $POST_TITLE, $post_template );
+					}
+					bp_activity_add( array(
+						'user_id'   => $user_ID,
+						'action'    => $post_template,
+						'component' => 'activity',
+						'type'      => 'wp_like_group',
+						'item_id'   => $cp_ID
+					));					
+					break;
+				
+				case '_commentliked':
+					// Replace the comment variables
+					$comment_template = wp_ulike_get_setting( 'wp_ulike_buddypress', 'bp_comment_activity_add_header' );
+
+					$comment_template = $comment_template == '' ? '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)' : $comment_template;
+					
+					if ( strpos( $comment_template, '%COMMENT_LIKER%' ) !== false ) {
+						$COMMENT_LIKER    = bp_core_get_userlink( $user_ID );
+						$comment_template = str_replace("%COMMENT_LIKER%", $COMMENT_LIKER, $comment_template );
+					}
+					if ( strpos( $comment_template, '%COMMENT_PERMALINK%' ) !== false ) {
+						$COMMENT_PERMALINK = get_comment_link( $cp_ID );
+						$comment_template  = str_replace( "%COMMENT_PERMALINK%", $COMMENT_PERMALINK, $comment_template );
+					}			
+					if ( strpos( $comment_template, '%COMMENT_AUTHOR%' ) !== false ) {
+						$COMMENT_AUTHOR   = get_comment_author( $cp_ID );
+						$comment_template = str_replace( "%COMMENT_AUTHOR%", $COMMENT_AUTHOR, $comment_template );
+					}
+					if ( strpos( $comment_template, '%COMMENT_COUNT%' ) !== false ) {
+						$COMMENT_COUNT    = get_comment_meta( $cp_ID, '_commentliked', true );
+						$comment_template = str_replace( "%COMMENT_COUNT%", $COMMENT_COUNT, $comment_template );
+					}
+					bp_activity_add( array(
+						'user_id'   => $user_ID,
+						'action'    => $comment_template,
+						'component' => 'activity',
+						'type'      => 'wp_like_group',
+						'item_id'   => $cp_ID
+					));					
+					break;
+				
+				default:
+					break;
 			}
-			if (strpos($post_template, '%POST_PERMALINK%') !== false) {
-				$POST_PERMALINK = get_permalink($cp_ID);
-				$post_template = str_replace("%POST_PERMALINK%", $POST_PERMALINK, $post_template);
-			}
-			if (strpos($post_template, '%POST_COUNT%') !== false) {
-				$POST_COUNT = get_post_meta($cp_ID, '_liked', true);
-				$post_template = str_replace("%POST_COUNT%", $POST_COUNT, $post_template);
-			}
-			if (strpos($post_template, '%POST_TITLE%') !== false) {
-				$POST_TITLE = get_the_title($cp_ID);
-				$post_template = str_replace("%POST_TITLE%", $POST_TITLE, $post_template);
-			}
-			
-			// Replace the comment variables
-			$comment_template = wp_ulike_get_setting( 'wp_ulike_buddypress', 'bp_comment_activity_add_header' );
-			if($comment_template == '')
-			$comment_template = '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)';
-			
-			if (strpos($comment_template, '%COMMENT_LIKER%') !== false) {
-				$COMMENT_LIKER = bp_core_get_userlink($user_ID);
-				$comment_template = str_replace("%COMMENT_LIKER%", $COMMENT_LIKER, $comment_template);
-			}
-			if (strpos($comment_template, '%COMMENT_PERMALINK%') !== false) {
-				$COMMENT_PERMALINK = get_comment_link($cp_ID);
-				$comment_template = str_replace("%COMMENT_PERMALINK%", $COMMENT_PERMALINK, $comment_template);
-			}			
-			if (strpos($comment_template, '%COMMENT_AUTHOR%') !== false) {
-				$COMMENT_AUTHOR = get_comment_author($cp_ID);
-				$comment_template = str_replace("%COMMENT_AUTHOR%", $COMMENT_AUTHOR, $comment_template);
-			}
-			if (strpos($comment_template, '%COMMENT_COUNT%') !== false) {
-				$COMMENT_COUNT = get_comment_meta($cp_ID, '_commentliked', true);
-				$comment_template = str_replace("%COMMENT_COUNT%", $COMMENT_COUNT, $comment_template);
-			}
-			
-			//create bp_activity_add
-			if($type=='_commentliked'){
-				bp_activity_add( array(
-					'user_id' => $user_ID,
-					'action' => $comment_template,
-					'component' => 'activity',
-					'type' => 'wp_like_group',
-					'item_id' => $cp_ID
-				));
-			}
-			else if($type=='_liked'){
-				bp_activity_add( array(
-					'user_id' => $user_ID,
-					'action' => $post_template,
-					'component' => 'activity',
-					'type' => 'wp_like_group',
-					'item_id' => $cp_ID
-				));
-			}
+
 		}
+
 		//Sends out notifications when you get a like from someone
-		if (function_exists('bp_is_active') && wp_ulike_get_setting( 'wp_ulike_buddypress', 'custom_notification' ) == '1') {
+		if ( function_exists( 'bp_is_active' ) && wp_ulike_get_setting( 'wp_ulike_buddypress', 'custom_notification' ) == '1' ) {
 			// No notifications from Anonymous
-			if (!$user_ID) {
+			if ( ! $user_ID ) {
 				return false;
 			}
-			$author_ID = wp_ulike_get_auhtor_id($cp_ID,$type);
-			if (!$author_ID || $author_ID == $user_ID) {
+			$author_ID = wp_ulike_get_auhtor_id( $cp_ID, $type );
+			if ( ! $author_ID || $author_ID == $user_ID ) {
 				return false;
 			}			
 			bp_notifications_add_notification( array(
-				'user_id'           => $author_ID,
-				'item_id'           => $cp_ID,
-				'secondary_item_id' => '',
-				'component_name'    => 'wp_ulike',
-				'component_action'  => 'wp_ulike' . $type . '_action_' . $user_ID,
-				'date_notified'     => bp_core_current_time(),
-				'is_new'            => 1,
-			) );			
+					'user_id'           => $author_ID,
+					'item_id'           => $cp_ID,
+					'secondary_item_id' => '',
+					'component_name'    => 'wp_ulike',
+					'component_action'  => 'wp_ulike' . $type . '_action_' . $user_ID,
+					'date_notified'     => bp_core_current_time(),
+					'is_new'            => 1,
+				) 
+			);			
 		}
-		else{
-			return;
-		}
+
 	}
 }
 
@@ -1175,7 +1185,7 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
 			$comment = get_comment( $cp_ID );
 			return $comment->user_id;					
 		}
-		else if( $type == '_activityliked' && defined( 'BP_VERSION' ) ){
+		else if( $type == '_activityliked' ){
 			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID, 'display_comments'  => true ) );
 			return $activity['activities'][0]->user_id;				
 		}
@@ -1190,8 +1200,12 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
  * @since           2.5.1
  * @return          String
  */
-if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) && defined( 'BP_VERSION' ) ){
+if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
 	function wp_ulike_bbp_format_buddypress_notifications($action, $item_id, $secondary_item_id, $total_items, $format = 'string') {
+
+		if ( ! defined( 'BP_VERSION' ) ) {
+			return;
+		}
 
 		$result = bbp_format_buddypress_notifications( 
 			$action, 
@@ -1221,7 +1235,7 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) && defin
  * @since           2.2
  * @return			String
  */
-if( ! function_exists( 'wp_ulike_bbpress' ) && function_exists( 'is_bbpress' ) ){
+if( ! function_exists( 'wp_ulike_bbpress' ) ){
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
 		//global variables
 		global $post,$wp_ulike_class,$wp_user_IP;
@@ -1539,10 +1553,6 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
  */
 if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){		
 	function wp_ulike_set_robeen_template( array $wp_ulike_template ){
-		$checked = '';
-		if( $status == 2 ){
-			$checked = 'checked="checked"';
-		}
 		//This function will turn output buffering on
 		ob_start();
 		do_action( 'wp_ulike_before_template' );	
@@ -1553,7 +1563,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 			<div class="<?php echo $general_class; ?>">
 					<label>
 					<input type="checkbox" data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
-				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>" <?php echo  $checked; ?> />
+				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>" <?php echo  $status == 2  ? 'checked="checked"' : ''; ?> />
 					<svg class="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg"><g class="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)"><path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" class="heart" fill="#AAB8C2"/><circle class="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5"/><g class="grp7" opacity="0" transform="translate(7 6)"><circle class="oval1" fill="#9CD8C3" cx="2" cy="6" r="2"/><circle class="oval2" fill="#8CE8C3" cx="5" cy="2" r="2"/></g><g class="grp6" opacity="0" transform="translate(0 28)"><circle class="oval1" fill="#CC8EF5" cx="2" cy="7" r="2"/><circle class="oval2" fill="#91D2FA" cx="3" cy="2" r="2"/></g><g class="grp3" opacity="0" transform="translate(52 28)"><circle class="oval2" fill="#9CD8C3" cx="2" cy="7" r="2"/><circle class="oval1" fill="#8CE8C3" cx="4" cy="2" r="2"/></g><g class="grp2" opacity="0" transform="translate(44 6)" fill="#CC8EF5"><circle class="oval2" transform="matrix(-1 0 0 1 10 0)" cx="5" cy="6" r="2"/><circle class="oval1" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp5" opacity="0" transform="translate(14 50)" fill="#91D2FA"><circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2"/><circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp4" opacity="0" transform="translate(35 50)" fill="#F48EA7"><circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2"/><circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp1" opacity="0" transform="translate(24)" fill="#9FC7FA"><circle class="oval1" cx="2.5" cy="3" r="2"/><circle class="oval2" cx="7.5" cy="2" r="2"/></g></g></svg>
 					<?php echo $counter; ?>
 					</label>

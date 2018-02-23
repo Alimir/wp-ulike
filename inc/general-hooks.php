@@ -1,4 +1,8 @@
 <?php
+/**
+ * General Hooks
+ * // @echo HEADER
+ */
 
 /*******************************************************
   General Hooks

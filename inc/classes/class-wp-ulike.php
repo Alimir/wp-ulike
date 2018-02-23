@@ -1,4 +1,9 @@
 <?php 
+/**
+ * WP ULike Process Class
+ * // @echo HEADER
+ */
+
 if ( ! class_exists( 'wp_ulike' ) ) {
 
 	class wp_ulike{
