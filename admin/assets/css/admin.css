@@ -94,7 +94,8 @@ https://wordpress.org/plugins/wp-ulike/
 /** 	Settings Page */
 form.wp-ulike h2 { display: inline-block; margin-right: 20px; }
 form.wp-ulike p.submit { display: inline-block; margin-right: 20px; }
-form.wp-ulike p.submit .button { height: 34px !important; line-height: 32px !important; padding: 0 18px 1px !important; font-size: 14px !important; }
+form.wp-ulike p.submit .button { height: 50px !important; line-height: 50px !important; padding: 0 25px !important; font-size: 18px !important; }
+form.wp-ulike p.submit .button:active { vertical-align: inherit; }
 form.wp-ulike td .settings-error { overflow: hidden; }
 form.wp-ulike td .settings-error p { margin: 0.5em 0; }
 form.wp-ulike .wp-ulike-settings-tabs h2 { float: left; padding: 10px 15px; margin: 1em 0 0; font-weight: 500; border: 1px solid #e0e0e0; border-right: none; border-bottom: none; cursor: pointer; }
