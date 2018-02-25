@@ -1333,13 +1333,13 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$before_style  = '';
 
 			// Button Style
-			if( isset( $customstyle['btn_bg'] ) ) {
+			if( isset( $customstyle['btn_bg'] ) && ! empty( $customstyle['btn_bg'] ) ) {
 				$btn_style .= "background-color:".$customstyle['btn_bg'].";";
 			}			
-			if( isset( $customstyle['btn_border'] ) ) {
+			if( isset( $customstyle['btn_border'] ) && ! empty( $customstyle['btn_border'] ) ) {
 				$btn_style .= "border-color:".$customstyle['btn_border']."; ";
 			}			
-			if( isset( $customstyle['btn_color'] ) ) {
+			if( isset( $customstyle['btn_color'] ) && ! empty( $customstyle['btn_color'] ) ) {
 				$btn_style .= "color:".$customstyle['btn_color'].";text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
 			}
 
@@ -1348,14 +1348,14 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			}			
 
 			// Counter Style
-			if( isset( $customstyle['counter_bg'] ) ) {
+			if( isset( $customstyle['counter_bg'] ) && ! empty( $customstyle['counter_bg'] ) ) {
 				$counter_style .= "background-color:".$customstyle['counter_bg'].";";
 			}			
-			if( isset( $customstyle['counter_border'] ) ) {
+			if( isset( $customstyle['counter_border'] ) && ! empty( $customstyle['counter_border'] ) ) {
 				$counter_style .= "border-color:".$customstyle['counter_border']."; ";
 				$before_style  = "border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
 			}			
-			if( isset( $customstyle['counter_color'] ) ) {
+			if( isset( $customstyle['counter_color'] ) && ! empty( $customstyle['counter_color'] ) ) {
 				$counter_style .= "color:".$customstyle['counter_color'].";";
 			}
 
@@ -1364,12 +1364,12 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			}		
 
 			// Loading Spinner
-			if( isset( $customstyle['loading_animation'] ) ) {
+			if( isset( $customstyle['loading_animation'] ) && ! empty( $customstyle['loading_animation'] ) ) {
 				$return_style .= '.wpulike .wp_ulike_is_loading .wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading .wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {background-image: url('.wp_get_attachment_url( $customstyle['loading_animation'] ).') !important;}';
 			}
 
 			// Custom Styles
-			if( isset( $customstyle['custom_css'] ) ) {
+			if( isset( $customstyle['custom_css'] ) && ! empty( $customstyle['custom_css'] ) ) {
 				$return_style .= $customstyle['custom_css'];
 			}
 		
