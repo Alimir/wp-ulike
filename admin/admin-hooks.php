@@ -219,7 +219,7 @@ function wp_ulike_advertisement(){
 ?>
 	<div class="welcome-panel wp-ulike-advertisement">
 		<a href="http://averta.net/phlox/wordpress-theme/?utm_source=ulike&utm_medium=banner&utm_campaign=phlox" target="_blank" title="Phlox Theme">
-			<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/phlox-theme.jpg" alt="Phlox Theme">
+			<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/phlox-theme.png" alt="Phlox Theme">
 		</a>
 	</div>
 <?php
