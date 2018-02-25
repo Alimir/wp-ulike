@@ -72,8 +72,8 @@ module.exports = function(grunt) {
 
             back_dev: {
                 options: {
-                    sassDir: 'admin/classes/sass',
-                    cssDir: 'admin/classes/css/',
+                    sassDir: 'admin/assets/sass',
+                    cssDir: 'admin/assets/css/',
                     environment: 'development',
                     watch:true,
                     trace:true,
@@ -135,6 +135,33 @@ module.exports = function(grunt) {
             }
         },
 
+        // Copy files from bower_component folder to right places
+        copy: {
+            gMaps: {
+
+                files: [
+                    {
+                        expand: true,     // Enable dynamic expansion.
+                        cwd: '<%= pkg.bower.components %>jqvmap/dist',      // Src matches are relative to this path.
+                        src: ['jquery.vmap.min.js', 'maps/jquery.vmap.world.js'],  // Actual pattern(s) to match.
+                        dest: 'admin/assets/js/src/plugins'   // Destination path prefix.
+                    }
+                ]
+            },
+            chartjs: {
+
+                files: [
+                    {
+                        expand: true,     // Enable dynamic expansion.
+                        cwd: '<%= pkg.bower.components %>chart.js/dist',      // Src matches are relative to this path.
+                        src: ['Chart.min.js'],  // Actual pattern(s) to match.
+                        dest: 'admin/assets/js/src/plugins'   // Destination path prefix.
+                    }
+                ]
+            }
+        },
+
+
         // merge js files
         concat: {
 
@@ -173,12 +200,10 @@ module.exports = function(grunt) {
                     },
                 },
                 src: [
-                    'admin/classes/js/src/chart.min.js',
-                    'admin/classes/js/src/jquery.vmap.min.js',
-                    'admin/classes/js/src/jquery.vmap.world.js',
-                    'admin/classes/js/src/scripts.js',
+                    'admin/assets/js/src/plugins/**/*.js',
+                    'admin/assets/js/src/scripts.js',
                 ],
-                dest: 'admin/classes/js/statistics.js'
+                dest: 'admin/assets/js/statistics.js'
             }
 
         },
@@ -320,7 +345,7 @@ module.exports = function(grunt) {
             },
 
             concat_admin_js_scripts: {
-                files: ['admin/classes/js/src/*.js'],
+                files: ['admin/assets/js/src/*.js'],
                 tasks: ['concat:adminJsScripts']
             },
 
@@ -339,8 +364,8 @@ module.exports = function(grunt) {
                 args: ["--verbose --delete-after"], // z:compress while transfering data, P: display progress
                 exclude: [
                         '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'admin/classes/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
-                        'config.rb', 'assets/sass/', 'admin/classes/sass/'
+                        'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
+                        'config.rb', 'assets/sass/', 'admin/assets/sass/'
                 ],
                 recursive: true,
                 syncDestIgnoreExcl: true
@@ -351,14 +376,14 @@ module.exports = function(grunt) {
                     src: "./",
                     dest: "<%= meta.buildPath %>"
                 }
-            },
+            },    
 
             lite: {
                 options: {
                     exclude: [
-                        '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'admin/classes/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
-                        'config.rb', 'assets/sass/', 'admin/classes/sass/'
+                        '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json', '_devDependencies',
+                        'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json', 'bower.json',
+                        'config.rb', 'assets/sass/', 'admin/assets/sass/'
                     ],
                     src: ['./'],
                     dest: "<%= meta.buildPath %>"
@@ -398,5 +423,7 @@ module.exports = function(grunt) {
     grunt.registerTask( 'default'       , ['concat','cssmin', 'uglify']);
 
     grunt.registerTask( 'dev', ['concurrent'] );
+
+    grunt.registerTask( 'update_dep'    , ['copy', 'concat'] );
 
 };
