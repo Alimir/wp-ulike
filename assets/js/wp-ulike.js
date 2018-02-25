@@ -1,6 +1,6 @@
-/*! WP ULike - v3.0
- *  http://wp-ulike.alimir.ir/
- *  Alimir 2017;
+/*! WP ULike - v3.1
+ *  https://wpulike.com
+ *  Alimir 2018;
  */
 
 

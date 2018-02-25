@@ -1,11 +1,11 @@
 === WP ULike ===
 Contributors: alimir
-Donate link: http://alimir.ir
+Donate link: https://m.do.co/c/13ad5bc24738
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
-Tested up to: 4.9
-Stable tag: 3.0
+Tested up to: 4.9.4
+Stable tag: 3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,8 @@ If you’re looking for one of the best and fastest ways to add like and dislike
 Also WP ULike’s amazing statistics tools help you to track your content effectiveness with a real-time report system and detailed statistics. What’s more, WP ULike have a wide variety of options available to customize your plugin. It will allow you to customize your like button in your favorite style.
 
 = More Information =
-*   Visit Our [Home Page](http://wp-ulike.alimir.ir/).
+*   Visit Our [Home Page](https://wpulike.com/).
+*   Donate Us [By Make a Cloud](https://m.do.co/c/13ad5bc24738).
 *   See Online [Demo](http://preview.alimir.ir/wp-ulike-plugin).
 *   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
@@ -172,6 +173,13 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 3.1 =
+* Added: A huge optimization in all of the core functionalities.
+* Added: A new file structure in plugins assets.
+* Added: wrapper_class attribute in template functions.
+* Fixed: All reported bugs.
+* Fixed: Custom style issues.
 
 = 3.0 =
 * Added: New option to remove the plugin's css and js file on certain pages.
@@ -439,6 +447,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * The initial version
 
 == Upgrade Notice ==
+
+= 3.1 =
+Are you ready for a huge update? WP ULike has become ever more powerful...
 
 = 2.8 =
 Attention Please!! In this version, we have made a new script library (wp-ulike.js), variables, templates, and functionalities. Besides, we have removed old ones, which may destroy your previous changes. That is very important to clear your browser cache and reset your customization with our new class names after updating the plugin. If you have a development version, please take some time to review our new changes.

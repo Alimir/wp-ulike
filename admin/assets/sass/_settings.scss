@@ -15,10 +15,14 @@ form.wp-ulike {
 		margin-right: 20px;
 
 		.button {
-			height: 34px !important;
-			line-height: 32px !important;
-			padding: 0 18px 1px !important;
-			font-size: 14px !important;
+			height: 50px !important;
+			line-height: 50px !important;
+			padding: 0 25px !important;
+			font-size: 18px !important;
+
+			&:active{
+				vertical-align: inherit;
+			}
 		}
 
 	}
