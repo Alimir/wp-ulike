@@ -71,15 +71,20 @@
                     this.generalElement.addClass( 'wp_ulike_is_loading' );
                 }.bind(this),
                 success: function( response ){
-                    this._update( response );
+                    //remove loading class
+                    this.generalElement.removeClass( 'wp_ulike_is_loading' );                    
+                    if( response.success ) {
+                        this._update( response );
+                    } else {
+                        this._notif( 'error', response.data );
+                    }
+                    
                     $document.trigger('WordpressUlikeUpdated');
                 }.bind(this)
             });
         },
         
         _update: function( response ){
-            //remove loading class
-            this.generalElement.removeClass( 'wp_ulike_is_loading' );
             //check likeStatus
             switch(this.settings.likeStatus) {
                 case 1: /* Change the status of 'is not liked' to 'liked' */
@@ -87,29 +92,29 @@
                     this.settings.likeStatus = 4;                   
                     this.generalElement.addClass( 'wp_ulike_is_liked' ).removeClass( 'wp_ulike_is_not_liked' );
                     this.generalElement.children().first().addClass( 'wp_ulike_click_is_disabled' );
-                    this.counterElement.text( response.data );
-                    this._actions( 'success', response.message, response.btnText, 4 );
+                    this.counterElement.text( response.data.data );
+                    this._actions( 'success', response.data.message, response.data.btnText, 4 );
                     break;
                 case 2: /* Change the status of 'liked' to 'unliked' */
                     this.buttonElement.attr( 'data-ulike-status', 3 );
                     this.settings.likeStatus = 3;
                     this.generalElement.addClass( 'wp_ulike_is_unliked' ).removeClass('wp_ulike_is_liked');
-                    this.counterElement.text( response.data );
-                    this._actions( 'error', response.message, response.btnText, 3 );
+                    this.counterElement.text( response.data.data );
+                    this._actions( 'error', response.data.message, response.data.btnText, 3 );
                     break;
                 case 3: /* Change the status of 'unliked' to 'liked' */
                     this.buttonElement.attr('data-ulike-status', 2);
                     this.settings.likeStatus = 2;
                     this.generalElement.addClass('wp_ulike_is_liked').removeClass('wp_ulike_is_unliked');
-                    this.counterElement.text( response.data );
-                    this._actions( 'success', response.message, response.btnText, 2 );
+                    this.counterElement.text( response.data.data );
+                    this._actions( 'success', response.data.message, response.data.btnText, 2 );
                     break;                  
                 case 4: /* Just print the log-in warning message */
-                    this._actions( 'info', response.message, response.btnText, 4 );
+                    this._actions( 'info', response.data.message, response.data.btnText, 4 );
                     this.generalElement.children().first().addClass( 'wp_ulike_click_is_disabled' );
                     break;
                 default: /* Just print the permission faild message */
-                    this._actions( 'warning', response.message, response.btnText, 0 );
+                    this._actions( 'warning', response.data.message, response.data.btnText, 0 );
             }
         },
         

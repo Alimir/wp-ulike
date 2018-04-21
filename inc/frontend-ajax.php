@@ -26,8 +26,8 @@ function wp_ulike_process(){
 	$response    = array();
 
 	if( $post_ID == null || ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) ) {
-		wp_die( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
-	}		
+		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
+	}	
 
 	switch ( $post_type ) {
 		case 'likeThis':
@@ -67,7 +67,7 @@ function wp_ulike_process(){
 			break;
 		
 		default:
-			wp_die( __( 'Error: This Method Is Not Exist!', WP_ULIKE_SLUG ) );
+			wp_send_json_error( __( 'Error: This Method Is Not Exist!', WP_ULIKE_SLUG ) );
 	}
 	
 	$get_like      = $get_meta_data != '' ? $get_meta_data : 0;
@@ -125,7 +125,7 @@ function wp_ulike_process(){
 					);
 	}
 
-	wp_send_json($response);
+	wp_send_json_success( $response );
 }
 //	wp_ajax hooks for the custom AJAX requests 
 add_action( 'wp_ajax_wp_ulike_process'			, 'wp_ulike_process' );
