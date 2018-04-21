@@ -122,28 +122,50 @@
             } else if( wp_ulike_params.button_type === 'text' ) {
                 this.buttonElement.find('span').html(btnText);
             }
+            
+            // Display Notifications
+            this._notif( messageType, messageText );
+        },
+
+        _notif: function( messageType, messageText ){
             //Check notifications active mode
             if(wp_ulike_params.notifications !== '1') return;
-            //Set 'toastr' options
-            toastr.options = {
-              closeButton       : false,
-              debug             : false,
-              newestOnTop       : false,
-              progressBar       : false,
-              positionClass     : 'toast-bottom-right',
-              preventDuplicates : false,
-              showDuration      : 300,
-              hideDuration      : 2000,
-              timeOut           : 5000,
-              extendedTimeOut   : 1000,
-              showEasing        : 'swing',
-              hideEasing        : 'linear',
-              showMethod        : 'fadeIn',
-              hideMethod        : 'fadeOut'
+
+            // Text Message Element
+            var $messageElement = $('<div/>').addClass( 'wpulike-message wpulike-' + messageType ).text( messageText );
+            
+            // Make notificaion container
+            if( !$('.wpulike-notification').length ) {
+                $(document.body).append( $('<div/>').addClass( 'wpulike-notification' ) );
             }
-            //Toast my notification
-            toastr[messageType]( messageText );         
+
+            // Notification Container Element
+            var $notifContainer = $('.wpulike-notification');
+
+            // Append Notification
+            $notifContainer.append( $messageElement ).trigger('WordpressUlikeNotificationAppend');
+
+            // Remove Message On Click
+            $messageElement.click(function(event) {
+                $(this).fadeOut(300, function(){ 
+                    $(this).remove();
+                    if( ! $('.wpulike-message').length ) {
+                        $notifContainer.remove();
+                    }
+                }).trigger('WordpressUlikeNotificationRemove');               
+            });
+            // Remove Message With Timeout
+            setTimeout(function() {
+                $($messageElement).fadeOut(300, function(){ 
+                    $(this).remove();
+                    if( ! $('.wpulike-message').length ) {
+                        $notifContainer.remove();
+                    }                    
+                }).trigger('WordpressUlikeRemoveNotification');   
+            }, 8000 );
+
         }
+
     });
 
     // A really lightweight plugin wrapper around the constructor,
