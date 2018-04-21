@@ -448,17 +448,17 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			switch ( $key ) {
 				case '_liked'		 :
 					update_post_meta( $id, $key, $data );
-					update_postmeta_cache( $id );
+					update_postmeta_cache( array( $id ) );
 					delete_transient( 'wp_ulike_get_most_liked_posts' );
 					break;
 				case '_topicliked'	 :
 					update_post_meta( $id, $key, $data );
-					update_postmeta_cache( $id );
+					update_postmeta_cache( array( $id ) );
 					delete_transient( 'wp_ulike_get_most_liked_topics' );
 					break;
 				case '_commentliked' :
 					update_comment_meta( $id, $key, $data );
-					update_meta_cache( 'comment', $id );
+					update_meta_cache( 'comment', array( $id ) );
 					delete_transient( 'wp_ulike_get_most_liked_comments' );
 					break;
 				case '_activityliked':
