@@ -1,0 +1,32 @@
+.rtl{
+	.wpulike-notification{
+		left: 20px;
+		right: inherit;
+
+	    .wpulike-message {
+	        padding: 15px 55px 15px 15px;
+	        background-position: right 15px center; 
+	    }      
+	}
+	@media all and (max-width:240px) {
+	    .wpulike-notification {
+	        .wpulike-message {
+	            padding: 8px 55px 8px 8px;
+	        }
+	    }
+	}
+	@media all and (min-width:241px) and (max-width:480px) {
+	    .wpulike-notification {
+	        .wpulike-message {
+	            padding: 8px 55px 8px 8px;
+	        }
+	    }
+	}
+	@media all and (min-width:481px) and (max-width:768px) {
+	    .wpulike-notification {
+	        .wpulike-message {
+	            padding: 15px 55px 15px 15px;
+	        }
+	    }
+	}	
+}
