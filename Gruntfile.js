@@ -179,6 +179,7 @@ module.exports = function(grunt) {
                     },
                 },
                 src: [
+                    'assets/js/src/wordpress-ulike-notifications.js',
                     'assets/js/src/wordpress-ulike.js',
                     'assets/js/src/scripts.js'
                 ],

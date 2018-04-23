@@ -135,40 +135,11 @@
         _notif: function( messageType, messageText ){
             //Check notifications active mode
             if(wp_ulike_params.notifications !== '1') return;
-
-            // Text Message Element
-            var $messageElement = $('<div/>').addClass( 'wpulike-message wpulike-' + messageType ).text( messageText );
-            
-            // Make notificaion container
-            if( !$('.wpulike-notification').length ) {
-                $(document.body).append( $('<div/>').addClass( 'wpulike-notification' ) );
-            }
-
-            // Notification Container Element
-            var $notifContainer = $('.wpulike-notification');
-
-            // Append Notification
-            $notifContainer.append( $messageElement ).trigger('WordpressUlikeNotificationAppend');
-
-            // Remove Message On Click
-            $messageElement.click(function(event) {
-                $(this).fadeOut(300, function(){ 
-                    $(this).remove();
-                    if( ! $('.wpulike-message').length ) {
-                        $notifContainer.remove();
-                    }
-                }).trigger('WordpressUlikeNotificationRemove');               
+            // Display Notification
+            $(document.body).WordpressUlikeNotifications({
+                messageType   : messageType, 
+                messageText   : messageText
             });
-            // Remove Message With Timeout
-            setTimeout(function() {
-                $($messageElement).fadeOut(300, function(){ 
-                    $(this).remove();
-                    if( ! $('.wpulike-message').length ) {
-                        $notifContainer.remove();
-                    }                    
-                }).trigger('WordpressUlikeRemoveNotification');   
-            }, 8000 );
-
         }
 
     });
