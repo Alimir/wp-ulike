@@ -236,18 +236,26 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 		public function get_ip() {
 
 			if ( getenv( 'HTTP_CLIENT_IP' ) ) {
-				return getenv( 'HTTP_CLIENT_IP' );
+				$ip = getenv( 'HTTP_CLIENT_IP' );
 			} elseif ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
-				return getenv( 'HTTP_X_FORWARDED_FOR' );
+				$ip = getenv( 'HTTP_X_FORWARDED_FOR' );
 			} elseif ( getenv( 'HTTP_X_FORWARDED' ) ) {
-				return getenv( 'HTTP_X_FORWARDED' );
+				$ip = getenv( 'HTTP_X_FORWARDED' );
 			} elseif ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
-				return getenv( 'HTTP_FORWARDED_FOR' );
+				$ip = getenv( 'HTTP_FORWARDED_FOR' );
 			} elseif ( getenv( 'HTTP_FORWARDED' ) ) {
-				return getenv( 'HTTP_FORWARDED' );
+				$ip = getenv( 'HTTP_FORWARDED' );
 			} else {
-				return $_SERVER['REMOTE_ADDR'];
+				$ip = $_SERVER['REMOTE_ADDR'];
 			}
+			
+
+			if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+				return '127.0.0.1';
+			} else {
+				return $ip;
+			}
+
 		}	    
 
 	   /**
