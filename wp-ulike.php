@@ -3,7 +3,7 @@
 Plugin Name: WP ULike
 Plugin URI: https://wpulike.com/
 Description: WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
-Version: 3.1
+Version: 3.2
 Author: Ali Mirzaei
 Author URI: http://about.alimir.ir
 Text Domain: wp-ulike
@@ -28,7 +28,7 @@ Thanks for using WP ULike plugin!
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		);
-define( 'WP_ULIKE_VERSION'      , '3.1' 						);
+define( 'WP_ULIKE_VERSION'      , '3.2' 						);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					);
 define( 'WP_ULIKE_DB_VERSION'   , '1.3' 						);
 
@@ -236,18 +236,26 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 		public function get_ip() {
 
 			if ( getenv( 'HTTP_CLIENT_IP' ) ) {
-				return getenv( 'HTTP_CLIENT_IP' );
+				$ip = getenv( 'HTTP_CLIENT_IP' );
 			} elseif ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
-				return getenv( 'HTTP_X_FORWARDED_FOR' );
+				$ip = getenv( 'HTTP_X_FORWARDED_FOR' );
 			} elseif ( getenv( 'HTTP_X_FORWARDED' ) ) {
-				return getenv( 'HTTP_X_FORWARDED' );
+				$ip = getenv( 'HTTP_X_FORWARDED' );
 			} elseif ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
-				return getenv( 'HTTP_FORWARDED_FOR' );
+				$ip = getenv( 'HTTP_FORWARDED_FOR' );
 			} elseif ( getenv( 'HTTP_FORWARDED' ) ) {
-				return getenv( 'HTTP_FORWARDED' );
+				$ip = getenv( 'HTTP_FORWARDED' );
 			} else {
-				return $_SERVER['REMOTE_ADDR'];
+				$ip = $_SERVER['REMOTE_ADDR'];
 			}
+			
+
+			if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+				return '127.0.0.1';
+			} else {
+				return $ip;
+			}
+
 		}	    
 
 	   /**

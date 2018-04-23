@@ -1,0 +1,92 @@
+/**
+ * Notification styles
+ */
+
+.wpulike-notification{
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+    right: 20px;
+    bottom: 20px;  
+      
+    * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }    
+
+    .wpulike-message {
+        position: relative;
+        pointer-events: auto;
+        word-wrap: break-word;        
+        overflow: hidden;
+        margin: 0 0 6px;
+        padding: 15px 15px 15px 55px;
+        width: 300px;
+        border-radius: 3px;
+        background-color: #1e88e5;
+        background-position: 15px center;
+        background-repeat: no-repeat;
+        background-image: url(../img/svg/info.svg);
+        color: $wp-ulike-color-light;
+        animation: wpUlikeNotifitcationsAnimation 200ms backwards;
+        opacity: .8;
+        font-size: 14px;
+        font-weight: 500;
+
+        &:hover {
+            opacity: 0.9;
+            cursor: pointer;
+        }
+
+        &.wpulike-success {
+            background-color: #43a047;
+            background-image: url(../img/svg/success.svg);
+        }
+        &.wpulike-error {
+            background-color: #e53935;
+            background-image: url(../img/svg/error.svg);
+        }
+        &.wpulike-warning {
+            background-color: #fb8c00;
+            background-image: url(../img/svg/warning.svg);
+        }        
+    }      
+}
+
+@keyframes wpUlikeNotifitcationsAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 0.8;
+        transform: translateY(0);
+    }
+}
+
+
+@media all and (max-width:240px) {
+    .wpulike-notification {
+        .wpulike-message {
+            padding: 8px 8px 8px 55px;
+            width: 11em;
+        }
+    }
+}
+@media all and (min-width:241px) and (max-width:480px) {
+    .wpulike-notification {
+        .wpulike-message {
+            padding: 8px 8px 8px 55px;
+            width: 18em;
+        }
+    }
+}
+@media all and (min-width:481px) and (max-width:768px) {
+    .wpulike-notification {
+        .wpulike-message {
+            padding: 15px 15px 15px 55px;
+            width: 25em;
+        }
+    }
+}
