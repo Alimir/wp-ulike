@@ -1,4 +1,4 @@
-/*! WP ULike - v3.1
+/*! WP ULike - v3.2
  *  https://wpulike.com
  *  Alimir 2018;
  */
@@ -49,23 +49,29 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
   	$('.wp_ulike_delete').click(function(e) {
 		e.preventDefault();
 		var parent = $(this).closest('tr');  
-		var value=$(this).data('id');
-		var table=$(this).data('table');
-		var r = confirm(wp_ulike_logs.message);
+		var value  = $(this).data('id');
+		var table  = $(this).data('table');
+		var nonce  = $(this).data('nonce');
+		var r      = confirm(wp_ulike_logs.message);
 		if (r === true) {
 			jQuery.ajax({
 			  type:'POST',
 			  url: wp_ulike_logs.ajaxurl,
 			  data:{
 				action:'ulikelogs',
-				id: value,
-				table: table
+				id    : value,
+				nonce : nonce,
+				table : table
 			  },
 			  beforeSend:function(){
-				parent.css("background-color","yellow");
-			  },			  
-			  success: function(data) {
-				parent.fadeOut(300);
+				parent.css("background-color","#fff59d");
+			  },	  
+			  success: function( response ) {
+			  	if( response.success ) {
+			  		parent.fadeOut(300);
+			  	} else {
+			  		parent.css("background-color","#ef9a9a");
+			  	}
 			  }
 			});
 		}	
