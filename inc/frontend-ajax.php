@@ -125,6 +125,8 @@ function wp_ulike_process(){
 					);
 	}
 
+	$response['likers'] = is_user_logged_in() ? $wp_ulike_class->get_liked_users( $args, true ) : false;
+
 	wp_send_json_success( $response );
 }
 //	wp_ajax hooks for the custom AJAX requests 

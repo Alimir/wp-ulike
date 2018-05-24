@@ -741,21 +741,18 @@ if( ! function_exists( 'wp_ulike' ) ){
         $parsed_args = wp_parse_args( $args, $defaults );		
 		
 		if( ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-			//call wp_get_ulike function from wp_ulike class
-			$wp_ulike = $wp_ulike_class->wp_get_ulike( $parsed_args );
-			$wp_ulike .= $wp_ulike_class->get_liked_users( $parsed_args );
 
 			if ($type == 'put') {
-				return $wp_ulike;
+				return $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
 			else {
-				echo $wp_ulike;
+				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
 		
 		}//end !only_registered_users condition
 		elseif ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
 			if(wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button") {
-				return $wp_ulike_class->get_template( $parsed_args, 0 ) . $wp_ulike_class->get_liked_users( $parsed_args );		
+				return $wp_ulike_class->get_template( $parsed_args, 0 );		
 			} else {
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
 			}
@@ -941,21 +938,18 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 		$parsed_args = wp_parse_args( $args, $defaults );
 		
 		if( ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {	
-			//call wp_get_ulike function from wp_ulike class
-			$wp_ulike = $wp_ulike_class->wp_get_ulike( $parsed_args );		
-			$wp_ulike .= $wp_ulike_class->get_liked_users( $parsed_args );
 
 			if ($type == 'put') {
-				return $wp_ulike;
+				return $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
 			else {
-				echo $wp_ulike;
+				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
 		
 		}//end !only_registered_users condition
 		elseif (wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users') == '1' && ! is_user_logged_in()){
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type' ) == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 ) . $wp_ulike_class->get_liked_users( $parsed_args );	
+				return $wp_ulike_class->get_template( $parsed_args, 0 );	
 			} else {
 				return apply_filters( 'wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this comment: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>' );
 			}
@@ -1032,21 +1026,18 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 		$parsed_args = wp_parse_args( $args, $defaults );
 		
 		if( ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-			//call wp_get_ulike function from wp_ulike class
-			$wp_ulike 		= $wp_ulike_class->wp_get_ulike( $parsed_args );
-			$wp_ulike  		.= $wp_ulike_class->get_liked_users( $parsed_args );
 
 			if ($type == 'put') {
-				return $wp_ulike;
+				return $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
 			else {
-				echo $wp_ulike;
+				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
 			
 		}//end !only_registered_users condition
 		elseif ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 ) . $wp_ulike_class->get_liked_users( $parsed_args );
+				return $wp_ulike_class->get_template( $parsed_args, 0 );
 			}
 			else{
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this activity: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
@@ -1275,22 +1266,19 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		$parsed_args = wp_parse_args( $args, $defaults );
 		
 		if( ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-			//call wp_get_ulike function from wp_ulike class
-			$wp_ulike = $wp_ulike_class->wp_get_ulike( $parsed_args );
-			$wp_ulike .= $wp_ulike_class->get_liked_users( $parsed_args );
 
 			if ($type == 'put') {
-				return $wp_ulike;
+				return $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
 			else {
-				echo $wp_ulike;
+				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
 		
 		}//end !only_registered_users condition
 		
 		else if ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && !is_user_logged_in()) {
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 ) . $wp_ulike_class->get_liked_users( $parsed_args );	
+				return $wp_ulike_class->get_template( $parsed_args, 0 );	
 			}
 			else {
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
@@ -1450,7 +1438,11 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 				</a>
 				<?php echo $counter; ?>
 			</div>
-			<?php echo $microdata; ?>
+		<?php 
+			echo $microdata; 
+			echo $display_likers;
+			do_action( 'wp_ulike_inside_template' );
+		?>
 		</div>
 	<?php
 		do_action( 'wp_ulike_after_template' );
@@ -1485,7 +1477,11 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 				</a>
 				<?php echo $counter; ?>
 			</div>
-			<?php echo $microdata; ?>
+		<?php 
+			echo $microdata; 
+			echo $display_likers; 
+			do_action( 'wp_ulike_inside_template' );
+		?>
 		</div>
 	<?php
 		do_action( 'wp_ulike_after_template' );
@@ -1517,7 +1513,11 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 					<?php echo $counter; ?>
 					</label>
 			</div>
-			<?php echo $microdata; ?>
+		<?php 
+			echo $microdata; 
+			echo $display_likers; 
+			do_action( 'wp_ulike_inside_template' );
+		?>
 		</div>
 	<?php
 		do_action( 'wp_ulike_after_template' );
