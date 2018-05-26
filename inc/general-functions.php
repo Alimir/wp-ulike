@@ -16,18 +16,18 @@
  * @return			Void
  */
 if( ! function_exists( 'wp_ulike_get_setting' ) ){
-	function wp_ulike_get_setting( $setting, $option = false ) {
+	function wp_ulike_get_setting( $setting, $option = false, $default = false ) {
 		$setting = get_option( $setting );
 		if ( is_array( $setting ) ) {
 			if ( $option ) {
-				return isset( $setting[$option] ) ? wp_ulike_settings::parse_multi( $setting[$option] ) : false;
+				return isset( $setting[$option] ) ? wp_ulike_settings::parse_multi( $setting[$option] ) : $default;
 			}
 			foreach ( $setting as $k => $v ) {
 				$setting[$k] = wp_ulike_settings::parse_multi( $v );
 			}
 		return $setting;
 		}
-		return $option ? false : $setting;
+		return $option ? $default : $setting;
 	}
 }
 
