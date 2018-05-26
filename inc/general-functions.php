@@ -228,6 +228,13 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'description'   => __('Custom toast messages after each activity', WP_ULIKE_SLUG)
 						),
+						'anonymise'     => array(
+							'type'          => 'checkbox',
+							'default'       => 1,
+							'label'         => __('Anonymize IP', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'description'   => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
+						),
 						'like_notice' => array(
 							'default' => __('Thanks! You Liked This.',WP_ULIKE_SLUG),
 							'label'   => __( 'Liked Notice Message', WP_ULIKE_SLUG)
