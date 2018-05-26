@@ -11,7 +11,7 @@
 /**
  * Get Settings Value
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           1.0
  * @return			Void
  */
@@ -32,18 +32,18 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 }
 
 /**
- * Delete all likes number by ajax process. 
+ * Delete all likes number by ajax process.
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.2
  * @return			Void
  */
-if( ! function_exists( 'wp_ulike_delete_all_data' ) ){	
+if( ! function_exists( 'wp_ulike_delete_all_data' ) ){
 	function wp_ulike_delete_all_data() {
 		global $wpdb;
 		$get_action = $_POST['action'];
 		//$wpdb->hide_errors();
-		
+
 		if($get_action == 'wp_ulike_posts_delete_data'){
 			$meta_table = $wpdb->prefix."postmeta";
 			$meta_key   = '_liked';
@@ -57,30 +57,30 @@ if( ! function_exists( 'wp_ulike_delete_all_data' ) ){
 			$meta_table = $wpdb->prefix."postmeta";
 			$meta_key   = '_topicliked';
 		}
-			
+
 		$do_action 		= $wpdb->delete($meta_table, array( 'meta_key' => $meta_key ));
-			
+
 		if ($do_action === FALSE) {
 			wp_send_json_error( __( 'Failed! An Error Has Occurred While Deleting All ULike Logs/Data', WP_ULIKE_SLUG ));
 		} else {
 			wp_send_json_success( __( 'Success! All ULike Logs/Data Have Been Deleted', WP_ULIKE_SLUG ) );
-		}		 
+		}
 	}
 }
 
 /**
- * Delete all the users likes logs by ajax process. 
+ * Delete all the users likes logs by ajax process.
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.2
  * @return			Void
  */
-if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){	
+if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 	function wp_ulike_delete_all_logs() {
 		global $wpdb;
 		$get_action = $_POST['action'];
 		//$wpdb->hide_errors();
-		
+
 		if($get_action == 'wp_ulike_posts_delete_logs'){
 			$logs_table = $wpdb->prefix."ulike";
 		} else if($get_action == 'wp_ulike_comments_delete_logs'){
@@ -89,13 +89,13 @@ if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 			$logs_table = $wpdb->prefix."ulike_activities";
 		} else if($get_action == 'wp_ulike_bbpress_delete_logs'){
 			$logs_table = $wpdb->prefix."ulike_forums";
-		}		
-		
+		}
+
 		if ($wpdb->query("TRUNCATE TABLE $logs_table") === FALSE) {
 			wp_send_json_error( __( 'Failed! An Error Has Occurred While Deleting All ULike Logs/Data', WP_ULIKE_SLUG ) );
 		} else {
 			wp_send_json_success( __( 'Success! All ULike Logs/Data Have Been Deleted', WP_ULIKE_SLUG ) );
-		}		 
+		}
 	}
 }
 
@@ -103,11 +103,11 @@ if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 /**
  * Generate templates list
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.8
  * @return			Array
  */
-if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){		
+if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	function wp_ulike_generate_templates_list(){
 		$default = array(
 			'wpulike-default' => array(
@@ -117,13 +117,13 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 			),
 			'wpulike-heart' => array(
 				'name'     => __('Heart', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_simple_heart_template',				
-				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg'				
+				'callback' => 'wp_ulike_set_simple_heart_template',
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg'
 			),
 			'wpulike-robeen' => array(
 				'name'     => __('Robeen', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_robeen_template',				
-				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'					
+				'callback' => 'wp_ulike_set_robeen_template',
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'
 			)
 		);
 
@@ -134,15 +134,15 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 /**
  * Generate options info list
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           3.1
  * @return			Array
  */
-if( ! function_exists( 'wp_ulike_get_options_info' ) ){		
+if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 	function wp_ulike_get_options_info( $type, $result = array() ) {
 
 		switch ( $type ) {
-			case 'general':		
+			case 'general':
 				$result = array(
 					'title'  => '<i class="dashicons-before dashicons-admin-settings"></i>' . ' ' . __( 'General',WP_ULIKE_SLUG),
 					'fields' => array(
@@ -157,7 +157,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								),
 								'text' => array(
 									'name'   => __('Text', WP_ULIKE_SLUG),
-									'symbol' => WP_ULIKE_ASSETS_URL . '/img/svg/text.svg'				
+									'symbol' => WP_ULIKE_ASSETS_URL . '/img/svg/text.svg'
 								)
 							)
 						),
@@ -178,7 +178,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'type'        => 'media',
 							'label'       => __( 'Button Icon', WP_ULIKE_SLUG) . ' (' . __('Unlike', WP_ULIKE_SLUG) .')',
 							'description' => __( 'Best size: 16x16',WP_ULIKE_SLUG)
-						),		
+						),
 						'permission_text' => array(
 							'default' => __('You have not permission to unlike',WP_ULIKE_SLUG),
 							'label'   => __( 'Permission Text', WP_ULIKE_SLUG)
@@ -211,9 +211,9 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								'buddypress'  => __('BuddyPress Pages', WP_ULIKE_SLUG),
 								'bbpress'     => __('bbPress Pages', WP_ULIKE_SLUG),
 								'woocommerce' => __('WooCommerce Pages', WP_ULIKE_SLUG)
-							),				
+							),
 							'description' => __('Remove the plugin\'s css and js file on these pages.', WP_ULIKE_SLUG)
-					    ),			
+					    ),
 						'format_number' => array(
 							'type'          => 'checkbox',
 							'default'       => 0,
@@ -242,12 +242,12 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'unlike_notice' => array(
 							'default' => __('Sorry! You unliked this.',WP_ULIKE_SLUG),
 							'label'   => __( 'Unliked Notice Message', WP_ULIKE_SLUG)
-						)		  
+						)
 					)
 				);//end wp_ulike_general
 				break;
 
-			case 'posts':		
+			case 'posts':
 				$result = array(
 					'title' => '<i class="dashicons-before dashicons-admin-post"></i>' . ' ' . __( 'Posts',WP_ULIKE_SLUG),
 					'fields' => array(
@@ -256,7 +256,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'default' => 'wpulike-default',
 							'label'   => __( 'Themes',WP_ULIKE_SLUG),
 							'options' => call_user_func('wp_ulike_generate_templates_list')
-						),                 
+						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
@@ -272,7 +272,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								'bottom'     => __('Bottom of Content', WP_ULIKE_SLUG),
 								'top_bottom' => __('Top and Bottom', WP_ULIKE_SLUG)
 							)
-						),		  
+						),
 						'auto_display_filter' => array(
 							'type'    => 'multi',
 							'label'   => __( 'Auto Display Filter',WP_ULIKE_SLUG ),
@@ -343,7 +343,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
-						),		  
+						),
 						'delete_data' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete All Data', WP_ULIKE_SLUG ),
@@ -351,9 +351,9 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'action'      => 'wp_ulike_delete_all_data'
 						)
 					)
-				);//end wp_ulike_posts				
+				);//end wp_ulike_posts
 				break;
-			
+
 			case 'comments':
 				$result = array(
 					'title'  => '<i class="dashicons-before dashicons-admin-comments"></i>' . ' ' . __( 'Comments',WP_ULIKE_SLUG),
@@ -363,7 +363,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'default' => 'wpulike-heart',
 							'label'   => __( 'Themes',WP_ULIKE_SLUG),
 							'options' => call_user_func('wp_ulike_generate_templates_list')
-						),		
+						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
@@ -379,7 +379,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								'bottom'     => __('Bottom of Content', WP_ULIKE_SLUG),
 								'top_bottom' => __('Top and Bottom', WP_ULIKE_SLUG)
 							)
-						),			  
+						),
 						'only_registered_users' => array(
 							'type'          => 'checkbox',
 							'default'       => 0,
@@ -397,7 +397,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								'by_ip'       => __('Logged By IP', WP_ULIKE_SLUG),
 								'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 							)
-						),		  
+						),
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
@@ -410,7 +410,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'default'     => 32,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
-						),		  
+						),
 						'number_of_users' => array(
 							'type'        => 'number',
 							'default'     => 10,
@@ -428,18 +428,18 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
-						),		  
+						),
 						'delete_data' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete All Data', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Data. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_data'
-						)  
+						)
 					)
-				);//end wp_ulike_comments				
+				);//end wp_ulike_comments
 				break;
-			
-			case 'buddypress':	
+
+			case 'buddypress':
 				$result = ! function_exists('is_buddypress') ?  array() : array(
 					'title'  => '<i class="dashicons-before dashicons-buddypress"></i>' . ' ' . __( 'BuddyPress',WP_ULIKE_SLUG),
 					'fields' => array(
@@ -470,7 +470,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'         => __('Activity Comment', WP_ULIKE_SLUG),
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'description'   => __('Add the possibility to like Buddypress comments in the activity stream', WP_ULIKE_SLUG)
-						),            
+						),
 						'only_registered_users' => array(
 							'type'          => 'checkbox',
 							'default'       => 0,
@@ -488,7 +488,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								'by_ip'       => __('Logged By IP', WP_ULIKE_SLUG),
 								'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
 							)
-						),		    
+						),
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
@@ -527,7 +527,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'         => __('BuddyPress Custom Notification', WP_ULIKE_SLUG),
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'description'   => __('Sends out notifications when you get a like from someone', WP_ULIKE_SLUG)
-						),				
+						),
 						'bp_post_activity_add_header' => array(
 							'type'        => 'textarea',
 							'default'     => '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)',
@@ -545,17 +545,17 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
-						),		  
+						),
 						'delete_data' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete All Data', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Data. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_data'
-						)  
+						)
 					)
-				);//end wp_ulike_buddypress			
+				);//end wp_ulike_buddypress
 				break;
-			
+
 			case 'bbpress':
 				$result	= ! function_exists('is_bbpress') ? array() : array(
 					'title'  => '<i class="dashicons-before dashicons-bbpress"></i>' . ' ' . __( 'bbPress',WP_ULIKE_SLUG),
@@ -565,7 +565,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'default' => 'wpulike-default',
 							'label'   => __( 'Themes',WP_ULIKE_SLUG),
 							'options' => call_user_func('wp_ulike_generate_templates_list')
-						),		
+						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
@@ -580,7 +580,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								'top'    => __('Top of Content', WP_ULIKE_SLUG),
 								'bottom' => __('Bottom of Content', WP_ULIKE_SLUG)
 							)
-						),		  
+						),
 						'only_registered_users' => array(
 							'type'          => 'checkbox',
 							'default'       => 0,
@@ -623,24 +623,24 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'default'     => '<br /><p style="margin-top:5px"> '.__('Users who have liked this topic:',WP_ULIKE_SLUG).'</p> <ul class="tiles">%START_WHILE%<li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
 							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
 							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
-						),               
+						),
 						'delete_logs' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
-						),		  
+						),
 						'delete_data' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete All Data', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Data. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_data'
-						)	  
+						)
 					)
-				);//end wp_ulike_buddypress			
+				);//end wp_ulike_buddypress
 				break;
-			
-			case 'customizer':	
+
+			case 'customizer':
 				$result = array(
 					'title'  => '<i class="dashicons-before dashicons-art"></i>' . ' ' . __( 'Customize',WP_ULIKE_SLUG),
 					'fields' => array(
@@ -651,9 +651,9 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'attributes'    => array(
 								'class' => 'wp_ulike_custom_style_activation'
-							),		
+							),
 							'description' 	=> __('Active this option to see the custom style settings.', WP_ULIKE_SLUG)
-						),	
+						),
 						'btn_bg' => array(
 							'type'        => 'color',
 							'label'       => __('Button style', WP_ULIKE_SLUG),
@@ -675,7 +675,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'counter_border' => array(
 							'type'        => 'color',
 							'description' => __('Border Color', WP_ULIKE_SLUG)
-						),             
+						),
 						'counter_color' => array(
 							'type'        => 'color',
 							'description' => __('Text Color', WP_ULIKE_SLUG)
@@ -688,9 +688,9 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'custom_css' => array(
 							'type'  => 'textarea',
 							'label' => __('Custom CSS', WP_ULIKE_SLUG),
-						)  
+						)
 					)
-				);//end wp_ulike_customize			
+				);//end wp_ulike_customize
 			break;
 		}
 
@@ -706,17 +706,17 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 /**
  * Display Like button for posts
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @param           String 	$type
  * @param           Array 	$args
  * @since           1.0
  * @return			String
  */
-if( ! function_exists( 'wp_ulike' ) ){	
+if( ! function_exists( 'wp_ulike' ) ){
 	function wp_ulike( $type = 'get', $args = array() ) {
 		//global variables
 		global $post, $wp_ulike_class, $wp_user_IP;
-		
+
 		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post->ID;
 		$get_post_meta = get_post_meta( $post_ID, '_liked', true );
 		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
@@ -724,7 +724,7 @@ if( ! function_exists( 'wp_ulike' ) ){
 		$attributes    = apply_filters( 'wp_ulike_posts_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_posts_microdata', null );
 		$style         = wp_ulike_get_setting( 'wp_ulike_posts', 'theme' );
-		
+
 		//Main data
 		$defaults      = array(
 			"id"            => $post_ID,				//Post ID
@@ -744,9 +744,9 @@ if( ! function_exists( 'wp_ulike' ) ){
 			"attributes"    => $attributes,				//Get Attributes Filter
 			"wrapper_class" => ''						//Extra Wrapper class
 		);
-		
-        $parsed_args = wp_parse_args( $args, $defaults );		
-		
+
+        $parsed_args = wp_parse_args( $args, $defaults );
+
 		if( ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
 
 			if ($type == 'put') {
@@ -755,11 +755,11 @@ if( ! function_exists( 'wp_ulike' ) ){
 			else {
 				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
-		
+
 		}//end !only_registered_users condition
 		elseif ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
 			if(wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button") {
-				return $wp_ulike_class->get_template( $parsed_args, 0 );		
+				return $wp_ulike_class->get_template( $parsed_args, 0 );
 			} else {
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
 			}
@@ -776,7 +776,7 @@ if( ! function_exists( 'wp_ulike' ) ){
  * @since           1.9
  * @return			boolean
  */
-if( ! function_exists( 'is_wp_ulike' ) ){		
+if( ! function_exists( 'is_wp_ulike' ) ){
 	function is_wp_ulike( $options, $args = array() ){
 
 		$defaults = array(
@@ -810,11 +810,11 @@ if( ! function_exists( 'is_wp_ulike' ) ){
  * Get Single Post likes number
  *
  * @author       	Alimir
- * @param           Integer $post_ID	 
- * @since           1.7 
+ * @param           Integer $post_ID
+ * @since           1.7
  * @return          String
  */
-if( ! function_exists( 'wp_ulike_get_post_likes' ) ){	
+if( ! function_exists( 'wp_ulike_get_post_likes' ) ){
 	function wp_ulike_get_post_likes($post_ID){
 		$val = get_post_meta($post_ID, '_liked', true);
 		return wp_ulike_format_number($val);
@@ -827,10 +827,10 @@ if( ! function_exists( 'wp_ulike_get_post_likes' ) ){
  * @author       	Alimir
  * @param           Integer $post_ID
  * @param           Boolean $is_decimal
- * @since           2.7 
+ * @since           2.7
  * @return          String
  */
-if( ! function_exists( 'wp_ulike_get_rating_value' ) ){		
+if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
 		global $wpdb;
 		if (false === ($rating_value = wp_cache_get($cache_key = 'get_rich_rating_value_' . $post_ID, $cache_group = 'wp_ulike'))) {
@@ -899,29 +899,29 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 /*******************************************************
   Comments
 *******************************************************/
-	
+
 /**
  * wp_ulike_comments function for comments like/unlike display
  *
  * @author       	Alimir
  * @param           String 	$type
- * @param           Array 	$args	 	
+ * @param           Array 	$args
  * @since           1.6
  * @return			String
  */
-if( ! function_exists( 'wp_ulike_comments' ) ){		
+if( ! function_exists( 'wp_ulike_comments' ) ){
 	function wp_ulike_comments( $type = 'get', $args = array() ) {
 		//global variables
 		global $wp_ulike_class, $wp_user_IP;
-		
+
 		$comment_ID    = isset( $args['id'] ) ? $args['id'] : get_comment_ID();
 		$comment_meta  = get_comment_meta( $comment_ID, '_commentliked', true );
 		$get_like      = empty( $comment_meta ) ? 0 : $comment_meta;
 		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_comments_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_comments_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_comments', 'theme' );	
-		
+		$style         = wp_ulike_get_setting( 'wp_ulike_comments', 'theme' );
+
 		//Main Data
 		$defaults      = array(
 			"id"            => $comment_ID,				//Comment ID
@@ -941,10 +941,10 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 			"attributes"    => $attributes,				//Get Attributes Filter
 			"wrapper_class" => ''						//Extra Wrapper class
 		);
-		
+
 		$parsed_args = wp_parse_args( $args, $defaults );
-		
-		if( ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {	
+
+		if( ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
 
 			if ($type == 'put') {
 				return $wp_ulike_class->wp_get_ulike( $parsed_args );
@@ -952,11 +952,11 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 			else {
 				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
-		
+
 		}//end !only_registered_users condition
 		elseif (wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users') == '1' && ! is_user_logged_in()){
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type' ) == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );	
+				return $wp_ulike_class->get_template( $parsed_args, 0 );
 			} else {
 				return apply_filters( 'wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this comment: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>' );
 			}
@@ -972,7 +972,7 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
  * @since           2.5
  * @return          String
  */
-if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){		
+if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){
 	function wp_ulike_get_comment_likes( $comment_ID ){
 		$val = get_comment_meta($comment_ID, '_commentliked', true);
 		return wp_ulike_format_number($val);
@@ -988,7 +988,7 @@ if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){
  *
  * @author       	Alimir
  * @param           String 	$type
- * @param           Array 	$args	 	
+ * @param           Array 	$args
  * @since           1.7
  * @return			String
  */
@@ -996,20 +996,20 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
 		//global variables
 		global $wp_ulike_class, $wp_user_IP;
-        
+
         if ( bp_get_activity_comment_id() != null ){
 			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_comment_id();
 		} else {
-			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_id(); 
+			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_id();
 		}
-		
+
 		$bp_get_meta   = bp_activity_get_meta($activityID, '_activityliked');
 		$get_like      = empty( $bp_get_meta ) ? 0 : $bp_get_meta;
 		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_activities_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_activities_microdata', null );
 		$style         = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme' );
-		
+
 		//Main Data
 		$defaults      = array(
 			"id"            => $activityID,				//Activity ID
@@ -1020,7 +1020,7 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			"setting"       => 'wp_ulike_buddypress',	//Setting Key
 			"type"          => 'post',					//Function type (post/process)
 			"table"         => 'ulike_activities',		//Activities table
-			"column"        => 'activity_id',			//ulike_activities table column name			
+			"column"        => 'activity_id',			//ulike_activities table column name
 			"key"           => '_activityliked',		//meta key
 			"cookie"        => 'activity-liked-',		//Cookie Name
 			"slug"          => 'activity',				//Slug Name
@@ -1029,9 +1029,9 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			"attributes"    => $attributes,				//Get Attributes Filter
 			"wrapper_class" => ''						//Extra Wrapper class
 		);
-		
+
 		$parsed_args = wp_parse_args( $args, $defaults );
-		
+
 		if( ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
 
 			if ($type == 'put') {
@@ -1040,7 +1040,7 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			else {
 				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
-			
+
 		}//end !only_registered_users condition
 		elseif ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button" ){
@@ -1048,23 +1048,23 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			}
 			else{
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this activity: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
-			}	
+			}
 		}//end only_registered_users condition
-		
+
 	}
 }
 
 /**
  * Add new buddypress activities on each like.
  *
- * @author       	Alimir	 
- * @param           Integer $user_ID (User ID)	 
+ * @author       	Alimir
+ * @param           Integer $user_ID (User ID)
  * @param           Integer $cp_ID (Post/Comment ID)
- * @param           String 	$type (Simple Key for separate posts by comments) 
+ * @param           String 	$type (Simple Key for separate posts by comments)
  * @since           1.6
  * @return          Void
  */
-if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){	
+if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 	function wp_ulike_bp_activity_add( $user_ID, $cp_ID, $type ){
 
 		//Create a new activity when an user likes something
@@ -1076,7 +1076,7 @@ if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 					$post_template = wp_ulike_get_setting( 'wp_ulike_buddypress', 'bp_post_activity_add_header' );
 
 					$post_template = $post_template == '' ? '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)' : $post_template;
-					
+
 					if ( strpos( $post_template, '%POST_LIKER%' ) !== false ) {
 						$POST_LIKER    = bp_core_get_userlink( $user_ID );
 						$post_template = str_replace( "%POST_LIKER%", $POST_LIKER, $post_template );
@@ -1099,15 +1099,15 @@ if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 						'component' => 'activity',
 						'type'      => 'wp_like_group',
 						'item_id'   => $cp_ID
-					));					
+					));
 					break;
-				
+
 				case '_commentliked':
 					// Replace the comment variables
 					$comment_template = wp_ulike_get_setting( 'wp_ulike_buddypress', 'bp_comment_activity_add_header' );
 
 					$comment_template = $comment_template == '' ? '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)' : $comment_template;
-					
+
 					if ( strpos( $comment_template, '%COMMENT_LIKER%' ) !== false ) {
 						$COMMENT_LIKER    = bp_core_get_userlink( $user_ID );
 						$comment_template = str_replace("%COMMENT_LIKER%", $COMMENT_LIKER, $comment_template );
@@ -1115,7 +1115,7 @@ if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 					if ( strpos( $comment_template, '%COMMENT_PERMALINK%' ) !== false ) {
 						$COMMENT_PERMALINK = get_comment_link( $cp_ID );
 						$comment_template  = str_replace( "%COMMENT_PERMALINK%", $COMMENT_PERMALINK, $comment_template );
-					}			
+					}
 					if ( strpos( $comment_template, '%COMMENT_AUTHOR%' ) !== false ) {
 						$COMMENT_AUTHOR   = get_comment_author( $cp_ID );
 						$comment_template = str_replace( "%COMMENT_AUTHOR%", $COMMENT_AUTHOR, $comment_template );
@@ -1130,9 +1130,9 @@ if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 						'component' => 'activity',
 						'type'      => 'wp_like_group',
 						'item_id'   => $cp_ID
-					));					
+					));
 					break;
-				
+
 				default:
 					break;
 			}
@@ -1148,7 +1148,7 @@ if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 			$author_ID = wp_ulike_get_auhtor_id( $cp_ID, $type );
 			if ( ! $author_ID || $author_ID == $user_ID ) {
 				return false;
-			}			
+			}
 			bp_notifications_add_notification( array(
 					'user_id'           => $author_ID,
 					'item_id'           => $cp_ID,
@@ -1157,8 +1157,8 @@ if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 					'component_action'  => 'wp_ulike' . $type . '_action_' . $user_ID,
 					'date_notified'     => bp_core_current_time(),
 					'is_new'            => 1,
-				) 
-			);			
+				)
+			);
 		}
 
 	}
@@ -1167,8 +1167,8 @@ if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 /**
  * Get auther ID by the ulike types
  *
- * @author       	Alimir	 
- * @param           Integer $cp_ID (Post/Comment/... ID)	 
+ * @author       	Alimir
+ * @param           Integer $cp_ID (Post/Comment/... ID)
  * @param           String 	$type (Get ulike Type)
  * @since           2.5
  * @return          String
@@ -1177,15 +1177,15 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
 	function wp_ulike_get_auhtor_id($cp_ID,$type) {
 		if($type == '_liked' || $type == '_topicliked'){
 			$post_tmp = get_post($cp_ID);
-			return $post_tmp->post_author;			
+			return $post_tmp->post_author;
 		}
 		else if($type == '_commentliked'){
 			$comment = get_comment( $cp_ID );
-			return $comment->user_id;					
+			return $comment->user_id;
 		}
 		else if( $type == '_activityliked' ){
 			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID, 'display_comments'  => true ) );
-			return $activity['activities'][0]->user_id;				
+			return $activity['activities'][0]->user_id;
 		}
 		else return;
 	}
@@ -1194,7 +1194,7 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
 /**
  * Wrapper for bbp_format_buddypress_notifications function as it is not returning $action
  *
- * @author       	Alimir	 
+ * @author       	Alimir
  * @since           2.5.1
  * @return          String
  */
@@ -1205,11 +1205,11 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
 			return;
 		}
 
-		$result = bbp_format_buddypress_notifications( 
-			$action, 
-			$item_id, 
-			$secondary_item_id, 
-			$total_items, 
+		$result = bbp_format_buddypress_notifications(
+			$action,
+			$item_id,
+			$secondary_item_id,
+			$total_items,
 			$format
 		);
 
@@ -1229,7 +1229,7 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
  *
  * @author       	Alimir
  * @param           String 	$type
- * @param           Array 	$args	 	
+ * @param           Array 	$args
  * @since           2.2
  * @return			String
  */
@@ -1237,19 +1237,19 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
 		//global variables
 		global $post,$wp_ulike_class,$wp_user_IP;
-        
+
         //Thanks to @Yehonal for this commit
 		$replyID       = bbp_get_reply_id();
 		$post_ID       = !$replyID ? $post->ID : $replyID;
 		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post_ID;
-		
+
 		$get_post_meta = get_post_meta( $post_ID, '_topicliked', true );
 		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();	
+		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_topics_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_topics_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme' );	
-		
+		$style         = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme' );
+
 		//Main Data
 		$defaults      = array(
 			"id"            => $post_ID,				//Post ID
@@ -1269,9 +1269,9 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 			"attributes"    => $attributes,				//Get Attributes Filter
 			"wrapper_class" => ''						//Extra Wrapper class
 		);
-		
+
 		$parsed_args = wp_parse_args( $args, $defaults );
-		
+
 		if( ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
 
 			if ($type == 'put') {
@@ -1280,25 +1280,25 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 			else {
 				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
 			}
-		
+
 		}//end !only_registered_users condition
-		
+
 		else if ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && !is_user_logged_in()) {
 			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );	
+				return $wp_ulike_class->get_template( $parsed_args, 0 );
 			}
 			else {
 				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
 			}
 		}//end only_registered_users condition
-		
+
 	}
 }
 
 /*******************************************************
   General
 *******************************************************/
-	
+
 /**
  * Get custom style setting from customize options
  *
@@ -1306,9 +1306,9 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
  * @since           1.3
  * @return          Void (Print new CSS styles)
  */
-if( ! function_exists( 'wp_ulike_get_custom_style' ) ){	
+if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	function wp_ulike_get_custom_style( $return_style = null ){
-		
+
 		// Like Icon
 		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url' ) ) ) {
 			$return_style .= '.wp_ulike_btn.wp_ulike_put_image { background-image: url('.$get_like_icon.') !important; }';
@@ -1318,9 +1318,9 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' ) ) ) {
 			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.image-unlike { background-image: url('.$get_like_icon.') !important; }';
 		}
-				
+
 		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) ) {
-		
+
 			//get custom options
 			$customstyle   = get_option( 'wp_ulike_customize' );
 			$btn_style     = '';
@@ -1330,33 +1330,33 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			// Button Style
 			if( isset( $customstyle['btn_bg'] ) && ! empty( $customstyle['btn_bg'] ) ) {
 				$btn_style .= "background-color:".$customstyle['btn_bg'].";";
-			}			
+			}
 			if( isset( $customstyle['btn_border'] ) && ! empty( $customstyle['btn_border'] ) ) {
 				$btn_style .= "border-color:".$customstyle['btn_border']."; ";
-			}			
+			}
 			if( isset( $customstyle['btn_color'] ) && ! empty( $customstyle['btn_color'] ) ) {
 				$btn_style .= "color:".$customstyle['btn_color'].";text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
 			}
 
 			if( $btn_style != '' ){
 				$return_style .= '.wpulike-default .wp_ulike_btn, .wpulike-default .wp_ulike_btn:hover, #bbpress-forums .wpulike-default .wp_ulike_btn, #bbpress-forums .wpulike-default .wp_ulike_btn:hover{'.$btn_style.'}.wpulike-heart .wp_ulike_general_class{'.$btn_style.'}';
-			}			
+			}
 
 			// Counter Style
 			if( isset( $customstyle['counter_bg'] ) && ! empty( $customstyle['counter_bg'] ) ) {
 				$counter_style .= "background-color:".$customstyle['counter_bg'].";";
-			}			
+			}
 			if( isset( $customstyle['counter_border'] ) && ! empty( $customstyle['counter_border'] ) ) {
 				$counter_style .= "border-color:".$customstyle['counter_border']."; ";
 				$before_style  = "border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
-			}			
+			}
 			if( isset( $customstyle['counter_color'] ) && ! empty( $customstyle['counter_color'] ) ) {
 				$counter_style .= "color:".$customstyle['counter_color'].";";
 			}
 
 			if( $counter_style != '' ){
 				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box:before{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
-			}		
+			}
 
 			// Loading Spinner
 			if( isset( $customstyle['loading_animation'] ) && ! empty( $customstyle['loading_animation'] ) ) {
@@ -1367,23 +1367,23 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			if( isset( $customstyle['custom_css'] ) && ! empty( $customstyle['custom_css'] ) ) {
 				$return_style .= $customstyle['custom_css'];
 			}
-		
+
 		}
 
 		return $return_style;
 	}
 
 }
-	
+
 /**
  * Convert numbers of Likes with string (kilobyte) format
  *
  * @author       	Alimir
- * @param           Integer $num (get like number)	 
+ * @param           Integer $num (get like number)
  * @since           1.5
  * @return          String
  */
-if( ! function_exists( 'wp_ulike_format_number' ) ){		
+if( ! function_exists( 'wp_ulike_format_number' ) ){
 	function wp_ulike_format_number($num){
 		$plus = $num != 0 ? '+' : '';
 		if ($num >= 1000 && wp_ulike_get_setting( 'wp_ulike_general', 'format_number' ) == '1')
@@ -1394,8 +1394,8 @@ if( ! function_exists( 'wp_ulike_format_number' ) ){
 		return $value;
 	}
 }
-	
-	
+
+
 /**
  * Date in localized format
  *
@@ -1404,15 +1404,15 @@ if( ! function_exists( 'wp_ulike_format_number' ) ){
  * @since           2.3
  * @return          String
  */
-if( ! function_exists( 'wp_ulike_date_i18n' ) ){	
+if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 	function wp_ulike_date_i18n($date){
-		return date_i18n( 
-			get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), 
+		return date_i18n(
+			get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ),
 			strtotime($date)
-		);	
+		);
 	}
 }
-	
+
 
 /*******************************************************
   Templates
@@ -1421,11 +1421,11 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 /**
  * Create simple default template
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.8
  * @return			Void
  */
-if( ! function_exists( 'wp_ulike_set_default_template' ) ){		
+if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 	function wp_ulike_set_default_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
 		ob_start();
@@ -1445,8 +1445,8 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 				</a>
 				<?php echo $counter; ?>
 			</div>
-		<?php 
-			echo $microdata; 
+		<?php
+			echo $microdata;
 			echo $display_likers;
 			do_action( 'wp_ulike_inside_template' );
 		?>
@@ -1460,17 +1460,17 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 	/**
 	 * Create simple heart template
 	 *
-	 * @author       	Alimir	 	
+	 * @author       	Alimir
 	 * @since           2.8
 	 * @return			Void
 	 */
-if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){	
+if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 	function wp_ulike_set_simple_heart_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
 		ob_start();
 		do_action( 'wp_ulike_before_template' );
 		// Extract input array
-		extract( $wp_ulike_template );		
+		extract( $wp_ulike_template );
 	?>
 		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
@@ -1484,9 +1484,9 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 				</a>
 				<?php echo $counter; ?>
 			</div>
-		<?php 
-			echo $microdata; 
-			echo $display_likers; 
+		<?php
+			echo $microdata;
+			echo $display_likers;
 			do_action( 'wp_ulike_inside_template' );
 		?>
 		</div>
@@ -1499,17 +1499,17 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 /**
  * Create Robeen (Animated Heart) template
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.8
  * @return			Void
  */
-if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){		
+if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 	function wp_ulike_set_robeen_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
 		ob_start();
-		do_action( 'wp_ulike_before_template' );	
+		do_action( 'wp_ulike_before_template' );
 		// Extract input array
-		extract( $wp_ulike_template );		
+		extract( $wp_ulike_template );
 	?>
 		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
@@ -1520,9 +1520,9 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 					<?php echo $counter; ?>
 					</label>
 			</div>
-		<?php 
-			echo $microdata; 
-			echo $display_likers; 
+		<?php
+			echo $microdata;
+			echo $display_likers;
 			do_action( 'wp_ulike_inside_template' );
 		?>
 		</div>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Class for statistics process
  * // @echo HEADER
@@ -14,11 +14,11 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @var      object
 		 */
-		protected static $instance  = null;				
-		
+		protected static $instance  = null;
+
 		/**
 		 * Constructor
-		 */	
+		 */
 		public function __construct()
 		{
 			global $wpdb;
@@ -34,7 +34,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @updated         2.3
 		 * @updated         3.0
 		 * @return			Void
-		 */		
+		 */
 		public function enqueue_script($hook)
 		{
 			// $currentScreen 	= get_current_screen();
@@ -67,15 +67,15 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			wp_enqueue_script('postbox');
 		}
-		
+
 		/**
 		 * Get The Posts Data Set
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
-		 * @updated         2.2		 
+		 * @updated         2.2
 		 * @return			JSON Array
-		 */				
+		 */
 		public function posts_dataset($type){
 			$newarray 		= array();
 			$return_type 	= $type != 'dataset' ? 'new_date_time' : 'count_date_time';
@@ -89,15 +89,15 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			}
 			return json_encode($newarray);
 		}
-		
+
 		/**
 		 * Get The Comments Data Set
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
 		 * @updated         2.2
-		 * @return			JSON Array 
-		 */			
+		 * @return			JSON Array
+		 */
 		public function comments_dataset($type){
 			$newarray 		= array();
 			$return_type 	= $type != 'dataset' ? 'new_date_time' : 'count_date_time';
@@ -108,7 +108,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				}
 				else
 				$newarray[] = $val->$return_type;
-			}				
+			}
 			return json_encode($newarray);
 		}
 
@@ -118,8 +118,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @author       	Alimir
 		 * @since           2.0
 		 * @updated         2.2
-		 * @return			JSON Array 
-		 */			
+		 * @return			JSON Array
+		 */
 		public function activities_dataset($type){
 			$newarray 		= array();
 			$return_type 	= $type != 'dataset' ? 'new_date_time' : 'count_date_time';
@@ -130,18 +130,18 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				}
 				else
 				$newarray[] = $val->$return_type;
-			}				
+			}
 			return json_encode($newarray);
 		}
-		
+
 		/**
 		 * Get The Activities Data Set
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
 		 * @updated         2.2
-		 * @return			JSON Array 
-		 */			
+		 * @return			JSON Array
+		 */
 		public function topics_dataset($type){
 			$newarray 		= array();
 			$return_type 	= $type != 'dataset' ? 'new_date_time' : 'count_date_time';
@@ -152,17 +152,17 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				}
 				else
 				$newarray[] = $val->$return_type;
-			}				
+			}
 			return json_encode($newarray);
 		}
-		
+
 		/**
 		 * Get The Logs Data From Tables
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
 		 * @return			String
-		 */		
+		 */
 		public function select_data($table){
 			$get_option = get_option( 'wp_ulike_statistics_screen' );
 			$set_number = $get_option['days_number'] != null ? $get_option['days_number'] : 20;
@@ -174,14 +174,14 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			");
 			return $return_val;
 		}
-		
+
 		/**
 		 * Get The Summary Of Like Data
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
 		 * @return			Integer
-		 */			
+		 */
 		public function get_data_date($table,$time){
 			if($time == 'today')
 			$where_val = "DATE(date_time) = DATE(NOW())";
@@ -189,16 +189,16 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$where_val = "DATE(date_time) = DATE(subdate(current_date, 1))";
 			else if($time == 'week')
 			$where_val = "week(DATE(date_time)) = week(DATE(NOW()))";
-			else 
+			else
 			$where_val = "month(DATE(date_time)) = month(DATE(NOW()))";
-			
+
 			$return_val = $this->wpdb->get_var(
 			"
 			SELECT COUNT(*)
 			FROM ".$this->wpdb->prefix."$table
 			WHERE $where_val
 			");
-			return $return_val;		
+			return $return_val;
 		}
 
 		/**
@@ -208,7 +208,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @since           2.0
 		 * @updated         2.1
 		 * @return			Integer
-		 */					
+		 */
 		public function get_all_data_date($table,$name){
 			$table_name = $this->wpdb->prefix . $table;
 			if( $this->wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name ) {
@@ -222,8 +222,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				return ;
 			}
 		}
-		
-		
+
+
 		/**
 		 * Get Data Map
 		 *
@@ -261,7 +261,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				// Set transient
 				set_transient( 'wp_ulike_get_likers_dispersal_statistics', $return_val, 24 * HOUR_IN_SECONDS );
 			}
-			
+
 			foreach($return_val as $return){
 				//$cdata = strtolower(wp_ulike_get_geoip($return->get_user_ip,'code'));
 				$cdata = strtolower( getCountryFromIP( $return->get_user_ip, "code" ) );
@@ -270,10 +270,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				}
 				$country_data[$cdata] += $return->get_count_user_ip;
 			}
-			
+
 			return json_encode( $country_data );
-		}		
-		
+		}
+
 		/**
 		 * Top Likers Summary
 		 *
@@ -281,7 +281,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @since           2.3
 		 * @since           3.0
 		 * @return			Array
-		 */					
+		 */
 		public function get_top_likers(){
 
 			if ( false === ( $result = get_transient( 'wp_ulike_get_top_likers' ) ) ) {
@@ -314,7 +314,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			return $result;
 		}
-		
+
 		/**
 		 * Tops Summaries
 		 *
@@ -322,7 +322,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @since           2.6
 		 * @since           3.0
 		 * @return			Array
-		 */					
+		 */
 		public function get_tops( $type ){
 			switch( $type ){
 				case 'top_posts':
@@ -355,8 +355,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			}
 
 			return self::$instance;
-		}	
+		}
 
 	}
-	
+
 }

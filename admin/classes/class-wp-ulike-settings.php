@@ -5,11 +5,11 @@
  */
 
 if ( !class_exists( 'wp_ulike_settings' ) ) {
-    
+
     class wp_ulike_settings {
-        
+
         private $page, $title, $menu, $admin_screen, $settings = array(), $empty = true, $notices = array();
-        
+
         public function __construct( $page = 'custom_settings', $title = null, $menu = array(), $settings = array(), $args = array() ) {
             $this->page  = $page;
             $this->title = $title ? $title : __( 'Custom Settings', WP_ULIKE_SLUG );
@@ -18,7 +18,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                 'title' => $this->title,
                 'capability' => 'manage_options',
                 'icon_url' => null,
-                'position' => null 
+                'position' => null
             ), $menu ) : false;
             $this->apply_settings( $settings );
             $this->args = array_merge( array(
@@ -26,24 +26,24 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                 'submit' => __( 'Save Settings', WP_ULIKE_SLUG ),
                 'reset' => __( 'Reset Settings', WP_ULIKE_SLUG ),
                 'tabs' => false,
-                'updated' => null 
+                'updated' => null
             ), $args );
             add_action( 'admin_menu', array(
                  $this,
-                'admin_menu' 
+                'admin_menu'
             ) );
             add_action( 'admin_init', array(
                  $this,
-                'admin_init' 
+                'admin_init'
             ) );
-            
+
             add_action( 'activated_plugin', array(
                  $this,
-                'plugin_priority' 
+                'plugin_priority'
             ) );
         }
-        
-        
+
+
         public function create_help_screen() {
             $current_screen     = get_current_screen();
             $this->admin_screen = WP_Screen::get( $current_screen );
@@ -52,36 +52,36 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                 'id' => 'overview_tab',
                 'content' => '<p>' . __( 'WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.', WP_ULIKE_SLUG ) . '</p>' . '<p>' . '<strong>' . __( 'Logging Method', WP_ULIKE_SLUG ) . ' : </strong></p>' . '<ul>' . '<li>' . __( 'If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', WP_ULIKE_SLUG ) . '</li>' . '<li>' . __( 'If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', WP_ULIKE_SLUG ) . '</li>' . '<li>' . __( 'If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', WP_ULIKE_SLUG ) . '</li>' . '<li>' . __( 'If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', WP_ULIKE_SLUG ) . '</li>
       </ul>' . '<p>' . '<strong>' . __( 'Template Variables', WP_ULIKE_SLUG ) . ' : </strong></p>' . '<ul>' . '<li>' . '<code>%START_WHILE%</code> : ' . __( 'Start the loop of logs', WP_ULIKE_SLUG ) . ' <span style="color:red">(' . __( 'required', WP_ULIKE_SLUG ) . ')</span></li>' . '<li>' . '<code>%END_WHILE%</code> : ' . __( 'End of the while loop', WP_ULIKE_SLUG ) . ' <span style="color:red">(' . __( 'required', WP_ULIKE_SLUG ) . ')</span></li>' . '<li>' . '<code>%USER_NAME%</code> : ' . __( 'Display the liker name', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%USER_AVATAR%</code> : ' . __( 'Display the liker avatar (By Gravatar)', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%BP_PROFILE_URL%</code> : ' . __( 'Display the BuddyPress user profile url', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%UM_PROFILE_URL%</code> : ' . __( 'Display the UltimateMemebr user profile url', WP_ULIKE_SLUG ) . '</li><hr>' . '<li>' . '<code>%POST_LIKER%</code> : ' . __( 'Display the liker name', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%POST_PERMALINK%</code> : ' . __( 'Display the permalink', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%POST_COUNT%</code> : ' . __( 'Display the likes count number', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%POST_TITLE%</code> : ' . __( 'Display the post title', WP_ULIKE_SLUG ) . '</li><hr>' . '<li>' . '<code>%COMMENT_LIKER%</code> : ' . __( 'Display the liker name', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%COMMENT_PERMALINK%</code> : ' . __( 'Display the permalink', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%COMMENT_AUTHOR%</code> : ' . __( 'Display the comment author name', WP_ULIKE_SLUG ) . '</li>' . '<li>' . '<code>%COMMENT_COUNT%</code> : ' . __( 'Display the likes count number', WP_ULIKE_SLUG ) . '</li>' . '</ul>',
-                'callback' => false 
+                'callback' => false
             ) );
             $this->admin_screen->add_help_tab( array(
                  'title' => __( 'Posts', WP_ULIKE_SLUG ),
                 'id' => 'posts_tab',
                 'content' => '<p>' . '<strong>' . __( 'Automatic display', WP_ULIKE_SLUG ) . ' : </strong></p><ul><li>' . __( 'If you disable this option, you have to put manually this code on wordpress while loop', WP_ULIKE_SLUG ) . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike\')) wp_ulike(\'get\'); ?&gt;</code>' . '</li></ul>' . '<p>' . '<strong>' . __( 'Users Like Box Template', WP_ULIKE_SLUG ) . ' - ' . __( 'Default Template:', WP_ULIKE_SLUG ) . ' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; ' . __( 'Users who have LIKED this post:', WP_ULIKE_SLUG ) . '&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>' . '</li></ul>',
-                
-                'callback' => false 
+
+                'callback' => false
             ) );
             $this->admin_screen->add_help_tab( array(
                  'title' => __( 'Comments', WP_ULIKE_SLUG ),
                 'id' => 'comments_tab',
                 'content' => '<p>' . '<strong>' . __( 'Automatic display', WP_ULIKE_SLUG ) . ' : </strong></p><ul><li>' . __( 'If you disable this option, you have to put manually this code on comments text', WP_ULIKE_SLUG ) . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_comments\')) wp_ulike_comments(\'get\'); ?&gt;</code>' . '</li></ul>' . '<p>' . '<strong>' . __( 'Users Like Box Template', WP_ULIKE_SLUG ) . ' - ' . __( 'Default Template:', WP_ULIKE_SLUG ) . ' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; ' . __( 'Users who have LIKED this comment:', WP_ULIKE_SLUG ) . '&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>' . '</li></ul>',
-                'callback' => false 
+                'callback' => false
             ) );
             $this->admin_screen->add_help_tab( array(
                  'title' => __( 'BuddyPress', WP_ULIKE_SLUG ),
                 'id' => 'bp_tab',
                 'content' => '<p>' . '<strong>' . __( 'Automatic display', WP_ULIKE_SLUG ) . ' : </strong></p><ul><li>' . __( 'If you disable this option, you have to put manually this code on buddypres activities content', WP_ULIKE_SLUG ) . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_buddypress\')) wp_ulike_buddypress(\'get\'); ?&gt;</code>' . '</li></ul>' . '<p>' . '<strong>' . __( 'Users Like Box Template', WP_ULIKE_SLUG ) . ' - ' . __( 'Default Template:', WP_ULIKE_SLUG ) . ' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; ' . __( 'Users who have liked this activity:', WP_ULIKE_SLUG ) . '&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>' . '</li></ul>' . '<p>' . '<strong>' . __( 'Post Activity Text', WP_ULIKE_SLUG ) . ' - ' . __( 'Default Template:', WP_ULIKE_SLUG ) . ' </strong></p><ul><li><code>&lt;strong&gt;%POST_LIKER%&lt;/strong&gt; liked &lt;a href="%POST_PERMALINK%" title="%POST_TITLE%"&gt;%POST_TITLE%&lt;/a&gt;. (So far, This post has &lt;span class="badge"&gt;%POST_COUNT%&lt;/span&gt; likes)</code>' . '</li></ul>' . '<p>' . '<strong>' . __( 'Comment Activity Text', WP_ULIKE_SLUG ) . ' - ' . __( 'Default Template:', WP_ULIKE_SLUG ) . ' </strong></p><ul><li><code>&lt;strong&gt;%COMMENT_LIKER%&lt;/strong&gt; liked &lt;strong&gt;%COMMENT_AUTHOR%&lt;/strong&gt; comment. (So far, %COMMENT_AUTHOR% has &lt;span class="badge"&gt;%COMMENT_COUNT%&lt;/span&gt; likes for this comment)</code>' . '</li></ul>',
-                'callback' => false 
+                'callback' => false
             ) );
             $this->admin_screen->add_help_tab( array(
                  'title' => __( 'bbPress', WP_ULIKE_SLUG ),
                 'id' => 'bb_tab',
                 'content' => '<p>' . '<strong>' . __( 'Automatic display', WP_ULIKE_SLUG ) . ' : </strong></p><ul><li>' . __( 'If you disable this option, you have to put manually this code on buddypres activities content', WP_ULIKE_SLUG ) . '<br /><code dir="ltr">&lt;?php if(function_exists(\'wp_ulike_bbpress\')) wp_ulike_bbpress(\'get\'); ?&gt;</code>' . '</li></ul>' . '<p>' . '<strong>' . __( 'Users Like Box Template', WP_ULIKE_SLUG ) . ' - ' . __( 'Default Template:', WP_ULIKE_SLUG ) . ' </strong></p><ul><li><code>&lt;p style="margin-top:5px"&gt; ' . __( 'Users who have liked this activity:', WP_ULIKE_SLUG ) . '&lt;/p&gt; &lt;ul class="tiles"&gt;%START_WHILE%&lt;li&gt;&lt;a  href="%BP_PROFILE_URL%" title="%USER_NAME%"&gt;%USER_AVATAR%&lt;/a&gt;&lt;/li&gt;%END_WHILE%&lt;/ul&gt;</code>' . '</li></ul>',
-                'callback' => false 
+                'callback' => false
             ) );
             $this->admin_screen->set_help_sidebar( '<p><strong>' . __( 'For more information:' ) . '</strong></p><p><a href="https://wordpress.org/plugins/wp-ulike/faq/" target="_blank">' . __( 'FAQ', WP_ULIKE_SLUG ) . '</a></p><p><a href="https://wordpress.org/support/plugin/wp-ulike" target="_blank">' . __( 'Support', WP_ULIKE_SLUG ) . '</a></p>' );
         }
-        
+
         public function apply_settings( $settings ) {
             if ( is_array( $settings ) ) {
                 foreach ( $settings as $setting => $section ) {
@@ -100,7 +100,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                             'sanitize' => null,
                             'attributes' => array(),
                             'options' => null,
-                            'action' => null 
+                            'action' => null
                         ), $field );
                         $section['fields'][$name] = $field;
                     } //$section['fields'] as $name => $field
@@ -111,14 +111,14 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                 } //$settings as $setting => $section
             } //is_array( $settings )
         }
-        
+
         public function add_notice( $message, $type = 'info' ) {
             $this->notices[] = array(
                  'message' => $message,
-                'type' => $type 
+                'type' => $type
             );
         }
-        
+
         private function get_defaults( $setting ) {
             $defaults = array();
             foreach ( $this->settings[$setting]['fields'] as $name => $field ) {
@@ -128,26 +128,26 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
             } //$this->settings[$setting]['fields'] as $name => $field
             return $defaults;
         }
-        
+
         private function reset() {
             foreach ( $this->settings as $setting => $section ) {
                 $_POST[$setting] = array_merge( $_POST[$setting], $this->get_defaults( $setting ) );
             } //$this->settings as $setting => $section
             add_settings_error( $this->page, 'settings_reset', __( 'Default settings have been reset.', WP_ULIKE_SLUG ), 'updated' );
         }
-        
+
         public function admin_menu() {
             if ( $this->menu ) {
                 if ( $this->menu['parent'] ) {
                     $page = add_submenu_page( $this->menu['parent'], $this->title, $this->menu['title'], $this->menu['capability'], $this->page, array(
                          $this,
-                        'do_page' 
+                        'do_page'
                     ) );
                 } //$this->menu['parent']
                 else {
                     $page = add_menu_page( $this->title, $this->menu['title'], $this->menu['capability'], $this->page, array(
                          $this,
-                        'do_page' 
+                        'do_page'
                     ), $this->menu['icon_url'], $this->menu['position'] );
                     if ( $this->title !== $this->menu['title'] ) {
                         add_submenu_page( $this->page, $this->title, $this->title, $this->menu['capability'], $this->page );
@@ -155,21 +155,21 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                 }
                 add_action( 'load-' . $page, array(
                      $this,
-                    'load_page' 
+                    'load_page'
                 ) );
                 add_action( 'load-' . $page, array(
                      &$this,
-                    'create_help_screen' 
+                    'create_help_screen'
                 ) );
             } //$this->menu
         }
-        
+
         public function load_page() {
             global $wp_settings_errors;
             foreach ( $this->notices as $notice ) {
                 $wp_settings_errors[] = array_merge( $notice, array(
                      'setting' => $this->page,
-                    'code' => $notice['type'] . '_notice' 
+                    'code' => $notice['type'] . '_notice'
                 ) );
             } //$this->notices as $notice
             if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) {
@@ -191,24 +191,24 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
             } //isset( $_GET['settings-updated'] ) && $_GET['settings-updated']
             add_action( 'admin_enqueue_scripts', array(
                  __CLASS__,
-                'admin_enqueue_scripts' 
+                'admin_enqueue_scripts'
             ) );
         }
-        
+
         public static function admin_enqueue_scripts() {
             wp_enqueue_media();
             wp_enqueue_script( 'wp-ulike-settings', WP_ULIKE_ADMIN_URL . '/assets/js/settings.js', array(
                 'jquery',
-                'wp-color-picker' 
+                'wp-color-picker'
             ) );
             wp_enqueue_script( "jquery-effects-core" );
             wp_localize_script( 'wp-ulike-settings', 'ajax', array(
                 'url'     => admin_url( 'admin-ajax.php' ),
-                'spinner' => admin_url( 'images/spinner.gif' ) 
+                'spinner' => admin_url( 'images/spinner.gif' )
             ) );
             wp_enqueue_style( 'wp-color-picker' );
         }
-        
+
         public function do_page() {
 ?>
     <form action="options.php" method="POST" enctype="multipart/form-data" class="wrap wp-ulike">
@@ -231,7 +231,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                 submit_button( $this->args['submit'], 'large primary' );
                 if ( $this->args['reset'] ) {
                     submit_button( $this->args['reset'], 'small', "{$this->page}_reset", true, array(
-                         'onclick' => "return confirm('" . __( 'Do you really want to reset all these settings to their default values ?', WP_ULIKE_SLUG ) . "');" 
+                         'onclick' => "return confirm('" . __( 'Do you really want to reset all these settings to their default values ?', WP_ULIKE_SLUG ) . "');"
                     ) );
                 } //$this->args['reset']
             } //!$this->empty
@@ -239,16 +239,16 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
     </form>
   <?php
         }
-        
+
         public function admin_init() {
             foreach ( $this->settings as $setting => $section ) {
                 register_setting( $this->page, $setting, array(
                      $this,
-                    'sanitize_setting' 
+                    'sanitize_setting'
                 ) );
                 add_settings_section( $setting, $section['title'], array(
                      $this,
-                    'do_section' 
+                    'do_section'
                 ), $this->page );
                 if ( !empty( $section['fields'] ) ) {
                     $this->empty = false;
@@ -260,11 +260,11 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                             'name'      => $setting . '[' . $name . ']',
                             'value'     => isset( $values[$name] ) ? $values[$name] : null,
                             'class'     => $id,
-                            'label_for' => $field['label'] === false ? 'hidden' : $id 
+                            'label_for' => $field['label'] === false ? 'hidden' : $id
                         ), $field );
                         add_settings_field( $name, $field['label'], array(
                              __CLASS__,
-                            'do_field' 
+                            'do_field'
                         ), $this->page, $setting, $field );
                         if ( $field['type'] === 'action' && is_callable( $field['action'] ) ) {
                             add_action( "wp_ajax_{$setting}_{$name}", $field['action'] );
@@ -276,7 +276,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                 $this->reset();
             } //isset( $_POST["{$this->page}_reset"] )
         }
-        
+
         public function do_section( $args ) {
             extract( $args );
             echo "<input name='{$id}[{$this->page}_setting]' type='hidden' value='{$id}' class='wp-ulike-settings-section' />";
@@ -284,7 +284,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                 echo wpautop( $text );
             } //$text = $this->settings[$id]['description']
         }
-        
+
         public static function do_field( $args ) {
             extract( $args );
             $attrs = "name='{$name}'";
@@ -306,7 +306,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                         echo " {$desc}";
                     } //$desc
                     break;
-                
+
                 case 'radio':
                     if ( !$options ) {
                         _e( 'No options defined.', WP_ULIKE_SLUG );
@@ -319,7 +319,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     echo implode( '<br />', $options );
                     echo "{$desc}</fieldset>";
                     break;
-                
+
                 case 'select':
                     if ( !$options ) {
                         _e( 'No options defined.', WP_ULIKE_SLUG );
@@ -334,7 +334,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     } //$options as $v => $label
                     echo "</select>{$desc}";
                     break;
-                
+
                 case 'visual-select':
                     if ( !$options ) {
                         _e( 'No options defined.', WP_ULIKE_SLUG );
@@ -349,7 +349,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     echo implode( '', $options );
                     echo "{$desc}</fieldset>";
                     break;
-                
+
                 case 'media':
                     echo "<fieldset class='wp-ulike-settings-media' id='{$id}'><input {$attrs} type='hidden' value='{$value}' />";
                     echo "<p><a class='button button-large wp-ulike-select-media' title='{$label}'>" . sprintf( __( 'Select %s', WP_ULIKE_SLUG ), $label ) . "</a> ";
@@ -359,11 +359,11 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     } //$value
                     echo "{$desc}</fieldset>";
                     break;
-                
+
                 case 'textarea':
                     echo "<textarea {$attrs} id='{$id}' class='large-text'>{$value}</textarea>{$desc}";
                     break;
-                
+
                 case 'multi':
                     if ( !$options ) {
                         _e( 'No options defined.', WP_ULIKE_SLUG );
@@ -377,26 +377,26 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     echo implode( '<br />', $options );
                     echo "{$desc}</fieldset>";
                     break;
-                
+
                 case 'action':
                     if ( !$action ) {
                         _e( 'No action defined.', WP_ULIKE_SLUG );
                     } //!$action
                     echo "<p class='wp-ulike-settings-action'><input {$attrs} id='{$id}' type='button' class='button button-large' value='{$label}' /></p>{$desc}";
                     break;
-                
+
                 case 'color':
                     $v = esc_attr( $value );
                     echo "<input {$attrs} id='{$id}' type='text' value='{$v}' class='wp-ulike-settings-color' />{$desc}";
                     break;
-                
+
                 default:
                     $v = esc_attr( $value );
                     echo "<input {$attrs} id='{$id}' type='{$type}' value='{$v}' class='regular-text' />{$desc}";
                     break;
             } //$type
         }
-        
+
         public function sanitize_setting( $inputs ) {
             $values = array();
             if ( !empty( $inputs["{$this->page}_setting"] ) ) {
@@ -411,20 +411,20 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                             case 'checkbox':
                                 $values[$name] = $input ? 1 : 0;
                                 break;
-                            
+
                             case 'radio':
                             case 'select':
                                 $values[$name] = sanitize_key( $input );
                                 break;
-                            
+
                             case 'media':
                                 $values[$name] = absint( $input );
                                 break;
-                            
+
                             case 'color':
                                 $values[$name] = preg_match( '/^#[a-f0-9]{6}$/i', $input ) ? $input : '';
                                 break;
-                            
+
                             case 'textarea':
                                 $text  = '';
                                 $nl    = "WP-ULIKE-SETTINGS-NEW-LINE";
@@ -435,7 +435,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                                 } //$lines as $line
                                 $values[$name] = trim( $text );
                                 break;
-                            
+
                             case 'multi':
                                 if ( !$input || empty( $field['options'] ) ) {
                                     break;
@@ -445,22 +445,22 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                                 } //$field['options'] as $n => $opt
                                 $values[$name] = json_encode( $input );
                                 break;
-                            
+
                             case 'action':
                                 break;
-                            
+
                             case 'email':
                                 $values[$name] = sanitize_email( $input );
                                 break;
-                            
+
                             case 'url':
                                 $values[$name] = esc_url_raw( $input );
                                 break;
-                            
+
                             case 'number':
                                 $values[$name] = floatval( $input );
                                 break;
-                            
+
                             default:
                                 $values[$name] = html_entity_decode( $input );
                                 break;
@@ -471,12 +471,12 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
             } //!empty( $inputs["{$this->page}_setting"] )
             return $inputs;
         }
-        
+
         public static function parse_multi( $result ) {
             // Check if the result was recorded as JSON, and if so, returns an array instead
             return ( is_string( $result ) && $array = json_decode( $result, true ) ) ? $array : $result;
         }
-        
+
         public static function plugin_priority() {
             $wp_ulike_settings = plugin_basename( __FILE__ );
             $active_plugins    = get_option( 'active_plugins' );
@@ -487,5 +487,5 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
             } //$order = array_search( $wp_ulike_settings, $active_plugins )
         }
     }
-    
+
 } //!class_exists( 'wp_ulike_settings' )

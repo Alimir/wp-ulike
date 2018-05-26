@@ -24,7 +24,7 @@ Also WP ULike’s amazing statistics tools help you to track your content effect
 *   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
 = Features =
-*   Clean Design + Pretty styles. 
+*   Clean Design + Pretty styles.
 *   Full myCRED Points Support.
 *   Flexible google rich snippets support. (Microdata)
 *   Full Statistics tools with many widgets.
@@ -58,7 +58,7 @@ WP ULike has been translated into the following languages:
 *   French (France)
 *   Chinese (China)
 *   Chinese (Taiwan)
-*   Dutch (Netherlands) 
+*   Dutch (Netherlands)
 *   Arabic
 *   Portuguese (Brazil)
 *   Turkish (Turkey)
@@ -162,13 +162,13 @@ Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-get-comment-l
 Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-sort-most-liked-posts)
 
 = How Can I Create Custom Template In Users Liked Box?  =
-* We have provided some variables in setting panel. You can use them in textarea and then save the new options. 
+* We have provided some variables in setting panel. You can use them in textarea and then save the new options.
 * Attention: `%START_WHILE%` And `%END_WHILE%` variables are very important and you should use them out of the frequent string. (Such as `<li></li>` tags sample in default template)
 
 = Receive HTTP ERROR 500 on WP ULike > Statistics   =
 * Increasing Your WordPress Memory Limit in wp-config.php to fix this error. It is located in your WordPress site's root folder, and you will need to use an FTP client or file manager in your web hosting control panel.
 * Next, you need to paste this code in wp-config.php file just before the line that says "That's all, stop editing! Happy blogging."
-<code> 
+<code>
 define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
@@ -230,7 +230,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Added: New response functionality with JSON.
 * Updated: 'wp_ulike' core class functionality.
 * Updated: FAQ documentation.
-* Removed: Old script files and enqueue new wp-ulike script. 
+* Removed: Old script files and enqueue new wp-ulike script.
 * Removed: Old version of 'mysql2date' function.
 
 = 2.7 =
@@ -439,7 +439,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 = 1.2 =
 * Added: most liked users widget.
-* Added: Chinese (ZH_CN) language. (Thanks to Changmeng Hu) 
+* Added: Chinese (ZH_CN) language. (Thanks to Changmeng Hu)
 
 = 1.1 =
 * Added: loading spinner.
@@ -485,7 +485,7 @@ In this version, we made some changes in the plugin scripts (wp-ulike-scripts.js
 In this version, we made some changes in the plugin scripts! So, please clear your browser cache after the plugin update.
 
 = 2.0 =
-In this version, we have mixed widgets in one packet. So you should upgrade your last widgets with new one. Have fun :) 
+In this version, we have mixed widgets in one packet. So you should upgrade your last widgets with new one. Have fun :)
 
 = 1.8 =
 In this version, we have made many changes on plugin functions and settings. So if you lose your last settings, try to add them again. :)
