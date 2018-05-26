@@ -1,0 +1,34 @@
+
+/**
+ *	Visual Select
+ */
+
+.wp-ulike-visual-select{
+    height:auto;
+    display:inline-block;
+    width:100%;
+    max-width:900px;    
+
+    .radio-img-item {
+        display: inline-block;
+        margin-right: 10px;
+        border:3px solid #d8d8d8;
+        padding: 0 10px;
+        width:110px;
+        height:60px;
+        cursor:pointer;
+
+        &.item-checked{
+            -webkit-filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%);
+            filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%);
+        }
+
+        img {
+            display:block;
+            clear:both;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+}

@@ -256,9 +256,10 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     foreach ( $section['fields'] as $name => $field ) {
                         $id    = $setting . '_' . $name;
                         $field = array_merge( array(
-                             'id' => $id,
-                            'name' => $setting . '[' . $name . ']',
-                            'value' => isset( $values[$name] ) ? $values[$name] : null,
+                            'id'        => $id,
+                            'name'      => $setting . '[' . $name . ']',
+                            'value'     => isset( $values[$name] ) ? $values[$name] : null,
+                            'class'     => $id,
                             'label_for' => $field['label'] === false ? 'hidden' : $id 
                         ), $field );
                         add_settings_field( $name, $field['label'], array(
@@ -338,7 +339,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     if ( !$options ) {
                         _e( 'No options defined.', WP_ULIKE_SLUG );
                     } //!$options
-                    echo "<fieldset class='visual-select' id='{$id}'>";
+                    echo "<fieldset class='wp-ulike-visual-select' id='{$id}'>";
                     foreach ( $options as $v => $label ) {
                         $name        = $label['name'];
                         $symbol      = $label['symbol'];
