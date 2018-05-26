@@ -156,7 +156,7 @@ jQuery(document).ready(function($) {
         });
     });
 
-    $('.visual-select input').radioImageSelect();
+    $('.wp-ulike-visual-select input').radioImageSelect();
 
     $('.wp-ulike-settings-color').wpColorPicker();
 
