@@ -583,7 +583,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			if( ! empty( $get_users ) ) {
 
 				// Get likers html template
-				$get_template 	= wp_ulike_get_setting( $setting, 'users_liked_box_template', '<br /><p style="margin-top:5px">'. __('Users who have LIKED this post:',WP_ULIKE_SLUG) .'</p> <ul class="tiles"> %START_WHILE% <li><a class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li> %END_WHILE%</ul>' );
+				$get_template 	= wp_ulike_get_setting( $setting, 'users_liked_box_template', '<ul class="tiles">%START_WHILE%<li><a href="#" class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>' );
 
 				$inner_template = $this->get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
