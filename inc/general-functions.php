@@ -1152,7 +1152,7 @@ if( ! function_exists( 'wp_ulike_bp_activity_add' ) ){
 			bp_notifications_add_notification( array(
 					'user_id'           => $author_ID,
 					'item_id'           => $cp_ID,
-					'secondary_item_id' => '',
+					'secondary_item_id' => $author_ID,
 					'component_name'    => 'wp_ulike',
 					'component_action'  => 'wp_ulike' . $type . '_action_' . $user_ID,
 					'date_notified'     => bp_core_current_time(),

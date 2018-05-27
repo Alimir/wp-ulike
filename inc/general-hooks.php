@@ -285,49 +285,51 @@ if( defined( 'BP_VERSION' ) ) {
 	if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 		function wp_ulike_format_buddypress_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
 			global $wp_filter,$wp_version;
-				if (strpos($action, 'wp_ulike_') !== false) {
-					$custom_link	= '';
-					//Extracting ulike type from the action value.
-					preg_match('/wp_ulike_(.*?)_action/', $action, $type);
-					//Extracting user id from the action value.
-					preg_match('/action_([0-9]+)/', $action, $user_ID);
-					$user_info 		= get_userdata($user_ID[1]);
-					$custom_text 	= __('You have a new like from', WP_ULIKE_SLUG ) . ' "' . $user_info->display_name . '"';
-					//checking the ulike types
-					if($type[1] == 'liked'){
-						$custom_link  	= get_permalink($item_id);
-					}
-					else if($type[1] == 'topicliked'){
-						$custom_link  	= get_permalink($item_id);
-					}
-					else if($type[1] == 'commentliked'){
-						$custom_link  	= get_comment_link( $item_id );
-					}
-					else if($type[1] == 'activityliked'){
-						$custom_link  	= bp_activity_get_permalink( $item_id );
-					}
-					// WordPress Toolbar
-					if ( 'string' === $format ) {
-						$return = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . esc_attr( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_text, $custom_link );
-					// Deprecated BuddyBar
+			// Return value
+			$return = false;
+			if ( strpos( $action, 'wp_ulike_' ) !== false ) {
+				$custom_link	= '';
+				//Extracting ulike type from the action value.
+				preg_match('/wp_ulike_(.*?)_action/', $action, $type);
+				//Extracting user id from the action value.
+				preg_match('/action_([0-9]+)/', $action, $user_ID);
+				$user_info 		= get_userdata($user_ID[1]);
+				$custom_text 	= __('You have a new like from', WP_ULIKE_SLUG ) . ' "' . $user_info->display_name . '"';
+				//checking the ulike types
+				if($type[1] == 'liked'){
+					$custom_link  	= get_permalink($item_id);
+				}
+				else if($type[1] == 'topicliked'){
+					$custom_link  	= get_permalink($item_id);
+				}
+				else if($type[1] == 'commentliked'){
+					$custom_link  	= get_comment_link( $item_id );
+				}
+				else if($type[1] == 'activityliked'){
+					$custom_link  	= bp_activity_get_permalink( $item_id );
+				}
+				// WordPress Toolbar
+				if ( 'string' === $format ) {
+					$return = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . esc_attr( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_text, $custom_link );
+				// Deprecated BuddyBar
+				} else {
+					$return = apply_filters( 'wp_ulike_bp_notifications_template', array(
+						'text' => $custom_text,
+						'link' => $custom_link
+					), $custom_link, (int) $total_items, $custom_text, $custom_text );
+				}
+				// global wp_filter to call bbPress wrapper function
+				if( isset( $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'] ) ) {
+					if( version_compare( $wp_version, '4.7', '>=' ) ) {
+						// https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
+						$wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
 					} else {
-						$return = apply_filters( 'wp_ulike_bp_notifications_template', array(
-							'text' => $custom_text,
-							'link' => $custom_link
-						), $custom_link, (int) $total_items, $custom_text, $custom_text );
+						$wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
 					}
-					// global wp_filter to call bbPress wrapper function
-					if (isset($wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'])) {
-						if (version_compare($wp_version, '4.7', '>=' )) {
-							// https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
-							$wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
-						} else {
-							$wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
-						}
-					}
-					return $return;
+				}
 			}
-			return $action;
+
+			return $return;
 		}
 		add_filter( 'bp_notifications_get_notifications_for_user', 'wp_ulike_format_buddypress_notifications', 5, 5 );
 	}
