@@ -104,7 +104,7 @@ module.exports = function(grunt) {
                     outputStyle: 'expanded' // nested, expanded, compact, compressed.
                 }
             }
-        },        
+        },
 
         // Generate POT file
         makepot: {
@@ -168,7 +168,7 @@ module.exports = function(grunt) {
             frontJsScripts: {
                 options: {
 
-                    banner: "/*! <%= meta.version %>\n" + 
+                    banner: "/*! <%= meta.version %>\n" +
                         " *  <%= pkg.homepage %>\n" +
                         " *  <%= meta.copyright %>;\n" +
                         " */\n",
@@ -186,10 +186,10 @@ module.exports = function(grunt) {
                 dest: 'assets/js/wp-ulike.js'
             },
 
-            adminJsScripts: {
+            adminJsStatistics: {
                 options: {
 
-                    banner: "/*! <%= meta.version %>\n" + 
+                    banner: "/*! <%= meta.version %>\n" +
                         " *  <%= pkg.homepage %>\n" +
                         " *  <%= meta.copyright %>;\n" +
                         " */\n",
@@ -204,6 +204,26 @@ module.exports = function(grunt) {
                     'admin/assets/js/src/scripts.js',
                 ],
                 dest: 'admin/assets/js/statistics.js'
+            },
+
+            adminJsSettings: {
+                options: {
+
+                    banner: "/*! <%= meta.version %>\n" +
+                        " *  <%= pkg.homepage %>\n" +
+                        " *  <%= meta.copyright %>;\n" +
+                        " */\n",
+
+                    process: function(src, filepath) {
+                        var separator = "\n\n/* ================== " + filepath + " =================== */\n\n\n";
+                        return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
+                    },
+                },
+                src: [
+                    'admin/assets/js/src/settings/visual-select.js',
+                    'admin/assets/js/src/settings/panel.js',
+                ],
+                dest: 'admin/assets/js/settings.js'
             }
 
         },
@@ -218,7 +238,7 @@ module.exports = function(grunt) {
                     'assets/css/wp-ulike.min.css': ['assets/css/wp-ulike.css']
                 }
             }
-        },     
+        },
 
         clean: {
             build: [
@@ -234,12 +254,12 @@ module.exports = function(grunt) {
             options: {
                 mangle: true,
                 preserveComments: 'some'
-            }, 
+            },
 
             frontJsScripts: {
                 src: '<%= concat.frontJsScripts.dest %>',
                 dest: 'assets/js/wp-ulike.min.js'
-            }     
+            }
         },
 
         preprocess : {
@@ -344,9 +364,14 @@ module.exports = function(grunt) {
                 tasks: ['concat:frontJsScripts', 'uglify:frontJsScripts']
             },
 
-            concat_admin_js_scripts: {
+            concat_admin_js_statistics: {
                 files: ['admin/assets/js/src/*.js'],
-                tasks: ['concat:adminJsScripts']
+                tasks: ['concat:adminJsStatistics']
+            },
+
+            concat_admin_js_settings: {
+                files: ['admin/assets/js/src/settings/*.js'],
+                tasks: ['concat:adminJsSettings']
             },
 
             livereload: {
@@ -356,7 +381,7 @@ module.exports = function(grunt) {
                         'assets/img/**/*.{png,jpg,jpeg,gif,webp,svg}'
                         ]
             }
-        },         
+        },
 
         // deploy via rsync
         deploy: {
