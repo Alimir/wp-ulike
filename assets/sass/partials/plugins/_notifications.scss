@@ -7,18 +7,18 @@
     z-index: 999999;
     pointer-events: none;
     right: 20px;
-    bottom: 20px;  
-      
+    bottom: 20px;
+
     * {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-    }    
+    }
 
     .wpulike-message {
         position: relative;
         pointer-events: auto;
-        word-wrap: break-word;        
+        word-wrap: break-word;
         overflow: hidden;
         margin: 0 0 6px;
         padding: 15px 15px 15px 55px;
@@ -50,8 +50,8 @@
         &.wpulike-warning {
             background-color: #fb8c00;
             background-image: url(../img/svg/warning.svg);
-        }        
-    }      
+        }
+    }
 }
 
 @keyframes wpUlikeNotifitcationsAnimation {

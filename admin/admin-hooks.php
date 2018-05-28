@@ -11,11 +11,11 @@
 /**
  * Add WP ULike CopyRight in footer
  *
- * @author       	Alimir	 	
- * @param           String $content	 
+ * @author       	Alimir
+ * @param           String $content
  * @since           2.0
  * @return			String
- */		
+ */
 function wp_ulike_copyright( $text ) {
 	return sprintf( __( ' Thank you for choosing <a href="%s" title="Wordpress ULike" target="_blank">WP ULike</a>. Created by <a href="%s" title="Wordpress ULike" target="_blank">Ali Mirzaei</a>' ), 'http://wordpress.org/plugins/wp-ulike/', 'https://ir.linkedin.com/in/alimirir' );
 }
@@ -27,17 +27,17 @@ if( isset($_GET["page"]) && stripos($_GET["page"], "wp-ulike") !== false ) {
 /**
  * admin enqueue scripts
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.1
  * @return			Void
- */		
+ */
 function wp_ulike_logs_enqueue_script( $hook ){
 
 	// Enqueue admin styles
 	wp_enqueue_style( 'wp-ulike-admin', WP_ULIKE_ADMIN_URL . '/assets/css/admin.css' );
 
 	$currentScreen 	= get_current_screen();
-	
+
 	if ( $currentScreen->id !== $hook || ! preg_match( '/logs/', $currentScreen->id ) ) {
 		return;
 	}
@@ -50,36 +50,36 @@ function wp_ulike_logs_enqueue_script( $hook ){
 		null,
 		true
 	);
-	
+
 	//localize script
 	wp_localize_script( 'wp_ulike_stats', 'wp_ulike_logs', array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 		'message' => __('Are you sure to remove this item?!',WP_ULIKE_SLUG)
 	));
-	
+
 }
 add_action('admin_enqueue_scripts', 'wp_ulike_logs_enqueue_script');
 
 /**
  * Set the option of per_page
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.1
  * @return			String
- */		 
+ */
 function wp_ulike_logs_per_page_set_option($status, $option, $value) {
 	if ( 'wp_ulike_logs_per_page' == $option ) return $value;
 	return $status;
-}	
-add_filter('set-screen-option', 'wp_ulike_logs_per_page_set_option', 10, 3);	
+}
+add_filter('set-screen-option', 'wp_ulike_logs_per_page_set_option', 10, 3);
 
 /**
  * remove photo class from gravatar
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           1.7
  * @return			String
- */ 
+ */
 function wp_ulike_remove_photo_class($avatar) {
 	return str_replace(' photo', ' gravatar', $avatar);
 }
@@ -89,10 +89,10 @@ add_filter('get_avatar', 'wp_ulike_remove_photo_class');
 /**
  * Save screen options with "update_option" mehtod
  *
- * @author       	Alimir	 	
- * @since           2.1 
+ * @author       	Alimir
+ * @since           2.1
  * @return			Void
- */		
+ */
 function wp_ulike_statistics_save_option(){
 	if(isset($_POST['wp_ulike_statistics_screen']) AND wp_verify_nonce($_POST['wp_ulike_statistics_screen'], 'wp_ulike_statistics_nonce_field' ) ){
 		$options = array(
@@ -121,49 +121,49 @@ add_action('admin_init', 'wp_ulike_statistics_save_option');
 /**
  * Add menu to admin
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           1.0
  * @updated         2.2
  * @updated         2.4.2
  * @return			String
  */
 function wp_ulike_admin_menu() {
-	
+
 	global $menu;
-	
+
 	//Post Like Logs Menu
 	$posts_screen 		= add_submenu_page(null, __( 'Post Likes Logs', WP_ULIKE_SLUG ), __( 'Post Likes Logs', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-post-logs', 'wp_ulike_post_likes_logs');
 	add_action("load-$posts_screen",'wp_ulike_logs_per_page');
-	
+
 	//Comment Like Logs Menu
 	$comments_screen 	= add_submenu_page(null, __( 'Comment Likes Logs', WP_ULIKE_SLUG ), __( 'Comment Likes Logs', WP_ULIKE_SLUG ), 'manage_options','wp-ulike-comment-logs', 'wp_ulike_comment_likes_logs');
 	add_action("load-$comments_screen",'wp_ulike_logs_per_page');
-	
+
 	//Activity Like Logs Menu
 	$activities_screen 	= add_submenu_page(null, __( 'Activity Likes Logs', WP_ULIKE_SLUG ), __( 'Activity Likes Logs', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-bp-logs', 'wp_ulike_buddypress_likes_logs');
 	add_action("load-$activities_screen",'wp_ulike_logs_per_page');
-	
+
 	//Activity Like Logs Menu
 	$topics_screen 		= add_submenu_page(null, __( 'Topics Likes Logs', WP_ULIKE_SLUG ), __( 'Topics Likes Logs', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-bbpress-logs', 'wp_ulike_bbpress_likes_logs');
 	add_action("load-$topics_screen",'wp_ulike_logs_per_page');
-	
+
 	//Statistics Menu
 	$statistics_screen 	= add_submenu_page('wp-ulike-settings', __( 'WP ULike Statistics', WP_ULIKE_SLUG ), __( 'WP ULike Statistics', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-statistics', 'wp_ulike_statistics');
 	add_action("load-$statistics_screen",'wp_ulike_statistics_register_option');
-	
+
 	//WP ULike About Menu
 	add_submenu_page('wp-ulike-settings', __( 'About WP ULike', WP_ULIKE_SLUG ), __( 'About WP ULike', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-about', 'wp_ulike_about_page');
-	
+
 	$newvotes = wp_ulike_get_number_of_new_likes();
 	$menu[313][0] .= $newvotes ? " <span class='update-plugins count-1'><span class='update-count'>". number_format_i18n($newvotes) ."</span></span> " : '';
-	
+
 }
 add_action('admin_menu', 'wp_ulike_admin_menu');
 
 /**
  * Set the admin login time.
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.4.2
  * @return			Void
  */
@@ -178,10 +178,10 @@ add_action('wp_logout', 'wp_ulike_set_lastvisit');
 /**
  * Add rating us notification on wp-ulike admin pages
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           2.7
  * @return			String
- */ 
+ */
 function wp_ulike_admin_notice() {
 	if( get_option( 'wp-ulike-notice-dismissed', FALSE ) ) return;
 	?>
@@ -193,7 +193,7 @@ function wp_ulike_admin_notice() {
 		            action: 'wp_ulike_dismissed_notice'
 		        }
 		    })
-		});			
+		});
 	</script>
 	<div class="notice wp-ulike-notice is-dismissible">
         <img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-badge.png" alt="WP ULike Plugin">
@@ -203,7 +203,7 @@ function wp_ulike_admin_notice() {
                 <a href="https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5" target="_blank"><?php echo _e( "Sure, I'd love to!", WP_ULIKE_SLUG ); ?></a>
             </p>
         </div>
-    </div>			
+    </div>
 	<?php
 }
 add_action( 'admin_notices', 'wp_ulike_admin_notice', 999);
@@ -211,10 +211,10 @@ add_action( 'admin_notices', 'wp_ulike_admin_notice', 999);
 /**
  * Simple Ads
  *
- * @author       	Alimir	 	
+ * @author       	Alimir
  * @since           3.1
  * @return			String
- */ 
+ */
 function wp_ulike_advertisement(){
 ?>
 	<div class="welcome-panel wp-ulike-advertisement">

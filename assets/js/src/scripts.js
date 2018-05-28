@@ -8,7 +8,7 @@
             $(".wpulike").WordpressUlike();
         });
     });
-    
+
     // init WordpressUlike
     $(".wpulike").WordpressUlike();
 

@@ -1,5 +1,5 @@
 /*
-/------------------------------------------\ _     __     _ _____      _  _  _   _ 
+/------------------------------------------\ _     __     _ _____      _  _  _   _
 | |   /  \   | | ___ \    | |(_)| | / /
 | |  / /\ \  | | |_/ /   _| || || |/ / ___
 | | / /  \ \ | |  __/ | | | || ||   | / _ \
@@ -102,12 +102,10 @@ form.wp-ulike .wp-ulike-settings-tabs h2 { float: left; padding: 10px 15px; marg
 form.wp-ulike .wp-ulike-settings-tabs h2:hover { background-color: #f9f9f9; }
 form.wp-ulike .wp-ulike-settings-tabs h2:last-child { border-right: 1px solid #e0e0e0; }
 form.wp-ulike .wp-ulike-settings-tabs h2.active { background-color: #ffffff; border-bottom: 1px solid #fff; margin-bottom: -1px; }
-form.wp-ulike .visual-select .radio-img-item { padding: 5px; border: 3px solid #424242; border-radius: 5px; cursor: pointer; width: 100px; height: 45px; margin: 0 5px; }
-form.wp-ulike .visual-select .radio-img-item.item-checked { border-color: #F2653A; }
 form.wp-ulike .toggle-switch input[type=checkbox] { display: none; }
 form.wp-ulike .toggle-switch label { cursor: pointer; text-indent: -9999px; width: 50px; height: 30px; background: #757575; display: block; border-radius: 100px; position: relative; }
 form.wp-ulike .toggle-switch label:after { content: ''; position: absolute; top: 5px; left: 5px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: 0.3s; }
-form.wp-ulike .toggle-switch input:checked + label { background: #F2653A; }
+form.wp-ulike .toggle-switch input:checked + label { background: #0077a3; }
 form.wp-ulike .toggle-switch input:checked + label:after { left: calc(100% - 5px); transform: translateX(-100%); }
 
 .wp-ulike-settings-tab { padding: 2em; border: 1px solid #e0e0e0; clear: both; background: #fff; }
@@ -138,6 +136,12 @@ tr.hide-label td { padding-left: 0; }
 .wp-ulike-notice .notice-dismiss { opacity: 0.6; }
 .wp-ulike-notice .notice-dismiss:before { color: #ffffff !important; }
 .wp-ulike-notice .notice-dismiss:hover { opacity: 1; }
+
+/** 	Visual Select */
+.wp-ulike-visual-select { height: auto; display: inline-block; width: 100%; max-width: 900px; }
+.wp-ulike-visual-select .radio-img-item { display: inline-block; margin-right: 10px; border: 3px solid #d8d8d8; padding: 0 10px; width: 110px; height: 60px; cursor: pointer; }
+.wp-ulike-visual-select .radio-img-item.item-checked { -webkit-filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%); filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%); }
+.wp-ulike-visual-select .radio-img-item img { display: block; clear: both; width: 100%; height: 100%; }
 
 /** Statistics Page */
 #right-log { width: 31%; }
