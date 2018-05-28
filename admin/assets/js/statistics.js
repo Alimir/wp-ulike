@@ -1,4 +1,4 @@
-/*! WP ULike - v3.2
+/*! WP ULike - v3.3
  *  https://wpulike.com
  *  Alimir 2018;
  */
@@ -48,7 +48,7 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 
   	$('.wp_ulike_delete').click(function(e) {
 		e.preventDefault();
-		var parent = $(this).closest('tr');  
+		var parent = $(this).closest('tr');
 		var value  = $(this).data('id');
 		var table  = $(this).data('table');
 		var nonce  = $(this).data('nonce');
@@ -65,7 +65,7 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 			  },
 			  beforeSend:function(){
 				parent.css("background-color","#fff59d");
-			  },	  
+			  },
 			  success: function( response ) {
 			  	if( response.success ) {
 			  		parent.fadeOut(300);
@@ -74,8 +74,8 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 			  	}
 			  }
 			});
-		}	
-	});	
+		}
+	});
 
 	if ( typeof wp_ulike_statistics === "undefined" ) return;
 
@@ -123,7 +123,7 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 					borderColor : "rgba(255, 143, 0,1)",
 					pointBackgroundColor: "rgba(255,255,255,1)",
 					borderWidth: 1
-					
+
 				}
 			]
 		};
@@ -183,7 +183,7 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
                 "#ffca28",
                 "#F7464A",
                 "#66bb6a",
-            ],	        
+            ],
 	    }],
 
 	    // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -192,7 +192,7 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 	        'Comments',
 	        'Activities',
 	        'Topics',
-	    ]		
+	    ]
 	};
 
 
@@ -201,7 +201,7 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 	var activitiesChart	= document.getElementById('chart3');
 	var topicsChart		= document.getElementById('chart4');
 	var allocationChart = document.getElementById('piechart');
-	
+
 	if ( postsChart !== null ) {
 		if( posts_dataset_var  !== null ){
 			var ctx1 = postsChart.getContext("2d");
@@ -210,12 +210,12 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 			    type: 'line',
 			    // The data for our dataset
 			    data: posts_date
-			});			
+			});
 		}else{
-			document.getElementById("posts_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
+			document.getElementById("posts_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";
 		}
 	}
-	
+
 	if ( commentsChart !== null ) {
 		if( comments_dataset_var  !== null ){
 			var ctx2 = commentsChart.getContext("2d");
@@ -224,12 +224,12 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 			    type: 'line',
 			    // The data for our dataset
 			    data: comments_date
-			});			
+			});
 		}else{
-			document.getElementById("comments_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
+			document.getElementById("comments_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";
 		}
 	}
-	
+
 	if ( activitiesChart !== null ) {
 		if( activities_dataset_var  !== null ){
 			var ctx3 = activitiesChart.getContext("2d");
@@ -238,12 +238,12 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 			    type: 'line',
 			    // The data for our dataset
 			    data: activities_date
-			});				
+			});
 		}else{
-			document.getElementById("activities_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
+			document.getElementById("activities_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";
 		}
 	}
-	
+
 	if ( topicsChart !== null ) {
 		if( topics_dataset_var  !== null ){
 			var ctx4 = topicsChart.getContext("2d");
@@ -252,12 +252,12 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 			    type: 'line',
 			    // The data for our dataset
 			    data: topics_date
-			});				
+			});
 		}else{
-			document.getElementById("topics_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
+			document.getElementById("topics_likes_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";
 		}
 	}
-	
+
 	if( allocationChart !== null ) {
 		if( activities_dataset_var  !== null || topics_dataset_var  !== null || comments_dataset_var  || null && posts_dataset_var  || null ){
 			var ctx5 = allocationChart.getContext("2d");
@@ -266,11 +266,11 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 			    type: 'pie',
 			    // The data for our dataset
 			    data: pieData
-			});				
+			});
 		}else{
-			document.getElementById("piechart_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";		
+			document.getElementById("piechart_stats").getElementsByClassName("main")[0].innerHTML = "No Data Found!";
 		}
-	}	
+	}
 
 	jQuery('#vmap').vectorMap({
 	    map 				: 'world_en',
@@ -285,10 +285,10 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 	    normalizeFunction	: 'polynomial',
 		onLabelShow 		: function (event, label, code) {
 			if(world_map_data[code] > 0) {
-				label.append(': '+world_map_data[code]+' Users'); 
+				label.append(': '+world_map_data[code]+' Users');
 			}
-		}			
-	});	
+		}
+	});
 
 	postboxes.save_state = function(){
 		return;
@@ -297,5 +297,5 @@ jQuery.fn.vectorMap('addMap', 'world_en', {"width":950,"height":550,"paths":{"id
 		return;
 	};
 	postboxes.add_postbox_toggles();
-	
+
 })( jQuery );

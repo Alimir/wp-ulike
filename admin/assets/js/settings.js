@@ -1,3 +1,12 @@
+/*! WP ULike - v3.3
+ *  https://wpulike.com
+ *  Alimir 2018;
+ */
+
+
+/* ================== admin/assets/js/src/settings/visual-select.js =================== */
+
+
 /*!
  * Radio image select
  **/
@@ -33,7 +42,7 @@
                 });
             };
 
-        // Parse args.. 
+        // Parse args..
         options = $.extend(defaults, options);
 
         // Start jQuery loop on elements..
@@ -75,6 +84,10 @@
         });
     }
 })(jQuery);
+
+
+/* ================== admin/assets/js/src/settings/panel.js =================== */
+
 
 /*!
  * Settings scripts
@@ -234,7 +247,7 @@ jQuery(document).ready(function($) {
         });
     });
 
-    $('.visual-select input').radioImageSelect();
+    $('.wp-ulike-visual-select input').radioImageSelect();
 
     $('.wp-ulike-settings-color').wpColorPicker();
 
