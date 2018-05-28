@@ -70,25 +70,6 @@ form.wp-ulike {
 
 	}
 
-	.visual-select{
-
-		.radio-img-item {
-			padding: 5px;
-			border: 3px solid #424242;
-			border-radius: 5px;
-			cursor: pointer;
-			width: 100px;
-			height: 45px;
-			margin: 0 5px;
-
-			&.item-checked {
-			  	border-color: #F2653A;
-			}
-
-		}
-
-	}
-
 	.toggle-switch{
 
 		input[type=checkbox]{
@@ -119,7 +100,7 @@ form.wp-ulike {
 		}
 
 		input:checked + label {
-			background: #F2653A;
+			background: #0077a3;
 		}
 
 		input:checked + label:after {
@@ -243,6 +224,6 @@ tr.hide-label {
 		}
 		&:hover{
 			opacity: 1;
-		}		
+		}
 	}
 }

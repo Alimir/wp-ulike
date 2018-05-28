@@ -43,7 +43,7 @@ WP ULike has been translated into the following languages:
 *   French (France)
 *   Chinese (China)
 *   Chinese (Taiwan)
-*   Dutch (Netherlands) 
+*   Dutch (Netherlands)
 *   Arabic
 *   Portuguese (Brazil)
 *   Turkish (Turkey)
@@ -114,16 +114,16 @@ function wp_ulike_new_format_number($value, $num, $plus){
 
 ## How To Change Schema Type? ##
 The default schema type is `CreativeWork`, if you want to change it to `Article`, you need to make use of the `wp_ulike_posts_add_attr` filter as shown in the sample code below:
-```php  
-add_filter('wp_ulike_posts_add_attr', 'wp_ulike_change_posts_microdata_itemtype', 10);  
-function wp_ulike_change_posts_microdata_itemtype() {  
-	return 'itemscope itemtype="http://schema.org/Article"';  
+```php
+add_filter('wp_ulike_posts_add_attr', 'wp_ulike_change_posts_microdata_itemtype', 10);
+function wp_ulike_change_posts_microdata_itemtype() {
+	return 'itemscope itemtype="http://schema.org/Article"';
 }
 ```
 
 ## How To Add Extra Microdata? ##
 Make use of the `wp_ulike_extra_structured_data` filter as shown in the sample code below:
-```php  
+```php
 add_filter('wp_ulike_extra_structured_data', 'wp_ulike_add_extra_structured_data', 10);
 function wp_ulike_add_extra_structured_data(){
 	$post_meta = '<div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">';
@@ -138,7 +138,7 @@ function wp_ulike_add_extra_structured_data(){
 
 ## How To Remove All Schema Data Except Of aggregateRating? ##
 Make use of the `wp_ulike_remove_microdata_post_meta` & `wp_ulike_posts_add_attr` filters as shown in the sample code below:
-```php 
+```php
 add_filter('wp_ulike_remove_microdata_post_meta', '__return_true', 10);
 add_filter('wp_ulike_posts_add_attr', '__return_null', 10);
 ```
@@ -156,7 +156,7 @@ function wp_ulike_change_my_count_box_template($string, $counter) {
 
 ## How To Change The Login Alert Template? ##
 Make use of the `wp_ulike_login_alert_template` filter as shown in the sample code below:
-```php 
+```php
 add_filter('wp_ulike_login_alert_template', 'wp_ulike_change_login_alert_template', 10);
 function wp_ulike_change_login_alert_template(){
 	return '<p class="alert alert-info fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Please login to your account! :)</p>';
@@ -165,7 +165,7 @@ function wp_ulike_change_login_alert_template(){
 
 ## How To Get Post Likes Number? ##
 Make use of the following function in WP Loop:
-```php 
+```php
 if (function_exists('wp_ulike_get_post_likes')):
 	echo wp_ulike_get_post_likes(get_the_ID());
 endif;
@@ -192,13 +192,13 @@ $the_query = new WP_Query(array(
 ```
 
 ## How Can I Create Custom Template In Users Liked Box?  ##
-We have provided some variables in setting panel. You can use them in textarea and then save the new options. 
+We have provided some variables in setting panel. You can use them in textarea and then save the new options.
 Attention: `%START_WHILE%` And `%END_WHILE%` variables are very important and you should use them out of the frequent string. (Such as `<li></li>` tags sample in default template)
 
 ## Receive HTTP ERROR 500 on WP ULike > Statistics   ##
 Increasing Your WordPress Memory Limit in wp-config.php to fix this error. It is located in your WordPress site's root folder, and you will need to use an FTP client or file manager in your web hosting control panel.
 Next, you need to paste this code in wp-config.php file just before the line that says `That's all, stop editing! Happy blogging.`
-```php 
+```php
 define( 'WP_MEMORY_LIMIT', '256M' );
 ```
 

@@ -6,9 +6,9 @@
     // Create the defaults once
     var pluginName = "WordpressUlikeNotifications",
         defaults  = {
-            messageType   : 'success', 
-            messageText   : 'Hello World!', 
-            messageElement: 'wpulike-message', 
+            messageType   : 'success',
+            messageText   : 'Hello World!',
+            messageElement: 'wpulike-message',
             notifContainer: 'wpulike-notification'
         };
     // The actual plugin constructor
@@ -69,8 +69,8 @@
                     if( !$( '.' + self.settings.messageElement ).length ) {
                         self.$notifContainer.remove();
                     }
-                }).trigger('WordpressUlikeRemoveNotification');   
-            }, 8000 );               
+                }).trigger('WordpressUlikeRemoveNotification');
+            }, 8000 );
         }
 
     });
