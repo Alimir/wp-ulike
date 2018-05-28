@@ -190,12 +190,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 							'status' 		=> $this->status
 						)
 					);
-					// Add buddypress activity
-					if( is_user_logged_in() ){
-						wp_ulike_bp_activity_add( $user_id, $id, $key );
-					}
-					// Mycred points
-					do_action( 'wp_ulike_mycred_like', $id, $key );
+
 				}
 				// Formatting the output
 				$output = wp_ulike_format_number( $this->update_meta_data( $id, $key, $get_like ) );
