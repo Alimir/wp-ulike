@@ -274,6 +274,119 @@ if( defined( 'BP_VERSION' ) ) {
 		add_filter( 'bp_notifications_get_registered_components', 'wp_ulike_filter_notifications_get_registered_components', 10 );
 	}
 
+	/**
+	 * Add new buddypress activities on each like.
+	 *
+	 * @author       	Alimir
+	 * @param           Integer $user_ID (User ID)
+	 * @param           Integer $cp_ID (Post/Comment ID)
+	 * @param           String 	$type (Simple Key for separate posts by comments)
+	 * @since           1.6
+	 * @return          Void
+	 */
+	if( ! function_exists( 'wp_ulike_add_bp_norifications' ) ){
+		function wp_ulike_add_bp_norifications( $cp_ID, $type, $user_ID, $status, $has_log  ){
+
+			// Return if user not logged in or an older data log exist
+			if( ! is_user_logged_in() || $has_log || ! function_exists( 'bp_is_active' ) ) return;
+
+			//Create a new activity when an user likes something
+			if (  wp_ulike_get_setting( 'wp_ulike_buddypress', 'new_likes_activity' ) == '1' ) {
+
+				switch ( $type ) {
+					case '_liked':
+						// Replace the post variables
+						$post_template = wp_ulike_get_setting( 'wp_ulike_buddypress', 'bp_post_activity_add_header' );
+
+						$post_template = $post_template == '' ? '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)' : $post_template;
+
+						if ( strpos( $post_template, '%POST_LIKER%' ) !== false ) {
+							$POST_LIKER    = bp_core_get_userlink( $user_ID );
+							$post_template = str_replace( "%POST_LIKER%", $POST_LIKER, $post_template );
+						}
+						if ( strpos( $post_template, '%POST_PERMALINK%' ) !== false ) {
+							$POST_PERMALINK = get_permalink($cp_ID);
+							$post_template  = str_replace( "%POST_PERMALINK%", $POST_PERMALINK, $post_template );
+						}
+						if ( strpos( $post_template, '%POST_COUNT%' ) !== false ) {
+							$POST_COUNT    = get_post_meta( $cp_ID, '_liked', true );
+							$post_template = str_replace( "%POST_COUNT%", $POST_COUNT, $post_template );
+						}
+						if ( strpos( $post_template, '%POST_TITLE%' ) !== false ) {
+							$POST_TITLE    = get_the_title( $cp_ID );
+							$post_template = str_replace( "%POST_TITLE%", $POST_TITLE, $post_template );
+						}
+						bp_activity_add( array(
+							'user_id'   => $user_ID,
+							'action'    => $post_template,
+							'component' => 'activity',
+							'type'      => 'wp_like_group',
+							'item_id'   => $cp_ID
+						));
+						break;
+
+					case '_commentliked':
+						// Replace the comment variables
+						$comment_template = wp_ulike_get_setting( 'wp_ulike_buddypress', 'bp_comment_activity_add_header' );
+
+						$comment_template = $comment_template == '' ? '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)' : $comment_template;
+
+						if ( strpos( $comment_template, '%COMMENT_LIKER%' ) !== false ) {
+							$COMMENT_LIKER    = bp_core_get_userlink( $user_ID );
+							$comment_template = str_replace("%COMMENT_LIKER%", $COMMENT_LIKER, $comment_template );
+						}
+						if ( strpos( $comment_template, '%COMMENT_PERMALINK%' ) !== false ) {
+							$COMMENT_PERMALINK = get_comment_link( $cp_ID );
+							$comment_template  = str_replace( "%COMMENT_PERMALINK%", $COMMENT_PERMALINK, $comment_template );
+						}
+						if ( strpos( $comment_template, '%COMMENT_AUTHOR%' ) !== false ) {
+							$COMMENT_AUTHOR   = get_comment_author( $cp_ID );
+							$comment_template = str_replace( "%COMMENT_AUTHOR%", $COMMENT_AUTHOR, $comment_template );
+						}
+						if ( strpos( $comment_template, '%COMMENT_COUNT%' ) !== false ) {
+							$COMMENT_COUNT    = get_comment_meta( $cp_ID, '_commentliked', true );
+							$comment_template = str_replace( "%COMMENT_COUNT%", $COMMENT_COUNT, $comment_template );
+						}
+						bp_activity_add( array(
+							'user_id'   => $user_ID,
+							'action'    => $comment_template,
+							'component' => 'activity',
+							'type'      => 'wp_like_group',
+							'item_id'   => $cp_ID
+						));
+						break;
+
+					default:
+						break;
+				}
+
+			}
+
+			//Sends out notifications when you get a like from someone
+			if ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'custom_notification' ) == '1' ) {
+				// No notifications from Anonymous
+				if ( ! $user_ID ) {
+					return false;
+				}
+				$author_ID = wp_ulike_get_auhtor_id( $cp_ID, $type );
+				if ( ! $author_ID || $author_ID == $user_ID ) {
+					return false;
+				}
+				bp_notifications_add_notification( array(
+						'user_id'           => $author_ID,
+						'item_id'           => $cp_ID,
+						'secondary_item_id' => $author_ID,
+						'component_name'    => 'wp_ulike',
+						'component_action'  => 'wp_ulike' . $type . '_action_' . $user_ID,
+						'date_notified'     => bp_core_current_time(),
+						'is_new'            => 1,
+					)
+				);
+			}
+
+		}
+		add_action( 'wp_ulike_after_process', 'wp_ulike_add_bp_norifications', 10, 5 );
+	}
 
 	/**
 	 * Add custom format for 'wp_ulike' notifications.
