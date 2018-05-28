@@ -5,6 +5,7 @@
  */
 
 if ( class_exists( 'myCRED_Hook' ) ) :
+
 	class wp_ulike_myCRED extends myCRED_Hook {
 
 		/**
@@ -45,17 +46,27 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 * @since		2.3
 		 */
 		public function run() {
+			// Goto status function
+			add_action( 'wp_ulike_after_process', array( $this, 'status' )	, 10, 4 );
+		}
 
-			if ( $this->prefs['add_like']['creds'] || $this->prefs['get_like']['creds'] ) {
-				add_action( 'wp_ulike_mycred_like'	, array( $this, 'like' )	, 10, 2 );
-			}
+		/**
+		 * Start functions by status
+		 *
+		 * @since		2.3
+		 */
+		public function status( $id , $key, $user_id, $status ) {
 
-			if ( $this->prefs['add_unlike']['creds'] || $this->prefs['get_unlike']['creds'] ) {
-				add_action( 'wp_ulike_mycred_unlike', array( $this, 'unlike' )	, 10, 2 );
+			switch ( $status ) {
+				case 'like':
+					$this->like( $id , $key, $user_id );
+					break;
+
+				default:
+					$this->unlike( $id , $key, $user_id );
 			}
 
 		}
-
 
 		public function bp_get_auhtor_id($activity_id) {
 			$activity = bp_activity_get_specific( array( 'activity_ids' => $activity_id, 'display_comments'  => true ) );
@@ -67,9 +78,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 *
 		 * @since		2.3
 		 */
-		public function like( $id , $key, $author_id = 0 ) {
-
-			$user_id 	= get_current_user_id();
+		public function like( $id , $key, $user_id, $author_id = 0 ) {
 
 			// Check for exclusion
 			if ( $this->core->exclude_user( $user_id ) ) return;
@@ -140,9 +149,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 *
 		 * @since		2.3
 		 */
-		public function unlike( $id , $key, $author_id 	= 0  ) {
-
-			$user_id 	= get_current_user_id();
+		public function unlike( $id , $key, $user_id, $author_id = 0 ) {
 
 			// Check for exclusion
 			if ( $this->core->exclude_user( $user_id ) ) return;
@@ -299,4 +306,5 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 
 		}
 	}
+
 endif;
