@@ -5,7 +5,7 @@ Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires at least: 3.5
 Tested up to: 4.9.6
-Stable tag: 3.3
+Stable tag: 3.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,10 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 3.3.1 =
+* Fixed: An old issue with database structure.
+* Fixed: An important bug with logging methods.
 
 = 3.3 =
 * Added: AJAX refresh for likers box.

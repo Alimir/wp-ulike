@@ -9,6 +9,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 	class wp_ulike{
 
 		private $wpdb, $status;
+
 		/**
 		 * Instance of this class.
 		 *
@@ -45,13 +46,13 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 	        /*
 	        // @endif
 	        //Add wp_ulike script file with special functions.
-	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), '3.2', true);
+	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), '3.3.1', true);
 	        // @if DEV
 	        */
 	        // @endif
 	        // @if DEV
 			//Add wp_ulike script file with special functions.
-			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), '3.2', true);
+			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), '3.3.1', true);
 	        // @endif
 
 			//localize script
@@ -95,10 +96,10 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					return $this->loggedby_cookie_method( $data );
 					break;
 				case 'by_ip':
-					return $this->loggedby_ip_method( $data );
+					return $this->loggedby_other_methods( $data, 'ip' );
 					break;
 				default:
-					return $this->loggedby_username( $data );
+					return $this->loggedby_other_methods( $data );
 			}
 		}
 
@@ -111,9 +112,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		public function do_not_log_method( array $data, $output = '' ){
+		public function do_not_log_method( array $data ){
 			// Extract data
 			extract( $data );
+			// output value
+			$output = '';
 
 			if( $type == 'post' ){
 				$output = $this->get_template( $data, 1 );
@@ -125,11 +128,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				$this->wpdb->insert(
 					$this->wpdb->prefix . $table,
 					array(
-						$column 		=> $id,
-						'date_time' 	=> current_time( 'mysql' ),
-						'ip' 			=> $user_ip,
-						'user_id' 		=> $user_id,
-						'status' 		=> $this->status
+						$column     => $id,
+						'date_time' => current_time( 'mysql' ),
+						'ip'        => $user_ip,
+						'user_id'   => $user_id,
+						'status'    => $this->status
 					)
 				);
 				// Formatting the output
@@ -159,9 +162,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		public function loggedby_cookie_method( array $data, $output = '' ){
+		public function loggedby_cookie_method( array $data ){
 			// Extract data
 			extract( $data );
+			// output value
+			$output = '';
 
 			if( $type == 'post' ){
 
@@ -183,11 +188,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$this->wpdb->insert(
 						$this->wpdb->prefix . $table,
 						array(
-							$column 		=> $id,
-							'date_time' 	=> current_time( 'mysql' ),
-							'ip' 			=> $user_ip,
-							'user_id' 		=> $user_id,
-							'status' 		=> $this->status
+							$column     => $id,
+							'date_time' => current_time( 'mysql' ),
+							'ip'        => $user_ip,
+							'user_id'   => $user_id,
+							'status'    => $this->status
 						)
 					);
 
@@ -211,112 +216,32 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
-		 * Logged by IP method
-		 *
-		 * @author       	Alimir
-		 * @param           Array $data
-		 * @since           2.0
-		 * @return			String
-		 */
-		public function loggedby_ip_method( array $data, $output = '' ){
-			// Check the user's likes history
-			$has_log = $this->has_log( $data );
-			// Extract data
-			extract( $data );
-
-			if( $type == 'post' ) {
-
-				if( ! $has_log ){
-					$output 	= $this->get_template( $data, 3 );
-
-				} else {
-
-					if( $this->get_user_status( $table, $column, 'ip', $id, $user_ip ) == "like" ){
-						$output = $this->get_template( $data, 2 );
-					} else{
-						$output = $this->get_template( $data, 3 );
-					}
-
-				}
-
-			} elseif( $type == 'process' ) {
-
-				if( ! $has_log ){
-					// Increment like counter
-					++$get_like;
-					// Insert log data
-					$this->wpdb->insert(
-						$this->wpdb->prefix . $table,
-						array(
-							$column 		=> $id,
-							'date_time' 	=> current_time( 'mysql' ),
-							'ip' 			=> $user_ip,
-							'user_id' 		=> $user_id,
-							'status' 		=> $this->status
-						)
-					);
-
-				} else {
-
-					if( $this->get_user_status( $table, $column, 'user_id', $id, $user_id ) === "like" ) {
-						// Decrement like counter
-						--$get_like;
-						$this->status = 'unlike';
-					} else {
-						// Increment like counter
-						++$get_like;
-					}
-					// Update status
-					$this->wpdb->update(
-						$this->wpdb->prefix . $table,
-						array(
-							'status' 	=> $this->status
-						),
-						array( $column => $id, 'user_id' => $user_id )
-					);
-				}
-
-				// Formatting the output
-				$output = wp_ulike_format_number( $this->update_meta_data( $id, $key, $get_like ) );
-				// After process hook
-				do_action_ref_array( 'wp_ulike_after_process',
-					array(
-						'id'      => $id,
-						'key'     => $key,
-						'user_id' => $user_id,
-						'status'  => $this->status,
-						'has_log' => $has_log
-					)
-				);
-
-			}
-
-			return $output;
-		}
-
-		/**
 		 * Logged by IP/UserName method
 		 *
 		 * @author       	Alimir
 		 * @param           Array 	$data
-		 * @param           String 	$output
+		 * @param           String 	$method_col
 		 * @since           2.0
 		 * @return			String
 		 */
-		public function loggedby_username( array $data, $output = '' ){
-			// Check the user's likes history
-			$has_log = $this->has_log( $data );
+		public function loggedby_other_methods( array $data, $method_col = 'user_id' ){
 			// Extract data
 			extract( $data );
+			// Check the user's likes history
+			$output     = '';
+			// method column value
+			$method_val = $method_col === 'ip' ? $user_ip : $user_id;
+			// Check user log history
+			$has_log    = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
 
 			if( $type == 'post' ){
 
-				if( ! $has_log ){
+				if( empty( $has_log ) ){
 					$output 	= $this->get_template( $data, 3 );
 
 				} else {
 
-					if( $this->get_user_status( $table, $column, 'user_id', $id, $user_id ) == "like" ) {
+					if( $has_log  == "like" ) {
 						$output = $this->get_template( $data, 2 );
 
 					} else {
@@ -327,24 +252,24 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			} elseif( $type == 'process' ) {
 
-				if( ! $has_log ){
+				if( empty( $has_log ) ){
 					// Increment like counter
 					++$get_like;
 					// Insert log data
 					$this->wpdb->insert(
 						$this->wpdb->prefix . $table,
 						array(
-							$column 		=> $id,
-							'date_time' 	=> current_time( 'mysql' ),
-							'ip' 			=> $user_ip,
-							'user_id' 		=> $user_id,
-							'status' 		=> $this->status
+							$column     => $id,
+							'date_time' => current_time( 'mysql' ),
+							'ip'        => $user_ip,
+							'user_id'   => $user_id,
+							'status'    => $this->status
 						)
 					);
 
 				} else {
 
-					if( $this->get_user_status( $table, $column, 'user_id', $id, $user_id ) == "like" ) {
+					if( $has_log == "like" ) {
 						// Decrement like counter
 						--$get_like;
 						$this->status = 'unlike';
@@ -358,7 +283,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						array(
 							'status' 	=> $this->status
 						),
-						array( $column => $id, 'user_id' => $user_id )
+						array( $column => $id, $method_col => $method_val )
 					);
 				}
 
@@ -371,7 +296,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						'key'     => $key,
 						'user_id' => $user_id,
 						'status'  => $this->status,
-						'has_log' => $has_log
+						'has_log' => empty( $has_log ) ? 0 : 1
 					)
 				);
 
@@ -505,28 +430,6 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
-		 * Get User Status (like/dislike)
-		 *
-		 * @author       	Alimir
-		 * @param           String $table
-		 * @param           String $first_column
-		 * @param           String $second_column
-		 * @param           String $first_val
-		 * @param           String $second_val
-		 * @since           2.0
-		 * @return			String
-		 */
-		public function get_user_status( $table, $first_column, $second_column, $first_val, $second_val ){
-			// This will return like|unlike
-			return $this->wpdb->get_var( "
-									SELECT status
-									FROM ".$this->wpdb->prefix."$table
-									WHERE $first_column = '$first_val'
-									AND $second_column = '$second_val'
-								");
-		}
-
-		/**
 		 * Get Liked User
 		 *
 		 * @author       	Alimir
@@ -599,6 +502,28 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
+		 * Get User Status (like/dislike)
+		 *
+		 * @author       	Alimir
+		 * @param           String $table
+		 * @param           String $first_column
+		 * @param           String $second_column
+		 * @param           String $first_val
+		 * @param           String $second_val
+		 * @since           2.0
+		 * @return			String
+		 */
+		public function get_user_status( $table, $first_column, $second_column, $first_val, $second_val ){
+			// This will return like|unlike
+			return $this->wpdb->get_var( "
+				SELECT status
+				FROM ".$this->wpdb->prefix."$table
+				WHERE $first_column = '$first_val'
+				AND $second_column = '$second_val'
+			" );
+		}
+
+		/**
 		 * Get Current User Likes List
 		 *
 		 * @author       	Alimir
@@ -613,7 +538,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				SELECT COUNT(*)
 				FROM ".$this->wpdb->prefix.$table."
 				WHERE $column = '$id'
-				AND user_id = '$user_id'
+				AND ( user_id = '$user_id' OR ip = '$user_ip' )
 			" );
 		}
 
