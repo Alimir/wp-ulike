@@ -8,3 +8,5 @@ build/
 \.sass-cache/
 
 _devDependencies/
+
+deploy\.sh
