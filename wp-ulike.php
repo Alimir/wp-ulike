@@ -420,15 +420,16 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                        `post_id` int(11) NOT NULL,
 	                        `date_time` datetime NOT NULL,
 	                        `ip` varchar(30) NOT NULL,
-	                        `user_id` int(11) UNSIGNED NOT NULL,
+	                        `user_id` bigint(20) UNSIGNED NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
 	                    );";
 
 	                require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	                dbDelta( $sql );
-
-	                add_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+	            } else {
+	            	// Fix an old issue with user_id column
+	            	$wpdb->query( "ALTER TABLE $posts_table CHANGE `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL" );
 	            }
 
 	            $comments_table = $wpdb->prefix . "ulike_comments";
@@ -438,15 +439,16 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                        `comment_id` int(11) NOT NULL,
 	                        `date_time` datetime NOT NULL,
 	                        `ip` varchar(30) NOT NULL,
-	                        `user_id` int(11) UNSIGNED NOT NULL,
+	                        `user_id` bigint(20) UNSIGNED NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
 	                    );";
 
 	                require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	                dbDelta( $sql );
-
-	                update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+	            } else {
+	            	// Fix an old issue with user_id column
+	            	$wpdb->query( "ALTER TABLE $comments_table CHANGE `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL" );
 	            }
 
 	            $activities_table = $wpdb->prefix . "ulike_activities";
@@ -456,15 +458,16 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                        `activity_id` int(11) NOT NULL,
 	                        `date_time` datetime NOT NULL,
 	                        `ip` varchar(30) NOT NULL,
-	                        `user_id` int(11) UNSIGNED NOT NULL,
+	                        `user_id` bigint(20) UNSIGNED NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
 	                    );";
 
 	                require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	                dbDelta( $sql );
-
-	                update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+	            } else {
+	            	// Fix an old issue with user_id column
+	            	$wpdb->query( "ALTER TABLE $activities_table CHANGE `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL" );
 	            }
 
 	            $forums_table = $wpdb->prefix . "ulike_forums";
@@ -474,16 +477,19 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                        `topic_id` int(11) NOT NULL,
 	                        `date_time` datetime NOT NULL,
 	                        `ip` varchar(30) NOT NULL,
-	                        `user_id` int(11) UNSIGNED NOT NULL,
+	                        `user_id` bigint(20) UNSIGNED NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
 	                    );";
 
 	                require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	                dbDelta( $sql );
-
-	                update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+	            } else {
+	            	// Fix an old issue with user_id column
+	            	$wpdb->query( "ALTER TABLE $forums_table CHANGE `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL" );
 	            }
+
+				update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
 
 	        }
 
