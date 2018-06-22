@@ -416,11 +416,11 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	            $posts_table = $wpdb->prefix . "ulike";
 	            if ( $wpdb->get_var( "show tables like '$posts_table'" ) != $posts_table ) {
 	                $sql = "CREATE TABLE " . $posts_table . " (
-	                        `id` bigint(11) NOT NULL AUTO_INCREMENT,
-	                        `post_id` int(11) NOT NULL,
+	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
+	                        `post_id` bigint(20) NOT NULL,
 	                        `date_time` datetime NOT NULL,
 	                        `ip` varchar(30) NOT NULL,
-	                        `user_id` bigint(20) UNSIGNED NOT NULL,
+	                        `user_id` varchar(30) NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
 	                    );";
@@ -429,17 +429,17 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                dbDelta( $sql );
 	            } else {
 	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $posts_table CHANGE `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL" );
+	            	$wpdb->query( "ALTER TABLE $posts_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
 	            }
 
 	            $comments_table = $wpdb->prefix . "ulike_comments";
 	            if ( $wpdb->get_var( "show tables like '$comments_table'" ) != $comments_table ) {
 	                $sql = "CREATE TABLE " . $comments_table . " (
-	                        `id` bigint(11) NOT NULL AUTO_INCREMENT,
-	                        `comment_id` int(11) NOT NULL,
+	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
+	                        `comment_id` bigint(20) NOT NULL,
 	                        `date_time` datetime NOT NULL,
 	                        `ip` varchar(30) NOT NULL,
-	                        `user_id` bigint(20) UNSIGNED NOT NULL,
+	                        `user_id` varchar(30) NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
 	                    );";
@@ -448,17 +448,17 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                dbDelta( $sql );
 	            } else {
 	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $comments_table CHANGE `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL" );
+	            	$wpdb->query( "ALTER TABLE $comments_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
 	            }
 
 	            $activities_table = $wpdb->prefix . "ulike_activities";
 	            if ( $wpdb->get_var( "show tables like '$activities_table'" ) != $activities_table ) {
 	                $sql = "CREATE TABLE " . $activities_table . " (
-	                        `id` bigint(11) NOT NULL AUTO_INCREMENT,
-	                        `activity_id` int(11) NOT NULL,
+	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
+	                        `activity_id` bigint(20) NOT NULL,
 	                        `date_time` datetime NOT NULL,
 	                        `ip` varchar(30) NOT NULL,
-	                        `user_id` bigint(20) UNSIGNED NOT NULL,
+	                        `user_id` varchar(30) NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
 	                    );";
@@ -467,17 +467,17 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                dbDelta( $sql );
 	            } else {
 	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $activities_table CHANGE `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL" );
+	            	$wpdb->query( "ALTER TABLE $activities_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
 	            }
 
 	            $forums_table = $wpdb->prefix . "ulike_forums";
 	            if ( $wpdb->get_var( "show tables like '$forums_table'" ) != $forums_table ) {
 	                $sql = "CREATE TABLE " . $forums_table . " (
-	                        `id` bigint(11) NOT NULL AUTO_INCREMENT,
-	                        `topic_id` int(11) NOT NULL,
+	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
+	                        `topic_id` bigint(20) NOT NULL,
 	                        `date_time` datetime NOT NULL,
 	                        `ip` varchar(30) NOT NULL,
-	                        `user_id` bigint(20) UNSIGNED NOT NULL,
+	                        `user_id` varchar(30) NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
 	                    );";
@@ -486,7 +486,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                dbDelta( $sql );
 	            } else {
 	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $forums_table CHANGE `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL" );
+	            	$wpdb->query( "ALTER TABLE $forums_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
 	            }
 
 				update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
