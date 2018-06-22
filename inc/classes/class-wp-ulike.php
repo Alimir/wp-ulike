@@ -133,7 +133,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						'ip'        => $user_ip,
 						'user_id'   => $user_id,
 						'status'    => $this->status
-					)
+					),
+					array( '%d', '%s', '%s', '%s', '%s' )
 				);
 				// Formatting the output
 				$output = wp_ulike_format_number( $this->update_meta_data( $id, $key, $get_like ) );
@@ -193,7 +194,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 							'ip'        => $user_ip,
 							'user_id'   => $user_id,
 							'status'    => $this->status
-						)
+						),
+						array( '%d', '%s', '%s', '%s', '%s' )
 					);
 
 				}
@@ -264,7 +266,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 							'ip'        => $user_ip,
 							'user_id'   => $user_id,
 							'status'    => $this->status
-						)
+						),
+						array( '%d', '%s', '%s', '%s', '%s' )
 					);
 
 				} else {
@@ -622,11 +625,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		function get_reutrn_id(){
-			global $user_ID,$wp_user_IP;
+		public function get_reutrn_id(){
+			global $user_ID, $wp_user_IP;
 
 			if( ! is_user_logged_in() ){
-				return ip2long($wp_user_IP);
+				return wp_ulike_generate_user_id( $wp_user_IP );
 			} else {
 				return $user_ID;
 			}

@@ -278,7 +278,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	    */
 		public function anonymise_ip( $ip_address ) {
 			if ( strpos( $ip_address, "." ) == true ) {
-				return preg_replace('~[0-9]+$~', '000', $ip_address);
+				return preg_replace('~[0-9]+$~', '0', $ip_address);
 			} else {
 				return preg_replace('~[0-9]*:[0-9]+$~', '0000:0000', $ip_address);
 			}

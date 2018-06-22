@@ -1303,6 +1303,27 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 	}
 }
 
+/**
+ * Convert IP to a integer value
+ *
+ * @author       	Alimir
+ * @param           String $user_ip
+ * @since           3.4
+ * @return          String
+ */
+function wp_ulike_generate_user_id( $user_ip ) {
+
+	if( filter_var( $user_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+	    return ip2long( $user_ip );
+	} else {
+	    $binary_val = '';
+	    foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
+	        $binary_val .= decbin( $byte );
+	    }
+	    return base_convert( ltrim( $binary_val, '0' ), 2, 10 );
+	}
+
+}
 
 /*******************************************************
   Templates
