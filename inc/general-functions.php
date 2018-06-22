@@ -1323,7 +1323,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+		<div class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<a data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
 				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
@@ -1362,7 +1362,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+		<div class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<a data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
 				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
@@ -1401,7 +1401,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 					<label>
 					<input type="checkbox" data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
