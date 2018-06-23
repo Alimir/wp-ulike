@@ -8,7 +8,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 	class wp_ulike{
 
-		private $wpdb, $status;
+		private $wpdb, $status, $user_id, $user_ip;
 
 		/**
 		 * Instance of this class.
@@ -22,12 +22,26 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function __construct()
 		{
-			global $wpdb;
-			$this->wpdb   = $wpdb;
-			$this->status = 'like';
+			// Init core
+			add_action( 'wp_ulike_loaded', array( $this, 'init' ) );
+		}
+
+		/**
+		 * Init function when plugin loaded
+		 *
+		 * @author          Alimir
+		 * @since           3.0
+		 * @return          Void
+		 */
+		public function init(){
+			global $wpdb, $wp_user_IP;
+			$this->wpdb    = $wpdb;
+			$this->status  = 'like';
+			$this->user_ip = $wp_user_IP;
+			$this->user_id = $this->get_reutrn_id();
 
 			// Enqueue Scripts
-		 	add_action( 'wp_enqueue_scripts', array( $this, 'load_assets'  ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'load_assets'  ) );
 		}
 
 		/**
@@ -87,6 +101,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		public function wp_get_ulike( array $data ){
 			//get loggin method option
 			$loggin_method = wp_ulike_get_setting( $data['setting'], 'logging_method');
+
 			//Select the logging functionality
 			switch( $loggin_method ){
 				case 'do_not_log':
@@ -130,8 +145,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array(
 						$column     => $id,
 						'date_time' => current_time( 'mysql' ),
-						'ip'        => $user_ip,
-						'user_id'   => $user_id,
+						'ip'        => $this->user_ip,
+						'user_id'   => $this->user_id,
 						'status'    => $this->status
 					),
 					array( '%d', '%s', '%s', '%s', '%s' )
@@ -143,7 +158,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array(
 						'id'      => $id,
 						'key'     => $key,
-						'user_id' => $user_id,
+						'user_id' => $this->user_id,
 						'status'  => $this->status,
 						'has_log' => $this->has_log( $data )
 					)
@@ -191,8 +206,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						array(
 							$column     => $id,
 							'date_time' => current_time( 'mysql' ),
-							'ip'        => $user_ip,
-							'user_id'   => $user_id,
+							'ip'        => $this->user_ip,
+							'user_id'   => $this->user_id,
 							'status'    => $this->status
 						),
 						array( '%d', '%s', '%s', '%s', '%s' )
@@ -206,7 +221,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array(
 						'id'      => $id,
 						'key'     => $key,
-						'user_id' => $user_id,
+						'user_id' => $this->user_id,
 						'status'  => $this->status,
 						'has_log' => $this->has_log( $data )
 					)
@@ -232,7 +247,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			// Check the user's likes history
 			$output     = '';
 			// method column value
-			$method_val = $method_col === 'ip' ? $user_ip : $user_id;
+			$method_val = $method_col === 'ip' ? $this->user_ip : $this->user_id;
 			// Check user log history
 			$has_log    = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
 
@@ -263,8 +278,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						array(
 							$column     => $id,
 							'date_time' => current_time( 'mysql' ),
-							'ip'        => $user_ip,
-							'user_id'   => $user_id,
+							'ip'        => $this->user_ip,
+							'user_id'   => $this->user_id,
 							'status'    => $this->status
 						),
 						array( '%d', '%s', '%s', '%s', '%s' )
@@ -297,7 +312,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array(
 						'id'      => $id,
 						'key'     => $key,
-						'user_id' => $user_id,
+						'user_id' => $this->user_id,
 						'status'  => $this->status,
 						'has_log' => empty( $has_log ) ? 0 : 1
 					)
@@ -541,7 +556,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				SELECT COUNT(*)
 				FROM ".$this->wpdb->prefix.$table."
 				WHERE $column = '$id'
-				AND ( user_id = '$user_id' OR ip = '$user_ip' )
+				AND ( user_id = ".$this->user_id." OR ip = ".$this->user_ip." )
 			" );
 		}
 
@@ -559,7 +574,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			return $this->wpdb->get_results( "
 				SELECT $col, date_time
 				FROM ".$this->wpdb->prefix.$table."
-				WHERE user_id = '$user_id'
+				WHERE user_id = ".$this->user_id."
 				AND status = 'like'
 				ORDER BY date_time
 				DESC
@@ -626,10 +641,10 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			String
 		 */
 		public function get_reutrn_id(){
-			global $user_ID, $wp_user_IP;
+			global $user_ID;
 
-			if( ! is_user_logged_in() ){
-				return wp_ulike_generate_user_id( $wp_user_IP );
+			if( ! $user_ID ){
+				return wp_ulike_generate_user_id( $this->user_ip );
 			} else {
 				return $user_ID;
 			}

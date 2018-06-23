@@ -715,21 +715,19 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 if( ! function_exists( 'wp_ulike' ) ){
 	function wp_ulike( $type = 'get', $args = array() ) {
 		//global variables
-		global $post, $wp_ulike_class, $wp_user_IP;
+		global $post;
 
 		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post->ID;
 		$get_post_meta = get_post_meta( $post_ID, '_liked', true );
 		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_posts_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_posts_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_posts', 'theme' );
+		$style         = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
+		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main data
 		$defaults      = array(
 			"id"            => $post_ID,				//Post ID
-			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"       => $wp_user_IP,				//User IP
 			"get_like"      => $get_like,				//Number Of Likes
 			"method"        => 'likeThis',				//JavaScript method
 			"setting"       => 'wp_ulike_posts',		//Setting Key
@@ -742,28 +740,20 @@ if( ! function_exists( 'wp_ulike' ) ){
 			"style"         => $style,					//Get Default Theme
 			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => ''						//Extra Wrapper class
+			"wrapper_class" => '',						//Extra Wrapper class
+			"button_type"   => $button_type				//Button Type
 		);
 
-        $parsed_args = wp_parse_args( $args, $defaults );
+		$parsed_args = wp_parse_args( $args, $defaults );
+		// Output templayte
+		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) );
+		// Select retrun or print
+        if( $type === 'put' ) {
+        	return $output;
+        } else {
+        	echo $output;
+        }
 
-		if( ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-
-			if ($type == 'put') {
-				return $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-			else {
-				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-
-		}//end !only_registered_users condition
-		elseif ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
-			if(wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button") {
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
-			} else {
-				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
-			}
-		}//end only_registered_users condition
 	}
 }
 
@@ -911,22 +901,18 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
  */
 if( ! function_exists( 'wp_ulike_comments' ) ){
 	function wp_ulike_comments( $type = 'get', $args = array() ) {
-		//global variables
-		global $wp_ulike_class, $wp_user_IP;
 
 		$comment_ID    = isset( $args['id'] ) ? $args['id'] : get_comment_ID();
 		$comment_meta  = get_comment_meta( $comment_ID, '_commentliked', true );
 		$get_like      = empty( $comment_meta ) ? 0 : $comment_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_comments_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_comments_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_comments', 'theme' );
+		$style         = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
+		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
 			"id"            => $comment_ID,				//Comment ID
-			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"       => $wp_user_IP,				//User IP
 			"get_like"      => $get_like,				//Number Of Likes
 			"method"        => 'likeThisComment',		//JavaScript method
 			"setting"       => 'wp_ulike_comments',		//Setting Key
@@ -939,28 +925,20 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 			"style"         => $style,					//Get Default Theme
 			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => ''						//Extra Wrapper class
+			"wrapper_class" => '',						//Extra Wrapper class
+			"button_type"   => $button_type				//Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
+		// Output templayte
+		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) );
+		// Select retrun or print
+        if( $type === 'put' ) {
+        	return $output;
+        } else {
+        	echo $output;
+        }
 
-		if( ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-
-			if ($type == 'put') {
-				return $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-			else {
-				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-
-		}//end !only_registered_users condition
-		elseif (wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users') == '1' && ! is_user_logged_in()){
-			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type' ) == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
-			} else {
-				return apply_filters( 'wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this comment: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>' );
-			}
-		}//end only_registered_users condition
 	}
 }
 
@@ -994,8 +972,6 @@ if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){
  */
 if( ! function_exists( 'wp_ulike_buddypress' ) ){
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
-		//global variables
-		global $wp_ulike_class, $wp_user_IP;
 
         if ( bp_get_activity_comment_id() != null ){
 			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_comment_id();
@@ -1005,16 +981,14 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 
 		$bp_get_meta   = bp_activity_get_meta($activityID, '_activityliked');
 		$get_like      = empty( $bp_get_meta ) ? 0 : $bp_get_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_activities_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_activities_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme' );
+		$style         = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
+		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
 			"id"            => $activityID,				//Activity ID
-			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"       => $wp_user_IP,				//User IP
 			"get_like"      => $get_like,				//Number Of Likes
 			"method"        => 'likeThisActivity',		//JavaScript method
 			"setting"       => 'wp_ulike_buddypress',	//Setting Key
@@ -1027,29 +1001,19 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			"style"         => $style,					//Get Default Theme
 			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => ''						//Extra Wrapper class
+			"wrapper_class" => '',						//Extra Wrapper class
+			"button_type"   => $button_type				//Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
-
-		if( ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-
-			if ($type == 'put') {
-				return $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-			else {
-				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-
-		}//end !only_registered_users condition
-		elseif ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
-			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
-			}
-			else{
-				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this activity: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
-			}
-		}//end only_registered_users condition
+		// Output templayte
+		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) );
+		// Select retrun or print
+        if( $type === 'put' ) {
+        	return $output;
+        } else {
+        	echo $output;
+        }
 
 	}
 }
@@ -1126,7 +1090,7 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
 if( ! function_exists( 'wp_ulike_bbpress' ) ){
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
 		//global variables
-		global $post,$wp_ulike_class,$wp_user_IP;
+		global $post;
 
         //Thanks to @Yehonal for this commit
 		$replyID       = bbp_get_reply_id();
@@ -1135,52 +1099,39 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 
 		$get_post_meta = get_post_meta( $post_ID, '_topicliked', true );
 		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_topics_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_topics_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme' );
+		$style         = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
+		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
 			"id"            => $post_ID,				//Post ID
-			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"       => $wp_user_IP,			//User IP
 			"get_like"      => $get_like,				//Number Of Likes
-			"method"        => 'likeThisTopic',		//JavaScript method
+			"method"        => 'likeThisTopic',			//JavaScript method
 			"setting"       => 'wp_ulike_bbpress',		//Setting Key
 			"type"          => 'post',					//Function type (post/process)
 			"table"         => 'ulike_forums',			//posts table
 			"column"        => 'topic_id',				//ulike table column name
 			"key"           => '_topicliked',			//meta key
 			"cookie"        => 'topic-liked-',			//Cookie Name
-			"slug"          => 'topic',				//Slug Name
+			"slug"          => 'topic',					//Slug Name
 			"style"         => $style,					//Get Default Theme
 			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => ''						//Extra Wrapper class
+			"wrapper_class" => '',						//Extra Wrapper class
+			"button_type"   => $button_type,			//Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
-
-		if( ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-
-			if ($type == 'put') {
-				return $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-			else {
-				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-
-		}//end !only_registered_users condition
-
-		else if ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && !is_user_logged_in()) {
-			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
-			}
-			else {
-				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
-			}
-		}//end only_registered_users condition
+		// Output templayte
+		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) );
+		// Select retrun or print
+        if( $type === 'put' ) {
+        	return $output;
+        } else {
+        	echo $output;
+        }
 
 	}
 }
@@ -1188,6 +1139,38 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 /*******************************************************
   General
 *******************************************************/
+
+/**
+ * Convert numbers of Likes with string (kilobyte) format
+ *
+ * @author       	Alimir
+ * @param           Array  		$parsed_args
+ * @param           Integer 	$only_registered_users
+ * @since           3.4
+ * @return          String
+ */
+if( ! function_exists( 'wp_ulike_display_button' ) ){
+	function wp_ulike_display_button( array $parsed_args, $only_registered_users ){
+		global $wp_ulike_class;
+
+		if( $only_registered_users != '1' || ( $only_registered_users == '1' && is_user_logged_in() ) ) {
+			// Return ulike template
+			return $wp_ulike_class->wp_get_ulike( $parsed_args );
+		} else {
+			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') === 'button' ){
+				return $wp_ulike_class->get_template( $parsed_args, 0 );
+			} else {
+				return apply_filters( 'wp_ulike_login_alert_template',
+					sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>',
+					__('You need to login in order to like this post: ',WP_ULIKE_SLUG),
+					wp_login_url( get_permalink() ),
+					__('click here',WP_ULIKE_SLUG)
+					)
+				);
+			}
+		}
+	}
+}
 
 /**
  * Get custom style setting from customize options
