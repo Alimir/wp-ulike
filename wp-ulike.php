@@ -75,7 +75,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	    */
 	    private function __construct() {
 
-	    	add_action( 'init', array( $this, 'init' ) );
+	    	add_action( 'plugins_loaded', array( $this, 'init' ) );
 			// Include Files
 			$this->includes();
 
@@ -86,6 +86,21 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 
 			$prefix = is_network_admin() ? 'network_admin_' : '';
 			add_filter( "{$prefix}plugin_action_links",  array( $this, 'add_links' ), 10, 5 );
+	    }
+
+	   /**
+	    * Init the plugin when WordPress Initialises.
+	    *
+	    * @return void
+	    */
+	    public function init(){
+
+	        // @deprecate version 5.0
+	        global $wp_version;
+	        if ( version_compare( $wp_version, '4.6', '<' ) ) {
+	            // Load plugin text domain
+	            $this->load_plugin_textdomain();
+	        }
 
 			// Loaded action
 			do_action( 'wp_ulike_loaded' );
@@ -283,21 +298,6 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 				return preg_replace('~[0-9]*:[0-9]+$~', '0000:0000', $ip_address);
 			}
 		}
-
-	   /**
-	    * Init the plugin when WordPress Initialises.
-	    *
-	    * @return void
-	    */
-	    public function init(){
-
-	        // @deprecate version 5.0
-	        global $wp_version;
-	        if ( version_compare( $wp_version, '4.6', '<' ) ) {
-	            // Load plugin text domain
-	            $this->load_plugin_textdomain();
-	        }
-	    }
 
 	   /**
 	    * Return an instance of this class.

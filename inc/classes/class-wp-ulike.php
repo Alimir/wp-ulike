@@ -371,13 +371,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function get_template( array $args, $status ){
 
-			$button_type 		= wp_ulike_get_setting( 'wp_ulike_general', 'button_type' );
 			//Primary button class name
 			$button_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_button_selector', 'wp_ulike_btn' ) );
 			//Button text value
 			$button_text		= '';
 
-			if( $button_type == 'image' ){
+			if( $args['button_type'] == 'image' ){
 				$button_class_name .= ' wp_ulike_put_image';
 				if($status == 2){
 					$button_class_name .= ' image-unlike';
@@ -422,7 +421,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					"attributes"     => $args['attributes'],
 					"microdata"      => $args['microdata'],
 					"style"          => $args['style'],
-					"button_type"    => $button_type,
+					"button_type"    => $args['button_type'],
 					"button_text"    => $button_text,
 					"general_class"  => $general_class_name,
 					"button_class"   => $button_class_name,

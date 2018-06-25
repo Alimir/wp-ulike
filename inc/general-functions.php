@@ -149,7 +149,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'button_type' => array(
 							'type'    => 'visual-select',
 							'label'   => __( 'Button Type', WP_ULIKE_SLUG),
-							'default' => 'text',
+							'default' => 'image',
 							'options' => array(
 								'image' => array(
 									'name'   => __('Icon', WP_ULIKE_SLUG),
@@ -166,7 +166,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'   => __( 'Button Text', WP_ULIKE_SLUG) . ' (' . __('Like', WP_ULIKE_SLUG) .')',
 						),
 						'button_text_u' => array(
-							'default' => __('Unlike',WP_ULIKE_SLUG),
+							'default' => __('Liked',WP_ULIKE_SLUG),
 							'label'   => __( 'Button Text', WP_ULIKE_SLUG) . ' (' . __('Unlike', WP_ULIKE_SLUG) .')',
 						),
 						'button_url' => array(
@@ -230,7 +230,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'anonymise'     => array(
 							'type'          => 'checkbox',
-							'default'       => 1,
+							'default'       => 0,
 							'label'         => __('Anonymize IP', WP_ULIKE_SLUG),
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'description'   => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
