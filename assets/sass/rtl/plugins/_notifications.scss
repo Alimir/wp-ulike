@@ -5,7 +5,12 @@
 
 	    .wpulike-message {
 	        padding: 15px 55px 15px 15px;
-	        background-position: right 15px center;
+
+        
+	        &:before{
+	            left: auto;
+	            right: 0;         
+	        }
 	    }
 	}
 	@media all and (max-width:240px) {

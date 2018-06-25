@@ -67,13 +67,17 @@
   }
 }
 .wpulike-robeen {
+  .wp_ulike_likers_wrapper{
+    bottom: 15px;
+  }
   .count-box {
     position: relative;
     bottom: 18px;
     right: 8px;
     font-weight: 600;
   }
-  label{
+  label{  
+    display: inline-block;
     margin: 0;
   }
   svg {

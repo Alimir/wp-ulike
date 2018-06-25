@@ -60,30 +60,29 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 	        /*
 	        // @endif
 	        //Add wp_ulike script file with special functions.
-	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), '3.3.1', true);
+	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), '3.4', true);
 	        // @if DEV
 	        */
 	        // @endif
 	        // @if DEV
 			//Add wp_ulike script file with special functions.
-			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), '3.3.1', true);
+			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), '3.4', true);
 	        // @endif
 
 			//localize script
 			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
 				'ajax_url'         => admin_url( 'admin-ajax.php' ),
-				'button_type'      => wp_ulike_get_setting( 'wp_ulike_general', 'button_type'),
 				'notifications'    => wp_ulike_get_setting( 'wp_ulike_general', 'notifications')
 			));
 	        // @if DEV
 	        /*
 	        // @endif
-	        wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css' );
+	        wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css', array(), '3.4' );
 	        // @if DEV
 	        */
 	        // @endif
 	        // @if DEV
-			wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css' );
+			wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css', array(), '3.4' );
 	        // @endif
 
 			//add your custom style from setting panel.

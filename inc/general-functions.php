@@ -1184,12 +1184,12 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 		// Like Icon
 		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image { background-image: url('.$get_like_icon.') !important; }';
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$get_like_icon.') !important; }';
 		}
 
 		// Unlike Icon
 		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.image-unlike { background-image: url('.$get_like_icon.') !important; }';
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.image-unlike:after { background-image: url('.$get_like_icon.') !important; filter: none; }';
 		}
 
 		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) ) {
@@ -1205,10 +1205,10 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 				$btn_style .= "background-color:".$customstyle['btn_bg'].";";
 			}
 			if( isset( $customstyle['btn_border'] ) && ! empty( $customstyle['btn_border'] ) ) {
-				$btn_style .= "border-color:".$customstyle['btn_border']."; ";
+				$btn_style .= "box-shadow: 0 0 0 1px ".$customstyle['btn_border']." inset; ";
 			}
 			if( isset( $customstyle['btn_color'] ) && ! empty( $customstyle['btn_color'] ) ) {
-				$btn_style .= "color:".$customstyle['btn_color'].";text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
+				$btn_style .= "color:".$customstyle['btn_color'].";";
 			}
 
 			if( $btn_style != '' ){
@@ -1220,15 +1220,15 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 				$counter_style .= "background-color:".$customstyle['counter_bg'].";";
 			}
 			if( isset( $customstyle['counter_border'] ) && ! empty( $customstyle['counter_border'] ) ) {
-				$counter_style .= "border-color:".$customstyle['counter_border']."; ";
-				$before_style  = "border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
+				$counter_style .= "box-shadow: 0 0 0 1px ".$customstyle['counter_border']." inset; ";
+				$before_style  = "background-color:".$customstyle['counter_bg']."; border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
 			}
 			if( isset( $customstyle['counter_color'] ) && ! empty( $customstyle['counter_color'] ) ) {
 				$counter_style .= "color:".$customstyle['counter_color'].";";
 			}
 
 			if( $counter_style != '' ){
-				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box:before{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
+				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
 			}
 
 			// Loading Spinner

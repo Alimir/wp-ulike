@@ -1,5 +1,14 @@
 
 .rtl {
+    .wp_ulike_likers_wrapper{
+        left: auto;
+        right: 0;
+
+        &:after{
+            left: auto;
+            right: 15px;
+        }
+    }    
     .commentlist {
         .tiles {
             .avatar {
