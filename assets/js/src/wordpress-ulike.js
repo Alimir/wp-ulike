@@ -127,11 +127,11 @@
 
         _actions: function( messageType, messageText, btnText, likeStatus ){
             //check the button types
-            if( wp_ulike_params.button_type === 'image' ) {
+            if( this.buttonElement.hasClass('wp_ulike_put_image') ) {
                 if( likeStatus === 3 || likeStatus === 2){
                     this.buttonElement.toggleClass('image-unlike');
                 }
-            } else if( wp_ulike_params.button_type === 'text' ) {
+            } else if( this.buttonElement.hasClass('wp_ulike_put_text') ) {
                 this.buttonElement.find('span').html(btnText);
             }
 
