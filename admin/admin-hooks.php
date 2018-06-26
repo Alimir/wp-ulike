@@ -186,22 +186,31 @@ function wp_ulike_admin_notice() {
 	if( get_option( 'wp-ulike-notice-dismissed', FALSE ) ) return;
 	?>
 	<script>
-		jQuery(document).on( 'click', '.wp-ulike-notice .notice-dismiss', function() {
+		jQuery(document).on( 'click', '.wp-ulike-dismiss', function(e) {
+			e.preventDefault();
 		    jQuery.ajax({
-		        url: ajaxurl,
-		        data: {
-		            action: 'wp_ulike_dismissed_notice'
+				url : ajaxurl,
+				type: 'post',
+				data: {
+					action: 'wp_ulike_dismissed_notice',
+					nonce : $(this).data('nonce')
 		        }
-		    })
+		    }).done(function( response ) {
+                $(this).closest('.wp-ulike-notice').fadeOut();
+            }.bind(this));
 		});
 	</script>
-	<div class="notice wp-ulike-notice is-dismissible">
-        <img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-badge.png" alt="WP ULike Plugin">
+	<div class="wp-ulike-notice">
+		<div class="wp-ulike-notice-image">
+        	<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-badge.png" alt="WP ULike Plugin">
+    	</div>
         <div class="wp-ulike-notice-text">
             <p><?php echo _e( "It's great to see that you've been using the WP ULike plugin for a while now. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ); ?> </p>
-            <p class="links">
+            <div class="links">
                 <a href="https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5" target="_blank"><?php echo _e( "Sure, I'd love to!", WP_ULIKE_SLUG ); ?></a>
-            </p>
+                <a href="https://m.do.co/c/13ad5bc24738" target="_blank"><?php echo _e( "I also want to donate!", WP_ULIKE_SLUG ); ?></a>
+                <a href="#" data-nonce="<?php echo wp_create_nonce( 'wp-ulike-notice-dismissed' ); ?>" class="wp-ulike-dismiss"><?php echo _e( "Maybe Later & Clear this message!", WP_ULIKE_SLUG ); ?></a>
+            </div>
         </div>
     </div>
 	<?php

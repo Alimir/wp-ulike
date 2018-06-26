@@ -125,17 +125,13 @@ tr.hide-label td { padding-left: 0; }
 
 #wp_ulike_customize_custom_css { font-family: Consolas,Monaco,monospace; direction: ltr; font-size: 13px; width: 97%; background: none repeat scroll 0% 0% #F9F9F9; outline: 0px none; width: 60%; min-height: 300px; }
 
-.wp-ulike-notice { position: relative; overflow: hidden; max-width: 870px; margin-top: 10px; padding: 10px 10px 7px 10px; background: #F26439; border: 1px solid #F2653A; color: #FFFCD6; }
-.wp-ulike-notice img { width: 84px; margin: 0 0 0 -100% !important; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
-.wp-ulike-notice .wp-ulike-notice-text { float: left; clear: none; width: 100%; padding: 4px 0; }
-.wp-ulike-notice p { float: left; clear: both; width: auto; margin: 0 0 0 100px !important; padding: 4px 40px 4px 0; }
-.wp-ulike-notice a { display: inline-block; padding: 0 8px; color: #FFFCD6; }
-.wp-ulike-notice a:hover { color: #212121; }
-.wp-ulike-notice a:focus { color: #212121; }
-.wp-ulike-notice .links { margin: 0 0 0 92px !important; padding: 4px 0 0 0; }
-.wp-ulike-notice .notice-dismiss { opacity: 0.6; }
-.wp-ulike-notice .notice-dismiss:before { color: #ffffff !important; }
-.wp-ulike-notice .notice-dismiss:hover { opacity: 1; }
+.wp-ulike-notice { position: relative; max-width: 870px; overflow: hidden; padding: 20px; background: #f83600; background: linear-gradient(to right, #f83600, #fe8c00); color: #FFFCD6; display: table; box-shadow: 0 3px 25px rgba(248, 54, 0, 0.2); margin: 20px 0px; }
+.wp-ulike-notice .wp-ulike-notice-image { display: table-cell; vertical-align: middle; }
+.wp-ulike-notice .wp-ulike-notice-image img { width: 100px; }
+.wp-ulike-notice .wp-ulike-notice-text { display: table-cell; vertical-align: middle; padding: 10px 20px; }
+.wp-ulike-notice .wp-ulike-notice-text p { font-size: 15px; margin-top: 0; }
+.wp-ulike-notice .links a { display: inline-block; color: #FFFCD6; text-transform: uppercase; text-decoration: none; padding: 5px 10px; border: 1px solid #FFFCD6; margin-top: 8px; margin-right: 8px; box-shadow: none; }
+.wp-ulike-notice .links a:hover, .wp-ulike-notice .links a:focus { background: #FFFCD6; color: #212121; }
 
 /** 	Visual Select */
 .wp-ulike-visual-select { height: auto; display: inline-block; width: 100%; max-width: 900px; }

@@ -3,114 +3,113 @@
  * Default template
  */
 .wpulike-default {
+
     .wp_ulike_btn {
-        &:focus {
-            outline: none;
-            border-color: #999;
-        }
-        &:hover {
-            text-decoration: none;
-            color: $wp-ulike-color-light-70;
-            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-            background-color: #bdc3c7;
-            border-color: #95a5a6;
-        }
-        &:active {
-            text-decoration: none;
-            color: $wp-ulike-color-light-70;
-            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-            background-color:#bdc3c7;
-            border-color: #95a5a6;
+        color: #616161;
+        background: #e0e0e0;
+    }
+
+    .wp_ulike_is_liked{
+        .wp_ulike_btn {
+            color: #757575;
         }
     }
-    .wp_ulike_btn.wp_ulike_put_image {
-        background-image: url(../img/icons/add.png);
-        background-repeat: no-repeat;
-        background-position: center center;
+
+    .wp_ulike_put_image{
+
+        &:after{
+            content: '';
+            display: block;
+            background: url(../img/svg/like.svg) no-repeat;
+            background-size: contain;
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%) ;
+        }
+
+        &.image-unlike{
+            &:after{
+                filter: invert(44%) sepia(40%) saturate(3852%) hue-rotate(329deg) brightness(100%) contrast(111%);
+            }
+        }
     }
-    .wp_ulike_btn.wp_ulike_put_image.image-unlike {
-        background-image: url(../img/icons/remove.png);
-    }
+
     .count-box {
         position: relative;
-        display: inline-block;
-        border: 1px solid #898F9C;
         border-radius: .25em;
-        vertical-align: middle;
-        color: $wp-ulike-color-dark-90;
-        font-size: .75em;
-        text-align: center;
+        font-size: 12px;
         text-decoration: none;
-        background-color: $wp-ulike-color-light;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        padding: .25em .5em;
-        margin-left: .5em;
-        line-height: 1em;
-        min-width: 2.25em;
+        background-color: #FFFFFF;
+        margin-left: 8px;
+        line-height: 28px;
+        display: inline-block;
+        padding: 0 8px;
+        box-shadow: 0 0 0 1px #bdbdbd inset;
+        color: #616161;
+        min-width: 30px;
+        vertical-align: middle;
+        text-align: center;
+
         &:before {
             content: '';
-            width: .25em;
-            height: .25em;
             position: absolute;
             border: 1px solid transparent;
-            background: $wp-ulike-color-light;
-            border-bottom-color: #898F9C;
-            left: -.2125em;
+            background: #FFFFFF;
+            border-bottom-color: #bdbdbd;
+            left: -5px;
             top: 50%;
-            margin-top: -.2em;
-            border-left-color: #898F9C;
-            -webkit-transform: rotate(45deg);
-            -moz-transform: rotate(45deg);
-            -ms-transform: rotate(45deg);
-            -o-transform: rotate(45deg);
-            transform: rotate(45deg);
+            border-left-color: #bdbdbd;
+            transform: rotate(45deg) translatey(-50%);
+            width: 5px;
+            height: 5px;
+            margin: 0;
         }
-    }
-    .wp_ulike_hide_me {
-        visibility: hidden;
     }
 }
-#buddypress {
-    .activity-content {
+
+#buddypress #activity-stream{
+
+    .activity-meta, .activity-comments {
+
         .wpulike {
-            .wp_ulike_is_loading {
-                .wp_ulike_btn {
-                    background-image: url(../img/icons/loading.gif) !important;
-                    background-repeat: no-repeat;
-                    background-position: center center;
-                }
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0;
+
+            .wp_ulike_btn span{
+                position: relative;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                display: block;
             }
         }
+
         .wpulike-default {
-            .count-box {
-                font-size: small;
-                padding: .3em .5em;
+            .wp_ulike_btn{
+                border-radius: 0;
+                background-color: #ffffff;
+                box-shadow: 0 0 0 1px #bdbdbd inset;
+                height: 29.5px;
+                min-width: 50px;
+                margin-bottom: 2px;
             }
         }
+
     }
-    .activity {
-        ul.item-list {
-            li {
-                position: initial;
-            }
-        }
-    }
-    div.activity-meta {
-        .tiles {
-            li {
-                a {
-                    padding: 0;
-                }
-            }
-        }
-        .wpulike-default {
-            .wp_ulike_btn {
-                padding: 12px 10px !important;
-            }
-            .wp_ulike_btn.wp_ulike_put_text {
-                padding: 7px 10px !important;
+
+    .wp_ulike_likers_wrapper{
+        li {
+            border: none;
+            padding: 0;
+
+            a, img{
+                float: none;
+                padding: 0;
+                margin: 0;
             }
         }
     }
@@ -120,44 +119,36 @@
         .wpulike {
             .wp_ulike_is_loading {
                 .wp_ulike_btn {
-                    background-image: url(../img/icons/loading.gif) !important;
+                    background-image: url(../img/svg/loader.svg);
                     background-repeat: no-repeat;
                     background-position: center center;
                 }
-            }
-        }
-        .wpulike-default {
-            .count-box {
-                font-size: small;
-                padding: .3em .5em;
             }
         }
     }
     .wpulike-default {
         .wp_ulike_btn {
             margin: 0;
+            position: relative;
             display: inline-block;
             border-radius: .25em;
-            border: 1px solid #d3d3d3;
-            line-height: 1em;
-            padding: .5em 1em;
-            font-size: 1em;
+            font-size: 14px;
+            line-height: 28px;
+            box-shadow: none;
             cursor: pointer;
+            padding: 0 15px;
             vertical-align: middle;
-            color: $wp-ulike-color-dark-70;
-            background: #dfdfdf;
-            box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5) inset;
-            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-            text-decoration: none;
+            height: 28px;
+            min-width: 50px;
+            font-weight: 600;
+            color: #616161;
+            background: #e0e0e0;
         }
-        .wp_ulike_btn.wp_ulike_put_image {
-            background-image: url(../img/icons/add.png);
-            background-repeat: no-repeat;
-            background-position: center center;
-            padding: 1em 1.8em;
-        }
-        .wp_ulike_btn.wp_ulike_put_image.image-unlike {
-            background-image: url(../img/icons/remove.png);
+
+    }
+    .wp_ulike_likers_wrapper{
+        ul {
+            margin: 0 !important;
         }
     }
 }

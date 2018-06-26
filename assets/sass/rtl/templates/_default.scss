@@ -2,12 +2,12 @@
 .rtl {
     .wpulike-default {
         .count-box {
-            margin-right: .5em;
+            margin-right: 8px;
             margin-left: inherit;
             &:before {
-                right: -.2125em;
-                left: inherit;
-                border-color:  #898F9C #898F9C transparent transparent;
+                right: -1px;
+                left: auto;
+                border-color:  #bdbdbd #bdbdbd transparent transparent;
             }
         }
     }

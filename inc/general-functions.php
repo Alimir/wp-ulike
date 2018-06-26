@@ -149,7 +149,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'button_type' => array(
 							'type'    => 'visual-select',
 							'label'   => __( 'Button Type', WP_ULIKE_SLUG),
-							'default' => 'text',
+							'default' => 'image',
 							'options' => array(
 								'image' => array(
 									'name'   => __('Icon', WP_ULIKE_SLUG),
@@ -166,7 +166,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'   => __( 'Button Text', WP_ULIKE_SLUG) . ' (' . __('Like', WP_ULIKE_SLUG) .')',
 						),
 						'button_text_u' => array(
-							'default' => __('Unlike',WP_ULIKE_SLUG),
+							'default' => __('Liked',WP_ULIKE_SLUG),
 							'label'   => __( 'Button Text', WP_ULIKE_SLUG) . ' (' . __('Unlike', WP_ULIKE_SLUG) .')',
 						),
 						'button_url' => array(
@@ -230,7 +230,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'anonymise'     => array(
 							'type'          => 'checkbox',
-							'default'       => 1,
+							'default'       => 0,
 							'label'         => __('Anonymize IP', WP_ULIKE_SLUG),
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'description'   => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
@@ -715,21 +715,19 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 if( ! function_exists( 'wp_ulike' ) ){
 	function wp_ulike( $type = 'get', $args = array() ) {
 		//global variables
-		global $post, $wp_ulike_class, $wp_user_IP;
+		global $post;
 
 		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post->ID;
 		$get_post_meta = get_post_meta( $post_ID, '_liked', true );
 		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_posts_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_posts_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_posts', 'theme' );
+		$style         = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
+		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main data
 		$defaults      = array(
 			"id"            => $post_ID,				//Post ID
-			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"       => $wp_user_IP,				//User IP
 			"get_like"      => $get_like,				//Number Of Likes
 			"method"        => 'likeThis',				//JavaScript method
 			"setting"       => 'wp_ulike_posts',		//Setting Key
@@ -742,28 +740,20 @@ if( ! function_exists( 'wp_ulike' ) ){
 			"style"         => $style,					//Get Default Theme
 			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => ''						//Extra Wrapper class
+			"wrapper_class" => '',						//Extra Wrapper class
+			"button_type"   => $button_type				//Button Type
 		);
 
-        $parsed_args = wp_parse_args( $args, $defaults );
+		$parsed_args = wp_parse_args( $args, $defaults );
+		// Output templayte
+		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) );
+		// Select retrun or print
+        if( $type === 'put' ) {
+        	return $output;
+        } else {
+        	echo $output;
+        }
 
-		if( ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-
-			if ($type == 'put') {
-				return $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-			else {
-				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-
-		}//end !only_registered_users condition
-		elseif ( wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
-			if(wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button") {
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
-			} else {
-				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
-			}
-		}//end only_registered_users condition
 	}
 }
 
@@ -911,22 +901,18 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
  */
 if( ! function_exists( 'wp_ulike_comments' ) ){
 	function wp_ulike_comments( $type = 'get', $args = array() ) {
-		//global variables
-		global $wp_ulike_class, $wp_user_IP;
 
 		$comment_ID    = isset( $args['id'] ) ? $args['id'] : get_comment_ID();
 		$comment_meta  = get_comment_meta( $comment_ID, '_commentliked', true );
 		$get_like      = empty( $comment_meta ) ? 0 : $comment_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_comments_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_comments_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_comments', 'theme' );
+		$style         = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
+		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
 			"id"            => $comment_ID,				//Comment ID
-			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"       => $wp_user_IP,				//User IP
 			"get_like"      => $get_like,				//Number Of Likes
 			"method"        => 'likeThisComment',		//JavaScript method
 			"setting"       => 'wp_ulike_comments',		//Setting Key
@@ -939,28 +925,20 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 			"style"         => $style,					//Get Default Theme
 			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => ''						//Extra Wrapper class
+			"wrapper_class" => '',						//Extra Wrapper class
+			"button_type"   => $button_type				//Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
+		// Output templayte
+		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) );
+		// Select retrun or print
+        if( $type === 'put' ) {
+        	return $output;
+        } else {
+        	echo $output;
+        }
 
-		if( ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-
-			if ($type == 'put') {
-				return $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-			else {
-				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-
-		}//end !only_registered_users condition
-		elseif (wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users') == '1' && ! is_user_logged_in()){
-			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type' ) == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
-			} else {
-				return apply_filters( 'wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this comment: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>' );
-			}
-		}//end only_registered_users condition
 	}
 }
 
@@ -994,8 +972,6 @@ if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){
  */
 if( ! function_exists( 'wp_ulike_buddypress' ) ){
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
-		//global variables
-		global $wp_ulike_class, $wp_user_IP;
 
         if ( bp_get_activity_comment_id() != null ){
 			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_comment_id();
@@ -1005,16 +981,14 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 
 		$bp_get_meta   = bp_activity_get_meta($activityID, '_activityliked');
 		$get_like      = empty( $bp_get_meta ) ? 0 : $bp_get_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_activities_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_activities_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme' );
+		$style         = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
+		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
 			"id"            => $activityID,				//Activity ID
-			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"       => $wp_user_IP,				//User IP
 			"get_like"      => $get_like,				//Number Of Likes
 			"method"        => 'likeThisActivity',		//JavaScript method
 			"setting"       => 'wp_ulike_buddypress',	//Setting Key
@@ -1027,29 +1001,19 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			"style"         => $style,					//Get Default Theme
 			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => ''						//Extra Wrapper class
+			"wrapper_class" => '',						//Extra Wrapper class
+			"button_type"   => $button_type				//Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
-
-		if( ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-
-			if ($type == 'put') {
-				return $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-			else {
-				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-
-		}//end !only_registered_users condition
-		elseif ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users') == '1' && ! is_user_logged_in() ) {
-			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') == "button" ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
-			}
-			else{
-				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this activity: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
-			}
-		}//end only_registered_users condition
+		// Output templayte
+		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) );
+		// Select retrun or print
+        if( $type === 'put' ) {
+        	return $output;
+        } else {
+        	echo $output;
+        }
 
 	}
 }
@@ -1126,7 +1090,7 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
 if( ! function_exists( 'wp_ulike_bbpress' ) ){
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
 		//global variables
-		global $post,$wp_ulike_class,$wp_user_IP;
+		global $post;
 
         //Thanks to @Yehonal for this commit
 		$replyID       = bbp_get_reply_id();
@@ -1135,52 +1099,39 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 
 		$get_post_meta = get_post_meta( $post_ID, '_topicliked', true );
 		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
-		$return_userID = $wp_ulike_class->get_reutrn_id();
 		$attributes    = apply_filters( 'wp_ulike_topics_add_attr', null );
 		$microdata     = apply_filters( 'wp_ulike_topics_microdata', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme' );
+		$style         = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
+		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
 			"id"            => $post_ID,				//Post ID
-			"user_id"       => $return_userID,			//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"       => $wp_user_IP,			//User IP
 			"get_like"      => $get_like,				//Number Of Likes
-			"method"        => 'likeThisTopic',		//JavaScript method
+			"method"        => 'likeThisTopic',			//JavaScript method
 			"setting"       => 'wp_ulike_bbpress',		//Setting Key
 			"type"          => 'post',					//Function type (post/process)
 			"table"         => 'ulike_forums',			//posts table
 			"column"        => 'topic_id',				//ulike table column name
 			"key"           => '_topicliked',			//meta key
 			"cookie"        => 'topic-liked-',			//Cookie Name
-			"slug"          => 'topic',				//Slug Name
+			"slug"          => 'topic',					//Slug Name
 			"style"         => $style,					//Get Default Theme
 			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => ''						//Extra Wrapper class
+			"wrapper_class" => '',						//Extra Wrapper class
+			"button_type"   => $button_type,			//Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
-
-		if( ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) != '1' ) or ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && is_user_logged_in() ) ) {
-
-			if ($type == 'put') {
-				return $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-			else {
-				echo $wp_ulike_class->wp_get_ulike( $parsed_args );
-			}
-
-		}//end !only_registered_users condition
-
-		else if ( wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) == '1' && !is_user_logged_in()) {
-			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
-			}
-			else {
-				return apply_filters('wp_ulike_login_alert_template', '<p class="alert alert-info fade in" role="alert">'.__('You need to login in order to like this post: ',WP_ULIKE_SLUG).'<a href="'.wp_login_url( get_permalink() ).'"> '.__('click here',WP_ULIKE_SLUG).' </a></p>');
-			}
-		}//end only_registered_users condition
+		// Output templayte
+		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) );
+		// Select retrun or print
+        if( $type === 'put' ) {
+        	return $output;
+        } else {
+        	echo $output;
+        }
 
 	}
 }
@@ -1188,6 +1139,38 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 /*******************************************************
   General
 *******************************************************/
+
+/**
+ * Convert numbers of Likes with string (kilobyte) format
+ *
+ * @author       	Alimir
+ * @param           Array  		$parsed_args
+ * @param           Integer 	$only_registered_users
+ * @since           3.4
+ * @return          String
+ */
+if( ! function_exists( 'wp_ulike_display_button' ) ){
+	function wp_ulike_display_button( array $parsed_args, $only_registered_users ){
+		global $wp_ulike_class;
+
+		if( $only_registered_users != '1' || ( $only_registered_users == '1' && is_user_logged_in() ) ) {
+			// Return ulike template
+			return $wp_ulike_class->wp_get_ulike( $parsed_args );
+		} else {
+			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') === 'button' ){
+				return $wp_ulike_class->get_template( $parsed_args, 0 );
+			} else {
+				return apply_filters( 'wp_ulike_login_alert_template',
+					sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>',
+					__('You need to login in order to like this post: ',WP_ULIKE_SLUG),
+					wp_login_url( get_permalink() ),
+					__('click here',WP_ULIKE_SLUG)
+					)
+				);
+			}
+		}
+	}
+}
 
 /**
  * Get custom style setting from customize options
@@ -1201,12 +1184,12 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 		// Like Icon
 		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image { background-image: url('.$get_like_icon.') !important; }';
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$get_like_icon.') !important; }';
 		}
 
 		// Unlike Icon
 		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.image-unlike { background-image: url('.$get_like_icon.') !important; }';
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.image-unlike:after { background-image: url('.$get_like_icon.') !important; filter: none; }';
 		}
 
 		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) ) {
@@ -1222,10 +1205,10 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 				$btn_style .= "background-color:".$customstyle['btn_bg'].";";
 			}
 			if( isset( $customstyle['btn_border'] ) && ! empty( $customstyle['btn_border'] ) ) {
-				$btn_style .= "border-color:".$customstyle['btn_border']."; ";
+				$btn_style .= "box-shadow: 0 0 0 1px ".$customstyle['btn_border']." inset; ";
 			}
 			if( isset( $customstyle['btn_color'] ) && ! empty( $customstyle['btn_color'] ) ) {
-				$btn_style .= "color:".$customstyle['btn_color'].";text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);";
+				$btn_style .= "color:".$customstyle['btn_color'].";";
 			}
 
 			if( $btn_style != '' ){
@@ -1237,15 +1220,15 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 				$counter_style .= "background-color:".$customstyle['counter_bg'].";";
 			}
 			if( isset( $customstyle['counter_border'] ) && ! empty( $customstyle['counter_border'] ) ) {
-				$counter_style .= "border-color:".$customstyle['counter_border']."; ";
-				$before_style  = "border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
+				$counter_style .= "box-shadow: 0 0 0 1px ".$customstyle['counter_border']." inset; ";
+				$before_style  = "background-color:".$customstyle['counter_bg']."; border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
 			}
 			if( isset( $customstyle['counter_color'] ) && ! empty( $customstyle['counter_color'] ) ) {
 				$counter_style .= "color:".$customstyle['counter_color'].";";
 			}
 
 			if( $counter_style != '' ){
-				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box:before{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
+				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
 			}
 
 			// Loading Spinner
@@ -1303,6 +1286,27 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 	}
 }
 
+/**
+ * Convert IP to a integer value
+ *
+ * @author       	Alimir
+ * @param           String $user_ip
+ * @since           3.4
+ * @return          String
+ */
+function wp_ulike_generate_user_id( $user_ip ) {
+
+	if( filter_var( $user_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+	    return ip2long( $user_ip );
+	} else {
+	    $binary_val = '';
+	    foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
+	        $binary_val .= decbin( $byte );
+	    }
+	    return base_convert( ltrim( $binary_val, '0' ), 2, 10 );
+	}
+
+}
 
 /*******************************************************
   Templates
@@ -1323,10 +1327,12 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+		<div class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-				<a data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
-				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
+				<a 	data-ulike-id="<?php echo $ID; ?>"
+					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
+					data-ulike-type="<?php echo $type; ?>"
+					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
 					<?php
 						if($button_type == 'text'){
 							echo '<span>' . $button_text . '</span>';
@@ -1362,10 +1368,12 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+		<div class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-				<a data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
-				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
+				<a  data-ulike-id="<?php echo $ID; ?>"
+					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
+					data-ulike-type="<?php echo $type; ?>"
+					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
 					<?php
 						if($button_type == 'text'){
 							echo '<span>' . $button_text . '</span>';
@@ -1401,12 +1409,51 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div id="wp-ulike-<?php echo $slug . '-' . $ID; ?>" class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 					<label>
-					<input type="checkbox" data-ulike-id="<?php echo $ID; ?>" data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>" data-ulike-type="<?php echo $type; ?>"
-				data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>" <?php echo  $status == 2  ? 'checked="checked"' : ''; ?> />
-					<svg class="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg"><g class="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)"><path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" class="heart" fill="#AAB8C2"/><circle class="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5"/><g class="grp7" opacity="0" transform="translate(7 6)"><circle class="oval1" fill="#9CD8C3" cx="2" cy="6" r="2"/><circle class="oval2" fill="#8CE8C3" cx="5" cy="2" r="2"/></g><g class="grp6" opacity="0" transform="translate(0 28)"><circle class="oval1" fill="#CC8EF5" cx="2" cy="7" r="2"/><circle class="oval2" fill="#91D2FA" cx="3" cy="2" r="2"/></g><g class="grp3" opacity="0" transform="translate(52 28)"><circle class="oval2" fill="#9CD8C3" cx="2" cy="7" r="2"/><circle class="oval1" fill="#8CE8C3" cx="4" cy="2" r="2"/></g><g class="grp2" opacity="0" transform="translate(44 6)" fill="#CC8EF5"><circle class="oval2" transform="matrix(-1 0 0 1 10 0)" cx="5" cy="6" r="2"/><circle class="oval1" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp5" opacity="0" transform="translate(14 50)" fill="#91D2FA"><circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2"/><circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp4" opacity="0" transform="translate(35 50)" fill="#F48EA7"><circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2"/><circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2"/></g><g class="grp1" opacity="0" transform="translate(24)" fill="#9FC7FA"><circle class="oval1" cx="2.5" cy="3" r="2"/><circle class="oval2" cx="7.5" cy="2" r="2"/></g></g></svg>
+					<input 	type="checkbox"
+							data-ulike-id="<?php echo $ID; ?>"
+							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
+							data-ulike-type="<?php echo $type; ?>"
+							data-ulike-status="<?php echo $status; ?>"
+							class="<?php echo $button_class; ?>"
+							<?php echo  $status == 2  ? 'checked="checked"' : ''; ?> />
+
+					<svg class="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
+					    <g class="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
+					        <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" class="heart" fill="#AAB8C2" />
+					        <circle class="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5" />
+					        <g class="grp7" opacity="0" transform="translate(7 6)">
+					            <circle class="oval1" fill="#9CD8C3" cx="2" cy="6" r="2" />
+					            <circle class="oval2" fill="#8CE8C3" cx="5" cy="2" r="2" />
+					        </g>
+					        <g class="grp6" opacity="0" transform="translate(0 28)">
+					            <circle class="oval1" fill="#CC8EF5" cx="2" cy="7" r="2" />
+					            <circle class="oval2" fill="#91D2FA" cx="3" cy="2" r="2" />
+					        </g>
+					        <g class="grp3" opacity="0" transform="translate(52 28)">
+					            <circle class="oval2" fill="#9CD8C3" cx="2" cy="7" r="2" />
+					            <circle class="oval1" fill="#8CE8C3" cx="4" cy="2" r="2" />
+					        </g>
+					        <g class="grp2" opacity="0" transform="translate(44 6)" fill="#CC8EF5">
+					            <circle class="oval2" transform="matrix(-1 0 0 1 10 0)" cx="5" cy="6" r="2" />
+					            <circle class="oval1" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2" />
+					        </g>
+					        <g class="grp5" opacity="0" transform="translate(14 50)" fill="#91D2FA">
+					            <circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2" />
+					            <circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2" />
+					        </g>
+					        <g class="grp4" opacity="0" transform="translate(35 50)" fill="#F48EA7">
+					            <circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2" />
+					            <circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2" />
+					        </g>
+					        <g class="grp1" opacity="0" transform="translate(24)" fill="#9FC7FA">
+					            <circle class="oval1" cx="2.5" cy="3" r="2" />
+					            <circle class="oval2" cx="7.5" cy="2" r="2" />
+					        </g>
+					    </g>
+					</svg>
 					<?php echo $counter; ?>
 					</label>
 			</div>

@@ -8,7 +8,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 	class wp_ulike{
 
-		private $wpdb, $status;
+		private $wpdb, $status, $user_id, $user_ip;
 
 		/**
 		 * Instance of this class.
@@ -22,12 +22,26 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function __construct()
 		{
-			global $wpdb;
-			$this->wpdb   = $wpdb;
-			$this->status = 'like';
+			// Init core
+			add_action( 'wp_ulike_loaded', array( $this, 'init' ) );
+		}
+
+		/**
+		 * Init function when plugin loaded
+		 *
+		 * @author          Alimir
+		 * @since           3.0
+		 * @return          Void
+		 */
+		public function init(){
+			global $wpdb, $wp_user_IP;
+			$this->wpdb    = $wpdb;
+			$this->status  = 'like';
+			$this->user_ip = $wp_user_IP;
+			$this->user_id = $this->get_reutrn_id();
 
 			// Enqueue Scripts
-		 	add_action( 'wp_enqueue_scripts', array( $this, 'load_assets'  ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'load_assets'  ) );
 		}
 
 		/**
@@ -46,30 +60,29 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 	        /*
 	        // @endif
 	        //Add wp_ulike script file with special functions.
-	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), '3.3.1', true);
+	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), '3.4', true);
 	        // @if DEV
 	        */
 	        // @endif
 	        // @if DEV
 			//Add wp_ulike script file with special functions.
-			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), '3.3.1', true);
+			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), '3.4', true);
 	        // @endif
 
 			//localize script
 			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
 				'ajax_url'         => admin_url( 'admin-ajax.php' ),
-				'button_type'      => wp_ulike_get_setting( 'wp_ulike_general', 'button_type'),
 				'notifications'    => wp_ulike_get_setting( 'wp_ulike_general', 'notifications')
 			));
 	        // @if DEV
 	        /*
 	        // @endif
-	        wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css' );
+	        wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css', array(), '3.4' );
 	        // @if DEV
 	        */
 	        // @endif
 	        // @if DEV
-			wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css' );
+			wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css', array(), '3.4' );
 	        // @endif
 
 			//add your custom style from setting panel.
@@ -87,6 +100,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		public function wp_get_ulike( array $data ){
 			//get loggin method option
 			$loggin_method = wp_ulike_get_setting( $data['setting'], 'logging_method');
+
 			//Select the logging functionality
 			switch( $loggin_method ){
 				case 'do_not_log':
@@ -130,10 +144,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array(
 						$column     => $id,
 						'date_time' => current_time( 'mysql' ),
-						'ip'        => $user_ip,
-						'user_id'   => $user_id,
+						'ip'        => $this->user_ip,
+						'user_id'   => $this->user_id,
 						'status'    => $this->status
-					)
+					),
+					array( '%d', '%s', '%s', '%s', '%s' )
 				);
 				// Formatting the output
 				$output = wp_ulike_format_number( $this->update_meta_data( $id, $key, $get_like ) );
@@ -142,7 +157,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array(
 						'id'      => $id,
 						'key'     => $key,
-						'user_id' => $user_id,
+						'user_id' => $this->user_id,
 						'status'  => $this->status,
 						'has_log' => $this->has_log( $data )
 					)
@@ -190,10 +205,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						array(
 							$column     => $id,
 							'date_time' => current_time( 'mysql' ),
-							'ip'        => $user_ip,
-							'user_id'   => $user_id,
+							'ip'        => $this->user_ip,
+							'user_id'   => $this->user_id,
 							'status'    => $this->status
-						)
+						),
+						array( '%d', '%s', '%s', '%s', '%s' )
 					);
 
 				}
@@ -204,7 +220,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array(
 						'id'      => $id,
 						'key'     => $key,
-						'user_id' => $user_id,
+						'user_id' => $this->user_id,
 						'status'  => $this->status,
 						'has_log' => $this->has_log( $data )
 					)
@@ -230,7 +246,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			// Check the user's likes history
 			$output     = '';
 			// method column value
-			$method_val = $method_col === 'ip' ? $user_ip : $user_id;
+			$method_val = $method_col === 'ip' ? $this->user_ip : $this->user_id;
 			// Check user log history
 			$has_log    = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
 
@@ -261,10 +277,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						array(
 							$column     => $id,
 							'date_time' => current_time( 'mysql' ),
-							'ip'        => $user_ip,
-							'user_id'   => $user_id,
+							'ip'        => $this->user_ip,
+							'user_id'   => $this->user_id,
 							'status'    => $this->status
-						)
+						),
+						array( '%d', '%s', '%s', '%s', '%s' )
 					);
 
 				} else {
@@ -294,7 +311,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array(
 						'id'      => $id,
 						'key'     => $key,
-						'user_id' => $user_id,
+						'user_id' => $this->user_id,
 						'status'  => $this->status,
 						'has_log' => empty( $has_log ) ? 0 : 1
 					)
@@ -354,13 +371,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function get_template( array $args, $status ){
 
-			$button_type 		= wp_ulike_get_setting( 'wp_ulike_general', 'button_type' );
 			//Primary button class name
 			$button_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_button_selector', 'wp_ulike_btn' ) );
 			//Button text value
 			$button_text		= '';
 
-			if( $button_type == 'image' ){
+			if( $args['button_type'] == 'image' ){
 				$button_class_name .= ' wp_ulike_put_image';
 				if($status == 2){
 					$button_class_name .= ' image-unlike';
@@ -405,7 +421,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					"attributes"     => $args['attributes'],
 					"microdata"      => $args['microdata'],
 					"style"          => $args['style'],
-					"button_type"    => $button_type,
+					"button_type"    => $args['button_type'],
 					"button_text"    => $button_text,
 					"general_class"  => $general_class_name,
 					"button_class"   => $button_class_name,
@@ -538,7 +554,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				SELECT COUNT(*)
 				FROM ".$this->wpdb->prefix.$table."
 				WHERE $column = '$id'
-				AND ( user_id = '$user_id' OR ip = '$user_ip' )
+				AND ( user_id = ".$this->user_id." OR ip = ".$this->user_ip." )
 			" );
 		}
 
@@ -556,7 +572,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			return $this->wpdb->get_results( "
 				SELECT $col, date_time
 				FROM ".$this->wpdb->prefix.$table."
-				WHERE user_id = '$user_id'
+				WHERE user_id = ".$this->user_id."
 				AND status = 'like'
 				ORDER BY date_time
 				DESC
@@ -622,11 +638,10 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		function get_reutrn_id(){
-			global $user_ID,$wp_user_IP;
+		public function get_reutrn_id(){
 
-			if( ! is_user_logged_in() ){
-				return ip2long($wp_user_IP);
+			if( ! ( $user_ID = get_current_user_id() ) ){
+				return wp_ulike_generate_user_id( $this->user_ip );
 			} else {
 				return $user_ID;
 			}

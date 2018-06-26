@@ -22,15 +22,12 @@
         overflow: hidden;
         margin: 0 0 6px;
         padding: 15px 15px 15px 55px;
-        width: 300px;
+        width: 280px;
         border-radius: 3px;
-        background-color: #1e88e5;
-        background-position: 15px center;
-        background-repeat: no-repeat;
-        background-image: url(../img/svg/info.svg);
+        background-color: #00BCD4;
         color: $wp-ulike-color-light;
         animation: wpUlikeNotifitcationsAnimation 200ms backwards;
-        opacity: .8;
+        box-shadow: 0 3px 5px rgba(0,0,0,0.08);
         font-size: 14px;
         font-weight: 500;
 
@@ -38,18 +35,41 @@
             opacity: 0.9;
             cursor: pointer;
         }
+        
+        &:before{
+            content: "";
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-image: url(../img/svg/info.svg);
+            position: absolute;
+            left: 0;
+            width: 45px;
+            top: 0;
+            height: 100%;
+            background-color: rgba(0,0,0,0.08);            
+        }
+
 
         &.wpulike-success {
-            background-color: #43a047;
-            background-image: url(../img/svg/success.svg);
+            background-color: #8bc34a;
+
+            &:before{
+                background-image: url(../img/svg/success.svg);
+            }            
         }
         &.wpulike-error {
-            background-color: #e53935;
-            background-image: url(../img/svg/error.svg);
+            background-color: #EF5350;
+
+            &:before{
+                background-image: url(../img/svg/error.svg);
+            }     
         }
         &.wpulike-warning {
-            background-color: #fb8c00;
-            background-image: url(../img/svg/warning.svg);
+            background-color: #FFAB00;
+
+            &:before{
+                background-image: url(../img/svg/warning.svg);
+            } 
         }
     }
 }

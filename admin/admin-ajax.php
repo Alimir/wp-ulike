@@ -17,7 +17,12 @@
  */
 function wp_ulike_ajax_notice_handler() {
     // Store it in the options table
-    update_option( 'wp-ulike-notice-dismissed', TRUE );
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wp-ulike-notice-dismissed' ) ) {
+		wp_send_json_error( $_POST['nonce'] );
+	} else {
+		update_option( 'wp-ulike-notice-dismissed', TRUE );
+		wp_send_json_success( __( 'It\'s OK.', WP_ULIKE_SLUG ) );
+	}
 }
 add_action( 'wp_ajax_wp_ulike_dismissed_notice', 'wp_ulike_ajax_notice_handler' );
 

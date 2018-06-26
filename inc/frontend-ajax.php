@@ -17,7 +17,7 @@
  */
 function wp_ulike_process(){
 	// Global variables
-	global $wp_ulike_class,$wp_user_IP;
+	global $wp_ulike_class;
 
 	$post_ID     = $_POST['id'];
 	$post_type   = $_POST['type'];
@@ -71,12 +71,9 @@ function wp_ulike_process(){
 	}
 
 	$get_like      = $get_meta_data != '' ? $get_meta_data : 0;
-	$return_userID = $wp_ulike_class->get_reutrn_id();
 
 	$args = apply_filters( 'wp_ulike_ajax_process_atts', array(
 			"id"       => $post_ID,				//Post ID
-			"user_id"  => $return_userID,		//User ID (if the user is guest, we save ip as user_id with "ip2long" function)
-			"user_ip"  => $wp_user_IP,			//User IP
 			"get_like" => $get_like,			//Number Of Likes
 			"method"   => $post_type,			//JavaScript method
 			"setting"  => $setting_key,			//Setting Key

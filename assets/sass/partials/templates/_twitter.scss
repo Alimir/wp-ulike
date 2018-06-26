@@ -67,19 +67,25 @@
   }
 }
 .wpulike-robeen {
+  .wp_ulike_likers_wrapper{
+    bottom: 15px;
+  }
   .count-box {
-    position: relative;
-    bottom: 18px;
-    right: 8px;
+    display: inline-block;
+    vertical-align: middle;
     font-weight: 600;
   }
   label{
+    display: inline-block;
     margin: 0;
   }
   svg {
     cursor: pointer;
-    overflow: visible;
+    overflow: visible !important;
     width: 50px;
+    display: inline-block;
+    vertical-align: middle;
+
     .heart {
       transform-origin: center;
       animation: animateHeartOut .3s linear forwards;
