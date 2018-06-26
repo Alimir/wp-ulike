@@ -175,6 +175,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 == Changelog ==
 
 = 3.4 =
+* Added: A new style for likers box with pophover effect.
 * Added: New stylesheet for all buttons.
 * Added: a new option for custom button_type.
 * Fixed: All of the reported bugs.

@@ -639,9 +639,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			String
 		 */
 		public function get_reutrn_id(){
-			global $user_ID;
 
-			if( ! $user_ID ){
+			if( ! ( $user_ID = get_current_user_id() ) ){
 				return wp_ulike_generate_user_id( $this->user_ip );
 			} else {
 				return $user_ID;

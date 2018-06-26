@@ -103,8 +103,8 @@
   top: 50%;
   border-left-color: #bdbdbd;
   transform: rotate(45deg) translatey(-50%);
-  width: 7px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   margin: 0;
 }
 
@@ -295,9 +295,8 @@
   bottom: 15px;
 }
 .wpulike-robeen .count-box {
-  position: relative;
-  bottom: 18px;
-  right: 8px;
+  display: inline-block;
+  vertical-align: middle;
   font-weight: 600;
 }
 .wpulike-robeen label {
@@ -306,8 +305,10 @@
 }
 .wpulike-robeen svg {
   cursor: pointer;
-  overflow: visible;
+  overflow: visible !important;
   width: 50px;
+  display: inline-block;
+  vertical-align: middle;
 }
 .wpulike-robeen svg .heart {
   transform-origin: center;
@@ -464,6 +465,7 @@
   display: table;
   border-spacing: 8px;
   margin: 0;
+  padding: 0;
 }
 .wp_ulike_likers_wrapper .tiles li {
   display: table-cell;
@@ -656,11 +658,6 @@
   right: -1px;
   left: auto;
   border-color: #bdbdbd #bdbdbd transparent transparent;
-}
-
-.rtl .wpulike-robeen .count-box {
-  right: inherit;
-  left: 8px;
 }
 
 .rtl .wp_ulike_likers_wrapper {
