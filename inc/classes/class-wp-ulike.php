@@ -441,7 +441,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			   }
 			}
 
-			return apply_filters( 'wp_ulike_return_final_templates', trim( preg_replace( '/\s+/',' ', $output ) ), $wp_ulike_template );
+			return apply_filters( 'wp_ulike_return_final_templates', preg_replace( '~>\s*\n\s*<~', '><', $output ), $wp_ulike_template );
 
 		}
 
