@@ -193,10 +193,10 @@ function wp_ulike_admin_notice() {
 				type: 'post',
 				data: {
 					action: 'wp_ulike_dismissed_notice',
-					nonce : $(this).data('nonce')
+					nonce : jQuery(this).data('nonce')
 		        }
 		    }).done(function( response ) {
-                $(this).closest('.wp-ulike-notice').fadeOut();
+                jQuery(this).closest('.wp-ulike-notice').fadeOut();
             }.bind(this));
 		});
 	</script>

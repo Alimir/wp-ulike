@@ -35,12 +35,13 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 		$result = '';
 		// Default Args
 		$args   = shortcode_atts( array(
-					"for"           => 'post',	//shortcode Type (post, comment, activity, topic)
-					"id"            => '',		//Post ID
-					"slug"          => 'post',	//Slug Name
-					"style"         => '',		//Get Default Theme
-					"attributes"    => '',		//Get Attributes Filter
-					"wrapper_class" => ''		//Extra Wrapper class
+					"for"           => 'post',	// shortcode Type (post, comment, activity, topic)
+					"id"            => '',		// Post ID
+					"slug"          => 'post',	// Slug Name
+					"style"         => '',		// Get Default Theme
+					"button_type"   => '',		// Set Button Type ('image' || 'text')
+					"attributes"    => '',		// Get Attributes Filter
+					"wrapper_class" => ''		// Extra Wrapper class
 			    ), $atts );
 
 	    switch ( $args['for'] ) {

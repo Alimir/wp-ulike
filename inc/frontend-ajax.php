@@ -88,36 +88,36 @@ function wp_ulike_process(){
 	switch ( $like_status ){
 		case 0:
 			$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'login_text' ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
+						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'login_text', __( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) ),
+						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
 						'data'    => NULL
 					);
 			break;
 		case 1:
 			$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice' ),
-						'btnText' => html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
+						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
+						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
 						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
 					);
 			break;
 		case 2:
 			$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice' ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
+						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice', __( 'Sorry! You unliked this.', WP_ULIKE_SLUG ) ),
+						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
 						'data'    => apply_filters( 'wp_ulike_respond_for_unliked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
 					);
 			break;
 		case 3:
 			$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice'),
-						'btnText' => html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u' ) ),
+						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
+						'btnText' => html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u', __( 'Liked', WP_ULIKE_SLUG ) ) ),
 						'data'    => apply_filters( 'wp_ulike_respond_for_liked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
 					);
 			break;
 		default:
 			$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'permission_text' ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) ),
+						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'permission_text', __( 'You have not permission to unlike', WP_ULIKE_SLUG ) ),
+						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Liked', WP_ULIKE_SLUG ) ) ),
 						'data'    => NULL
 					);
 	}
