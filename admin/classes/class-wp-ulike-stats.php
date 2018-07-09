@@ -4,10 +4,17 @@
  * // @echo HEADER
  */
 
+// no direct access allowed
+if ( ! defined('ABSPATH') ) {
+    die();
+}
+
 if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 	class wp_ulike_stats extends wp_ulike_widget{
-		private $wpdb;
+
+		// Private variables
+		private $wpdb, $tables;
 
 		/**
 		 * Instance of this class.
@@ -22,8 +29,13 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		public function __construct()
 		{
 			global $wpdb;
-			$this->wpdb = $wpdb;
-			add_action( 'admin_enqueue_scripts', array( $this,'enqueue_script' ) );
+			$this->wpdb   = $wpdb;
+			$this->tables = array(
+				'posts'      => 'ulike',
+				'comments'   => 'ulike_comments',
+				'activities' => 'ulike_activities',
+				'forums'     => 'ulike_forums',
+			);
 		}
 
 		/**
@@ -31,41 +43,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
-		 * @updated         2.3
-		 * @updated         3.0
 		 * @return			Void
 		 */
-		public function enqueue_script($hook)
-		{
-			// $currentScreen 	= get_current_screen();
-			$get_option 	= get_option( 'wp_ulike_statistics_screen' );
-
-			// if ( $currentScreen->id != $hook ) {
-			// 	return;
-			// }
-
-			// Register Script
-			wp_enqueue_script(
-				'wp_ulike_stats',
-				WP_ULIKE_ADMIN_URL . '/assets/js/statistics.js',
-				array('jquery'),
-				null,
-				true
-			);
-
-			wp_localize_script( 'wp_ulike_stats', 'wp_ulike_statistics', array(
-				'posts_date_labels' 		=> $this->posts_dataset('label'),
-				'comments_date_labels' 		=> $this->comments_dataset('label'),
-				'activities_date_labels' 	=> $this->activities_dataset('label'),
-				'topics_date_labels' 		=> $this->topics_dataset('label'),
-				'posts_dataset' 			=> $this->posts_dataset('dataset'),
-				'comments_dataset' 			=> $this->comments_dataset('dataset'),
-				'activities_dataset' 		=> $this->activities_dataset('dataset'),
-				'topics_dataset' 			=> $this->topics_dataset('dataset'),
-				'data_map' 					=> $get_option['likers_map'] == 1 ? $this->data_map() : null
-			));
-
-			wp_enqueue_script('postbox');
+		public function get_tables(){
+			return $this->tables;
 		}
 
 		/**
@@ -73,87 +54,77 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
-		 * @updated         2.2
 		 * @return			JSON Array
 		 */
-		public function posts_dataset($type){
-			$newarray 		= array();
-			$return_type 	= $type != 'dataset' ? 'new_date_time' : 'count_date_time';
-			$return_val 	= $this->select_data('ulike');
-			foreach($return_val as $val){
-				if($return_type == 'new_date_time'){
-				$newarray[] = date_i18n("M j, Y", strtotime($val->$return_type) );
-				}
-				else
-				$newarray[] = $val->$return_type;
+		public function dataset( $table ){
+			$output  = array();
+			// Get data
+			$results = $this->select_data( $table );
+			// Create chart dataset
+			foreach( $results as $result ){
+				$output['label'][] = date_i18n( "M j, Y", strtotime( $result->labels ) );
+				$output['data'][]  = $result->counts;
 			}
-			return json_encode($newarray);
+			// Add chart options
+			if( ! empty( $output['data'] ) ){
+				$output['options'] = $this->charts( $table );
+			}
+
+			return $output;
 		}
 
 		/**
-		 * Get The Comments Data Set
+		 * Get custom options for chartjs
 		 *
 		 * @author       	Alimir
-		 * @since           2.0
-		 * @updated         2.2
-		 * @return			JSON Array
+		 * @since           3.5
+		 * @return			Array
 		 */
-		public function comments_dataset($type){
-			$newarray 		= array();
-			$return_type 	= $type != 'dataset' ? 'new_date_time' : 'count_date_time';
-			$return_val 	= $this->select_data('ulike_comments');
-			foreach($return_val as $val){
-				if($return_type == 'new_date_time'){
-				$newarray[] = date_i18n("M j, Y", strtotime($val->$return_type) );
-				}
-				else
-				$newarray[] = $val->$return_type;
-			}
-			return json_encode($newarray);
-		}
+		public function charts( $table, $options = array() ){
 
-		/**
-		 * Get The Activities Data Set
-		 *
-		 * @author       	Alimir
-		 * @since           2.0
-		 * @updated         2.2
-		 * @return			JSON Array
-		 */
-		public function activities_dataset($type){
-			$newarray 		= array();
-			$return_type 	= $type != 'dataset' ? 'new_date_time' : 'count_date_time';
-			$return_val 	= $this->select_data('ulike_activities');
-			foreach($return_val as $val){
-				if($return_type == 'new_date_time'){
-				$newarray[] = date_i18n("M j, Y", strtotime($val->$return_type) );
-				}
-				else
-				$newarray[] = $val->$return_type;
-			}
-			return json_encode($newarray);
-		}
+			switch ( $table ) {
+				case 'ulike':
+					$options = array(
+						'label'                => __( "Posts Stats", WP_ULIKE_SLUG ),
+						'backgroundColor'      => "rgba(66, 165, 245,0.8)",
+						'borderColor'          => "rgba(21, 101, 192,1)",
+						'pointBackgroundColor' => "rgba(255,255,255,1)",
+						'borderWidth'          => 1
+					);
+					break;
 
-		/**
-		 * Get The Activities Data Set
-		 *
-		 * @author       	Alimir
-		 * @since           2.0
-		 * @updated         2.2
-		 * @return			JSON Array
-		 */
-		public function topics_dataset($type){
-			$newarray 		= array();
-			$return_type 	= $type != 'dataset' ? 'new_date_time' : 'count_date_time';
-			$return_val 	= $this->select_data('ulike_forums');
-			foreach($return_val as $val){
-				if($return_type == 'new_date_time'){
-				$newarray[] = date_i18n("M j, Y", strtotime($val->$return_type) );
-				}
-				else
-				$newarray[] = $val->$return_type;
+				case 'ulike_comments':
+					$options = array(
+						'label'                => __( "Comments Stats", WP_ULIKE_SLUG ),
+						'backgroundColor'      => "rgba(255, 202, 40,0.8)",
+						'borderColor'          => "rgba(255, 143, 0,1)",
+						'pointBackgroundColor' => "rgba(255,255,255,1)",
+						'borderWidth'          => 1
+					);
+					break;
+
+				case 'ulike_activities':
+					$options = array(
+						'label'                => __( "Activities Stats", WP_ULIKE_SLUG ),
+						'backgroundColor'      => "rgba(239, 83, 80,0.8)",
+						'borderColor'          => "rgba(198, 40, 40,1)",
+						'pointBackgroundColor' => "rgba(255,255,255,1)",
+						'borderWidth'          => 1
+					);
+					break;
+
+				case 'ulike_forums':
+					$options = array(
+						'label'                => __( "Topics Stats", WP_ULIKE_SLUG ),
+						'backgroundColor'      => "rgba(102, 187, 106,0.8)",
+						'borderColor'          => "rgba(27, 94, 32,1)",
+						'pointBackgroundColor' => "rgba(255,255,255,1)",
+						'borderWidth'          => 1
+					);
+					break;
 			}
-			return json_encode($newarray);
+
+			return $options;
 		}
 
 		/**
@@ -163,16 +134,25 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		public function select_data($table){
-			$get_option = get_option( 'wp_ulike_statistics_screen' );
-			$set_number = $get_option['days_number'] != null ? $get_option['days_number'] : 20;
-			$return_val = $this->wpdb->get_results(
-			"
-			SELECT DATE(date_time) AS new_date_time, count(date_time) AS count_date_time
-			FROM ".$this->wpdb->prefix."$table
-			GROUP BY new_date_time DESC LIMIT $set_number
-			");
-			return $return_val;
+		public function select_data( $table ){
+
+			$query  = sprintf( "
+					SELECT DATE(date_time) AS labels,
+					count(date_time) AS counts
+					FROM %s
+					GROUP BY labels
+					DESC LIMIT %d",
+					$this->wpdb->prefix . $table,
+					30
+				);
+
+			$result = $this->wpdb->get_results( $query );
+
+			if( empty( $result ) ) {
+				$result->labels = $result->counts = NULL;
+			}
+
+			return $result;
 		}
 
 		/**
@@ -182,96 +162,161 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @since           2.0
 		 * @return			Integer
 		 */
-		public function get_data_date($table,$time){
-			if($time == 'today')
-			$where_val = "DATE(date_time) = DATE(NOW())";
-			else if($time == 'yesterday')
-			$where_val = "DATE(date_time) = DATE(subdate(current_date, 1))";
-			else if($time == 'week')
-			$where_val = "week(DATE(date_time)) = week(DATE(NOW()))";
-			else
-			$where_val = "month(DATE(date_time)) = month(DATE(NOW()))";
-
-			$return_val = $this->wpdb->get_var(
-			"
-			SELECT COUNT(*)
-			FROM ".$this->wpdb->prefix."$table
-			WHERE $where_val
-			");
-			return $return_val;
+		public function get_data_date( $table, $date ){
+			_deprecated_function( 'get_data_date', '3.5', 'count_logs' );
+			return $this->count_logs( array( "table" => $table, "date" => $date ) );
 		}
 
 		/**
-		 * Get The Sum Of All Likes
+		 * Count all logs from our tables
 		 *
 		 * @author       	Alimir
-		 * @since           2.0
-		 * @updated         2.1
+		 * @since           3.5
 		 * @return			Integer
 		 */
-		public function get_all_data_date($table,$name){
-			$table_name = $this->wpdb->prefix . $table;
-			if( $this->wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name ) {
-				return $this->wpdb->get_var( "
-							SELECT SUM(meta_value)
-							FROM ".$this->wpdb->prefix."$table
-							WHERE meta_key LIKE '$name'
-						" );
+		public function count_all_logs( $date = 'all' ){
+			// Result
+			$result = 0;
+
+			foreach ( $this->tables as $key => $table ) {
+				$result += $this->count_logs( array( "table" => $table, "date" => $date ) );
 			}
-			else {
-				return ;
-			}
+
+			return $result;
+		}
+
+		/**
+		 * Count logs by table
+		 *
+		 * @author       	Alimir
+		 * @since           3.5
+		 * @return			Integer
+		 */
+		public function count_logs( $args = array() ){
+
+			//Main Data
+			$defaults  = array(
+				"table" => 'ulike',
+				"date"  => 'all'
+			);
+
+			$parsed_args = wp_parse_args( $args, $defaults );
+
+			// Extract variables
+			extract( $parsed_args );
+
+	        $query = sprintf( "SELECT COUNT(*) FROM %s WHERE 1=1", $this->wpdb->prefix . $table );
+
+	        switch ( $date ) {
+	        	case 'today':
+	        		$query .= ' AND DATE( date_time ) = DATE( NOW() )';
+	        		break;
+
+	        	case 'yesterday':
+	        		$query .= ' AND DATE( date_time ) = DATE( subdate( current_date, 1 ) )';
+	        		break;
+
+	        	case 'week':
+	        		$query .= ' AND WEEK( DATE( date_time ) ) = WEEK( DATE( NOW() ) )';
+	        		break;
+
+	        	case 'month':
+	        		$query .= ' AND MONTH( DATE( date_time ) ) = MONTH( DATE( NOW() ) )';
+	        		break;
+
+	        	case 'year':
+	        		$query .= ' AND YEAR( DATE( date_time ) ) = YEAR( DATE( NOW() ) )';
+	        		break;
+	        }
+
+	        $result = $this->wpdb->get_var( $query );
+
+	        return  empty( $result ) ? 0 : $result;
+
 		}
 
 
-		/**
-		 * Get Data Map
-		 *
-		 * @author       	Alimir
-		 * @since           2.3
-		 * @updated         2.6 //added new GeoIP system
-		 * @updated         3.0
-		 * @return			String
-		*/
-		public function data_map( $country_data =  array() ){
+		// /**
+		//  * Get Data Map
+		//  *
+		//  * @author       	Alimir
+		//  * @since           2.3
+		//  * @updated         2.6 //added new GeoIP system
+		//  * @updated         3.0
+		//  * @return			String
+		// */
+		// public function data_map( $country_data =  array() ){
 
-			if ( false === ( $return_val = get_transient( 'wp_ulike_get_likers_dispersal_statistics' ) ) ) {
-				// Make new sql request
-				$return_val = $this->wpdb->get_results( "
-									SELECT T.user_ip AS get_user_ip , SUM(T.count_user_ip) AS get_count_user_ip
-									FROM(
-									SELECT ip AS user_ip, count(ip) AS count_user_ip
-									FROM ".$this->wpdb->prefix."ulike
-									GROUP BY user_ip
-									UNION ALL
-									SELECT ip AS user_ip, count(ip) AS count_user_ip
-									FROM ".$this->wpdb->prefix."ulike_activities
-									GROUP BY user_ip
-									UNION ALL
-									SELECT ip AS user_ip, count(ip) AS count_user_ip
-									FROM ".$this->wpdb->prefix."ulike_comments
-									GROUP BY user_ip
-									UNION ALL
-									SELECT ip AS user_ip, count(ip) AS count_user_ip
-									FROM ".$this->wpdb->prefix."ulike_forums
-									GROUP BY user_ip
-									) AS T
-									GROUP BY get_user_ip
-								" );
-				// Set transient
-				set_transient( 'wp_ulike_get_likers_dispersal_statistics', $return_val, 24 * HOUR_IN_SECONDS );
+		// 	if( ! function_exists('getCountryFromIP') ){
+		// 		require_once( WP_ULIKE_ADMIN_DIR . '/includes/geoiploc.php');
+		// 	}
+
+		// 	if ( false === ( $return_val = get_transient( 'wp_ulike_get_likers_dispersal_statistics' ) ) ) {
+		// 		// Make new sql request
+		// 		$return_val = $this->wpdb->get_results( "
+		// 							SELECT T.user_ip AS get_user_ip , SUM(T.count_user_ip) AS get_count_user_ip
+		// 							FROM(
+		// 							SELECT ip AS user_ip, count(ip) AS count_user_ip
+		// 							FROM ".$this->wpdb->prefix."ulike
+		// 							GROUP BY user_ip
+		// 							UNION ALL
+		// 							SELECT ip AS user_ip, count(ip) AS count_user_ip
+		// 							FROM ".$this->wpdb->prefix."ulike_activities
+		// 							GROUP BY user_ip
+		// 							UNION ALL
+		// 							SELECT ip AS user_ip, count(ip) AS count_user_ip
+		// 							FROM ".$this->wpdb->prefix."ulike_comments
+		// 							GROUP BY user_ip
+		// 							UNION ALL
+		// 							SELECT ip AS user_ip, count(ip) AS count_user_ip
+		// 							FROM ".$this->wpdb->prefix."ulike_forums
+		// 							GROUP BY user_ip
+		// 							) AS T
+		// 							GROUP BY get_user_ip
+		// 						" );
+		// 		// Set transient
+		// 		set_transient( 'wp_ulike_get_likers_dispersal_statistics', $return_val, 24 * HOUR_IN_SECONDS );
+		// 	}
+
+		// 	foreach($return_val as $return){
+		// 		//$cdata = strtolower(wp_ulike_get_geoip($return->get_user_ip,'code'));
+		// 		$cdata = strtolower( getCountryFromIP( $return->get_user_ip, "code" ) );
+		// 		if( ! isset( $country_data[$cdata] ) ) {
+		// 			$country_data[$cdata] = 0;
+		// 		}
+		// 		$country_data[$cdata] += $return->get_count_user_ip;
+		// 	}
+
+		// 	return $country_data;
+		// }
+
+		public function display_top_likers(){
+			$top_likers = $this->get_top_likers();
+			$result     = '';
+			$counter    = 1;
+			foreach ( $top_likers as $user ) {
+				$user_ID  = stripslashes( $user->user_id );
+				$userdata = get_userdata( $user_ID );
+				$username = empty( $userdata ) ? __('Guest User',WP_ULIKE_SLUG) : $userdata->display_name;
+				
+				$result  .= '	
+	            <div class="wp-ulike-row wp-ulike-users-list">
+	                <div class="col-3 wp-ulike-counter">
+	                	<i class="wp-ulike-icons-trophy"></i>
+	                	<span class="aux-wp-ulike-counter">'.$counter++.'th</span>
+	                </div>
+	                <div class="col-6 wp-ulike-info">
+	                	<i class="wp-ulike-icons-profile-male"></i>
+						<span class="wp-ulike-user-name">'.$username.'</span>
+	                </div>
+	                <div class="col-3 wp-ulike-total">
+	                	<i class="wp-ulike-icons-heart"></i>
+						<span class="wp-ulike-user-name">'.$user->SumUser.'</span>
+	                </div>
+	            </div>';
 			}
 
-			foreach($return_val as $return){
-				//$cdata = strtolower(wp_ulike_get_geoip($return->get_user_ip,'code'));
-				$cdata = strtolower( getCountryFromIP( $return->get_user_ip, "code" ) );
-				if( ! isset( $country_data[$cdata] ) ) {
-					$country_data[$cdata] = 0;
-				}
-				$country_data[$cdata] += $return->get_count_user_ip;
-			}
-
-			return json_encode( $country_data );
+			return $result;
 		}
 
 		/**
@@ -286,30 +331,36 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			if ( false === ( $result = get_transient( 'wp_ulike_get_top_likers' ) ) ) {
 				// Make new sql request
-				$result = $this->wpdb->get_results( "
-									SELECT T.user_id, SUM(T.CountUser) AS SumUser, T.ip
-									FROM(
-									SELECT user_id, count(user_id) AS CountUser, ip
-									FROM ".$this->wpdb->prefix."ulike
-									GROUP BY user_id
-									UNION ALL
-									SELECT user_id, count(user_id) AS CountUser, ip
-									FROM ".$this->wpdb->prefix."ulike_activities
-									GROUP BY user_id
-									UNION ALL
-									SELECT user_id, count(user_id) AS CountUser, ip
-									FROM ".$this->wpdb->prefix."ulike_comments
-									GROUP BY user_id
-									UNION ALL
-									SELECT user_id, count(user_id) AS CountUser, ip
-									FROM ".$this->wpdb->prefix."ulike_forums
-									GROUP BY user_id
-									) AS T
-									GROUP BY T.user_id
-									ORDER BY SumUser DESC LIMIT 10
-								" );
-				// Set transient
-				set_transient( 'wp_ulike_get_top_likers', $result, 24 * HOUR_IN_SECONDS );
+				$query  = sprintf( '
+					SELECT T.user_id, SUM(T.CountUser) AS SumUser, T.ip
+					FROM(
+					SELECT user_id, count(user_id) AS CountUser, ip
+					FROM `%1$sulike`
+					GROUP BY user_id
+					UNION ALL
+					SELECT user_id, count(user_id) AS CountUser, ip
+					FROM `%1$sulike_activities`
+					GROUP BY user_id
+					UNION ALL
+					SELECT user_id, count(user_id) AS CountUser, ip
+					FROM `%1$sulike_comments`
+					GROUP BY user_id
+					UNION ALL
+					SELECT user_id, count(user_id) AS CountUser, ip
+					FROM `%1$sulike_forums`
+					GROUP BY user_id
+					) AS T
+					GROUP BY T.user_id
+					ORDER BY SumUser DESC LIMIT %2$d',
+					$this->wpdb->prefix,
+					5
+				);
+				$result = $this->wpdb->get_results( $query );
+
+				if( !empty( $result ) ) {
+					// Set transient
+					set_transient( 'wp_ulike_get_top_likers', $result, 24 * HOUR_IN_SECONDS );
+				}
 			}
 
 			return $result;

@@ -149,7 +149,6 @@ function wp_ulike_admin_menu() {
 
 	//Statistics Menu
 	$statistics_screen 	= add_submenu_page('wp-ulike-settings', __( 'WP ULike Statistics', WP_ULIKE_SLUG ), __( 'WP ULike Statistics', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-statistics', 'wp_ulike_statistics');
-	add_action("load-$statistics_screen",'wp_ulike_statistics_register_option');
 
 	//WP ULike About Menu
 	add_submenu_page('wp-ulike-settings', __( 'About WP ULike', WP_ULIKE_SLUG ), __( 'About WP ULike', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-about', 'wp_ulike_about_page');

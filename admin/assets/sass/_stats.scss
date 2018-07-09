@@ -3,6 +3,112 @@
  *  Statistics Page
  */
 
+.wp-ulike-inner{
+    position: relative;
+    padding: 35px 20px;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 3px 35px rgba(0,0,0,.08);
+    background: #fff;
+    // min-height: 100px;
+}
+
+.wp-ulike-logs-count{
+    margin: 0 auto;
+
+    .wp-ulike-icon{
+        font-size: 5vw;
+        color: #8B93A6;
+        line-height: 5vh;
+    }
+
+    .wp-ulike-var{
+        font-size: 3vw;
+        line-height: 4vw;;
+        display: block;
+    }
+
+    .wp-ulike-text{
+        display: block;
+        color: #8B93A6;
+        font-size: 1.5vw;
+        line-height: 2.5vw;
+    }
+}
+
+
+.wp-ulike-is-loading{
+    &:before{
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        top: 0;
+        height: 100%;
+        background-color: rgba(255,255,255, 0.95);
+        background-image: url(../../../assets/img/svg/statistics.svg);
+        background-repeat: no-repeat;
+        background-position: center center;
+        z-index: 9;
+    }
+}
+
+.wp-ulike-table{
+    display: table;
+
+    .wp-ulike-table-cell{
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+}
+
+.wp-ulike-summary-charts{
+
+    .wp-ulike-info{
+        margin: 0 15px;
+    }
+
+    .wp-ulike-icon{
+        font-size: 30px;
+        color: #8B93A6;
+        line-height: 30px;
+    }
+
+    .wp-ulike-var{
+        font-size: 20px;
+        line-height: 26px;;
+        display: block;
+    }
+
+    .wp-ulike-text{
+        display: block;
+        color: #8B93A6;
+        font-size: 16px;
+        line-height: 20px;
+    }
+}
+
+.wp-ulike-top-likers{
+    width: 90%;
+    text-align: center;
+
+    .wp-ulike-users-list{
+        box-shadow: 0 3px 5px rgba(0,0,0,.08);
+        font-size: 15px;
+        padding: 5px;
+        margin: 15px 0px;
+
+        i {
+            color: #8B93A6;
+            margin: 0 5px;
+        }
+    }
+
+    .wp-ulike-info{
+        text-align: left;
+    }
+}
+
 #right-log {
     width: 31%;
     a {
@@ -268,6 +374,7 @@
         float: right;
     }
 }
+
 @media screen and (max-width: 960px) {
     #right-log {
         width: 35%;
