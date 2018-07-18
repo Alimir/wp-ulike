@@ -4,6 +4,11 @@
  * // @echo HEADER
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die('No Naughty Business Please !');
+}
+
 /**
  * Add WP ULike CopyRight in footer
  *
@@ -100,7 +105,7 @@ function wp_ulike_admin_notice() {
         	<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-badge.png" alt="WP ULike Plugin">
     	</div>
         <div class="wp-ulike-notice-text">
-            <p><?php echo _e( "It's great to see that you've been using the WP ULike plugin for a while now. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ); ?> </p>
+            <p><?php echo _e( "It's great to see that you've been using the WP ULike plugin. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ); ?> </p>
             <div class="links">
                 <a href="https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5" target="_blank"><?php echo _e( "Sure, I'd love to!", WP_ULIKE_SLUG ); ?></a>
                 <a href="https://m.do.co/c/13ad5bc24738" target="_blank"><?php echo _e( "I also want to donate!", WP_ULIKE_SLUG ); ?></a>
@@ -110,22 +115,4 @@ function wp_ulike_admin_notice() {
     </div>
 	<?php
 }
-add_action( 'admin_notices', 'wp_ulike_admin_notice', 999);
-
-/**
- * Simple Ads
- *
- * @author       	Alimir
- * @since           3.1
- * @return			String
- */
-function wp_ulike_advertisement(){
-?>
-	<div class="welcome-panel wp-ulike-advertisement">
-		<a href="http://averta.net/phlox/wordpress-theme/?utm_source=ulike&utm_medium=banner&utm_campaign=phlox" target="_blank" title="Phlox Theme">
-			<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/phlox-theme.png" alt="Phlox Theme">
-		</a>
-	</div>
-<?php
-}
-add_filter( 'wp_ulike_advertisement', 'wp_ulike_advertisement', 99999999999999 );
+add_action( 'admin_notices', 'wp_ulike_admin_notice', 25 );

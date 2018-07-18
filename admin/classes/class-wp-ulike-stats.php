@@ -26,8 +26,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		/**
 		 * Constructor
 		 */
-		public function __construct()
-		{
+		function __construct(){
 			global $wpdb;
 			$this->wpdb   = $wpdb;
 			$this->tables = array(
@@ -39,7 +38,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Return tables which has data inside
+		 * Return tables which has any data inside
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
@@ -62,7 +61,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Get The Posts Data Set
+		 * Get posts datasets
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
@@ -86,7 +85,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Get custom options for chartjs
+		 * Set custom options for charts
 		 *
 		 * @author       	Alimir
 		 * @since           3.5
@@ -180,7 +179,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Count all logs from our tables
+		 * Count all logs from the tables
 		 *
 		 * @author       	Alimir
 		 * @since           3.5
@@ -257,16 +256,16 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				$username = empty( $userdata ) ? __('Guest User',WP_ULIKE_SLUG) : $userdata->display_name;
 				
 				$result  .= '	
-	            <div class="wp-ulike-row wp-ulike-users-list">
-	                <div class="col-3 wp-ulike-counter">
+	            <div class="wp-ulike-flex wp-ulike-users-list">
+	                <div class="wp-ulike-counter">
 	                	<i class="wp-ulike-icons-trophy"></i>
 	                	<span class="aux-wp-ulike-counter">'.$counter++.'th</span>
 	                </div>
-	                <div class="col-6 wp-ulike-info">
+	                <div class="wp-ulike-info">
 	                	<i class="wp-ulike-icons-profile-male"></i>
 						<span class="wp-ulike-user-name">'.$username.'</span>
 	                </div>
-	                <div class="col-3 wp-ulike-total">
+	                <div class="wp-ulike-total">
 	                	<i class="wp-ulike-icons-heart"></i>
 						<span class="wp-ulike-user-name">'.$user->SumUser.'</span>
 	                </div>
@@ -327,22 +326,33 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * Tops Summaries
 		 *
 		 * @author       	Alimir
-		 * @since           2.6
-		 * @since           3.0
-		 * @return			Array
+		 * @since           2.0
+		 * @return			Integer
 		 */
 		public function get_tops( $type ){
+			_deprecated_function( 'get_tops', '3.5', 'get_top' );
+			return $this->get_top( $type );
+		}
+
+		/**
+		 * Tops Summaries
+		 *
+		 * @author       	Alimir
+		 * @since           3.5
+		 * @return			Array
+		 */
+		public function get_top( $type ){
 			switch( $type ){
-				case 'top_posts':
+				case 'posts':
 					return parent::most_liked_posts();
 					break;
-				case 'top_comments':
+				case 'comments':
 					return parent::most_liked_comments();
 				break;
-				case 'top_activities':
+				case 'activities':
 					return parent::most_liked_activities();
 				break;
-				case 'top_topics':
+				case 'topics':
 					return parent::most_liked_topics();
 				break;
 				default:
