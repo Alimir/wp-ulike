@@ -118,46 +118,6 @@ function wp_ulike_statistics_save_option(){
 }
 add_action('admin_init', 'wp_ulike_statistics_save_option');
 
-/**
- * Add menu to admin
- *
- * @author       	Alimir
- * @since           1.0
- * @updated         2.2
- * @updated         2.4.2
- * @return			String
- */
-function wp_ulike_admin_menu() {
-
-	global $menu;
-
-	//Post Like Logs Menu
-	$posts_screen 		= add_submenu_page(null, __( 'Post Likes Logs', WP_ULIKE_SLUG ), __( 'Post Likes Logs', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-post-logs', 'wp_ulike_post_likes_logs');
-	add_action("load-$posts_screen",'wp_ulike_logs_per_page');
-
-	//Comment Like Logs Menu
-	$comments_screen 	= add_submenu_page(null, __( 'Comment Likes Logs', WP_ULIKE_SLUG ), __( 'Comment Likes Logs', WP_ULIKE_SLUG ), 'manage_options','wp-ulike-comment-logs', 'wp_ulike_comment_likes_logs');
-	add_action("load-$comments_screen",'wp_ulike_logs_per_page');
-
-	//Activity Like Logs Menu
-	$activities_screen 	= add_submenu_page(null, __( 'Activity Likes Logs', WP_ULIKE_SLUG ), __( 'Activity Likes Logs', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-bp-logs', 'wp_ulike_buddypress_likes_logs');
-	add_action("load-$activities_screen",'wp_ulike_logs_per_page');
-
-	//Activity Like Logs Menu
-	$topics_screen 		= add_submenu_page(null, __( 'Topics Likes Logs', WP_ULIKE_SLUG ), __( 'Topics Likes Logs', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-bbpress-logs', 'wp_ulike_bbpress_likes_logs');
-	add_action("load-$topics_screen",'wp_ulike_logs_per_page');
-
-	//Statistics Menu
-	$statistics_screen 	= add_submenu_page('wp-ulike-settings', __( 'WP ULike Statistics', WP_ULIKE_SLUG ), __( 'WP ULike Statistics', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-statistics', 'wp_ulike_statistics');
-
-	//WP ULike About Menu
-	add_submenu_page('wp-ulike-settings', __( 'About WP ULike', WP_ULIKE_SLUG ), __( 'About WP ULike', WP_ULIKE_SLUG ), 'manage_options', 'wp-ulike-about', 'wp_ulike_about_page');
-
-	$newvotes = wp_ulike_get_number_of_new_likes();
-	$menu[313][0] .= $newvotes ? " <span class='update-plugins count-1'><span class='update-count'>". number_format_i18n($newvotes) ."</span></span> " : '';
-
-}
-add_action('admin_menu', 'wp_ulike_admin_menu');
 
 /**
  * Set the admin login time.

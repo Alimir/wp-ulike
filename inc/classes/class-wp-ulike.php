@@ -39,55 +39,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$this->status  = 'like';
 			$this->user_ip = $wp_user_IP;
 			$this->user_id = $this->get_reutrn_id();
-
-			// Enqueue Scripts
-			add_action( 'wp_enqueue_scripts', array( $this, 'load_assets'  ) );
 		}
-
-		/**
-		 * Load the plugin assets
-		 *
-		 * @author          Alimir
-		 * @since           3.0
-		 * @return          Void
-		 */
-	    public function load_assets() {
-	    	// If user has been disabled this page in options, then return.
-			if( ! is_wp_ulike( wp_ulike_get_setting( 'wp_ulike_general', 'plugin_files') ) ) {
-				return;
-			}
-	        // @if DEV
-	        /*
-	        // @endif
-	        //Add wp_ulike script file with special functions.
-	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), '3.4', true);
-	        // @if DEV
-	        */
-	        // @endif
-	        // @if DEV
-			//Add wp_ulike script file with special functions.
-			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), '3.4', true);
-	        // @endif
-
-			//localize script
-			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
-				'ajax_url'         => admin_url( 'admin-ajax.php' ),
-				'notifications'    => wp_ulike_get_setting( 'wp_ulike_general', 'notifications')
-			));
-	        // @if DEV
-	        /*
-	        // @endif
-	        wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css', array(), '3.4' );
-	        // @if DEV
-	        */
-	        // @endif
-	        // @if DEV
-			wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css', array(), '3.4' );
-	        // @endif
-
-			//add your custom style from setting panel.
-			wp_add_inline_style( 'wp-ulike', wp_ulike_get_custom_style() );
-	    }
 
 		/**
 		 * Select the logging type

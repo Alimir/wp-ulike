@@ -76,12 +76,12 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	    private function __construct() {
 
 	    	add_action( 'plugins_loaded', array( $this, 'init' ) );
-			// Include Files
-			$this->includes();
+
+	    	add_action('admin_enqueue_scripts', array( $this, 'admin_assets' ) );
+	    	add_action('wp_enqueue_scripts', array( $this, 'frontend_assets' ) );
 
 			// Activate plugin when new blog is added
 			add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
-
 			add_action( 'activated_plugin', array( $this, 'after_activation' ) );
 
 			$prefix = is_network_admin() ? 'network_admin_' : '';
@@ -93,7 +93,27 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	    *
 	    * @return void
 	    */
+	    public function admin_assets( $hook ){
+	    	new wp_ulike_admin_assets( $hook );
+	    }
+
+	   /**
+	    * Init the plugin when WordPress Initialises.
+	    *
+	    * @return void
+	    */
+	    public function frontend_assets(){
+			new wp_ulike_frontend_assets();
+	    }
+
+	   /**
+	    * Init the plugin when WordPress Initialises.
+	    *
+	    * @return void
+	    */
 	    public function init(){
+	    	// Include Files
+	    	$this->includes();
 
 	        // @deprecate version 5.0
 	        global $wp_version;
