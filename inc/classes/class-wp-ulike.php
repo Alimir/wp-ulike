@@ -20,8 +20,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		/**
 		 * Constructor
 		 */
-		public function __construct()
-		{
+		function __construct(){
 			// Init core
 			add_action( 'wp_ulike_loaded', array( $this, 'init' ) );
 		}
@@ -396,78 +395,6 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
-		 * Get Liked User
-		 *
-		 * @author       	Alimir
-		 * @param           Array $arg
-		 * @since           2.0
-		 * @return			String
-		 */
-		public function get_liked_users( array $args, $skip_wrapper = false ){
-			// Extract input array
-			extract( $args );
-			// If likers box has been disabled
-			if ( ! wp_ulike_get_setting( $setting, 'users_liked_box' ) ) return;
-
-			// Get user's limit number value
-			$limit_num  = wp_ulike_get_setting( $setting, 'number_of_users');
-			// Set default value if limit_num equals to zero
-			$limit_num  = $limit_num != 0 ? $limit_num : 10;
-			// Get likers list
-			$get_users  = $this->wpdb->get_results( "SELECT user_id FROM ".$this->wpdb->prefix."$table WHERE $column = '$id' AND status = 'like' AND user_id BETWEEN 1 AND 999999 GROUP BY user_id LIMIT $limit_num" );
-
-			// Users list
-			$users_list = '';
-
-			if( ! empty( $get_users ) ) {
-
-				// Get likers html template
-				$get_template 	= wp_ulike_get_setting( $setting, 'users_liked_box_template', '<ul class="tiles">%START_WHILE%<li><a href="#" class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>' );
-
-				$inner_template = $this->get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
-
-				foreach ( $get_users as $get_user ) {
-					$user_info 		= get_userdata($get_user->user_id);
-					$out_template 	= $inner_template;
-					if ($user_info):
-						if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
-							$avatar_size 	= wp_ulike_get_setting( $setting, 'users_liked_box_avatar_size' );
-							$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
-							$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
-						}
-						if( strpos( $out_template, '%USER_NAME%' ) !== false) {
-							$USER_NAME 		= $user_info->display_name;
-							$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
-						}
-						if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
-							global $ultimatemember;
-							um_fetch_user( $user_info->ID );
-							$UM_PROFILE_URL = um_user_profile_url();
-							$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
-						}
-						if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
-							$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
-							$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
-						}
-						$users_list .= $out_template;
-					endif;
-				}
-
-				if( ! empty($users_list) ) {
-					$users_list = $this->put_template_between( $get_template,$users_list, "%START_WHILE%", "%END_WHILE%" );
-				}
-
-			}
-
-			if( $skip_wrapper ) {
-				return $users_list;
-			} else {
-				return sprintf( '<div class="wp_ulike_likers_wrapper">%s</div>', $users_list );
-			}
-
-		}
-
-		/**
 		 * Get User Status (like/dislike)
 		 *
 		 * @author       	Alimir
@@ -528,57 +455,6 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				DESC
 				LIMIT $limit
 			" );
-		}
-
-		/**
-		 * Get template between
-		 *
-		 * @author       	Alimir
-		 * @param           String $string
-		 * @param           String $start
-		 * @param           String $end
-		 * @since           2.0
-		 * @return			String
-		 */
-		public function get_template_between( $string, $start, $end ){
-			$string 	= " ".$string;
-			$ini 		= strpos($string,$start);
-			if ( $ini == 0 ){
-				return "";
-			}
-			$ini 		+= strlen($start);
-			$len 		= strpos($string,$end,$ini) - $ini;
-
-			return substr( $string, $ini, $len );
-		}
-
-		/**
-		 * Put template between
-		 *
-		 * @author       	Alimir
-		 * @param           String $string
-		 * @param           String $inner_string
-		 * @param           String $start
-		 * @param           String $end
-		 * @since           2.0
-		 * @return			String
-		 */
-		public function put_template_between( $string, $inner_string, $start, $end ){
-			$string 	= " ".$string;
-			$ini 		= strpos($string,$start);
-			if ($ini == 0){
-				return "";
-			}
-
-			$ini 		+= strlen($start);
-			$len		= strpos($string,$end,$ini) - $ini;
-			$newstr 	= substr_replace($string,$inner_string,$ini,$len);
-
-			return str_replace(
-				array( "%START_WHILE%", "%END_WHILE%" ),
-				array( "", "" ),
-				$newstr
-			);
 		}
 
 		/**
