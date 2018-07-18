@@ -195,20 +195,20 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			// Extract data
 			extract( $data );
 			// Check the user's likes history
-			$output     = '';
+			$output      = '';
 			// method column value
-			$method_val = $method_col === 'ip' ? $this->user_ip : $this->user_id;
+			$method_val  = $method_col === 'ip' ? $this->user_ip : $this->user_id;
 			// Check user log history
-			$has_log    = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
+			$user_status = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
 
 			if( $type == 'post' ){
 
-				if( empty( $has_log ) ){
+				if( ! $user_status ){
 					$output 	= $this->get_template( $data, 3 );
 
 				} else {
 
-					if( $has_log  == "like" ) {
+					if( $user_status  == "like" ) {
 						$output = $this->get_template( $data, 2 );
 
 					} else {
@@ -219,7 +219,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			} elseif( $type == 'process' ) {
 
-				if( empty( $has_log ) ){
+				if( ! $user_status ){
 					// Increment like counter
 					++$get_like;
 					// Insert log data
@@ -237,7 +237,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 				} else {
 
-					if( $has_log == "like" ) {
+					if( $user_status == "like" ) {
 						// Decrement like counter
 						--$get_like;
 						$this->status = 'unlike';
@@ -264,7 +264,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						'key'     => $key,
 						'user_id' => $this->user_id,
 						'status'  => $this->status,
-						'has_log' => empty( $has_log ) ? 0 : 1
+						'has_log' => ! $user_status ? 0 : 1
 					)
 				);
 
@@ -407,13 +407,23 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			String
 		 */
 		public function get_user_status( $table, $first_column, $second_column, $first_val, $second_val ){
-			// This will return like|unlike
-			return $this->wpdb->get_var( "
-				SELECT status
-				FROM ".$this->wpdb->prefix."$table
-				WHERE $first_column = '$first_val'
-				AND $second_column = '$second_val'
-			" );
+
+			// Check the user's likes history
+			$query  = sprintf( "
+					SELECT `status`
+					FROM %s
+					WHERE `%s` = '%s'
+					AND `%s` = '%s'",
+					esc_sql( $this->wpdb->prefix . $table ),
+					esc_sql( $first_column ),
+					esc_sql( $first_val ),
+					esc_sql( $second_column ),
+					esc_sql( $second_val )
+				);
+
+			$result = $this->wpdb->get_var( $query );
+
+			return empty( $result ) ? false : $result;
 		}
 
 		/**
@@ -425,14 +435,25 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			Array
 		 */
 		public function has_log( array $args ){
+			// Extract args
 			extract( $args );
+
 			// Check the user's likes history
-			return $this->wpdb->get_var( "
-				SELECT COUNT(*)
-				FROM ".$this->wpdb->prefix.$table."
-				WHERE $column = '$id'
-				AND ( user_id = ".$this->user_id." OR ip = ".$this->user_ip." )
-			" );
+			$query  = sprintf( "
+					SELECT COUNT(*)
+					FROM %s
+					WHERE `%s` = %s
+					AND ( `user_id` = '%s' OR `ip` = '%s' )",
+					esc_sql( $this->wpdb->prefix . $table ),
+					esc_sql( $column ),
+					esc_sql( $id ),
+					esc_sql( $this->user_id ),
+					esc_sql( $this->user_ip )
+				);
+
+			$result = $this->wpdb->get_var( $query );
+
+			return empty( $result ) ? 0 : $result;
 		}
 
 		/**
