@@ -12,3 +12,8 @@ if ( ! defined( 'WPINC' ) ) {
 require_once( WP_ULIKE_ADMIN_DIR . '/admin-functions.php');
 //include logs menu functions
 require_once( WP_ULIKE_ADMIN_DIR . '/admin-hooks.php');
+// init the class for extending the menu nav in back-end
+
+
+// Register admin menus
+new wp_ulike_admin_pages();
