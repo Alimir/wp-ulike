@@ -32,7 +32,7 @@
 	});
 
 	// Charts stack array to save data
-	var chartsData = [];
+	window.wpUlikechartsInfo = [];
 
     $.fn.WpUlikeAjaxStats = function( method, value ){
 			// local var
@@ -63,168 +63,128 @@
 	        return theResponse;
     };
 
-    $.fn.WpUlikeLinearCharts = function( index, value ){
-    	// Get chart element
-		var $this      = $(this),
-		sumStack       = 0,
-		callback       = $this.data( 'callback' ),
-		dataArgs       = $this.data( 'args' ),
-		$ajaxElement   = $(this).closest( ".wp-ulike-is-loading" ),
-		$canvasElement = $this.find( "canvas" ),
-		theResponse    = $.fn.WpUlikeAjaxStats( callback, dataArgs );
-
-		// If any error occurred, then continue
-	  	if( !theResponse || theResponse.length === 0 ){
-	  		$this.closest('.wp-ulike-summary-charts').remove();
-	    	return; //this is equivalent of 'continue' for jQuery loop
-		}
-
-		// Create object of canvas
-		var drawChart            = $canvasElement[0].getContext("2d");
-		// Push data into datasets options
-		theResponse.options['data'] = theResponse.data;
-
-		new Chart(drawChart, {
-		    // The type of chart we want to create
-		    type: 'line',
-		    // The data for our dataset
-		    data: {
-				labels  : theResponse.label,
-				datasets: [
-					theResponse.options
-				]
-			},
-			options: {
-				animation: false
-			}
-		});
-
-		// Get the sum of total likes
-		theResponse.data.forEach(function( num ){
-			sumStack += parseFloat( num ) || 0;
-		});
-		// Upgrade chartsData array
-		chartsData.push({
-			type      : value,
-			sum       : sumStack,
-			label     : theResponse.options.label,
-			background: theResponse.options.backgroundColor
-		});
-
-		// Remove loading spinner
-		if( $ajaxElement.length ){
-			$ajaxElement.removeClass( 'wp-ulike-is-loading' );
-		}
-    };
-
-    $.fn.WpUlikeLogsCount = function(){
-    	// Variables
-		var callback = $(this).data( 'callback' ),
-		dataArgs     = $(this).data( 'args' ),
-		$ajaxElement = $(this).closest( ".wp-ulike-is-loading" ),
-		theResponse  = $.fn.WpUlikeAjaxStats( callback, dataArgs );
-
-		// Insert ajax data
-		$(this).find('.wp-ulike-var').html( theResponse );
-
-		// Remove loading spinner
-		if( $ajaxElement.length ){
-			$ajaxElement.removeClass( 'wp-ulike-is-loading' );
-		}
-    };
-
-    $.fn.WpUlikePieCharts = function(){
-		var $this      = $(this),
-		$canvasElement = $this.find( "canvas" ),
-		$ajaxElement   = $this.closest( ".wp-ulike-is-loading" );
-
-		if( chartsData != null ) {
-
-			var piechart  = $canvasElement[0].getContext("2d"),
-			pieData       = [],
-			pieBackground = [],
-			pieLabels     = [];
-
-			chartsData.forEach(function( value, key ){
-				pieData.push( value.sum );
-				pieBackground.push( value.background );
-				pieLabels.push( value.label );
-			});
-
-			new Chart( piechart, {
-			    // The type of chart we want to create
-			    type: 'pie',
-			    // The data for our dataset
-			    data: {
-				    datasets: [{
-						data           : pieData,
-						backgroundColor: pieBackground,
-				    }],
-				    // These labels appear in the legend and in the tooltips when hovering different arcs
-					labels: pieLabels
-				}
-			});
-			
-		} else {
-			$this.closest('.wp-ulike-percent-charts').remove();
-		}
-
-		// Remove loading spinner
-		if( $ajaxElement.length ){
-			$ajaxElement.removeClass( 'wp-ulike-is-loading' );
-		}	
-
-    };
-
-    $.fn.WpUlikeStats = function(){
-
-		$('.wp-ulike-ajax-get-var').each(function(){
-			$(this).WpUlikeLogsCount();		
-		});
-
-		$('.wp-ulike-ajax-get-chart').each(function(){
-			$(this).WpUlikeLinearCharts();		
-		});
-
-		$('.wp-ulike-draw-chart').WpUlikePieCharts();
-
-		var $mapElement = $('#wp-ulike-maps');
-
-		if( typeof $mapElement !== 'undefined' ){
-
-			var world_map_data = $mapElement.WpUlikeAjaxStats( 'data_map', '' );
-
-		  	if( world_map_data !== false ){
-				$mapElement.vectorMap({
-					map              : 'world_en',
-					backgroundColor  : '#333333',
-					color            : '#ffffff',
-					hoverOpacity     : 0.7,
-					selectedColor    : '#666666',
-					enableZoom       : true,
-					showTooltip      : true,
-					values           : world_map_data,
-					scaleColors      : ['#C8EEFF', '#006491'],
-					normalizeFunction: 'polynomial',
-					onLabelShow      : function (event, label, code) {
-						if(world_map_data[code] > 0) {
-							label.append(': '+world_map_data[code]+' Users');
-						}
-					}
+    if( wp_ulike_admin.hook_address.indexOf("wp-ulike-statistics") !== -1 ) {
+    	// Get single var component
+		Vue.component('get-var', {
+		    props: ['callback', 'args'],
+		    data: function () {
+		        return {
+					output  : '...'
+		        }
+		    },
+		    mounted() {
+		        this.output = this.fetchData();
+		        // Remove spinner class
+				this.$nextTick(function () {
+					this.removeClass( this.$el.offsetParent );
 				});
-			}
+		    },
+		    methods:{
+		        fetchData () {
+		            return $.fn.WpUlikeAjaxStats( this.callback, this.args )
+		        },
+		        removeClass( element ){
+		        	element.classList.remove( 'wp-ulike-is-loading' );
+		        }
+		    }
+		});
+		// Get charts object component
+		Vue.component('get-chart', {
+		    props: ['callback', 'args', 'identify', 'type'],    
+		    mounted() {
+		    	if( this.type == 'line' ) {
+			    	this.planetChartData = this.fetchData();
+			        this.createLineChart( this.planetChartData );	    		
+		    	} else {
+		    		this.createPieChart();
+		    	}
+		    	// Remove spinner class
+				this.$nextTick(function () {
+					this.removeClass( this.$el.offsetParent );
+				});
+		    },
+		    methods:{
+		        fetchData () {
+		            return $.fn.WpUlikeAjaxStats( this.callback, this.args );
+		        },
+				createLineChart( chartData ) {
+					// Push data stats in dataset options
+					chartData.options['data'] = chartData.data;
+					// And finally draw it
+					this.drawChart({
+					    // The type of chart we want to create
+					    type: 'line',
+					    // The data for our dataset
+					    data: {
+							labels  : chartData.label,
+							datasets: [
+								chartData.options
+							]
+						}
+					});		
+					// Set info for this canvas
+					this.setInfo( chartData );
+				},
+				createPieChart() {
+					// Define stack variables
+					var pieData   = [],
+					pieBackground = [],
+					pieLabels     = [];
+					// Get the info of each chart
+					window.wpUlikechartsInfo.forEach(function( value, key ){
+						pieData.push( value.sum );
+						pieBackground.push( value.background );
+						pieLabels.push( value.label );
+					});
+					// And finally draw it
+					this.drawChart({
+					    // The type of chart we want to create
+					    type: 'pie',
+					    // The data for our dataset
+					    data: {
+						    datasets: [{
+								data           : pieData,
+								backgroundColor: pieBackground,
+						    }],
+						    // These labels appear in the legend and in the tooltips when hovering different arcs
+							labels: pieLabels
+						}
+					});
+				},
+				drawChart( chartArgs ){
+					// Get canvas element
+					const ctx   = document.getElementById( this.identify );
+					// Draw Chart
+					const chart = new Chart( ctx, chartArgs );
+				},
+				setInfo( chartData ){
+					var sumStack = 0;
+					// Get the sum of total likes
+					chartData.data.forEach(function( num ){
+						sumStack += parseFloat( num ) || 0;
+					});
+					// Upgrade wpUlikechartsInfo array
+					window.wpUlikechartsInfo.push({
+						type      : this.identify,
+						sum       : sumStack,
+						label     : chartData.options.label,
+						background: chartData.options.backgroundColor
+					});
+				},
+		        removeClass( element ){
+		        	element.classList.remove( 'wp-ulike-is-loading' );
+		        }
+		    }
+		});
 
-			$mapElement.closest('.inside').removeClass( "wp-ulike-is-loading" );
+		new Vue({
+		    el: '#wp-ulike-stats-app',
+		});
+    }
 
-		}
-    };
-
+    // on document ready
     $(function(){
-
-    	if( wp_ulike_admin.hook_address === 'wp-ulike_page_wp-ulike-statistics' ){
-    		$(document).WpUlikeStats();
-    	}
-
+        $('.wp-ulike-match-height').matchHeight();
     });
 
 })( jQuery );

@@ -34,19 +34,31 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				'posts'      => 'ulike',
 				'comments'   => 'ulike_comments',
 				'activities' => 'ulike_activities',
-				'forums'     => 'ulike_forums',
+				'topics'     => 'ulike_forums',
 			);
 		}
 
 		/**
-		 * Add chart scripts files + Creating Localize Objects
+		 * Return tables which has data inside
 		 *
 		 * @author       	Alimir
 		 * @since           2.0
-		 * @return			Void
+		 * @return			Array
 		 */
 		public function get_tables(){
-			return $this->tables;
+			// Tables buffer
+			$get_tables = $this->tables;
+
+			foreach ( $get_tables as $type => $table) {
+				// If this table has no data, then unset it and continue...
+				if( ! $this->count_logs( array ( "table" => $table ) ) ) {
+					unset( $get_tables[ $type ] );
+					continue;
+				}
+
+			}
+
+			return $get_tables;	
 		}
 
 		/**
