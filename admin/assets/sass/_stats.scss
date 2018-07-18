@@ -3,17 +3,72 @@
  *  Statistics Page
  */
 
+.wp-ulike-page-title{
+    font-size: 38px;
+    line-height: 50px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.wp-ulike-header{
+    margin: 0 2% 10px;
+    padding: 0 20px 35px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+    flex-wrap: wrap;
+
+    &:after{
+        content: "";
+        position: absolute;
+        bottom: 0;
+        height: 1px;
+        background: #dde3e7;
+        right: 20px;
+        left: 20px;
+    }
+
+    .wp-ulike-widget-title{
+        text-transform: capitalize;
+        font-size: 22px;
+        font-weight: 500;
+        line-height: normal;
+        color: #3d3d3d;
+        margin: 0;
+    }
+}
+
+.wp-ulike-button{
+    background-color: #f9faff;
+    padding: 10px 25px;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #7e8996;
+    border: 1px solid #dde3e7;
+    border-radius: 50em;
+    font-size: 14px;
+    line-height: 20px;
+
+    &:hover{
+        background-color: #fff;
+        color: #42484e;
+    }
+}
+
 .wp-ulike-inner{
     position: relative;
     padding: 35px 20px;
-    border: 1px solid #e5e5e5;
-    box-shadow: 0 3px 35px rgba(0,0,0,.08);
+    border: 1px solid #e4e6eb;
+    // box-shadow: 0 3px 25px rgba(0,0,0,.08);
     background: #fff;
+    border-radius: 4px;
     // min-height: 100px;
 }
 
 .wp-ulike-logs-count{
     margin: 0 auto;
+    text-align: center;
 
     .wp-ulike-icon{
         font-size: 5vw;
@@ -37,6 +92,8 @@
 
 
 .wp-ulike-is-loading{
+    padding: 10px 0;
+
     &:before{
         content: "";
         position: absolute;
@@ -44,7 +101,7 @@
         width: 100%;
         top: 0;
         height: 100%;
-        background-color: rgba(255,255,255, 0.95);
+        background-color: rgba(255,255,255, 1);
         background-image: url(../../../assets/img/svg/statistics.svg);
         background-repeat: no-repeat;
         background-position: center center;
@@ -65,38 +122,38 @@
 .wp-ulike-summary-charts{
 
     .wp-ulike-info{
-        margin: 0 15px;
+        flex-basis: 35%;
     }
 
     .wp-ulike-icon{
-        font-size: 30px;
+        font-size: 3vw;
         color: #8B93A6;
-        line-height: 30px;
+        line-height: normal;
+        flex-basis: 25%;
     }
 
     .wp-ulike-var{
-        font-size: 20px;
-        line-height: 26px;;
+        font-size: 1.8vw;
+        line-height: normal;;
         display: block;
     }
 
     .wp-ulike-text{
         display: block;
         color: #8B93A6;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 1vw;
+        line-height: normal;
     }
 }
 
 .wp-ulike-top-likers{
-    width: 90%;
-    text-align: center;
+    margin: 0 2%;
 
     .wp-ulike-users-list{
-        box-shadow: 0 3px 5px rgba(0,0,0,.08);
+        border-bottom: 1px solid #dde3e7;
         font-size: 15px;
-        padding: 5px;
-        margin: 15px 0px;
+        padding: 20px 0px;
+        margin: 5px;
 
         i {
             color: #8B93A6;
@@ -105,300 +162,60 @@
     }
 
     .wp-ulike-info{
-        text-align: left;
+        width: 60%;
+    }
+    .wp-ulike-counter{
+        width: 20%;
+    }
+    .wp-ulike-total{
+        width: 20%;
     }
 }
 
-#right-log {
-    width: 31%;
-    a {
-        text-decoration: none;
-    }
-}
-#left-log {
-    margin: 0 0 0 1%;
-    width: 68%;
-    a {
-        text-decoration: none;
-    }
-}
-#last-log {
-    width: 100%;
-    a {
-        text-decoration: none;
-    }
-}
-#summary-stats {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-    border: 1px none;
-    margin: 0 0 10px;
-    tr {
-        &:first-child {
-            th {
-                border-top: 0 none;
-            }
-        }
-    }
-    span {
-        color: #27ae60 !important;
-        font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-        font-size: 21px;
-    }
-}
-#th-colspan {
+.wp-ulike-empty-stats{
     text-align: center;
-    span {
-        color: #21759B !important;
-        font-size: 30px;
-    }
-}
-#last-visitor {
-    tr {
-        text-align: center;
-        &:first-child {
-            background: none repeat scroll 0 0 #EEEEEE;
-            font-weight: bold;
-            text-align: center;
-        }
-    }
-}
-#last-search {
-    tr {
-        text-align: center;
-        &:first-child {
-            background: none repeat scroll 0 0 #EEEEEE;
-            font-weight: bold;
-            text-align: center;
-        }
-    }
-}
-#last-referrer {
-    tr {
-        text-align: left;
-        &:first-child {
-            background: none repeat scroll 0 0 #EEEEEE;
-            font-weight: bold;
-            text-align: center;
-        }
-    }
-}
-.th-center {
-    text-align: center !important;
-}
-.td-align {
-    text-align: left;
-}
-.td-url {
-    color: #009936 !important;
-    direction: ltr;
-    font-size: 10px !important;
-    text-align: left;
-    white-space: nowrap;
-}
-#map_canvas {
-    direction: ltr;
-    height: 380px;
-    width: 100%;
-}
-.map-html-marker {
-    max-height: 170px;
-    width: 200px;
-    p {
-        border-bottom: 1px dashed #EFEFEF;
-        font-size: 10px;
-        margin: 2px 0;
-        padding: 3px 0;
-        text-align: left;
-        &:last-child {
-            border-bottom: 0 none;
-        }
-    }
-}
-.log-item {
-    border-bottom: 1px solid #D3CDCD;
-    border-top: 1px solid #FFFFFF;
-    height: 46px;
-    padding: 3px 7px;
-    &:hover {
-        background: none repeat scroll 0 0 #EEEEEE;
-    }
-}
-.top-widget {
-    ol {
-        li {
-            border-bottom: 1px solid #D3CDCD;
-            border-top: 1px solid #FFFFFF;
-            height: 46px;
-            padding: 3px 7px;
-            height: inherit;
-            padding: 12px 5px;
-            font-size: 16px;
-            margin-bottom: 0;
-            a {
-                color: #616161;
-            }
-            &:hover {
-                background: none repeat scroll 0 0 #EEEEEE;
-            }
-        }
-    }
-    .wp_counter_span {
-        display: inline-block;
-        background-color: #D54E21;
-        color: #FFFFFF;
-        font-size: 12px;
-        line-height: 19px;
-        font-weight: normal;
-        margin: 1px 0px 0px 2px;
-        vertical-align: top;
-        border-radius: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
-        z-index: 26;
-        float: right;
-    }
-}
-.show-map {
-    float: left;
-}
-.log-referred {
-    float: left;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 79%;
-}
-.log-ip {
-    direction: ltr;
-    float: right;
-    font-size: 10px;
-    margin-bottom: 5px;
-    white-space: pre;
-    width: 20%;
-}
-.log-tools {
-    float: left;
-    margin: 0 2px;
-}
-.log-agent {
-    float: left;
-}
-.log-url {
-    direction: ltr;
-    float: left;
-    font-size: 10px;
-    margin: 0 0 0 2px;
-    white-space: nowrap;
-    width: 85%;
-}
-#time_zone {
-    a {
-        font-size: 11px;
-        text-decoration: none;
-    }
-}
-#visits-log {
-    direction: ltr;
-    height: 290px;
-    width: 100%;
-}
-#search-engine-log {
-    direction: ltr;
-}
-#browsers-log {
-    direction: ltr;
-    height: 330px;
-    margin: 0 auto;
-    width: 100%;
-}
-#platform-log {
-    direction: ltr;
-}
-#visits-stats {
-    direction: ltr;
-}
-#exclusion-stats {
-    direction: ltr;
-}
-#search-stats {
-    direction: ltr;
-}
-#about-links {
-    margin: 0 0 10px;
-    p {
-        display: inline;
-        font-size: 11px;
-        margin: 0 2px;
-    }
-}
-#donate-button {
-    float: left;
-    padding: 7px 0 0;
-    text-align: center;
-    width: 100%;
-}
-.left-div {
-    float: left;
-}
-.right-div {
-    float: right;
-}
-.wp_ulike_logs {
-    .button {
-        line-height: 20px;
-    }
-    i{
-        font-size: 1.9em;
+    height: 50em;
+    position: relative;
 
-        &.wp-ulike-icons-thumb_up:before {
-            color: #4caf50;
-        }
-        &.wp-ulike-icons-thumb_down:before {
-            color: #f44336;
-        }
+    > div {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
     }
-}
-.postbox {
-    .badge {
-        display: inline-block;
-        background-color: #D54E21;
-        color: #FFFFFF;
-        font-size: 12px;
-        line-height: 19px;
-        font-weight: normal;
-        margin: 1px 0px 0px 2px;
-        vertical-align: top;
-        border-radius: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
-        z-index: 26;
-        float: right;
+
+    .wp-ulike-icon{
+        font-size: 110px;
+        color: #8B93A6;
+    }
+
+    .wp-ulike-info{
+        font-size: 28px;
+        line-height: 42px;
+        font-weight: 300;
+        margin-top: 50px;
     }
 }
 
-@media screen and (max-width: 960px) {
-    #right-log {
-        width: 35%;
-    }
-    #left-log {
-        margin: 0 0 0 1%;
-        width: 63%;
-    }
-}
-@media screen and (max-width: 758px) {
-    #right-log {
-        width: 100%;
-    }
-    #left-log {
-        margin: 0 0 0 1%;
-        width: 100%;
-    }
-}
-@media screen and (max-width: 524px) {
-    #right-log {
-        width: 100%;
-    }
-    #left-log {
-        margin: 0 0 0 1%;
-        width: 100%;
+.wp-ulike-tops-list{
+    padding: 0 20px;
+
+    > ul{
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 26px;
+        color: #3d3d3d;
+        margin: 0;
+
+        > li{
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #dde3e7;
+            padding: 8px 0;
+
+            a{
+                text-decoration: none;
+                color: #3d3d3d;
+            }
+        }
     }
 }
