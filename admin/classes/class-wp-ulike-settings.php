@@ -412,7 +412,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                                 break;
 
                             case 'color':
-                                $values[$name] = preg_match( '/^#[a-f0-9]{6}$/i', $input ) ? $input : '';
+                                $values[$name] = $input;
                                 break;
 
                             case 'textarea':

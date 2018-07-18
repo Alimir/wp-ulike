@@ -160,7 +160,31 @@
 
         $('.wp-ulike-visual-select input').radioImageSelect();
 
-        $('.wp-ulike-settings-color').wpColorPicker();
+        $('.wp-ulike-settings-color').spectrum({
+            allowEmpty: true,
+            showInput: true,
+            showAlpha: true,
+            disabled: false,
+
+            showSelectionPalette: true,
+            showPalette:true,
+            hideAfterPaletteSelect:true,
+            palette: [
+                ['black', 'white', ' ']
+            ],
+            clickoutFiresChange: true,
+            showInitial: true,
+            containerClassName: 'wp-ulike-sp-wrapper',
+            localStorageKey: "wpulike.spectrum",
+            preferredFormat: "hex6",
+            change: function(color) {
+                if( color === null) {
+                    $(this).val('');
+                } else {
+                    $(this).val( color.toString() );
+                }
+            }
+        });
 
         $('#wp-ulike-settings_wp_ulike_customize tr:not(:first-child)').addClass('custom-style-show');
 
