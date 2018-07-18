@@ -25,7 +25,8 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 			foreach ( $setting as $k => $v ) {
 				$setting[$k] = wp_ulike_settings::parse_multi( $v );
 			}
-		return $setting;
+			
+			return $setting;
 		}
 		return $option ? $default : $setting;
 	}
@@ -334,7 +335,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_template' => array(
 							'type'        => 'textarea',
-							'default'     => '<ul class="tiles">%START_WHILE%<li><a href="#" class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
+							'default'     => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
 							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
 							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
 						),
@@ -419,7 +420,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_template' => array(
 							'type'        => 'textarea',
-							'default'     => '<ul class="tiles">%START_WHILE%<li><a href="#" class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
+							'default'     => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
 							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
 							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
 						),
@@ -510,7 +511,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_template' => array(
 							'type'        => 'textarea',
-							'default'     => '<ul class="tiles">%START_WHILE%<li><a href="#" class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
+							'default'     => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
 							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
 							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
 						),
@@ -620,7 +621,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_template' => array(
 							'type'        => 'textarea',
-							'default'     => '<ul class="tiles">%START_WHILE%<li><a href="#" class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>',
+							'default'     => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
 							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
 							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
 						),
