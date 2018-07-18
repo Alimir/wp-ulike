@@ -29,46 +29,16 @@ function wp_ulike_process(){
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
-	switch ( $post_type ) {
-		case 'likeThis':
-			$get_meta_data = get_post_meta($post_ID, '_liked', true);
-			$setting_key   = 'wp_ulike_posts';
-			$table_name    = 'ulike';
-			$column_name   = 'post_id';
-			$meta_key      = '_liked';
-			$cookie_name   = 'liked-';
-			break;
+	// Get post type settings
+	$get_settings = wp_ulike_get_post_settings_by_type( $post_type, $post_ID );
 
-		case 'likeThisComment':
-			$get_meta_data = get_comment_meta($post_ID, '_commentliked', true);
-			$setting_key   = 'wp_ulike_comments';
-			$table_name    = 'ulike_comments';
-			$column_name   = 'comment_id';
-			$meta_key      = '_commentliked';
-			$cookie_name   = 'comment-liked-';
-			break;
-
-		case 'likeThisActivity':
-			$get_meta_data = bp_activity_get_meta($post_ID, '_activityliked');
-			$setting_key   = 'wp_ulike_buddypress';
-			$table_name    = 'ulike_activities';
-			$column_name   = 'activity_id';
-			$meta_key      = '_activityliked';
-			$cookie_name   = 'activity-liked-';
-			break;
-
-		case 'likeThisTopic':
-			$get_meta_data = get_post_meta($post_ID, '_topicliked', true);
-			$setting_key   = 'wp_ulike_bbpress';
-			$table_name    = 'ulike_forums';
-			$column_name   = 'topic_id';
-			$meta_key      = '_topicliked';
-			$cookie_name   = 'topic-liked-';
-			break;
-
-		default:
-			wp_send_json_error( __( 'Error: This Method Is Not Exist!', WP_ULIKE_SLUG ) );
+	// If method not exist, then return error message
+	if( empty( $get_settings ) ) {
+		wp_send_json_error( __( 'Error: This Method Is Not Exist!', WP_ULIKE_SLUG ) );
 	}
+
+	// Extract post type settings
+	extract( $get_settings );
 
 	$get_like      = $get_meta_data != '' ? $get_meta_data : 0;
 
@@ -122,13 +92,11 @@ function wp_ulike_process(){
 					);
 	}
 
-	$response['likers'] = is_user_logged_in() ? $wp_ulike_class->get_liked_users( $args, true ) : false;
-
 	wp_send_json_success( $response );
 }
 //	wp_ajax hooks for the custom AJAX requests
 add_action( 'wp_ajax_wp_ulike_process'			, 'wp_ulike_process' );
-add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );
+add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );
 
 
 /**
