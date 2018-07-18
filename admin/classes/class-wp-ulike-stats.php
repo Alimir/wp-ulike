@@ -247,61 +247,6 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 		}
 
-
-		// /**
-		//  * Get Data Map
-		//  *
-		//  * @author       	Alimir
-		//  * @since           2.3
-		//  * @updated         2.6 //added new GeoIP system
-		//  * @updated         3.0
-		//  * @return			String
-		// */
-		// public function data_map( $country_data =  array() ){
-
-		// 	if( ! function_exists('getCountryFromIP') ){
-		// 		require_once( WP_ULIKE_ADMIN_DIR . '/includes/geoiploc.php');
-		// 	}
-
-		// 	if ( false === ( $return_val = get_transient( 'wp_ulike_get_likers_dispersal_statistics' ) ) ) {
-		// 		// Make new sql request
-		// 		$return_val = $this->wpdb->get_results( "
-		// 							SELECT T.user_ip AS get_user_ip , SUM(T.count_user_ip) AS get_count_user_ip
-		// 							FROM(
-		// 							SELECT ip AS user_ip, count(ip) AS count_user_ip
-		// 							FROM ".$this->wpdb->prefix."ulike
-		// 							GROUP BY user_ip
-		// 							UNION ALL
-		// 							SELECT ip AS user_ip, count(ip) AS count_user_ip
-		// 							FROM ".$this->wpdb->prefix."ulike_activities
-		// 							GROUP BY user_ip
-		// 							UNION ALL
-		// 							SELECT ip AS user_ip, count(ip) AS count_user_ip
-		// 							FROM ".$this->wpdb->prefix."ulike_comments
-		// 							GROUP BY user_ip
-		// 							UNION ALL
-		// 							SELECT ip AS user_ip, count(ip) AS count_user_ip
-		// 							FROM ".$this->wpdb->prefix."ulike_forums
-		// 							GROUP BY user_ip
-		// 							) AS T
-		// 							GROUP BY get_user_ip
-		// 						" );
-		// 		// Set transient
-		// 		set_transient( 'wp_ulike_get_likers_dispersal_statistics', $return_val, 24 * HOUR_IN_SECONDS );
-		// 	}
-
-		// 	foreach($return_val as $return){
-		// 		//$cdata = strtolower(wp_ulike_get_geoip($return->get_user_ip,'code'));
-		// 		$cdata = strtolower( getCountryFromIP( $return->get_user_ip, "code" ) );
-		// 		if( ! isset( $country_data[$cdata] ) ) {
-		// 			$country_data[$cdata] = 0;
-		// 		}
-		// 		$country_data[$cdata] += $return->get_count_user_ip;
-		// 	}
-
-		// 	return $country_data;
-		// }
-
 		public function display_top_likers(){
 			$top_likers = $this->get_top_likers();
 			$result     = '';
