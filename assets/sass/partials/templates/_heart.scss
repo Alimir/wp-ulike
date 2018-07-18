@@ -63,8 +63,13 @@
 #buddypress #activity-stream{
 
     .activity-meta {
+        display: flex;
+        align-items: center;
 
         .wpulike-heart {
+            .wp_ulike_btn {
+                padding: 0 15px;
+            }
             .wp_ulike_general_class {
                 border-radius: 0;
                 padding: 1px 5px;
