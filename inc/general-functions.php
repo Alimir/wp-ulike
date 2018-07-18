@@ -721,7 +721,6 @@ if( ! function_exists( 'wp_ulike' ) ){
 		$get_post_meta = get_post_meta( $post_ID, '_liked', true );
 		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
 		$attributes    = apply_filters( 'wp_ulike_posts_add_attr', null );
-		$microdata     = apply_filters( 'wp_ulike_posts_microdata', null );
 		$style         = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
 		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
@@ -738,7 +737,6 @@ if( ! function_exists( 'wp_ulike' ) ){
 			"cookie"        => 'liked-',				//Cookie Name
 			"slug"          => 'post',					//Slug Name
 			"style"         => $style,					//Get Default Theme
-			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
 			"wrapper_class" => '',						//Extra Wrapper class
 			"button_type"   => $button_type				//Button Type
@@ -906,7 +904,6 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 		$comment_meta  = get_comment_meta( $comment_ID, '_commentliked', true );
 		$get_like      = empty( $comment_meta ) ? 0 : $comment_meta;
 		$attributes    = apply_filters( 'wp_ulike_comments_add_attr', null );
-		$microdata     = apply_filters( 'wp_ulike_comments_microdata', null );
 		$style         = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
 		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
@@ -923,7 +920,6 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 			"cookie"        => 'comment-liked-',		//Cookie Name
 			"slug"          => 'comment',				//Slug Name
 			"style"         => $style,					//Get Default Theme
-			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
 			"wrapper_class" => '',						//Extra Wrapper class
 			"button_type"   => $button_type				//Button Type
@@ -982,7 +978,6 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 		$bp_get_meta   = bp_activity_get_meta($activityID, '_activityliked');
 		$get_like      = empty( $bp_get_meta ) ? 0 : $bp_get_meta;
 		$attributes    = apply_filters( 'wp_ulike_activities_add_attr', null );
-		$microdata     = apply_filters( 'wp_ulike_activities_microdata', null );
 		$style         = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
 		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
@@ -999,7 +994,6 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			"cookie"        => 'activity-liked-',		//Cookie Name
 			"slug"          => 'activity',				//Slug Name
 			"style"         => $style,					//Get Default Theme
-			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
 			"wrapper_class" => '',						//Extra Wrapper class
 			"button_type"   => $button_type				//Button Type
@@ -1100,7 +1094,6 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		$get_post_meta = get_post_meta( $post_ID, '_topicliked', true );
 		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
 		$attributes    = apply_filters( 'wp_ulike_topics_add_attr', null );
-		$microdata     = apply_filters( 'wp_ulike_topics_microdata', null );
 		$style         = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
 		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
@@ -1117,7 +1110,6 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 			"cookie"        => 'topic-liked-',			//Cookie Name
 			"slug"          => 'topic',					//Slug Name
 			"style"         => $style,					//Get Default Theme
-			"microdata"     => $microdata,				//Get Microdata Filter
 			"attributes"    => $attributes,				//Get Attributes Filter
 			"wrapper_class" => '',						//Extra Wrapper class
 			"button_type"   => $button_type,			//Button Type
@@ -1544,9 +1536,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 				<?php echo $counter; ?>
 			</div>
 		<?php
-			echo $microdata;
-			echo $display_likers;
-			do_action( 'wp_ulike_inside_template' );
+			do_action( 'wp_ulike_inside_template', $wp_ulike_template );
 		?>
 		</div>
 	<?php
@@ -1585,9 +1575,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 				<?php echo $counter; ?>
 			</div>
 		<?php
-			echo $microdata;
-			echo $display_likers;
-			do_action( 'wp_ulike_inside_template' );
+			do_action( 'wp_ulike_inside_template', $wp_ulike_template );
 		?>
 		</div>
 	<?php
@@ -1660,9 +1648,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 					</label>
 			</div>
 		<?php
-			echo $microdata;
-			echo $display_likers;
-			do_action( 'wp_ulike_inside_template' );
+			do_action( 'wp_ulike_inside_template', $wp_ulike_template );
 		?>
 		</div>
 	<?php

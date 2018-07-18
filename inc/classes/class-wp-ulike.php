@@ -371,13 +371,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					"type"           => $args['method'],
 					"status"         => $status,
 					"attributes"     => $args['attributes'],
-					"microdata"      => $args['microdata'],
 					"style"          => $args['style'],
 					"button_type"    => $args['button_type'],
 					"button_text"    => $button_text,
 					"general_class"  => $general_class_name,
-					"button_class"   => $button_class_name,
-					"display_likers" => $this->get_liked_users( $args )
+					"button_class"   => $button_class_name
 				)
 			);
 

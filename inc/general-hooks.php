@@ -66,6 +66,42 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 	add_shortcode( 'wp_ulike', 'wp_ulike_shortcode' );
 }
 
+/**
+ * Generate rich snippet hooks
+ *
+ * @author       	Alimir
+ * @since           3.5
+ * @return          String
+ */
+if( ! function_exists( 'wp_ulike_generate_microdata' ) ){
+	function wp_ulike_generate_microdata( $args ){
+		// Bulk output
+		$output = '';
+
+		// Check ulike type
+		switch ( $args['type'] ) {
+			case 'likeThis':
+				$output = apply_filters( 'wp_ulike_posts_microdata', null );
+				break;
+
+			case 'likeThisComment':
+				$output = apply_filters( 'wp_ulike_comments_microdata', null );
+				break;
+
+			case 'likeThisActivity':
+				$output = apply_filters( 'wp_ulike_activities_microdata', null );
+				break;
+
+			case 'likeThisTopic':
+				$output = apply_filters( 'wp_ulike_topics_microdata', null );
+				break;
+		}
+
+		echo $output;
+	}
+	add_action( 'wp_ulike_inside_template', 'wp_ulike_generate_microdata' );
+}
+
 /*******************************************************
   Posts
 *******************************************************/
