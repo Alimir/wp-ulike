@@ -25,7 +25,7 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 			foreach ( $setting as $k => $v ) {
 				$setting[$k] = wp_ulike_settings::parse_multi( $v );
 			}
-			
+
 			return $setting;
 		}
 		return $option ? $default : $setting;

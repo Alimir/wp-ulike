@@ -120,7 +120,12 @@
                         this.generalElement.removeClass( 'wp_ulike_is_getting_likers_list' );
                         if( response.success ) {
                             // Modify likers box innerHTML
-                            this.likersElement.html( response.data );
+                            if( typeof response.data !== 'undefined' ){
+                                this.likersElement.html( response.data );
+                            } else {
+                                this.likersElement.empty();
+                            }
+
                         }
                     }.bind(this)
                 });

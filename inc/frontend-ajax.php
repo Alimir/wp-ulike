@@ -143,7 +143,8 @@ function wp_ulike_get_likers(){
 		wp_send_json_success( $users_list );
 	}
 
-	wp_send_json_error( __( 'Error: Nothing found!', WP_ULIKE_SLUG ) );
+	// Send blank success when the users list are empty
+	wp_send_json_success();
 
 }
 //	wp_ajax hooks for the custom AJAX requests
