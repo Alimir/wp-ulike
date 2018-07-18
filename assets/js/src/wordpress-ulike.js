@@ -52,27 +52,30 @@
     $.extend(Plugin.prototype, {
         init: function () {
             //Call _ajaxify function on click button
-            this.buttonElement.click( this._ajaxify.bind(this) );
+            this.buttonElement.click( this._button.bind(this) );
+
+            //Call _ajaxify function on click button
+            this.generalElement.hover( this._likers.bind(this) );
         },
 
-        _ajaxify: function(){
+        _button: function(){
             $.ajax({
-                type:'POST',
-                cache: false,
-                dataType: 'json',
-                url: wp_ulike_params.ajax_url,
-                data:{
+                type      :'POST',
+                cache     : false,
+                dataType  : 'json',
+                url       : wp_ulike_params.ajax_url,
+                data      :{
                     action: 'wp_ulike_process',
-                    id: this.settings.ID,
-                    nonce: this.settings.nonce,
+                    id    : this.settings.ID,
+                    nonce : this.settings.nonce,
                     status: this.settings.likeStatus,
-                    type: this.settings.type
+                    type  : this.settings.type
                 },
                 beforeSend:function(){
-                    $document.trigger('WordpressUlikeLoading');
+                    $document.trigger( 'WordpressUlikeLoading', this.element );
                     this.generalElement.addClass( 'wp_ulike_is_loading' );
                 }.bind(this),
-                success: function( response ){
+                success   : function( response ){
                     //remove loading class
                     this.generalElement.removeClass( 'wp_ulike_is_loading' );
                     if( response.success ) {
@@ -84,6 +87,43 @@
                     $document.trigger('WordpressUlikeUpdated');
                 }.bind(this)
             });
+        },
+
+        _likers: function(){
+            // Get likers box container element
+            this.likersElement = this.$element.find( this.settings.likersSelector );
+            // Make a request to generate or refresh the likers box
+            if( !this.likersElement.length || this._refresh === true ) {
+                $.ajax({
+                    type      :'POST',
+                    cache     : false,
+                    dataType  : 'json',
+                    url       : wp_ulike_params.ajax_url,
+                    data      :{
+                        action : 'wp_ulike_get_likers',
+                        id     : this.settings.ID,
+                        nonce  : this.settings.nonce,
+                        type   : this.settings.type,
+                        refresh: this._refresh ? 1 : 0
+                    },
+                    beforeSend:function(){
+                        // Add progress status class
+                        this.generalElement.addClass( 'wp_ulike_is_getting_likers_list' );
+                    }.bind(this),
+                    success   : function( response ){
+                        // If the likers container is not exist, we've to add it.
+                        if( !this.likersElement.length ) {
+                            this.likersElement = $( '<div>', { class: 'wp_ulike_likers_wrapper' } ).appendTo( this.$element );
+                        }
+                        // Remove progress status class
+                        this.generalElement.removeClass( 'wp_ulike_is_getting_likers_list' );
+                        if( response.success ) {
+                            // Modify likers box innerHTML
+                            this.likersElement.html( response.data );
+                        }
+                    }.bind(this)
+                });
+            }
         },
 
         _update: function( response ){
@@ -119,10 +159,9 @@
                     this._actions( 'warning', response.data.message, response.data.btnText, 0 );
             }
 
-            // Update likers box
-            if( response.data.likers !== false ){
-                this._likers( response.data.likers );
-            }
+            this._refresh = true;
+            this._likers();
+            this._refresh = false;
         },
 
         _actions: function( messageType, messageText, btnText, likeStatus ){
@@ -137,15 +176,6 @@
 
             // Display Notifications
             this._notif( messageType, messageText );
-        },
-
-        _likers: function( template ){
-            // Modify likers box innerHTML
-            if( template !== '' ) {
-                this.likersElement.html( template );
-            } else {
-                this.likersElement.empty();
-            }
         },
 
         _notif: function( messageType, messageText ){

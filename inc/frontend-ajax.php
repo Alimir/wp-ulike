@@ -128,4 +128,56 @@ function wp_ulike_process(){
 }
 //	wp_ajax hooks for the custom AJAX requests
 add_action( 'wp_ajax_wp_ulike_process'			, 'wp_ulike_process' );
-add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );
+add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );
+
+
+/**
+ * AJAX function for all like/unlike process
+ *
+ * @author       	Alimir
+ * @since           1.0
+ * @return			String
+ */
+function wp_ulike_get_likers(){
+
+	$post_ID     = $_POST['id'];
+	$post_type   = $_POST['type'];
+	$nonce_token = $_POST['nonce'];
+	$is_refresh  = $_POST['refresh'];
+
+	// Check security nonce field
+	if( $post_ID == null || ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) ) {
+		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
+	}
+
+	// Don't refresh likers data, when user is not logged in.
+	if( $is_refresh && ! is_user_logged_in() ) {
+		wp_send_json_error( __( 'Notice: The likers box is refreshed only for logged in users!', WP_ULIKE_SLUG ) );
+	}
+
+	// Get post type settings
+	$get_settings = wp_ulike_get_post_settings_by_type( $post_type, $post_ID );
+
+	// If method not exist, then return error message
+	if( empty( $get_settings ) ) {
+		wp_send_json_error( __( 'Error: This Method Is Not Exist!', WP_ULIKE_SLUG ) );
+	}
+
+	// Extract settings array
+	extract( $get_settings );
+
+	// If likers box has been disabled
+	if ( ! wp_ulike_get_setting( $setting_key, 'users_liked_box' ) ) {
+		wp_send_json_error( __( 'Notice: The likers box is not activated!', WP_ULIKE_SLUG ) );
+	}
+
+	if( NULL !== ( $users_list = wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key ) ) ) {
+		wp_send_json_success( $users_list );
+	}
+
+	wp_send_json_error( __( 'Error: Nothing found!', WP_ULIKE_SLUG ) );
+
+}
+//	wp_ajax hooks for the custom AJAX requests
+add_action( 'wp_ajax_wp_ulike_get_likers'		 , 'wp_ulike_get_likers' );
+add_action( 'wp_ajax_nopriv_wp_ulike_get_likers' , 'wp_ulike_get_likers' );
