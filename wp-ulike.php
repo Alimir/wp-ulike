@@ -251,15 +251,6 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 		       	// Add Settings Page
 		        $this->settings();
 
-				//include wp_ulike_stats class & geoIPloc functions
-				if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false ){
-					//include PHP GeoIPLocation Library
-					require_once( WP_ULIKE_ADMIN_DIR . '/includes/geoiploc.php');
-					// global variable
-					global $wp_ulike_stats;
-					$wp_ulike_stats = wp_ulike_stats::get_instance();
-				};
-
 	            // Load admin spesific codes
 	            include( WP_ULIKE_ADMIN_DIR . '/index.php' );
 	        }
