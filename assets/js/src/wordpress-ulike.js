@@ -26,15 +26,16 @@
 
     // The actual plugin constructor
     function Plugin ( element, options ) {
-        this.element = element;
-        this.$element = $(element);
-        this.settings = $.extend( {}, defaults, options );
-        this._defaults = defaults;
-        this._name = pluginName;
+        this.element        = element;
+        this.$element       = $(element);
+        this.settings       = $.extend( {}, defaults, options );
+        this._defaults      = defaults;
+        this._name          = pluginName;
+
+        this._refresh       = false;
 
         // Create main selectors
         this.buttonElement  = this.$element.find(this.settings.buttonSelector);
-        this.likersElement  = this.$element.find( this.settings.likersSelector );
         this.generalElement = this.$element.find(this.settings.generalSelector);
         this.counterElement = this.generalElement.find( this.settings.counterSelector );
 
@@ -84,7 +85,7 @@
                         this._notif( 'error', response.data );
                     }
 
-                    $document.trigger('WordpressUlikeUpdated');
+                    $document.trigger( 'WordpressUlikeUpdated', this.element );
                 }.bind(this)
             });
         },
