@@ -15,17 +15,23 @@
         line-height: 28px;
         box-shadow: none;
         cursor: pointer;
-        padding: 0 15px;
+        padding: 0 25px;
         vertical-align: middle;
         height: 28px;
-        min-width: 50px;
         font-weight: 600;
+        border: none;
+        text-align: center;
 
         &:hover {
             text-decoration: none;
             border-color: #95a5a6;
             box-shadow: none;
         }
+    }
+
+    .wp_ulike_put_text{
+        padding: 0 10px;
+        min-width: 50px;
     }
 
     .wp_ulike_is_loading {

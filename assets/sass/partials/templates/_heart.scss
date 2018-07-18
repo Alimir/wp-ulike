@@ -11,12 +11,11 @@
         padding: 5px;
     }
 
-    .wp_ulike_btn {
+    .wp_ulike_put_text{
         padding: 0 5px;
         text-transform: uppercase;
         font-weight: 600;
-        color: #757575;
-        min-width: 30px;
+        color: #757575; 
     }
 
     .wp_ulike_likers_wrapper{
@@ -24,6 +23,7 @@
     }
 
     .wp_ulike_put_image{
+        padding: 0 15px;
 
         &:after{
             content: '';
