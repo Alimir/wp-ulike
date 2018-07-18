@@ -42,7 +42,9 @@ function wp_ulike_get_paginated_logs( $table, $type ){
 		$wpdb->prefix . $table
 	);
 
-	if( NULL === ( $num_rows = $wpdb->get_var( $query ) ) ) {
+	$num_rows = $wpdb->get_var( $query );
+
+	if( empty( $num_rows ) ) {
 		return;
 	}
 
