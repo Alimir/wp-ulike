@@ -40,63 +40,21 @@
 			padding-left: inherit !important;
 		}
 	}
-	#left-log {
-		margin: 0 1% 0 0;
-	}
-	.th-center {
-		text-align: center !important;
-	}
-	.td-align {
-		text-align: right;
-	}
-	.log-referred {
-		float: right;
-	}
-	.log-ip {
-		float: left;
-	}
-	.left-div {
-		float: right;
-	}
-	.right-div {
-		float: left;
-	}
-	.postbox {
-		.badge {
-			margin: 1px 2px 0px 0;
-			float: left;
-		}
-	}
-	.top-widget {
-		.wp_counter_span {
-			margin: 1px 2px 0px 0;
-			float: left;
-		}
-	}
-
 	.wp-ulike-about-page {
 		.ulike-badge {
 			right: inherit;
 			left: 0px;
 		}
 	}
-
 	.wp-ulike-notice {
-		img {
-			width: 84px;
-			margin: 0 -100% 0 0 !important;
-		}
-		.wp-ulike-notice-text {
-			float: right;
-		}
-		p {
-			float: right;
-			margin: 0 100px 0 0 !important;
-			padding: 4px 0 4px 40px;
-		}
+
 		.links {
-			margin: 0 92px 0 0 !important;
+			a {
+				margin-right: 0;
+				margin-left: 8px;
+			}
 		}
+
 	}
 
 }

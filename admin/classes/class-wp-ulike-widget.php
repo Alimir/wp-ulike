@@ -4,6 +4,11 @@
  * // @echo HEADER
  */
 
+// no direct access allowed
+if ( ! defined('ABSPATH') ) {
+    die();
+}
+
 if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 	class wp_ulike_widget extends WP_Widget {
@@ -133,8 +138,10 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 				$result .= $before_item;
 				$result .= $show_thumb ? get_avatar( $comment->comment_author_email, $sizeOf ) : '';
+				$result .= '<span class="comment-info">';
 				$result .= '<span class="comment-author-link">' . $comment_author . '</span> ' . __('on',WP_ULIKE_SLUG);
 				$result .= ' <a href="' . $post_permalink . '#comment-' . $comment->comment_ID . '" title="' . $post_title.'" rel="nofollow">' . wp_trim_words( $post_title, $num_words = $trim, $more = null ) . '</a>';
+				$result .= '</span>';
 				$result .= $show_count ? ' <span class="wp_counter_span">'.wp_ulike_format_number($comment_likes_count).'</span>' : '';
 				$result .= $after_item;
 			}

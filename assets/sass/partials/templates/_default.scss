@@ -95,14 +95,15 @@
                 box-shadow: 0 0 0 1px #bdbdbd inset;
                 height: 29.5px;
                 min-width: 50px;
-                margin-bottom: 2px;
+                margin: 0;
+                padding: 0;
             }
         }
 
     }
 
     .wp_ulike_likers_wrapper{
-        li {
+        li, .wp-ulike-liker {
             border: none;
             padding: 0;
 
@@ -136,18 +137,19 @@
             line-height: 28px;
             box-shadow: none;
             cursor: pointer;
-            padding: 0 15px;
+            padding: 0 25px;
             vertical-align: middle;
             height: 28px;
-            min-width: 50px;
             font-weight: 600;
+            border: none;
+            text-align: center;
             color: #616161;
-            background: #e0e0e0;
+            background: #e0e0e0;  
         }
 
     }
     .wp_ulike_likers_wrapper{
-        ul {
+        ul, .wp-ulike-likers-list {
             margin: 0 !important;
         }
     }

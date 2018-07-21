@@ -20,8 +20,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		/**
 		 * Constructor
 		 */
-		public function __construct()
-		{
+		function __construct(){
 			// Init core
 			add_action( 'wp_ulike_loaded', array( $this, 'init' ) );
 		}
@@ -39,55 +38,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$this->status  = 'like';
 			$this->user_ip = $wp_user_IP;
 			$this->user_id = $this->get_reutrn_id();
-
-			// Enqueue Scripts
-			add_action( 'wp_enqueue_scripts', array( $this, 'load_assets'  ) );
 		}
-
-		/**
-		 * Load the plugin assets
-		 *
-		 * @author          Alimir
-		 * @since           3.0
-		 * @return          Void
-		 */
-	    public function load_assets() {
-	    	// If user has been disabled this page in options, then return.
-			if( ! is_wp_ulike( wp_ulike_get_setting( 'wp_ulike_general', 'plugin_files') ) ) {
-				return;
-			}
-	        // @if DEV
-	        /*
-	        // @endif
-	        //Add wp_ulike script file with special functions.
-	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), '3.4', true);
-	        // @if DEV
-	        */
-	        // @endif
-	        // @if DEV
-			//Add wp_ulike script file with special functions.
-			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), '3.4', true);
-	        // @endif
-
-			//localize script
-			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
-				'ajax_url'         => admin_url( 'admin-ajax.php' ),
-				'notifications'    => wp_ulike_get_setting( 'wp_ulike_general', 'notifications')
-			));
-	        // @if DEV
-	        /*
-	        // @endif
-	        wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css', array(), '3.4' );
-	        // @if DEV
-	        */
-	        // @endif
-	        // @if DEV
-			wp_enqueue_style( 'wp-ulike', WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css', array(), '3.4' );
-	        // @endif
-
-			//add your custom style from setting panel.
-			wp_add_inline_style( 'wp-ulike', wp_ulike_get_custom_style() );
-	    }
 
 		/**
 		 * Select the logging type
@@ -244,20 +195,20 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			// Extract data
 			extract( $data );
 			// Check the user's likes history
-			$output     = '';
+			$output      = '';
 			// method column value
-			$method_val = $method_col === 'ip' ? $this->user_ip : $this->user_id;
+			$method_val  = $method_col === 'ip' ? $this->user_ip : $this->user_id;
 			// Check user log history
-			$has_log    = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
+			$user_status = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
 
 			if( $type == 'post' ){
 
-				if( empty( $has_log ) ){
+				if( ! $user_status ){
 					$output 	= $this->get_template( $data, 3 );
 
 				} else {
 
-					if( $has_log  == "like" ) {
+					if( $user_status  == "like" ) {
 						$output = $this->get_template( $data, 2 );
 
 					} else {
@@ -268,7 +219,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			} elseif( $type == 'process' ) {
 
-				if( empty( $has_log ) ){
+				if( ! $user_status ){
 					// Increment like counter
 					++$get_like;
 					// Insert log data
@@ -286,7 +237,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 				} else {
 
-					if( $has_log == "like" ) {
+					if( $user_status == "like" ) {
 						// Decrement like counter
 						--$get_like;
 						$this->status = 'unlike';
@@ -313,7 +264,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						'key'     => $key,
 						'user_id' => $this->user_id,
 						'status'  => $this->status,
-						'has_log' => empty( $has_log ) ? 0 : 1
+						'has_log' => ! $user_status ? 0 : 1
 					)
 				);
 
@@ -419,13 +370,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					"type"           => $args['method'],
 					"status"         => $status,
 					"attributes"     => $args['attributes'],
-					"microdata"      => $args['microdata'],
 					"style"          => $args['style'],
 					"button_type"    => $args['button_type'],
 					"button_text"    => $button_text,
 					"general_class"  => $general_class_name,
-					"button_class"   => $button_class_name,
-					"display_likers" => $this->get_liked_users( $args )
+					"button_class"   => $button_class_name
 				)
 			);
 
@@ -446,78 +395,6 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
-		 * Get Liked User
-		 *
-		 * @author       	Alimir
-		 * @param           Array $arg
-		 * @since           2.0
-		 * @return			String
-		 */
-		public function get_liked_users( array $args, $skip_wrapper = false ){
-			// Extract input array
-			extract( $args );
-			// If likers box has been disabled
-			if ( ! wp_ulike_get_setting( $setting, 'users_liked_box' ) ) return;
-
-			// Get user's limit number value
-			$limit_num  = wp_ulike_get_setting( $setting, 'number_of_users');
-			// Set default value if limit_num equals to zero
-			$limit_num  = $limit_num != 0 ? $limit_num : 10;
-			// Get likers list
-			$get_users  = $this->wpdb->get_results( "SELECT user_id FROM ".$this->wpdb->prefix."$table WHERE $column = '$id' AND status = 'like' AND user_id BETWEEN 1 AND 999999 GROUP BY user_id LIMIT $limit_num" );
-
-			// Users list
-			$users_list = '';
-
-			if( ! empty( $get_users ) ) {
-
-				// Get likers html template
-				$get_template 	= wp_ulike_get_setting( $setting, 'users_liked_box_template', '<ul class="tiles">%START_WHILE%<li><a href="#" class="user-tooltip" title="%USER_NAME%">%USER_AVATAR%</a></li>%END_WHILE%</ul>' );
-
-				$inner_template = $this->get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
-
-				foreach ( $get_users as $get_user ) {
-					$user_info 		= get_userdata($get_user->user_id);
-					$out_template 	= $inner_template;
-					if ($user_info):
-						if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
-							$avatar_size 	= wp_ulike_get_setting( $setting, 'users_liked_box_avatar_size' );
-							$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
-							$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
-						}
-						if( strpos( $out_template, '%USER_NAME%' ) !== false) {
-							$USER_NAME 		= $user_info->display_name;
-							$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
-						}
-						if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
-							global $ultimatemember;
-							um_fetch_user( $user_info->ID );
-							$UM_PROFILE_URL = um_user_profile_url();
-							$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
-						}
-						if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
-							$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
-							$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
-						}
-						$users_list .= $out_template;
-					endif;
-				}
-
-				if( ! empty($users_list) ) {
-					$users_list = $this->put_template_between( $get_template,$users_list, "%START_WHILE%", "%END_WHILE%" );
-				}
-
-			}
-
-			if( $skip_wrapper ) {
-				return $users_list;
-			} else {
-				return sprintf( '<div class="wp_ulike_likers_wrapper">%s</div>', $users_list );
-			}
-
-		}
-
-		/**
 		 * Get User Status (like/dislike)
 		 *
 		 * @author       	Alimir
@@ -530,13 +407,23 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			String
 		 */
 		public function get_user_status( $table, $first_column, $second_column, $first_val, $second_val ){
-			// This will return like|unlike
-			return $this->wpdb->get_var( "
-				SELECT status
-				FROM ".$this->wpdb->prefix."$table
-				WHERE $first_column = '$first_val'
-				AND $second_column = '$second_val'
-			" );
+
+			// Check the user's likes history
+			$query  = sprintf( "
+					SELECT `status`
+					FROM %s
+					WHERE `%s` = '%s'
+					AND `%s` = '%s'",
+					esc_sql( $this->wpdb->prefix . $table ),
+					esc_sql( $first_column ),
+					esc_sql( $first_val ),
+					esc_sql( $second_column ),
+					esc_sql( $second_val )
+				);
+
+			$result = $this->wpdb->get_var( $query );
+
+			return empty( $result ) ? false : $result;
 		}
 
 		/**
@@ -548,14 +435,25 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			Array
 		 */
 		public function has_log( array $args ){
+			// Extract args
 			extract( $args );
+
 			// Check the user's likes history
-			return $this->wpdb->get_var( "
-				SELECT COUNT(*)
-				FROM ".$this->wpdb->prefix.$table."
-				WHERE $column = '$id'
-				AND ( user_id = ".$this->user_id." OR ip = ".$this->user_ip." )
-			" );
+			$query  = sprintf( "
+					SELECT COUNT(*)
+					FROM %s
+					WHERE `%s` = %s
+					AND ( `user_id` = '%s' OR `ip` = '%s' )",
+					esc_sql( $this->wpdb->prefix . $table ),
+					esc_sql( $column ),
+					esc_sql( $id ),
+					esc_sql( $this->user_id ),
+					esc_sql( $this->user_ip )
+				);
+
+			$result = $this->wpdb->get_var( $query );
+
+			return empty( $result ) ? 0 : $result;
 		}
 
 		/**
@@ -578,57 +476,6 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				DESC
 				LIMIT $limit
 			" );
-		}
-
-		/**
-		 * Get template between
-		 *
-		 * @author       	Alimir
-		 * @param           String $string
-		 * @param           String $start
-		 * @param           String $end
-		 * @since           2.0
-		 * @return			String
-		 */
-		public function get_template_between( $string, $start, $end ){
-			$string 	= " ".$string;
-			$ini 		= strpos($string,$start);
-			if ( $ini == 0 ){
-				return "";
-			}
-			$ini 		+= strlen($start);
-			$len 		= strpos($string,$end,$ini) - $ini;
-
-			return substr( $string, $ini, $len );
-		}
-
-		/**
-		 * Put template between
-		 *
-		 * @author       	Alimir
-		 * @param           String $string
-		 * @param           String $inner_string
-		 * @param           String $start
-		 * @param           String $end
-		 * @since           2.0
-		 * @return			String
-		 */
-		public function put_template_between( $string, $inner_string, $start, $end ){
-			$string 	= " ".$string;
-			$ini 		= strpos($string,$start);
-			if ($ini == 0){
-				return "";
-			}
-
-			$ini 		+= strlen($start);
-			$len		= strpos($string,$end,$ini) - $ini;
-			$newstr 	= substr_replace($string,$inner_string,$ini,$len);
-
-			return str_replace(
-				array( "%START_WHILE%", "%END_WHILE%" ),
-				array( "", "" ),
-				$newstr
-			);
 		}
 
 		/**

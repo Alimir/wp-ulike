@@ -4,6 +4,11 @@
  * // @echo HEADER
  */
 
+// no direct access allowed
+if ( ! defined('ABSPATH') ) {
+    die();
+}
+
 if ( !class_exists( 'wp_ulike_settings' ) ) {
 
     class wp_ulike_settings {
@@ -197,16 +202,6 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
 
         public static function admin_enqueue_scripts() {
             wp_enqueue_media();
-            wp_enqueue_script( 'wp-ulike-settings', WP_ULIKE_ADMIN_URL . '/assets/js/settings.js', array(
-                'jquery',
-                'wp-color-picker'
-            ) );
-            wp_enqueue_script( "jquery-effects-core" );
-            wp_localize_script( 'wp-ulike-settings', 'ajax', array(
-                'url'     => admin_url( 'admin-ajax.php' ),
-                'spinner' => admin_url( 'images/spinner.gif' )
-            ) );
-            wp_enqueue_style( 'wp-color-picker' );
         }
 
         public function do_page() {
@@ -422,7 +417,7 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                                 break;
 
                             case 'color':
-                                $values[$name] = preg_match( '/^#[a-f0-9]{6}$/i', $input ) ? $input : '';
+                                $values[$name] = $input;
                                 break;
 
                             case 'textarea':

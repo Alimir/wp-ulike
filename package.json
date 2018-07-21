@@ -1,22 +1,46 @@
 {
   "name": "wp-ulike",
   "title": "WP ULike",
-  "version": "3.4",
+  "version": "3.5.0",
   "description": "WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.",
   "homepage": "https://wpulike.com",
-  "repository": "https://github.com/Alimir/wp-ulike",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alimir/wp-ulike.git"
+  },
   "license": "MIT",
-  "author": {
-    "name": "Alimir",
-    "email": "info@alimir.ir",
-    "url": "http://alimir.ir"
+  "author": { 
+    "name": "Alimir", 
+    "email": "info@alimir.ir", 
+    "url": "http://alimir.ir" 
   },
   "main": "Gruntfile.js",
+  "scripts": {
+    "dev": "watchify -vd -p browserify-hmr -e admin/assets/js/solo/vue/src/main.js -o admin/assets/js/solo/vue/vue.js",
+    "build": "cross-env NODE_ENV=production browserify admin/assets/js/solo/vue/src/main.js | uglifyjs -c warnings=false -m > admin/assets/js/solo/vue/vue.js"
+  },
   "dependencies": {
+    "axios": "^0.18.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "chart.js": "^2.7.2",
     "preprocess": ">=2.1.1",
-    "request": ">=2.69.0"
+    "react": "^15.6.2",
+    "request": ">=2.69.0",
+    "vue": "^1.0.28",
+    "vue-chartjs": "^3.3.2",
+    "vue-resource": "^0.7.4",
+    "vue-router": "^0.7.13"
   },
   "devDependencies": {
+    "babel-core": "^6.0.0",
+    "babel-plugin-transform-runtime": "^6.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.0.0",
+    "babel-runtime": "^5.8.0",
+    "babelify": "^7.3.0",
+    "browserify": "^12.0.2",
+    "browserify-hmr": "^0.3.1",
+    "cross-env": "^1.0.6",
     "grunt": "^1.0.1",
     "grunt-concurrent": "^2.3.1",
     "grunt-contrib-clean": ">=0.5.0",
@@ -33,10 +57,25 @@
     "grunt-shell": ">=1.1.1",
     "grunt-sync": ">=0.0.8",
     "grunt-wp-i18n": ">=1.0.0",
+    "http-server": "^0.8.5",
     "load-grunt-tasks": ">=0.6.0",
-    "time-grunt": ">=0.4.0"
+    "time-grunt": ">=0.4.0",
+    "uglify-js": "^2.5.0",
+    "vue-hot-reload-api": "^1.2.2",
+    "vueify": "^8.7.0",
+    "vueify-insert-css": "^1.0.0",
+    "watchify": "^3.4.0"
+  },
+  "browserify": {
+    "transform": [
+      "vueify",
+      "babelify"
+    ]
   },
   "bower": {
     "components": "_devDependencies/bower_components/"
+  },
+  "bugs": {
+    "url": "https://github.com/Alimir/wp-ulike/issues"
   }
 }
