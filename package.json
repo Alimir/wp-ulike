@@ -1,7 +1,7 @@
 {
   "name": "wp-ulike",
   "title": "WP ULike",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "description": "WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.",
   "homepage": "https://wpulike.com",
   "repository": {
@@ -9,7 +9,11 @@
     "url": "git+https://github.com/Alimir/wp-ulike.git"
   },
   "license": "MIT",
-  "author": "Alimir <info@alimir.ir> (http://alimir.ir)",
+  "author": { 
+    "name": "Alimir", 
+    "email": "info@alimir.ir", 
+    "url": "http://alimir.ir" 
+  },
   "main": "Gruntfile.js",
   "scripts": {
     "dev": "watchify -vd -p browserify-hmr -e admin/assets/js/solo/vue/src/main.js -o admin/assets/js/solo/vue/vue.js",
