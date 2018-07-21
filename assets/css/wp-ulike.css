@@ -20,16 +20,21 @@
   line-height: 28px;
   box-shadow: none;
   cursor: pointer;
-  padding: 0 15px;
+  padding: 0 25px;
   vertical-align: middle;
   height: 28px;
-  min-width: 50px;
   font-weight: 600;
+  border: none;
+  text-align: center;
 }
 .wpulike .wp_ulike_btn:hover {
   text-decoration: none;
   border-color: #95a5a6;
   box-shadow: none;
+}
+.wpulike .wp_ulike_put_text {
+  padding: 0 10px;
+  min-width: 50px;
 }
 .wpulike .wp_ulike_is_loading .wp_ulike_btn {
   background-image: url(../img/svg/loader.svg);
@@ -126,13 +131,14 @@
   box-shadow: 0 0 0 1px #bdbdbd inset;
   height: 29.5px;
   min-width: 50px;
-  margin-bottom: 2px;
+  margin: 0;
+  padding: 0;
 }
-#buddypress #activity-stream .wp_ulike_likers_wrapper li {
+#buddypress #activity-stream .wp_ulike_likers_wrapper li, #buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker {
   border: none;
   padding: 0;
 }
-#buddypress #activity-stream .wp_ulike_likers_wrapper li a, #buddypress #activity-stream .wp_ulike_likers_wrapper li img {
+#buddypress #activity-stream .wp_ulike_likers_wrapper li a, #buddypress #activity-stream .wp_ulike_likers_wrapper li img, #buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker a, #buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker img {
   float: none;
   padding: 0;
   margin: 0;
@@ -152,15 +158,16 @@
   line-height: 28px;
   box-shadow: none;
   cursor: pointer;
-  padding: 0 15px;
+  padding: 0 25px;
   vertical-align: middle;
   height: 28px;
-  min-width: 50px;
   font-weight: 600;
+  border: none;
+  text-align: center;
   color: #616161;
   background: #e0e0e0;
 }
-#bbpress-forums .wp_ulike_likers_wrapper ul {
+#bbpress-forums .wp_ulike_likers_wrapper ul, #bbpress-forums .wp_ulike_likers_wrapper .wp-ulike-likers-list {
   margin: 0 !important;
 }
 
@@ -173,15 +180,17 @@
   border-radius: .25em;
   padding: 5px;
 }
-.wpulike-heart .wp_ulike_btn {
+.wpulike-heart .wp_ulike_put_text {
   padding: 0 5px;
   text-transform: uppercase;
   font-weight: 600;
   color: #757575;
-  min-width: 30px;
 }
 .wpulike-heart .wp_ulike_likers_wrapper {
   bottom: 10px;
+}
+.wpulike-heart .wp_ulike_put_image {
+  padding: 0 15px;
 }
 .wpulike-heart .wp_ulike_put_image:after {
   content: '';
@@ -211,6 +220,13 @@
   padding: 0 5px;
 }
 
+#buddypress #activity-stream .activity-meta {
+  display: flex;
+  align-items: center;
+}
+#buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_btn {
+  padding: 0 15px;
+}
 #buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_general_class {
   border-radius: 0;
   padding: 1px 5px;
@@ -461,17 +477,20 @@
 .wp_ulike_likers_wrapper:empty {
   display: none;
 }
-.wp_ulike_likers_wrapper .tiles {
-  display: table;
-  border-spacing: 8px;
+.wp_ulike_likers_wrapper .wp-ulike-likers-list, .wp_ulike_likers_wrapper .tiles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
 }
-.wp_ulike_likers_wrapper .tiles li {
-  display: table-cell;
-  padding: 0;
+.wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker, .wp_ulike_likers_wrapper .wp-ulike-likers-list li, .wp_ulike_likers_wrapper .tiles .wp-ulike-liker, .wp_ulike_likers_wrapper .tiles li {
+  padding: 3px;
+  margin: 0;
+  list-style: none;
 }
-.wp_ulike_likers_wrapper .tiles li a > img {
+.wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .wp-ulike-likers-list li a > img, .wp_ulike_likers_wrapper .tiles .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .tiles li a > img {
   border-radius: 5px;
   transition: opacity 1500ms cubic-bezier(0.19, 1, 0.22, 1);
   display: block;
@@ -495,7 +514,7 @@
   transform: translateY(-50px);
   opacity: 1;
 }
-.wpulike:hover .wp_ulike_likers_wrapper .tiles a > img {
+.wpulike:hover .wp_ulike_likers_wrapper .wp-ulike-liker a > img, .wpulike:hover .wp_ulike_likers_wrapper .tiles a > img {
   opacity: 1;
 }
 
@@ -519,7 +538,7 @@
   opacity: 0 !important;
 }
 
-.commentlist .tiles .avatar {
+.commentlist .tiles .avatar, .commentlist .wp-ulike-liker .avatar {
   left: 0 !important;
 }
 
