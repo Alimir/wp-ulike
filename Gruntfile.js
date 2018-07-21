@@ -137,17 +137,17 @@ module.exports = function(grunt) {
 
         // Copy files from bower_component folder to right places
         copy: {
-            gMaps: {
+            // gMaps: {
 
-                files: [
-                    {
-                        expand: true,     // Enable dynamic expansion.
-                        cwd: '<%= pkg.bower.components %>jqvmap/dist',      // Src matches are relative to this path.
-                        src: ['jquery.vmap.min.js', 'maps/jquery.vmap.world.js'],  // Actual pattern(s) to match.
-                        dest: 'admin/assets/js/src/plugins'   // Destination path prefix.
-                    }
-                ]
-            },
+            //     files: [
+            //         {
+            //             expand: true,     // Enable dynamic expansion.
+            //             cwd: '<%= pkg.bower.components %>jqvmap/dist',      // Src matches are relative to this path.
+            //             src: ['jquery.vmap.min.js', 'maps/jquery.vmap.world.js'],  // Actual pattern(s) to match.
+            //             dest: 'admin/assets/js/src/plugins'   // Destination path prefix.
+            //         }
+            //     ]
+            // },
             chartjs: {
 
                 files: [
@@ -155,10 +155,56 @@ module.exports = function(grunt) {
                         expand: true,     // Enable dynamic expansion.
                         cwd: '<%= pkg.bower.components %>chart.js/dist',      // Src matches are relative to this path.
                         src: ['Chart.min.js'],  // Actual pattern(s) to match.
-                        dest: 'admin/assets/js/src/plugins'   // Destination path prefix.
+                        dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
                     }
                 ]
-            }
+            },
+            vueJs: {
+
+                files: [
+                    {
+                        expand: true,     // Enable dynamic expansion.
+                        cwd: '<%= pkg.bower.components %>vue/dist',      // Src matches are relative to this path.
+                        src: [ 'vue.min.js', 'vue.js' ],  // Actual pattern(s) to match.
+                        dest: 'admin/assets/js/solo/vue/'   // Destination path prefix.
+                    }
+                ]
+            },
+            matchHeight: {
+
+                files: [
+                    {
+                        expand: true,     // Enable dynamic expansion.
+                        cwd: '<%= pkg.bower.components %>matchHeight/dist',      // Src matches are relative to this path.
+                        src: [ 'jquery.matchHeight-min.js' ],  // Actual pattern(s) to match.
+                        dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
+                    }
+                ]
+            },
+            spectrum_js: {
+
+                files: [
+                    {
+                        expand: true,     // Enable dynamic expansion.
+                        cwd: '<%= pkg.bower.components %>spectrum/',      // Src matches are relative to this path.
+                        src: ['spectrum.js'],      // Actual pattern(s) to match.
+                        dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
+                    }
+                ]
+            },
+            spectrum_css: {
+                files: [
+                    {
+                        expand: true,     // Enable dynamic expansion.
+                        cwd: '<%= pkg.bower.components %>spectrum/',      // Src matches are relative to this path.
+                        src: ['spectrum.css'],      // Actual pattern(s) to match.
+                        dest: 'admin/assets/sass/plugins/',   // Destination path prefix.
+                        rename: function( dest, src ) {
+                            return dest + src.replace(/[^\/]*$/, "") + "_spectrum.scss";
+                        }
+                    }
+                ]
+            }            
         },
 
 
@@ -186,7 +232,7 @@ module.exports = function(grunt) {
                 dest: 'assets/js/wp-ulike.js'
             },
 
-            adminJsStatistics: {
+            adminJsPlugins: {
                 options: {
 
                     banner: "/*! <%= meta.version %>\n" +
@@ -200,13 +246,12 @@ module.exports = function(grunt) {
                     },
                 },
                 src: [
-                    'admin/assets/js/src/plugins/**/*.js',
-                    'admin/assets/js/src/scripts.js',
+                    'admin/assets/js/src/plugins/**/*.js'
                 ],
-                dest: 'admin/assets/js/statistics.js'
+                dest: 'admin/assets/js/plugins.js'
             },
 
-            adminJsSettings: {
+            adminJsScripts: {
                 options: {
 
                     banner: "/*! <%= meta.version %>\n" +
@@ -220,10 +265,9 @@ module.exports = function(grunt) {
                     },
                 },
                 src: [
-                    'admin/assets/js/src/settings/visual-select.js',
-                    'admin/assets/js/src/settings/panel.js',
+                    'admin/assets/js/src/*.js',
                 ],
-                dest: 'admin/assets/js/settings.js'
+                dest: 'admin/assets/js/scripts.js'
             }
 
         },
@@ -364,14 +408,14 @@ module.exports = function(grunt) {
                 tasks: ['concat:frontJsScripts', 'uglify:frontJsScripts']
             },
 
-            concat_admin_js_statistics: {
-                files: ['admin/assets/js/src/*.js'],
-                tasks: ['concat:adminJsStatistics']
+            concat_admin_js_plugins: {
+                files: ['admin/assets/js/src/plugins/**/*.js'],
+                tasks: ['concat:adminJsPlugins']
             },
 
-            concat_admin_js_settings: {
-                files: ['admin/assets/js/src/settings/*.js'],
-                tasks: ['concat:adminJsSettings']
+            concat_admin_js_scripts: {
+                files: ['admin/assets/js/src/*.js'],
+                tasks: ['concat:adminJsScripts']
             },
 
             livereload: {
@@ -390,7 +434,7 @@ module.exports = function(grunt) {
                 exclude: [
                         '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
                         'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
-                        'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh'
+                        'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'wp-assets'
                 ],
                 recursive: true,
                 syncDestIgnoreExcl: true
