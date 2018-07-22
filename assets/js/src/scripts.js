@@ -12,7 +12,4 @@
     // init WordpressUlike
     $(".wpulike").WordpressUlike();
 
-    // removes "empty" paragraphs
-    $('p').filter(function () { return this.innerHTML == "" }).remove();
-
 })( jQuery );

@@ -7,7 +7,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/
  * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           3.4
+ * Version:           3.5.0
  * Author:            Ali Mirzaei
  * Author URI:        http://alimir.ir
  * Text Domain:       wp-ulike
@@ -33,7 +33,7 @@
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		);
-define( 'WP_ULIKE_VERSION'      , '3.4' 						);
+define( 'WP_ULIKE_VERSION'      , '3.5.0' 						);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					);
 define( 'WP_ULIKE_DB_VERSION'   , '1.5' 						);
 
@@ -76,12 +76,12 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	    private function __construct() {
 
 	    	add_action( 'plugins_loaded', array( $this, 'init' ) );
-			// Include Files
-			$this->includes();
+
+	    	add_action('admin_enqueue_scripts', array( $this, 'admin_assets' ) );
+	    	add_action('wp_enqueue_scripts', array( $this, 'frontend_assets' ) );
 
 			// Activate plugin when new blog is added
 			add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
-
 			add_action( 'activated_plugin', array( $this, 'after_activation' ) );
 
 			$prefix = is_network_admin() ? 'network_admin_' : '';
@@ -93,7 +93,27 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	    *
 	    * @return void
 	    */
+	    public function admin_assets( $hook ){
+	    	new wp_ulike_admin_assets( $hook );
+	    }
+
+	   /**
+	    * Init the plugin when WordPress Initialises.
+	    *
+	    * @return void
+	    */
+	    public function frontend_assets(){
+			new wp_ulike_frontend_assets();
+	    }
+
+	   /**
+	    * Init the plugin when WordPress Initialises.
+	    *
+	    * @return void
+	    */
 	    public function init(){
+	    	// Include Files
+	    	$this->includes();
 
 	        // @deprecate version 5.0
 	        global $wp_version;
@@ -230,15 +250,6 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	            }
 		       	// Add Settings Page
 		        $this->settings();
-
-				//include wp_ulike_stats class & geoIPloc functions
-				if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false ){
-					//include PHP GeoIPLocation Library
-					require_once( WP_ULIKE_ADMIN_DIR . '/includes/geoiploc.php');
-					// global variable
-					global $wp_ulike_stats;
-					$wp_ulike_stats = wp_ulike_stats::get_instance();
-				};
 
 	            // Load admin spesific codes
 	            include( WP_ULIKE_ADMIN_DIR . '/index.php' );

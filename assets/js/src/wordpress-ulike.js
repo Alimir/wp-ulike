@@ -26,15 +26,16 @@
 
     // The actual plugin constructor
     function Plugin ( element, options ) {
-        this.element = element;
-        this.$element = $(element);
-        this.settings = $.extend( {}, defaults, options );
-        this._defaults = defaults;
-        this._name = pluginName;
+        this.element        = element;
+        this.$element       = $(element);
+        this.settings       = $.extend( {}, defaults, options );
+        this._defaults      = defaults;
+        this._name          = pluginName;
+
+        this._refresh       = false;
 
         // Create main selectors
         this.buttonElement  = this.$element.find(this.settings.buttonSelector);
-        this.likersElement  = this.$element.find( this.settings.likersSelector );
         this.generalElement = this.$element.find(this.settings.generalSelector);
         this.counterElement = this.generalElement.find( this.settings.counterSelector );
 
@@ -52,27 +53,30 @@
     $.extend(Plugin.prototype, {
         init: function () {
             //Call _ajaxify function on click button
-            this.buttonElement.click( this._ajaxify.bind(this) );
+            this.buttonElement.click( this._button.bind(this) );
+
+            //Call _ajaxify function on click button
+            this.generalElement.hover( this._likers.bind(this) );
         },
 
-        _ajaxify: function(){
+        _button: function(){
             $.ajax({
-                type:'POST',
-                cache: false,
-                dataType: 'json',
-                url: wp_ulike_params.ajax_url,
-                data:{
+                type      :'POST',
+                cache     : false,
+                dataType  : 'json',
+                url       : wp_ulike_params.ajax_url,
+                data      :{
                     action: 'wp_ulike_process',
-                    id: this.settings.ID,
-                    nonce: this.settings.nonce,
+                    id    : this.settings.ID,
+                    nonce : this.settings.nonce,
                     status: this.settings.likeStatus,
-                    type: this.settings.type
+                    type  : this.settings.type
                 },
                 beforeSend:function(){
-                    $document.trigger('WordpressUlikeLoading');
+                    $document.trigger( 'WordpressUlikeLoading', this.element );
                     this.generalElement.addClass( 'wp_ulike_is_loading' );
                 }.bind(this),
-                success: function( response ){
+                success   : function( response ){
                     //remove loading class
                     this.generalElement.removeClass( 'wp_ulike_is_loading' );
                     if( response.success ) {
@@ -81,14 +85,56 @@
                         this._notif( 'error', response.data );
                     }
 
-                    $document.trigger('WordpressUlikeUpdated');
+                    $document.trigger( 'WordpressUlikeUpdated', this.element );
                 }.bind(this)
             });
         },
 
+        _likers: function(){
+            // Get likers box container element
+            this.likersElement = this.$element.find( this.settings.likersSelector );
+            // Make a request to generate or refresh the likers box
+            if( !this.likersElement.length || this._refresh ) {
+                $.ajax({
+                    type      :'POST',
+                    cache     : false,
+                    dataType  : 'json',
+                    url       : wp_ulike_params.ajax_url,
+                    data      :{
+                        action : 'wp_ulike_get_likers',
+                        id     : this.settings.ID,
+                        nonce  : this.settings.nonce,
+                        type   : this.settings.type,
+                        refresh: this._refresh ? 1 : 0
+                    },
+                    beforeSend:function(){
+                        // Add progress status class
+                        this.generalElement.addClass( 'wp_ulike_is_getting_likers_list' );
+                    }.bind(this),
+                    success   : function( response ){
+                        // If the likers container is not exist, we've to add it.
+                        if( !this.likersElement.length ) {
+                            this.likersElement = $( '<div>', { class: 'wp_ulike_likers_wrapper' } ).appendTo( this.$element );
+                        }
+                        // Remove progress status class
+                        this.generalElement.removeClass( 'wp_ulike_is_getting_likers_list' );
+                        if( response.success ) {
+                            // Modify likers box innerHTML
+                            if( typeof response.data !== 'undefined' ){
+                                this.likersElement.html( response.data );
+                            } else {
+                                this.likersElement.empty();
+                            }
+
+                        }
+                    }.bind(this)
+                });
+            }
+        },
+
         _update: function( response ){
             //check likeStatus
-            switch(this.settings.likeStatus) {
+            switch( this.settings.likeStatus ) {
                 case 1: /* Change the status of 'is not liked' to 'liked' */
                     this.buttonElement.attr('data-ulike-status', 4);
                     this.settings.likeStatus = 4;
@@ -96,6 +142,7 @@
                     this.generalElement.children().first().addClass( 'wp_ulike_click_is_disabled' );
                     this.counterElement.text( response.data.data );
                     this._actions( 'success', response.data.message, response.data.btnText, 4 );
+                    this._refresh = true;
                     break;
                 case 2: /* Change the status of 'liked' to 'unliked' */
                     this.buttonElement.attr( 'data-ulike-status', 3 );
@@ -103,6 +150,7 @@
                     this.generalElement.addClass( 'wp_ulike_is_unliked' ).removeClass('wp_ulike_is_liked');
                     this.counterElement.text( response.data.data );
                     this._actions( 'error', response.data.message, response.data.btnText, 3 );
+                    this._refresh = true;
                     break;
                 case 3: /* Change the status of 'unliked' to 'liked' */
                     this.buttonElement.attr('data-ulike-status', 2);
@@ -110,6 +158,7 @@
                     this.generalElement.addClass('wp_ulike_is_liked').removeClass('wp_ulike_is_unliked');
                     this.counterElement.text( response.data.data );
                     this._actions( 'success', response.data.message, response.data.btnText, 2 );
+                    this._refresh = true;
                     break;
                 case 4: /* Just print the log-in warning message */
                     this._actions( 'info', response.data.message, response.data.btnText, 4 );
@@ -119,10 +168,12 @@
                     this._actions( 'warning', response.data.message, response.data.btnText, 0 );
             }
 
-            // Update likers box
-            if( response.data.likers !== false ){
-                this._likers( response.data.likers );
+            // Refresh likers box on data update
+            if( this._refresh ) {
+                this._likers();
+                this._refresh = false;
             }
+
         },
 
         _actions: function( messageType, messageText, btnText, likeStatus ){
@@ -137,15 +188,6 @@
 
             // Display Notifications
             this._notif( messageType, messageText );
-        },
-
-        _likers: function( template ){
-            // Modify likers box innerHTML
-            if( template !== '' ) {
-                this.likersElement.html( template );
-            } else {
-                this.likersElement.empty();
-            }
         },
 
         _notif: function( messageType, messageText ){

@@ -187,9 +187,11 @@ tr.hide-label {
 	.wp-ulike-notice-image {
 		display: table-cell;
 		vertical-align: middle;
+		min-width: 100px;
 
 		img {
 			width: 100px;
+			height: auto;
 		}
 	}
 

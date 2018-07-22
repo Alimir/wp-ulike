@@ -22,15 +22,18 @@
         display: none;
     }
 
-    .tiles {
-        display: table;
-        border-spacing: 8px;
+    .wp-ulike-likers-list, .tiles {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
         margin: 0;
         padding: 0;
 
-        li {
-            display: table-cell;
-            padding: 0;
+        .wp-ulike-liker, li {
+            padding: 3px;
+            margin: 0;
+            list-style: none;
 
             a {
 
@@ -66,7 +69,7 @@
             transform: translateY(-50px);
             opacity: 1;
 
-            .tiles a > img {
+            .wp-ulike-liker a > img, .tiles a > img {
                 opacity: 1;
             }
         }
@@ -94,7 +97,7 @@
     }
 }
 .commentlist {
-    .tiles {
+    .tiles, .wp-ulike-liker {
         .avatar {
             left: 0 !important;
         }
