@@ -1524,7 +1524,8 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 	?>
 		<div class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-				<a 	data-ulike-id="<?php echo $ID; ?>"
+				<button type="button"
+					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
@@ -1533,7 +1534,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 							echo '<span>' . $button_text . '</span>';
 						}
 					?>
-				</a>
+				</button>
 				<?php echo $counter; ?>
 			</div>
 		<?php
@@ -1563,7 +1564,8 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 	?>
 		<div class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-				<a  data-ulike-id="<?php echo $ID; ?>"
+				<button type="button"
+					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
@@ -1572,7 +1574,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 							echo '<span>' . $button_text . '</span>';
 						}
 					?>
-				</a>
+				</button>
 				<?php echo $counter; ?>
 			</div>
 		<?php

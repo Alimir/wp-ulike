@@ -10,26 +10,23 @@
         margin: 0;
         position: relative;
         display: inline-block;
-        border-radius: .25em;
-        font-size: 14px;
-        line-height: 28px;
-        box-shadow: none;
-        cursor: pointer;
-        padding: 0 25px;
         vertical-align: middle;
-        height: 28px;
-        font-weight: 600;
+        border-radius: .25em;
+        box-shadow: none;
+        padding: 15px 25px;
         border: none;
         text-align: center;
-
-        &:hover {
-            text-decoration: none;
-            border-color: #95a5a6;
-            box-shadow: none;
-        }
+        transition-property: none;
+        
+        &:hover, &:active, &:focus {
+            outline: 0;
+        }        
     }
 
     .wp_ulike_put_text{
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 28px;
         padding: 0 10px;
         min-width: 50px;
     }
