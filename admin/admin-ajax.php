@@ -21,29 +21,17 @@ if ( ! defined( 'WPINC' ) ) {
  * @return			Void
  */
 function wp_ulike_ajax_stats() {
-	
-	$nonce  = $_POST['nonce'];
-	$method = $_POST['method'];
 
-	$value  = json_decode( json_encode( $_POST['value'] ), true );
-	
-	// If is not json then keep it as a variable
-	if( !is_array( $value ) ) {
-		$value = $_POST['value'];
-	}
+	$nonce  = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 
-	if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp-ulike-ajax-nonce' ) ) {
+	if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp-ulike-ajax-nonce' ) || ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
-	$wp_ulike_stats = wp_ulike_stats::get_instance();
+	$instance = wp_ulike_stats::get_instance();
+	$output   = $instance->get_all_data();
 
-	if( method_exists( $wp_ulike_stats, $method ) ) {
-		$output = empty( $value ) ? $wp_ulike_stats->$method() : $wp_ulike_stats->$method( $value );
-		wp_send_json_success( json_encode( $output ) );
-	}
-
-	wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
+	wp_send_json_success( json_encode( $output ) );
 
 }
 add_action( 'wp_ajax_wp_ulike_ajax_stats', 'wp_ulike_ajax_stats' );
