@@ -272,16 +272,26 @@ if( defined( 'BP_VERSION' ) ) {
 			wp_ulike_buddypress('get');
 		}
 
+		function wp_ulike_get_buddypress( $content ) {
+
+		}
+
 		if (wp_ulike_get_setting( 'wp_ulike_buddypress', 'auto_display' ) == '1') {
+			// Check display ulike in buddypress comments
+			$display_comments = wp_ulike_get_setting( 'wp_ulike_buddypress', 'activity_comment', 1 );
 
 			if (wp_ulike_get_setting( 'wp_ulike_buddypress', 'auto_display_position' ) == 'meta'){
 				add_action( 'bp_activity_entry_meta', 'wp_ulike_put_buddypress' );
+				// Add wp ulike in buddpress comments
+				if( $display_comments == '1' ) {
+					add_action( 'bp_activity_comment_options', 'wp_ulike_put_buddypress' );
+				}
 	        } else	{
 	        	add_action( 'bp_activity_entry_content', 'wp_ulike_put_buddypress' );
-	        }
-	        // Add wp ulike in buddpress comments
-	        if ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'activity_comment' ) == '1' ) {
-	        	add_action( 'bp_activity_comment_options', 'wp_ulike_put_buddypress' );
+	        	// Add wp ulike in buddpress comments
+				if( $display_comments == '1' ) {
+					add_filter( 'bp_activity_comment_content', function( $content ) { return $content . wp_ulike_buddypress('put'); } );
+				}
 	        }
 		}
 	}
