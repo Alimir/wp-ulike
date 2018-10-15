@@ -440,7 +440,7 @@ if( defined( 'BP_VERSION' ) ) {
 			//Sends out notifications when you get a like from someone
 			if ( wp_ulike_get_setting( 'wp_ulike_buddypress', 'custom_notification' ) == '1' ) {
 				// No notifications from Anonymous
-				if ( ! $user_ID ) {
+				if ( ! $user_ID || false === get_userdata( $user_ID ) ) {
 					return false;
 				}
 				$author_ID = wp_ulike_get_auhtor_id( $cp_ID, $type );
@@ -450,9 +450,9 @@ if( defined( 'BP_VERSION' ) ) {
 				bp_notifications_add_notification( array(
 						'user_id'           => $author_ID,
 						'item_id'           => $cp_ID,
-						'secondary_item_id' => '',
+						'secondary_item_id' => $user_ID,
 						'component_name'    => 'wp_ulike',
-						'component_action'  => 'wp_ulike' . $type . '_action_' . $user_ID,
+						'component_action'  => 'wp_ulike' . $type . '_action',
 						'date_notified'     => bp_core_current_time(),
 						'is_new'            => 1,
 					)
@@ -474,15 +474,19 @@ if( defined( 'BP_VERSION' ) ) {
 		function wp_ulike_format_buddypress_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
 			global $wp_filter,$wp_version;
 			// Return value
-			$return = false;
+			$return = $action;
+
 			if ( strpos( $action, 'wp_ulike_' ) !== false ) {
 				$custom_link	= '';
 				//Extracting ulike type from the action value.
 				preg_match('/wp_ulike_(.*?)_action/', $action, $type);
-				//Extracting user id from the action value.
-				preg_match('/action_([0-9]+)/', $action, $user_ID);
-				$user_info 		= get_userdata($user_ID[1]);
-				$custom_text 	= __('You have a new like from', WP_ULIKE_SLUG ) . ' "' . $user_info->display_name . '"';
+			    //Extracting user id from old action name values.
+			    preg_match('/action_([0-9]+)/', $action, $user_ID);
+				//Get user info
+				$user_ID     = isset( $user_ID[1] ) ? $user_ID[1] : $secondary_item_id;
+				$user_info   = get_userdata( $user_ID );
+				$custom_text = sprintf( __('You have a new like %s', WP_ULIKE_SLUG ), is_object( $user_info ) ? __( 'from' , WP_ULIKE_SLUG ) . ' ' . $user_info->display_name : '' );
+
 				//checking the ulike types
 				if($type[1] == 'liked'){
 					$custom_link  	= get_permalink($item_id);
