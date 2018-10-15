@@ -1,6 +1,6 @@
 
 .rtl {
-    .wp_ulike_likers_wrapper{
+    .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
         left: auto;
         right: 0;
 

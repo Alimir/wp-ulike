@@ -78,13 +78,6 @@
             vertical-align: middle;
             padding: 0;
 
-            .wp_ulike_btn span{
-                position: relative;
-                top: 50%;
-                left: 50%;
-                transform: translateX(-50%) translateY(-50%);
-                display: block;
-            }
         }
 
         .wpulike-default {
@@ -111,7 +104,7 @@
     }
 }
 #bbpress-forums {
-    .wp_ulike_likers_wrapper{
+    .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
         ul, .wp-ulike-likers-list {
             margin: 0 !important;
         }
