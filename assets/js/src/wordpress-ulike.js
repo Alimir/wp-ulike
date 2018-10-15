@@ -88,9 +88,6 @@
                     $document.trigger( 'WordpressUlikeUpdated', this.element );
                 }.bind(this)
             });
-
-            // Prevent default on href click
-            return false;
         },
 
         _likers: function(){
