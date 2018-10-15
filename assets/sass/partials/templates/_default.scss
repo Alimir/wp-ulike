@@ -107,6 +107,10 @@
     .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
         ul, .wp-ulike-likers-list {
             margin: 0 !important;
+
+            li{
+                list-style-type: none;
+            }
         }
     }
 }
