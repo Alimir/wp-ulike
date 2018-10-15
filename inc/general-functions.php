@@ -323,7 +323,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'disable_likers_pophover' => array(
 							'type'          => 'checkbox',
 							'default'       => 0,
-							'label'         => __('Disable Pophover In Likers Box', WP_ULIKE_SLUG),
+							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
 							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
@@ -414,7 +414,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'disable_likers_pophover' => array(
 							'type'          => 'checkbox',
 							'default'       => 0,
-							'label'         => __('Disable Pophover In Likers Box', WP_ULIKE_SLUG),
+							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
 							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
@@ -511,7 +511,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'disable_likers_pophover' => array(
 							'type'          => 'checkbox',
 							'default'       => 0,
-							'label'         => __('Disable Pophover In Likers Box', WP_ULIKE_SLUG),
+							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
 							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
@@ -627,7 +627,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'disable_likers_pophover' => array(
 							'type'          => 'checkbox',
 							'default'       => 0,
-							'label'         => __('Disable Pophover In Likers Box', WP_ULIKE_SLUG),
+							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
 							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
@@ -1072,7 +1072,7 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
  * @return          String
  */
 if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
-	function wp_ulike_bbp_format_buddypress_notifications($action, $item_id, $secondary_item_id, $total_items, $format = 'string') {
+	function wp_ulike_bbp_format_buddypress_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
 
 		if ( ! defined( 'BP_VERSION' ) ) {
 			return;

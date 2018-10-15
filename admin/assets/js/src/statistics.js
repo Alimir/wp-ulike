@@ -176,7 +176,7 @@
 		});
 
 		new Vue({
-		    el: '#wp-ulike-stats-app',
+		    el: '#wp-ulike-stats-app'
 		});
     }
 

@@ -120,7 +120,7 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		}
 		// Extract settings array
 		extract( $get_settings );
-		// Check pophover activation
+		// Check popover activation
 		$disable_pophover = wp_ulike_get_setting( $setting_key, 'disable_likers_pophover', 0 );
 		// Display likers box
 		echo $disable_pophover ? sprintf(
