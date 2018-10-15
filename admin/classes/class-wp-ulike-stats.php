@@ -57,7 +57,37 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			}
 
-			return $get_tables;	
+			return $get_tables;
+		}
+
+		/**
+		 * Set all data info for ajax requests
+		 *
+		 * @author       	Alimir
+		 * @since           3.5.1
+		 * @return			Array
+		 */
+		public function get_all_data(){
+
+			$tables = $this->get_tables();
+
+			$output = array(
+				'count_all_logs_all'       => $this->count_all_logs('all'),
+				'count_all_logs_today'     => $this->count_all_logs('today'),
+				'count_all_logs_yesterday' => $this->count_all_logs('yesterday'),
+				'display_top_likers' 	   => $this->display_top_likers(),
+			);
+
+			foreach ( $tables as $type => $table ) {
+				$output[ 'dataset_' . $table ]              = $this->dataset( $table );
+				$output[ 'get_top_' . $type ]               = $this->get_top( $type );
+				$output[ 'count_logs_' . $table . '_week' ] = $this->count_logs( array( "table" => $table, "date" => 'week' ) );
+				$output[ 'count_logs_' . $table . '_month'] = $this->count_logs( array( "table" => $table, "date" => 'month' ) );
+				$output[ 'count_logs_' . $table . '_year' ] = $this->count_logs( array( "table" => $table, "date" => 'year' ) );
+				$output[ 'count_logs_' . $table . '_all' ]  = $this->count_logs( array( "table" => $table, "date" => 'all' ) );
+			}
+
+			return $output;
 		}
 
 		/**
@@ -254,8 +284,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				$user_ID  = stripslashes( $user->user_id );
 				$userdata = get_userdata( $user_ID );
 				$username = empty( $userdata ) ? __('Guest User',WP_ULIKE_SLUG) : $userdata->display_name;
-				
-				$result  .= '	
+
+				$result  .= '
 	            <div class="wp-ulike-flex wp-ulike-users-list">
 	                <div class="wp-ulike-counter">
 	                	<i class="wp-ulike-icons-trophy"></i>

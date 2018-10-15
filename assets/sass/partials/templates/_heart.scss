@@ -15,15 +15,20 @@
         padding: 0 5px;
         text-transform: uppercase;
         font-weight: 600;
-        color: #757575; 
+        color: #757575;
     }
 
-    .wp_ulike_likers_wrapper{
+    .wp_ulike_btn{
+        background: transparent;
+    }
+
+    .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
         bottom: 10px;
     }
 
     .wp_ulike_put_image{
-        padding: 0 15px;
+        background: none;
+        padding: 15px;
 
         &:after{
             content: '';
@@ -51,7 +56,6 @@
         line-height: 28px;
         display: inline-block;
         color: #616161;
-        min-width: 30px;
         text-align: center;
         font-weight: 600;
         vertical-align: middle;
@@ -62,33 +66,20 @@
 
 #buddypress #activity-stream{
 
-    .activity-meta {
+    .activity-meta, .acomment-options {
         display: flex;
         align-items: center;
 
         .wpulike-heart {
-            .wp_ulike_btn {
-                padding: 0 15px;
+            .wp_ulike_put_image{
+                padding: 10px 15px;
             }
             .wp_ulike_general_class {
                 border-radius: 0;
-                padding: 1px 5px;
-                margin-bottom: 2px;
-            }
-            .count-box {
-                min-width: 20px;
+                padding: 0.2em 0.5em;
+                margin-bottom: 0;
             }
         }
 
-    }
-}
-
-#bbpress-forums {
-    .bbp-reply-content {
-        .wpulike-heart {
-            .wp_ulike_btn {
-                padding: 5px 15px;
-            }
-        }
     }
 }

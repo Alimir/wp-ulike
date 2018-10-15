@@ -31,14 +31,9 @@
 		}
 	});
 
-	// Charts stack array to save data
-	window.wpUlikechartsInfo = [];
-
-    $.fn.WpUlikeAjaxStats = function( method, value ){
+    $.fn.WpUlikeAjaxStats = function(){
 			// local var
 			var theResponse = null;
-			// returnValue     = $.isPlainObject( value ) ? $.parseJSON( value ) : value;
-
 	        // jQuery ajax
 	        $.ajax({
 	            type      :'POST',
@@ -47,15 +42,13 @@
 	            async     : false,
 	            data      :{
 					action: 'wp_ulike_ajax_stats',
-					method: method,
-					value : value,
 					nonce : wp_ulike_admin.nonce_field
 	            },
 	            success   : function( response ){
 	                if( response.success ) {
 	                    theResponse = JSON.parse( response.data );
 	                } else {
-	                	theResponse = 0;
+	                	theResponse = null;
 	                }
 	            }
 	        });
@@ -63,10 +56,15 @@
 	        return theResponse;
     };
 
-    if( wp_ulike_admin.hook_address.indexOf("wp-ulike-statistics") !== -1 ) {
+	// Charts stack array to save data
+	window.wpUlikechartsInfo  = [];
+	// Get all tables data
+	window.wpUlikeAjaxDataset = $.fn.WpUlikeAjaxStats();
+
+    if( window.wpUlikeAjaxDataset !== null && wp_ulike_admin.hook_address.indexOf("wp-ulike-statistics") !== -1 ) {
     	// Get single var component
 		Vue.component('get-var', {
-		    props: ['callback', 'args'],
+		    props: ['dataset'],
 		    data: function () {
 		        return {
 					output  : '...'
@@ -81,7 +79,7 @@
 		    },
 		    methods:{
 		        fetchData () {
-		            return $.fn.WpUlikeAjaxStats( this.callback, this.args )
+		        	return window.wpUlikeAjaxDataset[this.dataset];
 		        },
 		        removeClass( element ){
 		        	element.classList.remove( 'wp-ulike-is-loading' );
@@ -90,11 +88,11 @@
 		});
 		// Get charts object component
 		Vue.component('get-chart', {
-		    props: ['callback', 'args', 'identify', 'type'],    
+		    props: ['dataset', 'identify', 'type'],
 		    mounted() {
 		    	if( this.type == 'line' ) {
 			    	this.planetChartData = this.fetchData();
-			        this.createLineChart( this.planetChartData );	    		
+			        this.createLineChart( this.planetChartData );
 		    	} else {
 		    		this.createPieChart();
 		    	}
@@ -105,7 +103,7 @@
 		    },
 		    methods:{
 		        fetchData () {
-		            return $.fn.WpUlikeAjaxStats( this.callback, this.args );
+		            return window.wpUlikeAjaxDataset[this.dataset];
 		        },
 				createLineChart( chartData ) {
 					// Push data stats in dataset options
@@ -121,7 +119,7 @@
 								chartData.options
 							]
 						}
-					});		
+					});
 					// Set info for this canvas
 					this.setInfo( chartData );
 				},
@@ -178,7 +176,7 @@
 		});
 
 		new Vue({
-		    el: '#wp-ulike-stats-app',
+		    el: '#wp-ulike-stats-app'
 		});
     }
 

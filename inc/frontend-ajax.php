@@ -140,7 +140,10 @@ function wp_ulike_get_likers(){
 	}
 
 	if( NULL !== ( $users_list = wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key ) ) ) {
-		wp_send_json_success( $users_list );
+		// Add specific class name with popover checkup
+		$class_names = wp_ulike_get_setting( $setting_key, 'disable_likers_pophover', 0 ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
+		// Return the list of users
+		wp_send_json_success( array( 'template' => $users_list, 'class' => $class_names ) );
 	}
 
 	// Send blank success when the users list are empty

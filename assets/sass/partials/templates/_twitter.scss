@@ -67,8 +67,8 @@
   }
 }
 .wpulike-robeen {
-  .wp_ulike_likers_wrapper{
-    bottom: 15px;
+  .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
+    bottom: 5px;
   }
   .count-box {
     display: inline-block;
