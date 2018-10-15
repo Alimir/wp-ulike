@@ -46,10 +46,9 @@
         margin-left: 8px;
         line-height: 28px;
         display: inline-block;
-        padding: 0 8px;
+        padding: 0 10px;
         box-shadow: 0 0 0 1px #bdbdbd inset;
         color: #616161;
-        min-width: 30px;
         vertical-align: middle;
         text-align: center;
 
@@ -79,13 +78,6 @@
             vertical-align: middle;
             padding: 0;
 
-            .wp_ulike_btn span{
-                position: relative;
-                top: 50%;
-                left: 50%;
-                transform: translateX(-50%) translateY(-50%);
-                display: block;
-            }
         }
 
         .wpulike-default {
@@ -93,10 +85,6 @@
                 border-radius: 0;
                 background-color: #ffffff;
                 box-shadow: 0 0 0 1px #bdbdbd inset;
-                height: 29.5px;
-                min-width: 50px;
-                margin: 0;
-                padding: 0;
             }
         }
 
@@ -116,41 +104,13 @@
     }
 }
 #bbpress-forums {
-    .bbp-reply-content {
-        .wpulike {
-            .wp_ulike_is_loading {
-                .wp_ulike_btn {
-                    background-image: url(../img/svg/loader.svg);
-                    background-repeat: no-repeat;
-                    background-position: center center;
-                }
-            }
-        }
-    }
-    .wpulike-default {
-        .wp_ulike_btn {
-            margin: 0;
-            position: relative;
-            display: inline-block;
-            border-radius: .25em;
-            font-size: 14px;
-            line-height: 28px;
-            box-shadow: none;
-            cursor: pointer;
-            padding: 0 25px;
-            vertical-align: middle;
-            height: 28px;
-            font-weight: 600;
-            border: none;
-            text-align: center;
-            color: #616161;
-            background: #e0e0e0;  
-        }
-
-    }
-    .wp_ulike_likers_wrapper{
+    .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
         ul, .wp-ulike-likers-list {
             margin: 0 !important;
+
+            li{
+                list-style-type: none;
+            }
         }
     }
 }

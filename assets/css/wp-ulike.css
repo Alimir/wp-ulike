@@ -15,24 +15,21 @@
   margin: 0;
   position: relative;
   display: inline-block;
-  border-radius: .25em;
-  font-size: 14px;
-  line-height: 28px;
-  box-shadow: none;
-  cursor: pointer;
-  padding: 0 25px;
   vertical-align: middle;
-  height: 28px;
-  font-weight: 600;
+  border-radius: .25em;
+  box-shadow: none;
+  padding: 15px 25px;
   border: none;
   text-align: center;
+  transition-property: none;
 }
-.wpulike .wp_ulike_btn:hover {
-  text-decoration: none;
-  border-color: #95a5a6;
-  box-shadow: none;
+.wpulike .wp_ulike_btn:hover, .wpulike .wp_ulike_btn:active, .wpulike .wp_ulike_btn:focus {
+  outline: 0;
 }
 .wpulike .wp_ulike_put_text {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 28px;
   padding: 0 10px;
   min-width: 50px;
 }
@@ -91,10 +88,9 @@
   margin-left: 8px;
   line-height: 28px;
   display: inline-block;
-  padding: 0 8px;
+  padding: 0 10px;
   box-shadow: 0 0 0 1px #bdbdbd inset;
   color: #616161;
-  min-width: 30px;
   vertical-align: middle;
   text-align: center;
 }
@@ -118,21 +114,10 @@
   vertical-align: middle;
   padding: 0;
 }
-#buddypress #activity-stream .activity-meta .wpulike .wp_ulike_btn span, #buddypress #activity-stream .activity-comments .wpulike .wp_ulike_btn span {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  display: block;
-}
 #buddypress #activity-stream .activity-meta .wpulike-default .wp_ulike_btn, #buddypress #activity-stream .activity-comments .wpulike-default .wp_ulike_btn {
   border-radius: 0;
   background-color: #ffffff;
   box-shadow: 0 0 0 1px #bdbdbd inset;
-  height: 29.5px;
-  min-width: 50px;
-  margin: 0;
-  padding: 0;
 }
 #buddypress #activity-stream .wp_ulike_likers_wrapper li, #buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker {
   border: none;
@@ -144,31 +129,11 @@
   margin: 0;
 }
 
-#bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {
-  background-image: url(../img/svg/loader.svg);
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-#bbpress-forums .wpulike-default .wp_ulike_btn {
-  margin: 0;
-  position: relative;
-  display: inline-block;
-  border-radius: .25em;
-  font-size: 14px;
-  line-height: 28px;
-  box-shadow: none;
-  cursor: pointer;
-  padding: 0 25px;
-  vertical-align: middle;
-  height: 28px;
-  font-weight: 600;
-  border: none;
-  text-align: center;
-  color: #616161;
-  background: #e0e0e0;
-}
-#bbpress-forums .wp_ulike_likers_wrapper ul, #bbpress-forums .wp_ulike_likers_wrapper .wp-ulike-likers-list {
+#bbpress-forums .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) ul, #bbpress-forums .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) .wp-ulike-likers-list {
   margin: 0 !important;
+}
+#bbpress-forums .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) ul li, #bbpress-forums .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) .wp-ulike-likers-list li {
+  list-style-type: none;
 }
 
 /**
@@ -186,11 +151,15 @@
   font-weight: 600;
   color: #757575;
 }
-.wpulike-heart .wp_ulike_likers_wrapper {
+.wpulike-heart .wp_ulike_btn {
+  background: transparent;
+}
+.wpulike-heart .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
   bottom: 10px;
 }
 .wpulike-heart .wp_ulike_put_image {
-  padding: 0 15px;
+  background: none;
+  padding: 15px;
 }
 .wpulike-heart .wp_ulike_put_image:after {
   content: '';
@@ -213,31 +182,23 @@
   line-height: 28px;
   display: inline-block;
   color: #616161;
-  min-width: 30px;
   text-align: center;
   font-weight: 600;
   vertical-align: middle;
   padding: 0 5px;
 }
 
-#buddypress #activity-stream .activity-meta {
+#buddypress #activity-stream .activity-meta, #buddypress #activity-stream .acomment-options {
   display: flex;
   align-items: center;
 }
-#buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_btn {
-  padding: 0 15px;
+#buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_put_image, #buddypress #activity-stream .acomment-options .wpulike-heart .wp_ulike_put_image {
+  padding: 10px 15px;
 }
-#buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_general_class {
+#buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_general_class, #buddypress #activity-stream .acomment-options .wpulike-heart .wp_ulike_general_class {
   border-radius: 0;
-  padding: 1px 5px;
-  margin-bottom: 2px;
-}
-#buddypress #activity-stream .activity-meta .wpulike-heart .count-box {
-  min-width: 20px;
-}
-
-#bbpress-forums .bbp-reply-content .wpulike-heart .wp_ulike_btn {
-  padding: 5px 15px;
+  padding: 0.2em 0.5em;
+  margin-bottom: 0;
 }
 
 /**
@@ -307,8 +268,8 @@
     transform: scale(1);
   }
 }
-.wpulike-robeen .wp_ulike_likers_wrapper {
-  bottom: 15px;
+.wpulike-robeen .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
+  bottom: 5px;
 }
 .wpulike-robeen .count-box {
   display: inline-block;
@@ -461,6 +422,12 @@
  * Widgets & Likers Box
  */
 .wp_ulike_likers_wrapper {
+  margin: 10px 0;
+}
+.wp_ulike_likers_wrapper:empty {
+  display: none;
+}
+.wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
   transition: all 500ms cubic-bezier(0.19, 1, 0.22, 1);
   display: block;
   position: absolute;
@@ -474,13 +441,20 @@
   border-radius: 5px;
   z-index: 9;
 }
-.wp_ulike_likers_wrapper:empty {
-  display: none;
+.wp_ulike_likers_wrapper:not(.wp_ulike_display_inline):after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 15px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid #eeeeee;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
 }
 .wp_ulike_likers_wrapper .wp-ulike-likers-list, .wp_ulike_likers_wrapper .tiles {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-wrap: wrap;
   margin: 0;
   padding: 0;
@@ -492,29 +466,13 @@
 }
 .wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .wp-ulike-likers-list li a > img, .wp_ulike_likers_wrapper .tiles .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .tiles li a > img {
   border-radius: 5px;
-  transition: opacity 1500ms cubic-bezier(0.19, 1, 0.22, 1);
   display: block;
   border: 0;
-  opacity: 0;
   box-shadow: none;
 }
-.wp_ulike_likers_wrapper:after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 15px;
-  width: 0;
-  height: 0;
-  border-top: 8px solid #eeeeee;
-  border-right: 8px solid transparent;
-  border-left: 8px solid transparent;
-}
 
-.wpulike:hover .wp_ulike_likers_wrapper {
-  transform: translateY(-50px);
-  opacity: 1;
-}
-.wpulike:hover .wp_ulike_likers_wrapper .wp-ulike-liker a > img, .wpulike:hover .wp_ulike_likers_wrapper .tiles a > img {
+.wpulike:hover .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
+  transform: translateY(-40px);
   opacity: 1;
 }
 
@@ -679,11 +637,11 @@
   border-color: #bdbdbd #bdbdbd transparent transparent;
 }
 
-.rtl .wp_ulike_likers_wrapper {
+.rtl .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
   left: auto;
   right: 0;
 }
-.rtl .wp_ulike_likers_wrapper:after {
+.rtl .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline):after {
   left: auto;
   right: 15px;
 }

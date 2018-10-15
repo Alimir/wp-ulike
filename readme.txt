@@ -3,8 +3,8 @@ Contributors: alimir
 Donate link: https://m.do.co/c/13ad5bc24738
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
-Requires at least: 3.5
-Tested up to: 4.9.7
+Requires at least: 3.5.1
+Tested up to: 4.9.8
 Stable tag: 3.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -173,6 +173,15 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 3.5.1 =
+* Fixed: The buddypress notifications issue.
+* Added: A new option to disable popover on likers box and make it inline display.
+* Added: Some changes to improve statistics page and make it more faster.
+* Added: some improvements on ajax process of logs page.
+* Replaced: The <a> tag with <button> for accessible with the keyboard.
+* Fixed: An issue with button display on buddypress comments.
+* Fixed: Some styling issues.
 
 = 3.5.0 =
 * Added: New statistics system powered by vueJS.
@@ -484,6 +493,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * The initial version
 
 == Upgrade Notice ==
+
+= 3.5.1 =
+Attention Please! In this version, we have made some changes on plugin scripts! So, please clear your server cache after the plugin update.
 
 = 3.4 =
 Attention Please! In this release, many changes have been made to the structure of the styles, and may result in the loss of your past custom styles. These changes are surely designed to improve the performance of the plugin, so it's best to update your system with these changes and then clear your server cache.

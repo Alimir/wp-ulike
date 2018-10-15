@@ -317,8 +317,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
-							'label'         => __('Show Liked Users Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
+						),
+						'disable_likers_pophover' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
 						'users_liked_box_avatar_size' => array(
@@ -402,8 +408,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
-							'label'         => __('Show Liked Users Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
+						),
+						'disable_likers_pophover' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
 						'users_liked_box_avatar_size' => array(
@@ -493,8 +505,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
-							'label'         => __('Show Liked Users Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
+						),
+						'disable_likers_pophover' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
 						'users_liked_box_avatar_size' => array(
@@ -603,8 +621,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
-							'label'         => __('Show Liked Users Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
+						),
+						'disable_likers_pophover' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
 						'users_liked_box_avatar_size' => array(
@@ -1048,7 +1072,7 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
  * @return          String
  */
 if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
-	function wp_ulike_bbp_format_buddypress_notifications($action, $item_id, $secondary_item_id, $total_items, $format = 'string') {
+	function wp_ulike_bbp_format_buddypress_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
 
 		if ( ! defined( 'BP_VERSION' ) ) {
 			return;
@@ -1524,7 +1548,8 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 	?>
 		<div class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-				<a 	data-ulike-id="<?php echo $ID; ?>"
+				<button type="button"
+					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
@@ -1533,7 +1558,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 							echo '<span>' . $button_text . '</span>';
 						}
 					?>
-				</a>
+				</button>
 				<?php echo $counter; ?>
 			</div>
 		<?php
@@ -1563,7 +1588,8 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 	?>
 		<div class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-				<a  data-ulike-id="<?php echo $ID; ?>"
+				<button type="button"
+					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
@@ -1572,7 +1598,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 							echo '<span>' . $button_text . '</span>';
 						}
 					?>
-				</a>
+				</button>
 				<?php echo $counter; ?>
 			</div>
 		<?php
