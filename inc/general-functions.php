@@ -317,8 +317,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
-							'label'         => __('Show Liked Users Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
+						),
+						'disable_likers_pophover' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Disable Pophover In Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
 						'users_liked_box_avatar_size' => array(
@@ -402,8 +408,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
-							'label'         => __('Show Liked Users Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
+						),
+						'disable_likers_pophover' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Disable Pophover In Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
 						'users_liked_box_avatar_size' => array(
@@ -493,8 +505,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
-							'label'         => __('Show Liked Users Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
+						),
+						'disable_likers_pophover' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Disable Pophover In Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
 						'users_liked_box_avatar_size' => array(
@@ -603,8 +621,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'users_liked_box' => array(
 							'type'          => 'checkbox',
 							'default'       => 1,
-							'label'         => __('Show Liked Users Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
+						),
+						'disable_likers_pophover' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Disable Pophover In Likers Box', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
 							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
 						),
 						'users_liked_box_avatar_size' => array(

@@ -102,6 +102,38 @@ if( ! function_exists( 'wp_ulike_generate_microdata' ) ){
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_generate_microdata' );
 }
 
+
+/**
+ * Display inline likers box without AJAX request
+ *
+ * @author       	Alimir
+ * @since           3.5.1
+ * @return          String
+ */
+if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
+	function wp_ulike_display_inline_likers_template( $args ){
+		// Get settings for current type
+		$get_settings     = wp_ulike_get_post_settings_by_type(  $args['type'], $args['ID'] );
+		// If method not exist, then return error message
+		if( empty( $get_settings ) ) {
+			return;
+		}
+		// Extract settings array
+		extract( $get_settings );
+		// Check pophover activation
+		$disable_pophover = wp_ulike_get_setting( $setting_key, 'disable_likers_pophover', 0 );
+		// Display likers box
+		echo $disable_pophover ? sprintf(
+			'<div class="wp_ulike_likers_wrapper wp_ulike_display_inline">%s</div>',
+			wp_ulike_get_likers_template( $table_name, $column_name, $args['ID'], $setting_key )
+		) : '';
+	}
+	add_action( 'wp_ulike_inside_template', 'wp_ulike_display_inline_likers_template' );
+}
+
+
+
+
 /*******************************************************
   Posts
 *******************************************************/

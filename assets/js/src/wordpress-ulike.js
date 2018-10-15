@@ -117,16 +117,16 @@
                     success   : function( response ){
                         // If the likers container is not exist, we've to add it.
                         if( !this.likersElement.length ) {
-                            this.likersElement = $( '<div>', { class: 'wp_ulike_likers_wrapper' } ).appendTo( this.$element );
+                            this.likersElement = $( '<div>', { class: response.data.class } ).appendTo( this.$element );
                         }
                         // Remove progress status class
                         this.generalElement.removeClass( 'wp_ulike_is_getting_likers_list' );
                         if( response.success ) {
                             // Modify likers box innerHTML
                             if( typeof response.data !== 'undefined' ){
-                                this.likersElement.html( response.data );
+                                this.likersElement.html( response.data.template );
                             } else {
-                                this.likersElement.empty();
+                                this.likersElement.remove();
                             }
 
                         }
