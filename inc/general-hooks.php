@@ -290,7 +290,14 @@ if( defined( 'BP_VERSION' ) ) {
 	        	add_action( 'bp_activity_entry_content', 'wp_ulike_put_buddypress' );
 	        	// Add wp ulike in buddpress comments
 				if( $display_comments == '1' ) {
-					add_filter( 'bp_activity_comment_content', function( $content ) { return $content . wp_ulike_buddypress('put'); } );
+					add_filter( 'bp_get_activity_content', function( $content ) {
+						// We've changed thhe 'bp_activity_comment_content' hook for making some ajax issues on inserting activity
+						// If doing ajax, do not update it value
+						// if( wp_doing_ajax() ) {
+						// 	return $content;
+						// }
+						return $content . wp_ulike_buddypress('put');
+					} );
 				}
 	        }
 		}
