@@ -1231,18 +1231,20 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
  * @since           2.0
  * @return			String
  */
-function wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $limit_num = 10 ){
-	// Global wordpress database object
-	global $wpdb;
-	// Get likers list
-	return $wpdb->get_results( "SELECT user_id
-					FROM   ".$wpdb->prefix."$table_name
-					WHERE  $column_name = '$post_ID'
-					       AND status   = 'like'
-					       AND user_id BETWEEN 1 AND 999999
-					GROUP  BY user_id
-					LIMIT  $limit_num"
-				);
+if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
+	function wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $limit_num = 10 ){
+		// Global wordpress database object
+		global $wpdb;
+		// Get likers list
+		return $wpdb->get_results( "SELECT user_id
+						FROM   ".$wpdb->prefix."$table_name
+						WHERE  $column_name = '$post_ID'
+						       AND status   = 'like'
+						       AND user_id BETWEEN 1 AND 999999
+						GROUP  BY user_id
+						LIMIT  $limit_num"
+					);
+	}
 }
 
 
@@ -1257,55 +1259,57 @@ function wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID,
  * @since           2.0
  * @return			String
  */
-function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key ){
+if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
+	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key ){
 
-	// Get user's limit number value
-	$limit_num  = wp_ulike_get_setting( $setting_key, 'number_of_users', 10 );
-	// Get likers list
-	$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $limit_num );
-	// Bulk user list
-	$users_list = '';
+		// Get user's limit number value
+		$limit_num  = wp_ulike_get_setting( $setting_key, 'number_of_users', 10 );
+		// Get likers list
+		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $limit_num );
+		// Bulk user list
+		$users_list = '';
 
-	if( ! empty( $get_users ) ) {
+		if( ! empty( $get_users ) ) {
 
-		// Get likers html template
-		$get_template 	= wp_ulike_get_setting( $setting_key, 'users_liked_box_template', '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' );
+			// Get likers html template
+			$get_template 	= wp_ulike_get_setting( $setting_key, 'users_liked_box_template', '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' );
 
-		$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
+			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
-		foreach ( $get_users as $get_user ) {
-			$user_info 		= get_userdata( $get_user->user_id );
-			$out_template 	= $inner_template;
-			if ( $user_info ):
-				if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
-					$avatar_size 	= wp_ulike_get_setting( $setting_key, 'users_liked_box_avatar_size' );
-					$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
-					$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
-				}
-				if( strpos( $out_template, '%USER_NAME%' ) !== false) {
-					$USER_NAME 		= $user_info->display_name;
-					$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
-				}
-				if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
-					global $ultimatemember;
-					um_fetch_user( $user_info->ID );
-					$UM_PROFILE_URL = um_user_profile_url();
-					$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
-				}
-				if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
-					$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
-					$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
-				}
-				$users_list .= $out_template;
-			endif;
+			foreach ( $get_users as $get_user ) {
+				$user_info 		= get_userdata( $get_user->user_id );
+				$out_template 	= $inner_template;
+				if ( $user_info ):
+					if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
+						$avatar_size 	= wp_ulike_get_setting( $setting_key, 'users_liked_box_avatar_size' );
+						$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
+						$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
+					}
+					if( strpos( $out_template, '%USER_NAME%' ) !== false) {
+						$USER_NAME 		= $user_info->display_name;
+						$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
+					}
+					if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
+						global $ultimatemember;
+						um_fetch_user( $user_info->ID );
+						$UM_PROFILE_URL = um_user_profile_url();
+						$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
+					}
+					if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
+						$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
+						$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
+					}
+					$users_list .= $out_template;
+				endif;
+			}
+
+			if( ! empty( $users_list ) ) {
+				return wp_ulike_put_template_between( $get_template, $users_list, "%START_WHILE%", "%END_WHILE%" );
+			}
 		}
 
-		if( ! empty( $users_list ) ) {
-			return wp_ulike_put_template_between( $get_template, $users_list, "%START_WHILE%", "%END_WHILE%" );
-		}
+		return NULL;
 	}
-
-	return NULL;
 }
 
 /**
@@ -1318,16 +1322,18 @@ function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $set
  * @since           2.0
  * @return			String
  */
-function wp_ulike_get_template_between( $string, $start, $end ){
-	$string 	= " ".$string;
-	$ini 		= strpos($string,$start);
-	if ( $ini == 0 ){
-		return "";
-	}
-	$ini 		+= strlen($start);
-	$len 		= strpos($string,$end,$ini) - $ini;
+if( ! function_exists( 'wp_ulike_get_template_between' ) ){
+	function wp_ulike_get_template_between( $string, $start, $end ){
+		$string 	= " ".$string;
+		$ini 		= strpos($string,$start);
+		if ( $ini == 0 ){
+			return "";
+		}
+		$ini 		+= strlen($start);
+		$len 		= strpos($string,$end,$ini) - $ini;
 
-	return substr( $string, $ini, $len );
+		return substr( $string, $ini, $len );
+	}
 }
 
 /**
@@ -1341,22 +1347,24 @@ function wp_ulike_get_template_between( $string, $start, $end ){
  * @since           2.0
  * @return			String
  */
-function wp_ulike_put_template_between( $string, $inner_string, $start, $end ){
-	$string 	= " ".$string;
-	$ini 		= strpos($string,$start);
-	if ($ini == 0){
-		return "";
+if( ! function_exists( 'wp_ulike_put_template_between' ) ){
+	function wp_ulike_put_template_between( $string, $inner_string, $start, $end ){
+		$string 	= " ".$string;
+		$ini 		= strpos($string,$start);
+		if ($ini == 0){
+			return "";
+		}
+
+		$ini 		+= strlen($start);
+		$len		= strpos($string,$end,$ini) - $ini;
+		$newstr 	= substr_replace($string,$inner_string,$ini,$len);
+
+		return str_replace(
+			array( "%START_WHILE%", "%END_WHILE%" ),
+			array( "", "" ),
+			$newstr
+		);
 	}
-
-	$ini 		+= strlen($start);
-	$len		= strpos($string,$end,$ini) - $ini;
-	$newstr 	= substr_replace($string,$inner_string,$ini,$len);
-
-	return str_replace(
-		array( "%START_WHILE%", "%END_WHILE%" ),
-		array( "", "" ),
-		$newstr
-	);
 }
 
 /**
@@ -1513,18 +1521,20 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
  * @since           3.4
  * @return          String
  */
-function wp_ulike_generate_user_id( $user_ip ) {
+if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
+	function wp_ulike_generate_user_id( $user_ip ) {
 
-	if( filter_var( $user_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
-	    return ip2long( $user_ip );
-	} else {
-	    $binary_val = '';
-	    foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
-	        $binary_val .= decbin( $byte );
-	    }
-	    return base_convert( ltrim( $binary_val, '0' ), 2, 10 );
+		if( filter_var( $user_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+		    return ip2long( $user_ip );
+		} else {
+		    $binary_val = '';
+		    foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
+		        $binary_val .= decbin( $byte );
+		    }
+		    return base_convert( ltrim( $binary_val, '0' ), 2, 10 );
+		}
+
 	}
-
 }
 
 /*******************************************************
