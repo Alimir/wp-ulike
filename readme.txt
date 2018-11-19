@@ -3,7 +3,7 @@ Contributors: alimir
 Donate link: https://m.do.co/c/13ad5bc24738
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
-Requires at least: 3.5.1
+Requires at least: 3.5.2
 Tested up to: 4.9.8
 Stable tag: 3.5.0
 License: GPLv2 or later
@@ -174,6 +174,12 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 == Changelog ==
 
+= 3.5.2 =
+* Fixed: An important issue with buddypress comments.
+* Added: Class name issue on likers box.
+* Upgraded: "WordpressUlike" js functionality.
+* Added: some improvements on general functions.
+
 = 3.5.1 =
 * Fixed: The buddypress notifications issue.
 * Added: A new option to disable popover on likers box and make it inline display.
@@ -191,7 +197,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Fixed: Some issues in button styles.
 * Fixed: Some issues in ulike js functionality.
 * Fixed: An issue with supporting ulike in ultimatememeber.
-* Fixed: Colorpicker issue in admin settings by replacing the wpColorPicker with spectrum plugin. 
+* Fixed: Colorpicker issue in admin settings by replacing the wpColorPicker with spectrum plugin.
 
 = 3.4 =
 * Added: A new style for likers box with pophover effect.
@@ -493,6 +499,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * The initial version
 
 == Upgrade Notice ==
+
+= 3.5.2 =
+Attention Please! In this version, we have made some changes on plugin scripts! So, please clear your server cache after the plugin update.
 
 = 3.5.1 =
 Attention Please! In this version, we have made some changes on plugin scripts! So, please clear your server cache after the plugin update.
