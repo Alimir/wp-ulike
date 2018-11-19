@@ -139,16 +139,11 @@ function wp_ulike_get_likers(){
 		wp_send_json_error( __( 'Notice: The likers box is not activated!', WP_ULIKE_SLUG ) );
 	}
 
-	if( NULL !== ( $users_list = wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key ) ) ) {
-		// Add specific class name with popover checkup
-		$class_names = wp_ulike_get_setting( $setting_key, 'disable_likers_pophover', 0 ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
-		// Return the list of users
-		wp_send_json_success( array( 'template' => $users_list, 'class' => $class_names ) );
-	}
+	// Add specific class name with popover checkup
+	$class_names = wp_ulike_get_setting( $setting_key, 'disable_likers_pophover', 0 ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
+	$users_list  = wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key );
 
-	// Send blank success when the users list are empty
-	wp_send_json_success();
-
+	wp_send_json_success( array( 'template' => $users_list, 'class' => $class_names ) );
 }
 //	wp_ajax hooks for the custom AJAX requests
 add_action( 'wp_ajax_wp_ulike_get_likers'		 , 'wp_ulike_get_likers' );
