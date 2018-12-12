@@ -430,7 +430,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
 	                        `post_id` bigint(20) NOT NULL,
 	                        `date_time` datetime NOT NULL,
-	                        `ip` varchar(30) NOT NULL,
+	                        `ip` varchar(60) NOT NULL,
 	                        `user_id` varchar(30) NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
@@ -449,7 +449,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
 	                        `comment_id` bigint(20) NOT NULL,
 	                        `date_time` datetime NOT NULL,
-	                        `ip` varchar(30) NOT NULL,
+	                        `ip` varchar(60) NOT NULL,
 	                        `user_id` varchar(30) NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
@@ -468,7 +468,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
 	                        `activity_id` bigint(20) NOT NULL,
 	                        `date_time` datetime NOT NULL,
-	                        `ip` varchar(30) NOT NULL,
+	                        `ip` varchar(60) NOT NULL,
 	                        `user_id` varchar(30) NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
@@ -487,7 +487,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
 	                        `topic_id` bigint(20) NOT NULL,
 	                        `date_time` datetime NOT NULL,
-	                        `ip` varchar(30) NOT NULL,
+	                        `ip` varchar(60) NOT NULL,
 	                        `user_id` varchar(30) NOT NULL,
 	                        `status` varchar(15) NOT NULL,
 	                        PRIMARY KEY (`id`)
