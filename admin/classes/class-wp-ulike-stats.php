@@ -182,7 +182,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 					count(date_time) AS counts
 					FROM %s
 					GROUP BY labels
-					DESC LIMIT %d",
+					ASC LIMIT %d",
 					$this->wpdb->prefix . $table,
 					30
 				);
