@@ -35,7 +35,7 @@
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		);
 define( 'WP_ULIKE_VERSION'      , '3.5.2' 						);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					);
-define( 'WP_ULIKE_DB_VERSION'   , '1.5' 						);
+define( 'WP_ULIKE_DB_VERSION'   , '1.6' 						);
 
 define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	);
 define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	);
@@ -440,7 +440,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                dbDelta( $sql );
 	            } else {
 	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $posts_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
+					$wpdb->query( "ALTER TABLE $posts_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL, CHANGE `ip` `ip` VARCHAR(60) NOT NULL" );
 	            }
 
 	            $comments_table = $wpdb->prefix . "ulike_comments";
@@ -459,7 +459,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                dbDelta( $sql );
 	            } else {
 	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $comments_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
+	            	$wpdb->query( "ALTER TABLE $comments_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL, CHANGE `ip` `ip` VARCHAR(60) NOT NULL" );
 	            }
 
 	            $activities_table = $wpdb->prefix . "ulike_activities";
@@ -478,7 +478,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                dbDelta( $sql );
 	            } else {
 	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $activities_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
+	            	$wpdb->query( "ALTER TABLE $activities_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL, CHANGE `ip` `ip` VARCHAR(60) NOT NULL" );
 	            }
 
 	            $forums_table = $wpdb->prefix . "ulike_forums";
@@ -497,7 +497,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	                dbDelta( $sql );
 	            } else {
 	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $forums_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
+	            	$wpdb->query( "ALTER TABLE $forums_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL, CHANGE `ip` `ip` VARCHAR(60) NOT NULL" );
 	            }
 
 				update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
