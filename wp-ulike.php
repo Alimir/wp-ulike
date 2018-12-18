@@ -243,7 +243,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 
 	        // Dashboard and Administrative Functionality
 	        if ( is_admin() ) {
-	            // Load AJAX spesific codes on demand
+	            // Load AJAX specific codes on demand
 	            if ( defined('DOING_AJAX') && DOING_AJAX ){
 					include( WP_ULIKE_INC_DIR . '/frontend-ajax.php' );
 					include( WP_ULIKE_ADMIN_DIR . '/admin-ajax.php'  );
@@ -251,7 +251,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 		       	// Add Settings Page
 		        $this->settings();
 
-	            // Load admin spesific codes
+	            // Load admin specific codes
 	            include( WP_ULIKE_ADMIN_DIR . '/index.php' );
 	        }
 
