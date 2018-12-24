@@ -32,7 +32,7 @@
     this._defaults = defaults;
     this._name = pluginName;
 
-    this._refresh = false;
+    this._refreshTheLikers = false;
 
     // Create main selectors
     this.buttonElement = this.$element.find(this.settings.buttonSelector);
@@ -80,8 +80,10 @@
     _initLike: function(event) {
       // Prevents further propagation of the current event in the capturing and bubbling phases
       event.stopPropagation();
+      // check for same buttons
+      this._updateSameButtons();
       // Disable button
-      $(event.currentTarget).prop("disabled", true);
+      this.buttonElement.prop("disabled", true);
       // Manipulations
       $document.trigger("WordpressUlikeLoading", this.element);
       // Add progress class
@@ -105,7 +107,7 @@
             this._sendNotification("error", response.data);
           }
           // Re-enable button
-          $(event.currentTarget).prop("disabled", false);
+          this.buttonElement.prop("disabled", false);
           // Add new trigger when process finished
           $document.trigger("WordpressUlikeUpdated", this.element);
         }.bind(this)
@@ -135,7 +137,7 @@
             response.data.btnText,
             4
           );
-          this._refresh = true;
+          this._refreshTheLikers = true;
           break;
         case 2 /* Change the status of 'liked' to 'unliked' */:
           this.buttonElement.attr("data-ulike-status", 3);
@@ -150,7 +152,7 @@
             response.data.btnText,
             3
           );
-          this._refresh = true;
+          this._refreshTheLikers = true;
           break;
         case 3 /* Change the status of 'unliked' to 'liked' */:
           this.buttonElement.attr("data-ulike-status", 2);
@@ -165,7 +167,7 @@
             response.data.btnText,
             2
           );
-          this._refresh = true;
+          this._refreshTheLikers = true;
           break;
         case 4 /* Just print the log-in warning message */:
           this._controlActions(
@@ -180,7 +182,7 @@
             .addClass("wp_ulike_click_is_disabled");
           break;
         default:
-          /* Just print the permission faild message */
+          /* Just print the permission failed message */
           this._controlActions(
             "warning",
             response.data.message,
@@ -190,7 +192,7 @@
       }
 
       // Refresh likers box on data update
-      if (this._refresh) {
+      if (this._refreshTheLikers) {
         this._updateLikers();
       }
     },
@@ -200,9 +202,9 @@
      */
     _updateLikers: function() {
       // Get likers box container element
-      this.likersElement = this.$element.find(this.settings.likersSelector);
+      this.likersElement = this._getLikersElement();
       // Make a request to generate or refresh the likers box
-      if (!this.likersElement.length || this._refresh) {
+      if (!this.likersElement.length || this._refreshTheLikers) {
         // Add progress status class
         this.generalElement.addClass("wp_ulike_is_getting_likers_list");
         // Start ajax process
@@ -212,7 +214,7 @@
             id: this.settings.ID,
             nonce: this.settings.nonce,
             type: this.settings.type,
-            refresh: this._refresh ? 1 : 0
+            refresh: this._refreshTheLikers ? 1 : 0
           },
           function(response) {
             // Remove progress status class
@@ -232,9 +234,44 @@
                 this.likersElement.hide();
               }
             }
-            this._refresh = false;
+            this._refreshTheLikers = false;
           }.bind(this)
         );
+      }
+    },
+
+    /**
+     * Update the elements of same buttons at the same time
+     */
+    _updateSameButtons: function() {
+      // Get buttons with same ID and type
+      this.sameButtons = $document.find(
+        "[data-ulike-id='" +
+          this.settings.ID +
+          "'][data-ulike-type='" +
+          this.settings.type +
+          "']"
+      );
+      // Update general elements
+      if (this.sameButtons.length > 1) {
+        this.buttonElement = this.sameButtons;
+        this.generalElement = this.buttonElement.closest(
+          this.settings.generalSelector
+        );
+        this.counterElement = this.generalElement.find(
+          this.settings.counterSelector
+        );
+      }
+    },
+
+    /**
+     * Get likers wrapper element
+     */
+    _getLikersElement: function() {
+      if (this.generalElement.length > 1) {
+        return this.generalElement.next(this.settings.likersSelector);
+      } else {
+        return this.$element.find(this.settings.likersSelector);
       }
     },
 
