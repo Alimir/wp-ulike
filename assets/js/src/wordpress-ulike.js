@@ -244,13 +244,9 @@
      * Update the elements of same buttons at the same time
      */
     _updateSameButtons: function() {
-      // Get buttons with same ID and type
+      // Get buttons with same unique class names
       this.sameButtons = $document.find(
-        "[data-ulike-id='" +
-          this.settings.ID +
-          "'][data-ulike-type='" +
-          this.settings.type +
-          "']"
+        ".wp_" + this.settings.type.toLowerCase() + "_" + this.settings.ID
       );
       // Update general elements
       if (this.sameButtons.length > 1) {
