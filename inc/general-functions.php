@@ -1094,6 +1094,28 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
 	}
 }
 
+
+/**
+ * Check the buddypress notification component existence
+ *
+ * @author       	Alimir
+ * @since           2.5.1
+ * @return          integer
+ */
+if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
+	function wp_ulike_bbp_is_component_exist( $component_name ){
+		global $wpdb;
+		$bp = buddypress();
+
+		return $wpdb->get_var( 
+				$wpdb->prepare( 
+					"SELECT COUNT(*) FROM {$bp->notifications->table_name} WHERE component_action = %s",
+					$component_name
+				) 
+			);
+	}
+}
+
 /*******************************************************
   bbPress
 *******************************************************/

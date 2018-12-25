@@ -470,68 +470,121 @@ if( defined( 'BP_VERSION' ) ) {
 		add_action( 'wp_ulike_after_process', 'wp_ulike_add_bp_notifications', 10, 5 );
 	}
 
-	/**
-	 * Add custom format for 'wp_ulike' notifications.
-	 *
-	 * @author       	Alimir
-	 * @since           2.5
-	 * @return          String
-	 */
 	if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
-		function wp_ulike_format_buddypress_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
+		/**
+		 * Format notifications related to activity.
+		 *
+		 * @param string $content               Component action. Deprecated. Do not do checks against this! Use
+		 *                                      the 6th parameter instead - $component_action_name.
+		 * @param int    $item_id               Notification item ID.
+		 * @param int    $secondary_item_id     Notification secondary item ID.
+		 * @param int    $total_items     		Number of notifications with the same action.
+		 * @param string $format                Format of return. Either 'string' or 'object'.
+		 * @param string $action 				Canonical notification action.
+		 * @param string $component        		Notification component ID.
+		 * @param int    $id                    Notification ID.
+		 * @return string $return Formatted notification.
+		 */
+		function wp_ulike_format_buddypress_notifications( $content, $item_id, $secondary_item_id, $total_items, $format = 'string', $action, $component, $id ) {
 			global $wp_filter,$wp_version;
-			// Return value
-			$return = $action;
 
 			if ( strpos( $action, 'wp_ulike_' ) !== false ) {
-				$custom_link	= '';
 				//Extracting ulike type from the action value.
 				preg_match('/wp_ulike_(.*?)_action/', $action, $type);
 			    //Extracting user id from old action name values.
 			    preg_match('/action_([0-9]+)/', $action, $user_ID);
 				//Get user info
 				$user_ID     = isset( $user_ID[1] ) ? $user_ID[1] : $secondary_item_id;
-				$user_info   = get_userdata( $user_ID );
-				$custom_text = sprintf( __('You have a new like %s', WP_ULIKE_SLUG ), is_object( $user_info ) ? __( 'from' , WP_ULIKE_SLUG ) . ' ' . $user_info->display_name : '' );
+				$action_type = __( 'posts' , WP_ULIKE_SLUG );
+				$custom_link = '';
 
-				//checking the ulike types
-				if($type[1] == 'liked'){
-					$custom_link  	= get_permalink($item_id);
+				// Check the the ulike types
+				switch ( $type[1] ) {
+					case 'commentliked':
+						$custom_link = get_comment_link( $item_id );
+						$action_type = __( 'comments' , WP_ULIKE_SLUG );
+						break;
+
+					case 'activityliked':
+						$custom_link = bp_activity_get_permalink( $item_id );
+						$action_type = __( 'activities' , WP_ULIKE_SLUG );
+						break;
+
+					default:
+						$custom_link = get_permalink( $item_id );
+						break;
 				}
-				else if($type[1] == 'topicliked'){
-					$custom_link  	= get_permalink($item_id);
+
+				// Setup the output strings
+				if ( (int) $total_items > 1 ) {
+					$custom_text = sprintf( __( 'You have %d new %s likes', WP_ULIKE_SLUG ), (int) $total_items, $action_type );
+					$custom_link = add_query_arg( 'type', $action, bp_get_notifications_permalink() );
+				} else {
+					$user_fullname = bp_core_get_user_displayname( $user_ID );
+					$custom_text   = sprintf( __( '%s liked one of your %s', WP_ULIKE_SLUG ), $user_fullname, $action_type );
+					$custom_link   = add_query_arg( 'rid', (int) $id, $custom_link );
 				}
-				else if($type[1] == 'commentliked'){
-					$custom_link  	= get_comment_link( $item_id );
-				}
-				else if($type[1] == 'activityliked'){
-					$custom_link  	= bp_activity_get_permalink( $item_id );
-				}
+
 				// WordPress Toolbar
 				if ( 'string' === $format ) {
-					$return = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . esc_attr( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_text, $custom_link );
+					$content = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . esc_attr( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_link, (int) $total_items, $item_id, $user_ID );
 				// Deprecated BuddyBar
 				} else {
-					$return = apply_filters( 'wp_ulike_bp_notifications_template', array(
+					$content = apply_filters( 'wp_ulike_bp_notifications_template', array(
 						'text' => $custom_text,
 						'link' => $custom_link
-					), $custom_link, (int) $total_items, $custom_text, $custom_text );
+					), $custom_link, (int) $total_items, $item_id, $user_ID );
 				}
+
 				// global wp_filter to call bbPress wrapper function
 				if( isset( $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'] ) ) {
 					if( version_compare( $wp_version, '4.7', '>=' ) ) {
-						// https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
 						$wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
 					} else {
 						$wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
 					}
 				}
+
+				return $content;
 			}
 
-			return $return;
+			return $content;
 		}
-		add_filter( 'bp_notifications_get_notifications_for_user', 'wp_ulike_format_buddypress_notifications', 5, 5 );
+		add_filter( 'bp_notifications_get_notifications_for_user', 'wp_ulike_format_buddypress_notifications', 25, 8 );
 	}
+
+	function wp_ulike_notification_filters(){
+		$notifications = array(
+			array(
+				'id'       => 'wp_ulike_activityliked_action',
+				'label'    => __( 'New activity liked', WP_ULIKE_SLUG ),
+				'position' => 340,
+			),
+			array(
+				'id'       => 'wp_ulike_commentliked_action',
+				'label'    => __( 'New comment liked', WP_ULIKE_SLUG ),
+				'position' => 345,
+			),
+			array(
+				'id'       => 'wp_ulike_liked_action',
+				'label'    => __( 'New post liked', WP_ULIKE_SLUG ),
+				'position' => 355,
+			),
+			array(
+				'id'       => 'wp_ulike_topicliked_action',
+				'label'    => __( 'New topic liked', WP_ULIKE_SLUG ),
+				'position' => 365,
+			)
+		);
+
+		foreach ( $notifications as $notification ) {
+			if( ! wp_ulike_bbp_is_component_exist( $notification['id'] ) ){
+				continue;
+			}
+			bp_nouveau_notifications_register_filter( $notification );
+		}
+	}
+	add_action( 'bp_nouveau_notifications_init_filters', 'wp_ulike_notification_filters' );
 
 }
 
