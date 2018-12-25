@@ -11,7 +11,7 @@ if ( ! defined('ABSPATH') ) {
 
 if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 	/**
-	 *  Class to load and print master slider panel scripts
+	 *  Class to register admin menus
 	 */
 	class wp_ulike_admin_pages {
 
@@ -91,7 +91,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 				$hook_suffix = add_submenu_page( 
 					$parent_slug,
 					$title,
-					$title, 
+					apply_filters( 'wp_ulike_admin_sub_menu_title', $title, $menu_slug ), 
 					$capability,
 					$menu_slug,
 					array( &$this, 'load_template' )
@@ -115,13 +115,11 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 		public function menu_badge(){
 			global $menu;
 
-			if( 0 !== ( $new_votes = wp_ulike_get_number_of_new_likes() ) ) {
-				$menu[313][0] .= sprintf( "<span class='update-plugins count-1'><span class='update-count'>%s</span></span>", 
-					number_format_i18n( $new_votes ) 
-				);
+			if( 0 !== ( $badge_count = apply_filters( 'wp_ulike_menu_badge_count', 0 ) ) ) {
+				$menu[313][0] .= wp_ulike_badge_count_format( $badge_count );
 			}
 		}
-
+	
 		/**
 		 * Add screen options
 		 *

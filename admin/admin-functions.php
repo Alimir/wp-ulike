@@ -112,3 +112,16 @@ function wp_ulike_get_number_of_new_likes() {
 
 	return empty( $result ) ? 0 : $result;
 }
+
+
+/**
+ * Get badge counter in html format
+ *
+ * @param integer $number
+ * @return string
+ */
+function wp_ulike_badge_count_format( $number ){
+	return sprintf( ' <span class="update-plugins count-%1$s"><span class="update-count">%1$s</span></span>', 
+		number_format_i18n( $number ) 
+	);
+}

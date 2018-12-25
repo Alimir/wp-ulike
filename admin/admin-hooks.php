@@ -19,10 +19,10 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function wp_ulike_copyright( $text ) {
 	if( isset($_GET["page"]) && stripos( $_GET["page"], "wp-ulike") !== false ) {
-		return sprintf( 
-			__( ' Thank you for choosing <a href="%s" title="Wordpress ULike" target="_blank">WP ULike</a>. Created by <a href="%s" title="Wordpress ULike" target="_blank">Ali Mirzaei</a>', WP_ULIKE_SLUG ), 
-			'http://wordpress.org/plugins/wp-ulike/', 
-			'https://ir.linkedin.com/in/alimirir' 
+		return sprintf(
+			__( ' Thank you for choosing <a href="%s" title="Wordpress ULike" target="_blank">WP ULike</a>. Created by <a href="%s" title="Wordpress ULike" target="_blank">Ali Mirzaei</a>', WP_ULIKE_SLUG ),
+			'http://wordpress.org/plugins/wp-ulike/',
+			'https://ir.linkedin.com/in/alimirir'
 		);
 	}
 
@@ -116,3 +116,31 @@ function wp_ulike_admin_notice() {
 	<?php
 }
 add_action( 'admin_notices', 'wp_ulike_admin_notice', 25 );
+
+/**
+ *  Undocumented function
+ *
+ * @param integer $count
+ * @return integer
+ */
+function wp_ulike_update_menu_badge_count( $count ) {
+	if( 0 !== $count_new_likes = wp_ulike_get_number_of_new_likes() ){
+		$count += $count_new_likes;
+	}
+	return $count;
+}
+add_filter( 'wp_ulike_menu_badge_count', 'wp_ulike_update_menu_badge_count' );
+
+/**
+ *  Undocumented function
+ *
+ * @param integer $count
+ * @return integer
+ */
+function wp_ulike_update_admin_menu_title( $title, $menu_slug ) {
+	if( ( 0 !== $count_new_likes = wp_ulike_get_number_of_new_likes() ) && $menu_slug === 'wp-ulike-statistics' ){
+		$title .=  wp_ulike_badge_count_format( $count_new_likes );
+	}
+	return $title;
+}
+add_filter( 'wp_ulike_admin_sub_menu_title', 'wp_ulike_update_admin_menu_title', 10, 2 );
