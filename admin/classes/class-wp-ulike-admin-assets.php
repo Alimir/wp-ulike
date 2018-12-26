@@ -11,7 +11,7 @@ if ( ! defined('ABSPATH') ) {
 
 if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 	/**
-	 *  Class to load and print master slider panel scripts
+	 *  Class to load and print the admin panel scripts
 	 */
 	class wp_ulike_admin_assets {
 
