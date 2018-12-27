@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @author       	Alimir
  * @since           2.1
- * @return			Integer
+ * @return			integer
  */
 function wp_ulike_logs_return_per_page(){
 	$user     = get_current_user_id();
@@ -26,11 +26,12 @@ function wp_ulike_logs_return_per_page(){
 }
 
 /**
- * Get paginated logs datasets
+ * Get paginated logs dataset
  *
- * @author       	Alimir
- * @since           3.5
- * @return			Array
+ * @since 3.5
+ * @param string $table
+ * @param string $type
+ * @return array
  */
 function wp_ulike_get_paginated_logs( $table, $type ){
 	global $wpdb;
@@ -88,7 +89,7 @@ function wp_ulike_get_paginated_logs( $table, $type ){
  *
  * @author       	Alimir
  * @since           2.4.2
- * @return			String
+ * @return			string
  */
 function wp_ulike_get_number_of_new_likes() {
 	global $wpdb;
