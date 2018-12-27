@@ -331,6 +331,11 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$activity_action    = ! empty( $activity->content ) ? $activity->content : $activity->action;
 				$post_count         = $activity->meta_value;
 
+				// Skip empty activities
+				if( empty( $activity_action ) ){
+					continue;
+				}
+
 				$result .= $before_item;
 				$result .= '<a href="' . $activity_permalink . '" rel="nofollow">';
 				$result .= wp_trim_words( $activity_action, $num_words = $trim, $more = null );
