@@ -309,18 +309,14 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * Top Likers Summary
 		 *
 		 * @author       	Alimir
-		 * @since           2.3
 		 * @since           3.0
 		 * @return			Array
 		 */
 		public function get_top_likers(){
-
-			if ( false === ( $result = get_transient( 'wp_ulike_get_top_likers' ) ) ) {
-				// Make new sql request
-				$query  = sprintf( '
-					SELECT T.user_id, SUM(T.CountUser) AS SumUser, T.ip
-					FROM(
-					SELECT user_id, count(user_id) AS CountUser, ip
+			$query  = sprintf('
+				SELECT T.user_id, SUM(T.CountUser) AS SumUser, T.ip
+				FROM(
+				SELECT user_id, count(user_id) AS CountUser, ip
 					FROM `%1$sulike`
 					GROUP BY user_id
 					UNION ALL
@@ -338,26 +334,17 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 					) AS T
 					GROUP BY T.user_id
 					ORDER BY SumUser DESC LIMIT %2$d',
-					$this->wpdb->prefix,
-					5
-				);
-				$result = $this->wpdb->get_results( $query );
-
-				if( !empty( $result ) ) {
-					// Set transient
-					set_transient( 'wp_ulike_get_top_likers', $result, 24 * HOUR_IN_SECONDS );
-				}
-			}
-
-			return $result;
+				$this->wpdb->prefix,
+				5
+			);
+			return $this->wpdb->get_results( $query );
 		}
 
 		/**
-		 * Tops Summaries
+		 * Deprecated get top likers function
 		 *
-		 * @author       	Alimir
-		 * @since           2.0
-		 * @return			Integer
+		 * @param string $type
+		 * @return void
 		 */
 		public function get_tops( $type ){
 			_deprecated_function( 'get_tops', '3.5', 'get_top' );
