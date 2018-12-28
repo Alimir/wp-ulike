@@ -508,7 +508,7 @@ if( defined( 'BP_VERSION' ) ) {
 				} else {
 					$user_fullname = bp_core_get_user_displayname( $user_ID );
 					$custom_text   = sprintf( __( '%s liked one of your %s', WP_ULIKE_SLUG ), $user_fullname, $action_type );
-					$custom_link   = add_query_arg( 'rid', (int) $id, $custom_link );
+					$custom_link   = add_query_arg( 'read_ulike_notification', (int) $id, $custom_link );
 				}
 
 				// WordPress Toolbar
@@ -579,6 +579,38 @@ if( defined( 'BP_VERSION' ) ) {
 		add_action( 'bp_nouveau_notifications_init_filters', 'wp_ulike_notification_filters' );
 	}
 
+	if( ! function_exists( 'wp_ulike_seen_bp_notifications' ) ){
+		/**
+		 * Mark notifications as read when a user visits an activity permalink.
+		 *
+		 * @since 3.6.0
+		 */
+		function wp_ulike_seen_bp_notifications() {
+			if ( ! is_user_logged_in() ) {
+				return;
+			}
+
+			$comment_id = 0;
+			// For replies to a parent update.
+			if ( isset( $_GET['read_ulike_notification'] ) && ! empty( $_GET['read_ulike_notification'] ) ) {
+				$comment_id = (int) $_GET['read_ulike_notification'];
+			}
+
+			// Mark individual activity reply notification as read.
+			if ( $comment_id ) {
+				BP_Notifications_Notification::update(
+					array(
+						'is_new' => false
+					),
+					array(
+						'user_id' => bp_loggedin_user_id(),
+						'id'      => $comment_id
+					)
+				);
+			}
+		}
+		add_action( 'wp_loaded', 'wp_ulike_seen_bp_notifications' );
+	}
 }
 
 /*******************************************************
