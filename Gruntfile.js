@@ -434,7 +434,7 @@ module.exports = function(grunt) {
                 exclude: [
                         '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
                         'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
-                        'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'wp-assets'
+                        'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'wp-assets', 'docs'
                 ],
                 recursive: true,
                 syncDestIgnoreExcl: true
@@ -452,7 +452,7 @@ module.exports = function(grunt) {
                     exclude: [
                         '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json', '_devDependencies',
                         'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json', 'bower.json',
-                        'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh'
+                        'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'docs', 'wp-assets'
                     ],
                     src: ['./'],
                     dest: "<%= meta.buildPath %>"
