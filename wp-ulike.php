@@ -159,7 +159,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 
 			$wp_ulike_setting = new wp_ulike_settings(
 				'wp-ulike-settings',
-				__( 'WP ULike Settings', WP_ULIKE_SLUG ),
+				__( 'Settings', WP_ULIKE_SLUG ),
 				array(
 					'parent'   => false,
 					'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
