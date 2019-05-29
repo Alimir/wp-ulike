@@ -193,20 +193,27 @@ if( ! function_exists( 'wp_ulike_get_posts_microdata' ) ){
 	 * @return string
 	 */
 	function wp_ulike_get_posts_microdata(){
-		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
-		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
-        $post_meta 		= '<meta itemprop="name" content="' . get_the_title() . '" />';
-        $post_meta 		.= apply_filters( 'wp_ulike_extra_structured_data', NULL );
-		$post_meta 		.= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . get_the_author() . '" /></span>';
-        $post_meta 		.= '<meta itemprop="datePublished" content="' . get_post_time('c') . '" />';
-		$ratings_meta 	= '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
+		global $post;
+		$get_ulike_count = get_post_meta( $post->ID, '_liked', true );
+		// Check data output
+		if( !is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0 ) {
+			return;
+		}
+		// Post meta structure
+		$post_meta  = '<meta itemprop="name" content="' . the_title_attribute( 'echo=0' ) . '" />';
+		$post_meta .= apply_filters( 'wp_ulike_extra_structured_data', NULL );
+		$post_meta .= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . esc_attr( get_the_author() ) . '" /></span>';
+		$post_meta .= '<meta itemprop="datePublished" content="' . esc_attr( get_post_time('c') ) . '" />';
+		// Rating meta structure
+		$ratings_meta  = '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
 		$ratings_meta	.= '<meta itemprop="bestRating" content="5" />';
-		$ratings_meta 	.= '<meta itemprop="worstRating" content="1" />';
-		$ratings_meta 	.= '<meta itemprop="ratingValue" content="'. wp_ulike_get_rating_value(get_the_ID()) .'" />';
-		$ratings_meta 	.= '<meta itemprop="ratingCount" content="' . $get_ulike_count . '" />';
-		$ratings_meta 	.= '</span>';
-		$itemtype 		= apply_filters( 'wp_ulike_remove_microdata_post_meta', false );
-        return apply_filters( 'wp_ulike_generate_google_structured_data', ( $itemtype ? $ratings_meta : ( $post_meta . $ratings_meta ) ) );
+		$ratings_meta .= '<meta itemprop="worstRating" content="1" />';
+		$ratings_meta .= '<meta itemprop="ratingValue" content="'. wp_ulike_get_rating_value( $post->ID ) .'" />';
+		$ratings_meta .= '<meta itemprop="ratingCount" content="' . $get_ulike_count . '" />';
+		$ratings_meta .= '</span>';
+		// Return value
+		$itemtype  = apply_filters( 'wp_ulike_remove_microdata_post_meta', false );
+		return apply_filters( 'wp_ulike_generate_google_structured_data', ( $itemtype ? $ratings_meta : ( $post_meta . $ratings_meta ) ) );
 	}
 	add_filter( 'wp_ulike_posts_microdata', 'wp_ulike_get_posts_microdata');
 }
