@@ -287,6 +287,14 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								'tag'      => __('Tags', WP_ULIKE_SLUG),
 								'author'   => __('Author Page', WP_ULIKE_SLUG)
 							),
+							'default' => array(
+								'page'     => __('Pages', WP_ULIKE_SLUG),
+								'archive'  => __('Archives', WP_ULIKE_SLUG),
+								'category' => __('Categories', WP_ULIKE_SLUG),
+								'search'   => __('Search Results', WP_ULIKE_SLUG),
+								'tag'      => __('Tags', WP_ULIKE_SLUG),
+								'author'   => __('Author Page', WP_ULIKE_SLUG)
+							),
 							'description' => __('You can filter theses pages on auto display option.', WP_ULIKE_SLUG)
 						),
 						'google_rich_snippets' => array(
@@ -904,6 +912,7 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 			}
 			wp_cache_add($cache_key, $rating_value, $cache_group, HOUR_IN_SECONDS);
 		}
+
 		return $rating_value;
 	}
 }
@@ -1107,11 +1116,11 @@ if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
 		global $wpdb;
 		$bp = buddypress();
 
-		return $wpdb->get_var( 
-				$wpdb->prepare( 
+		return $wpdb->get_var(
+				$wpdb->prepare(
 					"SELECT COUNT(*) FROM {$bp->notifications->table_name} WHERE component_action = %s",
 					$component_name
-				) 
+				)
 			);
 	}
 }
@@ -1660,7 +1669,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 	?>
 		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-					<label>
+					<label title="<?php echo esc_attr( 'like this' . $type ); ?>">
 					<input 	type="checkbox"
 							data-ulike-id="<?php echo $ID; ?>"
 							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
