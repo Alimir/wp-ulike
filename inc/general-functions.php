@@ -1537,6 +1537,34 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 	}
 }
 
+/**
+ * Function to check if user has liked post
+ *
+ * @author       	Jose Colina [hozerapha]
+ * @param         	String $user_ID, $post_ID
+ * @since         	3.4
+ * @return        	Boolean
+ */
+if(!function_exists('wp_ulike_user_liked_post')) {
+	function wp_ulike_user_liked_post($user_ID, $post_ID) {
+		// Global wordpress database object
+		global $wpdb;
+		// Get ULike settings
+		$wpu_settings = wp_ulike_get_post_settings_by_type('likeThis', $post_ID);
+		$table_name = $wpu_settings['table_name'];
+		$column_name = $wpu_settings['column_name'];
+		// Get number of likes in the post by the user
+		$results = $wpdb->get_results( "SELECT COUNT(id) AS total
+						FROM   ".$wpdb->prefix."$table_name
+						WHERE  $column_name = '$post_ID'
+						       AND status   = 'like'
+						       AND user_id = $user_ID"
+					);
+		// Return bool true if there is a like
+		return ($results[0]->total > 0);
+	}
+}
+
 /*******************************************************
   Templates
 *******************************************************/
