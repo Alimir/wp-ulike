@@ -1542,7 +1542,7 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
  *
  * @author       	Jose Colina [hozerapha]
  * @param         	String $user_ID, $post_ID
- * @since         	3.4
+ * @since         	> 3.5.1
  * @return        	Boolean
  */
 if(!function_exists('wp_ulike_user_liked_post')) {
