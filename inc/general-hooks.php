@@ -648,6 +648,7 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) && function_exists( 'is_bbpress'
   Other Plugins
 *******************************************************/
 
+// My Cred Plugin
 if( defined( 'myCRED_VERSION' ) ){
 	if( ! function_exists( 'wp_ulike_register_myCRED_hook' ) ){
 		/**
@@ -686,6 +687,7 @@ if( defined( 'myCRED_VERSION' ) ){
 	}
 }
 
+// Ultimate Member plugin
 if ( defined( 'ultimatemember_version' ) ) {
 	if( ! function_exists( 'wp_ulike_add_custom_profile_tab' ) ){
 		/**
@@ -796,4 +798,21 @@ if ( defined( 'ultimatemember_version' ) ) {
 		}
 		add_action('um_profile_content_wp-ulike-comments_default', 'wp_ulike_comments_um_profile_content');
 	}
+}
+
+// Litespeed cache plugin
+if( ! function_exists( 'wp_ulike_purge_litespeed_cache' ) && method_exists( 'LiteSpeed_Cache_API', 'purge_post' ) ){
+	/**
+	 * Purge litespeed post cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_litespeed_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			LiteSpeed_Cache_API::purge_post( $ID ) ;
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_litespeed_cache'	, 10, 2 );
 }
