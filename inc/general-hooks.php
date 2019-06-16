@@ -816,3 +816,22 @@ if( ! function_exists( 'wp_ulike_purge_litespeed_cache' ) && method_exists( 'Lit
 	}
 	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_litespeed_cache'	, 10, 2 );
 }
+
+// w3 total cache plugin
+if( ! function_exists( 'wp_ulike_purge_w3_total_cache' ) && function_exists( 'w3tc_pgcache_flush_post' ) ){
+	/**
+	 * Purge w3 total post cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_w3_total_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			w3tc_pgcache_flush_post( $ID );
+		} else {
+			w3tc_pgcache_flush();
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_w3_total_cache'	, 10, 2 );
+}
