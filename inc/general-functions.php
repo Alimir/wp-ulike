@@ -287,14 +287,6 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 								'tag'      => __('Tags', WP_ULIKE_SLUG),
 								'author'   => __('Author Page', WP_ULIKE_SLUG)
 							),
-							'default' => array(
-								'page'     => __('Pages', WP_ULIKE_SLUG),
-								'archive'  => __('Archives', WP_ULIKE_SLUG),
-								'category' => __('Categories', WP_ULIKE_SLUG),
-								'search'   => __('Search Results', WP_ULIKE_SLUG),
-								'tag'      => __('Tags', WP_ULIKE_SLUG),
-								'author'   => __('Author Page', WP_ULIKE_SLUG)
-							),
 							'description' => __('You can filter theses pages on auto display option.', WP_ULIKE_SLUG)
 						),
 						'google_rich_snippets' => array(
