@@ -104,9 +104,9 @@ function wp_ulike_get_number_of_new_likes() {
 		( SELECT COUNT(*) FROM `%1$sulike_activities` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
 		( SELECT COUNT(*) FROM `%1$sulike_comments` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
 		( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) )
-		', 
+		',
 		$wpdb->prefix,
-		get_option( 'wpulike_lastvisit') 
+		get_option( 'wpulike_lastvisit')
 	);
 
 	$result = $wpdb->get_var( $query );
@@ -122,8 +122,8 @@ function wp_ulike_get_number_of_new_likes() {
  * @return string
  */
 function wp_ulike_badge_count_format( $number ){
-	return sprintf( ' <span class="update-plugins count-%1$s"><span class="update-count">%1$s</span></span>', 
-		number_format_i18n( $number ) 
+	return sprintf( ' <span class="update-plugins count-%1$s"><span class="update-count">%1$s</span></span>',
+		number_format_i18n( $number )
 	);
 }
 
@@ -196,4 +196,31 @@ function wp_ulike_delete_transient( $transient ) {
     $_wp_using_ext_object_cache = $current_using_cache;
 
     return $result;
+}
+
+/**
+ * Get plugin downloads info from wordpress.org
+ *
+ * @return void
+ */
+function wp_ulike_get_repository_downloads_info(){
+
+	$key = sanitize_key( 'wp_ulike_repository_downloads_info' );
+
+	if ( false === ( $info = wp_ulike_get_transient( $key ) ) ) {
+		$request = wp_remote_get( 'https://api.wordpress.org/stats/plugin/1.0/downloads.php?slug=wp-ulike&limit=30' );
+		if( is_wp_error( $request ) ) {
+			return NULL;
+		}
+		// get body info
+		$body = wp_remote_retrieve_body( $request );
+		$data = json_decode( $body, true );
+		$info = is_array( $data ) ? array(
+			'labels' => array_keys( $data ),
+			'data' => array_values( $data ),
+		) : NULL;
+		auxin_set_transient( $key, $info, 3 * HOUR_IN_SECONDS );
+	}
+
+	return $info;
 }
