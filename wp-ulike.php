@@ -54,9 +54,9 @@ define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		);
  * Initialize the plugin
  * ===========================================================================*/
 
-if ( ! class_exists( 'WPULIKE' ) ) :
+if ( ! class_exists( 'WpUlikeInit' ) ) :
 
-	class WPULIKE {
+	class WpUlikeInit {
 
 	  /**
 	    * Instance of this class.
@@ -547,19 +547,19 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 
 	}
 
+	// Register hooks that are fired when the plugin is activated or deactivated.
+	register_activation_hook  ( __FILE__, array( 'WpUlikeInit', 'activate'   ) );
+	register_deactivation_hook( __FILE__, array( 'WpUlikeInit', 'deactivate' ) );
+
     /**
      * Open WP Ulike World :)
      *
      * @since    3.1
      */
 	function RUN_WPULIKE(){
-	    return WPULIKE::get_instance();
+	    return WpUlikeInit::get_instance();
 	}
 	RUN_WPULIKE();
-
-	// Register hooks that are fired when the plugin is activated or deactivated.
-	register_activation_hook  ( __FILE__, array( 'WPULIKE', 'activate'   ) );
-	register_deactivation_hook( __FILE__, array( 'WPULIKE', 'deactivate' ) );
 
 else :
 
