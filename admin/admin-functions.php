@@ -219,7 +219,7 @@ function wp_ulike_get_repository_downloads_info(){
 			'labels' => array_keys( $data ),
 			'data' => array_values( $data ),
 		) : NULL;
-		auxin_set_transient( $key, $info, 3 * HOUR_IN_SECONDS );
+		wp_ulike_set_transient( $key, $info, 3 * HOUR_IN_SECONDS );
 	}
 
 	return $info;
