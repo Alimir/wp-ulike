@@ -284,6 +284,10 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			Void
 		 */
 		public function update_meta_data( $id, $key, $data ){
+			// Fix negative values
+			if( (int) $data < 0 ){
+				$data = 0;
+			}
 			// Update Values
 			switch ( $key ) {
 				case '_liked'		 :
