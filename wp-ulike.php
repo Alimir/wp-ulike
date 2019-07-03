@@ -7,7 +7,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/
  * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           3.6.0
+ * Version:           3.6.1
  * Author:            Ali Mirzaei
  * Author URI:        http://alimir.ir
  * Text Domain:       wp-ulike
@@ -31,11 +31,20 @@
  \------------------------------------------/
 */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die('No Naughty Business Please !');
+}
+
+// Abort loading if WordPress is upgrading
+if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
+    return;
+}
+
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		);
-define( 'WP_ULIKE_VERSION'      , '3.6.0' 						);
+define( 'WP_ULIKE_VERSION'      , '3.6.1' 						);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					);
-define( 'WP_ULIKE_DB_VERSION'   , '1.6' 						);
 
 define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	);
 define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	);
