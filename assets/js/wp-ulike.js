@@ -1,6 +1,6 @@
-/*! WP ULike - v3.6.0
+/*! WP ULike - v3.6.1
  *  https://wpulike.com
- *  Alimir 2018;
+ *  Alimir 2019;
  */
 
 
@@ -180,7 +180,7 @@
       //Call _ajaxify function on click button
       this.buttonElement.click(this._initLike.bind(this));
       //Call _ajaxify function on click button
-      this.generalElement.hover(this._updateLikers.bind(this));
+      this.buttonElement.hover(this._updateLikers.bind(this));
     },
 
     /**
