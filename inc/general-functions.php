@@ -796,6 +796,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 			'is_home'     => is_home() && $options['home'] == '1',
 			'is_single'   => is_single() && $options['single'] == '1',
 			'is_page'     => is_page() && $options['page'] == '1',
+			'is_front'    => is_front_page() || is_front_page() && is_home(), // Disable on homepage
 			'is_archive'  => is_archive() && $options['archive'] == '1',
 			'is_category' => is_category() && $options['category'] == '1',
 			'is_search'   => is_search() && $options['search'] == '1',
