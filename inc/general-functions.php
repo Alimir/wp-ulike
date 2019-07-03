@@ -796,6 +796,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 			'is_home'     => is_home() && $options['home'] == '1',
 			'is_single'   => is_single() && $options['single'] == '1',
 			'is_page'     => is_page() && $options['page'] == '1',
+			'is_front'    => is_front_page() || is_front_page() && is_home(), // Disable on homepage
 			'is_archive'  => is_archive() && $options['archive'] == '1',
 			'is_category' => is_category() && $options['category'] == '1',
 			'is_search'   => is_search() && $options['search'] == '1',
@@ -904,6 +905,7 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 			}
 			wp_cache_add($cache_key, $rating_value, $cache_group, HOUR_IN_SECONDS);
 		}
+
 		return $rating_value;
 	}
 }
@@ -1091,6 +1093,28 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
 		}
 
 		return $result;
+	}
+}
+
+
+/**
+ * Check the buddypress notification component existence
+ *
+ * @author       	Alimir
+ * @since           2.5.1
+ * @return          integer
+ */
+if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
+	function wp_ulike_bbp_is_component_exist( $component_name ){
+		global $wpdb;
+		$bp = buddypress();
+
+		return $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$bp->notifications->table_name} WHERE component_action = %s",
+					$component_name
+				)
+			);
 	}
 }
 
@@ -1537,6 +1561,37 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 	}
 }
 
+
+if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
+	/**
+	 * A simple function to check if user has been liked post or not
+	 *
+	 * @param integer $item_ID
+	 * @param integer $user_ID
+	 * @param string $type
+	 * @return bool
+	 */
+	function wp_ulike_is_user_liked( $item_ID, $user_ID,  $type = 'likeThis' ) {
+		global $wpdb;
+		// Get ULike settings
+		$get_settings = wp_ulike_get_post_settings_by_type( $type, $item_ID );
+
+		$query  = sprintf( "
+			SELECT COUNT(*)
+			FROM %s
+			WHERE `%s` = %s
+			AND `status` = 'like'
+			And `user_id` = %s",
+			esc_sql( $wpdb->prefix . $get_settings['table_name'] ),
+			esc_html( $get_settings['column_name'] ),
+			esc_html( $item_ID ),
+			esc_html( $user_ID )
+		);
+
+		return $wpdb->get_var( $query );
+	}
+}
+
 /*******************************************************
   Templates
 *******************************************************/
@@ -1638,7 +1693,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 	?>
 		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-					<label>
+					<label title="<?php echo esc_attr( 'like this' . $type ); ?>">
 					<input 	type="checkbox"
 							data-ulike-id="<?php echo $ID; ?>"
 							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"

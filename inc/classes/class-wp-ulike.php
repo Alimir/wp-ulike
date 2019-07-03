@@ -284,6 +284,10 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			Void
 		 */
 		public function update_meta_data( $id, $key, $data ){
+			// Fix negative values
+			if( (int) $data < 0 ){
+				$data = 0;
+			}
 			// Update Values
 			switch ( $key ) {
 				case '_liked'		 :
@@ -340,6 +344,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) );
 				}
 			}
+			// Add unique class name for each button
+			$button_class_name .= strtolower( ' wp_' . $args['method'] . '_' . $args['id'] );
 
 			$general_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_general_selector', 'wp_ulike_general_class' ) );
 

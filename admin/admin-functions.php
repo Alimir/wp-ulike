@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @author       	Alimir
  * @since           2.1
- * @return			Integer
+ * @return			integer
  */
 function wp_ulike_logs_return_per_page(){
 	$user     = get_current_user_id();
@@ -26,11 +26,12 @@ function wp_ulike_logs_return_per_page(){
 }
 
 /**
- * Get paginated logs datasets
+ * Get paginated logs dataset
  *
- * @author       	Alimir
- * @since           3.5
- * @return			Array
+ * @since 3.5
+ * @param string $table
+ * @param string $type
+ * @return array
  */
 function wp_ulike_get_paginated_logs( $table, $type ){
 	global $wpdb;
@@ -88,7 +89,7 @@ function wp_ulike_get_paginated_logs( $table, $type ){
  *
  * @author       	Alimir
  * @since           2.4.2
- * @return			String
+ * @return			string
  */
 function wp_ulike_get_number_of_new_likes() {
 	global $wpdb;
@@ -103,12 +104,123 @@ function wp_ulike_get_number_of_new_likes() {
 		( SELECT COUNT(*) FROM `%1$sulike_activities` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
 		( SELECT COUNT(*) FROM `%1$sulike_comments` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
 		( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) )
-		', 
+		',
 		$wpdb->prefix,
-		get_option( 'wpulike_lastvisit') 
+		get_option( 'wpulike_lastvisit')
 	);
 
 	$result = $wpdb->get_var( $query );
 
 	return empty( $result ) ? 0 : $result;
+}
+
+
+/**
+ * Get badge counter in html format
+ *
+ * @param integer $number
+ * @return string
+ */
+function wp_ulike_badge_count_format( $number ){
+	return sprintf( ' <span class="update-plugins count-%1$s"><span class="update-count">%1$s</span></span>',
+		number_format_i18n( $number )
+	);
+}
+
+
+/**
+ * Set/update the value of a transient.
+ *
+ * You do not need to serialize values. If the value needs to be serialized, then
+ * it will be serialized before it is set.
+ *
+ *
+ * @param string $transient  Transient name. Expected to not be SQL-escaped. Must be
+ *                           172 characters or fewer in length.
+ * @param mixed  $value      Transient value. Must be serializable if non-scalar.
+ *                           Expected to not be SQL-escaped.
+ * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
+ * @return bool False if value was not set and true if value was set.
+ */
+function wp_ulike_set_transient( $transient, $value, $expiration = 0 ) {
+    global $_wp_using_ext_object_cache;
+
+    $current_using_cache = $_wp_using_ext_object_cache;
+    $_wp_using_ext_object_cache = false;
+
+    $result = set_transient( $transient, $value, $expiration );
+
+    $_wp_using_ext_object_cache = $current_using_cache;
+
+    return $result;
+}
+
+
+/**
+ * Get the value of a transient.
+ *
+ * If the transient does not exist, does not have a value, or has expired,
+ * then the return value will be false.
+ *
+ * @param string $transient Transient name. Expected to not be SQL-escaped.
+ * @return mixed Value of transient.
+ */
+function wp_ulike_get_transient( $transient ) {
+    global $_wp_using_ext_object_cache;
+
+    $current_using_cache = $_wp_using_ext_object_cache;
+    $_wp_using_ext_object_cache = false;
+
+    $result = get_transient( $transient );
+
+    $_wp_using_ext_object_cache = $current_using_cache;
+
+    return $result;
+}
+
+
+/**
+ * Delete a transient.
+ *
+ * @param string $transient Transient name. Expected to not be SQL-escaped.
+ * @return bool true if successful, false otherwise
+ */
+function wp_ulike_delete_transient( $transient ) {
+    global $_wp_using_ext_object_cache;
+
+    $current_using_cache = $_wp_using_ext_object_cache;
+    $_wp_using_ext_object_cache = false;
+
+    $result = delete_transient( $transient );
+
+    $_wp_using_ext_object_cache = $current_using_cache;
+
+    return $result;
+}
+
+/**
+ * Get plugin downloads info from wordpress.org
+ *
+ * @return void
+ */
+function wp_ulike_get_repository_downloads_info(){
+
+	$key = sanitize_key( 'wp_ulike_repository_downloads_info' );
+
+	if ( false === ( $info = wp_ulike_get_transient( $key ) ) ) {
+		$request = wp_remote_get( 'https://api.wordpress.org/stats/plugin/1.0/downloads.php?slug=wp-ulike&limit=30' );
+		if( is_wp_error( $request ) ) {
+			return NULL;
+		}
+		// get body info
+		$body = wp_remote_retrieve_body( $request );
+		$data = json_decode( $body, true );
+		$info = is_array( $data ) ? array(
+			'labels' => array_keys( $data ),
+			'data' => array_values( $data ),
+		) : NULL;
+		wp_ulike_set_transient( $key, $info, 3 * HOUR_IN_SECONDS );
+	}
+
+	return $info;
 }

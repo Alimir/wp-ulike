@@ -8,28 +8,30 @@
   General Hooks
 *******************************************************/
 
-/**
- * Register WP ULike Widgets
- *
- * @author       	Alimir
- * @since           1.2
- * @return			Void
- */
 if( ! function_exists( 'wp_ulike_register_widget' ) ){
+	/**
+	 * Register WP ULike Widgets
+	 *
+	 * @author Alimir
+	 * @since 1.2
+	 * @return Void
+	 */
 	function wp_ulike_register_widget() {
 		register_widget( 'wp_ulike_widget' );
 	}
 	add_action( 'widgets_init', 'wp_ulike_register_widget' );
 }
 
-/**
- * Create ShortCode: 	[wp_ulike]
- *
- * @author       	Alimir
- * @since           1.4
- * @return			wp ulike button
- */
 if( ! function_exists( 'wp_ulike_shortcode' ) ){
+	/**
+	 * Create shortcode: [wp_ulike]
+	 *
+	 * @author Alimir
+	 * @param array $atts
+	 * @param string $content
+	 * @since 1.4
+	 * @return void
+	 */
 	function  wp_ulike_shortcode( $atts, $content = null ){
 		// Final result
 		$result = '';
@@ -66,14 +68,13 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 	add_shortcode( 'wp_ulike', 'wp_ulike_shortcode' );
 }
 
-/**
- * Generate rich snippet hooks
- *
- * @author       	Alimir
- * @since           3.5
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_generate_microdata' ) ){
+	/**
+	 * Generate rich snippet hooks
+	 *
+	 * @param array $args
+	 * @return string
+	 */
 	function wp_ulike_generate_microdata( $args ){
 		// Bulk output
 		$output = '';
@@ -102,15 +103,14 @@ if( ! function_exists( 'wp_ulike_generate_microdata' ) ){
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_generate_microdata' );
 }
 
-
-/**
- * Display inline likers box without AJAX request
- *
- * @author       	Alimir
- * @since           3.5.1
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
+	/**
+	 * Display inline likers box without AJAX request
+	 *
+	 * @param array $args
+	 * @since 3.5.1
+	 * @return void
+	 */
 	function wp_ulike_display_inline_likers_template( $args ){
 		// Get settings for current type
 		$get_settings     = wp_ulike_get_post_settings_by_type(  $args['type'], $args['ID'] );
@@ -138,15 +138,14 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
   Posts
 *******************************************************/
 
-/**
- * Auto insert wp_ulike function in the posts/pages content
- *
- * @author       	Alimir
- * @param           String $content
- * @since           1.0
- * @return			filter on "the_content"
- */
 if( ! function_exists( 'wp_ulike_put_posts' ) ){
+	/**
+	 * Auto insert wp_ulike function in the posts/pages content
+	 *
+	 * @param string $content
+	 * @since 1.0
+	 * @return string
+	 */
 	function wp_ulike_put_posts($content) {
 		//auto display position
 		$position = wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display_position');
@@ -158,29 +157,27 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 		}
 
 		//return by position
-		if($position=='bottom')
-		return $content . $button;
-		else if($position=='top')
-		return $button . $content;
-		else if($position=='top_bottom')
-		return $button . $content . $button;
-		else
-		return $content . $button;
+		if( $position=='bottom' ) {
+			return $content . $button;
+		} elseif( $position=='top' ) {
+			return $button . $content;
+		} elseif( $position=='top_bottom' ) {
+			return $button . $content . $button;
+		} else {
+			return $content . $button;
+		}
 	}
-
 	if (wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display' ) == '1') {
 		add_filter('the_content', 'wp_ulike_put_posts');
 	}
 }
 
-/**
- * Add itemtype to wp_ulike_posts_add_attr filter
- *
- * @author       	Alimir
- * @since           2.7
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_get_posts_microdata_itemtype' ) ){
+	/**
+	 * Add itemtype to wp_ulike_posts_add_attr filter
+	 *
+	 * @return mixed
+	 */
 	function wp_ulike_get_posts_microdata_itemtype(){
 		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
 		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
@@ -189,29 +186,35 @@ if( ! function_exists( 'wp_ulike_get_posts_microdata_itemtype' ) ){
 	add_filter('wp_ulike_posts_add_attr', 'wp_ulike_get_posts_microdata_itemtype');
 }
 
-/**
- * Add rich snippet for ratings in form of schema.org
- *
- * @author       	Alimir
- * @since           2.7
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_get_posts_microdata' ) ){
+	/**
+	 * Add rich snippet for ratings in form of schema.org
+	 *
+	 * @since 2.7
+	 * @return string
+	 */
 	function wp_ulike_get_posts_microdata(){
-		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
-		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
-        $post_meta 		= '<meta itemprop="name" content="' . get_the_title() . '" />';
-        $post_meta 		.= apply_filters( 'wp_ulike_extra_structured_data', NULL );
-		$post_meta 		.= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . get_the_author() . '" /></span>';
-        $post_meta 		.= '<meta itemprop="datePublished" content="' . get_post_time('c') . '" />';
-		$ratings_meta 	= '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
+		global $post;
+		$get_ulike_count = get_post_meta( $post->ID, '_liked', true );
+		// Check data output
+		if( !is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0 ) {
+			return;
+		}
+		// Post meta structure
+		$post_meta  = '<meta itemprop="name" content="' . the_title_attribute( 'echo=0' ) . '" />';
+		$post_meta .= apply_filters( 'wp_ulike_extra_structured_data', NULL );
+		$post_meta .= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . esc_attr( get_the_author() ) . '" /></span>';
+		$post_meta .= '<meta itemprop="datePublished" content="' . esc_attr( get_post_time('c') ) . '" />';
+		// Rating meta structure
+		$ratings_meta  = '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
 		$ratings_meta	.= '<meta itemprop="bestRating" content="5" />';
-		$ratings_meta 	.= '<meta itemprop="worstRating" content="1" />';
-		$ratings_meta 	.= '<meta itemprop="ratingValue" content="'. wp_ulike_get_rating_value(get_the_ID()) .'" />';
-		$ratings_meta 	.= '<meta itemprop="ratingCount" content="' . $get_ulike_count . '" />';
-		$ratings_meta 	.= '</span>';
-		$itemtype 		= apply_filters( 'wp_ulike_remove_microdata_post_meta', false );
-        return apply_filters( 'wp_ulike_generate_google_structured_data', ( $itemtype ? $ratings_meta : ( $post_meta . $ratings_meta )));
+		$ratings_meta .= '<meta itemprop="worstRating" content="1" />';
+		$ratings_meta .= '<meta itemprop="ratingValue" content="'. wp_ulike_get_rating_value( $post->ID ) .'" />';
+		$ratings_meta .= '<meta itemprop="ratingCount" content="' . $get_ulike_count . '" />';
+		$ratings_meta .= '</span>';
+		// Return value
+		$itemtype  = apply_filters( 'wp_ulike_remove_microdata_post_meta', false );
+		return apply_filters( 'wp_ulike_generate_google_structured_data', ( $itemtype ? $ratings_meta : ( $post_meta . $ratings_meta ) ) );
 	}
 	add_filter( 'wp_ulike_posts_microdata', 'wp_ulike_get_posts_microdata');
 }
@@ -220,31 +223,29 @@ if( ! function_exists( 'wp_ulike_get_posts_microdata' ) ){
   Comments
 *******************************************************/
 
-/**
- * Auto insert wp_ulike_comments in the comments content
- *
- * @author       	Alimir
- * @param           String $content
- * @since           1.6
- * @return          filter on "comment_text"
- */
 if( ! function_exists( 'wp_ulike_put_comments' ) ){
-	function wp_ulike_put_comments($content) {
+	/**
+	 * Auto insert wp_ulike_comments in the comments content
+	 *
+	 * @since 1.6
+	 * @param string $content
+	 * @return string
+	 */
+	function wp_ulike_put_comments( $content ) {
 		//auto display position
 		$position = wp_ulike_get_setting( 'wp_ulike_comments', 'auto_display_position');
-
 		//add wp_ulike_comments function
 		$button = wp_ulike_comments('put');
-
 		//return by position
-		if($position=='bottom')
-		return $content . $button;
-		else if($position=='top')
-		return $button . $content;
-		else if($position=='top_bottom')
-		return $button . $content . $button;
-		else
-		return $content . $button;
+		if( $position=='bottom' ){
+			return $content . $button;
+		} elseif( $position=='top' ){
+			return $button . $content;
+		} elseif( $position=='top_bottom' ){
+			return $button . $content . $button;
+		} else {
+			return $content . $button;
+		}
 	}
 
 	if ( wp_ulike_get_setting( 'wp_ulike_comments', 'auto_display' ) == '1'  && ! is_admin() ) {
@@ -259,23 +260,16 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 
 if( defined( 'BP_VERSION' ) ) {
 
-	/**
-	 * Auto insert wp_ulike_buddypress in the comments content
-	 *
-	 * @author       	Alimir
-	 * @param           String $content
-	 * @since           1.7
-	 * @return          filter on "bp_get_activity_action"
-	 */
 	if( ! function_exists( 'wp_ulike_put_buddypress' ) ){
+		/**
+		 * Auto insert wp_ulike_buddypress in the activities content
+		 *
+		 * @since 1.7
+		 * @return void
+		 */
 		function wp_ulike_put_buddypress() {
 			wp_ulike_buddypress('get');
 		}
-
-		function wp_ulike_get_buddypress( $content ) {
-
-		}
-
 		if (wp_ulike_get_setting( 'wp_ulike_buddypress', 'auto_display' ) == '1') {
 			// Check display ulike in buddypress comments
 			$display_comments = wp_ulike_get_setting( 'wp_ulike_buddypress', 'activity_comment', 1 );
@@ -303,14 +297,13 @@ if( defined( 'BP_VERSION' ) ) {
 		}
 	}
 
-	/**
-	 * Register "WP ULike Activity" action
-	 *
-	 * @author       	Alimir
-	 * @since           1.7
-	 * @return          Add action on "bp_register_activity_actions"
-	 */
 	if( ! function_exists( 'wp_ulike_register_activity_actions' ) ){
+		/**
+		 * Register "WP ULike Activity" action
+		 *
+		 * @since 1.7
+		 * @return void
+		 */
 		function wp_ulike_register_activity_actions() {
 			global $bp;
 			bp_activity_set_action(
@@ -322,14 +315,13 @@ if( defined( 'BP_VERSION' ) ) {
 		add_action( 'bp_register_activity_actions', 'wp_ulike_register_activity_actions' );
 	}
 
-	/**
-	 * Display likes option in BuddyPress activity filter
-	 *
-	 * @author       	Alimir
-	 * @since           2.5.1
-	 * @return          Void
-	 */
 	if( ! function_exists( 'wp_ulike_bp_activity_filter_options' ) ){
+		/**
+		 * Display likes option in BuddyPress activity filter
+		 *
+		 * @since 2.5.1
+		 * @return void
+		 */
 		function wp_ulike_bp_activity_filter_options() {
 			echo "<option value='wp_like_group'>". __('Likes') ."</option>";
 		}
@@ -338,15 +330,14 @@ if( defined( 'BP_VERSION' ) ) {
 		add_action( 'bp_group_activity_filter_options', 'wp_ulike_bp_activity_filter_options' ); // Group's activity
 	}
 
-	/**
-	 * Register 'wp_ulike' to BuddyPress component.
-	 *
-	 * @author       	Alimir
-	 * @param           Array $component_names
-	 * @since           2.5
-	 * @return          String
-	 */
 	if( ! function_exists( 'wp_ulike_filter_notifications_get_registered_components' ) ){
+		/**
+		 * Register 'wp_ulike' to BuddyPress component
+		 *
+		 * @since 2.5
+		 * @param array $component_names
+		 * @return string
+		 */
 		function wp_ulike_filter_notifications_get_registered_components( $component_names = array() ) {
 			// Force $component_names to be an array
 			if ( ! is_array( $component_names ) ) {
@@ -360,17 +351,19 @@ if( defined( 'BP_VERSION' ) ) {
 		add_filter( 'bp_notifications_get_registered_components', 'wp_ulike_filter_notifications_get_registered_components', 10 );
 	}
 
-	/**
-	 * Add new buddypress activities on each like.
-	 *
-	 * @author       	Alimir
-	 * @param           Integer $user_ID (User ID)
-	 * @param           Integer $cp_ID (Post/Comment ID)
-	 * @param           String 	$type (Simple Key for separate posts by comments)
-	 * @since           1.6
-	 * @return          Void
-	 */
+
 	if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
+		/**
+		 * Add new buddypress activities on each like
+		 *
+		 * @since 1.6
+		 * @param integer $cp_ID
+		 * @param string $type
+		 * @param integer $user_ID
+		 * @param string $status
+		 * @param boolean $has_log
+		 * @return void
+		 */
 		function wp_ulike_add_bp_notifications( $cp_ID, $type, $user_ID, $status, $has_log  ){
 
 			// Return if user not logged in or an older data log exist
@@ -470,84 +463,175 @@ if( defined( 'BP_VERSION' ) ) {
 		add_action( 'wp_ulike_after_process', 'wp_ulike_add_bp_notifications', 10, 5 );
 	}
 
-	/**
-	 * Add custom format for 'wp_ulike' notifications.
-	 *
-	 * @author       	Alimir
-	 * @since           2.5
-	 * @return          String
-	 */
 	if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
-		function wp_ulike_format_buddypress_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
+		/**
+		 * Format notifications related to activity.
+		 *
+		 * @param string $content               Component action. Deprecated. Do not do checks against this! Use
+		 *                                      the 6th parameter instead - $component_action_name.
+		 * @param int    $item_id               Notification item ID.
+		 * @param int    $secondary_item_id     Notification secondary item ID.
+		 * @param int    $total_items     		Number of notifications with the same action.
+		 * @param string $format                Format of return. Either 'string' or 'object'.
+		 * @param string $action 				Canonical notification action.
+		 * @param string $component        		Notification component ID.
+		 * @param int    $id                    Notification ID.
+		 * @return string $return Formatted notification.
+		 */
+		function wp_ulike_format_buddypress_notifications( $content, $item_id, $secondary_item_id, $total_items, $format = 'string', $action, $component, $id ) {
 			global $wp_filter,$wp_version;
-			// Return value
-			$return = $action;
 
 			if ( strpos( $action, 'wp_ulike_' ) !== false ) {
-				$custom_link	= '';
 				//Extracting ulike type from the action value.
 				preg_match('/wp_ulike_(.*?)_action/', $action, $type);
 			    //Extracting user id from old action name values.
 			    preg_match('/action_([0-9]+)/', $action, $user_ID);
 				//Get user info
 				$user_ID     = isset( $user_ID[1] ) ? $user_ID[1] : $secondary_item_id;
-				$user_info   = get_userdata( $user_ID );
-				$custom_text = sprintf( __('You have a new like %s', WP_ULIKE_SLUG ), is_object( $user_info ) ? __( 'from' , WP_ULIKE_SLUG ) . ' ' . $user_info->display_name : '' );
+				$action_type = __( 'posts' , WP_ULIKE_SLUG );
+				$custom_link = '';
 
-				//checking the ulike types
-				if($type[1] == 'liked'){
-					$custom_link  	= get_permalink($item_id);
+				// Check the the ulike types
+				switch ( $type[1] ) {
+					case 'commentliked':
+						$custom_link = get_comment_link( $item_id );
+						$action_type = __( 'comments' , WP_ULIKE_SLUG );
+						break;
+
+					case 'activityliked':
+						$custom_link = bp_activity_get_permalink( $item_id );
+						$action_type = __( 'activities' , WP_ULIKE_SLUG );
+						break;
+
+					default:
+						$custom_link = get_permalink( $item_id );
+						break;
 				}
-				else if($type[1] == 'topicliked'){
-					$custom_link  	= get_permalink($item_id);
+
+				// Setup the output strings
+				if ( (int) $total_items > 1 ) {
+					$custom_text = sprintf( __( 'You have %d new %s likes', WP_ULIKE_SLUG ), (int) $total_items, $action_type );
+					$custom_link = add_query_arg( 'type', $action, bp_get_notifications_permalink() );
+				} else {
+					$user_fullname = bp_core_get_user_displayname( $user_ID );
+					$custom_text   = sprintf( __( '%s liked one of your %s', WP_ULIKE_SLUG ), $user_fullname, $action_type );
+					$custom_link   = add_query_arg( 'read_ulike_notification', (int) $id, $custom_link );
 				}
-				else if($type[1] == 'commentliked'){
-					$custom_link  	= get_comment_link( $item_id );
-				}
-				else if($type[1] == 'activityliked'){
-					$custom_link  	= bp_activity_get_permalink( $item_id );
-				}
+
 				// WordPress Toolbar
 				if ( 'string' === $format ) {
-					$return = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . esc_attr( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_text, $custom_link );
+					$content = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . esc_attr( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_link, (int) $total_items, $item_id, $user_ID );
 				// Deprecated BuddyBar
 				} else {
-					$return = apply_filters( 'wp_ulike_bp_notifications_template', array(
+					$content = apply_filters( 'wp_ulike_bp_notifications_template', array(
 						'text' => $custom_text,
 						'link' => $custom_link
-					), $custom_link, (int) $total_items, $custom_text, $custom_text );
+					), $custom_link, (int) $total_items, $item_id, $user_ID );
 				}
+
 				// global wp_filter to call bbPress wrapper function
 				if( isset( $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'] ) ) {
 					if( version_compare( $wp_version, '4.7', '>=' ) ) {
-						// https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
 						$wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
 					} else {
 						$wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
 					}
 				}
+
+				return $content;
 			}
 
-			return $return;
+			return $content;
 		}
-		add_filter( 'bp_notifications_get_notifications_for_user', 'wp_ulike_format_buddypress_notifications', 5, 5 );
+		add_filter( 'bp_notifications_get_notifications_for_user', 'wp_ulike_format_buddypress_notifications', 25, 8 );
 	}
 
+	if( ! function_exists( 'wp_ulike_notification_filters' ) ){
+		/**
+		 * Add ulike notifications to initial buddyPress filters
+		 *
+		 * @return void
+		 */
+		function wp_ulike_notification_filters(){
+			$notifications = array(
+				array(
+					'id'       => 'wp_ulike_activityliked_action',
+					'label'    => __( 'New activity liked', WP_ULIKE_SLUG ),
+					'position' => 340,
+				),
+				array(
+					'id'       => 'wp_ulike_commentliked_action',
+					'label'    => __( 'New comment liked', WP_ULIKE_SLUG ),
+					'position' => 345,
+				),
+				array(
+					'id'       => 'wp_ulike_liked_action',
+					'label'    => __( 'New post liked', WP_ULIKE_SLUG ),
+					'position' => 355,
+				),
+				array(
+					'id'       => 'wp_ulike_topicliked_action',
+					'label'    => __( 'New topic liked', WP_ULIKE_SLUG ),
+					'position' => 365,
+				)
+			);
+
+			foreach ( $notifications as $notification ) {
+				if( ! wp_ulike_bbp_is_component_exist( $notification['id'] ) ){
+					continue;
+				}
+				bp_nouveau_notifications_register_filter( $notification );
+			}
+		}
+		add_action( 'bp_nouveau_notifications_init_filters', 'wp_ulike_notification_filters' );
+	}
+
+	if( ! function_exists( 'wp_ulike_seen_bp_notifications' ) ){
+		/**
+		 * Mark notifications as read when a user visits an activity permalink.
+		 *
+		 * @since 3.6.0
+		 */
+		function wp_ulike_seen_bp_notifications() {
+			if ( ! is_user_logged_in() ) {
+				return;
+			}
+
+			$comment_id = 0;
+			// For replies to a parent update.
+			if ( isset( $_GET['read_ulike_notification'] ) && ! empty( $_GET['read_ulike_notification'] ) ) {
+				$comment_id = (int) $_GET['read_ulike_notification'];
+			}
+
+			// Mark individual activity reply notification as read.
+			if ( $comment_id ) {
+				BP_Notifications_Notification::update(
+					array(
+						'is_new' => false
+					),
+					array(
+						'user_id' => bp_loggedin_user_id(),
+						'id'      => $comment_id
+					)
+				);
+			}
+		}
+		add_action( 'wp_loaded', 'wp_ulike_seen_bp_notifications' );
+	}
 }
 
 /*******************************************************
   bbPress
 *******************************************************/
 
-/**
- * Auto insert wp_ulike_bbpress in the topcis content
- *
- * @author       	Alimir
- * @param           String $content
- * @since           2.2
- * @return          filter on bbpPress hooks
- */
 if( ! function_exists( 'wp_ulike_put_bbpress' ) && function_exists( 'is_bbpress' ) ){
+	/**
+	 * Auto insert wp_ulike_bbpress in the topics content
+	 *
+	 * @author       	Alimir
+	 * @since           2.2
+	 * @return          filter on bbpPress hooks
+	 */
 	function wp_ulike_put_bbpress() {
 		 wp_ulike_bbpress('get');
 	}
@@ -564,14 +648,16 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) && function_exists( 'is_bbpress'
   Other Plugins
 *******************************************************/
 
-/**
- * MyCred Hooks
- *
- * @author       	Gabriel Lemarie & Alimir
- * @since          	2.3
- */
+// My Cred Plugin
 if( defined( 'myCRED_VERSION' ) ){
 	if( ! function_exists( 'wp_ulike_register_myCRED_hook' ) ){
+		/**
+		 * register wp_ulike in mycred setup
+		 *
+		 * @since 2.3
+		 * @param array $installed
+		 * @return void
+		 */
 		function wp_ulike_register_myCRED_hook( $installed ) {
 			$installed['wp_ulike'] = array(
 				'title'       => __( 'WP ULike', WP_ULIKE_SLUG ),
@@ -583,32 +669,34 @@ if( defined( 'myCRED_VERSION' ) ){
 		add_filter( 'mycred_setup_hooks', 'wp_ulike_register_myCRED_hook' );
 	}
 	if( ! function_exists( 'wp_ulike_myCRED_references' ) ){
-		function wp_ulike_myCRED_references( $hooks ) {
-			$hooks['wp_add_like'] 	= __( 'Liking Content', WP_ULIKE_SLUG );
-			$hooks['wp_get_like'] 	= __( 'Liked Content', WP_ULIKE_SLUG );
-			$hooks['wp_add_unlike'] = __( 'Unliking Content', WP_ULIKE_SLUG );
-			$hooks['wp_get_unlike'] = __( 'Unliked Content', WP_ULIKE_SLUG );
-			return $hooks;
+		/**
+		 * Add ulike references
+		 *
+		 * @since 2.3
+		 * @param array $list
+		 * @return void
+		 */
+		function wp_ulike_myCRED_references( $list ) {
+			$list['wp_add_like'] 	= __( 'Liking Content', WP_ULIKE_SLUG );
+			$list['wp_get_like'] 	= __( 'Liked Content', WP_ULIKE_SLUG );
+			$list['wp_add_unlike'] = __( 'Unliking Content', WP_ULIKE_SLUG );
+			$list['wp_get_unlike'] = __( 'Unliked Content', WP_ULIKE_SLUG );
+			return $list;
 		}
 		add_filter( 'mycred_all_references', 'wp_ulike_myCRED_references' );
 	}
 }
 
-/**
- * UltimateMember Hooks
- *
- * @author       	Alimir
- * @since          	2.3
- */
+// Ultimate Member plugin
 if ( defined( 'ultimatemember_version' ) ) {
-	/**
-	 * Add custom tabs in the UltimateMember profiles.
-	 *
-	 * @author       	Alimir
-	 * @since           2.3
-	 * @return          Array
-	 */
 	if( ! function_exists( 'wp_ulike_add_custom_profile_tab' ) ){
+		/**
+		 * Add custom tabs in the UltimateMember profiles.
+		 *
+		 * @since 2.3
+		 * @param array $tabs
+		 * @return array $tabs
+		 */
 		function wp_ulike_add_custom_profile_tab( $tabs ) {
 
 			$tabs['wp-ulike-posts'] = array(
@@ -626,14 +714,14 @@ if ( defined( 'ultimatemember_version' ) ) {
 		add_filter('um_profile_tabs', 'wp_ulike_add_custom_profile_tab', 1000 );
 	}
 
-	/**
-	 * Add content to the wp-ulike-posts tab
-	 *
-	 * @author       	Alimir
-	 * @since           2.3
-	 * @return          Void
-	 */
 	if( ! function_exists( 'wp_ulike_posts_um_profile_content' ) ){
+		/**
+		 * Add content to the wp-ulike-posts tab
+		 *
+		 * @since 2.3
+		 * @param array $args
+		 * @return void
+		 */
 		function wp_ulike_posts_um_profile_content( $args ) {
 			global $wp_ulike_class,$ultimatemember;
 
@@ -668,14 +756,14 @@ if ( defined( 'ultimatemember_version' ) ) {
 		add_action('um_profile_content_wp-ulike-posts_default', 'wp_ulike_posts_um_profile_content');
 	}
 
-	/**
-	 * Add content to the wp-ulike-comments tab
-	 *
-	 * @author       	Alimir
-	 * @since           2.3
-	 * @return          Void
-	 */
 	if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
+		/**
+		 * Add content to the wp-ulike-comments tab
+		 *
+		 * @since 2.3
+		 * @param array $args
+		 * @return void
+		 */
 		function wp_ulike_comments_um_profile_content( $args ) {
 			global $wp_ulike_class,$ultimatemember;
 
@@ -710,4 +798,40 @@ if ( defined( 'ultimatemember_version' ) ) {
 		}
 		add_action('um_profile_content_wp-ulike-comments_default', 'wp_ulike_comments_um_profile_content');
 	}
+}
+
+// Litespeed cache plugin
+if( ! function_exists( 'wp_ulike_purge_litespeed_cache' ) && method_exists( 'LiteSpeed_Cache_API', 'purge_post' ) ){
+	/**
+	 * Purge litespeed post cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_litespeed_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			LiteSpeed_Cache_API::purge_post( $ID ) ;
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_litespeed_cache'	, 10, 2 );
+}
+
+// w3 total cache plugin
+if( ! function_exists( 'wp_ulike_purge_w3_total_cache' ) && function_exists( 'w3tc_pgcache_flush_post' ) ){
+	/**
+	 * Purge w3 total post cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_w3_total_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			w3tc_pgcache_flush_post( $ID );
+		} else {
+			w3tc_pgcache_flush();
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_w3_total_cache'	, 10, 2 );
 }

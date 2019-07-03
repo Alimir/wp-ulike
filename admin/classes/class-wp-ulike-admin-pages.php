@@ -11,7 +11,7 @@ if ( ! defined('ABSPATH') ) {
 
 if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 	/**
-	 *  Class to load and print master slider panel scripts
+	 *  Class to register admin menus
 	 */
 	class wp_ulike_admin_pages {
 
@@ -56,7 +56,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'load_screen' => true
 				),
 				'statistics'      => array(
-					'title'       => __( 'WP ULike Statistics', WP_ULIKE_SLUG ),
+					'title'       => __( 'Statistics', WP_ULIKE_SLUG ),
 					'parent_slug' => 'wp-ulike-settings',
 					'capability'  => 'manage_options',
 					'path'        => '/includes/templates/statistics.php',
@@ -64,7 +64,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'load_screen' => false
 				),
 				'about'           => array(
-					'title'       => __( 'About WP ULike', WP_ULIKE_SLUG ),
+					'title'       => __( 'About', WP_ULIKE_SLUG ),
 					'parent_slug' => 'wp-ulike-settings',
 					'capability'  => 'manage_options',
 					'path'        => '/includes/templates/about.php',
@@ -75,7 +75,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 
 			add_action( 'admin_menu', array( $this, 'menus' ) );
 		}
-		
+
 		/**
 		 * register admin menus
 		 *
@@ -88,10 +88,10 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 				// extract variables
 				extract( $args );
 
-				$hook_suffix = add_submenu_page( 
+				$hook_suffix = add_submenu_page(
 					$parent_slug,
 					$title,
-					$title, 
+					apply_filters( 'wp_ulike_admin_sub_menu_title', $title, $menu_slug ),
 					$capability,
 					$menu_slug,
 					array( &$this, 'load_template' )
@@ -115,10 +115,8 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 		public function menu_badge(){
 			global $menu;
 
-			if( 0 !== ( $new_votes = wp_ulike_get_number_of_new_likes() ) ) {
-				$menu[313][0] .= sprintf( "<span class='update-plugins count-1'><span class='update-count'>%s</span></span>", 
-					number_format_i18n( $new_votes ) 
-				);
+			if( 0 !== ( $badge_count = apply_filters( 'wp_ulike_menu_badge_count', 0 ) ) ) {
+				$menu[313][0] .= wp_ulike_badge_count_format( $badge_count );
 			}
 		}
 
@@ -132,8 +130,8 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'label'   => __('Logs',WP_ULIKE_SLUG),
 					'default' => 30,
 					'option'  => 'wp_ulike_logs_per_page'
-				) 
-			);			
+				)
+			);
 		}
 
 		/**

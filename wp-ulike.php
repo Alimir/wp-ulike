@@ -7,7 +7,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/
  * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           3.5.2
+ * Version:           3.6.1
  * Author:            Ali Mirzaei
  * Author URI:        http://alimir.ir
  * Text Domain:       wp-ulike
@@ -31,11 +31,20 @@
  \------------------------------------------/
 */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die('No Naughty Business Please !');
+}
+
+// Abort loading if WordPress is upgrading
+if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
+    return;
+}
+
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		);
-define( 'WP_ULIKE_VERSION'      , '3.5.2' 						);
+define( 'WP_ULIKE_VERSION'      , '3.6.1' 						);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					);
-define( 'WP_ULIKE_DB_VERSION'   , '1.5' 						);
 
 define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	);
 define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	);
@@ -54,9 +63,9 @@ define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		);
  * Initialize the plugin
  * ===========================================================================*/
 
-if ( ! class_exists( 'WPULIKE' ) ) :
+if ( ! class_exists( 'WpUlikeInit' ) ) :
 
-	class WPULIKE {
+	class WpUlikeInit {
 
 	  /**
 	    * Instance of this class.
@@ -159,7 +168,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 
 			$wp_ulike_setting = new wp_ulike_settings(
 				'wp-ulike-settings',
-				__( 'WP ULike Settings', WP_ULIKE_SLUG ),
+				__( 'Settings', WP_ULIKE_SLUG ),
 				array(
 					'parent'   => false,
 					'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
@@ -243,7 +252,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 
 	        // Dashboard and Administrative Functionality
 	        if ( is_admin() ) {
-	            // Load AJAX spesific codes on demand
+	            // Load AJAX specific codes on demand
 	            if ( defined('DOING_AJAX') && DOING_AJAX ){
 					include( WP_ULIKE_INC_DIR . '/frontend-ajax.php' );
 					include( WP_ULIKE_ADMIN_DIR . '/admin-ajax.php'  );
@@ -251,7 +260,7 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 		       	// Add Settings Page
 		        $this->settings();
 
-	            // Load admin spesific codes
+	            // Load admin specific codes
 	            include( WP_ULIKE_ADMIN_DIR . '/index.php' );
 	        }
 
@@ -420,89 +429,67 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 	     */
 	    private static function single_activate() {
 
-	        global $wpdb;
+			global $wpdb;
 
-	        if ( get_site_option( 'wp_ulike_dbVersion' ) != WP_ULIKE_DB_VERSION ) {
+			if ( ! empty( $wpdb->charset ) ) {
+				$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
+			}
+			if ( ! empty( $wpdb->collate ) ) {
+				$charset_collate .= " COLLATE $wpdb->collate";
+			}
 
-	            $posts_table = $wpdb->prefix . "ulike";
-	            if ( $wpdb->get_var( "show tables like '$posts_table'" ) != $posts_table ) {
-	                $sql = "CREATE TABLE " . $posts_table . " (
-	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
-	                        `post_id` bigint(20) NOT NULL,
-	                        `date_time` datetime NOT NULL,
-	                        `ip` varchar(60) NOT NULL,
-	                        `user_id` varchar(30) NOT NULL,
-	                        `status` varchar(15) NOT NULL,
-	                        PRIMARY KEY (`id`)
-	                    );";
+			if( ! function_exists('maybe_create_table') ){
+				// Add one library admin function for next function
+				require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			}
 
-	                require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-	                dbDelta( $sql );
-	            } else {
-	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $posts_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
-	            }
+			// Posts table
+			$posts_table = $wpdb->prefix . "ulike";
+			maybe_create_table( $posts_table, "CREATE TABLE IF NOT EXISTS `{$posts_table}` (
+				`id` bigint(20) NOT NULL AUTO_INCREMENT,
+				`post_id` bigint(20) NOT NULL,
+				`date_time` datetime NOT NULL,
+				`ip` varchar(100) NOT NULL,
+				`user_id` varchar(100) NOT NULL,
+				`status` varchar(30) NOT NULL,
+				PRIMARY KEY (`id`)
+			) $charset_collate AUTO_INCREMENT=1;" );
 
-	            $comments_table = $wpdb->prefix . "ulike_comments";
-	            if ( $wpdb->get_var( "show tables like '$comments_table'" ) != $comments_table ) {
-	                $sql = "CREATE TABLE " . $comments_table . " (
-	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
-	                        `comment_id` bigint(20) NOT NULL,
-	                        `date_time` datetime NOT NULL,
-	                        `ip` varchar(60) NOT NULL,
-	                        `user_id` varchar(30) NOT NULL,
-	                        `status` varchar(15) NOT NULL,
-	                        PRIMARY KEY (`id`)
-	                    );";
+			// Comments table
+			$comments_table = $wpdb->prefix . "ulike_comments";
+			maybe_create_table( $comments_table, "CREATE TABLE IF NOT EXISTS `{$comments_table}` (
+				`id` bigint(20) NOT NULL AUTO_INCREMENT,
+				`comment_id` bigint(20) NOT NULL,
+				`date_time` datetime NOT NULL,
+				`ip` varchar(100) NOT NULL,
+				`user_id` varchar(100) NOT NULL,
+				`status` varchar(30) NOT NULL,
+				PRIMARY KEY (`id`)
+			) $charset_collate AUTO_INCREMENT=1;" );
 
-	                require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-	                dbDelta( $sql );
-	            } else {
-	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $comments_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
-	            }
+			// Activities table
+			$activities_table = $wpdb->prefix . "ulike_activities";
+			maybe_create_table( $activities_table, "CREATE TABLE IF NOT EXISTS `{$activities_table}` (
+				`id` bigint(20) NOT NULL AUTO_INCREMENT,
+				`activity_id` bigint(20) NOT NULL,
+				`date_time` datetime NOT NULL,
+				`ip` varchar(100) NOT NULL,
+				`user_id` varchar(100) NOT NULL,
+				`status` varchar(30) NOT NULL,
+				PRIMARY KEY (`id`)
+			) $charset_collate AUTO_INCREMENT=1;" );
 
-	            $activities_table = $wpdb->prefix . "ulike_activities";
-	            if ( $wpdb->get_var( "show tables like '$activities_table'" ) != $activities_table ) {
-	                $sql = "CREATE TABLE " . $activities_table . " (
-	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
-	                        `activity_id` bigint(20) NOT NULL,
-	                        `date_time` datetime NOT NULL,
-	                        `ip` varchar(60) NOT NULL,
-	                        `user_id` varchar(30) NOT NULL,
-	                        `status` varchar(15) NOT NULL,
-	                        PRIMARY KEY (`id`)
-	                    );";
-
-	                require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-	                dbDelta( $sql );
-	            } else {
-	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $activities_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
-	            }
-
-	            $forums_table = $wpdb->prefix . "ulike_forums";
-	            if ( $wpdb->get_var( "show tables like '$forums_table'" ) != $forums_table ) {
-	                $sql = "CREATE TABLE " . $forums_table . " (
-	                        `id` bigint(20) NOT NULL AUTO_INCREMENT,
-	                        `topic_id` bigint(20) NOT NULL,
-	                        `date_time` datetime NOT NULL,
-	                        `ip` varchar(60) NOT NULL,
-	                        `user_id` varchar(30) NOT NULL,
-	                        `status` varchar(15) NOT NULL,
-	                        PRIMARY KEY (`id`)
-	                    );";
-
-	                require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-	                dbDelta( $sql );
-	            } else {
-	            	// Fix an old issue with user_id column
-	            	$wpdb->query( "ALTER TABLE $forums_table CHANGE `user_id` `user_id` VARCHAR(30) NOT NULL" );
-	            }
-
-				update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
-
-	        }
+			// Forums table
+			$forums_table = $wpdb->prefix . "ulike_forums";
+			maybe_create_table( $forums_table, "CREATE TABLE IF NOT EXISTS `{$forums_table}` (
+				`id` bigint(20) NOT NULL AUTO_INCREMENT,
+				`topic_id` bigint(20) NOT NULL,
+				`date_time` datetime NOT NULL,
+				`ip` varchar(100) NOT NULL,
+				`user_id` varchar(100) NOT NULL,
+				`status` varchar(30) NOT NULL,
+				PRIMARY KEY (`id`)
+			) $charset_collate AUTO_INCREMENT=1;" );
 
 	        do_action( 'wp_ulike_activated', get_current_blog_id() );
 	    }
@@ -569,19 +556,19 @@ if ( ! class_exists( 'WPULIKE' ) ) :
 
 	}
 
+	// Register hooks that are fired when the plugin is activated or deactivated.
+	register_activation_hook  ( __FILE__, array( 'WpUlikeInit', 'activate'   ) );
+	register_deactivation_hook( __FILE__, array( 'WpUlikeInit', 'deactivate' ) );
+
     /**
      * Open WP Ulike World :)
      *
      * @since    3.1
      */
 	function RUN_WPULIKE(){
-	    return WPULIKE::get_instance();
+	    return WpUlikeInit::get_instance();
 	}
 	RUN_WPULIKE();
-
-	// Register hooks that are fired when the plugin is activated or deactivated.
-	register_activation_hook  ( __FILE__, array( 'WPULIKE', 'activate'   ) );
-	register_deactivation_hook( __FILE__, array( 'WPULIKE', 'deactivate' ) );
 
 else :
 

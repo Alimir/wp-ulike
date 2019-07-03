@@ -3,9 +3,9 @@ Contributors: alimir
 Donate link: https://m.do.co/c/13ad5bc24738
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
-Requires at least: 3.5.2
-Tested up to: 4.9.8
-Stable tag: 3.5.0
+Requires at least: 3.5.0
+Tested up to: 5.2.2
+Stable tag: 3.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,24 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 3.6.1 =
+* Added: Purge functionality for litespeed & w3 total cache.
+* Added: Better process for database table creation.
+* Added: Better menu labels.
+* Fixed: Some issues in likers box and some other functionalities.
+* Fixed: An issue with myCred points.
+* Fixed: Fix an issue in microdata structure.
+* Fixed: Some reported issues.
+
+= 3.6.0 =
+* Added: Better BuddyPress notifications with some improvements on old functionalities.
+* Added: Simultaneously refresh  for identical buttons.
+* Added: Mark notifications as read when a user visits our notifications.
+* Added: Better admin menu badge counter.
+* Fixed: The "Top Likers" widget issue.
+* Fixed: Fix IPv6 storage issue.
+* Fixed: Fix reverse graph X-axis
 
 = 3.5.2 =
 * Fixed: An important issue with buddypress comments.
