@@ -356,9 +356,6 @@ module.exports = function(grunt) {
             bumpVersion: {
                 command: 'npm version patch'
             },
-            push_svn:{
-                command: 'sh deploy-build.sh'
-            },
 
             cleanBuildDotFiles: {
                 command: ' find <%= meta.buildDir %> -name ".DS_Store" -delete' // exclude dotfiles
@@ -430,6 +427,17 @@ module.exports = function(grunt) {
             }
         },
 
+        wp_deploy: {
+            deploy: {
+                options: {
+                    plugin_slug: '<%= meta.project %>',
+                    svn_user: 'alimir',
+                    build_dir: '<%= meta.buildPath %>', //relative path to your build directory
+                    assets_dir: 'wp-assets' //relative path to your assets directory (optional).
+                },
+            }
+        },
+
         // deploy via rsync
         deploy: {
             options: {
@@ -491,7 +499,7 @@ module.exports = function(grunt) {
     // build the final lite version in /build folder and pack the product
     grunt.registerTask( 'build'         , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
 
-    grunt.registerTask( 'release'       , ['build', 'shell:push_svn'] );
+    grunt.registerTask( 'release'       , ['build', 'wp_deploy:deploy'] );
 
     // register task
     grunt.registerTask( 'default'       , ['concat','cssmin', 'uglify']);

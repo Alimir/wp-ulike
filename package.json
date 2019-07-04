@@ -9,10 +9,10 @@
     "url": "git+https://github.com/Alimir/wp-ulike.git"
   },
   "license": "MIT",
-  "author": { 
-    "name": "Alimir", 
-    "email": "info@alimir.ir", 
-    "url": "http://alimir.ir" 
+  "author": {
+    "name": "Alimir",
+    "email": "info@alimir.ir",
+    "url": "http://alimir.ir"
   },
   "main": "Gruntfile.js",
   "scripts": {
@@ -56,6 +56,7 @@
     "grunt-rsync": ">=0.6.2",
     "grunt-shell": ">=1.1.1",
     "grunt-sync": ">=0.0.8",
+    "grunt-wp-deploy": "^2.0.0",
     "grunt-wp-i18n": ">=1.0.0",
     "http-server": "^0.8.5",
     "load-grunt-tasks": ">=0.6.0",
