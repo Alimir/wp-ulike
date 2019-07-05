@@ -34,6 +34,14 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 		 * @return void
 		 */
 		public function load_styles() {
+			wp_enqueue_style(
+				'wp-ulike-admin-notice',
+				WP_ULIKE_ADMIN_URL . '/assets/css/notice.css'
+			);
+
+			if ( strpos( $this->hook, 'wp-ulike' ) === false ) {
+				return;
+			}
 			// Enqueue admin styles
 			wp_enqueue_style(
 				'wp-ulike-admin',
