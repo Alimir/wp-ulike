@@ -443,7 +443,7 @@ module.exports = function(grunt) {
             options: {
                 args: ["--verbose --delete-after"], // z:compress while transfering data, P: display progress
                 exclude: [
-                        '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json', 'deploy-build.sh',
+                        '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
                         'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
                         'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'wp-assets', 'docs'
                 ],
@@ -461,7 +461,7 @@ module.exports = function(grunt) {
             lite: {
                 options: {
                     exclude: [
-                        '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json', '_devDependencies', 'deploy-build.sh',
+                        '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json', '_devDependencies',
                         'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json', 'bower.json',
                         'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'docs', 'wp-assets'
                     ],
