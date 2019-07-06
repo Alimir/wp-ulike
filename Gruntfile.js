@@ -204,7 +204,7 @@ module.exports = function(grunt) {
                         }
                     }
                 ]
-            }            
+            }
         },
 
 
@@ -427,12 +427,23 @@ module.exports = function(grunt) {
             }
         },
 
+        wp_deploy: {
+            deploy: {
+                options: {
+                    plugin_slug: '<%= meta.project %>',
+                    svn_user: 'alimir',
+                    build_dir: '<%= meta.buildPath %>', //relative path to your build directory
+                    assets_dir: 'wp-assets' //relative path to your assets directory (optional).
+                },
+            }
+        },
+
         // deploy via rsync
         deploy: {
             options: {
                 args: ["--verbose --delete-after"], // z:compress while transfering data, P: display progress
                 exclude: [
-                        '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
+                        '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json', 'deploy-build.sh',
                         'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
                         'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'wp-assets', 'docs'
                 ],
@@ -445,12 +456,12 @@ module.exports = function(grunt) {
                     src: "./",
                     dest: "<%= meta.buildPath %>"
                 }
-            },    
+            },
 
             lite: {
                 options: {
                     exclude: [
-                        '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json', '_devDependencies',
+                        '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json', '_devDependencies', 'deploy-build.sh',
                         'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json', 'bower.json',
                         'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'docs', 'wp-assets'
                     ],
@@ -487,6 +498,8 @@ module.exports = function(grunt) {
 
     // build the final lite version in /build folder and pack the product
     grunt.registerTask( 'build'         , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
+
+    grunt.registerTask( 'release'       , ['build', 'wp_deploy:deploy'] );
 
     // register task
     grunt.registerTask( 'default'       , ['concat','cssmin', 'uglify']);

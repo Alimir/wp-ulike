@@ -3,6 +3,7 @@ Contributors: alimir
 Donate link: https://m.do.co/c/13ad5bc24738
 Author: Ali Mirzaei
 Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
+Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.2.2
 Stable tag: 3.6.1
