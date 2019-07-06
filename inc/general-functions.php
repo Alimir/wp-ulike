@@ -334,7 +334,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_avatar_size' => array(
 							'type'        => 'number',
-							'default'     => 32,
+							'default'     => 64,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
 						),
@@ -425,7 +425,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_avatar_size' => array(
 							'type'        => 'number',
-							'default'     => 32,
+							'default'     => 64,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
 						),
@@ -522,7 +522,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_avatar_size' => array(
 							'type'        => 'number',
-							'default'     => 32,
+							'default'     => 64,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
 						),
@@ -638,7 +638,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_avatar_size' => array(
 							'type'        => 'number',
-							'default'     => 32,
+							'default'     => 64,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
 						),
