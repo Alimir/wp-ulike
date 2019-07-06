@@ -1,5 +1,5 @@
 /* 'WordpressUlike' plugin : https://github.com/alimir/wp-ulike */
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   "use strict";
 
   // Create the defaults once
@@ -12,6 +12,8 @@
       type:
         "" /* Values : likeThis (Posts),likeThisComment, likeThisActivity, likeThisTopic */,
       likeStatus: 0 /* Values : 0 (Is not logged-in), 1 (Is not liked), 2 (Is liked), 3 (Is unliked), 4 (Already liked) */,
+      append: '',
+      appendTimeout: 2000,
       counterSelector: ".count-box",
       generalSelector: ".wp_ulike_general_class",
       buttonSelector: ".wp_ulike_btn",
@@ -21,6 +23,8 @@
       "ulike-id": "ID",
       "ulike-nonce": "nonce",
       "ulike-type": "type",
+      "ulike-append": "append",
+      "ulike-append-timeout": "appendTimeout",
       "ulike-status": "likeStatus"
     };
 
@@ -53,7 +57,7 @@
 
   // Avoid Plugin.prototype conflicts
   $.extend(Plugin.prototype, {
-    init: function() {
+    init: function () {
       //Call _ajaxify function on click button
       this.buttonElement.click(this._initLike.bind(this));
       //Call _ajaxify function on click button
@@ -63,7 +67,7 @@
     /**
      * global AJAX callback
      */
-    _ajax: function(args, callback) {
+    _ajax: function (args, callback) {
       // Do Ajax & update default value
       $.ajax({
         url: wp_ulike_params.ajax_url,
@@ -77,7 +81,7 @@
     /**
      * init ulike core process
      */
-    _initLike: function(event) {
+    _initLike: function (event) {
       // Prevents further propagation of the current event in the capturing and bubbling phases
       event.stopPropagation();
       // check for same buttons
@@ -97,12 +101,14 @@
           status: this.settings.likeStatus,
           type: this.settings.type
         },
-        function(response) {
+        function (response) {
           //remove progress class
           this.generalElement.removeClass("wp_ulike_is_loading");
           // Make changes
           if (response.success) {
             this._updateMarkup(response);
+            // Append html data
+            this._appendChild();
           } else {
             this._sendNotification("error", response.data);
           }
@@ -114,10 +120,26 @@
       );
     },
 
+
+    /**
+     * append child
+     */
+    _appendChild: function () {
+      if (this.settings.append !== '') {
+        var $appendedElement = $(this.settings.append);
+        this.buttonElement.append($appendedElement);
+        if (this.settings.appendTimeout) {
+          setTimeout(function () {
+            $appendedElement.detach();
+          }, this.settings.appendTimeout);
+        }
+      }
+    },
+
     /**
      * update button markup and calling some actions
      */
-    _updateMarkup: function(response) {
+    _updateMarkup: function (response) {
       //check likeStatus
       switch (this.settings.likeStatus) {
         case 1 /* Change the status of 'is not liked' to 'liked' */:
@@ -200,7 +222,7 @@
     /**
      * init & update likers box
      */
-    _updateLikers: function() {
+    _updateLikers: function () {
       // Get likers box container element
       this.likersElement = this._getLikersElement();
       // Make a request to generate or refresh the likers box
@@ -216,7 +238,7 @@
             type: this.settings.type,
             refresh: this._refreshTheLikers ? 1 : 0
           },
-          function(response) {
+          function (response) {
             // Remove progress status class
             this.generalElement.removeClass("wp_ulike_is_getting_likers_list");
             // Change markup
@@ -243,7 +265,7 @@
     /**
      * Update the elements of same buttons at the same time
      */
-    _updateSameButtons: function() {
+    _updateSameButtons: function () {
       // Get buttons with same unique class names
       this.sameButtons = $document.find(
         ".wp_" + this.settings.type.toLowerCase() + "_" + this.settings.ID
@@ -263,7 +285,7 @@
     /**
      * Get likers wrapper element
      */
-    _getLikersElement: function() {
+    _getLikersElement: function () {
       if (this.generalElement.length > 1) {
         return this.generalElement.next(this.settings.likersSelector);
       } else {
@@ -274,7 +296,7 @@
     /**
      * Control actions
      */
-    _controlActions: function(messageType, messageText, btnText, likeStatus) {
+    _controlActions: function (messageType, messageText, btnText, likeStatus) {
       //check the button types
       if (this.buttonElement.hasClass("wp_ulike_put_image")) {
         if (likeStatus === 3 || likeStatus === 2) {
@@ -291,7 +313,7 @@
     /**
      * Send notification by 'WordpressUlikeNotifications' plugin
      */
-    _sendNotification: function(messageType, messageText) {
+    _sendNotification: function (messageType, messageText) {
       //Check notifications active mode
       if (wp_ulike_params.notifications !== "1") {
         return;
@@ -306,8 +328,8 @@
 
   // A really lightweight plugin wrapper around the constructor,
   // preventing against multiple instantiations
-  $.fn[pluginName] = function(options) {
-    return this.each(function() {
+  $.fn[pluginName] = function (options) {
+    return this.each(function () {
       if (!$.data(this, "plugin_" + pluginName)) {
         $.data(this, "plugin_" + pluginName, new Plugin(this, options));
       }
