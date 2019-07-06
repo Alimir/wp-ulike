@@ -1,0 +1,142 @@
+
+/**
+ * Animated heart template
+ */
+
+.wpulike-animated-heart {
+
+  .wp_ulike_btn {
+    position: relative;
+    border-radius: 50em;
+    background-color: #ffffff;
+    padding: 0;
+    box-shadow: 0px 5px 30px rgba(255, 111, 99, 0.4);
+    border: 0;
+    width: 50px;
+    height: 50px;
+
+    &.image-unlike{
+      background-color: rgba(255, 111, 99, 1);
+      .wpulike-svg-heart{
+        fill: #ffffff;
+
+        &-pop{
+          animation-direction: normal;
+        }
+      }
+    }
+
+    &:active{
+      box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  .wpulike-svg-heart{
+    width: 20px;
+    fill: #ff6f63;
+    transition: fill .5s, transform .5s;
+    pointer-events: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
+    &-pop{
+     position: absolute;
+     width: 30%;
+     fill: #ff6f63;
+     opacity: 0;
+     left: 0;
+     animation: popHearts 1s ease forwards reverse;
+
+      &.one{
+        left: 1%;
+        transform: rotate(-10deg);
+        animation-delay: .45;
+      }
+      &.two{
+        left: 15%;
+        transform: rotate(8deg);
+        animation-delay: .25s;
+      }
+      &.three{
+        left: 30%;
+        transform: rotate(-5deg);
+        animation-delay: 0;
+      }
+      &.four{
+        left: 50%;
+        transform: rotate(-8deg);
+        animation-delay: .3s;
+      }
+      &.five{
+        left: 60%;
+        transform: rotate(-10deg);
+        animation-delay: .9s;
+      }
+      &.six{
+        left: 70%;
+        transform: rotate(-8deg);
+        animation-delay: .2;
+      }
+      &.seven{
+        left: 85%;
+        transform: rotate(6deg);
+        animation-delay: .35s;
+      }
+      &.eight{
+        left: 90%;
+        transform: rotate(-4deg);
+        animation-delay: .5s;
+      }
+      &.nine{
+        left: 95%;
+        transform: rotate(8deg);
+        animation-delay: .2s;
+      }
+    }
+  }
+
+  .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
+    bottom: 30px;
+  }
+
+  .count-box{
+    margin: 0 15px;
+    color: #ff6f63;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+}
+
+#buddypress #activity-stream{
+  .wpulike-animated-heart {
+      .wp_ulike_btn{
+        background: inherit;
+        border: 0;
+        width: 40px;
+        height: 40px;
+
+        &.image-unlike{
+          background-color: rgba(255, 111, 99, 1);
+        }
+      }
+  }
+}
+
+@keyframes popHearts{
+  0%{
+    left: calc(50% - 7px);
+    top: 10px;
+  }
+  20%{
+    opacity: 1;
+  }
+  80%{
+    top: -20px;
+  }
+  100%{
+    opacity: 0;
+  }
+}
