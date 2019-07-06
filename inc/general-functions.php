@@ -883,34 +883,36 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 			$avg 	= $likes->average;
 			$count 	= $likes->counter;
 			$date 	= strtotime($likes->post_date);
-			//if there is no log data, set $rating_value = 4
-			if($count == 0 || $avg == 0){
-				$rating_value = 4;
-				return $rating_value;
-			}
-			$decimal = 0;
-			if($is_decimal){
-				list($whole, $decimal) = explode('.', number_format(($count*100/($avg*2)), 1));
-				$decimal = (int)$decimal;
-			}
-			if( $date > strtotime('-1 month')) {
-				if($count < $avg) $rating_value = 4 + ".$decimal";
-				else $rating_value = 5;
-			} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
-				if($count < $avg) $rating_value = 3 + ".$decimal";
-				else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 4 + ".$decimal";
-				else $rating_value = 5;
+
+			// if there is no log data, set $rating_value = 5
+			if( $count == 0 || $avg == 0 ){
+				$rating_value = 5;
 			} else {
-				if($count < ($avg/2)) $rating_value = 1 + ".$decimal";
-				else if(($count >= ($avg/2)) && ($count < $avg)) $rating_value = 2 + ".$decimal";
-				else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 3 + ".$decimal";
-				else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) $rating_value = 4 + ".$decimal";
-				else $rating_value = 5;
+				$decimal = 0;
+				if( $is_decimal ){
+					list( $whole, $decimal ) = explode( '.', number_format( ( $count*100 / ( $avg * 2 ) ), 1 ) );
+					$decimal = (int)$decimal;
+				}
+				if( $date > strtotime('-1 month')) {
+					if($count < $avg) $rating_value = 4 + ".$decimal";
+					else $rating_value = 5;
+				} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
+					if($count < $avg) $rating_value = 3 + ".$decimal";
+					else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 4 + ".$decimal";
+					else $rating_value = 5;
+				} else {
+					if($count < ($avg/2)) $rating_value = 1 + ".$decimal";
+					else if(($count >= ($avg/2)) && ($count < $avg)) $rating_value = 2 + ".$decimal";
+					else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 3 + ".$decimal";
+					else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) $rating_value = 4 + ".$decimal";
+					else $rating_value = 5;
+				}
 			}
+
 			wp_cache_add($cache_key, $rating_value, $cache_group, HOUR_IN_SECONDS);
 		}
 
-		return $rating_value;
+		return apply_filters( 'wp_ulike_rating_value', $rating_value, $post_ID );
 	}
 }
 
