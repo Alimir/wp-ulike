@@ -1,4 +1,4 @@
-/*! WP ULike - v3.6.1
+/*! WP ULike - v3.6.2
  *  https://wpulike.com
  *  Alimir 2019;
  */
