@@ -6,7 +6,7 @@ Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, mos
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.2.2
-Stable tag: 3.6.1
+Stable tag: 3.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -174,6 +174,12 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 3.6.2 =
+* Added: New animated heart template.
+* Fixed: An issue with home page display.
+* Fixed: An issue with user avatar default size.
+* Fixed: Some issues with aggregaterating.
 
 = 3.6.1 =
 * Added: Purge functionality for litespeed & w3 total cache.

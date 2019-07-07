@@ -2,7 +2,7 @@
 /**
  * Robeen template
  */
-@keyframes "animateCircle" {
+@keyframes animateCircle {
   40% {
     transform: scale(10);
     opacity: 1;
@@ -47,7 +47,7 @@
     stroke-width: 0;
   }
 }
-@keyframes "animateHeart" {
+@keyframes animateHeart {
   0% {
     transform: scale(0.2);
   }
@@ -58,7 +58,7 @@
     transform: scale(1);
   }
 }
-@keyframes "animateHeartOut" {
+@keyframes animateHeartOut {
   0% {
     transform: scale(1.4);
   }

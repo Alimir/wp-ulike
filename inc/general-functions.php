@@ -125,6 +125,11 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 				'name'     => __('Robeen', WP_ULIKE_SLUG),
 				'callback' => 'wp_ulike_set_robeen_template',
 				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'
+			),
+			'wpulike-animated-heart' => array(
+				'name'     => __('Animated Heart', WP_ULIKE_SLUG),
+				'callback' => 'wp_ulike_set_animated_heart_template',
+				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/animated-heart.svg'
 			)
 		);
 
@@ -329,7 +334,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_avatar_size' => array(
 							'type'        => 'number',
-							'default'     => 32,
+							'default'     => 64,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
 						),
@@ -420,7 +425,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_avatar_size' => array(
 							'type'        => 'number',
-							'default'     => 32,
+							'default'     => 64,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
 						),
@@ -517,7 +522,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_avatar_size' => array(
 							'type'        => 'number',
-							'default'     => 32,
+							'default'     => 64,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
 						),
@@ -633,7 +638,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'users_liked_box_avatar_size' => array(
 							'type'        => 'number',
-							'default'     => 32,
+							'default'     => 64,
 							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
 							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
 						),
@@ -793,10 +798,9 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 	function is_wp_ulike( $options, $args = array() ){
 
 		$defaults = array(
-			'is_home'     => is_home() && $options['home'] == '1',
+			'is_home'     => is_front_page() && is_home() && $options['home'] == '1',
 			'is_single'   => is_single() && $options['single'] == '1',
 			'is_page'     => is_page() && $options['page'] == '1',
-			'is_front'    => is_front_page() || is_front_page() && is_home(), // Disable on homepage
 			'is_archive'  => is_archive() && $options['archive'] == '1',
 			'is_category' => is_category() && $options['category'] == '1',
 			'is_search'   => is_search() && $options['search'] == '1',
@@ -879,34 +883,36 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 			$avg 	= $likes->average;
 			$count 	= $likes->counter;
 			$date 	= strtotime($likes->post_date);
-			//if there is no log data, set $rating_value = 4
-			if($count == 0 || $avg == 0){
-				$rating_value = 4;
-				return $rating_value;
-			}
-			$decimal = 0;
-			if($is_decimal){
-				list($whole, $decimal) = explode('.', number_format(($count*100/($avg*2)), 1));
-				$decimal = (int)$decimal;
-			}
-			if( $date > strtotime('-1 month')) {
-				if($count < $avg) $rating_value = 4 + ".$decimal";
-				else $rating_value = 5;
-			} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
-				if($count < $avg) $rating_value = 3 + ".$decimal";
-				else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 4 + ".$decimal";
-				else $rating_value = 5;
+
+			// if there is no log data, set $rating_value = 5
+			if( $count == 0 || $avg == 0 ){
+				$rating_value = 5;
 			} else {
-				if($count < ($avg/2)) $rating_value = 1 + ".$decimal";
-				else if(($count >= ($avg/2)) && ($count < $avg)) $rating_value = 2 + ".$decimal";
-				else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 3 + ".$decimal";
-				else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) $rating_value = 4 + ".$decimal";
-				else $rating_value = 5;
+				$decimal = 0;
+				if( $is_decimal ){
+					list( $whole, $decimal ) = explode( '.', number_format( ( $count*100 / ( $avg * 2 ) ), 1 ) );
+					$decimal = (int)$decimal;
+				}
+				if( $date > strtotime('-1 month')) {
+					if($count < $avg) $rating_value = 4 + ".$decimal";
+					else $rating_value = 5;
+				} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
+					if($count < $avg) $rating_value = 3 + ".$decimal";
+					else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 4 + ".$decimal";
+					else $rating_value = 5;
+				} else {
+					if($count < ($avg/2)) $rating_value = 1 + ".$decimal";
+					else if(($count >= ($avg/2)) && ($count < $avg)) $rating_value = 2 + ".$decimal";
+					else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 3 + ".$decimal";
+					else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) $rating_value = 4 + ".$decimal";
+					else $rating_value = 5;
+				}
 			}
+
 			wp_cache_add($cache_key, $rating_value, $cache_group, HOUR_IN_SECONDS);
 		}
 
-		return $rating_value;
+		return apply_filters( 'wp_ulike_rating_value', $rating_value, $post_ID );
 	}
 }
 
@@ -1738,6 +1744,46 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 					</svg>
 					<?php echo $counter; ?>
 					</label>
+			</div>
+		<?php
+			do_action( 'wp_ulike_inside_template', $wp_ulike_template );
+		?>
+		</div>
+	<?php
+		do_action( 'wp_ulike_after_template' );
+		return ob_get_clean(); // data is now in here
+	}
+}
+
+/**
+ * Create Animated Heart template
+ *
+ * @author       	Alimir
+ * @since           3.6.2
+ * @return			Void
+ */
+if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
+	function wp_ulike_set_animated_heart_template( array $wp_ulike_template ){
+		//This function will turn output buffering on
+		ob_start();
+		do_action( 'wp_ulike_before_template' );
+		// Extract input array
+		extract( $wp_ulike_template );
+	?>
+		<div class="wpulike wpulike-animated-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
+			<div class="<?php echo $general_class; ?>">
+				<button type="button"
+					data-ulike-id="<?php echo $ID; ?>"
+					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
+					data-ulike-type="<?php echo $type; ?>"
+					data-ulike-append="<?php echo htmlspecialchars( '<svg class="wpulike-svg-heart wpulike-svg-heart-pop one" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop two" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop three" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop four" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop five" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop six" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop seven" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop eight" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop nine" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>' ); ?>"
+					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
+					<svg class="wpulike-svg-heart wpulike-svg-heart-icon" viewBox="0 -28 512.00002 512" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="m471.382812 44.578125c-26.503906-28.746094-62.871093-44.578125-102.410156-44.578125-29.554687 0-56.621094 9.34375-80.449218 27.769531-12.023438 9.300781-22.917969 20.679688-32.523438 33.960938-9.601562-13.277344-20.5-24.660157-32.527344-33.960938-23.824218-18.425781-50.890625-27.769531-80.445312-27.769531-39.539063 0-75.910156 15.832031-102.414063 44.578125-26.1875 28.410156-40.613281 67.222656-40.613281 109.292969 0 43.300781 16.136719 82.9375 50.78125 124.742187 30.992188 37.394531 75.535156 75.355469 127.117188 119.3125 17.613281 15.011719 37.578124 32.027344 58.308593 50.152344 5.476563 4.796875 12.503907 7.4375 19.792969 7.4375 7.285156 0 14.316406-2.640625 19.785156-7.429687 20.730469-18.128907 40.707032-35.152344 58.328125-50.171876 51.574219-43.949218 96.117188-81.90625 127.109375-119.304687 34.644532-41.800781 50.777344-81.4375 50.777344-124.742187 0-42.066407-14.425781-80.878907-40.617188-109.289063zm0 0" />
+					</svg>
+				</button>
+				<?php echo $counter; ?>
 			</div>
 		<?php
 			do_action( 'wp_ulike_inside_template', $wp_ulike_template );
