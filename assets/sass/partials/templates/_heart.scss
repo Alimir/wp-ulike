@@ -65,21 +65,24 @@
 }
 
 #buddypress #activity-stream{
-
+    .wpulike-heart {
+        .wp_ulike_btn{
+            background: transparent;
+            border: 0;
+            font-size: initial;
+            padding: initial;
+        }
+        .wp_ulike_put_image{
+            padding: 10px 15px;
+        }
+        .wp_ulike_general_class {
+            border-radius: 0;
+            padding: 0.2em 0.5em;
+            margin-bottom: 0;
+        }
+    }
     .activity-meta, .acomment-options {
         display: flex;
         align-items: center;
-
-        .wpulike-heart {
-            .wp_ulike_put_image{
-                padding: 10px 15px;
-            }
-            .wp_ulike_general_class {
-                border-radius: 0;
-                padding: 0.2em 0.5em;
-                margin-bottom: 0;
-            }
-        }
-
     }
 }
