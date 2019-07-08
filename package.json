@@ -16,7 +16,6 @@
   },
   "main": "Gruntfile.js",
   "scripts": {
-    "css":"grunt compass",
     "dev": "watchify -vd -p browserify-hmr -e admin/assets/js/solo/vue/src/main.js -o admin/assets/js/solo/vue/vue.js",
     "build": "cross-env NODE_ENV=production browserify admin/assets/js/solo/vue/src/main.js | uglifyjs -c warnings=false -m > admin/assets/js/solo/vue/vue.js"
   },
