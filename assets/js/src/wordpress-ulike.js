@@ -14,6 +14,7 @@
       likeStatus: 0 /* Values : 0 (Is not logged-in), 1 (Is not liked), 2 (Is liked), 3 (Is unliked), 4 (Already liked) */,
       append: '',
       appendTimeout: 2000,
+      displayLikers: false,
       counterSelector: ".count-box",
       generalSelector: ".wp_ulike_general_class",
       buttonSelector: ".wp_ulike_btn",
@@ -24,6 +25,7 @@
       "ulike-nonce": "nonce",
       "ulike-type": "type",
       "ulike-append": "append",
+      "ulike-display-likers": "displayLikers",
       "ulike-append-timeout": "appendTimeout",
       "ulike-status": "likeStatus"
     };
@@ -226,7 +228,7 @@
       // Get likers box container element
       this.likersElement = this._getLikersElement();
       // Make a request to generate or refresh the likers box
-      if (!this.likersElement.length || this._refreshTheLikers) {
+      if (this.settings.displayLikers && (!this.likersElement.length || this._refreshTheLikers)) {
         // Add progress status class
         this.generalElement.addClass("wp_ulike_is_getting_likers_list");
         // Start ajax process

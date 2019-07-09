@@ -747,29 +747,31 @@ if( ! function_exists( 'wp_ulike' ) ){
 		//global variables
 		global $post;
 
-		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post->ID;
-		$get_post_meta = get_post_meta( $post_ID, '_liked', true );
-		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
-		$attributes    = apply_filters( 'wp_ulike_posts_add_attr', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
-		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$post_ID        = isset( $args['id'] ) ? $args['id'] : $post->ID;
+		$get_post_meta  = get_post_meta( $post_ID, '_liked', true );
+		$get_like       = empty( $get_post_meta ) ? 0 : $get_post_meta;
+		$attributes     = apply_filters( 'wp_ulike_posts_add_attr', null );
+		$style          = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
+		$display_likers = wp_ulike_get_setting( 'wp_ulike_posts', 'users_liked_box', 1 );
+		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main data
 		$defaults      = array(
-			"id"            => $post_ID,				//Post ID
-			"get_like"      => $get_like,				//Number Of Likes
-			"method"        => 'likeThis',				//JavaScript method
-			"setting"       => 'wp_ulike_posts',		//Setting Key
-			"type"          => 'post',					//Function type (post/process)
-			"table"         => 'ulike',					//posts table
-			"column"        => 'post_id',				//ulike table column name
-			"key"           => '_liked',				//meta key
-			"cookie"        => 'liked-',				//Cookie Name
-			"slug"          => 'post',					//Slug Name
-			"style"         => $style,					//Get Default Theme
-			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => '',						//Extra Wrapper class
-			"button_type"   => $button_type				//Button Type
+			"id"             => $post_ID,           //Post ID
+			"get_like"       => $get_like,          //Number Of Likes
+			"method"         => 'likeThis',         //JavaScript method
+			"setting"        => 'wp_ulike_posts',   //Setting Key
+			"type"           => 'post',             //Function type (post/process)
+			"table"          => 'ulike',            //posts table
+			"column"         => 'post_id',          //ulike table column name
+			"key"            => '_liked',           //meta key
+			"cookie"         => 'liked-',           //Cookie Name
+			"slug"           => 'post',             //Slug Name
+			"display_likers" => $display_likers,    //Check likers box display
+			"style"          => $style,             //Get Default Theme
+			"attributes"     => $attributes,        //Get Attributes Filter
+			"wrapper_class"  => '',                 //Extra Wrapper class
+			"button_type"    => $button_type        //Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -933,29 +935,31 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 if( ! function_exists( 'wp_ulike_comments' ) ){
 	function wp_ulike_comments( $type = 'get', $args = array() ) {
 
-		$comment_ID    = isset( $args['id'] ) ? $args['id'] : get_comment_ID();
-		$comment_meta  = get_comment_meta( $comment_ID, '_commentliked', true );
-		$get_like      = empty( $comment_meta ) ? 0 : $comment_meta;
-		$attributes    = apply_filters( 'wp_ulike_comments_add_attr', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
-		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$comment_ID     = isset( $args['id'] ) ? $args['id'] : get_comment_ID();
+		$comment_meta   = get_comment_meta( $comment_ID, '_commentliked', true );
+		$get_like       = empty( $comment_meta ) ? 0 : $comment_meta;
+		$attributes     = apply_filters( 'wp_ulike_comments_add_attr', null );
+		$style          = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
+		$display_likers = wp_ulike_get_setting( 'wp_ulike_comments', 'users_liked_box', 1 );
+		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
-			"id"            => $comment_ID,				//Comment ID
-			"get_like"      => $get_like,				//Number Of Likes
-			"method"        => 'likeThisComment',		//JavaScript method
-			"setting"       => 'wp_ulike_comments',		//Setting Key
-			"type"          => 'post',					//Function type (post/process)
-			"table"         => 'ulike_comments',		//Comments table
-			"column"        => 'comment_id',			//ulike_comments table column name
-			"key"           => '_commentliked',			//meta key
-			"cookie"        => 'comment-liked-',		//Cookie Name
-			"slug"          => 'comment',				//Slug Name
-			"style"         => $style,					//Get Default Theme
-			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => '',						//Extra Wrapper class
-			"button_type"   => $button_type				//Button Type
+			"id"             => $comment_ID,           //Comment ID
+			"get_like"       => $get_like,             //Number Of Likes
+			"method"         => 'likeThisComment',     //JavaScript method
+			"setting"        => 'wp_ulike_comments',   //Setting Key
+			"type"           => 'post',                //Function type (post/process)
+			"table"          => 'ulike_comments',      //Comments table
+			"column"         => 'comment_id',          //ulike_comments table column name
+			"key"            => '_commentliked',       //meta key
+			"cookie"         => 'comment-liked-',      //Cookie Name
+			"slug"           => 'comment',             //Slug Name
+			"display_likers" => $display_likers,       //Display likers box
+			"style"          => $style,                //Get Default Theme
+			"attributes"     => $attributes,           //Get Attributes Filter
+			"wrapper_class"  => '',                    //Extra Wrapper class
+			"button_type"    => $button_type           //Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1008,28 +1012,30 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_id();
 		}
 
-		$bp_get_meta   = bp_activity_get_meta($activityID, '_activityliked');
-		$get_like      = empty( $bp_get_meta ) ? 0 : $bp_get_meta;
-		$attributes    = apply_filters( 'wp_ulike_activities_add_attr', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
-		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$bp_get_meta    = bp_activity_get_meta($activityID, '_activityliked');
+		$get_like       = empty( $bp_get_meta ) ? 0 : $bp_get_meta;
+		$attributes     = apply_filters( 'wp_ulike_activities_add_attr', null );
+		$style          = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
+		$display_likers = wp_ulike_get_setting( 'wp_ulike_buddypress', 'users_liked_box', 1 );
+		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
-			"id"            => $activityID,				//Activity ID
-			"get_like"      => $get_like,				//Number Of Likes
-			"method"        => 'likeThisActivity',		//JavaScript method
-			"setting"       => 'wp_ulike_buddypress',	//Setting Key
-			"type"          => 'post',					//Function type (post/process)
-			"table"         => 'ulike_activities',		//Activities table
-			"column"        => 'activity_id',			//ulike_activities table column name
-			"key"           => '_activityliked',		//meta key
-			"cookie"        => 'activity-liked-',		//Cookie Name
-			"slug"          => 'activity',				//Slug Name
-			"style"         => $style,					//Get Default Theme
-			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => '',						//Extra Wrapper class
-			"button_type"   => $button_type				//Button Type
+			"id"             => $activityID,             //Activity ID
+			"get_like"       => $get_like,               //Number Of Likes
+			"method"         => 'likeThisActivity',      //JavaScript method
+			"setting"        => 'wp_ulike_buddypress',   //Setting Key
+			"type"           => 'post',                  //Function type (post/process)
+			"table"          => 'ulike_activities',      //Activities table
+			"column"         => 'activity_id',           //ulike_activities table column name
+			"key"            => '_activityliked',        //meta key
+			"cookie"         => 'activity-liked-',       //Cookie Name
+			"slug"           => 'activity',              //Slug Name
+			"display_likers" => $display_likers,         //Display likers box
+			"style"          => $style,                  //Get Default Theme
+			"attributes"     => $attributes,             //Get Attributes Filter
+			"wrapper_class"  => '',                      //Extra Wrapper class
+			"button_type"    => $button_type             //Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1146,28 +1152,30 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		$post_ID       = !$replyID ? $post->ID : $replyID;
 		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post_ID;
 
-		$get_post_meta = get_post_meta( $post_ID, '_topicliked', true );
-		$get_like      = empty( $get_post_meta ) ? 0 : $get_post_meta;
-		$attributes    = apply_filters( 'wp_ulike_topics_add_attr', null );
-		$style         = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
-		$button_type   = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$get_post_meta  = get_post_meta( $post_ID, '_topicliked', true );
+		$get_like       = empty( $get_post_meta ) ? 0 : $get_post_meta;
+		$attributes     = apply_filters( 'wp_ulike_topics_add_attr', null );
+		$style          = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
+		$display_likers = wp_ulike_get_setting( 'wp_ulike_bbpress', 'users_liked_box', 1 );
+		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 
 		//Main Data
 		$defaults      = array(
-			"id"            => $post_ID,				//Post ID
-			"get_like"      => $get_like,				//Number Of Likes
-			"method"        => 'likeThisTopic',			//JavaScript method
-			"setting"       => 'wp_ulike_bbpress',		//Setting Key
-			"type"          => 'post',					//Function type (post/process)
-			"table"         => 'ulike_forums',			//posts table
-			"column"        => 'topic_id',				//ulike table column name
-			"key"           => '_topicliked',			//meta key
-			"cookie"        => 'topic-liked-',			//Cookie Name
-			"slug"          => 'topic',					//Slug Name
-			"style"         => $style,					//Get Default Theme
-			"attributes"    => $attributes,				//Get Attributes Filter
-			"wrapper_class" => '',						//Extra Wrapper class
-			"button_type"   => $button_type,			//Button Type
+			"id"             => $post_ID,             //Post ID
+			"get_like"       => $get_like,            //Number Of Likes
+			"method"         => 'likeThisTopic',      //JavaScript method
+			"setting"        => 'wp_ulike_bbpress',   //Setting Key
+			"type"           => 'post',               //Function type (post/process)
+			"table"          => 'ulike_forums',       //posts table
+			"column"         => 'topic_id',           //ulike table column name
+			"key"            => '_topicliked',        //meta key
+			"cookie"         => 'topic-liked-',       //Cookie Name
+			"slug"           => 'topic',              //Slug Name
+			"display_likers" => $display_likers,      //Slug Name
+			"style"          => $style,               //Get Default Theme
+			"attributes"     => $attributes,          //Get Attributes Filter
+			"wrapper_class"  => '',                   //Extra Wrapper class
+			"button_type"    => $button_type,         //Button Type
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1623,6 +1631,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
+					data-ulike-display-likers="<?php echo $display_likers; ?>"
 					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
 					<?php
 						if($button_type == 'text'){
@@ -1663,6 +1672,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
+					data-ulike-display-likers="<?php echo $display_likers; ?>"
 					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
 					<?php
 						if($button_type == 'text'){
@@ -1704,6 +1714,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 							data-ulike-id="<?php echo $ID; ?>"
 							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 							data-ulike-type="<?php echo $type; ?>"
+							data-ulike-display-likers="<?php echo $display_likers; ?>"
 							data-ulike-status="<?php echo $status; ?>"
 							class="<?php echo $button_class; ?>"
 							<?php echo  $status == 2  ? 'checked="checked"' : ''; ?> />
@@ -1776,6 +1787,7 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
+					data-ulike-display-likers="<?php echo $display_likers; ?>"
 					data-ulike-append="<?php echo htmlspecialchars( '<svg class="wpulike-svg-heart wpulike-svg-heart-pop one" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop two" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop three" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop four" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop five" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop six" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop seven" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop eight" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop nine" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>' ); ?>"
 					data-ulike-status="<?php echo $status; ?>" class="<?php echo $button_class; ?>">
 					<svg class="wpulike-svg-heart wpulike-svg-heart-icon" viewBox="0 -28 512.00002 512" xmlns="http://www.w3.org/2000/svg">
