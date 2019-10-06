@@ -183,6 +183,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 					SELECT DATE(date_time) AS labels,
 					count(date_time) AS counts
 					FROM %s
+					WHERE TO_DAYS(NOW()) - TO_DAYS(date_time) <= 30
 					GROUP BY labels
 					ASC LIMIT %d",
 					$this->wpdb->prefix . $table,
