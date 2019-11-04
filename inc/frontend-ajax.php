@@ -19,10 +19,11 @@ function wp_ulike_process(){
 	// Global variables
 	global $wp_ulike_class;
 
-	$post_ID     = $_POST['id'];
-	$post_type   = $_POST['type'];
-	$like_status = $_POST['status'];
-	$nonce_token = $_POST['nonce'];
+	$post_ID     = isset( $_POST['id'] ) ? $_POST['id'] : NULL;
+	$post_type   = isset( $_POST['type'] ) ? $_POST['type'] : NULL;
+	$like_status = isset( $_POST['status'] ) ? $_POST['status'] : NULL;
+	$nonce_token = isset( $_POST['nonce'] ) ? $_POST['nonce'] : NULL;
+	$factor      = isset( $_POST['factor'] ) ? $_POST['factor'] : NULL;
 	$response    = array();
 
 	if( $post_ID == null || ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) ) {
@@ -40,19 +41,19 @@ function wp_ulike_process(){
 	// Extract post type settings
 	extract( $get_settings );
 
-	$get_like      = $get_meta_data != '' ? $get_meta_data : 0;
-
 	$args = apply_filters( 'wp_ulike_ajax_process_atts', array(
-			"id"       => $post_ID,				//Post ID
-			"get_like" => $get_like,			//Number Of Likes
-			"method"   => $post_type,			//JavaScript method
-			"setting"  => $setting_key,			//Setting Key
-			"type"     => 'process',			//Function type (post/process)
-			"table"    => $table_name,			//posts table
-			"column"   => $column_name,			//ulike table column name
-			"key"      => $meta_key,			//meta key
-			"cookie"   => $cookie_name			//Cookie Name
-		), $post_ID
+			"id"       => $post_ID,                          //Post ID
+			"get_like" => $get_like != '' ? $get_like : 0,   //Number Of Likes
+			"method"   => $post_type,                        //JavaScript method
+			"setting"  => $setting,                          //Setting Key
+			"type"     => 'process',                         //Function type (post/process)
+			"table"    => $table,                            //posts table
+			"column"   => $column,                           //ulike table column name
+			"key"      => $key,                              //meta key
+			"slug"     => $slug,                             //meta key
+			"cookie"   => $cookie,                           //Cookie Name
+			"factor"   => $factor,                           //Factor type
+		), $post_ID, $get_settings
 	);
 
 	switch ( $like_status ){
@@ -92,7 +93,7 @@ function wp_ulike_process(){
 					);
 	}
 
-	wp_send_json_success( $response );
+	wp_send_json_success( apply_filters( 'wp_ulike_ajax_respond', $response, $post_ID, $args ) );
 }
 //	wp_ajax hooks for the custom AJAX requests
 add_action( 'wp_ajax_wp_ulike_process'			, 'wp_ulike_process' );
@@ -135,13 +136,13 @@ function wp_ulike_get_likers(){
 	extract( $get_settings );
 
 	// If likers box has been disabled
-	if ( ! wp_ulike_get_setting( $setting_key, 'users_liked_box' ) ) {
+	if ( ! wp_ulike_get_setting( $setting, 'users_liked_box' ) ) {
 		wp_send_json_error( __( 'Notice: The likers box is not activated!', WP_ULIKE_SLUG ) );
 	}
 
 	// Add specific class name with popover checkup
-	$class_names = wp_ulike_get_setting( $setting_key, 'disable_likers_pophover', 0 ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
-	$users_list  = wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key );
+	$class_names = wp_ulike_get_setting( $setting, 'disable_likers_pophover', 0 ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
+	$users_list  = wp_ulike_get_likers_template( $table, $column, $post_ID, $setting );
 
 	wp_send_json_success( array( 'template' => $users_list, 'class' => $class_names ) );
 }

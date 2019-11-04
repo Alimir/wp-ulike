@@ -15,6 +15,7 @@
       append: '',
       appendTimeout: 2000,
       displayLikers: false,
+      factor: '',
       counterSelector: ".count-box",
       generalSelector: ".wp_ulike_general_class",
       buttonSelector: ".wp_ulike_btn",
@@ -27,7 +28,8 @@
       "ulike-append": "append",
       "ulike-display-likers": "displayLikers",
       "ulike-append-timeout": "appendTimeout",
-      "ulike-status": "likeStatus"
+      "ulike-status": "likeStatus",
+      "ulike-factor": "factor"
     };
 
   // The actual plugin constructor
@@ -86,6 +88,8 @@
     _initLike: function (event) {
       // Prevents further propagation of the current event in the capturing and bubbling phases
       event.stopPropagation();
+      // Update element if there's more thab one button
+      this._maybeUpdateElements(event);
       // check for same buttons
       this._updateSameButtons();
       // Disable button
@@ -100,6 +104,7 @@
           action: "wp_ulike_process",
           id: this.settings.ID,
           nonce: this.settings.nonce,
+          factor: this.settings.factor,
           status: this.settings.likeStatus,
           type: this.settings.type
         },
@@ -122,6 +127,15 @@
       );
     },
 
+    _maybeUpdateElements: function(event) {
+      this.buttonElement  = $(event.currentTarget);
+      this.generalElement = this.buttonElement.closest(this.settings.generalSelector);
+      this.counterElement = this.generalElement.find(
+        this.settings.counterSelector
+      );
+      this.settings.factor = this.buttonElement.data('ulike-factor');
+      this.settings.likeStatus = this.buttonElement.data('ulike-status');
+    },
 
     /**
      * append child
@@ -145,7 +159,7 @@
       //check likeStatus
       switch (this.settings.likeStatus) {
         case 1 /* Change the status of 'is not liked' to 'liked' */:
-          this.buttonElement.attr("data-ulike-status", 4);
+          this.buttonElement.data("ulike-status", 4);
           this.settings.likeStatus = 4;
           this.generalElement
             .addClass("wp_ulike_is_liked")
@@ -154,7 +168,7 @@
             .children()
             .first()
             .addClass("wp_ulike_click_is_disabled");
-          this.counterElement.text(response.data.data);
+            this.__updateCounter(response.data.data);
           this._controlActions(
             "success",
             response.data.message,
@@ -164,12 +178,12 @@
           this._refreshTheLikers = true;
           break;
         case 2 /* Change the status of 'liked' to 'unliked' */:
-          this.buttonElement.attr("data-ulike-status", 3);
+          this.buttonElement.data("ulike-status", 3);
           this.settings.likeStatus = 3;
           this.generalElement
             .addClass("wp_ulike_is_unliked")
             .removeClass("wp_ulike_is_liked");
-          this.counterElement.text(response.data.data);
+          this.__updateCounter(response.data.data);
           this._controlActions(
             "error",
             response.data.message,
@@ -179,12 +193,12 @@
           this._refreshTheLikers = true;
           break;
         case 3 /* Change the status of 'unliked' to 'liked' */:
-          this.buttonElement.attr("data-ulike-status", 2);
+          this.buttonElement.data("ulike-status", 2);
           this.settings.likeStatus = 2;
           this.generalElement
             .addClass("wp_ulike_is_liked")
             .removeClass("wp_ulike_is_unliked");
-          this.counterElement.text(response.data.data);
+          this.__updateCounter(response.data.data);
           this._controlActions(
             "success",
             response.data.message,
@@ -219,6 +233,31 @@
       if (this._refreshTheLikers) {
         this._updateLikers();
       }
+    },
+
+    __updateCounter: function( counterValue ){
+      if( typeof counterValue !== "object" ){
+        this.counterElement.text(counterValue);
+      } else {
+        var $siblingElement = this.generalElement.siblings();
+        if( this.settings.factor === 'down' ){
+          this.counterElement.text(counterValue.down);
+          if($siblingElement.length){
+            $siblingElement.find(this.settings.counterSelector).text(counterValue.up);
+          }
+        } else {
+          this.counterElement.text(counterValue.up);
+          if($siblingElement.length){
+            $siblingElement.find(this.settings.counterSelector).text(counterValue.down);
+          }
+        }
+      }
+
+
+      $document.trigger("WordpressUlikeCounterUpdated", [this.buttonElement, this.settings.likeStatus]);
+      // // $document.on( "WordpressUlikeCounterUpdated", function( event, param1, param2 ) {
+      // //   console.log( param1 );
+      // // });
     },
 
     /**
@@ -270,7 +309,7 @@
     _updateSameButtons: function () {
       // Get buttons with same unique class names
       this.sameButtons = $document.find(
-        ".wp_" + this.settings.type.toLowerCase() + "_" + this.settings.ID
+        ".wp_" + this.settings.type.toLowerCase() + this.settings.factor + "_" + this.settings.ID
       );
       // Update general elements
       if (this.sameButtons.length > 1) {
