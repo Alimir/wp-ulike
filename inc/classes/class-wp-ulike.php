@@ -369,18 +369,19 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$counter = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $args['get_like'] ) .'</span>' , $args['get_like'] );
 
 			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(
-					"ID"             => $args['id'],
-					"wrapper_class"  => $args['wrapper_class'],
-					"slug"           => $args['slug'],
+					"ID"             => esc_attr( $args['id'] ),
+					"wrapper_class"  => esc_attr( $args['wrapper_class'] ),
+					"slug"           => esc_attr( $args['slug'] ),
 					"counter"        => $counter,
-					"type"           => $args['method'],
-					"status"         => $status,
-					"attributes"     => $args['attributes'],
-					"style"          => $args['style'],
-					"button_type"    => $args['button_type'],
+					"type"           => esc_attr( $args['method'] ),
+					"status"         => esc_attr( $status ),
+					"attributes"     => esc_attr( $args['attributes'] ),
+					"style"          => esc_html( $args['style'] ),
+					"button_type"    => esc_html( $args['button_type'] ),
+					"display_likers" => esc_attr( $args['display_likers'] ),
 					"button_text"    => $button_text,
-					"general_class"  => $general_class_name,
-					"button_class"   => $button_class_name
+					"general_class"  => esc_attr( $general_class_name ),
+					"button_class"   => esc_attr( $button_class_name )
 				)
 			);
 
