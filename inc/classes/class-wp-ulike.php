@@ -105,7 +105,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array( '%d', '%s', '%s', '%s', '%s' )
 				);
 				// Formatting the output
-				$output = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status ) );
+				$output = $this->get_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -180,7 +180,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 				}
 				// Formatting the output
-				$output = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status ) );
+				$output = $this->get_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -262,7 +262,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				}
 
 				// Formatting the output
-				$output = apply_filters( 'wp_ulike_ajax_counter_value', wp_ulike_get_counter_value( $id, $slug, $this->status ), $id, $slug, $this->status );
+				$output = $this->get_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -277,6 +277,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			}
 
 			return $output;
+		}
+
+		private function get_counter_value( $id, $slug ){
+			$counter = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status ) );
+			return apply_filters( 'wp_ulike_ajax_counter_value', $counter, $id, $slug, $this->status );
 		}
 
 		/**
