@@ -1579,14 +1579,18 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
  * @return          String
  */
 if( ! function_exists( 'wp_ulike_format_number' ) ){
-	function wp_ulike_format_number( $num ){
-		$plus = $num != 0 ? '+' : '';
-		if ($num >= 1000 && wp_ulike_get_setting( 'wp_ulike_general', 'format_number' ) == '1')
-		$value = round($num/1000, 2) . 'K' . $plus;
-		else
-		$value = $num . $plus;
-		$value = apply_filters( 'wp_ulike_format_number', $value, $num, $plus);
-		return $value;
+	function wp_ulike_format_number( $num, $status = 'like' ){
+		$sign = $value = '';
+		if( $num != 0 ){
+			$sign = strpos( $status, 'dis' ) === false ? '+' : '-';
+		}
+		if ($num >= 1000 && wp_ulike_get_setting( 'wp_ulike_general', 'format_number' ) == '1'){
+			$value = round($num/1000, 2) . 'K' . $sign;
+		} else {
+			$value = $num . $sign;
+		}
+
+		return apply_filters( 'wp_ulike_format_number', $value, $num, $sign);
 	}
 }
 
