@@ -176,7 +176,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 					'icon_url' => 'dashicons-wp-ulike'
 				),
 				array(
-					'wp_ulike_general' => wp_ulike_get_options_info('general')
+					'wp_ulike_general' => apply_filters( 'wp_ulike_general_settings', wp_ulike_get_options_info('general') )
 				),
 				array(
 					'tabs'    => true,
