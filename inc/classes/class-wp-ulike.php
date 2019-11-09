@@ -152,7 +152,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			if( $type == 'post' ){
 
-				if( ! isset( $_COOKIE[ $cookie . $id ] ) ){
+				if( ! $this->has_permission( $args, 'by_cookie' ) ){
 					$output = $this->get_template( $data, 1 );
 				}
 				else{
@@ -161,7 +161,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			} elseif( $type == 'process' ) {
 
-				if( ! isset( $_COOKIE[ $cookie . $id ] ) ){
+				if( ! $this->has_permission( $args, 'by_cookie' ) ){
 					$this->update_status( $factor, $user_status, true );
 					// Set cookie
 					setcookie( $cookie . $id, time(), 2147483647, '/' );
@@ -195,6 +195,19 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			}
 
 			return $output;
+		}
+
+		public function has_permission( $args, $method ){
+			// Extract data
+			extract( $data );
+
+			switch ( $method ) {
+				case 'by_cookie':
+					return isset( $_COOKIE[ $cookie . $id ] );
+
+				default:
+					return true;
+			}
 		}
 
 		/**
@@ -280,8 +293,19 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		private function get_counter_value( $id, $slug ){
-			$counter = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status ) );
+			$counter = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status ), $this->status );
 			return apply_filters( 'wp_ulike_ajax_counter_value', $counter, $id, $slug, $this->status );
+		}
+
+
+		public function get_status(){
+			if( ! $this->status ){
+				return 1;
+			} elseif( strpos( $this->status, 'un') === 0 ){
+				return 2;
+			} else {
+				return 3;
+			}
 		}
 
 		/**

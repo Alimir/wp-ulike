@@ -11,7 +11,6 @@
       nonce: 0 /*  Get nonce token */,
       type:
         "" /* Values : likeThis (Posts),likeThisComment, likeThisActivity, likeThisTopic */,
-      likeStatus: 0 /* Values : 0 (Is not logged-in), 1 (Is not liked), 2 (Is liked), 3 (Is unliked), 4 (Already liked) */,
       append: '',
       appendTimeout: 2000,
       displayLikers: false,
@@ -28,7 +27,6 @@
       "ulike-append": "append",
       "ulike-display-likers": "displayLikers",
       "ulike-append-timeout": "appendTimeout",
-      "ulike-status": "likeStatus",
       "ulike-factor": "factor"
     };
 
@@ -105,7 +103,6 @@
           id: this.settings.ID,
           nonce: this.settings.nonce,
           factor: this.settings.factor,
-          status: this.settings.likeStatus,
           type: this.settings.type
         },
         function (response) {
@@ -134,7 +131,6 @@
         this.settings.counterSelector
       );
       this.settings.factor = this.buttonElement.data('ulike-factor');
-      this.settings.likeStatus = this.buttonElement.data('ulike-status');
     },
 
     /**
@@ -157,10 +153,8 @@
      */
     _updateMarkup: function (response) {
       //check likeStatus
-      switch (this.settings.likeStatus) {
+      switch (response.data.status) {
         case 1 /* Change the status of 'is not liked' to 'liked' */:
-          this.buttonElement.data("ulike-status", 4);
-          this.settings.likeStatus = 4;
           this.generalElement
             .addClass("wp_ulike_is_liked")
             .removeClass("wp_ulike_is_not_liked");
@@ -169,65 +163,37 @@
             .first()
             .addClass("wp_ulike_click_is_disabled");
             this.__updateCounter(response.data.data);
-          this._controlActions(
-            "success",
-            response.data.message,
-            response.data.btnText,
-            4
-          );
           this._refreshTheLikers = true;
           break;
         case 2 /* Change the status of 'liked' to 'unliked' */:
-          this.buttonElement.data("ulike-status", 3);
-          this.settings.likeStatus = 3;
           this.generalElement
             .addClass("wp_ulike_is_unliked")
             .removeClass("wp_ulike_is_liked");
           this.__updateCounter(response.data.data);
-          this._controlActions(
-            "error",
-            response.data.message,
-            response.data.btnText,
-            3
-          );
           this._refreshTheLikers = true;
           break;
         case 3 /* Change the status of 'unliked' to 'liked' */:
-          this.buttonElement.data("ulike-status", 2);
-          this.settings.likeStatus = 2;
           this.generalElement
             .addClass("wp_ulike_is_liked")
             .removeClass("wp_ulike_is_unliked");
           this.__updateCounter(response.data.data);
-          this._controlActions(
-            "success",
-            response.data.message,
-            response.data.btnText,
-            2
-          );
           this._refreshTheLikers = true;
           break;
         case 4 /* Just print the log-in warning message */:
-          this._controlActions(
-            "info",
-            response.data.message,
-            response.data.btnText,
-            4
-          );
           this.generalElement
             .children()
             .first()
             .addClass("wp_ulike_click_is_disabled");
           break;
-        default:
-          /* Just print the permission failed message */
-          this._controlActions(
-            "warning",
-            response.data.message,
-            response.data.btnText,
-            0
-          );
       }
+
+      // init control actions
+      this._controlActions(
+        response.data.messageType,
+        response.data.message,
+        response.data.btnText,
+        response.data.status
+      );
 
       // Refresh likers box on data update
       if (this._refreshTheLikers) {
@@ -253,8 +219,7 @@
         }
       }
 
-
-      $document.trigger("WordpressUlikeCounterUpdated", [this.buttonElement, this.settings.likeStatus]);
+      $document.trigger("WordpressUlikeCounterUpdated", [this.buttonElement]);
       // // $document.on( "WordpressUlikeCounterUpdated", function( event, param1, param2 ) {
       // //   console.log( param1 );
       // // });
@@ -343,7 +308,7 @@
         if (likeStatus === 3 || likeStatus === 2) {
           this.buttonElement.toggleClass("image-unlike");
         }
-      } else if (this.buttonElement.hasClass("wp_ulike_put_text")) {
+      } else if (this.buttonElement.hasClass("wp_ulike_put_text") && btnText !== null) {
         this.buttonElement.find("span").html(btnText);
       }
 
