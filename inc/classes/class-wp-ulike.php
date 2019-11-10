@@ -297,7 +297,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			return apply_filters( 'wp_ulike_ajax_counter_value', $counter, $id, $slug, $this->status );
 		}
 
-
+		/**
+		 * Get user status code 
+		 *
+		 * @return integer ( 0 = Is not logged, 1 = Is not liked, 2 = Is liked in the past, 3 )
+		 */
 		public function get_status(){
 			if( ! $this->status ){
 				return 1;
@@ -307,48 +311,6 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				return 3;
 			}
 		}
-
-		/**
-		 * Update meta data
-		 *
-		 * @author       	Alimir
-		 * @param           Integer $id
-		 * @param           String $key
-		 * @param           Integer $data
-		 * @since           2.0
-		 * @return			Void
-		 */
-		public function update_meta_data( $id, $key, $data ){
-			// Fix negative values
-			if( (int) $data < 0 ){
-				$data = 0;
-			}
-			// Update Values
-			switch ( $key ) {
-				case '_liked'		 :
-					update_post_meta( $id, $key, $data );
-					update_postmeta_cache( array( $id ) );
-					delete_transient( 'wp_ulike_get_most_liked_posts' );
-					break;
-				case '_topicliked'	 :
-					update_post_meta( $id, $key, $data );
-					update_postmeta_cache( array( $id ) );
-					delete_transient( 'wp_ulike_get_most_liked_topics' );
-					break;
-				case '_commentliked' :
-					update_comment_meta( $id, $key, $data );
-					update_meta_cache( 'comment', array( $id ) );
-					delete_transient( 'wp_ulike_get_most_liked_comments' );
-					break;
-				case '_activityliked':
-					bp_activity_update_meta( $id, $key, $data );
-					delete_transient( 'wp_ulike_get_most_liked_activities' );
-					break;
-			}
-
-			return $data;
-		}
-
 
 		/**
 		 * Get template
