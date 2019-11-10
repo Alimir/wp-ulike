@@ -205,16 +205,16 @@
       if( typeof counterValue !== "object" ){
         this.counterElement.text(counterValue);
       } else {
-        var $siblingElement = this.generalElement.siblings();
+        this.siblingElement = this.generalElement.siblings();
         if( this.settings.factor === 'down' ){
           this.counterElement.text(counterValue.down);
-          if($siblingElement.length){
-            $siblingElement.find(this.settings.counterSelector).text(counterValue.up);
+          if(this.siblingElement.length){
+            this.siblingElement.find(this.settings.counterSelector).text(counterValue.up);
           }
         } else {
           this.counterElement.text(counterValue.up);
-          if($siblingElement.length){
-            $siblingElement.find(this.settings.counterSelector).text(counterValue.down);
+          if(this.siblingElement.length){
+            this.siblingElement.find(this.settings.counterSelector).text(counterValue.down);
           }
         }
       }
@@ -273,9 +273,11 @@
      */
     _updateSameButtons: function () {
       // Get buttons with same unique class names
+      var factorName = typeof this.settings.factor !== "undefined" ? this.settings.factor : ''; 
       this.sameButtons = $document.find(
-        ".wp_" + this.settings.type.toLowerCase() + this.settings.factor + "_" + this.settings.ID
+        ".wp_" + this.settings.type.toLowerCase() + factorName + "_" + this.settings.ID
       );
+      console.log(this.sameButtons);
       // Update general elements
       if (this.sameButtons.length > 1) {
         this.buttonElement = this.sameButtons;
@@ -309,7 +311,27 @@
           this.buttonElement.toggleClass("image-unlike");
         }
       } else if (this.buttonElement.hasClass("wp_ulike_put_text") && btnText !== null) {
-        this.buttonElement.find("span").html(btnText);
+        if( typeof btnText !== "object" ){
+          this.buttonElement.find("span").html(btnText);
+        } else {
+          this.siblingElement = this.generalElement.siblings();
+          if( this.settings.factor === 'down' ){
+            this.buttonElement.find("span").html(btnText.down);
+            if(this.siblingElement.length){
+              this.siblingElement.find(this.settings.buttonSelector).find("span").html(btnText.up);
+            }
+          } else {
+            this.buttonElement.find("span").html(btnText.up);
+            if(this.siblingElement.length){
+              this.siblingElement.find(this.settings.buttonSelector).find("span").html(btnText.down);
+            }
+          }
+        }
+
+        // this.buttonElement.find("span").html(btnText);
+        // if( this.siblingElement.length ){
+          
+        // }
       }
 
       // Display Notifications

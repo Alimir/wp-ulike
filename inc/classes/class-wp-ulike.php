@@ -237,10 +237,10 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				} else {
 
 					if( substr( $user_status, 0, 2 ) !== "un" ) {
-						$output = $this->get_template( $data, 2 );
+						$output = $this->get_template( $data, 2, $user_status );
 
 					} else {
-						$output = $this->get_template( $data, 3 );
+						$output = $this->get_template( $data, 3, $user_status );
 					}
 
 				}
@@ -321,7 +321,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		public function get_template( array $args, $status ){
+		public function get_template( array $args, $status, $user_status = 'like' ){
 
 			//Primary button class name
 			$button_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_button_selector', 'wp_ulike_btn' ) );
@@ -330,12 +330,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			if( $args['button_type'] == 'image' ){
 				$button_class_name .= ' wp_ulike_put_image';
-				if($status == 2){
+				if($status == 2 && strpos( $user_status, 'dis') !== 0){
 					$button_class_name .= ' image-unlike';
 				}
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';
-				if($status == 2){
+				if($status == 2 && strpos( $user_status, 'dis') !== 0){
 					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u' ) );
 				} else {
 					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) );
@@ -374,6 +374,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					"total_likes"    => $total_likes,
 					"type"           => esc_attr( $args['method'] ),
 					"status"         => esc_attr( $status ),
+					"user_status"    => esc_attr( $user_status ),
 					"attributes"     => esc_attr( $args['attributes'] ),
 					"style"          => esc_html( $args['style'] ),
 					"button_type"    => esc_html( $args['button_type'] ),
