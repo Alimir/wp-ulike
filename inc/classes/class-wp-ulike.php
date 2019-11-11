@@ -298,7 +298,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
-		 * Get user status code 
+		 * Get user status code
 		 *
 		 * @return integer ( 0 = Is not logged, 1 = Is not liked, 2 = Is liked in the past, 3 )
 		 */
@@ -330,7 +330,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			if( $args['button_type'] == 'image' ){
 				$button_class_name .= ' wp_ulike_put_image';
-				if($status == 2 && strpos( $user_status, 'dis') !== 0){
+				if($status == 2){
 					$button_class_name .= ' image-unlike';
 				}
 			} else {
