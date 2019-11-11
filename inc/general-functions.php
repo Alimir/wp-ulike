@@ -734,7 +734,7 @@ function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct 
 
 	$status = ltrim( $status, 'un');
 
-	if( empty( $ID ) || empty( $type ) ){
+	if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
 		return new WP_Error( 'broke', __( "Please enter some value for required variables.", WP_ULIKE_SLUG ) );
 	}
 
