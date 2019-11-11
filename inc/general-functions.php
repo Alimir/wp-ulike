@@ -1064,32 +1064,22 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 		} else {
 			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_id();
 		}
-
-		$bp_get_meta    = bp_activity_get_meta($activityID, '_activityliked');
-		$get_like       = empty( $bp_get_meta ) ? 0 : $bp_get_meta;
 		$attributes     = apply_filters( 'wp_ulike_activities_add_attr', null );
 		$style          = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
 		$display_likers = wp_ulike_get_setting( 'wp_ulike_buddypress', 'users_liked_box', 1 );
 		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$buddypress_settings = wp_ulike_get_post_settings_by_type( 'likeThisActivity', $activityID );
 
-		//Main Data
-		$defaults      = array(
+		$defaults = array_merge( $buddypress_settings, array(
 			"id"             => $activityID,             //Activity ID
-			"get_like"       => $get_like,               //Number Of Likes
 			"method"         => 'likeThisActivity',      //JavaScript method
-			"setting"        => 'wp_ulike_buddypress',   //Setting Key
 			"type"           => 'post',                  //Function type (post/process)
-			"table"          => 'ulike_activities',      //Activities table
-			"column"         => 'activity_id',           //ulike_activities table column name
-			"key"            => '_activityliked',        //meta key
-			"cookie"         => 'activity-liked-',       //Cookie Name
-			"slug"           => 'activity',              //Slug Name
 			"display_likers" => $display_likers,         //Display likers box
 			"style"          => $style,                  //Get Default Theme
 			"attributes"     => $attributes,             //Get Attributes Filter
 			"wrapper_class"  => '',                      //Extra Wrapper class
 			"button_type"    => $button_type             //Button Type
-		);
+		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
@@ -1201,35 +1191,26 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		global $post;
 
         //Thanks to @Yehonal for this commit
-		$replyID       = bbp_get_reply_id();
-		$post_ID       = !$replyID ? $post->ID : $replyID;
-		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post_ID;
+		$replyID = bbp_get_reply_id();
+		$post_ID = !$replyID ? $post->ID : $replyID;
+		$post_ID = isset( $args['id'] ) ? $args['id'] : $post_ID;
 
-		$get_post_meta  = get_post_meta( $post_ID, '_topicliked', true );
-		$get_like       = empty( $get_post_meta ) ? 0 : $get_post_meta;
-		$attributes     = apply_filters( 'wp_ulike_topics_add_attr', null );
-		$style          = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
-		$display_likers = wp_ulike_get_setting( 'wp_ulike_bbpress', 'users_liked_box', 1 );
-		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$attributes       = apply_filters( 'wp_ulike_topics_add_attr', null );
+		$style            = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
+		$display_likers   = wp_ulike_get_setting( 'wp_ulike_bbpress', 'users_liked_box', 1 );
+		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$bbpress_settings = wp_ulike_get_post_settings_by_type( 'likeThisTopic', $post_ID );
 
-		//Main Data
-		$defaults      = array(
-			"id"             => $post_ID,             //Post ID
-			"get_like"       => $get_like,            //Number Of Likes
-			"method"         => 'likeThisTopic',      //JavaScript method
-			"setting"        => 'wp_ulike_bbpress',   //Setting Key
-			"type"           => 'post',               //Function type (post/process)
-			"table"          => 'ulike_forums',       //posts table
-			"column"         => 'topic_id',           //ulike table column name
-			"key"            => '_topicliked',        //meta key
-			"cookie"         => 'topic-liked-',       //Cookie Name
-			"slug"           => 'topic',              //Slug Name
-			"display_likers" => $display_likers,      //Slug Name
-			"style"          => $style,               //Get Default Theme
-			"attributes"     => $attributes,          //Get Attributes Filter
-			"wrapper_class"  => '',                   //Extra Wrapper class
-			"button_type"    => $button_type,         //Button Type
-		);
+		$defaults = array_merge( $bbpress_settings, array(
+			"id"             => $post_ID,          //Post ID
+			"method"         => 'likeThisTopic',   //JavaScript method
+			"type"           => 'post',            //Function type (post/process)
+			"display_likers" => $display_likers,   //Display likers box
+			"style"          => $style,            //Get Default Theme
+			"attributes"     => $attributes,       //Get Attributes Filter
+			"wrapper_class"  => '',                //Extra Wrapper class
+			"button_type"    => $button_type       //Button Type
+		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
