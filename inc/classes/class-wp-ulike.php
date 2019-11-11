@@ -230,25 +230,19 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$user_status = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
 
 			if( $type == 'post' ){
-
 				if( ! $user_status ){
-					$output 	= $this->get_template( $data, 3 );
-
+					$output 	= $this->get_template( $data, 1 );
 				} else {
-
 					if( substr( $user_status, 0, 2 ) !== "un" ) {
 						$output = $this->get_template( $data, 2, $user_status );
-
 					} else {
 						$output = $this->get_template( $data, 3, $user_status );
 					}
-
 				}
 
 			} elseif( $type == 'process' ) {
-
 				if( ! $user_status ){
-					$this->update_status( $factor );
+					$this->update_status( $factor, 'unlike' );
 					// Insert log data
 					$this->wpdb->insert(
 						$this->wpdb->prefix . $table,
