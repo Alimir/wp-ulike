@@ -152,60 +152,85 @@
      * update button markup and calling some actions
      */
     _updateMarkup: function (response) {
-      //check likeStatus
-      switch (response.data.status) {
-        case 1 /* Change the status of 'is not liked' to 'liked' */:
-          this.generalElement
-            .addClass("wp_ulike_is_liked")
-            .removeClass("wp_ulike_is_not_liked");
-          this.generalElement
-            .children()
-            .first()
-            .addClass("wp_ulike_click_is_disabled");
-            this.__updateCounter(response.data.data);
-          this._refreshTheLikers = true;
-          break;
-        case 2 /* Change the status of 'liked' to 'unliked' */:
-          this.generalElement
-            .addClass("wp_ulike_is_unliked")
-            .removeClass("wp_ulike_is_liked");
-          this.__updateCounter(response.data.data);
-          this._refreshTheLikers = true;
-          break;
-        case 3 /* Change the status of 'unliked' to 'liked' */:
-          this.generalElement
-            .addClass("wp_ulike_is_liked")
-            .removeClass("wp_ulike_is_unliked");
-          this.__updateCounter(response.data.data);
-          this._refreshTheLikers = true;
-          break;
-        case 4 /* Just print the log-in warning message */:
-          this.generalElement
-            .children()
-            .first()
-            .addClass("wp_ulike_click_is_disabled");
-          break;
+      // Set sibling general elements
+      this._setSbilingElement();
+      this._updateGeneralClassNames(response.data.status);
+      // Update counter + check refresh likers box
+      if(response.data.status < 4){
+        this.__updateCounter(response.data.data);
+        this._refreshTheLikers = true;
       }
-
-      // init control actions
-      this._controlActions(
-        response.data.messageType,
-        response.data.message,
-        response.data.btnText,
-        response.data.status
-      );
-
+      // Update button status
+      this._updateButton(response.data.btnText, response.data.status);
+      // Display Notifications
+      this._sendNotification(response.data.messageType, response.data.message);
       // Refresh likers box on data update
       if (this._refreshTheLikers) {
         this._updateLikers();
       }
     },
 
+    _updateGeneralClassNames: function(status){
+      // Our base status class names
+      var classNameObj = {
+        start: "wp_ulike_is_not_liked",
+        active: "wp_ulike_is_liked",
+        deactive: "wp_ulike_is_unliked",
+        disable: "wp_ulike_click_is_disabled"
+      };
+
+      // Remove status from sibling element
+      if(this.siblingElement.length){
+        this.siblingElement.removeClass(this._arrayToString([
+          classNameObj.active,
+          classNameObj.deactive
+        ]));
+      }
+
+      switch (status) {
+        case 1:
+          this.generalElement
+          .addClass(classNameObj.active)
+          .removeClass(classNameObj.start);
+          this.generalElement
+          .children()
+          .first()
+          .addClass(classNameObj.disable);
+          break;
+
+        case 2:
+          this.generalElement
+          .addClass(classNameObj.deactive)
+          .removeClass(classNameObj.active);
+          break;
+
+        case 3:
+          this.generalElement
+          .addClass(classNameObj.active)
+          .removeClass(classNameObj.deactive);
+          break;
+
+        default:
+          this.generalElement
+          .children()
+          .first()
+          .addClass(classNameObj.disable);
+          break;
+      }
+    },
+
+    _arrayToString: function( data ){
+      return data.join(' ');
+    },
+
+    _setSbilingElement: function(){
+      this.siblingElement = this.generalElement.siblings();
+    },
+
     __updateCounter: function( counterValue ){
       if( typeof counterValue !== "object" ){
         this.counterElement.text(counterValue);
       } else {
-        this.siblingElement = this.generalElement.siblings();
         if( this.settings.factor === 'down' ){
           this.counterElement.text(counterValue.down);
           if(this.siblingElement.length){
@@ -273,11 +298,10 @@
      */
     _updateSameButtons: function () {
       // Get buttons with same unique class names
-      var factorName = typeof this.settings.factor !== "undefined" ? this.settings.factor : ''; 
+      var factorMethod = typeof this.settings.factor !== "undefined" ? this.settings.factor : '';
       this.sameButtons = $document.find(
-        ".wp_" + this.settings.type.toLowerCase() + factorName + "_" + this.settings.ID
+        ".wp_" + this.settings.type.toLowerCase() + factorMethod + "_" + this.settings.ID
       );
-      console.log(this.sameButtons);
       // Update general elements
       if (this.sameButtons.length > 1) {
         this.buttonElement = this.sameButtons;
@@ -304,17 +328,18 @@
     /**
      * Control actions
      */
-    _controlActions: function (messageType, messageText, btnText, likeStatus) {
-      //check the button types
+    _updateButton: function (btnText, likeStatus) {
       if (this.buttonElement.hasClass("wp_ulike_put_image")) {
         if (likeStatus === 3 || likeStatus === 2) {
           this.buttonElement.toggleClass("image-unlike");
+          if( this.siblingElement.length ){
+            this.siblingElement.find(this.settings.buttonSelector).removeClass("image-unlike");
+          }
         }
       } else if (this.buttonElement.hasClass("wp_ulike_put_text") && btnText !== null) {
         if( typeof btnText !== "object" ){
           this.buttonElement.find("span").html(btnText);
         } else {
-          this.siblingElement = this.generalElement.siblings();
           if( this.settings.factor === 'down' ){
             this.buttonElement.find("span").html(btnText.down);
             if(this.siblingElement.length){
@@ -327,15 +352,7 @@
             }
           }
         }
-
-        // this.buttonElement.find("span").html(btnText);
-        // if( this.siblingElement.length ){
-          
-        // }
       }
-
-      // Display Notifications
-      this._sendNotification(messageType, messageText);
     },
 
     /**
