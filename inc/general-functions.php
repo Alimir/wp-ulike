@@ -1243,7 +1243,6 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 		switch ( $post_type ) {
 			case 'likeThis':
 				$settings = array(
-					'get_like' => wp_ulike_get_post_likes( $post_ID ),
 					'setting'  => 'wp_ulike_posts',
 					'table'    => 'ulike',
 					'column'   => 'post_id',
@@ -1255,7 +1254,6 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 
 			case 'likeThisComment':
 				$settings = array(
-					'get_like' => wp_ulike_get_comment_likes( $post_ID ),
 					'setting'  => 'wp_ulike_comments',
 					'table'    => 'ulike_comments',
 					'column'   => 'comment_id',
@@ -1267,7 +1265,6 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 
 			case 'likeThisActivity':
 				$settings = array(
-					'get_like' => bp_activity_get_meta( $post_ID, '_activityliked' ),
 					'setting'  => 'wp_ulike_buddypress',
 					'table'    => 'ulike_activities',
 					'column'   => 'activity_id',
@@ -1279,7 +1276,6 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 
 			case 'likeThisTopic':
 				$settings = array(
-					'get_like' => get_post_meta( $post_ID, '_topicliked', true ),
 					'setting'  => 'wp_ulike_bbpress',
 					'table'    => 'ulike_forums',
 					'column'   => 'topic_id',

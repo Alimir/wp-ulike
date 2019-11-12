@@ -42,7 +42,6 @@ function wp_ulike_process(){
 
 	$args = apply_filters( 'wp_ulike_ajax_process_atts', array(
 			"id"       => $post_ID,                          //Post ID
-			"get_like" => $get_like != '' ? $get_like : 0,   //Number Of Likes
 			"method"   => $post_type,                        //JavaScript method
 			"setting"  => $setting,                          //Setting Key
 			"type"     => 'process',                         //Function type (post/process)
@@ -106,6 +105,15 @@ function wp_ulike_process(){
 						'messageType' => 'success',
 						'status'  => $status,
 						'data'    => apply_filters( 'wp_ulike_respond_for_liked_data', $counter, $post_ID )
+					);
+					break;
+				case 4:
+					$response = array(
+						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
+						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
+						'messageType' => 'success',
+						'status'  => $status,
+						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
 					);
 					break;
 			}
