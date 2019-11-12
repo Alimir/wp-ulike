@@ -728,7 +728,15 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 	}
 }
 
-
+/**
+ * Get counter value
+ *
+ * @param integer $ID
+ * @param string $type
+ * @param string $status
+ * @param boolean $is_distinct
+ * @return integer
+ */
 function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true ){
 	global $wpdb;
 
@@ -745,20 +753,25 @@ function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct 
 	}
 
 	$query = sprintf(
-		"SELECT COUNT(%s) FROM %s WHERE `status` = '%s' AND `%s` = '%s'",
+		"SELECT COUNT(%s) FROM %s WHERE %s AND `%s` = '%s'",
 		esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
 		esc_sql( $wpdb->prefix . $table_info['table'] ),
-		esc_sql( $status ),
+		esc_sql( $status !== 'all' ? "`status` = '$status'" : "1" ),
 		esc_sql( $table_info['column'] ),
 		esc_sql( $ID )
 	);
 
-	$result = $wpdb->get_var( $query );
+	$result = $wpdb->get_var( stripslashes( $query ) );
 
 	return  empty( $result ) ? 0 : $result;
 }
 
-
+/**
+ * Get table info
+ *
+ * @param string $type
+ * @return void
+ */
 function wp_ulike_get_table_info( $type = 'post' ){
 	$output = array();
 
@@ -850,6 +863,27 @@ if( ! function_exists( 'wp_ulike' ) ){
 }
 
 /**
+ * Get most liked posts in query
+ *
+ * @param integer $numberposts
+ * @return WP_Post[]|int[] Array of post objects or post IDs.
+ */
+function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '' ){
+	return get_posts( array(
+		'post__in'    => wp_ulike_get_popular_items_ids(array(
+			'type' => $method
+		)),
+		'numberposts' => $numberposts,
+		'orderby'     => 'post__in',
+		'post_type'   => $post_type === '' ? get_post_types_by_support( array(
+			'title',
+			'editor',
+			'thumbnail'
+		) ) : $post_type
+	) );
+}
+
+/**
  * Check wp ulike callback
  *
  * @author       	Alimir
@@ -897,8 +931,8 @@ if( ! function_exists( 'is_wp_ulike' ) ){
  * @return          String
  */
 if( ! function_exists( 'wp_ulike_get_post_likes' ) ){
-	function wp_ulike_get_post_likes( $post_ID ){
-		$value = wp_ulike_get_counter_value( $post_ID, 'post' );
+	function wp_ulike_get_post_likes( $post_ID, $status = 'like' ){
+		$value = wp_ulike_get_counter_value( $post_ID, 'post', $status );
 		return ! is_wp_error( $value ) ? $value : 0;
 	}
 }
@@ -1029,6 +1063,25 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 }
 
 /**
+ * Get most liked posts in query
+ *
+ * @param integer $numberposts
+ * @return WP_Post[]|int[] Array of post objects or post IDs.
+ */
+function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '' ){
+	return get_comments( array(
+		'comment__in' => wp_ulike_get_popular_items_ids(),
+		'number'      => $numbercomments,
+		'orderby'     => 'comment__in',
+		'post_type'   => $post_type === '' ? get_post_types_by_support( array(
+			'title',
+			'editor',
+			'thumbnail'
+		) ) : $post_type
+	) );
+}
+
+/**
  * Get the number of likes on a single comment
  *
  * @author          Alimir & Wacław Jacek
@@ -1068,7 +1121,7 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 		$style          = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
 		$display_likers = wp_ulike_get_setting( 'wp_ulike_buddypress', 'users_liked_box', 1 );
 		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
-		$buddypress_settings = wp_ulike_get_post_settings_by_type( 'likeThisActivity', $activityID );
+		$buddypress_settings = wp_ulike_get_post_settings_by_type( 'likeThisActivity' );
 
 		$defaults = array_merge( $buddypress_settings, array(
 			"id"             => $activityID,             //Activity ID
@@ -1171,6 +1224,41 @@ if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
 				)
 			);
 	}
+}
+
+
+/**
+ * Get most liked posts in query
+ *
+ * @param integer $numberposts
+ * @return WP_Post[]|int[] Array of post objects or post IDs.
+ */
+function wp_ulike_get_most_liked_activities( $number = 10 ){
+	global $wpdb;
+
+	if ( is_multisite() ) {
+		$bp_prefix = 'base_prefix';
+	} else {
+		$bp_prefix = 'prefix';
+	}
+
+	$activity_ids = wp_ulike_get_popular_items_ids(array(
+		'type' => 'activity'
+	));
+
+	// generate query string
+	$query  = sprintf( '
+		SELECT * FROM
+		`%1$sbp_activity`
+		WHERE `id` IN (%2$s)
+		ORDER BY FIELD(`id`, %2$s)
+		LIMIT %3$s',
+		$wpdb->$bp_prefix,
+		implode(',',$activity_ids),
+		$number
+	);
+
+	return $wpdb->get_results( $query );
 }
 
 /*******************************************************
@@ -1320,6 +1408,75 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 					);
 	}
 }
+
+if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
+	/**
+	 * Get popular items with their counter & ID
+	 *
+	 * @param array $args
+	 * @return object
+	 */
+	function wp_ulike_get_popular_items_info( $args = array() ){
+		// Global wordpress database object
+		global $wpdb;
+		//Main data
+		$defaults = array(
+			"type"   => 'post',
+			"status" => 'like',
+			"order"  => 'DESC',
+			"limit"  => 30
+		);
+		$parsed_args = wp_parse_args( $args, $defaults );
+		$info_args   = wp_ulike_get_table_info( $parsed_args['type'] );
+
+		// generate query string
+		$query  = sprintf( "
+			SELECT COUNT(*) AS counter,
+			`%s` AS item_ID
+			FROM %s
+			WHERE `status` = '%s'
+			GROUP BY item_ID
+			ORDER BY counter
+			%s LIMIT %d",
+			$info_args['column'],
+			$wpdb->prefix . $info_args['table'],
+			$parsed_args['status'],
+			$parsed_args['order'],
+			$parsed_args['limit']
+		);
+
+		return $wpdb->get_results( $query );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_popular_items_ids' ) ){
+	/**
+	 * Get popular items with their IDs
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	function wp_ulike_get_popular_items_ids( $args = array() ){
+		//Main data
+		$defaults = array(
+			"type"   => 'post',
+			"status" => 'like',
+			"order"  => 'DESC',
+			"limit"  => 30
+		);
+		$parsed_args = wp_parse_args( $args, $defaults );
+		$item_info   = wp_ulike_get_popular_items_info( $parsed_args );
+		$ids_stack   = array();
+		if( ! empty( $item_info ) ){
+			foreach ($item_info as $key => $info) {
+				$ids_stack[] = $info->item_ID;
+			}
+		}
+
+		return $ids_stack;
+	}
+}
+
 
 
 /**

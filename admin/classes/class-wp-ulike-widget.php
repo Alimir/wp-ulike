@@ -52,27 +52,12 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
-			if ( false === ( $posts = get_transient( 'wp_ulike_get_most_liked_posts' ) ) ) {
-				// Make new sql request
-		        $posts 		= $wpdb->get_results( "
-								SELECT p.ID, p.post_title, p.post_content, m.meta_value
-								FROM  $wpdb->posts AS p, $wpdb->postmeta AS m, ".$wpdb->prefix."ulike AS l
-								WHERE p.ID        = m.post_ID
-								AND m.post_ID     = l.post_id
-								AND p.post_status = 'publish'
-								AND m.meta_key    = '_liked'
-								".$this->period($period)."
-								GROUP BY p.ID
-								ORDER BY CAST( m.meta_value AS SIGNED ) DESC LIMIT $numberOf
-	                    	" );
-
-		        set_transient( 'wp_ulike_get_most_liked_posts', $posts, 6 * HOUR_IN_SECONDS );
-			}
+			$posts = wp_ulike_get_most_liked_posts( $numberOf );
 
 			foreach ($posts as $post) {
 				$post_title = stripslashes($post->post_title);
 				$permalink  = get_permalink($post->ID);
-				$post_count = $post->meta_value;
+				$post_count = wp_ulike_get_counter_value($post->ID, 'post', 'all', false);
 
 				$result     .= $before_item;
 				$result     .= $show_thumb ? $this->get_post_thumbnail( $post->ID, $sizeOf ) : '';
@@ -112,29 +97,13 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
-			if ( false === ( $comments = get_transient( 'wp_ulike_get_most_liked_comments' ) ) ) {
-				// Make new sql request
-		        $comments 	= $wpdb->get_results( "
-								SELECT *
-								FROM  $wpdb->comments AS c, $wpdb->commentmeta AS m, ".$wpdb->prefix."ulike_comments AS l
-								WHERE c.comment_ID     = m.comment_id
-								AND m.comment_id       = l.comment_id
-								AND c.comment_approved = '1'
-								AND m.meta_key         = '_commentliked'
-								".$this->period($period)."
-								GROUP BY c.comment_ID
-								ORDER BY CAST( m.meta_value AS SIGNED ) DESC LIMIT $numberOf
-	                    	" );
-
-		        set_transient( 'wp_ulike_get_most_liked_comments', $comments, 6 * HOUR_IN_SECONDS );
-			}
-
+			$comments = wp_ulike_get_most_liked_comments($numberOf);
 			foreach ($comments as $comment) {
 				$comment_author      = stripslashes($comment->comment_author);
 				$post_permalink      = get_permalink($comment->comment_post_ID);
 				$post_title          = get_the_title($comment->comment_post_ID);
 				$comment_permalink   = get_permalink($comment->comment_ID);
-				$comment_likes_count = $comment->meta_value;
+				$comment_likes_count = wp_ulike_get_counter_value($comment->comment_ID, 'comment', 'all', false);
 
 				$result .= $before_item;
 				$result .= $show_thumb ? get_avatar( $comment->comment_author_email, $sizeOf ) : '';
@@ -239,27 +208,11 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
-			if ( false === ( $posts = get_transient( 'wp_ulike_get_most_liked_topics' ) ) ) {
-				// Make new sql request
-		        $posts 		= $wpdb->get_results( "
-								SELECT p.ID, p.post_title, p.post_content, m.meta_value
-								FROM  $wpdb->posts AS p, $wpdb->postmeta AS m, ".$wpdb->prefix."ulike_forums AS l
-								WHERE p.ID        = m.post_ID
-								AND m.post_ID     = l.topic_id
-								AND p.post_status = 'publish'
-								AND m.meta_key    = '_topicliked'
-								".$this->period($period)."
-								GROUP BY p.ID
-								ORDER BY CAST( m.meta_value AS SIGNED ) DESC LIMIT $numberOf
-	                    	" );
-
-		        set_transient( 'wp_ulike_get_most_liked_topics', $posts, 6 * HOUR_IN_SECONDS );
-			}
-
+			$posts = wp_ulike_get_most_liked_posts( $numberOf, array( 'topic', 'reply' ), 'topic' );
 			foreach ($posts as $post) {
-				$post_title = empty($post->post_title) ? $post->post_content : stripslashes($post->post_title);
-				$permalink  = get_permalink($post->ID);
-				$post_count = $post->meta_value;
+				$post_title = empty( $post->post_title ) ? $post->post_content : stripslashes( $post->post_title );
+				$permalink  = get_permalink( $post->ID );
+				$post_count = wp_ulike_get_counter_value($post->ID, 'topic', 'all', false);
 
 				$result .= $before_item;
 				$result .= '<a href="' . $permalink . '" title="' . $post_title.'" rel="nofollow">'. wp_trim_words( $post_title, $num_words = $trim, $more = null ) . '</a>';
@@ -280,7 +233,6 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 * @return			String
 		 */
 		public function most_liked_activities( $args = array(), $result = '' ) {
-			global $wpdb;
 
 			if( ! defined( 'BP_VERSION' ) ) {
 				return sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ) ,__( 'BuddyPress', WP_ULIKE_SLUG ) );
@@ -306,30 +258,13 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 	            $bp_prefix = 'base_prefix';
 	        } else {
 	            $bp_prefix = 'prefix';
-	        }
-
-			if ( false === ( $activities = get_transient( 'wp_ulike_get_most_liked_activities' ) ) ) {
-				// Make new sql request
-		        $activities = $wpdb->get_results( "
-								SELECT * FROM
-								".$wpdb->$bp_prefix."bp_activity AS b,
-								".$wpdb->$bp_prefix."bp_activity_meta AS m,
-								".$wpdb->prefix."ulike_activities AS l
-								WHERE b.id        = m.activity_id
-								AND m.activity_id = l.activity_id
-								AND m.meta_key    = '_activityliked'
-								".$this->period($period)."
-								GROUP BY b.id
-								ORDER BY CAST( m.meta_value AS SIGNED ) DESC LIMIT $numberOf
-	                    	" );
-
-		        set_transient( 'wp_ulike_get_most_liked_activities', $activities, 6 * HOUR_IN_SECONDS );
 			}
 
+			$activities = wp_ulike_get_most_liked_activities();
 			foreach ($activities as $activity) {
-				$activity_permalink = function_exists('bp_activity_get_permalink') ? bp_activity_get_permalink( $activity->activity_id ) : '';
+				$activity_permalink = function_exists('bp_activity_get_permalink') ? bp_activity_get_permalink( $activity->id ) : '';
 				$activity_action    = ! empty( $activity->content ) ? $activity->content : $activity->action;
-				$post_count         = $activity->meta_value;
+				$post_count         = wp_ulike_get_counter_value($activity->id, 'activity', 'all', false);
 
 				// Skip empty activities
 				if( empty( $activity_action ) ){
