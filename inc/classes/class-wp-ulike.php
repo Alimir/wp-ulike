@@ -8,7 +8,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 	class wp_ulike{
 
-		private $wpdb, $status, $user_id, $user_ip;
+		private $wpdb, $status, $user_id, $user_ip, $is_distinct;
 
 		/**
 		 * Instance of this class.
@@ -34,10 +34,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function init(){
 			global $wpdb, $wp_user_IP;
-			$this->wpdb    = $wpdb;
-			$this->status  = 'like';
-			$this->user_ip = $wp_user_IP;
-			$this->user_id = $this->get_reutrn_id();
+			$this->wpdb        = $wpdb;
+			$this->status      = 'like';
+			$this->user_ip     = $wp_user_IP;
+			$this->user_id     = $this->get_reutrn_id();
+			$this->is_distinct = true;
 		}
 
 		/**
@@ -86,10 +87,10 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			// Check user log history
 			$user_status = $this->get_user_status( $table, $column, 'ip', $id, $this->user_ip );
 			$user_status = !$user_status ? $this->status : $user_status;
+			$this->is_distinct = false;
 
 			if( $type == 'post' ){
 				$output = $this->get_template( $data, 1 );
-
 			} elseif( $type == 'process' ){
 				$this->update_status( $factor, $user_status, true );
 				// Insert log data
@@ -287,18 +288,20 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		private function get_counter_value( $id, $slug ){
-			$counter = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status ), $this->status );
-			return apply_filters( 'wp_ulike_ajax_counter_value', $counter, $id, $slug, $this->status );
+			$counter = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status, $this->is_distinct ), $this->status );
+			return apply_filters( 'wp_ulike_ajax_counter_value', $counter, $id, $slug, $this->status, $this->is_distinct );
 		}
 
 		/**
 		 * Get user status code
 		 *
-		 * @return integer ( 0 = Is not logged, 1 = Is not liked, 2 = Is liked in the past, 3 )
+		 * @return integer ( 0 = Is not logged, 1 = Is not liked, 2 = Is liked in the past, 3 = Is unliked, 4 = Is already liked )
 		 */
 		public function get_status(){
 			if( ! $this->status ){
 				return 1;
+			} elseif( ! $this->is_distinct ){
+				return 4;
 			} elseif( strpos( $this->status, 'un') === 0 ){
 				return 2;
 			} else {
@@ -357,8 +360,9 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$general_class_name .= ' wp_ulike_is_already_liked';
 			}
 
-			$total_likes = wp_ulike_get_counter_value( $args['id'], $args['slug'], 'like' );
+			$total_likes = wp_ulike_get_counter_value( $args['id'], $args['slug'], 'like', $this->is_distinct );
 			$counter = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $total_likes ) .'</span>' , $total_likes );
+			$args['is_distinct'] = $this->is_distinct;
 
 			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(
 					"ID"             => esc_attr( $args['id'] ),
