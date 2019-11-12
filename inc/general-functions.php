@@ -818,7 +818,7 @@ if( ! function_exists( 'wp_ulike' ) ){
 		$style          = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
 		$display_likers = wp_ulike_get_setting( 'wp_ulike_posts', 'users_liked_box', 1 );
 		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
-		$post_settings  = wp_ulike_get_post_settings_by_type( 'likeThis', $post->ID );
+		$post_settings  = wp_ulike_get_post_settings_by_type( 'likeThis' );
 
 		//Main data
 		$defaults = array_merge( $post_settings, array(
@@ -1002,7 +1002,7 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 		$style            = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
 		$display_likers   = wp_ulike_get_setting( 'wp_ulike_comments', 'users_liked_box', 1 );
 		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
-		$comment_settings = wp_ulike_get_post_settings_by_type( 'likeThisComment', $comment_ID );
+		$comment_settings = wp_ulike_get_post_settings_by_type( 'likeThisComment' );
 
 		$defaults = array_merge( $comment_settings, array(
 			"id"             => $comment_ID,           //Comment ID
@@ -1199,7 +1199,7 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		$style            = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
 		$display_likers   = wp_ulike_get_setting( 'wp_ulike_bbpress', 'users_liked_box', 1 );
 		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
-		$bbpress_settings = wp_ulike_get_post_settings_by_type( 'likeThisTopic', $post_ID );
+		$bbpress_settings = wp_ulike_get_post_settings_by_type( 'likeThisTopic' );
 
 		$defaults = array_merge( $bbpress_settings, array(
 			"id"             => $post_ID,          //Post ID
@@ -1229,19 +1229,18 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
   General
 *******************************************************/
 
-/**
- * Convert numbers of Likes with string (kilobyte) format
- *
- * @author       	Alimir
- * @param           Array  		$parsed_args
- * @param           Integer 	$only_registered_users
- * @since           3.4
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
-	function wp_ulike_get_post_settings_by_type( $post_type, $post_ID ){
+	/**
+	 * Get post settings by its type
+	 *
+	 * @param string $post_type
+	 * @param integer $post_ID (*deprecated)
+	 * @return void
+	 */
+	function wp_ulike_get_post_settings_by_type( $post_type, $post_ID = NULL ){
 		switch ( $post_type ) {
 			case 'likeThis':
+			case 'post':
 				$settings = array(
 					'setting'  => 'wp_ulike_posts',
 					'table'    => 'ulike',
@@ -1253,6 +1252,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 				break;
 
 			case 'likeThisComment':
+			case 'comment':
 				$settings = array(
 					'setting'  => 'wp_ulike_comments',
 					'table'    => 'ulike_comments',
@@ -1264,6 +1264,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 				break;
 
 			case 'likeThisActivity':
+			case 'buddypress':
 				$settings = array(
 					'setting'  => 'wp_ulike_buddypress',
 					'table'    => 'ulike_activities',
@@ -1275,6 +1276,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 				break;
 
 			case 'likeThisTopic':
+			case 'bbpress':
 				$settings = array(
 					'setting'  => 'wp_ulike_bbpress',
 					'table'    => 'ulike_forums',
@@ -1289,7 +1291,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 				$settings = array();
 		}
 
-		return apply_filters( 'wp_ulike_get_post_settings_by_type', $settings, $post_ID  );
+		return apply_filters( 'wp_ulike_get_post_settings_by_type', $settings, $post_ID );
 	}
 }
 
@@ -1626,7 +1628,7 @@ if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
 	function wp_ulike_is_user_liked( $item_ID, $user_ID,  $type = 'likeThis' ) {
 		global $wpdb;
 		// Get ULike settings
-		$get_settings = wp_ulike_get_post_settings_by_type( $type, $item_ID );
+		$get_settings = wp_ulike_get_post_settings_by_type( $type );
 
 		$query  = sprintf( "
 			SELECT COUNT(*)

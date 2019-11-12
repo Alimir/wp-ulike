@@ -113,7 +113,7 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 	 */
 	function wp_ulike_display_inline_likers_template( $args ){
 		// Get settings for current type
-		$get_settings     = wp_ulike_get_post_settings_by_type(  $args['type'], $args['ID'] );
+		$get_settings     = wp_ulike_get_post_settings_by_type( $args['type'] );
 		// If method not exist, then return error message
 		if( empty( $get_settings ) ) {
 			return;
@@ -179,7 +179,7 @@ if( ! function_exists( 'wp_ulike_get_posts_microdata_itemtype' ) ){
 	 * @return mixed
 	 */
 	function wp_ulike_get_posts_microdata_itemtype(){
-		$get_ulike_count = get_post_meta(get_the_ID(), '_liked', true);
+		$get_ulike_count = wp_ulike_get_post_likes( get_the_ID() );
 		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
 		return 'itemscope itemtype="http://schema.org/CreativeWork"';
 	}
@@ -195,7 +195,7 @@ if( ! function_exists( 'wp_ulike_get_posts_microdata' ) ){
 	 */
 	function wp_ulike_get_posts_microdata(){
 		global $post;
-		$get_ulike_count = get_post_meta( $post->ID, '_liked', true );
+  		$get_ulike_count = wp_ulike_get_post_likes( $post->ID );
 		// Check data output
 		if( !is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0 ) {
 			return;
@@ -386,7 +386,7 @@ if( defined( 'BP_VERSION' ) ) {
 							$post_template  = str_replace( "%POST_PERMALINK%", $POST_PERMALINK, $post_template );
 						}
 						if ( strpos( $post_template, '%POST_COUNT%' ) !== false ) {
-							$POST_COUNT    = get_post_meta( $cp_ID, '_liked', true );
+							$POST_COUNT    = wp_ulike_get_post_likes( $cp_ID );
 							$post_template = str_replace( "%POST_COUNT%", $POST_COUNT, $post_template );
 						}
 						if ( strpos( $post_template, '%POST_TITLE%' ) !== false ) {
@@ -747,7 +747,7 @@ if ( defined( 'ultimatemember_version' ) ) {
 						  </div>';
 					echo '<div class="um-item-meta">
 						  <span>'.wp_ulike_date_i18n($get_date).'</span>
-						  <span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.get_post_meta( $get_post->ID, '_liked', true ).'</span>
+						  <span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_post_likes( $get_post->ID ).'</span>
 						  </div>';
 					echo '</div>';
 				}

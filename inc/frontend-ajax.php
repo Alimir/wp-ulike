@@ -30,7 +30,7 @@ function wp_ulike_process(){
 	}
 
 	// Get post type settings
-	$get_settings = wp_ulike_get_post_settings_by_type( $post_type, $post_ID );
+	$get_settings = wp_ulike_get_post_settings_by_type( $post_type );
 
 	// If method not exist, then return error message
 	if( empty( $get_settings ) ) {
@@ -152,7 +152,7 @@ function wp_ulike_get_likers(){
 	}
 
 	// Get post type settings
-	$get_settings = wp_ulike_get_post_settings_by_type( $post_type, $post_ID );
+	$get_settings = wp_ulike_get_post_settings_by_type( $post_type );
 
 	// If method not exist, then return error message
 	if( empty( $get_settings ) ) {
