@@ -156,7 +156,7 @@
       this._setSbilingElement();
       this._updateGeneralClassNames(response.data.status);
       // Update counter + check refresh likers box
-      if(response.data.status < 4){
+      if(response.data.status < 5){
         this.__updateCounter(response.data.data);
         this._refreshTheLikers = true;
       }
@@ -215,6 +215,11 @@
           .children()
           .first()
           .addClass(classNameObj.disable);
+          if(this.siblingElement.length){
+            this.siblingElement.children()
+            .first()
+            .addClass(classNameObj.disable);
+          }
           break;
       }
     },
