@@ -123,15 +123,6 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			return $output;
 		}
 
-
-		private function update_status( $factor = 'up', $old_status = 'like', $keep_status = false ){
-			if( $factor === 'down' ){
-				$this->status = $old_status !== 'dislike' || $keep_status ? 'dislike' : 'undislike';
-			} else {
-				$this->status = $old_status !== 'like' || $keep_status ? 'like' : 'unlike';
-			}
-		}
-
 		/**
 		 * Logged by cookie method
 		 *
@@ -153,7 +144,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			if( $type == 'post' ){
 
-				if( ! $this->has_permission( $args, 'by_cookie' ) ){
+				if( $this->has_permission( $data, 'by_cookie' ) ){
 					$output = $this->get_template( $data, 1 );
 				}
 				else{
@@ -162,7 +153,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			} elseif( $type == 'process' ) {
 
-				if( ! $this->has_permission( $args, 'by_cookie' ) ){
+				if( $this->has_permission( $data, 'by_cookie' ) ){
 					$this->update_status( $factor, $user_status, true );
 					// Set cookie
 					setcookie( $cookie . $id, time(), 2147483647, '/' );
@@ -196,19 +187,6 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			}
 
 			return $output;
-		}
-
-		public function has_permission( $args, $method ){
-			// Extract data
-			extract( $data );
-
-			switch ( $method ) {
-				case 'by_cookie':
-					return isset( $_COOKIE[ $cookie . $id ] );
-
-				default:
-					return true;
-			}
 		}
 
 		/**
@@ -287,9 +265,52 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			return $output;
 		}
 
+		/**
+		 * Get counter value for ajax responses
+		 *
+		 * @param integer $id
+		 * @param string $slug
+		 * @return integer
+		 */
 		private function get_counter_value( $id, $slug ){
 			$counter = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status, $this->is_distinct ), $this->status );
 			return apply_filters( 'wp_ulike_ajax_counter_value', $counter, $id, $slug, $this->status, $this->is_distinct );
+		}
+
+		/**
+		 * Update user status base on database changes
+		 *
+		 * @param string $factor
+		 * @param string $old_status
+		 * @param boolean $keep_status
+		 * @return void
+		 */
+		private function update_status( $factor = 'up', $old_status = 'like', $keep_status = false ){
+			if( $factor === 'down' ){
+				$this->status = $old_status !== 'dislike' || $keep_status ? 'dislike' : 'undislike';
+			} else {
+				$this->status = $old_status !== 'like' || $keep_status ? 'like' : 'unlike';
+			}
+		}
+
+		/**
+		 * Check user permission by logging methods
+		 *
+		 * @param array $args
+		 * @param string $method
+		 * @return boolean
+		 */
+		public function has_permission( $args, $logging_method ){
+			// Extract data
+			extract( $args );
+
+			switch ( $logging_method ) {
+				case 'by_cookie':
+					return ! isset( $_COOKIE[ $cookie . $id ] );
+
+				default:
+					return true;
+			}
 		}
 
 		/**
