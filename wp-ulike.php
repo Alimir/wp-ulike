@@ -185,13 +185,13 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 			);
 
 			//activate other settings panels
-			$wp_ulike_setting->apply_settings( array(
+			$wp_ulike_setting->apply_settings( apply_filters( 'wp_ulike_settings_info', array(
 					'wp_ulike_posts'      => apply_filters( 'wp_ulike_posts_settings'		, wp_ulike_get_options_info('posts') 		),
 					'wp_ulike_comments'   => apply_filters( 'wp_ulike_comments_settings'	, wp_ulike_get_options_info('comments') 	),
 					'wp_ulike_buddypress' => apply_filters( 'wp_ulike_buddypress_settings'	, wp_ulike_get_options_info('buddypress') 	),
 					'wp_ulike_bbpress'    => apply_filters( 'wp_ulike_bbpress_settings'		, wp_ulike_get_options_info('bbpress') 		),
 					'wp_ulike_customize'  => apply_filters( 'wp_ulike_customize_settings'	, wp_ulike_get_options_info('customizer') 	)
-				)
+				) )
 			);
 	    }
 
