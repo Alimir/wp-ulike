@@ -105,7 +105,8 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                             'sanitize' => null,
                             'attributes' => array(),
                             'options' => null,
-                            'action' => null
+                            'action' => null,
+                            'license' => null
                         ), $field );
                         $section['fields'][$name] = $field;
                     } //$section['fields'] as $name => $field
@@ -263,13 +264,13 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                         ), $this->page, $setting, $field );
                         if ( $field['type'] === 'action' && is_callable( $field['action'] ) ) {
                             add_action( "wp_ajax_{$setting}_{$name}", $field['action'] );
-                        } //$field['type'] === 'action' && is_callable( $field['action'] )
-                    } //$section['fields'] as $name => $field
-                } //!empty( $section['fields'] )
-            } //$this->settings as $setting => $section
+                        }
+                    }
+                }
+            }
             if ( isset( $_POST["{$this->page}_reset"] ) ) {
                 $this->reset();
-            } //isset( $_POST["{$this->page}_reset"] )
+            }
         }
 
         public function do_section( $args ) {
@@ -378,6 +379,22 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                         _e( 'No action defined.', WP_ULIKE_SLUG );
                     } //!$action
                     echo "<p class='wp-ulike-settings-action'><input {$attrs} id='{$id}' type='button' class='button button-large' value='{$label}' /></p>{$desc}";
+                    break;
+
+                case 'license':
+                    if ( !$action ) {
+                        _e( 'No license defined.', WP_ULIKE_SLUG );
+                    }
+                    $v = esc_attr( $value );
+                    $n = wp_nonce_field( 'wp_ulike_activate_license', 'wp_ulike_activate_license' );
+                    $o = wp_ulike_is_valid_license();
+                    $b = __( 'Submit', WP_ULIKE_SLUG );
+                    if( $o ){
+                        echo sprintf( '<p class="wp-ulike-license-info">%s <strong>%s</strong></p>', __( 'Dear user. Your license key has been activated until: ', WP_ULIKE_SLUG ), $o );
+                    } else {
+                        echo "<p class='wp-ulike-settings-license-activation'><input {$attrs} type='text' value='{$v}' class='regular-text license-info' /><input id='{$id}' type='button' class='button button-large' value='{$b}' />{$n}</p>{$desc}";
+                    }
+
                     break;
 
                 case 'color':

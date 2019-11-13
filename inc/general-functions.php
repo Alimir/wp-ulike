@@ -837,10 +837,6 @@ if( ! function_exists( 'wp_ulike' ) ){
 		$defaults = array_merge( $post_settings, array(
 			"id"             => $post_ID,                    //Post ID
 			"method"         => 'likeThis',                  //JavaScript method
-			"reaction"       => array(
-				'like'    => wp_create_nonce( 'like' ),
-				'dislike' => wp_create_nonce( 'like' ),
-			),
 			"type"           => 'post',                      //Function type (post/process)
 			"display_likers" => $display_likers,             //Check likers box display
 			"style"          => $style,                      //Get Default Theme
@@ -2002,4 +1998,18 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 		do_action( 'wp_ulike_after_template' );
 		return ob_get_clean(); // data is now in here
 	}
+}
+
+function wp_ulike_is_valid_license(){
+	$license_info = get_site_option( 'wp_ulike_pro_license_info' );
+
+	if( !empty($license_info) && isset($license_info['license']) ){
+  		$expire = strtotime( $license_info['expires'] );
+		$today  = strtotime("today midnight");
+		if( $today <= $expire && $license_info['status'] === 'valid' ){
+			return $license_info['expires'];
+		}
+	}
+
+	return false;
 }
