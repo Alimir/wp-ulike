@@ -110,6 +110,29 @@ form.wp-ulike {
 
 	}
 
+	.wp-ulike-settings-license-activation{
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+
+		.settings-error{
+			flex: 0 1 100%;
+		}
+		
+		.regular-text{
+			font-size: 18px;
+			font-weight: 600;
+			width: 400px;
+			height: 45px;
+		}
+
+		.button{
+			height: 45px;
+			font-weight: 700;
+			padding: 0 20px;
+		}
+	}
+
 }
 
 .wp-ulike-settings-tab {

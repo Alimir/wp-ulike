@@ -223,6 +223,7 @@
               if (typeof r === "object") {
                 if (r.hasOwnProperty("success") && r.success) {
                   noticeClass = "updated";
+                  submit.hide();
                 }
                 if (r.hasOwnProperty("data") && r.data) {
                   if (typeof r.data === "object") {
@@ -240,7 +241,6 @@
               } else if (r) {
                 showNotice(r);
               }
-              submit.hide();
               spinner.hide();
               $(this).fadeIn("fast");
               notice.show("fast");
