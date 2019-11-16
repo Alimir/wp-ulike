@@ -127,77 +127,6 @@ function wp_ulike_badge_count_format( $number ){
 	);
 }
 
-
-/**
- * Set/update the value of a transient.
- *
- * You do not need to serialize values. If the value needs to be serialized, then
- * it will be serialized before it is set.
- *
- *
- * @param string $transient  Transient name. Expected to not be SQL-escaped. Must be
- *                           172 characters or fewer in length.
- * @param mixed  $value      Transient value. Must be serializable if non-scalar.
- *                           Expected to not be SQL-escaped.
- * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
- * @return bool False if value was not set and true if value was set.
- */
-function wp_ulike_set_transient( $transient, $value, $expiration = 0 ) {
-    global $_wp_using_ext_object_cache;
-
-    $current_using_cache = $_wp_using_ext_object_cache;
-    $_wp_using_ext_object_cache = false;
-
-    $result = set_transient( $transient, $value, $expiration );
-
-    $_wp_using_ext_object_cache = $current_using_cache;
-
-    return $result;
-}
-
-
-/**
- * Get the value of a transient.
- *
- * If the transient does not exist, does not have a value, or has expired,
- * then the return value will be false.
- *
- * @param string $transient Transient name. Expected to not be SQL-escaped.
- * @return mixed Value of transient.
- */
-function wp_ulike_get_transient( $transient ) {
-    global $_wp_using_ext_object_cache;
-
-    $current_using_cache = $_wp_using_ext_object_cache;
-    $_wp_using_ext_object_cache = false;
-
-    $result = get_transient( $transient );
-
-    $_wp_using_ext_object_cache = $current_using_cache;
-
-    return $result;
-}
-
-
-/**
- * Delete a transient.
- *
- * @param string $transient Transient name. Expected to not be SQL-escaped.
- * @return bool true if successful, false otherwise
- */
-function wp_ulike_delete_transient( $transient ) {
-    global $_wp_using_ext_object_cache;
-
-    $current_using_cache = $_wp_using_ext_object_cache;
-    $_wp_using_ext_object_cache = false;
-
-    $result = delete_transient( $transient );
-
-    $_wp_using_ext_object_cache = $current_using_cache;
-
-    return $result;
-}
-
 /**
  * Get plugin downloads info from wordpress.org
  *
@@ -223,4 +152,155 @@ function wp_ulike_get_repository_downloads_info(){
 	}
 
 	return $info;
+}
+
+
+function wp_ulike_widget_button_callback( $atts = array() ){
+
+    // Defining default attributes
+    $default_atts = array(
+        'label'         => '',
+        'color_name'    => 'default',
+        'link'          => '',
+        'target'        => '_self',
+        'nofollow'      => false,
+        'btn_attrs'     => '', // data-attr1{val1};data-attr2{val2}
+        'custom_styles' => array(),
+        'extra_classes' => '', // custom css class names for this element
+    );
+
+    $result = $parsed_args = wp_parse_args( $atts, $default_atts );
+	extract( $result );
+
+    // --------------------------------------------
+    $btn_css_classes = array( 'wp-ulike-btn' );
+    $btn_css_classes[] = 'wp-ulike-btn-' . $color_name;   // appearance
+
+    // add extra attributes to button element if defined
+    $btn_other_attrs = '';
+
+    if( $btn_attrs = trim( $btn_attrs, ';' ) ){
+        preg_match_all('/([\-|\w]+)(?!{})([\w]+)/s', $btn_attrs, $btn_attr_matches );
+
+        if( ! empty( $btn_attr_matches[0] ) && is_array( $btn_attr_matches[0] ) ){
+            foreach( $btn_attr_matches[0] as $i => $attr_name_value ){
+                if( 0 == $i % 2 ){
+                    $btn_other_attrs .= sprintf(' %s', $attr_name_value);
+                } else {
+                    $btn_other_attrs .= sprintf('="%s"', esc_attr( trim( $attr_name_value ) ) );
+                }
+            }
+            $btn_other_attrs = trim( $btn_other_attrs );
+        }
+    }
+
+    $extra_styles  = '';
+
+    if ( isset( $custom_styles ) && ! empty( $custom_styles )  ) {
+
+        foreach( $custom_styles as $property => $value ) {
+            if ( 'custom' === $property ) {
+                $extra_styles .= $value;
+            } else {
+                $extra_styles  .=  $property . ':' . $value . ';';
+            }
+        }
+
+        $extra_styles = 'style="' . $extra_styles . '"';
+
+    }
+
+    if( ! empty( $extra_classes ) ) {
+        $btn_css_classes[] =  $extra_classes;
+    }
+
+    // get escaped class attributes
+    $button_class_attr = wp_ulike_make_html_class_attribute( $btn_css_classes );
+
+    $label = empty( $label ) ? $shortcode_content : $label;
+    $label = empty( $label ) ? __( "Button", 'auxin-elements' ) : $label;
+
+    $btn_content = '<span class="wp-ulike-text">'. wp_ulike_do_cleanup_shortcode( $label ) .'</span>';
+    $btn_tag     = empty( $link ) ? 'button' : 'a';
+    $btn_rel     = wp_ulike_is_true ( $nofollow ) ? ' rel="nofollow"' : '';
+    $btn_href    = empty( $link ) ? '' : ' href="'. esc_url( $link ) .'" target="'. esc_attr( $target ) .'" ' . $btn_rel;
+
+    $output   = '';
+
+    // widget custom output -----------------------
+
+    $output .= "<$btn_tag $btn_href $btn_other_attrs $button_class_attr $extra_styles>";
+    $output .= $btn_content;
+    $output .= "</$btn_tag>";
+
+    return $output;
+}
+
+
+/**
+ * Creates and returns an HTML class attribute
+ *
+ * @param  array        $classes   List of current classes
+ * @param  string|array $class     One or more classes to add to the class list.
+ *
+ * @return string                  HTML class attribute
+ */
+function wp_ulike_make_html_class_attribute( $classes = '', $class = '' ){
+
+    if( ! $merged_classes = wp_ulike_merge_css_classes( $classes, $class ) ){
+        return '';
+    }
+
+    return 'class="' . esc_attr( trim( join( ' ', array_unique( $merged_classes ) ) ) ) . '"';
+}
+
+/**
+ * Merge new css classes in current list
+ *
+ * @param  array        $classes   List of current classes
+ * @param  string|array $class     One or more classes to add to the class list.
+ *
+ * @return                         Array of classes
+ */
+function wp_ulike_merge_css_classes( $classes = array(), $class = '' ){
+
+    if( empty( $classes ) && empty( $class ) )
+        return array();
+
+    if ( ! empty( $class ) ) {
+        if ( !is_array( $class ) )
+            $class = preg_split( '#\s+#', $class );
+
+        $classes = array_merge( $class, $classes );
+    }
+
+    return $classes;
+}
+
+/**
+ * remove all auto generated p tags from shortcode content
+ *
+ * @param string $content
+ * @return string
+ */
+function wp_ulike_do_cleanup_shortcode( $content ) {
+
+	/* Parse nested shortcodes and add formatting. */
+	$content = trim( wpautop( do_shortcode( $content ) ) );
+
+	/* Remove any instances of '<p>' '</p>'. */
+	$content = wp_ulike_cleanup_content( $content );
+
+	return $content;
+}
+
+/**
+ * remove all p tags from string
+ *
+ * @param string $content
+ * @return string
+ */
+function wp_ulike_cleanup_content( $content ) {
+	/* Remove any instances of '<p>' '</p>'. */
+	return str_replace( array('<p>','</p>'), array('','') , $content );
 }

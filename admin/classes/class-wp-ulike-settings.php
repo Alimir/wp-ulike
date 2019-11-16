@@ -97,16 +97,20 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     ), $section );
                     foreach ( $section['fields'] as $name => $field ) {
                         $field                    = array_merge( array(
-                             'type' => 'text',
-                            'label' => null,
-                            'checkboxlabel' => null,
-                            'description' => null,
-                            'default' => null,
-                            'sanitize' => null,
-                            'attributes' => array(),
-                            'options' => null,
-                            'action' => null,
-                            'license' => null
+                             'type'          => 'text',
+                             'label'         => null,
+                             'title'         => null,
+                             'notice_type'   => null,
+                             'icon'          => null,
+                             'message'       => null,
+                             'checkboxlabel' => null,
+                             'description'   => null,
+                             'default'       => null,
+                             'sanitize'      => null,
+                             'attributes'    => array(),
+                             'options'       => null,
+                             'action'        => null,
+                             'license'       => null
                         ), $field );
                         $section['fields'][$name] = $field;
                     } //$section['fields'] as $name => $field
@@ -387,14 +391,20 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     }
                     $v = esc_attr( $value );
                     $n = wp_nonce_field( 'wp_ulike_activate_license', 'wp_ulike_activate_license' );
-                    $o = wp_ulike_is_valid_license();
                     $b = __( 'Submit', WP_ULIKE_SLUG );
-                    if( $o ){
-                        echo sprintf( '<p class="wp-ulike-license-info">%s <strong>%s</strong></p>', __( 'Dear user. Your license key has been activated until: ', WP_ULIKE_SLUG ), $o );
-                    } else {
-                        echo "<p class='wp-ulike-settings-license-activation'><input {$attrs} type='text' value='{$v}' class='regular-text license-info' /><input id='{$id}' type='button' class='button button-large' value='{$b}' />{$n}</p>{$desc}";
-                    }
+                    echo "<p class='wp-ulike-settings-license-activation'><input {$attrs} type='text' value='{$v}' class='regular-text license-info' /><input id='{$id}' type='button' class='button button-large' value='{$b}' />{$n}</p>{$desc}";
+                    break;
 
+                case 'notice':
+                    echo sprintf( '
+                    <div class="wp-ulike-settings-notice wp-ulike-notice-control wp-ulike-notice-skin-%s">
+                        <div class="wp-ulike-notice-image">%s</div>
+                        <div class="wp-ulike-notice-info">
+                            <h3 class="wp-ulike-notice-title">%s</h3>
+                            <p class="wp-ulike-notice-description">%s</p>
+                        </div>
+                    </div>',
+                    $notice_type, $icon, $title, $message );
                     break;
 
                 case 'color':

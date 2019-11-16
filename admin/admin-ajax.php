@@ -45,10 +45,10 @@ add_action( 'wp_ajax_wp_ulike_ajax_stats', 'wp_ulike_ajax_stats' );
  */
 function wp_ulike_ajax_notice_handler() {
     // Store it in the options table
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wp-ulike-notice-dismissed' ) ) {
-		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
+	if ( ! isset( $_POST['id'] ) ||  ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], '_notice_nonce' ) ) {
+		wp_send_json_error(  __( 'Token Error.', WP_ULIKE_SLUG ) );
 	} else {
-		update_option( 'wp-ulike-notice-dismissed', TRUE );
+		wp_ulike_set_transient( 'wp-ulike-notice-' . $_POST['id'], 1, $_POST['expiration'] );
 		wp_send_json_success( __( 'It\'s OK.', WP_ULIKE_SLUG ) );
 	}
 }
