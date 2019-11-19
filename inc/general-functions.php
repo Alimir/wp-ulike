@@ -1473,7 +1473,19 @@ if( ! function_exists( 'wp_ulike_get_popular_items_ids' ) ){
 	}
 }
 
-
+if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
+	/**
+	 * Check current user capabilities to access admin pages
+	 *
+	 * @param [type] $type
+	 * @return void
+	 */
+	function wp_ulike_get_user_access_capability( $type ){
+		$current_user  = wp_get_current_user();
+		$allowed_roles = apply_filters( 'wp_ulike_display_capabilities', array('administrator'), $type );
+		return array_intersect( $allowed_roles, $current_user->roles ) ? key($current_user->allcaps) : 'manage_options';
+	}
+}
 
 /**
  * Get likers box template

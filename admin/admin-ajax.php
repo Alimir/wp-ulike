@@ -24,7 +24,7 @@ function wp_ulike_ajax_stats() {
 
 	$nonce  = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 
-	if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp-ulike-ajax-nonce' ) || ! current_user_can( 'manage_options' ) ) {
+	if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp-ulike-ajax-nonce' ) || ! current_user_can( wp_ulike_get_user_access_capability('stats') ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
@@ -69,7 +69,7 @@ function wp_ulike_logs_process(){
 	$table = isset( $_POST['table'] ) ? $_POST['table'] : '';
 	$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 
-	if( $id == '' || ! wp_verify_nonce( $nonce, $table . $id ) || ! current_user_can( 'delete_posts' ) ) {
+	if( $id == '' || ! wp_verify_nonce( $nonce, $table . $id ) || ! current_user_can( wp_ulike_get_user_access_capability('logs') ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
