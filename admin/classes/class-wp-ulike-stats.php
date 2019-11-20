@@ -296,7 +296,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 	            <div class="wp-ulike-flex wp-ulike-users-list">
 	                <div class="wp-ulike-counter">
 	                	<i class="wp-ulike-icons-trophy"></i>
-	                	<span class="aux-wp-ulike-counter">'.$counter++.'th</span>
+	                	<span class="wp-ulike-counter">'.$counter++.'th</span>
 	                </div>
 	                <div class="wp-ulike-info">
 	                	<i class="wp-ulike-icons-profile-male"></i>
