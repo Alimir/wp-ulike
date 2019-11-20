@@ -31,6 +31,11 @@
         min-width: 50px;
     }
 
+    .wp_ulike_general_class{
+        display: inline-flex;
+        align-items: center;
+    }
+
     .wp_ulike_is_loading {
         .wp_ulike_btn {
             background-image: url(../img/svg/loader.svg);
@@ -58,4 +63,10 @@
 
 .wp_ulike_hide_me {
     visibility: hidden;
+}
+
+.wpulike-hide-counter{
+    .count-box{
+        display: none;
+    }
 }
