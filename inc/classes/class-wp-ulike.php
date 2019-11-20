@@ -354,9 +354,9 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';
 				if($status == 2 && strpos( $user_status, 'dis') !== 0){
-					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u' ) );
+					$button_text = wp_ulike_get_button_text( 'button_text_u' );
 				} else {
-					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) );
+					$button_text = wp_ulike_get_button_text( 'button_text' );
 				}
 			}
 			// Add unique class name for each button

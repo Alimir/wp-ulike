@@ -1913,6 +1913,30 @@ if( ! function_exists('wp_ulike_is_true') ){
     }
 }
 
+if( ! function_exists('wp_ulike_is_cache_exist') ){
+	/**
+	 * Check cache existence
+	 *
+	 * @return void
+	 */
+	function wp_ulike_is_cache_exist(){
+		return defined( WP_CACHE ) && WP_CACHE === true;
+	}
+}
+
+if( ! function_exists('wp_ulike_get_button_text') ){
+	/**
+	 * Get button text by option name
+	 *
+	 * @param string $option_name
+	 * @return string
+	 */
+	function wp_ulike_get_button_text( $option_name ){
+		$value = wp_ulike_get_setting( 'wp_ulike_general', $option_name );
+		return apply_filters( 'wp_ulike_button_text', $value, $option_name );
+	}
+}
+
 /*******************************************************
   Templates
 *******************************************************/

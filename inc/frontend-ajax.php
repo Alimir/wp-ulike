@@ -25,7 +25,7 @@ function wp_ulike_process(){
 	$factor      = isset( $_POST['factor'] ) ? $_POST['factor'] : NULL;
 	$response    = array();
 
-	if( $post_ID == null || ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) ) {
+	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && !wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
@@ -83,7 +83,7 @@ function wp_ulike_process(){
 				case 1:
 					$response = array(
 						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
+						'btnText' => wp_ulike_get_button_text( 'button_text' ),
 						'messageType' => 'success',
 						'status'  => $status,
 						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
@@ -92,7 +92,7 @@ function wp_ulike_process(){
 				case 2:
 					$response = array(
 						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice', __( 'Sorry! You unliked this.', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
+						'btnText' => wp_ulike_get_button_text( 'button_text' ),
 						'messageType' => 'error',
 						'status'  => $status,
 						'data'    => apply_filters( 'wp_ulike_respond_for_unliked_data', $counter, $post_ID )
@@ -101,7 +101,7 @@ function wp_ulike_process(){
 				case 3:
 					$response = array(
 						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u', __( 'Liked', WP_ULIKE_SLUG ) ) ),
+ 						'btnText' => wp_ulike_get_button_text( 'button_text_u' ),
 						'messageType' => 'success',
 						'status'  => $status,
 						'data'    => apply_filters( 'wp_ulike_respond_for_liked_data', $counter, $post_ID )
@@ -110,7 +110,7 @@ function wp_ulike_process(){
 				case 4:
 					$response = array(
 						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
+						'btnText' => wp_ulike_get_button_text( 'button_text' ),
 						'messageType' => 'success',
 						'status'  => $status,
 						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
