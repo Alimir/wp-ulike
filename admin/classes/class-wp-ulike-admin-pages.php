@@ -22,7 +22,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 		 */
 		function __construct() {
 
-			$this->submenus = array(
+			$this->submenus = apply_filters( 'wp_ulike_admin_pages', array(
 				'posts_logs'      => array(
 					'title'       => __( 'Post Likes Logs', WP_ULIKE_SLUG ),
 					'parent_slug' => NULL,
@@ -71,7 +71,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'menu_slug'   => 'wp-ulike-about',
 					'load_screen' => false
 				)
-			);
+			) );
 
 			add_action( 'admin_menu', array( $this, 'menus' ) );
 		}
