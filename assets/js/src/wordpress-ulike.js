@@ -14,6 +14,7 @@
       append: '',
       appendTimeout: 2000,
       displayLikers: false,
+      disablePophover: true,
       factor: '',
       counterSelector: ".count-box",
       generalSelector: ".wp_ulike_general_class",
@@ -26,6 +27,7 @@
       "ulike-type": "type",
       "ulike-append": "append",
       "ulike-display-likers": "displayLikers",
+      "ulike-disable-pophover": "disablePophover",
       "ulike-append-timeout": "appendTimeout",
       "ulike-factor": "factor"
     };
@@ -124,8 +126,8 @@
       );
     },
 
-    _maybeUpdateElements: function(event) {
-      this.buttonElement  = $(event.currentTarget);
+    _maybeUpdateElements: function (event) {
+      this.buttonElement = $(event.currentTarget);
       this.generalElement = this.buttonElement.closest(this.settings.generalSelector);
       this.counterElement = this.generalElement.find(
         this.settings.counterSelector
@@ -156,7 +158,7 @@
       this._setSbilingElement();
       this._updateGeneralClassNames(response.data.status);
       // Update counter + check refresh likers box
-      if(response.data.status < 5){
+      if (response.data.status < 5) {
         this.__updateCounter(response.data.data);
         this._refreshTheLikers = true;
       }
@@ -170,7 +172,7 @@
       }
     },
 
-    _updateGeneralClassNames: function(status){
+    _updateGeneralClassNames: function (status) {
       // Our base status class names
       var classNameObj = {
         start: "wp_ulike_is_not_liked",
@@ -180,7 +182,7 @@
       };
 
       // Remove status from sibling element
-      if(this.siblingElement.length){
+      if (this.siblingElement.length) {
         this.siblingElement.removeClass(this._arrayToString([
           classNameObj.active,
           classNameObj.deactive
@@ -190,60 +192,60 @@
       switch (status) {
         case 1:
           this.generalElement
-          .addClass(classNameObj.active)
-          .removeClass(classNameObj.start);
+            .addClass(classNameObj.active)
+            .removeClass(classNameObj.start);
           this.generalElement
-          .children()
-          .first()
-          .addClass(classNameObj.disable);
+            .children()
+            .first()
+            .addClass(classNameObj.disable);
           break;
 
         case 2:
           this.generalElement
-          .addClass(classNameObj.deactive)
-          .removeClass(classNameObj.active);
+            .addClass(classNameObj.deactive)
+            .removeClass(classNameObj.active);
           break;
 
         case 3:
           this.generalElement
-          .addClass(classNameObj.active)
-          .removeClass(classNameObj.deactive);
+            .addClass(classNameObj.active)
+            .removeClass(classNameObj.deactive);
           break;
 
         default:
           this.generalElement
-          .children()
-          .first()
-          .addClass(classNameObj.disable);
-          if(this.siblingElement.length){
-            this.siblingElement.children()
+            .children()
             .first()
             .addClass(classNameObj.disable);
+          if (this.siblingElement.length) {
+            this.siblingElement.children()
+              .first()
+              .addClass(classNameObj.disable);
           }
           break;
       }
     },
 
-    _arrayToString: function( data ){
+    _arrayToString: function (data) {
       return data.join(' ');
     },
 
-    _setSbilingElement: function(){
+    _setSbilingElement: function () {
       this.siblingElement = this.generalElement.siblings();
     },
 
-    __updateCounter: function( counterValue ){
-      if( typeof counterValue !== "object" ){
+    __updateCounter: function (counterValue) {
+      if (typeof counterValue !== "object") {
         this.counterElement.text(counterValue);
       } else {
-        if( this.settings.factor === 'down' ){
+        if (this.settings.factor === 'down') {
           this.counterElement.text(counterValue.down);
-          if(this.siblingElement.length){
+          if (this.siblingElement.length) {
             this.siblingElement.find(this.settings.counterSelector).text(counterValue.up);
           }
         } else {
           this.counterElement.text(counterValue.up);
-          if(this.siblingElement.length){
+          if (this.siblingElement.length) {
             this.siblingElement.find(this.settings.counterSelector).text(counterValue.down);
           }
         }
@@ -272,6 +274,7 @@
             id: this.settings.ID,
             nonce: this.settings.nonce,
             type: this.settings.type,
+            disablePophover: this.settings.disablePophover,
             refresh: this._refreshTheLikers ? 1 : 0
           },
           function (response) {
@@ -337,22 +340,22 @@
       if (this.buttonElement.hasClass("wp_ulike_put_image")) {
         if (likeStatus === 3 || likeStatus === 2) {
           this.buttonElement.toggleClass("image-unlike");
-          if( this.siblingElement.length ){
+          if (this.siblingElement.length) {
             this.siblingElement.find(this.settings.buttonSelector).removeClass("image-unlike");
           }
         }
       } else if (this.buttonElement.hasClass("wp_ulike_put_text") && btnText !== null) {
-        if( typeof btnText !== "object" ){
+        if (typeof btnText !== "object") {
           this.buttonElement.find("span").html(btnText);
         } else {
-          if( this.settings.factor === 'down' ){
+          if (this.settings.factor === 'down') {
             this.buttonElement.find("span").html(btnText.down);
-            if(this.siblingElement.length){
+            if (this.siblingElement.length) {
               this.siblingElement.find(this.settings.buttonSelector).find("span").html(btnText.up);
             }
           } else {
             this.buttonElement.find("span").html(btnText.up);
-            if(this.siblingElement.length){
+            if (this.siblingElement.length) {
               this.siblingElement.find(this.settings.buttonSelector).find("span").html(btnText.down);
             }
           }
