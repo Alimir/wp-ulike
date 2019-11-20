@@ -111,6 +111,11 @@ add_filter( 'wp_ulike_admin_sub_menu_title', 'wp_ulike_update_admin_sub_menu_tit
 
 function wp_ulike_notice_manager(){
 
+	// Display notices only for admin users
+	if( !current_user_can( 'manage_options' ) ){
+		return;
+	}
+
     $notice_list = [];
 
 	$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
