@@ -120,10 +120,8 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		}
 		// Extract settings array
 		extract( $get_settings );
-		// Check popover activation
-		$disable_pophover = wp_ulike_get_setting( $setting, 'disable_likers_pophover', 0 );
 		// Display likers box
-		echo $disable_pophover ? sprintf(
+		echo $args['disable_pophover'] ? sprintf(
 			'<div class="wp_ulike_likers_wrapper wp_ulike_display_inline">%s</div>',
 			wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting )
 		) : '';

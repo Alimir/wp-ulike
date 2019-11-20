@@ -386,21 +386,22 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$args['is_distinct'] = $this->is_distinct;
 
 			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(
-					"ID"             => esc_attr( $args['id'] ),
-					"wrapper_class"  => esc_attr( $args['wrapper_class'] ),
-					"slug"           => esc_attr( $args['slug'] ),
-					"counter"        => $counter,
-					"total_likes"    => $total_likes,
-					"type"           => esc_attr( $args['method'] ),
-					"status"         => esc_attr( $status ),
-					"user_status"    => esc_attr( $user_status ),
-					"attributes"     => esc_attr( $args['attributes'] ),
-					"style"          => esc_html( $args['style'] ),
-					"button_type"    => esc_html( $args['button_type'] ),
-					"display_likers" => esc_attr( $args['display_likers'] ),
-					"button_text"    => $button_text,
-					"general_class"  => esc_attr( $general_class_name ),
-					"button_class"   => esc_attr( $button_class_name )
+					"ID"               => esc_attr( $args['id'] ),
+					"wrapper_class"    => esc_attr( $args['wrapper_class'] ),
+					"slug"             => esc_attr( $args['slug'] ),
+					"counter"          => $counter,
+					"total_likes"      => $total_likes,
+					"type"             => esc_attr( $args['method'] ),
+					"status"           => esc_attr( $status ),
+					"user_status"      => esc_attr( $user_status ),
+					"attributes"       => esc_attr( $args['attributes'] ),
+					"style"            => esc_html( $args['style'] ),
+					"button_type"      => esc_html( $args['button_type'] ),
+					"display_likers"   => esc_attr( $args['display_likers'] ),
+					"disable_pophover" => esc_attr( $args['disable_pophover'] ),
+					"button_text"      => $button_text,
+					"general_class"    => esc_attr( $general_class_name ),
+					"button_class"     => esc_attr( $button_class_name )
 				), $args
 			);
 

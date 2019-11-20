@@ -136,13 +136,14 @@ add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );
  */
 function wp_ulike_get_likers(){
 
-	$post_ID     = $_POST['id'];
-	$post_type   = $_POST['type'];
-	$nonce_token = $_POST['nonce'];
-	$is_refresh  = $_POST['refresh'];
+	$post_ID          = $_POST['id'];
+	$post_type        = $_POST['type'];
+	$nonce_token      = $_POST['nonce'];
+	$is_refresh       = $_POST['refresh'];
+	$disable_pophover = $_POST['disablePophover'];
 
 	// Check security nonce field
-	if( $post_ID == null || ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) ) {
+	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && !wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
@@ -168,7 +169,7 @@ function wp_ulike_get_likers(){
 	}
 
 	// Add specific class name with popover checkup
-	$class_names = wp_ulike_get_setting( $setting, 'disable_likers_pophover', 0 ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
+	$class_names = wp_ulike_is_true( $disable_pophover ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
 	$users_list  = wp_ulike_get_likers_template( $table, $column, $post_ID, $setting );
 
 	wp_send_json_success( array( 'template' => $users_list, 'class' => $class_names ) );

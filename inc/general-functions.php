@@ -122,7 +122,7 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg'
 			),
 			'wpulike-robeen' => array(
-				'name'     => __('Robeen', WP_ULIKE_SLUG),
+				'name'     => __('Twitter Heart', WP_ULIKE_SLUG),
 				'callback' => 'wp_ulike_set_robeen_template',
 				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'
 			),
@@ -826,23 +826,25 @@ if( ! function_exists( 'wp_ulike' ) ){
 		//global variables
 		global $post;
 
-		$post_ID        = isset( $args['id'] ) ? $args['id'] : $post->ID;
-		$attributes     = apply_filters( 'wp_ulike_posts_add_attr', null );
-		$style          = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
-		$display_likers = wp_ulike_get_setting( 'wp_ulike_posts', 'users_liked_box', 1 );
-		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
-		$post_settings  = wp_ulike_get_post_settings_by_type( 'likeThis' );
+		$post_ID          = isset( $args['id'] ) ? $args['id'] : $post->ID;
+		$attributes       = apply_filters( 'wp_ulike_posts_add_attr', null );
+		$style            = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
+		$display_likers   = wp_ulike_get_setting( 'wp_ulike_posts', 'users_liked_box', 1 );
+		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_posts', 'disable_likers_pophover', 0 );
+		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$post_settings    = wp_ulike_get_post_settings_by_type( 'likeThis' );
 
 		//Main data
 		$defaults = array_merge( $post_settings, array(
-			"id"             => $post_ID,                    //Post ID
-			"method"         => 'likeThis',                  //JavaScript method
-			"type"           => 'post',                      //Function type (post/process)
-			"display_likers" => $display_likers,             //Check likers box display
-			"style"          => $style,                      //Get Default Theme
-			"attributes"     => $attributes,                 //Get Attributes Filter
-			"wrapper_class"  => '',                          //Extra Wrapper class
-			"button_type"    => $button_type                 //Button Type
+			"id"               => $post_ID,            //Post ID
+			"method"           => 'likeThis',          //JavaScript method
+			"type"             => 'post',              //Function type (post/process)
+			"display_likers"   => $display_likers,     //Check likers box display
+			"disable_pophover" => $disable_pophover,   //Disable pophover
+			"style"            => $style,              //Get Default Theme
+			"attributes"       => $attributes,         //Get Attributes Filter
+			"wrapper_class"    => '',                  //Extra Wrapper class
+			"button_type"      => $button_type         //Button Type
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1031,18 +1033,20 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 		$attributes       = apply_filters( 'wp_ulike_comments_add_attr', null );
 		$style            = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
 		$display_likers   = wp_ulike_get_setting( 'wp_ulike_comments', 'users_liked_box', 1 );
+		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_comments', 'disable_likers_pophover', 0 );
 		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 		$comment_settings = wp_ulike_get_post_settings_by_type( 'likeThisComment' );
 
 		$defaults = array_merge( $comment_settings, array(
-			"id"             => $comment_ID,           //Comment ID
-			"method"         => 'likeThisComment',     //JavaScript method
-			"type"           => 'post',                //Function type (post/process)
-			"display_likers" => $display_likers,       //Display likers box
-			"style"          => $style,                //Get Default Theme
-			"attributes"     => $attributes,           //Get Attributes Filter
-			"wrapper_class"  => '',                    //Extra Wrapper class
-			"button_type"    => $button_type           //Button Type
+			"id"               => $comment_ID,         //Comment ID
+			"method"           => 'likeThisComment',   //JavaScript method
+			"type"             => 'post',              //Function type (post/process)
+			"display_likers"   => $display_likers,     //Display likers box
+			"disable_pophover" => $disable_pophover,   //Disable pophover
+			"style"            => $style,              //Get Default Theme
+			"attributes"       => $attributes,         //Get Attributes Filter
+			"wrapper_class"    => '',                  //Extra Wrapper class
+			"button_type"      => $button_type         //Button Type
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1113,21 +1117,23 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 		} else {
 			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_id();
 		}
-		$attributes     = apply_filters( 'wp_ulike_activities_add_attr', null );
-		$style          = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
-		$display_likers = wp_ulike_get_setting( 'wp_ulike_buddypress', 'users_liked_box', 1 );
-		$button_type    = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$attributes          = apply_filters( 'wp_ulike_activities_add_attr', null );
+		$style               = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
+		$display_likers      = wp_ulike_get_setting( 'wp_ulike_buddypress', 'users_liked_box', 1 );
+		$disable_pophover    = wp_ulike_get_setting( 'wp_ulike_buddypress', 'disable_likers_pophover', 0 );
+		$button_type         = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 		$buddypress_settings = wp_ulike_get_post_settings_by_type( 'likeThisActivity' );
 
 		$defaults = array_merge( $buddypress_settings, array(
-			"id"             => $activityID,             //Activity ID
-			"method"         => 'likeThisActivity',      //JavaScript method
-			"type"           => 'post',                  //Function type (post/process)
-			"display_likers" => $display_likers,         //Display likers box
-			"style"          => $style,                  //Get Default Theme
-			"attributes"     => $attributes,             //Get Attributes Filter
-			"wrapper_class"  => '',                      //Extra Wrapper class
-			"button_type"    => $button_type             //Button Type
+			"id"               => $activityID,          //Activity ID
+			"method"           => 'likeThisActivity',   //JavaScript method
+			"type"             => 'post',               //Function type (post/process)
+			"display_likers"   => $display_likers,      //Display likers box
+			"disable_pophover" => $disable_pophover,    //Disable pophover
+			"style"            => $style,               //Get Default Theme
+			"attributes"       => $attributes,          //Get Attributes Filter
+			"wrapper_class"    => '',                   //Extra Wrapper class
+			"button_type"      => $button_type          //Button Type
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1282,18 +1288,20 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		$attributes       = apply_filters( 'wp_ulike_topics_add_attr', null );
 		$style            = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
 		$display_likers   = wp_ulike_get_setting( 'wp_ulike_bbpress', 'users_liked_box', 1 );
+		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_bbpress', 'disable_likers_pophover', 0 );
 		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
 		$bbpress_settings = wp_ulike_get_post_settings_by_type( 'likeThisTopic' );
 
 		$defaults = array_merge( $bbpress_settings, array(
-			"id"             => $post_ID,          //Post ID
-			"method"         => 'likeThisTopic',   //JavaScript method
-			"type"           => 'post',            //Function type (post/process)
-			"display_likers" => $display_likers,   //Display likers box
-			"style"          => $style,            //Get Default Theme
-			"attributes"     => $attributes,       //Get Attributes Filter
-			"wrapper_class"  => '',                //Extra Wrapper class
-			"button_type"    => $button_type       //Button Type
+			"id"               => $post_ID,            //Post ID
+			"method"           => 'likeThisTopic',     //JavaScript method
+			"type"             => 'post',              //Function type (post/process)
+			"display_likers"   => $display_likers,     //Display likers box
+			"disable_pophover" => $disable_pophover,   //Dsiable pophover
+			"style"            => $style,              //Get Default Theme
+			"attributes"       => $attributes,         //Get Attributes Filter
+			"wrapper_class"    => '',                  //Extra Wrapper class
+			"button_type"      => $button_type         //Button Type
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -1931,14 +1939,15 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-display-likers="<?php echo $display_likers; ?>"
+					data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
 					class="<?php echo $button_class; ?>">
 					<?php
+						do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
 						if($button_type == 'text'){
 							echo '<span>' . $button_text . '</span>';
 						}
 					?>
 				</button>
-				<?php wp_nonce_field( $type  . $ID ); ?>
 				<?php echo $counter; ?>
 			</div>
 		<?php
@@ -1973,8 +1982,10 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-display-likers="<?php echo $display_likers; ?>"
+					data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
 					class="<?php echo $button_class; ?>">
 					<?php
+						do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
 						if($button_type == 'text'){
 							echo '<span>' . $button_text . '</span>';
 						}
@@ -2015,9 +2026,10 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 							data-ulike-type="<?php echo $type; ?>"
 							data-ulike-display-likers="<?php echo $display_likers; ?>"
+							data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
 							class="<?php echo $button_class; ?>"
 							<?php echo  $status == 2  ? 'checked="checked"' : ''; ?> />
-
+					<?php do_action( 'wp_ulike_inside_like_button', $wp_ulike_template ); ?>
 					<svg class="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
 					    <g class="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
 					        <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" class="heart" fill="#AAB8C2" />
@@ -2087,8 +2099,10 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-display-likers="<?php echo $display_likers; ?>"
+					data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
 					data-ulike-append="<?php echo htmlspecialchars( '<svg class="wpulike-svg-heart wpulike-svg-heart-pop one" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop two" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop three" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop four" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop five" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop six" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop seven" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop eight" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop nine" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>' ); ?>"
 					class="<?php echo $button_class; ?>">
+					<?php do_action( 'wp_ulike_inside_like_button', $wp_ulike_template ); ?>
 					<svg class="wpulike-svg-heart wpulike-svg-heart-icon" viewBox="0 -28 512.00002 512" xmlns="http://www.w3.org/2000/svg">
 					<path
 						d="m471.382812 44.578125c-26.503906-28.746094-62.871093-44.578125-102.410156-44.578125-29.554687 0-56.621094 9.34375-80.449218 27.769531-12.023438 9.300781-22.917969 20.679688-32.523438 33.960938-9.601562-13.277344-20.5-24.660157-32.527344-33.960938-23.824218-18.425781-50.890625-27.769531-80.445312-27.769531-39.539063 0-75.910156 15.832031-102.414063 44.578125-26.1875 28.410156-40.613281 67.222656-40.613281 109.292969 0 43.300781 16.136719 82.9375 50.78125 124.742187 30.992188 37.394531 75.535156 75.355469 127.117188 119.3125 17.613281 15.011719 37.578124 32.027344 58.308593 50.152344 5.476563 4.796875 12.503907 7.4375 19.792969 7.4375 7.285156 0 14.316406-2.640625 19.785156-7.429687 20.730469-18.128907 40.707032-35.152344 58.328125-50.171876 51.574219-43.949218 96.117188-81.90625 127.109375-119.304687 34.644532-41.800781 50.777344-81.4375 50.777344-124.742187 0-42.066407-14.425781-80.878907-40.617188-109.289063zm0 0" />
