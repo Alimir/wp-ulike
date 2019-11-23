@@ -866,11 +866,17 @@ if( ! function_exists( 'wp_ulike' ) ){
  * @param integer $numberposts
  * @return WP_Post[]|int[] Array of post objects or post IDs.
  */
-function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '' ){
+function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all' ){
+	$post__in = wp_ulike_get_popular_items_ids(array(
+		'type'   => $method,
+		'period' => $period
+	));
+	if( empty( $post__in ) ){
+		return false;
+	}
+
 	return get_posts( array(
-		'post__in'    => wp_ulike_get_popular_items_ids(array(
-			'type' => $method
-		)),
+		'post__in'    => $post__in,
 		'numberposts' => $numberposts,
 		'orderby'     => 'post__in',
 		'post_type'   => $post_type === '' ? get_post_types_by_support( array(
@@ -1062,15 +1068,23 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 	}
 }
 
+
 /**
  * Get most liked posts in query
  *
  * @param integer $numberposts
  * @return WP_Post[]|int[] Array of post objects or post IDs.
  */
-function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '' ){
+function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all' ){
+	$comment__in = wp_ulike_get_popular_items_ids(array(
+		'period' => $period
+	));
+	if( empty( $comment__in ) ){
+		return false;
+	}
+
 	return get_comments( array(
-		'comment__in' => wp_ulike_get_popular_items_ids(),
+ 		'comment__in' => $comment__in,
 		'number'      => $numbercomments,
 		'orderby'     => 'comment__in',
 		'post_type'   => $post_type === '' ? get_post_types_by_support( array(
@@ -1235,7 +1249,7 @@ if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
  * @param integer $numberposts
  * @return WP_Post[]|int[] Array of post objects or post IDs.
  */
-function wp_ulike_get_most_liked_activities( $number = 10 ){
+function wp_ulike_get_most_liked_activities( $number = 10, $period = 'all' ){
 	global $wpdb;
 
 	if ( is_multisite() ) {
@@ -1245,8 +1259,13 @@ function wp_ulike_get_most_liked_activities( $number = 10 ){
 	}
 
 	$activity_ids = wp_ulike_get_popular_items_ids(array(
-		'type' => 'activity'
+		'type'   => 'activity',
+		'period' => $period
 	));
+
+	if( empty( $activity_ids ) ){
+		return false;
+	}
 
 	// generate query string
 	$query  = sprintf( '
@@ -1428,10 +1447,31 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			"type"   => 'post',
 			"status" => 'like',
 			"order"  => 'DESC',
+			"period" => 'all',
 			"limit"  => 30
 		);
-		$parsed_args = wp_parse_args( $args, $defaults );
-		$info_args   = wp_ulike_get_table_info( $parsed_args['type'] );
+		$parsed_args  = wp_parse_args( $args, $defaults );
+		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
+		$period_limit = '';
+
+		switch ($parsed_args['period']) {
+			case "today":
+				$period_limit = "AND DATE(date_time) = DATE(NOW())";
+				break;
+			case "yesterday":
+				$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
+				break;
+			case "week":
+				$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
+				break;
+			case "month":
+				$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
+				break;
+			case "year":
+				$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
+				break;
+		}
+
 
 		// generate query string
 		$query  = sprintf( "
@@ -1439,12 +1479,14 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			`%s` AS item_ID
 			FROM %s
 			WHERE `status` = '%s'
+			%s
 			GROUP BY item_ID
 			ORDER BY counter
 			%s LIMIT %d",
 			$info_args['column'],
 			$wpdb->prefix . $info_args['table'],
 			$parsed_args['status'],
+			$period_limit,
 			$parsed_args['order'],
 			$parsed_args['limit']
 		);
@@ -1466,6 +1508,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_ids' ) ){
 			"type"   => 'post',
 			"status" => 'like',
 			"order"  => 'DESC',
+			"period" => 'all',
 			"limit"  => 30
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );

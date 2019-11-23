@@ -52,7 +52,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
-			$posts = wp_ulike_get_most_liked_posts( $numberOf );
+			$posts = wp_ulike_get_most_liked_posts( $numberOf, '', '', $period );
 
 			foreach ($posts as $post) {
 				$post_title = stripslashes($post->post_title);
@@ -97,7 +97,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
-			$comments = wp_ulike_get_most_liked_comments($numberOf);
+ 			$comments = wp_ulike_get_most_liked_comments( $numberOf, '', $period );
 			foreach ($comments as $comment) {
 				$comment_author      = stripslashes($comment->comment_author);
 				$post_permalink      = get_permalink($comment->comment_post_ID);
@@ -208,9 +208,9 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
-			$posts = wp_ulike_get_most_liked_posts( $numberOf, array( 'topic', 'reply' ), 'topic' );
+			$posts = wp_ulike_get_most_liked_posts( $numberOf, array( 'topic', 'reply' ), 'topic', $period );
 			foreach ($posts as $post) {
-				$post_title = empty( $post->post_title ) ? $post->post_content : stripslashes( $post->post_title );
+				$post_title = function_exists('bbp_get_forum_title') ? bbp_get_forum_title( $post->ID ) : $post->post_title;
 				$permalink  = get_permalink( $post->ID );
 				$post_count = wp_ulike_get_counter_value($post->ID, 'topic', 'all', false);
 
@@ -260,7 +260,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 	            $bp_prefix = 'prefix';
 			}
 
-			$activities = wp_ulike_get_most_liked_activities();
+			$activities = wp_ulike_get_most_liked_activities( $numberOf, $period );
 			foreach ($activities as $activity) {
 				$activity_permalink = function_exists('bp_activity_get_permalink') ? bp_activity_get_permalink( $activity->id ) : '';
 				$activity_action    = ! empty( $activity->content ) ? $activity->content : $activity->action;
@@ -575,22 +575,6 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			// Delete widgets transient
 			switch ( strip_tags( $new_instance['type'] ) ) {
-				case 'post':
-					delete_transient( 'wp_ulike_get_most_liked_posts' );
-					break;
-
-				case 'comment':
-					delete_transient( 'wp_ulike_get_most_liked_comments' );
-					break;
-
-				case 'activity':
-					delete_transient( 'wp_ulike_get_most_liked_activities' );
-					break;
-
-				case 'topic':
-					delete_transient( 'wp_ulike_get_most_liked_topics' );
-					break;
-
 				case 'users':
 					delete_transient( 'wp_ulike_get_most_likers' );
 					break;
