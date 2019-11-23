@@ -1980,6 +1980,71 @@ if( ! function_exists('wp_ulike_get_button_text') ){
 	}
 }
 
+if( ! function_exists('wp_ulike_get_best_likers_info') ){
+	/**
+	 * Get most liked users in query
+	 *
+	 * @param integer $number
+	 * @param string $peroid
+	 * @return object
+	 */
+	function wp_ulike_get_best_likers_info( $number, $peroid ){
+		global $wpdb;
+		// Peroid limit SQL
+		$period_limit = '';
+		switch ($peroid) {
+			case "today":
+				$period_limit = "AND DATE(date_time) = DATE(NOW())";
+				break;
+			case "yesterday":
+				$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
+				break;
+			case "week":
+				$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
+				break;
+			case "month":
+				$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
+				break;
+			case "year":
+				$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
+				break;
+		}
+
+		$query  = sprintf( 'SELECT T.user_id, SUM(T.CountUser) AS SumUser
+		FROM(
+		SELECT user_id, count(user_id) AS CountUser
+		FROM `%1$sulike`
+		WHERE user_id BETWEEN 1 AND 999999
+		%2$s
+		GROUP BY user_id
+		UNION ALL
+		SELECT user_id, count(user_id) AS CountUser
+		FROM `%1$sulike_activities`
+		WHERE user_id BETWEEN 1 AND 999999
+		%2$s
+		GROUP BY user_id
+		UNION ALL
+		SELECT user_id, count(user_id) AS CountUser
+		FROM `%1$sulike_comments`
+		WHERE user_id BETWEEN 1 AND 999999
+		%2$s
+		GROUP BY user_id
+		UNION ALL
+		SELECT user_id, count(user_id) AS CountUser
+		FROM `%1$sulike_forums`
+		WHERE user_id BETWEEN 1 AND 999999
+		%2$s
+		GROUP BY user_id
+		) AS T
+		GROUP BY T.user_id
+		ORDER BY SumUser DESC LIMIT %3$s', $wpdb->prefix, $period_limit, $number );
+
+		// Make new sql request
+		return $wpdb->get_results( $query );
+	}
+}
+
+
 /*******************************************************
   Templates
 *******************************************************/

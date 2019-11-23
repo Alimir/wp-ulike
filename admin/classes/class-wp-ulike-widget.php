@@ -310,42 +310,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
-			if ( false === ( $likers = get_transient( 'wp_ulike_get_most_likers' ) ) ) {
-				// Make new sql request
-		        $likers = $wpdb->get_results( "
-								SELECT T.user_id, SUM(T.CountUser) AS SumUser
-								FROM(
-								SELECT user_id, count(user_id) AS CountUser
-								FROM ".$wpdb->prefix."ulike
-								WHERE user_id BETWEEN 1 AND 999999
-								".$this->period($period)."
-								GROUP BY user_id
-								UNION ALL
-								SELECT user_id, count(user_id) AS CountUser
-								FROM ".$wpdb->prefix."ulike_activities
-								WHERE user_id BETWEEN 1 AND 999999
-								".$this->period($period)."
-								GROUP BY user_id
-								UNION ALL
-								SELECT user_id, count(user_id) AS CountUser
-								FROM ".$wpdb->prefix."ulike_comments
-								WHERE user_id BETWEEN 1 AND 999999
-								".$this->period($period)."
-								GROUP BY user_id
-								UNION ALL
-								SELECT user_id, count(user_id) AS CountUser
-								FROM ".$wpdb->prefix."ulike_forums
-								WHERE user_id BETWEEN 1 AND 999999
-								".$this->period($period)."
-								GROUP BY user_id
-								) AS T
-								GROUP BY T.user_id
-								ORDER BY SumUser DESC LIMIT $numberOf
-	                    	" );
-
-		        set_transient( 'wp_ulike_get_most_likers', $likers, 6 * HOUR_IN_SECONDS );
-			}
-
+			$likers = wp_ulike_get_best_likers_info( $numberOf, $period );
 			foreach ($likers as $liker) {
 				$get_user_id        = stripslashes($liker->user_id);
 				$get_user_info      = get_userdata($get_user_id);
@@ -572,13 +537,6 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance = $old_instance;
-
-			// Delete widgets transient
-			switch ( strip_tags( $new_instance['type'] ) ) {
-				case 'users':
-					delete_transient( 'wp_ulike_get_most_likers' );
-					break;
-			}
 
 			$instance['title']       = strip_tags( $new_instance['title'] );
 			$instance['count']       = strip_tags( $new_instance['count'] );
