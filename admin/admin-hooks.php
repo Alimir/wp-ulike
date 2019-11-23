@@ -148,33 +148,34 @@ function wp_ulike_notice_manager(){
 		)
 	]);
 
-
-	$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
-		'id'          => 'wp_ulike_go_pro',
-		'title'       => __( 'WP Ulike Pro is Ready :)', WP_ULIKE_SLUG ),
-   		'description' => __( "Finally, after a long time, the Premium version of the WP Ulike plugin was released with some new features such as support for Dislike button, Elementor Page Builder and some new templates. We intend to add more features to this extension every day and provide a full support for our users." , WP_ULIKE_SLUG ),
-		'skin'        => 'default',
-		'wrapper_extra_styles' => [
-			'background-image'  => 'url(' . WP_ULIKE_ASSETS_URL . '/img/svg/banner-pro.svg)',
-			'background-color'  => '#e1f5fe',
-			'background-size'   => 'contain',
-			'background-repeat' => 'no-repeat',
-			'padding'           => '80px 180px 80px 340px',
-		],
-		'has_close'   => true,
-		'buttons'     => array(
-			array(
-				'label'      => __( "I like to try it", WP_ULIKE_SLUG ),
-				'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5'
-			),
-			array(
-				'label'      => __('Not Now', WP_ULIKE_SLUG),
-				'type'       => 'skip',
-				'color_name' => 'error',
-				'expiration' => DAY_IN_SECONDS * 7
+	if( defined( 'WP_ULIKE_PRO_VERSION' ) ){
+		$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_go_pro',
+			'title'       => __( 'WP Ulike Pro is Ready :))', WP_ULIKE_SLUG ),
+			   'description' => __( "Finally, after a long time, the Premium version of the WP Ulike plugin was released with some new features such as support for Dislike button, Elementor Page Builder and some new templates. We intend to add more features to this extension every day and provide a full support for our users." , WP_ULIKE_SLUG ),
+			'skin'        => 'default',
+			'wrapper_extra_styles' => [
+				'background-image'  => 'url(' . WP_ULIKE_ASSETS_URL . '/img/svg/banner-pro.svg)',
+				'background-color'  => '#e1f5fe',
+				'background-size'   => 'contain',
+				'background-repeat' => 'no-repeat',
+				'padding'           => '80px 180px 80px 340px',
+			],
+			'has_close'   => true,
+			'buttons'     => array(
+				array(
+					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+					'link'       => WP_ULIKE_PLUGIN_URI
+				),
+				array(
+					'label'      => __('Not Now', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'error',
+					'expiration' => WEEK_IN_SECONDS * 2
+				)
 			)
-		)
-	]);
+		]);
+	}
 
 
     $notice_list = apply_filters( 'wp_ulike_admin_notices_instances', $notice_list );
