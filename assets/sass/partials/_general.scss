@@ -54,6 +54,12 @@
         }
     }
 
+    &.wpulike-hide-counter{
+        .count-box{
+            display: none;
+        }
+    }
+
 }
 
 .wp_ulike_click_is_disabled {
@@ -63,10 +69,4 @@
 
 .wp_ulike_hide_me {
     visibility: hidden;
-}
-
-.wpulike-hide-counter{
-    .count-box{
-        display: none;
-    }
 }
