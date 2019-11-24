@@ -1424,7 +1424,7 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 		return $wpdb->get_results( "SELECT user_id
 						FROM   ".$wpdb->prefix."$table_name
 						WHERE  $column_name = '$post_ID'
-						       AND status   = 'like'
+						       AND status in ('like', 'dislike')
 						       AND user_id BETWEEN 1 AND 999999
 						GROUP  BY user_id
 						LIMIT  $limit_num"
