@@ -14,7 +14,7 @@
  * License:           GPL2
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path:       /lang
- * Tested up to: 	  4.9.6
+ * Tested up to: 	  5.3
 
  /------------------------------------------\
   _     __     _ _____      _  _  _   _
@@ -172,7 +172,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				__( 'Settings', WP_ULIKE_SLUG ),
 				array(
 					'parent'   => false,
-					'title'    => WP_ULIKE_NAME,
+					'title'    => apply_filters( 'wp_ulike_plugin_name', WP_ULIKE_NAME ),
 					'position' => 313,
 					'icon_url' => 'dashicons-wp-ulike'
 				),
