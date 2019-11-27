@@ -20,8 +20,7 @@ Also WP ULike’s amazing statistics tools help you to track your content effect
 
 = More Information =
 *   Visit Our [Home Page](https://wpulike.com/).
-*   Donate Us [By Make a Cloud](https://m.do.co/c/13ad5bc24738).
-*   See Online [Demo](http://preview.alimir.ir/wp-ulike-plugin).
+*   See Online [Demo](https://wpulike.com/templates/).
 *   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
 = Features =

@@ -658,7 +658,7 @@ if( defined( 'myCRED_VERSION' ) ){
 		 */
 		function wp_ulike_register_myCRED_hook( $installed ) {
 			$installed['wp_ulike'] = array(
-				'title'       => __( 'WP ULike', WP_ULIKE_SLUG ),
+				'title'       => WP_ULIKE_NAME,
 				'description' => __( 'This hook award / deducts points from users who Like/Unlike any content of WordPress, bbPress, BuddyPress & ...', WP_ULIKE_SLUG ),
 				'callback'    => array( 'wp_ulike_myCRED' )
 			);
