@@ -417,7 +417,7 @@ if( defined( 'BP_VERSION' ) ) {
 							$comment_template = str_replace( "%COMMENT_AUTHOR%", $COMMENT_AUTHOR, $comment_template );
 						}
 						if ( strpos( $comment_template, '%COMMENT_COUNT%' ) !== false ) {
-							$COMMENT_COUNT    = get_comment_meta( $cp_ID, '_commentliked', true );
+							$COMMENT_COUNT    = wp_ulike_get_comment_likes( $cp_ID );
 							$comment_template = str_replace( "%COMMENT_COUNT%", $COMMENT_COUNT, $comment_template );
 						}
 						bp_activity_add( array(
@@ -788,7 +788,7 @@ if ( defined( 'ultimatemember_version' ) ) {
 						  </div>';
 					echo '<div class="um-item-meta">
 						  <span>'.wp_ulike_date_i18n($get_date).'</span>
-						  <span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.get_comment_meta( $comment->comment_ID, '_commentliked', true ).'</span>
+						  <span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_comment_likes( $comment->comment_ID ).'</span>
 						  </div>';
 					echo '</div>';
 				}
