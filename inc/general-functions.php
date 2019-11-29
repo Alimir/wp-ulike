@@ -33,7 +33,7 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 }
 
 /**
- * Delete all likes number by ajax process.
+ * An old function to remove post meta logs
  *
  * @author       	Alimir
  * @since           2.2
@@ -355,12 +355,6 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
-						),
-						'delete_data' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete All Data', WP_ULIKE_SLUG ),
-							'description' => __( 'You Are About To Delete All Likes Data. This Action Is Not Reversible.', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_all_data'
 						)
 					)
 				);//end wp_ulike_posts
@@ -446,12 +440,6 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
-						),
-						'delete_data' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete All Data', WP_ULIKE_SLUG ),
-							'description' => __( 'You Are About To Delete All Likes Data. This Action Is Not Reversible.', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_all_data'
 						)
 					)
 				);//end wp_ulike_comments
@@ -569,12 +557,6 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
-						),
-						'delete_data' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete All Data', WP_ULIKE_SLUG ),
-							'description' => __( 'You Are About To Delete All Likes Data. This Action Is Not Reversible.', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_all_data'
 						)
 					)
 				);//end wp_ulike_buddypress
@@ -660,12 +642,6 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
 						),
-						'delete_data' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete All Data', WP_ULIKE_SLUG ),
-							'description' => __( 'You Are About To Delete All Likes Data. This Action Is Not Reversible.', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_all_data'
-						)
 					)
 				);//end wp_ulike_buddypress
 				break;
