@@ -25,7 +25,7 @@ function wp_ulike_process(){
 	$factor      = isset( $_POST['factor'] ) ? $_POST['factor'] : NULL;
 	$response    = array();
 
-	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && !wp_ulike_is_cache_exist() ) ) {
+	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
@@ -143,7 +143,7 @@ function wp_ulike_get_likers(){
 	$disable_pophover = $_POST['disablePophover'];
 
 	// Check security nonce field
-	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && !wp_ulike_is_cache_exist() ) ) {
+	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 

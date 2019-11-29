@@ -1963,7 +1963,7 @@ if( ! function_exists('wp_ulike_is_cache_exist') ){
 	 * @return void
 	 */
 	function wp_ulike_is_cache_exist(){
-		return defined( WP_CACHE ) && WP_CACHE === true;
+		return defined( 'WP_CACHE' ) && WP_CACHE === true;
 	}
 }
 
