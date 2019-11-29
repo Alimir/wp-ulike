@@ -748,7 +748,7 @@ if( ! function_exists( 'wp_ulike' ) ){
 		global $post;
 
 		$post_ID        = isset( $args['id'] ) ? $args['id'] : $post->ID;
-		$get_post_meta  = get_post_meta( $post_ID, '_liked', true );
+		$get_post_meta  = get_post_meta( $post_ID, (isset($args['key']) && !empty($args['key']) ? $args['key'] : '_liked'), true );
 		$get_like       = empty( $get_post_meta ) ? 0 : $get_post_meta;
 		$attributes     = apply_filters( 'wp_ulike_posts_add_attr', null );
 		$style          = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
