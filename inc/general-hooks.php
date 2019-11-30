@@ -873,9 +873,7 @@ if( ! function_exists( 'wp_ulike_purge_wp_fastest_cache' ) && class_exists( 'WpF
 					}
 				}
 			}
-		}
-
-		if( $type === '_liked' ){
+		} elseif( $type === '_liked' ){
 			$cache_interface->singleDeleteCache( false, $ID );
 		}
 
