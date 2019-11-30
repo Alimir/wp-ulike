@@ -182,6 +182,81 @@
       });
     });
 
+    $(".wp-ulike-settings-license-activation", form).each(function() {
+      var submit = $('[type="button"]', this),
+        spinner = $("<img>")
+          .attr({
+            src: wp_ulike_admin.spinner,
+            alt: "loading"
+          })
+          .insertAfter(submit)
+          .hide(),
+        notice = $("<div>")
+          .addClass("settings-error")
+          .insertBefore(submit)
+          .hide();
+      submit.click(function(e) {
+        e.preventDefault();
+        notice.hide("fast", function() {
+          notice.removeClass("error updated").empty();
+          $.ajax({
+            data: {
+              action: 'wp_ulike_activate_license',
+              nonce: $('#wp_ulike_activate_license').val(),
+              license: $(this).siblings('input.license-info').val()
+            },
+            dataType: "json",
+            type: "POST",
+            url: ajaxurl,
+            beforeSend: function() {
+              spinner.fadeIn("fast");
+              $(this).hide();
+            },
+            success: function(r) {
+              var noticeClass = "error",
+                showNotice = function(msg) {
+                  notice
+                    .html("<p>" + String(msg) + "</p>")
+                    .addClass(noticeClass)
+                    .show();
+                };
+              if (typeof r === "object") {
+                if (r.hasOwnProperty("success") && r.success) {
+                  noticeClass = "updated";
+                  submit.hide();
+                }
+                if (r.hasOwnProperty("data") && r.data) {
+                  if (typeof r.data === "object") {
+                    if (r.data.hasOwnProperty("reload") && r.data.reload) {
+                      document.location.reload();
+                      return;
+                    }
+                    if (r.data.hasOwnProperty("message") && r.data.message) {
+                      showNotice(r.data.message);
+                    }
+                  } else {
+                    showNotice(r.data);
+                  }
+                }
+              } else if (r) {
+                showNotice(r);
+              }
+              spinner.hide();
+              $(this).fadeIn("fast");
+              notice.show("fast");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              notice
+                .addClass("error")
+                .append("<p>" + jqXHR.responseText + "</p>")
+                .show("fast");
+              console.log(textStatus, jqXHR, errorThrown);
+            }
+          });
+        });
+      });
+    });
+
     $(".wp-ulike-visual-select input").radioImageSelect();
 
     $(".wp-ulike-settings-color").spectrum({

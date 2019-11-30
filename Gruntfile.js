@@ -81,6 +81,17 @@ module.exports = function(grunt) {
                 }
             },
 
+            back_build: {
+                options: {
+                    sassDir: 'admin/assets/sass',
+                    cssDir: 'admin/assets/css/',
+                    environment: 'development',
+                    watch:false,
+                    trace:true,
+                    outputStyle: 'expanded' // nested, expanded, compact, compressed.
+                }
+            },
+
             front_dev: {
                 options: {
                     sassDir: 'assets/sass',
@@ -494,7 +505,7 @@ module.exports = function(grunt) {
     grunt.registerTask( 'pack'          , ['shell:zipBuild'] );
 
     // deploy the lite version in /build folder
-    grunt.registerTask( 'beta'          , ['clean:build', 'compass:front_build', 'cssmin', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
+    grunt.registerTask( 'beta'          , ['clean:build', 'compass:front_build', 'compass:back_build', 'cssmin', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
 
     // build the final lite version in /build folder and pack the product
     grunt.registerTask( 'build'         , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );

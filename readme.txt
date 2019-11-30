@@ -1,36 +1,52 @@
 === WP ULike ===
 Contributors: alimir
-Donate link: https://m.do.co/c/13ad5bc24738
+Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: Ali Mirzaei
-Tags: wp ulike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
+Tags: wp ulike, elementor, like, dislike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
 Requires PHP: 5.4
 Requires at least: 3.5.0
-Tested up to: 5.2.2
-Stable tag: 3.6.2
+Tested up to: 5.3
+Stable tag: 4.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WP ULike enables you to add Ajax Like button into your WP and allowing your visitors to Like/unLike the posts, comments, activities & topics.
+WP ULike enables you to add Ajax Like button into your WP and allowing your visitors to Like/Dislike the posts, comments, activities & topics.
 
 == Description ==
 
-If you’re looking for one of the best and fastest ways to add like and dislike functionality to your WordPress website, then the WP ULike plugin is for you! WP ULike is a FREE WordPress plugin that will allow your website visitors to engage with your wide range of content types including posts, forum topics and replies, comments and activity updates.
+If you’re looking for one of the best and fastest ways to add like and dislike functionality to your WordPress website, then the WP ULike plugin is for you! WP ULike is our ultimate solution to cast voting to any type of content you may have in your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your contents would it be a Post, Comment, Activities, Forum Topics, WooCommerce products, you name it. Now you can really feel your users Love :heart: for each part of your work.
 
-Also WP ULike’s amazing statistics tools help you to track your content effectiveness with a real-time report system and detailed statistics. What’s more, WP ULike have a wide variety of options available to customize your plugin. It will allow you to customize your like button in your favorite style.
+It's time for **[WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
+
+= Check Votings, Best Likers & Top contents =
+With WP ULike comprehensive Statistics tools, you can track what your users love and what annoys them in an instance. You can extract reports of likes and dislikes in Tables, Charts, Pie Charts or whichever you prefer with some easy steps, no confusing options and coding needed.
+
+= Customize Every Part of Your YouLike Plugin [PRO] =
+Elementor is the #1 WordPress page builder. In the new version of the WP ULike PRO plugin we fully support this page builder and have a variety of widgets & controllers that make life much easier for you.
+Just drag your desired widget and drop it in your Elementor sections, customize as you go and enjoy your like and dislike buttons on your contents.
+
+= Start Configure your Voting System in a few Steps =
+We revamped our settings panel design and features to be more user friendly and more straight forward approach. Easy settings, Happy customers. WP ULike plugin has clean coding, resource management and tones of features so you can customize every part of your buttons just by a few clicks.
+
+= Pre-Designed Templates =
+Choose from 10+ of our beautiful [templates](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) and customize them to make them your own.
+
+= Try WP ULike Pro =
+So let's talk [PROfessional](https://wpulike.com/pricing/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)! WP ULike Pro has support DisLike button alongside Like button, both of them are completely customizable in our redesigned settings menu with tones of features and more beautiful and stylish templates. the PRO version of plugin is now compatible with Elementor Page builder and you can easily choose from +7 widgets by simply drag and drop them to your content. as you build your page and content with Elementor, you can add and customize  Like and Dislike button in every part such as Posts, Comments, activities, etc.
 
 = More Information =
-*   Visit Our [Home Page](https://wpulike.com/).
-*   Donate Us [By Make a Cloud](https://m.do.co/c/13ad5bc24738).
-*   See Online [Demo](http://preview.alimir.ir/wp-ulike-plugin).
+*   Visit Our [Home Page](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
+*   See Online [Demo](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
 *   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
 = Features =
-*   Clean Design + Pretty styles.
+*   Brand new Clean Design + eye-catching styles.
 *   Full myCRED Points Support.
+*   Full Elementor Page Builder Support. [PRO]
+*   Dislike button support. [PRO]
 *   Flexible google rich snippets support. (Microdata)
 *   Full Statistics tools with many widgets.
 *   Supporting UltimateMember & BuddyPress Profiles.
-*  	Likers World Map & Top Likers Widget.
 *   Ajax feature to update the data without reloading.
 *   Visitors do not have to register or log in to use the Like Button.
 *   Compatible with WP version 3.5 & above.
@@ -39,9 +55,9 @@ Also WP ULike’s amazing statistics tools help you to track your content effect
 *   Notifications System. (Custom toast messages after each activity)
 *   Shortcode support.
 *   Support custom templates with separate variables.
-*   Comment likes support.
+*   Comment likes & dislikes support.
 *   Supporting the date in localized format. (date_i18n)
-*   Full likes logs support.
+*   Full likes & dislike logs support.
 *   BuddyPress add activity & notifications support.
 *   Simple user like box with avatar support.
 *   Custom Like-UnLike Texts fields.
@@ -91,12 +107,6 @@ WP ULike has been translated into the following languages:
 *   English (United Kingdom)
 
 Want to add a new language to WP ULike? Well! You can contribute via [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/wp-ulike).
-
-= About Author =
-*   My personal website: [Ali Mirzaei](http://about.alimir.ir)
-*   Follow me on [Facebook](https://www.facebook.com/alimir1993)
-*   Catch me on twitter as @alimirir
-*   And Connect me on [Linkedin](https://ir.linkedin.com/in/alimirir)
 
 == Installation ==
 
@@ -174,6 +184,19 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.0.0 =
+* Added: New structure which switches the number of likes from meta values to the number of database logs.
+* Added: Complete list of cache plugins support.
+* Added: Some new hooks to make better control on ulike processes + PRO version support.
+* Added: Better admin notice system.
+* Added: Some improvements in statistics functionalities and data controllers.
+* Added: Better capability control for stats&logs admin menu pages
+* Added: BuddyPress & bbpress compatible with new improvements.
+* Fixed: An issue with catching of nonce fields problem.
+* Fixed: An issue with display likers in JS functionality.
+* Fixed: Some styling issues.
+* Fixed: Some reported bugs.
 
 = 3.6.2 =
 * Added: New animated heart template.

@@ -97,15 +97,20 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                     ), $section );
                     foreach ( $section['fields'] as $name => $field ) {
                         $field                    = array_merge( array(
-                             'type' => 'text',
-                            'label' => null,
-                            'checkboxlabel' => null,
-                            'description' => null,
-                            'default' => null,
-                            'sanitize' => null,
-                            'attributes' => array(),
-                            'options' => null,
-                            'action' => null
+                             'type'          => 'text',
+                             'label'         => null,
+                             'title'         => null,
+                             'notice_type'   => null,
+                             'icon'          => null,
+                             'message'       => null,
+                             'checkboxlabel' => null,
+                             'description'   => null,
+                             'default'       => null,
+                             'sanitize'      => null,
+                             'attributes'    => array(),
+                             'options'       => null,
+                             'action'        => null,
+                             'license'       => null
                         ), $field );
                         $section['fields'][$name] = $field;
                     } //$section['fields'] as $name => $field
@@ -263,13 +268,13 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                         ), $this->page, $setting, $field );
                         if ( $field['type'] === 'action' && is_callable( $field['action'] ) ) {
                             add_action( "wp_ajax_{$setting}_{$name}", $field['action'] );
-                        } //$field['type'] === 'action' && is_callable( $field['action'] )
-                    } //$section['fields'] as $name => $field
-                } //!empty( $section['fields'] )
-            } //$this->settings as $setting => $section
+                        }
+                    }
+                }
+            }
             if ( isset( $_POST["{$this->page}_reset"] ) ) {
                 $this->reset();
-            } //isset( $_POST["{$this->page}_reset"] )
+            }
         }
 
         public function do_section( $args ) {
@@ -378,6 +383,28 @@ if ( !class_exists( 'wp_ulike_settings' ) ) {
                         _e( 'No action defined.', WP_ULIKE_SLUG );
                     } //!$action
                     echo "<p class='wp-ulike-settings-action'><input {$attrs} id='{$id}' type='button' class='button button-large' value='{$label}' /></p>{$desc}";
+                    break;
+
+                case 'license':
+                    if ( !$action ) {
+                        _e( 'No license defined.', WP_ULIKE_SLUG );
+                    }
+                    $v = esc_attr( $value );
+                    $n = wp_nonce_field( 'wp_ulike_activate_license', 'wp_ulike_activate_license' );
+                    $b = __( 'Submit', WP_ULIKE_SLUG );
+                    echo "<p class='wp-ulike-settings-license-activation'><input {$attrs} type='text' value='{$v}' class='regular-text license-info' /><input id='{$id}' type='button' class='button button-large' value='{$b}' />{$n}</p>{$desc}";
+                    break;
+
+                case 'notice':
+                    echo sprintf( '
+                    <div class="wp-ulike-settings-notice wp-ulike-notice-control wp-ulike-notice-skin-%s">
+                        <div class="wp-ulike-notice-image">%s</div>
+                        <div class="wp-ulike-notice-info">
+                            <h3 class="wp-ulike-notice-title">%s</h3>
+                            <p class="wp-ulike-notice-description">%s</p>
+                        </div>
+                    </div>',
+                    $notice_type, $icon, $title, $message );
                     break;
 
                 case 'color':

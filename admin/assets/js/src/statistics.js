@@ -1,5 +1,5 @@
-(function($) {
-  $(".wp_ulike_delete").click(function(e) {
+(function ($) {
+  $(".wp_ulike_delete").click(function (e) {
     e.preventDefault();
     var parent = $(this).closest("tr");
     var value = $(this).data("id");
@@ -16,10 +16,10 @@
           nonce: nonce,
           table: table
         },
-        beforeSend: function() {
+        beforeSend: function () {
           parent.css("background-color", "#fff59d");
         },
-        success: function(response) {
+        success: function (response) {
           if (response.success) {
             parent.fadeOut(300);
           } else {
@@ -30,7 +30,7 @@
     }
   });
 
-  $.fn.WpUlikeAjaxStats = function() {
+  $.fn.WpUlikeAjaxStats = function () {
     // local var
     var theResponse = null;
     // jQuery ajax
@@ -43,7 +43,7 @@
         action: "wp_ulike_ajax_stats",
         nonce: wp_ulike_admin.nonce_field
       },
-      success: function(response) {
+      success: function (response) {
         if (response.success) {
           theResponse = JSON.parse(response.data);
         } else {
@@ -57,17 +57,20 @@
 
   // Charts stack array to save data
   window.wpUlikechartsInfo = [];
-  // Get all tables data
-  window.wpUlikeAjaxDataset = $.fn.WpUlikeAjaxStats();
 
-  if (
-    window.wpUlikeAjaxDataset !== null &&
-    wp_ulike_admin.hook_address.indexOf("wp-ulike-statistics") !== -1
-  ) {
+  if (wp_ulike_admin.hook_address.indexOf("wp-ulike-statistics") !== -1) {
+
+    // Get all tables data
+    window.wpUlikeAjaxDataset = $.fn.WpUlikeAjaxStats();
+
+    if (window.wpUlikeAjaxDataset === null) {
+      return;
+    }
+
     // Get single var component
     Vue.component("get-var", {
       props: ["dataset"],
-      data: function() {
+      data: function () {
         return {
           output: "..."
         };
@@ -75,7 +78,7 @@
       mounted() {
         this.output = this.fetchData();
         // Remove spinner class
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           this.removeClass(this.$el.offsetParent);
         });
       },
@@ -99,7 +102,7 @@
           this.createPieChart();
         }
         // Remove spinner class
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           this.removeClass(this.$el.offsetParent);
         });
       },
@@ -129,7 +132,7 @@
             pieBackground = [],
             pieLabels = [];
           // Get the info of each chart
-          window.wpUlikechartsInfo.forEach(function(value, key) {
+          window.wpUlikechartsInfo.forEach(function (value, key) {
             pieData.push(value.sum);
             pieBackground.push(value.background);
             pieLabels.push(value.label);
@@ -160,7 +163,7 @@
         setInfo(chartData) {
           var sumStack = 0;
           // Get the sum of total likes
-          chartData.data.forEach(function(num) {
+          chartData.data.forEach(function (num) {
             sumStack += parseFloat(num) || 0;
           });
           // Upgrade wpUlikechartsInfo array
@@ -183,7 +186,7 @@
   }
 
   // on document ready
-  $(function() {
+  $(function () {
     $(".wp-ulike-match-height").matchHeight();
   });
 })(jQuery);

@@ -27,7 +27,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 			$this->load_scripts();
 		 }
 
-		
+
 		/**
 		 * Styles for admin
 		 *
@@ -39,7 +39,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 				'wp-ulike-admin',
 				WP_ULIKE_ADMIN_URL . '/assets/css/admin.css'
 			);
-		
+
 		}
 
 	    /**
@@ -50,14 +50,14 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 		public function load_scripts() {
 
 			// Scripts is only can be load on ulike pages.
-			if ( strpos( $this->hook, 'wp-ulike' ) === false ) {
+			if ( strpos( $this->hook, WP_ULIKE_SLUG ) === false ) {
 				return;
 			}
 
 			// Remove all notices in wp ulike pages.
 			// remove_all_actions( 'admin_notices' );
 
-			// Enqueue vueJS	
+			// Enqueue vueJS
 	        // @if DEV
 	        /*
 	        // @endif
@@ -78,7 +78,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 				array(),
 				false,
 				false
-			);	
+			);
 	        // @endif
 
 			// Enqueue admin plugins
@@ -111,5 +111,5 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 		}
 
 	}
-	
+
 }

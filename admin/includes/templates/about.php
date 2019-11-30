@@ -14,9 +14,7 @@
 
 	<h1><?php echo _e( 'Welcome to WP ULike', WP_ULIKE_SLUG ) . ' ' . WP_ULIKE_VERSION; ?></h1>
 	<div class="about-text"><?php echo _e('Thank you for choosing WP ULike! This version is our leanest and most powerful version yet.', WP_ULIKE_SLUG) ; ?><br />
-
-	<?php add_thickbox(); ?>
-	<a target="_blank" href="<?php echo WP_ULIKE_PLUGIN_URI . '?TB_iframe=true&amp;width=800&amp;height=600'; ?>" class="thickbox"> <?php _e('Visit our homepage',WP_ULIKE_SLUG); ?></a>
+	<a target="_blank" href="<?php echo WP_ULIKE_PLUGIN_URI . '?utm_source=about-page&utm_campaign=plugin-uri&utm_medium=wp-dash'; ?>"> <?php _e('Visit our homepage',WP_ULIKE_SLUG); ?></a>
 	</div>
 	<div class="ulike-badge"><?php echo _e('Version',WP_ULIKE_SLUG) . ' ' . WP_ULIKE_VERSION; ?></div>
 	<h2 class="nav-tab-wrapper wp-clearfix">
@@ -29,14 +27,13 @@
 
 	<?php if(!isset($_GET["credit"])): ?>
 
-	<div class="changelog point-releases">
-		<h3><?php echo _e( 'Keep it Simple with With Our Voting Plugin', WP_ULIKE_SLUG ); ?></h3>
-		<p><?php echo _e('If you’re looking for one of the best and fastest ways to add like and dislike functionality to your WordPress website, then the WP ULike plugin is for you! WP ULike will allow your website visitors to engage with your wide range of content types including posts, forum topics and replies, comments and activity updates.',WP_ULIKE_SLUG); ?></p>
+	<div class="headline-feature">
+		<h2><?php echo _e( 'A Little Better Every Day', WP_ULIKE_SLUG ); ?></h2>
+		<p class="lead-description"><?php echo _e('If you’re looking for one of the best and fastest ways to add like and dislike functionality to your WordPress website, then the WP ULike plugin is for you! WP ULike will allow your website visitors to engage with your wide range of content types including posts, forum topics and replies, comments and activity updates.',WP_ULIKE_SLUG); ?></p>
 	</div>
 
-	<h2 class="feature-section-header" style="margin-bottom: -50px;"><?php echo _e( 'A Little Better Every Day', WP_ULIKE_SLUG ); ?></h2>
-	<div class="feature-section headline-feature one-col">
-		<div class="col">
+	<div class="feature-section is-wide has-1-columns">
+		<div class="column">
 			<div class="inline-svg">
 				<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/stats-plan.png" alt="Statistics Planning" />
 			</div>
@@ -49,8 +46,8 @@
 	$downloads_info = wp_ulike_get_repository_downloads_info();
 	if( ! empty( $downloads_info ) ) {
 ?>
-	<div class="feature-section headline-feature one-col">
-		<div class="col">
+	<div class="feature-section is-wide has-1-columns">
+		<div class="column">
 			<canvas id="downloads-stats"></canvas>
 		</div>
 	</div>
