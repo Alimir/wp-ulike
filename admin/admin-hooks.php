@@ -20,9 +20,8 @@ if ( ! defined( 'WPINC' ) ) {
 function wp_ulike_copyright( $text ) {
 	if( isset($_GET["page"]) && stripos( $_GET["page"], "wp-ulike") !== false ) {
 		return sprintf(
-			__( ' Thank you for choosing <a href="%s" title="Wordpress ULike" target="_blank">WP ULike</a>. Created by <a href="%s" title="Wordpress ULike" target="_blank">Ali Mirzaei</a>', WP_ULIKE_SLUG ),
-			'http://wordpress.org/plugins/wp-ulike/',
-			'https://ir.linkedin.com/in/alimirir'
+			__( ' Thank you for choosing <a href="%s" title="Wordpress ULike" target="_blank">WP ULike</a>.', WP_ULIKE_SLUG ),
+			WP_ULIKE_PLUGIN_URI . '?utm_source=footer-link&utm_campaign=plugin-uri&utm_medium=wp-dash'
 		);
 	}
 
@@ -148,7 +147,7 @@ function wp_ulike_notice_manager(){
 		)
 	]);
 
-	if( defined( 'WP_ULIKE_PRO_VERSION' ) ){
+	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
 		$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_go_pro',
 			'title'       => __( 'WP Ulike Pro is Ready :))', WP_ULIKE_SLUG ),
@@ -165,13 +164,19 @@ function wp_ulike_notice_manager(){
 			'buttons'     => array(
 				array(
 					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-					'link'       => WP_ULIKE_PLUGIN_URI
+					'link'       => WP_ULIKE_PLUGIN_URI . '?utm_source=banner&utm_campaign=gopro&utm_medium=wp-dash'
 				),
 				array(
 					'label'      => __('Not Now', WP_ULIKE_SLUG),
 					'type'       => 'skip',
-					'color_name' => 'error',
+					'color_name' => 'info',
 					'expiration' => WEEK_IN_SECONDS * 2
+				),
+				array(
+					'label'      => __('I don\'t Want to', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'error',
+					'expiration' => YEAR_IN_SECONDS * 1
 				)
 			)
 		]);
