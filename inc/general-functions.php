@@ -8,14 +8,14 @@
   Settings
 *******************************************************/
 
-/**
- * Get Settings Value
- *
- * @author       	Alimir
- * @since           1.0
- * @return			Void
- */
 if( ! function_exists( 'wp_ulike_get_setting' ) ){
+	/**
+	 * Get Settings Value
+	 *
+	 * @author       	Alimir
+	 * @since           1.0
+	 * @return			Void
+	 */
 	function wp_ulike_get_setting( $setting, $option = false, $default = false ) {
 		$setting = get_option( $setting );
 		if ( is_array( $setting ) ) {
@@ -32,14 +32,14 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 	}
 }
 
-/**
- * An old function to remove post meta logs
- *
- * @author       	Alimir
- * @since           2.2
- * @return			Void
- */
 if( ! function_exists( 'wp_ulike_delete_all_data' ) ){
+	/**
+	 * An old function to remove post meta logs
+	 *
+	 * @author       	Alimir
+	 * @since           2.2
+	 * @return			Void
+	 */
 	function wp_ulike_delete_all_data() {
 		global $wpdb;
 		$get_action = $_POST['action'];
@@ -69,14 +69,14 @@ if( ! function_exists( 'wp_ulike_delete_all_data' ) ){
 	}
 }
 
-/**
- * Delete all the users likes logs by ajax process.
- *
- * @author       	Alimir
- * @since           2.2
- * @return			Void
- */
 if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
+	/**
+	 * Delete all the users likes logs by ajax process.
+	 *
+	 * @author       	Alimir
+	 * @since           2.2
+	 * @return			Void
+	 */
 	function wp_ulike_delete_all_logs() {
 		global $wpdb;
 		$get_action = $_POST['action'];
@@ -101,14 +101,14 @@ if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 }
 
 
-/**
- * Generate templates list
- *
- * @author       	Alimir
- * @since           2.8
- * @return			Array
- */
 if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
+	/**
+	 * Generate templates list
+	 *
+	 * @author       	Alimir
+	 * @since           2.8
+	 * @return			Array
+	 */
 	function wp_ulike_generate_templates_list(){
 		$default = array(
 			'wpulike-default' => array(
@@ -137,14 +137,15 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	}
 }
 
-/**
- * Generate options info list
- *
- * @author       	Alimir
- * @since           3.1
- * @return			Array
- */
+
 if( ! function_exists( 'wp_ulike_get_options_info' ) ){
+	/**
+	 * Generate options info list
+	 *
+	 * @author       	Alimir
+	 * @since           3.1
+	 * @return			Array
+	 */
 	function wp_ulike_get_options_info( $type, $result = array() ) {
 
 		switch ( $type ) {
@@ -704,100 +705,105 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 	}
 }
 
-/**
- * Get counter value
- *
- * @param integer $ID
- * @param string $type
- * @param string $status
- * @param boolean $is_distinct
- * @return integer
- */
-function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true ){
-	global $wpdb;
+if( ! function_exists( 'wp_ulike_get_counter_value' ) ){
+	/**
+	 * Get counter value
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @param string $status
+	 * @param boolean $is_distinct
+	 * @return integer
+	 */
+	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true ){
+		global $wpdb;
 
-	$status = ltrim( $status, 'un');
+		$status = ltrim( $status, 'un');
 
-	if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
-		return new WP_Error( 'broke', __( "Please enter some value for required variables.", WP_ULIKE_SLUG ) );
+		if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
+			return new WP_Error( 'broke', __( "Please enter some value for required variables.", WP_ULIKE_SLUG ) );
+		}
+
+		// get table info
+		$table_info = wp_ulike_get_table_info( $type );
+		if( empty( $table_info ) ){
+			return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
+		}
+
+		$query = sprintf(
+			"SELECT COUNT(%s) FROM %s WHERE %s AND `%s` = '%s'",
+			esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
+			esc_sql( $wpdb->prefix . $table_info['table'] ),
+			esc_sql( $status !== 'all' ? "`status` = '$status'" : "1" ),
+			esc_sql( $table_info['column'] ),
+			esc_sql( $ID )
+		);
+
+		$result = $wpdb->get_var( stripslashes( $query ) );
+
+		return  empty( $result ) ? 0 : $result;
 	}
-
-	// get table info
-	$table_info = wp_ulike_get_table_info( $type );
-	if( empty( $table_info ) ){
-		return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
-	}
-
-	$query = sprintf(
-		"SELECT COUNT(%s) FROM %s WHERE %s AND `%s` = '%s'",
-		esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
-		esc_sql( $wpdb->prefix . $table_info['table'] ),
-		esc_sql( $status !== 'all' ? "`status` = '$status'" : "1" ),
-		esc_sql( $table_info['column'] ),
-		esc_sql( $ID )
-	);
-
-	$result = $wpdb->get_var( stripslashes( $query ) );
-
-	return  empty( $result ) ? 0 : $result;
 }
 
-/**
- * Get table info
- *
- * @param string $type
- * @return void
- */
-function wp_ulike_get_table_info( $type = 'post' ){
-	$output = array();
 
-	switch ( $type ) {
-		case 'comment':
-			$output = array(
-				'table'  => 'ulike_comments',
-				'column' => 'comment_id'
-			);
-			break;
+if( ! function_exists( 'wp_ulike_get_table_info' ) ){
+	/**
+	 * Get table info
+	 *
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_get_table_info( $type = 'post' ){
+		$output = array();
 
-		case 'activity':
-			$output = array(
-				'table'  => 'ulike_activities',
-				'column' => 'activity_id'
-			);
-			break;
+		switch ( $type ) {
+			case 'comment':
+				$output = array(
+					'table'  => 'ulike_comments',
+					'column' => 'comment_id'
+				);
+				break;
 
-		case 'topic':
-			$output = array(
-				'table'  => 'ulike_forums',
-				'column' => 'topic_id'
-			);
-			break;
+			case 'activity':
+				$output = array(
+					'table'  => 'ulike_activities',
+					'column' => 'activity_id'
+				);
+				break;
 
-		default:
-			$output = array(
-				'table'  => 'ulike',
-				'column' => 'post_id'
-			);
-			break;
+			case 'topic':
+				$output = array(
+					'table'  => 'ulike_forums',
+					'column' => 'topic_id'
+				);
+				break;
+
+			default:
+				$output = array(
+					'table'  => 'ulike',
+					'column' => 'post_id'
+				);
+				break;
+		}
+
+		return $output;
 	}
-
-	return $output;
 }
 
 /*******************************************************
   Posts
 *******************************************************/
 
-/**
- * Display Like button for posts
- *
- * @author       	Alimir
- * @param           String 	$type
- * @param           Array 	$args
- * @since           1.0
- * @return			String
- */
 if( ! function_exists( 'wp_ulike' ) ){
+	/**
+	 * Display Like button for posts
+	 *
+	 * @author       	Alimir
+	 * @param           String 	$type
+	 * @param           Array 	$args
+	 * @since           1.0
+	 * @return			String
+	 */
 	function wp_ulike( $type = 'get', $args = array() ) {
 		//global variables
 		global $post;
@@ -836,43 +842,46 @@ if( ! function_exists( 'wp_ulike' ) ){
 	}
 }
 
-/**
- * Get most liked posts in query
- *
- * @param integer $numberposts
- * @return WP_Post[]|int[] Array of post objects or post IDs.
- */
-function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all' ){
-	$post__in = wp_ulike_get_popular_items_ids(array(
-		'type'   => $method,
-		'period' => $period
-	));
-	if( empty( $post__in ) ){
-		return false;
-	}
 
-	return get_posts( array(
-		'post__in'    => $post__in,
-		'numberposts' => $numberposts,
-		'orderby'     => 'post__in',
-		'post_type'   => $post_type === '' ? get_post_types_by_support( array(
-			'title',
-			'editor',
-			'thumbnail'
-		) ) : $post_type
-	) );
+if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
+	/**
+	 * Get most liked posts in query
+	 *
+	 * @param integer $numberposts
+	 * @return WP_Post[]|int[] Array of post objects or post IDs.
+	 */
+	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all' ){
+		$post__in = wp_ulike_get_popular_items_ids(array(
+			'type'   => $method,
+			'period' => $period
+		));
+		if( empty( $post__in ) ){
+			return false;
+		}
+
+		return get_posts( array(
+			'post__in'    => $post__in,
+			'numberposts' => $numberposts,
+			'orderby'     => 'post__in',
+			'post_type'   => $post_type === '' ? get_post_types_by_support( array(
+				'title',
+				'editor',
+				'thumbnail'
+			) ) : $post_type
+		) );
+	}
 }
 
-/**
- * Check wp ulike callback
- *
- * @author       	Alimir
- * @param           Array 	$options
- * @param           Array   $args
- * @since           1.9
- * @return			boolean
- */
 if( ! function_exists( 'is_wp_ulike' ) ){
+	/**
+	 * Check wp ulike callback
+	 *
+	 * @author       	Alimir
+	 * @param           Array 	$options
+	 * @param           Array   $args
+	 * @since           1.9
+	 * @return			boolean
+	 */
 	function is_wp_ulike( $options, $args = array() ){
 
 		$defaults = array(
@@ -902,31 +911,32 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 }
 
 
-/**
- * Get Single Post likes number
- *
- * @author       	Alimir
- * @param           Integer $post_ID
- * @since           1.7
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_get_post_likes' ) ){
+	/**
+	 * Get Single Post likes number
+	 *
+	 * @author       	Alimir
+	 * @param           Integer $post_ID
+	 * @since           1.7
+	 * @return          String
+	 */
 	function wp_ulike_get_post_likes( $post_ID, $status = 'like' ){
 		$value = wp_ulike_get_counter_value( $post_ID, 'post', $status );
 		return ! is_wp_error( $value ) ? $value : 0;
 	}
 }
 
-/**
- * Calculate rating value by user logs & date_time
- *
- * @author       	Alimir
- * @param           Integer $post_ID
- * @param           Boolean $is_decimal
- * @since           2.7
- * @return          String
- */
+
 if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
+	/**
+	 * Calculate rating value by user logs & date_time
+	 *
+	 * @author       	Alimir
+	 * @param           Integer $post_ID
+	 * @param           Boolean $is_decimal
+	 * @since           2.7
+	 * @return          String
+	 */
 	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
 		global $wpdb;
 		if (false === ($rating_value = wp_cache_get($cache_key = 'get_rich_rating_value_' . $post_ID, $cache_group = 'wp_ulike'))) {
@@ -999,16 +1009,16 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
   Comments
 *******************************************************/
 
-/**
- * wp_ulike_comments function for comments like/unlike display
- *
- * @author       	Alimir
- * @param           String 	$type
- * @param           Array 	$args
- * @since           1.6
- * @return			String
- */
 if( ! function_exists( 'wp_ulike_comments' ) ){
+	/**
+	 * wp_ulike_comments function for comments like/unlike display
+	 *
+	 * @author       	Alimir
+	 * @param           String 	$type
+	 * @param           Array 	$args
+	 * @since           1.6
+	 * @return			String
+	 */
 	function wp_ulike_comments( $type = 'get', $args = array() ) {
 
 		$comment_ID       = isset( $args['id'] ) ? $args['id'] : get_comment_ID();
@@ -1044,42 +1054,44 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_most_liked_comments' ) ){
+	/**
+	 * Get most liked posts in query
+	 *
+	 * @param integer $numberposts
+	 * @return WP_Post[]|int[] Array of post objects or post IDs.
+	 */
+	function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all' ){
+		$comment__in = wp_ulike_get_popular_items_ids(array(
+			'period' => $period
+		));
+		if( empty( $comment__in ) ){
+			return false;
+		}
 
-/**
- * Get most liked posts in query
- *
- * @param integer $numberposts
- * @return WP_Post[]|int[] Array of post objects or post IDs.
- */
-function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all' ){
-	$comment__in = wp_ulike_get_popular_items_ids(array(
-		'period' => $period
-	));
-	if( empty( $comment__in ) ){
-		return false;
+		return get_comments( array(
+			'comment__in' => $comment__in,
+			'number'      => $numbercomments,
+			'orderby'     => 'comment__in',
+			'post_type'   => $post_type === '' ? get_post_types_by_support( array(
+				'title',
+				'editor',
+				'thumbnail'
+			) ) : $post_type
+		) );
 	}
-
-	return get_comments( array(
- 		'comment__in' => $comment__in,
-		'number'      => $numbercomments,
-		'orderby'     => 'comment__in',
-		'post_type'   => $post_type === '' ? get_post_types_by_support( array(
-			'title',
-			'editor',
-			'thumbnail'
-		) ) : $post_type
-	) );
 }
 
-/**
- * Get the number of likes on a single comment
- *
- * @author          Alimir & Wacław Jacek
- * @param           Integer $commentID
- * @since           2.5
- * @return          String
- */
+
 if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){
+	/**
+	 * Get the number of likes on a single comment
+	 *
+	 * @author          Alimir & Wacław Jacek
+	 * @param           Integer $commentID
+	 * @since           2.5
+	 * @return          String
+	 */
 	function wp_ulike_get_comment_likes( $comment_ID ){
 		$value = wp_ulike_get_counter_value( $comment_ID, 'comment' );
 		return ! is_wp_error( $value ) ? $value : 0;
@@ -1090,16 +1102,16 @@ if( ! function_exists( 'wp_ulike_get_comment_likes' ) ){
   BuddyPress
 *******************************************************/
 
-/**
- * wp_ulike_buddypress function for activities like/unlike display
- *
- * @author       	Alimir
- * @param           String 	$type
- * @param           Array 	$args
- * @since           1.7
- * @return			String
- */
 if( ! function_exists( 'wp_ulike_buddypress' ) ){
+	/**
+	 * wp_ulike_buddypress function for activities like/unlike display
+	 *
+	 * @author       	Alimir
+	 * @param           String 	$type
+	 * @param           Array 	$args
+	 * @since           1.7
+	 * @return			String
+	 */
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
 
         if ( bp_get_activity_comment_id() != null ){
@@ -1139,16 +1151,17 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 	}
 }
 
-/**
- * Get auther ID by the ulike types
- *
- * @author       	Alimir
- * @param           Integer $cp_ID (Post/Comment/... ID)
- * @param           String 	$type (Get ulike Type)
- * @since           2.5
- * @return          String
- */
+
 if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
+	/**
+	 * Get auther ID by the ulike types
+	 *
+	 * @author       	Alimir
+	 * @param           Integer $cp_ID (Post/Comment/... ID)
+	 * @param           String 	$type (Get ulike Type)
+	 * @since           2.5
+	 * @return          String
+	 */
 	function wp_ulike_get_auhtor_id($cp_ID,$type) {
 		if($type == '_liked' || $type == '_topicliked'){
 			$post_tmp = get_post($cp_ID);
@@ -1166,14 +1179,15 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
 	}
 }
 
-/**
- * Wrapper for bbp_format_buddypress_notifications function as it is not returning $action
- *
- * @author       	Alimir
- * @since           2.5.1
- * @return          String
- */
+
 if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
+	/**
+	 * Wrapper for bbp_format_buddypress_notifications function as it is not returning $action
+	 *
+	 * @author       	Alimir
+	 * @since           2.5.1
+	 * @return          String
+	 */
 	function wp_ulike_bbp_format_buddypress_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
 
 		if ( ! defined( 'BP_VERSION' ) ) {
@@ -1197,14 +1211,14 @@ if( ! function_exists( 'wp_ulike_bbp_format_buddypress_notifications' ) ) {
 }
 
 
-/**
- * Check the buddypress notification component existence
- *
- * @author       	Alimir
- * @since           2.5.1
- * @return          integer
- */
 if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
+	/**
+	 * Check the buddypress notification component existence
+	 *
+	 * @author       	Alimir
+	 * @since           2.5.1
+	 * @return          integer
+	 */
 	function wp_ulike_bbp_is_component_exist( $component_name ){
 		global $wpdb;
 		$bp = buddypress();
@@ -1218,59 +1232,61 @@ if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
+	/**
+	 * Get most liked posts in query
+	 *
+	 * @param integer $numberposts
+	 * @return WP_Post[]|int[] Array of post objects or post IDs.
+	 */
+	function wp_ulike_get_most_liked_activities( $number = 10, $period = 'all' ){
+		global $wpdb;
 
-/**
- * Get most liked posts in query
- *
- * @param integer $numberposts
- * @return WP_Post[]|int[] Array of post objects or post IDs.
- */
-function wp_ulike_get_most_liked_activities( $number = 10, $period = 'all' ){
-	global $wpdb;
+		if ( is_multisite() ) {
+			$bp_prefix = 'base_prefix';
+		} else {
+			$bp_prefix = 'prefix';
+		}
 
-	if ( is_multisite() ) {
-		$bp_prefix = 'base_prefix';
-	} else {
-		$bp_prefix = 'prefix';
+		$activity_ids = wp_ulike_get_popular_items_ids(array(
+			'type'   => 'activity',
+			'period' => $period
+		));
+
+		if( empty( $activity_ids ) ){
+			return false;
+		}
+
+		// generate query string
+		$query  = sprintf( '
+			SELECT * FROM
+			`%1$sbp_activity`
+			WHERE `id` IN (%2$s)
+			ORDER BY FIELD(`id`, %2$s)
+			LIMIT %3$s',
+			$wpdb->$bp_prefix,
+			implode(',',$activity_ids),
+			$number
+		);
+
+		return $wpdb->get_results( $query );
 	}
-
-	$activity_ids = wp_ulike_get_popular_items_ids(array(
-		'type'   => 'activity',
-		'period' => $period
-	));
-
-	if( empty( $activity_ids ) ){
-		return false;
-	}
-
-	// generate query string
-	$query  = sprintf( '
-		SELECT * FROM
-		`%1$sbp_activity`
-		WHERE `id` IN (%2$s)
-		ORDER BY FIELD(`id`, %2$s)
-		LIMIT %3$s',
-		$wpdb->$bp_prefix,
-		implode(',',$activity_ids),
-		$number
-	);
-
-	return $wpdb->get_results( $query );
 }
 
 /*******************************************************
   bbPress
 *******************************************************/
-/**
- * wp_ulike_bbpress function for topics like/unlike display
- *
- * @author       	Alimir
- * @param           String 	$type
- * @param           Array 	$args
- * @since           2.2
- * @return			String
- */
+
 if( ! function_exists( 'wp_ulike_bbpress' ) ){
+	/**
+	 * wp_ulike_bbpress function for topics like/unlike display
+	 *
+	 * @author       	Alimir
+	 * @param           String 	$type
+	 * @param           Array 	$args
+	 * @since           2.2
+	 * @return			String
+	 */
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
 		//global variables
 		global $post;
@@ -1382,17 +1398,17 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 	}
 }
 
-/**
- * Get template between
- *
- * @author       	Alimir
- * @param           String $string
- * @param           String $start
- * @param           String $end
- * @since           2.0
- * @return			String
- */
 if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
+	/**
+	 * Get template between
+	 *
+	 * @author       	Alimir
+	 * @param           String $string
+	 * @param           String $start
+	 * @param           String $end
+	 * @since           2.0
+	 * @return			String
+	 */
 	function wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $limit_num = 10 ){
 		// Global wordpress database object
 		global $wpdb;
@@ -1514,18 +1530,18 @@ if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 	}
 }
 
-/**
- * Get likers box template
- *
- * @author       	Alimir
- * @param           String $table_name
- * @param           String $column_name
- * @param           String $post_ID
- * @param           String $setting_key
- * @since           2.0
- * @return			String
- */
 if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
+	/**
+	 * Get likers box template
+	 *
+	 * @author       	Alimir
+	 * @param           String $table_name
+	 * @param           String $column_name
+	 * @param           String $post_ID
+	 * @param           String $setting_key
+	 * @since           2.0
+	 * @return			String
+	 */
 	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key ){
 
 		// Get user's limit number value
@@ -1578,17 +1594,17 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	}
 }
 
-/**
- * Get template between
- *
- * @author       	Alimir
- * @param           String $string
- * @param           String $start
- * @param           String $end
- * @since           2.0
- * @return			String
- */
 if( ! function_exists( 'wp_ulike_get_template_between' ) ){
+	/**
+	 * Get template between
+	 *
+	 * @author       	Alimir
+	 * @param           String $string
+	 * @param           String $start
+	 * @param           String $end
+	 * @since           2.0
+	 * @return			String
+	 */
 	function wp_ulike_get_template_between( $string, $start, $end ){
 		$string 	= " ".$string;
 		$ini 		= strpos($string,$start);
@@ -1602,18 +1618,19 @@ if( ! function_exists( 'wp_ulike_get_template_between' ) ){
 	}
 }
 
-/**
- * Put template between
- *
- * @author       	Alimir
- * @param           String $string
- * @param           String $inner_string
- * @param           String $start
- * @param           String $end
- * @since           2.0
- * @return			String
- */
+
 if( ! function_exists( 'wp_ulike_put_template_between' ) ){
+	/**
+	 * Put template between
+	 *
+	 * @author       	Alimir
+	 * @param           String $string
+	 * @param           String $inner_string
+	 * @param           String $start
+	 * @param           String $end
+	 * @since           2.0
+	 * @return			String
+	 */
 	function wp_ulike_put_template_between( $string, $inner_string, $start, $end ){
 		$string 	= " ".$string;
 		$ini 		= strpos($string,$start);
@@ -1633,16 +1650,16 @@ if( ! function_exists( 'wp_ulike_put_template_between' ) ){
 	}
 }
 
-/**
- * Convert numbers of Likes with string (kilobyte) format
- *
- * @author       	Alimir
- * @param           Array  		$parsed_args
- * @param           Integer 	$only_registered_users
- * @since           3.4
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_display_button' ) ){
+	/**
+	 * Convert numbers of Likes with string (kilobyte) format
+	 *
+	 * @author       	Alimir
+	 * @param           Array  		$parsed_args
+	 * @param           Integer 	$only_registered_users
+	 * @since           3.4
+	 * @return          String
+	 */
 	function wp_ulike_display_button( array $parsed_args, $only_registered_users ){
 		global $wp_ulike_class;
 
@@ -1665,14 +1682,14 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	}
 }
 
-/**
- * Get custom style setting from customize options
- *
- * @author       	Alimir
- * @since           1.3
- * @return          Void (Print new CSS styles)
- */
 if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
+	/**
+	 * Get custom style setting from customize options
+	 *
+	 * @author       	Alimir
+	 * @since           1.3
+	 * @return          Void (Print new CSS styles)
+	 */
 	function wp_ulike_get_custom_style( $return_style = null ){
 
 		// Like Icon
@@ -1741,15 +1758,15 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 }
 
-/**
- * Convert numbers of Likes with string (kilobyte) format
- *
- * @author       	Alimir
- * @param           Integer $num (get like number)
- * @since           1.5
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_format_number' ) ){
+	/**
+	 * Convert numbers of Likes with string (kilobyte) format
+	 *
+	 * @author       	Alimir
+	 * @param           Integer $num (get like number)
+	 * @since           1.5
+	 * @return          String
+	 */
 	function wp_ulike_format_number( $num, $status = 'like' ){
 		$sign = $value = '';
 		if( $num != 0 ){
@@ -1765,16 +1782,15 @@ if( ! function_exists( 'wp_ulike_format_number' ) ){
 	}
 }
 
-
-/**
- * Date in localized format
- *
- * @author       	Alimir
- * @param           String (Date)
- * @since           2.3
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_date_i18n' ) ){
+	/**
+	 * Date in localized format
+	 *
+	 * @author       	Alimir
+	 * @param           String (Date)
+	 * @since           2.3
+	 * @return          String
+	 */
 	function wp_ulike_date_i18n($date){
 		return date_i18n(
 			get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ),
@@ -1783,15 +1799,15 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 	}
 }
 
-/**
- * Convert IP to a integer value
- *
- * @author       	Alimir
- * @param           String $user_ip
- * @since           3.4
- * @return          String
- */
 if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
+	/**
+	 * Convert IP to a integer value
+	 *
+	 * @author       	Alimir
+	 * @param           String $user_ip
+	 * @since           3.4
+	 * @return          String
+	 */
 	function wp_ulike_generate_user_id( $user_ip ) {
 
 		if( filter_var( $user_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
@@ -1838,74 +1854,78 @@ if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
 	}
 }
 
-/**
- * Set/update the value of a transient.
- *
- * You do not need to serialize values. If the value needs to be serialized, then
- * it will be serialized before it is set.
- *
- *
- * @param string $transient  Transient name. Expected to not be SQL-escaped. Must be
- *                           172 characters or fewer in length.
- * @param mixed  $value      Transient value. Must be serializable if non-scalar.
- *                           Expected to not be SQL-escaped.
- * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
- * @return bool False if value was not set and true if value was set.
- */
-function wp_ulike_set_transient( $transient, $value, $expiration = 0 ) {
-    global $_wp_using_ext_object_cache;
+if( ! function_exists( 'wp_ulike_set_transient' ) ) {
+	/**
+	 * Set/update the value of a transient.
+	 *
+	 * You do not need to serialize values. If the value needs to be serialized, then
+	 * it will be serialized before it is set.
+	 *
+	 *
+	 * @param string $transient  Transient name. Expected to not be SQL-escaped. Must be
+	 *                           172 characters or fewer in length.
+	 * @param mixed  $value      Transient value. Must be serializable if non-scalar.
+	 *                           Expected to not be SQL-escaped.
+	 * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
+	 * @return bool False if value was not set and true if value was set.
+	 */
+	function wp_ulike_set_transient( $transient, $value, $expiration = 0 ) {
+		global $_wp_using_ext_object_cache;
 
-    $current_using_cache = $_wp_using_ext_object_cache;
-    $_wp_using_ext_object_cache = false;
+		$current_using_cache = $_wp_using_ext_object_cache;
+		$_wp_using_ext_object_cache = false;
 
-    $result = set_transient( $transient, $value, $expiration );
+		$result = set_transient( $transient, $value, $expiration );
 
-    $_wp_using_ext_object_cache = $current_using_cache;
+		$_wp_using_ext_object_cache = $current_using_cache;
 
-    return $result;
+		return $result;
+	}
 }
 
+if( ! function_exists( 'wp_ulike_get_transient' ) ) {
+	/**
+	 * Get the value of a transient.
+	 *
+	 * If the transient does not exist, does not have a value, or has expired,
+	 * then the return value will be false.
+	 *
+	 * @param string $transient Transient name. Expected to not be SQL-escaped.
+	 * @return mixed Value of transient.
+	 */
+	function wp_ulike_get_transient( $transient ) {
+		global $_wp_using_ext_object_cache;
 
-/**
- * Get the value of a transient.
- *
- * If the transient does not exist, does not have a value, or has expired,
- * then the return value will be false.
- *
- * @param string $transient Transient name. Expected to not be SQL-escaped.
- * @return mixed Value of transient.
- */
-function wp_ulike_get_transient( $transient ) {
-    global $_wp_using_ext_object_cache;
+		$current_using_cache = $_wp_using_ext_object_cache;
+		$_wp_using_ext_object_cache = false;
 
-    $current_using_cache = $_wp_using_ext_object_cache;
-    $_wp_using_ext_object_cache = false;
+		$result = get_transient( $transient );
 
-    $result = get_transient( $transient );
+		$_wp_using_ext_object_cache = $current_using_cache;
 
-    $_wp_using_ext_object_cache = $current_using_cache;
-
-    return $result;
+		return $result;
+	}
 }
 
+if( ! function_exists( 'wp_ulike_delete_transient' ) ) {
+	/**
+	 * Delete a transient.
+	 *
+	 * @param string $transient Transient name. Expected to not be SQL-escaped.
+	 * @return bool true if successful, false otherwise
+	 */
+	function wp_ulike_delete_transient( $transient ) {
+		global $_wp_using_ext_object_cache;
 
-/**
- * Delete a transient.
- *
- * @param string $transient Transient name. Expected to not be SQL-escaped.
- * @return bool true if successful, false otherwise
- */
-function wp_ulike_delete_transient( $transient ) {
-    global $_wp_using_ext_object_cache;
+		$current_using_cache = $_wp_using_ext_object_cache;
+		$_wp_using_ext_object_cache = false;
 
-    $current_using_cache = $_wp_using_ext_object_cache;
-    $_wp_using_ext_object_cache = false;
+		$result = delete_transient( $transient );
 
-    $result = delete_transient( $transient );
+		$_wp_using_ext_object_cache = $current_using_cache;
 
-    $_wp_using_ext_object_cache = $current_using_cache;
-
-    return $result;
+		return $result;
+	}
 }
 
 
@@ -2025,14 +2045,14 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
   Templates
 *******************************************************/
 
-/**
- * Create simple default template
- *
- * @author       	Alimir
- * @since           2.8
- * @return			Void
- */
 if( ! function_exists( 'wp_ulike_set_default_template' ) ){
+	/**
+	 * Create simple default template
+	 *
+	 * @author       	Alimir
+	 * @since           2.8
+	 * @return			Void
+	 */
 	function wp_ulike_set_default_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
 		ob_start();
@@ -2068,6 +2088,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 	/**
 	 * Create simple heart template
 	 *
@@ -2075,7 +2096,6 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 	 * @since           2.8
 	 * @return			Void
 	 */
-if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 	function wp_ulike_set_simple_heart_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
 		ob_start();
@@ -2111,14 +2131,14 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 	}
 }
 
-/**
- * Create Robeen (Animated Heart) template
- *
- * @author       	Alimir
- * @since           2.8
- * @return			Void
- */
 if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
+	/**
+	 * Create Robeen (Animated Heart) template
+	 *
+	 * @author       	Alimir
+	 * @since           2.8
+	 * @return			Void
+	 */
 	function wp_ulike_set_robeen_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
 		ob_start();
@@ -2185,14 +2205,15 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 	}
 }
 
-/**
- * Create Animated Heart template
- *
- * @author       	Alimir
- * @since           3.6.2
- * @return			Void
- */
+
 if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
+	/**
+	 * Create Animated Heart template
+	 *
+	 * @author       	Alimir
+	 * @since           3.6.2
+	 * @return			Void
+	 */
 	function wp_ulike_set_animated_heart_template( array $wp_ulike_template ){
 		//This function will turn output buffering on
 		ob_start();
