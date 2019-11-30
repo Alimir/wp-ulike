@@ -833,3 +833,86 @@ if( ! function_exists( 'wp_ulike_purge_w3_total_cache' ) && function_exists( 'w3
 	}
 	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_w3_total_cache'	, 10, 2 );
 }
+
+// wp fastest cache plugin
+if( ! function_exists( 'wp_ulike_purge_wp_fastest_cache' ) && class_exists( 'WpFastestCache' ) ){
+	/**
+	 * Purge wp fastest cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_wp_fastest_cache( $ID, $type ){
+		if( !isset( $GLOBALS["wp_fastest_cache"] ) ){
+			return;
+		}
+		$cache_interface = $GLOBALS["wp_fastest_cache"];
+
+		// to remove cache if vote is from homepage or category page or tag
+		if( isset($_SERVER["HTTP_REFERER"]) && $_SERVER["HTTP_REFERER"] ){
+			$url =  parse_url( $_SERVER["HTTP_REFERER"] );
+
+			$url["path"] = isset($url["path"]) ? $url["path"] : "/index.html";
+
+			$paths = array();
+
+			array_push($paths, $cache_interface->getWpContentDir("/cache/all").$url["path"]);
+
+			if(class_exists("WpFcMobileCache")){
+				$wpfc_mobile = new WpFcMobileCache();
+				array_push($paths, $cache_interface->getWpContentDir("/cache/wpfc-mobile-cache").$url["path"]);
+			}
+
+			foreach ($paths as $key => $value){
+				if(file_exists($value)){
+					if(preg_match("/\/(all|wpfc-mobile-cache)\/index\.html$/i", $value)){
+						@unlink($value);
+					}else{
+						$cache_interface->rm_folder_recursively($value);
+					}
+				}
+			}
+		}
+
+		if( $type === '_liked' ){
+			$cache_interface->singleDeleteCache( false, $ID );
+		}
+
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_fastest_cache'	, 10, 2 );
+}
+
+// wp super cache plugin
+if( ! function_exists( 'wp_ulike_purge_wp_super_cache' ) && function_exists( 'wpsc_delete_post_cache' ) ){
+	/**
+	 * Purge super post cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_wp_super_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			wpsc_delete_post_cache( $ID );
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_super_cache'	, 10, 2 );
+}
+
+// wp rocket cache plugin
+if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) && function_exists( 'rocket_clean_post' ) ){
+	/**
+  	 * Purge wp rocket cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_rocket_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			rocket_clean_post( $ID );
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_rocket_cache'	, 10, 2 );
+}
