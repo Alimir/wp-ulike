@@ -551,6 +551,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 == Upgrade Notice ==
 
+= 4.0.0 =
+Attention Please! In this version, we have made a various changes in our data structure which switches the number of likes from meta values to the number of database logs. So If you're a developer, please consider our commits in github repo.
+
 = 3.5.2 =
 Attention Please! In this version, we have made some changes on plugin scripts! So, please clear your server cache after the plugin update.
 
