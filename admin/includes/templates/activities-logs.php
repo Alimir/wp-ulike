@@ -79,11 +79,7 @@
 						</td>
 						<td>
 						<?php
-							if( $data_row->status === 'like' ) {
-								echo '<i class="wp-ulike-icons-thumb_up"></i>';
-							} else {
-								echo '<i class="wp-ulike-icons-thumb_down"></i>';
-							}
+							echo $data_row->status;
 						?>
 						</td>
 						<td>
