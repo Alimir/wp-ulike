@@ -10,9 +10,9 @@
   },
   "license": "MIT",
   "author": {
-    "name": "Alimir",
-    "email": "info@alimir.ir",
-    "url": "http://alimir.ir"
+    "name": "TechnoWich",
+    "email": "wpulike@gmail.com",
+    "url": "https://wpulike.com"
   },
   "main": "Gruntfile.js",
   "scripts": {

@@ -2,7 +2,7 @@
 /**
  * All wp-ulike functionalities starting from here...
  *
- * //@echo HEADER
+ * // @echo HEADER
  *
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
