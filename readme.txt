@@ -187,11 +187,14 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 = 4.0.0 =
 * Added: New structure which switches the number of likes from meta values to the number of database logs.
+* Added: Custom ID support to have multiple buttons in same page.
+* Added: Dislike support. [PRO]
+* Added: Elementor support + 7 widgets [PRO]
 * Added: Complete list of cache plugins support.
 * Added: Some new hooks to make better control on ulike processes + PRO version support.
 * Added: Better admin notice system.
 * Added: Some improvements in statistics functionalities and data controllers.
-* Added: Better capability control for stats&logs admin menu pages
+* Added: Better capability control for stats&logs admin menu pages. [PRO]
 * Added: BuddyPress & bbpress compatible with new improvements.
 * Fixed: An issue with catching of nonce fields problem.
 * Fixed: An issue with display likers in JS functionality.
