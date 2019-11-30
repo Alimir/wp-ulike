@@ -137,6 +137,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			extract( $data );
 			// output value
 			$output = '';
+			$this->is_distinct = false;
 
 			// Check user log history
 			$user_status = $this->get_user_status( $table, $column, 'ip', $id, $this->user_ip );
