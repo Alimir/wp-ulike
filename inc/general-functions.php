@@ -191,7 +191,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'description' => __( 'Best size: 16x16',WP_ULIKE_SLUG)
 						),
 						'permission_text' => array(
-							'default' => __('You have not permission to unlike',WP_ULIKE_SLUG),
+							'default' => __('You have already registered a vote.',WP_ULIKE_SLUG),
 							'label'   => __( 'Permission Text', WP_ULIKE_SLUG)
 						),
 						'login_type' => array(

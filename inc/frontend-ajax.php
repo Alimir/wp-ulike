@@ -69,7 +69,7 @@ function wp_ulike_process(){
 
 		if( ! $wp_ulike_class->has_permission( $args, $logging_method ) ){
 			$response = array(
-				'message'     => wp_ulike_get_setting( 'wp_ulike_general', 'permission_text', __( 'You have not permission to unlike', WP_ULIKE_SLUG ) ),
+				'message'     => wp_ulike_get_setting( 'wp_ulike_general', 'permission_text', __( 'You have already registered a vote.', WP_ULIKE_SLUG ) ),
 				'btnText'     => NULL,
 				'messageType' => 'warning',
 				'status'      => 5,
