@@ -50,7 +50,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 		public function load_scripts() {
 
 			// Scripts is only can be load on ulike pages.
-			if ( strpos( $this->hook, 'wp-ulike' ) === false ) {
+			if ( strpos( $this->hook, WP_ULIKE_SLUG ) === false ) {
 				return;
 			}
 
