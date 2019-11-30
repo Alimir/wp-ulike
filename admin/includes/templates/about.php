@@ -59,8 +59,8 @@
 				datasets: [{
 					label: '<?php echo _e( 'Downloads', WP_ULIKE_SLUG ); ?>',
 					data: <?php echo json_encode( $downloads_info['data'] ); ?>,
-					backgroundColor: '#F3643A',
-					borderColor: '#F3643A',
+					backgroundColor: '#FF7171',
+					borderColor: '#FF7171',
 					type: 'line',
 					pointRadius: 0,
 					fill: false,
