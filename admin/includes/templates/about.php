@@ -35,78 +35,11 @@
 	<div class="feature-section is-wide has-1-columns">
 		<div class="column">
 			<div class="inline-svg">
-				<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/stats-plan.png" alt="Statistics Planning" />
+				<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/statistics.svg" alt="Statistics Planning" />
 			</div>
-			<p><?php echo _e('WP ULike’s amazing statistics tools help you to track your content effectiveness with a real-time report system and detailed statistics. What’s more, WP ULike have a wide variety of options available to customize your plugin. It will allow you to customize your like button in your favorite style.',WP_ULIKE_SLUG); ?></p>
 		</div>
 
 	</div>
-
-<?php
-	$downloads_info = wp_ulike_get_repository_downloads_info();
-	if( ! empty( $downloads_info ) ) {
-?>
-	<div class="feature-section is-wide has-1-columns">
-		<div class="column">
-			<canvas id="downloads-stats"></canvas>
-		</div>
-	</div>
-	<script>
-		var config = {
-			type: 'line',
-			data: {
-				labels: <?php echo json_encode( $downloads_info['labels'] ); ?>,
-				datasets: [{
-					label: '<?php echo _e( 'Downloads', WP_ULIKE_SLUG ); ?>',
-					data: <?php echo json_encode( $downloads_info['data'] ); ?>,
-					backgroundColor: '#FF7171',
-					borderColor: '#FF7171',
-					type: 'line',
-					pointRadius: 0,
-					fill: false,
-					lineTension: 0,
-					borderWidth: 2
-				}]
-			},
-			options: {
-				responsive: true,
-				tooltips: {
-					mode: 'index',
-					intersect: false,
-				},
-				legend: {
-					display: false,
-				},
-				hover: {
-					mode: 'nearest',
-					intersect: true
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Days'
-						}
-					}],
-					yAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Downloads'
-						}
-					}]
-				}
-			}
-		};
-		window.onload = function() {
-			var ctx = document.getElementById('downloads-stats').getContext('2d');
-			window.myLine = new Chart(ctx, config);
-		};
-	</script>
-<?php
-	}
-?>
 	<hr>
 	<div class="return-to-dashboard">
 		<a href="admin.php?page=wp-ulike-statistics"><?php echo _e('WP ULike Statistics',WP_ULIKE_SLUG); ?> &rarr; <?php echo _e('Home',WP_ULIKE_SLUG); ?></a> <?php echo _e('OR',WP_ULIKE_SLUG); ?> <a href="admin.php?page=wp-ulike-settings"><?php echo _e('WP ULike Settings',WP_ULIKE_SLUG); ?></a>
