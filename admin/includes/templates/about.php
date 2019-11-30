@@ -51,8 +51,8 @@
 	<h3 class="wp-people-group"><?php echo _e('Project Leaders',WP_ULIKE_SLUG); ?></h3>
 	<ul id="wp-people-group-project-leaders" class="wp-people-group">
 		<li class="wp-person" id="wp-person-alimir">
-			<a href="https://profiles.wordpress.org/alimir/"><?php echo get_avatar( 'info@alimir.ir', 64 ); ?></a>
-			<a class="web" target="_blank" href="https://ir.linkedin.com/in/alimirir/">Ali Mirzaei</a>
+			<a href="https://profiles.wordpress.org/alimir/"><?php echo get_avatar( 'wpulike@gmail.com', 64 ); ?></a>
+			<a class="web" target="_blank" href="<?php echo WP_ULIKE_PLUGIN_URI . '?utm_source=about-page&utm_campaign=author-uri&utm_medium=wp-dash'; ?>">Ali Mirzaei</a>
 			<span class="title"><?php echo _e('Project Lead & Developer',WP_ULIKE_SLUG); ?></span>
 		</li>
 	</ul>
