@@ -107,7 +107,11 @@ function wp_ulike_update_admin_sub_menu_title( $title, $menu_slug ) {
 }
 add_filter( 'wp_ulike_admin_sub_menu_title', 'wp_ulike_update_admin_sub_menu_title', 10, 2 );
 
-
+/**
+ * Admin notice controller
+ *
+ * @return void
+ */
 function wp_ulike_notice_manager(){
 
 	// Display notices only for admin users

@@ -82,6 +82,10 @@ if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 		$get_action = $_POST['action'];
 		//$wpdb->hide_errors();
 
+		if( !current_user_can( 'manage_options' ) ){
+			wp_send_json_error( __( 'You\'ve not permission to remove all the logs. ', WP_ULIKE_SLUG ) );
+		}
+
 		if($get_action == 'wp_ulike_posts_delete_logs'){
 			$logs_table = $wpdb->prefix."ulike";
 		} else if($get_action == 'wp_ulike_comments_delete_logs'){

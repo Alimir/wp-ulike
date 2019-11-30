@@ -154,7 +154,12 @@ function wp_ulike_get_repository_downloads_info(){
 	return $info;
 }
 
-
+/**
+ * Button generator for admin usage
+ *
+ * @param array $atts
+ * @return string
+ */
 function wp_ulike_widget_button_callback( $atts = array() ){
 
     // Defining default attributes
