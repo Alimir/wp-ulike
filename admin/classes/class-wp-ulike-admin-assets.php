@@ -40,6 +40,17 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 				WP_ULIKE_ADMIN_URL . '/assets/css/admin.css'
 			);
 
+			// Scripts is only can be load on ulike pages.
+			if ( strpos( $this->hook, WP_ULIKE_SLUG ) === false ) {
+				return;
+			}
+
+			// Enqueue third-party styles
+			wp_enqueue_style(
+				'wp-ulike-admin-plugins',
+				WP_ULIKE_ADMIN_URL . '/assets/css/plugins.css'
+			);
+
 		}
 
 	    /**

@@ -376,8 +376,6 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 	    public function after_activation( $plugin ) {
 	        if( $plugin == WP_ULIKE_BASENAME ) {
-	            // Display WP ULike Notification
-	            update_option( 'wp-ulike-notice-dismissed', FALSE );
 	            // Redirect to the about page
 	            if( ! wp_doing_ajax() ) {
 	                exit( wp_redirect( admin_url( 'admin.php?page=wp-ulike-about' ) ) );

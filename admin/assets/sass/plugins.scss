@@ -17,8 +17,9 @@ https://wordpress.org/plugins/wp-ulike/
 \------------------------------------------/
 */
 
-@import "_icons.scss";
-@import "_settings.scss";
-@import "_button.scss";
-@import "_extra.scss";
-@import "_rtl.scss";
+@import "plugins/_spectrum.scss";
+@import "_visual-select.scss";
+@import "_grid.scss";
+@import "_stats.scss";
+@import "_about.scss";
+@import "_logs.scss";

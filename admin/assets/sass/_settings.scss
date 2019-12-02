@@ -232,35 +232,6 @@ form.wp-ulike {
     background: #fff;
 }
 
-.settings-error.info {
-    margin: 5px 0 15px;
-    border-left: 4px solid #2ea2cc;
-    padding: 1px 12px;
-    background-color: #ffffff;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-
-    p {
-        margin: 0.5em 0;
-        padding: 2px;
-    }
-}
-
-.settings-error.warning {
-    margin: 5px 0 15px;
-    border-left: 4px solid #2ea2cc;
-    padding: 1px 12px;
-    background-color: #ffffff;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-    border-color: #ffba00;
-
-    p {
-        margin: 0.5em 0;
-        padding: 2px;
-    }
-}
-
 tr.hide-label {
     th {
         display: none;
@@ -271,17 +242,19 @@ tr.hide-label {
     }
 }
 
-.dashicons-bbpress {
-    &:before {
-        content: "\f449";
+.wp-ulike-settings-tabs{
+    .dashicons-bbpress {
+        &:before {
+            content: "\f449";
+        }
+    }
+    .dashicons-buddypress {
+        &:before {
+            content: "\f452";
+        }
     }
 }
 
-.dashicons-buddypress {
-    &:before {
-        content: "\f452";
-    }
-}
 
 #wp_ulike_customize_custom_css {
     font-family: Consolas, Monaco, monospace;
@@ -292,68 +265,4 @@ tr.hide-label {
     outline: 0px none;
     width: 60%;
     min-height: 300px;
-}
-
-.wp-ulike-notice {
-    position: relative;
-    max-width: 870px;
-    overflow: hidden;
-    padding: 20px;
-    background: #f83600;
-    background: linear-gradient(to right, #f83600, #fe8c00);
-    color: #FFFCD6;
-    display: table;
-    box-shadow: 0 3px 25px rgba(248, 54, 0, 0.2);
-    margin: 20px 0px;
-
-    .wp-ulike-notice-image {
-        display: table-cell;
-        vertical-align: middle;
-        min-width: 100px;
-
-        img {
-            width: 100px;
-            height: auto;
-        }
-    }
-
-    .wp-ulike-notice-text {
-        display: table-cell;
-        vertical-align: middle;
-        padding: 10px 20px;
-
-        p {
-            font-size: 15px;
-            margin-top: 0;
-        }
-    }
-
-    .links {
-
-        a {
-            display: inline-block;
-            color: #FFFCD6;
-            text-transform: uppercase;
-            text-decoration: none;
-            padding: 5px 10px;
-            border: 1px solid #FFFCD6;
-            margin-top: 8px;
-            margin-right: 8px;
-            box-shadow: none;
-
-            &:hover,
-            &:focus {
-                background: #FFFCD6;
-                color: #212121;
-            }
-
-        }
-    }
-}
-
-.rtl{
-	.wp-ulike-notice-image {
-		margin-left: 25px;
-		margin-right: 0;
-    }
 }
