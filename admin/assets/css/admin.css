@@ -340,6 +340,8 @@ tr.hide-label td { padding-left: 0; }
 .wp-ulike-notice .links a { display: inline-block; color: #FFFCD6; text-transform: uppercase; text-decoration: none; padding: 5px 10px; border: 1px solid #FFFCD6; margin-top: 8px; margin-right: 8px; box-shadow: none; }
 .wp-ulike-notice .links a:hover, .wp-ulike-notice .links a:focus { background: #FFFCD6; color: #212121; }
 
+.rtl .wp-ulike-notice-image { margin-left: 25px; margin-right: 0; }
+
 .wp-ulike-container { width: 100%; margin-left: auto; margin-right: auto; }
 
 .wp-ulike-row { position: relative; width: 100%; }

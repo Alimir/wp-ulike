@@ -139,7 +139,7 @@ function wp_ulike_notice_manager(){
 				'expiration' => HOUR_IN_SECONDS * 48
 			),
 			array(
-				'label'      => __('I\'v already reviewd', WP_ULIKE_SLUG),
+				'label'      => __('I already did', WP_ULIKE_SLUG),
 				'type'       => 'skip',
 				'color_name' => 'error',
 				'expiration' => YEAR_IN_SECONDS * 10
