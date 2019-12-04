@@ -1075,13 +1075,13 @@ if( ! function_exists( 'wp_ulike_get_most_liked_comments' ) ){
 	 */
 	function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all', $status = 'like' ){
 		$comment__in = wp_ulike_get_popular_items_ids(array(
+			"type"   => 'comment',
 			'period' => $period,
 			'status' => $status
 		));
 		if( empty( $comment__in ) ){
 			return false;
 		}
-
 		return get_comments( array(
 			'comment__in' => $comment__in,
 			'number'      => $numbercomments,
