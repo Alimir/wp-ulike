@@ -852,11 +852,16 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 	 * Get most liked posts in query
 	 *
 	 * @param integer $numberposts
+	 * @param string $post_type
+	 * @param string $method
+	 * @param string $period
+	 * @param string $status
 	 * @return WP_Post[]|int[] Array of post objects or post IDs.
 	 */
-	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all' ){
+	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all', $status = 'like' ){
 		$post__in = wp_ulike_get_popular_items_ids(array(
 			'type'   => $method,
+			'status' => $status,
 			'period' => $period
 		));
 		if( empty( $post__in ) ){
@@ -1060,14 +1065,18 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 
 if( ! function_exists( 'wp_ulike_get_most_liked_comments' ) ){
 	/**
-	 * Get most liked posts in query
+	 * Get most liked comments in query
 	 *
-	 * @param integer $numberposts
-	 * @return WP_Post[]|int[] Array of post objects or post IDs.
+	 * @param integer $numbercomments
+	 * @param string $post_type
+	 * @param string $period
+	 * @param string $status
+	 * @return WP_Comment[]|int[] Array of post objects or post IDs.
 	 */
-	function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all' ){
+	function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all', $status = 'like' ){
 		$comment__in = wp_ulike_get_popular_items_ids(array(
-			'period' => $period
+			'period' => $period,
+			'status' => $status
 		));
 		if( empty( $comment__in ) ){
 			return false;
@@ -1238,12 +1247,14 @@ if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
 
 if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 	/**
-	 * Get most liked posts in query
+	 * Get most liked activities in array
 	 *
-	 * @param integer $numberposts
-	 * @return WP_Post[]|int[] Array of post objects or post IDs.
+	 * @param integer $number
+	 * @param string $period
+	 * @param string $status
+	 * @return object
 	 */
-	function wp_ulike_get_most_liked_activities( $number = 10, $period = 'all' ){
+	function wp_ulike_get_most_liked_activities( $number = 10, $period = 'all', $status = 'like' ){
 		global $wpdb;
 
 		if ( is_multisite() ) {
@@ -1254,6 +1265,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 
 		$activity_ids = wp_ulike_get_popular_items_ids(array(
 			'type'   => 'activity',
+			'status' => $status,
 			'period' => $period
 		));
 
@@ -1469,19 +1481,27 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		}
 
 
+		$status_type  = '';
+		if( is_array( $parsed_args['status'] ) ){
+			$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+		} else {
+			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+		}
+
+
 		// generate query string
 		$query  = sprintf( "
 			SELECT COUNT(*) AS counter,
 			`%s` AS item_ID
 			FROM %s
-			WHERE `status` = '%s'
+			WHERE %s
 			%s
 			GROUP BY item_ID
 			ORDER BY counter
 			%s LIMIT %d",
 			$info_args['column'],
 			$wpdb->prefix . $info_args['table'],
-			$parsed_args['status'],
+			$status_type,
 			$period_limit,
 			$parsed_args['order'],
 			$parsed_args['limit']
