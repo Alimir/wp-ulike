@@ -32,43 +32,6 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 	}
 }
 
-if( ! function_exists( 'wp_ulike_delete_all_data' ) ){
-	/**
-	 * An old function to remove post meta logs
-	 *
-	 * @author       	Alimir
-	 * @since           2.2
-	 * @return			Void
-	 */
-	function wp_ulike_delete_all_data() {
-		global $wpdb;
-		$get_action = $_POST['action'];
-		//$wpdb->hide_errors();
-
-		if($get_action == 'wp_ulike_posts_delete_data'){
-			$meta_table = $wpdb->prefix."postmeta";
-			$meta_key   = '_liked';
-		} else if($get_action == 'wp_ulike_comments_delete_data'){
-			$meta_table = $wpdb->prefix."commentmeta";
-			$meta_key   = '_commentliked';
-		} else if($get_action == 'wp_ulike_buddypress_delete_data'){
-			$meta_table = $wpdb->prefix."bp_activity_meta";
-			$meta_key   = '_activityliked';
-		} else if($get_action == 'wp_ulike_bbpress_delete_data'){
-			$meta_table = $wpdb->prefix."postmeta";
-			$meta_key   = '_topicliked';
-		}
-
-		$do_action 		= $wpdb->delete($meta_table, array( 'meta_key' => $meta_key ));
-
-		if ($do_action === FALSE) {
-			wp_send_json_error( __( 'Failed! An Error Has Occurred While Deleting All ULike Logs/Data', WP_ULIKE_SLUG ));
-		} else {
-			wp_send_json_success( __( 'Success! All ULike Logs/Data Have Been Deleted', WP_ULIKE_SLUG ) );
-		}
-	}
-}
-
 if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 	/**
 	 * Delete all the users likes logs by ajax process.
@@ -97,9 +60,72 @@ if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 		}
 
 		if ($wpdb->query("TRUNCATE TABLE $logs_table") === FALSE) {
-			wp_send_json_error( __( 'Failed! An Error Has Occurred While Deleting All ULike Logs/Data', WP_ULIKE_SLUG ) );
+			wp_send_json_error( __( 'Failed! There was a problem in removing of logs.', WP_ULIKE_SLUG ) );
 		} else {
-			wp_send_json_success( __( 'Success! All ULike Logs/Data Have Been Deleted', WP_ULIKE_SLUG ) );
+			wp_send_json_success( __( 'Success! All rows has been deleted!', WP_ULIKE_SLUG ) );
+		}
+	}
+}
+
+if( ! function_exists( 'wp_ulike_delete_orphaned_rows' ) ){
+	/**
+	 * Delete all the users likes logs by ajax process.
+	 *
+	 * @author       	Alimir
+	 * @since           2.2
+	 * @return			Void
+	 */
+	function wp_ulike_delete_orphaned_rows() {
+		global $wpdb;
+		$get_action = $_POST['action'];
+		//$wpdb->hide_errors();
+
+		if( !current_user_can( 'manage_options' ) ){
+			wp_send_json_error( __( 'You\'ve not permission to remove all the logs. ', WP_ULIKE_SLUG ) );
+		}
+
+		$type = '';
+		switch ($get_action) {
+			case 'wp_ulike_posts_delete_orphaned_rows':
+				$type = 'post';
+				break;
+
+			case 'wp_ulike_comments_delete_orphaned_rows':
+				$type = 'comment';
+				break;
+
+			case 'wp_ulike_buddypress_delete_orphaned_rows':
+				$type = 'activity';
+				break;
+
+			case 'wp_ulike_bbpress_delete_orphaned_rows':
+				$type = 'topic';
+				break;
+		}
+
+		if( empty( $type ) ){
+			wp_send_json_error( __( 'Bad request!', WP_ULIKE_SLUG ) );
+		}
+
+		// get table info
+		$info_args = wp_ulike_get_table_info( $type );
+
+		// Create query string
+		$query  = sprintf( "
+			DELETE FROM %s
+			WHERE `%s`
+			NOT IN (SELECT dt.`%s`
+			FROM %s dt)",
+			$wpdb->prefix . $info_args['table'],
+			$info_args['column'],
+			$info_args['related_column'],
+			$wpdb->prefix . $info_args['related_table']
+		);
+
+		if ( $wpdb->query( $query ) === FALSE ) {
+			wp_send_json_error( __( 'Failed! There was a problem in removing of orphaned rows.', WP_ULIKE_SLUG ) );
+		} else {
+			wp_send_json_success( __( 'Success! All orphaned rows has been deleted!', WP_ULIKE_SLUG ) );
 		}
 	}
 }
@@ -360,6 +386,12 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
+						),
+						'delete_orphaned_rows' => array(
+							'type'        => 'action',
+							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
+							'description' => __( 'Drop all rows in the logs table where its item ID no longer exists.', WP_ULIKE_SLUG),
+							'action'      => 'wp_ulike_delete_orphaned_rows'
 						)
 					)
 				);//end wp_ulike_posts
@@ -445,6 +477,12 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
+						),
+						'delete_orphaned_rows' => array(
+							'type'        => 'action',
+							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
+							'description' => __( 'Drop all rows in the logs table where its item ID no longer exists.', WP_ULIKE_SLUG),
+							'action'      => 'wp_ulike_delete_orphaned_rows'
 						)
 					)
 				);//end wp_ulike_comments
@@ -562,6 +600,12 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
+						),
+						'delete_orphaned_rows' => array(
+							'type'        => 'action',
+							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
+							'description' => __( 'Drop all rows in the logs table where its item ID no longer exists.', WP_ULIKE_SLUG),
+							'action'      => 'wp_ulike_delete_orphaned_rows'
 						)
 					)
 				);//end wp_ulike_buddypress
@@ -647,6 +691,12 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_all_logs'
 						),
+						'delete_orphaned_rows' => array(
+							'type'        => 'action',
+							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
+							'description' => __( 'Drop all rows in the logs table where its item ID no longer exists.', WP_ULIKE_SLUG),
+							'action'      => 'wp_ulike_delete_orphaned_rows'
+						)
 					)
 				);//end wp_ulike_buddypress
 				break;
@@ -763,29 +813,37 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 		switch ( $type ) {
 			case 'comment':
 				$output = array(
-					'table'  => 'ulike_comments',
-					'column' => 'comment_id'
+					'table'          => 'ulike_comments',
+					'column'         => 'comment_id',
+					'related_table'  => 'comments',
+					'related_column' => 'comment_ID'
 				);
 				break;
 
 			case 'activity':
 				$output = array(
-					'table'  => 'ulike_activities',
-					'column' => 'activity_id'
+					'table'          => 'ulike_activities',
+					'column'         => 'activity_id',
+					'related_table'  => 'bp_activity',
+					'related_column' => 'id'
 				);
 				break;
 
 			case 'topic':
 				$output = array(
-					'table'  => 'ulike_forums',
-					'column' => 'topic_id'
+					'table'          => 'ulike_forums',
+					'column'         => 'topic_id',
+					'related_table'  => 'posts',
+					'related_column' => 'ID'
 				);
 				break;
 
 			default:
 				$output = array(
-					'table'  => 'ulike',
-					'column' => 'post_id'
+					'table'          => 'ulike',
+					'column'         => 'post_id',
+					'related_table'  => 'posts',
+					'related_column' => 'ID'
 				);
 				break;
 		}

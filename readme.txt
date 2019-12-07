@@ -196,6 +196,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Added: Some improvements in statistics functionalities and data controllers.
 * Added: Better capability control for stats&logs admin menu pages. [PRO]
 * Added: BuddyPress & bbpress compatible with new improvements.
+* Added: New option to delete orphaned rows.
 * Fixed: An issue with catching of nonce fields problem.
 * Fixed: An issue with display likers in JS functionality.
 * Fixed: Some styling issues.
