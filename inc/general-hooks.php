@@ -321,7 +321,7 @@ if( defined( 'BP_VERSION' ) ) {
 		 * @return void
 		 */
 		function wp_ulike_bp_activity_filter_options() {
-			echo "<option value='wp_like_group'>". __('Likes') ."</option>";
+			echo "<option value='wp_like_group'>". __( 'Votes', WP_ULIKE_SLUG ) ."</option>";
 		}
 		add_action( 'bp_activity_filter_options', 'wp_ulike_bp_activity_filter_options' ); // Activity Directory
 		add_action( 'bp_member_activity_filter_options', 'wp_ulike_bp_activity_filter_options' ); // Member's profile activity
@@ -365,7 +365,7 @@ if( defined( 'BP_VERSION' ) ) {
 		function wp_ulike_add_bp_notifications( $cp_ID, $type, $user_ID, $status, $has_log  ){
 
 			// Return if user not logged in or an older data log exist
-			if( ! is_user_logged_in() || $has_log || ! function_exists( 'bp_is_active' ) ) return;
+			if( ! is_user_logged_in() || $has_log > 1 || ! function_exists( 'bp_is_active' ) ) return;
 
 			//Create a new activity when an user likes something
 			if (  wp_ulike_get_setting( 'wp_ulike_buddypress', 'new_likes_activity' ) == '1' ) {
