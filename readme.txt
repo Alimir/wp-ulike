@@ -199,6 +199,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Fixed: An issue with catching of nonce fields problem.
 * Fixed: An issue with display likers in JS functionality.
 * Fixed: Some styling issues.
+* Fixed: bbPress functionality conflict.
 * Fixed: Some reported bugs.
 
 = 3.6.2 =
