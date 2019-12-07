@@ -527,12 +527,14 @@ if( defined( 'BP_VERSION' ) ) {
 					), $custom_link, (int) $total_items, $item_id, $user_ID );
 				}
 
-				// global wp_filter to call bbPress wrapper function
-				if( isset( $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'] ) ) {
-					if( version_compare( $wp_version, '4.7', '>=' ) ) {
-						$wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
-					} else {
-						$wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
+ 				if ( function_exists('bbp_get_version') && version_compare( bbp_get_version(), '2.6.0' , '<') ) {
+					// global wp_filter to call bbPress wrapper function
+					if( isset( $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'] ) ) {
+						if( version_compare( $wp_version, '4.7', '>=' ) ) {
+							$wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
+						} else {
+							$wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
+						}
 					}
 				}
 
