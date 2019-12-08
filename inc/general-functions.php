@@ -926,7 +926,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 			return false;
 		}
 
-		return get_posts( array(
+		return get_posts( apply_filters( 'wp_ulike_get_top_posts_query', array(
 			'post__in'    => $post__in,
 			'numberposts' => $numberposts,
 			'orderby'     => 'post__in',
@@ -935,7 +935,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 				'editor',
 				'thumbnail'
 			) ) : $post_type
-		) );
+		) ) );
 	}
 }
 
@@ -1140,7 +1140,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_comments' ) ){
 		if( empty( $comment__in ) ){
 			return false;
 		}
-		return get_comments( array(
+		return get_comments( apply_filters( 'wp_ulike_get_top_comments_query', array(
 			'comment__in' => $comment__in,
 			'number'      => $numbercomments,
 			'orderby'     => 'comment__in',
@@ -1149,7 +1149,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_comments' ) ){
 				'editor',
 				'thumbnail'
 			) ) : $post_type
-		) );
+		) ) );
 	}
 }
 
