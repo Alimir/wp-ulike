@@ -390,7 +390,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'delete_orphaned_rows' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
-							'description' => __( 'Drop all rows in the logs table where its item ID no longer exists.', WP_ULIKE_SLUG),
+							'description' => __( 'Drop all rows in the logs table where its related table row no longer exists. (Don\'t try this option if you\'re using custom IDs)', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_orphaned_rows'
 						)
 					)
@@ -481,7 +481,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'delete_orphaned_rows' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
-							'description' => __( 'Drop all rows in the logs table where its item ID no longer exists.', WP_ULIKE_SLUG),
+							'description' => __( 'Drop all rows in the logs table where its related table row no longer exists. (Don\'t try this option if you\'re using custom IDs)', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_orphaned_rows'
 						)
 					)
@@ -604,7 +604,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'delete_orphaned_rows' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
-							'description' => __( 'Drop all rows in the logs table where its item ID no longer exists.', WP_ULIKE_SLUG),
+							'description' => __( 'Drop all rows in the logs table where its related table row no longer exists. (Don\'t try this option if you\'re using custom IDs)', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_orphaned_rows'
 						)
 					)
@@ -694,7 +694,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						'delete_orphaned_rows' => array(
 							'type'        => 'action',
 							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
-							'description' => __( 'Drop all rows in the logs table where its item ID no longer exists.', WP_ULIKE_SLUG),
+							'description' => __( 'Drop all rows in the logs table where its related table row no longer exists. (Don\'t try this option if you\'re using custom IDs)', WP_ULIKE_SLUG),
 							'action'      => 'wp_ulike_delete_orphaned_rows'
 						)
 					)
