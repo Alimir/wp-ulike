@@ -20,9 +20,8 @@ if ( ! defined( 'WPINC' ) ) {
 function wp_ulike_copyright( $text ) {
 	if( isset($_GET["page"]) && stripos( $_GET["page"], "wp-ulike") !== false ) {
 		return sprintf(
-			__( ' Thank you for choosing <a href="%s" title="Wordpress ULike" target="_blank">WP ULike</a>. Created by <a href="%s" title="Wordpress ULike" target="_blank">Ali Mirzaei</a>', WP_ULIKE_SLUG ),
-			'http://wordpress.org/plugins/wp-ulike/',
-			'https://ir.linkedin.com/in/alimirir'
+			__( ' Thank you for choosing <a href="%s" title="Wordpress ULike" target="_blank">WP ULike</a>.', WP_ULIKE_SLUG ),
+			WP_ULIKE_PLUGIN_URI . '?utm_source=footer-link&utm_campaign=plugin-uri&utm_medium=wp-dash'
 		);
 	}
 
@@ -77,48 +76,6 @@ function wp_ulike_set_lastvisit() {
 add_action('wp_logout', 'wp_ulike_set_lastvisit');
 
 /**
- * Add rating us notification on wp-ulike admin pages
- *
- * @author       	Alimir
- * @since           2.7
- * @return			string
- */
-function wp_ulike_admin_notice() {
-	if( get_option( 'wp-ulike-notice-dismissed', FALSE ) ) return;
-	?>
-	<script>
-		jQuery(document).on( 'click', '.wp-ulike-dismiss', function(e) {
-			e.preventDefault();
-		    jQuery.ajax({
-				url : ajaxurl,
-				type: 'post',
-				data: {
-					action: 'wp_ulike_dismissed_notice',
-					nonce : jQuery(this).data('nonce')
-		        }
-		    }).done(function( response ) {
-                jQuery(this).closest('.wp-ulike-notice').fadeOut();
-            }.bind(this));
-		});
-	</script>
-	<div class="wp-ulike-notice">
-		<div class="wp-ulike-notice-image">
-        	<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/wp-ulike-badge.png" alt="WP ULike Plugin">
-    	</div>
-        <div class="wp-ulike-notice-text">
-            <p><?php echo _e( "It's great to see that you've been using the WP ULike plugin. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ); ?> </p>
-            <div class="links">
-                <a href="https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5" target="_blank"><?php echo _e( "Sure, I'd love to!", WP_ULIKE_SLUG ); ?></a>
-                <a href="https://m.do.co/c/13ad5bc24738" target="_blank"><?php echo _e( "I also want to donate!", WP_ULIKE_SLUG ); ?></a>
-                <a href="#" data-nonce="<?php echo wp_create_nonce( 'wp-ulike-notice-dismissed' ); ?>" class="wp-ulike-dismiss"><?php echo _e( "Maybe Later & Clear this message!", WP_ULIKE_SLUG ); ?></a>
-            </div>
-        </div>
-    </div>
-	<?php
-}
-add_action( 'admin_notices', 'wp_ulike_admin_notice', 25 );
-
-/**
  *  Undocumented function
  *
  * @since 3.6.0
@@ -149,3 +106,93 @@ function wp_ulike_update_admin_sub_menu_title( $title, $menu_slug ) {
 	return $title;
 }
 add_filter( 'wp_ulike_admin_sub_menu_title', 'wp_ulike_update_admin_sub_menu_title', 10, 2 );
+
+/**
+ * Admin notice controller
+ *
+ * @return void
+ */
+function wp_ulike_notice_manager(){
+
+	// Display notices only for admin users
+	if( !current_user_can( 'manage_options' ) ){
+		return;
+	}
+
+    $notice_list = [];
+
+	$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
+		'id'          => 'wp_ulike_leave_a_review',
+		'title'       => __( 'Thanks for using WP ULike', WP_ULIKE_SLUG ) . ' ' . WP_ULIKE_VERSION,
+		'description' => __( "It's great to see that you've been using the WP ULike plugin. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ),
+		'skin'        => 'info',
+		'has_close'   => true,
+		'buttons'     => array(
+			array(
+				'label'      => __( "Sure, I'd love to!", WP_ULIKE_SLUG ),
+				'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5'
+			),
+			array(
+				'label'      => __('Not Now', WP_ULIKE_SLUG),
+				'type'       => 'skip',
+				'color_name' => 'info',
+				'expiration' => HOUR_IN_SECONDS * 48
+			),
+			array(
+				'label'      => __('I already did', WP_ULIKE_SLUG),
+				'type'       => 'skip',
+				'color_name' => 'error',
+				'expiration' => YEAR_IN_SECONDS * 10
+			)
+		),
+		'image'     => array(
+			'width' => '150',
+			'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/rating.svg'
+		)
+	]);
+
+	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
+		$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_go_pro',
+			'title'       => __( 'WP Ulike Pro is Ready :))', WP_ULIKE_SLUG ),
+			   'description' => __( "Finally, after a long time, the Premium version of the WP Ulike plugin was released with some new features such as support for Dislike button, Elementor Page Builder and some new templates. We intend to add more features to this extension every day and provide a full support for our users." , WP_ULIKE_SLUG ),
+			'skin'        => 'default',
+			'wrapper_extra_styles' => [
+				'background-image'  => 'url(' . WP_ULIKE_ASSETS_URL . '/img/svg/banner-pro.svg)',
+				'background-color'  => '#e1f5fe',
+				'background-size'   => 'contain',
+				'background-repeat' => 'no-repeat',
+				'padding'           => '80px 180px 80px 340px',
+			],
+			'has_close'   => true,
+			'buttons'     => array(
+				array(
+					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+					'link'       => WP_ULIKE_PLUGIN_URI . '?utm_source=banner&utm_campaign=gopro&utm_medium=wp-dash'
+				),
+				array(
+					'label'      => __('Not Now', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'info',
+					'expiration' => WEEK_IN_SECONDS * 2
+				),
+				array(
+					'label'      => __('I don\'t Want to', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'error',
+					'expiration' => YEAR_IN_SECONDS * 1
+				)
+			)
+		]);
+	}
+
+
+    $notice_list = apply_filters( 'wp_ulike_admin_notices_instances', $notice_list );
+
+    foreach ( $notice_list as $notice ) {
+        if( $notice instanceof wp_ulike_notices ){
+            $notice->render();
+        }
+    }
+}
+add_action( 'admin_notices', 'wp_ulike_notice_manager' );

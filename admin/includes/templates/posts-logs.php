@@ -78,21 +78,17 @@
 						</td>
 						<td>
 						<?php
-							if( $data_row->status === 'like' ) {
-								echo '<i class="wp-ulike-icons-thumb_up"></i>';
-							} else {
-								echo '<i class="wp-ulike-icons-thumb_down"></i>';
-							}
+							echo $data_row->status;
 						?>
 						</td>
 						<td>
-						<?php 
-							echo $data_row->post_id; 
+						<?php
+							echo $data_row->post_id;
 						?>
 						</td>
 						<td>
-						<?php 
-							echo '<a href="'.get_permalink($data_row->post_id).'" title="'.get_the_title($data_row->post_id).'">'.get_the_title($data_row->post_id).'</a>'; 
+						<?php
+							echo '<a href="'.get_permalink($data_row->post_id).'" title="'.get_the_title($data_row->post_id).'">'.get_the_title($data_row->post_id).'</a>';
 						?>
 						</td>
 						<td>
@@ -101,8 +97,8 @@
 						?>
 						</td>
 						<td>
-						<?php 
-							echo $data_row->ip; 
+						<?php
+							echo $data_row->ip;
 						?>
 						</td>
 						<td>

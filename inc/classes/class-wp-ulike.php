@@ -8,7 +8,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 	class wp_ulike{
 
-		private $wpdb, $status, $user_id, $user_ip;
+		private $wpdb, $status, $user_id, $user_ip, $is_distinct;
 
 		/**
 		 * Instance of this class.
@@ -34,10 +34,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function init(){
 			global $wpdb, $wp_user_IP;
-			$this->wpdb    = $wpdb;
-			$this->status  = 'like';
-			$this->user_ip = $wp_user_IP;
-			$this->user_id = $this->get_reutrn_id();
+			$this->wpdb        = $wpdb;
+			$this->status      = 'like';
+			$this->user_ip     = $wp_user_IP;
+			$this->user_id     = $this->get_reutrn_id();
+			$this->is_distinct = true;
 		}
 
 		/**
@@ -50,7 +51,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function wp_get_ulike( array $data ){
 			//get loggin method option
-			$loggin_method = wp_ulike_get_setting( $data['setting'], 'logging_method');
+			$loggin_method = wp_ulike_get_setting( $data['setting'], 'logging_method' );
 
 			//Select the logging functionality
 			switch( $loggin_method ){
@@ -64,7 +65,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					return $this->loggedby_other_methods( $data, 'ip' );
 					break;
 				default:
-					return $this->loggedby_other_methods( $data );
+					return $this->loggedby_other_methods( $data, 'user_id' );
 			}
 		}
 
@@ -83,12 +84,15 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			// output value
 			$output = '';
 
+			// Check user log history
+			$user_status = $this->get_user_status( $table, $column, 'ip', $id, $this->user_ip );
+			$user_status = !$user_status ? $this->status : $user_status;
+			$this->is_distinct = false;
+
 			if( $type == 'post' ){
 				$output = $this->get_template( $data, 1 );
-
 			} elseif( $type == 'process' ){
-				// Increment like counter
-				++$get_like;
+				$this->update_status( $factor, $user_status, true );
 				// Insert log data
 				$this->wpdb->insert(
 					$this->wpdb->prefix . $table,
@@ -102,7 +106,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array( '%d', '%s', '%s', '%s', '%s' )
 				);
 				// Formatting the output
-				$output = wp_ulike_format_number( $this->update_meta_data( $id, $key, $get_like ) );
+				$output = $this->get_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -133,10 +137,15 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			extract( $data );
 			// output value
 			$output = '';
+			$this->is_distinct = false;
+
+			// Check user log history
+			$user_status = $this->get_user_status( $table, $column, 'ip', $id, $this->user_ip );
+			$user_status = !$user_status ? $this->status : $user_status;
 
 			if( $type == 'post' ){
 
-				if( ! isset( $_COOKIE[ $cookie . $id ] ) ){
+				if( $this->has_permission( $data, 'by_cookie' ) ){
 					$output = $this->get_template( $data, 1 );
 				}
 				else{
@@ -145,9 +154,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			} elseif( $type == 'process' ) {
 
-				if( ! isset( $_COOKIE[ $cookie . $id ] ) ){
-					// Increment like counter
-					++$get_like;
+				if( $this->has_permission( $data, 'by_cookie' ) ){
+					$this->update_status( $factor, $user_status, true );
 					// Set cookie
 					setcookie( $cookie . $id, time(), 2147483647, '/' );
 					// Insert log data
@@ -165,7 +173,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 				}
 				// Formatting the output
-				$output = wp_ulike_format_number( $this->update_meta_data( $id, $key, $get_like ) );
+				$output = $this->get_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -202,26 +210,19 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$user_status = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
 
 			if( $type == 'post' ){
-
 				if( ! $user_status ){
-					$output 	= $this->get_template( $data, 3 );
-
+					$output 	= $this->get_template( $data, 1 );
 				} else {
-
-					if( $user_status  == "like" ) {
-						$output = $this->get_template( $data, 2 );
-
+					if( substr( $user_status, 0, 2 ) !== "un" ) {
+						$output = $this->get_template( $data, 2, $user_status );
 					} else {
-						$output = $this->get_template( $data, 3 );
+						$output = $this->get_template( $data, 3, $user_status );
 					}
-
 				}
 
 			} elseif( $type == 'process' ) {
-
 				if( ! $user_status ){
-					// Increment like counter
-					++$get_like;
+					$this->update_status( $factor, 'unlike' );
 					// Insert log data
 					$this->wpdb->insert(
 						$this->wpdb->prefix . $table,
@@ -236,15 +237,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					);
 
 				} else {
-
-					if( $user_status == "like" ) {
-						// Decrement like counter
-						--$get_like;
-						$this->status = 'unlike';
-					} else {
-						// Increment like counter
-						++$get_like;
-					}
+					$this->update_status( $factor, $user_status );
 					// Update status
 					$this->wpdb->update(
 						$this->wpdb->prefix . $table,
@@ -256,7 +249,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				}
 
 				// Formatting the output
-				$output = wp_ulike_format_number( $this->update_meta_data( $id, $key, $get_like ) );
+				$output = $this->get_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -274,46 +267,69 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
-		 * Update meta data
+		 * Get counter value for ajax responses
 		 *
-		 * @author       	Alimir
-		 * @param           Integer $id
-		 * @param           String $key
-		 * @param           Integer $data
-		 * @since           2.0
-		 * @return			Void
+		 * @param integer $id
+		 * @param string $slug
+		 * @return integer
 		 */
-		public function update_meta_data( $id, $key, $data ){
-			// Fix negative values
-			if( (int) $data < 0 ){
-				$data = 0;
-			}
-			// Update Values
-			switch ( $key ) {
-				case '_liked'		 :
-					update_post_meta( $id, $key, $data );
-					update_postmeta_cache( array( $id ) );
-					delete_transient( 'wp_ulike_get_most_liked_posts' );
-					break;
-				case '_topicliked'	 :
-					update_post_meta( $id, $key, $data );
-					update_postmeta_cache( array( $id ) );
-					delete_transient( 'wp_ulike_get_most_liked_topics' );
-					break;
-				case '_commentliked' :
-					update_comment_meta( $id, $key, $data );
-					update_meta_cache( 'comment', array( $id ) );
-					delete_transient( 'wp_ulike_get_most_liked_comments' );
-					break;
-				case '_activityliked':
-					bp_activity_update_meta( $id, $key, $data );
-					delete_transient( 'wp_ulike_get_most_liked_activities' );
-					break;
-			}
-
-			return $data;
+		private function get_counter_value( $id, $slug ){
+			$counter = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status, $this->is_distinct ), $this->status );
+			return apply_filters( 'wp_ulike_ajax_counter_value', $counter, $id, $slug, $this->status, $this->is_distinct );
 		}
 
+		/**
+		 * Update user status base on database changes
+		 *
+		 * @param string $factor
+		 * @param string $old_status
+		 * @param boolean $keep_status
+		 * @return void
+		 */
+		private function update_status( $factor = 'up', $old_status = 'like', $keep_status = false ){
+			if( $factor === 'down' ){
+				$this->status = $old_status !== 'dislike' || $keep_status ? 'dislike' : 'undislike';
+			} else {
+				$this->status = $old_status !== 'like' || $keep_status ? 'like' : 'unlike';
+			}
+		}
+
+		/**
+		 * Check user permission by logging methods
+		 *
+		 * @param array $args
+		 * @param string $method
+		 * @return boolean
+		 */
+		public function has_permission( $args, $logging_method ){
+			// Extract data
+			extract( $args );
+
+			switch ( $logging_method ) {
+				case 'by_cookie':
+					return ! isset( $_COOKIE[ $cookie . $id ] );
+
+				default:
+					return true;
+			}
+		}
+
+		/**
+		 * Get user status code
+		 *
+		 * @return integer ( 0 = Is not logged, 1 = Is not liked, 2 = Is liked in the past, 3 = Is unliked, 4 = Is already liked )
+		 */
+		public function get_status(){
+			if( ! $this->status ){
+				return 1;
+			} elseif( ! $this->is_distinct ){
+				return 4;
+			} elseif( strpos( $this->status, 'un') === 0 ){
+				return 2;
+			} else {
+				return 3;
+			}
+		}
 
 		/**
 		 * Get template
@@ -324,7 +340,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @since           2.0
 		 * @return			String
 		 */
-		public function get_template( array $args, $status ){
+		public function get_template( array $args, $status, $user_status = 'like' ){
 
 			//Primary button class name
 			$button_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_button_selector', 'wp_ulike_btn' ) );
@@ -338,10 +354,10 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				}
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';
-				if($status == 2){
-					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u' ) );
+				if($status == 2 && strpos( $user_status, 'dis') !== 0){
+					$button_text = wp_ulike_get_button_text( 'button_text_u' );
 				} else {
-					$button_text = html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text' ) );
+					$button_text = wp_ulike_get_button_text( 'button_text' );
 				}
 			}
 			// Add unique class name for each button
@@ -366,23 +382,28 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$general_class_name .= ' wp_ulike_is_already_liked';
 			}
 
-			$counter = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $args['get_like'] ) .'</span>' , $args['get_like'] );
+			$total_likes = wp_ulike_get_counter_value( $args['id'], $args['slug'], 'like', $this->is_distinct );
+			$counter = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $total_likes ) .'</span>' , $total_likes );
+			$args['is_distinct'] = $this->is_distinct;
 
 			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(
-					"ID"             => esc_attr( $args['id'] ),
-					"wrapper_class"  => esc_attr( $args['wrapper_class'] ),
-					"slug"           => esc_attr( $args['slug'] ),
-					"counter"        => $counter,
-					"type"           => esc_attr( $args['method'] ),
-					"status"         => esc_attr( $status ),
-					"attributes"     => esc_attr( $args['attributes'] ),
-					"style"          => esc_html( $args['style'] ),
-					"button_type"    => esc_html( $args['button_type'] ),
-					"display_likers" => esc_attr( $args['display_likers'] ),
-					"button_text"    => $button_text,
-					"general_class"  => esc_attr( $general_class_name ),
-					"button_class"   => esc_attr( $button_class_name )
-				)
+					"ID"               => esc_attr( $args['id'] ),
+					"wrapper_class"    => esc_attr( $args['wrapper_class'] ),
+					"slug"             => esc_attr( $args['slug'] ),
+					"counter"          => $counter,
+					"total_likes"      => $total_likes,
+					"type"             => esc_attr( $args['method'] ),
+					"status"           => esc_attr( $status ),
+					"user_status"      => esc_attr( $user_status ),
+					"attributes"       => esc_attr( $args['attributes'] ),
+					"style"            => esc_html( $args['style'] ),
+					"button_type"      => esc_html( $args['button_type'] ),
+					"display_likers"   => esc_attr( $args['display_likers'] ),
+					"disable_pophover" => esc_attr( $args['disable_pophover'] ),
+					"button_text"      => $button_text,
+					"general_class"    => esc_attr( $general_class_name ),
+					"button_class"     => esc_attr( $button_class_name )
+				), $args
 			);
 
 

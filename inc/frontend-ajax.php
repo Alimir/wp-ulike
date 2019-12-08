@@ -19,18 +19,18 @@ function wp_ulike_process(){
 	// Global variables
 	global $wp_ulike_class;
 
-	$post_ID     = $_POST['id'];
-	$post_type   = $_POST['type'];
-	$like_status = $_POST['status'];
-	$nonce_token = $_POST['nonce'];
+	$post_ID     = isset( $_POST['id'] ) ? $_POST['id'] : NULL;
+	$post_type   = isset( $_POST['type'] ) ? $_POST['type'] : NULL;
+	$nonce_token = isset( $_POST['nonce'] ) ? $_POST['nonce'] : NULL;
+	$factor      = isset( $_POST['factor'] ) ? $_POST['factor'] : NULL;
 	$response    = array();
 
-	if( $post_ID == null || ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) ) {
+	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
 	// Get post type settings
-	$get_settings = wp_ulike_get_post_settings_by_type( $post_type, $post_ID );
+	$get_settings = wp_ulike_get_post_settings_by_type( $post_type );
 
 	// If method not exist, then return error message
 	if( empty( $get_settings ) ) {
@@ -40,59 +40,87 @@ function wp_ulike_process(){
 	// Extract post type settings
 	extract( $get_settings );
 
-	$get_like      = $get_meta_data != '' ? $get_meta_data : 0;
-
 	$args = apply_filters( 'wp_ulike_ajax_process_atts', array(
-			"id"       => $post_ID,				//Post ID
-			"get_like" => $get_like,			//Number Of Likes
-			"method"   => $post_type,			//JavaScript method
-			"setting"  => $setting_key,			//Setting Key
-			"type"     => 'process',			//Function type (post/process)
-			"table"    => $table_name,			//posts table
-			"column"   => $column_name,			//ulike table column name
-			"key"      => $meta_key,			//meta key
-			"cookie"   => $cookie_name			//Cookie Name
-		), $post_ID
+			"id"       => $post_ID,                          //Post ID
+			"method"   => $post_type,                        //JavaScript method
+			"setting"  => $setting,                          //Setting Key
+			"type"     => 'process',                         //Function type (post/process)
+			"table"    => $table,                            //posts table
+			"column"   => $column,                           //ulike table column name
+			"key"      => $key,                              //meta key
+			"slug"     => $slug,                             //meta key
+			"cookie"   => $cookie,                           //Cookie Name
+			"factor"   => $factor,                           //Factor type
+		), $post_ID, $get_settings
 	);
 
-	switch ( $like_status ){
-		case 0:
+	$only_registered_users = wp_ulike_get_setting( $setting, 'only_registered_users' );
+
+	if( $only_registered_users === '0' || ( $only_registered_users === '1' && is_user_logged_in() ) ) {
+		$response = array(
+			'message'     => wp_ulike_get_setting( 'wp_ulike_general', 'login_text', __( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) ),
+			'btnText'     => NULL,
+			'messageType' => 'info',
+			'status'      => 4,
+			'data'        => NULL
+		);
+	} else{
+		$logging_method = wp_ulike_get_setting( $setting, 'logging_method' );
+
+		if( ! $wp_ulike_class->has_permission( $args, $logging_method ) ){
 			$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'login_text', __( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
-						'data'    => NULL
-					);
-			break;
-		case 1:
-			$response = array(
+				'message'     => wp_ulike_get_setting( 'wp_ulike_general', 'permission_text', __( 'You have already registered a vote.', WP_ULIKE_SLUG ) ),
+				'btnText'     => NULL,
+				'messageType' => 'warning',
+				'status'      => 5,
+				'data'        => NULL
+			);
+		} else {
+			$counter = $wp_ulike_class->wp_get_ulike( $args );
+			$status  = $wp_ulike_class->get_status();
+
+			switch ( $status ){
+				case 1:
+					$response = array(
 						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
-						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
+						'btnText' => wp_ulike_get_button_text( 'button_text' ),
+						'messageType' => 'success',
+						'status'  => $status,
+						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
 					);
-			break;
-		case 2:
-			$response = array(
+					break;
+				case 2:
+					$response = array(
 						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice', __( 'Sorry! You unliked this.', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Like', WP_ULIKE_SLUG ) ) ),
-						'data'    => apply_filters( 'wp_ulike_respond_for_unliked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
+						'btnText' => wp_ulike_get_button_text( 'button_text' ),
+						'messageType' => 'error',
+						'status'  => $status,
+						'data'    => apply_filters( 'wp_ulike_respond_for_unliked_data', $counter, $post_ID )
 					);
-			break;
-		case 3:
-			$response = array(
+					break;
+				case 3:
+					$response = array(
 						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode(wp_ulike_get_setting( 'wp_ulike_general', 'button_text_u', __( 'Liked', WP_ULIKE_SLUG ) ) ),
-						'data'    => apply_filters( 'wp_ulike_respond_for_liked_data', $wp_ulike_class->wp_get_ulike( $args ), $post_ID )
+ 						'btnText' => wp_ulike_get_button_text( 'button_text_u' ),
+						'messageType' => 'success',
+						'status'  => $status,
+						'data'    => apply_filters( 'wp_ulike_respond_for_liked_data', $counter, $post_ID )
 					);
-			break;
-		default:
-			$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'permission_text', __( 'You have not permission to unlike', WP_ULIKE_SLUG ) ),
-						'btnText' => html_entity_decode( wp_ulike_get_setting( 'wp_ulike_general', 'button_text', __( 'Liked', WP_ULIKE_SLUG ) ) ),
-						'data'    => NULL
+					break;
+				case 4:
+					$response = array(
+						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
+						'btnText' => wp_ulike_get_button_text( 'button_text' ),
+						'messageType' => 'success',
+						'status'  => $status,
+						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
 					);
+					break;
+			}
+		}
 	}
 
-	wp_send_json_success( $response );
+	wp_send_json_success( apply_filters( 'wp_ulike_ajax_respond', $response, $post_ID, $status, $args ) );
 }
 //	wp_ajax hooks for the custom AJAX requests
 add_action( 'wp_ajax_wp_ulike_process'			, 'wp_ulike_process' );
@@ -108,13 +136,14 @@ add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );
  */
 function wp_ulike_get_likers(){
 
-	$post_ID     = $_POST['id'];
-	$post_type   = $_POST['type'];
-	$nonce_token = $_POST['nonce'];
-	$is_refresh  = $_POST['refresh'];
+	$post_ID          = $_POST['id'];
+	$post_type        = $_POST['type'];
+	$nonce_token      = $_POST['nonce'];
+	$is_refresh       = $_POST['refresh'];
+	$disable_pophover = $_POST['disablePophover'];
 
 	// Check security nonce field
-	if( $post_ID == null || ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) ) {
+	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
 	}
 
@@ -124,7 +153,7 @@ function wp_ulike_get_likers(){
 	}
 
 	// Get post type settings
-	$get_settings = wp_ulike_get_post_settings_by_type( $post_type, $post_ID );
+	$get_settings = wp_ulike_get_post_settings_by_type( $post_type );
 
 	// If method not exist, then return error message
 	if( empty( $get_settings ) ) {
@@ -135,13 +164,13 @@ function wp_ulike_get_likers(){
 	extract( $get_settings );
 
 	// If likers box has been disabled
-	if ( ! wp_ulike_get_setting( $setting_key, 'users_liked_box' ) ) {
+	if ( ! wp_ulike_get_setting( $setting, 'users_liked_box' ) ) {
 		wp_send_json_error( __( 'Notice: The likers box is not activated!', WP_ULIKE_SLUG ) );
 	}
 
 	// Add specific class name with popover checkup
-	$class_names = wp_ulike_get_setting( $setting_key, 'disable_likers_pophover', 0 ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
-	$users_list  = wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key );
+	$class_names = wp_ulike_is_true( $disable_pophover ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
+	$users_list  = wp_ulike_get_likers_template( $table, $column, $post_ID, $setting );
 
 	wp_send_json_success( array( 'template' => $users_list, 'class' => $class_names ) );
 }

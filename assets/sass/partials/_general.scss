@@ -17,10 +17,11 @@
         border: none;
         text-align: center;
         transition-property: none;
-        
+        cursor: pointer;
+
         &:hover, &:active, &:focus {
             outline: 0;
-        }        
+        }
     }
 
     .wp_ulike_put_text{
@@ -29,6 +30,11 @@
         line-height: 28px;
         padding: 0 10px;
         min-width: 50px;
+    }
+
+    .wp_ulike_general_class{
+        display: inline-flex;
+        align-items: center;
     }
 
     .wp_ulike_is_loading {
@@ -46,6 +52,12 @@
                     content: none;
                 }
             }
+        }
+    }
+
+    &.wpulike-hide-counter{
+        .count-box{
+            display: none;
         }
     }
 

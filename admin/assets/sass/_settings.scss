@@ -1,228 +1,268 @@
-
 /**
  *	Settings Page
  */
 
 form.wp-ulike {
 
-	h2 {
-		display: inline-block;
-		margin-right: 20px;
+    h2 {
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+    p.submit {
+        display: inline-block;
+        margin-right: 20px;
+
+        .button {
+            height: 50px !important;
+            line-height: 50px !important;
+            padding: 0 25px !important;
+            font-size: 18px !important;
+
+            &:active {
+                vertical-align: inherit;
+            }
+        }
+
+    }
+
+    td {
+
+        .settings-error {
+            overflow: hidden;
+
+            p {
+                margin: 0.5em 0;
+            }
+
+        }
+
+    }
+
+    .wp-ulike-settings-tabs {
+
+        h2 {
+            float: left;
+            padding: 10px 15px;
+            margin: 1em 0 0;
+            font-weight: 500;
+            border: 1px solid #e0e0e0;
+            border-right: none;
+            border-bottom: none;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f9f9f9;
+            }
+
+            &:last-child {
+                border-right: 1px solid #e0e0e0;
+            }
+
+        }
+
+        h2.active {
+            background-color: #ffffff;
+            border-bottom: 1px solid #fff;
+            margin-bottom: -1px;
+        }
+
+    }
+
+    .toggle-switch {
+
+        input[type=checkbox] {
+            display: none;
+        }
+
+        label {
+            cursor: pointer;
+            text-indent: -9999px;
+            width: 50px;
+            height: 30px;
+            background: #757575;
+            display: block;
+            border-radius: 100px;
+            position: relative;
+        }
+
+        label:after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        input:checked+label {
+            background: #0077a3;
+        }
+
+        input:checked+label:after {
+            left: calc(100% - 5px);
+            transform: translateX(-100%);
+        }
+
 	}
 
-	p.submit {
-		display: inline-block;
-		margin-right: 20px;
+	.wp-ulike-settings-license-activation{
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
 
-		.button {
-			height: 50px !important;
-			line-height: 50px !important;
-			padding: 0 25px !important;
-			font-size: 18px !important;
-
-			&:active{
-				vertical-align: inherit;
-			}
+		.settings-error{
+			flex: 0 1 100%;
 		}
 
+		.regular-text{
+			font-size: 18px;
+			font-weight: 600;
+			width: 400px;
+			height: 45px;
+		}
+
+		.button{
+			height: 45px;
+			font-weight: 700;
+			padding: 0 20px;
+		}
+	}
+}
+
+.wp-ulike-settings-notice, .wp-ulike-notice-wrapper {
+	position: relative;
+
+
+    &.wp-ulike-notice-control{
+        display: flex;
+        align-items: center;
+        padding: 30px 40px;
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+        border-left: 0;
+        border-right: 0;
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background-color: #2C87FF;
+            -webkit-transform: translateX(-6px);
+            -ms-transform: translateX(-6px);
+            transform: translateX(-6px);
+            box-shadow: 0 3px 6px rgba(44, 135, 255, 0.16);
+        }
+    }
+
+
+	&.wp-ulike-notice-skin-success {
+		box-shadow: 0 3px 6px rgba(57, 216, 148, 0.16);
+
+		&:before {
+			background-color: #39D894;
+		}
 	}
 
-	td {
+	&.wp-ulike-notice-skin-info {
+		box-shadow: 0 3px 6px rgba(255, 166, 88, 0.16);
 
-		.settings-error {
-			overflow: hidden;
-
-			p {
-				margin: 0.5em 0;
-			}
-
+		&:before {
+			background-color: #FFA658;
 		}
-
 	}
 
-	.wp-ulike-settings-tabs {
+	&.wp-ulike-notice-skin-error {
+		box-shadow: 0 3px 6px rgba(255, 88, 88, 0.16);
 
-		h2 {
-			float: left;
-			padding: 10px 15px;
-			margin: 1em 0 0;
-			font-weight: 500;
-			border: 1px solid #e0e0e0;
-			border-right: none;
-			border-bottom: none;
-			cursor: pointer;
-
-			&:hover {
-				background-color: #f9f9f9;
-			}
-
-			&:last-child {
-				border-right: 1px solid #e0e0e0;
-			}
-
+		&:before {
+			background-color: #FF5858;
 		}
-
-		h2.active {
-			background-color: #ffffff;
-			border-bottom: 1px solid #fff;
-			margin-bottom: -1px;
-		}
-
 	}
 
-	.toggle-switch{
-
-		input[type=checkbox]{
-			display: none;
-		}
-
-		label {
-			cursor: pointer;
-			text-indent: -9999px;
-			width: 50px;
-			height: 30px;
-			background: #757575;
-			display: block;
-			border-radius: 100px;
-			position: relative;
-		}
-
-		label:after {
-			content: '';
-			position: absolute;
-			top: 5px;
-			left: 5px;
-			width: 20px;
-			height: 20px;
-			background: #fff;
-			border-radius: 50%;
-			transition: 0.3s;
-		}
-
-		input:checked + label {
-			background: #0077a3;
-		}
-
-		input:checked + label:after {
-			left: calc(100% - 5px);
-			transform: translateX(-100%);
-		}
-
+	.wp-ulike-notice-image {
+		margin-right: 25px;
 	}
+
+	.wp-ulike-notice-title {
+		font-size: 18px;
+		line-height: 24px;
+		font-weight: 600;
+		margin: 0;
+		margin-bottom: 5px;
+		letter-spacing: 0;
+	}
+
+	.wp-ulike-notice-description {
+		font-size: 16px;
+		line-height: 23px;
+		font-weight: 400;
+		margin: 0;
+    }
+
+    .wp-ulike-notice-submit{
+        margin: 1.5em 0 0 -5px;
+        padding: 0;
+
+        .wp-ulike-btn{
+            margin-bottom: 0;
+            margin: 0 5px;
+        }
+    }
+
+    .wp-ulike-close-notice {
+        text-decoration: none;
+    }
 
 }
 
 .wp-ulike-settings-tab {
-	padding: 2em;
-	border: 1px solid #e0e0e0;
-	clear: both;
-	background: #fff;
+    padding: 2em;
+    border: 1px solid #e0e0e0;
+    clear: both;
+    background: #fff;
 }
-.settings-error.info {
-	margin: 5px 0 15px;
-	border-left: 4px solid #2ea2cc;
-	padding: 1px 12px;
-	background-color: #ffffff;
-	-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-	p {
-		margin: 0.5em 0;
-		padding: 2px;
-	}
-}
-.settings-error.warning {
-	margin: 5px 0 15px;
-	border-left: 4px solid #2ea2cc;
-	padding: 1px 12px;
-	background-color: #ffffff;
-	-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-	border-color: #ffba00;
-	p {
-		margin: 0.5em 0;
-		padding: 2px;
-	}
-}
+
 tr.hide-label {
-	th {
-		display: none;
-	}
-	td {
-		padding-left: 0;
-	}
+    th {
+        display: none;
+    }
+
+    td {
+        padding-left: 0;
+    }
 }
-.dashicons-bbpress {
-	&:before {
-		content: "\f449";
-	}
+
+.wp-ulike-settings-tabs{
+    .dashicons-bbpress {
+        &:before {
+            content: "\f449";
+        }
+    }
+    .dashicons-buddypress {
+        &:before {
+            content: "\f452";
+        }
+    }
 }
-.dashicons-buddypress {
-	&:before {
-		content: "\f452";
-	}
-}
+
+
 #wp_ulike_customize_custom_css {
-	font-family: Consolas,Monaco,monospace;
-	direction: ltr;
-	font-size: 13px;
-	width: 97%;
-	background: none repeat scroll 0% 0% #F9F9F9;
-	outline: 0px none;
-	width: 60%;
-	min-height: 300px;
-}
-
-.wp-ulike-notice {
-	position: relative;
-	max-width: 870px;
-	overflow: hidden;
-	padding: 20px;
-	background: #f83600;
-	background: linear-gradient(to right, #f83600, #fe8c00);
-	color: #FFFCD6;
-	display: table;
-	box-shadow: 0 3px 25px rgba(248, 54, 0, 0.2);
-	margin: 20px 0px;
-
-	.wp-ulike-notice-image {
-		display: table-cell;
-		vertical-align: middle;
-		min-width: 100px;
-
-		img {
-			width: 100px;
-			height: auto;
-		}
-	}
-
-	.wp-ulike-notice-text {
-		display: table-cell;
-		vertical-align: middle;
-		padding: 10px 20px;
-
-		p{
-			font-size: 15px;
-			margin-top: 0;
-		}
-	}
-	.links {
-
-		a {
-			display: inline-block;
-			color: #FFFCD6;
-			text-transform: uppercase;
-			text-decoration: none;
-			padding: 5px 10px;
-			border: 1px solid #FFFCD6;
-			margin-top: 8px;
-			margin-right: 8px;
-			box-shadow: none;
-
-			&:hover, &:focus {
-				background: #FFFCD6;
-				color: #212121;
-			}
-
-		}
-	}
+    font-family: Consolas, Monaco, monospace;
+    direction: ltr;
+    font-size: 13px;
+    width: 97%;
+    background: none repeat scroll 0% 0% #F9F9F9;
+    outline: 0px none;
+    width: 60%;
+    min-height: 300px;
 }

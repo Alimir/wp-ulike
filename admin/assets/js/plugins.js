@@ -1,6 +1,6 @@
-/*! WP ULike - v3.6.2
+/*! WP ULike - v4.0.0
  *  https://wpulike.com
- *  Alimir 2019;
+ *  TechnoWich 2019;
  */
 
 

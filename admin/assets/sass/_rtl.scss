@@ -26,14 +26,6 @@
 			}
 		}
 	}
-	.settings-error.info {
-		border-left: none;
-		border-right: 4px solid #2ea2cc;
-	}
-	.settings-error.warning {
-		border-left: none;
-		border-right: 4px solid #2ea2cc;
-	}
 	tr.hide-label {
 		td {
 			padding-right: 0;
@@ -56,5 +48,8 @@
 		}
 
 	}
-
+	.wp-ulike-notice-image {
+		margin-left: 25px;
+		margin-right: 0;
+    }
 }

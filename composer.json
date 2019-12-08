@@ -7,9 +7,9 @@
     "type": "wordpress-plugin",
     "authors": [
         {
-            "name": "Ali Mirzaei",
-            "email": "alimir71@gmail.com",
-			"homepage": "http://alimir.ir"
+            "name": "WP ULike",
+            "email": "wpulike@gmail.com",
+			"homepage": "https://wpulike.com"
         }
     ],
     "require": {

@@ -22,6 +22,7 @@
   border: none;
   text-align: center;
   transition-property: none;
+  cursor: pointer;
 }
 .wpulike .wp_ulike_btn:hover, .wpulike .wp_ulike_btn:active, .wpulike .wp_ulike_btn:focus {
   outline: 0;
@@ -33,6 +34,10 @@
   padding: 0 10px;
   min-width: 50px;
 }
+.wpulike .wp_ulike_general_class {
+  display: inline-flex;
+  align-items: center;
+}
 .wpulike .wp_ulike_is_loading .wp_ulike_btn {
   background-image: url(../img/svg/loader.svg);
   background-repeat: no-repeat;
@@ -43,6 +48,9 @@
 }
 .wpulike .wp_ulike_is_loading .wp_ulike_btn.wp_ulike_put_image:after {
   content: none;
+}
+.wpulike.wpulike-hide-counter .count-box {
+  display: none;
 }
 
 .wp_ulike_click_is_disabled {
@@ -112,8 +120,8 @@
 }
 
 #buddypress #activity-stream .activity-meta .wpulike, #buddypress #activity-stream .activity-comments .wpulike {
-  display: inline-block;
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
   padding: 0;
 }
 #buddypress #activity-stream .activity-meta .wpulike-default .wp_ulike_btn, #buddypress #activity-stream .activity-comments .wpulike-default .wp_ulike_btn {
@@ -144,7 +152,6 @@
  * Heart template
  */
 .wpulike-heart .wp_ulike_general_class {
-  display: inline-block;
   box-shadow: 0 0 0 1px #bdbdbd inset;
   border-radius: .25em;
   padding: 5px;
@@ -556,6 +563,7 @@
  */
 .wp_ulike_likers_wrapper {
   margin: 10px 0;
+  flex: 0 0 100%;
 }
 .wp_ulike_likers_wrapper:empty {
   display: none;

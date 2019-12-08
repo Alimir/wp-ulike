@@ -2,19 +2,19 @@
 /**
  * All wp-ulike functionalities starting from here...
  *
- * //@echo HEADER
+ * // @echo HEADER
  *
  * Plugin Name:       WP ULike
- * Plugin URI:        https://wpulike.com/
+ * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           3.6.2
+ * Version:           4.0.0
  * Author:            Ali Mirzaei
- * Author URI:        http://alimir.ir
+ * Author URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
  * License:           GPL2
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path:       /lang
- * Tested up to: 	  4.9.6
+ * Tested up to: 	  5.3
 
  /------------------------------------------\
   _     __     _ _____      _  _  _   _
@@ -24,7 +24,7 @@
  | |/ /    \ \| | |  | |_| | || || |\ \  __/
  \___/      \__/\_|   \__,_|_||_||_| \_\___|
 
- \--> Alimir, 2018 <--/
+ \--> Alimir, 2019 <--/
 
  Thanks for using WP ULike plugin!
 
@@ -42,22 +42,23 @@ if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
 }
 
 // Do not change these values
-define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		);
-define( 'WP_ULIKE_VERSION'      , '3.6.2' 					);
-define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					);
+define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 );
+define( 'WP_ULIKE_VERSION'      , '4.0.0' 					     );
+define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 );
+define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG ));
 
-define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	);
-define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	);
-define( 'WP_ULIKE_BASENAME'     , plugin_basename( __FILE__ ) 	);
+define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	 );
+define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	 );
+define( 'WP_ULIKE_BASENAME'     , plugin_basename( __FILE__ ) 	 );
 
-define( 'WP_ULIKE_ADMIN_DIR'    , WP_ULIKE_DIR . '/admin' 		);
-define( 'WP_ULIKE_ADMIN_URL'    , WP_ULIKE_URL . '/admin' 		);
+define( 'WP_ULIKE_ADMIN_DIR'    , WP_ULIKE_DIR . '/admin' 		 );
+define( 'WP_ULIKE_ADMIN_URL'    , WP_ULIKE_URL . '/admin' 		 );
 
-define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . '/inc' 		);
-define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/inc' 		);
+define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . '/inc' 		 );
+define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/inc' 		 );
 
-define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . '/assets' 		);
-define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		);
+define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . '/assets' 		 );
+define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		 );
 
 /**
  * Initialize the plugin
@@ -171,12 +172,12 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				__( 'Settings', WP_ULIKE_SLUG ),
 				array(
 					'parent'   => false,
-					'title'    =>  __( 'WP ULike', WP_ULIKE_SLUG ),
+					'title'    => apply_filters( 'wp_ulike_plugin_name', WP_ULIKE_NAME ),
 					'position' => 313,
-					'icon_url' => 'dashicons-wp-ulike'
+					'icon_url' => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjUgMjUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI1IDI1OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggY2xhc3M9InN0MCIgZD0iTTIzLjksNy4xTDIzLjksNy4xYy0xLjUtMS41LTMuOS0xLjUtNS40LDBsLTEuNSwxLjVsMS40LDEuNGwxLjUtMS41YzAuNC0wLjQsMC44LTAuNiwxLjMtMC42YzAuNSwwLDEuMSwwLjIsMS40LDAuNmMwLjcsMC44LDAuNywyLTAuMSwyLjdsLTEsMWMtMC41LDAuNS0xLjIsMC41LTEuNiwwYy0wLjktMC45LTUuMS01LjEtNS4xLTUuMWMtMC43LTAuNy0xLjctMS4xLTIuNy0xLjFsMCwwYy0xLDAtMiwwLjQtMi43LDEuMUM5LDcuNCw4LjgsNy43LDguNiw4LjFMOC41LDguM2wxLjYsMS42bDAuMS0wLjVjMC4yLTEsMS4yLTEuNywyLjMtMS41YzAuNCwwLjEsMC43LDAuMiwxLDAuNWw1LjksNS45TDE2LjYsMTdMMTIuNywxM2wwLDBjLTAuMS0wLjEtMC40LTAuNC0yLjEtMi4xbC00LTRDNSw1LjQsMi42LDUuNCwxLjEsNi45Yy0xLjUsMS41LTEuNSwzLjksMCw1LjRsNiw2YzAuMywwLjMsMC44LDAuNSwxLjIsMC41bDAsMGMwLjUsMCwwLjktMC4yLDEuMi0wLjVsMi41LTIuNWwtMS40LTEuNGwtMi40LDIuNGwtNS45LTUuOWMtMC43LTAuOC0wLjctMiwwLjEtMi43YzAuNy0wLjcsMS45LTAuNywyLjYsMGw0LDRjMC4xLDAuMSwwLjEsMC4yLDAuMiwwLjJsNiw2YzAuMywwLjMsMC44LDAuNSwxLjMsMC41YzAsMCwwLDAsMCwwYzAuNSwwLDAuOS0wLjIsMS4yLTAuNWw2LTZDMjUuNCwxMSwyNS40LDguNiwyMy45LDcuMXoiLz48L3N2Zz4='
 				),
 				array(
-					'wp_ulike_general' => wp_ulike_get_options_info('general')
+					'wp_ulike_general' => apply_filters( 'wp_ulike_general_settings', wp_ulike_get_options_info('general') )
 				),
 				array(
 					'tabs'    => true,
@@ -185,13 +186,13 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 			);
 
 			//activate other settings panels
-			$wp_ulike_setting->apply_settings( array(
+			$wp_ulike_setting->apply_settings( apply_filters( 'wp_ulike_settings_info', array(
 					'wp_ulike_posts'      => apply_filters( 'wp_ulike_posts_settings'		, wp_ulike_get_options_info('posts') 		),
 					'wp_ulike_comments'   => apply_filters( 'wp_ulike_comments_settings'	, wp_ulike_get_options_info('comments') 	),
 					'wp_ulike_buddypress' => apply_filters( 'wp_ulike_buddypress_settings'	, wp_ulike_get_options_info('buddypress') 	),
 					'wp_ulike_bbpress'    => apply_filters( 'wp_ulike_bbpress_settings'		, wp_ulike_get_options_info('bbpress') 		),
 					'wp_ulike_customize'  => apply_filters( 'wp_ulike_customize_settings'	, wp_ulike_get_options_info('customizer') 	)
-				)
+				) )
 			);
 	    }
 
@@ -375,8 +376,6 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 	    public function after_activation( $plugin ) {
 	        if( $plugin == WP_ULIKE_BASENAME ) {
-	            // Display WP ULike Notification
-	            update_option( 'wp-ulike-notice-dismissed', FALSE );
 	            // Redirect to the about page
 	            if( ! wp_doing_ajax() ) {
 	                exit( wp_redirect( admin_url( 'admin.php?page=wp-ulike-about' ) ) );
