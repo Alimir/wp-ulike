@@ -196,3 +196,20 @@ function wp_ulike_notice_manager(){
     }
 }
 add_action( 'admin_notices', 'wp_ulike_notice_manager' );
+
+
+function wp_ulike_go_pro_admin_menu( $submenus ){
+	if( is_array( $submenus ) && defined( 'WP_ULIKE_PRO_VERSION' ) ){
+		$submenus['go_pro'] = array(
+			'title'       =>  sprintf( '<span class="wp-ulike-gopro-menu-link"><strong>%s</strong></span>', __( 'Go Pro', WP_ULIKE_SLUG )),
+			'parent_slug' => 'wp-ulike-settings',
+ 			'capability'  => 'manage_options',
+			'path'        => '/includes/templates/go-pro.php',
+			'menu_slug'   => 'wp-ulike-go-pro',
+			'load_screen' => false
+		);
+	}
+
+	return $submenus;
+}
+add_filter( 'wp_ulike_admin_pages', 'wp_ulike_go_pro_admin_menu', 1, 10 );

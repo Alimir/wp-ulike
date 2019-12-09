@@ -222,7 +222,6 @@ function wp_ulike_widget_button_callback( $atts = array() ){
     // get escaped class attributes
     $button_class_attr = wp_ulike_make_html_class_attribute( $btn_css_classes );
 
-    $label = empty( $label ) ? $shortcode_content : $label;
     $label = empty( $label ) ? __( "Button", WP_ULIKE_SLUG ) : $label;
 
     $btn_content = '<span class="wp-ulike-text">'. wp_ulike_do_cleanup_shortcode( $label ) .'</span>';
