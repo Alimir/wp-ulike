@@ -197,7 +197,12 @@ function wp_ulike_notice_manager(){
 }
 add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 
-
+/**
+ * This makes a new admin menu page to introduce premium version
+ *
+ * @param array $submenus
+ * @return array
+ */
 function wp_ulike_go_pro_admin_menu( $submenus ){
 	if( is_array( $submenus ) && ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
 		$submenus['go_pro'] = array(
