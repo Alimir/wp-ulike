@@ -829,6 +829,11 @@ if( ! function_exists( 'wp_ulike_purge_w3_total_cache' ) && function_exists( 'w3
 	function wp_ulike_purge_w3_total_cache( $ID, $type ){
 		if( $type === '_liked' ){
 			w3tc_pgcache_flush_post( $ID );
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				w3tc_pgcache_flush_post( $comment->comment_post_ID );
+			}
 		} else {
 			w3tc_pgcache_flush();
 		}
@@ -875,8 +880,21 @@ if( ! function_exists( 'wp_ulike_purge_wp_fastest_cache' ) && class_exists( 'WpF
 					}
 				}
 			}
-		} elseif( $type === '_liked' ){
-			$cache_interface->singleDeleteCache( false, $ID );
+		} elseif( in_array( $type, array( '_liked', '_commentliked' ) ) ){
+			$comment_id = false;
+			$post_id    = $ID;
+			if( $type === '_commentliked' ){
+				$comment = get_comment( $ID );
+				if( isset( $comment->comment_post_ID ) ){
+					$comment_id = $ID;
+					$post_id = $comment->comment_post_ID;
+				} else {
+					$post_id = NULL;
+				}
+			}
+			if( ! empty( $post_id ) ){
+				$cache_interface->singleDeleteCache( $comment_id, $post_id );
+			}
 		}
 
 	}
@@ -895,6 +913,11 @@ if( ! function_exists( 'wp_ulike_purge_wp_super_cache' ) && function_exists( 'wp
 	function wp_ulike_purge_wp_super_cache( $ID, $type ){
 		if( $type === '_liked' ){
 			wpsc_delete_post_cache( $ID );
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				wpsc_delete_post_cache( $comment->comment_post_ID );
+			}
 		}
 	}
 	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_super_cache'	, 10, 2 );
@@ -912,6 +935,11 @@ if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) && function_exists( 'rock
 	function wp_ulike_purge_rocket_cache( $ID, $type ){
 		if( $type === '_liked' ){
 			rocket_clean_post( $ID );
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				rocket_clean_post( $comment->comment_post_ID );
+			}
 		}
 	}
 	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_rocket_cache'	, 10, 2 );
