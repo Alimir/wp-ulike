@@ -57,7 +57,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			foreach ($posts as $post) {
 				$post_title = stripslashes($post->post_title);
 				$permalink  = get_permalink($post->ID);
-				$post_count = wp_ulike_get_counter_value($post->ID, 'post', 'all', false);
+				$post_count = $this->get_counter_value($post->ID, 'post', 'all', false);
 
 				$result     .= $before_item;
 				$result     .= $show_thumb ? $this->get_post_thumbnail( $post->ID, $sizeOf ) : '';
@@ -103,7 +103,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$post_permalink      = get_permalink($comment->comment_post_ID);
 				$post_title          = get_the_title($comment->comment_post_ID);
 				$comment_permalink   = get_permalink($comment->comment_ID);
-				$comment_likes_count = wp_ulike_get_counter_value($comment->comment_ID, 'comment', 'all', false);
+				$comment_likes_count = $this->get_counter_value($comment->comment_ID, 'comment', 'all', false);
 
 				$result .= $before_item;
 				$result .= $show_thumb ? get_avatar( $comment->comment_author_email, $sizeOf ) : '';
@@ -212,7 +212,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			foreach ($posts as $post) {
 				$post_title = function_exists('bbp_get_forum_title') ? bbp_get_forum_title( $post->ID ) : $post->post_title;
 				$permalink  = get_permalink( $post->ID );
-				$post_count = wp_ulike_get_counter_value($post->ID, 'topic', 'all', false);
+				$post_count = $this->get_counter_value($post->ID, 'topic', 'all', false);
 
 				$result .= $before_item;
 				$result .= '<a href="' . $permalink . '" title="' . $post_title.'" rel="nofollow">'. wp_trim_words( $post_title, $num_words = $trim, $more = null ) . '</a>';
@@ -264,7 +264,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			foreach ($activities as $activity) {
 				$activity_permalink = function_exists('bp_activity_get_permalink') ? bp_activity_get_permalink( $activity->id ) : '';
 				$activity_action    = ! empty( $activity->content ) ? $activity->content : $activity->action;
-				$post_count         = wp_ulike_get_counter_value($activity->id, 'activity', 'all', false);
+				$post_count         = $this->get_counter_value( $activity->id, 'activity', 'all', false );
 
 				// Skip empty activities
 				if( empty( $activity_action ) ){
@@ -349,6 +349,20 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			} else {
 				return '<img src="'.WP_ULIKE_ASSETS_URL.'/img/no-thumbnail.png" class="wp_ulike_thumbnail" alt="no-thumbnail" width="'.$sizeOf.'"/>';
 			}
+		}
+
+		/**
+		 * Get counter value
+		 *
+		 * @param integer $id
+		 * @param string $slug
+		 * @param string $status
+		 * @param bool $is_distinct
+		 * @return integer
+		 */
+		private function get_counter_value( $id, $slug, $status, $is_distinct ){
+			$counter_val = wp_ulike_get_counter_value_info( $id, $slug, $status, $is_distinct );
+			return ! is_wp_error( $counter_val ) ? $counter_val : 0;
 		}
 
 		/**
