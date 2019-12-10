@@ -925,7 +925,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 	 * Get most liked posts in query
 	 *
 	 * @param integer $numberposts
-	 * @param string $post_type
+	 * @param array|string $post_type
 	 * @param string $method
 	 * @param string $period
 	 * @param string $status
