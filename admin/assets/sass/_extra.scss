@@ -1,0 +1,15 @@
+.wp-ulike-gopro-menu-link{
+    &::before{
+        content: '';
+        background-image: url(../../../assets/img/svg/rocket.svg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+    }
+    strong{
+        padding: 0 5px;
+    }
+}

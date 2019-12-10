@@ -298,6 +298,13 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .wp-ulike-about-page .icon-container { text-align: center; font-size: 6vw; border: 1px solid #757575; padding: 35px 5px; }
 .wp-ulike-about-page .featured-image img { border: none; }
 
+/** Go Pro Page */
+.wp-ulike-go-pro-page .has-1-columns, .wp-ulike-go-pro-page .has-2-columns, .wp-ulike-go-pro-page .has-3-columns, .wp-ulike-go-pro-page .has-4-columns { max-width: 1400px; margin-left: 0; margin-right: 0; }
+.wp-ulike-go-pro-page h1 { margin-bottom: 1em; }
+.wp-ulike-go-pro-page h2 { text-align: left; }
+.wp-ulike-go-pro-page .is-section-header { margin-left: 20px; margin-right: 20px; }
+.wp-ulike-go-pro-page .wp-ulike-btn { margin-top: 5px; margin-right: 15px; }
+
 /** Logs Page */
 .wp_ulike_logs .button { line-height: 20px; }
 .wp_ulike_logs i { font-size: 1.9em; }

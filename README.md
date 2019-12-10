@@ -182,13 +182,17 @@ endif;
 ## How To Sort Most Liked Posts?  ##
 Make use of the following query on a loop:
 ```php
-$the_query = new WP_Query(array(
-	'post_status' => 'published',
-	'post_type' => 'post',
-	'orderby' => 'meta_value_num',
-	'meta_key' => '_liked',
-	'paged' => (get_query_var('paged')) ? get_query_var('paged') : 1
-));
+/**
+ * Get most liked posts in query
+ *
+ * @param integer $numberposts		The number of items
+ * @param array|string $post_type	Select post type
+ * @param string $method			keep this as default value
+ * @param string $period			Date peroid (all|today|yeterday|week|month|year)
+ * @param string $status			Log status (like|unlike|dislike|undislike)
+ * @return WP_Post[]|int[] 			Array of post objects or post IDs.
+ */
+$wp_query = wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', 'post', $period = 'all', $status = 'like' );
 ```
 
 ## How Can I Create Custom Template In Users Liked Box?  ##

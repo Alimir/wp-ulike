@@ -106,7 +106,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					array( '%d', '%s', '%s', '%s', '%s' )
 				);
 				// Formatting the output
-				$output = $this->get_counter_value( $id, $slug );
+				$output = $this->get_ajax_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -173,7 +173,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 				}
 				// Formatting the output
-				$output = $this->get_counter_value( $id, $slug );
+				$output = $this->get_ajax_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -249,7 +249,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				}
 
 				// Formatting the output
-				$output = $this->get_counter_value( $id, $slug );
+				$output = $this->get_ajax_counter_value( $id, $slug );
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
@@ -273,9 +273,24 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @param string $slug
 		 * @return integer
 		 */
-		private function get_counter_value( $id, $slug ){
-			$counter = wp_ulike_format_number( wp_ulike_get_counter_value( $id, $slug, $this->status, $this->is_distinct ), $this->status );
-			return apply_filters( 'wp_ulike_ajax_counter_value', $counter, $id, $slug, $this->status, $this->is_distinct );
+		private function get_ajax_counter_value( $id, $slug ){
+			$counter_val   = $this->get_counter_value( $id, $slug, $this->status, $this->is_distinct );
+			$formatted_val = wp_ulike_format_number( $counter_val, $this->status );
+			return apply_filters( 'wp_ulike_ajax_counter_value', $formatted_val, $id, $slug, $this->status, $this->is_distinct );
+		}
+
+		/**
+		 * Get counter value
+		 *
+		 * @param integer $id
+		 * @param string $slug
+		 * @param string $status
+		 * @param bool $is_distinct
+		 * @return integer
+		 */
+		private function get_counter_value( $id, $slug, $status, $is_distinct ){
+			$counter_val = wp_ulike_get_counter_value_info( $id, $slug, $status, $is_distinct );
+			return ! is_wp_error( $counter_val ) ? $counter_val : 0;
 		}
 
 		/**
@@ -382,15 +397,15 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$general_class_name .= ' wp_ulike_is_already_liked';
 			}
 
-			$total_likes = wp_ulike_get_counter_value( $args['id'], $args['slug'], 'like', $this->is_distinct );
-			$counter = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $total_likes ) .'</span>' , $total_likes );
+			$total_likes   = $this->get_counter_value( $args['id'], $args['slug'], 'like', $this->is_distinct );
+			$formatted_val = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $total_likes ) .'</span>' , $total_likes );
 			$args['is_distinct'] = $this->is_distinct;
 
 			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(
 					"ID"               => esc_attr( $args['id'] ),
 					"wrapper_class"    => esc_attr( $args['wrapper_class'] ),
 					"slug"             => esc_attr( $args['slug'] ),
-					"counter"          => $counter,
+					"counter"          => $formatted_val,
 					"total_likes"      => $total_likes,
 					"type"             => esc_attr( $args['method'] ),
 					"status"           => esc_attr( $status ),

@@ -1,0 +1,31 @@
+
+/**
+ *  Go Pro Page
+ */
+
+.wp-ulike-go-pro-page {
+
+	.has-1-columns, .has-2-columns, .has-3-columns, .has-4-columns{
+		max-width: 1400px;
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	h1{
+		margin-bottom: 1em;
+	}
+
+	h2{
+		text-align: left;
+	}
+
+	.is-section-header{
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+
+	.wp-ulike-btn{
+		margin-top: 5px;
+		margin-right: 15px;
+	}
+}
