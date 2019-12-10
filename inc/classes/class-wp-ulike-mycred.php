@@ -60,8 +60,12 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 */
 		public function status( $id , $key, $user_id, $status ) {
 			$author_id = $this->get_author_ID( $key );
-			$user_func = strpos( $status, 'un') !== 0 ? 'like' : 'unlike';
-			call_user_func( array( $this, $user_func ), $id , $key, $user_id, $author_id );
+			// Check status
+			if( ! in_array( $status, array( 'like', 'unlike' ) ) ){
+				return;
+			}
+			// Call function by user status
+			call_user_func( array( $this, $status ), $id , $key, $user_id, $author_id );
 		}
 
 		/**
