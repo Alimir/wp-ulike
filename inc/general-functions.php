@@ -1758,7 +1758,7 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	function wp_ulike_display_button( array $parsed_args, $only_registered_users ){
 		global $wp_ulike_class;
 
-		if( $only_registered_users != '1' || ( $only_registered_users == '1' && is_user_logged_in() ) ) {
+		if( ! wp_ulike_is_true( $only_registered_users ) || is_user_logged_in() ) {
 			// Return ulike template
 			return $wp_ulike_class->wp_get_ulike( $parsed_args );
 		} else {
