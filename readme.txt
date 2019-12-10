@@ -2,11 +2,11 @@
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: Ali Mirzaei
-Tags: wp ulike, elementor, like, dislike, wordpress youlike plugin, like button, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member
+Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member, ranking
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,9 +34,12 @@ Choose from 10+ of our beautiful [templates](https://wpulike.com/templates/?utm_
 = Try WP ULike Pro =
 So let's talk [PROfessional](https://wpulike.com/pricing/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)! WP ULike Pro has support DisLike button alongside Like button, both of them are completely customizable in our redesigned settings menu with tones of features and more beautiful and stylish templates. the PRO version of plugin is now compatible with Elementor Page builder and you can easily choose from +7 widgets by simply drag and drop them to your content. as you build your page and content with Elementor, you can add and customize  Like and Dislike button in every part such as Posts, Comments, activities, etc.
 
+Join the elite web professionals who enjoy **[WP ULike PRO](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
+
 = More Information =
 *   Visit Our [Home Page](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
 *   See Online [Demo](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
+*   For documentation and tutorials go to our [Documentation](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
 *   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
 = Features =
@@ -184,6 +187,12 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.0.1 =
+* Added: New myCred option for points to be awarded even when item authors Like/Unlike their own item.
+* Fixed: Some important issues in myCred functionality.
+* Fixed: An issue with get counter value.
+* Fixed: Some styling issues.
 
 = 4.0.0 =
 * Added: New structure which switches the number of likes from meta values to the number of database logs.
