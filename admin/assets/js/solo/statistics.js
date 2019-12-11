@@ -1,3 +1,6 @@
+/**
+ * wp ulike admin statistics
+ */
 (function ($) {
   $(".wp_ulike_delete").click(function (e) {
     e.preventDefault();
