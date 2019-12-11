@@ -209,7 +209,7 @@ function wp_ulike_go_pro_admin_menu( $submenus ){
 			'title'       =>  sprintf( '<span class="wp-ulike-gopro-menu-link"><strong>%s</strong></span>', __( 'Go Pro', WP_ULIKE_SLUG )),
 			'parent_slug' => 'wp-ulike-settings',
  			'capability'  => 'manage_options',
-			'path'        => '/includes/templates/go-pro.php',
+			'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/go-pro.php',
 			'menu_slug'   => 'wp-ulike-go-pro',
 			'load_screen' => false
 		);
