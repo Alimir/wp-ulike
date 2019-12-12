@@ -410,7 +410,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					"type"             => esc_attr( $args['method'] ),
 					"status"           => esc_attr( $status ),
 					"user_status"      => esc_attr( $user_status ),
-					"attributes"       => esc_attr( $args['attributes'] ),
+					"attributes"       => $args['attributes'],
 					"style"            => esc_html( $args['style'] ),
 					"button_type"      => esc_html( $args['button_type'] ),
 					"display_likers"   => esc_attr( $args['display_likers'] ),
