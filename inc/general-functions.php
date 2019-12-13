@@ -272,6 +272,13 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'description'   => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
 						),
+						'hide_admin_notice' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Hide Admin Notices', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'description'   => __('Enabling this option will completely disable all admin notices.', WP_ULIKE_SLUG)
+						),
 						'like_notice' => array(
 							'default' => __('Thanks! You Liked This.',WP_ULIKE_SLUG),
 							'label'   => __( 'Liked Notice Message', WP_ULIKE_SLUG)

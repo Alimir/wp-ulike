@@ -136,10 +136,10 @@ function wp_ulike_notice_manager(){
 				'label'      => __('Not Now', WP_ULIKE_SLUG),
 				'type'       => 'skip',
 				'color_name' => 'info',
-				'expiration' => HOUR_IN_SECONDS * 48
+				'expiration' => WEEK_IN_SECONDS * 2
 			),
 			array(
-				'label'      => __('I already did', WP_ULIKE_SLUG),
+				'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
 				'type'       => 'skip',
 				'color_name' => 'error',
 				'expiration' => YEAR_IN_SECONDS * 10
@@ -177,10 +177,10 @@ function wp_ulike_notice_manager(){
 					'expiration' => WEEK_IN_SECONDS * 2
 				),
 				array(
-					'label'      => __('I don\'t Want to', WP_ULIKE_SLUG),
+					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
 					'type'       => 'skip',
 					'color_name' => 'error',
-					'expiration' => YEAR_IN_SECONDS * 1
+					'expiration' => YEAR_IN_SECONDS * 10
 				)
 			)
 		]);
@@ -218,3 +218,9 @@ function wp_ulike_go_pro_admin_menu( $submenus ){
 	return $submenus;
 }
 add_filter( 'wp_ulike_admin_pages', 'wp_ulike_go_pro_admin_menu', 1, 10 );
+
+function wp_ulike_hide_admin_notifications( $notice_list ){
+	$hide_admin_notice = wp_ulike_get_setting( 'wp_ulike_general', 'hide_admin_notice', false );
+	return wp_ulike_is_true( $hide_admin_notice ) ? array() : $notice_list;
+}
+add_filter( 'wp_ulike_admin_notices_instances', 'wp_ulike_hide_admin_notifications', 1, 20 );
