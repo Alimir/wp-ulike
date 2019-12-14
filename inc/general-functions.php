@@ -296,10 +296,11 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 					'title' => '<i class="dashicons-before dashicons-admin-post"></i>' . ' ' . __( 'Posts',WP_ULIKE_SLUG),
 					'fields' => array(
 						'theme' => array(
-							'type'    => 'visual-select',
-							'default' => 'wpulike-default',
-							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => call_user_func('wp_ulike_generate_templates_list')
+							'type'        => 'visual-select',
+							'default'     => 'wpulike-default',
+							'label'       => __( 'Themes',WP_ULIKE_SLUG),
+							'options'     => call_user_func('wp_ulike_generate_templates_list'),
+ 							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -409,10 +410,11 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 					'title'  => '<i class="dashicons-before dashicons-admin-comments"></i>' . ' ' . __( 'Comments',WP_ULIKE_SLUG),
 					'fields' => array(
 						'theme' => array(
-							'type'    => 'visual-select',
-							'default' => 'wpulike-heart',
-							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => call_user_func('wp_ulike_generate_templates_list')
+							'type'        => 'visual-select',
+							'default'     => 'wpulike-heart',
+							'label'       => __( 'Themes',WP_ULIKE_SLUG),
+							'options'     => call_user_func('wp_ulike_generate_templates_list'),
+							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -500,10 +502,11 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 					'title'  => '<i class="dashicons-before dashicons-buddypress"></i>' . ' ' . __( 'BuddyPress',WP_ULIKE_SLUG),
 					'fields' => array(
 						'theme' => array(
-							'type'    => 'visual-select',
-							'default' => 'wpulike-robeen',
-							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => call_user_func('wp_ulike_generate_templates_list')
+							'type'        => 'visual-select',
+							'default'     => 'wpulike-robeen',
+							'label'       => __( 'Themes',WP_ULIKE_SLUG),
+							'options'     => call_user_func('wp_ulike_generate_templates_list'),
+							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -623,10 +626,11 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 					'title'  => '<i class="dashicons-before dashicons-bbpress"></i>' . ' ' . __( 'bbPress',WP_ULIKE_SLUG),
 					'fields' => array(
 						'theme' => array(
-							'type'    => 'visual-select',
-							'default' => 'wpulike-default',
-							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => call_user_func('wp_ulike_generate_templates_list')
+							'type'        => 'visual-select',
+							'default'     => 'wpulike-default',
+							'label'       => __( 'Themes',WP_ULIKE_SLUG),
+							'options'     => call_user_func('wp_ulike_generate_templates_list'),
+							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
