@@ -539,7 +539,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'logging_method' => array(
 							'type'    => 'select',
-							'default' => 'by_cookie_ip',
+							'default' => 'by_username',
 							'label'   => __( 'Logging Method',WP_ULIKE_SLUG),
 							'options' => array(
 								'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
@@ -656,7 +656,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'logging_method' => array(
 							'type'    => 'select',
-							'default' => 'by_cookie_ip',
+							'default' => 'by_username',
 							'label'   => __( 'Logging Method',WP_ULIKE_SLUG),
 							'options' => array(
 								'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
