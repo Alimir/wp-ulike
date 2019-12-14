@@ -54,6 +54,11 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			$posts = wp_ulike_get_most_liked_posts( $numberOf, '', '', $period );
 
+			if( empty( $posts ) ){
+				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
+				return sprintf( '<li>%s "%s" %s</li>', __( 'No results were found in', WP_ULIKE_SLUG ), $period_info, __( 'period', WP_ULIKE_SLUG ) );
+			}
+
 			foreach ($posts as $post) {
 				$post_title = stripslashes($post->post_title);
 				$permalink  = get_permalink($post->ID);
@@ -97,7 +102,13 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
- 			$comments = wp_ulike_get_most_liked_comments( $numberOf, '', $period );
+			 $comments = wp_ulike_get_most_liked_comments( $numberOf, '', $period );
+
+			if( empty( $comments ) ){
+				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
+				return sprintf( '<li>%s "%s" %s</li>', __( 'No results were found in', WP_ULIKE_SLUG ), $period_info, __( 'period', WP_ULIKE_SLUG ) );
+			}
+
 			foreach ($comments as $comment) {
 				$comment_author      = stripslashes($comment->comment_author);
 				$post_permalink      = get_permalink($comment->comment_post_ID);
@@ -209,6 +220,12 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			extract($settings);
 
 			$posts = wp_ulike_get_most_liked_posts( $numberOf, array( 'topic', 'reply' ), 'topic', $period );
+
+			if( empty( $posts ) ){
+				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
+				return sprintf( '<li>%s "%s" %s</li>', __( 'No results were found in', WP_ULIKE_SLUG ), $period_info, __( 'period', WP_ULIKE_SLUG ) );
+			}
+
 			foreach ($posts as $post) {
 				$post_title = function_exists('bbp_get_forum_title') ? bbp_get_forum_title( $post->ID ) : $post->post_title;
 				$permalink  = get_permalink( $post->ID );
@@ -261,6 +278,12 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			}
 
 			$activities = wp_ulike_get_most_liked_activities( $numberOf, $period );
+
+			if( empty( $activities ) ){
+				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
+				return sprintf( '<li>%s "%s" %s</li>', __( 'No results were found in', WP_ULIKE_SLUG ), $period_info, __( 'period', WP_ULIKE_SLUG ) );
+			}
+
 			foreach ($activities as $activity) {
 				$activity_permalink = function_exists('bp_activity_get_permalink') ? bp_activity_get_permalink( $activity->id ) : '';
 				$activity_action    = ! empty( $activity->content ) ? $activity->content : $activity->action;
