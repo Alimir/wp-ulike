@@ -1540,24 +1540,31 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
 		$period_limit = '';
 
-		switch ($parsed_args['period']) {
-			case "today":
-				$period_limit = "AND DATE(date_time) = DATE(NOW())";
-				break;
-			case "yesterday":
-				$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
-				break;
-			case "week":
-				$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
-				break;
-			case "month":
-				$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
-				break;
-			case "year":
-				$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
-				break;
+		if( is_array( $parsed_args['period'] ) && isset( $parsed_args['period']['start'] ) ){
+			if( $parsed_args['period']['start'] === $parsed_args['period']['end'] ){
+				$period_limit = sprintf( 'AND DATE(`date_time`) = \'%s\'', $parsed_args['period']['start'] );
+			} else {
+				$period_limit = sprintf( 'AND DATE(`date_time`) >= \'%s\' AND DATE(`date_time`) <= \'%s\'', $parsed_args['period']['start'], $parsed_args['period']['end'] );
+			}
+		} else {
+			switch ($parsed_args['period']) {
+				case "today":
+					$period_limit = "AND DATE(date_time) = DATE(NOW())";
+					break;
+				case "yesterday":
+					$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
+					break;
+				case "week":
+					$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
+					break;
+				case "month":
+					$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
+					break;
+				case "year":
+					$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
+					break;
+			}
 		}
-
 
 		$status_type  = '';
 		if( is_array( $parsed_args['status'] ) ){
