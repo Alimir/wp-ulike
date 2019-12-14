@@ -59,7 +59,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 * @since		2.3
 		 */
 		public function status( $id , $key, $user_id, $status ) {
-			$author_id = $this->get_author_ID( $key );
+			$author_id = $this->get_author_ID( $id, $key );
 			// Check status
 			if( ! in_array( $status, array( 'like', 'unlike' ) ) ){
 				return;
@@ -190,7 +190,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 * @param string $key
 		 * @return integer
 		 */
-		protected function get_author_ID( $key ){
+		protected function get_author_ID( $id, $key ){
 			// Default value
 			$author_id 	= 0;
 			// Get author ID by it's type

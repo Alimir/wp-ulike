@@ -272,6 +272,13 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'description'   => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
 						),
+						'hide_admin_notice' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Hide Admin Notices', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'description'   => __('Enabling this option will completely disable all admin notices.', WP_ULIKE_SLUG)
+						),
 						'like_notice' => array(
 							'default' => __('Thanks! You Liked This.',WP_ULIKE_SLUG),
 							'label'   => __( 'Liked Notice Message', WP_ULIKE_SLUG)
@@ -289,10 +296,11 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 					'title' => '<i class="dashicons-before dashicons-admin-post"></i>' . ' ' . __( 'Posts',WP_ULIKE_SLUG),
 					'fields' => array(
 						'theme' => array(
-							'type'    => 'visual-select',
-							'default' => 'wpulike-default',
-							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => call_user_func('wp_ulike_generate_templates_list')
+							'type'        => 'visual-select',
+							'default'     => 'wpulike-default',
+							'label'       => __( 'Themes',WP_ULIKE_SLUG),
+							'options'     => call_user_func('wp_ulike_generate_templates_list'),
+ 							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -402,10 +410,11 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 					'title'  => '<i class="dashicons-before dashicons-admin-comments"></i>' . ' ' . __( 'Comments',WP_ULIKE_SLUG),
 					'fields' => array(
 						'theme' => array(
-							'type'    => 'visual-select',
-							'default' => 'wpulike-heart',
-							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => call_user_func('wp_ulike_generate_templates_list')
+							'type'        => 'visual-select',
+							'default'     => 'wpulike-heart',
+							'label'       => __( 'Themes',WP_ULIKE_SLUG),
+							'options'     => call_user_func('wp_ulike_generate_templates_list'),
+							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -493,10 +502,11 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 					'title'  => '<i class="dashicons-before dashicons-buddypress"></i>' . ' ' . __( 'BuddyPress',WP_ULIKE_SLUG),
 					'fields' => array(
 						'theme' => array(
-							'type'    => 'visual-select',
-							'default' => 'wpulike-robeen',
-							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => call_user_func('wp_ulike_generate_templates_list')
+							'type'        => 'visual-select',
+							'default'     => 'wpulike-robeen',
+							'label'       => __( 'Themes',WP_ULIKE_SLUG),
+							'options'     => call_user_func('wp_ulike_generate_templates_list'),
+							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -529,7 +539,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'logging_method' => array(
 							'type'    => 'select',
-							'default' => 'by_cookie_ip',
+							'default' => 'by_username',
 							'label'   => __( 'Logging Method',WP_ULIKE_SLUG),
 							'options' => array(
 								'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
@@ -616,10 +626,11 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 					'title'  => '<i class="dashicons-before dashicons-bbpress"></i>' . ' ' . __( 'bbPress',WP_ULIKE_SLUG),
 					'fields' => array(
 						'theme' => array(
-							'type'    => 'visual-select',
-							'default' => 'wpulike-default',
-							'label'   => __( 'Themes',WP_ULIKE_SLUG),
-							'options' => call_user_func('wp_ulike_generate_templates_list')
+							'type'        => 'visual-select',
+							'default'     => 'wpulike-default',
+							'label'       => __( 'Themes',WP_ULIKE_SLUG),
+							'options'     => call_user_func('wp_ulike_generate_templates_list'),
+							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
 						),
 						'auto_display' => array(
 							'type'          => 'checkbox',
@@ -645,7 +656,7 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 						),
 						'logging_method' => array(
 							'type'    => 'select',
-							'default' => 'by_cookie_ip',
+							'default' => 'by_username',
 							'label'   => __( 'Logging Method',WP_ULIKE_SLUG),
 							'options' => array(
 								'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
@@ -1533,24 +1544,31 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
 		$period_limit = '';
 
-		switch ($parsed_args['period']) {
-			case "today":
-				$period_limit = "AND DATE(date_time) = DATE(NOW())";
-				break;
-			case "yesterday":
-				$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
-				break;
-			case "week":
-				$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
-				break;
-			case "month":
-				$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
-				break;
-			case "year":
-				$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
-				break;
+		if( is_array( $parsed_args['period'] ) && isset( $parsed_args['period']['start'] ) ){
+			if( $parsed_args['period']['start'] === $parsed_args['period']['end'] ){
+				$period_limit = sprintf( 'AND DATE(`date_time`) = \'%s\'', $parsed_args['period']['start'] );
+			} else {
+				$period_limit = sprintf( 'AND DATE(`date_time`) >= \'%s\' AND DATE(`date_time`) <= \'%s\'', $parsed_args['period']['start'], $parsed_args['period']['end'] );
+			}
+		} else {
+			switch ($parsed_args['period']) {
+				case "today":
+					$period_limit = "AND DATE(date_time) = DATE(NOW())";
+					break;
+				case "yesterday":
+					$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
+					break;
+				case "week":
+					$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
+					break;
+				case "month":
+					$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
+					break;
+				case "year":
+					$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
+					break;
+			}
 		}
-
 
 		$status_type  = '';
 		if( is_array( $parsed_args['status'] ) ){
@@ -1758,7 +1776,7 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	function wp_ulike_display_button( array $parsed_args, $only_registered_users ){
 		global $wp_ulike_class;
 
-		if( $only_registered_users != '1' || ( $only_registered_users == '1' && is_user_logged_in() ) ) {
+		if( ! wp_ulike_is_true( $only_registered_users ) || is_user_logged_in() ) {
 			// Return ulike template
 			return $wp_ulike_class->wp_get_ulike( $parsed_args );
 		} else {

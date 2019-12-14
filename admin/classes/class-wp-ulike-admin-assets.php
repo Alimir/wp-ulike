@@ -110,6 +110,15 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 				true
 			);
 
+			// Enqueue statistics script
+			wp_enqueue_script(
+				'wp_ulike_admin_statistics_scripts',
+				WP_ULIKE_ADMIN_URL . '/assets/js/solo/statistics.js',
+				array( 'wp_ulike_admin_scripts'),
+				false,
+				true
+			);
+
 			// Localize scripts
 			wp_localize_script( 'wp_ulike_admin_scripts', 'wp_ulike_admin', array(
 				'hook_address'    => esc_html( $this->hook ),

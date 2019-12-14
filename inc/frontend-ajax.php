@@ -24,6 +24,7 @@ function wp_ulike_process(){
 	$nonce_token = isset( $_POST['nonce'] ) ? $_POST['nonce'] : NULL;
 	$factor      = isset( $_POST['factor'] ) ? $_POST['factor'] : NULL;
 	$response    = array();
+	$status      = 0;
 
 	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
@@ -54,9 +55,7 @@ function wp_ulike_process(){
 		), $post_ID, $get_settings
 	);
 
-	$only_registered_users = wp_ulike_get_setting( $setting, 'only_registered_users' );
-
-	if( $only_registered_users === '0' || ( $only_registered_users === '1' && is_user_logged_in() ) ) {
+	if( wp_ulike_is_true( wp_ulike_get_setting( $setting, 'only_registered_users' ) ) && ! is_user_logged_in() ) {
 		$response = array(
 			'message'     => wp_ulike_get_setting( 'wp_ulike_general', 'login_text', __( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) ),
 			'btnText'     => NULL,

@@ -21,6 +21,16 @@ $breakpoint-large: 60em; // 960px
   flex-wrap: wrap;
   justify-content: center;
   padding: 10px 0;
+
+  &.wp-ulike-flex-end{
+    justify-content: end;
+  }
+  &.wp-ulike-flex-start{
+    justify-content: start;
+  }
+  &.wp-ulike-flex-space-between{
+    justify-content: space-between;
+  }
 }
 
 .wp-ulike-row [class^="col"] {

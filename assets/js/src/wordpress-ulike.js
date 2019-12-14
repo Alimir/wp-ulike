@@ -157,13 +157,16 @@
       // Set sibling general elements
       this._setSbilingElement();
       this._updateGeneralClassNames(response.data.status);
-      // Update counter + check refresh likers box
-      if (response.data.status < 5) {
-        this.__updateCounter(response.data.data);
-        this._refreshTheLikers = true;
+      // If data exist
+      if( response.data.data !== null ){
+        // Update counter + check refresh likers box
+        if (response.data.status < 5) {
+          this.__updateCounter(response.data.data);
+          this._refreshTheLikers = true;
+        }
+        // Update button status
+        this._updateButton(response.data.btnText, response.data.status);
       }
-      // Update button status
-      this._updateButton(response.data.btnText, response.data.status);
       // Display Notifications
       this._sendNotification(response.data.messageType, response.data.message);
       // Refresh likers box on data update
