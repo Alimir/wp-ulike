@@ -24,6 +24,7 @@ function wp_ulike_process(){
 	$nonce_token = isset( $_POST['nonce'] ) ? $_POST['nonce'] : NULL;
 	$factor      = isset( $_POST['factor'] ) ? $_POST['factor'] : NULL;
 	$response    = array();
+	$status      = 0;
 
 	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
