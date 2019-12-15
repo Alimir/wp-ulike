@@ -119,38 +119,41 @@ function wp_ulike_notice_manager(){
 		return;
 	}
 
-	$screen = get_current_screen();
-    $notice_list = [];
+	$count_logs  = wp_ulike_count_all_logs();
+	$screen      = get_current_screen();
+	$notice_list = [];
 
-	$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
-		'id'          => 'wp_ulike_leave_a_review',
-		'title'       => __( 'Thanks for using WP ULike', WP_ULIKE_SLUG ) . ' ' . WP_ULIKE_VERSION,
-		'description' => __( "It's great to see that you've been using the WP ULike plugin. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ),
-		'skin'        => 'info',
-		'has_close'   => true,
-		'buttons'     => array(
-			array(
-				'label'      => __( "Sure, I'd love to!", WP_ULIKE_SLUG ),
-				'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5'
+	if( $count_logs > 1000 ){
+		$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_leave_a_review',
+			'title'       => __( 'Wow! You\'ve earned over a thousand likes', WP_ULIKE_SLUG ) . ' :)',
+			'description' => __( "It's great to see that you've been using the WP ULike plugin. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ),
+			'skin'        => 'info',
+			'has_close'   => true,
+			'buttons'     => array(
+				array(
+					'label'      => __( "Sure, I'd love to!", WP_ULIKE_SLUG ),
+					'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5'
+				),
+				array(
+					'label'      => __('Not Now', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'info',
+					'expiration' => WEEK_IN_SECONDS * 2
+				),
+				array(
+					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'error',
+					'expiration' => YEAR_IN_SECONDS * 10
+				)
 			),
-			array(
-				'label'      => __('Not Now', WP_ULIKE_SLUG),
-				'type'       => 'skip',
-				'color_name' => 'info',
-				'expiration' => WEEK_IN_SECONDS * 2
-			),
-			array(
-				'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
-				'type'       => 'skip',
-				'color_name' => 'error',
-				'expiration' => YEAR_IN_SECONDS * 10
+			'image'     => array(
+				'width' => '150',
+				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/rating.svg'
 			)
-		),
-		'image'     => array(
-			'width' => '150',
-			'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/rating.svg'
-		)
-	]);
+		]);
+	}
 
 	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) && strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
 		$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
