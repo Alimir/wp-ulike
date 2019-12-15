@@ -189,10 +189,13 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 == Changelog ==
 
 = 4.0.2 =
+* Removed: Pro banner display from general notices.
+
+= 4.0.2 =
 * Added: An option to remove plugin admin notices.
 * Added: Professional stats panel with date range + status selector options. [PRO]
 * Added: A new template called "Feedback". [PRO]
-* Fixed: A important issue with only logged in option.
+* Fixed: An important issue with only logged in option.
 * Fixed: Schema attributes escape issue.
 * Fixed: Some small issues.
 
