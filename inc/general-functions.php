@@ -2119,6 +2119,19 @@ if( ! function_exists('wp_ulike_is_cache_exist') ){
 	}
 }
 
+if( ! function_exists('wp_ulike_count_all_logs') ){
+	/**
+	 * Count logs from all tables
+	 *
+	 * @param string $period		Availabe values: all, today, yesterday
+	 * @return integer
+	 */
+	function wp_ulike_count_all_logs( $period = 'all' ){
+		$instance = wp_ulike_stats::get_instance();
+		return $instance->count_all_logs( $period );
+	}
+}
+
 if( ! function_exists('wp_ulike_get_button_text') ){
 	/**
 	 * Get button text by option name
