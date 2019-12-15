@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.1
-Stable tag: 4.0.2
+Stable tag: 4.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,8 +188,11 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 == Changelog ==
 
-= 4.0.2 =
-* Removed: Pro banner display from general notices.
+= 4.0.3 =
+* Added: A new option for some users who have upgraded to version +4 and deleted their old logs which can add the number of old likes to the new figures.
+* Added: A new condition to hide "leave review" banner.
+* Removed: Pro banner display from main dashboard.
+* Fixed: Some small issues.
 
 = 4.0.2 =
 * Added: An option to remove plugin admin notices.
