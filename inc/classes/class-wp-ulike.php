@@ -433,6 +433,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			   }
 			}
 
+			// Get default template, if template key not exist anymore.
+			if( empty( $output ) ){
+				$output = call_user_func( 'wp_ulike_set_default_template', $wp_ulike_template );
+			}
+
 			return apply_filters( 'wp_ulike_return_final_templates', preg_replace( '~>\s*\n\s*<~', '><', $output ), $wp_ulike_template );
 
 		}
