@@ -119,6 +119,7 @@ function wp_ulike_notice_manager(){
 		return;
 	}
 
+	$screen = get_current_screen();
     $notice_list = [];
 
 	$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
@@ -151,7 +152,7 @@ function wp_ulike_notice_manager(){
 		)
 	]);
 
-	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
+	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) && strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
 		$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_go_pro',
 			'title'       => __( 'WP Ulike Pro is Ready :))', WP_ULIKE_SLUG ),
