@@ -109,6 +109,49 @@
     }
 }
 
+.wp-ulike-pro-stats-banner{
+
+    .wp-ulike-inner{
+        padding: 20px 40px;
+        &:before{
+            content: "";
+            position: absolute;
+            right: 5%;
+            left: 40%;
+            bottom: 0;
+            height: 100%;
+            background-image: url(../../../assets/img/pro-stats-banner.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom right;
+        }
+
+        h3{
+            margin: 0.5em 0;
+            font-size: 32px;
+            max-width: 360px;
+            line-height: 1.4;
+            font-weight: 500;
+            color: #017e52;
+        }
+
+        p{
+            max-width: 540px;
+            font-size: 15px;
+            line-height: 1.4em;
+            color: #8B93A6;
+        }
+
+        .wp-ulike-button-group{
+            margin: 2em 0 1em;
+
+            .wp-ulike-btn{
+                margin: 0 5px;
+            }
+        }
+    }
+}
+
 .wp-ulike-table{
     display: table;
 

@@ -23,6 +23,7 @@
 		<a target="_blank" class="nav-tab" href="https://wordpress.org/support/plugin/wp-ulike"><?php echo _e('Support',WP_ULIKE_SLUG); ?></a>
 		<a target="_blank" class="nav-tab" href="https://wordpress.org/plugins/wp-ulike/faq/"><?php echo _e('FAQ',WP_ULIKE_SLUG); ?></a>
 		<a target="_blank" class="nav-tab" href="https://wordpress.org/support/view/plugin-reviews/wp-ulike"><?php echo _e('Reviews',WP_ULIKE_SLUG); ?></a>
+		<a target="_blank" class="nav-tab" href="https://wpulike.com/pricing/?utm_source=about-page&utm_campaign=gopro&utm_medium=wp-dash"><?php echo _e('Go Pro',WP_ULIKE_SLUG); ?></a>
 	</h2>
 
 	<?php if(!isset($_GET["credit"])): ?>

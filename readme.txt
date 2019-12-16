@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.1
-Stable tag: 4.0.2
+Stable tag: 4.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,32 +43,28 @@ Join the elite web professionals who enjoy **[WP ULike PRO](https://wpulike.com/
 *   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
 = Features =
-*   Brand new Clean Design + eye-catching styles.
-*   Full myCRED Points Support.
+
+*   Clean Design + Some standard eye-catching templates.
 *   Full Elementor Page Builder Support. [PRO]
-*   Dislike button support. [PRO]
-*   Flexible google rich snippets support. (Microdata)
-*   Full Statistics tools with many widgets.
+*   Dislike button support with +8 creative templates. [PRO]
+*   Display the likers of each button in linear or pop-up mode.
+*   Simple, Stylish and user-friendly settings to easily customize your plugin.
+*   Extract detailed reports and beautiful, useful and simple charts in an instant.
+*   Support Custom Post Types, Comments, Activities & Topics.
+*   Using various hooks and functions, you can easily customize this plugin.
+*   We’re light-weight, fast, responsive and compatible with Google Schemas.
+*   Full myCRED (points management system) Points Support.
 *   Supporting UltimateMember & BuddyPress Profiles.
 *   Ajax feature to update the data without reloading.
 *   Visitors do not have to register or log in to use the Like Button.
-*   Compatible with WP version 3.5 & above.
 *   Added automatically with filtering options (no Code required).
-*   Different logging method options.
+*   Different logging method options. (Cookie, IP, Username)
 *   Notifications System. (Custom toast messages after each activity)
-*   Shortcode support.
-*   Support custom templates with separate variables.
-*   Comment likes & dislikes support.
+*   Flexible Shortcode with variable support.
 *   Supporting the date in localized format. (date_i18n)
-*   Full likes & dislike logs support.
-*   BuddyPress add activity & notifications support.
-*   Simple user like box with avatar support.
-*   Custom Like-UnLike Texts fields.
+*   BuddyPress adds activity & notifications support.
 *   Simple custom style with color picker settings.
-*   Advanced Widgets With Custom Tools. (Most Liked Posts,Comments,Users,Topics,...)
-*   Powerful configuration panel.
-*   Support RTL & language file.
-*   And so on...
+*   Support RTL & +20 language files.
 
 = Translations =
 WP ULike has been translated into the following languages:
@@ -188,8 +184,11 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 == Changelog ==
 
-= 4.0.2 =
-* Removed: Pro banner display from general notices.
+= 4.0.3 =
+* Added: A new option for some users who have upgraded to version +4 and deleted their old logs which can add the number of old likes to the new figures.
+* Added: A new condition to hide "leave review" banner.
+* Removed: Pro banner display from main dashboard.
+* Fixed: Some small issues.
 
 = 4.0.2 =
 * Added: An option to remove plugin admin notices.

@@ -279,6 +279,13 @@ if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
 							'description'   => __('Enabling this option will completely disable all admin notices.', WP_ULIKE_SLUG)
 						),
+						'enable_meta_values' => array(
+							'type'          => 'checkbox',
+							'default'       => 0,
+							'label'         => __('Enable Old Meta Values', WP_ULIKE_SLUG),
+							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
+							'description'   => sprintf( '%s<br><strong>* %s</strong>', __('By activating this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.', WP_ULIKE_SLUG), __('Attention: If you have been using WP ULike +v4 from the beginning Or you haven\'t deleted any logs yet, do not enable this option.', WP_ULIKE_SLUG) )
+						),
 						'like_notice' => array(
 							'default' => __('Thanks! You Liked This.',WP_ULIKE_SLUG),
 							'label'   => __( 'Liked Notice Message', WP_ULIKE_SLUG)
@@ -806,6 +813,12 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 
 		$result = $wpdb->get_var( stripslashes( $query ) );
 
+		// By checking this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.
+		$enable_meta_values = wp_ulike_get_setting( 'wp_ulike_general', 'enable_meta_values', false );
+		if( wp_ulike_is_true( $enable_meta_values ) && in_array( $status, array( 'like', 'all' ) ) ){
+			$result += wp_ulike_get_old_meta_value( $ID, $type );
+		}
+
 		return  empty( $result ) ? 0 : $result;
 	}
 }
@@ -823,6 +836,36 @@ if( ! function_exists( 'wp_ulike_get_counter_value' ) ){
 	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true ){
 		$counter_info = wp_ulike_get_counter_value_info( $ID, $type, $status, $is_distinct );
 		return ! is_wp_error( $counter_info ) ? $counter_info : 0;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_old_meta_value' ) ){
+	/**
+	 * Get the number of old meta values
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return integer
+	 */
+	function wp_ulike_get_old_meta_value( $ID, $type ){
+		$meta_value = 0;
+
+		switch ( $type ) {
+			case 'post':
+				$meta_value = get_post_meta( $ID, '_liked', true );
+				break;
+			case 'comment':
+				$meta_value = get_comment_meta( $ID, '_commentliked', true );
+				break;
+			case 'activity':
+				$meta_value = function_exists( 'bp_activity_get_meta' ) ? bp_activity_get_meta( $ID, '_activityliked' ) : '';
+				break;
+			case 'topic':
+				$meta_value = get_post_meta( $ID, '_topicliked', true );
+				break;
+		}
+
+		return empty( $meta_value ) ? 0 : (int) $meta_value;
 	}
 }
 
@@ -2073,6 +2116,19 @@ if( ! function_exists('wp_ulike_is_cache_exist') ){
 	 */
 	function wp_ulike_is_cache_exist(){
 		return defined( 'WP_CACHE' ) && WP_CACHE === true;
+	}
+}
+
+if( ! function_exists('wp_ulike_count_all_logs') ){
+	/**
+	 * Count logs from all tables
+	 *
+	 * @param string $period		Availabe values: all, today, yesterday
+	 * @return integer
+	 */
+	function wp_ulike_count_all_logs( $period = 'all' ){
+		$instance = wp_ulike_stats::get_instance();
+		return $instance->count_all_logs( $period );
 	}
 }
 
