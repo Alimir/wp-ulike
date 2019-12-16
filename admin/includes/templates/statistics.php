@@ -38,6 +38,28 @@
 			<h2 class="wp-ulike-page-title"><?php echo _e( 'WP ULike Statistics', WP_ULIKE_SLUG ); ?></h2>
 		</div>
 	</div>
+	<div class="wp-ulike-pro-stats-banner wp-ulike-row">
+		<div class="col-12">
+			<div class="wp-ulike-inner">
+				<div class="wp-ulike-row">
+					<h3><?php echo _e( 'Check Votings, Best Likers & Top contents', WP_ULIKE_SLUG ); ?></h3>
+					<?php
+						echo sprintf( '<p>%s</p><div class="wp-ulike-button-group">%s%s</div>', __('With WP ULike Pro comprehensive Statistics tools, you can track what your users love and what annoys them in an instance. You can extract reports of likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with dateRange picker and status selector controllers, no confusing options and coding needed.',WP_ULIKE_SLUG), wp_ulike_widget_button_callback( array(
+							'label'         => __( 'Buy WP ULike Premium', WP_ULIKE_SLUG ),
+							'color_name'    => 'default',
+							'link'          => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=statistics-page&utm_campaign=gopro&utm_medium=wp-dash',
+							'target'        => '_blank'
+						) ), wp_ulike_widget_button_callback( array(
+							'label'         => __( 'More information', WP_ULIKE_SLUG ),
+							'color_name'    => 'info',
+							'link'          => WP_ULIKE_PLUGIN_URI . '?utm_source=statistics-page&utm_campaign=gopro&utm_medium=wp-dash',
+							'target'        => '_blank'
+						) ) );
+					?>
+				</div>
+			</div>
+		</div>
+	</div>
     <div class="wp-ulike-row wp-ulike-logs-count">
         <div class="col-4">
 			<div class="wp-ulike-inner">
