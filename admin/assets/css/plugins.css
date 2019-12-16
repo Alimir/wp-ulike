@@ -207,12 +207,14 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .wp-ulike-visual-select .radio-img-item img { display: block; clear: both; width: 100%; height: 100%; }
 
 .wp-ulike-container { width: 100%; margin-left: auto; margin-right: auto; }
+.wp-ulike-container .notice { display: none; }
 
 .wp-ulike-row { position: relative; width: 100%; }
 
 .wp-ulike-flex { display: flex; align-items: center; flex-wrap: wrap; justify-content: center; padding: 10px 0; }
 .wp-ulike-flex.wp-ulike-flex-end { justify-content: end; }
 .wp-ulike-flex.wp-ulike-flex-start { justify-content: start; }
+.wp-ulike-flex.wp-ulike-flex-space-between { justify-content: space-between; }
 
 .wp-ulike-row [class^="col"] { float: left; margin: 2%; }
 
@@ -268,6 +270,13 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .wp-ulike-is-loading { padding: 10px 0; }
 .wp-ulike-is-loading:before { content: ""; position: absolute; left: 0; width: 100%; top: 0; height: 100%; background-color: white; background-image: url(../../../assets/img/svg/statistics.svg); background-repeat: no-repeat; background-position: center center; z-index: 9; }
 
+.wp-ulike-pro-stats-banner .wp-ulike-inner { padding: 20px 40px; }
+.wp-ulike-pro-stats-banner .wp-ulike-inner:before { content: ""; position: absolute; right: 5%; left: 40%; bottom: 0; height: 100%; background-image: url(../../../assets/img/pro-stats-banner.svg); background-size: contain; background-repeat: no-repeat; background-position: bottom right; }
+.wp-ulike-pro-stats-banner .wp-ulike-inner h3 { margin: 0.5em 0; font-size: 32px; max-width: 360px; line-height: 1.4; font-weight: 500; color: #017e52; }
+.wp-ulike-pro-stats-banner .wp-ulike-inner p { max-width: 540px; font-size: 15px; line-height: 1.4em; color: #8B93A6; }
+.wp-ulike-pro-stats-banner .wp-ulike-inner .wp-ulike-button-group { margin: 2em 0 1em; }
+.wp-ulike-pro-stats-banner .wp-ulike-inner .wp-ulike-button-group .wp-ulike-btn { margin: 0 5px; }
+
 .wp-ulike-table { display: table; }
 .wp-ulike-table .wp-ulike-table-cell { display: table-cell; vertical-align: middle; }
 
@@ -304,8 +313,20 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .wp-ulike-go-pro-page .has-1-columns, .wp-ulike-go-pro-page .has-2-columns, .wp-ulike-go-pro-page .has-3-columns, .wp-ulike-go-pro-page .has-4-columns { max-width: 1400px; margin-left: 0; margin-right: 0; }
 .wp-ulike-go-pro-page h1 { margin-bottom: 1em; }
 .wp-ulike-go-pro-page h2 { text-align: left; }
-.wp-ulike-go-pro-page .is-section-header { margin-left: 20px; margin-right: 20px; }
+.wp-ulike-go-pro-page .is-section-header { padding-top: 20px; margin-left: 20px; margin-right: 20px; }
 .wp-ulike-go-pro-page .wp-ulike-btn { margin-top: 5px; margin-right: 15px; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table { width: 100%; max-width: 100%; margin-bottom: 2rem; background-color: transparent; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table > thead > tr, .wp-ulike-go-pro-page .wp-ulike-simple-table > tbody > tr, .wp-ulike-go-pro-page .wp-ulike-simple-table > tfoot > tr { -webkit-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table > thead > tr > th, .wp-ulike-go-pro-page .wp-ulike-simple-table > thead > tr > td, .wp-ulike-go-pro-page .wp-ulike-simple-table > tbody > tr > th, .wp-ulike-go-pro-page .wp-ulike-simple-table > tbody > tr > td, .wp-ulike-go-pro-page .wp-ulike-simple-table > tfoot > tr > th, .wp-ulike-go-pro-page .wp-ulike-simple-table > tfoot > tr > td { text-align: left; padding: 1rem; vertical-align: top; border-top: 0; -webkit-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table > thead > tr > th { font-weight: 600; color: #757575; vertical-align: bottom; border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+.wp-ulike-go-pro-page .wp-ulike-simple-table > caption + thead > tr:first-child > th, .wp-ulike-go-pro-page .wp-ulike-simple-table > caption + thead > tr:first-child > td, .wp-ulike-go-pro-page .wp-ulike-simple-table > colgroup + thead > tr:first-child > th, .wp-ulike-go-pro-page .wp-ulike-simple-table > colgroup + thead > tr:first-child > td, .wp-ulike-go-pro-page .wp-ulike-simple-table > thead:first-child > tr:first-child > th, .wp-ulike-go-pro-page .wp-ulike-simple-table > thead:first-child > tr:first-child > td { border-top: 0; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table > tbody + tbody { border-top: 1px solid rgba(0, 0, 0, 0.12); }
+.wp-ulike-go-pro-page .wp-ulike-simple-table .table { background-color: transparent; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table .no-border { border: 0; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered { border: 0; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered > thead > tr > th, .wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered > thead > tr > td, .wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered > tbody > tr > th, .wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered > tbody > tr > td, .wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered > tfoot > tr > th, .wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered > tfoot > tr > td { border: 0; border-bottom: 1px solid #e0e0e0; }
+.wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered > thead > tr > th, .wp-ulike-go-pro-page .wp-ulike-simple-table.table-bordered > thead > tr > td { border-bottom-width: 2px; }
+.wp-ulike-go-pro-page .wp-ulike-table-icon { width: 18px; height: 18px; }
 
 /** Logs Page */
 .wp_ulike_logs .button { line-height: 20px; }
