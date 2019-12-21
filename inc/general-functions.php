@@ -2209,6 +2209,45 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
 	}
 }
 
+if( ! function_exists('wp_ulike_get_period_limit_sql') ){
+	/**
+	 * Get period limit as a sql string
+	 *
+	 * @param string|array $date_range
+	 * @return string
+	 */
+	function wp_ulike_get_period_limit_sql( $date_range ){
+		$period_limit = '';
+
+		if( is_array( $date_range ) && isset( $date_range['start'] ) ){
+			if( $date_range['start'] === $date_range['end'] ){
+				$period_limit = sprintf( 'AND DATE(`date_time`) = \'%s\'', $date_range['start'] );
+			} else {
+				$period_limit = sprintf( 'AND DATE(`date_time`) >= \'%s\' AND DATE(`date_time`) <= \'%s\'', $date_range['start'], $date_range['end'] );
+			}
+		} elseif( !empty( $date_range )) {
+			switch ($date_range) {
+				case "today":
+					$period_limit = "AND DATE(date_time) = DATE(NOW())";
+					break;
+				case "yesterday":
+					$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
+					break;
+				case "week":
+					$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
+					break;
+				case "month":
+					$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
+					break;
+				case "year":
+					$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
+					break;
+			}
+		}
+
+		return $period_limit;
+	}
+}
 
 /*******************************************************
   Templates
