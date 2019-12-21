@@ -369,7 +369,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			if( $args['button_type'] == 'image' || ( isset( $temp_list[$args['style']]['is_text_support'] ) && ! $temp_list[$args['style']]['is_text_support'] ) ){
 				$button_class_name .= ' wp_ulike_put_image';
 				if($status == 2){
-					$button_class_name .= ' image-unlike wp_ulike_vote_is_active';
+					$button_class_name .= ' image-unlike wp_ulike_btn_is_active';
 				}
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';

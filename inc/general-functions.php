@@ -1839,7 +1839,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 		// Unlike Icon
 		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.image-unlike:after { background-image: url('.$get_like_icon.') !important; filter: none; }';
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$get_like_icon.') !important; filter: none; }';
 		}
 
 		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) ) {

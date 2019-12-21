@@ -42,7 +42,7 @@
             transform: translateX(-50%) translateY(-50%) ;
         }
 
-        &.image-unlike{
+        &.wp_ulike_btn_is_active{
             &:after{
                 filter: invert(44%) sepia(40%) saturate(3852%) hue-rotate(329deg) brightness(100%) contrast(111%);
             }
