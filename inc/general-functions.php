@@ -785,9 +785,10 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 	 * @param string $type
 	 * @param string $status
 	 * @param boolean $is_distinct
+	 * @param string|array $date_range
 	 * @return WP_Error[]|integer
 	 */
-	function wp_ulike_get_counter_value_info( $ID, $type, $status = 'like', $is_distinct = true ){
+	function wp_ulike_get_counter_value_info( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
 		global $wpdb;
 
 		$status = ltrim( $status, 'un');
@@ -796,19 +797,23 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			return new WP_Error( 'broke', __( "Please enter some value for required variables.", WP_ULIKE_SLUG ) );
 		}
 
+		// Peroid limit SQL
+		$period_limit = wp_ulike_get_period_limit_sql( $date_range );
+
 		// get table info
-		$table_info = wp_ulike_get_table_info( $type );
+		$table_info   = wp_ulike_get_table_info( $type );
 		if( empty( $table_info ) ){
 			return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
 		}
 
 		$query = sprintf(
-			"SELECT COUNT(%s) FROM %s WHERE %s AND `%s` = '%s'",
+			"SELECT COUNT(%s) FROM %s WHERE %s AND `%s` = '%s' %s",
 			esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
 			esc_sql( $wpdb->prefix . $table_info['table'] ),
-			esc_sql( $status !== 'all' ? "`status` = '$status'" : "1" ),
+			esc_sql( $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'" ),
 			esc_sql( $table_info['column'] ),
-			esc_sql( $ID )
+			esc_sql( $ID ),
+			esc_sql( $period_limit )
 		);
 
 		$result = $wpdb->get_var( stripslashes( $query ) );
@@ -831,10 +836,11 @@ if( ! function_exists( 'wp_ulike_get_counter_value' ) ){
 	 * @param string $type
 	 * @param string $status
 	 * @param boolean $is_distinct
+	 * @param string|array $date_range
 	 * @return integer
 	 */
-	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true ){
-		$counter_info = wp_ulike_get_counter_value_info( $ID, $type, $status, $is_distinct );
+	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
+		$counter_info = wp_ulike_get_counter_value_info( $ID, $type, $status, $is_distinct, $date_range );
 		return ! is_wp_error( $counter_info ) ? $counter_info : 0;
 	}
 }
@@ -1585,33 +1591,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		);
 		$parsed_args  = wp_parse_args( $args, $defaults );
 		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
-		$period_limit = '';
-
-		if( is_array( $parsed_args['period'] ) && isset( $parsed_args['period']['start'] ) ){
-			if( $parsed_args['period']['start'] === $parsed_args['period']['end'] ){
-				$period_limit = sprintf( 'AND DATE(`date_time`) = \'%s\'', $parsed_args['period']['start'] );
-			} else {
-				$period_limit = sprintf( 'AND DATE(`date_time`) >= \'%s\' AND DATE(`date_time`) <= \'%s\'', $parsed_args['period']['start'], $parsed_args['period']['end'] );
-			}
-		} else {
-			switch ($parsed_args['period']) {
-				case "today":
-					$period_limit = "AND DATE(date_time) = DATE(NOW())";
-					break;
-				case "yesterday":
-					$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
-					break;
-				case "week":
-					$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
-					break;
-				case "month":
-					$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
-					break;
-				case "year":
-					$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
-					break;
-			}
-		}
+		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
 
 		$status_type  = '';
 		if( is_array( $parsed_args['status'] ) ){
@@ -2156,24 +2136,7 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
 	function wp_ulike_get_best_likers_info( $number, $peroid ){
 		global $wpdb;
 		// Peroid limit SQL
-		$period_limit = '';
-		switch ($peroid) {
-			case "today":
-				$period_limit = "AND DATE(date_time) = DATE(NOW())";
-				break;
-			case "yesterday":
-				$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
-				break;
-			case "week":
-				$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
-				break;
-			case "month":
-				$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
-				break;
-			case "year":
-				$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
-				break;
-		}
+		$period_limit = wp_ulike_get_period_limit_sql( $peroid );
 
 		$query  = sprintf( 'SELECT T.user_id, SUM(T.CountUser) AS SumUser
 		FROM(
