@@ -142,24 +142,28 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	function wp_ulike_generate_templates_list(){
 		$default = array(
 			'wpulike-default' => array(
-				'name'     => __('Default', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_default_template',
-				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg'
+				'name'            => __('Default', WP_ULIKE_SLUG),
+				'callback'        => 'wp_ulike_set_default_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg',
+				'is_text_support' => true
 			),
 			'wpulike-heart' => array(
-				'name'     => __('Heart', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_simple_heart_template',
-				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg'
+				'name'            => __('Heart', WP_ULIKE_SLUG),
+				'callback'        => 'wp_ulike_set_simple_heart_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg',
+				'is_text_support' => true
 			),
 			'wpulike-robeen' => array(
-				'name'     => __('Twitter Heart', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_robeen_template',
-				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg'
+				'name'            => __('Twitter Heart', WP_ULIKE_SLUG),
+				'callback'        => 'wp_ulike_set_robeen_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg',
+				'is_text_support' => false
 			),
 			'wpulike-animated-heart' => array(
-				'name'     => __('Animated Heart', WP_ULIKE_SLUG),
-				'callback' => 'wp_ulike_set_animated_heart_template',
-				'symbol'   => WP_ULIKE_ASSETS_URL . '/img/svg/animated-heart.svg'
+				'name'            => __('Animated Heart', WP_ULIKE_SLUG),
+				'callback'        => 'wp_ulike_set_animated_heart_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/animated-heart.svg',
+				'is_text_support' => false
 			)
 		);
 
