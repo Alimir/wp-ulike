@@ -377,8 +377,8 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	    public function after_activation( $plugin ) {
 	        if( $plugin == WP_ULIKE_BASENAME ) {
 	            // Redirect to the about page
-	            if( ! wp_doing_ajax() ) {
-	                exit( wp_redirect( admin_url( 'admin.php?page=wp-ulike-about' ) ) );
+	            if( wp_safe_redirect( admin_url( 'admin.php?page=wp-ulike-about' ) ) ) {
+					exit;
 	            }
 	        }
 	    }
