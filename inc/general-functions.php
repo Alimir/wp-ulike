@@ -2195,19 +2195,19 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 		} elseif( !empty( $date_range )) {
 			switch ($date_range) {
 				case "today":
-					$period_limit = "AND DATE(date_time) = DATE(NOW())";
+					$period_limit = " AND DATE(date_time) = DATE(NOW())";
 					break;
 				case "yesterday":
-					$period_limit = "AND DATE(date_time) = DATE(subdate(current_date, 1))";
+					$period_limit = " AND DATE(date_time) = DATE(subdate(current_date, 1))";
 					break;
 				case "week":
-					$period_limit = "AND week(DATE(date_time)) = week(DATE(NOW()))";
+					$period_limit = " AND week(DATE(date_time)) = week(DATE(NOW()))";
 					break;
 				case "month":
-					$period_limit = "AND month(DATE(date_time)) = month(DATE(NOW()))";
+					$period_limit = " AND month(DATE(date_time)) = month(DATE(NOW()))";
 					break;
 				case "year":
-					$period_limit = "AND year(DATE(date_time)) = year(DATE(NOW()))";
+					$period_limit = " AND year(DATE(date_time)) = year(DATE(NOW()))";
 					break;
 			}
 		}
