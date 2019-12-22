@@ -100,44 +100,34 @@
 			?>
 		</div>
 	</div>
+	<div class="has-1-columns">
+		<h2 class="is-section-header">Frequently Asked Questions</h2>
+	</div>
 	<div class="has-3-columns">
-		<h2 class="is-section-header">Our Features</h2>
-
 		<div class="column">
-			<h3><?php echo _e( 'Extensions', WP_ULIKE_SLUG ); ?></h3>
-			<?php
-				echo sprintf( '<p>%s</p>', __('WP ULike support posts, comments, BuddyPress activities & bbPress Topics.',WP_ULIKE_SLUG) );
-			?>
+			<h3>What's the difference between WP ULike Pro vs free?</h3>
+			<p>WP ULike's Free version offers limitless  possibilities. WP ULike Pro, however, empowers you with more professional tools, up/down vote support and provide you a professional stats panel. See <a target="_blank" href="https://wpulike.com/blog/wp-ulike-pro-vs-free/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash" title=" WP ULike Pro Vs. Free: Which One Helps You Better?
+">full comparison here</a>.</p>
 		</div>
 		<div class="column">
-			<h3><?php echo _e( 'Languages', WP_ULIKE_SLUG ); ?></h3>
-			<?php
-				echo sprintf( '<p>%s</p>', __('WP ULike is already translated into +20 languages, with more always in progress.',WP_ULIKE_SLUG) );
-			?>
+			<h3>What happens to buttons created in the free version after I upgrade?</h3>
+			<p>WP ULike Pro is an extension of free version. After you upgrade to Pro, you continue just where you left off, without any interruptions. In fact, you'll be able to leverage those buttons using the Pro features.</p>
 		</div>
 		<div class="column">
-			<h3><?php echo _e( 'Clean & Simple', WP_ULIKE_SLUG ); ?></h3>
-			<?php
-				echo sprintf( '<p>%s</p>', __('We’ve used the simplest and prettiest styles for designing like buttons.',WP_ULIKE_SLUG) );
-			?>
+			<h3>Do you offer a Demo version? Can I request a refund?</h3>
+			<p>We don't offer a demo version of WP ULike Pro for trial. However, we have a <a target="_blank" href="https://wpulike.com/refund-rules/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash" title="My Account">refund policy</a> which lets you cancel your purchase and get a refund during the first 30 days.</p>
 		</div>
 		<div class="column">
-			<h3><?php echo _e( 'Easy Develop', WP_ULIKE_SLUG ); ?></h3>
-			<?php
-				echo sprintf( '<p>%s</p>', __('Using various hooks and functions, you can easily customize this plugin.',WP_ULIKE_SLUG) );
-			?>
+			<h3>What happens if I don't renew my license after one year? Will WP ULike Pro still work?</h3>
+			<p>Your existing project will remain intact. The only difference is support, updates and access to the new premium templates which constantly added each month.</p>
 		</div>
 		<div class="column">
-			<h3><?php echo _e( 'Custom Templates', WP_ULIKE_SLUG ); ?></h3>
-			<?php
-				echo sprintf( '<p>%s</p>', __('You can choose from multiple gorgeous and professional designed templates.',WP_ULIKE_SLUG) );
-			?>
+			<h3>Can I transfer the WP ULike Pro license key from one domain to another?</h3>
+			<p>Of course! You can manage it in your <a target="_blank" href="https://wpulike.com/user/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash" title="My Account">account</a> via My Account &gt; Licenses tab.</p>
 		</div>
 		<div class="column">
-			<h3><?php echo _e( 'Statistics', WP_ULIKE_SLUG ); ?></h3>
-			<?php
-				echo sprintf( '<p>%s</p>', __('extract detailed reports and beautiful, useful and simple charts in an instant.',WP_ULIKE_SLUG) );
-			?>
+			<h3>Can I ask a question before buying?</h3>
+			<p>Of course! If you have any questions about the bundle or the extensions, you can submit a pre-purchase question <a target="_blank" href="https://wpulike.com/support/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash"  title="Support">here</a>.</p>
 		</div>
 	</div>
 </div>
