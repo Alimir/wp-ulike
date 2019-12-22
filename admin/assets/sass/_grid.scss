@@ -27,10 +27,10 @@ $breakpoint-large: 60em; // 960px
   padding: 10px 0;
 
   &.wp-ulike-flex-end{
-    justify-content: end;
+    justify-content: flex-end;
   }
   &.wp-ulike-flex-start{
-    justify-content: start;
+    justify-content: flex-start;
   }
   &.wp-ulike-flex-space-between{
     justify-content: space-between;
