@@ -212,8 +212,8 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .wp-ulike-row { position: relative; width: 100%; }
 
 .wp-ulike-flex { display: flex; align-items: center; flex-wrap: wrap; justify-content: center; padding: 10px 0; }
-.wp-ulike-flex.wp-ulike-flex-end { justify-content: end; }
-.wp-ulike-flex.wp-ulike-flex-start { justify-content: start; }
+.wp-ulike-flex.wp-ulike-flex-end { justify-content: flex-end; }
+.wp-ulike-flex.wp-ulike-flex-start { justify-content: flex-start; }
 .wp-ulike-flex.wp-ulike-flex-space-between { justify-content: space-between; }
 
 .wp-ulike-row [class^="col"] { float: left; margin: 2%; }

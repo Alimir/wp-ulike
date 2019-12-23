@@ -1,4 +1,4 @@
-/*! WP ULike - v4.0.3
+/*! WP ULike - v4.0.4
  *  https://wpulike.com
  *  TechnoWich 2019;
  */
@@ -464,11 +464,9 @@
      */
     _updateButton: function (btnText, likeStatus) {
       if (this.buttonElement.hasClass("wp_ulike_put_image")) {
-        if (likeStatus === 3 || likeStatus === 2) {
-          this.buttonElement.toggleClass("image-unlike");
-          if (this.siblingElement.length) {
-            this.siblingElement.find(this.settings.buttonSelector).removeClass("image-unlike");
-          }
+        this.buttonElement.toggleClass("image-unlike wp_ulike_btn_is_active");
+        if (this.siblingElement.length) {
+          this.siblingElement.find(this.settings.buttonSelector).removeClass("image-unlike wp_ulike_btn_is_active");
         }
       } else if (this.buttonElement.hasClass("wp_ulike_put_text") && btnText !== null) {
         if (typeof btnText !== "object") {
