@@ -86,7 +86,7 @@
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
-.wpulike-default .wp_ulike_put_image.image-unlike:after {
+.wpulike-default .wp_ulike_put_image.wp_ulike_btn_is_active:after {
   filter: invert(44%) sepia(40%) saturate(3852%) hue-rotate(329deg) brightness(100%) contrast(111%);
 }
 .wpulike-default .count-box {
@@ -184,7 +184,7 @@
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
-.wpulike-heart .wp_ulike_put_image.image-unlike:after {
+.wpulike-heart .wp_ulike_put_image.wp_ulike_btn_is_active:after {
   filter: invert(44%) sepia(40%) saturate(3852%) hue-rotate(329deg) brightness(100%) contrast(111%);
 }
 .wpulike-heart .count-box {
@@ -448,13 +448,13 @@
   width: 50px;
   height: 50px;
 }
-.wpulike-animated-heart .wp_ulike_btn.image-unlike {
+.wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active {
   background-color: #ff6f63;
 }
-.wpulike-animated-heart .wp_ulike_btn.image-unlike .wpulike-svg-heart {
+.wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active .wpulike-svg-heart {
   fill: #ffffff;
 }
-.wpulike-animated-heart .wp_ulike_btn.image-unlike .wpulike-svg-heart-pop {
+.wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active .wpulike-svg-heart-pop {
   animation-direction: normal;
 }
 .wpulike-animated-heart .wp_ulike_btn:active {
@@ -539,7 +539,7 @@
   width: 40px;
   height: 40px;
 }
-#buddypress #activity-stream .wpulike-animated-heart .wp_ulike_btn.image-unlike {
+#buddypress #activity-stream .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active {
   background-color: #ff6f63;
 }
 

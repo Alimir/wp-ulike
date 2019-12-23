@@ -362,10 +362,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			//Button text value
 			$button_text		= '';
 
-			if( $args['button_type'] == 'image' ){
+			// Get all template callback list
+			$temp_list = call_user_func( 'wp_ulike_generate_templates_list' );
+			$func_name = isset( $temp_list[ $args['style'] ]['callback'] ) ? $temp_list[ $args['style'] ]['callback'] : 'wp_ulike_set_default_template';
+
+			if( $args['button_type'] == 'image' || ( isset( $temp_list[$args['style']]['is_text_support'] ) && ! $temp_list[$args['style']]['is_text_support'] ) ){
 				$button_class_name .= ' wp_ulike_put_image';
 				if($status == 2){
-					$button_class_name .= ' image-unlike';
+					$button_class_name .= ' image-unlike wp_ulike_btn_is_active';
 				}
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';
@@ -375,6 +379,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$button_text = wp_ulike_get_button_text( 'button_text' );
 				}
 			}
+
 			// Add unique class name for each button
 			$button_class_name .= strtolower( ' wp_' . $args['method'] . '_' . $args['id'] );
 
@@ -418,27 +423,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					"button_text"      => $button_text,
 					"general_class"    => esc_attr( $general_class_name ),
 					"button_class"     => esc_attr( $button_class_name )
-				), $args
+				), $args, $temp_list
 			);
 
+			$final_template = call_user_func( $func_name, $wp_ulike_template );
 
-			$wp_ulike_callback = call_user_func( 'wp_ulike_generate_templates_list' );
-
-			$output			= '';
-
-			foreach( $wp_ulike_callback as $key => $value ){
-			   if ( $key === $args['style'] ) {
-				   $output = call_user_func( $value['callback'], $wp_ulike_template );
-				   break;
-			   }
-			}
-
-			// Get default template, if template key not exist anymore.
-			if( empty( $output ) ){
-				$output = call_user_func( 'wp_ulike_set_default_template', $wp_ulike_template );
-			}
-
-			return apply_filters( 'wp_ulike_return_final_templates', preg_replace( '~>\s*\n\s*<~', '><', $output ), $wp_ulike_template );
+			return apply_filters( 'wp_ulike_return_final_templates', preg_replace( '~>\s*\n\s*<~', '><', $final_template ), $wp_ulike_template );
 
 		}
 

@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.1
-Stable tag: 4.0.3
+Stable tag: 4.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -183,6 +183,14 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.0.4 =
+* Added: 3 new templates. (Rating Face, Rating Boy, Rating Girl) [PRO]
+* Tweak: Added date range filter for top likers widget. [PRO]
+* Tweak: Date range support in get counter value function.
+* Tweak: Some improvements in button class names.
+* Tweak: Added some improvements statistics panel.
+* Fixed: Fix an issue with template callback.
 
 = 4.0.3 =
 * Added: A new option for some users who have upgraded to version +4 and deleted their old logs which can add the number of old likes to the new figures.

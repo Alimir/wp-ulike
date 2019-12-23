@@ -249,29 +249,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			// Extract variables
 			extract( $parsed_args );
 
-	        $query = sprintf( "SELECT COUNT(*) FROM %s WHERE 1=1", $this->wpdb->prefix . $table );
-
-	        switch ( $date ) {
-	        	case 'today':
-	        		$query .= ' AND DATE( date_time ) = DATE( NOW() )';
-	        		break;
-
-	        	case 'yesterday':
-	        		$query .= ' AND DATE( date_time ) = DATE( subdate( current_date, 1 ) )';
-	        		break;
-
-	        	case 'week':
-	        		$query .= ' AND WEEK( DATE( date_time ) ) = WEEK( DATE( NOW() ) )';
-	        		break;
-
-	        	case 'month':
-	        		$query .= ' AND MONTH( DATE( date_time ) ) = MONTH( DATE( NOW() ) )';
-	        		break;
-
-	        	case 'year':
-	        		$query .= ' AND YEAR( DATE( date_time ) ) = YEAR( DATE( NOW() ) )';
-	        		break;
-	        }
+			$query = sprintf( "SELECT COUNT(*) FROM %s WHERE 1=1", $this->wpdb->prefix . $table );
+			$query .= wp_ulike_get_period_limit_sql( $date );
 
 	        $result = $this->wpdb->get_var( $query );
 
@@ -321,31 +300,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @return			Array
 		 */
 		public function get_top_likers(){
-			$query  = sprintf('
-				SELECT T.user_id, SUM(T.CountUser) AS SumUser, T.ip
-				FROM(
-				SELECT user_id, count(user_id) AS CountUser, ip
-				FROM `%1$sulike`
-				GROUP BY user_id
-				UNION ALL
-				SELECT user_id, count(user_id) AS CountUser, ip
-				FROM `%1$sulike_activities`
-				GROUP BY user_id
-				UNION ALL
-				SELECT user_id, count(user_id) AS CountUser, ip
-				FROM `%1$sulike_comments`
-				GROUP BY user_id
-				UNION ALL
-				SELECT user_id, count(user_id) AS CountUser, ip
-				FROM `%1$sulike_forums`
-				GROUP BY user_id
-				) AS T
-				GROUP BY T.user_id
-				ORDER BY SumUser DESC LIMIT %2$d',
-				$this->wpdb->prefix,
-				5
-			);
-			return $this->wpdb->get_results( $query );
+			return wp_ulike_get_best_likers_info( 5, NULL );
 		}
 
 		/**

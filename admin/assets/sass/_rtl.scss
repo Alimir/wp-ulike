@@ -51,5 +51,37 @@
 	.wp-ulike-notice-image {
 		margin-left: 25px;
 		margin-right: 0;
-    }
+	}
+	.wp-ulike-pro-stats-banner{
+		.wp-ulike-inner{
+			&:before{
+				left: 5%;
+				right: 40%;
+				background-position: bottom left;
+			}
+		}
+	}
+
+	.wp-ulike-go-pro-page {
+		h2{
+			text-align: right;
+		}
+		.wp-ulike-btn{
+			margin-left: 15px;
+			margin-right: 0;
+		}
+		.wp-ulike-simple-table{
+			> thead,
+			> tbody,
+			> tfoot {
+			  > tr {
+				> th,
+				> td {
+				  text-align: right;
+				}
+			  }
+			}
+		}
+	}
+
 }
