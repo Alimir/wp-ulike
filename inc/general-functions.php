@@ -828,7 +828,10 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			$result += wp_ulike_get_old_meta_value( $ID, $type );
 		}
 
-		return  empty( $result ) ? 0 : $result;
+		// Create an action when counter value is ready.
+		do_action('wp_ulike_counter_value_generated');
+
+		return apply_filters( 'wp_ulike_counter_value' , empty( $result ) ? 0 : $result, $ID, $type );
 	}
 }
 
