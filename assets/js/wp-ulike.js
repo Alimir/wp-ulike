@@ -1,4 +1,4 @@
-/*! WP ULike - v4.0.4
+/*! WP ULike - v4.0.5
  *  https://wpulike.com
  *  TechnoWich 2019;
  */
@@ -452,11 +452,7 @@
      * Get likers wrapper element
      */
     _getLikersElement: function () {
-      if (this.generalElement.length > 1) {
-        return this.generalElement.next(this.settings.likersSelector);
-      } else {
-        return this.$element.find(this.settings.likersSelector);
-      }
+      return this.$element.find(this.settings.likersSelector);
     },
 
     /**
