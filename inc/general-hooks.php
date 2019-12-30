@@ -144,30 +144,36 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 	 * @since 1.0
 	 * @return string
 	 */
-	function wp_ulike_put_posts($content) {
-		//auto display position
-		$position = wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display_position');
-		$button = '';
+	function wp_ulike_put_posts( $content ) {
+		// Stack variable
+		$output = $content;
 
-		//add wp_ulike function
-		if(	!is_feed() && is_wp_ulike( wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display_filter') ) ){
-			$button = wp_ulike('put');
+		if ( wp_ulike_is_true( wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display' ) ) ) {
+			//auto display position
+			$position = wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display_position');
+			//add wp_ulike function
+			$button   = '';
+			if(	!is_feed() && is_wp_ulike( wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display_filter') ) ){
+				$button = wp_ulike('put');
+			}
+			switch ($position) {
+				case 'top':
+					$output = $button . $content;
+					break;
+
+				case 'top_bottom':
+					$output = $button . $content . $button;
+					break;
+
+				default:
+					$output = $content . $button;
+					break;
+			}
 		}
 
-		//return by position
-		if( $position=='bottom' ) {
-			return $content . $button;
-		} elseif( $position=='top' ) {
-			return $button . $content;
-		} elseif( $position=='top_bottom' ) {
-			return $button . $content . $button;
-		} else {
-			return $content . $button;
-		}
+		return apply_filters( 'wp_ulike_the_content', $output, $content );
 	}
-	if (wp_ulike_get_setting( 'wp_ulike_posts', 'auto_display' ) == '1') {
-		add_filter('the_content', 'wp_ulike_put_posts');
-	}
+	add_filter('the_content', 'wp_ulike_put_posts');
 }
 
 if( ! function_exists( 'wp_ulike_get_posts_microdata_itemtype' ) ){
@@ -230,25 +236,32 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 	 * @return string
 	 */
 	function wp_ulike_put_comments( $content ) {
-		//auto display position
-		$position = wp_ulike_get_setting( 'wp_ulike_comments', 'auto_display_position');
-		//add wp_ulike_comments function
-		$button = wp_ulike_comments('put');
-		//return by position
-		if( $position=='bottom' ){
-			return $content . $button;
-		} elseif( $position=='top' ){
-			return $button . $content;
-		} elseif( $position=='top_bottom' ){
-			return $button . $content . $button;
-		} else {
-			return $content . $button;
-		}
-	}
+		// Stack variable
+		$output = $content;
 
-	if ( wp_ulike_get_setting( 'wp_ulike_comments', 'auto_display' ) == '1'  && ! is_admin() ) {
-		add_filter('comment_text', 'wp_ulike_put_comments');
+		if ( wp_ulike_is_true( wp_ulike_get_setting( 'wp_ulike_comments', 'auto_display' ) ) && ! is_admin() ) {
+			//auto display position
+			$position = wp_ulike_get_setting( 'wp_ulike_comments', 'auto_display_position');
+			//add wp_ulike function
+			$button   = wp_ulike_comments('put');
+			switch ($position) {
+				case 'top':
+					$output = $button . $content;
+					break;
+
+				case 'top_bottom':
+					$output = $button . $content . $button;
+					break;
+
+				default:
+					$output = $content . $button;
+					break;
+			}
+		}
+
+		return apply_filters( 'wp_ulike_comment_text', $output, $content );
 	}
+	add_filter('comment_text', 'wp_ulike_put_comments');
 }
 
 

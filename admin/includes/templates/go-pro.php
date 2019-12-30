@@ -57,6 +57,11 @@
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
+						<td>Professional Schema.org Generator + Start Ratings</td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
+					</tr>
+					<tr>
 						<td>+7 Professional Elementor Widgets</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
@@ -98,6 +103,17 @@
 			<?php
 				echo sprintf('<p>%s</p><p>%s</p>', __('Elementor is the #1 WordPress page builder. In the new version of the WP ULike PRO plugin we fully support this page builder and have a variety of widgets & controllers that make life much easier for you.',WP_ULIKE_SLUG), __('Just drag your desired widget and drop it in your Elementor sections, customize as you go and enjoy your like and dislike buttons on your contents.',WP_ULIKE_SLUG) );
 			?>
+		</div>
+	</div>
+	<div class="has-2-columns">
+		<div class="column is-vertically-aligned-center">
+			<h2>Boost Your SEO by Using Our Professional Schema Generator</h2>
+			<p>WP ULike Pro is an innovative and powerful SEO Plugin which can manage +13 types of Schema Markups to make a better connection between your webpages and search engines. Now you can talk in search engine language and tell them which type of content you are promoting</p>
+			<p>By using of our professional Schema Generator, search engines like Google, Yahoo, Bing and etc. can easily understand your content, whether it be a Media, Organization, Movie, Book or anything else.</p>
+			<p>We also fully support Aggregate ratings which is a collection of reviews from users. This enables Google to feature your review ratings and attract customers with it.</p>
+		</div>
+		<div class="column is-edge-to-edge has-accent-background-color">
+			<img src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/schema-generator.svg" alt="Schema Generator" />
 		</div>
 	</div>
 	<div class="has-1-columns">

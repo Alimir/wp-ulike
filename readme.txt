@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.1
-Stable tag: 4.0.4
+Stable tag: 4.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,7 @@ Join the elite web professionals who enjoy **[WP ULike PRO](https://wpulike.com/
 = Features =
 
 *   Clean Design + Some standard eye-catching templates.
+*   Proffesional Schema.org generator for each post type. [PRO]
 *   Full Elementor Page Builder Support. [PRO]
 *   Dislike button support with +8 creative templates. [PRO]
 *   Display the likers of each button in linear or pop-up mode.
@@ -183,6 +184,15 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.0.5 =
+* Added: Proffesional Schema.org generator for each post type with supporting start ratings. [PRO]
+* Added: Display meta options at all post types for better customization.  [PRO]
+* Added: Counter start quantity value for like/dislike. [PRO]
+* Added: improvements in auto display functionlity.
+* Added: Some new hooks for better development purposes.
+* Fixed: Fix an issue with likers box wrapper generation.
+* Fixed: Some small issues.
 
 = 4.0.4 =
 * Added: 3 new templates. (Rating Face, Rating Boy, Rating Girl) [PRO]
