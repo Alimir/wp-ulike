@@ -156,6 +156,29 @@ function wp_ulike_notice_manager(){
 	}
 
 	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) && strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
+		$notice_list[ 'wp_ulike_seo_tools_banner' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_seo_tools_banner',
+			'title'       => __( 'Boost Your SEO by Using Schema Rich Snippets', WP_ULIKE_SLUG ),
+			'description' => __( "WP ULike Pro in its latest update evolved to an innovative and powerful SEO Plugin which can manage +13 types of Schema Markups to make a better connection between your webpages and search engines. Now you can talk in search engine language and tell them which type of content you are promoting." , WP_ULIKE_SLUG ),
+			'skin'        => 'default',
+			'has_close'   => true,
+			'buttons'     => array(
+				array(
+					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+					'link'       => WP_ULIKE_PLUGIN_URI . '?utm_source=seo-tools-banner&utm_campaign=gopro&utm_medium=wp-dash'
+				),
+				array(
+					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'error',
+					'expiration' => YEAR_IN_SECONDS * 10
+				)
+			),
+			'image'     => array(
+				'width' => '140',
+				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/seo.svg'
+			)
+		]);
 		$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_go_pro',
 			'title'       => __( 'WP Ulike Pro is Ready :))', WP_ULIKE_SLUG ),
