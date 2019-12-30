@@ -831,7 +831,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		// Create an action when counter value is ready.
 		do_action('wp_ulike_counter_value_generated');
 
-		return apply_filters( 'wp_ulike_counter_value' , empty( $result ) ? 0 : $result, $ID, $type );
+		return apply_filters( 'wp_ulike_counter_value' , empty( $result ) ? 0 : $result, $ID, $type, $status );
 	}
 }
 
@@ -1088,7 +1088,7 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
 		global $wpdb;
 		if (false === ($rating_value = wp_cache_get($cache_key = 'get_rich_rating_value_' . $post_ID, $cache_group = 'wp_ulike'))) {
-			//get the average, likes count & date_time columns by $post_ID
+			// get the average, likes count & date_time columns by $post_ID
 			$request =  "SELECT
 							FORMAT(
 								(
