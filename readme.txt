@@ -186,7 +186,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 == Changelog ==
 
 = 4.0.5 =
-* Added: Proffesional Schema.org generator for each post type with supporting start ratings. [PRO]
+* Added: Proffesional Schema.org generator for each post type with supporting Star ratings. [PRO]
 * Added: Display meta options at all post types for better customization.  [PRO]
 * Added: Counter start quantity value for like/dislike. [PRO]
 * Added: improvements in auto display functionlity.
