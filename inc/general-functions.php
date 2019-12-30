@@ -1033,18 +1033,19 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 	 */
 	function is_wp_ulike( $options, $args = array() ){
 
-		$defaults = array(
-			'is_home'     => is_front_page() && is_home() && $options['home'] == '1',
-			'is_single'   => is_single() && $options['single'] == '1',
-			'is_page'     => is_page() && $options['page'] == '1',
-			'is_archive'  => is_archive() && $options['archive'] == '1',
-			'is_category' => is_category() && $options['category'] == '1',
-			'is_search'   => is_search() && $options['search'] == '1',
-			'is_tag'      => is_tag() && $options['tag'] == '1',
-			'is_author'   => is_author() && $options['author'] == '1',
-			'is_bp'       => function_exists('is_buddypress') && is_buddypress() && isset( $options['buddypress'] ) && $options['buddypress'] == '1',
-			'is_bbpress'  => function_exists('is_bbpress') && is_bbpress() && isset( $options['bbpress'] ) && $options['bbpress'] == '1',
-			'is_wc'       => function_exists('is_woocommerce') && is_woocommerce() && isset( $options['woocommerce'] ) && $options['woocommerce'] == '1',
+		$defaults = apply_filters( 'wp_ulike_auto_diplay_filter_list' , array(
+				'is_home'     => is_front_page() && is_home() && $options['home'] == '1',
+				'is_single'   => is_single() && $options['single'] == '1',
+				'is_page'     => is_page() && $options['page'] == '1',
+				'is_archive'  => is_archive() && $options['archive'] == '1',
+				'is_category' => is_category() && $options['category'] == '1',
+				'is_search'   => is_search() && $options['search'] == '1',
+				'is_tag'      => is_tag() && $options['tag'] == '1',
+				'is_author'   => is_author() && $options['author'] == '1',
+				'is_bp'       => function_exists('is_buddypress') && is_buddypress() && isset( $options['buddypress'] ) && $options['buddypress'] == '1',
+				'is_bbpress'  => function_exists('is_bbpress') && is_bbpress() && isset( $options['bbpress'] ) && $options['bbpress'] == '1',
+				'is_wc'       => function_exists('is_woocommerce') && is_woocommerce() && isset( $options['woocommerce'] ) && $options['woocommerce'] == '1',
+			)
 		);
 
 		$parsed_args = wp_parse_args( $args, $defaults );
