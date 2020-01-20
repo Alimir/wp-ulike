@@ -32,6 +32,39 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 	}
 }
 
+
+if ( ! function_exists( 'wp_ulike_get_option' ) ) {
+	/**
+	 * Get options list values
+	 *
+	 * @param string $option
+	 * @param array|string $default
+	 * @return array|string|null
+	 */
+	function wp_ulike_get_option( $option = '', $default = null ) {
+	  $global_settings = get_option( 'wp_ulike_settings' );
+
+	  if( strpos( $option, '|' ) && is_array( $global_settings ) ){
+		$option_name  = explode( "|", $option );
+		$option_stack = array();
+		foreach ($option_name as $key => $value) {
+			if( isset( $global_settings[$value] ) ){
+				$option_stack = $global_settings[$value];
+				continue;
+			}
+			if( isset( $option_stack[$value] ) ){
+				$option_stack = $option_stack[$value];
+			} else {
+				return $default;
+			}
+		}
+		return $option_stack;
+	  }
+
+	  return ( isset( $global_settings[$option] ) ) ? $global_settings[$option] : $default;
+	}
+}
+
 if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 	/**
 	 * Delete all the users likes logs by ajax process.
