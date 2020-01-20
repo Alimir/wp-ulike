@@ -102,25 +102,25 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 			);
 
 			// Enqueue admin scripts
-			wp_enqueue_script(
-				'wp_ulike_admin_scripts',
-				WP_ULIKE_ADMIN_URL . '/assets/js/scripts.js',
-				array( 'wp_ulike_admin_plugins', 'wp_ulike_vuejs'),
-				false,
-				true
-			);
+			// wp_enqueue_script(
+			// 	'wp_ulike_admin_scripts',
+			// 	WP_ULIKE_ADMIN_URL . '/assets/js/scripts.js',
+			// 	array( 'wp_ulike_admin_plugins', 'wp_ulike_vuejs'),
+			// 	false,
+			// 	true
+			// );
 
 			// Enqueue statistics script
 			wp_enqueue_script(
 				'wp_ulike_admin_statistics_scripts',
 				WP_ULIKE_ADMIN_URL . '/assets/js/solo/statistics.js',
-				array( 'wp_ulike_admin_scripts'),
+				array( 'wp_ulike_admin_plugins'),
 				false,
 				true
 			);
 
 			// Localize scripts
-			wp_localize_script( 'wp_ulike_admin_scripts', 'wp_ulike_admin', array(
+			wp_localize_script( 'wp_ulike_admin_plugins', 'wp_ulike_admin', array(
 				'hook_address'    => esc_html( $this->hook ),
 				'nonce_field'     => wp_create_nonce( 'wp-ulike-ajax-nonce' ),
 				'logs_notif'      => __('Are you sure to remove this item?!',WP_ULIKE_SLUG),
