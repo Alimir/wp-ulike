@@ -823,7 +823,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		$result = $wpdb->get_var( stripslashes( $query ) );
 
 		// By checking this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.
-		$enable_meta_values = wp_ulike_get_setting( 'wp_ulike_general', 'enable_meta_values', false );
+		$enable_meta_values = wp_ulike_get_option( 'enable_meta_values', false );
 		if( wp_ulike_is_true( $enable_meta_values ) && in_array( $status, array( 'like', 'all' ) ) ){
 			$result += wp_ulike_get_old_meta_value( $ID, $type );
 		}
@@ -952,30 +952,30 @@ if( ! function_exists( 'wp_ulike' ) ){
 		//global variables
 		global $post;
 
-		$post_ID          = isset( $args['id'] ) ? $args['id'] : $post->ID;
-		$attributes       = apply_filters( 'wp_ulike_posts_add_attr', null );
-		$style            = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
-		$display_likers   = wp_ulike_get_setting( 'wp_ulike_posts', 'users_liked_box', 1 );
-		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_posts', 'disable_likers_pophover', 0 );
-		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
-		$post_settings    = wp_ulike_get_post_settings_by_type( 'likeThis' );
+		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post->ID;
+		$attributes    = apply_filters( 'wp_ulike_posts_add_attr', null );
+		$options       = wp_ulike_get_option( 'posts_group' );
+		$post_settings = wp_ulike_get_post_settings_by_type( 'likeThis' );
 
 		//Main data
 		$defaults = array_merge( $post_settings, array(
-			"id"               => $post_ID,            //Post ID
-			"method"           => 'likeThis',          //JavaScript method
-			"type"             => 'post',              //Function type (post/process)
-			"display_likers"   => $display_likers,     //Check likers box display
-			"disable_pophover" => $disable_pophover,   //Disable pophover
-			"style"            => $style,              //Get Default Theme
-			"attributes"       => $attributes,         //Get Attributes Filter
-			"wrapper_class"    => '',                  //Extra Wrapper class
-			"button_type"      => $button_type         //Button Type
+			"id"                   => $post_ID,
+			"method"               => 'likeThis',
+			"type"                 => 'post',
+			"wrapper_class"        => '',
+			"attributes"           => $attributes,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
+			"disable_pophover"     => isset( $options['disable_likers_pophover'] ) ? $options['disable_likers_pophover'] : 0,
+			"style"                => isset( $options['template'] ) ? $options['template'] : 'wpulike-default',
+			"button_type"          => isset( $options['button_type'] ) ? $options['button_type'] : 'image',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button',
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
-		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) );
+		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
         if( $type === 'put' ) {
         	return $output;
@@ -1033,25 +1033,37 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 	 */
 	function is_wp_ulike( $options, $args = array() ){
 
+		if( empty( $options ) ){
+			return true;
+		}
+
 		$defaults = apply_filters( 'wp_ulike_auto_diplay_filter_list' , array(
-				'is_home'     => is_front_page() && is_home() && $options['home'] == '1',
-				'is_single'   => is_single() && $options['single'] == '1',
-				'is_page'     => is_page() && $options['page'] == '1',
-				'is_archive'  => is_archive() && $options['archive'] == '1',
-				'is_category' => is_category() && $options['category'] == '1',
-				'is_search'   => is_search() && $options['search'] == '1',
-				'is_tag'      => is_tag() && $options['tag'] == '1',
-				'is_author'   => is_author() && $options['author'] == '1',
-				'is_bp'       => function_exists('is_buddypress') && is_buddypress() && isset( $options['buddypress'] ) && $options['buddypress'] == '1',
-				'is_bbpress'  => function_exists('is_bbpress') && is_bbpress() && isset( $options['bbpress'] ) && $options['bbpress'] == '1',
-				'is_wc'       => function_exists('is_woocommerce') && is_woocommerce() && isset( $options['woocommerce'] ) && $options['woocommerce'] == '1',
+				'is_home'        => is_front_page() && is_home(),
+				'is_single'      => is_singular(),
+				'is_archive'     => is_archive(),
+				'is_category'    => is_category(),
+				'is_search'      => is_search(),
+				'is_tag'         => is_tag(),
+				'is_author'      => is_author(),
+				'is_buddypress'  => function_exists('is_buddypress') && is_buddypress(),
+				'is_bbpress'     => function_exists('is_bbpress') && is_bbpress(),
+				'is_woocommerce' => function_exists('is_woocommerce') && is_woocommerce(),
 			)
 		);
-
 		$parsed_args = wp_parse_args( $args, $defaults );
 
-		foreach ( $parsed_args as $key => $value ) {
-			if( $value ) {
+		foreach ( $options as $key => $value ) {
+			if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
+				if( $value === 'single' ){
+					$post_types = wp_ulike_get_option( 'auto_display_filter_post_types' );
+					if( ! empty( $post_types ) ){
+						foreach ($post_types as $p_key => $p_value) {
+							if( get_post_type() === $p_value ){
+								return true;
+							}
+						}
+					}
+				}
 				return false;
 			}
 		}
@@ -1172,27 +1184,28 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 
 		$comment_ID       = isset( $args['id'] ) ? $args['id'] : get_comment_ID();
 		$attributes       = apply_filters( 'wp_ulike_comments_add_attr', null );
-		$style            = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
-		$display_likers   = wp_ulike_get_setting( 'wp_ulike_comments', 'users_liked_box', 1 );
-		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_comments', 'disable_likers_pophover', 0 );
-		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$options          = wp_ulike_get_option( 'comments_group' );
 		$comment_settings = wp_ulike_get_post_settings_by_type( 'likeThisComment' );
 
+		//Main data
 		$defaults = array_merge( $comment_settings, array(
-			"id"               => $comment_ID,         //Comment ID
-			"method"           => 'likeThisComment',   //JavaScript method
-			"type"             => 'post',              //Function type (post/process)
-			"display_likers"   => $display_likers,     //Display likers box
-			"disable_pophover" => $disable_pophover,   //Disable pophover
-			"style"            => $style,              //Get Default Theme
-			"attributes"       => $attributes,         //Get Attributes Filter
-			"wrapper_class"    => '',                  //Extra Wrapper class
-			"button_type"      => $button_type         //Button Type
+			"id"                   => $comment_ID,
+			"method"               => 'likeThisComment',
+			"type"                 => 'post',
+			"wrapper_class"        => '',
+			"attributes"           => $attributes,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
+			"disable_pophover"     => isset( $options['disable_likers_pophover'] ) ? $options['disable_likers_pophover'] : 0,
+			"style"                => isset( $options['template'] ) ? $options['template'] : 'wpulike-default',
+			"button_type"          => isset( $options['button_type'] ) ? $options['button_type'] : 'image',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button',
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
-		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) );
+		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
         if( $type === 'put' ) {
         	return $output;
@@ -1272,27 +1285,28 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_id();
 		}
 		$attributes          = apply_filters( 'wp_ulike_activities_add_attr', null );
-		$style               = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
-		$display_likers      = wp_ulike_get_setting( 'wp_ulike_buddypress', 'users_liked_box', 1 );
-		$disable_pophover    = wp_ulike_get_setting( 'wp_ulike_buddypress', 'disable_likers_pophover', 0 );
-		$button_type         = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$options             = wp_ulike_get_option( 'buddypress_group' );
 		$buddypress_settings = wp_ulike_get_post_settings_by_type( 'likeThisActivity' );
 
+		//Main data
 		$defaults = array_merge( $buddypress_settings, array(
-			"id"               => $activityID,          //Activity ID
-			"method"           => 'likeThisActivity',   //JavaScript method
-			"type"             => 'post',               //Function type (post/process)
-			"display_likers"   => $display_likers,      //Display likers box
-			"disable_pophover" => $disable_pophover,    //Disable pophover
-			"style"            => $style,               //Get Default Theme
-			"attributes"       => $attributes,          //Get Attributes Filter
-			"wrapper_class"    => '',                   //Extra Wrapper class
-			"button_type"      => $button_type          //Button Type
+			"id"                   => $activityID,
+			"method"               => 'likeThisActivity',
+			"type"                 => 'post',
+			"wrapper_class"        => '',
+			"attributes"           => $attributes,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
+			"disable_pophover"     => isset( $options['disable_likers_pophover'] ) ? $options['disable_likers_pophover'] : 0,
+			"style"                => isset( $options['template'] ) ? $options['template'] : 'wpulike-default',
+			"button_type"          => isset( $options['button_type'] ) ? $options['button_type'] : 'image',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button',
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
-		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) );
+		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
         if( $type === 'put' ) {
         	return $output;
@@ -1452,27 +1466,28 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		$post_ID = isset( $args['id'] ) ? $args['id'] : $post_ID;
 
 		$attributes       = apply_filters( 'wp_ulike_topics_add_attr', null );
-		$style            = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
-		$display_likers   = wp_ulike_get_setting( 'wp_ulike_bbpress', 'users_liked_box', 1 );
-		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_bbpress', 'disable_likers_pophover', 0 );
-		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$options          = wp_ulike_get_option( 'bbpress_group' );
 		$bbpress_settings = wp_ulike_get_post_settings_by_type( 'likeThisTopic' );
 
+		//Main data
 		$defaults = array_merge( $bbpress_settings, array(
-			"id"               => $post_ID,            //Post ID
-			"method"           => 'likeThisTopic',     //JavaScript method
-			"type"             => 'post',              //Function type (post/process)
-			"display_likers"   => $display_likers,     //Display likers box
-			"disable_pophover" => $disable_pophover,   //Dsiable pophover
-			"style"            => $style,              //Get Default Theme
-			"attributes"       => $attributes,         //Get Attributes Filter
-			"wrapper_class"    => '',                  //Extra Wrapper class
-			"button_type"      => $button_type         //Button Type
+			"id"                   => $post_ID,
+			"method"               => 'likeThisTopic',
+			"type"                 => 'post',
+			"wrapper_class"        => '',
+			"attributes"           => $attributes,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
+			"disable_pophover"     => isset( $options['disable_likers_pophover'] ) ? $options['disable_likers_pophover'] : 0,
+			"style"                => isset( $options['template'] ) ? $options['template'] : 'wpulike-default',
+			"button_type"          => isset( $options['button_type'] ) ? $options['button_type'] : 'image',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button',
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
-		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) );
+		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
         if( $type === 'put' ) {
         	return $output;
@@ -1500,7 +1515,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 			case 'likeThis':
 			case 'post':
 				$settings = array(
-					'setting'  => 'wp_ulike_posts',
+					'setting'  => 'posts_group',
 					'table'    => 'ulike',
 					'column'   => 'post_id',
 					'key'      => '_liked',
@@ -1512,7 +1527,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 			case 'likeThisComment':
 			case 'comment':
 				$settings = array(
-					'setting'  => 'wp_ulike_comments',
+					'setting'  => 'comments_group',
 					'table'    => 'ulike_comments',
 					'column'   => 'comment_id',
 					'key'      => '_commentliked',
@@ -1524,7 +1539,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 			case 'likeThisActivity':
 			case 'buddypress':
 				$settings = array(
-					'setting'  => 'wp_ulike_buddypress',
+					'setting'  => 'buddypress_group',
 					'table'    => 'ulike_activities',
 					'column'   => 'activity_id',
 					'key'      => '_activityliked',
@@ -1536,7 +1551,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 			case 'likeThisTopic':
 			case 'bbpress':
 				$settings = array(
-					'setting'  => 'wp_ulike_bbpress',
+					'setting'  => 'bbpress_group',
 					'table'    => 'ulike_forums',
 					'column'   => 'topic_id',
 					'key'      => '_topicliked',
@@ -1686,19 +1701,26 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	 * @since           2.0
 	 * @return			String
 	 */
-	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key ){
+	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key, $args = array() ){
 
-		// Get user's limit number value
-		$limit_num  = wp_ulike_get_setting( $setting_key, 'number_of_users', 10 );
+		$options  = wp_ulike_get_option( $setting_key );
+		//Main data
+		$defaults = array(
+			"counter"     => isset( $options['likers_count'] ) ? $options['likers_count'] : 10,
+			"template"    => isset( $options['likers_template'] ) ? $options['likers_template'] : null,
+			"avatar_size" => isset( $options['likers_gravatar_size'] ) ? $options['likers_gravatar_size'] : 64,
+		);
+		$parsed_args = wp_parse_args( $args, $defaults );
+
 		// Get likers list
-		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $limit_num );
+		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $parsed_args['counter'] );
 		// Bulk user list
 		$users_list = '';
 
 		if( ! empty( $get_users ) ) {
 
 			// Get likers html template
-			$get_template 	= wp_ulike_get_setting( $setting_key, 'users_liked_box_template', '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' );
+ 			$get_template = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
 
 			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
@@ -1707,7 +1729,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 				$out_template 	= $inner_template;
 				if ( $user_info ):
 					if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
-						$avatar_size 	= wp_ulike_get_setting( $setting_key, 'users_liked_box_avatar_size' );
+						$avatar_size 	= $parsed_args['avatar_size'];
 						$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
 						$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
 					}
@@ -1800,19 +1822,19 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	 *
 	 * @author       	Alimir
 	 * @param           Array  		$parsed_args
-	 * @param           Integer 	$only_registered_users
+	 * @param           Integer 	$deprecated_value
 	 * @since           3.4
 	 * @return          String
 	 */
-	function wp_ulike_display_button( array $parsed_args, $only_registered_users ){
+	function wp_ulike_display_button( array $args, $deprecated_value = null ){
 		global $wp_ulike_class;
 
-		if( ! wp_ulike_is_true( $only_registered_users ) || is_user_logged_in() ) {
+		if( ! wp_ulike_is_true( $args['only_logged_in_users'] ) || is_user_logged_in() ) {
 			// Return ulike template
-			return $wp_ulike_class->wp_get_ulike( $parsed_args );
+			return $wp_ulike_class->wp_get_ulike( $args );
 		} else {
-			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') === 'button' ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
+			if( $args['logged_out_action'] === 'button' ){
+				return $wp_ulike_class->get_template( $args, 0 );
 			} else {
 				return apply_filters( 'wp_ulike_login_alert_template',
 					sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>',
@@ -1916,7 +1938,7 @@ if( ! function_exists( 'wp_ulike_format_number' ) ){
 		if( $num != 0 ){
 			$sign = strpos( $status, 'dis' ) === false ? '+' : '-';
 		}
-		if ($num >= 1000 && wp_ulike_get_setting( 'wp_ulike_general', 'format_number' ) == '1'){
+		if ( $num >= 1000 &&  wp_ulike_is_true( wp_ulike_get_option( 'enable_kilobyte_format', 0 ) ) ){
 			$value = round($num/1000, 2) . 'K' . $sign;
 		} else {
 			$value = $num . $sign;
@@ -2127,9 +2149,9 @@ if( ! function_exists('wp_ulike_get_button_text') ){
 	 * @param string $option_name
 	 * @return string
 	 */
-	function wp_ulike_get_button_text( $option_name ){
-		$value = wp_ulike_get_setting( 'wp_ulike_general', $option_name );
-		return apply_filters( 'wp_ulike_button_text', $value, $option_name );
+	function wp_ulike_get_button_text( $option_name, $setting_key = 'posts_group' ){
+		$value = wp_ulike_get_option( $setting_key . '|text_group|' . $option_name );
+		return apply_filters( 'wp_ulike_button_text', $value, $option_name, $setting_key );
 	}
 }
 

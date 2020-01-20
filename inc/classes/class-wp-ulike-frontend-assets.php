@@ -22,7 +22,7 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 	   	 */
 	  	function __construct() {
 	    	// If user has been disabled this page in options, then return.
-			if( ! is_wp_ulike( wp_ulike_get_setting( 'wp_ulike_general', 'plugin_files') ) ) {
+			if( ! is_wp_ulike( wp_ulike_get_option( 'disable_plugin_files' ) ) ) {
 				return;
 			}
 	        // general assets
@@ -77,7 +77,7 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 			//localize script
 			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
 				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'notifications' => wp_ulike_get_setting( 'wp_ulike_general', 'notifications')
+				'notifications' => wp_ulike_get_option( 'enable_toast_notice' )
 			));
 	  	}
 
