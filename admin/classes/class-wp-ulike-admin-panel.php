@@ -55,7 +55,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'enqueue_webfont'    => true,
                 'async_webfont'      => false,
                 'output_css'         => true,
-                'theme'              => 'light'
+                'theme'              => 'light wp-ulike-settings-panel'
             ) );
 
             do_action( 'wp_ulike_settings_loaded' );
@@ -306,19 +306,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'placeholder'  => 'http://'
                     )
                 ) )
-            ) );
-
-            /**
-             * Backup Section
-             */
-            CSF::createSection( $this->option_domain, array(
-                'title'  => __( 'Backup',WP_ULIKE_SLUG),
-                'icon'   => 'fa fa-shield',
-                'fields' => array(
-                    array(
-                        'type' => 'backup',
-                    )
-                )
             ) );
 
             do_action( 'wp_ulike_panel_sections_ended' );
