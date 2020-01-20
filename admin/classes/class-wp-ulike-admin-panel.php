@@ -47,7 +47,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'show_footer'        => true,
                 'show_all_options'   => true,
                 'show_form_warning'  => true,
-                'sticky_header'      => false,
+                'sticky_header'      => true,
                 'save_defaults'      => true,
                 'ajax_save'          => true,
                 'footer_credit'      => 'Thank you for choosing <a href="https://wpulike.com/?utm_source=footer-link&amp;utm_campaign=plugin-uri&amp;utm_medium=wp-dash" title="Wordpress ULike" target="_blank">WP ULike</a>.',
@@ -93,7 +93,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'title'  => __( 'General',WP_ULIKE_SLUG),
                 'fields' => apply_filters( 'wp_ulike_panel_general', array(
                     array(
-                        'id'    => 'enable_covert_format',
+                        'id'    => 'enable_kilobyte_format',
                         'type'  => 'switcher',
                         'title' => __('Enable Convert Format', WP_ULIKE_SLUG),
                         'desc'  => __('Convert numbers of Likes with string (kilobyte) format.', WP_ULIKE_SLUG) . '<strong> (WHEN? likes>=1000)</strong>'
@@ -163,8 +163,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'content' => __('Activity Content', WP_ULIKE_SLUG),
                 'meta'    => __('Activity Meta', WP_ULIKE_SLUG)
             );
-            $get_content_fields['buddypress']['enable_add_bp_notifications'] = array(
-                'id'         => 'enable_add_bp_notifications',
+            $get_content_fields['buddypress']['enable_comments'] = array(
+                'id'         => 'enable_comments',
+                'type'       => 'switcher',
+                'title'      => __('Activity Comment', WP_ULIKE_SLUG),
+                'desc'       => __('Add the possibility to like Buddypress comments in the activity stream', WP_ULIKE_SLUG),
+                'dependency' => array( 'enable_auto_display', '==', 'true' )
+            );
+            $get_content_fields['buddypress']['enable_add_bp_activity'] = array(
+                'id'         => 'enable_add_bp_activity',
                 'type'       => 'switcher',
                 'title'      => __('Enable Activity Notification', WP_ULIKE_SLUG),
                 'desc'       => __('Insert new likes in buddyPress activity page', WP_ULIKE_SLUG),
@@ -179,7 +186,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'default'  => '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)',
                 'title'    => __('Post Activity Text', WP_ULIKE_SLUG),
                 'desc'     => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%POST_LIKER%</code> , <code>%POST_PERMALINK%</code> , <code>%POST_COUNT%</code> , <code>%POST_TITLE%</code>',
-                'dependency'=> array( 'enable_add_bp_notifications', '==', 'true' ),
+                'dependency'=> array( 'enable_add_bp_activity', '==', 'true' ),
             );
             $get_content_fields['buddypress']['comments_notification_template'] = array(
                 'id'       => 'comments_notification_template',
@@ -191,7 +198,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'default'  => '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)',
                 'title'    => __('Comment Activity Text', WP_ULIKE_SLUG),
                 'desc'     => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%COMMENT_LIKER%</code> , <code>%COMMENT_AUTHOR%</code> , <code>%COMMENT_COUNT%</code>, <code>%COMMENT_PERMALINK%</code>',
-                'dependency'=> array( 'enable_add_bp_notifications', '==', 'true' ),
+                'dependency'=> array( 'enable_add_bp_activity', '==', 'true' ),
             );
             $get_content_fields['buddypress']['enable_add_notification'] = array(
                 'id'         => 'enable_add_notification',
@@ -317,6 +324,11 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             do_action( 'wp_ulike_panel_sections_ended' );
         }
 
+        /**
+         * Generate general content options
+         *
+         * @return void
+         */
         public function get_content_options(){
             return array(
                 'template' => array(
@@ -324,7 +336,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'    => 'image_select',
                     'title'   => __( 'Select a Template',WP_ULIKE_SLUG),
                     'desc'    => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) ),
-                    'options' => wp_ulike_get_template_list_option_array(),
+                    'options' => $this->get_templates_option_array(),
                     'default' => 'wpulike-default',
                     'class'   => 'wp-ulike-visual-select',
                 ),
@@ -333,9 +345,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'       => 'button_set',
                     'title'      => __( 'Button Type', WP_ULIKE_SLUG),
                     'options'    => array(
-                    'image' => __('Image', WP_ULIKE_SLUG),
-                    'text'  => __('Text', WP_ULIKE_SLUG),
-                    'icon'  => __('Icon', WP_ULIKE_SLUG),
+                        'image' => __('Image', WP_ULIKE_SLUG),
+                        'text'  => __('Text', WP_ULIKE_SLUG)
                     ),
                     'default'    => 'enabled',
                     'dependency' => array( 'template', 'any', 'wpulike-default' ),
@@ -369,34 +380,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         ),
                     ),
                     'dependency' => array( 'button_type|template', 'any|any', 'text|wpulike-default' ),
-                ),
-                'icon_group' => array(
-                    'id'            => 'icon_group',
-                    'type'          => 'tabbed',
-                    'title'         => __( 'Button Icon', WP_ULIKE_SLUG),
-                    'tabs'          => array(
-                        array(
-                            'title'     => __('Like',WP_ULIKE_SLUG),
-                            'fields'    => array(
-                                array(
-                                    'id'      => 'like',
-                                    'type'    => 'icon',
-                                    'title'   => __('Button Icon',WP_ULIKE_SLUG)
-                                ),
-                            )
-                        ),
-                        array(
-                            'title'     => __('Liked',WP_ULIKE_SLUG),
-                            'fields'    => array(
-                                array(
-                                    'id'      => 'liked',
-                                    'type'    => 'icon',
-                                    'title'   => __('Button Icon',WP_ULIKE_SLUG)
-                                ),
-                            )
-                        ),
-                    ),
-                    'dependency' => array( 'button_type|template', 'any|any', 'icon|wpulike-default' ),
                 ),
                 'image_group' => array(
                     'id'            => 'image_group',
@@ -487,7 +470,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'by_ip'       => __('Logged By IP', WP_ULIKE_SLUG),
                         'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
                     ),
-                    'default'     => 'by_ip'
+                    'default'     => 'by_username'
                 ),
                 'enable_only_logged_in_users' => array(
                     'id'    => 'enable_only_logged_in_users',
@@ -547,6 +530,24 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'dependency'=> array( 'enable_likers_box', '==', 'true' ),
                 )
             );
+        }
+
+        /**
+         * Get templates option array
+         *
+         * @return array
+         */
+        public function get_templates_option_array(){
+            $options = wp_ulike_generate_templates_list();
+            $output  = array();
+
+            if( !empty( $options ) ){
+                foreach ($options as $key => $args) {
+                    $output[$key] = $args['symbol'];
+                }
+            }
+
+            return $output;
         }
 
     }
