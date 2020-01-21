@@ -149,12 +149,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             // Get all content options
             $get_content_options = apply_filters( 'wp_ulike_panel_content_options', $this->get_content_options() );
             $get_content_fields  = array();
+
             // Generate posts fields
             $get_content_fields['posts']    = $get_content_options;
+
             // Generate comment fields
             $get_content_fields['comments'] = $get_content_options;
             unset( $get_content_fields['comments']['auto_display_filter'] );
             unset( $get_content_fields['comments']['auto_display_filter_post_types'] );
+
             // Generate buddypress fields
             $get_content_fields['buddypress'] = $get_content_options;
             unset( $get_content_fields['buddypress']['auto_display_filter'] );
@@ -206,10 +209,26 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'title'      => __('Enable User Notification', WP_ULIKE_SLUG),
                 'desc'       => __('Sends out notifications when you get a like from someone', WP_ULIKE_SLUG),
             );
-            // Generate buddypress fields
+            $buddypress_options = array( array(
+                'type'    => 'content',
+                'content' => sprintf( '<strong>%s</strong> %s', __( 'BuddyPress', WP_ULIKE_SLUG ), __( 'plugin is not installed or activated', WP_ULIKE_SLUG ) ),
+            ) );
+            if( function_exists('is_buddypress') ){
+                $buddypress_options = array_values( apply_filters( 'wp_ulike_panel_buddypress_type_options', $get_content_fields['buddypress'] ) );
+            }
+
+            // Generate bbPress fields
             $get_content_fields['bbpress'] = $get_content_options;
             unset( $get_content_fields['bbpress']['auto_display_filter'] );
             unset( $get_content_fields['bbpress']['auto_display_filter_post_types'] );
+
+            $bbPress_options = array( array(
+                'type'    => 'content',
+                'content' => sprintf( '<strong>%s</strong> %s', __( 'bbPress', WP_ULIKE_SLUG ), __( 'plugin is not installed or activated', WP_ULIKE_SLUG ) ),
+            ) );
+            if( function_exists('is_buddypress') ){
+                $bbPress_options = array_values( apply_filters( 'wp_ulike_panel_bbpress_type_options', $get_content_fields['bbpress'] ) );
+            }
 
             // Content Groups
             CSF::createSection( $this->option_domain, array(
@@ -235,14 +254,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'     => 'buddypress_group',
                         'type'   => 'fieldset',
                         'title'  => __('BuddyPress'),
-                        'fields' => array_values( apply_filters( 'wp_ulike_panel_buddypress_type_options', $get_content_fields['buddypress'] ) )
+                        'fields' => $buddypress_options
                     ),
                     // Posts
                     array(
                         'id'     => 'bbpress_group',
                         'type'   => 'fieldset',
                         'title'  => __('bbPress'),
-                        'fields' => array_values( apply_filters( 'wp_ulike_panel_bbpress_type_options', $get_content_fields['bbpress'] ) )
+                        'fields' => $bbPress_options
                     )
                     // End
                 )
