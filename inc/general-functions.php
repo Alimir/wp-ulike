@@ -2348,7 +2348,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 					class="<?php echo $button_class; ?>">
 					<?php
 						do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
-						if($button_type == 'text'){
+						if( $button_type == 'text' ){
 							echo '<span>' . $button_text . '</span>';
 						}
 					?>

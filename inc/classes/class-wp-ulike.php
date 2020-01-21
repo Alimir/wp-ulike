@@ -371,7 +371,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';
 				if($status == 2 && strpos( $user_status, 'dis') !== 0){
-					$button_text = wp_ulike_get_button_text( 'liked', $args['setting'] );
+					$button_text = wp_ulike_get_button_text( 'unlike', $args['setting'] );
 				} else {
 					$button_text = wp_ulike_get_button_text( 'like', $args['setting'] );
 				}
@@ -412,6 +412,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					"type"             => esc_attr( $args['method'] ),
 					"status"           => esc_attr( $status ),
 					"user_status"      => esc_attr( $user_status ),
+					"setting"      	   => esc_attr( $args['setting'] ),
 					"attributes"       => $args['attributes'],
 					"style"            => esc_html( $args['style'] ),
 					"button_type"      => esc_html( $args['button_type'] ),

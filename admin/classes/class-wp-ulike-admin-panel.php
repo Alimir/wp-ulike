@@ -331,12 +331,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'         => 'button_type',
                     'type'       => 'button_set',
                     'title'      => __( 'Button Type', WP_ULIKE_SLUG),
+                    'default'    => 'image',
                     'options'    => array(
                         'image' => __('Image', WP_ULIKE_SLUG),
                         'text'  => __('Text', WP_ULIKE_SLUG)
                     ),
                     'default'    => 'enabled',
-                    'dependency' => array( 'template', 'any', 'wpulike-default' ),
+                    'dependency' => array( 'template', 'any', 'wpulike-default,wp-ulike-pro-default,wpulike-heart' ),
                 ),
                 'text_group' => array(
                     'id'            => 'text_group',
@@ -355,10 +356,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             )
                         ),
                         array(
-                            'title'     => __('Liked',WP_ULIKE_SLUG),
+                            'title'     => __('Unlike',WP_ULIKE_SLUG),
                             'fields'    => array(
                                 array(
-                                    'id'      => 'liked',
+                                    'id'      => 'unlike',
                                     'type'    => 'text',
                                     'title'   => __('Button Text',WP_ULIKE_SLUG),
                                     'default' => 'Liked'
@@ -366,7 +367,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             )
                         ),
                     ),
-                    'dependency' => array( 'button_type|template', 'any|any', 'text|wpulike-default' ),
+                    'dependency' => array( 'button_type|template', 'any|any', 'text|wpulike-default,wp-ulike-pro-default,wpulike-heart' ),
                 ),
                 'image_group' => array(
                     'id'            => 'image_group',
@@ -386,10 +387,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             )
                         ),
                         array(
-                            'title'     => __('Liked',WP_ULIKE_SLUG),
+                            'title'     => __('Unlike',WP_ULIKE_SLUG),
                             'fields'    => array(
                                 array(
-                                    'id'           => 'liked',
+                                    'id'           => 'unlike',
                                     'type'         => 'upload',
                                     'title'        => __('Button Image',WP_ULIKE_SLUG),
                                     'library'      => 'image',
@@ -398,7 +399,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             )
                         ),
                     ),
-                    'dependency' => array( 'button_type|template', 'any|any', 'image|wpulike-default' ),
+                    'dependency' => array( 'button_type|template', 'any|any', 'image|wpulike-default,wp-ulike-pro-default,wpulike-heart' ),
                 ),
                 'enable_auto_display' => array(
                     'id'      => 'enable_auto_display',

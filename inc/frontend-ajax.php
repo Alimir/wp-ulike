@@ -103,7 +103,7 @@ function wp_ulike_process(){
 				case 3:
 					$response = array(
 						'message'     => wp_ulike_get_option( 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
-						'btnText'     => wp_ulike_get_button_text( 'liked', $setting ),
+						'btnText'     => wp_ulike_get_button_text( 'unlike', $setting ),
 						'messageType' => 'success',
 						'status'      => $status,
 						'data'        => apply_filters( 'wp_ulike_respond_for_liked_data', $counter, $post_ID )
