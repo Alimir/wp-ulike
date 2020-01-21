@@ -204,7 +204,6 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	}
 }
 
-
 if( ! function_exists( 'wp_ulike_get_options_info' ) ){
 	/**
 	 * Generate options info list
@@ -1891,68 +1890,17 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	 */
 	function wp_ulike_get_custom_style( $return_style = null ){
 
-		// Like Icon
-		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$get_like_icon.') !important; }';
+		// Custom Spinner
+		if( '' != ( $custom_spinner = wp_ulike_get_option( 'custom_spinner' ) ) ) {
+			$return_style .= '.wpulike .wp_ulike_is_loading .wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading .wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {background-image: url('.$custom_spinner.') !important;}';
 		}
 
-		// Unlike Icon
-		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$get_like_icon.') !important; filter: none; }';
+		// Custom Styles
+		if( '' != ( $custom_css = wp_ulike_get_option( 'custom_css' ) ) ) {
+			$return_style .= $custom_css;
 		}
 
-		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) ) {
-
-			//get custom options
-			$customstyle   = get_option( 'wp_ulike_customize' );
-			$btn_style     = '';
-			$counter_style = '';
-			$before_style  = '';
-
-			// Button Style
-			if( isset( $customstyle['btn_bg'] ) && ! empty( $customstyle['btn_bg'] ) ) {
-				$btn_style .= "background-color:".$customstyle['btn_bg'].";";
-			}
-			if( isset( $customstyle['btn_border'] ) && ! empty( $customstyle['btn_border'] ) ) {
-				$btn_style .= "box-shadow: 0 0 0 1px ".$customstyle['btn_border']." inset; ";
-			}
-			if( isset( $customstyle['btn_color'] ) && ! empty( $customstyle['btn_color'] ) ) {
-				$btn_style .= "color:".$customstyle['btn_color'].";";
-			}
-
-			if( $btn_style != '' ){
-				$return_style .= '.wpulike-default .wp_ulike_btn, .wpulike-default .wp_ulike_btn:hover, #bbpress-forums .wpulike-default .wp_ulike_btn, #bbpress-forums .wpulike-default .wp_ulike_btn:hover{'.$btn_style.'}.wpulike-heart .wp_ulike_general_class{'.$btn_style.'}';
-			}
-
-			// Counter Style
-			if( isset( $customstyle['counter_bg'] ) && ! empty( $customstyle['counter_bg'] ) ) {
-				$counter_style .= "background-color:".$customstyle['counter_bg'].";";
-			}
-			if( isset( $customstyle['counter_border'] ) && ! empty( $customstyle['counter_border'] ) ) {
-				$counter_style .= "box-shadow: 0 0 0 1px ".$customstyle['counter_border']." inset; ";
-				$before_style  = "background-color:".$customstyle['counter_bg']."; border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
-			}
-			if( isset( $customstyle['counter_color'] ) && ! empty( $customstyle['counter_color'] ) ) {
-				$counter_style .= "color:".$customstyle['counter_color'].";";
-			}
-
-			if( $counter_style != '' ){
-				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
-			}
-
-			// Loading Spinner
-			if( isset( $customstyle['loading_animation'] ) && ! empty( $customstyle['loading_animation'] ) ) {
-				$return_style .= '.wpulike .wp_ulike_is_loading .wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading .wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {background-image: url('.wp_get_attachment_url( $customstyle['loading_animation'] ).') !important;}';
-			}
-
-			// Custom Styles
-			if( isset( $customstyle['custom_css'] ) && ! empty( $customstyle['custom_css'] ) ) {
-				$return_style .= $customstyle['custom_css'];
-			}
-
-		}
-
-		return $return_style;
+		return apply_filters( 'wp_ulike_custom_css', $return_style );
 	}
 
 }
