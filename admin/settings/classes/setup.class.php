@@ -12,7 +12,7 @@ if( ! class_exists( 'CSF' ) ) {
 
     // constants
     public static $version = '2.1.3';
-    public static $premium = false;
+    public static $premium = true;
     public static $dir     = null;
     public static $url     = null;
     public static $inited  = array();

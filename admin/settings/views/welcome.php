@@ -129,5 +129,5 @@ if( ! class_exists( 'CSF_Welcome' ) ) {
 
   }
 
-  // CSF_Welcome::instance();
+  CSF_Welcome::instance();
 }
