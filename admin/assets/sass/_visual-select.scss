@@ -8,7 +8,6 @@
     .csf--image{
         &.csf--active{
             > img{
-                -webkit-filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%);
                 filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%);
             }
         }
