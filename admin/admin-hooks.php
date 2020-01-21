@@ -127,7 +127,7 @@ function wp_ulike_notice_manager(){
 		$notice_list[ 'wp_ulike_upgrade_option_panel' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_upgrade_option_panel',
 			'title'       => __( 'Upgrade Settings Panel', WP_ULIKE_SLUG ),
-			'description' => __( "In the current version, we have released our new settings panel that is much more powerful than the previous one. This update may have disabled your old settings, if you want to reset those, click the button below:" , WP_ULIKE_SLUG ),
+			'description' => __( "In the current version, we have released our new settings panel that is much more powerful than the previous one. This update may have disabled your old settings. if you want to reset those, click the button below. \nHowever, we recommend that you skip this option, and reset the plugin once." , WP_ULIKE_SLUG ),
 			'skin'        => 'warning',
 			'has_close'   => true,
 			'buttons'     => array(
