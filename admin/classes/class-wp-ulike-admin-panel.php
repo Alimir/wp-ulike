@@ -166,6 +166,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'content' => __('Activity Content', WP_ULIKE_SLUG),
                 'meta'    => __('Activity Meta', WP_ULIKE_SLUG)
             );
+            $get_content_fields['buddypress']['auto_display_position']['default'] = 'content';
             $get_content_fields['buddypress']['enable_comments'] = array(
                 'id'         => 'enable_comments',
                 'type'       => 'switcher',
@@ -355,7 +356,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'image' => __('Image', WP_ULIKE_SLUG),
                         'text'  => __('Text', WP_ULIKE_SLUG)
                     ),
-                    'default'    => 'enabled',
                     'dependency' => array( 'template', 'any', 'wpulike-default,wp-ulike-pro-default,wpulike-heart' ),
                 ),
                 'text_group' => array(

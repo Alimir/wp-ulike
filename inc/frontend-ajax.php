@@ -166,7 +166,7 @@ function wp_ulike_get_likers(){
 	extract( $get_settings );
 
 	// If likers box has been disabled
-	if ( ! wp_ulike_get_option( $setting . '|enable_likers_box' , 'users_liked_box' ) ) {
+	if ( ! wp_ulike_get_option( $setting . '|enable_likers_box' , false ) ) {
 		wp_send_json_error( __( 'Notice: The likers box is not activated!', WP_ULIKE_SLUG ) );
 	}
 

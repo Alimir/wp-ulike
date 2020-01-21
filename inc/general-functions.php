@@ -1310,7 +1310,7 @@ if( ! function_exists( 'wp_ulike_format_number' ) ){
 		if( $num != 0 ){
 			$sign = strpos( $status, 'dis' ) === false ? '+' : '-';
 		}
-		if ( $num >= 1000 &&  wp_ulike_is_true( wp_ulike_get_option( 'enable_kilobyte_format', 0 ) ) ){
+		if ( $num >= 1000 &&  wp_ulike_is_true( wp_ulike_get_option( 'enable_kilobyte_format', false ) ) ){
 			$value = round($num/1000, 2) . 'K' . $sign;
 		} else {
 			$value = $num . $sign;
