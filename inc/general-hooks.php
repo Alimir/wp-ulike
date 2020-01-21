@@ -146,16 +146,16 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 			return;
 		}
 
-		if( isset( $image_group['like'] ) ) {
+		if( isset( $image_group['like'] ) && ! empty( $image_group['like'] ) ) {
 			$return_style .= '.wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$image_group['like'].') !important; }';
 		}
-		if( isset( $image_group['unlike'] ) ) {
+		if( isset( $image_group['unlike'] ) && ! empty( $image_group['unlike'] ) ) {
 			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$image_group['unlike'].') !important; }';
 		}
-		if( isset( $image_group['dislike'] ) ) {
+		if( isset( $image_group['dislike'] ) && ! empty( $image_group['dislike'] ) ) {
 			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$image_group['dislike'].') !important; }';
 		}
-		if( isset( $image_group['undislike'] ) ) {
+		if( isset( $image_group['undislike'] ) && ! empty( $image_group['undislike'] ) ) {
 			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$image_group['undislike'].') !important; }';
 		}
 

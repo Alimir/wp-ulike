@@ -256,7 +256,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				return '127.0.0.1';
 			} else {
 
-				if ( wp_ulike_is_true( wp_ulike_get_option( 'enable_anonymise_ip', 0 ) ) ) {
+				if ( wp_ulike_is_true( wp_ulike_get_option( 'enable_anonymise_ip', false ) ) ) {
 					return $this->anonymise_ip( $ip );
 				} else {
 					return $ip;
