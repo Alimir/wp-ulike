@@ -109,6 +109,26 @@
     }
 }
 
+.wp-ulike-btn-is-loading{
+    position: relative;
+
+    .wp-ulike-text{
+        visibility: hidden;
+    }
+
+    &:before{
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 25px;
+        height: 25px;
+        transform: translateX(-50%) translateY(-50%);
+        background-image: url(../../../assets/img/svg/button-spinner.svg);
+        z-index: 9;
+    }
+}
+
 .wp-ulike-pro-stats-banner{
 
     .wp-ulike-inner{

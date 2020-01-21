@@ -123,6 +123,31 @@ function wp_ulike_notice_manager(){
 	$screen      = get_current_screen();
 	$notice_list = [];
 
+	if( !wp_ulike_is_true( get_option( 'wp_ulike_upgrade_option_panel_status', false ) ) && '' !== get_option( 'wp_ulike_general' ) ){
+		$notice_list[ 'wp_ulike_upgrade_option_panel' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_upgrade_option_panel',
+			'title'       => __( 'Upgrade Settings Panel', WP_ULIKE_SLUG ),
+			'description' => __( "In the current version, we have released our new settings panel that is much more powerful than the previous one. This update may have disabled your old settings, if you want to reset those, click the button below:" , WP_ULIKE_SLUG ),
+			'skin'        => 'warning',
+			'has_close'   => true,
+			'buttons'     => array(
+				array(
+					'label'         => __( "Start Recovery", WP_ULIKE_SLUG ),
+					'link'          => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5',
+					'ajax_request'  => array(
+						'action' => 'wp_ulike_upgrade_option_panel'
+					)
+				),
+				array(
+					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'error',
+					'expiration' => YEAR_IN_SECONDS * 10
+				)
+			)
+		]);
+	}
+
 	if( $count_logs > 1000 ){
 		$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_leave_a_review',
