@@ -123,11 +123,11 @@ function wp_ulike_notice_manager(){
 	$screen      = get_current_screen();
 	$notice_list = [];
 
-	if( !wp_ulike_is_true( get_option( 'wp_ulike_upgrade_option_panel_status', false ) ) && '' !== get_option( 'wp_ulike_general' ) ){
+	if( ! wp_ulike_is_true( get_option( 'wp_ulike_upgrade_option_panel_status', false ) ) && '' !== get_option( 'wp_ulike_general' ) ){
 		$notice_list[ 'wp_ulike_upgrade_option_panel' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_upgrade_option_panel',
 			'title'       => __( 'Upgrade Settings Panel', WP_ULIKE_SLUG ),
-			'description' => __( "In the current version, we have released our new settings panel that is much more powerful than the previous one. This update may have disabled your old settings. if you want to reset those, click the button below. \nHowever, we recommend that you skip this option, and reset the plugin once." , WP_ULIKE_SLUG ),
+			'description' => __( "In the current version, we have released our new settings panel that is much more powerful than the previous one. This update may have disabled your old settings. if you want to reset those, click the button below. \nHowever, we recommend that you skip this option, and re-config the plugin once." , WP_ULIKE_SLUG ),
 			'skin'        => 'warning',
 			'has_close'   => true,
 			'buttons'     => array(
@@ -137,6 +137,11 @@ function wp_ulike_notice_manager(){
 					'ajax_request'  => array(
 						'action' => 'wp_ulike_upgrade_option_panel'
 					)
+				),
+				array(
+					'label'      => __('Go to Settings', WP_ULIKE_SLUG),
+					'link'       => self_admin_url( 'admin.php?page=wp-ulike-settings' ),
+					'color_name' => 'info',
 				),
 				array(
 					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
