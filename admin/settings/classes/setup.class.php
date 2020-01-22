@@ -411,16 +411,16 @@ if( ! class_exists( 'CSF' ) ) {
       wp_enqueue_style( 'csf-fa', 'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css', array(), '4.7.1', 'all' );
 
       // framework core styles
-      wp_enqueue_style( 'csf', CSF::include_plugin_url( 'assets/css/csf'. $min .'.css' ), array(), '1.1.0', 'all' );
+      wp_enqueue_style( 'csf', CSF::include_plugin_url( 'assets/css/csf'. $min .'.css' ), array(), '4.1.2', 'all' );
 
       // rtl styles
       if( is_rtl() ) {
-        wp_enqueue_style( 'csf-rtl', CSF::include_plugin_url( 'assets/css/csf-rtl'. $min .'.css' ), array(), '1.1.0', 'all' );
+        wp_enqueue_style( 'csf-rtl', CSF::include_plugin_url( 'assets/css/csf-rtl'. $min .'.css' ), array(), '4.1.2', 'all' );
       }
 
       // framework core scripts
-      wp_enqueue_script( 'csf-plugins', CSF::include_plugin_url( 'assets/js/csf-plugins'. $min .'.js' ), array(), '1.1.0', true );
-      wp_enqueue_script( 'csf', CSF::include_plugin_url( 'assets/js/csf'. $min .'.js' ), array( 'csf-plugins' ), '1.1.0', true );
+      wp_enqueue_script( 'csf-plugins', CSF::include_plugin_url( 'assets/js/csf-plugins'. $min .'.js' ), array(), '4.1.2', true );
+      wp_enqueue_script( 'csf', CSF::include_plugin_url( 'assets/js/csf.js' ), array( 'csf-plugins' ), '4.1.2', true );
 
       wp_localize_script( 'csf', 'csf_vars', array(
         'color_palette'  => apply_filters( 'csf_color_palette', array() ),
