@@ -195,6 +195,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Added: New MusicPlaylist type for schema list. [PRO]
 * Added: More flexible button text/image option for each content type.
 * Added: Simple tool to convert old settings values to new settings values.
+* Updated: Language files.
 * Fixed: Some issues.
 
 = 4.0.5 =
