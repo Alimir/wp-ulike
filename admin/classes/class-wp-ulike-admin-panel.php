@@ -445,6 +445,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'        => __('With this option, you can disable automatic display on these pages.', WP_ULIKE_SLUG),
                     'chosen'      => true,
                     'multiple'    => true,
+                    'default'     => 'single',
                     'options'     => array(
                         'home'     => __('Home', WP_ULIKE_SLUG),
                         'single'   => __('Singular', WP_ULIKE_SLUG),

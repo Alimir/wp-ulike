@@ -123,7 +123,7 @@ function wp_ulike_notice_manager(){
 	$screen      = get_current_screen();
 	$notice_list = [];
 
-	if( ! wp_ulike_is_true( get_option( 'wp_ulike_upgrade_option_panel_status', false ) ) && '' !== get_option( 'wp_ulike_general' ) ){
+	if( ! wp_ulike_is_true( get_option( 'wp_ulike_upgrade_option_panel_status', false ) ) && '' != get_option( 'wp_ulike_general' ) ){
 		$notice_list[ 'wp_ulike_upgrade_option_panel' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_upgrade_option_panel',
 			'title'       => __( 'Upgrade Settings Panel', WP_ULIKE_SLUG ),
