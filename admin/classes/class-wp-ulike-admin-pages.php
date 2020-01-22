@@ -73,7 +73,10 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 				)
 			) );
 
-			add_action( 'admin_menu', array( $this, 'menus' ) );
+			add_action( 'wp_ulike_settings_loaded', function(){
+				add_action( 'admin_menu', array( $this, 'menus' ) );
+			} );
+
 		}
 
 		/**

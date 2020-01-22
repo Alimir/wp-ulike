@@ -1,0 +1,446 @@
+/**
+ * 01. Base
+ */
+.csf{
+  position: relative;
+
+  label{
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+  }
+}
+
+.csf-ab-icon{
+  top: 2px;
+}
+
+#screen-meta-links + .csf-options{
+  margin-top: 40px;
+}
+
+.csf-options{
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+/**
+ * 01. 01. Header
+ */
+.csf-header{
+  position: relative;
+}
+
+.csf-header-inner{
+  padding: 25px;
+
+  h1{
+    float: left;
+    font-size: 1.5em;
+    line-height: 26px;
+    font-weight: 400;
+    margin: 0;
+
+    small{
+      font-size: 11px;
+      font-weight: 500;
+    }
+  }
+}
+
+/**
+ * 01. 02. Sticky
+ */
+.csf-sticky{
+
+  .csf-header-inner{
+    position: fixed;
+    z-index: 99999;
+    top: 32px;
+    @include box-shadow(0 5px 25px rgba(black, 0.125));
+  }
+}
+
+/**
+ * 01. 03. Header Buttons
+ */
+.csf-buttons{
+  float: right;
+  @include transition(opacity 0.2s);
+
+  .button{
+    margin: 0 2px;
+    line-height: 26px;
+
+    &:focus{
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .csf-save{
+    min-width: 72px;
+  }
+}
+
+.csf-header-left{
+  float: left;
+}
+
+.csf-header-right{
+  float: right;
+}
+
+/**
+ * 01. 04. Navigation
+ */
+.csf-nav{
+  display: block;
+  position: relative;
+  z-index: 10;
+  float: left;
+  width: 225px;
+
+  ul{
+    clear: left;
+    margin: 0;
+    list-style-type: none;
+
+    li{
+      margin-bottom: 0;
+
+      a{
+        font-size: 13px;
+        position: relative;
+        display: block;
+        padding: 14px 12px;
+        text-decoration: none;
+        @include transition(all 0.3s ease);
+
+        &:focus{
+          outline: none;
+          @include box-shadow(none);
+        }
+      }
+
+      .csf-section-active{
+
+        &:after{
+          content: " ";
+          position: absolute;
+          right: 0;
+          top: 50%;
+          height: 0;
+          width: 0;
+          pointer-events: none;
+          border: solid transparent;
+          border-right-color: #fff;
+          border-width: 4px;
+          margin-top: -4px;
+        }
+      }
+
+      .csf-arrow:after{
+        content: "\f054";
+        display: inline-block;
+        font-family: "FontAwesome";
+        font-size: 9px;
+        line-height: 1;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        margin-top: -4px;
+        @include transform(rotate(0));
+      }
+
+      &.csf-tab-active{
+
+        .csf-arrow:after{
+          @include transform( rotate(90deg) );
+        }
+
+        ul{
+          display: block;
+        }
+      }
+    }
+
+    ul{
+      display: none;
+      position: relative;
+
+      li{
+
+        a{
+          font-size: 12px;
+          padding: 12px 14px 12px 24px;
+        }
+      }
+    }
+  }
+
+  .fa{
+    width: 20px;
+    margin-right: 5px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .csf-label-error{
+    margin-left: 4px;
+    vertical-align: top;
+  }
+}
+
+.csf-nav-background{
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 9;
+  width: 225px;
+}
+
+/**
+ * 01. 05. Wrapper
+ */
+.csf-wrapper{
+  position: relative;
+}
+
+/**
+ * 01. 06. Content
+ */
+.csf-content{
+  position: relative;
+  margin-left: 225px;
+  background-color: #fff;
+  @include transition(opacity 0.2s);
+}
+
+/**
+ * 01. 07. Section
+ */
+.csf-sections{
+  float: left;
+  width: 100%;
+}
+
+.csf-section{
+  display: none;
+}
+
+.csf-section-title{
+  display: none;
+  padding: 20px 30px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+
+  h3{
+    margin: 0;
+    padding: 0 ;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .fa{
+    margin-right: 5px;
+  }
+}
+
+/**
+ * 01. 08. Footer
+ */
+.csf-footer{
+  padding: 20px;
+  font-size: 11px;
+}
+
+/**
+ * 01. 09. Copyright
+ */
+.csf-copyright{
+  float: left;
+  margin-top: 5px;
+}
+
+/**
+ * 01. 10. Show All Options
+ */
+.csf-search-all,
+.csf-show-all{
+  .csf-nav-background,
+  .csf-nav{
+    display: none;
+  }
+
+  .csf-content{
+    margin-left: 0;
+  }
+
+  .csf-section-title,
+  .csf-section{
+    display: block !important;
+  }
+}
+
+.csf-search-all{
+  .csf-section-title{
+    display: none !important;
+  }
+}
+
+//
+// Expand
+//
+.csf-expand-all{
+  float: left;
+  padding: 0 8px;
+  margin-right: 4px;
+  z-index: 1;
+  font-size: 14px;
+  line-height: 28px;
+  cursor: pointer;
+  user-select: none;
+  @include border-radius(2px);
+  @include transition(all 0.2s);
+
+  span{
+    font-size: 11px;
+    vertical-align: middle;
+  }
+}
+
+/**
+ * 01. 11. Search Input
+ */
+.csf-search{
+  float: left;
+
+  input{
+    margin: 0 2px 0 0;
+    border: none;
+    font-size: 12px;
+    line-height: 28px;
+    min-height: 28px;
+    text-align: inherit;
+    padding: 0 10px;
+    @include border-radius(2px);
+    @include box-shadow(none);
+
+    &:focus{
+      @include box-shadow(none);
+    }
+  }
+}
+
+.csf-saving{
+
+  .csf-buttons,
+  .csf-content{
+    cursor: default;
+    pointer-events: none;
+    @include opacity(0.5);
+  }
+}
+
+/**
+ * 01. 12. Metabox
+ */
+.csf-metabox{
+  margin: -6px -12px -12px -12px;
+
+  .csf-section-title{
+    padding: 20px;
+  }
+}
+
+.block-editor-page{
+
+  .csf-metabox{
+    margin: -6px -14px -12px -14px;
+  }
+}
+
+.csf-restore-wrapper{
+  text-align: right;
+  padding: 10px;
+  border-top: 1px solid #eee;
+
+  .csf-button-cancel,
+  input{
+    display: none;
+  }
+
+  span{
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+
+  input:checked ~ .csf-button-restore{
+    display: none;
+  }
+
+  input:checked ~ .csf-button-cancel{
+    display: inline-block;
+  }
+
+}
+
+#side-sortables{
+
+  .csf-section-title{
+    padding: 12px;
+  }
+
+  .csf-field{
+    padding: 12px;
+
+    .csf-title{
+      float: none;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .csf-fieldset{
+      margin-left: 0;
+    }
+  }
+
+  .csf-notice{
+    padding: 12px;
+  }
+}
+
+/**
+ * 01. 13. Comment Metabox
+ */
+.csf-comment-metabox{
+  margin: -6px -12px -12px -12px;
+
+  .csf-section-title{
+    padding: 20px;
+  }
+}
+
+
+/**
+ * 01. 14. Help Tooltip
+ */
+.csf-tooltip{
+  position: absolute;
+  z-index: 5000001;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  padding: 6px 12px;
+  max-width: 200px;
+  color: #fff;
+  background-color: #000;
+  background-color: rgba(black, 0.85);
+  @include border-radius(4px);
+}

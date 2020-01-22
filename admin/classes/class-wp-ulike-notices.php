@@ -131,6 +131,9 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 'color_name'    => 'default',
                 'link'          => '#',
                 'expiration'    => '',
+                'ajax_request'  => array(
+                    'action'  => ''
+                ),
                 'extra_classes' => 'wp-ulike-notice-btn'
             ];
 
@@ -153,6 +156,33 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 unset( $btn_args['expiration'] );
 
                 $this->buttons .= wp_ulike_widget_button_callback( $btn_args );
+
+                if( !empty( $btn_args['ajax_request']['action'] ) ){
+                ob_start();
+?>
+                <script>
+                    jQuery('.<?php echo esc_js( $this->get_unique_class() ); ?> .wp-ulike-notice-cta-btn').on( 'click' , function(e) {
+                        e.preventDefault();
+                        var $currentTargetElement = jQuery(event.currentTarget).addClass('wp-ulike-btn-is-loading');
+                        jQuery.ajax({
+                            url : ajaxurl,
+                            type: 'post',
+                            data: {
+                                action : '<?php echo esc_js( $btn_args['ajax_request']['action'] ); ?>',
+                                nonce  : '<?php echo esc_js( wp_create_nonce( '_notice_nonce' ) ); ?>'
+                            }
+                        }).done(function( response ) {
+                            $currentTargetElement.removeClass('wp-ulike-btn-is-loading');
+                            jQuery(this).closest('.wp-ulike-notice-wrapper').fadeOut();
+                            if(response.success) {
+                                location.reload();
+                            }
+                        }.bind(this));
+                    });
+                </script>
+<?php
+                $this->buttons .= ob_get_clean();
+                }
             }
 
             return $this->buttons;

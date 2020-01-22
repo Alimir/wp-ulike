@@ -32,6 +32,39 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 	}
 }
 
+
+if ( ! function_exists( 'wp_ulike_get_option' ) ) {
+	/**
+	 * Get options list values
+	 *
+	 * @param string $option
+	 * @param array|string $default
+	 * @return array|string|null
+	 */
+	function wp_ulike_get_option( $option = '', $default = null ) {
+	  $global_settings = get_option( 'wp_ulike_settings' );
+
+	  if( strpos( $option, '|' ) && is_array( $global_settings ) ){
+		$option_name  = explode( "|", $option );
+		$option_stack = array();
+		foreach ($option_name as $key => $value) {
+			if( isset( $global_settings[$value] ) ){
+				$option_stack = $global_settings[$value];
+				continue;
+			}
+			if( isset( $option_stack[$value] ) ){
+				$option_stack = $option_stack[$value];
+			} else {
+				return $default;
+			}
+		}
+		return $option_stack;
+	  }
+
+	  return ( isset( $global_settings[$option] ) ) ? $global_settings[$option] : $default;
+	}
+}
+
 if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
 	/**
 	 * Delete all the users likes logs by ajax process.
@@ -171,616 +204,6 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	}
 }
 
-
-if( ! function_exists( 'wp_ulike_get_options_info' ) ){
-	/**
-	 * Generate options info list
-	 *
-	 * @author       	Alimir
-	 * @since           3.1
-	 * @return			Array
-	 */
-	function wp_ulike_get_options_info( $type, $result = array() ) {
-
-		switch ( $type ) {
-			case 'general':
-				$result = array(
-					'title'  => '<i class="dashicons-before dashicons-admin-settings"></i>' . ' ' . __( 'General',WP_ULIKE_SLUG),
-					'fields' => array(
-						'button_type' => array(
-							'type'    => 'visual-select',
-							'label'   => __( 'Button Type', WP_ULIKE_SLUG),
-							'default' => 'image',
-							'options' => array(
-								'image' => array(
-									'name'   => __('Icon', WP_ULIKE_SLUG),
-									'symbol' => WP_ULIKE_ASSETS_URL . '/img/svg/icon.svg'
-								),
-								'text' => array(
-									'name'   => __('Text', WP_ULIKE_SLUG),
-									'symbol' => WP_ULIKE_ASSETS_URL . '/img/svg/text.svg'
-								)
-							)
-						),
-						'button_text' => array(
-							'default' => __('Like',WP_ULIKE_SLUG),
-							'label'   => __( 'Button Text', WP_ULIKE_SLUG) . ' (' . __('Like', WP_ULIKE_SLUG) .')',
-						),
-						'button_text_u' => array(
-							'default' => __('Liked',WP_ULIKE_SLUG),
-							'label'   => __( 'Button Text', WP_ULIKE_SLUG) . ' (' . __('Unlike', WP_ULIKE_SLUG) .')',
-						),
-						'button_url' => array(
-							'type'        => 'media',
-							'label'       => __( 'Button Icon', WP_ULIKE_SLUG) . ' (' . __('Like', WP_ULIKE_SLUG) .')',
-							'description' => __( 'Best size: 16x16',WP_ULIKE_SLUG)
-						),
-						'button_url_u' => array(
-							'type'        => 'media',
-							'label'       => __( 'Button Icon', WP_ULIKE_SLUG) . ' (' . __('Unlike', WP_ULIKE_SLUG) .')',
-							'description' => __( 'Best size: 16x16',WP_ULIKE_SLUG)
-						),
-						'permission_text' => array(
-							'default' => __('You have already registered a vote.',WP_ULIKE_SLUG),
-							'label'   => __( 'Permission Text', WP_ULIKE_SLUG)
-						),
-						'login_type' => array(
-							'type'    => 'radio',
-							'label'   => __( 'Users Login Type',WP_ULIKE_SLUG),
-							'default' => 'button',
-							'options' => array(
-								'alert'  => __('Alert Box', WP_ULIKE_SLUG),
-								'button' => __('Like Button', WP_ULIKE_SLUG)
-						  	)
-						),
-						'login_text' => array(
-							'default' => __('You Should Login To Submit Your Like',WP_ULIKE_SLUG),
-							'label'   => __( 'Users Login Text', WP_ULIKE_SLUG)
-						),
-						'plugin_files' => array(
-							'type'        => 'multi',
-							'label'       => __( 'Disable Plugin Files',WP_ULIKE_SLUG ),
-							'options'     => array(
-								'home'        => __('Home', WP_ULIKE_SLUG),
-								'single'      => __('Single Posts', WP_ULIKE_SLUG),
-								'page'        => __('Pages', WP_ULIKE_SLUG),
-								'archive'     => __('Archives', WP_ULIKE_SLUG),
-								'category'    => __('Categories', WP_ULIKE_SLUG),
-								'search'      => __('Search Results', WP_ULIKE_SLUG),
-								'tag'         => __('Tags', WP_ULIKE_SLUG),
-								'author'      => __('Author Page', WP_ULIKE_SLUG),
-								'buddypress'  => __('BuddyPress Pages', WP_ULIKE_SLUG),
-								'bbpress'     => __('bbPress Pages', WP_ULIKE_SLUG),
-								'woocommerce' => __('WooCommerce Pages', WP_ULIKE_SLUG)
-							),
-							'description' => __('Remove the plugin\'s css and js file on these pages.', WP_ULIKE_SLUG)
-					    ),
-						'format_number' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Format Number', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('Convert numbers of Likes with string (kilobyte) format.', WP_ULIKE_SLUG) . '<strong> (WHEN? likes>=1000)</strong>'
-						),
-						'notifications' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Notifications', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('Custom toast messages after each activity', WP_ULIKE_SLUG)
-						),
-						'anonymise'     => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Anonymize IP', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
-						),
-						'hide_admin_notice' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Hide Admin Notices', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('Enabling this option will completely disable all admin notices.', WP_ULIKE_SLUG)
-						),
-						'enable_meta_values' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Enable Old Meta Values', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => sprintf( '%s<br><strong>* %s</strong>', __('By activating this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.', WP_ULIKE_SLUG), __('Attention: If you have been using WP ULike +v4 from the beginning Or you haven\'t deleted any logs yet, do not enable this option.', WP_ULIKE_SLUG) )
-						),
-						'like_notice' => array(
-							'default' => __('Thanks! You Liked This.',WP_ULIKE_SLUG),
-							'label'   => __( 'Liked Notice Message', WP_ULIKE_SLUG)
-						),
-						'unlike_notice' => array(
-							'default' => __('Sorry! You unliked this.',WP_ULIKE_SLUG),
-							'label'   => __( 'Unliked Notice Message', WP_ULIKE_SLUG)
-						)
-					)
-				);//end wp_ulike_general
-				break;
-
-			case 'posts':
-				$result = array(
-					'title' => '<i class="dashicons-before dashicons-admin-post"></i>' . ' ' . __( 'Posts',WP_ULIKE_SLUG),
-					'fields' => array(
-						'theme' => array(
-							'type'        => 'visual-select',
-							'default'     => 'wpulike-default',
-							'label'       => __( 'Themes',WP_ULIKE_SLUG),
-							'options'     => call_user_func('wp_ulike_generate_templates_list'),
- 							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
-						),
-						'auto_display' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Automatic display', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
-						),
-						'auto_display_position' => array(
-							'type'    => 'radio',
-							'label'   => __( 'Auto Display Position',WP_ULIKE_SLUG),
-							'default' => 'bottom',
-							'options' => array(
-								'top'        => __('Top of Content', WP_ULIKE_SLUG),
-								'bottom'     => __('Bottom of Content', WP_ULIKE_SLUG),
-								'top_bottom' => __('Top and Bottom', WP_ULIKE_SLUG)
-							)
-						),
-						'auto_display_filter' => array(
-							'type'    => 'multi',
-							'label'   => __( 'Auto Display Filter',WP_ULIKE_SLUG ),
-							'options' => array(
-								'home'     => __('Home', WP_ULIKE_SLUG),
-								'single'   => __('Single Posts', WP_ULIKE_SLUG),
-								'page'     => __('Pages', WP_ULIKE_SLUG),
-								'archive'  => __('Archives', WP_ULIKE_SLUG),
-								'category' => __('Categories', WP_ULIKE_SLUG),
-								'search'   => __('Search Results', WP_ULIKE_SLUG),
-								'tag'      => __('Tags', WP_ULIKE_SLUG),
-								'author'   => __('Author Page', WP_ULIKE_SLUG)
-							),
-							'description' => __('You can filter theses pages on auto display option.', WP_ULIKE_SLUG)
-						),
-						'google_rich_snippets' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => '*' . __('Google Rich Snippets', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('Add rich snippet for ratings in form of schema.org', WP_ULIKE_SLUG)
-						),
-						'only_registered_users' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Only registered Users', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('<strong>Only</strong> registered users have permission to like posts.', WP_ULIKE_SLUG)
-						),
-						'logging_method' => array(
-							'type'    => 'select',
-							'default' => 'by_username',
-							'label'   => __( 'Logging Method',WP_ULIKE_SLUG),
-							'options' => array(
-								'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
-								'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
-								'by_ip'       => __('Logged By IP', WP_ULIKE_SLUG),
-								'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
-							)
-						),
-						'users_liked_box' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
-						),
-						'disable_likers_pophover' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
-							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
-						),
-						'users_liked_box_avatar_size' => array(
-							'type'        => 'number',
-							'default'     => 64,
-							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
-							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
-						),
-						'number_of_users' => array(
-							'type'        => 'number',
-							'default'     => 10,
-							'label'       => __( 'Number Of The Users', WP_ULIKE_SLUG),
-							'description' => __('The number of users to show in the users liked box', WP_ULIKE_SLUG)
-						),
-						'users_liked_box_template' => array(
-							'type'        => 'textarea',
-							'default'     => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
-							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
-							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
-						),
-						'delete_logs' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
-							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_all_logs'
-						),
-						'delete_orphaned_rows' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
-							'description' => __( 'Drop all rows in the logs table where its related table row no longer exists. (Don\'t try this option if you\'re using custom IDs)', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_orphaned_rows'
-						)
-					)
-				);//end wp_ulike_posts
-				break;
-
-			case 'comments':
-				$result = array(
-					'title'  => '<i class="dashicons-before dashicons-admin-comments"></i>' . ' ' . __( 'Comments',WP_ULIKE_SLUG),
-					'fields' => array(
-						'theme' => array(
-							'type'        => 'visual-select',
-							'default'     => 'wpulike-heart',
-							'label'       => __( 'Themes',WP_ULIKE_SLUG),
-							'options'     => call_user_func('wp_ulike_generate_templates_list'),
-							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
-						),
-						'auto_display' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Automatic display', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
-						),
-						'auto_display_position' => array(
-							'type'    => 'radio',
-							'label'   => __( 'Auto Display Position',WP_ULIKE_SLUG),
-							'default' => 'bottom',
-							'options' => array(
-								'top'        => __('Top of Content', WP_ULIKE_SLUG),
-								'bottom'     => __('Bottom of Content', WP_ULIKE_SLUG),
-								'top_bottom' => __('Top and Bottom', WP_ULIKE_SLUG)
-							)
-						),
-						'only_registered_users' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Only registered Users', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('<strong>Only</strong> registered users have permission to like comments.', WP_ULIKE_SLUG)
-						),
-						'logging_method' => array(
-							'type'    => 'select',
-							'default' => 'by_username',
-							'label'   => __( 'Logging Method',WP_ULIKE_SLUG),
-							'options' => array(
-								'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
-								'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
-								'by_ip'       => __('Logged By IP', WP_ULIKE_SLUG),
-								'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
-							)
-						),
-						'users_liked_box' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
-						),
-						'disable_likers_pophover' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
-							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
-						),
-						'users_liked_box_avatar_size' => array(
-							'type'        => 'number',
-							'default'     => 64,
-							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
-							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
-						),
-						'number_of_users' => array(
-							'type'        => 'number',
-							'default'     => 10,
-							'label'       => __( 'Number Of The Users', WP_ULIKE_SLUG),
-							'description' => __('The number of users to show in the users liked box', WP_ULIKE_SLUG)
-						),
-						'users_liked_box_template' => array(
-							'type'        => 'textarea',
-							'default'     => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
-							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
-							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
-						),
-						'delete_logs' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
-							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_all_logs'
-						),
-						'delete_orphaned_rows' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
-							'description' => __( 'Drop all rows in the logs table where its related table row no longer exists. (Don\'t try this option if you\'re using custom IDs)', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_orphaned_rows'
-						)
-					)
-				);//end wp_ulike_comments
-				break;
-
-			case 'buddypress':
-				$result = ! function_exists('is_buddypress') ?  array() : array(
-					'title'  => '<i class="dashicons-before dashicons-buddypress"></i>' . ' ' . __( 'BuddyPress',WP_ULIKE_SLUG),
-					'fields' => array(
-						'theme' => array(
-							'type'        => 'visual-select',
-							'default'     => 'wpulike-robeen',
-							'label'       => __( 'Themes',WP_ULIKE_SLUG),
-							'options'     => call_user_func('wp_ulike_generate_templates_list'),
-							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
-						),
-						'auto_display' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Automatic display', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
-						),
-						'auto_display_position' => array(
-							'type'    => 'radio',
-							'label'   => __( 'Auto Display Position',WP_ULIKE_SLUG),
-							'default' => 'meta',
-							'options' => array(
-								'content' => __('Activity Content', WP_ULIKE_SLUG),
-								'meta'    => __('Activity Meta', WP_ULIKE_SLUG)
-							)
-						),
-						'activity_comment'=> array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Activity Comment', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('Add the possibility to like Buddypress comments in the activity stream', WP_ULIKE_SLUG)
-						),
-						'only_registered_users' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Only registered Users', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('<strong>Only</strong> registered users have permission to like activities.', WP_ULIKE_SLUG)
-						),
-						'logging_method' => array(
-							'type'    => 'select',
-							'default' => 'by_username',
-							'label'   => __( 'Logging Method',WP_ULIKE_SLUG),
-							'options' => array(
-								'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
-								'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
-								'by_ip'       => __('Logged By IP', WP_ULIKE_SLUG),
-								'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
-							)
-						),
-						'users_liked_box' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
-						),
-						'disable_likers_pophover' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
-							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
-						),
-						'users_liked_box_avatar_size' => array(
-							'type'        => 'number',
-							'default'     => 64,
-							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
-							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
-						),
-						'number_of_users' => array(
-							'type'        => 'number',
-							'default'     => 10,
-							'label'       => __( 'Number Of The Users', WP_ULIKE_SLUG),
-							'description' => __('The number of users to show in the users liked box', WP_ULIKE_SLUG)
-						),
-						'users_liked_box_template' => array(
-							'type'        => 'textarea',
-							'default'     => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
-							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
-							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
-						),
-						'new_likes_activity' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('BuddyPress Activity', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('insert new likes in buddyPress activity page', WP_ULIKE_SLUG)
-						),
-						'custom_notification' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('BuddyPress Custom Notification', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('Sends out notifications when you get a like from someone', WP_ULIKE_SLUG)
-						),
-						'bp_post_activity_add_header' => array(
-							'type'        => 'textarea',
-							'default'     => '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)',
-							'label'       => __('Post Activity Text', WP_ULIKE_SLUG),
-							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%POST_LIKER%</code> , <code>%POST_PERMALINK%</code> , <code>%POST_COUNT%</code> , <code>%POST_TITLE%</code>'
-						),
-						'bp_comment_activity_add_header' => array(
-							'type'        => 'textarea',
-							'default'     => '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)',
-							'label'       => __('Comment Activity Text', WP_ULIKE_SLUG),
-							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%COMMENT_LIKER%</code> , <code>%COMMENT_AUTHOR%</code> , <code>%COMMENT_COUNT%</code>, <code>%COMMENT_PERMALINK%</code>'
-						),
-						'delete_logs' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
-							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_all_logs'
-						),
-						'delete_orphaned_rows' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
-							'description' => __( 'Drop all rows in the logs table where its related table row no longer exists. (Don\'t try this option if you\'re using custom IDs)', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_orphaned_rows'
-						)
-					)
-				);//end wp_ulike_buddypress
-				break;
-
-			case 'bbpress':
-				$result	= ! function_exists('is_bbpress') ? array() : array(
-					'title'  => '<i class="dashicons-before dashicons-bbpress"></i>' . ' ' . __( 'bbPress',WP_ULIKE_SLUG),
-					'fields' => array(
-						'theme' => array(
-							'type'        => 'visual-select',
-							'default'     => 'wpulike-default',
-							'label'       => __( 'Themes',WP_ULIKE_SLUG),
-							'options'     => call_user_func('wp_ulike_generate_templates_list'),
-							'description' => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', __( 'Display online preview',WP_ULIKE_SLUG),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',__( 'Here',WP_ULIKE_SLUG) )
-						),
-						'auto_display' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Automatic display', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
-						),
-						'auto_display_position' => array(
-							'type'    => 'radio',
-							'label'   => __( 'Auto Display Position',WP_ULIKE_SLUG),
-							'default' => 'bottom',
-							'options' => array(
-								'top'    => __('Top of Content', WP_ULIKE_SLUG),
-								'bottom' => __('Bottom of Content', WP_ULIKE_SLUG)
-							)
-						),
-						'only_registered_users' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Only registered Users', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'description'   => __('<strong>Only</strong> registered users have permission to like Topics.', WP_ULIKE_SLUG)
-						),
-						'logging_method' => array(
-							'type'    => 'select',
-							'default' => 'by_username',
-							'label'   => __( 'Logging Method',WP_ULIKE_SLUG),
-							'options' => array(
-								'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
-								'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
-								'by_ip'       => __('Logged By IP', WP_ULIKE_SLUG),
-								'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
-							)
-						),
-						'users_liked_box' => array(
-							'type'          => 'checkbox',
-							'default'       => 1,
-							'label'         => __('Display Likers Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG)
-						),
-						'disable_likers_pophover' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Disable Popover In Likers Box', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Disable', WP_ULIKE_SLUG),
-							'description'   => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
-						),
-						'users_liked_box_avatar_size' => array(
-							'type'        => 'number',
-							'default'     => 64,
-							'label'       => __( 'Size of Gravatars', WP_ULIKE_SLUG),
-							'description' => __('Size of Gravatars to return (max is 512)', WP_ULIKE_SLUG)
-						),
-						'number_of_users' => array(
-							'type'        => 'number',
-							'default'     => 10,
-							'label'       => __( 'Number Of The Users', WP_ULIKE_SLUG),
-							'description' => __('The number of users to show in the users liked box', WP_ULIKE_SLUG)
-						),
-						'users_liked_box_template' => array(
-							'type'        => 'textarea',
-							'default'     => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
-							'label'       => __('Users Like Box Template', WP_ULIKE_SLUG),
-							'description' => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>'
-						),
-						'delete_logs' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete All Logs', WP_ULIKE_SLUG ),
-							'description' => __( 'You Are About To Delete All Likes Logs. This Action Is Not Reversible.', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_all_logs'
-						),
-						'delete_orphaned_rows' => array(
-							'type'        => 'action',
-							'label'       => __( 'Delete Orphaned Rows', WP_ULIKE_SLUG ),
-							'description' => __( 'Drop all rows in the logs table where its related table row no longer exists. (Don\'t try this option if you\'re using custom IDs)', WP_ULIKE_SLUG),
-							'action'      => 'wp_ulike_delete_orphaned_rows'
-						)
-					)
-				);//end wp_ulike_buddypress
-				break;
-
-			case 'customizer':
-				$result = array(
-					'title'  => '<i class="dashicons-before dashicons-art"></i>' . ' ' . __( 'Customize',WP_ULIKE_SLUG),
-					'fields' => array(
-						'custom_style' => array(
-							'type'          => 'checkbox',
-							'default'       => 0,
-							'label'         => __('Custom Style', WP_ULIKE_SLUG),
-							'checkboxlabel' => __('Activate', WP_ULIKE_SLUG),
-							'attributes'    => array(
-								'class' => 'wp_ulike_custom_style_activation'
-							),
-							'description' 	=> __('Active this option to see the custom style settings.', WP_ULIKE_SLUG)
-						),
-						'btn_bg' => array(
-							'type'        => 'color',
-							'label'       => __('Button style', WP_ULIKE_SLUG),
-							'description' => __('Background', WP_ULIKE_SLUG)
-						),
-						'btn_border' => array(
-							'type'        => 'color',
-							'description' => __('Border Color', WP_ULIKE_SLUG)
-						),
-						'btn_color' => array(
-							'type'        => 'color',
-							'description' => __('Text Color', WP_ULIKE_SLUG)
-						),
-						'counter_bg' => array(
-							'type'        => 'color',
-							'label'       => __( 'Counter Style', WP_ULIKE_SLUG),
-							'description' => __('Background', WP_ULIKE_SLUG)
-						),
-						'counter_border' => array(
-							'type'        => 'color',
-							'description' => __('Border Color', WP_ULIKE_SLUG)
-						),
-						'counter_color' => array(
-							'type'        => 'color',
-							'description' => __('Text Color', WP_ULIKE_SLUG)
-						),
-						'loading_animation' => array(
-							'type'        => 'media',
-							'label'       => __( 'Loading Animation', WP_ULIKE_SLUG) . ' (.GIF)',
-							'description' => __( 'Best size: 16x16',WP_ULIKE_SLUG)
-						),
-						'custom_css' => array(
-							'type'  => 'textarea',
-							'label' => __('Custom CSS', WP_ULIKE_SLUG),
-						)
-					)
-				);//end wp_ulike_customize
-			break;
-		}
-
-		return $result;
-	}
-}
-
 if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 	/**
 	 * Get counter value info
@@ -823,7 +246,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		$result = $wpdb->get_var( stripslashes( $query ) );
 
 		// By checking this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.
-		$enable_meta_values = wp_ulike_get_setting( 'wp_ulike_general', 'enable_meta_values', false );
+		$enable_meta_values = wp_ulike_get_option( 'enable_meta_values', false );
 		if( wp_ulike_is_true( $enable_meta_values ) && in_array( $status, array( 'like', 'all' ) ) ){
 			$result += wp_ulike_get_old_meta_value( $ID, $type );
 		}
@@ -952,30 +375,30 @@ if( ! function_exists( 'wp_ulike' ) ){
 		//global variables
 		global $post;
 
-		$post_ID          = isset( $args['id'] ) ? $args['id'] : $post->ID;
-		$attributes       = apply_filters( 'wp_ulike_posts_add_attr', null );
-		$style            = wp_ulike_get_setting( 'wp_ulike_posts', 'theme', 'wpulike-default' );
-		$display_likers   = wp_ulike_get_setting( 'wp_ulike_posts', 'users_liked_box', 1 );
-		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_posts', 'disable_likers_pophover', 0 );
-		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
-		$post_settings    = wp_ulike_get_post_settings_by_type( 'likeThis' );
+		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post->ID;
+		$attributes    = apply_filters( 'wp_ulike_posts_add_attr', null );
+		$options       = wp_ulike_get_option( 'posts_group' );
+		$post_settings = wp_ulike_get_post_settings_by_type( 'likeThis' );
 
 		//Main data
 		$defaults = array_merge( $post_settings, array(
-			"id"               => $post_ID,            //Post ID
-			"method"           => 'likeThis',          //JavaScript method
-			"type"             => 'post',              //Function type (post/process)
-			"display_likers"   => $display_likers,     //Check likers box display
-			"disable_pophover" => $disable_pophover,   //Disable pophover
-			"style"            => $style,              //Get Default Theme
-			"attributes"       => $attributes,         //Get Attributes Filter
-			"wrapper_class"    => '',                  //Extra Wrapper class
-			"button_type"      => $button_type         //Button Type
+			"id"                   => $post_ID,
+			"method"               => 'likeThis',
+			"type"                 => 'post',
+			"wrapper_class"        => '',
+			"attributes"           => $attributes,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
+			"disable_pophover"     => isset( $options['disable_likers_pophover'] ) ? $options['disable_likers_pophover'] : 0,
+			"style"                => isset( $options['template'] ) ? $options['template'] : 'wpulike-default',
+			"button_type"          => isset( $options['button_type'] ) ? $options['button_type'] : 'image',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button',
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
-		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_posts', 'only_registered_users' ) );
+		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
         if( $type === 'put' ) {
         	return $output;
@@ -1033,25 +456,37 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 	 */
 	function is_wp_ulike( $options, $args = array() ){
 
+		if( empty( $options ) ){
+			return true;
+		}
+
 		$defaults = apply_filters( 'wp_ulike_auto_diplay_filter_list' , array(
-				'is_home'     => is_front_page() && is_home() && $options['home'] == '1',
-				'is_single'   => is_single() && $options['single'] == '1',
-				'is_page'     => is_page() && $options['page'] == '1',
-				'is_archive'  => is_archive() && $options['archive'] == '1',
-				'is_category' => is_category() && $options['category'] == '1',
-				'is_search'   => is_search() && $options['search'] == '1',
-				'is_tag'      => is_tag() && $options['tag'] == '1',
-				'is_author'   => is_author() && $options['author'] == '1',
-				'is_bp'       => function_exists('is_buddypress') && is_buddypress() && isset( $options['buddypress'] ) && $options['buddypress'] == '1',
-				'is_bbpress'  => function_exists('is_bbpress') && is_bbpress() && isset( $options['bbpress'] ) && $options['bbpress'] == '1',
-				'is_wc'       => function_exists('is_woocommerce') && is_woocommerce() && isset( $options['woocommerce'] ) && $options['woocommerce'] == '1',
+				'is_home'        => is_front_page() && is_home(),
+				'is_single'      => is_singular(),
+				'is_archive'     => is_archive(),
+				'is_category'    => is_category(),
+				'is_search'      => is_search(),
+				'is_tag'         => is_tag(),
+				'is_author'      => is_author(),
+				'is_buddypress'  => function_exists('is_buddypress') && is_buddypress(),
+				'is_bbpress'     => function_exists('is_bbpress') && is_bbpress(),
+				'is_woocommerce' => function_exists('is_woocommerce') && is_woocommerce(),
 			)
 		);
-
 		$parsed_args = wp_parse_args( $args, $defaults );
 
-		foreach ( $parsed_args as $key => $value ) {
-			if( $value ) {
+		foreach ( $options as $key => $value ) {
+			if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
+				if( $value === 'single' ){
+					$post_types = wp_ulike_get_option( 'posts_group|auto_display_filter_post_types' );
+					if( ! empty( $post_types ) ){
+						foreach ($post_types as $p_key => $p_value) {
+							if( get_post_type() === $p_value ){
+								return true;
+							}
+						}
+					}
+				}
 				return false;
 			}
 		}
@@ -1172,27 +607,28 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 
 		$comment_ID       = isset( $args['id'] ) ? $args['id'] : get_comment_ID();
 		$attributes       = apply_filters( 'wp_ulike_comments_add_attr', null );
-		$style            = wp_ulike_get_setting( 'wp_ulike_comments', 'theme', 'wpulike-default' );
-		$display_likers   = wp_ulike_get_setting( 'wp_ulike_comments', 'users_liked_box', 1 );
-		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_comments', 'disable_likers_pophover', 0 );
-		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$options          = wp_ulike_get_option( 'comments_group' );
 		$comment_settings = wp_ulike_get_post_settings_by_type( 'likeThisComment' );
 
+		//Main data
 		$defaults = array_merge( $comment_settings, array(
-			"id"               => $comment_ID,         //Comment ID
-			"method"           => 'likeThisComment',   //JavaScript method
-			"type"             => 'post',              //Function type (post/process)
-			"display_likers"   => $display_likers,     //Display likers box
-			"disable_pophover" => $disable_pophover,   //Disable pophover
-			"style"            => $style,              //Get Default Theme
-			"attributes"       => $attributes,         //Get Attributes Filter
-			"wrapper_class"    => '',                  //Extra Wrapper class
-			"button_type"      => $button_type         //Button Type
+			"id"                   => $comment_ID,
+			"method"               => 'likeThisComment',
+			"type"                 => 'post',
+			"wrapper_class"        => '',
+			"attributes"           => $attributes,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
+			"disable_pophover"     => isset( $options['disable_likers_pophover'] ) ? $options['disable_likers_pophover'] : 0,
+			"style"                => isset( $options['template'] ) ? $options['template'] : 'wpulike-default',
+			"button_type"          => isset( $options['button_type'] ) ? $options['button_type'] : 'image',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button',
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
-		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_comments', 'only_registered_users' ) );
+		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
         if( $type === 'put' ) {
         	return $output;
@@ -1272,27 +708,28 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_id();
 		}
 		$attributes          = apply_filters( 'wp_ulike_activities_add_attr', null );
-		$style               = wp_ulike_get_setting( 'wp_ulike_buddypress', 'theme', 'wpulike-default' );
-		$display_likers      = wp_ulike_get_setting( 'wp_ulike_buddypress', 'users_liked_box', 1 );
-		$disable_pophover    = wp_ulike_get_setting( 'wp_ulike_buddypress', 'disable_likers_pophover', 0 );
-		$button_type         = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$options             = wp_ulike_get_option( 'buddypress_group' );
 		$buddypress_settings = wp_ulike_get_post_settings_by_type( 'likeThisActivity' );
 
+		//Main data
 		$defaults = array_merge( $buddypress_settings, array(
-			"id"               => $activityID,          //Activity ID
-			"method"           => 'likeThisActivity',   //JavaScript method
-			"type"             => 'post',               //Function type (post/process)
-			"display_likers"   => $display_likers,      //Display likers box
-			"disable_pophover" => $disable_pophover,    //Disable pophover
-			"style"            => $style,               //Get Default Theme
-			"attributes"       => $attributes,          //Get Attributes Filter
-			"wrapper_class"    => '',                   //Extra Wrapper class
-			"button_type"      => $button_type          //Button Type
+			"id"                   => $activityID,
+			"method"               => 'likeThisActivity',
+			"type"                 => 'post',
+			"wrapper_class"        => '',
+			"attributes"           => $attributes,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
+			"disable_pophover"     => isset( $options['disable_likers_pophover'] ) ? $options['disable_likers_pophover'] : 0,
+			"style"                => isset( $options['template'] ) ? $options['template'] : 'wpulike-default',
+			"button_type"          => isset( $options['button_type'] ) ? $options['button_type'] : 'image',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button',
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
-		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_buddypress', 'only_registered_users' ) );
+		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
         if( $type === 'put' ) {
         	return $output;
@@ -1452,27 +889,28 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		$post_ID = isset( $args['id'] ) ? $args['id'] : $post_ID;
 
 		$attributes       = apply_filters( 'wp_ulike_topics_add_attr', null );
-		$style            = wp_ulike_get_setting( 'wp_ulike_bbpress', 'theme', 'wpulike-default' );
-		$display_likers   = wp_ulike_get_setting( 'wp_ulike_bbpress', 'users_liked_box', 1 );
-		$disable_pophover = wp_ulike_get_setting( 'wp_ulike_bbpress', 'disable_likers_pophover', 0 );
-		$button_type      = wp_ulike_get_setting( 'wp_ulike_general', 'button_type', 'image' );
+		$options          = wp_ulike_get_option( 'bbpress_group' );
 		$bbpress_settings = wp_ulike_get_post_settings_by_type( 'likeThisTopic' );
 
+		//Main data
 		$defaults = array_merge( $bbpress_settings, array(
-			"id"               => $post_ID,            //Post ID
-			"method"           => 'likeThisTopic',     //JavaScript method
-			"type"             => 'post',              //Function type (post/process)
-			"display_likers"   => $display_likers,     //Display likers box
-			"disable_pophover" => $disable_pophover,   //Dsiable pophover
-			"style"            => $style,              //Get Default Theme
-			"attributes"       => $attributes,         //Get Attributes Filter
-			"wrapper_class"    => '',                  //Extra Wrapper class
-			"button_type"      => $button_type         //Button Type
+			"id"                   => $post_ID,
+			"method"               => 'likeThisTopic',
+			"type"                 => 'post',
+			"wrapper_class"        => '',
+			"attributes"           => $attributes,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
+			"disable_pophover"     => isset( $options['disable_likers_pophover'] ) ? $options['disable_likers_pophover'] : 0,
+			"style"                => isset( $options['template'] ) ? $options['template'] : 'wpulike-default',
+			"button_type"          => isset( $options['button_type'] ) ? $options['button_type'] : 'image',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button',
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
 		// Output templayte
-		$output      = wp_ulike_display_button( $parsed_args, wp_ulike_get_setting( 'wp_ulike_bbpress', 'only_registered_users' ) );
+		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
         if( $type === 'put' ) {
         	return $output;
@@ -1500,7 +938,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 			case 'likeThis':
 			case 'post':
 				$settings = array(
-					'setting'  => 'wp_ulike_posts',
+					'setting'  => 'posts_group',
 					'table'    => 'ulike',
 					'column'   => 'post_id',
 					'key'      => '_liked',
@@ -1512,7 +950,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 			case 'likeThisComment':
 			case 'comment':
 				$settings = array(
-					'setting'  => 'wp_ulike_comments',
+					'setting'  => 'comments_group',
 					'table'    => 'ulike_comments',
 					'column'   => 'comment_id',
 					'key'      => '_commentliked',
@@ -1524,7 +962,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 			case 'likeThisActivity':
 			case 'buddypress':
 				$settings = array(
-					'setting'  => 'wp_ulike_buddypress',
+					'setting'  => 'buddypress_group',
 					'table'    => 'ulike_activities',
 					'column'   => 'activity_id',
 					'key'      => '_activityliked',
@@ -1536,7 +974,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 			case 'likeThisTopic':
 			case 'bbpress':
 				$settings = array(
-					'setting'  => 'wp_ulike_bbpress',
+					'setting'  => 'bbpress_group',
 					'table'    => 'ulike_forums',
 					'column'   => 'topic_id',
 					'key'      => '_topicliked',
@@ -1670,7 +1108,7 @@ if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 	function wp_ulike_get_user_access_capability( $type ){
 		$current_user  = wp_get_current_user();
 		$allowed_roles = apply_filters( 'wp_ulike_display_capabilities', array('administrator'), $type );
-		return array_intersect( $allowed_roles, $current_user->roles ) ? key($current_user->allcaps) : 'manage_options';
+		return ! empty( $allowed_roles ) && array_intersect( $allowed_roles, $current_user->roles ) ? key($current_user->allcaps) : 'manage_options';
 	}
 }
 
@@ -1686,19 +1124,26 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	 * @since           2.0
 	 * @return			String
 	 */
-	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key ){
+	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key, $args = array() ){
 
-		// Get user's limit number value
-		$limit_num  = wp_ulike_get_setting( $setting_key, 'number_of_users', 10 );
+		$options  = wp_ulike_get_option( $setting_key );
+		//Main data
+		$defaults = array(
+			"counter"     => isset( $options['likers_count'] ) ? $options['likers_count'] : 10,
+			"template"    => isset( $options['likers_template'] ) ? $options['likers_template'] : null,
+			"avatar_size" => isset( $options['likers_gravatar_size'] ) ? $options['likers_gravatar_size'] : 64,
+		);
+		$parsed_args = wp_parse_args( $args, $defaults );
+
 		// Get likers list
-		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $limit_num );
+		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $parsed_args['counter'] );
 		// Bulk user list
 		$users_list = '';
 
 		if( ! empty( $get_users ) ) {
 
 			// Get likers html template
-			$get_template 	= wp_ulike_get_setting( $setting_key, 'users_liked_box_template', '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' );
+ 			$get_template = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
 
 			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
@@ -1707,7 +1152,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 				$out_template 	= $inner_template;
 				if ( $user_info ):
 					if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
-						$avatar_size 	= wp_ulike_get_setting( $setting_key, 'users_liked_box_avatar_size' );
+						$avatar_size 	= $parsed_args['avatar_size'];
 						$USER_AVATAR 	= get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
 						$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
 					}
@@ -1800,19 +1245,19 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	 *
 	 * @author       	Alimir
 	 * @param           Array  		$parsed_args
-	 * @param           Integer 	$only_registered_users
+	 * @param           Integer 	$deprecated_value
 	 * @since           3.4
 	 * @return          String
 	 */
-	function wp_ulike_display_button( array $parsed_args, $only_registered_users ){
+	function wp_ulike_display_button( array $args, $deprecated_value = null ){
 		global $wp_ulike_class;
 
-		if( ! wp_ulike_is_true( $only_registered_users ) || is_user_logged_in() ) {
+		if( ! wp_ulike_is_true( $args['only_logged_in_users'] ) || is_user_logged_in() ) {
 			// Return ulike template
-			return $wp_ulike_class->wp_get_ulike( $parsed_args );
+			return $wp_ulike_class->wp_get_ulike( $args );
 		} else {
-			if( wp_ulike_get_setting( 'wp_ulike_general', 'login_type') === 'button' ){
-				return $wp_ulike_class->get_template( $parsed_args, 0 );
+			if( $args['logged_out_action'] === 'button' ){
+				return $wp_ulike_class->get_template( $args, 0 );
 			} else {
 				return apply_filters( 'wp_ulike_login_alert_template',
 					sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>',
@@ -1836,68 +1281,17 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	 */
 	function wp_ulike_get_custom_style( $return_style = null ){
 
-		// Like Icon
-		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$get_like_icon.') !important; }';
+		// Custom Spinner
+		if( '' != ( $custom_spinner = wp_ulike_get_option( 'custom_spinner' ) ) ) {
+			$return_style .= '.wpulike .wp_ulike_is_loading .wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading .wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {background-image: url('.$custom_spinner.') !important;}';
 		}
 
-		// Unlike Icon
-		if( $get_like_icon = wp_get_attachment_url( wp_ulike_get_setting( 'wp_ulike_general', 'button_url_u' ) ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$get_like_icon.') !important; filter: none; }';
+		// Custom Styles
+		if( '' != ( $custom_css = wp_ulike_get_option( 'custom_css' ) ) ) {
+			$return_style .= $custom_css;
 		}
 
-		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) ) {
-
-			//get custom options
-			$customstyle   = get_option( 'wp_ulike_customize' );
-			$btn_style     = '';
-			$counter_style = '';
-			$before_style  = '';
-
-			// Button Style
-			if( isset( $customstyle['btn_bg'] ) && ! empty( $customstyle['btn_bg'] ) ) {
-				$btn_style .= "background-color:".$customstyle['btn_bg'].";";
-			}
-			if( isset( $customstyle['btn_border'] ) && ! empty( $customstyle['btn_border'] ) ) {
-				$btn_style .= "box-shadow: 0 0 0 1px ".$customstyle['btn_border']." inset; ";
-			}
-			if( isset( $customstyle['btn_color'] ) && ! empty( $customstyle['btn_color'] ) ) {
-				$btn_style .= "color:".$customstyle['btn_color'].";";
-			}
-
-			if( $btn_style != '' ){
-				$return_style .= '.wpulike-default .wp_ulike_btn, .wpulike-default .wp_ulike_btn:hover, #bbpress-forums .wpulike-default .wp_ulike_btn, #bbpress-forums .wpulike-default .wp_ulike_btn:hover{'.$btn_style.'}.wpulike-heart .wp_ulike_general_class{'.$btn_style.'}';
-			}
-
-			// Counter Style
-			if( isset( $customstyle['counter_bg'] ) && ! empty( $customstyle['counter_bg'] ) ) {
-				$counter_style .= "background-color:".$customstyle['counter_bg'].";";
-			}
-			if( isset( $customstyle['counter_border'] ) && ! empty( $customstyle['counter_border'] ) ) {
-				$counter_style .= "box-shadow: 0 0 0 1px ".$customstyle['counter_border']." inset; ";
-				$before_style  = "background-color:".$customstyle['counter_bg']."; border-color:transparent; border-bottom-color:".$customstyle['counter_border']."; border-left-color:".$customstyle['counter_border'].";";
-			}
-			if( isset( $customstyle['counter_color'] ) && ! empty( $customstyle['counter_color'] ) ) {
-				$counter_style .= "color:".$customstyle['counter_color'].";";
-			}
-
-			if( $counter_style != '' ){
-				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
-			}
-
-			// Loading Spinner
-			if( isset( $customstyle['loading_animation'] ) && ! empty( $customstyle['loading_animation'] ) ) {
-				$return_style .= '.wpulike .wp_ulike_is_loading .wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading .wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading .wp_ulike_btn {background-image: url('.wp_get_attachment_url( $customstyle['loading_animation'] ).') !important;}';
-			}
-
-			// Custom Styles
-			if( isset( $customstyle['custom_css'] ) && ! empty( $customstyle['custom_css'] ) ) {
-				$return_style .= $customstyle['custom_css'];
-			}
-
-		}
-
-		return $return_style;
+		return apply_filters( 'wp_ulike_custom_css', $return_style );
 	}
 
 }
@@ -1916,7 +1310,7 @@ if( ! function_exists( 'wp_ulike_format_number' ) ){
 		if( $num != 0 ){
 			$sign = strpos( $status, 'dis' ) === false ? '+' : '-';
 		}
-		if ($num >= 1000 && wp_ulike_get_setting( 'wp_ulike_general', 'format_number' ) == '1'){
+		if ( $num >= 1000 &&  wp_ulike_is_true( wp_ulike_get_option( 'enable_kilobyte_format', false ) ) ){
 			$value = round($num/1000, 2) . 'K' . $sign;
 		} else {
 			$value = $num . $sign;
@@ -2127,9 +1521,9 @@ if( ! function_exists('wp_ulike_get_button_text') ){
 	 * @param string $option_name
 	 * @return string
 	 */
-	function wp_ulike_get_button_text( $option_name ){
-		$value = wp_ulike_get_setting( 'wp_ulike_general', $option_name );
-		return apply_filters( 'wp_ulike_button_text', $value, $option_name );
+	function wp_ulike_get_button_text( $option_name, $setting_key = 'posts_group' ){
+		$value = wp_ulike_get_option( $setting_key . '|text_group|' . $option_name );
+		return apply_filters( 'wp_ulike_button_text', $value, $option_name, $setting_key );
 	}
 }
 
@@ -2293,7 +1687,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 					class="<?php echo $button_class; ?>">
 					<?php
 						do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
-						if($button_type == 'text'){
+						if( $button_type == 'text' ){
 							echo '<span>' . $button_text . '</span>';
 						}
 					?>

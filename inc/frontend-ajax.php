@@ -41,34 +41,37 @@ function wp_ulike_process(){
 	// Extract post type settings
 	extract( $get_settings );
 
+	// Get options
+	$options = wp_ulike_get_option( $setting );
+
 	$args = apply_filters( 'wp_ulike_ajax_process_atts', array(
-			"id"       => $post_ID,                          //Post ID
-			"method"   => $post_type,                        //JavaScript method
-			"setting"  => $setting,                          //Setting Key
-			"type"     => 'process',                         //Function type (post/process)
-			"table"    => $table,                            //posts table
-			"column"   => $column,                           //ulike table column name
-			"key"      => $key,                              //meta key
-			"slug"     => $slug,                             //meta key
-			"cookie"   => $cookie,                           //Cookie Name
-			"factor"   => $factor,                           //Factor type
+			"id"                   => $post_ID,
+			"method"               => $post_type,
+			"type"                 => 'process',
+			"table"                => $table,
+			"column"               => $column,
+			"key"                  => $key,
+			"slug"                 => $slug,
+			"cookie"               => $cookie,
+			"factor"               => $factor,
+			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
+			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
+			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button'
 		), $post_ID, $get_settings
 	);
 
-	if( wp_ulike_is_true( wp_ulike_get_setting( $setting, 'only_registered_users' ) ) && ! is_user_logged_in() ) {
+	if( wp_ulike_is_true( $args['only_logged_in_users'] ) && ! is_user_logged_in() ) {
 		$response = array(
-			'message'     => wp_ulike_get_setting( 'wp_ulike_general', 'login_text', __( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) ),
+			'message'     => wp_ulike_get_option( 'login_required_notice',  __( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) ),
 			'btnText'     => NULL,
 			'messageType' => 'info',
 			'status'      => 4,
 			'data'        => NULL
 		);
 	} else{
-		$logging_method = wp_ulike_get_setting( $setting, 'logging_method' );
-
-		if( ! $wp_ulike_class->has_permission( $args, $logging_method ) ){
+		if( ! $wp_ulike_class->has_permission( $args ) ){
 			$response = array(
-				'message'     => wp_ulike_get_setting( 'wp_ulike_general', 'permission_text', __( 'You have already registered a vote.', WP_ULIKE_SLUG ) ),
+				'message'     => wp_ulike_get_option( 'already_registered_notice', __( 'You have already registered a vote.', WP_ULIKE_SLUG ) ),
 				'btnText'     => NULL,
 				'messageType' => 'warning',
 				'status'      => 5,
@@ -81,38 +84,38 @@ function wp_ulike_process(){
 			switch ( $status ){
 				case 1:
 					$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
-						'btnText' => wp_ulike_get_button_text( 'button_text' ),
+						'message'     => wp_ulike_get_option( 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
+						'btnText'     => wp_ulike_get_button_text( 'like', $setting ),
 						'messageType' => 'success',
-						'status'  => $status,
-						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
+						'status'      => $status,
+						'data'        => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
 					);
 					break;
 				case 2:
 					$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'unlike_notice', __( 'Sorry! You unliked this.', WP_ULIKE_SLUG ) ),
-						'btnText' => wp_ulike_get_button_text( 'button_text' ),
+						'message'     => wp_ulike_get_option( 'unlike_notice', __( 'Sorry! You unliked this.', WP_ULIKE_SLUG ) ),
+						'btnText'     => wp_ulike_get_button_text( 'like', $setting ),
 						'messageType' => 'error',
-						'status'  => $status,
-						'data'    => apply_filters( 'wp_ulike_respond_for_unliked_data', $counter, $post_ID )
+						'status'      => $status,
+						'data'        => apply_filters( 'wp_ulike_respond_for_unliked_data', $counter, $post_ID )
 					);
 					break;
 				case 3:
 					$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
- 						'btnText' => wp_ulike_get_button_text( 'button_text_u' ),
+						'message'     => wp_ulike_get_option( 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
+						'btnText'     => wp_ulike_get_button_text( 'unlike', $setting ),
 						'messageType' => 'success',
-						'status'  => $status,
-						'data'    => apply_filters( 'wp_ulike_respond_for_liked_data', $counter, $post_ID )
+						'status'      => $status,
+						'data'        => apply_filters( 'wp_ulike_respond_for_liked_data', $counter, $post_ID )
 					);
 					break;
 				case 4:
 					$response = array(
-						'message' => wp_ulike_get_setting( 'wp_ulike_general', 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
-						'btnText' => wp_ulike_get_button_text( 'button_text' ),
+						'message'     => wp_ulike_get_option( 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) ),
+						'btnText'     => wp_ulike_get_button_text( 'like', $setting ),
 						'messageType' => 'success',
-						'status'  => $status,
-						'data'    => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
+						'status'      => $status,
+						'data'        => apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter, $post_ID )
 					);
 					break;
 			}
@@ -163,7 +166,7 @@ function wp_ulike_get_likers(){
 	extract( $get_settings );
 
 	// If likers box has been disabled
-	if ( ! wp_ulike_get_setting( $setting, 'users_liked_box' ) ) {
+	if ( ! wp_ulike_get_option( $setting . '|enable_likers_box' , false ) ) {
 		wp_send_json_error( __( 'Notice: The likers box is not activated!', WP_ULIKE_SLUG ) );
 	}
 

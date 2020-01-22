@@ -123,6 +123,36 @@ function wp_ulike_notice_manager(){
 	$screen      = get_current_screen();
 	$notice_list = [];
 
+	if( ! wp_ulike_is_true( get_option( 'wp_ulike_upgrade_option_panel_status', false ) ) && '' !== get_option( 'wp_ulike_general' ) ){
+		$notice_list[ 'wp_ulike_upgrade_option_panel' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_upgrade_option_panel',
+			'title'       => __( 'Upgrade Settings Panel', WP_ULIKE_SLUG ),
+			'description' => __( "In the current version, we have released our new settings panel that is much more powerful than the previous one. This update may have disabled your old settings. if you want to reset those, click the button below. \nHowever, we recommend that you skip this option, and re-config the plugin once." , WP_ULIKE_SLUG ),
+			'skin'        => 'warning',
+			'has_close'   => true,
+			'buttons'     => array(
+				array(
+					'label'         => __( "Start Recovery", WP_ULIKE_SLUG ),
+					'link'          => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5',
+					'ajax_request'  => array(
+						'action' => 'wp_ulike_upgrade_option_panel'
+					)
+				),
+				array(
+					'label'      => __('Go to Settings', WP_ULIKE_SLUG),
+					'link'       => self_admin_url( 'admin.php?page=wp-ulike-settings' ),
+					'color_name' => 'info',
+				),
+				array(
+					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'error',
+					'expiration' => YEAR_IN_SECONDS * 10
+				)
+			)
+		]);
+	}
+
 	if( $count_logs > 1000 ){
 		$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_leave_a_review',
@@ -248,7 +278,7 @@ add_filter( 'wp_ulike_admin_pages', 'wp_ulike_go_pro_admin_menu', 1, 10 );
 
 function wp_ulike_hide_admin_notifications( $notice_list ){
 	$screen = get_current_screen();
-	$hide_admin_notice = wp_ulike_get_setting( 'wp_ulike_general', 'hide_admin_notice', false );
+	$hide_admin_notice = wp_ulike_get_option( 'disable_admin_notice', false );
 	return wp_ulike_is_true( $hide_admin_notice ) && strpos( $screen->base, WP_ULIKE_SLUG ) === false ? array() : $notice_list;
 }
 add_filter( 'wp_ulike_admin_notices_instances', 'wp_ulike_hide_admin_notifications', 1, 20 );

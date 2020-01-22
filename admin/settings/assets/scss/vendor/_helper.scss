@@ -1,0 +1,183 @@
+/**
+ * 08. Helper
+ */
+.csf-text-desc,
+.csf-text-subtitle{
+  font-weight: 400;
+  margin-top: 10px;
+  color: #999;
+}
+
+.csf-text-success{
+  color: #2b542c;
+}
+
+.csf-text-error{
+  color: #d02c21;
+}
+
+.csf-text-info{
+  color: #31708f;
+}
+
+.csf-text-warning{
+  color: #ffb900;
+}
+
+.csf-text-muted{
+  color: #aaa;
+}
+
+.csf-text-left{
+  text-align: left;
+}
+
+.csf-text-center{
+  text-align: center;
+}
+
+.csf-text-right{
+  text-align: right;
+}
+
+.csf-block-left{
+  float: left;
+}
+
+.csf-block-right{
+  float: right;
+}
+
+.csf-full-width{
+  width: 100%;
+}
+
+.csf-full-half{
+  width: 50%;
+}
+
+.csf-table{
+  width: 100%;
+  display: table;
+}
+
+.csf-table-cell{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.csf-table-expanded{
+  width: 100%;
+}
+
+.csf-nowrap{
+  white-space: nowrap;
+}
+
+.csf-text-highlight{
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  @include border-radius(2px);
+}
+
+.csf-text-highlight-gray{
+  padding: 2px 4px;
+  font-size: 90%;
+  background-color: #f0f0f0;
+  @include border-radius(2px);
+}
+
+.csf-hidden{
+  display: none;
+}
+
+.csf-hide{
+  display: none !important;
+}
+
+.csf-show{
+  display: block !important;
+}
+
+.csf-opacity{
+  opacity: 0.5;
+}
+
+.csf-warning-primary{
+  color: #fff !important;
+  border-color: #dc3545 !important;
+  background: #dc3545 !important;
+
+  &:hover,
+  &:focus{
+    border-color: #bd2130 !important;
+    background: #bd2130 !important;
+  }
+
+  &:focus{
+    box-shadow: 0 0 0 1px #fff, 0 0 0 3px #bd2130 !important;
+  }
+
+  &:active{
+    border-color: #bd2130 !important;
+    background: #bd2130 !important;
+  }
+}
+
+.csf-form-result{
+  display: none;
+  float: left;
+  padding: 0 8px;
+  margin-right: 4px;
+  font-size: 11px;
+  line-height: 28px;
+  user-select: none;
+  border-radius: 2px;
+}
+
+.csf-form-show{
+  display: block;
+}
+
+.csf-form-success{
+  color: #fff;
+  background-color: #46b450;
+}
+
+.csf-form-warning{
+  color: #8a6d3b;
+  background-color: #faebcc;
+}
+
+.csf-label-error{
+  position: relative;
+  top: -2px;
+  display: inline-block;
+  font-size: 10px;
+  line-height: 10px;
+  height: 10px;
+  width: 10px;
+  padding: 1px;
+  font-style: normal;
+  text-align: center;
+  color: #fff;
+  vertical-align: middle;
+  background-color: #e10000;
+  @include border-radius(2px);
+}
+
+.csf-no-option{
+  padding: 30px;
+}
+
+.csf-input-number{
+  -moz-appearance:textfield;
+}
+
+.csf-input-number::-webkit-inner-spin-button,
+.csf-input-number::-webkit-outer-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}

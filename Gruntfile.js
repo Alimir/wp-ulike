@@ -191,30 +191,6 @@ module.exports = function(grunt) {
                         dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
                     }
                 ]
-            },
-            spectrum_js: {
-
-                files: [
-                    {
-                        expand: true,     // Enable dynamic expansion.
-                        cwd: '<%= pkg.bower.components %>spectrum/',      // Src matches are relative to this path.
-                        src: ['spectrum.js'],      // Actual pattern(s) to match.
-                        dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
-                    }
-                ]
-            },
-            spectrum_css: {
-                files: [
-                    {
-                        expand: true,     // Enable dynamic expansion.
-                        cwd: '<%= pkg.bower.components %>spectrum/',      // Src matches are relative to this path.
-                        src: ['spectrum.css'],      // Actual pattern(s) to match.
-                        dest: 'admin/assets/sass/plugins/',   // Destination path prefix.
-                        rename: function( dest, src ) {
-                            return dest + src.replace(/[^\/]*$/, "") + "_spectrum.scss";
-                        }
-                    }
-                ]
             }
         },
 
@@ -262,24 +238,24 @@ module.exports = function(grunt) {
                 dest: 'admin/assets/js/plugins.js'
             },
 
-            adminJsScripts: {
-                options: {
+            // adminJsScripts: {
+            //     options: {
 
-                    banner: "/*! <%= meta.version %>\n" +
-                        " *  <%= pkg.homepage %>\n" +
-                        " *  <%= meta.copyright %>;\n" +
-                        " */\n",
+            //         banner: "/*! <%= meta.version %>\n" +
+            //             " *  <%= pkg.homepage %>\n" +
+            //             " *  <%= meta.copyright %>;\n" +
+            //             " */\n",
 
-                    process: function(src, filepath) {
-                        var separator = "\n\n/* ================== " + filepath + " =================== */\n\n\n";
-                        return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
-                    },
-                },
-                src: [
-                    'admin/assets/js/src/*.js',
-                ],
-                dest: 'admin/assets/js/scripts.js'
-            }
+            //         process: function(src, filepath) {
+            //             var separator = "\n\n/* ================== " + filepath + " =================== */\n\n\n";
+            //             return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
+            //         },
+            //     },
+            //     src: [
+            //         'admin/assets/js/src/*.js',
+            //     ],
+            //     dest: 'admin/assets/js/scripts.js'
+            // }
 
         },
 
@@ -424,10 +400,10 @@ module.exports = function(grunt) {
                 tasks: ['concat:adminJsPlugins']
             },
 
-            concat_admin_js_scripts: {
-                files: ['admin/assets/js/src/*.js'],
-                tasks: ['concat:adminJsScripts']
-            },
+            // concat_admin_js_scripts: {
+            //     files: ['admin/assets/js/src/*.js'],
+            //     tasks: ['concat:adminJsScripts']
+            // },
 
             livereload: {
                 options: { livereload: 35985 },
