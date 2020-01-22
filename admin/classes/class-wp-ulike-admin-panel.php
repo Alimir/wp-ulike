@@ -227,7 +227,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'type'    => 'content',
                 'content' => sprintf( '<strong>%s</strong> %s', __( 'bbPress', WP_ULIKE_SLUG ), __( 'plugin is not installed or activated', WP_ULIKE_SLUG ) ),
             ) );
-            if( function_exists('is_buddypress') ){
+            if( function_exists('is_bbpress') ){
                 $bbPress_options = array_values( apply_filters( 'wp_ulike_panel_bbpress_type_options', $get_content_fields['bbpress'] ) );
             }
 
