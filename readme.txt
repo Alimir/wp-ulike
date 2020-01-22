@@ -133,7 +133,8 @@ Want to add a new language to WP ULike? Well! You can contribute via [translate.
 1. **Get Ratings From Every Section of Your Website**
 2. **Check Votings, BestLikers & Top contents**
 3. **Start to Configure your Voting Plugin in a few Steps**
-4. **Boost Your SEO by Using Our Professional Schema Generator**
+4. **Boost Your SEO by Using Our Professional Schema Generator [PRO]**
+5. **Customize Every Aspect of Your Like Buttons with Elementor Widgets [PRO]**
 
 == Frequently Asked Questions ==
 
