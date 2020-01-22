@@ -127,7 +127,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'          => 'disable_plugin_files',
                         'type'        => 'select',
                         'title'       => __( 'Disable Plugin Files',WP_ULIKE_SLUG ),
-                        'desc'        => __('Remove the plugin\'s css and js file on these pages.', WP_ULIKE_SLUG),
+                        'desc'        => __('With this option, you can disable all plugin assets on these pages.', WP_ULIKE_SLUG),
                         'chosen'      => true,
                         'multiple'    => true,
                         'options'     => array(
@@ -279,7 +279,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'      => 'already_registered_notice',
                         'type'    => 'text',
                         'default' => __('You have already registered a vote.',WP_ULIKE_SLUG),
-                        'title'   => __( 'Permission Message', WP_ULIKE_SLUG)
+                        'title'   => __( 'Already Voted Message', WP_ULIKE_SLUG)
                     ),
                     array(
                         'id'      => 'login_required_notice',
@@ -442,7 +442,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'          => 'auto_display_filter',
                     'type'        => 'select',
                     'title'       => __( 'Automatic Display Restriction',WP_ULIKE_SLUG ),
-                    'desc'        => __('You can filter theses pages on auto display option.', WP_ULIKE_SLUG),
+                    'desc'        => __('With this option, you can disable automatic display on these pages.', WP_ULIKE_SLUG),
                     'chosen'      => true,
                     'multiple'    => true,
                     'options'     => array(
@@ -477,7 +477,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'by_ip'       => __('Logged By IP', WP_ULIKE_SLUG),
                         'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
                     ),
-                    'default'     => 'by_username'
+                    'default'     => 'by_username',
+                    'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>', __( 'If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', WP_ULIKE_SLUG ), __( 'If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', WP_ULIKE_SLUG ), __( 'If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', WP_ULIKE_SLUG ), __( 'If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', WP_ULIKE_SLUG ) )
                 ),
                 'enable_only_logged_in_users' => array(
                     'id'    => 'enable_only_logged_in_users',
