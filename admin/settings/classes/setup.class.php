@@ -420,7 +420,7 @@ if( ! class_exists( 'CSF' ) ) {
 
       // framework core scripts
       wp_enqueue_script( 'csf-plugins', CSF::include_plugin_url( 'assets/js/csf-plugins'. $min .'.js' ), array(), '1.1.0', true );
-      wp_enqueue_script( 'csf', CSF::include_plugin_url( 'assets/js/csf'. $min .'.js' ), array( 'csf-plugins' ), '1.1.0', true );
+      wp_enqueue_script( 'csf', CSF::include_plugin_url( 'assets/js/csf.js' ), array( 'csf-plugins' ), '1.1.0', true );
 
       wp_localize_script( 'csf', 'csf_vars', array(
         'color_palette'  => apply_filters( 'csf_color_palette', array() ),
