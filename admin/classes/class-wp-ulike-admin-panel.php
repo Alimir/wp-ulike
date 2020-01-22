@@ -461,6 +461,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'        => 'select',
                     'title'       => __( 'Post Types Filter',WP_ULIKE_SLUG ),
                     'placeholder' => __( 'Select a post type',WP_ULIKE_SLUG ),
+                    'desc'        => __( 'Make these post types an exception and display the button on them.',WP_ULIKE_SLUG ),
                     'chosen'      => true,
                     'multiple'    => true,
                     'default'     => 'post',
