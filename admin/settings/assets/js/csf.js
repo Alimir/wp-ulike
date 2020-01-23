@@ -2745,8 +2745,8 @@
   // WP Color Picker
   //
   if( typeof Color === 'function' ) {
-    var toStringFn = typeof Color.fn !== 'undefined' ? Color.fn.toString : Color.toString;
-    toStringFn = function() {
+
+    Color.prototype.toString = function() {
 
       if( this._alpha < 1 ) {
         return this.toCSS('rgba', this._alpha).replace(/\s+/g, '');
@@ -3136,7 +3136,7 @@
   //
   $.fn.csf_customizer_listen = function( options ) {
 
-    var settings =  $.extend({
+    var settings = $.extend({
       closest: false,
     }, options );
 
