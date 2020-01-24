@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.2
-Stable tag: 4.1.2
+Stable tag: 4.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -185,6 +185,13 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.1.3 =
+* Fixed: Problems with restoring old settings.
+* Fixed: An issue in bbPress option panel.
+* Fixed: A simple issue with custom icons display.
+* Fixed: Some default option values.
+* Fixed: Button display issue in blog page.
 
 = 4.1.2 =
 * Fixed: WPcolor js issue in the setting panel.
