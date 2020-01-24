@@ -95,7 +95,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     array(
                         'id'    => 'enable_kilobyte_format',
                         'type'  => 'switcher',
-                        'title' => __('Enable Convert Format', WP_ULIKE_SLUG),
+                        'title' => __('Enable Convertor', WP_ULIKE_SLUG),
                         'desc'  => __('Convert numbers of Likes with string (kilobyte) format.', WP_ULIKE_SLUG) . '<strong> (WHEN? likes>=1000)</strong>'
                     ),
                     array(
@@ -116,12 +116,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'type'  => 'switcher',
                         'title' => __('Hide Admin Notices', WP_ULIKE_SLUG),
                         'desc'  => __('Enabling this option will completely disable all admin notices.', WP_ULIKE_SLUG)
-                    ),
-                    array(
-                        'id'    => 'enable_meta_values',
-                        'type'  => 'switcher',
-                        'title' => __('Enable Old Meta Values', WP_ULIKE_SLUG),
-                        'desc'  => sprintf( '%s<br><strong>* %s</strong>', __('By activating this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.', WP_ULIKE_SLUG), __('Attention: If you have been using WP ULike +v4 from the beginning Or you haven\'t deleted any logs yet, do not enable this option.', WP_ULIKE_SLUG) )
                     ),
                     array(
                         'id'          => 'disable_plugin_files',
@@ -267,6 +261,26 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     // End
                 )
             ) );
+            // Integrations
+            CSF::createSection( $this->option_domain, array(
+                'parent' => 'configuration',
+                'title'  => __( 'Integrations',WP_ULIKE_SLUG),
+                'fields' => apply_filters( 'wp_ulike_panel_integrations', array(
+                    array(
+                        'id'    => 'enable_meta_values',
+                        'type'  => 'switcher',
+                        'title' => __('Enable Old Meta Values', WP_ULIKE_SLUG),
+                        'desc'  => sprintf( '%s<br><strong>* %s</strong>', __('By activating this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.', WP_ULIKE_SLUG), __('Attention: If you have been using WP ULike +v4 from the beginning Or you haven\'t deleted any logs yet, do not enable this option.', WP_ULIKE_SLUG) )
+                    ),
+                   array(
+                        'id'    => 'enable_deprecated_options',
+                        'type'  => 'switcher',
+                        'title' => __('Enable Deprecated Options', WP_ULIKE_SLUG),
+                        'desc'  => sprintf( '%s<br><strong>* %s</strong>', __('By activating this option, users who have upgraded to version +4.1 and lost their old options can restore and enable previous settings.', WP_ULIKE_SLUG), __('Attention: If you have been using WP ULike +v4.1 from the beginning, do not enable this option.', WP_ULIKE_SLUG) )
+                    ),
+                ) )
+            ) );
+
 
             /**
              * Translations Section
@@ -278,13 +292,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     array(
                         'id'      => 'already_registered_notice',
                         'type'    => 'text',
-                        'default' => __('You have already registered a vote.',WP_ULIKE_SLUG),
+                        'default' => __( 'You have already registered a vote.',WP_ULIKE_SLUG),
                         'title'   => __( 'Already Voted Message', WP_ULIKE_SLUG)
                     ),
                     array(
                         'id'      => 'login_required_notice',
                         'type'    => 'text',
-                        'default' => __('You Should Login To Submit Your Like',WP_ULIKE_SLUG),
+                        'default' => __( 'You Should Login To Submit Your Like',WP_ULIKE_SLUG),
                         'title'   => __( 'Login Required Message', WP_ULIKE_SLUG)
                     ),
                     array(
