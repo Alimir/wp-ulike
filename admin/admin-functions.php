@@ -308,3 +308,18 @@ function wp_ulike_cleanup_content( $content ) {
 	/* Remove any instances of '<p>' '</p>'. */
 	return str_replace( array('<p>','</p>'), array('','') , $content );
 }
+
+/**
+ * Simple convertor for old option values
+ * @param array $data
+ * @return array
+ */
+function wp_ulike_convert_old_options_array( $data ){
+	$output = array();
+	foreach ($data as $key => $value) {
+		if( wp_ulike_is_true( $value ) ){
+			$output[] = $key;
+		}
+	}
+	return $output;
+}
