@@ -618,6 +618,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 == Upgrade Notice ==
 
+= 4.1.3 =
+In this release we have added a new option called  "Enable Deprecated Options" which enables you to restore all the old settings.
+
 = 4.0.0 =
 Attention Please! In this version, we have made a various changes in our data structure which switches the number of likes from meta values to the number of database logs. So If you're a developer, please consider our commits in github repo.
 
