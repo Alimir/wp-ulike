@@ -481,7 +481,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 					$post_types = wp_ulike_get_option( 'posts_group|auto_display_filter_post_types' );
 					if( ! empty( $post_types ) ){
 						foreach ($post_types as $p_key => $p_value) {
-							if( get_post_type() === $p_value ){
+							if( get_post_type() === $p_value && ! is_page() ){
 								return true;
 							}
 						}
