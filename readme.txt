@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.2
-Stable tag: 4.1.3
+Stable tag: 4.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -186,12 +186,22 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 == Changelog ==
 
+= 4.1.4 =
+* Added: Up/Down subtotal voting support. [PRO]
+* Added: 3 new templates. (Stackoverflow Votings, Badge Thumb, Star Thumb) [PRO]
+* Added: HTML support for button custom text option.
+* Added: Search field for the options panel.
+* Removed: Old microdata display on front-end posts.
+* Fixed: Anonymise IP issue.
+* Fixed: An issue with comments auto display hook.
+* Fixed: Some reported issues.
+
 = 4.1.3 =
 * Fixed: Problems with restoring old settings.
-* Fixed: An issue in bbPress option panel.
+* Fixed: An issue in the bbPress option panel.
 * Fixed: A simple issue with custom icons display.
 * Fixed: Some default option values.
-* Fixed: Button display issue in blog page.
+* Fixed: Button display issue on the blog page.
 
 = 4.1.2 =
 * Fixed: WPcolor js issue in the setting panel.
