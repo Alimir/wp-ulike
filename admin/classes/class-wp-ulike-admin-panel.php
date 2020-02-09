@@ -375,6 +375,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'text_group' => array(
                     'id'            => 'text_group',
                     'type'          => 'tabbed',
+                    'desc'          => __( 'Enter your custom button text in the fields above. You can also use HTML tags in these fields.', WP_ULIKE_SLUG),
                     'title'         => __( 'Button Text', WP_ULIKE_SLUG),
                     'tabs'          => array(
                         array(
@@ -382,7 +383,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'fields'    => array(
                                 array(
                                     'id'      => 'like',
-                                    'type'    => 'text',
+                                    'type'    => 'code_editor',
+                                    'settings' => array(
+                                        'mode'    => 'htmlmixed',
+                                    ),
                                     'title'   => __('Button Text',WP_ULIKE_SLUG),
                                     'default' => 'Like'
                                 ),
@@ -393,7 +397,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'fields'    => array(
                                 array(
                                     'id'      => 'unlike',
-                                    'type'    => 'text',
+                                    'type'    => 'code_editor',
+                                    'settings' => array(
+                                        'mode'    => 'htmlmixed',
+                                    ),
                                     'title'   => __('Button Text',WP_ULIKE_SLUG),
                                     'default' => 'Liked'
                                 ),
