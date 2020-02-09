@@ -1,4 +1,4 @@
-/*! WP ULike - v4.1.3
+/*! WP ULike - v4.1.4
  *  https://wpulike.com
  *  TechnoWich 2020;
  */
@@ -139,6 +139,7 @@
       displayLikers: false,
       disablePophover: true,
       factor: '',
+      template: '',
       counterSelector: ".count-box",
       generalSelector: ".wp_ulike_general_class",
       buttonSelector: ".wp_ulike_btn",
@@ -152,7 +153,8 @@
       "ulike-display-likers": "displayLikers",
       "ulike-disable-pophover": "disablePophover",
       "ulike-append-timeout": "appendTimeout",
-      "ulike-factor": "factor"
+      "ulike-factor": "factor",
+      "ulike-template": "template",
     };
 
   // The actual plugin constructor
@@ -228,7 +230,8 @@
           id: this.settings.ID,
           nonce: this.settings.nonce,
           factor: this.settings.factor,
-          type: this.settings.type
+          type: this.settings.type,
+          template: this.settings.template
         },
         function (response) {
           //remove progress class
@@ -279,6 +282,9 @@
     _updateMarkup: function (response) {
       // Set sibling general elements
       this._setSbilingElement();
+      // Set sibling button elements
+      this._setSbilingButtons();
+      // Update general element class names
       this._updateGeneralClassNames(response.data.status);
       // If data exist
       if( response.data.data !== null ){
@@ -358,6 +364,10 @@
 
     _setSbilingElement: function () {
       this.siblingElement = this.generalElement.siblings();
+    },
+
+    _setSbilingButtons: function () {
+      this.siblingButton = this.buttonElement.siblings( this.settings.buttonSelector );
     },
 
     __updateCounter: function (counterValue) {
@@ -463,6 +473,9 @@
         this.buttonElement.toggleClass("image-unlike wp_ulike_btn_is_active");
         if (this.siblingElement.length) {
           this.siblingElement.find(this.settings.buttonSelector).removeClass("image-unlike wp_ulike_btn_is_active");
+        }
+        if( this.siblingButton.length ) {
+          this.siblingButton.removeClass("image-unlike wp_ulike_btn_is_active");
         }
       } else if (this.buttonElement.hasClass("wp_ulike_put_text") && btnText !== null) {
         if (typeof btnText !== "object") {

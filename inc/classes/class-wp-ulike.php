@@ -365,12 +365,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 			if( $args['button_type'] == 'image' || ( isset( $temp_list[$args['style']]['is_text_support'] ) && ! $temp_list[$args['style']]['is_text_support'] ) ){
 				$button_class_name .= ' wp_ulike_put_image';
-				if($status == 2){
+ 				if( in_array( $status, array( 2, 4 ) ) ){
 					$button_class_name .= ' image-unlike wp_ulike_btn_is_active';
 				}
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';
-				if($status == 2 && strpos( $user_status, 'dis') !== 0){
+ 				if( in_array( $status, array( 2, 4 ) ) && strpos( $user_status, 'dis') !== 0){
 					$button_text = wp_ulike_get_button_text( 'unlike', $args['setting'] );
 				} else {
 					$button_text = wp_ulike_get_button_text( 'like', $args['setting'] );

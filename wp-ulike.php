@@ -7,7 +7,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           4.1.3
+ * Version:           4.1.4
  * Author:            Ali Mirzaei
  * Author URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
@@ -43,7 +43,7 @@ if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 );
-define( 'WP_ULIKE_VERSION'      , '4.1.3' 					     );
+define( 'WP_ULIKE_VERSION'      , '4.1.4' 					     );
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 );
 define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG ));
 
@@ -235,34 +235,14 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	     * @return   String
 	    */
 		public function get_ip() {
-
-			if ( getenv( 'HTTP_CLIENT_IP' ) ) {
-				$ip = getenv( 'HTTP_CLIENT_IP' );
-			} elseif ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
-				$ip = getenv( 'HTTP_X_FORWARDED_FOR' );
-			} elseif ( getenv( 'HTTP_X_FORWARDED' ) ) {
-				$ip = getenv( 'HTTP_X_FORWARDED' );
-			} elseif ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
-				$ip = getenv( 'HTTP_FORWARDED_FOR' );
-			} elseif ( getenv( 'HTTP_FORWARDED' ) ) {
-				$ip = getenv( 'HTTP_FORWARDED' );
+			// Get user IP
+			$user_ip = wp_ulike_get_user_ip();
+			// Check GDPR anonymise
+			if ( wp_ulike_is_true( wp_ulike_get_option( 'enable_anonymise_ip', false ) ) ) {
+				return $this->anonymise_ip( $user_ip );
 			} else {
-				$ip = $_SERVER['REMOTE_ADDR'];
+				return $user_ip;
 			}
-
-
-			if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-				// Return local ip address
-				return '127.0.0.1';
-			} else {
-
-				if ( wp_ulike_is_true( wp_ulike_get_option( 'enable_anonymise_ip', false ) ) ) {
-					return $this->anonymise_ip( $ip );
-				} else {
-					return $ip;
-				}
-			}
-
 		}
 
 	    /**
