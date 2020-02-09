@@ -295,7 +295,7 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 
 		return apply_filters( 'wp_ulike_comment_text', $output, $content );
 	}
-	add_filter( 'get_comment_text', 'wp_ulike_put_comments' );
+	add_filter( 'comment_text', 'wp_ulike_put_comments' );
 }
 
 
