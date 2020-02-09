@@ -1377,6 +1377,38 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
+	/**
+	 * Get user IP
+	 *
+	 * @return string
+	 */
+	function wp_ulike_get_user_ip(){
+		$ip = '';
+
+		if ( getenv( 'HTTP_CLIENT_IP' ) ) {
+			$ip = getenv( 'HTTP_CLIENT_IP' );
+		} elseif ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
+			$ip = getenv( 'HTTP_X_FORWARDED_FOR' );
+		} elseif ( getenv( 'HTTP_X_FORWARDED' ) ) {
+			$ip = getenv( 'HTTP_X_FORWARDED' );
+		} elseif ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
+			$ip = getenv( 'HTTP_FORWARDED_FOR' );
+		} elseif ( getenv( 'HTTP_FORWARDED' ) ) {
+			$ip = getenv( 'HTTP_FORWARDED' );
+		} else {
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
+
+		if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+			// Return local ip address
+			return '127.0.0.1';
+		}
+
+		return $ip;
+	}
+}
+
 if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 	/**
 	 * Convert IP to a integer value
@@ -1391,7 +1423,9 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 		if( filter_var( $user_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
 		    return ip2long( $user_ip );
 		} else {
-		    $binary_val = '';
+			// Get non-anonymise IP address
+			$user_ip    = wp_ulike_get_user_ip();
+			$binary_val = '';
 		    foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
 		        $binary_val .= decbin( $byte );
 		    }

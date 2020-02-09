@@ -235,34 +235,14 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	     * @return   String
 	    */
 		public function get_ip() {
-
-			if ( getenv( 'HTTP_CLIENT_IP' ) ) {
-				$ip = getenv( 'HTTP_CLIENT_IP' );
-			} elseif ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
-				$ip = getenv( 'HTTP_X_FORWARDED_FOR' );
-			} elseif ( getenv( 'HTTP_X_FORWARDED' ) ) {
-				$ip = getenv( 'HTTP_X_FORWARDED' );
-			} elseif ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
-				$ip = getenv( 'HTTP_FORWARDED_FOR' );
-			} elseif ( getenv( 'HTTP_FORWARDED' ) ) {
-				$ip = getenv( 'HTTP_FORWARDED' );
+			// Get user IP
+			$user_ip = wp_ulike_get_user_ip();
+			// Check GDPR anonymise
+			if ( wp_ulike_is_true( wp_ulike_get_option( 'enable_anonymise_ip', false ) ) ) {
+				return $this->anonymise_ip( $user_ip );
 			} else {
-				$ip = $_SERVER['REMOTE_ADDR'];
+				return $user_ip;
 			}
-
-
-			if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-				// Return local ip address
-				return '127.0.0.1';
-			} else {
-
-				if ( wp_ulike_is_true( wp_ulike_get_option( 'enable_anonymise_ip', false ) ) ) {
-					return $this->anonymise_ip( $ip );
-				} else {
-					return $ip;
-				}
-			}
-
 		}
 
 	    /**
