@@ -19,10 +19,11 @@ function wp_ulike_process(){
 	// Global variables
 	global $wp_ulike_class;
 
-	$post_ID     = isset( $_POST['id'] ) ? $_POST['id'] : NULL;
-	$post_type   = isset( $_POST['type'] ) ? $_POST['type'] : NULL;
-	$nonce_token = isset( $_POST['nonce'] ) ? $_POST['nonce'] : NULL;
-	$factor      = isset( $_POST['factor'] ) ? $_POST['factor'] : NULL;
+	$post_ID     = isset( $_POST['id'] ) ? esc_html( $_POST['id'] ) : NULL;
+	$post_type   = isset( $_POST['type'] ) ? esc_html( $_POST['type'] ) : NULL;
+	$nonce_token = isset( $_POST['nonce'] ) ? esc_html( $_POST['nonce'] ) : NULL;
+	$factor      = isset( $_POST['factor'] ) ? esc_html( $_POST['factor'] ) : NULL;
+	$template    = isset( $_POST['template'] ) ? esc_html( $_POST['template'] ) : 'wpulike-default';
 	$response    = array();
 	$status      = 0;
 
@@ -54,7 +55,7 @@ function wp_ulike_process(){
 			"slug"                 => $slug,
 			"cookie"               => $cookie,
 			"factor"               => $factor,
-			"style"                => isset( $options['template'] ) ? $options['template'] : '',
+			"style"                => $template,
 			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
 			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
 			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button'

@@ -16,6 +16,7 @@
       displayLikers: false,
       disablePophover: true,
       factor: '',
+      template: '',
       counterSelector: ".count-box",
       generalSelector: ".wp_ulike_general_class",
       buttonSelector: ".wp_ulike_btn",
@@ -29,7 +30,8 @@
       "ulike-display-likers": "displayLikers",
       "ulike-disable-pophover": "disablePophover",
       "ulike-append-timeout": "appendTimeout",
-      "ulike-factor": "factor"
+      "ulike-factor": "factor",
+      "ulike-template": "template",
     };
 
   // The actual plugin constructor
@@ -105,7 +107,8 @@
           id: this.settings.ID,
           nonce: this.settings.nonce,
           factor: this.settings.factor,
-          type: this.settings.type
+          type: this.settings.type,
+          template: this.settings.template
         },
         function (response) {
           //remove progress class
