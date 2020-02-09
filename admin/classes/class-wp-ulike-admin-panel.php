@@ -41,7 +41,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'show_bar_menu'      => false,
                 'show_sub_menu'      => false,
                 'show_network_menu'  => false,
-                'show_search'        => false,
+                'show_search'        => true,
                 'show_reset_all'     => true,
                 'show_reset_section' => true,
                 'show_footer'        => true,
