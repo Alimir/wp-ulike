@@ -54,6 +54,7 @@ function wp_ulike_process(){
 			"slug"                 => $slug,
 			"cookie"               => $cookie,
 			"factor"               => $factor,
+			"style"                => isset( $options['template'] ) ? $options['template'] : '',
 			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
 			"only_logged_in_users" => isset( $options['enable_only_logged_in_users'] ) ? $options['enable_only_logged_in_users'] : 0,
 			"logged_out_action"    => isset( $options['logged_out_display_type'] ) ? $options['logged_out_display_type'] : 'button'
