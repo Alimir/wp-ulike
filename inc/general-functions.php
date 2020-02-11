@@ -256,7 +256,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		$counter_value = 0;
 		foreach ( $counter_query as $key => $row ) {
 			if( $row->col_id == $ID ){
-				$counter_value = $row->col_val;
+				$counter_value = $row->col_val ? $row->col_val : 0;
 				break;
 			}
 		}
@@ -270,7 +270,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		// Create an action when counter value is ready.
 		do_action('wp_ulike_counter_value_generated');
 
-		return apply_filters( 'wp_ulike_counter_value' , empty( $counter_value ) ? 0 : $counter_value, $ID, $type, $status );
+		return apply_filters( 'wp_ulike_counter_value' , $counter_value, $ID, $type, $status );
 	}
 }
 
