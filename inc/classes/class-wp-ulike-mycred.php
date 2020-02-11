@@ -12,8 +12,6 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 * Construct
 		 */
 		function __construct( $hook_prefs, $type = 'mycred_default' ) {
- 			global $wpdb;
-			$this->wpdb = $wpdb;
 			parent::__construct( array(
 				'id'       => 'wp_ulike',
 				'defaults' => array(
