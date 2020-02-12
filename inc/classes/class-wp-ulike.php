@@ -146,7 +146,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$output = $this->get_template( $data, 1 );
 				}
 				else{
-					$output = $this->get_template( $data, 4 );
+					$output = $this->get_template( $data, 4, $user_status );
 				}
 
 			} elseif( $type == 'process' ) {
