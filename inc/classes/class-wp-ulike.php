@@ -146,7 +146,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$output = $this->get_template( $data, 1 );
 				}
 				else{
-					$output = $this->get_template( $data, 4 );
+					$output = $this->get_template( $data, 4, $user_status );
 				}
 
 			} elseif( $type == 'process' ) {
@@ -433,33 +433,50 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		/**
 		 * Get User Status (like/dislike)
 		 *
-		 * @author       	Alimir
-		 * @param           String $table
-		 * @param           String $first_column
-		 * @param           String $second_column
-		 * @param           String $first_val
-		 * @param           String $second_val
-		 * @since           2.0
-		 * @return			String
+		 * @param           string $table
+		 * @param           string $item_type_col
+		 * @param           string $item_conditional_col
+		 * @param           string $item_type_val
+		 * @param           string $item_conditional_val
+		 * @return			string
 		 */
-		public function get_user_status( $table, $first_column, $second_column, $first_val, $second_val ){
+		public function get_user_status( $table, $item_type_col, $item_conditional_col, $item_type_val, $item_conditional_val ){
 
-			// Check the user's likes history
-			$query  = sprintf( "
-					SELECT `status`
-					FROM %s
-					WHERE `%s` = '%s'
-					AND `%s` = '%s'",
+			$cache_key  = sanitize_key( sprintf( 'user-status-on-%s-table', $table ) );
+			$user_query = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+			// Make a general query to get info from target table.
+			if( false === $user_query ){
+				// Create query string
+				$query  = sprintf( '
+						SELECT `%1$s` AS col_id,
+						GROUP_CONCAT(DISTINCT(`status`)) AS col_status
+						FROM %2$s
+						WHERE `%3$s` = \'%4$s\'
+						GROUP BY `%1$s`
+					',
+					esc_sql( $item_type_col ),
 					esc_sql( $this->wpdb->prefix . $table ),
-					esc_sql( $first_column ),
-					esc_sql( $first_val ),
-					esc_sql( $second_column ),
-					esc_sql( $second_val )
+					esc_sql( $item_conditional_col ),
+					esc_sql( $item_conditional_val )
 				);
 
-			$result = $this->wpdb->get_var( $query );
+				// Get results
+				$user_query = $this->wpdb->get_results( stripslashes( $query ) );
+				wp_cache_set( $cache_key, $user_query, WP_ULIKE_SLUG );
+			}
 
-			return empty( $result ) ? false : $result;
+			// Find current ID value from cached query.
+			$user_status = false;
+			foreach ( $user_query as $key => $row ) {
+				if( $row->col_id == $item_type_val ){
+					$col_status  = explode( ',', $row->col_status );
+					$user_status = is_array( $col_status ) ? $col_status[0] : $col_status;
+					break;
+				}
+			}
+
+			return $user_status;
 		}
 
 		/**

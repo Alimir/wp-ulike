@@ -34,7 +34,6 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 * @return			String
 		 */
 		public function most_liked_posts( $args = array(), $result = '' ) {
-			global $wpdb;
 
 			$defaults = array(
 				"numberOf"    => 10,
@@ -84,7 +83,6 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 * @return			String
 		 */
 		public function most_liked_comments( $args = array(), $result = '' ) {
-			global $wpdb;
 
 			$defaults = array(
 				"numberOf"    => 10,
@@ -197,7 +195,6 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 * @return			String
 		 */
 		public function most_liked_topics( $args = array(), $result = '' ) {
-			global $wpdb;
 
 			if( ! function_exists( 'is_bbpress' ) ) {
 				return sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ) ,__( 'bbPress', WP_ULIKE_SLUG ) );
@@ -315,7 +312,6 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 * @return			String
 		 */
 		public function most_liked_users( $args = array(), $result = '' ) {
-			global $wpdb;
 
 			$defaults = array(
 				"numberOf"    => 10,

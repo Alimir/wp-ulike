@@ -224,37 +224,53 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			return new WP_Error( 'broke', __( "Please enter some value for required variables.", WP_ULIKE_SLUG ) );
 		}
 
-		// Peroid limit SQL
-		$period_limit = wp_ulike_get_period_limit_sql( $date_range );
+		$cache_key     = sanitize_key( sprintf( 'counter-query-for-%s-%s-status', $type, $status ) );
+		$counter_query = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
-		// get table info
-		$table_info   = wp_ulike_get_table_info( $type );
-		if( empty( $table_info ) ){
-			return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
+		// Make a general query to get info from target table.
+		if( false === $counter_query ){
+			// Peroid limit SQL
+			$period_limit = wp_ulike_get_period_limit_sql( $date_range );
+
+			// get table info
+			$table_info   = wp_ulike_get_table_info( $type );
+			if( empty( $table_info ) ){
+				return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
+			}
+
+			$query = sprintf(
+				'SELECT `%1$s` AS col_id, COUNT(%2$s) AS col_val FROM %3$s WHERE %4$s GROUP BY `%1$s` %5$s',
+				esc_sql( $table_info['column'] ),
+				esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
+				esc_sql( $wpdb->prefix . $table_info['table'] ),
+				esc_sql( $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'" ),
+				esc_sql( $period_limit )
+			);
+
+			$counter_query = $wpdb->get_results( stripslashes( $query ) );
+
+			wp_cache_set( $cache_key, $counter_query, WP_ULIKE_SLUG );
 		}
 
-		$query = sprintf(
-			"SELECT COUNT(%s) FROM %s WHERE %s AND `%s` = '%s' %s",
-			esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
-			esc_sql( $wpdb->prefix . $table_info['table'] ),
-			esc_sql( $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'" ),
-			esc_sql( $table_info['column'] ),
-			esc_sql( $ID ),
-			esc_sql( $period_limit )
-		);
-
-		$result = $wpdb->get_var( stripslashes( $query ) );
+		// Find current ID counter value from cached query.
+		$counter_value = 0;
+		foreach ( $counter_query as $key => $row ) {
+			if( $row->col_id == $ID ){
+				$counter_value = $row->col_val ? $row->col_val : 0;
+				break;
+			}
+		}
 
 		// By checking this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.
 		$enable_meta_values = wp_ulike_get_option( 'enable_meta_values', false );
 		if( wp_ulike_is_true( $enable_meta_values ) && in_array( $status, array( 'like', 'all' ) ) ){
-			$result += wp_ulike_get_old_meta_value( $ID, $type );
+			$counter_value += wp_ulike_get_old_meta_value( $ID, $type );
 		}
 
 		// Create an action when counter value is ready.
 		do_action('wp_ulike_counter_value_generated');
 
-		return apply_filters( 'wp_ulike_counter_value' , empty( $result ) ? 0 : $result, $ID, $type, $status );
+		return apply_filters( 'wp_ulike_counter_value' , $counter_value, $ID, $type, $status );
 	}
 }
 
@@ -993,27 +1009,47 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 
 if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 	/**
-	 * Get template between
+	 * Get likers list
 	 *
-	 * @author       	Alimir
-	 * @param           String $string
-	 * @param           String $start
-	 * @param           String $end
-	 * @since           2.0
-	 * @return			String
+	 * @param string $table_name
+	 * @param string $column_name
+	 * @param integer $item_ID
+	 * @param integer $limit
+	 * @return array
 	 */
-	function wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $limit_num = 10 ){
+	function wp_ulike_get_likers_list_per_post( $table_name, $column_name, $item_ID, $limit = 10 ){
 		// Global wordpress database object
 		global $wpdb;
-		// Get likers list
-		return $wpdb->get_results( "SELECT user_id
-						FROM   ".$wpdb->prefix."$table_name
-						WHERE  $column_name = '$post_ID'
-						       AND status in ('like', 'dislike')
-						       AND user_id BETWEEN 1 AND 999999
-						GROUP  BY user_id
-						LIMIT  $limit_num"
-					);
+
+		$cache_key    = sanitize_key( sprintf( 'likers-query-for-%s-table', $table_name ) );
+		$likers_query = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+		// Make a general query to get info from target table.
+		if( false === $likers_query ){
+			// Create query string
+			$query = sprintf(
+				'SELECT `%1$s` AS col_id,
+				 GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ",") AS col_val
+				 FROM %2$s WHERE `status` in ( "like", "dislike" ) AND `user_id` BETWEEN 1 AND 999999 GROUP BY `%1$s`',
+				esc_sql( $column_name ),
+				esc_sql( $wpdb->prefix . $table_name )
+			);
+
+			// Get results
+			$likers_query = $wpdb->get_results( stripslashes( $query ) );
+			wp_cache_set( $cache_key, $likers_query, WP_ULIKE_SLUG );
+		}
+
+		// Find current ID value from cached query.
+		$likers_list = array();
+		foreach ( $likers_query as $key => $row ) {
+			if( $row->col_id == $item_ID ){
+				$likers_list = explode( ',', $row->col_val );
+				break;
+			}
+		}
+
+		return ! empty( $likers_list ) ? array_slice( $likers_list, 0, $limit ) : array();
 	}
 }
 
@@ -1147,8 +1183,8 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 
 			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
-			foreach ( $get_users as $get_user ) {
-				$user_info 		= get_userdata( $get_user->user_id );
+			foreach ( $get_users as $user ) {
+				$user_info 		= get_userdata( $user );
 				$out_template 	= $inner_template;
 				if ( $user_info ):
 					if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
