@@ -470,7 +470,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$user_status = false;
 			foreach ( $user_query as $key => $row ) {
 				if( $row->col_id == $item_type_val ){
-					$user_status = $row->col_status;
+					$col_status  = explode( ',', $row->col_status );
+					$user_status = is_array( $col_status ) ? $col_status[0] : $col_status;
 					break;
 				}
 			}
