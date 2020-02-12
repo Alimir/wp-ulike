@@ -1030,10 +1030,9 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 			$query = sprintf(
 				'SELECT `%1$s` AS col_id,
 				 GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ",") AS col_val
-				 FROM %2$s WHERE `status` in ( "like", "dislike" ) AND `user_id` BETWEEN 1 AND 999999 GROUP BY `%1$s` LIMIT %3$s',
+				 FROM %2$s WHERE `status` in ( "like", "dislike" ) AND `user_id` BETWEEN 1 AND 999999 GROUP BY `%1$s`',
 				esc_sql( $column_name ),
-				esc_sql( $wpdb->prefix . $table_name ),
-				esc_sql( $limit )
+				esc_sql( $wpdb->prefix . $table_name )
 			);
 
 			// Get results
@@ -1050,7 +1049,7 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 			}
 		}
 
-		return $likers_list;
+		return ! empty( $likers_list ) ? array_slice( $likers_list, 0, $limit ) : array();
 	}
 }
 
