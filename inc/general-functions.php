@@ -239,7 +239,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			}
 
 			$query = sprintf(
-				'SELECT `%1$s` AS col_id, COUNT(%2$s) AS col_val FROM %3$s WHERE %4$s GROUP BY `%1$s` %5$s',
+				'SELECT `%1$s` AS col_id, COUNT(%2$s) AS col_val FROM %3$s WHERE %4$s %5$s GROUP BY `%1$s`',
 				esc_sql( $table_info['column'] ),
 				esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
 				esc_sql( $wpdb->prefix . $table_info['table'] ),
