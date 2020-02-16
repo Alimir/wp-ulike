@@ -59,8 +59,12 @@
 				</thead>
 				<tbody class="wp_ulike_logs">
 					<?php
-					foreach ( $datasets['data_rows'] as $data_row )
-					{
+					foreach ( $datasets['data_rows'] as $data_row ) {
+					$comment_author = $comment_content = __('Not Found!',WP_ULIKE_SLUG);
+					if( NULL != ( $getComment = get_comment( $data_row->comment_id ) ) ){
+						$comment_author  = $getComment->comment_author;
+						$comment_content = $getComment->comment_content;
+					}
 					?>
 					<tr <?php if ($alternate == true) echo 'class="alternate"';?>>
 						<td>
@@ -90,12 +94,12 @@
 						</td>
 						<td>
 						<?php
-							echo get_comment_author( ! empty( $data_row->comment_id ) ? $data_row->comment_id : 0 );
+							echo $comment_author;
 						?>
 						</td>
 						<td>
 						<?php
-							echo get_comment_text( ! empty( $data_row->comment_id ) ? $data_row->comment_id : 0 );
+							echo $comment_content;
 						?>
 						</td>
 						<td>
