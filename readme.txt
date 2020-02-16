@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.2
-Stable tag: 4.1.5
+Stable tag: 4.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -185,6 +185,14 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.1.6 =
+* Added: Professional logs controller page with various options. [PRO]
+* Added: All times preset in date range filter. [PRO]
+* Fixed: An issue with getting counter value in widgets.
+* Fixed: Nofollow issue with widget links.
+* Fixed: An issue with the comment logs template.
+* Fixed: Some small issues.
 
 = 4.1.5 =
 * Added: New caching methods to increase the performance of some essential queries.
