@@ -63,11 +63,14 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$permalink  = get_permalink($post->ID);
 				$post_count = $this->get_counter_value($post->ID, 'post', 'all', false, $period );
 
-				$result     .= $before_item;
-				$result     .= $show_thumb ? $this->get_post_thumbnail( $post->ID, $sizeOf ) : '';
-				$result     .= '<a href="' . $permalink . '" title="' . $post_title.'" rel="nofollow">'. wp_trim_words( $post_title, $num_words = $trim, $more = null ) . '</a>';
-				$result     .= $show_count ? ' <span class="wp_counter_span">'.wp_ulike_format_number($post_count).'</span>' : '';
-				$result     .= $after_item;
+				$result .= sprintf(
+					'%s <a href="%s">%s</a> %s %s',
+					$before_item,
+					$permalink,
+					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number($post_count) . '</span>' : '',
+					$after_item
+				);
 			}
 
 			return $result;
@@ -109,19 +112,21 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			foreach ($comments as $comment) {
 				$comment_author      = stripslashes($comment->comment_author);
-				$post_permalink      = get_permalink($comment->comment_post_ID);
 				$post_title          = get_the_title($comment->comment_post_ID);
-				$comment_permalink   = get_permalink($comment->comment_ID);
+				$comment_permalink   = get_comment_link($comment->comment_ID);
 				$comment_likes_count = $this->get_counter_value($comment->comment_ID, 'comment', 'all', false, $period);
 
-				$result .= $before_item;
-				$result .= $show_thumb ? get_avatar( $comment->comment_author_email, $sizeOf ) : '';
-				$result .= '<span class="comment-info">';
-				$result .= '<span class="comment-author-link">' . $comment_author . '</span> ' . __('on',WP_ULIKE_SLUG);
-				$result .= ' <a href="' . $post_permalink . '#comment-' . $comment->comment_ID . '" title="' . $post_title.'" rel="nofollow">' . wp_trim_words( $post_title, $num_words = $trim, $more = null ) . '</a>';
-				$result .= '</span>';
-				$result .= $show_count ? ' <span class="wp_counter_span">'.wp_ulike_format_number($comment_likes_count).'</span>' : '';
-				$result .= $after_item;
+				$result .= sprintf(
+					'%s %s <span class="comment-info"><span class="comment-author-link">%s</span> %s <a href="%s">%s</a></span> %s %s',
+					$before_item,
+					$show_thumb ? get_avatar( $comment->comment_author_email, $sizeOf ) : '',
+					$comment_author,
+					__('on',WP_ULIKE_SLUG),
+					$comment_permalink,
+					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number($comment_likes_count) . '</span>' : '',
+					$after_item
+				);
 			}
 
 			return $result;
@@ -228,10 +233,14 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$permalink  = get_permalink( $post->ID );
 				$post_count = $this->get_counter_value($post->ID, 'topic', 'all', false, $period);
 
-				$result .= $before_item;
-				$result .= '<a href="' . $permalink . '" title="' . $post_title.'" rel="nofollow">'. wp_trim_words( $post_title, $num_words = $trim, $more = null ) . '</a>';
-				$result .= $show_count ? ' <span class="wp_counter_span">'.wp_ulike_format_number($post_count).'</span>' : '';
-				$result .= $after_item;
+				$result .= sprintf(
+					'%s <a href="%s">%s</a> %s %s',
+					$before_item,
+					$permalink,
+					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number($post_count) . '</span>' : '',
+					$after_item
+				);
 			}
 
 			return $result;
@@ -291,12 +300,14 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					continue;
 				}
 
-				$result .= $before_item;
-				$result .= '<a href="' . $activity_permalink . '" rel="nofollow">';
-				$result .= wp_trim_words( $activity_action, $num_words = $trim, $more = null );
-				$result .= '</a>';
-				$result .= $show_count ? ' <span class="wp_counter_span">'.wp_ulike_format_number($post_count).'</span>' : '';
-				$result .= $after_item;
+				$result .= sprintf(
+					'%s <a href="%s">%s</a> %s %s',
+					$before_item,
+					esc_url( $activity_permalink ),
+					wp_trim_words( $activity_action, $num_words = $trim, $more = null ),
+					$show_count ? '<span class="wp_counter_span">'.wp_ulike_format_number($post_count).'</span>' : '',
+					$after_item
+				);
 			}
 
 			return $result;
