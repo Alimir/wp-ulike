@@ -1083,7 +1083,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		}
 
 		$limit_records = '';
-		if( $parsed_args['limit'] <= 0 ){
+		if( (int) $parsed_args['limit'] > 0 ){
 			$limit_records = sprintf( "LIMIT %d", $parsed_args['limit'] );
 		}
 
