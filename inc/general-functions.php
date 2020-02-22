@@ -1069,7 +1069,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			"status" => 'like',
 			"order"  => 'DESC',
 			"period" => 'all',
-			"limit"  => 30
+			"limit"  => 0
 		);
 		$parsed_args  = wp_parse_args( $args, $defaults );
 		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
@@ -1082,6 +1082,10 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
 		}
 
+		$limit_records = '';
+		if( $parsed_args['limit'] <= 0 ){
+			$limit_records = sprintf( "LIMIT %d", $parsed_args['limit'] );
+		}
 
 		// generate query string
 		$query  = sprintf( "
@@ -1092,13 +1096,13 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			%s
 			GROUP BY item_ID
 			ORDER BY counter
-			%s LIMIT %d",
+			%s %s",
 			$info_args['column'],
 			$wpdb->prefix . $info_args['table'],
 			$status_type,
 			$period_limit,
 			$parsed_args['order'],
-			$parsed_args['limit']
+			$limit_records
 		);
 
 		return $wpdb->get_results( $query );
@@ -1119,7 +1123,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_ids' ) ){
 			"status" => 'like',
 			"order"  => 'DESC',
 			"period" => 'all',
-			"limit"  => 30
+			"limit"  => 0
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
 		$item_info   = wp_ulike_get_popular_items_info( $parsed_args );
