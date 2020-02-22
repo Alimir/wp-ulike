@@ -250,13 +250,19 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			// Extract variables
 			extract( $parsed_args );
 
-			$query = sprintf( "SELECT COUNT(*) FROM %s WHERE 1=1", $this->wpdb->prefix . $table );
-			$query .= wp_ulike_get_period_limit_sql( $date );
+			$cache_key     = sanitize_key( sprintf( 'count-logs-for-%s-table-in-%s-daterange', $table, $date ) );
+			$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
-	        $result = $this->wpdb->get_var( $query );
+			// Make a cachable query to get new like count from all tables
+			if( false === $counter_value ){
+				$query = sprintf( "SELECT COUNT(*) FROM %s WHERE 1=1", $this->wpdb->prefix . $table );
+				$query .= wp_ulike_get_period_limit_sql( $date );
 
-	        return  empty( $result ) ? 0 : $result;
+				$counter_value = $this->wpdb->get_var( $query );
+				wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG );
+			}
 
+	        return  empty( $counter_value ) ? 0 : $counter_value;
 		}
 
 		/**
