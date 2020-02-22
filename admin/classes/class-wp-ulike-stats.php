@@ -220,14 +220,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @return integer
 		 */
 		public function count_all_logs( $date = 'all' ){
-			// Result
-			$result = 0;
-
-			foreach ( $this->tables as $key => $table ) {
-				$result += $this->count_logs( array( "table" => $table, "date" => $date ) );
-			}
-
-			return $result;
+			return wp_ulike_count_all_logs( $date );
 		}
 
 		/**

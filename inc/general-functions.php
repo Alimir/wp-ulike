@@ -1623,8 +1623,35 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 	 * @return integer
 	 */
 	function wp_ulike_count_all_logs( $period = 'all' ){
-		$instance = wp_ulike_stats::get_instance();
-		return $instance->count_all_logs( $period );
+		global $wpdb;
+
+		// Convert array period
+		if( is_array( $period ) ){
+			$period = implode( '-', $period );
+		}
+
+		$cache_key     = sanitize_key( sprintf( 'calculate-%s-logs', $period ) );
+		$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+		// Make a cachable query to get new like count from all tables
+		if( false === $counter_value ){
+
+			$query = sprintf( '
+				SELECT
+				( SELECT COUNT(*) FROM `%1$sulike` WHERE 1=1 %2$s ) +
+				( SELECT COUNT(*) FROM `%1$sulike_activities` WHERE 1=1 %2$s ) +
+				( SELECT COUNT(*) FROM `%1$sulike_comments` WHERE 1=1 %2$s ) +
+				( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE 1=1 %2$s )
+				',
+				$wpdb->prefix,
+				wp_ulike_get_period_limit_sql( $period )
+			);
+
+			$counter_value = $wpdb->get_var( $query );
+			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG );
+		}
+
+		return empty( $counter_value ) ? 0 : $counter_value;
 	}
 }
 
