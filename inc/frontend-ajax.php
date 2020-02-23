@@ -140,12 +140,12 @@ add_action( 'wp_ajax_nopriv_wp_ulike_process'	, 'wp_ulike_process' );
  */
 function wp_ulike_get_likers(){
 
-	$post_ID          = $_POST['id'];
-	$post_type        = $_POST['type'];
-	$nonce_token      = $_POST['nonce'];
-	$is_refresh       = $_POST['refresh'];
-	$display_likers   = $_POST['displayLikers'];
-	$disable_pophover = $_POST['disablePophover'];
+	$post_ID          = isset( $_POST['id'] ) ? esc_html( $_POST['id'] ) : NULL;
+	$post_type        = isset( $_POST['type'] ) ? esc_html( $_POST['type'] ) : NULL;
+	$nonce_token      = isset( $_POST['nonce'] ) ? esc_html( $_POST['nonce'] ) : NULL;
+	$is_refresh       = isset( $_POST['refresh'] ) ? esc_html( $_POST['refresh'] ) : false;
+	$display_likers   = isset( $_POST['displayLikers'] ) ? esc_html( $_POST['displayLikers'] ) : false;
+	$disable_pophover = isset( $_POST['disablePophover'] ) ? esc_html( $_POST['disablePophover'] ) : false;
 
 	// Check security nonce field
 	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && wp_ulike_is_cache_exist() ) ) {
