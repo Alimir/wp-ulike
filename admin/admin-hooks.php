@@ -156,6 +156,29 @@ function wp_ulike_notice_manager(){
 	}
 
 	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) && strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
+		$notice_list[ 'wp_ulike_logs_page_banner' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_logs_page_banner',
+			'title'       => __( 'How to Create Detailed Log Reports in WP ULike PRO?', WP_ULIKE_SLUG ),
+			'description' => __( "Having votes for your content without a tool for measuring the results is meaningless, isn't it? for that reason, we gave you full access to your log data in the WP ULike professional Logs panel." , WP_ULIKE_SLUG ),
+			'skin'        => 'default',
+			'has_close'   => true,
+			'buttons'     => array(
+				array(
+					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/log-reports-in-wp-ulike-pro/?utm_source=logs-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+				),
+				array(
+					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+					'type'       => 'skip',
+					'color_name' => 'error',
+					'expiration' => YEAR_IN_SECONDS * 10
+				)
+			),
+			'image'     => array(
+				'width' => '140',
+				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/table.svg'
+			)
+		]);
 		$notice_list[ 'wp_ulike_seo_tools_banner' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_seo_tools_banner',
 			'title'       => __( 'Boost Your SEO by Using Schema Rich Snippets', WP_ULIKE_SLUG ),
