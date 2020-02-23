@@ -1,4 +1,4 @@
-/*! WP ULike - v4.1.6
+/*! WP ULike - v4.1.7
  *  https://wpulike.com
  *  TechnoWich 2020;
  */
@@ -410,6 +410,7 @@
             id: this.settings.ID,
             nonce: this.settings.nonce,
             type: this.settings.type,
+            displayLikers: this.settings.displayLikers,
             disablePophover: this.settings.disablePophover,
             refresh: this._refreshTheLikers ? 1 : 0
           },
