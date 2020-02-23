@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/plugins/wp-ulike/\n"
-"POT-Creation-Date: 2020-02-16 15:32:36+00:00\n"
+"POT-Creation-Date: 2020-02-23 09:39:59+00:00\n"
 "PO-Revision-Date: 2015-05-21 11:28+0330\n"
 "Last-Translator: Alimir <info@alimir.ir>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/wp-"
@@ -26,8 +26,8 @@ msgstr ""
 #: build/wp-ulike/admin/admin-ajax.php:76
 #: build/wp-ulike/admin/admin-ajax.php:82
 #: build/wp-ulike/inc/frontend-ajax.php:34
-#: build/wp-ulike/inc/frontend-ajax.php:154 inc/frontend-ajax.php:31
-#: inc/frontend-ajax.php:151
+#: build/wp-ulike/inc/frontend-ajax.php:155 inc/frontend-ajax.php:31
+#: inc/frontend-ajax.php:152
 msgid "Error: Something Wrong Happened!"
 msgstr ""
 
@@ -43,9 +43,9 @@ msgstr ""
 msgid "It's Ok!"
 msgstr ""
 
-#: admin/admin-functions.php:225
+#: admin/admin-functions.php:231
 #: admin/classes/class-wp-ulike-admin-panel.php:517
-#: build/wp-ulike/admin/admin-functions.php:228
+#: build/wp-ulike/admin/admin-functions.php:234
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:520
 msgid "Button"
 msgstr ""
@@ -72,24 +72,45 @@ msgstr ""
 msgid "Sure, I'd love to!"
 msgstr ""
 
-#: admin/admin-hooks.php:139 admin/admin-hooks.php:201
+#: admin/admin-hooks.php:139 admin/admin-hooks.php:224
 #: build/wp-ulike/admin/admin-hooks.php:142
-#: build/wp-ulike/admin/admin-hooks.php:204
+#: build/wp-ulike/admin/admin-hooks.php:227
 msgid "Not Now"
 msgstr ""
 
 #: admin/admin-hooks.php:145 admin/admin-hooks.php:171
-#: admin/admin-hooks.php:207 build/wp-ulike/admin/admin-hooks.php:148
+#: admin/admin-hooks.php:194 admin/admin-hooks.php:230
+#: build/wp-ulike/admin/admin-hooks.php:148
 #: build/wp-ulike/admin/admin-hooks.php:174
-#: build/wp-ulike/admin/admin-hooks.php:210
+#: build/wp-ulike/admin/admin-hooks.php:197
+#: build/wp-ulike/admin/admin-hooks.php:233
 msgid "No thanks and never ask me again"
 msgstr ""
 
 #: admin/admin-hooks.php:161 build/wp-ulike/admin/admin-hooks.php:164
-msgid "Boost Your SEO by Using Schema Rich Snippets"
+msgid "How to Create Detailed Log Reports in WP ULike PRO?"
 msgstr ""
 
 #: admin/admin-hooks.php:162 build/wp-ulike/admin/admin-hooks.php:165
+msgid ""
+"Having votes for your content without a tool for measuring the results is "
+"meaningless, isn't it? for that reason, we gave you full access to your log "
+"data in the WP ULike professional Logs panel."
+msgstr ""
+
+#: admin/admin-hooks.php:167 admin/admin-hooks.php:190
+#: admin/admin-hooks.php:220 build/wp-ulike/admin/admin-hooks.php:170
+#: build/wp-ulike/admin/admin-hooks.php:193
+#: build/wp-ulike/admin/admin-hooks.php:223
+#, fuzzy
+msgid "Get More Information"
+msgstr "För mer information:"
+
+#: admin/admin-hooks.php:184 build/wp-ulike/admin/admin-hooks.php:187
+msgid "Boost Your SEO by Using Schema Rich Snippets"
+msgstr ""
+
+#: admin/admin-hooks.php:185 build/wp-ulike/admin/admin-hooks.php:188
 msgid ""
 "WP ULike Pro in its latest update evolved to an innovative and powerful SEO "
 "Plugin which can manage +13 types of Schema Markups to make a better "
@@ -97,18 +118,11 @@ msgid ""
 "search engine language and tell them which type of content you are promoting."
 msgstr ""
 
-#: admin/admin-hooks.php:167 admin/admin-hooks.php:197
-#: build/wp-ulike/admin/admin-hooks.php:170
-#: build/wp-ulike/admin/admin-hooks.php:200
-#, fuzzy
-msgid "Get More Information"
-msgstr "För mer information:"
-
-#: admin/admin-hooks.php:184 build/wp-ulike/admin/admin-hooks.php:187
+#: admin/admin-hooks.php:207 build/wp-ulike/admin/admin-hooks.php:210
 msgid "WP Ulike Pro is Ready :))"
 msgstr ""
 
-#: admin/admin-hooks.php:185 build/wp-ulike/admin/admin-hooks.php:188
+#: admin/admin-hooks.php:208 build/wp-ulike/admin/admin-hooks.php:211
 msgid ""
 "Finally, after a long time, the Premium version of the WP Ulike plugin has "
 "been released with some new features such as support for Dislike button, "
@@ -117,8 +131,8 @@ msgid ""
 "provide a full support for our users."
 msgstr ""
 
-#: admin/admin-hooks.php:236 admin/includes/templates/about.php:26
-#: build/wp-ulike/admin/admin-hooks.php:239
+#: admin/admin-hooks.php:259 admin/includes/templates/about.php:26
+#: build/wp-ulike/admin/admin-hooks.php:262
 #: build/wp-ulike/admin/includes/templates/about.php:29
 msgid "Go Pro"
 msgstr ""
@@ -134,30 +148,30 @@ msgid "No information was found in this database!"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:27
-#: admin/includes/templates/posts-logs.php:39
+#: admin/includes/templates/posts-logs.php:61
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-pages.php:30
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:42
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:64
 msgid "Post Likes Logs"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:35
-#: admin/includes/templates/comments-logs.php:39
+#: admin/includes/templates/comments-logs.php:61
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-pages.php:38
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:42
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:64
 msgid "Comment Likes Logs"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:43
-#: admin/includes/templates/activities-logs.php:39
+#: admin/includes/templates/activities-logs.php:61
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-pages.php:46
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:42
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:64
 msgid "Activity Likes Logs"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:51
-#: admin/includes/templates/topics-logs.php:39
+#: admin/includes/templates/topics-logs.php:61
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-pages.php:54
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:42
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:64
 msgid "Topics Likes Logs"
 msgstr ""
 
@@ -177,23 +191,23 @@ msgid "About"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:133
-#: admin/includes/templates/activities-logs.php:42
-#: admin/includes/templates/activities-logs.php:119
-#: admin/includes/templates/comments-logs.php:42
-#: admin/includes/templates/comments-logs.php:129
-#: admin/includes/templates/posts-logs.php:42
-#: admin/includes/templates/posts-logs.php:118
-#: admin/includes/templates/topics-logs.php:42
-#: admin/includes/templates/topics-logs.php:118
+#: admin/includes/templates/activities-logs.php:64
+#: admin/includes/templates/activities-logs.php:141
+#: admin/includes/templates/comments-logs.php:64
+#: admin/includes/templates/comments-logs.php:151
+#: admin/includes/templates/posts-logs.php:64
+#: admin/includes/templates/posts-logs.php:140
+#: admin/includes/templates/topics-logs.php:64
+#: admin/includes/templates/topics-logs.php:140
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-pages.php:136
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:45
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:122
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:45
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:132
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:45
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:121
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:45
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:121
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:67
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:144
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:67
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:154
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:67
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:143
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:67
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:143
 msgid "Logs"
 msgstr "Loggar"
 
@@ -1020,16 +1034,16 @@ msgstr ""
 msgid "Topics Stats"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-stats.php:274
-#: admin/includes/templates/activities-logs.php:76
-#: admin/includes/templates/comments-logs.php:81
-#: admin/includes/templates/posts-logs.php:75
-#: admin/includes/templates/topics-logs.php:75
-#: build/wp-ulike/admin/classes/class-wp-ulike-stats.php:277
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:79
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:84
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:78
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:78
+#: admin/classes/class-wp-ulike-stats.php:273
+#: admin/includes/templates/activities-logs.php:98
+#: admin/includes/templates/comments-logs.php:103
+#: admin/includes/templates/posts-logs.php:97
+#: admin/includes/templates/topics-logs.php:97
+#: build/wp-ulike/admin/classes/class-wp-ulike-stats.php:276
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:101
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:106
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:100
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:100
 msgid "Guest User"
 msgstr ""
 
@@ -1315,115 +1329,177 @@ msgstr ""
 msgid "No data found! This is because there is still no data in your database."
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:38
-#: admin/includes/templates/comments-logs.php:38
-#: admin/includes/templates/posts-logs.php:38
-#: admin/includes/templates/topics-logs.php:38
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:41
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:41
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:41
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:41
+#: admin/includes/templates/activities-logs.php:40
+#: admin/includes/templates/comments-logs.php:40
+#: admin/includes/templates/posts-logs.php:40
+#: admin/includes/templates/statistics.php:45
+#: admin/includes/templates/topics-logs.php:40
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:43
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:43
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:43
+#: build/wp-ulike/admin/includes/templates/statistics.php:48
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:43
+msgid "Check Votings, Best Likers & Top contents"
+msgstr ""
+
+#: admin/includes/templates/activities-logs.php:42
+#: admin/includes/templates/comments-logs.php:42
+#: admin/includes/templates/posts-logs.php:42
+#: admin/includes/templates/statistics.php:47
+#: admin/includes/templates/topics-logs.php:42
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:45
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:45
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:45
+#: build/wp-ulike/admin/includes/templates/statistics.php:50
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:45
+msgid ""
+"With WP ULike Pro comprehensive Statistics tools, you can track what your "
+"users love and what annoys them in an instance. You can extract reports of "
+"likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with "
+"dateRange picker and status selector controllers, no confusing options and "
+"coding needed."
+msgstr ""
+
+#: admin/includes/templates/activities-logs.php:43
+#: admin/includes/templates/comments-logs.php:43
+#: admin/includes/templates/go-pro.php:22
+#: admin/includes/templates/posts-logs.php:43
+#: admin/includes/templates/statistics.php:48
+#: admin/includes/templates/topics-logs.php:43
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:46
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:46
+#: build/wp-ulike/admin/includes/templates/go-pro.php:25
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:46
+#: build/wp-ulike/admin/includes/templates/statistics.php:51
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:46
+msgid "Buy WP ULike Premium"
+msgstr ""
+
+#: admin/includes/templates/activities-logs.php:48
+#: admin/includes/templates/comments-logs.php:48
+#: admin/includes/templates/go-pro.php:28
+#: admin/includes/templates/posts-logs.php:48
+#: admin/includes/templates/statistics.php:53
+#: admin/includes/templates/topics-logs.php:48
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:51
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:51
+#: build/wp-ulike/admin/includes/templates/go-pro.php:31
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:51
+#: build/wp-ulike/admin/includes/templates/statistics.php:56
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:51
+#, fuzzy
+msgid "More information"
+msgstr "För mer information:"
+
+#: admin/includes/templates/activities-logs.php:60
+#: admin/includes/templates/comments-logs.php:60
+#: admin/includes/templates/posts-logs.php:60
+#: admin/includes/templates/topics-logs.php:60
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:63
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:63
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:63
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:63
 msgid "WP ULike Logs"
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:49
-#: admin/includes/templates/comments-logs.php:49
-#: admin/includes/templates/posts-logs.php:49
-#: admin/includes/templates/topics-logs.php:49
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:52
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:52
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:52
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:52
+#: admin/includes/templates/activities-logs.php:71
+#: admin/includes/templates/comments-logs.php:71
+#: admin/includes/templates/posts-logs.php:71
+#: admin/includes/templates/topics-logs.php:71
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:74
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:74
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:74
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:74
 msgid "ID"
 msgstr "ID"
 
-#: admin/includes/templates/activities-logs.php:50
-#: admin/includes/templates/comments-logs.php:50
-#: admin/includes/templates/posts-logs.php:50
-#: admin/includes/templates/topics-logs.php:50
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:53
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:53
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:53
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:53
+#: admin/includes/templates/activities-logs.php:72
+#: admin/includes/templates/comments-logs.php:72
+#: admin/includes/templates/posts-logs.php:72
+#: admin/includes/templates/topics-logs.php:72
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:75
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:75
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:75
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:75
 msgid "Username"
 msgstr "Användarnamn"
 
-#: admin/includes/templates/activities-logs.php:51
-#: admin/includes/templates/comments-logs.php:51
-#: admin/includes/templates/posts-logs.php:51
-#: admin/includes/templates/topics-logs.php:51
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:54
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:54
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:54
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:54
+#: admin/includes/templates/activities-logs.php:73
+#: admin/includes/templates/comments-logs.php:73
+#: admin/includes/templates/posts-logs.php:73
+#: admin/includes/templates/topics-logs.php:73
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:76
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:76
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:76
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:76
 msgid "Status"
 msgstr "Status"
 
-#: admin/includes/templates/activities-logs.php:52
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:55
+#: admin/includes/templates/activities-logs.php:74
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:77
 msgid "Activity ID"
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:53
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:56
+#: admin/includes/templates/activities-logs.php:75
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:78
 msgid "Permalink"
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:54
-#: admin/includes/templates/comments-logs.php:55
-#: admin/includes/templates/posts-logs.php:54
-#: admin/includes/templates/topics-logs.php:54
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:57
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:58
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:57
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:57
+#: admin/includes/templates/activities-logs.php:76
+#: admin/includes/templates/comments-logs.php:77
+#: admin/includes/templates/posts-logs.php:76
+#: admin/includes/templates/topics-logs.php:76
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:79
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:80
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:79
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:79
 msgid "Date / Time"
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:55
-#: admin/includes/templates/comments-logs.php:56
-#: admin/includes/templates/posts-logs.php:55
-#: admin/includes/templates/topics-logs.php:55
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:58
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:59
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:58
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:58
+#: admin/includes/templates/activities-logs.php:77
+#: admin/includes/templates/comments-logs.php:78
+#: admin/includes/templates/posts-logs.php:77
+#: admin/includes/templates/topics-logs.php:77
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:80
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:81
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:80
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:80
 msgid "IP"
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:56
-#: admin/includes/templates/comments-logs.php:57
-#: admin/includes/templates/posts-logs.php:56
-#: admin/includes/templates/topics-logs.php:56
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:59
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:60
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:59
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:59
+#: admin/includes/templates/activities-logs.php:78
+#: admin/includes/templates/comments-logs.php:79
+#: admin/includes/templates/posts-logs.php:78
+#: admin/includes/templates/topics-logs.php:78
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:81
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:82
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:81
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:81
 msgid "Actions"
 msgstr "Åtgärd"
 
-#: admin/includes/templates/activities-logs.php:92
-#: build/wp-ulike/admin/includes/templates/activities-logs.php:95
+#: admin/includes/templates/activities-logs.php:114
+#: build/wp-ulike/admin/includes/templates/activities-logs.php:117
 msgid "<a href=\"%1$s\">Activity Permalink</a>"
 msgstr ""
 
-#: admin/includes/templates/comments-logs.php:52
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:55
+#: admin/includes/templates/comments-logs.php:74
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:77
 msgid "Comment ID"
 msgstr ""
 
-#: admin/includes/templates/comments-logs.php:53
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:56
+#: admin/includes/templates/comments-logs.php:75
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:78
 msgid "Comment Author"
 msgstr ""
 
-#: admin/includes/templates/comments-logs.php:54
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:57
+#: admin/includes/templates/comments-logs.php:76
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:79
 msgid "Comment Text"
 msgstr ""
 
-#: admin/includes/templates/comments-logs.php:63
-#: build/wp-ulike/admin/includes/templates/comments-logs.php:66
+#: admin/includes/templates/comments-logs.php:85
+#: build/wp-ulike/admin/includes/templates/comments-logs.php:88
 msgid "Not Found!"
 msgstr ""
 
@@ -1432,59 +1508,29 @@ msgstr ""
 msgid "WP ULike Premium"
 msgstr ""
 
-#: admin/includes/templates/go-pro.php:22
-#: admin/includes/templates/statistics.php:48
-#: build/wp-ulike/admin/includes/templates/go-pro.php:25
-#: build/wp-ulike/admin/includes/templates/statistics.php:51
-msgid "Buy WP ULike Premium"
-msgstr ""
-
-#: admin/includes/templates/go-pro.php:28
-#: admin/includes/templates/statistics.php:53
-#: build/wp-ulike/admin/includes/templates/go-pro.php:31
-#: build/wp-ulike/admin/includes/templates/statistics.php:56
-#, fuzzy
-msgid "More information"
-msgstr "För mer information:"
-
-#: admin/includes/templates/go-pro.php:114
-#: build/wp-ulike/admin/includes/templates/go-pro.php:117
+#: admin/includes/templates/go-pro.php:119
+#: build/wp-ulike/admin/includes/templates/go-pro.php:122
 msgid ""
 "Elementor is the #1 WordPress page builder. In the new version of the WP "
 "ULike PRO plugin we fully support this page builder and have a variety of "
 "widgets & controllers that make life much easier for you."
 msgstr ""
 
-#: admin/includes/templates/go-pro.php:114
-#: build/wp-ulike/admin/includes/templates/go-pro.php:117
+#: admin/includes/templates/go-pro.php:119
+#: build/wp-ulike/admin/includes/templates/go-pro.php:122
 msgid ""
 "Just drag your desired widget and drop it in your Elementor sections, "
 "customize as you go and enjoy your like and dislike buttons on your contents."
 msgstr ""
 
-#: admin/includes/templates/posts-logs.php:52
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:55
+#: admin/includes/templates/posts-logs.php:74
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:77
 msgid "Post ID"
 msgstr ""
 
-#: admin/includes/templates/posts-logs.php:53
-#: build/wp-ulike/admin/includes/templates/posts-logs.php:56
+#: admin/includes/templates/posts-logs.php:75
+#: build/wp-ulike/admin/includes/templates/posts-logs.php:78
 msgid "Post Title"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:45
-#: build/wp-ulike/admin/includes/templates/statistics.php:48
-msgid "Check Votings, Best Likers & Top contents"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:47
-#: build/wp-ulike/admin/includes/templates/statistics.php:50
-msgid ""
-"With WP ULike Pro comprehensive Statistics tools, you can track what your "
-"users love and what annoys them in an instance. You can extract reports of "
-"likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with "
-"dateRange picker and status selector controllers, no confusing options and "
-"coding needed."
 msgstr ""
 
 #: admin/includes/templates/statistics.php:76
@@ -1535,13 +1581,13 @@ msgstr ""
 msgid "Top"
 msgstr ""
 
-#: admin/includes/templates/topics-logs.php:52
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:55
+#: admin/includes/templates/topics-logs.php:74
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:77
 msgid "Topic ID"
 msgstr ""
 
-#: admin/includes/templates/topics-logs.php:53
-#: build/wp-ulike/admin/includes/templates/topics-logs.php:56
+#: admin/includes/templates/topics-logs.php:75
+#: build/wp-ulike/admin/includes/templates/topics-logs.php:78
 msgid "Topic Title"
 msgstr ""
 
@@ -1660,48 +1706,48 @@ msgstr ""
 msgid "Are you sure to reset all options?"
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:429
-#: build/wp-ulike/admin/settings/classes/setup.class.php:429
+#: admin/settings/classes/setup.class.php:436
+#: build/wp-ulike/admin/settings/classes/setup.class.php:436
 msgid "Are you sure?"
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:430
-#: build/wp-ulike/admin/settings/classes/setup.class.php:430
+#: admin/settings/classes/setup.class.php:437
+#: build/wp-ulike/admin/settings/classes/setup.class.php:437
 msgid "Restoring options."
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:431
-#: build/wp-ulike/admin/settings/classes/setup.class.php:431
+#: admin/settings/classes/setup.class.php:438
+#: build/wp-ulike/admin/settings/classes/setup.class.php:438
 msgid "Importing options."
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:434
-#: build/wp-ulike/admin/settings/classes/setup.class.php:434
+#: admin/settings/classes/setup.class.php:441
+#: build/wp-ulike/admin/settings/classes/setup.class.php:441
 msgid "Please enter %s or more characters"
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:435
-#: build/wp-ulike/admin/settings/classes/setup.class.php:435
+#: admin/settings/classes/setup.class.php:442
+#: build/wp-ulike/admin/settings/classes/setup.class.php:442
 msgid "Searching..."
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:436
-#: build/wp-ulike/admin/settings/classes/setup.class.php:436
+#: admin/settings/classes/setup.class.php:443
+#: build/wp-ulike/admin/settings/classes/setup.class.php:443
 msgid "No results match"
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:507
-#: build/wp-ulike/admin/settings/classes/setup.class.php:507
+#: admin/settings/classes/setup.class.php:514
+#: build/wp-ulike/admin/settings/classes/setup.class.php:514
 msgid "Ooops! This field type (%s) can not be used here, yet."
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:570
-#: build/wp-ulike/admin/settings/classes/setup.class.php:570
+#: admin/settings/classes/setup.class.php:577
+#: build/wp-ulike/admin/settings/classes/setup.class.php:577
 msgid "This field class is not available!"
 msgstr ""
 
-#: admin/settings/classes/setup.class.php:574
-#: build/wp-ulike/admin/settings/classes/setup.class.php:574
+#: admin/settings/classes/setup.class.php:581
+#: build/wp-ulike/admin/settings/classes/setup.class.php:581
 msgid "This type is not found!"
 msgstr ""
 
@@ -2569,17 +2615,17 @@ msgid ""
 msgstr ""
 
 #: build/wp-ulike/inc/frontend-ajax.php:42
-#: build/wp-ulike/inc/frontend-ajax.php:167 inc/frontend-ajax.php:39
-#: inc/frontend-ajax.php:164
+#: build/wp-ulike/inc/frontend-ajax.php:173 inc/frontend-ajax.php:39
+#: inc/frontend-ajax.php:170
 msgid "Error: This Method Is Not Exist!"
 msgstr ""
 
-#: build/wp-ulike/inc/frontend-ajax.php:159 inc/frontend-ajax.php:156
-msgid "Notice: The likers box is refreshed only for logged in users!"
+#: build/wp-ulike/inc/frontend-ajax.php:160 inc/frontend-ajax.php:157
+msgid "Notice: The likers box is not activated!"
 msgstr ""
 
-#: build/wp-ulike/inc/frontend-ajax.php:175 inc/frontend-ajax.php:172
-msgid "Notice: The likers box is not activated!"
+#: build/wp-ulike/inc/frontend-ajax.php:165 inc/frontend-ajax.php:162
+msgid "Notice: The likers box is refreshed only for logged in users!"
 msgstr ""
 
 #: build/wp-ulike/inc/general-functions.php:85
@@ -2624,15 +2670,15 @@ msgstr ""
 msgid "Table info is empty."
 msgstr ""
 
-#: build/wp-ulike/inc/general-functions.php:1303 inc/general-functions.php:1300
+#: build/wp-ulike/inc/general-functions.php:1307 inc/general-functions.php:1304
 msgid "You need to login in order to like this post: "
 msgstr ""
 
-#: build/wp-ulike/inc/general-functions.php:1305 inc/general-functions.php:1302
+#: build/wp-ulike/inc/general-functions.php:1309 inc/general-functions.php:1306
 msgid "click here"
 msgstr ""
 
-#: build/wp-ulike/inc/general-functions.php:1839 inc/general-functions.php:1836
+#: build/wp-ulike/inc/general-functions.php:1870 inc/general-functions.php:1867
 msgid "Like This"
 msgstr ""
 
