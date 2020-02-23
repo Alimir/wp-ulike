@@ -1069,7 +1069,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			"status" => 'like',
 			"order"  => 'DESC',
 			"period" => 'all',
-			"limit"  => 30
+			"limit"  => 0
 		);
 		$parsed_args  = wp_parse_args( $args, $defaults );
 		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
@@ -1082,6 +1082,10 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
 		}
 
+		$limit_records = '';
+		if( (int) $parsed_args['limit'] > 0 ){
+			$limit_records = sprintf( "LIMIT %d", $parsed_args['limit'] );
+		}
 
 		// generate query string
 		$query  = sprintf( "
@@ -1092,13 +1096,13 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			%s
 			GROUP BY item_ID
 			ORDER BY counter
-			%s LIMIT %d",
+			%s %s",
 			$info_args['column'],
 			$wpdb->prefix . $info_args['table'],
 			$status_type,
 			$period_limit,
 			$parsed_args['order'],
-			$parsed_args['limit']
+			$limit_records
 		);
 
 		return $wpdb->get_results( $query );
@@ -1119,7 +1123,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_ids' ) ){
 			"status" => 'like',
 			"order"  => 'DESC',
 			"period" => 'all',
-			"limit"  => 30
+			"limit"  => 0
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
 		$item_info   = wp_ulike_get_popular_items_info( $parsed_args );
@@ -1619,8 +1623,35 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 	 * @return integer
 	 */
 	function wp_ulike_count_all_logs( $period = 'all' ){
-		$instance = wp_ulike_stats::get_instance();
-		return $instance->count_all_logs( $period );
+		global $wpdb;
+
+		// Convert array period
+		if( is_array( $period ) ){
+			$period = implode( '-', $period );
+		}
+
+		$cache_key     = sanitize_key( sprintf( 'calculate-%s-logs', $period ) );
+		$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+		// Make a cachable query to get new like count from all tables
+		if( false === $counter_value ){
+
+			$query = sprintf( '
+				SELECT
+				( SELECT COUNT(*) FROM `%1$sulike` WHERE 1=1 %2$s ) +
+				( SELECT COUNT(*) FROM `%1$sulike_activities` WHERE 1=1 %2$s ) +
+				( SELECT COUNT(*) FROM `%1$sulike_comments` WHERE 1=1 %2$s ) +
+				( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE 1=1 %2$s )
+				',
+				$wpdb->prefix,
+				wp_ulike_get_period_limit_sql( $period )
+			);
+
+			$counter_value = $wpdb->get_var( $query );
+			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG );
+		}
+
+		return empty( $counter_value ) ? 0 : $counter_value;
 	}
 }
 

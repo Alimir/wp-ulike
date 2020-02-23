@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.2
-Stable tag: 4.1.6
+Stable tag: 4.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ WP ULike enables you to add Ajax Like button into your WP and allowing your visi
 
 == Description ==
 
-If you’re looking for one of the best and fastest ways to add like and dislike functionality to your WordPress website, then the WP ULike plugin is for you! WP ULike is our ultimate solution to cast voting to any type of content you may have in your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your contents would it be a Post, Comment, Activities, Forum Topics, WooCommerce products, you name it. Now you can feel your users Love :heart: for each part of your work.
+If you’re looking for one of the best and fastest ways to add like and dislike functionality to your WordPress website, then the WP ULike plugin is for you! WP ULike is our ultimate solution to cast voting to any type of content you may have on your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your contents would it be a Post, Comment, Activities, Forum Topics, WooCommerce products, you name it. Now you can feel your users Love :heart: for each part of your work.
 
 It's time for **[WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
 
@@ -139,7 +139,7 @@ Want to add a new language to WP ULike? Well! You can contribute via [translate.
 == Frequently Asked Questions ==
 
 = How To Use this plugin? =
-Just install the plugin and activate "automatic display" in plugin configuration panel. (WP ULike has four auto options for posts, comments, buddypress activities & bbPress Topics.)
+Just install the plugin and activate "automatic display" in plugin configuration panel. (WP ULike has four auto options for posts, comments, BuddyPress activities & bbPress Topics.)
 Also you can use of the following function and shortcode for your posts:
 *   Function:
 `if(function_exists('wp_ulike')) wp_ulike('get');`
@@ -185,6 +185,13 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.1.7 =
+* Added: New caching methods to increase the performance of admin pages.
+* Fixed: Limitation issue in getting the popular item IDs.
+* Fixed: Restrict admin assets visible only to plugin and edit post pages.
+* Fixed: Likers box display issue with shortcode value.
+* Fixed: Some small issues.
 
 = 4.1.6 =
 * Added: Professional logs controller page with various options. [PRO]

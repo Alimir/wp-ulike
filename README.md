@@ -2,79 +2,40 @@
 
 ### WP ULike GitHub Repository
 
-WP ULike is a WordPress plugin that also supports BuddyPress, bbPress and a number of other plugins. It aims to be a comprehensive “Like” system for your site and enables site users to like a wide range of content types, including posts, forum topics and replies, comments and activity updates. It’s very simple to use and supports many options and full Statistics tools. Also, All are free :)
+If you’re looking for one of the best and fastest ways to add like and dislike functionality to your WordPress website, then the WP ULike plugin is for you! WP ULike is our ultimate solution to cast voting to any type of content you may have on your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your contents would it be a Post, Comment, Activities, Forum Topics, WooCommerce products, you name it. Now you can feel your users Love :heart: for each part of your work.
 
-More information can be found at [WP ULike](https://wpulike.com/?utm_source=github-repo&utm_medium=link&utm_campaign=readme).
-
-<a href="https://wordpress.org/plugins/wp-ulike/"><img src="http://preview.alimir.ir/wp-content/uploads/wp-ulike-created-banner.png"></a>
+It's time for **[WP ULike](https://wpulike.com/?utm_source=github-repo&utm_medium=link&utm_campaign=readme)**.
 
 ## Features
-*   Clean Design.
-*   Full myCRED Points Support.
-*   Full Statistics tools.
+*   Clean Design + Some standard eye-catching templates.
+*   Professional Schema.org generator for each post type. [PRO]
+*   Full Elementor Page Builder Support. [PRO]
+*   Dislike button support with +8 creative templates. [PRO]
+*   Display the likers of each button in linear or pop-up mode.
+*   Simple, Stylish and user-friendly settings to easily customize your plugin.
+*   Extract detailed reports and beautiful, useful and simple charts in an instant.
+*   Support Custom Post Types, Comments, Activities & Topics.
+*   Using various hooks and functions, you can easily customize this plugin.
+*   We’re light-weight, fast, responsive and compatible with Google Schemas.
+*   Full myCRED (points management system) Points Support.
 *   Supporting UltimateMember & BuddyPress Profiles.
-*   Likers World Map & Top Likers Widget.
 *   Ajax feature to update the data without reloading.
 *   Visitors do not have to register or log in to use the Like Button.
-*   Compatible with WP version 3.5 & above.
 *   Added automatically with filtering options (no Code required).
-*   Different logging method options.
+*   Different logging method options. (Cookie, IP, Username)
 *   Notifications System. (Custom toast messages after each activity)
-*   Shortcode support.
-*   Support custom templates with separate variables.
-*   Comment likes support.
-*   Supporting the date in localized format. (date_i18n)
-*   Full likes logs support.
-*   BuddyPress add activity & notifications support.
-*   Simple user like box with avatar support.
-*   Custom Like-UnLike Texts fields.
+*   Flexible Shortcode with variable support.
+*   Supporting the date in a localized format. (date_i18n)
+*   BuddyPress adds activity & notifications support.
 *   Simple custom style with color picker settings.
-*   Advanced Widgets With Custom Tools. (Most Liked Posts,Comments,Users,Topics,…)
-*   Powerful configuration panel.
-*   Support RTL & language file.
-*   And so on…
+*   Support RTL & +20 language files.
 
+## More Information ##
 
-## Translations
-WP ULike has been translated into the following languages:
-
-*   English (United States)
-*   Persian (Iran)
-*   French (France)
-*   Chinese (China)
-*   Chinese (Taiwan)
-*   Dutch (Netherlands)
-*   Arabic
-*   Portuguese (Brazil)
-*   Turkish (Turkey)
-*   Greek
-*   Russian (Russia)
-*   Spanish (Spain)
-*   German (Germany)
-*   Japanese
-*   Romanian (Romania)
-*   Slovak (Slovakia)
-*   Czech (Czech Republic)
-*   Hebrew (Israel)
-*   Italian (Italy)
-*   Polish (Poland)
-*   Finnish
-*   Hungarian (Hungary)
-*   Lithuanian (Lithuania)
-*   Indonesian (Indonesia)
-*   Khmer
-*   Norwegian Bokmal (Norway)
-*   Portuguese (Portugal)
-*   Swedish (Sweden)
-*   Danish (Denmark)
-*   Estonian
-*   Korean (Korea)
-*   Vietnamese
-*   Basque
-*   Bosnian (Bosnia and Herzegovina)
-*   English (United Kingdom)
-
-Would you like to help translate the plugin into more languages? [Join our WP-Translations Community](https://www.transifex.com/projects/p/wp-ulike/).
+*   Visit Our [Home Page](https://wpulike.com/?utm_source=github-repo&utm_medium=link&utm_campaign=readme).
+*   See Online [Demo](https://wpulike.com/templates/?utm_source=github-repo&utm_medium=link&utm_campaign=readme).
+*   For documentation and tutorials go to our [Documentation](https://docs.wpulike.com/?utm_source=github-repo&utm_medium=link&utm_campaign=readme).
+*   Fork Us In [Github](https://github.com/Alimir/wp-ulike).
 
 ## Installation ##
 
@@ -85,17 +46,24 @@ For detailed setup instructions, visit the official [Documentation](https://word
 
 This will download the latest developer copy of WP ULike.
 
-
 ## How To Use this plugin? ##
-Just install the plugin and activate "automatic display" in plugin configuration panel. (WP ULike has four auto options for posts, comments, buddypress activities & bbPress Topics.)
-Also you can use of the following function and shortcode for your posts:
-*   Function:
-```php
-if(function_exists('wp_ulike')) wp_ulike('get');
-```
-*   Shortcode:
+After installing and activating the plugin, go to the Settings panel and enable the "Auto Display" option for your target section (Currently for: Posts, Comments, BuddyPress activities & bbPress Topics.). Otherwise, you can use the manual way.
+
+In order to insert Like button inside a content use the following shortcode:
+### Display CTA button ###
 ```
 [wp_ulike]
+```
+**Parameters ( attributes ):**
+* for (string) - select button type (Availabe Values: `post`, `comment`, `activity`, `topic`)
+* id (integer) - select specific item ID. (For manual usage)
+* button_type (string) - Set Button Type (Availabe Values: `image`, `text`)
+* style (string) - Choose the default template from the available list.
+* wrapper_class (string) - Extra Wrapper class
+
+**Using shortcode in the PHP template:**
+```php
+echo do_shortcode('[wp_ulike for="post" id="1" style="wpulike-heart"]');
 ```
 
 ## How To Change The Counter Format? ##
@@ -110,37 +78,6 @@ function wp_ulike_new_format_number($value, $num, $plus){
 	endif;
 	return $value;
 }
-```
-
-## How To Change Schema Type? ##
-The default schema type is `CreativeWork`, if you want to change it to `Article`, you need to make use of the `wp_ulike_posts_add_attr` filter as shown in the sample code below:
-```php
-add_filter('wp_ulike_posts_add_attr', 'wp_ulike_change_posts_microdata_itemtype', 10);
-function wp_ulike_change_posts_microdata_itemtype() {
-	return 'itemscope itemtype="http://schema.org/Article"';
-}
-```
-
-## How To Add Extra Microdata? ##
-Make use of the `wp_ulike_extra_structured_data` filter as shown in the sample code below:
-```php
-add_filter('wp_ulike_extra_structured_data', 'wp_ulike_add_extra_structured_data', 10);
-function wp_ulike_add_extra_structured_data(){
-	$post_meta = '<div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">';
-	$post_meta .= '<meta itemprop="name" content="WordPress" />';
-	$post_meta .= '<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">';
-	$post_meta .= '<meta itemprop="url" content="https://s.w.org/about/images/logos/wordpress-logo-hoz-rgb.png" />';
-	$post_meta .= '</div>';
-	$post_meta .= '</div>';
-	return $post_meta;
-}
-```
-
-## How To Remove All Schema Data Except Of aggregateRating? ##
-Make use of the `wp_ulike_remove_microdata_post_meta` & `wp_ulike_posts_add_attr` filters as shown in the sample code below:
-```php
-add_filter('wp_ulike_remove_microdata_post_meta', '__return_true', 10);
-add_filter('wp_ulike_posts_add_attr', '__return_null', 10);
 ```
 
 ## How To Remove "0" Count If There Are No Likes? ##
@@ -187,12 +124,12 @@ Make use of the following query on a loop:
  *
  * @param integer $numberposts		The number of items
  * @param array|string $post_type	Select post type
- * @param string $method			keep this as default value
+ * @param string $method			keep this as default value (post, comment, activity, topic)
  * @param string $period			Date peroid (all|today|yeterday|week|month|year)
  * @param string $status			Log status (like|unlike|dislike|undislike)
  * @return WP_Post[]|int[] 			Array of post objects or post IDs.
  */
-$wp_query = wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', 'post', $period = 'all', $status = 'like' );
+$wp_query = wp_ulike_get_most_liked_posts( 10, array( 'post' ), 'post', 'all', 'like' );
 ```
 
 ## How Can I Create Custom Template In Users Liked Box?  ##

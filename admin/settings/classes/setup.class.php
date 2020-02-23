@@ -395,7 +395,14 @@ if( ! class_exists( 'CSF' ) ) {
 
     //
     // Enqueue admin and fields styles and scripts.
-    public static function add_admin_enqueue_scripts() {
+    public static function add_admin_enqueue_scripts( $hook ) {
+
+			// Scripts is only can be load on ulike pages.
+			if ( strpos( $hook, WP_ULIKE_SLUG ) === false ) {
+        if( ! defined( 'WP_ULIKE_PRO_DOMAIN' ) || ! in_array( $hook, array( 'post.php', 'post-new.php' ) ) ){
+          return;
+        }
+      }
 
       // check for developer mode
       $min = ( apply_filters( 'csf_dev_mode', false ) || WP_DEBUG ) ? '' : '.min';

@@ -88,7 +88,6 @@ function wp_ulike_get_paginated_logs( $table, $type ){
  * The counter of last likes by the admin last login time.
  *
  * @author       	Alimir
- * @since           2.4.2
  * @return			string
  */
 function wp_ulike_get_number_of_new_likes() {
@@ -98,20 +97,27 @@ function wp_ulike_get_number_of_new_likes() {
 		update_option( 'wpulike_lastvisit', current_time( 'mysql' ) );
 	}
 
-	$query = sprintf( '
-		SELECT
-		( SELECT COUNT(*) FROM `%1$sulike` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
-		( SELECT COUNT(*) FROM `%1$sulike_activities` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
-		( SELECT COUNT(*) FROM `%1$sulike_comments` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
-		( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) )
-		',
-		$wpdb->prefix,
-		get_option( 'wpulike_lastvisit')
-	);
+	$cache_key     = sanitize_key( 'calculate-new-votes' );
+	$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
-	$result = $wpdb->get_var( $query );
+	// Make a cachable query to get new like count from all tables
+	if( false === $counter_value ){
+		$query = sprintf( '
+			SELECT
+			( SELECT COUNT(*) FROM `%1$sulike` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
+			( SELECT COUNT(*) FROM `%1$sulike_activities` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
+			( SELECT COUNT(*) FROM `%1$sulike_comments` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
+			( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) )
+			',
+			$wpdb->prefix,
+			get_option( 'wpulike_lastvisit')
+		);
 
-	return empty( $result ) ? 0 : $result;
+		$counter_value = $wpdb->get_var( $query );
+		wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG );
+	}
+
+	return empty( $counter_value ) ? 0 : $counter_value;
 }
 
 
