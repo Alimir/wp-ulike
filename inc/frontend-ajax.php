@@ -144,11 +144,17 @@ function wp_ulike_get_likers(){
 	$post_type        = $_POST['type'];
 	$nonce_token      = $_POST['nonce'];
 	$is_refresh       = $_POST['refresh'];
+	$display_likers   = $_POST['displayLikers'];
 	$disable_pophover = $_POST['disablePophover'];
 
 	// Check security nonce field
 	if( $post_ID == null || ( ! wp_verify_nonce( $nonce_token, $post_type . $post_ID ) && wp_ulike_is_cache_exist() ) ) {
 		wp_send_json_error( __( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );
+	}
+
+	// If likers box has been disabled
+	if ( ! $display_likers ) {
+		wp_send_json_error( __( 'Notice: The likers box is not activated!', WP_ULIKE_SLUG ) );
 	}
 
 	// Don't refresh likers data, when user is not logged in.
@@ -166,11 +172,6 @@ function wp_ulike_get_likers(){
 
 	// Extract settings array
 	extract( $get_settings );
-
-	// If likers box has been disabled
-	if ( ! wp_ulike_get_option( $setting . '|enable_likers_box' , false ) ) {
-		wp_send_json_error( __( 'Notice: The likers box is not activated!', WP_ULIKE_SLUG ) );
-	}
 
 	// Add specific class name with popover checkup
 	$class_names = wp_ulike_is_true( $disable_pophover ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
