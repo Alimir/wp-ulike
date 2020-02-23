@@ -61,6 +61,10 @@ In order to insert Like button inside a content use the following shortcode:
 * style (string) - Choose the default template from the available list.
 * wrapper_class (string) - Extra Wrapper class
 
+**Using shortcode in the PHP template:**
+```php
+echo do_shortcode('[wp_ulike for="post" id="1" style="wpulike-heart"]');
+```
 
 ## How To Change The Counter Format? ##
 Just add a filter on `wp_ulike_format_number`. e.g. If you want to remove `+` character, you need to make use of the sample code below:
