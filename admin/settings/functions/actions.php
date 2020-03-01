@@ -174,6 +174,9 @@ if( ! function_exists( 'csf_chosen_ajax' ) ) {
  */
 if( ! function_exists( 'csf_set_icons' ) ) {
   function csf_set_icons() {
+    if( ! wp_ulike_is_plugin_screen() ){
+      return;
+    }
     ?>
     <div id="csf-modal-icon" class="csf-modal csf-modal-icon">
       <div class="csf-modal-table">
