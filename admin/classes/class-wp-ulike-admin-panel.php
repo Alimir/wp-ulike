@@ -321,7 +321,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
              */
             CSF::createSection( $this->option_domain, array(
                 'id'    => 'customization',
-                'title' => __( 'Customization',WP_ULIKE_SLUG),
+                'title' => __( 'Developer Tools',WP_ULIKE_SLUG),
                 'icon'  => 'fa fa-code',
             ) );
 
