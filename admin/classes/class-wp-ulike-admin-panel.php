@@ -320,8 +320,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
              * Customization Section
              */
             CSF::createSection( $this->option_domain, array(
-                'title'  => __( 'Customization',WP_ULIKE_SLUG),
-                'icon'   => 'fa fa-code',
+                'id'    => 'customization',
+                'title' => __( 'Customization',WP_ULIKE_SLUG),
+                'icon'  => 'fa fa-code',
+            ) );
+
+            CSF::createSection( $this->option_domain, array(
+                'parent' => 'customization',
+                'title'  => __( 'Custom Style',WP_ULIKE_SLUG),
                 'fields' => apply_filters( 'wp_ulike_panel_customization', array(
                     array(
                         'id'    => 'custom_css',
