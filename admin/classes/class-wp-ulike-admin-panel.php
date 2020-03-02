@@ -519,11 +519,26 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'       => 'button_set',
                     'title'      => __( 'Display Type', WP_ULIKE_SLUG),
                     'options'    => array(
-                        'alert'  => __('Alert', WP_ULIKE_SLUG),
+                        'alert'  => __('Template', WP_ULIKE_SLUG),
                         'button' => __('Button', WP_ULIKE_SLUG)
                     ),
                     'default'    => 'button',
                     'dependency' => array( 'enable_only_logged_in_users', '==', 'true' ),
+                ),
+                'login_template' => array(
+                    'id'       => 'login_template',
+                    'type'     => 'code_editor',
+                    'settings' => array(
+                        'theme' => 'shadowfox',
+                        'mode'  => 'htmlmixed',
+                    ),
+                    'default'  => sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>',
+                        __('You need to login in order to like this post: ',WP_ULIKE_SLUG),
+                        wp_login_url( get_permalink() ),
+                        __('click here',WP_ULIKE_SLUG)
+                    ),
+                    'title'    => __('Custom HTML Template', WP_ULIKE_SLUG),
+                    'dependency'=> array( 'logged_out_display_type', '==', 'alert' ),
                 ),
                 'enable_likers_box' => array(
                     'id'    => 'enable_likers_box',
