@@ -329,3 +329,21 @@ function wp_ulike_convert_old_options_array( $data ){
 	}
 	return $output;
 }
+
+/**
+ * Check plugin admin pages
+ *
+ * @return bool
+ */
+function wp_ulike_is_plugin_screen(){
+    $screen = get_current_screen();
+
+	if( strpos( $screen->base, WP_ULIKE_SLUG ) === false ){
+        if( defined( 'WP_ULIKE_PRO_DOMAIN' ) && in_array( $screen->base, array( 'post' ) ) ){
+            return true;
+        }
+        return false;
+    }
+
+    return true;
+}

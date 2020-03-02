@@ -402,6 +402,7 @@ if( ! function_exists( 'wp_ulike' ) ){
 			"method"               => 'likeThis',
 			"type"                 => 'post',
 			"wrapper_class"        => '',
+			"options_group"        => 'posts_group',
 			"attributes"           => $attributes,
 			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
 			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
@@ -632,6 +633,7 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 			"method"               => 'likeThisComment',
 			"type"                 => 'post',
 			"wrapper_class"        => '',
+			"options_group"        => 'comments_group',
 			"attributes"           => $attributes,
 			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
 			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
@@ -733,6 +735,7 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 			"method"               => 'likeThisActivity',
 			"type"                 => 'post',
 			"wrapper_class"        => '',
+			"options_group"        => 'buddypress_group',
 			"attributes"           => $attributes,
 			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
 			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
@@ -914,6 +917,7 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 			"method"               => 'likeThisTopic',
 			"type"                 => 'post',
 			"wrapper_class"        => '',
+			"options_group"        => 'bbpress_group',
 			"attributes"           => $attributes,
 			"logging_method"       => isset( $options['logging_method'] ) ? $options['logging_method'] : 'by_username',
 			"display_likers"       => isset( $options['enable_likers_box'] ) ? $options['enable_likers_box'] : 0,
@@ -1299,13 +1303,11 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 			if( $args['logged_out_action'] === 'button' ){
 				return $wp_ulike_class->get_template( $args, 0 );
 			} else {
-				return apply_filters( 'wp_ulike_login_alert_template',
-					sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>',
-					__('You need to login in order to like this post: ',WP_ULIKE_SLUG),
-					wp_login_url( get_permalink() ),
-					__('click here',WP_ULIKE_SLUG)
-					)
-				);
+				$template = wp_ulike_get_option( $args['options_group'] . '|login_template', sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>', __('You need to login in order to like this post: ',WP_ULIKE_SLUG),
+				wp_login_url( get_permalink() ),
+				__('click here',WP_ULIKE_SLUG)
+				) );
+				return apply_filters( 'wp_ulike_login_alert_template', $template );
 			}
 		}
 	}
