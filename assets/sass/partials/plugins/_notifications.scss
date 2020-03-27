@@ -35,7 +35,7 @@
             opacity: 0.9;
             cursor: pointer;
         }
-        
+
         &:before{
             content: "";
             background-position: center center;
@@ -46,7 +46,7 @@
             width: 45px;
             top: 0;
             height: 100%;
-            background-color: rgba(0,0,0,0.08);            
+            background-color: rgba(0,0,0,0.08);
         }
 
 
@@ -55,21 +55,21 @@
 
             &:before{
                 background-image: url(../img/svg/success.svg);
-            }            
+            }
         }
         &.wpulike-error {
             background-color: #EF5350;
 
             &:before{
                 background-image: url(../img/svg/error.svg);
-            }     
+            }
         }
         &.wpulike-warning {
             background-color: #FFAB00;
 
             &:before{
                 background-image: url(../img/svg/warning.svg);
-            } 
+            }
         }
     }
 }

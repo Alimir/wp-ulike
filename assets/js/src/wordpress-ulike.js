@@ -64,10 +64,22 @@
   // Avoid Plugin.prototype conflicts
   $.extend(Plugin.prototype, {
     init: function () {
-      //Call _ajaxify function on click button
+      // Call _ajaxify function on click button
       this.buttonElement.click(this._initLike.bind(this));
-      //Call _ajaxify function on click button
+      // Call likers box generator
       this.generalElement.one("mouseenter", this._updateLikers.bind(this));
+      // Fix PopHover Appearance
+      if( !this.settings.disablePophover && this.settings.displayLikers ){
+        var self = this;
+        this.generalElement.hover(
+          function() {
+            self.$element.addClass( "wp_ulike_display_pophover" );
+          }, function() {
+            self.$element.removeClass( "wp_ulike_display_pophover" );
+          }
+        );
+      }
+
     },
 
     /**
