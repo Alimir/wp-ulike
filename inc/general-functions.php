@@ -249,7 +249,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 
 			$counter_query = $wpdb->get_results( stripslashes( $query ) );
 
-			wp_cache_set( $cache_key, $counter_query, WP_ULIKE_SLUG );
+			wp_cache_set( $cache_key, $counter_query, WP_ULIKE_SLUG, 300 );
 		}
 
 		// Find current ID counter value from cached query.
@@ -1041,7 +1041,7 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 
 			// Get results
 			$likers_query = $wpdb->get_results( stripslashes( $query ) );
-			wp_cache_set( $cache_key, $likers_query, WP_ULIKE_SLUG );
+			wp_cache_set( $cache_key, $likers_query, WP_ULIKE_SLUG, 300 );
 		}
 
 		// Find current ID value from cached query.
@@ -1650,7 +1650,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 			);
 
 			$counter_value = $wpdb->get_var( $query );
-			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG );
+			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 		}
 
 		return empty( $counter_value ) ? 0 : $counter_value;
