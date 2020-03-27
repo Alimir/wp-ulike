@@ -52,47 +52,47 @@
       &.one{
         left: 1%;
         transform: rotate(-10deg);
-        animation-delay: .45;
+        animation-delay: 0.45s;
       }
       &.two{
         left: 15%;
         transform: rotate(8deg);
-        animation-delay: .25s;
+        animation-delay: 0.25s;
       }
       &.three{
         left: 30%;
         transform: rotate(-5deg);
-        animation-delay: 0;
+        animation-delay: 0s;
       }
       &.four{
         left: 50%;
         transform: rotate(-8deg);
-        animation-delay: .3s;
+        animation-delay: 0.3s;
       }
       &.five{
         left: 60%;
         transform: rotate(-10deg);
-        animation-delay: .9s;
+        animation-delay: 0.9s;
       }
       &.six{
         left: 70%;
         transform: rotate(-8deg);
-        animation-delay: .2;
+        animation-delay: 0.2s;
       }
       &.seven{
         left: 85%;
         transform: rotate(6deg);
-        animation-delay: .35s;
+        animation-delay: 0.35s;
       }
       &.eight{
         left: 90%;
         transform: rotate(-4deg);
-        animation-delay: .5s;
+        animation-delay: 0.5s;
       }
       &.nine{
         left: 95%;
         transform: rotate(8deg);
-        animation-delay: .2s;
+        animation-delay: 0.2s;
       }
     }
   }
