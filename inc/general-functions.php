@@ -1815,6 +1815,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 		<div class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
@@ -1859,6 +1860,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 		<div class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
@@ -1904,6 +1906,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 			<div class="<?php echo $general_class; ?>">
 					<label title="<?php _e( 'Like This', WP_ULIKE_SLUG ); ?>">
 					<input 	type="checkbox"
+							aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
 							data-ulike-id="<?php echo $ID; ?>"
 							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 							data-ulike-type="<?php echo $type; ?>"
@@ -1979,6 +1982,7 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 		<div class="wpulike wpulike-animated-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
