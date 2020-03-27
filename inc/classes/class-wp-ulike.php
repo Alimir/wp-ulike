@@ -463,7 +463,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 				// Get results
 				$user_query = $this->wpdb->get_results( stripslashes( $query ) );
-				wp_cache_set( $cache_key, $user_query, WP_ULIKE_SLUG );
+				wp_cache_set( $cache_key, $user_query, WP_ULIKE_SLUG, 300 );
 			}
 
 			// Find current ID value from cached query.

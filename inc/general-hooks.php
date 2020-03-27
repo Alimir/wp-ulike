@@ -329,16 +329,6 @@ if( defined( 'BP_VERSION' ) ) {
 						}
 						break;
 
-					case 'bp_before_activity_comment':
-						if( isset( $options['enable_comments'] ) && wp_ulike_is_true( $options['enable_comments'] ) ) {
-							if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'content' ){
-								add_filter( 'bp_activity_comment_content', function( $content ) use( $button ) {
-									return $content . $button;
-								});
-							}
-						}
-						break;
-
 					case 'bp_activity_entry_meta':
 						if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'meta' ){
 							echo $button;
@@ -355,8 +345,33 @@ if( defined( 'BP_VERSION' ) ) {
 		}
 		add_action( 'bp_activity_entry_meta', 'wp_ulike_put_buddypress' );
 		add_action( 'bp_activity_comment_options', 'wp_ulike_put_buddypress' );
-		add_action( 'bp_before_activity_comment', 'wp_ulike_put_buddypress' );
 		add_action( 'bp_activity_entry_content', 'wp_ulike_put_buddypress' );
+	}
+
+	if( ! function_exists( 'wp_ulike_buddypress_comment_content_display' ) ){
+		/**
+		 * BuddyPress Comment Content auto display hook
+		 *
+		 * @param string $content
+		 * @return string
+		 */
+		function wp_ulike_buddypress_comment_content_display( $content, $context ) {
+			$options = wp_ulike_get_option( 'buddypress_group' );
+
+			if ( isset( $options['enable_auto_display'] ) && wp_ulike_is_true( $options['enable_auto_display'] ) && $context === 'get' ) {
+				// Add wp_ulike function
+				$button  = wp_ulike_buddypress('put');
+
+				if( isset( $options['enable_comments'] ) && wp_ulike_is_true( $options['enable_comments'] ) ) {
+					if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'content' ){
+							return $content . $button;
+					}
+				}
+			}
+
+			return $content;
+		}
+		add_filter( 'bp_activity_comment_content', 'wp_ulike_buddypress_comment_content_display', 10, 2 );
 	}
 
 	if( ! function_exists( 'wp_ulike_register_activity_actions' ) ){

@@ -313,6 +313,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'default' => __('Sorry! You unliked this.',WP_ULIKE_SLUG),
                         'title'   => __( 'Unliked Notice Message', WP_ULIKE_SLUG)
                     ),
+                    array(
+                        'id'      => 'like_button_aria_label',
+                        'type'    => 'text',
+                        'default' => __( 'Like Button',WP_ULIKE_SLUG),
+                        'title'   => __( 'Like Button Aria Label', WP_ULIKE_SLUG)
+                    )
                 ) )
             ) );
 

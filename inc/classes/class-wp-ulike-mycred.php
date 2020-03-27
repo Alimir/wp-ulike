@@ -99,21 +99,18 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 
 				// Award post author for being liked
 				if ( $this->prefs['get_like']['creds'] && $author_id ) {
-					// Make sure this is unique event
+					// If not over limit
 					if ( ! $this->over_hook_limit( 'get_like', 'wp_get_like', $author_id ) ) {
-						// Make sure this is unique event
-						if ( ! $this->core->has_entry( 'wp_get_like', $id, $author_id ) ) {
-							// Execute
-							$this->core->add_creds(
-								'wp_get_like',
-								$author_id,
-								$this->prefs['get_like']['creds'],
-								$this->prefs['get_like']['log'],
-								$id,
-								array( 'ref_type' => $key, 'by' => $user_id ),
-								$this->mycred_type
-							);
-						}
+						// Execute
+						$this->core->add_creds(
+							'wp_get_like',
+							$author_id,
+							$this->prefs['get_like']['creds'],
+							$this->prefs['get_like']['log'],
+							$id,
+							array( 'ref_type' => $key, 'by' => $user_id ),
+							$this->mycred_type
+						);
 					}
 				}
 
@@ -194,8 +191,10 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 			// Get author ID by it's type
 			switch ( $key ) {
 				case '_liked':
-				case '_topicliked':
 					$author_id 	= get_post_field( 'post_author', $id );
+					break;
+				case '_topicliked':
+					$author_id 	= bbp_get_reply_author_id( $id );
 					break;
 				case '_commentliked':
 					$comment_id = get_comment( $id );

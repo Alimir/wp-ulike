@@ -22,6 +22,7 @@
         background: #eeeeee;
         padding: 5px;
         opacity: 0;
+        visibility: hidden;
         box-shadow: 2px 2px 1px rgba(0,0,0,0.1);
         border-radius: 5px;
         z-index: 9;
@@ -65,15 +66,14 @@
 
 }
 
-.wpulike {
-
+.wp_ulike_display_pophover {
     &:hover{
         .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
             transform: translateY(-40px);
             opacity: 1;
+            visibility: visible;
         }
     }
-
 }
 
 .most_liked_users {

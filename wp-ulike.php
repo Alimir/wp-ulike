@@ -7,7 +7,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           4.1.8
+ * Version:           4.1.9
  * Author:            Ali Mirzaei
  * Author URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
@@ -43,7 +43,8 @@ if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 );
-define( 'WP_ULIKE_VERSION'      , '4.1.8' 					 	 );
+define( 'WP_ULIKE_VERSION'      , '4.1.9' 					 	 );
+define( 'WP_ULIKE_DB_VERSION'   , '1.7' 					 	 );
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 );
 define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG ));
 
@@ -429,6 +430,15 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				`status` varchar(30) NOT NULL,
 				PRIMARY KEY (`id`)
 			) $charset_collate AUTO_INCREMENT=1;" );
+
+			// Upgrade Tables
+			if ( version_compare( get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION ), WP_ULIKE_DB_VERSION, '<' ) ) {
+				$wpdb->query( "ALTER TABLE $posts_table CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL" );
+				$wpdb->query( "ALTER TABLE $comments_table CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL" );
+				$wpdb->query( "ALTER TABLE $activities_table CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL" );
+				$wpdb->query( "ALTER TABLE $forums_table CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL" );
+				update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+			}
 
 	        do_action( 'wp_ulike_activated', get_current_blog_id() );
 	    }

@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.3.2
-Stable tag: 4.1.8
+Stable tag: 4.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -185,6 +185,16 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.1.9 =
+* Added: Improvements on getting likers data from database.
+* Added: Aria-label option for buttons to make more accessibility support.
+* Added: Database structure upgrade to fix IPv6 issues.
+* Fixed: Auto display issue in BuddyPress comments content.
+* Fixed: An issue with author points in mycred integration.
+* Fixed: PopHover display issues.
+* Fixed: An issue with CSS validation.
+* Fixed: Some small issues.
 
 = 4.1.8 =
 * Added: New REST API Routes. [PRO]

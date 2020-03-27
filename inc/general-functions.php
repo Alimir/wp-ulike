@@ -249,7 +249,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 
 			$counter_query = $wpdb->get_results( stripslashes( $query ) );
 
-			wp_cache_set( $cache_key, $counter_query, WP_ULIKE_SLUG );
+			wp_cache_set( $cache_key, $counter_query, WP_ULIKE_SLUG, 300 );
 		}
 
 		// Find current ID counter value from cached query.
@@ -1041,7 +1041,7 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 
 			// Get results
 			$likers_query = $wpdb->get_results( stripslashes( $query ) );
-			wp_cache_set( $cache_key, $likers_query, WP_ULIKE_SLUG );
+			wp_cache_set( $cache_key, $likers_query, WP_ULIKE_SLUG, 300 );
 		}
 
 		// Find current ID value from cached query.
@@ -1158,15 +1158,14 @@ if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 
 if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	/**
-	 * Get likers box template
+	 * Get likers box template info.
 	 *
-	 * @author       	Alimir
-	 * @param           String $table_name
-	 * @param           String $column_name
-	 * @param           String $post_ID
-	 * @param           String $setting_key
-	 * @since           2.0
-	 * @return			String
+	 * @param string $table_name
+	 * @param string $column_name
+	 * @param integer $post_ID
+	 * @param string $setting_key
+	 * @param array $args
+	 * @return string
 	 */
 	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key, $args = array() ){
 
@@ -1187,12 +1186,16 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		if( ! empty( $get_users ) ) {
 
 			// Get likers html template
- 			$get_template = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
+ 			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
+ 			$get_users_info = wp_ulike_get_users( $table_name );
+ 			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
-			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
+			 foreach ( $get_users as $user ) {
+				if( ! isset( $get_users_info[$user] ) ){
+					continue;
+				}
 
-			foreach ( $get_users as $user ) {
-				$user_info 		= get_userdata( $user );
+				$user_info 		= $get_users_info[$user];
 				$out_template 	= $inner_template;
 				if ( $user_info ):
 					if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
@@ -1224,6 +1227,36 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		}
 
 		return NULL;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_users' ) ){
+	/**
+	 * Retrieve list of users matching wp ulike tables.
+	 *
+	 * @return array
+	 */
+	function wp_ulike_get_users( $table ){
+		global $wpdb;
+
+		$cache_key = sanitize_key( sprintf( 'get-users-for-%s', $table ) );
+		$get_users = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+		// Make a general query to get info from target table.
+		if( false === $get_users ){
+
+			$get_users = $wpdb->get_results( "SELECT DISTINCT {$wpdb->users}.*
+				FROM {$wpdb->users}
+				INNER JOIN {$wpdb->prefix}{$table}
+				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table}.user_id )
+				WHERE {$wpdb->prefix}{$table}.status IN ('like', 'dislike')
+				ORDER BY user_login ASC", OBJECT_K
+			);
+
+			wp_cache_set( $cache_key, $get_users, WP_ULIKE_SLUG, 300 );
+		}
+
+		return $get_users;
 	}
 }
 
@@ -1650,7 +1683,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 			);
 
 			$counter_value = $wpdb->get_var( $query );
-			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG );
+			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 		}
 
 		return empty( $counter_value ) ? 0 : $counter_value;
@@ -1779,6 +1812,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 		<div class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
@@ -1823,6 +1857,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 		<div class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
@@ -1866,8 +1901,8 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 	?>
 		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-					<label title="<?php _e( 'Like This', WP_ULIKE_SLUG ); ?>">
-					<input 	type="checkbox"
+					<label title="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>">
+					<input type="checkbox"
 							data-ulike-id="<?php echo $ID; ?>"
 							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 							data-ulike-type="<?php echo $type; ?>"
@@ -1943,6 +1978,7 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 		<div class="wpulike wpulike-animated-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
