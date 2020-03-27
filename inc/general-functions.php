@@ -1158,15 +1158,14 @@ if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 
 if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	/**
-	 * Get likers box template
+	 * Get likers box template info.
 	 *
-	 * @author       	Alimir
-	 * @param           String $table_name
-	 * @param           String $column_name
-	 * @param           String $post_ID
-	 * @param           String $setting_key
-	 * @since           2.0
-	 * @return			String
+	 * @param string $table_name
+	 * @param string $column_name
+	 * @param integer $post_ID
+	 * @param string $setting_key
+	 * @param array $args
+	 * @return string
 	 */
 	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key, $args = array() ){
 
@@ -1187,12 +1186,16 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		if( ! empty( $get_users ) ) {
 
 			// Get likers html template
- 			$get_template = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
+ 			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
+ 			$get_users_info = wp_ulike_get_users( $table_name );
+ 			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
-			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
+			 foreach ( $get_users as $user ) {
+				if( ! isset( $get_users_info[$user] ) ){
+					continue;
+				}
 
-			foreach ( $get_users as $user ) {
-				$user_info 		= get_userdata( $user );
+				$user_info 		= $get_users_info[$user];
 				$out_template 	= $inner_template;
 				if ( $user_info ):
 					if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
@@ -1224,6 +1227,39 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		}
 
 		return NULL;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_users' ) ){
+	/**
+	 * Retrieve list of users matching wp ulike tables.
+	 *
+	 * @return array
+	 */
+	function wp_ulike_get_users( $table ){
+		global $wpdb;
+
+		$cache_key = sanitize_key( sprintf( 'get-users-for-%s', $table ) );
+		$get_users = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+		// Make a general query to get info from target table.
+		if( false === $get_users ){
+
+			$get_users = $wpdb->get_results( "SELECT DISTINCT {$wpdb->users}.*
+				FROM {$wpdb->users}
+				INNER JOIN {$wpdb->usermeta}
+				ON ( {$wpdb->users}.ID = {$wpdb->usermeta}.user_id )
+				INNER JOIN {$wpdb->prefix}{$table}
+				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table}.user_id )
+				WHERE {$wpdb->usermeta}.meta_key = 'wp_capabilities'
+				AND {$wpdb->prefix}{$table}.status IN ('like', 'dislike')
+				ORDER BY user_login ASC", OBJECT_K
+			);
+
+			wp_cache_set( $cache_key, $get_users, WP_ULIKE_SLUG, 300 );
+		}
+
+		return $get_users;
 	}
 }
 
