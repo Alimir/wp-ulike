@@ -1247,12 +1247,9 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 
 			$get_users = $wpdb->get_results( "SELECT DISTINCT {$wpdb->users}.*
 				FROM {$wpdb->users}
-				INNER JOIN {$wpdb->usermeta}
-				ON ( {$wpdb->users}.ID = {$wpdb->usermeta}.user_id )
 				INNER JOIN {$wpdb->prefix}{$table}
 				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table}.user_id )
-				WHERE {$wpdb->usermeta}.meta_key = 'wp_capabilities'
-				AND {$wpdb->prefix}{$table}.status IN ('like', 'dislike')
+				WHERE {$wpdb->prefix}{$table}.status IN ('like', 'dislike')
 				ORDER BY user_login ASC", OBJECT_K
 			);
 
