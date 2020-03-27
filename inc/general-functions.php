@@ -1904,9 +1904,8 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 	?>
 		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-					<label title="<?php _e( 'Like This', WP_ULIKE_SLUG ); ?>">
-					<input 	type="checkbox"
-							aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
+					<label title="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>">
+					<input type="checkbox"
 							data-ulike-id="<?php echo $ID; ?>"
 							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 							data-ulike-type="<?php echo $type; ?>"
