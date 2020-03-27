@@ -192,17 +192,16 @@
       // Call likers box generator
       this.generalElement.one("mouseenter", this._updateLikers.bind(this));
       // Fix PopHover Appearance
-      if( !this.settings.disablePophover && this.settings.displayLikers ){
-        var self = this;
-        this.generalElement.hover(
-          function() {
-            self.$element.addClass( "wp_ulike_display_pophover" );
-          }, function() {
-            self.$element.removeClass( "wp_ulike_display_pophover" );
-          }
-        );
-      }
-
+      // if( !this.settings.disablePophover && this.settings.displayLikers ){
+      //   var self = this;
+      //   this.generalElement.hover(
+      //     function() {
+      //       self.$element.addClass( "wp_ulike_display_pophover" );
+      //     }, function() {
+      //       self.$element.removeClass( "wp_ulike_display_pophover" );
+      //     }
+      //   );
+      // }
     },
 
     /**

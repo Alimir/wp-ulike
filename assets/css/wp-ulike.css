@@ -618,7 +618,7 @@
   box-shadow: none;
 }
 
-.wp_ulike_display_pophover:hover .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
+.wpulike:hover .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
   transform: translateY(-40px);
   opacity: 1;
   visibility: visible;
