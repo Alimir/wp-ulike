@@ -68,23 +68,21 @@
 }
 .wpulike-robeen {
   .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
-    bottom: 5px;
+    bottom: 15px;
   }
   .count-box {
-    display: inline-block;
-    vertical-align: middle;
     font-weight: 600;
   }
   label{
-    display: inline-block;
-    margin: 0;
+    display: flex;
+    align-items: center;
+    margin: 0 -10px;
   }
   svg {
     cursor: pointer;
     overflow: visible !important;
     width: 50px;
-    display: inline-block;
-    vertical-align: middle;
+    height: 50px;
 
     .heart {
       transform-origin: center;
@@ -95,7 +93,15 @@
     }
   }
   .wp_ulike_btn {
-    display: none !important;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+
     &:checked {
       &+svg {
         .heart {

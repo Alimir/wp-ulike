@@ -67,7 +67,7 @@
       //Call _ajaxify function on click button
       this.buttonElement.click(this._initLike.bind(this));
       //Call _ajaxify function on click button
-      this.buttonElement.one("mouseenter", this._updateLikers.bind(this));
+      this.generalElement.one("mouseenter", this._updateLikers.bind(this));
     },
 
     /**
