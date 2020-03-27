@@ -286,23 +286,21 @@
   }
 }
 .wpulike-robeen .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
-  bottom: 5px;
+  bottom: 15px;
 }
 .wpulike-robeen .count-box {
-  display: inline-block;
-  vertical-align: middle;
   font-weight: 600;
 }
 .wpulike-robeen label {
-  display: inline-block;
-  margin: 0;
+  display: flex;
+  align-items: center;
+  margin: 0 -5px;
 }
 .wpulike-robeen svg {
   cursor: pointer;
   overflow: visible !important;
   width: 50px;
-  display: inline-block;
-  vertical-align: middle;
+  height: 50px;
 }
 .wpulike-robeen svg .heart {
   transform-origin: center;
@@ -312,7 +310,14 @@
   transform-origin: 29.5px 29.5px;
 }
 .wpulike-robeen .wp_ulike_btn {
-  display: none !important;
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
 }
 .wpulike-robeen .wp_ulike_btn:checked + svg .heart {
   transform: scale(0.2);
@@ -481,47 +486,47 @@
 .wpulike-animated-heart .wpulike-svg-heart-pop.one {
   left: 1%;
   transform: rotate(-10deg);
-  animation-delay: .45;
+  animation-delay: 0.45s;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.two {
   left: 15%;
   transform: rotate(8deg);
-  animation-delay: .25s;
+  animation-delay: 0.25s;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.three {
   left: 30%;
   transform: rotate(-5deg);
-  animation-delay: 0;
+  animation-delay: 0s;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.four {
   left: 50%;
   transform: rotate(-8deg);
-  animation-delay: .3s;
+  animation-delay: 0.3s;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.five {
   left: 60%;
   transform: rotate(-10deg);
-  animation-delay: .9s;
+  animation-delay: 0.9s;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.six {
   left: 70%;
   transform: rotate(-8deg);
-  animation-delay: .2;
+  animation-delay: 0.2s;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.seven {
   left: 85%;
   transform: rotate(6deg);
-  animation-delay: .35s;
+  animation-delay: 0.35s;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.eight {
   left: 90%;
   transform: rotate(-4deg);
-  animation-delay: .5s;
+  animation-delay: 0.5s;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.nine {
   left: 95%;
   transform: rotate(8deg);
-  animation-delay: .2s;
+  animation-delay: 0.2s;
 }
 .wpulike-animated-heart .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
   bottom: 30px;
@@ -578,6 +583,7 @@
   background: #eeeeee;
   padding: 5px;
   opacity: 0;
+  visibility: hidden;
   box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   z-index: 9;
@@ -612,9 +618,10 @@
   box-shadow: none;
 }
 
-.wpulike:hover .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
+.wp_ulike_display_pophover:hover .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
   transform: translateY(-40px);
   opacity: 1;
+  visibility: visible;
 }
 
 .most_liked_users {
