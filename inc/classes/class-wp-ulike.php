@@ -111,7 +111,9 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						'key'     => $key,
 						'user_id' => $this->user_id,
 						'status'  => $this->status,
-						'has_log' => ! $check_user_status ? 0 : 1
+						'has_log' => ! $check_user_status ? 0 : 1,
+						'slug'    => $slug,
+						'table'   => $table
 					)
 				);
 
@@ -178,7 +180,9 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						'key'     => $key,
 						'user_id' => $this->user_id,
 						'status'  => $this->status,
-						'has_log' => ! $check_user_status ? 0 : 1
+						'has_log' => ! $check_user_status ? 0 : 1,
+						'slug'    => $slug,
+						'table'   => $table
 					)
 				);
 
@@ -263,7 +267,9 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						'key'     => $key,
 						'user_id' => $this->user_id,
 						'status'  => $this->status,
-						'has_log' => ! $user_status ? 0 : 1
+						'has_log' => ! $user_status ? 0 : 1,
+						'slug'    => $slug,
+						'table'   => $table
 					)
 				);
 
@@ -299,11 +305,20 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		private function update_counter_value( $id, $value, $slug ){
 			$status = $this->status;
 			$status = ltrim( $status, 'un');
-			$meta_vale = wp_ulike_meta_counter_value( $id, $slug, $status, $this->is_distinct );
-			if( ! empty( $meta_vale ) ){
+
+			// Update meta value
+			$main_val = wp_ulike_meta_counter_value( $id, $slug, $status, $this->is_distinct );
+			if( ! empty( $main_val ) ){
 				$value  = strpos( $this->status, 'un') === false ? $value + 1 : $value - 1;
 			}
-			wp_ulike_update_meta_counter_value( $id, $value, $slug, $status, $this->is_distinct );
+			wp_ulike_update_meta_counter_value( $id, max( $value, 0 ), $slug, $status, $this->is_distinct );
+
+			// Decrease reverse meta value
+			$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
+			$reverse_val = wp_ulike_meta_counter_value( $id, $slug, $reverse_key, $this->is_distinct );
+			if( !empty( $reverse_val ) ){
+				wp_ulike_update_meta_counter_value( $id, max( --$reverse_val, 0 ), $slug, $reverse_key, $this->is_distinct );
+			}
 
 			return $value;
 		}

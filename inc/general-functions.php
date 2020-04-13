@@ -494,8 +494,8 @@ if( ! function_exists( 'wp_ulike_update_meta_counter_value' ) ){
 	 * @return int|bool
 	 */
 	function wp_ulike_update_meta_counter_value( $ID, $value, $type, $status, $is_distinct = true ){
-		$distinct_name = $is_distinct ? 'total' : 'distinct';
-		return wp_ulike_update_meta_data( $ID, sprintf( '%s_%s_%s_count', $type, $status, $distinct_name ), $value );
+		$distinct_name = ! $is_distinct ? 'total' : 'distinct';
+		return wp_ulike_update_meta_data( $ID, sprintf( 'count_%s_%s_%s', $distinct_name, $type, $status ), $value );
 	}
 }
 
@@ -512,8 +512,8 @@ if( ! function_exists( 'wp_ulike_meta_counter_value' ) ){
 	 * @return mixed Single metadata value, or array of values
 	 */
 	function wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct = true ){
-		$distinct_name = $is_distinct ? 'total' : 'distinct';
-		return wp_ulike_get_meta_data( $ID, sprintf( '%s_%s_%s_count', $type, $status, $distinct_name ), true );
+		$distinct_name = ! $is_distinct ? 'total' : 'distinct';
+		return wp_ulike_get_meta_data( $ID, sprintf( 'count_%s_%s_%s', $distinct_name, $type, $status ), true );
 	}
 }
 
