@@ -371,6 +371,8 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 			global $wpdb;
 
+			$max_index_length = 191;
+
 			if ( ! empty( $wpdb->charset ) ) {
 				$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
 			}
@@ -393,6 +395,10 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				`user_id` varchar(100) NOT NULL,
 				`status` varchar(30) NOT NULL,
 				PRIMARY KEY (`id`)
+				KEY `post_id` (`post_id`),
+				KEY `date_time` (`date_time`),
+				KEY `user_id` (`user_id`),
+				KEY `status` (`status`)
 			) $charset_collate AUTO_INCREMENT=1;" );
 
 			// Comments table
@@ -404,7 +410,11 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				`ip` varchar(100) NOT NULL,
 				`user_id` varchar(100) NOT NULL,
 				`status` varchar(30) NOT NULL,
-				PRIMARY KEY (`id`)
+				PRIMARY KEY (`id`),
+				KEY `comment_id` (`comment_id`),
+				KEY `date_time` (`date_time`),
+				KEY `user_id` (`user_id`),
+				KEY `status` (`status`)
 			) $charset_collate AUTO_INCREMENT=1;" );
 
 			// Activities table
@@ -416,7 +426,11 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				`ip` varchar(100) NOT NULL,
 				`user_id` varchar(100) NOT NULL,
 				`status` varchar(30) NOT NULL,
-				PRIMARY KEY (`id`)
+				PRIMARY KEY (`id`),
+				KEY `activity_id` (`activity_id`),
+				KEY `date_time` (`date_time`),
+				KEY `user_id` (`user_id`),
+				KEY `status` (`status`)
 			) $charset_collate AUTO_INCREMENT=1;" );
 
 			// Forums table
@@ -428,16 +442,57 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				`ip` varchar(100) NOT NULL,
 				`user_id` varchar(100) NOT NULL,
 				`status` varchar(30) NOT NULL,
-				PRIMARY KEY (`id`)
+				PRIMARY KEY (`id`),
+				KEY `topic_id` (`topic_id`),
+				KEY `date_time` (`date_time`),
+				KEY `user_id` (`user_id`),
+				KEY `status` (`status`)
+			) $charset_collate AUTO_INCREMENT=1;" );
+
+			// Meta values table
+			$meta_table = $wpdb->prefix . "ulike_meta";
+			maybe_create_table( $meta_table, "CREATE TABLE IF NOT EXISTS `{$meta_table}` (
+				`meta_id` bigint(20) unsigned NOT NULL auto_increment,
+				`item_id` bigint(20) unsigned NOT NULL,
+				`meta_key` varchar(255) default NULL,
+				`meta_value` longtext,
+				PRIMARY KEY  (`meta_id`),
+				KEY `item_id` (`item_id`),
+				KEY `meta_key` (`meta_key`($max_index_length))
 			) $charset_collate AUTO_INCREMENT=1;" );
 
 			// Upgrade Tables
 			if ( version_compare( get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION ), WP_ULIKE_DB_VERSION, '<' ) ) {
-				$wpdb->query( "ALTER TABLE $posts_table CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL" );
-				$wpdb->query( "ALTER TABLE $comments_table CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL" );
-				$wpdb->query( "ALTER TABLE $activities_table CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL" );
-				$wpdb->query( "ALTER TABLE $forums_table CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL" );
-				update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+				// Posts ugrades
+				$wpdb->query( "
+					ALTER TABLE $posts_table
+					ADD INDEX( `post_id`, `date_time`, `user_id`, `status`),
+					CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
+					CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
+				" );
+				// Comments ugrades
+				$wpdb->query( "
+					ALTER TABLE $comments_table
+					ADD INDEX( `comment_id`, `date_time`, `user_id`, `status`),
+					CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
+					CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
+				" );
+				// BuddyPress ugrades
+				$wpdb->query( "
+					ALTER TABLE $activities_table
+					ADD INDEX( `activity_id`, `date_time`, `user_id`, `status`),
+					CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
+					CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
+				" );
+				// bbPress upgrades
+				$wpdb->query( "
+					ALTER TABLE $forums_table
+					ADD INDEX( `topic_id`, `date_time`, `user_id`, `status`),
+					CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
+					CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
+				" );
+				// Update db version
+				update_option( 'wp_ulike_dbVersion', '1.7' );
 			}
 
 	        do_action( 'wp_ulike_activated', get_current_blog_id() );
