@@ -1768,28 +1768,17 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 	 * @return string
 	 */
 	function wp_ulike_get_user_ip(){
-		$ip = '';
-
-		if ( getenv( 'HTTP_CLIENT_IP' ) ) {
-			$ip = getenv( 'HTTP_CLIENT_IP' );
-		} elseif ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
-			$ip = getenv( 'HTTP_X_FORWARDED_FOR' );
-		} elseif ( getenv( 'HTTP_X_FORWARDED' ) ) {
-			$ip = getenv( 'HTTP_X_FORWARDED' );
-		} elseif ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
-			$ip = getenv( 'HTTP_FORWARDED_FOR' );
-		} elseif ( getenv( 'HTTP_FORWARDED' ) ) {
-			$ip = getenv( 'HTTP_FORWARDED' );
-		} else {
-			$ip = $_SERVER['REMOTE_ADDR'];
+		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
+			if ( array_key_exists( $key, $_SERVER ) === true ){
+				foreach ( explode( ',', $_SERVER[$key] ) as $ip ){
+					if ( filter_var( $ip, FILTER_VALIDATE_IP ) !== false ){
+						return $ip;
+					} else {
+						return '127.0.0.1';
+					}
+				}
+			}
 		}
-
-		if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-			// Return local ip address
-			return '127.0.0.1';
-		}
-
-		return $ip;
 	}
 }
 
