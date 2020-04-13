@@ -903,6 +903,40 @@ if ( defined( 'ultimatemember_version' ) ) {
 	}
 }
 
+// Count logs
+if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
+	/**
+	 * Upgrade count logs
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @param integer $user_ID
+	 * @param string $status
+	 * @param boolean $has_log
+	 * @param string $slug
+	 * @param string $table
+	 * @return void
+	 */
+	function wp_ulike_update_count_all_logs( $ID, $type, $user_ID, $status, $has_log, $slug, $table ){
+		if( strpos( $status, 'un') === false ){
+			global $wpdb;
+
+			// update all logs period
+			$wpdb->query( "
+					UPDATE `{$wpdb->prefix}ulike_meta`
+					SET `meta_value` = (`meta_value` + 1)
+					WHERE `meta_key` = 'count_logs_period_all'
+			" );
+			$wpdb->query( "
+					UPDATE `{$wpdb->prefix}ulike_meta`
+					SET `meta_value` = (`meta_value` + 1)
+					WHERE `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
+			" );
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_update_count_all_logs'	, 10, 7 );
+}
+
 // Litespeed cache plugin
 if( ! function_exists( 'wp_ulike_purge_litespeed_cache' ) && method_exists( 'LiteSpeed_Cache_API', 'purge_post' ) ){
 	/**

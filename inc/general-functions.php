@@ -1963,7 +1963,16 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 			$period = implode( '-', $period );
 		}
 
-		$cache_key     = sanitize_key( sprintf( 'calculate-%s-logs', $period ) );
+		$cache_key      = sanitize_key( sprintf( 'count_logs_period_%s', $period ) );
+		$count_all_logs = wp_ulike_get_meta_data( 1, 'count_logs_period_all', true );
+
+		if( $period === 'all' ){
+			$count_all_logs = wp_ulike_get_meta_data( 1, 'count_logs_period_all', true );
+			if( ! empty( $count_all_logs ) ){
+				return $count_all_logs;
+			}
+		}
+
 		$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 		// Make a cachable query to get new like count from all tables
@@ -1982,6 +1991,10 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 
 			$counter_value = $wpdb->get_var( $query );
 			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+		}
+
+		if( $period === 'all' ){
+			wp_ulike_update_meta_data( 1, 'count_logs_period_all', $counter_value );
 		}
 
 		return empty( $counter_value ) ? 0 : $counter_value;
