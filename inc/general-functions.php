@@ -568,6 +568,9 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 				$counter_value = $wpdb->get_var( stripslashes( $query ) );
 				wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 			}
+
+			// Add counter to meta value
+			wp_ulike_update_meta_counter_value( $ID, $counter_value, $type, $status, $is_distinct );
 		}
 
 		// By checking this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.
