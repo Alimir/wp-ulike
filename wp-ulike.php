@@ -13,7 +13,7 @@
  * Text Domain:       wp-ulike
  * License:           GPL2
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Domain Path:       /lang
+ * Domain Path:       languages
  * Tested up to: 	  5.3.1
 
  /------------------------------------------\
@@ -128,10 +128,8 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 	        // @deprecate version 5.0
 	        global $wp_version;
-	        if ( version_compare( $wp_version, '4.6', '<' ) ) {
-	            // Load plugin text domain
-	            $this->load_plugin_textdomain();
-	        }
+			// Load plugin text domain
+			$this->load_plugin_textdomain();
 
 			// Loaded action
 			do_action( 'wp_ulike_loaded' );
@@ -555,7 +553,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	    public function load_plugin_textdomain() {
 	        $locale = apply_filters( 'plugin_locale', get_locale(), WP_ULIKE_SLUG );
 	        load_textdomain( WP_ULIKE_SLUG, trailingslashit( WP_LANG_DIR ) . WP_ULIKE_SLUG . '/' . WP_ULIKE_SLUG . '-' . $locale . '.mo' );
-	        load_plugin_textdomain( WP_ULIKE_SLUG, FALSE, dirname( WP_ULIKE_BASENAME ) . '/lang/' );
+	        load_plugin_textdomain( WP_ULIKE_SLUG, FALSE, dirname( WP_ULIKE_BASENAME ) . '/languages' );
 	    }
 
 	}
