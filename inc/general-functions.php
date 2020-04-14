@@ -494,7 +494,7 @@ if( ! function_exists( 'wp_ulike_update_meta_counter_value' ) ){
 	 * @return int|bool
 	 */
 	function wp_ulike_update_meta_counter_value( $ID, $value, $type, $status, $is_distinct = true ){
-		$distinct_name = ! $is_distinct ? 'total' : 'distinct';
+		$distinct_name = !$is_distinct ? 'total' : 'distinct';
 		return wp_ulike_update_meta_data( $ID, sprintf( 'count_%s_%s_%s', $distinct_name, $type, $status ), $value );
 	}
 }
@@ -538,7 +538,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 
 		$counter_value = wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct );
 
-		if( empty( $counter_value ) || ! empty( $date_range ) ){
+		if( ( empty( $counter_value ) && ! is_numeric( $counter_value ) ) || ! empty( $date_range ) ){
 			global $wpdb;
 
 			$cache_key     = sanitize_key( sprintf( 'counter-query-for-%s-%s-%s-status', $type, $ID, $status, $is_distinct ) );

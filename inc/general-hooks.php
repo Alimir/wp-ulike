@@ -917,8 +917,8 @@ if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
 	 * @param string $table
 	 * @return void
 	 */
-	function wp_ulike_update_count_all_logs( $ID, $type, $user_ID, $status, $has_log, $slug, $table ){
-		if( strpos( $status, 'un') === false ){
+	function wp_ulike_update_count_all_logs( $ID, $type, $user_ID, $status, $has_log, $slug, $table, $is_distinct ){
+		if( ( ! $has_log || ! $is_distinct ) && strpos( $status, 'un') === false ){
 			global $wpdb;
 
 			// update all logs period
@@ -934,7 +934,7 @@ if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
 			" );
 		}
 	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_update_count_all_logs'	, 10, 7 );
+	add_action( 'wp_ulike_after_process', 'wp_ulike_update_count_all_logs'	, 10, 8 );
 }
 
 // Litespeed cache plugin
