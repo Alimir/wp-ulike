@@ -123,6 +123,11 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	    * @return void
 	    */
 	    public function init(){
+			// Check database upgrade if needed
+			if ( version_compare( get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION ), WP_ULIKE_DB_VERSION, '<' ) ) {
+				$this->single_activate();
+			}
+
 	    	// Include Files
 	    	$this->includes();
 
