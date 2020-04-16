@@ -694,6 +694,38 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_type_by_table' ) ){
+	/**
+	 * Get type by table name
+	 *
+	 * @param string $table
+	 * @return void
+	 */
+	function wp_ulike_get_type_by_table( $table ){
+		$output = NULL;
+
+		switch ( $table ) {
+			case 'ulike_comments':
+				$output = 'comment';
+				break;
+
+			case 'ulike_activities':
+				$output = 'activity';
+				break;
+
+			case 'ulike_forums':
+				$output = 'topic';
+				break;
+
+			case 'ulike':
+				$output = 'post';
+				break;
+		}
+
+		return $output;
+	}
+}
+
 /*******************************************************
   Posts
 *******************************************************/
@@ -1346,35 +1378,26 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 		// Global wordpress database object
 		global $wpdb;
 
-		$cache_key    = sanitize_key( sprintf( 'likers-query-for-%s-table', $table_name ) );
-		$likers_query = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+		$item_type  = wp_ulike_get_type_by_table( $table_name );
+		$get_likers = wp_ulike_get_meta_data( $item_ID, $item_type, 'likers_list', true );
 
-		// Make a general query to get info from target table.
-		if( false === $likers_query ){
-			// Create query string
-			$query = sprintf(
-				'SELECT `%1$s` AS col_id,
-				 GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ",") AS col_val
-				 FROM %2$s WHERE `status` in ( "like", "dislike" ) AND `user_id` BETWEEN 1 AND 999999 GROUP BY `%1$s`',
-				esc_sql( $column_name ),
-				esc_sql( $wpdb->prefix . $table_name )
-			);
-
+		if( empty( $get_likers ) ){
 			// Get results
-			$likers_query = $wpdb->get_results( stripslashes( $query ) );
-			wp_cache_set( $cache_key, $likers_query, WP_ULIKE_SLUG, 300 );
-		}
-
-		// Find current ID value from cached query.
-		$likers_list = array();
-		foreach ( $likers_query as $key => $row ) {
-			if( $row->col_id == $item_ID ){
-				$likers_list = explode( ',', $row->col_val );
-				break;
+			$get_likers = $wpdb->get_var( "
+				SELECT GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ',')
+				FROM {$wpdb->prefix}{$table_name}
+				INNER JOIN {$wpdb->users}
+				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table_name}.user_id )
+				WHERE {$wpdb->prefix}{$table_name}.status IN ('like', 'dislike')
+				AND {$column_name} = {$item_ID}"
+			);
+			if( ! empty( $get_likers) ){
+				$get_likers = explode( ',', $get_likers );
+				wp_ulike_update_meta_data( $item_ID, $item_type, 'likers_list', $get_likers );
 			}
 		}
 
-		return ! empty( $likers_list ) ? array_slice( $likers_list, 0, $limit ) : array();
+		return ! empty( $get_likers ) ? array_slice( $get_likers, 0, $limit ) : array();
 	}
 }
 
@@ -1508,15 +1531,14 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 
 			// Get likers html template
  			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
- 			$get_users_info = wp_ulike_get_users( $table_name );
  			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
-			 foreach ( $get_users as $user ) {
-				if( ! isset( $get_users_info[$user] ) ){
+			foreach ( $get_users as $user ) {
+				$user_info	= get_user_by( 'id', $user );
+				// Check user existence
+				if( ! $user_info ){
 					continue;
 				}
-
-				$user_info 		= $get_users_info[$user];
 				$out_template 	= $inner_template;
 				if ( $user_info ):
 					if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {

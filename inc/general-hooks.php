@@ -941,9 +941,10 @@ if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
 	 * @return void
 	 */
 	function wp_ulike_update_count_all_logs( $ID, $type, $user_ID, $status, $has_log, $slug, $table, $is_distinct ){
+
+		// Update total stats
 		if( ( ! $has_log || ! $is_distinct ) && strpos( $status, 'un') === false ){
 			global $wpdb;
-
 			// update all logs period
 			$wpdb->query( "
 					UPDATE `{$wpdb->prefix}ulike_meta`
@@ -956,6 +957,31 @@ if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
 					WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
 			" );
 		}
+
+		// Update likers list
+		$get_likers = wp_ulike_get_meta_data( $ID, $slug, 'likers_list', true );
+		if( ! empty( $get_likers ) ){
+			$get_user   = get_userdata( $user_ID );
+			$is_updated = false;
+			if( $get_user ){
+				if( in_array( $get_user->ID, $get_likers ) ){
+					if( strpos( $status, 'un') !== false ){
+						$get_likers = array_diff( $get_likers, array( $get_user->ID ) );
+						$is_updated = true;
+					}
+				} else {
+					if( strpos( $status, 'un') === false ){
+						array_push( $get_likers, $get_user->ID );
+						$is_updated = true;
+					}
+				}
+				// If array list has been changed, then update meta data.
+				if( $is_updated ){
+					wp_ulike_update_meta_data( $ID, $slug, 'likers_list', $get_likers );
+				}
+			}
+		}
+
 	}
 	add_action( 'wp_ulike_after_process', 'wp_ulike_update_count_all_logs'	, 10, 8 );
 }
