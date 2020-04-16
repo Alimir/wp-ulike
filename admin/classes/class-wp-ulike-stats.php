@@ -246,7 +246,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$cache_key = sanitize_key( sprintf( 'count_logs_for_%s_table_in_%s_daterange', $table, $date ) );
 
 			if( $date === 'all' ){
-				$count_all_logs = wp_ulike_get_meta_data( 1, $cache_key, true );
+				$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
 				if( ! empty( $count_all_logs ) ){
 					return $count_all_logs;
 				}
@@ -264,7 +264,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			}
 
 			if( $date === 'all' ){
-				wp_ulike_update_meta_data( 1, $cache_key, $counter_value );
+				wp_ulike_update_meta_data( 1, 'statistics', $cache_key, $counter_value );
 			}
 
 	        return  empty( $counter_value ) ? 0 : $counter_value;

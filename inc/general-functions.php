@@ -211,6 +211,7 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
 	 * @param int    $object_id  ID of the object metadata is for.
+	 * @param string $meta_group   Metadata group.
 	 * @param string $meta_key   Metadata key.
 	 * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
 	 * @param bool   $unique     Optional. Whether the specified metadata key should be unique for the object.
@@ -218,10 +219,10 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 	 *                           no change will be made. Default false.
 	 * @return int|false The meta ID on success, false on failure.
 	 */
-	function wp_ulike_add_meta_data( $object_id, $meta_key, $meta_value, $unique = false ) {
+	function wp_ulike_add_meta_data( $object_id, $meta_group, $meta_key, $meta_value, $unique = false ) {
 		global $wpdb;
 
-		if ( ! $meta_key || ! is_numeric( $object_id ) ) {
+		if ( ! $meta_group || ! $meta_key || ! is_numeric( $object_id ) ) {
 			return false;
 		}
 
@@ -236,12 +237,14 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 		$id_column = 'meta_id';
 
 		// expected_slashed ($meta_key)
+		$meta_group = wp_unslash( $meta_group );
 		$meta_key   = wp_unslash( $meta_key );
 		$meta_value = wp_unslash( $meta_value );
 
 		if ( $unique && $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM $table WHERE meta_key = %s AND $column = %d",
+				"SELECT COUNT(*) FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %d",
+				$meta_group,
 				$meta_key,
 				$object_id
 			)
@@ -256,6 +259,7 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 			$table,
 			array(
 				$column      => $object_id,
+				'meta_group' => $meta_group,
 				'meta_key'   => $meta_key,
 				'meta_value' => $meta_value,
 			)
@@ -282,16 +286,17 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 	 *
 	 * @param int    $object_id  ID of the object metadata is for.
 	 * @param string $meta_key   Metadata key.
+	 * @param string $meta_group   Metadata group.
 	 * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
 	 * @param mixed  $prev_value Optional. If specified, only update existing metadata entries
 	 *                           with this value. Otherwise, update all entries.
 	 * @return int|bool The new meta field ID if a field with the given key didn't exist and was
 	 *                  therefore added, true on successful update, false on failure.
 	 */
-	function wp_ulike_update_meta_data( $object_id, $meta_key, $meta_value, $prev_value = '' ) {
+	function wp_ulike_update_meta_data( $object_id, $meta_group, $meta_key, $meta_value, $prev_value = '' ) {
 		global $wpdb;
 
-		if ( ! $meta_key || ! is_numeric( $object_id ) ) {
+		if ( ! $meta_group || ! $meta_key || ! is_numeric( $object_id ) ) {
 			return false;
 		}
 
@@ -306,14 +311,16 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 		$id_column = 'meta_id';
 
 		// expected_slashed ($meta_key)
-		$raw_meta_key = $meta_key;
-		$meta_key     = wp_unslash( $meta_key );
-		$passed_value = $meta_value;
-		$meta_value   = wp_unslash( $meta_value );
+		$raw_meta_group = $meta_group;
+		$meta_group     = wp_unslash( $meta_group );
+		$raw_meta_key   = $meta_key;
+		$meta_key       = wp_unslash( $meta_key );
+		$passed_value   = $meta_value;
+		$meta_value     = wp_unslash( $meta_value );
 
 		// Compare existing value to new value if no prev value given and the key exists only once.
 		if ( empty( $prev_value ) ) {
-			$old_value = wp_ulike_get_meta_data( $object_id, $meta_key );
+			$old_value = wp_ulike_get_meta_data( $object_id, $meta_group, $meta_key );
 			if ( count( $old_value ) == 1 ) {
 				if ( $old_value[0] === $meta_value ) {
 					return false;
@@ -321,9 +328,9 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 			}
 		}
 
-		$meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_key = %s AND $column = %d", $meta_key, $object_id ) );
+		$meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %d", $meta_group, $meta_key, $object_id ) );
 		if ( empty( $meta_ids ) ) {
-			return wp_ulike_add_meta_data( $object_id, $raw_meta_key, $passed_value );
+			return wp_ulike_add_meta_data( $object_id, $raw_meta_group, $raw_meta_key, $passed_value );
 		}
 
 		$_meta_value = $meta_value;
@@ -331,8 +338,9 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 
 		$data  = compact( 'meta_value' );
 		$where = array(
-			$column    => $object_id,
-			'meta_key' => $meta_key,
+			$column      => $object_id,
+			'meta_group' => $meta_group,
+			'meta_key'   => $meta_key,
 		);
 
 		if ( ! empty( $prev_value ) ) {
@@ -397,12 +405,12 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 		// Get meta info.
 		$id_list   = join( ',', $ids );
 		$id_column = 'meta_id';
-		$meta_list = $wpdb->get_results( "SELECT $column, meta_key, meta_value FROM $table WHERE $column IN ($id_list) ORDER BY $id_column ASC", ARRAY_A );
+		$meta_list = $wpdb->get_results( "SELECT $column, meta_group, meta_key, meta_value FROM $table WHERE $column IN ($id_list) ORDER BY $id_column ASC", ARRAY_A );
 
 		if ( ! empty( $meta_list ) ) {
 			foreach ( $meta_list as $metarow ) {
 				$mpid = intval( $metarow[ $column ] );
-				$mkey = $metarow['meta_key'];
+				$mkey = $metarow['meta_group'] . '_' . $metarow['meta_key'];
 				$mval = $metarow['meta_value'];
 
 				// Force subkeys to be array type.
@@ -435,13 +443,14 @@ if( ! function_exists( 'wp_ulike_get_meta_data' ) ){
 	 *
 	 *
 	 * @param int    $object_id ID of the object metadata is for.
+	 * @param string $meta_group  Metadata group
 	 * @param string $meta_key  Optional. Metadata key. If not specified, retrieve all metadata for
 	 *                          the specified object. Default empty.
 	 * @param bool   $single    Optional. If true, return only the first value of the specified meta_key.
 	 *                          This parameter has no effect if meta_key is not specified. Default false.
 	 * @return mixed Single metadata value, or array of values
 	 */
-	function wp_ulike_get_meta_data( $object_id, $meta_key = '', $single = false ) {
+	function wp_ulike_get_meta_data( $object_id, $meta_group, $meta_key = '', $single = false ) {
 		if ( ! is_numeric( $object_id ) ) {
 			return false;
 		}
@@ -462,15 +471,15 @@ if( ! function_exists( 'wp_ulike_get_meta_data' ) ){
 			}
 		}
 
-		if ( ! $meta_key ) {
+		if ( ! $meta_key || ! $meta_group ) {
 			return $meta_cache;
 		}
 
-		if ( isset( $meta_cache[ $meta_key ] ) ) {
+		if ( isset( $meta_cache[ $meta_group . '_' . $meta_key  ] ) ) {
 			if ( $single ) {
-				return maybe_unserialize( $meta_cache[ $meta_key ][0] );
+				return maybe_unserialize( $meta_cache[ $meta_group . '_' . $meta_key ][0] );
 			} else {
-				return array_map( 'maybe_unserialize', $meta_cache[ $meta_key ] );
+				return array_map( 'maybe_unserialize', $meta_cache[ $meta_group . '_' . $meta_key ] );
 			}
 		}
 
@@ -495,7 +504,7 @@ if( ! function_exists( 'wp_ulike_update_meta_counter_value' ) ){
 	 */
 	function wp_ulike_update_meta_counter_value( $ID, $value, $type, $status, $is_distinct = true ){
 		$distinct_name = !$is_distinct ? 'total' : 'distinct';
-		return wp_ulike_update_meta_data( $ID, sprintf( 'count_%s_%s_%s', $distinct_name, $type, $status ), $value );
+		return wp_ulike_update_meta_data( $ID, $type, sprintf( 'count_%s_%s', $distinct_name, $status ), $value );
 	}
 }
 
@@ -513,7 +522,7 @@ if( ! function_exists( 'wp_ulike_meta_counter_value' ) ){
 	 */
 	function wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct = true ){
 		$distinct_name = ! $is_distinct ? 'total' : 'distinct';
-		return wp_ulike_get_meta_data( $ID, sprintf( 'count_%s_%s_%s', $distinct_name, $type, $status ), true );
+		return wp_ulike_get_meta_data( $ID, $type, sprintf( 'count_%s_%s', $distinct_name, $status ), true );
 	}
 }
 
@@ -541,7 +550,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		if( ( empty( $counter_value ) && ! is_numeric( $counter_value ) ) || ! empty( $date_range ) ){
 			global $wpdb;
 
-			$cache_key     = sanitize_key( sprintf( 'counter-query-for-%s-%s-%s-status', $type, $ID, $status, $is_distinct ) );
+			$cache_key     = sanitize_key( sprintf( 'counter-query-for-%s-%s-%s-status', $type, $ID, $status ) );
 			$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 			// Make a general query to get info from target table.
@@ -1967,10 +1976,10 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 		}
 
 		$cache_key      = sanitize_key( sprintf( 'count_logs_period_%s', $period ) );
-		$count_all_logs = wp_ulike_get_meta_data( 1, 'count_logs_period_all', true );
+		$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
 
 		if( $period === 'all' ){
-			$count_all_logs = wp_ulike_get_meta_data( 1, 'count_logs_period_all', true );
+			$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
 			if( ! empty( $count_all_logs ) ){
 				return $count_all_logs;
 			}
@@ -1997,7 +2006,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 		}
 
 		if( $period === 'all' ){
-			wp_ulike_update_meta_data( 1, 'count_logs_period_all', $counter_value );
+			wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
 		}
 
 		return empty( $counter_value ) ? 0 : $counter_value;

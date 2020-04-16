@@ -948,12 +948,12 @@ if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
 			$wpdb->query( "
 					UPDATE `{$wpdb->prefix}ulike_meta`
 					SET `meta_value` = (`meta_value` + 1)
-					WHERE `meta_key` = 'count_logs_period_all'
+					WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
 			" );
 			$wpdb->query( "
 					UPDATE `{$wpdb->prefix}ulike_meta`
 					SET `meta_value` = (`meta_value` + 1)
-					WHERE `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
+					WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
 			" );
 		}
 	}

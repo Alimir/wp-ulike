@@ -451,11 +451,13 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 			$meta_table = $wpdb->prefix . "ulike_meta";
 			maybe_create_table( $meta_table, "CREATE TABLE IF NOT EXISTS `{$meta_table}` (
 				`meta_id` bigint(20) unsigned NOT NULL auto_increment,
-				`item_id` bigint(20) unsigned NOT NULL,
+				`item_id` bigint(20) unsigned NOT NULL default '0',
+				`meta_group` varchar(100) default NULL,
 				`meta_key` varchar(255) default NULL,
 				`meta_value` longtext,
 				PRIMARY KEY  (`meta_id`),
 				KEY `item_id` (`item_id`),
+				KEY `meta_group` (`meta_group`),
 				KEY `meta_key` (`meta_key`($max_index_length))
 			) $charset_collate AUTO_INCREMENT=1;" );
 
@@ -490,7 +492,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 					CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
 				" );
 				// Update db version
-				update_option( 'wp_ulike_dbVersion', '1.7' );
+				update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
 			}
 
 	        do_action( 'wp_ulike_activated', get_current_blog_id() );
