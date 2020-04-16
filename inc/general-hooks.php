@@ -926,10 +926,9 @@ if ( defined( 'ultimatemember_version' ) ) {
 	}
 }
 
-// Count logs
-if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
+if( ! function_exists( 'wp_ulike_update_meta_data_info' ) ){
 	/**
-	 * Upgrade count logs
+	 * Upgrade meta data
 	 *
 	 * @param integer $ID
 	 * @param string $type
@@ -940,7 +939,7 @@ if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
 	 * @param string $table
 	 * @return void
 	 */
-	function wp_ulike_update_count_all_logs( $ID, $type, $user_ID, $status, $has_log, $slug, $table, $is_distinct ){
+	function wp_ulike_update_meta_data_info( $ID, $type, $user_ID, $status, $has_log, $slug, $table, $is_distinct ){
 
 		// Update total stats
 		if( ( ! $has_log || ! $is_distinct ) && strpos( $status, 'un') === false ){
@@ -983,7 +982,7 @@ if( ! function_exists( 'wp_ulike_update_count_all_logs' ) ){
 		}
 
 	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_update_count_all_logs'	, 10, 8 );
+	add_action( 'wp_ulike_after_process', 'wp_ulike_update_meta_data_info'	, 10, 8 );
 }
 
 // Litespeed cache plugin
