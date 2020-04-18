@@ -276,8 +276,13 @@
             padding: 8px 0;
 
             .wp_ulike_item_counter{
-                > span {
+                .wp_ulike_up_vote_count{
                     margin: 0 5px;
+                    color: green;
+                }
+                .wp_ulike_down_vote_count{
+                    margin: 0 5px;
+                    color: red;
                 }
             }
 
