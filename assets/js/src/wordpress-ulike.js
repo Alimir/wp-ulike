@@ -235,14 +235,9 @@
           break;
 
         default:
-          this.generalElement
-            .children()
-            .first()
-            .addClass(classNameObj.disable);
+          this.generalElement.addClass(classNameObj.disable);
           if (this.siblingElement.length) {
-            this.siblingElement.children()
-              .first()
-              .addClass(classNameObj.disable);
+            this.siblingElement.addClass(classNameObj.disable);
           }
           break;
       }
