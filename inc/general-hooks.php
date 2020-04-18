@@ -467,7 +467,7 @@ if( defined( 'BP_VERSION' ) ) {
 		function wp_ulike_add_bp_notifications( $cp_ID, $type, $user_ID, $status, $has_log  ){
 
 			// Return if user not logged in or an older data log exist
-			if( ! is_user_logged_in() || $has_log > 1 || ! function_exists( 'bp_is_active' ) ){
+			if( ! is_user_logged_in() || $has_log > 0 || ! function_exists( 'bp_is_active' ) ){
 				return;
 			}
 
@@ -1129,3 +1129,26 @@ if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) && function_exists( 'rock
 	}
 	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_rocket_cache'	, 10, 2 );
 }
+
+// @if DEV
+// function wp_ulike_pro_custom_hreview( $content ){
+// 	global $post;
+
+// 	if( is_singular() && 0 != ( $counter = wp_ulike_get_post_likes( $post->ID ) ) ){
+// 			$content .= sprintf('<div style="display:none" class="hreview-aggregate">
+// 							<div class=item>
+// 							<p class="fn">%s</p>
+// 							</div>
+// 							<span class=rating>%s</span>
+// 							<span class=count>%s</span>
+// 					</div>',
+// 					$post->post_title,
+// 					wp_ulike_get_rating_value( $post->ID ),
+// 					$counter
+// 			);
+// 	}
+
+// 	return $content;
+// }
+// add_filter('the_content', 'wp_ulike_pro_custom_hreview');
+// @endif
