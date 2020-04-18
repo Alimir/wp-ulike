@@ -22,6 +22,14 @@
         &:hover, &:active, &:focus {
             outline: 0;
         }
+
+        &[disabled=disabled], &:disabled{
+            &:hover, &:active, &:focus {
+                outline: 0;
+                padding: 0;
+                background-color: initial;
+            }
+        }
     }
 
     .wp_ulike_put_text{
