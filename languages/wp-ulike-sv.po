@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/plugins/wp-ulike/\n"
-"POT-Creation-Date: 2020-04-04 10:34:38+00:00\n"
+"POT-Creation-Date: 2020-04-18 13:20:40+00:00\n"
 "PO-Revision-Date: 2020-02-26 22:14:02+0000\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -172,13 +172,13 @@ msgstr ""
 #: admin/includes/templates/statistics.php:124
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-pages.php:62
 #: build/wp-ulike/admin/includes/templates/statistics.php:127
-#: build/wp-ulike/wp-ulike.php:154 wp-ulike.php:149
+#: build/wp-ulike/wp-ulike.php:157 wp-ulike.php:154
 msgid "Statistics"
 msgstr "Statistik"
 
 #: admin/classes/class-wp-ulike-admin-pages.php:67
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-pages.php:70
-#: build/wp-ulike/wp-ulike.php:155 wp-ulike.php:150
+#: build/wp-ulike/wp-ulike.php:158 wp-ulike.php:155
 msgid "About"
 msgstr "Om"
 
@@ -205,7 +205,7 @@ msgstr "Loggar"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:36
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:39
-#: build/wp-ulike/wp-ulike.php:153 wp-ulike.php:148
+#: build/wp-ulike/wp-ulike.php:156 wp-ulike.php:153
 msgid "Settings"
 msgstr "Inställningar"
 
@@ -397,13 +397,13 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:209
 #: admin/classes/class-wp-ulike-admin-panel.php:251
 #: admin/classes/class-wp-ulike-settings.php:76
-#: admin/classes/class-wp-ulike-widget.php:261
-#: admin/classes/class-wp-ulike-widget.php:549
+#: admin/classes/class-wp-ulike-widget.php:266
+#: admin/classes/class-wp-ulike-widget.php:554
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:212
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:254
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:79
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:264
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:552
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:269
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:557
 msgid "BuddyPress"
 msgstr "BuddyPress"
 
@@ -417,11 +417,11 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:222
 #: admin/classes/class-wp-ulike-admin-panel.php:258
 #: admin/classes/class-wp-ulike-settings.php:82
-#: admin/classes/class-wp-ulike-widget.php:205
+#: admin/classes/class-wp-ulike-widget.php:210
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:225
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:261
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:85
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:208
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:213
 msgid "bbPress"
 msgstr "bbPress"
 
@@ -541,12 +541,12 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:319
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:322
-#: build/wp-ulike/inc/general-functions.php:1818
-#: build/wp-ulike/inc/general-functions.php:1863
-#: build/wp-ulike/inc/general-functions.php:1907
-#: build/wp-ulike/inc/general-functions.php:1984 inc/general-functions.php:1815
-#: inc/general-functions.php:1860 inc/general-functions.php:1904
-#: inc/general-functions.php:1981
+#: build/wp-ulike/inc/general-functions.php:2209
+#: build/wp-ulike/inc/general-functions.php:2254
+#: build/wp-ulike/inc/general-functions.php:2298
+#: build/wp-ulike/inc/general-functions.php:2375 inc/general-functions.php:2244
+#: inc/general-functions.php:2289 inc/general-functions.php:2333
+#: inc/general-functions.php:2410
 msgid "Like Button"
 msgstr ""
 
@@ -620,10 +620,10 @@ msgstr "Knapptext"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:394
 #: admin/classes/class-wp-ulike-admin-panel.php:430
-#: admin/classes/class-wp-ulike-widget.php:349
+#: admin/classes/class-wp-ulike-widget.php:354
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:397
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:433
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:352
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:357
 msgid "Like"
 msgstr "Gilla"
 
@@ -784,13 +784,13 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:542
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:545
-#: build/wp-ulike/inc/general-functions.php:1342 inc/general-functions.php:1339
+#: build/wp-ulike/inc/general-functions.php:1690 inc/general-functions.php:1657
 msgid "You need to login in order to like this post: "
 msgstr "Du måste logga in för att gilla detta inlägg: "
 
 #: admin/classes/class-wp-ulike-admin-panel.php:544
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:547
-#: build/wp-ulike/inc/general-functions.php:1344 inc/general-functions.php:1341
+#: build/wp-ulike/inc/general-functions.php:1692 inc/general-functions.php:1659
 msgid "click here"
 msgstr "klicka här"
 
@@ -1052,12 +1052,12 @@ msgstr "Aktivitetsstatistik"
 msgid "Topics Stats"
 msgstr "Ämnesstatistik"
 
-#: admin/classes/class-wp-ulike-stats.php:273
+#: admin/classes/class-wp-ulike-stats.php:285
 #: admin/includes/templates/activities-logs.php:98
 #: admin/includes/templates/comments-logs.php:103
 #: admin/includes/templates/posts-logs.php:97
 #: admin/includes/templates/topics-logs.php:97
-#: build/wp-ulike/admin/classes/class-wp-ulike-stats.php:276
+#: build/wp-ulike/admin/classes/class-wp-ulike-stats.php:288
 #: build/wp-ulike/admin/includes/templates/activities-logs.php:101
 #: build/wp-ulike/admin/includes/templates/comments-logs.php:106
 #: build/wp-ulike/admin/includes/templates/posts-logs.php:100
@@ -1077,176 +1077,176 @@ msgid ""
 msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:58
-#: admin/classes/class-wp-ulike-widget.php:110
-#: admin/classes/class-wp-ulike-widget.php:228
-#: admin/classes/class-wp-ulike-widget.php:290
+#: admin/classes/class-wp-ulike-widget.php:115
+#: admin/classes/class-wp-ulike-widget.php:233
+#: admin/classes/class-wp-ulike-widget.php:295
 #: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:61
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:113
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:231
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:293
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:118
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:236
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:298
 msgid "No results were found in"
 msgstr "Inga resultat hittades i"
 
 #: admin/classes/class-wp-ulike-widget.php:58
-#: admin/classes/class-wp-ulike-widget.php:110
-#: admin/classes/class-wp-ulike-widget.php:228
-#: admin/classes/class-wp-ulike-widget.php:290
+#: admin/classes/class-wp-ulike-widget.php:115
+#: admin/classes/class-wp-ulike-widget.php:233
+#: admin/classes/class-wp-ulike-widget.php:295
 #: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:61
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:113
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:231
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:293
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:118
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:236
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:298
 msgid "period"
 msgstr "period"
 
-#: admin/classes/class-wp-ulike-widget.php:124
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:127
+#: admin/classes/class-wp-ulike-widget.php:129
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:132
 msgid "on"
 msgstr "på"
 
-#: admin/classes/class-wp-ulike-widget.php:187
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:190
+#: admin/classes/class-wp-ulike-widget.php:192
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:195
 msgid "you haven't liked any post yet!"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:205
-#: admin/classes/class-wp-ulike-widget.php:261
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:208
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:264
+#: admin/classes/class-wp-ulike-widget.php:210
+#: admin/classes/class-wp-ulike-widget.php:266
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:213
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:269
 msgid "%s is Not Activated!"
 msgstr "%s är inte aktiverad!"
 
-#: admin/classes/class-wp-ulike-widget.php:484
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:487
+#: admin/classes/class-wp-ulike-widget.php:489
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:492
 msgid "Most Liked"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:499
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:502
+#: admin/classes/class-wp-ulike-widget.php:504
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:507
 msgid "Title:"
 msgstr "Rubrik:"
 
-#: admin/classes/class-wp-ulike-widget.php:504
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:507
+#: admin/classes/class-wp-ulike-widget.php:509
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:512
 msgid "Type:"
 msgstr "Typ:"
 
-#: admin/classes/class-wp-ulike-widget.php:506
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:509
+#: admin/classes/class-wp-ulike-widget.php:511
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:514
 msgid "Most Liked Posts"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:507
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:510
+#: admin/classes/class-wp-ulike-widget.php:512
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:515
 msgid "Most Liked Comments"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:508
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:511
+#: admin/classes/class-wp-ulike-widget.php:513
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:516
 msgid "Most Liked Activities"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:509
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:512
+#: admin/classes/class-wp-ulike-widget.php:514
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:517
 msgid "Most Liked Topics"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:510
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:513
+#: admin/classes/class-wp-ulike-widget.php:515
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:518
 msgid "Most Liked Users"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-widget.php:511
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:514
-msgid "Last Posts Liked By User"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:516
 #: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:519
-msgid "Number of items to show:"
+msgid "Last Posts Liked By User"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:521
 #: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:524
-msgid "Period:"
-msgstr "Period:"
-
-#: admin/classes/class-wp-ulike-widget.php:523
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:526
-msgid "All The Times"
+msgid "Number of items to show:"
 msgstr ""
-
-#: admin/classes/class-wp-ulike-widget.php:524
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:527
-msgid "Year"
-msgstr "År"
-
-#: admin/classes/class-wp-ulike-widget.php:525
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:528
-msgid "Month"
-msgstr "Månad"
 
 #: admin/classes/class-wp-ulike-widget.php:526
 #: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:529
+msgid "Period:"
+msgstr "Period:"
+
+#: admin/classes/class-wp-ulike-widget.php:528
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:531
+msgid "All The Times"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-widget.php:529
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:532
+msgid "Year"
+msgstr "År"
+
+#: admin/classes/class-wp-ulike-widget.php:530
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:533
+msgid "Month"
+msgstr "Månad"
+
+#: admin/classes/class-wp-ulike-widget.php:531
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:534
 msgid "Week"
 msgstr "Vecka"
 
-#: admin/classes/class-wp-ulike-widget.php:527
+#: admin/classes/class-wp-ulike-widget.php:532
 #: admin/includes/templates/statistics.php:110
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:530
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:535
 #: build/wp-ulike/admin/includes/templates/statistics.php:113
 msgid "Yesterday"
 msgstr "Igår"
 
-#: admin/classes/class-wp-ulike-widget.php:528
+#: admin/classes/class-wp-ulike-widget.php:533
 #: admin/includes/templates/statistics.php:93
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:531
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:536
 #: build/wp-ulike/admin/includes/templates/statistics.php:96
 msgid "Today"
 msgstr "Idag"
 
-#: admin/classes/class-wp-ulike-widget.php:533
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:536
+#: admin/classes/class-wp-ulike-widget.php:538
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:541
 msgid "Style:"
 msgstr "Stil:"
 
-#: admin/classes/class-wp-ulike-widget.php:535
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:538
+#: admin/classes/class-wp-ulike-widget.php:540
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:543
 msgid "Simple"
 msgstr "Enkel"
 
-#: admin/classes/class-wp-ulike-widget.php:536
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:539
+#: admin/classes/class-wp-ulike-widget.php:541
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:544
 #: build/wp-ulike/inc/general-functions.php:187 inc/general-functions.php:184
 msgid "Heart"
 msgstr "Hjärta"
 
-#: admin/classes/class-wp-ulike-widget.php:541
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:544
+#: admin/classes/class-wp-ulike-widget.php:546
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:549
 msgid "Title Trim (Length):"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:547
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:550
+#: admin/classes/class-wp-ulike-widget.php:552
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:555
 msgid "Profile URL:"
 msgstr "Profil-URL:"
 
-#: admin/classes/class-wp-ulike-widget.php:550
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:553
+#: admin/classes/class-wp-ulike-widget.php:555
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:558
 msgid "UltimateMember"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-widget.php:556
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:559
-msgid "Activate Like Counter"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:561
 #: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:564
+msgid "Activate Like Counter"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-widget.php:566
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:569
 msgid "Activate Thumbnail/Avatar"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:565
-#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:568
+#: admin/classes/class-wp-ulike-widget.php:570
+#: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:573
 msgid "Thumbnail/Avatar size:"
 msgstr ""
 
@@ -2644,95 +2644,95 @@ msgstr ""
 msgid "Animated Heart"
 msgstr ""
 
-#: build/wp-ulike/inc/general-functions.php:227 inc/general-functions.php:224
+#: build/wp-ulike/inc/general-functions.php:548 inc/general-functions.php:545
 msgid "Please enter some value for required variables."
 msgstr ""
 
-#: build/wp-ulike/inc/general-functions.php:241 inc/general-functions.php:238
+#: build/wp-ulike/inc/general-functions.php:567 inc/general-functions.php:564
 msgid "Table info is empty."
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:392 inc/general-hooks.php:389
+#: build/wp-ulike/inc/general-hooks.php:415 inc/general-hooks.php:412
 msgid "WP ULike Activity"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:406 inc/general-hooks.php:403
+#: build/wp-ulike/inc/general-hooks.php:429 inc/general-hooks.php:426
 msgid "Votes"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:575 inc/general-hooks.php:572
+#: build/wp-ulike/inc/general-hooks.php:598 inc/general-hooks.php:595
 msgid "posts"
 msgstr "inlägg"
 
-#: build/wp-ulike/inc/general-hooks.php:582 inc/general-hooks.php:579
+#: build/wp-ulike/inc/general-hooks.php:605 inc/general-hooks.php:602
 msgid "comments"
 msgstr "kommentarer"
 
-#: build/wp-ulike/inc/general-hooks.php:587 inc/general-hooks.php:584
+#: build/wp-ulike/inc/general-hooks.php:610 inc/general-hooks.php:607
 msgid "activities"
 msgstr "aktiviteter"
 
-#: build/wp-ulike/inc/general-hooks.php:597 inc/general-hooks.php:594
+#: build/wp-ulike/inc/general-hooks.php:620 inc/general-hooks.php:617
 msgid "You have %d new %s likes"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:601 inc/general-hooks.php:598
+#: build/wp-ulike/inc/general-hooks.php:624 inc/general-hooks.php:621
 msgid "%s liked one of your %s"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:645 inc/general-hooks.php:642
+#: build/wp-ulike/inc/general-hooks.php:668 inc/general-hooks.php:665
 msgid "New activity liked"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:650 inc/general-hooks.php:647
+#: build/wp-ulike/inc/general-hooks.php:673 inc/general-hooks.php:670
 msgid "New comment liked"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:655 inc/general-hooks.php:652
+#: build/wp-ulike/inc/general-hooks.php:678 inc/general-hooks.php:675
 msgid "New post liked"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:660 inc/general-hooks.php:657
+#: build/wp-ulike/inc/general-hooks.php:683 inc/general-hooks.php:680
 msgid "New topic liked"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:770 inc/general-hooks.php:767
+#: build/wp-ulike/inc/general-hooks.php:793 inc/general-hooks.php:790
 msgid ""
 "This hook award / deducts points from users who Like/Unlike any content of "
 "WordPress, bbPress, BuddyPress & ..."
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:786 inc/general-hooks.php:783
+#: build/wp-ulike/inc/general-hooks.php:809 inc/general-hooks.php:806
 msgid "Liking Content"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:787 inc/general-hooks.php:784
+#: build/wp-ulike/inc/general-hooks.php:810 inc/general-hooks.php:807
 msgid "Liked Content"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:788 inc/general-hooks.php:785
+#: build/wp-ulike/inc/general-hooks.php:811 inc/general-hooks.php:808
 msgid "Unliking Content"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:789 inc/general-hooks.php:786
+#: build/wp-ulike/inc/general-hooks.php:812 inc/general-hooks.php:809
 msgid "Unliked Content"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:809
-#: build/wp-ulike/inc/general-hooks.php:844 inc/general-hooks.php:806
-#: inc/general-hooks.php:841
+#: build/wp-ulike/inc/general-hooks.php:832
+#: build/wp-ulike/inc/general-hooks.php:867 inc/general-hooks.php:829
+#: inc/general-hooks.php:864
 msgid "Recent Posts Liked"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:814
-#: build/wp-ulike/inc/general-hooks.php:886 inc/general-hooks.php:811
-#: inc/general-hooks.php:883
+#: build/wp-ulike/inc/general-hooks.php:837
+#: build/wp-ulike/inc/general-hooks.php:909 inc/general-hooks.php:834
+#: inc/general-hooks.php:906
 msgid "Recent Comments Liked"
 msgstr ""
 
-#: build/wp-ulike/inc/general-hooks.php:860
-#: build/wp-ulike/inc/general-hooks.php:903 inc/general-hooks.php:857
-#: inc/general-hooks.php:900
+#: build/wp-ulike/inc/general-hooks.php:883
+#: build/wp-ulike/inc/general-hooks.php:926 inc/general-hooks.php:880
+#: inc/general-hooks.php:923
 msgid "This user has not made any likes."
 msgstr ""
 
@@ -2740,7 +2740,7 @@ msgstr ""
 msgid "WP ULike"
 msgstr ""
 
-#: build/wp-ulike/wp-ulike.php:529 wp-ulike.php:524
+#: build/wp-ulike/wp-ulike.php:589 wp-ulike.php:586
 msgid ""
 "You are using two instances of WP ULike plugin at same time, please deactive "
 "one of them."
