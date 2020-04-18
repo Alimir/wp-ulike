@@ -29,6 +29,12 @@
         background: none;
         padding: 15px;
 
+        &[disabled=disabled], &:disabled{
+            &:hover, &:active, &:focus {
+                padding: 15px;
+            }
+        }
+
         &:after{
             content: '';
             display: block;
