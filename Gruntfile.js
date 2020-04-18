@@ -121,7 +121,7 @@ module.exports = function(grunt) {
         makepot: {
             target: {
                 options: {
-                    domainPath: 'lang',
+                    domainPath: 'languages',
                     mainFile: 'wp-ulike.php',
                     potFilename: 'wp-ulike.pot',
                     potHeaders: {
@@ -141,7 +141,7 @@ module.exports = function(grunt) {
 
         po2mo: {
             files: {
-                src: 'lang/*.po',
+                src: 'languages/*.po',
                 expand: true,
             }
         },
