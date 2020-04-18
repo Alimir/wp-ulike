@@ -1977,7 +1977,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 
 		if( $period === 'all' ){
 			$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
-			if( ! empty( $count_all_logs ) ){
+			if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
 				return $count_all_logs;
 			}
 		}

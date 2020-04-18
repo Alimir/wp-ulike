@@ -247,7 +247,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			if( $date === 'all' ){
 				$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
-				if( ! empty( $count_all_logs ) ){
+				if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
 					return $count_all_logs;
 				}
 			}
