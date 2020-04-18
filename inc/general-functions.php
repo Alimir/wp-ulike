@@ -1578,36 +1578,6 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	}
 }
 
-if( ! function_exists( 'wp_ulike_get_users' ) ){
-	/**
-	 * Retrieve list of users matching wp ulike tables.
-	 *
-	 * @return array
-	 */
-	function wp_ulike_get_users( $table ){
-		global $wpdb;
-
-		$cache_key = sanitize_key( sprintf( 'get-users-for-%s', $table ) );
-		$get_users = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
-
-		// Make a general query to get info from target table.
-		if( false === $get_users ){
-
-			$get_users = $wpdb->get_results( "SELECT DISTINCT {$wpdb->users}.*
-				FROM {$wpdb->users}
-				INNER JOIN {$wpdb->prefix}{$table}
-				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table}.user_id )
-				WHERE {$wpdb->prefix}{$table}.status IN ('like', 'dislike')
-				ORDER BY user_login ASC", OBJECT_K
-			);
-
-			wp_cache_set( $cache_key, $get_users, WP_ULIKE_SLUG, 300 );
-		}
-
-		return $get_users;
-	}
-}
-
 if( ! function_exists( 'wp_ulike_get_template_between' ) ){
 	/**
 	 * Get template between
@@ -2137,6 +2107,115 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 		}
 
 		return $period_limit;
+	}
+}
+
+if( ! function_exists('wp_ulike_get_user_data') ){
+	/**
+	 * Get user logs
+	 *
+	 * @param integer $user_ID
+	 * @param array $args
+	 * @return object|null
+	 */
+	function wp_ulike_get_user_data( $user_ID, $args = array() ){
+		global $wpdb;
+
+		$defaults = array(
+			'type'     => 'post',
+			'period'   => 'all',
+			'order'    => 'DESC',
+			'status'   => 'like',
+			'page'     => 1,
+			'per_page' => 10
+		);
+		$parsed_args  = wp_parse_args( $args, $defaults );
+		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
+		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
+
+		$status_type  = '';
+		if( is_array( $parsed_args['status'] ) ){
+			$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+		} else {
+			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+		}
+
+		// generate query string
+		$query  = sprintf( "
+			SELECT `%s` AS itemID, max(`date_time`) AS datetime, max(`status`) AS lastStatus
+			FROM %s
+			WHERE `user_id` = '%s'
+			AND %s %s
+			GROUP BY itemID
+			ORDER BY datetime
+			%s LIMIT %s, %s",
+			$parsed_args['column'],
+			$wpdb->prefix . $parsed_args['table'],
+			$user_ID,
+			$status_type,
+			$period_limit,
+			$parsed_args['order'],
+			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
+			$parsed_args['per_page'],
+		);
+
+		return $wpdb->get_results( $query );
+	}
+
+}
+
+if( ! function_exists( 'wp_ulike_get_users' ) ){
+	/**
+	 * Retrieve list of users
+	 *
+	 * @param array $args
+	 * @return object|null
+	 */
+	function wp_ulike_get_users( $args = array() ){
+		global $wpdb;
+
+		$defaults = array(
+			'type'     => 'post',
+			'period'   => 'all',
+			'order'    => 'DESC',
+			'status'   => 'like',
+			'page'     => 1,
+			'per_page' => 10
+		);
+		$parsed_args  = wp_parse_args( $args, $defaults );
+		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
+		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
+
+		$status_type  = '';
+		if( is_array( $parsed_args['status'] ) ){
+			$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+		} else {
+			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+		}
+
+		// generate query string
+		$query  = sprintf( '
+			SELECT %1$s.user_id AS userID, count(%1$s.user_id) AS score,
+			max(%1$s.date_time) AS datetime, max(%1$s.status) AS lastStatus,
+			GROUP_CONCAT(DISTINCT(%1$s.%3$s) SEPARATOR ",") AS itemsList
+			FROM %1$s
+			INNER JOIN %2$s
+			ON ( %2$s.ID = %1$s.user_id )
+			WHERE %4$s %5$s
+			GROUP BY user_id
+			ORDER BY score
+			%6$s LIMIT %7$s, %8$s',
+			$wpdb->prefix . $parsed_args['table'],
+			$wpdb->users,
+			$parsed_args['column'],
+			$status_type,
+			$period_limit,
+			$parsed_args['order'],
+			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
+			$parsed_args['per_page'],
+		);
+
+		return $wpdb->get_results( $query );
 	}
 }
 
