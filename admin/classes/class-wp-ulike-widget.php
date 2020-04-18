@@ -59,9 +59,14 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			}
 
 			foreach ($posts as $post) {
+				// Check post title existence
+				if( empty( $post->post_title ) ){
+					continue;
+				}
+
 				$post_title = stripslashes($post->post_title);
 				$permalink  = get_permalink($post->ID);
-				$post_count = $this->get_counter_value($post->ID, 'post', 'all', false, $period );
+				$post_count = $this->get_counter_value($post->ID, 'post', 'like', false, $period );
 
 				$result .= sprintf(
 					'%s <a href="%s">%s</a> %s %s',
@@ -114,7 +119,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$comment_author      = stripslashes($comment->comment_author);
 				$post_title          = get_the_title($comment->comment_post_ID);
 				$comment_permalink   = get_comment_link($comment->comment_ID);
-				$comment_likes_count = $this->get_counter_value($comment->comment_ID, 'comment', 'all', false, $period);
+				$comment_likes_count = $this->get_counter_value($comment->comment_ID, 'comment', 'like', false, $period);
 
 				$result .= sprintf(
 					'%s %s <span class="comment-info"><span class="comment-author-link">%s</span> %s <a href="%s">%s</a></span> %s %s',
@@ -231,7 +236,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			foreach ($posts as $post) {
 				$post_title = function_exists('bbp_get_forum_title') ? bbp_get_forum_title( $post->ID ) : $post->post_title;
 				$permalink  = get_permalink( $post->ID );
-				$post_count = $this->get_counter_value($post->ID, 'topic', 'all', false, $period);
+				$post_count = $this->get_counter_value($post->ID, 'topic', 'like', false, $period);
 
 				$result .= sprintf(
 					'%s <a href="%s">%s</a> %s %s',
@@ -293,7 +298,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			foreach ($activities as $activity) {
 				$activity_permalink = function_exists('bp_activity_get_permalink') ? bp_activity_get_permalink( $activity->id ) : '';
 				$activity_action    = ! empty( $activity->content ) ? $activity->content : $activity->action;
-				$post_count         = $this->get_counter_value( $activity->id, 'activity', 'all', false, $period );
+				$post_count         = $this->get_counter_value( $activity->id, 'activity', 'like', false, $period );
 
 				// Skip empty activities
 				if( empty( $activity_action ) ){

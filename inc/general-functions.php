@@ -608,7 +608,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value' ) ){
 	 */
 	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
 		$counter_info = wp_ulike_get_counter_value_info( $ID, $type, $status, $is_distinct, $date_range );
-		return ! is_wp_error( $counter_info ) ? $counter_info : 0;
+		return ! is_wp_error( $counter_info ) ? (int) $counter_info : 0;
 	}
 }
 
@@ -789,28 +789,33 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 	 * @param string $method
 	 * @param string $period
 	 * @param string $status
+	 * @param boolean $is_noraml
 	 * @return WP_Post[]|int[] Array of post objects or post IDs.
 	 */
-	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all', $status = 'like' ){
+	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all', $status = 'like', $is_noraml = false ){
 		$post__in = wp_ulike_get_popular_items_ids(array(
 			'type'   => $method,
 			'status' => $status,
 			'period' => $period
 		));
-		if( empty( $post__in ) ){
-			return false;
-		}
 
-		return get_posts( apply_filters( 'wp_ulike_get_top_posts_query', array(
-			'post__in'    => $post__in,
+		$args = array(
 			'numberposts' => $numberposts,
-			'orderby'     => 'post__in',
 			'post_type'   => $post_type === '' ? get_post_types_by_support( array(
 				'title',
 				'editor',
 				'thumbnail'
 			) ) : $post_type
-		) ) );
+		);
+
+		if( ! empty( $post__in ) ){
+			$args['post__in'] = $post__in;
+			$args['orderby'] = 'post__in';
+		} elseif( empty( $post__in ) && ! $is_noraml ) {
+			return false;
+		}
+
+		return get_posts( apply_filters( 'wp_ulike_get_top_posts_query', $args ) );
 	}
 }
 
