@@ -522,7 +522,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					esc_sql( $item_conditional_col ),
 					esc_sql( $item_conditional_val ),
 					esc_sql( $item_type_col ),
-					esc_sql( $item_type_val ),
+					esc_sql( $item_type_val )
 				);
 
 				// Get results

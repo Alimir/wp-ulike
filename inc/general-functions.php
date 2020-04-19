@@ -2156,7 +2156,7 @@ if( ! function_exists('wp_ulike_get_user_data') ){
 			$period_limit,
 			$parsed_args['order'],
 			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
-			$parsed_args['per_page'],
+			$parsed_args['per_page']
 		);
 
 		return $wpdb->get_results( $query );
@@ -2212,7 +2212,7 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 			$period_limit,
 			$parsed_args['order'],
 			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
-			$parsed_args['per_page'],
+			$parsed_args['per_page']
 		);
 
 		return $wpdb->get_results( $query );
