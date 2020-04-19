@@ -1,4 +1,4 @@
-/*! WP ULike - v4.1.9
+/*! WP ULike - v4.2.0
  *  https://wpulike.com
  *  TechnoWich 2020;
  */
@@ -138,6 +138,7 @@
       appendTimeout: 2000,
       displayLikers: false,
       disablePophover: true,
+      isTotal: false,
       factor: '',
       template: '',
       counterSelector: ".count-box",
@@ -150,6 +151,7 @@
       "ulike-nonce": "nonce",
       "ulike-type": "type",
       "ulike-append": "append",
+      "ulike-is-total": "isTotal",
       "ulike-display-likers": "displayLikers",
       "ulike-disable-pophover": "disablePophover",
       "ulike-append-timeout": "appendTimeout",
@@ -356,14 +358,9 @@
           break;
 
         default:
-          this.generalElement
-            .children()
-            .first()
-            .addClass(classNameObj.disable);
+          this.generalElement.addClass(classNameObj.disable);
           if (this.siblingElement.length) {
-            this.siblingElement.children()
-              .first()
-              .addClass(classNameObj.disable);
+            this.siblingElement.addClass(classNameObj.disable);
           }
           break;
       }
@@ -385,15 +382,19 @@
       if (typeof counterValue !== "object") {
         this.counterElement.text(counterValue);
       } else {
-        if (this.settings.factor === 'down') {
-          this.counterElement.text(counterValue.down);
-          if (this.siblingElement.length) {
-            this.siblingElement.find(this.settings.counterSelector).text(counterValue.up);
-          }
+        if( this.settings.isTotal && typeof counterValue.sub !== "undefined" ){
+          this.counterElement.text(counterValue.sub);
         } else {
-          this.counterElement.text(counterValue.up);
-          if (this.siblingElement.length) {
-            this.siblingElement.find(this.settings.counterSelector).text(counterValue.down);
+          if (this.settings.factor === 'down') {
+            this.counterElement.text(counterValue.down);
+            if (this.siblingElement.length) {
+              this.siblingElement.find(this.settings.counterSelector).text(counterValue.up);
+            }
+          } else {
+            this.counterElement.text(counterValue.up);
+            if (this.siblingElement.length) {
+              this.siblingElement.find(this.settings.counterSelector).text(counterValue.down);
+            }
           }
         }
       }

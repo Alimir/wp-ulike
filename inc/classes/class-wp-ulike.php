@@ -8,7 +8,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 	class wp_ulike{
 
-		private $wpdb, $status, $user_id, $user_ip, $is_distinct;
+		private $wpdb, $status, $user_id, $user_ip, $is_distinct, $prev_status;
 
 		/**
 		 * Instance of this class.
@@ -82,14 +82,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$output = '';
 
 			// Check user log history
-			$user_status = $this->get_user_status( $table, $column, 'ip', $id, $this->user_ip );
-			$user_status = !$user_status ? $this->status : $user_status;
+			$check_user_status = $this->get_user_status( $table, $column, 'ip', $id, $this->user_ip );
+			$this->prev_status = !$check_user_status ? $this->status : $check_user_status;
 			$this->is_distinct = false;
 
 			if( $type == 'post' ){
 				$output = $this->get_template( $data, 1 );
 			} elseif( $type == 'process' ){
-				$this->update_status( $factor, $user_status, true );
+				$this->update_status( $factor, $this->prev_status, true );
 				// Insert log data
 				$this->wpdb->insert(
 					$this->wpdb->prefix . $table,
@@ -107,11 +107,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
-						'id'      => $id,
-						'key'     => $key,
-						'user_id' => $this->user_id,
-						'status'  => $this->status,
-						'has_log' => $this->has_log( $data )
+						'id'          => $id,
+						'key'         => $key,
+						'user_id'     => $this->user_id,
+						'status'      => $this->status,
+						'has_log'     => ! $check_user_status ? 0 : 1,
+						'slug'        => $slug,
+						'table'       => $table,
+						'is_distinct' => $this->is_distinct
 					)
 				);
 
@@ -137,8 +140,8 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$this->is_distinct = false;
 
 			// Check user log history
-			$user_status = $this->get_user_status( $table, $column, 'ip', $id, $this->user_ip );
-			$user_status = !$user_status ? $this->status : $user_status;
+			$check_user_status = $this->get_user_status( $table, $column, 'ip', $id, $this->user_ip );
+			$this->prev_status = !$check_user_status ? $this->status : $check_user_status;
 
 			if( $type == 'post' ){
 
@@ -146,13 +149,13 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					$output = $this->get_template( $data, 1 );
 				}
 				else{
-					$output = $this->get_template( $data, 4, $user_status );
+					$output = $this->get_template( $data, 4, $this->prev_status );
 				}
 
 			} elseif( $type == 'process' ) {
 
 				if( $this->has_permission( $data ) ){
-					$this->update_status( $factor, $user_status, true );
+					$this->update_status( $factor, $this->prev_status, true );
 					// Set cookie
 					setcookie( $cookie . $id, time(), 2147483647, '/' );
 					// Insert log data
@@ -174,11 +177,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
-						'id'      => $id,
-						'key'     => $key,
-						'user_id' => $this->user_id,
-						'status'  => $this->status,
-						'has_log' => $this->has_log( $data )
+						'id'          => $id,
+						'key'         => $key,
+						'user_id'     => $this->user_id,
+						'status'      => $this->status,
+						'has_log'     => ! $check_user_status ? 0 : 1,
+						'slug'        => $slug,
+						'table'       => $table,
+						'is_distinct' => $this->is_distinct
 					)
 				);
 
@@ -204,21 +210,23 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			// method column value
 			$method_val  = $method_col === 'ip' ? $this->user_ip : $this->user_id;
 			// Check user log history
-			$user_status = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
+			$this->prev_status = $this->get_user_status( $table, $column, $method_col, $id, $method_val );
+
+			$this->is_distinct = true;
 
 			if( $type == 'post' ){
-				if( ! $user_status ){
+				if( ! $this->prev_status ){
 					$output 	= $this->get_template( $data, 1 );
 				} else {
-					if( substr( $user_status, 0, 2 ) !== "un" ) {
-						$output = $this->get_template( $data, 2, $user_status );
+					if( substr( $this->prev_status, 0, 2 ) !== "un" ) {
+						$output = $this->get_template( $data, 2, $this->prev_status );
 					} else {
-						$output = $this->get_template( $data, 3, $user_status );
+						$output = $this->get_template( $data, 3, $this->prev_status );
 					}
 				}
 
 			} elseif( $type == 'process' ) {
-				if( ! $user_status ){
+				if( ! $this->prev_status ){
 					$this->update_status( $factor, 'unlike' );
 					// Insert log data
 					$this->wpdb->insert(
@@ -234,7 +242,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 					);
 
 				} else {
-					$this->update_status( $factor, $user_status );
+					$this->update_status( $factor, $this->prev_status );
 					// Update status
 					$this->wpdb->update(
 						$this->wpdb->prefix . $table,
@@ -243,6 +251,20 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 						),
 						array( $column => $id, $method_col => $method_val )
 					);
+					// $this->wpdb->query( sprintf( '
+					// 		UPDATE `%s`
+					// 		SET `status` = \'%s\'
+					// 		WHERE `%s` = \'%s\'
+					// 		AND `%s` = \'%s\'
+					// 		ORDER BY id DESC LIMIT 1
+					// 	',
+					// 	esc_sql( $this->wpdb->prefix . $table ),
+					// 	$this->status,
+					// 	esc_sql( $column ),
+					// 	esc_sql( $id ),
+					// 	esc_sql( $method_col ),
+					// 	esc_sql( $method_val ),
+					// ) );
 				}
 
 				// Formatting the output
@@ -250,11 +272,14 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				// After process hook
 				do_action_ref_array( 'wp_ulike_after_process',
 					array(
-						'id'      => $id,
-						'key'     => $key,
-						'user_id' => $this->user_id,
-						'status'  => $this->status,
-						'has_log' => ! $user_status ? 0 : 1
+						'id'          => $id,
+						'key'         => $key,
+						'user_id'     => $this->user_id,
+						'status'      => $this->status,
+						'has_log'     => ! $this->prev_status ? 0 : 1,
+						'slug'        => $slug,
+						'table'       => $table,
+						'is_distinct' => $this->is_distinct
 					)
 				);
 
@@ -272,8 +297,46 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		private function get_ajax_counter_value( $id, $slug ){
 			$counter_val   = $this->get_counter_value( $id, $slug, $this->status, $this->is_distinct );
+			// Update counter value
+			$counter_val   = $this->update_counter_value( $id, $counter_val, $slug );
+			// Format value
 			$formatted_val = wp_ulike_format_number( $counter_val, $this->status );
 			return apply_filters( 'wp_ulike_ajax_counter_value', $formatted_val, $id, $slug, $this->status, $this->is_distinct );
+		}
+
+		/**
+		 * Update counter value in meta table
+		 *
+		 * @param integer $id
+		 * @param string $value
+		 * @param string $slug
+		 * @return integer
+		 */
+		private function update_counter_value( $id, $value, $slug ){
+			$status  = $this->status;
+			$status  = ltrim( $status, 'un');
+			$old_val = $value;
+
+			// Update meta value
+			$primary_val = wp_ulike_meta_counter_value( $id, $slug, $status, $this->is_distinct );
+			if( ! empty( $primary_val ) || is_numeric( $primary_val ) ){
+				$value  = strpos( $this->status, 'un') === false ? $value + 1 : $value - 1;
+			}
+			wp_ulike_update_meta_counter_value( $id, max( $value, 0 ), $slug, $status, $this->is_distinct );
+
+			// Decrease reverse meta value
+			if( $this->is_distinct ){
+				$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
+				$reverse_val = wp_ulike_meta_counter_value( $id, $slug, $reverse_key, $this->is_distinct );
+				if( ! empty( $reverse_val ) || is_numeric( $reverse_val ) ){
+					if( strpos( $this->status, 'un') === false && strpos( $this->prev_status, 'un') === false  ){
+						$reverse_val = $reverse_val - 1;
+					}
+					wp_ulike_update_meta_counter_value( $id, max( $reverse_val, 0 ), $slug, $reverse_key, $this->is_distinct );
+				}
+			}
+
+			return $value;
 		}
 
 		/**
@@ -442,38 +505,29 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function get_user_status( $table, $item_type_col, $item_conditional_col, $item_type_val, $item_conditional_val ){
 
-			$cache_key  = sanitize_key( sprintf( 'user-status-on-%s-table', $table ) );
-			$user_query = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+			$cache_key  = sanitize_key( sprintf( 'user-status-of-item-%s-in-%s-table', $table, $item_type_val ) );
+			$user_status = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 			// Make a general query to get info from target table.
-			if( false === $user_query ){
+			if( false === $user_status ){
 				// Create query string
 				$query  = sprintf( '
-						SELECT `%1$s` AS col_id,
-						GROUP_CONCAT(DISTINCT(`status`)) AS col_status
-						FROM %2$s
-						WHERE `%3$s` = \'%4$s\'
-						GROUP BY `%1$s`
+						SELECT `status`
+						FROM %s
+						WHERE `%s` = \'%s\'
+						AND `%s` = \'%s\'
+						ORDER BY id DESC LIMIT 1
 					',
-					esc_sql( $item_type_col ),
 					esc_sql( $this->wpdb->prefix . $table ),
 					esc_sql( $item_conditional_col ),
-					esc_sql( $item_conditional_val )
+					esc_sql( $item_conditional_val ),
+					esc_sql( $item_type_col ),
+					esc_sql( $item_type_val ),
 				);
 
 				// Get results
-				$user_query = $this->wpdb->get_results( stripslashes( $query ) );
-				wp_cache_set( $cache_key, $user_query, WP_ULIKE_SLUG, 300 );
-			}
-
-			// Find current ID value from cached query.
-			$user_status = false;
-			foreach ( $user_query as $key => $row ) {
-				if( $row->col_id == $item_type_val ){
-					$col_status  = explode( ',', $row->col_status );
-					$user_status = is_array( $col_status ) ? $col_status[0] : $col_status;
-					break;
-				}
+				$user_status = $this->wpdb->get_var( stripslashes( $query ) );
+				wp_cache_set( $cache_key, $user_status, WP_ULIKE_SLUG, 300 );
 			}
 
 			return $user_status;

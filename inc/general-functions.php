@@ -204,9 +204,331 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
+	/**
+	 * Adds metadata for the specified object.
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @param int    $object_id  ID of the object metadata is for.
+	 * @param string $meta_group   Metadata group.
+	 * @param string $meta_key   Metadata key.
+	 * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
+	 * @param bool   $unique     Optional. Whether the specified metadata key should be unique for the object.
+	 *                           If true, and the object already has a value for the specified metadata key,
+	 *                           no change will be made. Default false.
+	 * @return int|false The meta ID on success, false on failure.
+	 */
+	function wp_ulike_add_meta_data( $object_id, $meta_group, $meta_key, $meta_value, $unique = false ) {
+		global $wpdb;
+
+		if ( ! $meta_group || ! $meta_key || ! is_numeric( $object_id ) ) {
+			return false;
+		}
+
+		$object_id = absint( $object_id );
+		if ( ! $object_id ) {
+			return false;
+		}
+
+		$meta_type = 'wp_ulike';
+		$table     = $wpdb->prefix . 'ulike_meta';
+		$column    = sanitize_key( 'item_id' );
+		$id_column = 'meta_id';
+
+		// expected_slashed ($meta_key)
+		$meta_group = wp_unslash( $meta_group );
+		$meta_key   = wp_unslash( $meta_key );
+		$meta_value = wp_unslash( $meta_value );
+
+		if ( $unique && $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %d",
+				$meta_group,
+				$meta_key,
+				$object_id
+			)
+		) ) {
+			return false;
+		}
+
+		$_meta_value = $meta_value;
+		$meta_value  = maybe_serialize( $meta_value );
+
+		$result = $wpdb->insert(
+			$table,
+			array(
+				$column      => $object_id,
+				'meta_group' => $meta_group,
+				'meta_key'   => $meta_key,
+				'meta_value' => $meta_value,
+			)
+		);
+
+		if ( ! $result ) {
+			return false;
+		}
+
+		$mid = (int) $wpdb->insert_id;
+
+		wp_cache_delete( $object_id, $meta_type . '_meta' );
+
+		return $mid;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
+	/**
+	 * Updates metadata for the specified object. If no value already exists for the specified object
+	 * ID and metadata key, the metadata will be added.
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @param int    $object_id  ID of the object metadata is for.
+	 * @param string $meta_key   Metadata key.
+	 * @param string $meta_group   Metadata group.
+	 * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
+	 * @param mixed  $prev_value Optional. If specified, only update existing metadata entries
+	 *                           with this value. Otherwise, update all entries.
+	 * @return int|bool The new meta field ID if a field with the given key didn't exist and was
+	 *                  therefore added, true on successful update, false on failure.
+	 */
+	function wp_ulike_update_meta_data( $object_id, $meta_group, $meta_key, $meta_value, $prev_value = '' ) {
+		global $wpdb;
+
+		if ( ! $meta_group || ! $meta_key || ! is_numeric( $object_id ) ) {
+			return false;
+		}
+
+		$object_id = absint( $object_id );
+		if ( ! $object_id ) {
+			return false;
+		}
+
+		$meta_type = 'wp_ulike';
+		$table     = $wpdb->prefix . 'ulike_meta';
+		$column    = sanitize_key( 'item_id' );
+		$id_column = 'meta_id';
+
+		// expected_slashed ($meta_key)
+		$raw_meta_group = $meta_group;
+		$meta_group     = wp_unslash( $meta_group );
+		$raw_meta_key   = $meta_key;
+		$meta_key       = wp_unslash( $meta_key );
+		$passed_value   = $meta_value;
+		$meta_value     = wp_unslash( $meta_value );
+
+		// Compare existing value to new value if no prev value given and the key exists only once.
+		if ( empty( $prev_value ) ) {
+			$old_value = wp_ulike_get_meta_data( $object_id, $meta_group, $meta_key );
+			if ( count( $old_value ) == 1 ) {
+				if ( $old_value[0] === $meta_value ) {
+					return false;
+				}
+			}
+		}
+
+		$meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %d", $meta_group, $meta_key, $object_id ) );
+		if ( empty( $meta_ids ) ) {
+			return wp_ulike_add_meta_data( $object_id, $raw_meta_group, $raw_meta_key, $passed_value );
+		}
+
+		$_meta_value = $meta_value;
+		$meta_value  = maybe_serialize( $meta_value );
+
+		$data  = compact( 'meta_value' );
+		$where = array(
+			$column      => $object_id,
+			'meta_group' => $meta_group,
+			'meta_key'   => $meta_key,
+		);
+
+		if ( ! empty( $prev_value ) ) {
+			$prev_value          = maybe_serialize( $prev_value );
+			$where['meta_value'] = $prev_value;
+		}
+
+		$result = $wpdb->update( $table, $data, $where );
+		if ( ! $result ) {
+			return false;
+		}
+
+		wp_cache_delete( $object_id, $meta_type . '_meta' );
+
+		return true;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
+	/**
+	 * Updates the metadata cache for the specified objects.
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @param string|int[] $object_ids Array or comma delimited list of object IDs to update cache for.
+	 * @return array|false Metadata cache for the specified objects, or false on failure.
+	 */
+	function wp_ulike_update_meta_cache( $object_ids ) {
+		global $wpdb;
+
+		if ( ! $object_ids ) {
+			return false;
+		}
+
+		$meta_type = 'wp_ulike';
+		$table     = $wpdb->prefix . 'ulike_meta';
+		$column    = sanitize_key( 'item_id' );
+
+		if ( ! is_array( $object_ids ) ) {
+			$object_ids = preg_replace( '|[^0-9,]|', '', $object_ids );
+			$object_ids = explode( ',', $object_ids );
+		}
+
+		$object_ids = array_map( 'intval', $object_ids );
+
+		$cache_key = $meta_type . '_meta';
+		$ids       = array();
+		$cache     = array();
+		foreach ( $object_ids as $id ) {
+			$cached_object = wp_cache_get( $id, $cache_key );
+			if ( false === $cached_object ) {
+				$ids[] = $id;
+			} else {
+				$cache[ $id ] = $cached_object;
+			}
+		}
+
+		if ( empty( $ids ) ) {
+			return $cache;
+		}
+
+		// Get meta info.
+		$id_list   = join( ',', $ids );
+		$id_column = 'meta_id';
+		$meta_list = $wpdb->get_results( "SELECT $column, meta_group, meta_key, meta_value FROM $table WHERE $column IN ($id_list) ORDER BY $id_column ASC", ARRAY_A );
+
+		if ( ! empty( $meta_list ) ) {
+			foreach ( $meta_list as $metarow ) {
+				$mpid = intval( $metarow[ $column ] );
+				$mkey = $metarow['meta_group'] . '_' . $metarow['meta_key'];
+				$mval = $metarow['meta_value'];
+
+				// Force subkeys to be array type.
+				if ( ! isset( $cache[ $mpid ] ) || ! is_array( $cache[ $mpid ] ) ) {
+					$cache[ $mpid ] = array();
+				}
+				if ( ! isset( $cache[ $mpid ][ $mkey ] ) || ! is_array( $cache[ $mpid ][ $mkey ] ) ) {
+					$cache[ $mpid ][ $mkey ] = array();
+				}
+
+				// Add a value to the current pid/key.
+				$cache[ $mpid ][ $mkey ][] = $mval;
+			}
+		}
+
+		foreach ( $ids as $id ) {
+			if ( ! isset( $cache[ $id ] ) ) {
+				$cache[ $id ] = array();
+			}
+			wp_cache_add( $id, $cache[ $id ], $cache_key );
+		}
+
+		return $cache;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_meta_data' ) ){
+	/**
+	 * Retrieves metadata for the specified object.
+	 *
+	 *
+	 * @param int    $object_id ID of the object metadata is for.
+	 * @param string $meta_group  Metadata group
+	 * @param string $meta_key  Optional. Metadata key. If not specified, retrieve all metadata for
+	 *                          the specified object. Default empty.
+	 * @param bool   $single    Optional. If true, return only the first value of the specified meta_key.
+	 *                          This parameter has no effect if meta_key is not specified. Default false.
+	 * @return mixed Single metadata value, or array of values
+	 */
+	function wp_ulike_get_meta_data( $object_id, $meta_group, $meta_key = '', $single = false ) {
+		if ( ! is_numeric( $object_id ) ) {
+			return false;
+		}
+
+		$object_id = absint( $object_id );
+		if ( ! $object_id ) {
+			return false;
+		}
+
+		$meta_cache = wp_cache_get( $object_id, 'wp_ulike_meta' );
+
+		if ( ! $meta_cache ) {
+			$meta_cache = wp_ulike_update_meta_cache( array( $object_id ) );
+			if ( isset( $meta_cache[ $object_id ] ) ) {
+				$meta_cache = $meta_cache[ $object_id ];
+			} else {
+				$meta_cache = null;
+			}
+		}
+
+		if ( ! $meta_key || ! $meta_group ) {
+			return $meta_cache;
+		}
+
+		if ( isset( $meta_cache[ $meta_group . '_' . $meta_key  ] ) ) {
+			if ( $single ) {
+				return maybe_unserialize( $meta_cache[ $meta_group . '_' . $meta_key ][0] );
+			} else {
+				return array_map( 'maybe_unserialize', $meta_cache[ $meta_group . '_' . $meta_key ] );
+			}
+		}
+
+		if ( $single ) {
+			return '';
+		} else {
+			return array();
+		}
+	}
+}
+
+if( ! function_exists( 'wp_ulike_update_meta_counter_value' ) ){
+	/**
+	 * Update meta counter value
+	 *
+	 * @param integer $ID
+	 * @param string $value
+	 * @param string $type
+	 * @param string $status
+	 * @param boolean $is_distinct
+	 * @return int|bool
+	 */
+	function wp_ulike_update_meta_counter_value( $ID, $value, $type, $status, $is_distinct = true ){
+		$distinct_name = !$is_distinct ? 'total' : 'distinct';
+		return wp_ulike_update_meta_data( $ID, $type, sprintf( 'count_%s_%s', $distinct_name, $status ), $value );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_meta_counter_value' ) ){
+	/**
+	 * Get meta counter value
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @param atring $status
+	 * @param boolean $is_distinct
+	 * @return mixed Single metadata value, or array of values
+	 */
+	function wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct = true ){
+		$distinct_name = ! $is_distinct ? 'total' : 'distinct';
+		return wp_ulike_get_meta_data( $ID, $type, sprintf( 'count_%s_%s', $distinct_name, $status ), true );
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 	/**
-	 * Get counter value info
+	 * Get counter value data
 	 *
 	 * @param integer $ID
 	 * @param string $type
@@ -216,7 +538,6 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 	 * @return WP_Error[]|integer
 	 */
 	function wp_ulike_get_counter_value_info( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
-		global $wpdb;
 
 		$status = ltrim( $status, 'un');
 
@@ -224,41 +545,41 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			return new WP_Error( 'broke', __( "Please enter some value for required variables.", WP_ULIKE_SLUG ) );
 		}
 
-		$cache_key     = sanitize_key( sprintf( 'counter-query-for-%s-%s-status', $type, $status ) );
-		$counter_query = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+		$counter_value = wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct );
 
-		// Make a general query to get info from target table.
-		if( false === $counter_query ){
-			// Peroid limit SQL
-			$period_limit = wp_ulike_get_period_limit_sql( $date_range );
+		if( ( empty( $counter_value ) && ! is_numeric( $counter_value ) ) || ! empty( $date_range ) ){
+			global $wpdb;
 
-			// get table info
-			$table_info   = wp_ulike_get_table_info( $type );
-			if( empty( $table_info ) ){
-				return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
+			$cache_key     = sanitize_key( sprintf( 'counter-query-for-%s-%s-%s-status', $type, $ID, $status ) );
+			$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+			// Make a general query to get info from target table.
+			if( false === $counter_value ){
+				// Peroid limit SQL
+				$period_limit = wp_ulike_get_period_limit_sql( $date_range );
+
+				// get table info
+				$table_info   = wp_ulike_get_table_info( $type );
+				if( empty( $table_info ) ){
+					return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
+				}
+				extract( $table_info );
+
+				$query = sprintf(
+					'SELECT COUNT(%1$s) FROM %2$s WHERE %3$s AND %4$s %5$s',
+					esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
+					esc_sql( $wpdb->prefix . $table ),
+					esc_sql( $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'" ),
+					esc_sql( "`$column` = '$ID'" ),
+					esc_sql( $period_limit )
+				);
+
+				$counter_value = $wpdb->get_var( stripslashes( $query ) );
+				wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 			}
 
-			$query = sprintf(
-				'SELECT `%1$s` AS col_id, COUNT(%2$s) AS col_val FROM %3$s WHERE %4$s %5$s GROUP BY `%1$s`',
-				esc_sql( $table_info['column'] ),
-				esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
-				esc_sql( $wpdb->prefix . $table_info['table'] ),
-				esc_sql( $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'" ),
-				esc_sql( $period_limit )
-			);
-
-			$counter_query = $wpdb->get_results( stripslashes( $query ) );
-
-			wp_cache_set( $cache_key, $counter_query, WP_ULIKE_SLUG, 300 );
-		}
-
-		// Find current ID counter value from cached query.
-		$counter_value = 0;
-		foreach ( $counter_query as $key => $row ) {
-			if( $row->col_id == $ID ){
-				$counter_value = $row->col_val ? $row->col_val : 0;
-				break;
-			}
+			// Add counter to meta value
+			wp_ulike_update_meta_counter_value( $ID, $counter_value, $type, $status, $is_distinct );
 		}
 
 		// By checking this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.
@@ -287,7 +608,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value' ) ){
 	 */
 	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
 		$counter_info = wp_ulike_get_counter_value_info( $ID, $type, $status, $is_distinct, $date_range );
-		return ! is_wp_error( $counter_info ) ? $counter_info : 0;
+		return ! is_wp_error( $counter_info ) ? (int) $counter_info : 0;
 	}
 }
 
@@ -373,6 +694,38 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_type_by_table' ) ){
+	/**
+	 * Get type by table name
+	 *
+	 * @param string $table
+	 * @return void
+	 */
+	function wp_ulike_get_type_by_table( $table ){
+		$output = NULL;
+
+		switch ( $table ) {
+			case 'ulike_comments':
+				$output = 'comment';
+				break;
+
+			case 'ulike_activities':
+				$output = 'activity';
+				break;
+
+			case 'ulike_forums':
+				$output = 'topic';
+				break;
+
+			case 'ulike':
+				$output = 'post';
+				break;
+		}
+
+		return $output;
+	}
+}
+
 /*******************************************************
   Posts
 *******************************************************/
@@ -436,28 +789,33 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 	 * @param string $method
 	 * @param string $period
 	 * @param string $status
+	 * @param boolean $is_noraml
 	 * @return WP_Post[]|int[] Array of post objects or post IDs.
 	 */
-	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all', $status = 'like' ){
+	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all', $status = 'like', $is_noraml = false ){
 		$post__in = wp_ulike_get_popular_items_ids(array(
 			'type'   => $method,
 			'status' => $status,
 			'period' => $period
 		));
-		if( empty( $post__in ) ){
-			return false;
-		}
 
-		return get_posts( apply_filters( 'wp_ulike_get_top_posts_query', array(
-			'post__in'    => $post__in,
+		$args = array(
 			'numberposts' => $numberposts,
-			'orderby'     => 'post__in',
 			'post_type'   => $post_type === '' ? get_post_types_by_support( array(
 				'title',
 				'editor',
 				'thumbnail'
 			) ) : $post_type
-		) ) );
+		);
+
+		if( ! empty( $post__in ) ){
+			$args['post__in'] = $post__in;
+			$args['orderby'] = 'post__in';
+		} elseif( empty( $post__in ) && ! $is_noraml ) {
+			return false;
+		}
+
+		return get_posts( apply_filters( 'wp_ulike_get_top_posts_query', $args ) );
 	}
 }
 
@@ -1025,35 +1383,26 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 		// Global wordpress database object
 		global $wpdb;
 
-		$cache_key    = sanitize_key( sprintf( 'likers-query-for-%s-table', $table_name ) );
-		$likers_query = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+		$item_type  = wp_ulike_get_type_by_table( $table_name );
+		$get_likers = wp_ulike_get_meta_data( $item_ID, $item_type, 'likers_list', true );
 
-		// Make a general query to get info from target table.
-		if( false === $likers_query ){
-			// Create query string
-			$query = sprintf(
-				'SELECT `%1$s` AS col_id,
-				 GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ",") AS col_val
-				 FROM %2$s WHERE `status` in ( "like", "dislike" ) AND `user_id` BETWEEN 1 AND 999999 GROUP BY `%1$s`',
-				esc_sql( $column_name ),
-				esc_sql( $wpdb->prefix . $table_name )
-			);
-
+		if( empty( $get_likers ) ){
 			// Get results
-			$likers_query = $wpdb->get_results( stripslashes( $query ) );
-			wp_cache_set( $cache_key, $likers_query, WP_ULIKE_SLUG, 300 );
-		}
-
-		// Find current ID value from cached query.
-		$likers_list = array();
-		foreach ( $likers_query as $key => $row ) {
-			if( $row->col_id == $item_ID ){
-				$likers_list = explode( ',', $row->col_val );
-				break;
+			$get_likers = $wpdb->get_var( "
+				SELECT GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ',')
+				FROM {$wpdb->prefix}{$table_name}
+				INNER JOIN {$wpdb->users}
+				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table_name}.user_id )
+				WHERE {$wpdb->prefix}{$table_name}.status IN ('like', 'dislike')
+				AND {$column_name} = {$item_ID}"
+			);
+			if( ! empty( $get_likers) ){
+				$get_likers = explode( ',', $get_likers );
+				wp_ulike_update_meta_data( $item_ID, $item_type, 'likers_list', $get_likers );
 			}
 		}
 
-		return ! empty( $likers_list ) ? array_slice( $likers_list, 0, $limit ) : array();
+		return ! empty( $get_likers ) ? array_slice( $get_likers, 0, $limit ) : array();
 	}
 }
 
@@ -1187,15 +1536,14 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 
 			// Get likers html template
  			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
- 			$get_users_info = wp_ulike_get_users( $table_name );
  			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
-			 foreach ( $get_users as $user ) {
-				if( ! isset( $get_users_info[$user] ) ){
+			foreach ( $get_users as $user ) {
+				$user_info	= get_user_by( 'id', $user );
+				// Check user existence
+				if( ! $user_info ){
 					continue;
 				}
-
-				$user_info 		= $get_users_info[$user];
 				$out_template 	= $inner_template;
 				if ( $user_info ):
 					if( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
@@ -1227,36 +1575,6 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		}
 
 		return NULL;
-	}
-}
-
-if( ! function_exists( 'wp_ulike_get_users' ) ){
-	/**
-	 * Retrieve list of users matching wp ulike tables.
-	 *
-	 * @return array
-	 */
-	function wp_ulike_get_users( $table ){
-		global $wpdb;
-
-		$cache_key = sanitize_key( sprintf( 'get-users-for-%s', $table ) );
-		$get_users = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
-
-		// Make a general query to get info from target table.
-		if( false === $get_users ){
-
-			$get_users = $wpdb->get_results( "SELECT DISTINCT {$wpdb->users}.*
-				FROM {$wpdb->users}
-				INNER JOIN {$wpdb->prefix}{$table}
-				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table}.user_id )
-				WHERE {$wpdb->prefix}{$table}.status IN ('like', 'dislike')
-				ORDER BY user_login ASC", OBJECT_K
-			);
-
-			wp_cache_set( $cache_key, $get_users, WP_ULIKE_SLUG, 300 );
-		}
-
-		return $get_users;
 	}
 }
 
@@ -1459,28 +1777,17 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 	 * @return string
 	 */
 	function wp_ulike_get_user_ip(){
-		$ip = '';
-
-		if ( getenv( 'HTTP_CLIENT_IP' ) ) {
-			$ip = getenv( 'HTTP_CLIENT_IP' );
-		} elseif ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
-			$ip = getenv( 'HTTP_X_FORWARDED_FOR' );
-		} elseif ( getenv( 'HTTP_X_FORWARDED' ) ) {
-			$ip = getenv( 'HTTP_X_FORWARDED' );
-		} elseif ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
-			$ip = getenv( 'HTTP_FORWARDED_FOR' );
-		} elseif ( getenv( 'HTTP_FORWARDED' ) ) {
-			$ip = getenv( 'HTTP_FORWARDED' );
-		} else {
-			$ip = $_SERVER['REMOTE_ADDR'];
+		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
+			if ( array_key_exists( $key, $_SERVER ) === true ){
+				foreach ( explode( ',', $_SERVER[$key] ) as $ip ){
+					if ( filter_var( $ip, FILTER_VALIDATE_IP ) !== false ){
+						return $ip;
+					} else {
+						return '127.0.0.1';
+					}
+				}
+			}
 		}
-
-		if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-			// Return local ip address
-			return '127.0.0.1';
-		}
-
-		return $ip;
 	}
 }
 
@@ -1665,7 +1972,16 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 			$period = implode( '-', $period );
 		}
 
-		$cache_key     = sanitize_key( sprintf( 'calculate-%s-logs', $period ) );
+		$cache_key      = sanitize_key( sprintf( 'count_logs_period_%s', $period ) );
+		$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
+
+		if( $period === 'all' ){
+			$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
+			if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
+				return $count_all_logs;
+			}
+		}
+
 		$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 		// Make a cachable query to get new like count from all tables
@@ -1684,6 +2000,10 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 
 			$counter_value = $wpdb->get_var( $query );
 			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+		}
+
+		if( $period === 'all' ){
+			wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
 		}
 
 		return empty( $counter_value ) ? 0 : $counter_value;
@@ -1787,6 +2107,115 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 		}
 
 		return $period_limit;
+	}
+}
+
+if( ! function_exists('wp_ulike_get_user_data') ){
+	/**
+	 * Get user logs
+	 *
+	 * @param integer $user_ID
+	 * @param array $args
+	 * @return object|null
+	 */
+	function wp_ulike_get_user_data( $user_ID, $args = array() ){
+		global $wpdb;
+
+		$defaults = array(
+			'type'     => 'post',
+			'period'   => 'all',
+			'order'    => 'DESC',
+			'status'   => 'like',
+			'page'     => 1,
+			'per_page' => 10
+		);
+		$parsed_args  = wp_parse_args( $args, $defaults );
+		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
+		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
+
+		$status_type  = '';
+		if( is_array( $parsed_args['status'] ) ){
+			$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+		} else {
+			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+		}
+
+		// generate query string
+		$query  = sprintf( "
+			SELECT `%s` AS itemID, max(`date_time`) AS datetime, max(`status`) AS lastStatus
+			FROM %s
+			WHERE `user_id` = '%s'
+			AND %s %s
+			GROUP BY itemID
+			ORDER BY datetime
+			%s LIMIT %s, %s",
+			$parsed_args['column'],
+			$wpdb->prefix . $parsed_args['table'],
+			$user_ID,
+			$status_type,
+			$period_limit,
+			$parsed_args['order'],
+			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
+			$parsed_args['per_page'],
+		);
+
+		return $wpdb->get_results( $query );
+	}
+
+}
+
+if( ! function_exists( 'wp_ulike_get_users' ) ){
+	/**
+	 * Retrieve list of users
+	 *
+	 * @param array $args
+	 * @return object|null
+	 */
+	function wp_ulike_get_users( $args = array() ){
+		global $wpdb;
+
+		$defaults = array(
+			'type'     => 'post',
+			'period'   => 'all',
+			'order'    => 'DESC',
+			'status'   => 'like',
+			'page'     => 1,
+			'per_page' => 10
+		);
+		$parsed_args  = wp_parse_args( $args, $defaults );
+		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
+		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
+
+		$status_type  = '';
+		if( is_array( $parsed_args['status'] ) ){
+			$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+		} else {
+			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+		}
+
+		// generate query string
+		$query  = sprintf( '
+			SELECT %1$s.user_id AS userID, count(%1$s.user_id) AS score,
+			max(%1$s.date_time) AS datetime, max(%1$s.status) AS lastStatus,
+			GROUP_CONCAT(DISTINCT(%1$s.%3$s) SEPARATOR ",") AS itemsList
+			FROM %1$s
+			INNER JOIN %2$s
+			ON ( %2$s.ID = %1$s.user_id )
+			WHERE %4$s %5$s
+			GROUP BY user_id
+			ORDER BY score
+			%6$s LIMIT %7$s, %8$s',
+			$wpdb->prefix . $parsed_args['table'],
+			$wpdb->users,
+			$parsed_args['column'],
+			$status_type,
+			$period_limit,
+			$parsed_args['order'],
+			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
+			$parsed_args['per_page'],
+		);
+
+		return $wpdb->get_results( $query );
 	}
 }
 

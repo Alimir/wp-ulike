@@ -275,6 +275,17 @@
             border-bottom: 1px solid #dde3e7;
             padding: 8px 0;
 
+            .wp_ulike_item_counter{
+                .wp_ulike_up_vote_count{
+                    margin: 0 5px;
+                    color: green;
+                }
+                .wp_ulike_down_vote_count{
+                    margin: 0 5px;
+                    color: red;
+                }
+            }
+
             a{
                 text-decoration: none;
                 color: #3d3d3d;

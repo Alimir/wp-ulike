@@ -27,6 +27,11 @@
 .wpulike .wp_ulike_btn:hover, .wpulike .wp_ulike_btn:active, .wpulike .wp_ulike_btn:focus {
   outline: 0;
 }
+.wpulike .wp_ulike_btn[disabled=disabled]:hover, .wpulike .wp_ulike_btn[disabled=disabled]:active, .wpulike .wp_ulike_btn[disabled=disabled]:focus, .wpulike .wp_ulike_btn:disabled:hover, .wpulike .wp_ulike_btn:disabled:active, .wpulike .wp_ulike_btn:disabled:focus {
+  outline: 0;
+  padding: 0;
+  background-color: initial;
+}
 .wpulike .wp_ulike_put_text {
   font-size: 14px;
   font-weight: 600;
@@ -67,9 +72,12 @@
  */
 .wpulike-default .wp_ulike_btn {
   color: #616161;
-  background: #e0e0e0;
+  background-color: #e0e0e0;
   min-height: 30px;
   min-width: 50px;
+}
+.wpulike-default .wp_ulike_btn[disabled=disabled]:hover, .wpulike-default .wp_ulike_btn[disabled=disabled]:active, .wpulike-default .wp_ulike_btn[disabled=disabled]:focus, .wpulike-default .wp_ulike_btn:disabled:hover, .wpulike-default .wp_ulike_btn:disabled:active, .wpulike-default .wp_ulike_btn:disabled:focus {
+  background-color: #e0e0e0;
 }
 .wpulike-default .wp_ulike_is_liked .wp_ulike_btn {
   color: #757575;
@@ -170,6 +178,9 @@
 }
 .wpulike-heart .wp_ulike_put_image {
   background: none;
+  padding: 15px;
+}
+.wpulike-heart .wp_ulike_put_image[disabled=disabled]:hover, .wpulike-heart .wp_ulike_put_image[disabled=disabled]:active, .wpulike-heart .wp_ulike_put_image[disabled=disabled]:focus, .wpulike-heart .wp_ulike_put_image:disabled:hover, .wpulike-heart .wp_ulike_put_image:disabled:active, .wpulike-heart .wp_ulike_put_image:disabled:focus {
   padding: 15px;
 }
 .wpulike-heart .wp_ulike_put_image:after {
@@ -452,6 +463,9 @@
   border: 0;
   width: 50px;
   height: 50px;
+}
+.wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:hover, .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:active, .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:focus, .wpulike-animated-heart .wp_ulike_btn:disabled:hover, .wpulike-animated-heart .wp_ulike_btn:disabled:active, .wpulike-animated-heart .wp_ulike_btn:disabled:focus {
+  background-color: #ffffff;
 }
 .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active {
   background-color: #ff6f63;
