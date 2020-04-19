@@ -7,7 +7,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           4.1.9
+ * Version:           4.2.0
  * Author:            Ali Mirzaei
  * Author URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
@@ -43,8 +43,8 @@ if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 );
-define( 'WP_ULIKE_VERSION'      , '4.1.9' 					 	 );
-define( 'WP_ULIKE_DB_VERSION'   , '1.7' 					 	 );
+define( 'WP_ULIKE_VERSION'      , '4.2.0' 					 	 );
+define( 'WP_ULIKE_DB_VERSION'   , '2.0' 					 	 );
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 );
 define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG ));
 
@@ -124,7 +124,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	    */
 	    public function init(){
 			// Check database upgrade if needed
-			if ( version_compare( get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION ), WP_ULIKE_DB_VERSION, '<' ) ) {
+			if ( version_compare( get_option( 'wp_ulike_dbVersion', '1.6' ), WP_ULIKE_DB_VERSION, '<' ) ) {
 				$this->single_activate();
 			}
 
@@ -467,7 +467,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 			) $charset_collate AUTO_INCREMENT=1;" );
 
 			// Upgrade Tables
-			if ( version_compare( get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION ), WP_ULIKE_DB_VERSION, '<' ) ) {
+			if ( version_compare( get_option( 'wp_ulike_dbVersion', '1.6' ), WP_ULIKE_DB_VERSION, '<' ) ) {
 				// Posts ugrades
 				$wpdb->query( "
 					ALTER TABLE $posts_table
