@@ -29,7 +29,6 @@
 }
 .wpulike .wp_ulike_btn[disabled=disabled]:hover, .wpulike .wp_ulike_btn[disabled=disabled]:active, .wpulike .wp_ulike_btn[disabled=disabled]:focus, .wpulike .wp_ulike_btn:disabled:hover, .wpulike .wp_ulike_btn:disabled:active, .wpulike .wp_ulike_btn:disabled:focus {
   outline: 0;
-  padding: 0;
   background-color: initial;
 }
 .wpulike .wp_ulike_put_text {
