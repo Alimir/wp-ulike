@@ -111,6 +111,8 @@ https://wordpress.org/plugins/wp-ulike/
 .wp-ulike-tops-list { padding: 0 20px; }
 .wp-ulike-tops-list > ul { font-size: 16px; font-weight: 300; line-height: 26px; color: #3d3d3d; margin: 0; }
 .wp-ulike-tops-list > ul > li { display: flex; justify-content: space-between; border-bottom: 1px solid #dde3e7; padding: 8px 0; }
+.wp-ulike-tops-list > ul > li .wp_ulike_item_counter .wp_ulike_up_vote_count { margin: 0 5px; color: green; }
+.wp-ulike-tops-list > ul > li .wp_ulike_item_counter .wp_ulike_down_vote_count { margin: 0 5px; color: red; }
 .wp-ulike-tops-list > ul > li a { text-decoration: none; color: #3d3d3d; }
 
 /** About Page */
