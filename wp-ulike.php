@@ -397,7 +397,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				`ip` varchar(100) NOT NULL,
 				`user_id` varchar(100) NOT NULL,
 				`status` varchar(30) NOT NULL,
-				PRIMARY KEY (`id`)
+				PRIMARY KEY (`id`),
 				KEY `post_id` (`post_id`),
 				KEY `date_time` (`date_time`),
 				KEY `user_id` (`user_id`),
