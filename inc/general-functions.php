@@ -1778,16 +1778,31 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 	 */
 	function wp_ulike_get_user_ip(){
 		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
-			if ( array_key_exists( $key, $_SERVER ) === true ){
-				foreach ( explode( ',', $_SERVER[$key] ) as $ip ){
-					if ( filter_var( $ip, FILTER_VALIDATE_IP ) !== false ){
+			if ( array_key_exists( $key, $_SERVER ) === true ) {
+				foreach ( explode(',', $_SERVER[$key]) as $ip ) {
+					// trim for safety measures
+					$ip = trim( $ip );
+					// attempt to validate IP
+					if ( wp_ulike_validate_ip( $ip ) ) {
 						return $ip;
-					} else {
-						return '127.0.0.1';
 					}
 				}
 			}
 		}
+
+		return '127.0.0.1';
+	}
+}
+
+if( ! function_exists( 'wp_ulike_validate_ip' ) ){
+	/**
+	 * Ensures an ip address is both a valid IP and does not fall within a private network range.
+	 *
+	 * @param string $ip
+	 * @return boolean
+	 */
+	function wp_ulike_validate_ip( $ip ) {
+		return filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) === false ? false : true;
 	}
 }
 
@@ -1801,8 +1816,7 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_generate_user_id( $user_ip ) {
-
-		if( filter_var( $user_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+		if( wp_ulike_validate_ip(  $user_ip  ) ) {
 		    return ip2long( $user_ip );
 		} else {
 			// Get non-anonymise IP address
@@ -2156,7 +2170,7 @@ if( ! function_exists('wp_ulike_get_user_data') ){
 			$period_limit,
 			$parsed_args['order'],
 			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
-			$parsed_args['per_page'],
+			$parsed_args['per_page']
 		);
 
 		return $wpdb->get_results( $query );
@@ -2212,7 +2226,7 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 			$period_limit,
 			$parsed_args['order'],
 			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
-			$parsed_args['per_page'],
+			$parsed_args['per_page']
 		);
 
 		return $wpdb->get_results( $query );
