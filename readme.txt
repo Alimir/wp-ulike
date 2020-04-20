@@ -6,7 +6,7 @@ Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin,
 Requires PHP: 5.4
 Requires at least: 3.5.0
 Tested up to: 5.4
-Stable tag: 4.2.0
+Stable tag: 4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -185,6 +185,10 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.2.1 =
+* Fixed: An issue in database tables.
+* Fixed: An issue with user IP method.
 
 = 4.2.0 =
 * Added: New algorithms to make essential queries more faster and flexible. (New Metadata Table)
