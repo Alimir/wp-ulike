@@ -504,33 +504,22 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			string
 		 */
 		public function get_user_status( $table, $item_type_col, $item_conditional_col, $item_type_val, $item_conditional_val ){
+			// Create query string
+			$query  = sprintf( '
+					SELECT `status`
+					FROM %s
+					WHERE `%s` = \'%s\'
+					AND `%s` = \'%s\'
+					ORDER BY id DESC LIMIT 1
+				',
+				esc_sql( $this->wpdb->prefix . $table ),
+				esc_sql( $item_conditional_col ),
+				esc_sql( $item_conditional_val ),
+				esc_sql( $item_type_col ),
+				esc_sql( $item_type_val )
+			);
 
-			$cache_key  = sanitize_key( sprintf( 'user-status-of-item-%s-in-%s-table', $table, $item_type_val ) );
-			$user_status = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
-
-			// Make a general query to get info from target table.
-			if( false === $user_status ){
-				// Create query string
-				$query  = sprintf( '
-						SELECT `status`
-						FROM %s
-						WHERE `%s` = \'%s\'
-						AND `%s` = \'%s\'
-						ORDER BY id DESC LIMIT 1
-					',
-					esc_sql( $this->wpdb->prefix . $table ),
-					esc_sql( $item_conditional_col ),
-					esc_sql( $item_conditional_val ),
-					esc_sql( $item_type_col ),
-					esc_sql( $item_type_val )
-				);
-
-				// Get results
-				$user_status = $this->wpdb->get_var( stripslashes( $query ) );
-				wp_cache_set( $cache_key, $user_status, WP_ULIKE_SLUG, 300 );
-			}
-
-			return $user_status;
+			return $this->wpdb->get_var( stripslashes( $query ) );
 		}
 
 		/**
