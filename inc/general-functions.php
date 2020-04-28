@@ -2353,7 +2353,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 							data-ulike-display-likers="<?php echo $display_likers; ?>"
 							data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
 							class="<?php echo $button_class; ?>"
-							<?php echo in_array( $status, array( 2, 4 ) )  ? 'checked="checked"' : ''; ?> />
+							<?php echo in_array( $status, array( 2, 4 ) )  ? 'checked="checked"' : ''; ?> autocomplete="off"/>
 					<?php do_action( 'wp_ulike_inside_like_button', $wp_ulike_template ); ?>
 					<svg class="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
 					    <g class="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
