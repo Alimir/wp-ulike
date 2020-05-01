@@ -231,7 +231,6 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 			return false;
 		}
 
-		$meta_type = 'wp_ulike';
 		$table     = $wpdb->prefix . 'ulike_meta';
 		$column    = sanitize_key( 'item_id' );
 		$id_column = 'meta_id';
@@ -271,7 +270,7 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 
 		$mid = (int) $wpdb->insert_id;
 
-		wp_cache_delete( $object_id, $meta_type . '_meta' );
+		wp_cache_delete( $object_id, 'wp_ulike_meta' );
 
 		return $mid;
 	}
@@ -305,7 +304,6 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 			return false;
 		}
 
-		$meta_type = 'wp_ulike';
 		$table     = $wpdb->prefix . 'ulike_meta';
 		$column    = sanitize_key( 'item_id' );
 		$id_column = 'meta_id';
@@ -353,7 +351,7 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 			return false;
 		}
 
-		wp_cache_delete( $object_id, $meta_type . '_meta' );
+		wp_cache_delete( $object_id, 'wp_ulike_meta' );
 
 		return true;
 	}
@@ -375,7 +373,6 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 			return false;
 		}
 
-		$meta_type = 'wp_ulike';
 		$table     = $wpdb->prefix . 'ulike_meta';
 		$column    = sanitize_key( 'item_id' );
 
@@ -386,7 +383,7 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 
 		$object_ids = array_map( 'intval', $object_ids );
 
-		$cache_key = $meta_type . '_meta';
+		$cache_key = 'wp_ulike_meta';
 		$ids       = array();
 		$cache     = array();
 		foreach ( $object_ids as $id ) {
