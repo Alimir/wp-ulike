@@ -131,8 +131,6 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	    	// Include Files
 	    	$this->includes();
 
-	        // @deprecate version 5.0
-	        global $wp_version;
 			// Load plugin text domain
 			$this->load_plugin_textdomain();
 
