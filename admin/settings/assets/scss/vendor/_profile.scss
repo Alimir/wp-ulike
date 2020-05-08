@@ -8,11 +8,12 @@
   }
 
   > .csf-field{
+    max-width: 800px;
     padding: 15px 0;
     border-top: none !important;
 
     > .csf-title{
-      width: 220px;
+      width: 200px;
 
       h4{
         font-size: 14px;
@@ -24,7 +25,7 @@
     }
 
     > .csf-fieldset{
-      margin-left: 220px;
+      width: calc(100% - 220px);
 
       > .csf-help{
         top: -15px;

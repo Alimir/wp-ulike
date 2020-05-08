@@ -46,14 +46,6 @@
     display: none;
   }
 
-  .csf-fieldset{
-    margin-left: 25%;
-  }
-
-  .csf-title{
-    width: 20%;
-  }
-
   .csf-field{
     padding: 15px 30px 15px 15px;
   }
@@ -251,35 +243,27 @@
   }
 
   .csf-icon-search{
-    width: 250px;
+    width: 50%;
     height: 40px;
     line-height: 40px;
   }
 
-  a{
-    display: inline-block;
-    padding: 4px;
+  i{
     cursor: pointer;
+    display: inline-block;
+    margin: 4px;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 16px;
+    color: #555;
+    text-align: center;
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    @include border-radius(2px);
+    @include box-shadow(1px 1px 0 rgba(black, 0.05));
 
-    .csf-icon{
-      position: relative;
-      padding: 4px;
-      display: inline-block;
-      font-size: 14px;
-      width: 30px;
-      height: 26px;
-      line-height: 26px;
-      text-align: center;
-      vertical-align: top;
-      color: #555;
-      border: 1px solid #ccc;
-      background-color: #f7f7f7;
-      @include border-radius(3px);
-      @include box-shadow(0 1px 0 rgba(black, 0.08));
-      @include box-sizing(content-box);
-    }
-
-    &:hover .csf-icon{
+    &:hover {
       color: #fff;
       border-color: #222;
       background-color: #222;

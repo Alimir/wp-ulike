@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_button_set' ) ) {
+if ( ! class_exists( 'CSF_Field_button_set' ) ) {
   class CSF_Field_button_set extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -17,37 +17,47 @@ if( ! class_exists( 'CSF_Field_button_set' ) ) {
     public function render() {
 
       $args = wp_parse_args( $this->field, array(
-        'multiple' => false,
-        'options'  => array(),
+        'multiple'   => false,
+        'options'    => array(),
+        'query_args' => array(),
       ) );
 
       $value = ( is_array( $this->value ) ) ? $this->value : array_filter( (array) $this->value );
 
       echo $this->field_before();
 
-      if( ! empty( $args['options'] ) ) {
+      if ( isset( $this->field['options'] ) ) {
 
-        echo '<div class="csf-siblings csf--button-group" data-multiple="'. $args['multiple'] .'">';
+        $options = $this->field['options'];
+        $options = ( is_array( $options ) ) ? $options : array_filter( $this->field_data( $options, false, $args['query_args'] ) );
 
-        foreach( $args['options'] as $key => $option ) {
+        if ( is_array( $options ) && ! empty( $options ) ) {
 
-          $type    = ( $args['multiple'] ) ? 'checkbox' : 'radio';
-          $extra   = ( $args['multiple'] ) ? '[]' : '';
-          $active  = ( in_array( $key, $value ) || ( empty( $value ) && empty( $key ) )  ) ? ' csf--active' : '';
-          $checked = ( in_array( $key, $value ) || ( empty( $value ) && empty( $key ) ) ) ? ' checked' : '';
+          echo '<div class="csf-siblings csf--button-group" data-multiple="'. esc_attr( $args['multiple'] ) .'">';
 
-          echo '<div class="csf--sibling csf--button'. $active .'">';
-          echo '<input type="'. $type .'" name="'. $this->field_name( $extra ) .'" value="'. $key .'"'. $this->field_attributes() . $checked .'/>';
-          echo $option;
+          foreach ( $options as $key => $option ) {
+
+            $type    = ( $args['multiple'] ) ? 'checkbox' : 'radio';
+            $extra   = ( $args['multiple'] ) ? '[]' : '';
+            $active  = ( in_array( $key, $value ) || ( empty( $value ) && empty( $key ) )  ) ? ' csf--active' : '';
+            $checked = ( in_array( $key, $value ) || ( empty( $value ) && empty( $key ) ) ) ? ' checked' : '';
+
+            echo '<div class="csf--sibling csf--button'. esc_attr( $active ) .'">';
+            echo '<input type="'. esc_attr( $type ) .'" name="'. esc_attr( $this->field_name( $extra ) ) .'" value="'. esc_attr( $key ) .'"'. $this->field_attributes() . esc_attr( $checked ) .'/>';
+            echo wp_kses_post( $option );
+            echo '</div>';
+
+          }
+
           echo '</div>';
+
+        } else {
+
+          echo ( ! empty( $this->field['empty_message'] ) ) ? esc_attr( $this->field['empty_message'] ) : esc_html__( 'No data provided for this option type.', 'csf' );
 
         }
 
-        echo '</div>';
-
       }
-
-      echo '<div class="clear"></div>';
 
       echo $this->field_after();
 

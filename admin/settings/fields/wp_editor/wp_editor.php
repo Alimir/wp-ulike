@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_wp_editor' ) ) {
+if ( ! class_exists( 'CSF_Field_wp_editor' ) ) {
   class CSF_Field_wp_editor extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -29,7 +29,7 @@ if( ! class_exists( 'CSF_Field_wp_editor' ) ) {
         'autocomplete' => 'off',
       );
 
-      $editor_height = ( ! empty( $args['height'] ) ) ? ' style="height:'. $args['height']. ';"' : '';
+      $editor_height = ( ! empty( $args['height'] ) ) ? ' style="height:'. esc_attr( $args['height'] ) .';"' : '';
 
       $editor_settings  = array(
         'tinymce'       => $args['tinymce'],
@@ -39,11 +39,9 @@ if( ! class_exists( 'CSF_Field_wp_editor' ) ) {
 
       echo $this->field_before();
 
-      echo ( csf_wp_editor_api() ) ? '<div class="csf-wp-editor" data-editor-settings="'. esc_attr( wp_json_encode( $editor_settings ) ) .'">' : '';
+      echo ( csf_wp_editor_api() ) ? '<div class="csf-wp-editor" data-editor-settings="'. esc_attr( json_encode( $editor_settings ) ) .'">' : '';
 
-      echo '<textarea name="'. $this->field_name() .'"'. $this->field_attributes( $attributes ) . $editor_height .'>'. $this->value .'</textarea>';
-
-      echo '<div class="clear"></div>';
+      echo '<textarea name="'. esc_attr( $this->field_name() ) .'"'. $this->field_attributes( $attributes ) . $editor_height .'>'. $this->value .'</textarea>';
 
       echo ( csf_wp_editor_api() ) ? '</div>' : '';
 
@@ -53,7 +51,7 @@ if( ! class_exists( 'CSF_Field_wp_editor' ) ) {
 
     public function enqueue() {
 
-      if( csf_wp_editor_api() && function_exists( 'wp_enqueue_editor' ) ) {
+      if ( csf_wp_editor_api() && function_exists( 'wp_enqueue_editor' ) ) {
 
         wp_enqueue_editor();
 
@@ -75,7 +73,7 @@ if( ! class_exists( 'CSF_Field_wp_editor' ) ) {
       $media_buttons = ob_get_clean();
 
       echo '<script type="text/javascript">';
-      echo 'var csf_media_buttons = '. wp_json_encode( $media_buttons ) .';';
+      echo 'var csf_media_buttons = '. json_encode( $media_buttons ) .';';
       echo '</script>';
 
     }
@@ -83,7 +81,7 @@ if( ! class_exists( 'CSF_Field_wp_editor' ) ) {
     // Setup wp editor settings
     public function setup_wp_editor_settings() {
 
-      if( csf_wp_editor_api() && class_exists( '_WP_Editors') ) {
+      if ( csf_wp_editor_api() && class_exists( '_WP_Editors') ) {
 
         $defaults = apply_filters( 'csf_wp_editor', array(
           'tinymce' => array(

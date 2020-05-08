@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Profile_Options' ) ) {
+if ( ! class_exists( 'CSF_Profile_Options' ) ) {
   class CSF_Profile_Options extends CSF_Abstract{
 
     // constans
@@ -16,8 +16,8 @@ if( ! class_exists( 'CSF_Profile_Options' ) ) {
     public $sections = array();
     public $args     = array(
       'data_type'    => 'serialize',
-      'defaults'     => array(),
       'class'        => '',
+      'defaults'     => array(),
     );
 
     // run profile construct
@@ -50,8 +50,8 @@ if( ! class_exists( 'CSF_Profile_Options' ) ) {
     // get default value
     public function get_default( $field ) {
 
-      $default = ( isset( $field['id'] ) && isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : null;
-      $default = ( isset( $field['default'] ) ) ? $field['default'] : $default;
+      $default = ( isset( $field['default'] ) ) ? $field['default'] : '';
+      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : $default;
 
       return $default;
 
@@ -62,9 +62,9 @@ if( ! class_exists( 'CSF_Profile_Options' ) ) {
 
       $value = null;
 
-      if( ! empty( $user_id ) && ! empty( $field['id'] ) ) {
+      if ( ! empty( $user_id ) && ! empty( $field['id'] ) ) {
 
-        if( $this->args['data_type'] !== 'serialize' ) {
+        if ( $this->args['data_type'] !== 'serialize' ) {
           $meta  = get_user_meta( $user_id, $field['id'] );
           $value = ( isset( $meta[0] ) ) ? $meta[0] : null;
         } else {
@@ -74,7 +74,7 @@ if( ! class_exists( 'CSF_Profile_Options' ) ) {
 
       }
 
-      $default = $this->get_default( $field );
+      $default = ( isset( $field['id'] ) ) ? $this->get_default( $field ) : '';
       $value   = ( isset( $value ) ) ? $value : $default;
 
       return $value;
@@ -86,31 +86,34 @@ if( ! class_exists( 'CSF_Profile_Options' ) ) {
 
       $is_profile = ( is_object( $profileuser ) && isset( $profileuser->ID ) ) ? true : false;
       $profile_id = ( $is_profile ) ? $profileuser->ID : 0;
-      $errors     = ( ! empty( $profile_id ) ) ? get_user_meta( $profile_id, '_csf_errors', true ) : array();
+      $errors     = ( ! empty( $profile_id ) ) ? get_user_meta( $profile_id, '_csf_errors_'. $this->unique, true ) : array();
       $errors     = ( ! empty( $errors ) ) ? $errors : array();
-      $class      = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
+      $class      = ( $this->args['class'] ) ? ''. $this->args['class'] : '';
 
-      // clear errors
-      if( ! empty( $errors ) ) {
-        delete_user_meta( $profile_id, '_csf_errors' );
+      if ( ! empty( $errors ) ) {
+        delete_user_meta( $profile_id, '_csf_errors_'. $this->unique );
       }
 
-      echo '<div class="csf csf-profile csf-onload'. $class .'">';
+      echo '<div class="csf csf-profile csf-onload'. esc_attr( $class ) .'">';
 
       wp_nonce_field( 'csf_profile_nonce', 'csf_profile_nonce'. $this->unique );
 
-      foreach( $this->sections as $section ) {
+      foreach ( $this->sections as $section ) {
 
-        $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-icon '. $section['icon'] .'"></i>' : '';
+        $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
         $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
 
-        echo ( $section_title || $section_icon ) ? '<h2>'. $section_icon . $section_title .'</h2>' : '';
+        echo ( $section_title || $section_icon ) ? '<h2>'. wp_kses_post( $section_icon . $section_title ) .'</h2>' : '';
 
-        if( ! empty( $section['fields'] ) ) {
-          foreach( $section['fields'] as $field ) {
+        if ( ! empty( $section['fields'] ) ) {
+          foreach ( $section['fields'] as $field ) {
 
-            if( ! empty( $field['id'] ) && ! empty( $errors[$field['id']] ) ) {
-              $field['_error'] = $errors[$field['id']];
+            if ( ! empty( $field['id'] ) && ! empty( $errors['fields'][$field['id']] ) ) {
+              $field['_error'] = $errors['fields'][$field['id']];
+            }
+
+            if ( ! empty( $field['id'] ) ) {
+              $field['default'] = $this->get_default( $field );
             }
 
             CSF::field( $field, $this->get_meta_value( $profile_id, $field ), $this->unique, 'profile' );
@@ -127,101 +130,113 @@ if( ! class_exists( 'CSF_Profile_Options' ) ) {
     // save profile form fields
     public function save_profile( $user_id ) {
 
-      if ( wp_verify_nonce( csf_get_var( 'csf_profile_nonce'. $this->unique ), 'csf_profile_nonce' ) ) {
+      $count    = 1;
+      $data     = array();
+      $errors   = array();
+      $noncekey = 'csf_profile_nonce'. $this->unique;
+      $nonce    = ( ! empty( $_POST[ $noncekey ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $noncekey ] ) ) : '';
 
-        $errors = array();
+      if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! wp_verify_nonce( $nonce, 'csf_profile_nonce' ) ) {
+        return $user_id;
+      }
+
+      // XSS ok.
+      // No worries, This "POST" requests is sanitizing in the below foreach.
+      $request = ( ! empty( $_POST[ $this->unique ] ) ) ? $_POST[ $this->unique ] : array();
+
+      if ( ! empty( $request ) ) {
 
         foreach ( $this->sections as $section ) {
 
-          $request = csf_get_var( $this->unique, array() );
+          if ( ! empty( $section['fields'] ) ) {
 
-          // ignore _nonce
-          if( isset( $request['_nonce'] ) ) {
-            unset( $request['_nonce'] );
-          }
+            foreach ( $section['fields'] as $field ) {
 
-          // sanitize and validate
-          if( ! empty( $section['fields'] ) ) {
+              if ( ! empty( $field['id'] ) ) {
 
-            foreach( $section['fields'] as $field ) {
+                $field_id    = $field['id'];
+                $field_value = isset( $request[$field_id] ) ? $request[$field_id] : '';
 
-              if( ! empty( $field['id'] ) ) {
+                // Sanitize "post" request of field.
+                if ( ! isset( $field['sanitize'] ) ) {
 
-                // sanitize
-                if( ! empty( $field['sanitize'] ) ) {
+                  if( is_array( $field_value ) ) {
+                    $data[$field_id] = wp_kses_post_deep( $field_value );
+                  } else {
+                    $data[$field_id] = wp_kses_post( $field_value );
+                  }
 
-                  $sanitize              = $field['sanitize'];
-                  $value_sanitize        = csf_get_vars( $this->unique, $field['id'] );
-                  $request[$field['id']] = call_user_func( $sanitize, $value_sanitize );
+                } else if( isset( $field['sanitize'] ) && function_exists( $field['sanitize'] ) ) {
+
+                  $data[$field_id] = call_user_func( $field['sanitize'], $field_value );
+
+                } else {
+
+                  $data[$field_id] = $field_value;
 
                 }
 
-                // validate
-                if( ! empty( $field['validate'] ) ) {
+                // Validate "post" request of field.
+                if ( isset( $field['validate'] ) && function_exists( $field['validate'] ) ) {
 
-                  $validate = $field['validate'];
-                  $value_validate = csf_get_vars( $this->unique, $field['id'] );
-                  $has_validated = call_user_func( $validate, $value_validate );
+                  $has_validated = call_user_func( $field['validate'], $field_value );
 
-                  if( ! empty( $has_validated ) ) {
+                  if ( ! empty( $has_validated ) ) {
 
-                    $errors[$field['id']]  = $has_validated;
-                    $request[$field['id']] = $this->get_meta_value( $user_id, $field );
+                    $errors['sections'][$count] = true;
+                    $errors['fields'][$field_id] = $has_validated;
+                    $data[$field_id] = $this->get_meta_value( $user_id, $field );
 
                   }
 
                 }
 
-                // auto sanitize
-                if( ! isset( $request[$field['id']] ) || is_null( $request[$field['id']] ) ) {
-                  $request[$field['id']] = '';
-                }
-
               }
 
             }
 
           }
 
-          $request = apply_filters( "csf_{$this->unique}_save", $request, $user_id, $this );
-
-          do_action( "csf_{$this->unique}_save_before", $request, $user_id, $this );
-
-          if( empty( $request ) ) {
-
-            if( $this->args['data_type'] !== 'serialize' ) {
-              foreach ( $request as $key => $value ) {
-                delete_user_meta( $user_id, $key );
-              }
-            } else {
-              delete_user_meta( $user_id, $this->unique );
-            }
-
-          } else {
-
-            if( $this->args['data_type'] !== 'serialize' ) {
-              foreach ( $request as $key => $value ) {
-                update_user_meta( $user_id, $key, $value );
-              }
-            } else {
-              update_user_meta( $user_id, $this->unique, $request );
-            }
-
-            if( ! empty( $errors ) ) {
-              update_user_meta( $user_id, '_csf_errors', $errors );
-            }
-
-          }
-
-          do_action( "csf_{$this->unique}_saved", $request, $user_id, $this );
-
-          do_action( "csf_{$this->unique}_save_after", $request, $user_id, $this );
+          $count++;
 
         }
 
       }
 
-    }
+      $data = apply_filters( "csf_{$this->unique}_save", $data, $user_id, $this );
 
+      do_action( "csf_{$this->unique}_save_before", $data, $user_id, $this );
+
+      if ( empty( $data ) ) {
+
+        if ( $this->args['data_type'] !== 'serialize' ) {
+          foreach ( $data as $key => $value ) {
+            delete_user_meta( $user_id, $key );
+          }
+        } else {
+          delete_user_meta( $user_id, $this->unique );
+        }
+
+      } else {
+
+        if ( $this->args['data_type'] !== 'serialize' ) {
+          foreach ( $data as $key => $value ) {
+            update_user_meta( $user_id, $key, $value );
+          }
+        } else {
+          update_user_meta( $user_id, $this->unique, $data );
+        }
+
+        if ( ! empty( $errors ) ) {
+          update_user_meta( $user_id, '_csf_errors_'. $this->unique, $errors );
+        }
+
+      }
+
+      do_action( "csf_{$this->unique}_saved", $data, $user_id, $this );
+
+      do_action( "csf_{$this->unique}_save_after", $data, $user_id, $this );
+
+    }
   }
 }

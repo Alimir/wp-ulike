@@ -5,8 +5,8 @@ Author: Ali Mirzaei
 Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin, rating, vote, voting, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member, ranking
 Requires PHP: 5.4
 Requires at least: 3.5.0
-Tested up to: 5.4
-Stable tag: 4.2.1
+Tested up to: 5.4.1
+Stable tag: 4.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -185,6 +185,14 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.2.2 =
+* Added: New algorithms to get user status with less query.
+* Added: New Optimization Panel for truncate tables & delete rows from database. [PRO]
+* Added: "WP Optimize" plugin cache support.
+* Fixed: Some issues in stats panel.
+* Modified: Twitter template structure & styles.
+* Updated: Option panel framework.
 
 = 4.2.1 =
 * Fixed: An issue in database tables.

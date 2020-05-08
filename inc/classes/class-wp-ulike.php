@@ -34,11 +34,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function init(){
 			global $wpdb, $wp_user_IP;
-			$this->wpdb        = $wpdb;
-			$this->status      = 'like';
-			$this->user_ip     = $wp_user_IP;
-			$this->user_id     = $this->get_reutrn_id();
-			$this->is_distinct = true;
+			$this->wpdb         = $wpdb;
+			$this->status       = 'like';
+			$this->user_ip      = $wp_user_IP;
+			$this->current_user = get_current_user_id();
+			$this->user_id      = $this->get_reutrn_id();
+			$this->is_distinct  = true;
 		}
 
 		/**
@@ -243,6 +244,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 				} else {
 					$this->update_status( $factor, $this->prev_status );
+					$this->update_user_meta_status( $id, $slug, $this->status );
 					// Update status
 					$this->wpdb->update(
 						$this->wpdb->prefix . $table,
@@ -494,6 +496,28 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
+		 * Update user meta status
+		 *
+		 * @param integer $id
+		 * @param string $slug
+		 * @param string $status
+		 * @return void
+		 */
+		public function update_user_meta_status( $id, $slug, $status ){
+			// Update object cache (memcached issue)
+			$meta_key  = sanitize_key( $slug . '_status' );
+			$user_info = wp_ulike_get_meta_data( $this->user_id, 'user', $meta_key, true );
+
+			if( empty( $user_info ) ){
+				$user_info = array( $id => $status );
+			} else {
+				$user_info[$id] = $status;
+			}
+
+			wp_ulike_update_meta_data( $this->user_id, 'user', $meta_key, $user_info );
+		}
+
+		/**
 		 * Get User Status (like/dislike)
 		 *
 		 * @param           string $table
@@ -505,11 +529,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		public function get_user_status( $table, $item_type_col, $item_conditional_col, $item_type_val, $item_conditional_val ){
 
-			$cache_key  = sanitize_key( sprintf( 'user-status-of-item-%s-in-%s-table', $table, $item_type_val ) );
-			$user_status = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+			$item_type = wp_ulike_get_type_by_table( $table );
+			$meta_key  = sanitize_key( $item_type . '_status' );
+			$user_info = wp_ulike_get_meta_data( $this->user_id, 'user', $meta_key, true );
 
-			// Make a general query to get info from target table.
-			if( false === $user_status ){
+			if( empty( $user_info ) || ! isset( $user_info[$item_type_val] ) ){
 				// Create query string
 				$query  = sprintf( '
 						SELECT `status`
@@ -527,10 +551,18 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 
 				// Get results
 				$user_status = $this->wpdb->get_var( stripslashes( $query ) );
-				wp_cache_set( $cache_key, $user_status, WP_ULIKE_SLUG, 300 );
+				// Check user info value
+				$user_info = empty( $user_info ) ? array() : $user_info;
+
+				if( $user_status !== NULL || $this->current_user ){
+					$user_info[$item_type_val] = $this->current_user && $user_status === NULL ? NULL : $user_status;
+					wp_ulike_update_meta_data( $this->user_id, 'user', $meta_key, $user_info );
+				}
+			} elseif( empty( $user_info[$item_type_val] ) ) {
+				return false;
 			}
 
-			return $user_status;
+			return isset( $user_info[ $item_type_val ] ) ? $user_info[ $item_type_val ] : false;
 		}
 
 		/**
@@ -586,19 +618,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		}
 
 		/**
-		 * Return user ID
+		 * Get current user ID
 		 *
-		 * @author       	Alimir
-		 * @since           2.0
-		 * @return			String
+		 * @return void
 		 */
 		public function get_reutrn_id(){
-
-			if( ! ( $user_ID = get_current_user_id() ) ){
-				return wp_ulike_generate_user_id( $this->user_ip );
-			} else {
-				return $user_ID;
-			}
+			return ! $this->current_user ? wp_ulike_generate_user_id( $this->user_ip ) : $this->current_user;
 		}
 
 		/**

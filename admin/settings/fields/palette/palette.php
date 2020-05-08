@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_palette' ) ) {
+if ( ! class_exists( 'CSF_Field_palette' ) ) {
   class CSF_Field_palette extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -20,7 +20,7 @@ if( ! class_exists( 'CSF_Field_palette' ) ) {
 
       echo $this->field_before();
 
-      if( ! empty( $palette ) ) {
+      if ( ! empty( $palette ) ) {
 
         echo '<div class="csf-siblings csf--palettes">';
 
@@ -29,19 +29,19 @@ if( ! class_exists( 'CSF_Field_palette' ) ) {
           $active  = ( $key === $this->value ) ? ' csf--active' : '';
           $checked = ( $key === $this->value ) ? ' checked' : '';
 
-          echo '<div class="csf--sibling csf--palette'. $active .'">';
+          echo '<div class="csf--sibling csf--palette'. esc_attr( $active ) .'">';
 
-          if( ! empty( $colors ) ) {
+          if ( ! empty( $colors ) ) {
 
-            foreach( $colors as $color ) {
+            foreach ( $colors as $color ) {
 
-              echo '<span style="background-color: '. $color .';"></span>';
+              echo '<span style="background-color: '. esc_attr( $color ) .';"></span>';
 
             }
 
           }
 
-          echo '<input type="radio" name="'. $this->field_name() .'" value="'. $key .'"'. $this->field_attributes() . $checked .'/>';
+          echo '<input type="radio" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $key ) .'"'. $this->field_attributes() . esc_attr( $checked ) .'/>';
           echo '</div>';
 
         }
@@ -49,8 +49,6 @@ if( ! class_exists( 'CSF_Field_palette' ) ) {
         echo '</div>';
 
       }
-
-      echo '<div class="clear"></div>';
 
       echo $this->field_after();
 

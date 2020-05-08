@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
+if ( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
   class CSF_Taxonomy_Options extends CSF_Abstract{
 
     // constans
@@ -19,8 +19,8 @@ if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
     public $args       = array(
       'taxonomy'       => '',
       'data_type'      => 'serialize',
-      'defaults'       => array(),
       'class'          => '',
+      'defaults'       => array(),
     );
 
     // run taxonomy construct
@@ -30,9 +30,9 @@ if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
       $this->args       = apply_filters( "csf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
       $this->sections   = apply_filters( "csf_{$this->unique}_sections", $params['sections'], $this );
       $this->taxonomies = ( is_array( $this->args['taxonomy'] ) ) ? $this->args['taxonomy'] : array_filter( (array) $this->args['taxonomy'] );
-      $this->taxonomy   = csf_get_var( 'taxonomy' );
+      $this->taxonomy   = ( ! empty( $_REQUEST[ 'taxonomy' ] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST[ 'taxonomy' ] ) ) : '';
 
-      if( ! empty( $this->taxonomies ) && in_array( $this->taxonomy, $this->taxonomies ) ) {
+      if ( ! empty( $this->taxonomies ) && in_array( $this->taxonomy, $this->taxonomies ) ) {
         add_action( 'admin_init', array( &$this, 'add_taxonomy_options' ) );
       }
 
@@ -57,8 +57,8 @@ if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
     // get default value
     public function get_default( $field ) {
 
-      $default = ( isset( $field['id'] ) && isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : null;
-      $default = ( isset( $field['default'] ) ) ? $field['default'] : $default;
+      $default = ( isset( $field['default'] ) ) ? $field['default'] : '';
+      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : $default;
 
       return $default;
 
@@ -69,9 +69,9 @@ if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
 
       $value = null;
 
-      if( ! empty( $term_id ) && ! empty( $field['id'] ) ) {
+      if ( ! empty( $term_id ) && ! empty( $field['id'] ) ) {
 
-        if( $this->args['data_type'] !== 'serialize' ) {
+        if ( $this->args['data_type'] !== 'serialize' ) {
           $meta  = get_term_meta( $term_id, $field['id'] );
           $value = ( isset( $meta[0] ) ) ? $meta[0] : null;
         } else {
@@ -81,7 +81,7 @@ if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
 
       }
 
-      $default = $this->get_default( $field );
+      $default = ( isset( $field['id'] ) ) ? $this->get_default( $field ) : '';
       $value   = ( isset( $value ) ) ? $value : $default;
 
       return $value;
@@ -95,33 +95,36 @@ if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
       $term_id   = ( $is_term ) ? $term->term_id : 0;
       $taxonomy  = ( $is_term ) ? $term->taxonomy : $term;
       $classname = ( $is_term ) ? 'edit' : 'add';
-      $errors    = ( ! empty( $term_id ) ) ? get_term_meta( $term_id, '_csf_errors', true ) : array();
+      $errors    = ( ! empty( $term_id ) ) ? get_term_meta( $term_id, '_csf_errors_'. $this->unique, true ) : array();
       $errors    = ( ! empty( $errors ) ) ? $errors : array();
       $class     = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
 
-      // clear errors
-      if( ! empty( $errors ) ) {
-        delete_term_meta( $term_id, '_csf_errors' );
+      if ( ! empty( $errors ) ) {
+        delete_term_meta( $term_id, '_csf_errors_'. $this->unique );
       }
 
       wp_nonce_field( 'csf_taxonomy_nonce', 'csf_taxonomy_nonce'. $this->unique );
 
-      echo '<div class="csf csf-taxonomy csf-show-all csf-onload csf-taxonomy-'. $classname .'-fields'. $class .'">';
+      echo '<div class="csf csf-taxonomy csf-show-all csf-onload csf-taxonomy-'. esc_attr( $classname ) .'-fields '. esc_attr( $class ) .'">';
 
-      foreach( $this->sections as $section ) {
+      foreach ( $this->sections as $section ) {
 
-        if( $taxonomy === $this->taxonomy ) {
+        if ( $taxonomy === $this->taxonomy ) {
 
-          $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-icon '. $section['icon'] .'"></i>' : '';
+          $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
           $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
 
-          echo ( $section_title || $section_icon ) ? '<div class="csf-section-title"><h3>'. $section_icon . $section_title .'</h3></div>' : '';
+          echo ( $section_title || $section_icon ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
 
-          if( ! empty( $section['fields'] ) ) {
-            foreach( $section['fields'] as $field ) {
+          if ( ! empty( $section['fields'] ) ) {
+            foreach ( $section['fields'] as $field ) {
 
-              if( ! empty( $field['id'] ) && ! empty( $errors[$field['id']] ) ) {
-                $field['_error'] = $errors[$field['id']];
+              if ( ! empty( $field['id'] ) && ! empty( $errors['fields'][$field['id']] ) ) {
+                $field['_error'] = $errors['fields'][$field['id']];
+              }
+
+              if ( ! empty( $field['id'] ) ) {
+                $field['default'] = $this->get_default( $field );
               }
 
               CSF::field( $field, $this->get_meta_value( $term_id, $field ), $this->unique, 'taxonomy' );
@@ -139,57 +142,64 @@ if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
     // save taxonomy form fields
     public function save_taxonomy( $term_id ) {
 
-      if ( wp_verify_nonce( csf_get_var( 'csf_taxonomy_nonce'. $this->unique ), 'csf_taxonomy_nonce' ) ) {
+      $count    = 1;
+      $data     = array();
+      $errors   = array();
+      $noncekey = 'csf_taxonomy_nonce'. $this->unique;
+      $nonce    = ( ! empty( $_POST[ $noncekey ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $noncekey ] ) ) : '';
+      $taxonomy = ( ! empty( $_POST[ 'taxonomy' ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ 'taxonomy' ] ) ) : '';
 
-        $errors = array();
-        $taxonomy = csf_get_var( 'taxonomy' );
+      if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! wp_verify_nonce( $nonce, 'csf_taxonomy_nonce' ) ) {
+        return $term_id;
+      }
+
+      // XSS ok.
+      // No worries, This "POST" requests is sanitizing in the below foreach.
+      $request = ( ! empty( $_POST[ $this->unique ] ) ) ? $_POST[ $this->unique ] : array();
+
+      if ( ! empty( $request ) ) {
 
         foreach ( $this->sections as $section ) {
 
-          if( $taxonomy == $this->taxonomy ) {
+          if ( ! empty( $section['fields'] ) ) {
 
-            $request = csf_get_var( $this->unique, array() );
+            foreach ( $section['fields'] as $field ) {
 
-            // ignore _nonce
-            if( isset( $request['_nonce'] ) ) {
-              unset( $request['_nonce'] );
-            }
+              if ( ! empty( $field['id'] ) ) {
 
-            // sanitize and validate
-            if( ! empty( $section['fields'] ) ) {
+                $field_id    = $field['id'];
+                $field_value = isset( $request[$field_id] ) ? $request[$field_id] : '';
 
-              foreach( $section['fields'] as $field ) {
+                // Sanitize "post" request of field.
+                if ( ! isset( $field['sanitize'] ) ) {
 
-                if( ! empty( $field['id'] ) ) {
-
-                  // sanitize
-                  if( ! empty( $field['sanitize'] ) ) {
-
-                    $sanitize              = $field['sanitize'];
-                    $value_sanitize        = csf_get_vars( $this->unique, $field['id'] );
-                    $request[$field['id']] = call_user_func( $sanitize, $value_sanitize );
-
+                  if( is_array( $field_value ) ) {
+                    $data[$field_id] = wp_kses_post_deep( $field_value );
+                  } else {
+                    $data[$field_id] = wp_kses_post( $field_value );
                   }
 
-                  // validate
-                  if( ! empty( $field['validate'] ) ) {
+                } else if( isset( $field['sanitize'] ) && function_exists( $field['sanitize'] ) ) {
 
-                    $validate = $field['validate'];
-                    $value_validate = csf_get_vars( $this->unique, $field['id'] );
-                    $has_validated = call_user_func( $validate, $value_validate );
+                  $data[$field_id] = call_user_func( $field['sanitize'], $field_value );
 
-                    if( ! empty( $has_validated ) ) {
+                } else {
 
-                      $errors[$field['id']]  = $has_validated;
-                      $request[$field['id']] = $this->get_meta_value( $term_id, $field );
+                  $data[$field_id] = $field_value;
 
-                    }
+                }
 
-                  }
+                // Validate "post" request of field.
+                if ( isset( $field['validate'] ) && function_exists( $field['validate'] ) ) {
 
-                  // auto sanitize
-                  if( ! isset( $request[$field['id']] ) || is_null( $request[$field['id']] ) ) {
-                    $request[$field['id']] = '';
+                  $has_validated = call_user_func( $field['validate'], $field_value );
+
+                  if ( ! empty( $has_validated ) ) {
+
+                    $errors['sections'][$count] = true;
+                    $errors['fields'][$field_id] = $has_validated;
+                    $data[$field_id] = $this->get_meta_value( $term_id, $field );
+
                   }
 
                 }
@@ -197,48 +207,49 @@ if( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
               }
 
             }
-
-            $request = apply_filters( "csf_{$this->unique}_save", $request, $term_id, $this );
-
-            do_action( "csf_{$this->unique}_save_before", $request, $term_id, $this );
-
-            if( empty( $request ) ) {
-
-              if( $this->args['data_type'] !== 'serialize' ) {
-                foreach ( $request as $key => $value ) {
-                  delete_term_meta( $term_id, $key );
-                }
-              } else {
-                delete_term_meta( $term_id, $this->unique );
-              }
-
-            } else {
-
-              if( $this->args['data_type'] !== 'serialize' ) {
-                foreach ( $request as $key => $value ) {
-                  update_term_meta( $term_id, $key, $value );
-                }
-              } else {
-                update_term_meta( $term_id, $this->unique, $request );
-              }
-
-              if( ! empty( $errors ) ) {
-                update_term_meta( $term_id, '_csf_errors', $errors );
-              }
-
-            }
-
-            do_action( "csf_{$this->unique}_saved", $request, $term_id, $this );
-
-            do_action( "csf_{$this->unique}_save_after", $request, $term_id, $this );
 
           }
+
+          $count++;
 
         }
 
       }
 
-    }
+      $data = apply_filters( "csf_{$this->unique}_save", $data, $term_id, $this );
 
+      do_action( "csf_{$this->unique}_save_before", $data, $term_id, $this );
+
+      if ( empty( $data ) ) {
+
+        if ( $this->args['data_type'] !== 'serialize' ) {
+          foreach ( $data as $key => $value ) {
+            delete_term_meta( $term_id, $key );
+          }
+        } else {
+          delete_term_meta( $term_id, $this->unique );
+        }
+
+      } else {
+
+        if ( $this->args['data_type'] !== 'serialize' ) {
+          foreach ( $data as $key => $value ) {
+            update_term_meta( $term_id, $key, $value );
+          }
+        } else {
+          update_term_meta( $term_id, $this->unique, $data );
+        }
+
+        if ( ! empty( $errors ) ) {
+          update_term_meta( $term_id, '_csf_errors_'. $this->unique, $errors );
+        }
+
+      }
+
+      do_action( "csf_{$this->unique}_saved", $data, $term_id, $this );
+
+      do_action( "csf_{$this->unique}_save_after", $data, $term_id, $this );
+
+    }
   }
 }

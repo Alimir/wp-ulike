@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Fields' ) ) {
+if ( ! class_exists( 'CSF_Fields' ) ) {
   abstract class CSF_Fields extends CSF_Abstract {
 
     public function __construct( $field = array(), $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -25,7 +25,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
       $field_name = ( ! empty( $this->field['name'] ) ) ? $this->field['name'] : $unique_id;
       $tag_prefix = ( ! empty( $this->field['tag_prefix'] ) ) ? $this->field['tag_prefix'] : '';
 
-      if( ! empty( $tag_prefix ) ) {
+      if ( ! empty( $tag_prefix ) ) {
         $nested_name = str_replace( '[', '['. $tag_prefix, $nested_name );
       }
 
@@ -38,11 +38,11 @@ if( ! class_exists( 'CSF_Fields' ) ) {
       $field_id   = ( ! empty( $this->field['id'] ) ) ? $this->field['id'] : '';
       $attributes = ( ! empty( $this->field['attributes'] ) ) ? $this->field['attributes'] : array();
 
-      if( ! empty( $field_id ) && empty( $attributes['data-depend-id'] ) ) {
+      if ( ! empty( $field_id ) && empty( $attributes['data-depend-id'] ) ) {
         $attributes['data-depend-id'] = $field_id;
       }
 
-      if( ! empty( $this->field['placeholder'] ) ) {
+      if ( ! empty( $this->field['placeholder'] ) ) {
         $attributes['placeholder'] = $this->field['placeholder'];
       }
 
@@ -50,12 +50,12 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
       $atts = '';
 
-      if( ! empty( $attributes ) ) {
-        foreach( $attributes as $key => $value ) {
-          if( $value === 'only-key' ) {
-            $atts .= ' '. $key;
+      if ( ! empty( $attributes ) ) {
+        foreach ( $attributes as $key => $value ) {
+          if ( $value === 'only-key' ) {
+            $atts .= ' '. esc_attr( $key );
           } else {
-            $atts .= ' '. $key . '="'. $value .'"';
+            $atts .= ' '. esc_attr( $key ) . '="'. esc_attr( $value ) .'"';
           }
         }
       }
@@ -65,15 +65,15 @@ if( ! class_exists( 'CSF_Fields' ) ) {
     }
 
     public function field_before() {
-      return ( ! empty( $this->field['before'] ) ) ? $this->field['before'] : '';
+      return ( ! empty( $this->field['before'] ) ) ? wp_kses_post( $this->field['before'] ) : '';
     }
 
     public function field_after() {
 
-      $output  = ( ! empty( $this->field['after'] ) ) ? $this->field['after'] : '';
-      $output .= ( ! empty( $this->field['desc'] ) ) ? '<p class="csf-text-desc">'. $this->field['desc'] .'</p>' : '';
-      $output .= ( ! empty( $this->field['help'] ) ) ? '<span class="csf-help"><span class="csf-help-text">'. $this->field['help'] .'</span><span class="fa fa-question-circle"></span></span>' : '';
-      $output .= ( ! empty( $this->field['_error'] ) ) ? '<p class="csf-text-error">'. $this->field['_error'] .'</p>' : '';
+      $output  = ( ! empty( $this->field['after'] ) ) ? wp_kses_post( $this->field['after'] ) : '';
+      $output .= ( ! empty( $this->field['desc'] ) ) ? '<div class="clear"></div><div class="csf-text-desc">'. wp_kses_post( $this->field['desc'] ) .'</div>' : '';
+      $output .= ( ! empty( $this->field['help'] ) ) ? '<div class="csf-help"><span class="csf-help-text">'. wp_kses_post( $this->field['help'] ) .'</span><i class="fas fa-question-circle"></i></div>' : '';
+      $output .= ( ! empty( $this->field['_error'] ) ) ? '<div class="csf-text-error">'. wp_kses_post( $this->field['_error'] ) .'</div>' : '';
 
       return $output;
 
@@ -85,15 +85,15 @@ if( ! class_exists( 'CSF_Fields' ) ) {
       $array_search = false;
 
       // sanitize type name
-      if( in_array( $type, array( 'page', 'pages' ) ) ) {
+      if ( in_array( $type, array( 'page', 'pages' ) ) ) {
         $option = 'page';
-      } else if( in_array( $type, array( 'post', 'posts' ) ) ) {
+      } else if ( in_array( $type, array( 'post', 'posts' ) ) ) {
         $option = 'post';
-      } else if( in_array( $type, array( 'category', 'categories' ) ) ) {
+      } else if ( in_array( $type, array( 'category', 'categories' ) ) ) {
         $option = 'category';
-      } else if( in_array( $type, array( 'tag', 'tags' ) ) ) {
+      } else if ( in_array( $type, array( 'tag', 'tags' ) ) ) {
         $option = 'post_tag';
-      } else if( in_array( $type, array( 'menu', 'menus' ) ) ) {
+      } else if ( in_array( $type, array( 'menu', 'menus' ) ) ) {
         $option = 'nav_menu';
       } else {
         $option  = '';
@@ -108,7 +108,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
         case 'posts':
 
           // term query required for ajax select
-          if( ! empty( $term ) ) {
+          if ( ! empty( $term ) ) {
 
             $query             = new WP_Query( wp_parse_args( $query_args, array(
               's'              => $term,
@@ -126,8 +126,8 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
           }
 
-          if( ! is_wp_error( $query ) && ! empty( $query->posts ) ) {
-            foreach( $query->posts as $item ) {
+          if ( ! is_wp_error( $query ) && ! empty( $query->posts ) ) {
+            foreach ( $query->posts as $item ) {
               $options[$item->ID] = $item->post_title;
             }
           }
@@ -141,7 +141,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
         case 'menu':
         case 'menus':
 
-          if( ! empty( $term ) ) {
+          if ( ! empty( $term ) ) {
 
             $query         = new WP_Term_Query( wp_parse_args( $query_args, array(
               'search'     => $term,
@@ -159,8 +159,8 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
           }
 
-          if( ! is_wp_error( $query ) && ! empty( $query->terms ) ) {
-            foreach( $query->terms as $item ) {
+          if ( ! is_wp_error( $query ) && ! empty( $query->terms ) ) {
+            foreach ( $query->terms as $item ) {
               $options[$item->term_id] = $item->name;
             }
           }
@@ -170,7 +170,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
         case 'user':
         case 'users':
 
-          if( ! empty( $term ) ) {
+          if ( ! empty( $term ) ) {
 
             $query      = new WP_User_Query( array(
               'search'  => '*'. $term .'*',
@@ -186,8 +186,8 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
           }
 
-          if( ! is_wp_error( $query ) && ! empty( $query->get_results() ) ) {
-            foreach( $query->get_results() as $item ) {
+          if ( ! is_wp_error( $query ) && ! empty( $query->get_results() ) ) {
+            foreach ( $query->get_results() as $item ) {
               $options[$item->ID] = $item->display_name;
             }
           }
@@ -199,8 +199,8 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
           global $wp_registered_sidebars;
 
-          if( ! empty( $wp_registered_sidebars ) ) {
-            foreach( $wp_registered_sidebars as $sidebar ) {
+          if ( ! empty( $wp_registered_sidebars ) ) {
+            foreach ( $wp_registered_sidebars as $sidebar ) {
               $options[$sidebar['id']] = $sidebar['name'];
             }
           }
@@ -214,9 +214,9 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
           global $wp_roles;
 
-          if( ! empty( $wp_roles ) ) {
-            if( ! empty( $wp_roles->roles ) ) {
-              foreach( $wp_roles->roles as $role_key => $role_value ) {
+          if ( ! empty( $wp_roles ) ) {
+            if ( ! empty( $wp_roles->roles ) ) {
+              foreach ( $wp_roles->roles as $role_key => $role_value ) {
                 $options[$role_key] = $role_value['name'];
               }
             }
@@ -231,8 +231,8 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
           $post_types = get_post_types( array( 'show_in_nav_menus' => true ), 'objects' );
 
-          if( ! is_wp_error( $post_types ) && ! empty( $post_types ) ) {
-            foreach( $post_types as $post_type ) {
+          if ( ! is_wp_error( $post_types ) && ! empty( $post_types ) ) {
+            foreach ( $post_types as $post_type ) {
               $options[$post_type->name] = $post_type->labels->name;
             }
           }
@@ -243,8 +243,8 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
         default:
 
-          if( function_exists( $type ) ) {
-            if( ! empty( $term ) ) {
+          if ( function_exists( $type ) ) {
+            if ( ! empty( $term ) ) {
               $options = call_user_func( $type, $query_args );
             } else {
               $options = call_user_func( $type, $term, $query_args );
@@ -256,14 +256,14 @@ if( ! class_exists( 'CSF_Fields' ) ) {
       }
 
       // Array search by "term"
-      if( ! empty( $term ) && ! empty( $options ) && ! empty( $array_search ) ) {
+      if ( ! empty( $term ) && ! empty( $options ) && ! empty( $array_search ) ) {
         $options = preg_grep( '/'. $term .'/i', $options );
       }
 
       // Make multidimensional array for ajax search
-      if( ! empty( $term ) && ! empty( $options ) ) {
+      if ( ! empty( $term ) && ! empty( $options ) ) {
         $arr = array();
-        foreach( $options as $option_key => $option_value ) {
+        foreach ( $options as $option_key => $option_value ) {
           $arr[] = array( 'value' => $option_key, 'text' => $option_value );
         }
         $options = $arr;
@@ -277,9 +277,9 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
       $options = array();
 
-      if( ! empty( $values ) && is_array( $values ) ) {
+      if ( ! empty( $values ) && is_array( $values ) ) {
 
-        foreach( $values as $value ) {
+        foreach ( $values as $value ) {
 
           switch( $type ) {
 
@@ -290,7 +290,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
               $title = get_the_title( $value );
 
-              if( ! is_wp_error( $title ) && ! empty( $title ) ) {
+              if ( ! is_wp_error( $title ) && ! empty( $title ) ) {
                 $options[$value] = $title;
               }
 
@@ -305,7 +305,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
               $term = get_term( $value );
 
-              if( ! is_wp_error( $term ) && ! empty( $term ) ) {
+              if ( ! is_wp_error( $term ) && ! empty( $term ) ) {
                 $options[$value] = $term->name;
               }
 
@@ -316,7 +316,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
               $user = get_user_by( 'id', $value );
 
-              if( ! is_wp_error( $user ) && ! empty( $user ) ) {
+              if ( ! is_wp_error( $user ) && ! empty( $user ) ) {
                 $options[$value] = $user->display_name;
               }
 
@@ -327,7 +327,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
               global $wp_registered_sidebars;
 
-              if( ! empty( $wp_registered_sidebars[$value] ) ) {
+              if ( ! empty( $wp_registered_sidebars[$value] ) ) {
                 $options[$value] = $wp_registered_sidebars[$value]['name'];
               }
 
@@ -338,7 +338,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
               global $wp_roles;
 
-              if( ! empty( $wp_roles ) && ! empty( $wp_roles->roles ) && ! empty( $wp_roles->roles[$value] ) ) {
+              if ( ! empty( $wp_roles ) && ! empty( $wp_roles->roles ) && ! empty( $wp_roles->roles[$value] ) ) {
                 $options[$value] = $wp_roles->roles[$value]['name'];
               }
 
@@ -349,7 +349,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
                 $post_types = get_post_types( array( 'show_in_nav_menus' => true ) );
 
-                if( ! is_wp_error( $post_types ) && ! empty( $post_types ) && ! empty( $post_types[$value] ) ) {
+                if ( ! is_wp_error( $post_types ) && ! empty( $post_types ) && ! empty( $post_types[$value] ) ) {
                   $options[$value] = ucfirst( $value );
                 }
 
@@ -357,7 +357,7 @@ if( ! class_exists( 'CSF_Fields' ) ) {
 
             default:
 
-              if( function_exists( $type .'_title' ) ) {
+              if ( function_exists( $type .'_title' ) ) {
                 $options[$value] = call_user_func( $type .'_title', $value );
               } else {
                 $options[$value] = ucfirst( $value );

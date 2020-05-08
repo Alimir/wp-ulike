@@ -65,105 +65,6 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 	}
 }
 
-if( ! function_exists( 'wp_ulike_delete_all_logs' ) ){
-	/**
-	 * Delete all the users likes logs by ajax process.
-	 *
-	 * @author       	Alimir
-	 * @since           2.2
-	 * @return			Void
-	 */
-	function wp_ulike_delete_all_logs() {
-		global $wpdb;
-		$get_action = $_POST['action'];
-		//$wpdb->hide_errors();
-
-		if( !current_user_can( 'manage_options' ) ){
-			wp_send_json_error( __( 'You\'ve not permission to remove all the logs. ', WP_ULIKE_SLUG ) );
-		}
-
-		if($get_action == 'wp_ulike_posts_delete_logs'){
-			$logs_table = $wpdb->prefix."ulike";
-		} else if($get_action == 'wp_ulike_comments_delete_logs'){
-			$logs_table = $wpdb->prefix."ulike_comments";
-		} else if($get_action == 'wp_ulike_buddypress_delete_logs'){
-			$logs_table = $wpdb->prefix."ulike_activities";
-		} else if($get_action == 'wp_ulike_bbpress_delete_logs'){
-			$logs_table = $wpdb->prefix."ulike_forums";
-		}
-
-		if ($wpdb->query("TRUNCATE TABLE $logs_table") === FALSE) {
-			wp_send_json_error( __( 'Failed! There was a problem in removing of logs.', WP_ULIKE_SLUG ) );
-		} else {
-			wp_send_json_success( __( 'Success! All rows has been deleted!', WP_ULIKE_SLUG ) );
-		}
-	}
-}
-
-if( ! function_exists( 'wp_ulike_delete_orphaned_rows' ) ){
-	/**
-	 * Delete all the users likes logs by ajax process.
-	 *
-	 * @author       	Alimir
-	 * @since           2.2
-	 * @return			Void
-	 */
-	function wp_ulike_delete_orphaned_rows() {
-		global $wpdb;
-		$get_action = $_POST['action'];
-		//$wpdb->hide_errors();
-
-		if( !current_user_can( 'manage_options' ) ){
-			wp_send_json_error( __( 'You\'ve not permission to remove all the logs. ', WP_ULIKE_SLUG ) );
-		}
-
-		$type = '';
-		switch ($get_action) {
-			case 'wp_ulike_posts_delete_orphaned_rows':
-				$type = 'post';
-				break;
-
-			case 'wp_ulike_comments_delete_orphaned_rows':
-				$type = 'comment';
-				break;
-
-			case 'wp_ulike_buddypress_delete_orphaned_rows':
-				$type = 'activity';
-				break;
-
-			case 'wp_ulike_bbpress_delete_orphaned_rows':
-				$type = 'topic';
-				break;
-		}
-
-		if( empty( $type ) ){
-			wp_send_json_error( __( 'Bad request!', WP_ULIKE_SLUG ) );
-		}
-
-		// get table info
-		$info_args = wp_ulike_get_table_info( $type );
-
-		// Create query string
-		$query  = sprintf( "
-			DELETE FROM %s
-			WHERE `%s`
-			NOT IN (SELECT dt.`%s`
-			FROM %s dt)",
-			$wpdb->prefix . $info_args['table'],
-			$info_args['column'],
-			$info_args['related_column'],
-			$wpdb->prefix . $info_args['related_table']
-		);
-
-		if ( $wpdb->query( $query ) === FALSE ) {
-			wp_send_json_error( __( 'Failed! There was a problem in removing of orphaned rows.', WP_ULIKE_SLUG ) );
-		} else {
-			wp_send_json_success( __( 'Success! All orphaned rows has been deleted!', WP_ULIKE_SLUG ) );
-		}
-	}
-}
-
-
 if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	/**
 	 * Generate templates list
@@ -231,7 +132,6 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 			return false;
 		}
 
-		$meta_type = 'wp_ulike';
 		$table     = $wpdb->prefix . 'ulike_meta';
 		$column    = sanitize_key( 'item_id' );
 		$id_column = 'meta_id';
@@ -271,7 +171,7 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 
 		$mid = (int) $wpdb->insert_id;
 
-		wp_cache_delete( $object_id, $meta_type . '_meta' );
+		wp_cache_delete( $object_id, 'wp_ulike_meta' );
 
 		return $mid;
 	}
@@ -305,7 +205,6 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 			return false;
 		}
 
-		$meta_type = 'wp_ulike';
 		$table     = $wpdb->prefix . 'ulike_meta';
 		$column    = sanitize_key( 'item_id' );
 		$id_column = 'meta_id';
@@ -353,7 +252,7 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 			return false;
 		}
 
-		wp_cache_delete( $object_id, $meta_type . '_meta' );
+		wp_cache_delete( $object_id, 'wp_ulike_meta' );
 
 		return true;
 	}
@@ -375,7 +274,6 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 			return false;
 		}
 
-		$meta_type = 'wp_ulike';
 		$table     = $wpdb->prefix . 'ulike_meta';
 		$column    = sanitize_key( 'item_id' );
 
@@ -386,7 +284,7 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 
 		$object_ids = array_map( 'intval', $object_ids );
 
-		$cache_key = $meta_type . '_meta';
+		$cache_key = 'wp_ulike_meta';
 		$ids       = array();
 		$cache     = array();
 		foreach ( $object_ids as $id ) {
@@ -2344,53 +2242,18 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 	?>
 		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
-					<label title="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>">
-					<input type="checkbox"
-							data-ulike-id="<?php echo $ID; ?>"
-							data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
-							data-ulike-type="<?php echo $type; ?>"
-							data-ulike-template="<?php echo $style; ?>"
-							data-ulike-display-likers="<?php echo $display_likers; ?>"
-							data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
-							class="<?php echo $button_class; ?>"
-							<?php echo in_array( $status, array( 2, 4 ) )  ? 'checked="checked"' : ''; ?> />
+				<button type="button"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button',WP_ULIKE_SLUG) ) ?>"
+					data-ulike-id="<?php echo $ID; ?>"
+					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
+					data-ulike-type="<?php echo $type; ?>"
+					data-ulike-template="<?php echo $style; ?>"
+					data-ulike-display-likers="<?php echo $display_likers; ?>"
+					data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
+					class="<?php echo $button_class; ?>">
 					<?php do_action( 'wp_ulike_inside_like_button', $wp_ulike_template ); ?>
-					<svg class="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
-					    <g class="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
-					        <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" class="heart" fill="#AAB8C2" />
-					        <circle class="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5" />
-					        <g class="grp7" opacity="0" transform="translate(7 6)">
-					            <circle class="oval1" fill="#9CD8C3" cx="2" cy="6" r="2" />
-					            <circle class="oval2" fill="#8CE8C3" cx="5" cy="2" r="2" />
-					        </g>
-					        <g class="grp6" opacity="0" transform="translate(0 28)">
-					            <circle class="oval1" fill="#CC8EF5" cx="2" cy="7" r="2" />
-					            <circle class="oval2" fill="#91D2FA" cx="3" cy="2" r="2" />
-					        </g>
-					        <g class="grp3" opacity="0" transform="translate(52 28)">
-					            <circle class="oval2" fill="#9CD8C3" cx="2" cy="7" r="2" />
-					            <circle class="oval1" fill="#8CE8C3" cx="4" cy="2" r="2" />
-					        </g>
-					        <g class="grp2" opacity="0" transform="translate(44 6)" fill="#CC8EF5">
-					            <circle class="oval2" transform="matrix(-1 0 0 1 10 0)" cx="5" cy="6" r="2" />
-					            <circle class="oval1" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2" />
-					        </g>
-					        <g class="grp5" opacity="0" transform="translate(14 50)" fill="#91D2FA">
-					            <circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2" />
-					            <circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2" />
-					        </g>
-					        <g class="grp4" opacity="0" transform="translate(35 50)" fill="#F48EA7">
-					            <circle class="oval1" transform="matrix(-1 0 0 1 12 0)" cx="6" cy="5" r="2" />
-					            <circle class="oval2" transform="matrix(-1 0 0 1 4 0)" cx="2" cy="2" r="2" />
-					        </g>
-					        <g class="grp1" opacity="0" transform="translate(24)" fill="#9FC7FA">
-					            <circle class="oval1" cx="2.5" cy="3" r="2" />
-					            <circle class="oval2" cx="7.5" cy="2" r="2" />
-					        </g>
-					    </g>
-					</svg>
-					<?php echo $counter; ?>
-					</label>
+				</button>
+				<?php echo $counter; ?>
 			</div>
 		<?php
 			do_action( 'wp_ulike_inside_template', $wp_ulike_template );

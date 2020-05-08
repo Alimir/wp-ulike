@@ -103,7 +103,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$results = $this->select_data( $table );
 			// Create chart dataset
 			foreach( $results as $result ){
-				$output['label'][] = !empty( $result->labels ) ? date_i18n( "M j, Y", strtotime( $result->labels ) ) : array();
+				$output['label'][] = !empty( $result->labels ) ? date_i18n( "Y-m-d", strtotime( $result->labels ) ) : array();
 				$output['data'][]  = !empty( $result->counts ) ? $result->counts : array();
 			}
 			// Add chart options

@@ -1,4 +1,4 @@
-<?php if( ! defined( 'ABSPATH' ) ) { die; } // Cannot access directly.
+<?php if ( ! defined( 'ABSPATH' ) ) { die; } // Cannot access directly.
 /**
  *
  * Options Class
@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Options' ) ) {
+if ( ! class_exists( 'CSF_Options' ) ) {
   class CSF_Options extends CSF_Abstract {
 
     // constans
@@ -106,7 +106,7 @@ if( ! class_exists( 'CSF_Options' ) ) {
       add_action( 'admin_bar_menu', array( &$this, 'add_admin_bar_menu' ), $this->args['admin_bar_menu_priority'] );
       add_action( 'wp_ajax_csf_'. $this->unique .'_ajax_save', array( &$this, 'ajax_save' ) );
 
-      if( ! empty( $this->args['show_network_menu'] ) ) {
+      if ( ! empty( $this->args['show_network_menu'] ) ) {
         add_action( 'network_admin_menu', array( &$this, 'add_admin_menu' ) );
       }
 
@@ -126,8 +126,8 @@ if( ! class_exists( 'CSF_Options' ) ) {
       $parents = array();
       $count   = 100;
 
-      foreach( $sections as $key => $section ) {
-        if( ! empty( $section['parent'] ) ) {
+      foreach ( $sections as $key => $section ) {
+        if ( ! empty( $section['parent'] ) ) {
           $section['priority'] = ( isset( $section['priority'] ) ) ? $section['priority'] : $count;
           $parents[$section['parent']][] = $section;
           unset( $sections[$key] );
@@ -135,9 +135,9 @@ if( ! class_exists( 'CSF_Options' ) ) {
         $count++;
       }
 
-      foreach( $sections as $key => $section ) {
+      foreach ( $sections as $key => $section ) {
         $section['priority'] = ( isset( $section['priority'] ) ) ? $section['priority'] : $count;
-        if( ! empty( $section['id'] ) && ! empty( $parents[$section['id']] ) ) {
+        if ( ! empty( $section['id'] ) && ! empty( $parents[$section['id']] ) ) {
           $section['subs'] = wp_list_sort( $parents[$section['id']], array( 'priority' => 'ASC' ), 'ASC', true );
         }
         $result[] = $section;
@@ -151,9 +151,9 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
       $result  = array();
 
-      foreach( $sections as $key => $section ) {
-        if( ! empty( $section['fields'] ) ) {
-          foreach( $section['fields'] as $field ) {
+      foreach ( $sections as $key => $section ) {
+        if ( ! empty( $section['fields'] ) ) {
+          foreach ( $section['fields'] as $field ) {
             $result[] = $field;
           }
         }
@@ -166,13 +166,13 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
       $result = array();
 
-      foreach( $this->pre_tabs as $tab ) {
-        if( ! empty( $tab['subs'] ) ) {
-          foreach( $tab['subs'] as $sub ) {
+      foreach ( $this->pre_tabs as $tab ) {
+        if ( ! empty( $tab['subs'] ) ) {
+          foreach ( $tab['subs'] as $sub ) {
             $result[] = $sub;
           }
         }
-        if( empty( $tab['subs'] ) ) {
+        if ( empty( $tab['subs'] ) ) {
           $result[] = $tab;
         }
       }
@@ -183,36 +183,36 @@ if( ! class_exists( 'CSF_Options' ) ) {
     // add admin bar menu
     public function add_admin_bar_menu( $wp_admin_bar ) {
 
-      if( ! empty( $this->args['show_bar_menu'] ) && empty( $this->args['menu_hidden'] ) ) {
+      if ( ! empty( $this->args['show_bar_menu'] ) && empty( $this->args['menu_hidden'] ) ) {
 
         global $submenu;
 
         $menu_slug = $this->args['menu_slug'];
-        $menu_icon = ( ! empty( $this->args['admin_bar_menu_icon'] ) ) ? '<span class="csf-ab-icon ab-icon '. $this->args['admin_bar_menu_icon'] .'"></span>' : '';
+        $menu_icon = ( ! empty( $this->args['admin_bar_menu_icon'] ) ) ? '<span class="csf-ab-icon ab-icon '. esc_attr( $this->args['admin_bar_menu_icon'] ) .'"></span>' : '';
 
         $wp_admin_bar->add_node( array(
           'id'    => $menu_slug,
-          'title' => $menu_icon . $this->args['menu_title'],
-          'href'  => ( is_network_admin() ) ? network_admin_url( 'admin.php?page='. $menu_slug ) : admin_url( 'admin.php?page='. $menu_slug ),
+          'title' => $menu_icon . esc_attr( $this->args['menu_title'] ),
+          'href'  => esc_url( ( is_network_admin() ) ? network_admin_url( 'admin.php?page='. $menu_slug ) : admin_url( 'admin.php?page='. $menu_slug ) ),
         ) );
 
-        if( ! empty( $submenu[$menu_slug] ) ) {
-          foreach( $submenu[$menu_slug] as $key => $menu ) {
+        if ( ! empty( $submenu[$menu_slug] ) ) {
+          foreach ( $submenu[$menu_slug] as $key => $menu ) {
             $wp_admin_bar->add_node( array(
               'parent' => $menu_slug,
               'id'     => $menu_slug .'-'. $key,
               'title'  => $menu[0],
-              'href'   => ( is_network_admin() ) ? network_admin_url( 'admin.php?page='. $menu[2] ) : admin_url( 'admin.php?page='. $menu[2] ),
+              'href'   => esc_url( ( is_network_admin() ) ? network_admin_url( 'admin.php?page='. $menu[2] ) : admin_url( 'admin.php?page='. $menu[2] ) ),
             ) );
           }
         }
 
-        if( ! empty( $this->args['show_network_menu'] ) ) {
+        if ( ! empty( $this->args['show_network_menu'] ) ) {
           $wp_admin_bar->add_node( array(
             'parent' => 'network-admin',
             'id'     => $menu_slug .'-network-admin',
-            'title'  => $menu_icon . $this->args['menu_title'],
-            'href'   => network_admin_url( 'admin.php?page='. $menu_slug ),
+            'title'  => $menu_icon . esc_attr( $this->args['menu_title'] ),
+            'href'   => esc_url( network_admin_url( 'admin.php?page='. $menu_slug ) ),
           ) );
         }
 
@@ -222,30 +222,21 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
     public function ajax_save() {
 
-      if( ! empty( $_POST['data'] ) ) {
+      $result = $this->set_options( true );
 
-        $_POST = json_decode( stripslashes( $_POST['data'] ), true );
-
-        if( wp_verify_nonce( csf_get_var( 'csf_options_nonce'. $this->unique ), 'csf_options_nonce' ) ) {
-
-          $this->set_options();
-
-          wp_send_json_success( array( 'success' => true, 'notice' => $this->notice, 'errors' => $this->errors ) );
-
-        }
-
+      if ( ! $result ) {
+        wp_send_json_error( array( 'error' => esc_html__( 'Error while saving.', 'csf' ) ) );
+      } else {
+        wp_send_json_success( array( 'notice' => $this->notice, 'errors' => $this->errors ) );
       }
-
-      wp_send_json_error( array( 'success' => false, 'error' => esc_html__( 'Error while saving.', 'csf' ) ) );
 
     }
 
     // get default value
-    public function get_default( $field, $options = array() ) {
+    public function get_default( $field ) {
 
-      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : '';
-      $default = ( isset( $field['default'] ) ) ? $field['default'] : $default;
-      $default = ( isset( $options[$field['id']] ) ) ? $options[$field['id']] : $default;
+      $default = ( isset( $field['default'] ) ) ? $field['default'] : '';
+      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : $default;
 
       return $default;
 
@@ -256,91 +247,124 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
       $tmp_options = $this->options;
 
-      foreach( $this->pre_fields as $field ) {
-        if( ! empty( $field['id'] ) ) {
-          $this->options[$field['id']] = $this->get_default( $field, $this->options );
+      foreach ( $this->pre_fields as $field ) {
+        if ( ! empty( $field['id'] ) ) {
+          $this->options[$field['id']] = ( isset( $this->options[$field['id']] ) ) ? $this->options[$field['id']] : $this->get_default( $field );
         }
       }
 
-      if( $this->args['save_defaults'] && empty( $tmp_options ) ) {
+      if ( $this->args['save_defaults'] && empty( $tmp_options ) ) {
         $this->save_options( $this->options );
       }
 
     }
 
     // set options
-    public function set_options() {
+    public function set_options( $ajax = false ) {
 
-      if( wp_verify_nonce( csf_get_var( 'csf_options_nonce'. $this->unique ), 'csf_options_nonce' ) ) {
+      // XSS ok.
+      // No worries, This "POST" requests is sanitizing in the below foreach. see #L337 - #L341
+      $response    = ( $ajax && ! empty( $_POST['data'] ) ) ? json_decode( wp_unslash( trim( $_POST['data'] ) ), true ) : $_POST;
 
-        $request    = csf_get_var( $this->unique, array() );
-        $transient  = csf_get_var( 'csf_transient' );
+      // Set variables.
+      $data      = array();
+      $noncekey  = 'csf_options_nonce'. $this->unique;
+      $nonce     = ( ! empty( $response[$noncekey] ) ) ? $response[$noncekey] : '';
+      $options   = ( ! empty( $response[$this->unique] ) ) ? $response[$this->unique] : array();
+      $transient = ( ! empty( $response['csf_transient'] ) ) ? $response['csf_transient'] : array();
+
+      if ( wp_verify_nonce( $nonce, 'csf_options_nonce' ) ) {
+
+        $importing  = false;
         $section_id = ( ! empty( $transient['section'] ) ) ? $transient['section'] : '';
 
-        // import data
-        if( ! empty( $transient['csf_import_data'] ) ) {
+        if ( ! $ajax && ! empty( $response[ 'csf_import_data' ] ) ) {
 
-          $import_data = json_decode( stripslashes( trim( $transient['csf_import_data'] ) ), true );
-          $request = ( is_array( $import_data ) ) ? $import_data : array();
-
+          // XSS ok.
+          // No worries, This "POST" requests is sanitizing in the below foreach. see #L337 - #L341
+          $import_data  = json_decode( wp_unslash( trim( $response[ 'csf_import_data' ] ) ), true );
+          $options      = ( is_array( $import_data ) && ! empty( $import_data ) ) ? $import_data : array();
+          $importing    = true;
           $this->notice = esc_html__( 'Success. Imported backup options.', 'csf' );
 
-        } else if( ! empty( $transient['reset'] ) ) {
+        }
 
-          foreach( $this->pre_fields as $field ) {
-            if( ! empty( $field['id'] ) ) {
-              $request[$field['id']] = $this->get_default( $field );
+        if ( ! empty( $transient['reset'] ) ) {
+
+          foreach ( $this->pre_fields as $field ) {
+            if ( ! empty( $field['id'] ) ) {
+              $data[$field['id']] = $this->get_default( $field );
             }
           }
 
           $this->notice = esc_html__( 'Default options restored.', 'csf' );
 
-        } else if( ! empty( $transient['reset_section'] ) && ! empty( $section_id ) ) {
+        } else if ( ! empty( $transient['reset_section'] ) && ! empty( $section_id ) ) {
 
-          if( ! empty( $this->pre_sections[$section_id-1]['fields'] ) ) {
+          if ( ! empty( $this->pre_sections[$section_id-1]['fields'] ) ) {
 
-            foreach( $this->pre_sections[$section_id-1]['fields'] as $field ) {
-              if( ! empty( $field['id'] ) ) {
-                $request[$field['id']] = $this->get_default( $field );
+            foreach ( $this->pre_sections[$section_id-1]['fields'] as $field ) {
+              if ( ! empty( $field['id'] ) ) {
+                $data[$field['id']] = $this->get_default( $field );
               }
             }
 
           }
+
+          $data = wp_parse_args( $data, $this->options );
 
           $this->notice = esc_html__( 'Default options restored for only this section.', 'csf' );
 
         } else {
 
           // sanitize and validate
-          foreach( $this->pre_fields as $field ) {
+          foreach ( $this->pre_fields as $field ) {
 
-            if( ! empty( $field['id'] ) ) {
+            if ( ! empty( $field['id'] ) ) {
 
-              // sanitize
-              if( ! empty( $field['sanitize'] ) ) {
+              $field_id    = $field['id'];
+              $field_value = isset( $options[$field_id] ) ? $options[$field_id] : '';
 
-                $sanitize = $field['sanitize'];
-                $value_sanitize = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
-                $request[$field['id']] = call_user_func( $sanitize, $value_sanitize );
-
+              // Ajax and Importing doing wp_unslash already.
+              if ( ! $ajax && ! $importing ) {
+                $field_value = wp_unslash( $field_value );
               }
 
-              // validate
-              if( ! empty( $field['validate'] ) ) {
+              // Sanitize "post" request of field.
+              if ( ! isset( $field['sanitize'] ) ) {
 
-                $value_validate = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
-                $has_validated  = call_user_func( $field['validate'], $value_validate );
+                if( is_array( $field_value ) ) {
 
-                if( ! empty( $has_validated ) ) {
-                  $request[$field['id']] = ( isset( $this->options[$field['id']] ) ) ? $this->options[$field['id']] : '';
-                  $this->errors[$field['id']] = $has_validated;
+                  $data[$field_id] = wp_kses_post_deep( $field_value );
+
+                } else {
+
+                  $data[$field_id] = wp_kses_post( $field_value );
+
                 }
 
+              } else if( isset( $field['sanitize'] ) && function_exists( $field['sanitize'] ) ) {
+
+                $data[$field_id] = call_user_func( $field['sanitize'], $field_value );
+
+              } else {
+
+                $data[$field_id] = $field_value;
+
               }
 
-              // auto sanitize
-              if( ! isset( $request[$field['id']] ) || is_null( $request[$field['id']] ) ) {
-                $request[$field['id']] = '';
+              // Validate "post" request of field.
+              if ( isset( $field['validate'] ) && function_exists( $field['validate'] ) ) {
+
+                $has_validated = call_user_func( $field['validate'], $field_value );
+
+                if ( ! empty( $has_validated ) ) {
+
+                  $data[$field_id] = ( isset( $this->options[$field_id] ) ) ? $this->options[$field_id] : '';
+                  $this->errors[$field_id] = $has_validated;
+
+                }
+
               }
 
             }
@@ -349,62 +373,59 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
         }
 
-        // ignore nonce requests
-        if( isset( $request['_nonce'] ) ) { unset( $request['_nonce'] ); }
+        $data = apply_filters( "csf_{$this->unique}_save", $data, $this );
 
-        $request = wp_unslash( $request );
+        do_action( "csf_{$this->unique}_save_before", $data, $this );
 
-        $request = apply_filters( "csf_{$this->unique}_save", $request, $this );
+        $this->options = $data;
 
-        do_action( "csf_{$this->unique}_save_before", $request, $this );
+        $this->save_options( $data );
 
-        $this->options = $request;
+        do_action( "csf_{$this->unique}_save_after", $data, $this );
 
-        $this->save_options( $request );
-
-        do_action( "csf_{$this->unique}_save_after", $request, $this );
-
-        if( empty( $this->notice ) ) {
+        if ( empty( $this->notice ) ) {
           $this->notice = esc_html__( 'Settings saved.', 'csf' );
         }
 
+        return true;
+
       }
 
-      return true;
+      return false;
 
     }
 
     // save options database
-    public function save_options( $request ) {
+    public function save_options( $data ) {
 
-      if( $this->args['database'] === 'transient' ) {
-        set_transient( $this->unique, $request, $this->args['transient_time'] );
-      } else if( $this->args['database'] === 'theme_mod' ) {
-        set_theme_mod( $this->unique, $request );
-      } else if( $this->args['database'] === 'network' ) {
-        update_site_option( $this->unique, $request );
+      if ( $this->args['database'] === 'transient' ) {
+        set_transient( $this->unique, $data, $this->args['transient_time'] );
+      } else if ( $this->args['database'] === 'theme_mod' ) {
+        set_theme_mod( $this->unique, $data );
+      } else if ( $this->args['database'] === 'network' ) {
+        update_site_option( $this->unique, $data );
       } else {
-        update_option( $this->unique, $request );
+        update_option( $this->unique, $data );
       }
 
-      do_action( "csf_{$this->unique}_saved", $request, $this );
+      do_action( "csf_{$this->unique}_saved", $data, $this );
 
     }
 
     // get options from database
     public function get_options() {
 
-      if( $this->args['database'] === 'transient' ) {
+      if ( $this->args['database'] === 'transient' ) {
         $this->options = get_transient( $this->unique );
-      } else if( $this->args['database'] === 'theme_mod' ) {
+      } else if ( $this->args['database'] === 'theme_mod' ) {
         $this->options = get_theme_mod( $this->unique );
-      } else if( $this->args['database'] === 'network' ) {
+      } else if ( $this->args['database'] === 'network' ) {
         $this->options = get_site_option( $this->unique );
       } else {
         $this->options = get_option( $this->unique );
       }
 
-      if( empty( $this->options ) ) {
+      if ( empty( $this->options ) ) {
         $this->options = array();
       }
 
@@ -412,32 +433,32 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
     }
 
-    // wp api: admin menu
+    // admin menu
     public function add_admin_menu() {
 
       extract( $this->args );
 
-      if( $menu_type === 'submenu' ) {
+      if ( $menu_type === 'submenu' ) {
 
-        $menu_page = call_user_func( 'add_submenu_page', $menu_parent, $menu_title, $menu_title, $menu_capability, $menu_slug, array( &$this, 'add_options_html' ) );
+        $menu_page = call_user_func( 'add_submenu_page', $menu_parent, esc_attr( $menu_title ), esc_attr( $menu_title ), $menu_capability, $menu_slug, array( &$this, 'add_options_html' ) );
 
       } else {
 
-        $menu_page = call_user_func( 'add_menu_page', $menu_title, $menu_title, $menu_capability, $menu_slug, array( &$this, 'add_options_html' ), $menu_icon, $menu_position );
+        $menu_page = call_user_func( 'add_menu_page', esc_attr( $menu_title ), esc_attr( $menu_title ), $menu_capability, $menu_slug, array( &$this, 'add_options_html' ), $menu_icon, $menu_position );
 
         if ( ! empty( $sub_menu_title ) ) {
-          call_user_func( 'add_submenu_page', $menu_slug, $sub_menu_title, $sub_menu_title, $menu_capability, $menu_slug, array( &$this, 'add_options_html' ) );
+          call_user_func( 'add_submenu_page', $menu_slug, esc_attr( $sub_menu_title ), esc_attr( $sub_menu_title ), $menu_capability, $menu_slug, array( &$this, 'add_options_html' ) );
         }
 
-        if( ! empty( $this->args['show_sub_menu'] ) && count( $this->pre_tabs ) > 1 ) {
+        if ( ! empty( $this->args['show_sub_menu'] ) && count( $this->pre_tabs ) > 1 ) {
 
           // create submenus
           $tab_key = 1;
           foreach ( $this->pre_tabs as $section ) {
 
-            call_user_func( 'add_submenu_page', $menu_slug, $section['title'],  $section['title'], $menu_capability, $menu_slug .'#tab='. $tab_key, '__return_null' );
+            call_user_func( 'add_submenu_page', $menu_slug, esc_attr( $section['title'] ),  esc_attr( $section['title'] ), $menu_capability, $menu_slug .'#tab='. $tab_key, '__return_null' );
 
-            if( ! empty( $section['subs'] ) ) {
+            if ( ! empty( $section['subs'] ) ) {
               $tab_key += ( count( $section['subs'] )-1 );
             }
 
@@ -449,7 +470,7 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
         }
 
-        if( ! empty( $menu_hidden ) ) {
+        if ( ! empty( $menu_hidden ) ) {
           remove_menu_page( $menu_slug );
         }
 
@@ -461,15 +482,15 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
     public function add_page_on_load() {
 
-      if( ! empty( $this->args['contextual_help'] ) ) {
+      if ( ! empty( $this->args['contextual_help'] ) ) {
 
         $screen = get_current_screen();
 
-        foreach( $this->args['contextual_help'] as $tab ) {
+        foreach ( $this->args['contextual_help'] as $tab ) {
           $screen->add_help_tab( $tab );
         }
 
-        if( ! empty( $this->args['contextual_help_sidebar'] ) ) {
+        if ( ! empty( $this->args['contextual_help_sidebar'] ) ) {
           $screen->set_help_sidebar( $this->args['contextual_help_sidebar'] );
         }
 
@@ -481,30 +502,30 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
     public function add_admin_footer_text() {
       $default = 'Thank you for creating with <a href="http://codestarframework.com/" target="_blank">Codestar Framework</a>';
-      echo ( ! empty( $this->args['footer_credit'] ) ) ? $this->args['footer_credit'] : $default;
+      echo ( ! empty( $this->args['footer_credit'] ) ) ? wp_kses_post( $this->args['footer_credit'] ) : $default;
     }
 
     public function error_check( $sections, $err = '' ) {
 
-      if( ! $this->args['ajax_save'] ) {
+      if ( ! $this->args['ajax_save'] ) {
 
-        if( ! empty( $sections['fields'] ) ) {
-          foreach( $sections['fields'] as $field ) {
-            if( ! empty( $field['id'] ) ) {
-              if( array_key_exists( $field['id'], $this->errors ) ) {
+        if ( ! empty( $sections['fields'] ) ) {
+          foreach ( $sections['fields'] as $field ) {
+            if ( ! empty( $field['id'] ) ) {
+              if ( array_key_exists( $field['id'], $this->errors ) ) {
                 $err = '<span class="csf-label-error">!</span>';
               }
             }
           }
         }
 
-        if( ! empty( $sections['subs'] ) ) {
-          foreach( $sections['subs'] as $sub ) {
+        if ( ! empty( $sections['subs'] ) ) {
+          foreach ( $sections['subs'] as $sub ) {
             $err = $this->error_check( $sub, $err );
           }
         }
 
-        if( ! empty( $sections['id'] ) && array_key_exists( $sections['id'], $this->errors ) ) {
+        if ( ! empty( $sections['id'] ) && array_key_exists( $sections['id'], $this->errors ) ) {
           $err = $this->errors[$sections['id']];
         }
 
@@ -526,7 +547,7 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
       do_action( 'csf_options_before' );
 
-      echo '<div class="csf csf-options'. $theme . $class . $wrapper_class .'" data-slug="'. $this->args['menu_slug'] .'" data-unique="'. $this->unique .'">';
+      echo '<div class="csf csf-options'. esc_attr( $theme . $class . $wrapper_class ) .'" data-slug="'. esc_attr( $this->args['menu_slug'] ) .'" data-unique="'. esc_attr( $this->unique ) .'">';
 
         echo '<div class="csf-container">';
 
@@ -545,19 +566,19 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
           echo '<div class="csf-header-right">';
 
-            $notice_class = ( ! empty( $this->notice ) ) ? ' csf-form-show' : '';
+            $notice_class = ( ! empty( $this->notice ) ) ? 'csf-form-show' : '';
             $notice_text  = ( ! empty( $this->notice ) ) ? $this->notice : '';
 
-            echo '<div class="csf-form-result csf-form-success'. $notice_class .'">'. $notice_text .'</div>';
+            echo '<div class="csf-form-result csf-form-success '. esc_attr( $notice_class ) .'">'. wp_kses_post( $notice_text ) .'</div>';
 
             echo ( $this->args['show_form_warning'] ) ? '<div class="csf-form-result csf-form-warning">'. esc_html__( 'Settings have changed, you should save them!', 'csf' ) .'</div>' : '';
 
-            echo ( $has_nav && $this->args['show_all_options'] ) ? '<div class="csf-expand-all" title="'. esc_html__( 'show all options', 'csf' ) .'"><i class="fa fa-outdent"></i></div>' : '';
+            echo ( $has_nav && $this->args['show_all_options'] ) ? '<div class="csf-expand-all" title="'. esc_html__( 'show all options', 'csf' ) .'"><i class="fas fa-outdent"></i></div>' : '';
 
             echo ( $this->args['show_search'] ) ? '<div class="csf-search"><input type="text" name="csf-search" placeholder="'. esc_html__( 'Search option(s)', 'csf' ) .'" autocomplete="off" /></div>' : '';
 
             echo '<div class="csf-buttons">';
-            echo '<input type="submit" name="'. $this->unique .'[_nonce][save]" class="button button-primary csf-top-save csf-save'. $ajax_class .'" value="'. esc_html__( 'Save', 'csf' ) .'" data-save="'. esc_html__( 'Saving...', 'csf' ) .'">';
+            echo '<input type="submit" name="'. esc_attr( $this->unique ) .'[_nonce][save]" class="button button-primary csf-top-save csf-save'. esc_attr( $ajax_class ) .'" value="'. esc_html__( 'Save', 'csf' ) .'" data-save="'. esc_html__( 'Saving...', 'csf' ) .'">';
             echo ( $this->args['show_reset_section'] ) ? '<input type="submit" name="csf_transient[reset_section]" class="button button-secondary csf-reset-section csf-confirm" value="'. esc_html__( 'Reset Section', 'csf' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset this section options?', 'csf' ) .'">' : '';
             echo ( $this->args['show_reset_all'] ) ? '<input type="submit" name="csf_transient[reset]" class="button csf-warning-primary csf-reset-all csf-confirm" value="'. esc_html__( 'Reset All', 'csf' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset all options?', 'csf' ) .'">' : '';
             echo '</div>';
@@ -568,36 +589,38 @@ if( ! class_exists( 'CSF_Options' ) ) {
           echo '</div>';
         echo '</div>';
 
-        echo '<div class="csf-wrapper'. $show_all .'">';
+        echo '<div class="csf-wrapper'. esc_attr( $show_all ) .'">';
 
-          if( $has_nav ) {
+          if ( $has_nav ) {
+
             echo '<div class="csf-nav csf-nav-options">';
 
               echo '<ul>';
 
               $tab_key = 1;
 
-              foreach( $this->pre_tabs as $tab ) {
+              foreach ( $this->pre_tabs as $tab ) {
 
                 $tab_error = $this->error_check( $tab );
-                $tab_icon  = ( ! empty( $tab['icon'] ) ) ? '<i class="'. $tab['icon'] .'"></i>' : '';
+                $tab_icon  = ( ! empty( $tab['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $tab['icon'] ) .'"></i>' : '';
 
-                if( ! empty( $tab['subs'] ) ) {
+                if ( ! empty( $tab['subs'] ) ) {
 
                   echo '<li class="csf-tab-depth-0">';
 
-                    echo '<a href="#tab='. $tab_key .'" class="csf-arrow">'. $tab_icon . $tab['title'] . $tab_error .'</a>';
+                    echo '<a href="#tab='. $tab_key .'" class="csf-arrow">'. wp_kses_post( $tab_icon . $tab['title'] . $tab_error ) .'</a>';
 
                     echo '<ul>';
 
                     foreach ( $tab['subs'] as $sub ) {
 
                       $sub_error = $this->error_check( $sub );
-                      $sub_icon  = ( ! empty( $sub['icon'] ) ) ? '<i class="'. $sub['icon'] .'"></i>' : '';
+                      $sub_icon  = ( ! empty( $sub['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $sub['icon'] ) .'"></i>' : '';
 
-                      echo '<li class="csf-tab-depth-1"><a id="csf-tab-link-'. $tab_key .'" href="#tab='. $tab_key .'">'. $sub_icon . $sub['title'] . $sub_error .'</a></li>';
+                      echo '<li class="csf-tab-depth-1"><a id="csf-tab-link-'. esc_attr( $tab_key ) .'" href="#tab='. esc_attr( $tab_key ) .'">'. wp_kses_post( $sub_icon . $sub['title'] . $sub_error ) .'</a></li>';
 
                       $tab_key++;
+
                     }
 
                     echo '</ul>';
@@ -606,9 +629,10 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
                 } else {
 
-                  echo '<li class="csf-tab-depth-0"><a id="csf-tab-link-'. $tab_key .'" href="#tab='. $tab_key .'">'. $tab_icon . $tab['title'] . $tab_error .'</a></li>';
+                  echo '<li class="csf-tab-depth-0"><a id="csf-tab-link-'. esc_attr( $tab_key ) .'" href="#tab='. esc_attr( $tab_key ) .'">'. wp_kses_post( $tab_icon . $tab['title'] . $tab_error ) .'</a></li>';
 
                   $tab_key++;
+
                 }
 
               }
@@ -625,23 +649,27 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
             $section_key = 1;
 
-            foreach( $this->pre_sections as $section ) {
+            foreach ( $this->pre_sections as $section ) {
 
               $onload = ( ! $has_nav ) ? ' csf-onload' : '';
-              $section_icon = ( ! empty( $section['icon'] ) ) ? '<i class="csf-icon '. $section['icon'] .'"></i>' : '';
+              $section_icon = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-              echo '<div id="csf-section-'. $section_key .'" class="csf-section'. $onload .'">';
-              echo ( $has_nav ) ? '<div class="csf-section-title"><h3>'. $section_icon . $section['title'] .'</h3></div>' : '';
-              echo ( ! empty( $section['description'] ) ) ? '<div class="csf-field csf-section-description">'. $section['description'] .'</div>' : '';
+              echo '<div id="csf-section-'. $section_key .'" class="csf-section'. esc_attr( $onload ) .'">';
+              echo ( $has_nav ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section['title'] ) .'</h3></div>' : '';
+              echo ( ! empty( $section['description'] ) ) ? '<div class="csf-field csf-section-description">'. wp_kses_post( $section['description'] ) .'</div>' : '';
 
-              if( ! empty( $section['fields'] ) ) {
+              if ( ! empty( $section['fields'] ) ) {
 
-                foreach( $section['fields'] as $field ) {
+                foreach ( $section['fields'] as $field ) {
 
                   $is_field_error = $this->error_check( $field );
 
-                  if( ! empty( $is_field_error ) ) {
+                  if ( ! empty( $is_field_error ) ) {
                     $field['_error'] = $is_field_error;
+                  }
+
+                  if ( ! empty( $field['id'] ) ) {
+                    $field['default'] = $this->get_default( $field );
                   }
 
                   $value = ( ! empty( $field['id'] ) && isset( $this->options[$field['id']] ) ) ? $this->options[$field['id']] : '';
@@ -659,6 +687,7 @@ if( ! class_exists( 'CSF_Options' ) ) {
               echo '</div>';
 
               $section_key++;
+
             }
 
             echo '</div>';
@@ -671,17 +700,17 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
         echo '</div>';
 
-        if( ! empty( $this->args['show_footer'] ) ) {
+        if ( ! empty( $this->args['show_footer'] ) ) {
 
           echo '<div class="csf-footer">';
 
           echo '<div class="csf-buttons">';
-          echo '<input type="submit" name="csf_transient[save]" class="button button-primary csf-save'. $ajax_class .'" value="'. esc_html__( 'Save', 'csf' ) .'" data-save="'. esc_html__( 'Saving...', 'csf' ) .'">';
+          echo '<input type="submit" name="csf_transient[save]" class="button button-primary csf-save'. esc_attr( $ajax_class ) .'" value="'. esc_html__( 'Save', 'csf' ) .'" data-save="'. esc_html__( 'Saving...', 'csf' ) .'">';
           echo ( $this->args['show_reset_section'] ) ? '<input type="submit" name="csf_transient[reset_section]" class="button button-secondary csf-reset-section csf-confirm" value="'. esc_html__( 'Reset Section', 'csf' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset this section options?', 'csf' ) .'">' : '';
           echo ( $this->args['show_reset_all'] ) ? '<input type="submit" name="csf_transient[reset]" class="button csf-warning-primary csf-reset-all csf-confirm" value="'. esc_html__( 'Reset All', 'csf' ) .'" data-confirm="'. esc_html__( 'Are you sure to reset all options?', 'csf' ) .'">' : '';
           echo '</div>';
 
-          echo ( ! empty( $this->args['footer_text'] ) ) ? '<div class="csf-copyright">'. $this->args['footer_text'] .'</div>' : '';
+          echo ( ! empty( $this->args['footer_text'] ) ) ? '<div class="csf-copyright">'. wp_kses_post( $this->args['footer_text'] ) .'</div>' : '';
 
           echo '<div class="clear"></div>';
           echo '</div>';
@@ -694,7 +723,7 @@ if( ! class_exists( 'CSF_Options' ) ) {
 
         echo '<div class="clear"></div>';
 
-        echo ( ! empty( $this->args['footer_after'] ) ) ? $this->args['footer_after'] : '';
+        echo ( ! empty( $this->args['footer_after'] ) ) ? wp_kses_post( $this->args['footer_after'] ) : '';
 
       echo '</div>';
 

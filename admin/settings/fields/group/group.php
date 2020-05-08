@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_group' ) ) {
+if ( ! class_exists( 'CSF_Field_group' ) ) {
   class CSF_Field_group extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -30,7 +30,7 @@ if( ! class_exists( 'CSF_Field_group' ) ) {
       $title_number = ( ! empty( $args['accordion_title_number'] ) ) ? true : false;
       $title_auto   = ( ! empty( $args['accordion_title_auto'] ) ) ? true : false;
 
-      if( ! empty( $this->parent ) && preg_match( '/'. preg_quote( '['. $this->field['id'] .']' ) .'/', $this->parent ) ) {
+      if ( ! empty( $this->parent ) && preg_match( '/'. preg_quote( '['. $this->field['id'] .']' ) .'/', $this->parent ) ) {
 
         echo '<div class="csf-notice csf-notice-danger">'. esc_html__( 'Error: Nested field id can not be same with another nested field id.', 'csf' ) .'</div>';
 
@@ -41,15 +41,15 @@ if( ! class_exists( 'CSF_Field_group' ) ) {
         echo '<div class="csf-cloneable-item csf-cloneable-hidden">';
 
           echo '<div class="csf-cloneable-helper">';
-          echo '<i class="csf-cloneable-sort fa fa-arrows"></i>';
-          echo '<i class="csf-cloneable-clone fa fa-clone"></i>';
-          echo '<i class="csf-cloneable-remove csf-confirm fa fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'csf' ) .'"></i>';
+          echo '<i class="csf-cloneable-sort fas fa-arrows-alt"></i>';
+          echo '<i class="csf-cloneable-clone far fa-clone"></i>';
+          echo '<i class="csf-cloneable-remove csf-confirm fas fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'csf' ) .'"></i>';
           echo '</div>';
 
           echo '<h4 class="csf-cloneable-title">';
           echo '<span class="csf-cloneable-text">';
           echo ( $title_number ) ? '<span class="csf-cloneable-title-number"></span>' : '';
-          echo ( $title_prefix ) ? '<span class="csf-cloneable-title-prefix">'. $title_prefix .'</span>' : '';
+          echo ( $title_prefix ) ? '<span class="csf-cloneable-title-prefix">'. esc_attr( $title_prefix ) .'</span>' : '';
           echo ( $title_auto ) ? '<span class="csf-cloneable-value"><span class="csf-cloneable-placeholder"></span></span>' : '';
           echo '</span>';
           echo '</h4>';
@@ -67,9 +67,9 @@ if( ! class_exists( 'CSF_Field_group' ) ) {
 
         echo '</div>';
 
-        echo '<div class="csf-cloneable-wrapper csf-data-wrapper" data-title-number="'. $title_number .'" data-unique-id="'. $this->unique .'" data-field-id="['. $this->field['id'] .']" data-max="'. $args['max'] .'" data-min="'. $args['min'] .'">';
+        echo '<div class="csf-cloneable-wrapper csf-data-wrapper" data-title-number="'. esc_attr( $title_number ) .'" data-unique-id="'. esc_attr( $this->unique ) .'" data-field-id="['. esc_attr( $this->field['id'] ) .']" data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'">';
 
-        if( ! empty( $this->value ) ) {
+        if ( ! empty( $this->value ) ) {
 
           $num = 0;
 
@@ -77,20 +77,21 @@ if( ! class_exists( 'CSF_Field_group' ) ) {
 
             $first_id    = ( isset( $this->field['fields'][0]['id'] ) ) ? $this->field['fields'][0]['id'] : '';
             $first_value = ( isset( $value[$first_id] ) ) ? $value[$first_id] : '';
+            $first_value = ( is_array( $first_value ) ) ? reset( $first_value ) : $first_value;
 
             echo '<div class="csf-cloneable-item">';
 
               echo '<div class="csf-cloneable-helper">';
-              echo '<i class="csf-cloneable-sort fa fa-arrows"></i>';
-              echo '<i class="csf-cloneable-clone fa fa-clone"></i>';
-              echo '<i class="csf-cloneable-remove csf-confirm fa fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'csf' ) .'"></i>';
+              echo '<i class="csf-cloneable-sort fas fa-arrows-alt"></i>';
+              echo '<i class="csf-cloneable-clone far fa-clone"></i>';
+              echo '<i class="csf-cloneable-remove csf-confirm fas fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'csf' ) .'"></i>';
               echo '</div>';
 
               echo '<h4 class="csf-cloneable-title">';
               echo '<span class="csf-cloneable-text">';
-              echo ( $title_number ) ? '<span class="csf-cloneable-title-number">'. ( $num+1 ) .'.</span>' : '';
-              echo ( $title_prefix ) ? '<span class="csf-cloneable-title-prefix">'. $title_prefix .'</span>' : '';
-              echo ( $title_auto ) ? '<span class="csf-cloneable-value">' . $first_value .'</span>' : '';
+              echo ( $title_number ) ? '<span class="csf-cloneable-title-number">'. esc_attr( $num+1 ) .'.</span>' : '';
+              echo ( $title_prefix ) ? '<span class="csf-cloneable-title-prefix">'. esc_attr( $title_prefix ) .'</span>' : '';
+              echo ( $title_auto ) ? '<span class="csf-cloneable-value">' . esc_attr( $first_value ) .'</span>' : '';
               echo '</span>';
               echo '</h4>';
 
@@ -118,10 +119,10 @@ if( ! class_exists( 'CSF_Field_group' ) ) {
 
         echo '</div>';
 
-        echo '<div class="csf-cloneable-alert csf-cloneable-max">'. esc_html__( 'You can not add more than', 'csf' ) .' '. $args['max'] .'</div>';
-        echo '<div class="csf-cloneable-alert csf-cloneable-min">'. esc_html__( 'You can not remove less than', 'csf' ) .' '. $args['min'] .'</div>';
+        echo '<div class="csf-cloneable-alert csf-cloneable-max">'. esc_html__( 'You can not add more than', 'csf' ) .' '. esc_attr( $args['max'] ) .'</div>';
+        echo '<div class="csf-cloneable-alert csf-cloneable-min">'. esc_html__( 'You can not remove less than', 'csf' ) .' '. esc_attr( $args['min'] ) .'</div>';
 
-        echo '<a href="#" class="button button-primary csf-cloneable-add">'. $args['button_title'] .'</a>';
+        echo '<a href="#" class="button button-primary csf-cloneable-add">'. wp_kses_post( $args['button_title'] ) .'</a>';
 
         echo $this->field_after();
 
@@ -131,11 +132,11 @@ if( ! class_exists( 'CSF_Field_group' ) ) {
 
     public function enqueue() {
 
-      if( ! wp_script_is( 'jquery-ui-accordion' ) ) {
+      if ( ! wp_script_is( 'jquery-ui-accordion' ) ) {
         wp_enqueue_script( 'jquery-ui-accordion' );
       }
 
-      if( ! wp_script_is( 'jquery-ui-sortable' ) ) {
+      if ( ! wp_script_is( 'jquery-ui-sortable' ) ) {
         wp_enqueue_script( 'jquery-ui-sortable' );
       }
 

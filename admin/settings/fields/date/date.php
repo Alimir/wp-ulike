@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_date' ) ) {
+if ( ! class_exists( 'CSF_Field_date' ) ) {
   class CSF_Field_date extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -25,7 +25,7 @@ if( ! class_exists( 'CSF_Field_date' ) ) {
 
       echo $this->field_before();
 
-      if( ! empty( $this->field['from_to'] ) ) {
+      if ( ! empty( $this->field['from_to'] ) ) {
 
         $args = wp_parse_args( $this->field, array(
           'text_from' => esc_html__( 'From', 'csf' ),
@@ -37,12 +37,12 @@ if( ! class_exists( 'CSF_Field_date' ) ) {
           'to'   => '',
         ) );
 
-        echo '<label class="csf--from">'. $args['text_from'] .' <input type="text" name="'. $this->field_name('[from]') .'" value="'. $value['from'] .'"'. $this->field_attributes() .'/></label>';
-        echo '<label class="csf--to">'. $args['text_to'] .' <input type="text" name="'. $this->field_name('[to]') .'" value="'. $value['to'] .'"'. $this->field_attributes() .'/></label>';
+        echo '<label class="csf--from">'. esc_attr( $args['text_from'] ) .' <input type="text" name="'. esc_attr( $this->field_name( '[from]' ) ) .'" value="'. esc_attr( $value['from'] ) .'"'. $this->field_attributes() .'/></label>';
+        echo '<label class="csf--to">'. esc_attr( $args['text_to'] ) .' <input type="text" name="'. esc_attr( $this->field_name( '[to]' ) ) .'" value="'. esc_attr( $value['to'] ) .'"'. $this->field_attributes() .'/></label>';
 
       } else {
 
-        echo '<input type="text" name="'. $this->field_name() .'" value="'. $this->value .'"'. $this->field_attributes() .'/>';
+        echo '<input type="text" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes() .'/>';
 
       }
 
@@ -54,7 +54,7 @@ if( ! class_exists( 'CSF_Field_date' ) ) {
 
     public function enqueue() {
 
-      if( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
+      if ( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
         wp_enqueue_script( 'jquery-ui-datepicker' );
       }
 

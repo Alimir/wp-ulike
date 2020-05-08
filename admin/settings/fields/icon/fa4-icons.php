@@ -1,9 +1,6 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) { die; } // Cannot access directly.
 //
-//
-// Default Icons
-// We are using Font-awesome icons as default
-//
+// Font Awesome 4 Icons
 //
 function csf_get_default_icons() {
   return array( array(

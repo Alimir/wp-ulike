@@ -60,7 +60,8 @@
     }
 
     > .csf-fieldset{
-      margin-left: 0;
+      float: none;
+      width: 100%;
 
       > .csf-help{
         right: -5px;
@@ -79,7 +80,7 @@
     padding: 20px 0;
 
     > .csf-title{
-      width: 225px;
+      width: 200px;
 
       h4{
         font-size: 14px;
@@ -91,7 +92,7 @@
     }
 
     > .csf-fieldset{
-      margin-left: 225px;
+      width: calc(100% - 220px);
 
       > .csf-help{
         top: -5px;

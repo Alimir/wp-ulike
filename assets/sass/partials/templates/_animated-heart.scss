@@ -5,6 +5,12 @@
 
 .wpulike-animated-heart {
 
+  .wp_ulike_is_loading{
+      .wp_ulike_btn{
+          background-image: none;
+      }
+  }
+
   .wp_ulike_btn {
     position: relative;
     border-radius: 50em;
@@ -23,6 +29,13 @@
 
     &.wp_ulike_btn_is_active{
       background-color: rgba(255, 111, 99, 1);
+
+      &[disabled=disabled], &:disabled{
+        &:hover, &:active, &:focus {
+            background-color: rgba(255, 111, 99, 1);
+        }
+      }
+
       .wpulike-svg-heart{
         fill: #ffffff;
 

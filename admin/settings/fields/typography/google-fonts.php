@@ -1,6 +1,6 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { die; } // Cannot access directly.
 
-if( ! function_exists( 'csf_get_google_fonts' ) ) {
+if ( ! function_exists( 'csf_get_google_fonts' ) ) {
   function csf_get_google_fonts() {
     return [
       'ABeeZee'=>[['normal','italic'],['latin']],

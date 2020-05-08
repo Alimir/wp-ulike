@@ -14,7 +14,8 @@
       }
 
       .csf-fieldset{
-        margin-left: 0;
+        float: none;
+        width: 100%;
       }
     }
   }
@@ -86,7 +87,17 @@
     }
 
     .csf-fieldset{
-      margin-left: 0;
+      float: none;
+      width: 100%;
+    }
+  }
+
+  .csf-field-color{
+
+    .button.wp-picker-clear{
+      padding: 0 8px;
+      line-height: 2.14285714;
+      min-height: 32px;
     }
   }
 
@@ -123,7 +134,8 @@
     }
   }
 
-  .csf-profile{
+  .csf-profile,
+  .csf-taxonomy-edit-fields{
 
     > .csf-field{
 
@@ -134,7 +146,8 @@
       }
 
       > .csf-fieldset{
-        margin-left: 0;
+        float: none;
+        width: 100%;
       }
     }
   }

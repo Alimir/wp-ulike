@@ -36,6 +36,11 @@
  *     02. 19. Field: link_color
  *     02. 20. Field: color_group
  *     02. 21. Field: palette
+ *     02. 22. Field: accordion
+ *     02. 23. Field: date
+ *     02. 24. Field: map
+ *     02. 25. Field: sortable
+ *     02. 26. Field: number
  * 03. Taxonomy
  * 04. Profile
  * 05. Modal
@@ -198,8 +203,7 @@
   float: right;
 }
 .csf-field .csf-fieldset {
-  margin-left: 0;
-  margin-right: 30%;
+  float: left;
 }
 
 .csf-pseudo-field {
@@ -242,7 +246,7 @@
  * 02. 04. Field: upload
  */
 .csf-field-upload .csf--remove,
-.csf-field-upload .csf--buttons {
+.csf-field-upload .csf--button {
   margin-left: 0;
   margin-right: 5px;
 }
@@ -301,7 +305,7 @@
 /**
  * 02. 11. Field: tabbed
  */
-.csf-field-tabbed .csf-tabbed-nav .fa {
+.csf-field-tabbed .csf-tabbed-nav .csf--icon {
   padding-right: 0;
   padding-left: 5px;
 }
@@ -334,16 +338,26 @@
  * 02. 14. Field: border, spacing, dimensions
  */
 .csf-field-dimensions .csf--input,
+.csf-field-dimensions .csf-fieldset,
 .csf-field-spacing .csf--input,
-.csf-field-border .csf--input {
-  float: right;
-  margin-right: 0;
-  margin-left: 15px;
+.csf-field-spacing .csf-fieldset,
+.csf-field-border .csf--input,
+.csf-field-border .csf-fieldset {
+  direction: ltr;
 }
-.csf-field-dimensions .csf--left,
-.csf-field-spacing .csf--left,
-.csf-field-border .csf--left {
+.csf-field-dimensions .csf--inputs,
+.csf-field-dimensions .csf--color,
+.csf-field-spacing .csf--inputs,
+.csf-field-spacing .csf--color,
+.csf-field-border .csf--inputs,
+.csf-field-border .csf--color {
   float: right;
+}
+.csf-field-dimensions .csf--color,
+.csf-field-spacing .csf--color,
+.csf-field-border .csf--color {
+  margin-right: 4px;
+  direction: rtl;
 }
 
 /**
@@ -366,21 +380,19 @@
  */
 .csf-field-spinner .csf--spin {
   float: right;
+  direction: ltr;
 }
 
 /**
  * 02. 17. Field: slider
  */
-.csf-field-slider .ui-slider {
+.csf-field-slider .csf-slider-ui {
   direction: ltr;
+  margin-right: 0;
+  margin-left: 15px;
 }
-.csf-field-slider input[type="text"] {
-  margin-left: 0;
-  margin-right: 15px;
-}
-.csf-field-slider em {
-  padding-left: 0;
-  padding-right: 5px;
+.csf-field-slider .csf--input {
+  direction: ltr;
 }
 
 /**
@@ -417,20 +429,52 @@
 }
 
 /**
+ * 02. 22. Field: accordion
+ */
+.csf-field-accordion .csf--icon {
+  margin-right: 0;
+  margin-left: 2px;
+}
+
+/**
+ * 02. 23. Field: date
+ */
+.csf-field-date .csf--to {
+  margin-left: 0;
+  margin-right: 7px;
+}
+
+/**
+ * 02. 24. Field: map
+ */
+.csf-field-map .csf--map-input:last-child {
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+/**
+ * 02. 25. Field: sortable
+ */
+.csf-field-sortable .csf--sortable-helper {
+  border-left: none;
+  border-right: 1px solid #eee;
+}
+
+/**
+ * 02. 26. Field: number
+ */
+.csf-field-number .csf--wrap {
+  float: right;
+}
+
+/**
  * 03. Taxonomy
  */
-.csf-taxonomy-add-fields .csf-fieldset {
-  margin-right: 0;
-}
 .csf-taxonomy-add-fields .csf-field > .csf-fieldset > .csf-help {
   left: -5px;
   right: auto;
 }
 
-.csf-taxonomy-edit-fields .csf-fieldset {
-  margin-left: 0;
-  margin-right: 225px;
-}
 .csf-taxonomy-edit-fields .csf-field > .csf-fieldset > .csf-help {
   right: auto;
   left: -5px;
@@ -443,22 +487,9 @@
   padding-right: 0;
   padding-left: 7px;
 }
-.csf-profile > .csf-field > .csf-fieldset {
-  margin-left: 0;
-  margin-right: 220px;
-}
-.csf-profile > .csf-field > .csf-help {
-  left: 0;
-  right: auto;
-}
-
-.csf-taxonomy-edit-fields .csf-fieldset {
-  margin-left: 0;
-  margin-right: 225px;
-}
-.csf-taxonomy-edit-fields .csf-field > .csf-fieldset > .csf-help {
-  right: auto;
+.csf-profile > .csf-field > .csf-fieldset > .csf-help {
   left: -5px;
+  right: auto;
 }
 
 /**

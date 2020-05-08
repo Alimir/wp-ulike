@@ -20,12 +20,16 @@
         cursor: pointer;
 
         &:hover, &:active, &:focus {
-            outline: 0;
+            outline: none;
+        }
+
+        &::-moz-focus-inner {
+            border: 0;
         }
 
         &[disabled=disabled], &:disabled{
             &:hover, &:active, &:focus {
-                outline: 0;
+                outline: none;
                 background-color: initial;
             }
         }
