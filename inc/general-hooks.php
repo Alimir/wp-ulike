@@ -1111,7 +1111,7 @@ if( ! function_exists( 'wp_ulike_purge_wp_super_cache' ) && function_exists( 'wp
 // wp rocket cache plugin
 if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) && function_exists( 'rocket_clean_post' ) ){
 	/**
-  	 * Purge wp rocket cache
+   * Purge wp rocket cache
 	 *
 	 * @param integer $ID
 	 * @param string $type
@@ -1128,6 +1128,28 @@ if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) && function_exists( 'rock
 		}
 	}
 	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_rocket_cache'	, 10, 2 );
+}
+
+// wp optimize cache plugin
+if( ! function_exists( 'wp_ulike_purge_wp_optimize_cache' ) && class_exists('WP_Optimize') ){
+	/**
+   * Purge wp optimize cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_wp_optimize_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			WPO_Page_Cache::delete_single_post_cache( $ID );
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				WPO_Page_Cache::delete_single_post_cache( $comment->comment_post_ID );
+			}
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_optimize_cache'	, 10, 2 );
 }
 
 // @if DEV
