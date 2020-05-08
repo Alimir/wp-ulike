@@ -1131,7 +1131,7 @@ if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) && function_exists( 'rock
 }
 
 // wp optimize cache plugin
-if( ! function_exists( 'wp_ulike_purge_wp_optimize_cache' ) && class_exists('WP_Optimize') ){
+if( ! function_exists( 'wp_ulike_purge_wp_optimize_cache' ) && class_exists('WPO_Page_Cache') ){
 	/**
    * Purge wp optimize cache
 	 *
