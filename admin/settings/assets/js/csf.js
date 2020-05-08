@@ -24,6 +24,7 @@
     $window: $(window),
     $document: $(document),
     $form_warning: null,
+    is_confirm: false,
     form_modified: false,
     code_themes: [],
     is_rtl: $('body').hasClass('rtl'),
@@ -56,7 +57,7 @@
       var regex  = new RegExp('('+ CSF.helper.preg_quote(field_id) +')\\[(\\d+)\\]', 'g');
 
       $selector.find(':radio').each(function() {
-        if( this.checked || this.orginal_checked ) {
+        if ( this.checked || this.orginal_checked ) {
           this.orginal_checked = true;
         }
       });
@@ -64,7 +65,7 @@
       $selector.each( function( index ) {
         $(this).find(':input').each(function() {
           this.name = this.name.replace(regex, field_id +'['+ index +']');
-          if( this.orginal_checked ) {
+          if ( this.orginal_checked ) {
             this.checked = true;
           }
         });
@@ -81,14 +82,14 @@
         var context = this, args = arguments;
         var later = function() {
           timeout = null;
-          if( !immediate ) {
+          if ( !immediate ) {
             callback.apply(context, args);
           }
         };
         var callNow = ( immediate && !timeout );
         clearTimeout( timeout );
         timeout = setTimeout( later, threshold );
-        if( callNow ) {
+        if ( callNow ) {
           callback.apply(context, args);
         }
       };
@@ -101,16 +102,16 @@
 
       var e, b, cookie = document.cookie, p = name + '=';
 
-      if( ! cookie ) {
+      if ( ! cookie ) {
         return;
       }
 
       b = cookie.indexOf( '; ' + p );
 
-      if( b === -1 ) {
+      if ( b === -1 ) {
         b = cookie.indexOf(p);
 
-        if( b !== 0 ) {
+        if ( b !== 0 ) {
           return null;
         }
       } else {
@@ -119,7 +120,7 @@
 
       e = cookie.indexOf( ';', b );
 
-      if( e === -1 ) {
+      if ( e === -1 ) {
         e = cookie.length;
       }
 
@@ -134,9 +135,9 @@
 
       var d = new Date();
 
-      if( typeof( expires ) === 'object' && expires.toGMTString ) {
+      if ( typeof( expires ) === 'object' && expires.toGMTString ) {
         expires = expires.toGMTString();
-      } else if( parseInt( expires, 10 ) ) {
+      } else if ( parseInt( expires, 10 ) ) {
         d.setTime( d.getTime() + ( parseInt( expires, 10 ) * 1000 ) );
         expires = d.toGMTString();
       } else {
@@ -172,7 +173,7 @@
     for( var i = 0; i < clone.length; ++i ) {
       for( var j = 0; j < clone[i].options.length; ++j ) {
 
-        if( clone[i].options[j].selected === true ) {
+        if ( clone[i].options[j].selected === true ) {
           cloned[i].options[j].selected = true;
         }
 
@@ -214,24 +215,24 @@
           $hidden = $nav.closest('.csf').find('.csf-section-id'),
           $last_section;
 
-      $(window).on('hashchange', function() {
+      $(window).on('hashchange csf.hashchange', function() {
 
         var hash  = window.location.hash.match(new RegExp('tab=([^&]*)'));
         var slug  = hash ? hash[1] : $links.first().attr('href').replace('#tab=', '');
         var $link = $('#csf-tab-link-'+ slug);
 
-        if( $link.length > 0 ) {
+        if ( $link.length > 0 ) {
 
           $link.closest('.csf-tab-depth-0').addClass('csf-tab-active').siblings().removeClass('csf-tab-active');
           $links.removeClass('csf-section-active');
           $link.addClass('csf-section-active');
 
-          if( $last_section !== undefined ) {
+          if ( $last_section !== undefined ) {
             $last_section.hide();
           }
 
           var $section = $('#csf-section-'+slug);
-          $section.css({display: 'block'});
+          $section.show();
           $section.csf_reload_script();
 
           $hidden.val(slug);
@@ -240,7 +241,7 @@
 
         }
 
-      }).trigger('hashchange');
+      }).trigger('csf.hashchange');
 
     });
   };
@@ -265,18 +266,18 @@
         var $link      = $(this),
             section_id = $link.data('section');
 
-        if( $last_link !== undefined ) {
+        if ( $last_link !== undefined ) {
           $last_link.removeClass('csf-section-active');
         }
 
-        if( $last_section !== undefined ) {
+        if ( $last_section !== undefined ) {
           $last_section.hide();
         }
 
         $link.addClass('csf-section-active');
 
         var $section = $('#csf-section-'+section_id);
-        $section.css({display: 'block'});
+        $section.show();
         $section.csf_reload_script();
 
         CSF.helper.set_cookie('csf-last-metabox-tab-'+ post_id +'-'+ unique_id, section_id);
@@ -288,7 +289,7 @@
 
       var get_cookie = CSF.helper.get_cookie('csf-last-metabox-tab-'+ post_id +'-'+ unique_id);
 
-      if( get_cookie ) {
+      if ( get_cookie ) {
         $nav.find('a[data-section="'+ get_cookie +'"]').trigger('click');
       } else {
         $links.first('a').trigger('click');
@@ -301,7 +302,7 @@
   // Metabox Page Templates Listener
   //
   $.fn.csf_page_templates = function() {
-    if( this.length ) {
+    if ( this.length ) {
 
       $(document).on('change', '.editor-page-attributes__template select, #page_template', function() {
 
@@ -319,7 +320,7 @@
   // Metabox Post Formats Listener
   //
   $.fn.csf_post_formats = function() {
-    if( this.length ) {
+    if ( this.length ) {
 
       $(document).on('change', '.editor-post-format select, #formatdiv input[name="post_format"]', function() {
 
@@ -342,8 +343,8 @@
   $.fn.csf_search = function() {
     return this.each( function() {
 
-      var $this    = $(this),
-          $input   = $this.find('input');
+      var $this  = $(this),
+          $input = $this.find('input');
 
       $input.on('change keyup', function() {
 
@@ -353,7 +354,7 @@
             $fields  = $section.find('> .csf-field:not(.hidden)'),
             $titles  = $fields.find('> .csf-title, .csf-search-tags');
 
-        if( value.length > 3 ) {
+        if ( value.length > 3 ) {
 
           $fields.addClass('csf-hidden');
           $wrapper.addClass('csf-search-all');
@@ -362,7 +363,7 @@
 
             var $title = $(this);
 
-            if( $title.text().match( new RegExp('.*?' + value + '.*?', 'i') ) ) {
+            if ( $title.text().match( new RegExp('.*?' + value + '.*?', 'i') ) ) {
 
               var $field = $title.closest('.csf-field');
 
@@ -405,7 +406,7 @@
                 stickyTop = Math.max(offset, offsetTop - scrollTop ),
                 winWidth  = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
-            if( stickyTop <= offset && winWidth > 782 ) {
+            if ( stickyTop <= offset && winWidth > 782 ) {
               $inner.css({width: $this.outerWidth()-padding});
               $this.css({height: $this.outerHeight()}).addClass( 'csf-sticky' );
             } else {
@@ -416,7 +417,7 @@
           },
           requestTick = function() {
 
-            if( !ticking ) {
+            if ( !ticking ) {
               requestAnimationFrame( function() {
                 stickyUpdate();
                 ticking = false;
@@ -459,7 +460,7 @@
             values      = $field.data('value').toString().split('|'),
             rules       = ruleset;
 
-        if( $field.data('depend-global') ) {
+        if ( $field.data('depend-global') ) {
           is_global = true;
         }
 
@@ -478,9 +479,9 @@
 
       });
 
-      if( depends.length ) {
+      if ( depends.length ) {
 
-        if( is_global ) {
+        if ( is_global ) {
           $.csf_deps.enable(CSF.vars.$body, ruleset, depends);
         } else {
           $.csf_deps.enable($this, ruleset, depends);
@@ -505,13 +506,13 @@
             $icon    = $title.find('.csf-accordion-icon'),
             $content = $title.next();
 
-        if( $icon.hasClass('fa-angle-right') ) {
+        if ( $icon.hasClass('fa-angle-right') ) {
           $icon.removeClass('fa-angle-right').addClass('fa-angle-down');
         } else {
           $icon.removeClass('fa-angle-down').addClass('fa-angle-right');
         }
 
-        if( !$content.data( 'opened' ) ) {
+        if ( !$content.data( 'opened' ) ) {
 
           $content.csf_reload_script();
           $content.data( 'opened', true );
@@ -531,7 +532,7 @@
   $.fn.csf_field_backup = function() {
     return this.each( function() {
 
-      if( window.wp.customize === undefined ) { return; }
+      if ( window.wp.customize === undefined ) { return; }
 
       var base    = this,
           $this   = $(this),
@@ -541,10 +542,10 @@
 
       base.notification = function( message_text ) {
 
-        if( wp.customize.notifications && wp.customize.OverlayNotification ) {
+        if ( wp.customize.notifications && wp.customize.OverlayNotification ) {
 
           // clear if there is any saved data.
-          if( !wp.customize.state('saved').get() ) {
+          if ( !wp.customize.state('saved').get() ) {
             wp.customize.state('changesetStatus').set('trash');
             wp.customize.each( function( setting ) { setting._dirty = false; });
             wp.customize.state('saved').set(true);
@@ -565,7 +566,7 @@
 
         e.preventDefault();
 
-        if( CSF.vars.is_confirm ) {
+        if ( CSF.vars.is_confirm ) {
 
           base.notification( window.csf_vars.i18n.reset_notification );
 
@@ -589,14 +590,14 @@
 
         e.preventDefault();
 
-        if( CSF.vars.is_confirm ) {
+        if ( CSF.vars.is_confirm ) {
 
           base.notification( window.csf_vars.i18n.import_notification );
 
           window.wp.ajax.post( 'csf-import', {
             unique: $import.data('unique'),
             nonce: $import.data('nonce'),
-            import_data: $this.find('.csf-import-data').val()
+            data: $this.find('.csf-import-data').val()
           }).done( function( response ) {
             window.location.reload(true);
           }).fail( function( response ) {
@@ -626,24 +627,24 @@
   $.fn.csf_field_code_editor = function() {
     return this.each( function() {
 
-      if( typeof CodeMirror !== 'function' ) { return; }
+      if ( typeof CodeMirror !== 'function' ) { return; }
 
       var $this       = $(this),
           $textarea   = $this.find('textarea'),
           $inited     = $this.find('.CodeMirror'),
           data_editor = $textarea.data('editor');
 
-      if( $inited.length ) {
+      if ( $inited.length ) {
         $inited.remove();
       }
 
       var interval = setInterval(function () {
-        if( $this.is(':visible') ) {
+        if ( $this.is(':visible') ) {
 
           var code_editor = CodeMirror.fromTextArea( $textarea[0], data_editor );
 
           // load code-mirror theme css.
-          if( data_editor.theme !== 'default' && CSF.vars.code_themes.indexOf(data_editor.theme) === -1 ) {
+          if ( data_editor.theme !== 'default' && CSF.vars.code_themes.indexOf(data_editor.theme) === -1 ) {
 
             var $cssLink = $('<link>');
 
@@ -700,7 +701,7 @@
 
       settings = $.extend({}, settings, defaults);
 
-      if( $inputs.length === 2 ) {
+      if ( $inputs.length === 2 ) {
 
         settings = $.extend({}, settings, {
           onSelect: function( selectedDate ) {
@@ -721,7 +722,7 @@
 
         var $input = $(this);
 
-        if( $input.hasClass('hasDatepicker') ) {
+        if ( $input.hasClass('hasDatepicker') ) {
           $input.removeAttr('id').removeClass('hasDatepicker');
         }
 
@@ -764,10 +765,10 @@
 
         e.preventDefault();
 
-        if( typeof window.wp === 'undefined' || ! window.wp.media || ! window.wp.media.gallery ) { return; }
+        if ( typeof window.wp === 'undefined' || ! window.wp.media || ! window.wp.media.gallery ) { return; }
 
          // Open media with state
-        if( state === 'gallery' ) {
+        if ( state === 'gallery' ) {
 
           wp_media_frame = window.wp.media({
             library: {
@@ -784,7 +785,7 @@
 
           wp_media_frame = window.wp.media.gallery.edit( '[gallery ids="'+ ids +'"]' );
 
-          if( what === 'add' ) {
+          if ( what === 'add' ) {
             wp_media_frame.setState('gallery-library');
           }
 
@@ -846,7 +847,7 @@
           min       = parseInt( $wrapper.data('min') );
 
       // clear accordion arrows if multi-instance
-      if( $wrapper.hasClass('ui-accordion') ) {
+      if ( $wrapper.hasClass('ui-accordion') ) {
         $wrapper.find('.ui-accordion-header-icon').remove();
       }
 
@@ -863,21 +864,21 @@
         animate: false,
         heightStyle: 'content',
         icons: {
-          'header': 'csf-cloneable-header-icon fa fa-angle-right',
-          'activeHeader': 'csf-cloneable-header-icon fa fa-angle-down'
+          'header': 'csf-cloneable-header-icon fas fa-angle-right',
+          'activeHeader': 'csf-cloneable-header-icon fas fa-angle-down'
         },
         activate: function( event, ui ) {
 
           var $panel  = ui.newPanel;
           var $header = ui.newHeader;
 
-          if( $panel.length && !$panel.data( 'opened' ) ) {
+          if ( $panel.length && !$panel.data( 'opened' ) ) {
 
             var $fields = $panel.children();
             var $first  = $fields.first().find(':input').first();
             var $title  = $header.find('.csf-cloneable-value');
 
-            $first.on('keyup', function( event ) {
+            $first.on('change keyup', function( event ) {
               $title.text($first.val());
             });
 
@@ -885,7 +886,7 @@
             $panel.data( 'opened', true );
             $panel.data( 'retry', false );
 
-          } else if( $panel.data( 'retry' ) ) {
+          } else if ( $panel.data( 'retry' ) ) {
 
             $panel.csf_reload_script_retry();
             $panel.data( 'retry', false );
@@ -913,7 +914,7 @@
           CSF.helper.name_nested_replace( $wrapper.children('.csf-cloneable-item'), field_id );
           $wrapper.csf_customizer_refresh();
 
-          if( is_number ) {
+          if ( is_number ) {
             update_title_numbers($wrapper);
           }
 
@@ -928,7 +929,7 @@
 
         $min.hide();
 
-        if( max && (count+1) > max ) {
+        if ( max && (count+1) > max ) {
           $max.show();
           return;
         }
@@ -953,7 +954,7 @@
         $wrapper.csf_customizer_refresh();
         $wrapper.csf_customizer_listen({closest: true});
 
-        if( is_number ) {
+        if ( is_number ) {
           update_title_numbers($wrapper);
         }
 
@@ -967,7 +968,7 @@
 
         $min.hide();
 
-        if( max && (count+1) > max ) {
+        if ( max && (count+1) > max ) {
           $max.show();
           return;
         }
@@ -998,7 +999,7 @@
         $wrapper.csf_customizer_refresh();
         $wrapper.csf_customizer_listen({closest: true});
 
-        if( is_number ) {
+        if ( is_number ) {
           update_title_numbers($wrapper);
         }
 
@@ -1016,7 +1017,7 @@
         $max.hide();
         $min.hide();
 
-        if( min && (count-1) < min ) {
+        if ( min && (count-1) < min ) {
           $min.show();
           return;
         }
@@ -1027,7 +1028,7 @@
 
         $wrapper.csf_customizer_refresh();
 
-        if( is_number ) {
+        if ( is_number ) {
           update_title_numbers($wrapper);
         }
 
@@ -1058,7 +1059,7 @@
 
         CSF.vars.$icon_target = $this;
 
-        if( !CSF.vars.icon_modal_loaded ) {
+        if ( !CSF.vars.icon_modal_loaded ) {
 
           $modal.find('.csf-modal-loading').show();
 
@@ -1072,11 +1073,11 @@
 
             var $load = $modal.find('.csf-modal-load').html( response.content );
 
-            $load.on('click', 'a', function( e ) {
+            $load.on('click', 'i', function( e ) {
 
               e.preventDefault();
 
-              var icon = $(this).data('csf-icon');
+              var icon = $(this).attr('title');
 
               CSF.vars.$icon_target.find('i').removeAttr('class').addClass(icon);
               CSF.vars.$icon_target.find('input').val(icon).trigger('change');
@@ -1090,13 +1091,13 @@
             $modal.on('change keyup', '.csf-icon-search', function() {
 
               var value  = $(this).val(),
-                  $icons = $load.find('a');
+                  $icons = $load.find('i');
 
               $icons.each( function() {
 
                 var $elem = $(this);
 
-                if( $elem.data('csf-icon').search( new RegExp( value, 'i' ) ) < 0 ) {
+                if ( $elem.attr('title').search( new RegExp( value, 'i' ) ) < 0 ) {
                   $elem.hide();
                 } else {
                   $elem.show();
@@ -1135,7 +1136,7 @@
   $.fn.csf_field_map = function() {
     return this.each( function() {
 
-      if( typeof L === 'undefined' ) { return; }
+      if ( typeof L === 'undefined' ) { return; }
 
       var $this         = $(this),
           $map          = $this.find('.csf--map-osm'),
@@ -1172,36 +1173,54 @@
         update_latlng( mapMarker.getLatLng() );
       });
 
-      if( ! $search_input.length ) {
+      if ( ! $search_input.length ) {
         $search_input = $( '[data-depend-id="'+ $this.find('.csf--address-field').data( 'address-field' ) +'"]' );
       }
 
+      var cache = {};
+
       $search_input.autocomplete({
         source: function ( request, response ) {
+
+          var term = request.term;
+
+          if ( term in cache ) {
+            response( cache[term] );
+            return;
+          }
+
           $.get( 'https://nominatim.openstreetmap.org/search', {
             format: 'json',
-            q: request.term,
+            q: term,
           }, function( results ) {
-            if( results.length ) {
-              response( results.map( function( item ) {
+
+            var data;
+
+            if ( results.length ) {
+              data = results.map( function( item ) {
                 return {
                   value: item.display_name,
                   label: item.display_name,
                   lat: item.lat,
                   lon: item.lon
                 };
-              }, 'json' ) );
+              }, 'json');
             } else {
-              response([{
+              data = [{
                 value: 'no-data',
                 label: 'No Results.'
-              }]);
+              }];
             }
+
+            cache[term] = data;
+            response(data);
+
           });
+
         },
         select: function ( event, ui ) {
 
-          if( ui.item.value === 'no-data' ) { return false; }
+          if ( ui.item.value === 'no-data' ) { return false; }
 
           var latLng = L.latLng( ui.item.lat, ui.item.lon );
 
@@ -1247,11 +1266,11 @@
 
         e.preventDefault();
 
-        if( typeof window.wp === 'undefined' || ! window.wp.media || ! window.wp.media.gallery ) {
+        if ( typeof window.wp === 'undefined' || ! window.wp.media || ! window.wp.media.gallery ) {
           return;
         }
 
-        if( wp_media_frame ) {
+        if ( wp_media_frame ) {
           wp_media_frame.open();
           return;
         }
@@ -1268,7 +1287,7 @@
           var attributes   = wp_media_frame.state().get('selection').first().attributes;
           var preview_size = $upload_button.data('preview-size') || 'thumbnail';
 
-          if( $library.length && $library.indexOf(attributes.subtype) === -1 && $library.indexOf(attributes.type) === -1 ) {
+          if ( $library.length && $library.indexOf(attributes.subtype) === -1 && $library.indexOf(attributes.type) === -1 ) {
             return;
           }
 
@@ -1279,15 +1298,15 @@
           $this.find('.csf--title').val( attributes.title );
           $this.find('.csf--description').val( attributes.description );
 
-          if( typeof attributes.sizes !== 'undefined' && typeof attributes.sizes.thumbnail !== 'undefined' && preview_size === 'thumbnail' ) {
+          if ( typeof attributes.sizes !== 'undefined' && typeof attributes.sizes.thumbnail !== 'undefined' && preview_size === 'thumbnail' ) {
             thumbnail = attributes.sizes.thumbnail.url;
-          } else if( typeof attributes.sizes !== 'undefined' && typeof attributes.sizes.full !== 'undefined' ) {
+          } else if ( typeof attributes.sizes !== 'undefined' && typeof attributes.sizes.full !== 'undefined' ) {
             thumbnail = attributes.sizes.full.url;
           } else {
             thumbnail = attributes.icon;
           }
 
-          if( $auto_attributes ) {
+          if ( $auto_attributes ) {
             $auto_attributes.removeClass('csf--attributes-hidden');
           }
 
@@ -1308,7 +1327,7 @@
 
         e.preventDefault();
 
-        if( $auto_attributes ) {
+        if ( $auto_attributes ) {
           $auto_attributes.addClass('csf--attributes-hidden');
         }
 
@@ -1367,7 +1386,7 @@
 
         $min.hide();
 
-        if( max && (count+1) > max ) {
+        if ( max && (count+1) > max ) {
           $max.show();
           return;
         }
@@ -1401,7 +1420,7 @@
 
         $min.hide();
 
-        if( max && (count+1) > max ) {
+        if ( max && (count+1) > max ) {
           $max.show();
           return;
         }
@@ -1445,7 +1464,7 @@
         $max.hide();
         $min.hide();
 
-        if( min && (count-1) < min ) {
+        if ( min && (count-1) < min ) {
           $min.show();
           return;
         }
@@ -1476,7 +1495,7 @@
           data    = $input.data(),
           value   = $input.val() || 0;
 
-      if( $slider.hasClass('ui-slider') ) {
+      if ( $slider.hasClass('ui-slider') ) {
         $slider.empty();
       }
 
@@ -1491,7 +1510,7 @@
         }
       });
 
-      $input.keyup( function() {
+      $input.on('keyup', function() {
         $slider.slider('value', $input.val());
       });
 
@@ -1539,7 +1558,7 @@
 
           var $el = ui.item.find('input');
 
-          if( ui.item.parent().hasClass('csf-enabled') ) {
+          if ( ui.item.parent().hasClass('csf-enabled') ) {
             $el.attr('name', $el.attr('name').replace('disabled', 'enabled'));
           } else {
             $el.attr('name', $el.attr('name').replace('enabled', 'disabled'));
@@ -1550,7 +1569,7 @@
         }
       });
 
-      if( $disabled ) {
+      if ( $disabled ) {
 
         $disabled.sortable({
           connectWith: $enabled,
@@ -1576,7 +1595,7 @@
           $inited = $this.find('.ui-spinner-button'),
           $unit   = $input.data('unit');
 
-      if( $inited.length ) {
+      if ( $inited.length ) {
         $inited.remove();
       }
 
@@ -1585,7 +1604,7 @@
         min: $input.data('min') || 0,
         step: $input.data('step') || 1,
         create: function( event, ui ) {
-          if( $unit.length ) {
+          if ( $unit.length ) {
             $this.find('.ui-spinner-up').after('<span class="ui-button-text-only csf--unit">'+ $unit +'</span>');
           }
         },
@@ -1610,7 +1629,7 @@
         var value  = 0;
         var $input = $switcher.find('input');
 
-        if( $switcher.hasClass('csf--active') ) {
+        if ( $switcher.hasClass('csf--active') ) {
           $switcher.removeClass('csf--active');
         } else {
           value = 1;
@@ -1687,16 +1706,16 @@
       // Load google font
       base.load_google_font = function( font_family, weight, style ) {
 
-        if( font_family && typeof WebFont === 'object' ) {
+        if ( font_family && typeof WebFont === 'object' ) {
 
           weight = weight ? weight.replace('normal', '') : '';
           style  = style ? style.replace('normal', '') : '';
 
-          if( weight || style ) {
+          if ( weight || style ) {
             font_family = font_family +':'+ weight + style;
           }
 
-          if( loaded_fonts.indexOf( font_family ) === -1 ) {
+          if ( loaded_fonts.indexOf( font_family ) === -1 ) {
             WebFont.load({ google: { families: [font_family] } });
           }
 
@@ -1721,15 +1740,15 @@
           var name = value;
 
           // is_multi
-          if( is_multi ) {
+          if ( is_multi ) {
             selected = ( condition && condition.indexOf(value) !== -1 ) ? ' selected' : '';
           } else {
             selected = ( condition && condition === value ) ? ' selected' : '';
           }
 
-          if( type === 'subset' ) {
+          if ( type === 'subset' ) {
             name = base.sanitize_subset( value );
-          } else if( type === 'style' ){
+          } else if ( type === 'style' ){
             name = base.sanitize_style( value );
           }
 
@@ -1746,17 +1765,18 @@
         //
         //
         // Constants
-        var selected_styles = [];
-        var $typography     = $this.find('.csf--typography');
-        var $type           = $this.find('.csf--type');
-        var $styles         = $this.find('.csf--block-font-style');
-        var unit            = $typography.data('unit');
-        var exclude_fonts   = $typography.data('exclude') ? $typography.data('exclude').split(',') : [];
+        var selected_styles  = [];
+        var $typography      = $this.find('.csf--typography');
+        var $type            = $this.find('.csf--type');
+        var $styles          = $this.find('.csf--block-font-style');
+        var unit             = $typography.data('unit');
+        var line_height_unit = $typography.data('line-height-unit');
+        var exclude_fonts    = $typography.data('exclude') ? $typography.data('exclude').split(',') : [];
 
         //
         //
         // Chosen init
-        if( $this.find('.csf--chosen').length ) {
+        if ( $this.find('.csf--chosen').length ) {
 
           var $chosen_selects = $this.find('select');
 
@@ -1765,7 +1785,7 @@
             var $chosen_select = $(this),
                 $chosen_inited = $chosen_select.parent().find('.chosen-container');
 
-            if( $chosen_inited.length ) {
+            if ( $chosen_inited.length ) {
               $chosen_inited.remove();
             }
 
@@ -1793,7 +1813,7 @@
         $.each(webfonts, function( type, group ) {
 
           // Check for exclude fonts
-          if( exclude_fonts && exclude_fonts.indexOf(type) !== -1 ) { return; }
+          if ( exclude_fonts && exclude_fonts.indexOf(type) !== -1 ) { return; }
 
           opts += '<optgroup label="' + group.label + '">';
 
@@ -1818,7 +1838,7 @@
         // Font style select
         var $font_style_block = $this.find('.csf--block-font-style');
 
-        if( $font_style_block.length ) {
+        if ( $font_style_block.length ) {
 
           var $font_style_select = $this.find('.csf--font-style-select');
           var first_style_value  = $font_style_select.val() ? $font_style_select.val().replace(/normal/g, '' ) : '';
@@ -1830,7 +1850,7 @@
             var style_value = $font_style_select.val();
 
             // set a default value
-            if( !style_value && selected_styles && selected_styles.indexOf('normal') === -1 ) {
+            if ( !style_value && selected_styles && selected_styles.indexOf('normal') === -1 ) {
               style_value = selected_styles[0];
             }
 
@@ -1849,7 +1869,7 @@
           // Extra font style select
           var $extra_font_style_block = $this.find('.csf--block-extra-styles');
 
-          if( $extra_font_style_block.length ) {
+          if ( $extra_font_style_block.length ) {
             var $extra_font_style_select = $this.find('.csf--extra-styles');
             var first_extra_style_value  = $extra_font_style_select.val();
           }
@@ -1860,7 +1880,7 @@
         //
         // Subsets select
         var $subset_block = $this.find('.csf--block-subset');
-        if( $subset_block.length ) {
+        if ( $subset_block.length ) {
           var $subset_select = $this.find('.csf--subset');
           var first_subset_select_value = $subset_select.val();
           var subset_multi_select = $subset_select.data('multiple') || false;
@@ -1877,17 +1897,17 @@
         $font_family_select.on('change csf.change', function( event ) {
 
           // Hide subsets on change
-          if( $subset_block.length ) {
+          if ( $subset_block.length ) {
             $subset_block.addClass('hidden');
           }
 
           // Hide extra font style on change
-          if( $extra_font_style_block.length ) {
+          if ( $extra_font_style_block.length ) {
             $extra_font_style_block.addClass('hidden');
           }
 
           // Hide backup font family on change
-          if( $backup_font_family_block.length ) {
+          if ( $backup_font_family_block.length ) {
             $backup_font_family_block.addClass('hidden');
           }
 
@@ -1895,23 +1915,23 @@
           var value     = $selected.val();
           var type      = $selected.data('type');
 
-          if( type && value ) {
+          if ( type && value ) {
 
             // Show backup fonts if font type google or custom
-            if( ( type === 'google' || type === 'custom' ) && $backup_font_family_block.length ) {
+            if ( ( type === 'google' || type === 'custom' ) && $backup_font_family_block.length ) {
               $backup_font_family_block.removeClass('hidden');
             }
 
             // Appending font style select options
-            if( $font_style_block.length ) {
+            if ( $font_style_block.length ) {
 
               // set styles for multi and normal style selectors
               var styles = defaultstyles;
 
               // Custom or gogle font styles
-              if( type === 'google' && webfonts[type].fonts[value][0] ) {
+              if ( type === 'google' && webfonts[type].fonts[value][0] ) {
                 styles = webfonts[type].fonts[value][0];
-              } else if( type === 'custom' && webfonts[type].fonts[value] ) {
+              } else if ( type === 'custom' && webfonts[type].fonts[value] ) {
                 styles = webfonts[type].fonts[value];
               }
 
@@ -1931,7 +1951,7 @@
               $font_style_block.removeClass('hidden');
 
               // Appending extra font style select options
-              if( type === 'google' && $extra_font_style_block.length && styles.length > 1 ) {
+              if ( type === 'google' && $extra_font_style_block.length && styles.length > 1 ) {
 
                 // Append extra-style select options
                 base.append_select_options( $extra_font_style_select, styles, first_extra_style_value, 'style', true );
@@ -1947,7 +1967,7 @@
             }
 
             // Appending google fonts subsets select options
-            if( type === 'google' && $subset_block.length && webfonts[type].fonts[value][1] ) {
+            if ( type === 'google' && $subset_block.length && webfonts[type].fonts[value][1] ) {
 
               var subsets          = webfonts[type].fonts[value][1];
               var set_auto_subset  = ( subsets.length < 2 && subsets[0] !== 'latin' ) ? subsets[0] : '';
@@ -1970,13 +1990,13 @@
             $styles.find(':input').val('');
 
             // Clear subsets options if type and value empty
-            if( $subset_block.length ) {
+            if ( $subset_block.length ) {
               $subset_select.find('option').not(':first-child').remove();
               $subset_select.trigger('chosen:updated');
             }
 
             // Clear font styles options if type and value empty
-            if( $font_style_block.length ) {
+            if ( $font_style_block.length ) {
               $font_style_select.find('option').not(':first-child').remove();
               $font_style_select.trigger('chosen:updated');
             }
@@ -1993,7 +2013,7 @@
         // Preview
         var $preview_block = $this.find('.csf--block-preview');
 
-        if( $preview_block.length ) {
+        if ( $preview_block.length ) {
 
           var $preview = $this.find('.csf--preview');
 
@@ -2017,29 +2037,29 @@
                 custom_style      = $this.find('.csf--custom-style').val(),
                 type              = $this.find('.csf--type').val();
 
-            if( type === 'google' ) {
+            if ( type === 'google' ) {
               base.load_google_font(font_family, font_weight, font_style);
             }
 
             var properties = {};
 
-            if( font_family     ) { properties.fontFamily     = font_family;           }
-            if( font_weight     ) { properties.fontWeight     = font_weight;           }
-            if( font_style      ) { properties.fontStyle      = font_style;            }
-            if( font_variant    ) { properties.fontVariant    = font_variant;          }
-            if( font_size       ) { properties.fontSize       = font_size + unit;      }
-            if( line_height     ) { properties.lineHeight     = line_height + unit;    }
-            if( letter_spacing  ) { properties.letterSpacing  = letter_spacing + unit; }
-            if( word_spacing    ) { properties.wordSpacing    = word_spacing + unit;   }
-            if( text_align      ) { properties.textAlign      = text_align;            }
-            if( text_transform  ) { properties.textTransform  = text_transform;        }
-            if( text_decoration ) { properties.textDecoration = text_decoration;       }
-            if( text_color      ) { properties.color          = text_color;            }
+            if ( font_family     ) { properties.fontFamily     = font_family;                    }
+            if ( font_weight     ) { properties.fontWeight     = font_weight;                    }
+            if ( font_style      ) { properties.fontStyle      = font_style;                     }
+            if ( font_variant    ) { properties.fontVariant    = font_variant;                   }
+            if ( font_size       ) { properties.fontSize       = font_size + unit;               }
+            if ( line_height     ) { properties.lineHeight     = line_height + line_height_unit; }
+            if ( letter_spacing  ) { properties.letterSpacing  = letter_spacing + unit;          }
+            if ( word_spacing    ) { properties.wordSpacing    = word_spacing + unit;            }
+            if ( text_align      ) { properties.textAlign      = text_align;                     }
+            if ( text_transform  ) { properties.textTransform  = text_transform;                 }
+            if ( text_decoration ) { properties.textDecoration = text_decoration;                }
+            if ( text_color      ) { properties.color          = text_color;                     }
 
             $preview.removeAttr('style');
 
             // Customs style attribute
-            if( custom_style ) { $preview.attr('style', custom_style); }
+            if ( custom_style ) { $preview.attr('style', custom_style); }
 
             $preview.css(properties);
 
@@ -2052,7 +2072,7 @@
 
             var $toggle = $preview_block.find('.csf--toggle');
 
-            if( $toggle.hasClass('fa-toggle-off') ) {
+            if ( $toggle.hasClass('fa-toggle-off') ) {
               $toggle.removeClass('fa-toggle-off').addClass('fa-toggle-on');
             } else {
               $toggle.removeClass('fa-toggle-on').addClass('fa-toggle-off');
@@ -2060,7 +2080,7 @@
 
           });
 
-          if( !$preview_block.hasClass('hidden') ) {
+          if ( !$preview_block.hasClass('hidden') ) {
             $this.trigger('change');
           }
 
@@ -2087,7 +2107,7 @@
           wp_media_frame;
 
       $input.on('change', function( e ) {
-        if( $input.val() ) {
+        if ( $input.val() ) {
           $remove_button.removeClass('hidden');
         } else {
           $remove_button.addClass('hidden');
@@ -2098,11 +2118,11 @@
 
         e.preventDefault();
 
-        if( typeof window.wp === 'undefined' || ! window.wp.media || ! window.wp.media.gallery ) {
+        if ( typeof window.wp === 'undefined' || ! window.wp.media || ! window.wp.media.gallery ) {
           return;
         }
 
-        if( wp_media_frame ) {
+        if ( wp_media_frame ) {
           wp_media_frame.open();
           return;
         }
@@ -2117,7 +2137,7 @@
 
           var attributes = wp_media_frame.state().get('selection').first().attributes;
 
-          if( $library.length && $library.indexOf(attributes.subtype) === -1 && $library.indexOf(attributes.type) === -1 ) {
+          if ( $library.length && $library.indexOf(attributes.subtype) === -1 && $library.indexOf(attributes.type) === -1 ) {
             return;
           }
 
@@ -2144,7 +2164,7 @@
   $.fn.csf_field_wp_editor = function() {
     return this.each( function() {
 
-      if( typeof window.wp.editor === 'undefined' || typeof window.tinyMCEPreInit === 'undefined' || typeof window.tinyMCEPreInit.mceInit.csf_wp_editor === 'undefined' ) {
+      if ( typeof window.wp.editor === 'undefined' || typeof window.tinyMCEPreInit === 'undefined' || typeof window.tinyMCEPreInit.mceInit.csf_wp_editor === 'undefined' ) {
         return;
       }
 
@@ -2155,7 +2175,7 @@
       // If there is wp-editor remove it for avoid dupliated wp-editor conflicts.
       var $has_wp_editor = $this.find('.wp-editor-wrap').length || $this.find('.mce-container').length;
 
-      if( $has_wp_editor ) {
+      if ( $has_wp_editor ) {
         $editor.empty();
         $editor.append($textarea);
         $textarea.css('display', '');
@@ -2186,7 +2206,7 @@
       // Callback for old wp editor
       var wpEditor = wp.oldEditor ? wp.oldEditor : wp.editor;
 
-      if( wpEditor && wpEditor.hasOwnProperty('autop') ) {
+      if ( wpEditor && wpEditor.hasOwnProperty('autop') ) {
         wp.editor.autop = wpEditor.autop;
         wp.editor.removep = wpEditor.removep;
         wp.editor.initialize = wpEditor.initialize;
@@ -2196,31 +2216,31 @@
       default_editor_settings.tinymce = $.extend( {}, default_editor_settings.tinymce, { selector: '#'+ uid, setup: editor_on_change } );
 
       // Override editor tinymce settings
-      if( field_editor_settings.tinymce === false ) {
+      if ( field_editor_settings.tinymce === false ) {
         default_editor_settings.tinymce = false;
         $editor.addClass('csf-no-tinymce');
       }
 
       // Override editor quicktags settings
-      if( field_editor_settings.quicktags === false ) {
+      if ( field_editor_settings.quicktags === false ) {
         default_editor_settings.quicktags = false;
         $editor.addClass('csf-no-quicktags');
       }
 
       // Wait until :visible
       var interval = setInterval(function () {
-        if( $this.is(':visible') ) {
+        if ( $this.is(':visible') ) {
           window.wp.editor.initialize(uid, default_editor_settings);
           clearInterval(interval);
         }
       });
 
       // Add Media buttons
-      if( field_editor_settings.media_buttons && window.csf_media_buttons ) {
+      if ( field_editor_settings.media_buttons && window.csf_media_buttons ) {
 
         var $editor_buttons = $editor.find('.wp-media-buttons');
 
-        if( $editor_buttons.length ) {
+        if ( $editor_buttons.length ) {
 
           $editor_buttons.find('.csf-shortcode-button').data('editor-id', uid);
 
@@ -2247,13 +2267,13 @@
     return this.each( function() {
       $(this).on('click', function( e ) {
 
-        var confirm_text    = $(this).data('confirm') || window.csf_vars.i18n.confirm;
-        var confirm_answer  = confirm( confirm_text );
-        CSF.vars.is_confirm = true;
+        var confirm_text   = $(this).data('confirm') || window.csf_vars.i18n.confirm;
+        var confirm_answer = confirm( confirm_text );
 
-        if( !confirm_answer ) {
+        if ( confirm_answer ) {
+          CSF.vars.is_confirm = true;
+        } else {
           e.preventDefault();
-          CSF.vars.is_confirm = false;
           return false;
         }
 
@@ -2292,14 +2312,14 @@
 
       $this.on('click', function( e ) {
 
-        if( !flooding ) {
+        if ( !flooding ) {
 
           var $text  = $this.data('save'),
               $value = $this.val();
 
           $buttons.attr('value', $text);
 
-          if( $this.hasClass('csf-save-ajax') ) {
+          if ( $this.hasClass('csf-save-ajax') ) {
 
             e.preventDefault();
 
@@ -2314,7 +2334,7 @@
               // clear errors
               $('.csf-error').remove();
 
-              if( Object.keys( response.errors ).length ) {
+              if ( Object.keys( response.errors ).length ) {
 
                 var error_icon = '<i class="csf-label-error csf-error">!</i>';
 
@@ -2326,15 +2346,13 @@
 
                   $field.closest('.csf-fieldset').append( '<p class="csf-text-error csf-error">'+ error_message +'</p>' );
 
-                  if( !$link.find('.csf-error').length ) {
+                  if ( !$link.find('.csf-error').length ) {
                     $link.append( error_icon );
                   }
 
-                  if( !$tab.find('.csf-arrow .csf-error').length ) {
+                  if ( !$tab.find('.csf-arrow .csf-error').length ) {
                     $tab.find('.csf-arrow').append( error_icon );
                   }
-
-                  console.log(error_message);
 
                 });
 
@@ -2360,6 +2378,10 @@
             .fail( function( response ) {
               alert( response.error );
             });
+
+          } else {
+
+            CSF.vars.form_modified = false;
 
           }
 
@@ -2387,14 +2409,14 @@
       CSF.vars.$form_warning = $form_warning;
 
       // Shows a message white leaving theme options without saving
-      if( $form_warning.length ) {
+      if ( $form_warning.length ) {
 
         window.onbeforeunload = function() {
-          return ( CSF.vars.form_modified ) ? true : undefined;
+          return ( CSF.vars.form_modified && CSF.vars.is_confirm === false ) ? true : undefined;
         };
 
         $content.on('change keypress', ':input', function() {
-          if( !CSF.vars.form_modified ) {
+          if ( !CSF.vars.form_modified ) {
             $form_success.hide();
             $form_warning.fadeIn('fast');
             CSF.vars.form_modified = true;
@@ -2403,14 +2425,14 @@
 
       }
 
-      if( $form_success.hasClass('csf-form-show') ) {
+      if ( $form_success.hasClass('csf-form-show') ) {
         setTimeout( function() {
           $form_success.fadeOut('fast');
         }, 1000);
       }
 
       $(document).keydown(function (event) {
-        if( ( event.ctrlKey || event.metaKey ) && event.which === 83 ) {
+        if ( ( event.ctrlKey || event.metaKey ) && event.which === 83 ) {
           $save_button.trigger('click');
           event.preventDefault();
           return false;
@@ -2429,14 +2451,14 @@
       var $this = $(this),
           $form = $this.parents('form');
 
-      if( $form.attr('id') === 'addtag' ) {
+      if ( $form.attr('id') === 'addtag' ) {
 
         var $submit = $form.find('#submit'),
             $cloned = $this.find('.csf-field').csf_clone();
 
         $submit.on( 'click', function() {
 
-          if( !$form.find('.form-required').hasClass('form-invalid') ) {
+          if ( !$form.find('.form-required').hasClass('form-invalid') ) {
 
             $this.data('inited', false);
 
@@ -2476,7 +2498,7 @@
 
         $.each(shortcode_values, function( shortcode_tag, shortcode_value ) {
 
-          if( shortcode_tag === 'content' ) {
+          if ( shortcode_tag === 'content' ) {
 
             shortcode += ']';
             shortcode += shortcode_value;
@@ -2502,9 +2524,9 @@
 
       var shortcode = '';
 
-      if( shortcode_value !== '' ) {
+      if ( shortcode_value !== '' ) {
 
-        if( typeof shortcode_value === 'object' && !$.isArray( shortcode_value ) ) {
+        if ( typeof shortcode_value === 'object' && !$.isArray( shortcode_value ) ) {
 
           $.each(shortcode_value, function( sub_shortcode_tag, sub_shortcode_value ) {
 
@@ -2517,7 +2539,7 @@
 
             }
 
-            if( sub_shortcode_value !== '' ) {
+            if ( sub_shortcode_value !== '' ) {
               shortcode += ' ' + sub_shortcode_tag.replace('-', '_') + '="' + sub_shortcode_value.toString() + '"';
             }
 
@@ -2539,7 +2561,7 @@
 
       var obj = ( typeof _this[0].name !== 'undefined' ) ? _this[0] : _this;
 
-      if( obj.value.length && typeof obj.selectionStart !== 'undefined' ) {
+      if ( obj.value.length && typeof obj.selectionStart !== 'undefined' ) {
         obj.focus();
         return obj.value.substring( 0, obj.selectionStart ) + currentValue + obj.value.substring( obj.selectionEnd, obj.value.length );
       } else {
@@ -2553,11 +2575,11 @@
 
       var tinymce_editor;
 
-      if( typeof tinymce !== 'undefined' ) {
+      if ( typeof tinymce !== 'undefined' ) {
         tinymce_editor = tinymce.get( editor_id );
       }
 
-      if( tinymce_editor && !tinymce_editor.isHidden() ) {
+      if ( tinymce_editor && !tinymce_editor.isHidden() ) {
         tinymce_editor.execCommand( 'mceInsertContent', false, html );
       } else {
         var $editor = $('#'+editor_id);
@@ -2598,7 +2620,7 @@
         $modal.show();
 
         // single usage trigger first shortcode
-        if( $modal.hasClass('csf-shortcode-single') && sc_name === undefined ) {
+        if ( $modal.hasClass('csf-shortcode-single') && sc_name === undefined ) {
           $select.trigger('change');
         }
 
@@ -2616,7 +2638,7 @@
 
         $load.empty();
 
-        if( sc_key ) {
+        if ( sc_key ) {
 
           $loading.show();
 
@@ -2651,7 +2673,7 @@
 
         e.preventDefault();
 
-        if( $insert.prop('disabled') || $insert.attr('disabled') ) { return; }
+        if ( $insert.prop('disabled') || $insert.attr('disabled') ) { return; }
 
         var shortcode = '';
         var serialize = $modal.find('.csf-field:not(.hidden)').find(':input:not(.ignore)').serializeObjectCSF();
@@ -2690,12 +2712,12 @@
 
         shortcode = ( shortcode === '' ) ? '['+ sc_name +']' : shortcode;
 
-        if( gutenberg_id ) {
+        if ( gutenberg_id ) {
 
           var content = window.csf_gutenberg_props.attributes.hasOwnProperty('shortcode') ? window.csf_gutenberg_props.attributes.shortcode : '';
           window.csf_gutenberg_props.setAttributes({shortcode: content + shortcode});
 
-        } else if( editor_id ) {
+        } else if ( editor_id ) {
 
           base.send_to_editor( shortcode, editor_id );
 
@@ -2744,19 +2766,19 @@
   //
   // WP Color Picker
   //
-  if( typeof Color === 'function' ) {
+  if ( typeof Color === 'function' ) {
 
     Color.prototype.toString = function() {
 
-      if( this._alpha < 1 ) {
+      if ( this._alpha < 1 ) {
         return this.toCSS('rgba', this._alpha).replace(/\s+/g, '');
       }
 
       var hex = parseInt( this._color, 10 ).toString( 16 );
 
-      if( this.error ) { return ''; }
+      if ( this.error ) { return ''; }
 
-      if( hex.length < 6 ) {
+      if ( hex.length < 6 ) {
         for (var i = 6 - hex.length - 1; i >= 0; i--) {
           hex = '0' + hex;
         }
@@ -2787,7 +2809,7 @@
           $container;
 
       // Destroy and Reinit
-      if( $input.hasClass('wp-color-picker') ) {
+      if ( $input.hasClass('wp-color-picker') ) {
         $input.closest('.wp-picker-container').after($input).remove();
       }
 
@@ -2811,19 +2833,19 @@
                                 '<div class="csf--transparent-slider"></div>' +
                                 '<div class="csf--transparent-offset"></div>' +
                                 '<div class="csf--transparent-text"></div>' +
-                                '<div class="csf--transparent-button">transparent <i class="fa fa-toggle-off"></i></div>' +
+                                '<div class="csf--transparent-button">transparent <i class="fas fa-toggle-off"></i></div>' +
                                 '</div>').appendTo( $container.find('.wp-picker-holder') ),
               $transparent_slider = $transparent_wrap.find('.csf--transparent-slider'),
               $transparent_text   = $transparent_wrap.find('.csf--transparent-text'),
               $transparent_offset = $transparent_wrap.find('.csf--transparent-offset'),
               $transparent_button = $transparent_wrap.find('.csf--transparent-button');
 
-          if( $input.val() === 'transparent' ) {
+          if ( $input.val() === 'transparent' ) {
             $container.addClass('csf--transparent-active');
           }
 
           $transparent_button.on('click', function() {
-            if( $input.val() !== 'transparent' ) {
+            if ( $input.val() !== 'transparent' ) {
               $input.val('transparent').trigger('change').removeClass('iris-error');
               $container.addClass('csf--transparent-active');
             } else {
@@ -2902,12 +2924,12 @@
             no_results_text: window.csf_vars.i18n.no_results_text,
           }, $this.data('chosen-settings'));
 
-      if( $inited.length ) {
+      if ( $inited.length ) {
         $inited.remove();
       }
 
       // Chosen ajax
-      if( is_ajax ) {
+      if ( is_ajax ) {
 
         var set_ajax_options = $.extend({
           data: {
@@ -2933,21 +2955,21 @@
       }
 
       // Chosen keep options order
-      if( is_multiple ) {
+      if ( is_multiple ) {
 
         var $hidden_select = $this.parent().find('.csf-hidden-select');
         var $hidden_value  = $hidden_select.val() || [];
 
         $this.on('change', function(obj, result) {
 
-          if( result && result.selected ) {
+          if ( result && result.selected ) {
             $hidden_select.append( '<option value="'+ result.selected +'" selected="selected">'+ result.selected +'</option>' );
-          } else if( result && result.deselected ) {
+          } else if ( result && result.deselected ) {
             $hidden_select.find('option[value="'+ result.deselected +'"]').remove();
           }
 
           // Force customize refresh
-          if( $hidden_select.children().length === 0 && window.wp.customize !== undefined ) {
+          if ( $hidden_select.children().length === 0 && window.wp.customize !== undefined ) {
             window.wp.customize.control( $hidden_select.data('customize-setting-link') ).setting.set('');
           }
 
@@ -2961,13 +2983,13 @@
       }
 
       // Chosen sortable
-      if( is_sortable ) {
+      if ( is_sortable ) {
 
         var $chosen_container = $this.parent().find('.chosen-container');
         var $chosen_choices   = $chosen_container.find('.chosen-choices');
 
         $chosen_choices.bind('mousedown', function( event ) {
-          if( $(event.target).is('span') ) {
+          if ( $(event.target).is('span') ) {
             event.stopPropagation();
           }
         });
@@ -2990,7 +3012,7 @@
             $chosen_choices.find('.search-choice-close').each( function() {
               var option_array_index = $(this).data('option-array-index');
               $.each(chosen_object.results_data, function(index, data) {
-                if( data.array_index === option_array_index ){
+                if ( data.array_index === option_array_index ){
                   select_options += '<option value="'+ data.value +'" selected>'+ data.value +'</option>';
                 }
               });
@@ -3039,9 +3061,9 @@
 
         var $sibling = $(this);
 
-        if( multiple ) {
+        if ( multiple ) {
 
-          if( $sibling.hasClass('csf--active') ) {
+          if ( $sibling.hasClass('csf--active') ) {
             $sibling.removeClass('csf--active');
             $sibling.find('input').prop('checked', false).trigger('change');
           } else {
@@ -3086,7 +3108,7 @@
         },
         mouseleave: function() {
 
-          if( $tooltip !== undefined ) {
+          if ( $tooltip !== undefined ) {
             $tooltip.remove();
           }
 
@@ -3106,7 +3128,7 @@
       var $this    = $(this),
           $complex = $this.closest('.csf-customize-complex');
 
-      if( $complex.length ) {
+      if ( $complex.length ) {
 
         var $input  = $complex.find(':input'),
             $unique = $complex.data('unique-id'),
@@ -3142,14 +3164,14 @@
 
     return this.each( function() {
 
-      if( window.wp.customize === undefined ) { return; }
+      if ( window.wp.customize === undefined ) { return; }
 
       var $this     = ( settings.closest ) ? $(this).closest('.csf-customize-complex') : $(this),
           $input    = $this.find(':input'),
           unique_id = $this.data('unique-id'),
           option_id = $this.data('option-id');
 
-      if( unique_id === undefined ) { return; }
+      if ( unique_id === undefined ) { return; }
 
       $input.on('change keyup', CSF.helper.debounce( function() {
 
@@ -3170,12 +3192,12 @@
 
     var $this  = $(this);
 
-    if( $this.hasClass('open') && !$this.data('inited') ) {
+    if ( $this.hasClass('open') && !$this.data('inited') ) {
 
       var $fields  = $this.find('.csf-customize-field');
       var $complex = $this.find('.csf-customize-complex');
 
-      if( $fields.length ) {
+      if ( $fields.length ) {
         $this.csf_dependency();
         $fields.csf_reload_script({dependency: false});
         $complex.csf_customizer_listen();
@@ -3194,7 +3216,7 @@
 
     var window_width = navigator.userAgent.indexOf('AppleWebKit/') > -1 ? CSF.vars.$window.width() : window.innerWidth;
 
-    if( window_width <= 782 && !CSF.vars.onloaded ) {
+    if ( window_width <= 782 && !CSF.vars.onloaded ) {
       $('.csf-section').csf_reload_script();
       CSF.vars.onloaded  = true;
     }
@@ -3205,7 +3227,7 @@
   // Widgets Framework
   //
   $.fn.csf_widgets = function() {
-    if( this.length ) {
+    if ( this.length ) {
 
       $(document).on('widget-added widget-updated', function( event, $widget ) {
         $widget.find('.csf-fields').csf_reload_script();
@@ -3230,7 +3252,7 @@
 
       var $this = $(this);
 
-      if( $this.data('inited') ) {
+      if ( $this.data('inited') ) {
         $this.children('.csf-field-wp_editor').csf_field_wp_editor();
       }
 
@@ -3251,7 +3273,7 @@
       var $this = $(this);
 
       // Avoid for conflicts
-      if( !$this.data('inited') ) {
+      if ( !$this.data('inited') ) {
 
         // Field plugins
         $this.children('.csf-field-accordion').csf_field_accordion();
@@ -3298,7 +3320,7 @@
         // Help Tooptip
         $this.children('.csf-field').find('.csf-help').csf_help();
 
-        if( settings.dependency ) {
+        if ( settings.dependency ) {
           $this.csf_dependency();
         }
 

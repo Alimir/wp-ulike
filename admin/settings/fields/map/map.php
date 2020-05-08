@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_map' ) ) {
+if ( ! class_exists( 'CSF_Field_map' ) ) {
   class CSF_Field_map extends CSF_Fields {
 
     public $version = '1.5.1';
@@ -42,38 +42,37 @@ if( ! class_exists( 'CSF_Field_map' ) ) {
 
       $settings = ( ! empty( $this->field['settings'] ) ) ? $this->field['settings'] : array();
       $settings = wp_parse_args( $settings, $default_settings );
-      $encoded  = htmlspecialchars( json_encode( $settings ) );
 
-      $style_attr  = ( ! empty( $args['height'] ) ) ? ' style="min-height:'. $args['height'] .';"' : '';
+      $style_attr  = ( ! empty( $args['height'] ) ) ? ' style="min-height:'. esc_attr( $args['height'] ) .';"' : '';
       $placeholder = ( ! empty( $args['placeholder'] ) ) ? array( 'placeholder' => $args['placeholder'] ) : '';
 
       echo $this->field_before();
 
-      if( empty( $args['address_field'] ) ) {
+      if ( empty( $args['address_field'] ) ) {
         echo '<div class="csf--map-search">';
-        echo '<input type="text" name="'. $this->field_name('[address]') .'" value="'. $value['address'] .'"'. $this->field_attributes( $placeholder ) .' />';
+        echo '<input type="text" name="'. esc_attr( $this->field_name( '[address]' ) ) .'" value="'. esc_attr( $value['address'] ) .'"'. $this->field_attributes( $placeholder ) .' />';
         echo '</div>';
       } else {
-        echo '<div class="csf--address-field" data-address-field="'. $args['address_field'] .'"></div>';
+        echo '<div class="csf--address-field" data-address-field="'. esc_attr( $args['address_field'] ) .'"></div>';
       }
 
-      echo '<div class="csf--map-osm-wrap"><div class="csf--map-osm" data-map="'. $encoded .'"'. $style_attr .'></div></div>';
+      echo '<div class="csf--map-osm-wrap"><div class="csf--map-osm" data-map="'. esc_attr( json_encode( $settings ) ) .'"'. $style_attr .'></div></div>';
 
       echo '<div class="csf--map-inputs">';
 
         echo '<div class="csf--map-input">';
-        echo '<label>'. $args['latitude_text'] .'</label>';
-        echo '<input type="text" name="'. $this->field_name('[latitude]') .'" value="'. $value['latitude'] .'" class="csf--latitude" />';
+        echo '<label>'. esc_attr( $args['latitude_text'] ) .'</label>';
+        echo '<input type="text" name="'. esc_attr( $this->field_name( '[latitude]' ) ) .'" value="'. esc_attr( $value['latitude'] ) .'" class="csf--latitude" />';
         echo '</div>';
 
         echo '<div class="csf--map-input">';
-        echo '<label>'. $args['longitude_text'] .'</label>';
-        echo '<input type="text" name="'. $this->field_name('[longitude]') .'" value="'. $value['longitude'] .'" class="csf--longitude" />';
+        echo '<label>'. esc_attr( $args['longitude_text'] ) .'</label>';
+        echo '<input type="text" name="'. esc_attr( $this->field_name( '[longitude]' ) ) .'" value="'. esc_attr( $value['longitude'] ) .'" class="csf--longitude" />';
         echo '</div>';
 
       echo '</div>';
 
-      echo '<input type="hidden" name="'. $this->field_name('[zoom]') .'" value="'. $value['zoom'] .'" class="csf--zoom" />';
+      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[zoom]' ) ) .'" value="'. esc_attr( $value['zoom'] ) .'" class="csf--zoom" />';
 
       echo $this->field_after();
 
@@ -81,15 +80,15 @@ if( ! class_exists( 'CSF_Field_map' ) ) {
 
     public function enqueue() {
 
-      if( ! wp_script_is( 'csf-leaflet' ) ) {
-        wp_enqueue_script( 'csf-leaflet', $this->cdn_url . $this->version .'/dist/leaflet.js', array( 'csf' ), $this->version, true );
+      if ( ! wp_script_is( 'csf-leaflet' ) ) {
+        wp_enqueue_script( 'csf-leaflet', esc_url( $this->cdn_url . $this->version .'/dist/leaflet.js' ), array( 'csf' ), $this->version, true );
       }
 
-      if( ! wp_style_is( 'csf-leaflet' ) ) {
-        wp_enqueue_style( 'csf-leaflet', $this->cdn_url . $this->version .'/dist/leaflet.css', array(), $this->version );
+      if ( ! wp_style_is( 'csf-leaflet' ) ) {
+        wp_enqueue_style( 'csf-leaflet', esc_url( $this->cdn_url . $this->version .'/dist/leaflet.css' ), array(), $this->version );
       }
 
-      if( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
+      if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
         wp_enqueue_script( 'jquery-ui-autocomplete' );
       }
 

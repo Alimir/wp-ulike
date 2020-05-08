@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_text' ) ) {
+if ( ! class_exists( 'CSF_Field_text' ) ) {
   class CSF_Field_text extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -20,7 +20,7 @@ if( ! class_exists( 'CSF_Field_text' ) ) {
 
       echo $this->field_before();
 
-      echo '<input type="'. $type .'" name="'. $this->field_name() .'" value="'. $this->value .'"'. $this->field_attributes() .' />';
+      echo '<input type="'. esc_attr( $type ) .'" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes() .' />';
 
       echo $this->field_after();
 

@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Metabox' ) ) {
+if ( ! class_exists( 'CSF_Metabox' ) ) {
   class CSF_Metabox extends CSF_Abstract{
 
     // constans
@@ -49,8 +49,8 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
       add_action( 'save_post', array( &$this, 'save_meta_box' ) );
       add_action( 'edit_attachment', array( &$this, 'save_meta_box' ) );
 
-      if( ! empty( $this->page_templates ) || ! empty( $this->post_formats ) || ! empty( $this->args['class'] ) ) {
-        foreach( $this->post_type as $post_type ) {
+      if ( ! empty( $this->page_templates ) || ! empty( $this->post_formats ) || ! empty( $this->args['class'] ) ) {
+        foreach ( $this->post_type as $post_type ) {
           add_filter( 'postbox_classes_'. $post_type .'_'. $this->unique, array( &$this, 'add_metabox_classes' ) );
         }
       }
@@ -69,9 +69,9 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
       $result  = array();
 
-      foreach( $sections as $key => $section ) {
-        if( ! empty( $section['fields'] ) ) {
-          foreach( $section['fields'] as $field ) {
+      foreach ( $sections as $key => $section ) {
+        if ( ! empty( $section['fields'] ) ) {
+          foreach ( $section['fields'] as $field ) {
             $result[] = $field;
           }
         }
@@ -84,7 +84,7 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
       global $post;
 
-      if( ! empty( $this->post_formats ) ) {
+      if ( ! empty( $this->post_formats ) ) {
 
         $saved_post_format = ( is_object( $post ) ) ? get_post_format( $post ) : false;
         $saved_post_format = ( ! empty( $saved_post_format ) ) ? $saved_post_format : 'default';
@@ -92,15 +92,15 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
         $classes[] = 'csf-post-formats';
 
         // Sanitize post format for standard to default
-        if( ( $key = array_search( 'standard', $this->post_formats ) ) !== false ) {
+        if ( ( $key = array_search( 'standard', $this->post_formats ) ) !== false ) {
           $this->post_formats[$key] = 'default';
         }
 
-        foreach( $this->post_formats as $format ) {
+        foreach ( $this->post_formats as $format ) {
           $classes[] = 'csf-post-format-'. $format;
         }
 
-        if( ! in_array( $saved_post_format, $this->post_formats ) ) {
+        if ( ! in_array( $saved_post_format, $this->post_formats ) ) {
           $classes[] = 'csf-hide';
         } else {
           $classes[] = 'csf-show';
@@ -108,17 +108,17 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
       }
 
-      if( ! empty( $this->page_templates ) ) {
+      if ( ! empty( $this->page_templates ) ) {
 
         $saved_template = ( is_object( $post ) && ! empty( $post->page_template ) ) ? $post->page_template : 'default';
 
         $classes[] = 'csf-page-templates';
 
-        foreach( $this->page_templates as $template ) {
+        foreach ( $this->page_templates as $template ) {
           $classes[] = 'csf-page-'. preg_replace( '/[^a-zA-Z0-9]+/', '-', strtolower( $template ) );
         }
 
-        if( ! in_array( $saved_template, $this->page_templates ) ) {
+        if ( ! in_array( $saved_template, $this->page_templates ) ) {
           $classes[] = 'csf-hide';
         } else {
           $classes[] = 'csf-show';
@@ -126,7 +126,7 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
       }
 
-      if( ! empty( $this->args['class'] ) ) {
+      if ( ! empty( $this->args['class'] ) ) {
         $classes[] = $this->args['class'];
       }
 
@@ -137,8 +137,8 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
     // add metabox
     public function add_meta_box( $post_type ) {
 
-      if( ! in_array( $post_type, $this->args['exclude_post_types'] ) ) {
-        add_meta_box( $this->unique, $this->args['title'], array( &$this, 'add_meta_box_content' ), $this->post_type, $this->args['context'], $this->args['priority'], $this->args );
+      if ( ! in_array( $post_type, $this->args['exclude_post_types'] ) ) {
+        add_meta_box( $this->unique, wp_kses_post( $this->args['title'] ), array( &$this, 'add_meta_box_content' ), $this->post_type, $this->args['context'], $this->args['priority'], $this->args );
       }
 
     }
@@ -146,8 +146,8 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
     // get default value
     public function get_default( $field ) {
 
-      $default = ( isset( $field['id'] ) && isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : null;
-      $default = ( isset( $field['default'] ) ) ? $field['default'] : $default;
+      $default = ( isset( $field['default'] ) ) ? $field['default'] : '';
+      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : $default;
 
       return $default;
 
@@ -160,9 +160,9 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
       $value = null;
 
-      if( is_object( $post ) && ! empty( $field['id'] ) ) {
+      if ( is_object( $post ) && ! empty( $field['id'] ) ) {
 
-        if( $this->args['data_type'] !== 'serialize' ) {
+        if ( $this->args['data_type'] !== 'serialize' ) {
           $meta  = get_post_meta( $post->ID, $field['id'] );
           $value = ( isset( $meta[0] ) ) ? $meta[0] : null;
         } else {
@@ -172,7 +172,7 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
       }
 
-      $default = $this->get_default( $field );
+      $default = ( isset( $field['id'] ) ) ? $this->get_default( $field ) : '';
       $value   = ( isset( $value ) ) ? $value : $default;
 
       return $value;
@@ -186,32 +186,32 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
       $has_nav  = ( count( $this->sections ) > 1 && $this->args['context'] !== 'side' ) ? true : false;
       $show_all = ( ! $has_nav ) ? ' csf-show-all' : '';
-      $errors   = ( is_object ( $post ) ) ? get_post_meta( $post->ID, '_csf_errors', true ) : array();
+      $errors   = ( is_object ( $post ) ) ? get_post_meta( $post->ID, '_csf_errors_'. $this->unique, true ) : array();
       $errors   = ( ! empty( $errors ) ) ? $errors : array();
       $theme    = ( $this->args['theme'] ) ? ' csf-theme-'. $this->args['theme'] : '';
 
-      if( is_object ( $post ) && ! empty( $errors ) ) {
-        delete_post_meta( $post->ID, '_csf_errors' );
+      if ( is_object ( $post ) && ! empty( $errors ) ) {
+        delete_post_meta( $post->ID, '_csf_errors_'. $this->unique );
       }
 
       wp_nonce_field( 'csf_metabox_nonce', 'csf_metabox_nonce'. $this->unique );
 
-      echo '<div class="csf csf-metabox'. $theme .'">';
+      echo '<div class="csf csf-metabox'. esc_attr( $theme ) .'">';
 
-        echo '<div class="csf-wrapper'. $show_all .'">';
+        echo '<div class="csf-wrapper'. esc_attr( $show_all ) .'">';
 
-          if( $has_nav ) {
+          if ( $has_nav ) {
 
-            echo '<div class="csf-nav csf-nav-metabox" data-unique="'. $this->unique .'">';
+            echo '<div class="csf-nav csf-nav-metabox" data-unique="'. esc_attr( $this->unique ) .'">';
 
               echo '<ul>';
               $tab_key = 1;
-              foreach( $this->sections as $section ) {
+              foreach ( $this->sections as $section ) {
 
                 $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="csf-label-error csf-error">!</i>' : '';
-                $tab_icon = ( ! empty( $section['icon'] ) ) ? '<i class="csf-icon '. $section['icon'] .'"></i>' : '';
+                $tab_icon = ( ! empty( $section['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-                echo '<li><a href="#" data-section="'. $this->unique .'_'. $tab_key .'">'. $tab_icon . $section['title'] . $tab_error .'</a></li>';
+                echo '<li><a href="#" data-section="'. esc_attr( $this->unique .'_'. $tab_key ) .'">'. wp_kses_post( $tab_icon . $section['title'] . $tab_error ) .'</a></li>';
 
                 $tab_key++;
               }
@@ -225,25 +225,29 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
             echo '<div class="csf-sections">';
 
-            $section_key = 1;
+            $count = 1;
 
-            foreach( $this->sections as $section ) {
+            foreach ( $this->sections as $section ) {
 
               $onload = ( ! $has_nav ) ? ' csf-onload' : '';
 
-              echo '<div id="csf-section-'. $this->unique .'_'. $section_key .'" class="csf-section'. $onload .'">';
+              echo '<div id="csf-section-'. esc_attr( $this->unique .'_'. $count ) .'" class="csf-section'. esc_attr( $onload ) .'">';
 
-              $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-icon '. $section['icon'] .'"></i>' : '';
+              $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
               $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
 
-              echo ( $section_title || $section_icon ) ? '<div class="csf-section-title"><h3>'. $section_icon . $section_title .'</h3></div>' : '';
+              echo ( $section_title || $section_icon ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
 
-              if( ! empty( $section['fields'] ) ) {
+              if ( ! empty( $section['fields'] ) ) {
 
                 foreach ( $section['fields'] as $field ) {
 
-                  if( ! empty( $field['id'] ) && ! empty( $errors['fields'][$field['id']] ) ) {
+                  if ( ! empty( $field['id'] ) && ! empty( $errors['fields'][$field['id']] ) ) {
                     $field['_error'] = $errors['fields'][$field['id']];
+                  }
+
+                  if ( ! empty( $field['id'] ) ) {
+                    $field['default'] = $this->get_default( $field );
                   }
 
                   CSF::field( $field, $this->get_meta_value( $field ), $this->unique, 'metabox' );
@@ -258,18 +262,19 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
               echo '</div>';
 
-              $section_key++;
+              $count++;
+
             }
 
             echo '</div>';
 
             echo '<div class="clear"></div>';
 
-            if( ! empty( $this->args['show_restore'] ) ) {
+            if ( ! empty( $this->args['show_restore'] ) ) {
 
               echo '<div class="csf-restore-wrapper">';
               echo '<label>';
-              echo '<input type="checkbox" name="'. $this->unique .'[_restore]" />';
+              echo '<input type="checkbox" name="'. esc_attr( $this->unique ) .'[_restore]" />';
               echo '<span class="button csf-button-restore">'. esc_html__( 'Restore', 'csf' ) .'</span>';
               echo '<span class="button csf-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post for restore ', 'csf' ), esc_html__( 'Cancel', 'csf' ) ) .'</span>';
               echo '</label>';
@@ -292,63 +297,65 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
     // save metabox
     public function save_meta_box( $post_id ) {
 
-      if( ! wp_verify_nonce( csf_get_var( 'csf_metabox_nonce'. $this->unique ), 'csf_metabox_nonce' ) ) {
+      $count    = 1;
+      $data     = array();
+      $errors   = array();
+      $noncekey = 'csf_metabox_nonce'. $this->unique;
+      $nonce    = ( ! empty( $_POST[ $noncekey ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $noncekey ] ) ) : '';
+
+      if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! wp_verify_nonce( $nonce, 'csf_metabox_nonce' ) ) {
         return $post_id;
       }
 
-      if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-        return $post_id;
-      }
+      // XSS ok.
+      // No worries, This "POST" requests is sanitizing in the below foreach.
+      $request = ( ! empty( $_POST[ $this->unique ] ) ) ? $_POST[ $this->unique ] : array();
 
-      $errors  = array();
-      $request = csf_get_var( $this->unique );
+      if ( ! empty( $request ) ) {
 
-      if( ! empty( $request ) ) {
+        foreach ( $this->sections as $section ) {
 
-        // ignore _nonce
-        if( isset( $request['_nonce'] ) ) {
-          unset( $request['_nonce'] );
-        }
+          if ( ! empty( $section['fields'] ) ) {
 
-        // sanitize and validate
-        $section_key = 1;
-        foreach( $this->sections as $section ) {
+            foreach ( $section['fields'] as $field ) {
 
-          if( ! empty( $section['fields'] ) ) {
+              if ( ! empty( $field['id'] ) ) {
 
-            foreach( $section['fields'] as $field ) {
+                $field_id    = $field['id'];
+                $field_value = isset( $request[$field_id] ) ? $request[$field_id] : '';
 
-              if( ! empty( $field['id'] ) ) {
+                // Sanitize "post" request of field.
+                if ( ! isset( $field['sanitize'] ) ) {
 
-                // sanitize
-                if( ! empty( $field['sanitize'] ) ) {
+                  if( is_array( $field_value ) ) {
+                    $data[$field_id] = wp_kses_post_deep( $field_value );
+                  } else {
+                    $data[$field_id] = wp_kses_post( $field_value );
+                  }
 
-                  $sanitize              = $field['sanitize'];
-                  $value_sanitize        = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
-                  $request[$field['id']] = call_user_func( $sanitize, $value_sanitize );
+                } else if( isset( $field['sanitize'] ) && function_exists( $field['sanitize'] ) ) {
+
+                  $data[$field_id] = call_user_func( $field['sanitize'], $field_value );
+
+                } else {
+
+                  $data[$field_id] = $field_value;
 
                 }
 
-                // validate
-                if( ! empty( $field['validate'] ) ) {
+                // Validate "post" request of field.
+                if ( isset( $field['validate'] ) && function_exists( $field['validate'] ) ) {
 
-                  $validate       = $field['validate'];
-                  $value_validate = isset( $request[$field['id']] ) ? $request[$field['id']] : '';
-                  $has_validated  = call_user_func( $validate, $value_validate );
+                  $has_validated = call_user_func( $field['validate'], $field_value );
 
-                  if( ! empty( $has_validated ) ) {
+                  if ( ! empty( $has_validated ) ) {
 
-                    $errors['sections'][$section_key] = true;
-                    $errors['fields'][$field['id']] = $has_validated;
-                    $request[$field['id']] = $this->get_meta_value( $field );
+                    $errors['sections'][$count] = true;
+                    $errors['fields'][$field_id] = $has_validated;
+                    $data[$field_id] = $this->get_meta_value( $field );
 
                   }
 
-                }
-
-                // auto sanitize
-                if( ! isset( $request[$field['id']] ) || is_null( $request[$field['id']] ) ) {
-                  $request[$field['id']] = '';
                 }
 
               }
@@ -357,19 +364,20 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
           }
 
-          $section_key++;
+          $count++;
+
         }
 
       }
 
-      $request = apply_filters( "csf_{$this->unique}_save", $request, $post_id, $this );
+      $data = apply_filters( "csf_{$this->unique}_save", $data, $post_id, $this );
 
-      do_action( "csf_{$this->unique}_save_before", $request, $post_id, $this );
+      do_action( "csf_{$this->unique}_save_before", $data, $post_id, $this );
 
-      if( empty( $request ) || ! empty( $request['_restore'] ) ) {
+      if ( empty( $data ) || ! empty( $request['_restore'] ) ) {
 
-        if( $this->args['data_type'] !== 'serialize' ) {
-          foreach ( $request as $key => $value ) {
+        if ( $this->args['data_type'] !== 'serialize' ) {
+          foreach ( $data as $key => $value ) {
             delete_post_meta( $post_id, $key );
           }
         } else {
@@ -378,23 +386,23 @@ if( ! class_exists( 'CSF_Metabox' ) ) {
 
       } else {
 
-        if( $this->args['data_type'] !== 'serialize' ) {
-          foreach ( $request as $key => $value ) {
+        if ( $this->args['data_type'] !== 'serialize' ) {
+          foreach ( $data as $key => $value ) {
             update_post_meta( $post_id, $key, $value );
           }
         } else {
-          update_post_meta( $post_id, $this->unique, $request );
+          update_post_meta( $post_id, $this->unique, $data );
         }
 
-        if( ! empty( $errors ) ) {
-          update_post_meta( $post_id, '_csf_errors', $errors );
+        if ( ! empty( $errors ) ) {
+          update_post_meta( $post_id, '_csf_errors_'. $this->unique, $errors );
         }
 
       }
 
-      do_action( "csf_{$this->unique}_saved", $request, $post_id, $this );
+      do_action( "csf_{$this->unique}_saved", $data, $post_id, $this );
 
-      do_action( "csf_{$this->unique}_save_after", $request, $post_id, $this );
+      do_action( "csf_{$this->unique}_save_after", $data, $post_id, $this );
 
     }
   }

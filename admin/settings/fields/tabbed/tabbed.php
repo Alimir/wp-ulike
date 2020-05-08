@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_tabbed' ) ) {
+if ( ! class_exists( 'CSF_Field_tabbed' ) ) {
   class CSF_Field_tabbed extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -23,10 +23,10 @@ if( ! class_exists( 'CSF_Field_tabbed' ) ) {
       echo '<div class="csf-tabbed-nav">';
       foreach ( $this->field['tabs'] as $key => $tab ) {
 
-        $tabbed_icon   = ( ! empty( $tab['icon'] ) ) ? '<i class="csf--icon '. $tab['icon'] .'"></i>' : '';
-        $tabbed_active = ( empty( $key ) ) ? ' class="csf-tabbed-active"' : '';
+        $tabbed_icon   = ( ! empty( $tab['icon'] ) ) ? '<i class="csf--icon '. esc_attr( $tab['icon'] ) .'"></i>' : '';
+        $tabbed_active = ( empty( $key ) ) ? 'csf-tabbed-active' : '';
 
-        echo '<a href="#"'. $tabbed_active .'>'. $tabbed_icon . $tab['title'] .'</a>';
+        echo '<a href="#" class="'. esc_attr( $tabbed_active ) .'"">'. $tabbed_icon . esc_attr( $tab['title'] ) .'</a>';
 
       }
       echo '</div>';
@@ -36,11 +36,11 @@ if( ! class_exists( 'CSF_Field_tabbed' ) ) {
 
         $tabbed_hidden = ( ! empty( $key ) ) ? ' hidden' : '';
 
-        echo '<div class="csf-tabbed-section'. $tabbed_hidden .'">';
+        echo '<div class="csf-tabbed-section'. esc_attr( $tabbed_hidden ) .'">';
 
         foreach ( $tab['fields'] as $field ) {
 
-          if( in_array( $field['type'], $unallows ) ) { $field['_notice'] = true; }
+          if ( in_array( $field['type'], $unallows ) ) { $field['_notice'] = true; }
 
           $field_id      = ( isset( $field['id'] ) ) ? $field['id'] : '';
           $field_default = ( isset( $field['default'] ) ) ? $field['default'] : '';

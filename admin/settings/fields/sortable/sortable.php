@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_sortable' ) ) {
+if ( ! class_exists( 'CSF_Field_sortable' ) ) {
   class CSF_Field_sortable extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -24,26 +24,26 @@ if( ! class_exists( 'CSF_Field_sortable' ) ) {
       $pre_fields = array();
 
       // Add array-keys to defined fields for sort by
-      foreach( $this->field['fields'] as $key => $field ) {
+      foreach ( $this->field['fields'] as $key => $field ) {
         $pre_fields[$field['id']] = $field;
       }
 
       // Set sort by by saved-value or default-value
-      if( ! empty( $this->value ) ) {
+      if ( ! empty( $this->value ) ) {
 
-        foreach( $this->value as $key => $value ) {
+        foreach ( $this->value as $key => $value ) {
           $pre_sortby[$key] = $pre_fields[$key];
         }
 
       } else {
 
-        foreach( $pre_fields as $key => $value ) {
+        foreach ( $pre_fields as $key => $value ) {
           $pre_sortby[$key] = $value;
         }
 
       }
 
-      foreach( $pre_sortby as $key => $field ) {
+      foreach ( $pre_sortby as $key => $field ) {
 
         echo '<div class="csf--sortable-item">';
 
@@ -57,7 +57,7 @@ if( ! class_exists( 'CSF_Field_sortable' ) ) {
 
           echo '</div>';
 
-          echo '<div class="csf--sortable-helper"><i class="fa fa-arrows"></i></div>';
+          echo '<div class="csf--sortable-helper"><i class="fas fa-arrows-alt"></i></div>';
 
         echo '</div>';
 
@@ -71,7 +71,7 @@ if( ! class_exists( 'CSF_Field_sortable' ) ) {
 
     public function enqueue() {
 
-      if( ! wp_script_is( 'jquery-ui-sortable' ) ) {
+      if ( ! wp_script_is( 'jquery-ui-sortable' ) ) {
         wp_enqueue_script( 'jquery-ui-sortable' );
       }
 

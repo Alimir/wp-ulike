@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Widget' ) ) {
+if ( ! class_exists( 'CSF_Widget' ) ) {
   class CSF_Widget extends WP_Widget {
 
     // constans
@@ -17,9 +17,9 @@ if( ! class_exists( 'CSF_Widget' ) ) {
       'classname'   => '',
       'description' => '',
       'width'       => '',
-      'defaults'    => array(),
-      'fields'      => array(),
       'class'       => '',
+      'fields'      => array(),
+      'defaults'    => array(),
     );
 
     public function __construct( $key, $params ) {
@@ -31,24 +31,24 @@ if( ! class_exists( 'CSF_Widget' ) ) {
       $this->args   = apply_filters( "csf_{$this->unique}_args", wp_parse_args( $params, $this->args ), $this );
 
       // Set control options
-      if( ! empty( $this->args['width'] ) ) {
-        $control_ops['width'] = $this->args['width'];
+      if ( ! empty( $this->args['width'] ) ) {
+        $control_ops['width'] = esc_attr( $this->args['width'] );
       }
 
       // Set widget options
-      if( ! empty( $this->args['description'] ) ) {
-        $widget_ops['description'] = $this->args['description'];
+      if ( ! empty( $this->args['description'] ) ) {
+        $widget_ops['description'] = esc_attr( $this->args['description'] );
       }
 
-      if( ! empty( $this->args['classname'] ) ) {
-        $widget_ops['classname'] = $this->args['classname'];
+      if ( ! empty( $this->args['classname'] ) ) {
+        $widget_ops['classname'] = esc_attr( $this->args['classname'] );
       }
 
       // Set filters
       $widget_ops  = apply_filters( "csf_{$this->unique}_widget_ops", $widget_ops, $this );
       $control_ops = apply_filters( "csf_{$this->unique}_control_ops", $control_ops, $this );
 
-      parent::__construct( $this->unique, $this->args['title'], $widget_ops, $control_ops );
+      parent::__construct( $this->unique, esc_attr( $this->args['title'] ), $widget_ops, $control_ops );
 
     }
 
@@ -63,42 +63,51 @@ if( ! class_exists( 'CSF_Widget' ) ) {
     }
 
     // get default value
-    public function get_default( $field, $options = array() ) {
+    public function get_default( $field ) {
 
-      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : null;
-      $default = ( isset( $field['default'] ) ) ? $field['default'] : $default;
-      $default = ( isset( $options[$field['id']] ) ) ? $options[$field['id']] : $default;
+      $default = ( isset( $field['default'] ) ) ? $field['default'] : '';
+      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : $default;
 
       return $default;
+
+    }
+
+    // get widget value
+    public function get_widget_value( $instance, $field ) {
+
+      $default = ( isset( $field['id'] ) ) ? $this->get_default( $field ) : '';
+      $value   = ( isset( $field['id'] ) && isset( $instance[$field['id']] ) ) ? $instance[$field['id']] : $default;
+
+      return $value;
 
     }
 
     // Back-end widget form.
     public function form( $instance ) {
 
-      if( ! empty( $this->args['fields'] ) ) {
+      if ( ! empty( $this->args['fields'] ) ) {
 
         $class = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
 
         echo '<div class="csf csf-widgets csf-fields'. $class .'">';
 
-        foreach( $this->args['fields'] as $field ) {
+        foreach ( $this->args['fields'] as $field ) {
 
-          $field_value  = '';
           $field_unique = '';
 
-          if( ! empty( $field['id'] ) ) {
+          if ( ! empty( $field['id'] ) ) {
 
-            $field_value  = $this->get_default( $field, $instance );
             $field_unique = 'widget-' . $this->unique . '[' . $this->number . ']';
 
-            if( $field['id'] === 'title' ) {
+            if ( $field['id'] === 'title' ) {
               $field['attributes']['id'] = 'widget-'. $this->unique .'-'. $this->number .'-title';
             }
 
+            $field['default'] = $this->get_default( $field );
+
           }
 
-          CSF::field( $field, $field_value, $field_unique );
+          CSF::field( $field, $this->get_widget_value( $instance, $field ), $field_unique );
 
         }
 
@@ -112,8 +121,8 @@ if( ! class_exists( 'CSF_Widget' ) ) {
     public function update( $new_instance, $old_instance ) {
 
       // auto sanitize
-      foreach( $this->args['fields'] as $field ) {
-        if( ! empty( $field['id'] ) && ( ! isset( $new_instance[$field['id']] ) || is_null( $new_instance[$field['id']] ) ) ) {
+      foreach ( $this->args['fields'] as $field ) {
+        if ( ! empty( $field['id'] ) && ( ! isset( $new_instance[$field['id']] ) || is_null( $new_instance[$field['id']] ) ) ) {
           $new_instance[$field['id']] = '';
         }
       }

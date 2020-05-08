@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_sorter' ) ) {
+if ( ! class_exists( 'CSF_Field_sorter' ) ) {
   class CSF_Field_sorter extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -30,26 +30,26 @@ if( ! class_exists( 'CSF_Field_sorter' ) ) {
 
       echo ( $args['disabled'] ) ? '<div class="csf-modules">' : '';
 
-      echo ( ! empty( $args['enabled_title'] ) ) ? '<div class="csf-sorter-title">'. $args['enabled_title'] .'</div>' : '';
+      echo ( ! empty( $args['enabled_title'] ) ) ? '<div class="csf-sorter-title">'. esc_attr( $args['enabled_title'] ) .'</div>' : '';
       echo '<ul class="csf-enabled">';
-      if( ! empty( $enabled_options ) ) {
-        foreach( $enabled_options as $key => $value ) {
-          echo '<li><input type="hidden" name="'. $this->field_name( '[enabled]['. $key .']' ) .'" value="'. $value .'"/><label>'. $value .'</label></li>';
+      if ( ! empty( $enabled_options ) ) {
+        foreach ( $enabled_options as $key => $value ) {
+          echo '<li><input type="hidden" name="'. esc_attr( $this->field_name( '[enabled]['. $key .']' ) ) .'" value="'. esc_attr( $value ) .'"/><label>'. esc_attr( $value ) .'</label></li>';
         }
       }
       echo '</ul>';
 
       // Check for hide/show disabled section
-      if( $args['disabled'] ) {
+      if ( $args['disabled'] ) {
 
         echo '</div>';
 
         echo '<div class="csf-modules">';
-        echo ( ! empty( $args['disabled_title'] ) ) ? '<div class="csf-sorter-title">'. $args['disabled_title'] .'</div>' : '';
+        echo ( ! empty( $args['disabled_title'] ) ) ? '<div class="csf-sorter-title">'. esc_attr( $args['disabled_title'] ) .'</div>' : '';
         echo '<ul class="csf-disabled">';
-        if( ! empty( $disabled_options ) ) {
-          foreach( $disabled_options as $key => $value ) {
-          echo '<li><input type="hidden" name="'. $this->field_name( '[disabled]['. $key .']' ) .'" value="'. $value .'"/><label>'. $value .'</label></li>';
+        if ( ! empty( $disabled_options ) ) {
+          foreach ( $disabled_options as $key => $value ) {
+          echo '<li><input type="hidden" name="'. esc_attr( $this->field_name( '[disabled]['. $key .']' ) ) .'" value="'. esc_attr( $value ) .'"/><label>'. esc_attr( $value ) .'</label></li>';
           }
         }
         echo '</ul>';
@@ -57,15 +57,13 @@ if( ! class_exists( 'CSF_Field_sorter' ) ) {
 
       }
 
-      echo '<div class="clear"></div>';
-
       echo $this->field_after();
 
     }
 
     public function enqueue() {
 
-      if( ! wp_script_is( 'jquery-ui-sortable' ) ) {
+      if ( ! wp_script_is( 'jquery-ui-sortable' ) ) {
         wp_enqueue_script( 'jquery-ui-sortable' );
       }
 

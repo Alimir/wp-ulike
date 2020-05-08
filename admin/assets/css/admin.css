@@ -142,8 +142,7 @@ https://wordpress.org/plugins/wp-ulike/
 .wp-ulike-simple-table.table-bordered { border: 0; }
 .wp-ulike-simple-table.table-bordered > thead > tr > th, .wp-ulike-simple-table.table-bordered > thead > tr > td, .wp-ulike-simple-table.table-bordered > tbody > tr > th, .wp-ulike-simple-table.table-bordered > tbody > tr > td, .wp-ulike-simple-table.table-bordered > tfoot > tr > th, .wp-ulike-simple-table.table-bordered > tfoot > tr > td { border: 0; border-bottom: 1px solid #e0e0e0; }
 .wp-ulike-simple-table.table-bordered > thead > tr > th, .wp-ulike-simple-table.table-bordered > thead > tr > td { border-bottom-width: 2px; }
-
-.wp-ulike-table-icon { width: 18px; height: 18px; }
+.wp-ulike-simple-table .wp-ulike-table-icon { width: 18px; height: 18px; }
 
 /** 	RTL support */
 .rtl form.wp-ulike p.submit { margin-right: inherit; margin-left: 20px; }

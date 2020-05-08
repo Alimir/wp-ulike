@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_color' ) ) {
+if ( ! class_exists( 'CSF_Field_color' ) ) {
   class CSF_Field_color extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -16,10 +16,10 @@ if( ! class_exists( 'CSF_Field_color' ) ) {
 
     public function render() {
 
-      $default_attr = ( ! empty( $this->field['default'] ) ) ? ' data-default-color="'. $this->field['default'] .'"' : '';
+      $default_attr = ( ! empty( $this->field['default'] ) ) ? ' data-default-color="'. esc_attr( $this->field['default'] ) .'"' : '';
 
       echo $this->field_before();
-      echo '<input type="text" name="'. $this->field_name() .'" value="'. $this->value .'" class="csf-color"'. $default_attr . $this->field_attributes() .'/>';
+      echo '<input type="text" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'" class="csf-color"'. $default_attr . $this->field_attributes() .'/>';
       echo $this->field_after();
 
     }
@@ -31,9 +31,9 @@ if( ! class_exists( 'CSF_Field_color' ) ) {
       $important = ( ! empty( $this->field['output_important'] ) ) ? '!important' : '';
       $mode      = ( ! empty( $this->field['output_mode'] ) ) ? $this->field['output_mode'] : 'color';
 
-      if( ! empty( $elements ) && isset( $this->value ) && $this->value !== '' ) {
-        foreach( $elements as $key_property => $element ) {
-          if( is_numeric( $key_property ) ) {
+      if ( ! empty( $elements ) && isset( $this->value ) && $this->value !== '' ) {
+        foreach ( $elements as $key_property => $element ) {
+          if ( is_numeric( $key_property ) ) {
             $output = implode( ',', $elements ) .'{'. $mode .':'. $this->value . $important .';}';
             break;
           } else {

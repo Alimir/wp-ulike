@@ -57,6 +57,11 @@
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
+						<td>Supports Rest APIs with a variety of routes for use in Apps</td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
+					</tr>
+					<tr>
 						<td>Professional Schema.org Generator + Start Ratings</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
@@ -72,7 +77,12 @@
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Progressive Log Management Panel, with advanced search capabilities.</td>
+						<td>Progressive Log Management Panel, with advanced search capabilities</td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
+					</tr>
+					<tr>
+						<td>Database optimization panel with various options.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>

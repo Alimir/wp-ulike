@@ -218,7 +218,8 @@
 .csf-nav ul li .csf-arrow:after {
   content: "\f054";
   display: inline-block;
-  font-family: "FontAwesome";
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   font-size: 9px;
   line-height: 1;
   position: absolute;
@@ -247,10 +248,10 @@
   font-size: 12px;
   padding: 12px 14px 12px 24px;
 }
-.csf-nav .fa {
+.csf-nav .csf-tab-icon {
   width: 20px;
   margin-right: 5px;
-  font-size: 14px;
+  font-size: 13px;
   text-align: center;
 }
 .csf-nav .csf-label-error {
@@ -313,7 +314,7 @@
   font-weight: bold;
   text-transform: uppercase;
 }
-.csf-section-title .fa {
+.csf-section-title .csf-section-icon {
   margin-right: 5px;
 }
 
@@ -362,8 +363,8 @@
   padding: 0 8px;
   margin-right: 4px;
   z-index: 1;
-  font-size: 14px;
-  line-height: 28px;
+  font-size: 13px;
+  line-height: 30px;
   cursor: pointer;
   user-select: none;
   -moz-border-radius: 2px;
@@ -389,8 +390,8 @@
   margin: 0 2px 0 0;
   border: none;
   font-size: 12px;
-  line-height: 28px;
-  min-height: 28px;
+  line-height: 30px;
+  min-height: 30px;
   text-align: inherit;
   padding: 0 10px;
   -moz-border-radius: 2px;
@@ -424,10 +425,17 @@
 }
 
 .block-editor-page .csf-metabox {
-  margin: -6px -14px -12px -14px;
+  margin: -6px -14px -14px -14px;
+}
+
+.block-editor-editor-skeleton__content .csf-metabox {
+  border-left: 1px solid #e2e4e7;
+  border-right: 1px solid #e2e4e7;
 }
 
 .csf-restore-wrapper {
+  position: relative;
+  z-index: 1000000;
   text-align: right;
   padding: 10px;
   border-top: 1px solid #eee;
@@ -459,7 +467,8 @@
   margin-bottom: 10px;
 }
 #side-sortables .csf-field .csf-fieldset {
-  margin-left: 0;
+  float: none;
+  width: 100%;
 }
 #side-sortables .csf-notice {
   padding: 12px;
@@ -666,7 +675,8 @@
   color: #23282d;
 }
 .csf-field .csf-fieldset {
-  margin-left: 25%;
+  float: right;
+  width: calc(80% - 20px);
 }
 
 .csf-pseudo-field {
@@ -715,6 +725,7 @@
 .csf-field-accordion .csf--icon {
   width: 20px;
   text-align: center;
+  margin-right: 2px;
 }
 .csf-field-accordion .csf-accordion-content {
   display: none;
@@ -760,9 +771,6 @@
 }
 .csf-field-background .csf--attributes-hidden {
   display: none;
-}
-.csf-field-background .wp-color-result.button {
-  margin-bottom: 0;
 }
 
 /**
@@ -959,8 +967,10 @@
   max-width: 100%;
 }
 .csf-field-color .button.wp-picker-clear {
+  padding: 0 8px;
   margin-left: 6px;
-  padding: 2px 8px;
+  line-height: 2.54545455;
+  min-height: 30px;
 }
 
 /**
@@ -1041,7 +1051,8 @@
   top: auto;
   left: auto;
   right: auto;
-  font-family: "FontAwesome";
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   font-size: 12px;
   text-align: center;
   width: 41px;
@@ -1280,10 +1291,10 @@
 }
 .csf-field-icon .csf-icon-preview i {
   display: inline-block;
-  font-size: 14px;
+  font-size: 16px;
   width: 30px;
-  height: 26px;
-  line-height: 26px;
+  height: 28px;
+  line-height: 28px;
   margin-right: 5px;
   text-align: center;
   vertical-align: top;
@@ -1325,12 +1336,13 @@
   top: 0;
   left: 0;
   text-align: center;
-  font-size: 11px;
-  font-family: FontAwesome;
+  font-size: 10px;
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   content: "\f00c";
-  width: 15px;
-  height: 15px;
-  line-height: 15px;
+  width: 16px;
+  height: 16px;
+  line-height: 14px;
   opacity: 0;
   color: #fff;
   background-color: #222;
@@ -1481,12 +1493,13 @@
   top: 0;
   left: 0;
   text-align: center;
-  font-size: 11px;
-  font-family: FontAwesome;
+  font-size: 10px;
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   content: "\f00c";
-  width: 15px;
-  height: 15px;
-  line-height: 15px;
+  width: 16px;
+  height: 16px;
+  line-height: 14px;
   opacity: 0;
   color: #fff;
   background-color: #222;
@@ -1616,11 +1629,14 @@
   border-left: 0;
   background-color: #f5f5f5;
 }
+.csf-field-slider .csf-slider-ui {
+  margin-right: 15px;
+}
 .csf-field-slider input[type=number] {
   position: relative;
   z-index: 1;
+  margin: 0;
   width: 50px;
-  margin: 0 0 0 15px;
   text-align: center;
 }
 .csf-field-slider .csf--is-unit {
@@ -1692,13 +1708,13 @@
   border-left: 1px solid #eee;
   background-color: #f7f7f7;
 }
-.csf-field-sortable .csf--sortable-helper .fa {
+.csf-field-sortable .csf--sortable-helper i {
   display: inline-block;
   cursor: pointer;
   width: 50px;
   color: #555;
 }
-.csf-field-sortable .csf--sortable-helper .fa:hover {
+.csf-field-sortable .csf--sortable-helper i:hover {
   opacity: 0.5;
 }
 .csf-field-sortable .widget-placeholder {
@@ -1817,8 +1833,10 @@
   background-color: #ddd;
 }
 .csf-field-spinner .ui-button:before {
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   font-size: 14px;
+  line-height: 14px;
 }
 .csf-field-spinner .ui-spinner-down {
   order: 1;
@@ -2277,7 +2295,7 @@
   top: 0;
   right: 0;
   padding: 5px;
-  font-size: 14px;
+  font-size: 13px;
   color: #aaa;
 }
 .csf-help .csf-help-text {
@@ -2314,7 +2332,8 @@
 .csf-field .chosen-container-single .chosen-single abbr {
   top: 0;
   right: 20px;
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   font-size: 12px;
   height: 100%;
   width: 18px;
@@ -2329,7 +2348,8 @@
   color: #555;
 }
 .csf-field .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   font-size: 12px;
   height: 100%;
   width: 18px;
@@ -2346,7 +2366,8 @@
   color: #555;
 }
 .csf-field .chosen-container-single .chosen-single div b {
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   font-size: 14px;
   color: #aaa;
   background: none;
@@ -2374,16 +2395,20 @@
   background: none;
 }
 .csf-field .chosen-container-single .chosen-search:before {
-  font-family: FontAwesome;
-  position: absolute;
-  content: "\f002";
+  font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+  font-weight: 900;
   font-size: 11px;
-  right: 10px;
-  top: 7px;
+  content: "\f002";
+  position: absolute;
+  right: 12px;
+  top: 10px;
   color: #aaa;
 }
 .csf-field .wp-picker-container {
   display: inline-block;
+}
+.csf-field .wp-picker-container .wp-color-result.button {
+  margin-bottom: 0;
 }
 .csf-field .csf--transparent-wrap {
   display: none;
@@ -2508,7 +2533,8 @@
   margin-bottom: 5px;
 }
 .csf-widgets > .csf-field .csf-fieldset {
-  margin-left: 0;
+  float: none;
+  width: 100%;
 }
 .csf-widgets .csf-field-text input {
   width: 100%;
@@ -2542,7 +2568,8 @@
   color: inherit;
 }
 .control-section .csf-field .csf-fieldset {
-  margin-left: 0;
+  float: none;
+  width: 100%;
 }
 .control-section .csf-help {
   top: -5px;
@@ -2703,7 +2730,8 @@
   font-weight: normal;
 }
 .csf-taxonomy-add-fields > .csf-field > .csf-fieldset {
-  margin-left: 0;
+  float: none;
+  width: 100%;
 }
 .csf-taxonomy-add-fields > .csf-field > .csf-fieldset > .csf-help {
   right: -5px;
@@ -2716,7 +2744,7 @@
   padding: 20px 0;
 }
 .csf-taxonomy-edit-fields > .csf-field > .csf-title {
-  width: 225px;
+  width: 200px;
 }
 .csf-taxonomy-edit-fields > .csf-field > .csf-title h4 {
   font-size: 14px;
@@ -2726,7 +2754,7 @@
   vertical-align: middle;
 }
 .csf-taxonomy-edit-fields > .csf-field > .csf-fieldset {
-  margin-left: 225px;
+  width: calc(100% - 220px);
 }
 .csf-taxonomy-edit-fields > .csf-field > .csf-fieldset > .csf-help {
   top: -5px;
@@ -2748,11 +2776,12 @@
   padding-right: 7px;
 }
 .csf-profile > .csf-field {
+  max-width: 800px;
   padding: 15px 0;
   border-top: none !important;
 }
 .csf-profile > .csf-field > .csf-title {
-  width: 220px;
+  width: 200px;
 }
 .csf-profile > .csf-field > .csf-title h4 {
   font-size: 14px;
@@ -2762,7 +2791,7 @@
   vertical-align: middle;
 }
 .csf-profile > .csf-field > .csf-fieldset {
-  margin-left: 220px;
+  width: calc(100% - 220px);
 }
 .csf-profile > .csf-field > .csf-fieldset > .csf-help {
   top: -15px;
@@ -2840,12 +2869,6 @@
 }
 .csf-modal-content .csf-shortcode-button {
   display: none;
-}
-.csf-modal-content .csf-fieldset {
-  margin-left: 25%;
-}
-.csf-modal-content .csf-title {
-  width: 20%;
 }
 .csf-modal-content .csf-field {
   padding: 15px 30px 15px 15px;
@@ -3019,39 +3042,30 @@
   background-color: #f7f7f7;
 }
 .csf-modal-icon .csf-icon-search {
-  width: 250px;
+  width: 50%;
   height: 40px;
   line-height: 40px;
 }
-.csf-modal-icon a {
-  display: inline-block;
-  padding: 4px;
+.csf-modal-icon i {
   cursor: pointer;
-}
-.csf-modal-icon a .csf-icon {
-  position: relative;
-  padding: 4px;
   display: inline-block;
-  font-size: 14px;
-  width: 30px;
-  height: 26px;
-  line-height: 26px;
-  text-align: center;
-  vertical-align: top;
+  margin: 4px;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  font-size: 16px;
   color: #555;
+  text-align: center;
   border: 1px solid #ccc;
   background-color: #f7f7f7;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
-  -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
 }
-.csf-modal-icon a:hover .csf-icon {
+.csf-modal-icon i:hover {
   color: #fff;
   border-color: #222;
   background-color: #222;
@@ -3147,10 +3161,18 @@
 /**
  * 08. Helper
  */
-.csf-text-desc,
 .csf-text-subtitle {
-  font-weight: 400;
   margin-top: 10px;
+  font-weight: 400;
+  color: #999;
+}
+
+.csf-text-desc {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 10px;
+  font-weight: 400;
   color: #999;
 }
 
@@ -3159,6 +3181,7 @@
 }
 
 .csf-text-error {
+  margin-top: 5px;
   color: #d02c21;
 }
 
@@ -3624,7 +3647,8 @@
     margin-bottom: 10px;
   }
   .csf-metabox .csf-field .csf-fieldset {
-    margin-left: 0;
+    float: none;
+    width: 100%;
   }
 }
 @media only screen and (max-width: 782px) {
@@ -3688,7 +3712,14 @@
     margin-bottom: 10px;
   }
   .csf-field .csf-fieldset {
-    margin-left: 0;
+    float: none;
+    width: 100%;
+  }
+
+  .csf-field-color .button.wp-picker-clear {
+    padding: 0 8px;
+    line-height: 2.14285714;
+    min-height: 32px;
   }
 
   .csf-modal-inner {
@@ -3716,13 +3747,16 @@
     height: 252px;
   }
 
-  .csf-profile > .csf-field > .csf-title {
+  .csf-profile > .csf-field > .csf-title,
+  .csf-taxonomy-edit-fields > .csf-field > .csf-title {
     float: none;
     width: 100%;
     margin-bottom: 10px;
   }
-  .csf-profile > .csf-field > .csf-fieldset {
-    margin-left: 0;
+  .csf-profile > .csf-field > .csf-fieldset,
+  .csf-taxonomy-edit-fields > .csf-field > .csf-fieldset {
+    float: none;
+    width: 100%;
   }
 }
 /**

@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_heading' ) ) {
+if ( ! class_exists( 'CSF_Field_heading' ) ) {
   class CSF_Field_heading extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -16,7 +16,7 @@ if( ! class_exists( 'CSF_Field_heading' ) ) {
 
     public function render() {
 
-      echo ( ! empty( $this->field['content'] ) ) ? $this->field['content'] : '';
+      echo ( ! empty( $this->field['content'] ) ) ? wp_kses_post( $this->field['content'] ) : '';
 
     }
 

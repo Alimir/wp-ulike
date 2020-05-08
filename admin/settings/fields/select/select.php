@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_select' ) ) {
+if ( ! class_exists( 'CSF_Field_select' ) ) {
   class CSF_Field_select extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -30,12 +30,12 @@ if( ! class_exists( 'CSF_Field_select' ) ) {
 
       echo $this->field_before();
 
-      if( isset( $this->field['options'] ) ) {
+      if ( isset( $this->field['options'] ) ) {
 
-        if( ! empty( $args['ajax'] ) ) {
+        if ( ! empty( $args['ajax'] ) ) {
           $args['settings']['data']['type']  = $args['options'];
           $args['settings']['data']['nonce'] = wp_create_nonce( 'csf_chosen_ajax_nonce' );
-          if( ! empty( $args['query_args'] ) ) {
+          if ( ! empty( $args['query_args'] ) ) {
             $args['settings']['data']['query_args'] = $args['query_args'];
           }
         }
@@ -45,28 +45,28 @@ if( ! class_exists( 'CSF_Field_select' ) ) {
         $multiple_attr    = ( $args['multiple'] ) ? ' multiple="multiple"' : '';
         $chosen_sortable  = ( $args['chosen'] && $args['sortable'] ) ? ' csf-chosen-sortable' : '';
         $chosen_ajax      = ( $args['chosen'] && $args['ajax'] ) ? ' csf-chosen-ajax' : '';
-        $placeholder_attr = ( $args['chosen'] && $args['placeholder'] ) ? ' data-placeholder="'. $args['placeholder'] .'"' : '';
-        $field_class      = ( $args['chosen'] ) ? ' class="csf-chosen'. $chosen_rtl . $chosen_sortable . $chosen_ajax .'"' : '';
+        $placeholder_attr = ( $args['chosen'] && $args['placeholder'] ) ? ' data-placeholder="'. esc_attr( $args['placeholder'] ) .'"' : '';
+        $field_class      = ( $args['chosen'] ) ? ' class="csf-chosen'. esc_attr( $chosen_rtl . $chosen_sortable . $chosen_ajax ) .'"' : '';
         $field_name       = $this->field_name( $multiple_name );
         $field_attr       = $this->field_attributes();
         $maybe_options    = $this->field['options'];
         $chosen_data_attr = ( $args['chosen'] && ! empty( $args['settings'] ) ) ? ' data-chosen-settings="'. esc_attr( json_encode( $args['settings'] ) ) .'"' : '';
 
-        if( is_string( $maybe_options ) && ! empty( $args['chosen'] ) && ! empty( $args['ajax'] ) ) {
+        if ( is_string( $maybe_options ) && ! empty( $args['chosen'] ) && ! empty( $args['ajax'] ) ) {
           $options = $this->field_wp_query_data_title( $maybe_options, $this->value );
-        } else if( is_string( $maybe_options ) ) {
+        } else if ( is_string( $maybe_options ) ) {
           $options = $this->field_data( $maybe_options, false, $args['query_args'] );
         } else {
           $options = $maybe_options;
         }
 
-        if( ( is_array( $options ) && ! empty( $options ) ) || ( ! empty( $args['chosen'] ) && ! empty( $args['ajax'] ) ) ) {
+        if ( ( is_array( $options ) && ! empty( $options ) ) || ( ! empty( $args['chosen'] ) && ! empty( $args['ajax'] ) ) ) {
 
-          if( ! empty( $args['chosen'] ) && ! empty( $args['multiple'] ) ) {
+          if ( ! empty( $args['chosen'] ) && ! empty( $args['multiple'] ) ) {
 
             echo '<select name="'. $field_name .'" class="csf-hidden-select csf-hidden"'. $multiple_attr . $field_attr .'>';
-            foreach( $this->value as $option_key ) {
-              echo '<option value="'. $option_key .'" selected>'. $option_key .'</option>';
+            foreach ( $this->value as $option_key ) {
+              echo '<option value="'. esc_attr( $option_key ) .'" selected>'. esc_attr( $option_key ) .'</option>';
             }
             echo '</select>';
 
@@ -75,32 +75,33 @@ if( ! class_exists( 'CSF_Field_select' ) ) {
 
           }
 
-          echo '<select name="'. $field_name .'"'. $field_class . $multiple_attr . $placeholder_attr . $field_attr . $chosen_data_attr .'>';
+          // These attributes has been serialized above.
+          echo '<select name="'. esc_attr( $field_name ) .'"'. $field_class . $multiple_attr . $placeholder_attr . $field_attr . $chosen_data_attr .'>';
 
-          if( $args['placeholder'] && empty( $args['multiple'] ) ) {
-            if( ! empty( $args['chosen'] ) ) {
+          if ( $args['placeholder'] && empty( $args['multiple'] ) ) {
+            if ( ! empty( $args['chosen'] ) ) {
               echo '<option value=""></option>';
             } else {
-              echo '<option value="">'. $args['placeholder'] .'</option>';
+              echo '<option value="">'. esc_attr( $args['placeholder'] ) .'</option>';
             }
           }
 
-          foreach( $options as $option_key => $option ) {
+          foreach ( $options as $option_key => $option ) {
 
-            if( is_array( $option ) && ! empty( $option ) ) {
+            if ( is_array( $option ) && ! empty( $option ) ) {
 
-              echo '<optgroup label="'. $option_key .'">';
+              echo '<optgroup label="'. esc_attr( $option_key ) .'">';
 
-              foreach( $option as $sub_key => $sub_value ) {
+              foreach ( $option as $sub_key => $sub_value ) {
                 $selected = ( in_array( $sub_key, $this->value ) ) ? ' selected' : '';
-                echo '<option value="'. $sub_key .'" '. $selected .'>'. $sub_value .'</option>';
+                echo '<option value="'. esc_attr( $sub_key ) .'" '. esc_attr( $selected ) .'>'. esc_attr( $sub_value ) .'</option>';
               }
 
               echo '</optgroup>';
 
             } else {
               $selected = ( in_array( $option_key, $this->value ) ) ? ' selected' : '';
-              echo '<option value="'. $option_key .'" '. $selected .'>'. $option .'</option>';
+              echo '<option value="'. esc_attr( $option_key ) .'" '. esc_attr( $selected ) .'>'. esc_attr( $option ) .'</option>';
             }
 
           }
@@ -109,7 +110,7 @@ if( ! class_exists( 'CSF_Field_select' ) ) {
 
         } else {
 
-          echo ( ! empty( $this->field['empty_message'] ) ) ? $this->field['empty_message'] : esc_html__( 'No data provided for this option type.', 'csf' );
+          echo ( ! empty( $this->field['empty_message'] ) ) ? esc_attr( $this->field['empty_message'] ) : esc_html__( 'No data provided for this option type.', 'csf' );
 
         }
 
@@ -121,7 +122,7 @@ if( ! class_exists( 'CSF_Field_select' ) ) {
 
     public function enqueue() {
 
-      if( ! wp_script_is( 'jquery-ui-sortable' ) ) {
+      if ( ! wp_script_is( 'jquery-ui-sortable' ) ) {
         wp_enqueue_script( 'jquery-ui-sortable' );
       }
 

@@ -143,7 +143,8 @@
       .csf-arrow:after{
         content: "\f054";
         display: inline-block;
-        font-family: "FontAwesome";
+        font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "FontAwesome";
+        font-weight: 900;
         font-size: 9px;
         line-height: 1;
         position: absolute;
@@ -179,10 +180,10 @@
     }
   }
 
-  .fa{
+  .csf-tab-icon{
     width: 20px;
     margin-right: 5px;
-    font-size: 14px;
+    font-size: 13px;
     text-align: center;
   }
 
@@ -245,7 +246,7 @@
     text-transform: uppercase;
   }
 
-  .fa{
+  .csf-section-icon{
     margin-right: 5px;
   }
 }
@@ -300,8 +301,8 @@
   padding: 0 8px;
   margin-right: 4px;
   z-index: 1;
-  font-size: 14px;
-  line-height: 28px;
+  font-size: 13px;
+  line-height: 30px;
   cursor: pointer;
   user-select: none;
   @include border-radius(2px);
@@ -323,8 +324,8 @@
     margin: 0 2px 0 0;
     border: none;
     font-size: 12px;
-    line-height: 28px;
-    min-height: 28px;
+    line-height: 30px;
+    min-height: 30px;
     text-align: inherit;
     padding: 0 10px;
     @include border-radius(2px);
@@ -360,11 +361,22 @@
 .block-editor-page{
 
   .csf-metabox{
-    margin: -6px -14px -12px -14px;
+    margin: -6px -14px -14px -14px;
   }
 }
 
+.block-editor-editor-skeleton__content{
+
+  .csf-metabox{
+    border-left: 1px solid #e2e4e7;
+    border-right: 1px solid #e2e4e7;
+  }
+}
+
+
 .csf-restore-wrapper{
+  position: relative;
+  z-index: 1000000;
   text-align: right;
   padding: 10px;
   border-top: 1px solid #eee;
@@ -406,7 +418,8 @@
     }
 
     .csf-fieldset{
-      margin-left: 0;
+      float: none;
+      width: 100%;
     }
   }
 

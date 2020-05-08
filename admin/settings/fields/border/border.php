@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Field_border' ) ) {
+if ( ! class_exists( 'CSF_Field_border' ) ) {
   class CSF_Field_border extends CSF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
@@ -17,11 +17,11 @@ if( ! class_exists( 'CSF_Field_border' ) ) {
     public function render() {
 
       $args = wp_parse_args( $this->field, array(
-        'top_icon'           => '<i class="fa fa-long-arrow-up"></i>',
-        'left_icon'          => '<i class="fa fa-long-arrow-left"></i>',
-        'bottom_icon'        => '<i class="fa fa-long-arrow-down"></i>',
-        'right_icon'         => '<i class="fa fa-long-arrow-right"></i>',
-        'all_icon'           => '<i class="fa fa-arrows"></i>',
+        'top_icon'           => '<i class="fas fa-long-arrow-alt-up"></i>',
+        'left_icon'          => '<i class="fas fa-long-arrow-alt-left"></i>',
+        'bottom_icon'        => '<i class="fas fa-long-arrow-alt-down"></i>',
+        'right_icon'         => '<i class="fas fa-long-arrow-alt-right"></i>',
+        'all_icon'           => '<i class="fas fa-arrows-alt"></i>',
         'top_placeholder'    => esc_html__( 'top', 'csf' ),
         'right_placeholder'  => esc_html__( 'right', 'csf' ),
         'bottom_placeholder' => esc_html__( 'bottom', 'csf' ),
@@ -67,14 +67,14 @@ if( ! class_exists( 'CSF_Field_border' ) ) {
 
       echo '<div class="csf--inputs">';
 
-      if( ! empty( $args['all'] ) ) {
+      if ( ! empty( $args['all'] ) ) {
 
-        $placeholder = ( ! empty( $args['all_placeholder'] ) ) ? ' placeholder="'. $args['all_placeholder'] .'"' : '';
+        $placeholder = ( ! empty( $args['all_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args['all_placeholder'] ) .'"' : '';
 
         echo '<div class="csf--input">';
-        echo ( ! empty( $args['all_icon'] ) ) ? '<span class="csf--label csf--icon">'. $args['all_icon'] .'</span>' : '';
-        echo '<input type="number" name="'. $this->field_name('[all]') .'" value="'. $value['all'] .'"'. $placeholder .' class="csf-input-number csf--is-unit" />';
-        echo ( ! empty( $args['unit'] ) ) ? '<span class="csf--label csf--unit">'. $args['unit'] .'</span>' : '';
+        echo ( ! empty( $args['all_icon'] ) ) ? '<span class="csf--label csf--icon">'. wp_kses_post( $args['all_icon'] ) .'</span>' : '';
+        echo '<input type="number" name="'. esc_attr( $this->field_name( '[all]' ) ) .'" value="'. esc_attr( $value['all'] ) .'"'. $placeholder .' class="csf-input-number csf--is-unit" />';
+        echo ( ! empty( $args['unit'] ) ) ? '<span class="csf--label csf--unit">'. esc_attr( $args['unit'] ) .'</span>' : '';
         echo '</div>';
 
       } else {
@@ -82,33 +82,33 @@ if( ! class_exists( 'CSF_Field_border' ) ) {
         $properties = array();
 
         foreach ( array( 'top', 'right', 'bottom', 'left' ) as $prop ) {
-          if( ! empty( $args[$prop] ) ) {
+          if ( ! empty( $args[$prop] ) ) {
             $properties[] = $prop;
           }
         }
 
         $properties = ( $properties === array( 'right', 'left' ) ) ? array_reverse( $properties ) : $properties;
 
-        foreach( $properties as $property ) {
+        foreach ( $properties as $property ) {
 
-          $placeholder = ( ! empty( $args[$property.'_placeholder'] ) ) ? ' placeholder="'. $args[$property.'_placeholder'] .'"' : '';
+          $placeholder = ( ! empty( $args[$property.'_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args[$property.'_placeholder'] ) .'"' : '';
 
           echo '<div class="csf--input">';
-          echo ( ! empty( $args[$property.'_icon'] ) ) ? '<span class="csf--label csf--icon">'. $args[$property.'_icon'] .'</span>' : '';
-          echo '<input type="number" name="'. $this->field_name('['. $property .']') .'" value="'. $value[$property] .'"'. $placeholder .' class="csf-input-number csf--is-unit" />';
-          echo ( ! empty( $args['unit'] ) ) ? '<span class="csf--label csf--unit">'. $args['unit'] .'</span>' : '';
+          echo ( ! empty( $args[$property.'_icon'] ) ) ? '<span class="csf--label csf--icon">'. wp_kses_post( $args[$property.'_icon'] ) .'</span>' : '';
+          echo '<input type="number" name="'. esc_attr( $this->field_name( '['. $property .']' ) ) .'" value="'. esc_attr( $value[$property] ) .'"'. $placeholder .' class="csf-input-number csf--is-unit" />';
+          echo ( ! empty( $args['unit'] ) ) ? '<span class="csf--label csf--unit">'. esc_attr( $args['unit'] ) .'</span>' : '';
           echo '</div>';
 
         }
 
       }
 
-      if( ! empty( $args['style'] ) ) {
+      if ( ! empty( $args['style'] ) ) {
         echo '<div class="csf--input">';
-        echo '<select name="'. $this->field_name('[style]') .'">';
-        foreach( $border_props as $border_prop_key => $border_prop_value ) {
+        echo '<select name="'. esc_attr( $this->field_name( '[style]' ) ) .'">';
+        foreach ( $border_props as $border_prop_key => $border_prop_value ) {
           $selected = ( $value['style'] === $border_prop_key ) ? ' selected' : '';
-          echo '<option value="'. $border_prop_key .'"'. $selected .'>'. $border_prop_value .'</option>';
+          echo '<option value="'. esc_attr( $border_prop_key ) .'"'. esc_attr( $selected ) .'>'. esc_attr( $border_prop_value ) .'</option>';
         }
         echo '</select>';
         echo '</div>';
@@ -116,16 +116,14 @@ if( ! class_exists( 'CSF_Field_border' ) ) {
 
       echo '</div>';
 
-      if( ! empty( $args['color'] ) ) {
-        $default_color_attr = ( ! empty( $default_value['color'] ) ) ? ' data-default-color="'. $default_value['color'] .'"' : '';
+      if ( ! empty( $args['color'] ) ) {
+        $default_color_attr = ( ! empty( $default_value['color'] ) ) ? ' data-default-color="'. esc_attr( $default_value['color'] ) .'"' : '';
         echo '<div class="csf--color">';
         echo '<div class="csf-field-color">';
-        echo '<input type="text" name="'. $this->field_name('[color]') .'" value="'. $value['color'] .'" class="csf-color"'. $default_color_attr .' />';
+        echo '<input type="text" name="'. esc_attr( $this->field_name( '[color]' ) ) .'" value="'. esc_attr( $value['color'] ) .'" class="csf-color"'. $default_color_attr .' />';
         echo '</div>';
         echo '</div>';
       }
-
-      echo '<div class="clear"></div>';
 
       echo $this->field_after();
 
@@ -147,7 +145,7 @@ if( ! class_exists( 'CSF_Field_border' ) ) {
       $color   = ( isset( $this->value['color'] )  && $this->value['color']  !== '' ) ? $this->value['color']  : '';
       $all     = ( isset( $this->value['all'] )    && $this->value['all']    !== '' ) ? $this->value['all']    : '';
 
-      if( ! empty( $this->field['all'] ) && ( $all !== '' || $color !== '' ) ) {
+      if ( ! empty( $this->field['all'] ) && ( $all !== '' || $color !== '' ) ) {
 
         $output  = $element .'{';
         $output .= ( $all   !== '' ) ? 'border-width:'. $all . $unit . $important .';' : '';
@@ -155,7 +153,7 @@ if( ! class_exists( 'CSF_Field_border' ) ) {
         $output .= ( $style !== '' ) ? 'border-style:'. $style . $important .';'       : '';
         $output .= '}';
 
-      } else if( $top !== '' || $right !== '' || $bottom !== '' || $left !== '' || $color !== '' ) {
+      } else if ( $top !== '' || $right !== '' || $bottom !== '' || $left !== '' || $color !== '' ) {
 
         $output  = $element .'{';
         $output .= ( $top    !== '' ) ? 'border-top-width:'. $top . $unit . $important .';'       : '';

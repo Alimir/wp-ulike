@@ -7,7 +7,7 @@
  * @version 1.0.0
  *
  */
-if( ! class_exists( 'CSF_Shortcoder' ) ) {
+if ( ! class_exists( 'CSF_Shortcoder' ) ) {
   class CSF_Shortcoder extends CSF_Abstract{
 
     // constans
@@ -47,12 +47,12 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
       add_action( 'customize_controls_print_footer_scripts', array( &$this, 'add_shortcode_modal' ) );
       add_action( 'wp_ajax_csf-get-shortcode-'. $this->unique, array( &$this, 'get_shortcode' ) );
 
-      if( ! empty( $this->args['show_in_editor'] ) ) {
+      if ( ! empty( $this->args['show_in_editor'] ) ) {
 
         CSF::$shortcode_instances[] = wp_parse_args( array( 'hash' => md5( $key ), 'modal_id' => $this->unique ), $this->args );
 
         // elementor editor support
-        if( CSF::is_active_plugin( 'elementor/elementor.php' ) ) {
+        if ( CSF::is_active_plugin( 'elementor/elementor.php' ) ) {
           add_action( 'elementor/editor/before_enqueue_scripts', array( 'CSF', 'add_admin_enqueue_scripts' ), 20 );
           add_action( 'elementor/editor/footer', array( &$this, 'add_shortcode_modal' ) );
           add_action( 'elementor/editor/footer', 'csf_set_icons' );
@@ -73,8 +73,8 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
       $parents = array();
       $count   = 100;
 
-      foreach( $sections as $key => $section ) {
-        if( ! empty( $section['parent'] ) ) {
+      foreach ( $sections as $key => $section ) {
+        if ( ! empty( $section['parent'] ) ) {
           $section['priority'] = ( isset( $section['priority'] ) ) ? $section['priority'] : $count;
           $parents[$section['parent']][] = $section;
           unset( $sections[$key] );
@@ -82,9 +82,9 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
         $count++;
       }
 
-      foreach( $sections as $key => $section ) {
+      foreach ( $sections as $key => $section ) {
         $section['priority'] = ( isset( $section['priority'] ) ) ? $section['priority'] : $count;
-        if( ! empty( $section['id'] ) && ! empty( $parents[$section['id']] ) ) {
+        if ( ! empty( $section['id'] ) && ! empty( $parents[$section['id']] ) ) {
           $section['subs'] = wp_list_sort( $parents[$section['id']], array( 'priority' => 'ASC' ), 'ASC', true );
         }
         $result[] = $section;
@@ -98,13 +98,13 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
 
       $result = array();
 
-      foreach( $this->pre_tabs as $tab ) {
-        if( ! empty( $tab['subs'] ) ) {
-          foreach( $tab['subs'] as $sub ) {
+      foreach ( $this->pre_tabs as $tab ) {
+        if ( ! empty( $tab['subs'] ) ) {
+          foreach ( $tab['subs'] as $sub ) {
             $result[] = $sub;
           }
         }
-        if( empty( $tab['subs'] ) ) {
+        if ( empty( $tab['subs'] ) ) {
           $result[] = $tab;
         }
       }
@@ -115,8 +115,8 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
     // get default value
     public function get_default( $field ) {
 
-      $default = ( isset( $field['id'] ) && isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : null;
-      $default = ( isset( $field['default'] ) ) ? $field['default'] : $default;
+      $default = ( isset( $field['default'] ) ) ? $field['default'] : '';
+      $default = ( isset( $this->args['defaults'][$field['id']] ) ) ? $this->args['defaults'][$field['id']] : $default;
 
       return $default;
 
@@ -124,56 +124,59 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
 
     public function add_shortcode_modal() {
 
-      $class        = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
+      $class        = ( $this->args['class'] ) ? ' '. esc_attr( $this->args['class'] ) : '';
       $has_select   = ( count( $this->pre_tabs ) > 1 ) ? true : false;
       $single_usage = ( ! $has_select ) ? ' csf-shortcode-single' : '';
       $hide_header  = ( ! $has_select ) ? ' hidden' : '';
 
     ?>
-      <div id="csf-modal-<?php echo $this->unique; ?>" class="wp-core-ui csf-modal csf-shortcode<?php echo $single_usage . $class; ?>" data-modal-id="<?php echo $this->unique; ?>" data-nonce="<?php echo wp_create_nonce( 'csf_shortcode_nonce' ); ?>">
+      <div id="csf-modal-<?php echo esc_attr( $this->unique ); ?>" class="wp-core-ui csf-modal csf-shortcode<?php echo esc_attr( $single_usage . $class ); ?>" data-modal-id="<?php echo esc_attr( $this->unique ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'csf_shortcode_nonce' ) ); ?>">
         <div class="csf-modal-table">
           <div class="csf-modal-table-cell">
             <div class="csf-modal-overlay"></div>
             <div class="csf-modal-inner">
               <div class="csf-modal-title">
-                <?php echo $this->args['button_title']; ?>
+                <?php echo wp_kses_post( $this->args['button_title'] ); ?>
                 <div class="csf-modal-close"></div>
               </div>
               <?php
 
-                echo '<div class="csf-modal-header'. $hide_header .'">';
+                echo '<div class="csf-modal-header'. esc_attr( $hide_header ) .'">';
                 echo '<select>';
-                echo ( $has_select ) ? '<option value="">'. $this->args['select_title'] .'</option>' : '';
+                echo ( $has_select ) ? '<option value="">'. esc_attr( $this->args['select_title'] ) .'</option>' : '';
 
                 $tab_key = 1;
+
                 foreach ( $this->pre_tabs as $tab ) {
 
-                  if( ! empty( $tab['subs'] ) ) {
+                  if ( ! empty( $tab['subs'] ) ) {
 
-                    echo '<optgroup label="'. $tab['title'] .'">';
+                    echo '<optgroup label="'. esc_attr( $tab['title'] ) .'">';
 
                     foreach ( $tab['subs'] as $sub ) {
 
-                      $view      = ( ! empty( $sub['view'] ) ) ? ' data-view="'. $sub['view'] .'"' : '';
-                      $shortcode = ( ! empty( $sub['shortcode'] ) ) ? ' data-shortcode="'. $sub['shortcode'] .'"' : '';
-                      $group     = ( ! empty( $sub['group_shortcode'] ) ) ? ' data-group="'. $sub['group_shortcode'] .'"' : '';
+                      $view      = ( ! empty( $sub['view'] ) ) ? ' data-view="'. esc_attr( $sub['view'] ) .'"' : '';
+                      $shortcode = ( ! empty( $sub['shortcode'] ) ) ? ' data-shortcode="'. esc_attr( $sub['shortcode'] ) .'"' : '';
+                      $group     = ( ! empty( $sub['group_shortcode'] ) ) ? ' data-group="'. esc_attr( $sub['group_shortcode'] ) .'"' : '';
 
-                      echo '<option value="'. $tab_key .'"'. $view . $shortcode . $group .'>'. $sub['title'] .'</option>';
+                      echo '<option value="'. esc_attr( $tab_key ) .'"'. $view . $shortcode . $group .'>'. esc_attr( $sub['title'] ) .'</option>';
 
                       $tab_key++;
+
                     }
 
                     echo '</optgroup>' ;
 
                   } else {
 
-                      $view      = ( ! empty( $tab['view'] ) ) ? ' data-view="'. $tab['view'] .'"' : '';
-                      $shortcode = ( ! empty( $tab['shortcode'] ) ) ? ' data-shortcode="'. $tab['shortcode'] .'"' : '';
-                      $group     = ( ! empty( $tab['group_shortcode'] ) ) ? ' data-group="'. $tab['group_shortcode'] .'"' : '';
+                      $view      = ( ! empty( $tab['view'] ) ) ? ' data-view="'. esc_attr( $tab['view'] ) .'"' : '';
+                      $shortcode = ( ! empty( $tab['shortcode'] ) ) ? ' data-shortcode="'. esc_attr( $tab['shortcode'] ) .'"' : '';
+                      $group     = ( ! empty( $tab['group_shortcode'] ) ) ? ' data-group="'. esc_attr( $tab['group_shortcode'] ) .'"' : '';
 
-                      echo '<option value="'. $tab_key .'"'. $view . $shortcode . $group .'>'. $tab['title'] .'</option>';
+                      echo '<option value="'. esc_attr( $tab_key ) .'"'. $view . $shortcode . $group .'>'. esc_attr( $tab['title'] ) .'</option>';
 
                     $tab_key++;
+
                   }
 
                 }
@@ -186,7 +189,7 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
                 <div class="csf-modal-loading"><div class="csf-loading"></div></div>
                 <div class="csf-modal-load"></div>
               </div>
-              <div class="csf-modal-insert-wrapper hidden"><a href="#" class="button button-primary csf-modal-insert"><?php echo $this->args['insert_title']; ?></a></div>
+              <div class="csf-modal-insert-wrapper hidden"><a href="#" class="button button-primary csf-modal-insert"><?php echo wp_kses_post( $this->args['insert_title'] ); ?></a></div>
             </div>
           </div>
         </div>
@@ -198,31 +201,32 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
 
       ob_start();
 
-      $shortcode_key = csf_get_var( 'shortcode_key' );
+      $nonce         = ( ! empty( $_POST[ 'nonce' ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ 'nonce' ] ) ) : '';
+      $shortcode_key = ( ! empty( $_POST[ 'shortcode_key' ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ 'shortcode_key' ] ) ) : '';
 
-      if( ! empty( $shortcode_key ) && wp_verify_nonce( csf_get_var( 'nonce' ), 'csf_shortcode_nonce' ) ) {
+      if ( ! empty( $shortcode_key ) && wp_verify_nonce( $nonce, 'csf_shortcode_nonce' ) ) {
 
         $unallows  = array( 'group', 'repeater', 'sorter' );
         $section   = $this->pre_sections[$shortcode_key-1];
         $shortcode = ( ! empty( $section['shortcode'] ) ) ? $section['shortcode'] : '';
         $view      = ( ! empty( $section['view'] ) ) ? $section['view'] : 'normal';
 
-        if( ! empty( $section ) ) {
+        if ( ! empty( $section ) ) {
 
           //
           // View: normal
-          if( ! empty( $section['fields'] ) && $view !== 'repeater' ) {
+          if ( ! empty( $section['fields'] ) && $view !== 'repeater' ) {
 
             echo '<div class="csf-fields">';
 
             foreach ( $section['fields'] as $field ) {
 
-              if( in_array( $field['type'], $unallows ) ) { $field['_notice'] = true; }
+              if ( in_array( $field['type'], $unallows ) ) { $field['_notice'] = true; }
 
               // Extra tag improves for spesific fields (border, spacing, dimensions etc...)
               $field['tag_prefix'] = ( ! empty( $field['tag_prefix'] ) ) ? $field['tag_prefix'] .'_' : '';
 
-              $field_default = $this->get_default( $field );
+              $field_default = ( isset( $field['id'] ) ) ? $this->get_default( $field ) : '';
 
               CSF::field( $field, $field_default, $shortcode, 'shortcode' );
 
@@ -237,7 +241,7 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
           $repeatable_fields = ( $view === 'repeater' && ! empty( $section['fields'] ) ) ? $section['fields'] : array();
           $repeatable_fields = ( $view === 'group' && ! empty( $section['group_fields'] ) ) ? $section['group_fields'] : $repeatable_fields;
 
-          if( ! empty( $repeatable_fields ) ) {
+          if ( ! empty( $repeatable_fields ) ) {
 
             $button_title    = ( ! empty( $section['button_title'] ) ) ? ' '. $section['button_title'] : esc_html__( 'Add one more', 'csf' );
             $inner_shortcode = ( ! empty( $section['group_shortcode'] ) ) ? $section['group_shortcode'] : $shortcode;
@@ -246,18 +250,18 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
 
               echo '<div class="csf--repeat-shortcode">';
 
-                echo '<div class="csf-repeat-remove fa fa-times"></div>';
+                echo '<div class="csf-repeat-remove fas fa-times"></div>';
 
                 echo '<div class="csf-fields">';
 
                 foreach ( $repeatable_fields as $field ) {
 
-                  if( in_array( $field['type'], $unallows ) ) { $field['_notice'] = true; }
+                  if ( in_array( $field['type'], $unallows ) ) { $field['_notice'] = true; }
 
                   // Extra tag improves for spesific fields (border, spacing, dimensions etc...)
                   $field['tag_prefix'] = ( ! empty( $field['tag_prefix'] ) ) ? $field['tag_prefix'] .'_' : '';
 
-                  $field_default = $this->get_default( $field );
+                  $field_default = ( isset( $field['id'] ) ) ? $this->get_default( $field ) : '';
 
                   CSF::field( $field, $field_default, $inner_shortcode.'[0]', 'shortcode' );
 
@@ -269,7 +273,7 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
 
             echo '</div>';
 
-            echo '<div class="csf--repeat-button-block"><a class="button csf--repeat-button" href="#"><i class="fa fa-plus-circle"></i> '. $button_title .'</a></div>';
+            echo '<div class="csf--repeat-button-block"><a class="button csf--repeat-button" href="#"><i class="fas fa-plus-circle"></i> '. wp_kses_post( $button_title ) .'</a></div>';
 
           }
 
@@ -303,7 +307,7 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
 
       wp_localize_script( 'csf-gutenberg-block', 'csf_gutenberg_blocks', CSF::$shortcode_instances );
 
-      foreach( CSF::$shortcode_instances as $hash => $value ) {
+      foreach ( CSF::$shortcode_instances as $hash => $value ) {
 
         register_block_type( 'csf-gutenberg-block/block-'. $hash, array(
           'editor_script' => 'csf-gutenberg-block',
@@ -316,8 +320,8 @@ if( ! class_exists( 'CSF_Shortcoder' ) ) {
     // Add media buttons
     public static function add_media_buttons( $editor_id ) {
 
-      foreach( CSF::$shortcode_instances as $hash => $value ) {
-        echo '<a href="#" class="button button-primary csf-shortcode-button" data-editor-id="'. $editor_id .'" data-modal-id="'. $value['modal_id'] .'">'. $value['button_title'] .'</a>';
+      foreach ( CSF::$shortcode_instances as $hash => $value ) {
+        echo '<a href="#" class="button button-primary csf-shortcode-button" data-editor-id="'. esc_attr( $editor_id ) .'" data-modal-id="'. esc_attr( $value['modal_id'] ) .'">'. wp_kses_post( $value['button_title'] ) .'</a>';
       }
 
     }
