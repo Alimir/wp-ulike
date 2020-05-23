@@ -347,3 +347,28 @@ function wp_ulike_is_plugin_screen(){
 
     return true;
 }
+
+/**
+ * Create stylish admin notices
+ *
+ * @param array $args
+ * @return void
+ */
+function wp_ulike_get_notice_render( $args = array() ){
+    $defaults   = array(
+        'id'             => NULL,
+        'title'          => '',
+        'skin'           => 'default',
+        'image'          => '',
+        'screen_filter'  => array(),
+        'description'    => '',
+        'initial_snooze' => '',          // snooze time in milliseconds
+        'has_close'      => false,       // Whether it has close button or not
+        'buttons'        => array()
+    );
+    $parsed_args = wp_parse_args( $args, $defaults );
+
+    // Create notice instance
+    $notice_instance = new wp_ulike_notices($parsed_args);
+	$notice_instance->render();
+}
