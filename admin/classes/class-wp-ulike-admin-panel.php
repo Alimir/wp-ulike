@@ -288,6 +288,37 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             ) );
 
+            // Profiles
+            CSF::createSection( $this->option_domain, array(
+                'parent' => 'configuration',
+                'title'  => __( 'Profiles',WP_ULIKE_SLUG),
+                'fields' => apply_filters( 'wp_ulike_panel_profiles', array(
+                    array(
+                        'type'     => 'callback',
+                        'function' => 'wp_ulike_get_notice_render',
+                        'args'     => array(
+                            'id'          => 'wp_ulike_pro_user_profiles_banner',
+                            'title'       => __( 'How to Create Your Own Custom User Profiles with WP ULike?', WP_ULIKE_SLUG ),
+                            'description' => __( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website  without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
+                            'skin'        => 'info',
+                            'has_close'   => false,
+                            'buttons'     => array(
+                                array(
+                                    'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+                                    'color_name' => 'info',
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-user-profile-front-end/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                )
+                            ),
+                            'image'     => array(
+                                'width' => '140',
+                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/hero.svg'
+                            )
+                        )
+                    )
+                ) )
+            ) );
+
+
             /**
              * Translations Section
              */
@@ -356,6 +387,64 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'title'        => __('Custom Spinner',WP_ULIKE_SLUG),
                         'library'      => 'image',
                         'placeholder'  => 'http://'
+                    )
+                ) )
+            ) );
+
+            CSF::createSection( $this->option_domain, array(
+                'parent' => 'customization',
+                'title'  => __( 'REST API',WP_ULIKE_SLUG ),
+                'fields' => apply_filters( 'wp_ulike_panel_rest_api', array(
+                    array(
+                        'type'     => 'callback',
+                        'function' => 'wp_ulike_get_notice_render',
+                        'args'     => array(
+                            'id'          => 'wp_ulike_pro_rest_api_banner',
+                            'title'       => __( 'How to Get Started with WP ULike REST API?', WP_ULIKE_SLUG ),
+                            'description' => __( "Have you ever tried to get data from online sources like WP ULike logs and use them in your Application or website? the solution is Rest API!" , WP_ULIKE_SLUG ),
+                            'skin'        => 'info',
+                            'has_close'   => false,
+                            'buttons'     => array(
+                                array(
+                                    'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+                                    'color_name' => 'info',
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/how-to-get-started-with-wp-ulike-rest-api/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                )
+                            ),
+                            'image'     => array(
+                                'width' => '140',
+                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/api.svg'
+                            )
+                        )
+                    )
+                ) )
+            ) );
+
+            CSF::createSection( $this->option_domain, array(
+                'parent' => 'customization',
+                'title'  => __( 'Optimization',WP_ULIKE_SLUG ),
+                'fields' => apply_filters( 'wp_ulike_panel_optimization', array(
+                    array(
+                        'type'     => 'callback',
+                        'function' => 'wp_ulike_get_notice_render',
+                        'args'     => array(
+                            'id'          => 'wp_ulike_pro_optimization_banner',
+                            'title'       => __( 'How to Optimize or Truncate WP ULike Database Tables?', WP_ULIKE_SLUG ),
+                            'description' => __( "Your WP ULike database stores all of your voting data in multiple tables. If the number of your logs increases over time, your database will grow larger. A large database can greatly affect the performance of your website as it takes longer for your server to retrieve information from database tables. This is why database optimization is so important." , WP_ULIKE_SLUG ),
+                            'skin'        => 'info',
+                            'has_close'   => false,
+                            'buttons'     => array(
+                                array(
+                                    'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+                                    'color_name' => 'info',
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/optimizing-your-wp-ulike-database/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                )
+                            ),
+                            'image'     => array(
+                                'width' => '140',
+                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/database.svg'
+                            )
+                        )
                     )
                 ) )
             ) );
