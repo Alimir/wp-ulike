@@ -550,7 +550,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         __('click here',WP_ULIKE_SLUG)
                     ),
                     'title'    => __('Custom HTML Template', WP_ULIKE_SLUG),
-                    'dependency'=> array( 'logged_out_display_type', '==', 'alert' ),
+                    'dependency'=> array( 'logged_out_display_type|enable_only_logged_in_users', '==|==', 'alert|true' ),
                 ),
                 'enable_likers_box' => array(
                     'id'    => 'enable_likers_box',
