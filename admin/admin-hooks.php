@@ -462,6 +462,12 @@ add_filter( 'admin_init', 'wp_ulike_upgrade_deprecated_options_value' );
 function wp_ulike_admin_init_controller() {
 	global $pagenow;
 
+	$disable_panel_files = wp_ulike_get_option( 'disable_panel_files', true );
+
+	if( ! wp_ulike_is_true( $disable_panel_files ) ){
+		return;
+	}
+
 	$has_ulike  = isset( $_GET['page'] ) && strpos( $_GET['page'], WP_ULIKE_SLUG ) !== false;
 	$has_assets = defined( 'WP_ULIKE_PRO_DOMAIN' ) && in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
 

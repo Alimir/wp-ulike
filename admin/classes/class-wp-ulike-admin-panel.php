@@ -278,9 +278,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'title' => __('Enable Deprecated Options', WP_ULIKE_SLUG),
                         'desc'  => sprintf( '%s<br><strong>* %s</strong>', __('By activating this option, users who have upgraded to version +4.1 and lost their old options can restore and enable previous settings.', WP_ULIKE_SLUG), __('Attention: If you have been using WP ULike +v4.1 from the beginning, do not enable this option.', WP_ULIKE_SLUG) )
                     ),
+                   array(
+                        'id'      => 'disable_panel_files',
+                        'type'    => 'switcher',
+                        'default' => true,
+                        'title'   => __('Disable Admin Panel Assets', WP_ULIKE_SLUG),
+                        'desc'    => __('By activating this option, the display of settings panel assets will be limited to the plugin admin pages.', WP_ULIKE_SLUG),
+                    ),
                 ) )
             ) );
-
 
             /**
              * Translations Section
