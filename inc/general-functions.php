@@ -32,7 +32,6 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 	}
 }
 
-
 if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 	/**
 	 * Get options list values
@@ -267,7 +266,7 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 	 * @param string|int[] $object_ids Array or comma delimited list of object IDs to update cache for.
 	 * @return array|false Metadata cache for the specified objects, or false on failure.
 	 */
-	function wp_ulike_update_meta_cache( $object_ids ) {
+	function wp_ulike_update_meta_cache( $object_ids, $meta_group ) {
 		global $wpdb;
 
 		if ( ! $object_ids ) {
@@ -303,7 +302,7 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 		// Get meta info.
 		$id_list   = join( ',', $ids );
 		$id_column = 'meta_id';
-		$meta_list = $wpdb->get_results( "SELECT $column, meta_group, meta_key, meta_value FROM $table WHERE $column IN ($id_list) ORDER BY $id_column ASC", ARRAY_A );
+		$meta_list = $wpdb->get_results( "SELECT $column, meta_group, meta_key, meta_value FROM $table WHERE $column IN ($id_list) AND meta_group = '$meta_group' ORDER BY $id_column ASC", ARRAY_A );
 
 		if ( ! empty( $meta_list ) ) {
 			foreach ( $meta_list as $metarow ) {
@@ -361,7 +360,7 @@ if( ! function_exists( 'wp_ulike_get_meta_data' ) ){
 		$meta_cache = wp_cache_get( $object_id, 'wp_ulike_meta' );
 
 		if ( ! $meta_cache ) {
-			$meta_cache = wp_ulike_update_meta_cache( array( $object_id ) );
+			$meta_cache = wp_ulike_update_meta_cache( array( $object_id ), $meta_group );
 			if ( isset( $meta_cache[ $object_id ] ) ) {
 				$meta_cache = $meta_cache[ $object_id ];
 			} else {
