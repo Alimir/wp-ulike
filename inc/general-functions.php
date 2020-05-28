@@ -1308,54 +1308,125 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 	 * Get popular items with their counter & ID
 	 *
 	 * @param array $args
-	 * @return object
+	 * @return object|null
 	 */
 	function wp_ulike_get_popular_items_info( $args = array() ){
 		// Global wordpress database object
 		global $wpdb;
 		//Main data
 		$defaults = array(
-			"type"   => 'post',
-			"status" => 'like',
-			"order"  => 'DESC',
-			"period" => 'all',
-			"limit"  => 0
+			"type"     => 'post',
+			"rel_type" => '',
+			"status"   => 'like',
+			"user_id"  => '',
+			"order"    => 'DESC',
+			"period"   => 'all',
+			"offset"   => 1,
+			"limit"    => 10
 		);
 		$parsed_args  = wp_parse_args( $args, $defaults );
 		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
 		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
 
-		$status_type  = '';
-		if( is_array( $parsed_args['status'] ) ){
-			$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
-		} else {
-			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
-		}
-
 		$limit_records = '';
 		if( (int) $parsed_args['limit'] > 0 ){
-			$limit_records = sprintf( "LIMIT %d", $parsed_args['limit'] );
+			$offset = $parsed_args['offset'] > 0 ? ( $parsed_args['offset'] - 1 ) * $parsed_args['offset'] : 0;
+			$limit_records = sprintf( "LIMIT %d, %d", $offset, $parsed_args['limit'] );
 		}
 
-		// generate query string
-		$query  = sprintf( "
-			SELECT COUNT(*) AS counter,
-			`%s` AS item_ID
-			FROM %s
-			WHERE %s
-			%s
-			GROUP BY item_ID
-			ORDER BY counter
-			%s %s",
-			$info_args['column'],
-			$wpdb->prefix . $info_args['table'],
-			$status_type,
-			$period_limit,
-			$parsed_args['order'],
-			$limit_records
-		);
 
-		return $wpdb->get_results( $query );
+		$related_condition = '';
+		switch ($parsed_args['type']) {
+			case 'post':
+			case 'topic':
+				$post_type = '';
+				if( is_array( $parsed_args['rel_type'] ) ){
+					$post_type = sprintf( " AND r.post_type IN ('%s')", implode ("','", $parsed_args['rel_type'] ) );
+				} elseif( ! empty( $parsed_args['rel_type'] ) ) {
+					$post_type = sprintf( " AND r.post_type = '%s'", $parsed_args['rel_type'] );
+				}
+				$related_condition = 'AND r.post_status = \'publish\'' . $post_type;
+				break;
+		}
+
+		$user_condition = '';
+		if( !empty( $parsed_args['user_id'] ) ){
+			if( is_array( $parsed_args['user_id'] ) ){
+				$user_condition = sprintf( " AND t.user_id IN ('%s')", implode ("','", $parsed_args['user_id'] ) );
+			} else {
+				$user_condition = sprintf( " AND t.user_id = '%s'", $parsed_args['user_id'] );
+			}
+		}
+
+
+		$query = '';
+		/**
+		 * If user id and period limit are not set, we use the meta table to get the information. This creates more optimization.
+		 */
+		if( empty( $period_limit ) && empty( $user_condition ) ){
+			// create query condition from status
+			$status_type  = '';
+			if( is_array( $parsed_args['status'] ) ){
+				foreach ($parsed_args['status'] as $key => $value) {
+					$status_type.= $key === 0 ? sprintf( " AND t.meta_key LIKE '%%\_%s'", $value ) : sprintf( " OR t.meta_key LIKE '%%\_%s'", $value );
+				}
+			} else {
+				$status_type = sprintf( " AND t.meta_key LIKE '%%\_%s'", $parsed_args['status'] );
+			}
+
+			// generate query string
+			$query  = sprintf( '
+				SELECT t.item_id AS item_ID, MAX(CAST(t.meta_value AS UNSIGNED)) as max_value
+				FROM %1$s t
+				INNER JOIN %2$s r ON t.item_id = r.%3$s %4$s
+				WHERE t.meta_group = "%5$s" %6$s
+				GROUP BY item_ID
+				ORDER BY max_value
+				%7$s %8$s',
+				$wpdb->prefix . 'ulike_meta',
+				$wpdb->prefix . $info_args['related_table'],
+				$info_args['related_column'],
+				$related_condition,
+				$parsed_args['type'],
+				$status_type,
+				$parsed_args['order'],
+				$limit_records
+			);
+
+		} else {
+			// create query condition from status
+			$status_type  = '';
+			if( is_array( $parsed_args['status'] ) ){
+				$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+			} else {
+				$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+			}
+
+			// generate query string
+			$query  = sprintf( '
+				SELECT COUNT(t.%1$s) AS counter,
+				t.%1$s AS item_ID
+				FROM %2$s t
+				INNER JOIN %3$s r ON t.%1$s = r.%4$s
+				WHERE %5$s %6$s
+				%7$s
+				GROUP BY item_ID
+				ORDER BY counter
+				%8$s %9$s',
+				$info_args['column'],
+				$wpdb->prefix . $info_args['table'],
+				$wpdb->prefix . $info_args['related_table'],
+				$info_args['related_column'],
+				$status_type,
+				$user_condition,
+				$period_limit,
+				$parsed_args['order'],
+				$limit_records
+			);
+
+		}
+
+		return !empty( $query ) ? $wpdb->get_results( $query ): null;
 	}
 }
 
@@ -1369,11 +1440,14 @@ if( ! function_exists( 'wp_ulike_get_popular_items_ids' ) ){
 	function wp_ulike_get_popular_items_ids( $args = array() ){
 		//Main data
 		$defaults = array(
-			"type"   => 'post',
-			"status" => 'like',
-			"order"  => 'DESC',
-			"period" => 'all',
-			"limit"  => 0
+			"type"     => 'post',
+			"rel_type" => 'post',
+			"status"   => 'like',
+			"user_id"  => '',
+			"order"    => 'DESC',
+			"period"   => 'all',
+			"offset"   => 1,
+			"limit"    => 10
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
 		$item_info   = wp_ulike_get_popular_items_info( $parsed_args );
