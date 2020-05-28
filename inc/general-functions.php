@@ -687,22 +687,30 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 	 * @param string $period
 	 * @param string $status
 	 * @param boolean $is_noraml
+	 * @param integer $offset
+	 * @param string $user_id
 	 * @return WP_Post[]|int[] Array of post objects or post IDs.
 	 */
-	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all', $status = 'like', $is_noraml = false ){
+	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all', $status = 'like', $is_noraml = false, $offset = 1, $user_id = '' ){
+		// Get post types
+		$post_type =  empty( $post_type ) ? get_post_types_by_support( array(
+			'title',
+			'editor',
+			'thumbnail'
+		) ) : $post_type;
+
 		$post__in = wp_ulike_get_popular_items_ids(array(
-			'type'   => $method,
-			'status' => $status,
-			'period' => $period
+			'type'     => $method,
+			'rel_type' => $post_type,
+			'status'   => $status,
+			'period'   => $period,
+			"offset"   => $offset,
+			"user_id"  => $user_id,
+			"limit"    => $numberposts
 		));
 
 		$args = array(
-			'numberposts' => $numberposts,
-			'post_type'   => $post_type === '' ? get_post_types_by_support( array(
-				'title',
-				'editor',
-				'thumbnail'
-			) ) : $post_type
+			'post_type'   => $post_type
 		);
 
 		if( ! empty( $post__in ) ){
@@ -922,25 +930,35 @@ if( ! function_exists( 'wp_ulike_get_most_liked_comments' ) ){
 	 * @param string $status
 	 * @return WP_Comment[]|int[] Array of post objects or post IDs.
 	 */
-	function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all', $status = 'like' ){
+	function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all', $status = 'like', $offset = 1, $user_id = ''){
+		// Get post types
+		$post_type =  empty( $post_type ) ? get_post_types_by_support( array(
+			'title',
+			'editor',
+			'thumbnail'
+		) ) : $post_type;
+
+		// Get popular comments
 		$comment__in = wp_ulike_get_popular_items_ids(array(
-			"type"   => 'comment',
-			'period' => $period,
-			'status' => $status
+			"type"     => 'comment',
+			'period'   => $period,
+			'rel_type' => '',
+			'status'   => $status,
+			"user_id"  => $user_id,
+			"offset"   => $offset,
+			"limit"    => $numbercomments
 		));
+
 		if( empty( $comment__in ) ){
 			return false;
 		}
+
 		return get_comments( apply_filters( 'wp_ulike_get_top_comments_query', array(
 			'comment__in' => $comment__in,
-			'number'      => $numbercomments,
 			'orderby'     => 'comment__in',
-			'post_type'   => $post_type === '' ? get_post_types_by_support( array(
-				'title',
-				'editor',
-				'thumbnail'
-			) ) : $post_type
+			'post_type'   => $post_type
 		) ) );
+
 	}
 }
 
@@ -1104,7 +1122,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 	 * @param string $status
 	 * @return object
 	 */
-	function wp_ulike_get_most_liked_activities( $number = 10, $period = 'all', $status = 'like' ){
+	function wp_ulike_get_most_liked_activities( $number = 10, $period = 'all', $status = 'like', $offset = 1, $user_id = '' ){
 		global $wpdb;
 
 		if ( is_multisite() ) {
@@ -1114,9 +1132,13 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 		}
 
 		$activity_ids = wp_ulike_get_popular_items_ids(array(
-			'type'   => 'activity',
-			'status' => $status,
-			'period' => $period
+			'type'     => 'activity',
+			'rel_type' => '',
+			'status'   => $status,
+			'period'   => $period,
+			"user_id"  => $user_id,
+			"offset"   => $offset,
+			"limit"    => $number
 		));
 
 		if( empty( $activity_ids ) ){
@@ -1128,11 +1150,9 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 			SELECT * FROM
 			`%1$sbp_activity`
 			WHERE `id` IN (%2$s)
-			ORDER BY FIELD(`id`, %2$s)
-			LIMIT %3$s',
+			ORDER BY FIELD(`id`, %2$s)',
 			$wpdb->$bp_prefix,
-			implode(',',$activity_ids),
-			$number
+			implode(',',$activity_ids)
 		);
 
 		return $wpdb->get_results( $query );
@@ -1316,7 +1336,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		//Main data
 		$defaults = array(
 			"type"     => 'post',
-			"rel_type" => '',
+			"rel_type" => 'post',
 			"status"   => 'like',
 			"user_id"  => '',
 			"order"    => 'DESC',
@@ -1330,7 +1350,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 
 		$limit_records = '';
 		if( (int) $parsed_args['limit'] > 0 ){
-			$offset = $parsed_args['offset'] > 0 ? ( $parsed_args['offset'] - 1 ) * $parsed_args['offset'] : 0;
+			$offset = $parsed_args['offset'] > 0 ? ( $parsed_args['offset'] - 1 ) * $parsed_args['limit'] : 0;
 			$limit_records = sprintf( "LIMIT %d, %d", $offset, $parsed_args['limit'] );
 		}
 
@@ -1368,8 +1388,9 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			$status_type  = '';
 			if( is_array( $parsed_args['status'] ) ){
 				foreach ($parsed_args['status'] as $key => $value) {
-					$status_type.= $key === 0 ? sprintf( " AND t.meta_key LIKE '%%\_%s'", $value ) : sprintf( " OR t.meta_key LIKE '%%\_%s'", $value );
+					$status_type .= $key === 0 ? sprintf( "t.meta_key LIKE '%%\_%s'", $value ) : sprintf( " OR t.meta_key LIKE '%%\_%s'", $value );
 				}
+				$status_type = sprintf( " AND (%s)",  $status_type );
 			} else {
 				$status_type = sprintf( " AND t.meta_key LIKE '%%\_%s'", $parsed_args['status'] );
 			}
@@ -1477,7 +1498,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			"type"     => 'post',
 			"status"   => 'like',
 			"period"   => 'all',
-			"user_id"  => 1,
+			"user_id"  => '',
 			"rel_type" => 'post'
 		);
 		$parsed_args  = wp_parse_args( $args, $defaults );
@@ -1517,8 +1538,9 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			$status_type  = '';
 			if( is_array( $parsed_args['status'] ) ){
 				foreach ($parsed_args['status'] as $key => $value) {
-					$status_type.= $key === 0 ? sprintf( " AND t.meta_key LIKE '%%\_%s'", $value ) : sprintf( " OR t.meta_key LIKE '%%\_%s'", $value );
+					$status_type.= $key === 0 ? sprintf( "t.meta_key LIKE '%%\_%s'", $value ) : sprintf( " OR t.meta_key LIKE '%%\_%s'", $value );
 				}
+				$status_type = sprintf( " AND (%s)",  $status_type );
 			} else {
 				$status_type = sprintf( " AND t.meta_key LIKE '%%\_%s'", $parsed_args['status'] );
 			}
