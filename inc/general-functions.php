@@ -1388,6 +1388,112 @@ if( ! function_exists( 'wp_ulike_get_popular_items_ids' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
+	/**
+	 * Get popular items total number
+	 *
+	 * @param array $args
+	 * @return string|null
+	 */
+	function wp_ulike_get_popular_items_total_number( $args = array() ){
+		// Global wordpress database object
+		global $wpdb;
+		//Main data
+		$defaults = array(
+			"type"     => 'post',
+			"status"   => 'like',
+			"period"   => 'all',
+			"user_id"  => 1,
+			"rel_type" => 'post'
+		);
+		$parsed_args  = wp_parse_args( $args, $defaults );
+		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
+		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
+
+		$related_condition = '';
+		switch ($parsed_args['type']) {
+			case 'post':
+			case 'topic':
+				$post_type = '';
+				if( is_array( $parsed_args['rel_type'] ) ){
+					$post_type = sprintf( " AND r.post_type IN ('%s')", implode ("','", $parsed_args['rel_type'] ) );
+				} elseif( ! empty( $parsed_args['rel_type'] ) ) {
+					$post_type = sprintf( " AND r.post_type = '%s'", $parsed_args['rel_type'] );
+				}
+				$related_condition = 'AND r.post_status = \'publish\'' . $post_type;
+				break;
+		}
+
+
+		$user_condition = '';
+		if( !empty( $parsed_args['user_id'] ) ){
+			if( is_array( $parsed_args['user_id'] ) ){
+				$user_condition = sprintf( " AND t.user_id IN ('%s')", implode ("','", $parsed_args['user_id'] ) );
+			} else {
+				$user_condition = sprintf( " AND t.user_id = '%s'", $parsed_args['user_id'] );
+			}
+		}
+
+		$query = '';
+		/**
+		 * If user id and period limit are not set, we use the meta table to get the information. This creates more optimization.
+		 */
+		if( empty( $period_limit ) && empty( $user_condition ) ){
+			// create query condition from status
+			$status_type  = '';
+			if( is_array( $parsed_args['status'] ) ){
+				foreach ($parsed_args['status'] as $key => $value) {
+					$status_type.= $key === 0 ? sprintf( " AND t.meta_key LIKE '%%\_%s'", $value ) : sprintf( " OR t.meta_key LIKE '%%\_%s'", $value );
+				}
+			} else {
+				$status_type = sprintf( " AND t.meta_key LIKE '%%\_%s'", $parsed_args['status'] );
+			}
+
+			// generate query string
+			$query  = sprintf( '
+				SELECT COUNT(DISTINCT t.item_id)
+				FROM %1$s t
+				INNER JOIN %2$s r ON t.item_id = r.%3$s %4$s
+				WHERE t.meta_group = "%5$s" %6$s',
+				$wpdb->prefix . 'ulike_meta',
+				$wpdb->prefix . $info_args['related_table'],
+				$info_args['related_column'],
+				$related_condition,
+				$parsed_args['type'],
+				$status_type
+			);
+
+		} else {
+			// create query condition from status
+			$status_type  = '';
+			if( is_array( $parsed_args['status'] ) ){
+				$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+			} else {
+				$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+			}
+
+			// generate query string
+			$query  = sprintf( '
+				SELECT COUNT(DISTINCT t.%1$s)
+				FROM %2$s t
+				INNER JOIN %3$s r ON t.%1$s = r.%4$s %5$s
+				WHERE %6$s %7$s
+				%8$s',
+				$info_args['column'],
+				$wpdb->prefix . $info_args['table'],
+				$wpdb->prefix . $info_args['related_table'],
+				$info_args['related_column'],
+				$related_condition,
+				$status_type,
+				$user_condition,
+				$period_limit
+			);
+		}
+
+		return !empty( $query ) ? $wpdb->get_var( $query ): null;
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 	/**
 	 * Check current user capabilities to access admin pages
