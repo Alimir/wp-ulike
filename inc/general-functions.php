@@ -1418,9 +1418,9 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			// create query condition from status
 			$status_type  = '';
 			if( is_array( $parsed_args['status'] ) ){
-				$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+				$status_type = sprintf( "t.status IN ('%s')", implode ("','", $parsed_args['status'] ) );
 			} else {
-				$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+				$status_type = sprintf( "t.status = '%s'", $parsed_args['status'] );
 			}
 
 			// generate query string
@@ -1563,9 +1563,9 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			// create query condition from status
 			$status_type  = '';
 			if( is_array( $parsed_args['status'] ) ){
-				$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+				$status_type = sprintf( "t.status IN ('%s')", implode ("','", $parsed_args['status'] ) );
 			} else {
-				$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+				$status_type = sprintf( "t.status = '%s'", $parsed_args['status'] );
 			}
 
 			// generate query string
