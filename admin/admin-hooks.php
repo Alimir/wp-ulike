@@ -156,16 +156,16 @@ function wp_ulike_notice_manager(){
 	}
 
 	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) && strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
-		$notice_list[ 'wp_ulike_logs_page_banner' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_logs_page_banner',
-			'title'       => __( 'How to Create Detailed Log Reports in WP ULike PRO?', WP_ULIKE_SLUG ),
-			'description' => __( "Having votes for your content without a tool for measuring the results is meaningless, isn't it? for that reason, we gave you full access to your log data in the WP ULike professional Logs panel." , WP_ULIKE_SLUG ),
+		$notice_list[ 'wp_ulike_pro_user_profiles_banner' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_pro_user_profiles_banner',
+			'title'       => __( 'How to Create Ultimate User Profiles with WP ULike?', WP_ULIKE_SLUG ),
+			'description' => __( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
 			'skin'        => 'default',
 			'has_close'   => true,
 			'buttons'     => array(
 				array(
 					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/log-reports-in-wp-ulike-pro/?utm_source=logs-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
 				),
 				array(
 					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
@@ -176,7 +176,7 @@ function wp_ulike_notice_manager(){
 			),
 			'image'     => array(
 				'width' => '140',
-				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/table.svg'
+				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/hero.svg'
 			)
 		]);
 		$notice_list[ 'wp_ulike_seo_tools_banner' ] = new wp_ulike_notices([
