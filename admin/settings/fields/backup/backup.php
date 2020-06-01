@@ -32,7 +32,7 @@ if ( ! class_exists( 'CSF_Field_backup' ) ) {
 
       echo '<hr />';
       echo '<button type="submit" name="csf_transient[reset]" value="reset" class="button csf-warning-primary csf-confirm csf-reset" data-unique="'. esc_attr( $unique ) .'" data-nonce="'. esc_attr( $nonce ) .'">'. esc_html__( 'Reset All', 'csf' ) .'</button>';
-      echo '<small class="csf-text-error">'. esc_html__( 'Please be sure for reset all of options.', 'csf' ) .'</small>';
+      echo '<small class="csf-error-text">'. esc_html__( 'Please be sure for reset all of options.', 'csf' ) .'</small>';
 
       echo $this->field_after();
 

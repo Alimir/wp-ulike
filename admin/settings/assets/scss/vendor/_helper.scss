@@ -1,117 +1,64 @@
 /**
- * 08. Helper
+ * 10. Helper
  */
-.csf-text-subtitle{
-  margin-top: 10px;
+.csf-subtitle-text{
+  margin-top: 6px;
   font-weight: 400;
   color: #999;
 }
 
-.csf-text-desc{
+.csf-desc-text{
   clear: both;
   float: left;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 6px;
   font-weight: 400;
   color: #999;
 }
 
-.csf-text-success{
-  color: #2b542c;
-}
-
-.csf-text-error{
-  margin-top: 5px;
+.csf-error-text{
+  margin-top: 6px;
   color: #d02c21;
 }
 
-.csf-text-info{
-  color: #31708f;
+.csf-before-text{
+  margin-bottom: 6px;
 }
 
-.csf-text-warning{
-  color: #ffb900;
+.csf-after-text{
+  margin-top: 6px;
 }
 
-.csf-text-muted{
-  color: #aaa;
-}
-
-.csf-text-left{
-  text-align: left;
-}
-
-.csf-text-center{
-  text-align: center;
-}
-
-.csf-text-right{
-  text-align: right;
-}
-
-.csf-block-left{
-  float: left;
-}
-
-.csf-block-right{
-  float: right;
-}
-
-.csf-full-width{
-  width: 100%;
-}
-
-.csf-full-half{
-  width: 50%;
-}
-
-.csf-table{
-  width: 100%;
-  display: table;
-}
-
-.csf-table-cell{
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.csf-table-expanded{
-  width: 100%;
-}
-
-.csf-nowrap{
-  white-space: nowrap;
-}
-
-.csf-text-highlight{
-  padding: 2px 4px;
-  font-size: 90%;
-  color: #c7254e;
-  background-color: #f9f2f4;
-  @include border-radius(2px);
-}
-
-.csf-text-highlight-gray{
-  padding: 2px 4px;
-  font-size: 90%;
-  background-color: #f0f0f0;
-  @include border-radius(2px);
-}
-
-.csf-hidden{
-  display: none;
-}
-
-.csf-hide{
+.csf-metabox-hide{
   display: none !important;
 }
 
-.csf-show{
+.csf-metabox-show{
   display: block !important;
 }
 
-.csf-opacity{
-  opacity: 0.5;
+.csf-depend-hidden.csf-depend-on{
+  display: none;
+}
+
+.csf-depend-visible.csf-depend-on{
+  display: block;
+  opacity: 0.75;
+  filter: grayscale(1);
+  user-select: none;
+  border-top: 1px solid #eee;
+
+  .clear:before{
+    content: "";
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    background-color: #eee;
+    opacity: 0.25;
+    z-index: 10;
+  }
 }
 
 .csf-warning-primary{
@@ -141,7 +88,7 @@
   padding: 0 8px;
   margin-right: 4px;
   font-size: 11px;
-  line-height: 28px;
+  line-height: 30px;
   user-select: none;
   border-radius: 2px;
 }

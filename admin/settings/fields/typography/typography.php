@@ -415,8 +415,6 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
 
     public function enqueue_google_fonts() {
 
-      $value     = $this->value;
-      $families  = array();
       $is_google = false;
 
       if ( ! empty( $this->value['type'] ) ) {
@@ -429,37 +427,37 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
       if ( $is_google ) {
 
         // set style
-        $font_weight = ( ! empty( $value['font-weight'] ) ) ? $value['font-weight'] : '';
-        $font_style  = ( ! empty( $value['font-style'] ) ) ? $value['font-style'] : '';
+        $font_family = ( ! empty( $this->value['font-family'] ) ) ? $this->value['font-family'] : '';
+        $font_weight = ( ! empty( $this->value['font-weight'] ) ) ? $this->value['font-weight'] : '';
+        $font_style  = ( ! empty( $this->value['font-style'] ) ) ? $this->value['font-style'] : '';
 
         if ( $font_weight || $font_style ) {
           $style = $font_weight . $font_style;
-          $families['style'][$style] = $style;
+          if ( ! empty( $style ) && $style !== 'normal' ) {
+            $this->parent->webfonts[$font_family][$style] = $style;
+          }
         }
 
         // set extra styles
-        if ( ! empty( $value['extra-styles'] ) ) {
-          foreach ( $value['extra-styles'] as $extra_style ) {
-            $families['style'][$extra_style] = $extra_style;
+        if ( ! empty( $this->value['extra-styles'] ) ) {
+          foreach ( $this->value['extra-styles'] as $extra_style ) {
+            if ( ! empty( $extra_style ) && $extra_style !== 'normal' ) {
+              $this->parent->webfonts[$font_family][$extra_style] = $extra_style;
+            }
           }
         }
 
         // set subsets
-        if ( ! empty( $value['subset'] ) ) {
-          $value['subset'] = ( is_array( $value['subset'] ) ) ? $value['subset'] : array_filter( (array) $value['subset'] );
-          foreach ( $value['subset'] as $subset ) {
-            $families['subset'][$subset] = $subset;
+        if ( ! empty( $this->value['subset'] ) ) {
+          $this->value['subset'] = ( is_array( $this->value['subset'] ) ) ? $this->value['subset'] : array_filter( (array) $this->value['subset'] );
+          foreach ( $this->value['subset'] as $subset ) {
+            if( ! empty( $subset ) ) {
+              $this->parent->subsets[$subset] = $subset;
+            }
           }
         }
 
-        $all_styles  = ( ! empty( $families['style'] ) ) ? ':'. implode( ',', $families['style'] ) : '';
-        $all_subsets = ( ! empty( $families['subset'] ) ) ? ':'. implode( ',', $families['subset'] ) : '';
-
-        $families = $this->value['font-family'] . str_replace( array( 'normal', 'italic' ), array( 'n', 'i' ), $all_styles ) . $all_subsets;
-
-        $this->parent->typographies[] = $families;
-
-        return $families;
+        return $font_family;
 
       }
 

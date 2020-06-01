@@ -66,14 +66,15 @@
  * 05. Customizer
  * 06. Taxonomy
  * 07. Profile
- * 08. Modal
- *     08. 01. Shortcode Modal
- *     08. 02. Gutenberg Modal
- *     08. 03. Icon Modal
- * 09. Helper
- * 10. Welcome Page
- * 11. Responsive
- * 12. Others
+ * 08. Nav Menu
+ * 09. Modal
+ *     09. 01. Shortcode Modal
+ *     09. 02. Gutenberg Modal
+ *     09. 03. Icon Modal
+ * 10. Helper
+ * 11. Welcome Page
+ * 12. Responsive
+ * 13. Others
  *
  * ---------------------------------------------------------
  *
@@ -86,6 +87,7 @@
 @import "vendor/widget";
 @import "vendor/customizer";
 @import "vendor/taxonomy";
+@import "vendor/navmenu";
 @import "vendor/profile";
 @import "vendor/modal";
 @import "vendor/helper";

@@ -89,7 +89,7 @@ if ( ! class_exists( 'CSF_Widget' ) ) {
 
         $class = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
 
-        echo '<div class="csf csf-widgets csf-fields'. $class .'">';
+        echo '<div class="csf csf-widgets csf-fields'. esc_attr( $class ) .'">';
 
         foreach ( $this->args['fields'] as $field ) {
 

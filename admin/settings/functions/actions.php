@@ -38,7 +38,7 @@ if ( ! function_exists( 'csf_get_icons' ) ) {
 
     } else {
 
-      echo '<div class="csf-text-error">'. esc_html__( 'No data provided by developer', 'csf' ) .'</div>';
+      echo '<div class="csf-error-text">'. esc_html__( 'No data provided by developer', 'csf' ) .'</div>';
 
     }
 
@@ -187,41 +187,4 @@ if ( ! function_exists( 'csf_chosen_ajax' ) ) {
 
   }
   add_action( 'wp_ajax_csf-chosen', 'csf_chosen_ajax' );
-}
-
-/**
- *
- * Set icons for wp dialog
- *
- * @since 1.0.0
- * @version 1.0.0
- *
- */
-if ( ! function_exists( 'csf_set_icons' ) ) {
-  function csf_set_icons() {
-    ?>
-    <div id="csf-modal-icon" class="csf-modal csf-modal-icon">
-      <div class="csf-modal-table">
-        <div class="csf-modal-table-cell">
-          <div class="csf-modal-overlay"></div>
-          <div class="csf-modal-inner">
-            <div class="csf-modal-title">
-              <?php esc_html_e( 'Add Icon', 'csf' ); ?>
-              <div class="csf-modal-close csf-icon-close"></div>
-            </div>
-            <div class="csf-modal-header csf-text-center">
-              <input type="text" placeholder="<?php esc_html_e( 'Search a Icon...', 'csf' ); ?>" class="csf-icon-search" />
-            </div>
-            <div class="csf-modal-content">
-              <div class="csf-modal-loading"><div class="csf-loading"></div></div>
-              <div class="csf-modal-load"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php
-  }
-  add_action( 'admin_footer', 'csf_set_icons' );
-  add_action( 'customize_controls_print_footer_scripts', 'csf_set_icons' );
 }

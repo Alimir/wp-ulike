@@ -5,7 +5,7 @@
   position: relative;
   padding: 30px;
 
-  + .csf-field:not(.hidden){
+  + .csf-field{
     border-top: 1px solid #eee;
   }
 
@@ -70,6 +70,10 @@
     position: relative;
     margin-bottom: 5px;
 
+    &:last-child{
+      margin-bottom: 0;
+    }
+
     h4{
       font-size: 1em;
     }
@@ -95,17 +99,17 @@
       outline: none;
       border-color: #999;
     }
+
+    .csf--icon{
+      width: 20px;
+      text-align: center;
+      margin-right: 2px;
+    }
   }
 
   .csf-accordion-icon{
-    width: 14px;
+    width: 16px;
     text-align: center;
-  }
-
-  .csf--icon{
-    width: 20px;
-    text-align: center;
-    margin-right: 2px;
   }
 
   .csf-accordion-content{
@@ -145,6 +149,7 @@
 
   .csf--background-colors{
     display: flex;
+    flex-wrap: wrap;
   }
 
   .csf--background-attributes{
@@ -324,14 +329,30 @@
 
   ul{
     margin: 0;
-    padding: 0 1px;
+    padding: 0;
     list-style-type: none;
     overflow-y: auto;
     max-height: 305px;
 
+    li{
+      margin-bottom: 6px;
+    }
+
     ul{
       max-height: none;
+
+      li{
+        margin-left: 8px;
+
+        &:first-child{
+          margin-left: 0;
+        }
+      }
     }
+  }
+
+  input{
+    margin: 0 1px;
   }
 
   .csf--inline-list li{
@@ -339,8 +360,9 @@
     margin-right: 15px;
   }
 
-  input[type="radio"]:checked:before{
-    line-height: 10px;
+  .csf--text{
+    margin-left: 5px;
+    vertical-align: middle;
   }
 
   .csf-checker{
@@ -927,6 +949,7 @@
 
   .csf--placeholder{
     display: flex;
+    align-items: flex-start;
 
     input{
       width: 100%;
@@ -1747,6 +1770,7 @@
 
   .csf--wrap{
     display: flex;
+    align-items: flex-start;
   }
 
   .button{

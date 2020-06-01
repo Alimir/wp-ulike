@@ -10,29 +10,29 @@
 if ( ! class_exists( 'CSF_Abstract' ) ) {
   abstract class CSF_Abstract {
 
-    public $abstract     = '';
-    public $output_css   = '';
-    public $typographies = array();
+    public $abstract   = '';
+    public $output_css = '';
+    public $webfonts   = array();
+    public $subsets    = array();
 
     public function __construct() {
 
-      // Check for embed google web fonts
-      if ( ! empty( $this->args['enqueue_webfont'] ) ) {
-        add_action( 'wp_enqueue_scripts', array( &$this, 'add_enqueue_google_fonts' ), 100 );
-      }
-
-      // Check for embed custom css styles
-      if ( ! empty( $this->args['output_css'] ) ) {
-        add_action( 'wp_head', array( &$this, 'add_output_css' ), 100 );
+      // Collect output css and typography
+      if ( ! empty( $this->args['output_css'] ) || ! empty( $this->args['enqueue_webfont'] ) ) {
+        add_action( 'wp_enqueue_scripts', array( &$this, 'collect_output_css_and_typography' ), 10 );
       }
 
     }
 
-    public function add_enqueue_google_fonts() {
+    public function collect_output_css_and_typography() {
+      $this->recursive_output_css( $this->pre_fields );
+    }
 
-      if ( ! empty( $this->pre_fields ) ) {
+    public function recursive_output_css( $fields = array(), $combine_field = array() ) {
 
-        foreach ( $this->pre_fields as $field ) {
+      if ( ! empty( $fields ) ) {
+
+        foreach ( $fields as $field ) {
 
           $field_id     = ( ! empty( $field['id'] ) ) ? $field['id'] : '';
           $field_type   = ( ! empty( $field['type'] ) ) ? $field['type'] : '';
@@ -45,6 +45,28 @@ if ( ! class_exists( 'CSF_Abstract' ) ) {
 
             $class_name = 'CSF_Field_' . $field_type;
 
+            if( $field_type === 'fieldset' ) {
+              if ( ! empty( $field['fields'] ) ) {
+                $this->recursive_output_css( $field['fields'], $field );
+              }
+            }
+
+            if( $field_type === 'accordion' ) {
+              if ( ! empty( $field['accordions'] ) ) {
+                foreach ( $field['accordions'] as $accordion ) {
+                  $this->recursive_output_css( $accordion['fields'], $field );
+                }
+              }
+            }
+
+            if( $field_type === 'tabbed' ) {
+              if ( ! empty( $field['tabs'] ) ) {
+                foreach ( $field['tabs'] as $accordion ) {
+                  $this->recursive_output_css( $accordion['fields'], $field );
+                }
+              }
+            }
+
             if ( class_exists( $class_name ) ) {
 
               if ( method_exists( $class_name, 'output' ) || method_exists( $class_name, 'enqueue_google_fonts' ) ) {
@@ -52,21 +74,49 @@ if ( ! class_exists( 'CSF_Abstract' ) ) {
                 $field_value = '';
 
                 if ( $field_check && ( $this->abstract === 'options' || $this->abstract === 'customize' ) ) {
-                  $field_value = ( isset( $this->options[$field_id] ) && $this->options[$field_id] !== '' ) ? $this->options[$field_id] : '';
-                } else if ( $field_check && $this->abstract === 'metabox' ) {
-                  $field_value = $this->get_meta_value( $field );
+
+                  if( ! empty( $combine_field ) ) {
+
+                    $field_value = ( isset( $this->options[$combine_field['id']][$field_id] ) ) ? $this->options[$combine_field['id']][$field_id] : '';
+
+                  } else {
+
+                    $field_value = ( isset( $this->options[$field_id] ) ) ? $this->options[$field_id] : '';
+
+                  }
+
+                } else if ( $field_check && $this->abstract === 'metabox' && is_singular() ) {
+
+                  if( ! empty( $combine_field ) ) {
+
+                    $meta_value  = $this->get_meta_value( $combine_field );
+                    $field_value = ( isset( $meta_value[$field_id] ) ) ? $meta_value[$field_id] : '';
+
+                  } else {
+
+                    $meta_value  = $this->get_meta_value( $field );
+                    $field_value = ( isset( $meta_value ) ) ? $meta_value : '';
+
+                  }
+
                 }
 
                 $instance = new $class_name( $field, $field_value, $this->unique, 'wp/enqueue', $this );
 
                 // typography enqueue and embed google web fonts
                 if ( $field_type === 'typography' && $this->args['enqueue_webfont'] && ! empty( $field_value['font-family'] ) ) {
-                  $instance->enqueue_google_fonts();
+
+                  $method = ( ! empty( $this->args['async_webfont'] ) ) ? 'async' : 'enqueue';
+                  $family = $instance->enqueue_google_fonts();
+
+                  CSF::$webfonts[$method][$family] = ( ! empty( $this->webfonts[$family] ) ) ? $family . ':' . implode( ',', $this->webfonts[$family] ) : $family;
+                  CSF::$subsets = $this->subsets;
+
                 }
 
                 // output css
                 if ( $field_output && $this->args['output_css'] ) {
-                  $instance->output();
+                  CSF::$css .= $instance->output();
                 }
 
                 unset( $instance );
@@ -79,36 +129,6 @@ if ( ! class_exists( 'CSF_Abstract' ) ) {
 
         }
 
-      }
-
-      if ( ! empty( $this->typographies ) && empty( $this->args['async_webfont'] ) ) {
-
-        $api    = '//fonts.googleapis.com/css';
-        $query  = array( 'family' => implode( '%7C', $this->typographies ) );
-        $handle = 'csf-google-web-fonts-'. $this->unique;
-
-        wp_enqueue_style( $handle, esc_url( add_query_arg( $query, $api ) ), array(), null );
-
-      }
-
-      if ( ! empty( $this->typographies ) && ! empty( $this->args['async_webfont'] ) ) {
-
-        $api = '//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
-        echo '<script type="text/javascript">';
-        echo 'WebFontConfig={google:{families:['. "'" . implode( "','", $this->typographies ) . "'" .']}};';
-        echo '!function(e){var t=e.createElement("script"),s=e.scripts[0];t.src="'. esc_url( $api ) .'",t.async=!0,s.parentNode.insertBefore(t,s)}(document);';
-        echo '</script>';
-
-      }
-
-    }
-
-    public function add_output_css() {
-
-      $this->output_css = apply_filters( "csf_{$this->unique}_output_css", $this->output_css, $this );
-
-      if ( ! empty( $this->output_css ) ) {
-        echo '<style type="text/css">'. wp_strip_all_tags( $this->output_css ) .'</style>';
       }
 
     }
