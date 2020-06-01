@@ -477,4 +477,4 @@ function wp_ulike_admin_init_controller() {
 	  remove_action( 'customize_controls_print_footer_scripts', 'csf_set_icons' );
 	}
 }
-add_action( 'admin_init', 'wp_ulike_admin_init_controller' );
+// add_action( 'admin_init', 'wp_ulike_admin_init_controller' );
