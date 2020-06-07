@@ -752,12 +752,14 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) && function_exists( 'is_bbpress'
 
 			switch ( $action ) {
 				case 'bbp_theme_before_reply_content':
+				case 'bbp_theme_before_topic_content':
 					if( $position === 'top' ){
 						echo $button;
 					}
 					return;
 
 				case 'bbp_theme_after_reply_content':
+				case 'bbp_theme_after_topic_content':
 					if( $position === 'bottom' ){
 						echo $button;
 					}
@@ -767,6 +769,8 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) && function_exists( 'is_bbpress'
 	}
 	add_action( 'bbp_theme_before_reply_content', 'wp_ulike_put_bbpress' );
 	add_action( 'bbp_theme_after_reply_content', 'wp_ulike_put_bbpress' );
+	add_action( 'bbp_theme_before_topic_content', 'wp_ulike_put_bbpress' );
+	add_action( 'bbp_theme_after_topic_content', 'wp_ulike_put_bbpress' );
 
 }
 
