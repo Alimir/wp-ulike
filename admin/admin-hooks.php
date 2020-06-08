@@ -202,38 +202,6 @@ function wp_ulike_notice_manager(){
 				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/seo.svg'
 			)
 		]);
-		$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_go_pro',
-			'title'       => __( 'WP Ulike Pro is Ready :))', WP_ULIKE_SLUG ),
-			   'description' => __( "Finally, after a long time, the Premium version of the WP Ulike plugin has been released with some new features such as support for Dislike button, Professional stats, Elementor (Page Builder) Widgets, and some new templates. We intend to add more features to this extension every day and provide a full support for our users." , WP_ULIKE_SLUG ),
-			'skin'        => 'default',
-			'wrapper_extra_styles' => [
-				'background-image'  => 'url(' . WP_ULIKE_ASSETS_URL . '/img/svg/banner-pro.svg)',
-				'background-color'  => '#e1f5fe',
-				'background-size'   => 'contain',
-				'background-repeat' => 'no-repeat',
-				'padding'           => '80px 180px 80px 340px',
-			],
-			'has_close'   => true,
-			'buttons'     => array(
-				array(
-					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-					'link'       => WP_ULIKE_PLUGIN_URI . '?utm_source=banner&utm_campaign=gopro&utm_medium=wp-dash'
-				),
-				array(
-					'label'      => __('Not Now', WP_ULIKE_SLUG),
-					'type'       => 'skip',
-					'color_name' => 'info',
-					'expiration' => WEEK_IN_SECONDS * 2
-				),
-				array(
-					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
-					'type'       => 'skip',
-					'color_name' => 'error',
-					'expiration' => YEAR_IN_SECONDS * 10
-				)
-			)
-		]);
 	}
 
 
