@@ -638,10 +638,20 @@ if( ! function_exists( 'wp_ulike' ) ){
 	 * @return			String
 	 */
 	function wp_ulike( $type = 'get', $args = array() ) {
-		//global variables
-		global $post;
+		// Get item ID
+		$post_ID = ! empty( $args['id'] ) ? $args['id'] : NULL;
 
-		$post_ID       = isset( $args['id'] ) ? $args['id'] : $post->ID;
+		if( empty( $post_ID ) ){
+			//global variables
+			global $post;
+			$post_ID = isset( $post->ID ) ? $post->ID : NULL;
+		}
+
+		// Return if post ID not exist
+		if( empty( $post_ID ) ){
+			return;
+		}
+
 		$attributes    = apply_filters( 'wp_ulike_posts_add_attr', null );
 		$options       = wp_ulike_get_option( 'posts_group' );
 		$post_settings = wp_ulike_get_post_settings_by_type( 'likeThis' );
@@ -667,12 +677,11 @@ if( ! function_exists( 'wp_ulike' ) ){
 		// Output templayte
 		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
-        if( $type === 'put' ) {
-        	return $output;
-        } else {
-        	echo $output;
-        }
-
+		if( $type === 'put' ) {
+			return $output;
+		} else {
+			echo $output;
+		}
 	}
 }
 
@@ -691,7 +700,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 	 * @param string $user_id
 	 * @return WP_Post[]|int[] Array of post objects or post IDs.
 	 */
-	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = '', $period = 'all', $status = 'like', $is_noraml = false, $offset = 1, $user_id = '' ){
+	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = 'post', $period = 'all', $status = 'like', $is_noraml = false, $offset = 1, $user_id = '' ){
 		// Get post types
 		$post_type =  empty( $post_type ) ? get_post_types_by_support( array(
 			'title',

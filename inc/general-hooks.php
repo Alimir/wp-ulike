@@ -37,31 +37,31 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 		$result = '';
 		// Default Args
 		$args   = shortcode_atts( array(
-					"for"           => 'post',	// shortcode Type (post, comment, activity, topic)
-					"id"            => '',		// Post ID
-					"slug"          => 'post',	// Slug Name
-					"style"         => '',		// Get Default Theme
-					"button_type"   => '',		// Set Button Type ('image' || 'text')
-					"attributes"    => '',		// Get Attributes Filter
-					"wrapper_class" => ''		// Extra Wrapper class
-			    ), $atts );
+			"for"           => 'post',	// shortcode Type (post, comment, activity, topic)
+			"id"            => '',		// Post ID
+			"slug"          => 'post',	// Slug Name
+			"style"         => '',		// Get Default Theme
+			"button_type"   => '',		// Set Button Type ('image' || 'text')
+			"attributes"    => '',		// Get Attributes Filter
+			"wrapper_class" => ''		// Extra Wrapper class
+		), $atts );
 
-	    switch ( $args['for'] ) {
-	    	case 'comment':
-	    		$result = $content . wp_ulike_comments( 'put', array_filter( $args ) );
-	    		break;
+		switch ( $args['for'] ) {
+			case 'comment':
+				$result = $content . wp_ulike_comments( 'put', array_filter( $args ) );
+				break;
 
-	    	case 'activity':
-	    		$result = $content . wp_ulike_buddypress( 'put', array_filter( $args ) );
-	    		break;
+			case 'activity':
+				$result = $content . wp_ulike_buddypress( 'put', array_filter( $args ) );
+				break;
 
-	    	case 'topic':
-	    		$result = $content . wp_ulike_bbpress( 'put', array_filter( $args ) );
-	    		break;
+			case 'topic':
+				$result = $content . wp_ulike_bbpress( 'put', array_filter( $args ) );
+				break;
 
-	    	default:
-	    		$result = $content . wp_ulike( 'put', array_filter( $args ) );
-	    }
+			default:
+				$result = $content . wp_ulike( 'put', array_filter( $args ) );
+		}
 
 		return $result;
 	}
@@ -181,27 +181,26 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 		// Stack variable
 		$output = $content;
 
-		if ( wp_ulike_is_true( wp_ulike_get_option( 'posts_group|enable_auto_display', 1 ) ) ) {
+		if ( in_the_loop() && is_main_query() && wp_ulike_is_true( wp_ulike_get_option( 'posts_group|enable_auto_display', 1 ) ) ) {
 			//auto display position
 			$position = wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' );
-			//add wp_ulike function
-			$button   = '';
 
 			if(	!is_feed() && is_wp_ulike( wp_ulike_get_option( 'posts_group|auto_display_filter' ) ) ){
+				// Get button
 				$button = wp_ulike('put');
-			}
-			switch ($position) {
-				case 'top':
-					$output = $button . $content;
-					break;
+				switch ($position) {
+					case 'top':
+						$output = $button . $content;
+						break;
 
-				case 'top_bottom':
-					$output = $button . $content . $button;
-					break;
+					case 'top_bottom':
+						$output = $button . $content . $button;
+						break;
 
-				default:
-					$output = $content . $button;
-					break;
+					default:
+						$output = $content . $button;
+						break;
+				}
 			}
 		}
 

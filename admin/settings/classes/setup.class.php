@@ -452,7 +452,7 @@ if ( ! class_exists( 'CSF' ) ) {
 
       if( ! empty( self::$args['shortcode_options'] ) ) {
         foreach ( self::$args['shortcode_options'] as $argument ) {
-          if( $argument['show_in_editor'] && $wpscreen->base === 'post' ) {
+          if( !empty($argument['show_in_editor']) && $wpscreen->base === 'post' ) {
             $enqueue = true;
           }
         }

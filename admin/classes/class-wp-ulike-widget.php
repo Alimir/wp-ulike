@@ -51,7 +51,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			// Extract settings
 			extract($settings);
 
-			$posts = wp_ulike_get_most_liked_posts( $numberOf, '', '', $period );
+			$posts = wp_ulike_get_most_liked_posts( $numberOf, '', 'post', $period );
 
 			if( empty( $posts ) ){
 				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
