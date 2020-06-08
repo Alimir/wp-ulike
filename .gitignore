@@ -10,3 +10,5 @@ build/
 _devDependencies/
 
 deploy\.sh
+
+.vscode/
