@@ -40,7 +40,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
       // menu extras
       'show_bar_menu'           => true,
       'show_sub_menu'           => true,
-      'show_network_menu'       => true,
+      'show_in_network'         => true,
       'show_in_customizer'      => false,
 
       'show_search'             => true,
@@ -55,7 +55,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
       // admin bar menu settings
       'admin_bar_menu_icon'     => '',
-      'admin_bar_menu_priority' => 80,
+      'admin_bar_menu_priority' => 50,
 
       // footer
       'footer_text'             => '',
@@ -106,7 +106,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
       add_action( 'admin_bar_menu', array( &$this, 'add_admin_bar_menu' ), $this->args['admin_bar_menu_priority'] );
       add_action( 'wp_ajax_csf_'. $this->unique .'_ajax_save', array( &$this, 'ajax_save' ) );
 
-      if ( ! empty( $this->args['show_network_menu'] ) ) {
+      if ( $this->args['database'] === 'network' && ! empty( $this->args['show_in_network'] ) ) {
         add_action( 'network_admin_menu', array( &$this, 'add_admin_menu' ) );
       }
 
@@ -183,6 +183,10 @@ if ( ! class_exists( 'CSF_Options' ) ) {
     // add admin bar menu
     public function add_admin_bar_menu( $wp_admin_bar ) {
 
+      if( is_network_admin() && ( $this->args['database'] !== 'network' || $this->args['show_in_network'] !== true ) ) {
+        return;
+      }
+
       if ( ! empty( $this->args['show_bar_menu'] ) && empty( $this->args['menu_hidden'] ) ) {
 
         global $submenu;
@@ -197,23 +201,14 @@ if ( ! class_exists( 'CSF_Options' ) ) {
         ) );
 
         if ( ! empty( $submenu[$menu_slug] ) ) {
-          foreach ( $submenu[$menu_slug] as $key => $menu ) {
+          foreach ( $submenu[$menu_slug] as $menu_key => $menu_value ) {
             $wp_admin_bar->add_node( array(
               'parent' => $menu_slug,
-              'id'     => $menu_slug .'-'. $key,
-              'title'  => $menu[0],
-              'href'   => esc_url( ( is_network_admin() ) ? network_admin_url( 'admin.php?page='. $menu[2] ) : admin_url( 'admin.php?page='. $menu[2] ) ),
+              'id'     => $menu_slug .'-'. $menu_key,
+              'title'  => $menu_value[0],
+              'href'   => esc_url( ( is_network_admin() ) ? network_admin_url( 'admin.php?page='. $menu_value[2] ) : admin_url( 'admin.php?page='. $menu_value[2] ) ),
             ) );
           }
-        }
-
-        if ( ! empty( $this->args['show_network_menu'] ) ) {
-          $wp_admin_bar->add_node( array(
-            'parent' => 'network-admin',
-            'id'     => $menu_slug .'-network-admin',
-            'title'  => $menu_icon . esc_attr( $this->args['menu_title'] ),
-            'href'   => esc_url( network_admin_url( 'admin.php?page='. $menu_slug ) ),
-          ) );
         }
 
       }
@@ -264,7 +259,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
       // XSS ok.
       // No worries, This "POST" requests is sanitizing in the below foreach. see #L337 - #L341
-      $response    = ( $ajax && ! empty( $_POST['data'] ) ) ? json_decode( wp_unslash( trim( $_POST['data'] ) ), true ) : $_POST;
+      $response  = ( $ajax && ! empty( $_POST['data'] ) ) ? json_decode( wp_unslash( trim( $_POST['data'] ) ), true ) : $_POST;
 
       // Set variables.
       $data      = array();
@@ -301,9 +296,9 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
         } else if ( ! empty( $transient['reset_section'] ) && ! empty( $section_id ) ) {
 
-          if ( ! empty( $this->pre_sections[$section_id-1]['fields'] ) ) {
+          if ( ! empty( $this->pre_sections[$section_id]['fields'] ) ) {
 
-            foreach ( $this->pre_sections[$section_id-1]['fields'] as $field ) {
+            foreach ( $this->pre_sections[$section_id]['fields'] as $field ) {
               if ( ! empty( $field['id'] ) ) {
                 $data[$field['id']] = $this->get_default( $field );
               }
@@ -453,17 +448,8 @@ if ( ! class_exists( 'CSF_Options' ) ) {
         if ( ! empty( $this->args['show_sub_menu'] ) && count( $this->pre_tabs ) > 1 ) {
 
           // create submenus
-          $tab_key = 1;
           foreach ( $this->pre_tabs as $section ) {
-
-            call_user_func( 'add_submenu_page', $menu_slug, esc_attr( $section['title'] ),  esc_attr( $section['title'] ), $menu_capability, $menu_slug .'#tab='. $tab_key, '__return_null' );
-
-            if ( ! empty( $section['subs'] ) ) {
-              $tab_key += ( count( $section['subs'] )-1 );
-            }
-
-            $tab_key++;
-
+            call_user_func( 'add_submenu_page', $menu_slug, esc_attr( $section['title'] ),  esc_attr( $section['title'] ), $menu_capability, $menu_slug .'#tab='. sanitize_title( $section['title'] ), '__return_null' );
           }
 
           remove_submenu_page( $menu_slug, $menu_slug );
@@ -597,29 +583,27 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
               echo '<ul>';
 
-              $tab_key = 1;
-
               foreach ( $this->pre_tabs as $tab ) {
 
+                $tab_id    = sanitize_title( $tab['title'] );
                 $tab_error = $this->error_check( $tab );
                 $tab_icon  = ( ! empty( $tab['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $tab['icon'] ) .'"></i>' : '';
 
                 if ( ! empty( $tab['subs'] ) ) {
 
-                  echo '<li class="csf-tab-depth-0">';
+                  echo '<li class="csf-tab-item">';
 
-                    echo '<a href="#tab='. $tab_key .'" class="csf-arrow">'. wp_kses_post( $tab_icon . $tab['title'] . $tab_error ) .'</a>';
+                    echo '<a href="#tab='. esc_attr( $tab_id ) .'" data-tab-id="'. esc_attr( $tab_id ) .'" class="csf-arrow">'. wp_kses_post( $tab_icon . $tab['title'] . $tab_error ) .'</a>';
 
                     echo '<ul>';
 
                     foreach ( $tab['subs'] as $sub ) {
 
+                      $sub_id    = sanitize_title( $sub['title'] );
                       $sub_error = $this->error_check( $sub );
                       $sub_icon  = ( ! empty( $sub['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $sub['icon'] ) .'"></i>' : '';
 
-                      echo '<li class="csf-tab-depth-1"><a id="csf-tab-link-'. esc_attr( $tab_key ) .'" href="#tab='. esc_attr( $tab_key ) .'">'. wp_kses_post( $sub_icon . $sub['title'] . $sub_error ) .'</a></li>';
-
-                      $tab_key++;
+                      echo '<li><a href="#tab='. esc_attr( $sub_id ) .'" data-tab-id="'. esc_attr( $sub_id ) .'">'. wp_kses_post( $sub_icon . $sub['title'] . $sub_error ) .'</a></li>';
 
                     }
 
@@ -629,9 +613,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
                 } else {
 
-                  echo '<li class="csf-tab-depth-0"><a id="csf-tab-link-'. esc_attr( $tab_key ) .'" href="#tab='. esc_attr( $tab_key ) .'">'. wp_kses_post( $tab_icon . $tab['title'] . $tab_error ) .'</a></li>';
-
-                  $tab_key++;
+                  echo '<li class="csf-tab-item"><a href="#tab='. esc_attr( $tab_id ) .'" data-tab-id="'. esc_attr( $tab_id ) .'">'. wp_kses_post( $tab_icon . $tab['title'] . $tab_error ) .'</a></li>';
 
                 }
 
@@ -647,15 +629,15 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
             echo '<div class="csf-sections">';
 
-            $section_key = 1;
-
             foreach ( $this->pre_sections as $section ) {
 
-              $onload = ( ! $has_nav ) ? ' csf-onload' : '';
-              $section_icon = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+              $section_onload = ( ! $has_nav ) ? ' csf-onload' : '';
+              $section_class  = ( ! empty( $section['class'] ) ) ? ' '. $section['class'] : '';
+              $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+              $section_title  = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
 
-              echo '<div id="csf-section-'. $section_key .'" class="csf-section'. esc_attr( $onload ) .'">';
-              echo ( $has_nav ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section['title'] ) .'</h3></div>' : '';
+              echo '<div class="csf-section'. esc_attr( $section_onload . $section_class ) .'" data-section-id="'. sanitize_title( $section_title ) .'">';
+              echo ( $has_nav ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
               echo ( ! empty( $section['description'] ) ) ? '<div class="csf-field csf-section-description">'. wp_kses_post( $section['description'] ) .'</div>' : '';
 
               if ( ! empty( $section['fields'] ) ) {
@@ -680,13 +662,11 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
               } else {
 
-                echo '<div class="csf-no-option csf-text-muted">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
+                echo '<div class="csf-no-option">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
 
               }
 
               echo '</div>';
-
-              $section_key++;
 
             }
 

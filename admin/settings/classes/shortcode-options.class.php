@@ -43,8 +43,8 @@ if ( ! class_exists( 'CSF_Shortcoder' ) ) {
       $this->pre_tabs     = $this->pre_tabs( $this->sections );
       $this->pre_sections = $this->pre_sections( $this->sections );
 
-      add_action( 'admin_footer', array( &$this, 'add_shortcode_modal' ) );
-      add_action( 'customize_controls_print_footer_scripts', array( &$this, 'add_shortcode_modal' ) );
+      add_action( 'admin_footer', array( &$this, 'add_footer_modal_shortcode' ) );
+      add_action( 'customize_controls_print_footer_scripts', array( &$this, 'add_footer_modal_shortcode' ) );
       add_action( 'wp_ajax_csf-get-shortcode-'. $this->unique, array( &$this, 'get_shortcode' ) );
 
       if ( ! empty( $this->args['show_in_editor'] ) ) {
@@ -53,9 +53,9 @@ if ( ! class_exists( 'CSF_Shortcoder' ) ) {
 
         // elementor editor support
         if ( CSF::is_active_plugin( 'elementor/elementor.php' ) ) {
-          add_action( 'elementor/editor/before_enqueue_scripts', array( 'CSF', 'add_admin_enqueue_scripts' ), 20 );
-          add_action( 'elementor/editor/footer', array( &$this, 'add_shortcode_modal' ) );
-          add_action( 'elementor/editor/footer', 'csf_set_icons' );
+          add_action( 'elementor/editor/before_enqueue_scripts', array( 'CSF', 'add_admin_enqueue_scripts' ) );
+          add_action( 'elementor/editor/footer', array( 'CSF_Field_icon', 'add_footer_modal_icon' ) );
+          add_action( 'elementor/editor/footer', array( &$this, 'add_footer_modal_shortcode' ) );
         }
 
       }
@@ -122,7 +122,11 @@ if ( ! class_exists( 'CSF_Shortcoder' ) ) {
 
     }
 
-    public function add_shortcode_modal() {
+    public function add_footer_modal_shortcode() {
+
+      if( ! wp_script_is( 'csf' ) ) {
+        return;
+      }
 
       $class        = ( $this->args['class'] ) ? ' '. esc_attr( $this->args['class'] ) : '';
       $has_select   = ( count( $this->pre_tabs ) > 1 ) ? true : false;
@@ -130,7 +134,7 @@ if ( ! class_exists( 'CSF_Shortcoder' ) ) {
       $hide_header  = ( ! $has_select ) ? ' hidden' : '';
 
     ?>
-      <div id="csf-modal-<?php echo esc_attr( $this->unique ); ?>" class="wp-core-ui csf-modal csf-shortcode<?php echo esc_attr( $single_usage . $class ); ?>" data-modal-id="<?php echo esc_attr( $this->unique ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'csf_shortcode_nonce' ) ); ?>">
+      <div id="csf-modal-<?php echo esc_attr( $this->unique ); ?>" class="wp-core-ui csf-modal csf-shortcode hidden<?php echo esc_attr( $single_usage . $class ); ?>" data-modal-id="<?php echo esc_attr( $this->unique ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'csf_shortcode_nonce' ) ); ?>">
         <div class="csf-modal-table">
           <div class="csf-modal-table-cell">
             <div class="csf-modal-overlay"></div>
@@ -280,7 +284,7 @@ if ( ! class_exists( 'CSF_Shortcoder' ) ) {
         }
 
       } else {
-        echo '<div class="csf-field csf-text-error">'. esc_html__( 'Error: Nonce verification has failed. Please try again.', 'csf' ) .'</div>';
+        echo '<div class="csf-field csf-error-text">'. esc_html__( 'Error: Nonce verification has failed. Please try again.', 'csf' ) .'</div>';
       }
 
       wp_send_json_success( array( 'content' => ob_get_clean() ) );

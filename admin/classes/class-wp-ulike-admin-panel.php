@@ -40,7 +40,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'menu_position'      => 313,
                 'show_bar_menu'      => false,
                 'show_sub_menu'      => true,
-                'show_network_menu'  => false,
                 'show_search'        => true,
                 'show_reset_all'     => true,
                 'show_reset_section' => true,
@@ -277,14 +276,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'type'  => 'switcher',
                         'title' => __('Enable Deprecated Options', WP_ULIKE_SLUG),
                         'desc'  => sprintf( '%s<br><strong>* %s</strong>', __('By activating this option, users who have upgraded to version +4.1 and lost their old options can restore and enable previous settings.', WP_ULIKE_SLUG), __('Attention: If you have been using WP ULike +v4.1 from the beginning, do not enable this option.', WP_ULIKE_SLUG) )
-                    ),
-                   array(
-                        'id'      => 'disable_panel_files',
-                        'type'    => 'switcher',
-                        'default' => true,
-                        'title'   => __('Disable Admin Panel Assets', WP_ULIKE_SLUG),
-                        'desc'    => __('By activating this option, the display of settings panel assets will be limited to the plugin admin pages.', WP_ULIKE_SLUG),
-                    ),
+                    )
                 ) )
             ) );
 
@@ -298,15 +290,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'function' => 'wp_ulike_get_notice_render',
                         'args'     => array(
                             'id'          => 'wp_ulike_pro_user_profiles_banner',
-                            'title'       => __( 'How to Create Your Own Custom User Profiles with WP ULike?', WP_ULIKE_SLUG ),
-                            'description' => __( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website  without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
+                            'title'       => __( 'How to Create Ultimate User Profiles with WP ULike?', WP_ULIKE_SLUG ),
+                            'description' => __( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
                             'skin'        => 'info',
                             'has_close'   => false,
                             'buttons'     => array(
                                 array(
                                     'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
                                     'color_name' => 'info',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-user-profile-front-end/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
                                 )
                             ),
                             'image'     => array(
@@ -429,15 +421,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'function' => 'wp_ulike_get_notice_render',
                         'args'     => array(
                             'id'          => 'wp_ulike_pro_optimization_banner',
-                            'title'       => __( 'How to Optimize or Truncate WP ULike Database Tables?', WP_ULIKE_SLUG ),
-                            'description' => __( "Your WP ULike database stores all of your voting data in multiple tables. If the number of your logs increases over time, your database will grow larger. A large database can greatly affect the performance of your website as it takes longer for your server to retrieve information from database tables. This is why database optimization is so important." , WP_ULIKE_SLUG ),
+                            'title'       => __( 'How to Optimize or Repair WP ULike Database Tables?', WP_ULIKE_SLUG ),
+                            'description' => __( "Have you ever optimized your WP ULike database? Optimizing your database cleans up unwanted data which reduces database size and improves performance." , WP_ULIKE_SLUG ),
                             'skin'        => 'info',
                             'has_close'   => false,
                             'buttons'     => array(
                                 array(
                                     'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
                                     'color_name' => 'info',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/optimizing-your-wp-ulike-database/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/database-optimization/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
                                 )
                             ),
                             'image'     => array(

@@ -95,70 +95,6 @@
       };
     },
 
-    //
-    // Get a cookie
-    //
-    get_cookie: function( name ) {
-
-      var e, b, cookie = document.cookie, p = name + '=';
-
-      if ( ! cookie ) {
-        return;
-      }
-
-      b = cookie.indexOf( '; ' + p );
-
-      if ( b === -1 ) {
-        b = cookie.indexOf(p);
-
-        if ( b !== 0 ) {
-          return null;
-        }
-      } else {
-        b += 2;
-      }
-
-      e = cookie.indexOf( ';', b );
-
-      if ( e === -1 ) {
-        e = cookie.length;
-      }
-
-      return decodeURIComponent( cookie.substring( b + p.length, e ) );
-
-    },
-
-    //
-    // Set a cookie
-    //
-    set_cookie: function( name, value, expires, path, domain, secure ) {
-
-      var d = new Date();
-
-      if ( typeof( expires ) === 'object' && expires.toGMTString ) {
-        expires = expires.toGMTString();
-      } else if ( parseInt( expires, 10 ) ) {
-        d.setTime( d.getTime() + ( parseInt( expires, 10 ) * 1000 ) );
-        expires = d.toGMTString();
-      } else {
-        expires = '';
-      }
-
-      document.cookie = name + '=' + encodeURIComponent( value ) +
-        ( expires ? '; expires=' + expires : '' ) +
-        ( path    ? '; path=' + path       : '' ) +
-        ( domain  ? '; domain=' + domain   : '' ) +
-        ( secure  ? '; secure'             : '' );
-
-    },
-
-    //
-    // Remove a cookie
-    //
-    remove_cookie: function( name, path, domain, secure ) {
-      CSF.helper.set_cookie( name, '', -1000, path, domain, secure );
-    },
-
   };
 
   //
@@ -210,34 +146,42 @@
   $.fn.csf_nav_options = function() {
     return this.each( function() {
 
-      var $nav    = $(this),
-          $links  = $nav.find('a'),
-          $hidden = $nav.closest('.csf').find('.csf-section-id'),
-          $last_section;
+      var $nav   = $(this),
+          $links = $nav.find('a'),
+          $last;
 
       $(window).on('hashchange csf.hashchange', function() {
 
-        var hash  = window.location.hash.match(new RegExp('tab=([^&]*)'));
-        var slug  = hash ? hash[1] : $links.first().attr('href').replace('#tab=', '');
-        var $link = $('#csf-tab-link-'+ slug);
+        var hash  = window.location.hash.replace('#tab=', '');
+        var slug  = hash ? hash : $links.first().attr('href').replace('#tab=', '');
+        var $link = $('[data-tab-id="'+slug+'"]');
 
-        if ( $link.length > 0 ) {
+        if ( $link.length ) {
 
-          $link.closest('.csf-tab-depth-0').addClass('csf-tab-active').siblings().removeClass('csf-tab-active');
-          $links.removeClass('csf-section-active');
-          $link.addClass('csf-section-active');
+          $link.closest('.csf-tab-item').addClass('csf-tab-expanded').siblings().removeClass('csf-tab-expanded');
 
-          if ( $last_section !== undefined ) {
-            $last_section.hide();
+          if( $link.next().is('ul') ) {
+
+            $link = $link.next().find('li').first().find('a');
+            slug  = $link.data('tab-id');
+
           }
 
-          var $section = $('#csf-section-'+slug);
+          $links.removeClass('csf-active');
+          $link.addClass('csf-active');
+
+          if ( $last ) {
+            $last.hide();
+          }
+
+          var $section = $('[data-section-id="'+slug+'"]');
+
           $section.show();
           $section.csf_reload_script();
 
-          $hidden.val(slug);
+          $('.csf-section-id').val( $section.index() );
 
-          $last_section = $section;
+          $last = $section;
 
         }
 
@@ -254,46 +198,36 @@
 
       var $nav      = $(this),
           $links    = $nav.find('a'),
-          unique_id = $nav.data('unique'),
-          post_id   = $('#post_ID').val() || 'global',
-          $last_section,
-          $last_link;
+          $sections = $nav.parent().find('.csf-section'),
+          $last;
 
-      $links.on('click', function( e ) {
+      $links.each( function( index ) {
 
-        e.preventDefault();
+        $(this).on('click', function( e ) {
 
-        var $link      = $(this),
-            section_id = $link.data('section');
+          e.preventDefault();
 
-        if ( $last_link !== undefined ) {
-          $last_link.removeClass('csf-section-active');
-        }
+          var $link = $(this);
 
-        if ( $last_section !== undefined ) {
-          $last_section.hide();
-        }
+          $links.removeClass('csf-active');
+          $link.addClass('csf-active');
 
-        $link.addClass('csf-section-active');
+          if ( $last !== undefined ) {
+            $last.hide();
+          }
 
-        var $section = $('#csf-section-'+section_id);
-        $section.show();
-        $section.csf_reload_script();
+          var $section = $sections.eq(index);
 
-        CSF.helper.set_cookie('csf-last-metabox-tab-'+ post_id +'-'+ unique_id, section_id);
+          $section.show();
+          $section.csf_reload_script();
 
-        $last_section = $section;
-        $last_link    = $link;
+          $last = $section;
+
+        });
 
       });
 
-      var get_cookie = CSF.helper.get_cookie('csf-last-metabox-tab-'+ post_id +'-'+ unique_id);
-
-      if ( get_cookie ) {
-        $nav.find('a[data-section="'+ get_cookie +'"]').trigger('click');
-      } else {
-        $links.first('a').trigger('click');
-      }
+      $links.first().trigger('click');
 
     });
   };
@@ -308,8 +242,8 @@
 
         var maybe_value = $(this).val() || 'default';
 
-        $('.csf-page-templates').removeClass('csf-show').addClass('csf-hide');
-        $('.csf-page-'+maybe_value.toLowerCase().replace(/[^a-zA-Z0-9]+/g,'-')).removeClass('csf-hide').addClass('csf-show');
+        $('.csf-page-templates').removeClass('csf-metabox-show').addClass('csf-metabox-hide');
+        $('.csf-page-'+maybe_value.toLowerCase().replace(/[^a-zA-Z0-9]+/g,'-')).removeClass('csf-metabox-hide').addClass('csf-metabox-show');
 
       });
 
@@ -329,8 +263,8 @@
         // Fallback for classic editor version
         maybe_value = ( maybe_value === '0' ) ? 'default' : maybe_value;
 
-        $('.csf-post-formats').removeClass('csf-show').addClass('csf-hide');
-        $('.csf-post-format-'+maybe_value).removeClass('csf-hide').addClass('csf-show');
+        $('.csf-post-formats').removeClass('csf-metabox-show').addClass('csf-metabox-hide');
+        $('.csf-post-format-'+maybe_value).removeClass('csf-metabox-hide').addClass('csf-metabox-show');
 
       });
 
@@ -351,12 +285,12 @@
         var value    = $(this).val(),
             $wrapper = $('.csf-wrapper'),
             $section = $wrapper.find('.csf-section'),
-            $fields  = $section.find('> .csf-field:not(.hidden)'),
+            $fields  = $section.find('> .csf-field:not(.csf-depend-on)'),
             $titles  = $fields.find('> .csf-title, .csf-search-tags');
 
         if ( value.length > 3 ) {
 
-          $fields.addClass('csf-hidden');
+          $fields.addClass('csf-metabox-hide');
           $wrapper.addClass('csf-search-all');
 
           $titles.each( function() {
@@ -367,7 +301,7 @@
 
               var $field = $title.closest('.csf-field');
 
-              $field.removeClass('csf-hidden');
+              $field.removeClass('csf-metabox-hide');
               $field.parent().csf_reload_script();
 
             }
@@ -376,7 +310,7 @@
 
         } else {
 
-          $fields.removeClass('csf-hidden');
+          $fields.removeClass('csf-metabox-hide');
           $wrapper.removeClass('csf-search-all');
 
         }
@@ -1055,7 +989,7 @@
         var $button = $(this);
         var $modal  = $('#csf-modal-icon');
 
-        $modal.show();
+        $modal.removeClass('hidden');
 
         CSF.vars.$icon_target = $this;
 
@@ -1084,7 +1018,7 @@
               CSF.vars.$icon_target.find('.csf-icon-preview').removeClass('hidden');
               CSF.vars.$icon_target.find('.csf-icon-remove').removeClass('hidden');
 
-              $modal.hide();
+              $modal.addClass('hidden');
 
             });
 
@@ -1108,13 +1042,15 @@
             });
 
             $modal.on('click', '.csf-modal-close, .csf-modal-overlay', function() {
-              $modal.hide();
+              $modal.addClass('hidden');
             });
 
           }).fail( function( response ) {
             $modal.find('.csf-modal-loading').hide();
             $modal.find('.csf-modal-load').html( response.error );
-            $modal.on('click', function() { $modal.hide(); });
+            $modal.on('click', function() {
+              $modal.addClass('hidden');
+            });
           });
         }
 
@@ -2272,6 +2208,7 @@
 
         if ( confirm_answer ) {
           CSF.vars.is_confirm = true;
+          CSF.vars.form_modified = false;
         } else {
           e.preventDefault();
           return false;
@@ -2344,7 +2281,7 @@
                       $link  = $('#csf-tab-link-'+ ($field.closest('.csf-section').index()+1)),
                       $tab   = $link.closest('.csf-tab-depth-0');
 
-                  $field.closest('.csf-fieldset').append( '<p class="csf-text-error csf-error">'+ error_message +'</p>' );
+                  $field.closest('.csf-fieldset').append( '<p class="csf-error csf-error-text">'+ error_message +'</p>' );
 
                   if ( !$link.find('.csf-error').length ) {
                     $link.append( error_icon );
@@ -2412,7 +2349,7 @@
       if ( $form_warning.length ) {
 
         window.onbeforeunload = function() {
-          return ( CSF.vars.form_modified && CSF.vars.is_confirm === false ) ? true : undefined;
+          return ( CSF.vars.form_modified ) ? true : undefined;
         };
 
         $content.on('change keypress', ':input', function() {
@@ -2617,7 +2554,7 @@
         target_id    = $button.data('target-id')    || false;
         gutenberg_id = $button.data('gutenberg-id') || false;
 
-        $modal.show();
+        $modal.removeClass('hidden');
 
         // single usage trigger first shortcode
         if ( $modal.hasClass('csf-shortcode-single') && sc_name === undefined ) {
@@ -2676,7 +2613,7 @@
         if ( $insert.prop('disabled') || $insert.attr('disabled') ) { return; }
 
         var shortcode = '';
-        var serialize = $modal.find('.csf-field:not(.hidden)').find(':input:not(.ignore)').serializeObjectCSF();
+        var serialize = $modal.find('.csf-field:not(.csf-depend-on)').find(':input:not(.ignore)').serializeObjectCSF();
 
         switch ( sc_view ) {
 
@@ -2728,7 +2665,7 @@
 
         }
 
-        $modal.hide();
+        $modal.addClass('hidden');
 
       });
 
@@ -2757,7 +2694,7 @@
       });
 
       $modal.on('click', '.csf-modal-close, .csf-modal-overlay', function() {
-        $modal.hide();
+        $modal.addClass('hidden');
       });
 
     });
@@ -2957,7 +2894,7 @@
       // Chosen keep options order
       if ( is_multiple ) {
 
-        var $hidden_select = $this.parent().find('.csf-hidden-select');
+        var $hidden_select = $this.parent().find('.csf-hide-select');
         var $hidden_value  = $hidden_select.val() || [];
 
         $this.on('change', function(obj, result) {
@@ -2969,7 +2906,7 @@
           }
 
           // Force customize refresh
-          if ( $hidden_select.children().length === 0 && window.wp.customize !== undefined ) {
+          if ( window.wp.customize !== undefined && $hidden_select.children().length === 0 && $hidden_select.data('customize-setting-link') ) {
             window.wp.customize.control( $hidden_select.data('customize-setting-link') ).setting.set('');
           }
 
@@ -3007,7 +2944,7 @@
 
             var select_options = '';
             var chosen_object  = $this.data('chosen');
-            var $prev_select   = $this.parent().find('.csf-hidden-select');
+            var $prev_select   = $this.parent().find('.csf-hide-select');
 
             $chosen_choices.find('.search-choice-close').each( function() {
               var option_array_index = $(this).data('option-array-index');
@@ -3245,6 +3182,25 @@
   };
 
   //
+  // Nav Menu Options Framework
+  //
+  $.fn.csf_nav_menu = function() {
+    return this.each( function() {
+
+      var $navmenu = $(this);
+
+      $navmenu.on('click', 'a.item-edit', function() {
+        $(this).closest('li.menu-item').find('.csf-fields').csf_reload_script();
+      });
+
+      $navmenu.on('sortstop', function( event, ui ) {
+        ui.item.find('.csf-fields').csf_reload_script_retry();
+      });
+
+    });
+  };
+
+  //
   // Retry Plugins
   //
   $.fn.csf_reload_script_retry = function() {
@@ -3352,6 +3308,7 @@
     $('.csf-expand-all').csf_expand_all();
     $('.csf-onload').csf_reload_script();
     $('.widget').csf_widgets();
+    $('#menu-to-edit').csf_nav_menu();
 
   });
 

@@ -212,6 +212,7 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
             ''        => esc_html__( 'Background Size', 'csf' ),
             'cover'   => esc_html__( 'Cover', 'csf' ),
             'contain' => esc_html__( 'Contain', 'csf' ),
+            'auto'    => esc_html__( 'Auto', 'csf' ),
           ),
         ), $this->value['background-size'], $this->field_name(), 'field/background' );
 
@@ -298,6 +299,7 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       if ( $background_color && $background_gd_color ) {
         $gd_direction   = ( $background_gd_direction ) ? $background_gd_direction .',' : '';
         $bg_image[] = 'linear-gradient('. $gd_direction . $background_color .','. $background_gd_color .')';
+        unset( $this->value['background-color'] );
       }
 
       if ( $background_image ) {

@@ -47,7 +47,7 @@
 						) ), wp_ulike_widget_button_callback( array(
 							'label'         => __( 'More information', WP_ULIKE_SLUG ),
 							'color_name'    => 'info',
-							'link'          => WP_ULIKE_PLUGIN_URI . '?utm_source=statistics-page&utm_campaign=gopro&utm_medium=wp-dash',
+							'link'          => WP_ULIKE_PLUGIN_URI . 'blog/wp-ulike-pro-statistics/?utm_source=statistics-page&utm_campaign=gopro&utm_medium=wp-dash',
 							'target'        => '_blank'
 						) ) );
 					?>

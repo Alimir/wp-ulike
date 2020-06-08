@@ -33,6 +33,7 @@
 
 .csf-header-inner{
   padding: 25px;
+  transition: box-shadow .3s ease;
 
   h1{
     float: left;
@@ -55,9 +56,9 @@
 
   .csf-header-inner{
     position: fixed;
-    z-index: 99999;
+    z-index: 99;
     top: 32px;
-    @include box-shadow(0 5px 25px rgba(black, 0.125));
+    @include box-shadow(0 5px 10px rgba(black, 0.1));
   }
 }
 
@@ -115,28 +116,13 @@
         display: block;
         padding: 14px 12px;
         text-decoration: none;
-        @include transition(all 0.3s ease);
+        transition-property: color;
+        transition-duration: 0.2s;
+        transition-timing-function: ease;
 
         &:focus{
           outline: none;
           @include box-shadow(none);
-        }
-      }
-
-      .csf-section-active{
-
-        &:after{
-          content: " ";
-          position: absolute;
-          right: 0;
-          top: 50%;
-          height: 0;
-          width: 0;
-          pointer-events: none;
-          border: solid transparent;
-          border-right-color: #fff;
-          border-width: 4px;
-          margin-top: -4px;
         }
       }
 
@@ -154,7 +140,7 @@
         @include transform(rotate(0));
       }
 
-      &.csf-tab-active{
+      &.csf-tab-expanded{
 
         .csf-arrow:after{
           @include transform( rotate(90deg) );
@@ -353,6 +339,10 @@
 .csf-metabox{
   margin: -6px -12px -12px -12px;
 
+  .csf-field{
+    padding: 20px;
+  }
+
   .csf-section-title{
     padding: 20px;
   }
@@ -373,17 +363,21 @@
   }
 }
 
-
-.csf-restore-wrapper{
+.csf-sections-restore{
+  float: left;
+  width: 100%;
   position: relative;
   z-index: 1000000;
   text-align: right;
-  padding: 10px;
   border-top: 1px solid #eee;
 
   .csf-button-cancel,
   input{
     display: none;
+  }
+
+  label{
+    padding: 10px;
   }
 
   span{
@@ -409,12 +403,12 @@
   }
 
   .csf-field{
-    padding: 12px;
+    padding: 10px 15px;
 
     .csf-title{
       float: none;
       width: 100%;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .csf-fieldset{
@@ -423,8 +417,12 @@
     }
   }
 
+  .csf-field-text input{
+    width: 100%;
+  }
+
   .csf-notice{
-    padding: 12px;
+    padding: 10px 15px;
   }
 }
 
@@ -433,6 +431,10 @@
  */
 .csf-comment-metabox{
   margin: -6px -12px -12px -12px;
+
+  .csf-field{
+    padding: 20px;
+  }
 
   .csf-section-title{
     padding: 20px;

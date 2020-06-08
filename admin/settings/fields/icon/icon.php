@@ -37,5 +37,35 @@ if ( ! class_exists( 'CSF_Field_icon' ) ) {
 
     }
 
+    public function enqueue() {
+      add_action( 'admin_footer', array( &$this, 'add_footer_modal_icon' ) );
+      add_action( 'customize_controls_print_footer_scripts', array( &$this, 'add_footer_modal_icon' ) );
+    }
+
+    public function add_footer_modal_icon() {
+    ?>
+      <div id="csf-modal-icon" class="csf-modal csf-modal-icon hidden">
+        <div class="csf-modal-table">
+          <div class="csf-modal-table-cell">
+            <div class="csf-modal-overlay"></div>
+            <div class="csf-modal-inner">
+              <div class="csf-modal-title">
+                <?php esc_html_e( 'Add Icon', 'csf' ); ?>
+                <div class="csf-modal-close csf-icon-close"></div>
+              </div>
+              <div class="csf-modal-header">
+                <input type="text" placeholder="<?php esc_html_e( 'Search a Icon...', 'csf' ); ?>" class="csf-icon-search" />
+              </div>
+              <div class="csf-modal-content">
+                <div class="csf-modal-loading"><div class="csf-loading"></div></div>
+                <div class="csf-modal-load"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <?php
+    }
+
   }
 }

@@ -78,6 +78,7 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
       }
 
       return $result;
+
     }
 
     public function add_metabox_classes( $classes ) {
@@ -101,9 +102,9 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
         }
 
         if ( ! in_array( $saved_post_format, $this->post_formats ) ) {
-          $classes[] = 'csf-hide';
+          $classes[] = 'csf-metabox-hide';
         } else {
-          $classes[] = 'csf-show';
+          $classes[] = 'csf-metabox-show';
         }
 
       }
@@ -119,9 +120,9 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
         }
 
         if ( ! in_array( $saved_template, $this->page_templates ) ) {
-          $classes[] = 'csf-hide';
+          $classes[] = 'csf-metabox-hide';
         } else {
-          $classes[] = 'csf-show';
+          $classes[] = 'csf-metabox-show';
         }
 
       }
@@ -202,19 +203,23 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
           if ( $has_nav ) {
 
-            echo '<div class="csf-nav csf-nav-metabox" data-unique="'. esc_attr( $this->unique ) .'">';
+            echo '<div class="csf-nav csf-nav-metabox">';
 
               echo '<ul>';
-              $tab_key = 1;
+
+              $tab_key = 0;
+
               foreach ( $this->sections as $section ) {
 
                 $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="csf-label-error csf-error">!</i>' : '';
-                $tab_icon = ( ! empty( $section['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+                $tab_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-                echo '<li><a href="#" data-section="'. esc_attr( $this->unique .'_'. $tab_key ) .'">'. wp_kses_post( $tab_icon . $section['title'] . $tab_error ) .'</a></li>';
+                echo '<li><a href="#">'. wp_kses_post( $tab_icon . $section['title'] . $tab_error ) .'</a></li>';
 
                 $tab_key++;
+
               }
+
               echo '</ul>';
 
             echo '</div>';
@@ -225,16 +230,16 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
             echo '<div class="csf-sections">';
 
-            $count = 1;
+            $section_key = 0;
 
             foreach ( $this->sections as $section ) {
 
-              $onload = ( ! $has_nav ) ? ' csf-onload' : '';
+              $section_onload = ( ! $has_nav ) ? ' csf-onload' : '';
+              $section_class  = ( ! empty( $section['class'] ) ) ? ' '. $section['class'] : '';
+              $section_title  = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
+              $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-              echo '<div id="csf-section-'. esc_attr( $this->unique .'_'. $count ) .'" class="csf-section'. esc_attr( $onload ) .'">';
-
-              $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
-              $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
+              echo '<div class="csf-section'. esc_attr( $section_onload . $section_class ) .'">';
 
               echo ( $section_title || $section_icon ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
 
@@ -256,23 +261,21 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
               } else {
 
-                echo '<div class="csf-no-option csf-text-muted">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
+                echo '<div class="csf-no-option">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
 
               }
 
               echo '</div>';
 
-              $count++;
+              $section_key++;
 
             }
 
             echo '</div>';
 
-            echo '<div class="clear"></div>';
-
             if ( ! empty( $this->args['show_restore'] ) ) {
 
-              echo '<div class="csf-restore-wrapper">';
+              echo '<div class="csf-sections-restore">';
               echo '<label>';
               echo '<input type="checkbox" name="'. esc_attr( $this->unique ) .'[_restore]" />';
               echo '<span class="button csf-button-restore">'. esc_html__( 'Restore', 'csf' ) .'</span>';

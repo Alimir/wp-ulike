@@ -43,10 +43,11 @@
  *     02. 26. Field: number
  * 03. Taxonomy
  * 04. Profile
- * 05. Modal
- * 06. Customizer
- * 07. Responsive
- * 08. Others
+ * 05. Nav Menu
+ * 06. Modal
+ * 07. Customizer
+ * 08. Responsive
+ * 09. Others
  *
  * ---------------------------------------------------------
  *
@@ -57,7 +58,7 @@
 /**
  * 01. Base
  */
-.csf{
+.csf-options{
   margin-left: 20px;
   margin-right: 0;
 }
@@ -101,7 +102,7 @@
     clear: right;
 
     li{
-      .csf-section-active:after{
+      .csf-active:after{
         right: auto;
         left: 0;
         border-left-color: #fff;
@@ -114,7 +115,7 @@
         left: 10px;
       }
 
-      &.csf-tab-active .csf-arrow:after{
+      &.csf-tab-expanded .csf-arrow:after{
         @include transform( rotate(-90deg) );
       }
     }
@@ -134,7 +135,7 @@
     }
   }
 
-  .fa{
+  .csf-tab-icon{
     margin-left: 5px;
     margin-right: 0;
   }
@@ -202,17 +203,15 @@
 
   .csf-section-title{
     padding: 20px;
-
-    .fa{
-      margin-left: 5px;
-      margin-right: 0;
-    }
   }
 }
 
-.csf-section-title .fa{
-  margin-left: 5px;
-  margin-right: 0;
+.csf-section-title{
+
+  .csf-section-icon{
+    margin-left: 5px;
+    margin-right: 0;
+  }
 }
 
 /**
@@ -256,9 +255,23 @@
 .csf-field-checkbox,
 .csf-field-radio{
 
+  ul ul li{
+    margin-left: 0;
+    margin-right: 8px;
+
+    &:first-child{
+      margin-right: 0;
+    }
+  }
+
   .csf--inline-list li{
     margin-right: 0;
     margin-left: 15px;
+  }
+
+  .csf--text{
+    margin-left: 0;
+    margin-right: 5px;
   }
 }
 
@@ -572,6 +585,8 @@
  * 03. Taxonomy
  */
 .csf-taxonomy-add-fields{
+  margin-right: 0;
+  margin-left: 30px;
 
   .csf-field > .csf-fieldset > .csf-help{
     left: -5px;
@@ -580,6 +595,8 @@
 }
 
 .csf-taxonomy-edit-fields{
+  margin-right: 0;
+  margin-left: 35px;
 
   .csf-field > .csf-fieldset > .csf-help{
     right: auto;
@@ -590,7 +607,7 @@
 /**
  * 04. Profile
  */
-.csf-profile{
+.csf-profile-options{
 
   > h2 > .fa{
     padding-right: 0;
@@ -610,7 +627,28 @@
 }
 
 /**
- * 05. Modal
+ * 05. Nav Menu
+ */
+.csf-nav-menu-options{
+
+  > .csf-fields{
+    margin-left: 0;
+    margin-right: -10px;
+  }
+}
+
+.csf-nav-menu-title {
+  padding-left: 14px;
+  padding-right: 12px;
+}
+
+.csf-nav-menu-icon{
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/**
+ * 06. Modal
  */
 .csf-modal-content{
 
@@ -629,7 +667,7 @@
 }
 
 /**
- * 06. Customizer
+ * 07. Customizer
  */
 .control-section{
 
@@ -642,7 +680,7 @@
 }
 
 /**
- * 07. Responsive
+ * 08. Responsive
  */
 @media only screen and (max-width:1200px){
   .csf-metabox .csf-field .csf-fieldset{
@@ -658,7 +696,7 @@
 }
 
 /**
- * 08. Others
+ * 09. Others
  */
 .csf-field{
 

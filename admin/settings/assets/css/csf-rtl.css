@@ -43,10 +43,11 @@
  *     02. 26. Field: number
  * 03. Taxonomy
  * 04. Profile
- * 05. Modal
- * 06. Customizer
- * 07. Responsive
- * 08. Others
+ * 05. Nav Menu
+ * 06. Modal
+ * 07. Customizer
+ * 08. Responsive
+ * 09. Others
  *
  * ---------------------------------------------------------
  *
@@ -54,7 +55,7 @@
 /**
  * 01. Base
  */
-.csf {
+.csf-options {
   margin-left: 20px;
   margin-right: 0;
 }
@@ -94,7 +95,7 @@
 .csf-nav ul {
   clear: right;
 }
-.csf-nav ul li .csf-section-active:after {
+.csf-nav ul li .csf-active:after {
   right: auto;
   left: 0;
   border-left-color: #fff;
@@ -105,7 +106,7 @@
   right: auto;
   left: 10px;
 }
-.csf-nav ul li.csf-tab-active .csf-arrow:after {
+.csf-nav ul li.csf-tab-expanded .csf-arrow:after {
   -moz-transform: rotate(-90deg);
   -ms-transform: rotate(-90deg);
   -webkit-transform: rotate(-90deg);
@@ -119,7 +120,7 @@
   left: auto;
   right: 15px;
 }
-.csf-nav .fa {
+.csf-nav .csf-tab-icon {
   margin-left: 5px;
   margin-right: 0;
 }
@@ -186,12 +187,8 @@
 .csf-metabox .csf-section-title {
   padding: 20px;
 }
-.csf-metabox .csf-section-title .fa {
-  margin-left: 5px;
-  margin-right: 0;
-}
 
-.csf-section-title .fa {
+.csf-section-title .csf-section-icon {
   margin-left: 5px;
   margin-right: 0;
 }
@@ -224,10 +221,24 @@
 /**
  * 02. 02. Field: checkbox, radio
  */
+.csf-field-checkbox ul ul li,
+.csf-field-radio ul ul li {
+  margin-left: 0;
+  margin-right: 8px;
+}
+.csf-field-checkbox ul ul li:first-child,
+.csf-field-radio ul ul li:first-child {
+  margin-right: 0;
+}
 .csf-field-checkbox .csf--inline-list li,
 .csf-field-radio .csf--inline-list li {
   margin-right: 0;
   margin-left: 15px;
+}
+.csf-field-checkbox .csf--text,
+.csf-field-radio .csf--text {
+  margin-left: 0;
+  margin-right: 5px;
 }
 
 /**
@@ -470,11 +481,19 @@
 /**
  * 03. Taxonomy
  */
+.csf-taxonomy-add-fields {
+  margin-right: 0;
+  margin-left: 30px;
+}
 .csf-taxonomy-add-fields .csf-field > .csf-fieldset > .csf-help {
   left: -5px;
   right: auto;
 }
 
+.csf-taxonomy-edit-fields {
+  margin-right: 0;
+  margin-left: 35px;
+}
 .csf-taxonomy-edit-fields .csf-field > .csf-fieldset > .csf-help {
   right: auto;
   left: -5px;
@@ -483,17 +502,35 @@
 /**
  * 04. Profile
  */
-.csf-profile > h2 > .fa {
+.csf-profile-options > h2 > .fa {
   padding-right: 0;
   padding-left: 7px;
 }
-.csf-profile > .csf-field > .csf-fieldset > .csf-help {
+.csf-profile-options > .csf-field > .csf-fieldset > .csf-help {
   left: -5px;
   right: auto;
 }
 
 /**
- * 05. Modal
+ * 05. Nav Menu
+ */
+.csf-nav-menu-options > .csf-fields {
+  margin-left: 0;
+  margin-right: -10px;
+}
+
+.csf-nav-menu-title {
+  padding-left: 14px;
+  padding-right: 12px;
+}
+
+.csf-nav-menu-icon {
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/**
+ * 06. Modal
  */
 .csf-modal-content .csf-field {
   padding: 15px 15px 15px 30px;
@@ -509,14 +546,14 @@
 }
 
 /**
- * 06. Customizer
+ * 07. Customizer
  */
 .control-section .csf-field .csf-fieldset {
   margin-right: 0;
 }
 
 /**
- * 07. Responsive
+ * 08. Responsive
  */
 @media only screen and (max-width: 1200px) {
   .csf-metabox .csf-field .csf-fieldset {
@@ -530,7 +567,7 @@
   }
 }
 /**
- * 08. Others
+ * 09. Others
  */
 .csf-field .csf--transparent-slider {
   margin-left: 0;

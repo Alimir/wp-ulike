@@ -156,16 +156,16 @@ function wp_ulike_notice_manager(){
 	}
 
 	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) && strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
-		$notice_list[ 'wp_ulike_logs_page_banner' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_logs_page_banner',
-			'title'       => __( 'How to Create Detailed Log Reports in WP ULike PRO?', WP_ULIKE_SLUG ),
-			'description' => __( "Having votes for your content without a tool for measuring the results is meaningless, isn't it? for that reason, we gave you full access to your log data in the WP ULike professional Logs panel." , WP_ULIKE_SLUG ),
+		$notice_list[ 'wp_ulike_pro_user_profiles_banner' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_pro_user_profiles_banner',
+			'title'       => __( 'How to Create Ultimate User Profiles with WP ULike?', WP_ULIKE_SLUG ),
+			'description' => __( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
 			'skin'        => 'default',
 			'has_close'   => true,
 			'buttons'     => array(
 				array(
 					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/log-reports-in-wp-ulike-pro/?utm_source=logs-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
 				),
 				array(
 					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
@@ -176,7 +176,7 @@ function wp_ulike_notice_manager(){
 			),
 			'image'     => array(
 				'width' => '140',
-				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/table.svg'
+				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/hero.svg'
 			)
 		]);
 		$notice_list[ 'wp_ulike_seo_tools_banner' ] = new wp_ulike_notices([
@@ -200,38 +200,6 @@ function wp_ulike_notice_manager(){
 			'image'     => array(
 				'width' => '140',
 				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/seo.svg'
-			)
-		]);
-		$notice_list[ 'wp_ulike_go_pro' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_go_pro',
-			'title'       => __( 'WP Ulike Pro is Ready :))', WP_ULIKE_SLUG ),
-			   'description' => __( "Finally, after a long time, the Premium version of the WP Ulike plugin has been released with some new features such as support for Dislike button, Professional stats, Elementor (Page Builder) Widgets, and some new templates. We intend to add more features to this extension every day and provide a full support for our users." , WP_ULIKE_SLUG ),
-			'skin'        => 'default',
-			'wrapper_extra_styles' => [
-				'background-image'  => 'url(' . WP_ULIKE_ASSETS_URL . '/img/svg/banner-pro.svg)',
-				'background-color'  => '#e1f5fe',
-				'background-size'   => 'contain',
-				'background-repeat' => 'no-repeat',
-				'padding'           => '80px 180px 80px 340px',
-			],
-			'has_close'   => true,
-			'buttons'     => array(
-				array(
-					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-					'link'       => WP_ULIKE_PLUGIN_URI . '?utm_source=banner&utm_campaign=gopro&utm_medium=wp-dash'
-				),
-				array(
-					'label'      => __('Not Now', WP_ULIKE_SLUG),
-					'type'       => 'skip',
-					'color_name' => 'info',
-					'expiration' => WEEK_IN_SECONDS * 2
-				),
-				array(
-					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
-					'type'       => 'skip',
-					'color_name' => 'error',
-					'expiration' => YEAR_IN_SECONDS * 10
-				)
 			)
 		]);
 	}
@@ -477,4 +445,4 @@ function wp_ulike_admin_init_controller() {
 	  remove_action( 'customize_controls_print_footer_scripts', 'csf_set_icons' );
 	}
 }
-add_action( 'admin_init', 'wp_ulike_admin_init_controller' );
+// add_action( 'admin_init', 'wp_ulike_admin_init_controller' );

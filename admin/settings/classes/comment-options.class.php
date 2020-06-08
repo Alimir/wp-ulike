@@ -40,9 +40,6 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
         add_filter( 'postbox_classes_comment_'. $this->unique, array( &$this, 'add_comment_metabox_classes' ) );
       }
 
-      // wp enqeueu for typography and output css
-      parent::__construct();
-
     }
 
     // instance
@@ -137,7 +134,7 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
           if ( $has_nav ) {
 
-            echo '<div class="csf-nav csf-nav-metabox" data-unique="'. esc_attr( $this->unique ) .'">';
+            echo '<div class="csf-nav csf-nav-metabox">';
 
               echo '<ul>';
 
@@ -148,7 +145,7 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
                 $tab_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
                 $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="csf-label-error csf-error">!</i>' : '';
 
-                echo '<li><a href="#" data-section="'. esc_attr( $this->unique .'_'. $tab_key ) .'">'. wp_kses_post( $tab_icon . $section['title'] . $tab_error ) .'</a></li>';
+                echo '<li><a href="#">'. wp_kses_post( $tab_icon . $section['title'] . $tab_error ) .'</a></li>';
 
                 $tab_key++;
 
@@ -168,12 +165,12 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
             foreach ( $this->sections as $section ) {
 
-              $onload = ( ! $has_nav ) ? ' csf-onload' : '';
+              $section_onload = ( ! $has_nav ) ? ' csf-onload' : '';
+              $section_class  = ( ! empty( $section['class'] ) ) ? ' '. $section['class'] : '';
+              $section_title  = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
+              $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-              echo '<div id="csf-section-'. esc_attr( $this->unique .'_'. $section_key ) .'" class="csf-section'. esc_attr( $onload ) .'">';
-
-              $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
-              $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
+              echo '<div class="csf-section'. esc_attr( $section_onload . $section_class ) .'">';
 
               echo ( $section_title || $section_icon ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
 
@@ -195,7 +192,7 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
               } else {
 
-                echo '<div class="csf-no-option csf-text-muted">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
+                echo '<div class="csf-no-option">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
 
               }
 
@@ -207,11 +204,9 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
             echo '</div>';
 
-            echo '<div class="clear"></div>';
-
             if ( ! empty( $this->args['show_restore'] ) ) {
 
-              echo '<div class="csf-restore-wrapper">';
+              echo '<div class="csf-sections-restore">';
               echo '<label>';
               echo '<input type="checkbox" name="'. esc_attr( $this->unique ) .'[_restore]" />';
               echo '<span class="button csf-button-restore">'. esc_html__( 'Restore', 'csf' ) .'</span>';

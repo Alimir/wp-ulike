@@ -17,7 +17,7 @@ if ( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
     public $sections   = array();
     public $taxonomies = array();
     public $args       = array(
-      'taxonomy'       => '',
+      'taxonomy'       => 'category',
       'data_type'      => 'serialize',
       'class'          => '',
       'defaults'       => array(),
@@ -64,7 +64,7 @@ if ( ! class_exists( 'CSF_Taxonomy_Options' ) ) {
 
     }
 
-    // get default value
+    // get meta value
     public function get_meta_value( $term_id, $field ) {
 
       $value = null;
