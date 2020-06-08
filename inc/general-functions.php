@@ -2140,43 +2140,58 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
 	/**
 	 * Get most liked users in query
 	 *
-	 * @param integer $number
+	 * @param integer $limit
 	 * @param string $peroid
+	 * @param integer $offset
 	 * @return object
 	 */
-	function wp_ulike_get_best_likers_info( $number, $peroid ){
+	function wp_ulike_get_best_likers_info( $limit, $peroid, $offset = 1 ){
 		global $wpdb;
 		// Peroid limit SQL
 		$period_limit = wp_ulike_get_period_limit_sql( $peroid );
+
+		$limit_records = '';
+		if( (int) $limit > 0 ){
+			$offset = $offset > 0 ? ( $offset - 1 ) * $limit : 0;
+			$limit_records = sprintf( "LIMIT %d, %d", $offset, $limit );
+		}
 
 		$query  = sprintf( 'SELECT T.user_id, SUM(T.CountUser) AS SumUser
 		FROM(
 		SELECT user_id, count(user_id) AS CountUser
 		FROM `%1$sulike`
-		WHERE user_id BETWEEN 1 AND 999999
+		INNER JOIN %4$s
+		ON ( %4$s.ID = %1$sulike.user_id )
+		WHERE status IN (\'like\', \'dislike\')
 		%2$s
 		GROUP BY user_id
 		UNION ALL
 		SELECT user_id, count(user_id) AS CountUser
 		FROM `%1$sulike_activities`
-		WHERE user_id BETWEEN 1 AND 999999
+		INNER JOIN %4$s
+		ON ( %4$s.ID = %1$sulike_activities.user_id )
+		WHERE status IN (\'like\', \'dislike\')
 		%2$s
 		GROUP BY user_id
 		UNION ALL
 		SELECT user_id, count(user_id) AS CountUser
 		FROM `%1$sulike_comments`
-		WHERE user_id BETWEEN 1 AND 999999
+		INNER JOIN %4$s
+		ON ( %4$s.ID = %1$sulike_comments.user_id )
+		WHERE status IN (\'like\', \'dislike\')
 		%2$s
 		GROUP BY user_id
 		UNION ALL
 		SELECT user_id, count(user_id) AS CountUser
 		FROM `%1$sulike_forums`
-		WHERE user_id BETWEEN 1 AND 999999
+		INNER JOIN %4$s
+		ON ( %4$s.ID = %1$sulike_forums.user_id )
+		WHERE status IN (\'like\', \'dislike\')
 		%2$s
 		GROUP BY user_id
 		) AS T
 		GROUP BY T.user_id
-		ORDER BY SumUser DESC LIMIT %3$s', $wpdb->prefix, $period_limit, $number );
+		ORDER BY SumUser DESC %3$s', $wpdb->prefix, $period_limit, $limit_records, $wpdb->users );
 
 		// Make new sql request
 		return $wpdb->get_results( $query );
@@ -2268,7 +2283,7 @@ if( ! function_exists('wp_ulike_get_user_data') ){
 			$status_type,
 			$period_limit,
 			$parsed_args['order'],
-			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
+			( $parsed_args['page'] - 1 ) * $parsed_args['per_page'],
 			$parsed_args['per_page']
 		);
 
@@ -2324,7 +2339,7 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 			$status_type,
 			$period_limit,
 			$parsed_args['order'],
-			( $parsed_args['page'] - 1 ) * $parsed_args['page'],
+			( $parsed_args['page'] - 1 ) * $parsed_args['per_page'],
 			$parsed_args['per_page']
 		);
 
