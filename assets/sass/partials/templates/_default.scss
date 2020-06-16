@@ -10,6 +10,12 @@
         min-height: 30px;
         min-width: 50px;
 
+        &:hover, &:focus {
+            color: #616161;
+            background-color: #e0e0e0;
+            text-decoration: none;
+        }
+
         &[disabled=disabled], &:disabled{
             &:hover, &:active, &:focus {
                 background-color: #e0e0e0;

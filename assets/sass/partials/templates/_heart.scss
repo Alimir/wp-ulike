@@ -19,6 +19,12 @@
 
     .wp_ulike_btn{
         background: transparent;
+
+        &:hover, &:focus {
+            color: #757575;
+            background-color: transparent;
+            text-decoration: none;
+        }
     }
 
     .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
