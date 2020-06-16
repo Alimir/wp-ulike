@@ -78,6 +78,11 @@
   min-height: 30px;
   min-width: 50px;
 }
+.wpulike-default .wp_ulike_btn:hover, .wpulike-default .wp_ulike_btn:focus {
+  color: #616161;
+  background-color: #e0e0e0;
+  text-decoration: none;
+}
 .wpulike-default .wp_ulike_btn[disabled=disabled]:hover, .wpulike-default .wp_ulike_btn[disabled=disabled]:active, .wpulike-default .wp_ulike_btn[disabled=disabled]:focus, .wpulike-default .wp_ulike_btn:disabled:hover, .wpulike-default .wp_ulike_btn:disabled:active, .wpulike-default .wp_ulike_btn:disabled:focus {
   background-color: #e0e0e0;
 }
@@ -175,6 +180,11 @@
 .wpulike-heart .wp_ulike_btn {
   background: transparent;
 }
+.wpulike-heart .wp_ulike_btn:hover, .wpulike-heart .wp_ulike_btn:focus {
+  color: #757575;
+  background-color: transparent;
+  text-decoration: none;
+}
 .wpulike-heart .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
   bottom: 10px;
 }
@@ -257,6 +267,9 @@
   border: 0;
   background: transparent;
 }
+.wpulike-robeen .wp_ulike_btn:hover, .wpulike-robeen .wp_ulike_btn:focus {
+  background-color: transparent;
+}
 .wpulike-robeen .wp_ulike_btn:after {
   content: '';
   background: url(../img/icons/twitter-heart.png) no-repeat;
@@ -302,6 +315,10 @@
   border: 0;
   width: 50px;
   height: 50px;
+}
+.wpulike-animated-heart .wp_ulike_btn:hover, .wpulike-animated-heart .wp_ulike_btn:focus {
+  background-color: #ffffff;
+  background-image: none;
 }
 .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:hover, .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:active, .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:focus, .wpulike-animated-heart .wp_ulike_btn:disabled:hover, .wpulike-animated-heart .wp_ulike_btn:disabled:active, .wpulike-animated-heart .wp_ulike_btn:disabled:focus {
   background-color: #ffffff;

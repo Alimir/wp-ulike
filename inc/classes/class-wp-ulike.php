@@ -534,30 +534,39 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 			$user_info = wp_ulike_get_meta_data( $this->user_id, 'user', $meta_key, true );
 
 			if( empty( $user_info ) || ! isset( $user_info[$item_type_val] ) ){
-				// Create query string
-				$query  = sprintf( '
-						SELECT `status`
-						FROM %s
-						WHERE `%s` = \'%s\'
-						AND `%s` = \'%s\'
-						ORDER BY id DESC LIMIT 1
-					',
-					esc_sql( $this->wpdb->prefix . $table ),
-					esc_sql( $item_conditional_col ),
-					esc_sql( $item_conditional_val ),
-					esc_sql( $item_type_col ),
-					esc_sql( $item_type_val )
-				);
+				$cache_key   = sanitize_key( sprintf( '%s-%s-user-%s-status', $item_type, $item_type_val, $item_conditional_val ) );
+				$user_status = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
-				// Get results
-				$user_status = $this->wpdb->get_var( stripslashes( $query ) );
-				// Check user info value
-				$user_info = empty( $user_info ) ? array() : $user_info;
+				// Make a cachable query to get user status
+				if( false === $user_status ){
+					// Create query string
+					$query  = sprintf( '
+							SELECT `status`
+							FROM %s
+							WHERE `%s` = \'%s\'
+							AND `%s` = \'%s\'
+							ORDER BY id DESC LIMIT 1
+						',
+						esc_sql( $this->wpdb->prefix . $table ),
+						esc_sql( $item_conditional_col ),
+						esc_sql( $item_conditional_val ),
+						esc_sql( $item_type_col ),
+						esc_sql( $item_type_val )
+					);
 
-				if( $user_status !== NULL || $this->current_user ){
-					$user_info[$item_type_val] = $this->current_user && $user_status === NULL ? NULL : $user_status;
-					wp_ulike_update_meta_data( $this->user_id, 'user', $meta_key, $user_info );
+					// Get results
+					$user_status = $this->wpdb->get_var( stripslashes( $query ) );
+					// Check user info value
+					$user_info = empty( $user_info ) ? array() : $user_info;
+
+					if( $user_status !== NULL || $this->current_user ){
+						$user_info[$item_type_val] = $this->current_user && $user_status === NULL ? NULL : $user_status;
+						wp_ulike_update_meta_data( $this->user_id, 'user', $meta_key, $user_info );
+					}
+
+					wp_cache_set( $cache_key, $user_status, WP_ULIKE_SLUG, 300 );
 				}
+
 			} elseif( empty( $user_info[$item_type_val] ) ) {
 				return false;
 			}
