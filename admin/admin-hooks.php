@@ -188,7 +188,7 @@ function wp_ulike_notice_manager(){
 			'buttons'     => array(
 				array(
 					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-					'link'       => WP_ULIKE_PLUGIN_URI . '?utm_source=seo-tools-banner&utm_campaign=gopro&utm_medium=wp-dash'
+					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-rich-snippets-generator/?utm_source=seo-tools-banner&utm_campaign=gopro&utm_medium=wp-dash'
 				),
 				array(
 					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
