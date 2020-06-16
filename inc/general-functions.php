@@ -1410,7 +1410,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				SELECT t.item_id AS item_ID, MAX(CAST(t.meta_value AS UNSIGNED)) as counter
 				FROM %1$s t
 				INNER JOIN %2$s r ON t.item_id = r.%3$s %4$s
-				WHERE t.meta_group = "%5$s" %6$s
+				WHERE t.meta_group = "%5$s" AND t.meta_value > 0 %6$s
 				GROUP BY item_ID
 				ORDER BY counter
 				%7$s %8$s',
