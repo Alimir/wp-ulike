@@ -170,7 +170,7 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 
 		$mid = (int) $wpdb->insert_id;
 
-		wp_cache_delete( $object_id, 'wp_ulike_meta' );
+		wp_cache_delete( $object_id, sprintf( 'wp_ulike_%s_meta', $meta_group ) );
 
 		return $mid;
 	}
@@ -251,7 +251,7 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 			return false;
 		}
 
-		wp_cache_delete( $object_id, 'wp_ulike_meta' );
+		wp_cache_delete( $object_id, sprintf( 'wp_ulike_%s_meta', $meta_group ) );
 
 		return true;
 	}
@@ -283,7 +283,7 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 
 		$object_ids = array_map( 'intval', $object_ids );
 
-		$cache_key = 'wp_ulike_meta';
+		$cache_key = sprintf( 'wp_ulike_%s_meta', $meta_group );
 		$ids       = array();
 		$cache     = array();
 		foreach ( $object_ids as $id ) {
@@ -357,7 +357,7 @@ if( ! function_exists( 'wp_ulike_get_meta_data' ) ){
 			return false;
 		}
 
-		$meta_cache = wp_cache_get( $object_id, 'wp_ulike_meta' );
+		$meta_cache = wp_cache_get( $object_id, sprintf( 'wp_ulike_%s_meta', $meta_group ) );
 
 		if ( ! $meta_cache ) {
 			$meta_cache = wp_ulike_update_meta_cache( array( $object_id ), $meta_group );
