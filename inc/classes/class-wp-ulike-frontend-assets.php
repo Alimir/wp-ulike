@@ -47,10 +47,18 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 	        // @endif
 	        // @if DEV
 			wp_enqueue_style( WP_ULIKE_SLUG, WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css', array(), WP_ULIKE_VERSION );
-	        // @endif
+			// @endif
 
-			//add your custom style from setting panel.
-			wp_add_inline_style( WP_ULIKE_SLUG, wp_ulike_get_custom_style() );
+			// load custom.css if the directory is writable. else use inline css fallback - Make sure the auxin-elements is installed
+			if( ! wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) ) ){
+				$uploads   = wp_get_upload_dir();
+				$css_file  = $uploads['baseurl'] . '/' . WP_ULIKE_SLUG . '/custom.css';
+
+				wp_enqueue_style( WP_ULIKE_SLUG . '-custom', $css_file, array( WP_ULIKE_SLUG ), WP_ULIKE_VERSION );
+			} else {
+				//add your custom style from setting panel.
+				wp_add_inline_style( WP_ULIKE_SLUG, wp_ulike_get_custom_style() );
+			}
 
 	  	}
 

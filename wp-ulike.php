@@ -128,6 +128,9 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 				$this->single_activate();
 			}
 
+			// Define constant values
+			$this->define_constants();
+
 	    	// Include Files
 	    	$this->includes();
 
@@ -136,7 +139,13 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 			// Loaded action
 			do_action( 'wp_ulike_loaded' );
-	    }
+		}
+
+		private function define_constants(){
+			// a custom directory in uploads directory for storing custom files. Default uploads/{TWT_DOMAIN}
+			$uploads = wp_get_upload_dir();
+			define( 'WP_ULIKE_CUSTOM_DIR' , $uploads['basedir'] . '/' . WP_ULIKE_SLUG );
+		}
 
 	    /**
 	     * Add custom links too plugin info

@@ -21,6 +21,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             add_action( 'csf_loaded', array( $this, 'register_panel' ) );
             add_action( 'wp_ulike_settings_loaded', array( $this, 'register_sections' ) );
             add_action( 'wp_ulike_settings_loaded', array( $this, 'register_pages' ) );
+
+            add_action( 'csf_'.$this->option_domain.'_saved', array( $this, 'options_saved' ) );
+        }
+
+        public function options_saved(){
+            // Update custom css
+            wp_ulike_save_custom_css();
         }
 
         /**

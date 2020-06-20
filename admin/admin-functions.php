@@ -372,3 +372,136 @@ function wp_ulike_get_notice_render( $args = array() ){
     $notice_instance = new wp_ulike_notices($parsed_args);
 	$notice_instance->render();
 }
+
+/**
+ * Creates and stores content in a file (#admin)
+ *
+ * @param  string $content    The content for writing in the file
+ * @param  string $file_location  The address that we plan to create the file in.
+ *
+ * @return boolean            Returns true if the file is created and updated successfully, false on failure
+ */
+function wp_ulike_put_contents( $content, $file_location = '', $chmode = 0644 ){
+
+    if( empty( $file_location ) ){
+        return false;
+    }
+
+    /**
+     * Initialize the WP_Filesystem
+     */
+    global $wp_filesystem;
+    if ( empty( $wp_filesystem ) ) {
+        require_once ( ABSPATH.'/wp-admin/includes/file.php' );
+        WP_Filesystem();
+    }
+
+    // Write the content, if possible
+    if ( wp_mkdir_p( dirname( $file_location ) ) && ! $wp_filesystem->put_contents( $file_location, $content, $chmode ) ) {
+        // If writing the content in the file was not successful
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
+/**
+ * Creates and stores content in a file (#admin)
+ *
+ * @param  string $content    The content for writing in the file
+ * @param  string $file_name  The name of the file that we plan to store the content in. Default value is 'customfile'
+ * @param  string $file_dir   The directory that we plan to store the file in. Default dir is wp-contents/uploads/{THEME_ID}
+ *
+ * @return boolean            Returns true if the file is created and updated successfully, false on failure
+ */
+function wp_ulike_put_contents_dir( $content, $file_name = '', $file_dir = null, $chmode = 0644 ){
+
+    // Check if the fucntion for writing the files is enabled
+    if( ! function_exists('wp_ulike_put_contents') ){
+        return false;
+    }
+
+    if( is_null( $file_dir ) ){
+        $file_dir  = WP_ULIKE_CUSTOM_DIR;
+    }
+    $file_dir = trailingslashit( $file_dir );
+
+
+    if( empty( $file_name ) ){
+        $file_name = 'customfile';
+    }
+
+    $file_location = $file_dir . $file_name;
+
+    return wp_ulike_put_contents( $content, $file_location, $chmode );
+}
+
+/**
+ * Stores css content in custom css file (#admin)
+ *
+ * @return boolean            Returns true if the file is created and updated successfully, false on failure
+ */
+function wp_ulike_save_custom_css(){
+    $css_string = wp_ulike_get_custom_style();
+
+    if ( wp_ulike_put_contents_dir( wp_ulike_minify_css( $css_string ), 'custom.css' ) ) {
+        update_option( 'wp_ulike_use_inline_custom_css' , 0 ); // disable inline css output
+        return true;
+    // if the directory is not writable, try inline css fallback
+    } else {
+        update_option( 'wp_ulike_use_inline_custom_css' , 1 ); // save css rules as option to print as inline css
+        return false;
+    }
+}
+
+/**
+ * Minify CSS
+ *
+ * @param string $input
+ * @return string
+ */
+function wp_ulike_minify_css( $input ) {
+    if( trim( $input ) === "" ){
+        return $input;
+    }
+
+    return preg_replace(
+        array(
+            // Remove comment(s)
+            '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
+            // Remove unused white-space(s)
+            '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~]|\s(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
+            // Replace `0(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)` with `0`
+            '#(?<=[\s:])(0)(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)#si',
+            // Replace `:0 0 0 0` with `:0`
+            '#:(0\s+0|0\s+0\s+0\s+0)(?=[;\}]|\!important)#i',
+            // Replace `background-position:0` with `background-position:0 0`
+            '#(background-position):0(?=[;\}])#si',
+            // Replace `0.6` with `.6`, but only when preceded by `:`, `,`, `-` or a white-space
+            '#(?<=[\s:,\-])0+\.(\d+)#s',
+            // Minify string value
+            '#(\/\*(?>.*?\*\/))|(?<!content\:)([\'"])([a-z_][a-z0-9\-_]*?)\2(?=[\s\{\}\];,])#si',
+            '#(\/\*(?>.*?\*\/))|(\burl\()([\'"])([^\s]+?)\3(\))#si',
+            // Minify HEX color code
+            '#(?<=[\s:,\-]\#)([a-f0-6]+)\1([a-f0-6]+)\2([a-f0-6]+)\3#i',
+            // Replace `(border|outline):none` with `(border|outline):0`
+            '#(?<=[\{;])(border|outline):none(?=[;\}\!])#',
+            // Remove empty selector(s)
+            '#(\/\*(?>.*?\*\/))|(^|[\{\}])(?:[^\s\{\}]+)\{\}#s'
+        ),
+        array(
+            '$1',
+            '$1$2$3$4$5$6$7',
+            '$1',
+            ':0',
+            '$1:0 0',
+            '.$1',
+            '$1$3',
+            '$1$2$4$5',
+            '$1$2$3',
+            '$1:0',
+            '$1$2'
+        ),
+    $input);
+}
