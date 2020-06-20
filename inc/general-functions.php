@@ -435,7 +435,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 	 * @return WP_Error[]|integer
 	 */
 	function wp_ulike_get_counter_value_info( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
-
+		// Remove 'un' prefix from status
 		$status = ltrim( $status, 'un');
 
 		if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
@@ -447,33 +447,25 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		if( ( empty( $counter_value ) && ! is_numeric( $counter_value ) ) || ! empty( $date_range ) ){
 			global $wpdb;
 
-			$cache_key     = sanitize_key( sprintf( 'counter-query-for-%s-%s-%s-status', $type, $ID, $status ) );
-			$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+			// Peroid limit SQL
+			$period_limit = wp_ulike_get_period_limit_sql( $date_range );
 
-			// Make a general query to get info from target table.
-			if( false === $counter_value ){
-				// Peroid limit SQL
-				$period_limit = wp_ulike_get_period_limit_sql( $date_range );
-
-				// get table info
-				$table_info   = wp_ulike_get_table_info( $type );
-				if( empty( $table_info ) ){
-					return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
-				}
-				extract( $table_info );
-
-				$query = sprintf(
-					'SELECT COUNT(%1$s) FROM %2$s WHERE %3$s AND %4$s %5$s',
-					esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
-					esc_sql( $wpdb->prefix . $table ),
-					esc_sql( $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'" ),
-					esc_sql( "`$column` = '$ID'" ),
-					esc_sql( $period_limit )
-				);
-
-				$counter_value = $wpdb->get_var( stripslashes( $query ) );
-				wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+			// get table info
+			$table_info   = wp_ulike_get_table_info( $type );
+			if( empty( $table_info ) ){
+				return new WP_Error( 'broke', __( "Table info is empty.", WP_ULIKE_SLUG ) );
 			}
+			extract( $table_info );
+
+			$query = sprintf(
+				'SELECT COUNT(%1$s) FROM %2$s WHERE %3$s AND %4$s %5$s',
+				esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
+				esc_sql( $wpdb->prefix . $table ),
+				esc_sql( $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'" ),
+				esc_sql( "`$column` = '$ID'" ),
+				esc_sql( $period_limit )
+			);
+			$counter_value = $wpdb->get_var( stripslashes( $query ) );
 
 			// Add counter to meta value
 			wp_ulike_update_meta_counter_value( $ID, $counter_value, $type, $status, $is_distinct );
