@@ -12,7 +12,7 @@ if ( ! class_exists( 'CSF' ) ) {
 
     // Default constants
     public static $premium  = true;
-    public static $version  = '2.1.6';
+    public static $version  = '2.1.7';
     public static $dir      = '';
     public static $url      = '';
     public static $css      = '';
@@ -452,7 +452,7 @@ if ( ! class_exists( 'CSF' ) ) {
 
       if( ! empty( self::$args['shortcode_options'] ) ) {
         foreach ( self::$args['shortcode_options'] as $argument ) {
-          if( !empty($argument['show_in_editor']) && $wpscreen->base === 'post' ) {
+          if( ! empty( $argument['show_in_editor'] ) && $wpscreen->base === 'post' ) {
             $enqueue = true;
           }
         }
@@ -505,16 +505,16 @@ if ( ! class_exists( 'CSF' ) ) {
       }
 
       // Main style
-      wp_enqueue_style( 'csf', CSF::include_plugin_url( 'assets/css/csf'. $min .'.css' ), array(), '1.0.0', 'all' );
+      wp_enqueue_style( 'csf', CSF::include_plugin_url( 'assets/css/style'. $min .'.css' ), array(), self::$version, 'all' );
 
       // Main RTL styles
       if ( is_rtl() ) {
-        wp_enqueue_style( 'csf-rtl', CSF::include_plugin_url( 'assets/css/csf-rtl'. $min .'.css' ), array(), '1.0.0', 'all' );
+        wp_enqueue_style( 'csf-rtl', CSF::include_plugin_url( 'assets/css/style-rtl'. $min .'.css' ), array(), self::$version, 'all' );
       }
 
       // Main scripts
-      wp_enqueue_script( 'csf-plugins', CSF::include_plugin_url( 'assets/js/csf-plugins'. $min .'.js' ), array(), '1.0.0', true );
-      wp_enqueue_script( 'csf', CSF::include_plugin_url( 'assets/js/csf'. $min .'.js' ), array( 'csf-plugins' ), '1.0.0', true );
+      wp_enqueue_script( 'csf-plugins', CSF::include_plugin_url( 'assets/js/plugins'. $min .'.js' ), array(), self::$version, true );
+      wp_enqueue_script( 'csf', CSF::include_plugin_url( 'assets/js/main'. $min .'.js' ), array( 'csf-plugins' ), self::$version, true );
 
       // Main variables
       wp_localize_script( 'csf', 'csf_vars', array(

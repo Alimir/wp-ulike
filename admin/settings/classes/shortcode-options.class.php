@@ -307,7 +307,7 @@ if ( ! class_exists( 'CSF_Shortcoder' ) ) {
     // Add gutenberg blocks.
     public static function add_guteberg_block() {
 
-      wp_register_script( 'csf-gutenberg-block', CSF::include_plugin_url( 'assets/js/csf-gutenberg-block.js' ), array( 'wp-blocks', 'wp-editor', 'wp-element', 'wp-components' ) );
+      wp_register_script( 'csf-gutenberg-block', CSF::include_plugin_url( 'assets/js/gutenberg.js' ), array( 'wp-blocks', 'wp-editor', 'wp-element', 'wp-components' ) );
 
       wp_localize_script( 'csf-gutenberg-block', 'csf_gutenberg_blocks', CSF::$shortcode_instances );
 

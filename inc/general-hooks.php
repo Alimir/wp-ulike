@@ -984,6 +984,13 @@ if( ! function_exists( 'wp_ulike_update_meta_data_info' ) ){
 			}
 		}
 
+		// Delete object cache
+		if( wp_ulike_is_cache_exist() ){
+			wp_cache_delete( 'calculate_new_votes', WP_ULIKE_SLUG );
+			wp_cache_delete( 'count_logs_period_all', WP_ULIKE_SLUG );
+			wp_cache_delete( 1, 'wp_ulike_statistics_meta' );
+		}
+
 	}
 	add_action( 'wp_ulike_after_process', 'wp_ulike_update_meta_data_info'	, 10, 8 );
 }

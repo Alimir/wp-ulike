@@ -381,44 +381,50 @@
   $.fn.csf_dependency = function() {
     return this.each( function() {
 
-      var $this     = $(this),
-          ruleset   = $.csf_deps.createRuleset(),
-          depends   = [],
-          is_global = false;
+      var $this   = $(this),
+          $fields = $this.children('[data-controller]');
 
-      $this.children('[data-controller]').each( function() {
+      if( $fields.length ) {
 
-        var $field      = $(this),
-            controllers = $field.data('controller').split('|'),
-            conditions  = $field.data('condition').split('|'),
-            values      = $field.data('value').toString().split('|'),
-            rules       = ruleset;
+        var normal_ruleset = $.csf_deps.createRuleset(),
+            global_ruleset = $.csf_deps.createRuleset(),
+            normal_depends = [],
+            global_depends = [];
 
-        if ( $field.data('depend-global') ) {
-          is_global = true;
-        }
+        $fields.each( function() {
 
-        $.each(controllers, function( index, depend_id ) {
+          var $field      = $(this),
+              controllers = $field.data('controller').split('|'),
+              conditions  = $field.data('condition').split('|'),
+              values      = $field.data('value').toString().split('|'),
+              is_global   = $field.data('depend-global') ? true : false,
+              ruleset     = ( is_global ) ? global_ruleset : normal_ruleset;
 
-          var value     = values[index] || '',
-              condition = conditions[index] || conditions[0];
+          $.each(controllers, function( index, depend_id ) {
 
-          rules = rules.createRule('[data-depend-id="'+ depend_id +'"]', condition, value);
+            var value     = values[index] || '',
+                condition = conditions[index] || conditions[0];
 
-          rules.include($field);
+            ruleset = ruleset.createRule('[data-depend-id="'+ depend_id +'"]', condition, value);
 
-          depends.push(depend_id);
+            ruleset.include($field);
+
+            if ( is_global ) {
+              global_depends.push(depend_id);
+            } else {
+              normal_depends.push(depend_id);
+            }
+
+          });
 
         });
 
-      });
+        if ( normal_depends.length ) {
+          $.csf_deps.enable($this, normal_ruleset, normal_depends);
+        }
 
-      if ( depends.length ) {
-
-        if ( is_global ) {
-          $.csf_deps.enable(CSF.vars.$body, ruleset, depends);
-        } else {
-          $.csf_deps.enable($this, ruleset, depends);
+        if ( global_depends.length ) {
+          $.csf_deps.enable(CSF.vars.$body, global_ruleset, global_depends);
         }
 
       }
@@ -1459,7 +1465,7 @@
   $.fn.csf_field_sortable = function() {
     return this.each( function() {
 
-      var $sortable = $(this).find('.csf--sortable');
+      var $sortable = $(this).find('.csf-sortable');
 
       $sortable.sortable({
         axis: 'y',
@@ -1471,7 +1477,7 @@
         }
       });
 
-      $sortable.find('.csf--sortable-content').csf_reload_script();
+      $sortable.find('.csf-sortable-content').csf_reload_script();
 
     });
   };
@@ -1587,9 +1593,9 @@
 
       var $this     = $(this),
           $links    = $this.find('.csf-tabbed-nav a'),
-          $sections = $this.find('.csf-tabbed-section');
+          $contents = $this.find('.csf-tabbed-content');
 
-      $sections.eq(0).csf_reload_script();
+      $contents.eq(0).csf_reload_script();
 
       $links.on( 'click', function( e ) {
 
@@ -1597,11 +1603,11 @@
 
         var $link    = $(this),
             index    = $link.index(),
-            $section = $sections.eq(index);
+            $content = $contents.eq(index);
 
         $link.addClass('csf-tabbed-active').siblings().removeClass('csf-tabbed-active');
-        $section.csf_reload_script();
-        $section.removeClass('hidden').siblings().addClass('hidden');
+        $content.csf_reload_script();
+        $content.removeClass('hidden').siblings().addClass('hidden');
 
       });
 

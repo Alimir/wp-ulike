@@ -31,12 +31,12 @@ if ( ! class_exists( 'CSF_Field_tabbed' ) ) {
       }
       echo '</div>';
 
-      echo '<div class="csf-tabbed-sections">';
+      echo '<div class="csf-tabbed-contents">';
       foreach ( $this->field['tabs'] as $key => $tab ) {
 
         $tabbed_hidden = ( ! empty( $key ) ) ? ' hidden' : '';
 
-        echo '<div class="csf-tabbed-section'. esc_attr( $tabbed_hidden ) .'">';
+        echo '<div class="csf-tabbed-content'. esc_attr( $tabbed_hidden ) .'">';
 
         foreach ( $tab['fields'] as $field ) {
 

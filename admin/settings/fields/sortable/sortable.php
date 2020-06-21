@@ -18,7 +18,7 @@ if ( ! class_exists( 'CSF_Field_sortable' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="csf--sortable">';
+      echo '<div class="csf-sortable">';
 
       $pre_sortby = array();
       $pre_fields = array();
@@ -35,6 +35,12 @@ if ( ! class_exists( 'CSF_Field_sortable' ) ) {
           $pre_sortby[$key] = $pre_fields[$key];
         }
 
+        $diff = array_diff_key( $pre_fields, $this->value );
+
+        if( ! empty( $diff ) ) {
+          $pre_sortby = array_merge( $pre_sortby, $diff );
+        }
+
       } else {
 
         foreach ( $pre_fields as $key => $value ) {
@@ -45,9 +51,9 @@ if ( ! class_exists( 'CSF_Field_sortable' ) ) {
 
       foreach ( $pre_sortby as $key => $field ) {
 
-        echo '<div class="csf--sortable-item">';
+        echo '<div class="csf-sortable-item">';
 
-          echo '<div class="csf--sortable-content">';
+          echo '<div class="csf-sortable-content">';
 
           $field_default = ( isset( $this->field['default'][$key] ) ) ? $this->field['default'][$key] : '';
           $field_value   = ( isset( $this->value[$key] ) ) ? $this->value[$key] : $field_default;
@@ -57,7 +63,7 @@ if ( ! class_exists( 'CSF_Field_sortable' ) ) {
 
           echo '</div>';
 
-          echo '<div class="csf--sortable-helper"><i class="fas fa-arrows-alt"></i></div>';
+          echo '<div class="csf-sortable-helper"><i class="fas fa-arrows-alt"></i></div>';
 
         echo '</div>';
 

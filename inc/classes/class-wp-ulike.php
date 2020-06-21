@@ -315,13 +315,11 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return integer
 		 */
 		private function update_counter_value( $id, $value, $slug ){
-			$status  = $this->status;
-			$status  = ltrim( $status, 'un');
-			$old_val = $value;
+			// Remove 'un' prefix from status.
+			$status  = ltrim( $this->status, 'un');
 
 			// Update meta value
-			$primary_val = wp_ulike_meta_counter_value( $id, $slug, $status, $this->is_distinct );
-			if( ! empty( $primary_val ) || is_numeric( $primary_val ) ){
+			if( ! empty( $value ) || is_numeric( $value ) ){
 				$value  = strpos( $this->status, 'un') === false ? $value + 1 : $value - 1;
 			}
 			wp_ulike_update_meta_counter_value( $id, max( $value, 0 ), $slug, $status, $this->is_distinct );
@@ -514,6 +512,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 				$user_info[$id] = $status;
 			}
 
+			// Update meta value
 			wp_ulike_update_meta_data( $this->user_id, 'user', $meta_key, $user_info );
 		}
 
@@ -528,43 +527,33 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return			string
 		 */
 		public function get_user_status( $table, $item_type_col, $item_conditional_col, $item_type_val, $item_conditional_val ){
-
 			$item_type = wp_ulike_get_type_by_table( $table );
 			$meta_key  = sanitize_key( $item_type . '_status' );
 			$user_info = wp_ulike_get_meta_data( $this->user_id, 'user', $meta_key, true );
 
 			if( empty( $user_info ) || ! isset( $user_info[$item_type_val] ) ){
-				$cache_key   = sanitize_key( sprintf( '%s-%s-user-%s-status', $item_type, $item_type_val, $item_conditional_val ) );
-				$user_status = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+				$query  = sprintf( '
+						SELECT `status`
+						FROM %s
+						WHERE `%s` = \'%s\'
+						AND `%s` = \'%s\'
+						ORDER BY id DESC LIMIT 1
+					',
+					esc_sql( $this->wpdb->prefix . $table ),
+					esc_sql( $item_conditional_col ),
+					esc_sql( $item_conditional_val ),
+					esc_sql( $item_type_col ),
+					esc_sql( $item_type_val )
+				);
 
-				// Make a cachable query to get user status
-				if( false === $user_status ){
-					// Create query string
-					$query  = sprintf( '
-							SELECT `status`
-							FROM %s
-							WHERE `%s` = \'%s\'
-							AND `%s` = \'%s\'
-							ORDER BY id DESC LIMIT 1
-						',
-						esc_sql( $this->wpdb->prefix . $table ),
-						esc_sql( $item_conditional_col ),
-						esc_sql( $item_conditional_val ),
-						esc_sql( $item_type_col ),
-						esc_sql( $item_type_val )
-					);
+				// Get results
+				$user_status = $this->wpdb->get_var( stripslashes( $query ) );
+				// Check user info value
+				$user_info = empty( $user_info ) ? array() : $user_info;
 
-					// Get results
-					$user_status = $this->wpdb->get_var( stripslashes( $query ) );
-					// Check user info value
-					$user_info = empty( $user_info ) ? array() : $user_info;
-
-					if( $user_status !== NULL || $this->current_user ){
-						$user_info[$item_type_val] = $this->current_user && $user_status === NULL ? NULL : $user_status;
-						wp_ulike_update_meta_data( $this->user_id, 'user', $meta_key, $user_info );
-					}
-
-					wp_cache_set( $cache_key, $user_status, WP_ULIKE_SLUG, 300 );
+				if( $user_status !== NULL || $this->current_user ){
+					$user_info[$item_type_val] = $this->current_user && $user_status === NULL ? NULL : $user_status;
+					wp_ulike_update_meta_data( $this->user_id, 'user', $meta_key, $user_info );
 				}
 
 			} elseif( empty( $user_info[$item_type_val] ) ) {

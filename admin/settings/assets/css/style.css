@@ -588,13 +588,13 @@
  * 02. 02. Theme Light
  */
 .csf-theme-light .csf-container {
-  border: 1px solid #e5e5e5;
+  border: 1px solid #ccd0d4;
   -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.04);
   -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.04);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.04);
 }
 .csf-theme-light .csf-header-inner {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #ccd0d4;
   background-color: #f5f5f5;
   background: linear-gradient(#fefefe, #f5f5f5);
 }
@@ -603,28 +603,22 @@
 }
 .csf-theme-light .csf-expand-all {
   color: #999;
-  background-color: #fff;
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  background-color: #eee;
 }
 .csf-theme-light .csf-expand-all:hover {
   color: #555;
 }
 .csf-theme-light .csf-search input {
   color: #555;
-  background-color: #fff;
-  -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
-  -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+  background-color: #eee;
 }
 .csf-theme-light .csf-search input::-webkit-input-placeholder {
-  color: #bbb;
+  color: #999;
 }
 .csf-theme-light .csf-nav ul li a {
   color: #666;
   background-color: #f5f5f5;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #ccd0d4;
 }
 .csf-theme-light .csf-nav ul li a:hover {
   color: #222;
@@ -644,18 +638,18 @@
 }
 .csf-theme-light .csf-nav ul ul li a {
   background-color: #eee;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #ccd0d4;
 }
 .csf-theme-light .csf-nav > ul > li:last-child > a {
   border-bottom: none;
 }
 .csf-theme-light .csf-nav-background {
   background-color: #f5f5f5;
-  border-right: 1px solid #e5e5e5;
+  border-right: 1px solid #ccd0d4;
 }
 .csf-theme-light .csf-footer {
   color: #555;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #ccd0d4;
   background-color: #f5f5f5;
   background: linear-gradient(#fafafa, #f5f5f5);
 }
@@ -1723,25 +1717,25 @@
   width: 100%;
   max-width: 100%;
 }
-.csf-field-sortable .csf--sortable .csf--sortable-item {
+.csf-field-sortable .csf-sortable .csf-sortable-item {
   display: table;
   width: 100%;
   margin-bottom: 5px;
   border: 1px solid #eee;
 }
-.csf-field-sortable .csf--sortable .csf--sortable-item h4 {
+.csf-field-sortable .csf-sortable .csf-sortable-item h4 {
   font-size: 1em;
 }
-.csf-field-sortable .csf--sortable-content {
+.csf-field-sortable .csf-sortable-content {
   width: 100%;
   display: table-cell;
   vertical-align: middle;
   background-color: #fff;
 }
-.csf-field-sortable .csf--sortable-content > .csf-field {
+.csf-field-sortable .csf-sortable-content > .csf-field {
   padding: 15px;
 }
-.csf-field-sortable .csf--sortable-helper {
+.csf-field-sortable .csf-sortable-helper {
   width: 100%;
   display: table-cell;
   vertical-align: middle;
@@ -1751,13 +1745,13 @@
   border-left: 1px solid #eee;
   background-color: #f7f7f7;
 }
-.csf-field-sortable .csf--sortable-helper i {
+.csf-field-sortable .csf-sortable-helper i {
   display: inline-block;
   cursor: pointer;
   width: 50px;
   color: #555;
 }
-.csf-field-sortable .csf--sortable-helper i:hover {
+.csf-field-sortable .csf-sortable-helper i:hover {
   opacity: 0.5;
 }
 .csf-field-sortable .widget-placeholder {
@@ -1773,8 +1767,8 @@
   background-color: #eee !important;
   opacity: 0.5;
 }
-.csf-field-sortable .ui-sortable-helper .csf--sortable-helper,
-.csf-field-sortable .ui-sortable-helper .csf--sortable-content {
+.csf-field-sortable .ui-sortable-helper .csf-sortable-helper,
+.csf-field-sortable .ui-sortable-helper .csf-sortable-content {
   display: none;
 }
 
@@ -1995,12 +1989,12 @@
 /**
  * 03. 28. Field: tabbed
  */
-.csf-field-tabbed .csf-tabbed-section {
+.csf-field-tabbed .csf-tabbed-content {
   border: 1px solid #ccd0d4;
   background-color: #fff;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
-.csf-field-tabbed .csf-tabbed-section > .csf-field {
+.csf-field-tabbed .csf-tabbed-content > .csf-field {
   padding: 15px;
 }
 .csf-field-tabbed .csf-tabbed-nav .csf--icon {
@@ -2691,38 +2685,35 @@
 .control-section .csf-field-fieldset .csf-fieldset-content {
   border-color: #e5e5e5;
 }
-.control-section .csf-field-fieldset .csf-field {
+.control-section .csf-tabbed-content > .csf-field,
+.control-section .csf-sortable-content > .csf-field,
+.control-section .csf-repeater-content > .csf-field,
+.control-section .csf-fieldset-content > .csf-field,
+.control-section .csf-cloneable-content > .csf-field,
+.control-section .csf-accordion-content > .csf-field {
   padding: 10px;
 }
-.control-section .csf-field-fieldset .csf-field .csf-title {
+.control-section .csf-tabbed-content > .csf-field .csf-title,
+.control-section .csf-sortable-content > .csf-field .csf-title,
+.control-section .csf-repeater-content > .csf-field .csf-title,
+.control-section .csf-fieldset-content > .csf-field .csf-title,
+.control-section .csf-cloneable-content > .csf-field .csf-title,
+.control-section .csf-accordion-content > .csf-field .csf-title {
   margin-bottom: 5px;
 }
-.control-section .csf-field-fieldset .csf-field h4 {
+.control-section .csf-tabbed-content > .csf-field h4,
+.control-section .csf-sortable-content > .csf-field h4,
+.control-section .csf-repeater-content > .csf-field h4,
+.control-section .csf-fieldset-content > .csf-field h4,
+.control-section .csf-cloneable-content > .csf-field h4,
+.control-section .csf-accordion-content > .csf-field h4 {
   font-size: 12px;
 }
-.control-section .csf-field-group .csf-field,
-.control-section .csf-field-tabbed .csf-field,
-.control-section .csf-field-sortable .csf-field,
-.control-section .csf-field-repeater .csf-field,
-.control-section .csf-field-accordion .csf-field {
-  padding: 10px;
-}
-.control-section .csf-field-group .csf-field .csf-title,
-.control-section .csf-field-tabbed .csf-field .csf-title,
-.control-section .csf-field-sortable .csf-field .csf-title,
-.control-section .csf-field-repeater .csf-field .csf-title,
-.control-section .csf-field-accordion .csf-field .csf-title {
-  margin-bottom: 5px;
-}
-.control-section .csf-field-group .csf-field h4,
-.control-section .csf-field-tabbed .csf-field h4,
-.control-section .csf-field-sortable .csf-field h4,
-.control-section .csf-field-repeater .csf-field h4,
-.control-section .csf-field-accordion .csf-field h4 {
-  font-size: 12px;
-}
-.control-section .csf-dependency-control.hidden {
+.control-section .csf-depend-hidden.csf-depend-on {
   display: none !important;
+}
+.control-section .csf-depend-visible.csf-depend-on {
+  border-top: 0 !important;
 }
 
 /**
@@ -3127,8 +3118,8 @@
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 }
 
-.csf-shortcode-block .button {
-  margin: 10px 0;
+.csf-shortcode-block .components-button {
+  margin-bottom: 10px;
 }
 
 /**
