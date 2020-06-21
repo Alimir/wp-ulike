@@ -2088,7 +2088,6 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 		}
 
 		$cache_key      = sanitize_key( sprintf( 'count_logs_period_%s', $period ) );
-		$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
 
 		if( $period === 'all' ){
 			$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );

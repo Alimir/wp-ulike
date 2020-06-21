@@ -91,13 +91,17 @@ function wp_ulike_get_paginated_logs( $table, $type ){
  * @return			string
  */
 function wp_ulike_get_number_of_new_likes() {
-	global $wpdb;
+    global $wpdb;
+
+    // Get cache key
+    $cache_key = sanitize_key( 'calculate_new_votes' );
 
 	if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false && is_super_admin() ) {
-		update_option( 'wpulike_lastvisit', current_time( 'mysql' ) );
-	}
+        update_option( 'wpulike_lastvisit', current_time( 'mysql' ) );
+        wp_cache_delete( $cache_key, WP_ULIKE_SLUG );
+    }
 
-	$cache_key     = sanitize_key( 'calculate-new-votes' );
+    // Get cached counter value
 	$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 	// Make a cachable query to get new like count from all tables
@@ -114,7 +118,7 @@ function wp_ulike_get_number_of_new_likes() {
 		);
 
 		$counter_value = $wpdb->get_var( $query );
-		wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+        wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 	}
 
 	return empty( $counter_value ) ? 0 : $counter_value;
