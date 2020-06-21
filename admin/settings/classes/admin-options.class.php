@@ -169,6 +169,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
       foreach ( $this->pre_tabs as $tab ) {
         if ( ! empty( $tab['subs'] ) ) {
           foreach ( $tab['subs'] as $sub ) {
+            $sub['ptitle'] = $tab['title'];
             $result[] = $sub;
           }
         }
@@ -338,7 +339,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
                 }
 
-              } else if( isset( $field['sanitize'] ) && function_exists( $field['sanitize'] ) ) {
+              } else if( isset( $field['sanitize'] ) && is_callable( $field['sanitize'] ) ) {
 
                 $data[$field_id] = call_user_func( $field['sanitize'], $field_value );
 
@@ -349,7 +350,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
               }
 
               // Validate "post" request of field.
-              if ( isset( $field['validate'] ) && function_exists( $field['validate'] ) ) {
+              if ( isset( $field['validate'] ) && is_callable( $field['validate'] ) ) {
 
                 $has_validated = call_user_func( $field['validate'], $field_value );
 
@@ -599,7 +600,7 @@ if ( ! class_exists( 'CSF_Options' ) ) {
 
                     foreach ( $tab['subs'] as $sub ) {
 
-                      $sub_id    = sanitize_title( $sub['title'] );
+                      $sub_id    = $tab_id .'/'. sanitize_title( $sub['title'] );
                       $sub_error = $this->error_check( $sub );
                       $sub_icon  = ( ! empty( $sub['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $sub['icon'] ) .'"></i>' : '';
 
@@ -635,8 +636,10 @@ if ( ! class_exists( 'CSF_Options' ) ) {
               $section_class  = ( ! empty( $section['class'] ) ) ? ' '. $section['class'] : '';
               $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
               $section_title  = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
+              $section_parent = ( ! empty( $section['ptitle'] ) ) ? sanitize_title( $section['ptitle'] ) .'/' : '';
+              $section_id     = ( ! empty( $section['title'] ) ) ? sanitize_title( $section_title ) : '';
 
-              echo '<div class="csf-section'. esc_attr( $section_onload . $section_class ) .'" data-section-id="'. sanitize_title( $section_title ) .'">';
+              echo '<div class="csf-section'. esc_attr( $section_onload . $section_class ) .'" data-section-id="'. esc_attr( $section_parent . $section_id ) .'">';
               echo ( $has_nav ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
               echo ( ! empty( $section['description'] ) ) ? '<div class="csf-field csf-section-description">'. wp_kses_post( $section['description'] ) .'</div>' : '';
 

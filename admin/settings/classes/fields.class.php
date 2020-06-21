@@ -243,7 +243,7 @@ if ( ! class_exists( 'CSF_Fields' ) ) {
 
         default:
 
-          if ( function_exists( $type ) ) {
+          if ( is_callable( $type ) ) {
             if ( ! empty( $term ) ) {
               $options = call_user_func( $type, $query_args );
             } else {
@@ -357,7 +357,7 @@ if ( ! class_exists( 'CSF_Fields' ) ) {
 
             default:
 
-              if ( function_exists( $type .'_title' ) ) {
+              if ( is_callable( $type .'_title' ) ) {
                 $options[$value] = call_user_func( $type .'_title', $value );
               } else {
                 $options[$value] = ucfirst( $value );

@@ -168,7 +168,7 @@ if ( ! class_exists( 'CSF_Profile_Options' ) ) {
                     $data[$field_id] = wp_kses_post( $field_value );
                   }
 
-                } else if( isset( $field['sanitize'] ) && function_exists( $field['sanitize'] ) ) {
+                } else if( isset( $field['sanitize'] ) && is_callable( $field['sanitize'] ) ) {
 
                   $data[$field_id] = call_user_func( $field['sanitize'], $field_value );
 
@@ -179,7 +179,7 @@ if ( ! class_exists( 'CSF_Profile_Options' ) ) {
                 }
 
                 // Validate "post" request of field.
-                if ( isset( $field['validate'] ) && function_exists( $field['validate'] ) ) {
+                if ( isset( $field['validate'] ) && is_callable( $field['validate'] ) ) {
 
                   $has_validated = call_user_func( $field['validate'], $field_value );
 

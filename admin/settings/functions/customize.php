@@ -44,18 +44,44 @@ if ( ! class_exists( 'WP_Customize_Control_CSF' ) && class_exists( 'WP_Customize
 
     protected function render() {
 
-      $depend = '';
-      $hidden = '';
+      $depend  = '';
+      $visible = '';
 
       if ( ! empty( $this->field['dependency'] ) ) {
-        $hidden  = ' csf-dependency-control hidden';
-        $depend .= ' data-controller="'. esc_attr( $this->field['dependency'][0] ) .'"';
-        $depend .= ' data-condition="'. esc_attr( $this->field['dependency'][1] ) .'"';
-        $depend .= ' data-value="'. esc_attr( $this->field['dependency'][2] ) .'"';
+
+        $dependency      = $this->field['dependency'];
+        $depend_visible  = '';
+        $data_controller = '';
+        $data_condition  = '';
+        $data_value      = '';
+        $data_global     = '';
+
+        if ( is_array( $dependency[0] ) ) {
+          $data_controller = implode( '|', array_column( $dependency, 0 ) );
+          $data_condition  = implode( '|', array_column( $dependency, 1 ) );
+          $data_value      = implode( '|', array_column( $dependency, 2 ) );
+          $data_global     = implode( '|', array_column( $dependency, 3 ) );
+          $depend_visible  = implode( '|', array_column( $dependency, 4 ) );
+        } else {
+          $data_controller = ( ! empty( $dependency[0] ) ) ? $dependency[0] : '';
+          $data_condition  = ( ! empty( $dependency[1] ) ) ? $dependency[1] : '';
+          $data_value      = ( ! empty( $dependency[2] ) ) ? $dependency[2] : '';
+          $data_global     = ( ! empty( $dependency[3] ) ) ? $dependency[3] : '';
+          $depend_visible  = ( ! empty( $dependency[4] ) ) ? $dependency[4] : '';
+        }
+
+        $depend .= ' data-controller="'. esc_attr( $data_controller ) .'"';
+        $depend .= ' data-condition="'. esc_attr( $data_condition ) .'"';
+        $depend .= ' data-value="'. esc_attr( $data_value ) .'"';
+        $depend .= ( ! empty( $data_global ) ) ? ' data-depend-global="true"' : '';
+
+        $visible  = ' csf-dependency-control';
+        $visible .= ( ! empty( $depend_visible ) ) ? ' csf-depend-visible' : ' csf-depend-hidden';
+
       }
 
       $id    = 'customize-control-' . str_replace( array( '[', ']' ), array( '-', '' ), $this->id );
-      $class = 'customize-control customize-control-' . $this->type . $hidden;
+      $class = 'customize-control customize-control-'. $this->type . $visible;
 
       echo '<li id="'. esc_attr( $id ) .'" class="'. esc_attr( $class ) .'"'. $depend .'>';
       $this->render_content();

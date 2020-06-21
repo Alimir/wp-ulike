@@ -147,8 +147,16 @@
     .csf-fieldset-content{
       border-color: #e5e5e5;
     }
+  }
 
-    .csf-field{
+  .csf-tabbed-content,
+  .csf-sortable-content,
+  .csf-repeater-content,
+  .csf-fieldset-content,
+  .csf-cloneable-content,
+  .csf-accordion-content{
+
+    > .csf-field{
       padding: 10px;
 
       .csf-title{
@@ -161,26 +169,11 @@
     }
   }
 
-  .csf-field-group,
-  .csf-field-tabbed,
-  .csf-field-sortable,
-  .csf-field-repeater,
-  .csf-field-accordion{
-
-    .csf-field{
-      padding: 10px;
-
-      .csf-title{
-        margin-bottom: 5px;
-      }
-
-      h4{
-        font-size: 12px;
-      }
-    }
-  }
-
-  .csf-dependency-control.hidden{
+  .csf-depend-hidden.csf-depend-on{
     display: none !important;
+  }
+
+  .csf-depend-visible.csf-depend-on{
+    border-top: 0 !important;
   }
 }

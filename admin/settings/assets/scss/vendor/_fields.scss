@@ -1260,9 +1260,9 @@
     }
   }
 
-  .csf--sortable{
+  .csf-sortable{
 
-    .csf--sortable-item{
+    .csf-sortable-item{
       display: table;
       width: 100%;
       margin-bottom: 5px;
@@ -1274,7 +1274,7 @@
     }
   }
 
-  .csf--sortable-content{
+  .csf-sortable-content{
     width: 100%;
     display: table-cell;
     vertical-align: middle;
@@ -1285,7 +1285,7 @@
     }
   }
 
-  .csf--sortable-helper{
+  .csf-sortable-helper{
     width: 100%;
     display: table-cell;
     vertical-align: middle;
@@ -1321,8 +1321,8 @@
     background-color: #eee !important;
     @include opacity(0.5);
 
-    .csf--sortable-helper,
-    .csf--sortable-content{
+    .csf-sortable-helper,
+    .csf-sortable-content{
       display: none;
     }
   }
@@ -1585,7 +1585,7 @@
  */
 .csf-field-tabbed{
 
-  .csf-tabbed-section{
+  .csf-tabbed-content{
     border: 1px solid #ccd0d4;
     background-color: #fff;
     box-shadow: 0 1px 1px rgba(0,0,0,.04);

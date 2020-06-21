@@ -122,12 +122,12 @@
 .csf-theme-light{
 
   .csf-container{
-    border: 1px solid #e5e5e5;
+    border: 1px solid #ccd0d4;
     @include box-shadow(0 0 15px rgba(black, 0.04));
   }
 
   .csf-header-inner{
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #ccd0d4;
     background-color: #f5f5f5;
     background: linear-gradient(#fefefe, #f5f5f5);
 
@@ -141,8 +141,7 @@
 
   .csf-expand-all{
     color: #999;
-    background-color: #fff;
-    @include box-shadow(0 1px 1px rgba(black, 0.05));
+    background-color: #eee;
 
     &:hover{
       color: #555;
@@ -153,11 +152,10 @@
 
     input{
       color: #555;
-      background-color: #fff;
-      @include box-shadow(0px 1px 1px rgba(black, 0.05));
+      background-color: #eee;
 
       &::-webkit-input-placeholder{
-        color: #bbb;
+        color: #999;
       }
     }
   }
@@ -171,7 +169,7 @@
         a{
           color: #666;
           background-color: #f5f5f5;
-          border-bottom: 1px solid #e5e5e5;
+          border-bottom: 1px solid #ccd0d4;
 
           &:hover{
             color: #222;
@@ -200,7 +198,7 @@
 
           a{
             background-color: #eee;
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid #ccd0d4;
           }
         }
       }
@@ -213,12 +211,12 @@
 
   .csf-nav-background{
     background-color: #f5f5f5;
-    border-right: 1px solid #e5e5e5;
+    border-right: 1px solid #ccd0d4;
   }
 
   .csf-footer{
     color: #555;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #ccd0d4;
     background-color: #f5f5f5;
     background: linear-gradient(#fafafa, #f5f5f5);
   }

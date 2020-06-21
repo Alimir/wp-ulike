@@ -433,7 +433,8 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
 
         if ( $font_weight || $font_style ) {
           $style = $font_weight . $font_style;
-          if ( ! empty( $style ) && $style !== 'normal' ) {
+          if ( ! empty( $style ) ) {
+            $style = ( $style === 'normal' ) ? '400' : $style;
             $this->parent->webfonts[$font_family][$style] = $style;
           }
         }
@@ -441,7 +442,8 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
         // set extra styles
         if ( ! empty( $this->value['extra-styles'] ) ) {
           foreach ( $this->value['extra-styles'] as $extra_style ) {
-            if ( ! empty( $extra_style ) && $extra_style !== 'normal' ) {
+            if ( ! empty( $extra_style ) ) {
+              $extra_style = ( $extra_style === 'normal' ) ? '400' : $extra_style;
               $this->parent->webfonts[$font_family][$extra_style] = $extra_style;
             }
           }
