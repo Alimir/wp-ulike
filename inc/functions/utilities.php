@@ -4,6 +4,11 @@
  * // @echo HEADER
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die('No Naughty Business Please !');
+}
+
 if( ! function_exists( 'wp_ulike_set_transient' ) ) {
 	/**
 	 * Set/update the value of a transient.

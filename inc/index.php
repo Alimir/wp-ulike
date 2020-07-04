@@ -9,5 +9,15 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
-include_once( 'general-functions.php' );
-include_once( 'general-hooks.php' );
+// Functions
+include_once( 'functions/utilities.php' );
+include_once( 'functions/general.php' );
+include_once( 'functions/templates.php' );
+include_once( 'functions/counter.php' );
+include_once( 'functions/content-types.php' );
+include_once( 'functions/queries.php' );
+
+// Hooks
+include_once( 'hooks/general.php' );
+include_once( 'hooks/shortcodes.php' );
+include_once( 'hooks/third-party.php' );
