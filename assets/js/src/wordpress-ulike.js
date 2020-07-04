@@ -177,7 +177,7 @@
       // Update general element class names
       this._updateGeneralClassNames(response.data.status);
       // If data exist
-      if( response.data.data !== null ){
+      if (response.data.data !== null) {
         // Update counter + check refresh likers box
         if (response.data.status < 5) {
           this.__updateCounter(response.data.data);
@@ -252,14 +252,14 @@
     },
 
     _setSbilingButtons: function () {
-      this.siblingButton = this.buttonElement.siblings( this.settings.buttonSelector );
+      this.siblingButton = this.buttonElement.siblings(this.settings.buttonSelector);
     },
 
     __updateCounter: function (counterValue) {
       if (typeof counterValue !== "object") {
         this.counterElement.text(counterValue);
       } else {
-        if( this.settings.isTotal && typeof counterValue.sub !== "undefined" ){
+        if (this.settings.isTotal && typeof counterValue.sub !== "undefined") {
           this.counterElement.text(counterValue.sub);
         } else {
           if (this.settings.factor === 'down') {
@@ -277,9 +277,6 @@
       }
 
       $document.trigger("WordpressUlikeCounterUpdated", [this.buttonElement]);
-      // // $document.on( "WordpressUlikeCounterUpdated", function( event, param1, param2 ) {
-      // //   console.log( param1 );
-      // // });
     },
 
     /**
@@ -364,7 +361,7 @@
         if (this.siblingElement.length) {
           this.siblingElement.find(this.settings.buttonSelector).removeClass("image-unlike wp_ulike_btn_is_active");
         }
-        if( this.siblingButton.length ) {
+        if (this.siblingButton.length) {
           this.siblingButton.removeClass("image-unlike wp_ulike_btn_is_active");
         }
       } else if (this.buttonElement.hasClass("wp_ulike_put_text") && btnText !== null) {

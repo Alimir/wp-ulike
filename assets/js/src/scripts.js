@@ -1,9 +1,9 @@
 /* Run :) */
-(function($) {
+(function ($) {
   // on document ready
-  $(function() {
+  $(function () {
     // Upgrading 'WordpressUlike' datasheets when new DOM has been inserted
-    $(this).bind("DOMNodeInserted", function(e) {
+    $(this).bind("DOMNodeInserted", function (e) {
       $(".wpulike").WordpressUlike();
     });
   });
