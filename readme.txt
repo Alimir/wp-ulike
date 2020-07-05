@@ -1,12 +1,12 @@
-=== WP ULike - Most Advanced WordPress Mareking Tool ===
+=== WP ULike - Most Advanced WordPress Marketing Toolkit ===
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: Ali Mirzaei
-Tags: like, dislike, bookmark, favorite, elementor, multisite, rating, voting, statistics, gamification, feedback, member
+Tags: like, marketing, elementor, favorite, dislike, multisite, rating, voting, statistics, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.4.2
-Stable tag: 4.2.6
+Stable tag: 4.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,7 +41,7 @@ Just drag your desired widget and drop it in your Elementor sections, customize 
 = Boost Your SEO by Using Our Schema Markup Generator [PRO] =
 Schema markup is a form of data structure and helps Search Engine to have a better understanding of content. The Process for adding these schemas to your webpage is quite messy and confusing. Because of that, WP ULike Pro adds a Metabox to your posts so you can easily generate your custom rich snippets.
 
-= Try WP ULike Pro - The Best Mareking Tool For WordPress =
+= Try WP ULike Pro - The Best Marketing Tool For WordPress =
 So let's talk [PROfessional](https://wpulike.com/pricing/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)! WP ULike Pro has support DisLike button alongside Like button, both of them are completely customizable in our redesigned settings menu with tones of features and more beautiful and stylish templates. the PRO version of the plugin is now compatible with Elementor Page builder and you can easily choose from +7 widgets by simply drag and drop them to your content. as you build your page and content with Elementor, you can add and customize Like and Dislike button in every part such as Posts, Comments, activities, etc.
 
 There are many other [features](https://wpulike.com/blog/wp-ulike-pro-vs-free/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) to help you build better websites:
@@ -151,6 +151,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.2.7 =
+* Fixed: Some type issues.
 
 = 4.2.6 =
 * Added: New file structure for includes path.
