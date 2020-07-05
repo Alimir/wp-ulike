@@ -1,6 +1,6 @@
 <?php
 /**
- * Counter Meta Functions
+ * General Hooks
  * // @echo HEADER
  */
 
@@ -69,7 +69,7 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 		// Stack variable
 		$output = $content;
 
-		if ( wp_ulike_is_true( wp_ulike_get_option( 'comments_group|enable_auto_display', 1 ) ) && ! is_admin() ) {
+		if ( wp_ulike_is_true( wp_ulike_get_option( 'comments_group|enable_auto_display', 1 ) ) && is_singular() && comments_open() ) {
 			//auto display position
 			$position = wp_ulike_get_option( 'comments_group|auto_display_position', 'bottom' );
 			//add wp_ulike function
