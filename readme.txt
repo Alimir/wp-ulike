@@ -1,16 +1,16 @@
-=== WP ULike ===
+=== WP ULike - Most Advanced WordPress Mareking Tool ===
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: Ali Mirzaei
-Tags: wp ulike, like button, elementor, like, dislike, wordpress youlike plugin, rating, vote, voting, seo, marketing, most liked posts, wordpress like page, wordpress like post, wordpress vote page, wordpress vote post, wp like page, wp like post, wp like plugin, buddypress like system, buddypress votes, comment like system, voting button, wordpress, buddypress, statistics, stats likes, bbpress, bbPress like, WP-Translations, forums, community, credit, points, mycred, users, ultimate member, ranking
-Requires PHP: 5.4
-Requires at least: 3.5.0
+Tags: like, dislike, bookmark, favorite, elementor, multisite, rating, voting, statistics, gamification, feedback, member
+Requires PHP: 5.6
+Requires at least: 5.0
 Tested up to: 5.4.2
-Stable tag: 4.2.5
+Stable tag: 4.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WP ULike enables you to add Ajax Like button into your WP and allowing your visitors to Like/Dislike the posts, comments, activities & topics.
+Like/Dislike button for any post type, comments, BuddyPress, bbPress. Track what your users love and what annoys them, using comprehensive statistics tools.
 
 == Description ==
 
@@ -53,6 +53,7 @@ There are many other [features](https://wpulike.com/blog/wp-ulike-pro-vs-free/?u
 * Progressive Log Management Panel, with advanced search capabilities
 * Database optimization panel with various options
 * +20 Carefully Designed Premium Templates
+* Anonymize IP option for GDPR compliance
 * Flexible Metabox Options with More Customization Settings For Each Post
 * Full myCred (Points, Rewards, Gamification, Ranks, Badges & Loyalty Plugin) Support.
 * Professional Statistics Panel With Date Range & Status Controllers
@@ -150,6 +151,14 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.2.6 =
+* Added: New file structure for includes path.
+* Added: An option to change likers list arrange.
+* Added: An option to force inline custom css.
+* Updated: Third-party plugins cache methods. (WP Rocket, Total Cache, etc.)
+* Fixed: An issue with comment auto display. (rest routes issue)
+* Fixed: Some major issues.
 
 = 4.2.5 =
 * Added: Filesystem support for custom css option. (Inline CSS Alternative)
