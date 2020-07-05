@@ -12,6 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 // Functions
 include_once( 'functions/utilities.php' );
 include_once( 'functions/general.php' );
+include_once( 'functions/meta.php' );
 include_once( 'functions/templates.php' );
 include_once( 'functions/counter.php' );
 include_once( 'functions/content-types.php' );
