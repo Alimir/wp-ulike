@@ -1,6 +1,6 @@
 <?php
 /**
- * Counter Meta Functions
+ * Shortcodes
  * // @echo HEADER
  */
 

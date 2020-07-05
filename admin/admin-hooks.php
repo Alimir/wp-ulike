@@ -421,28 +421,3 @@ function wp_ulike_upgrade_deprecated_options_value(){
 	update_option( 'wp_ulike_settings', $final_options_stack  );
 }
 add_filter( 'admin_init', 'wp_ulike_upgrade_deprecated_options_value' );
-
-/**
- * Admin init controller
- *
- * @return void
- */
-function wp_ulike_admin_init_controller() {
-	global $pagenow;
-
-	$disable_panel_files = wp_ulike_get_option( 'disable_panel_files', true );
-
-	if( ! wp_ulike_is_true( $disable_panel_files ) ){
-		return;
-	}
-
-	$has_ulike  = isset( $_GET['page'] ) && strpos( $_GET['page'], WP_ULIKE_SLUG ) !== false;
-	$has_assets = defined( 'WP_ULIKE_PRO_DOMAIN' ) && in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
-
-	if( ! $has_ulike &&  ! $has_assets ) {
-	  remove_action( 'admin_enqueue_scripts', 'CSF::add_admin_enqueue_scripts', 20 );
-	  remove_action( 'admin_footer', 'csf_set_icons' );
-	  remove_action( 'customize_controls_print_footer_scripts', 'csf_set_icons' );
-	}
-}
-// add_action( 'admin_init', 'wp_ulike_admin_init_controller' );

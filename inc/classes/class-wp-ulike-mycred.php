@@ -4,6 +4,11 @@
  * // @echo HEADER
  */
 
+// no direct access allowed
+if ( ! defined('ABSPATH') ) {
+    die();
+}
+
 if ( class_exists( 'myCRED_Hook' ) ) :
 
 	class wp_ulike_myCRED extends myCRED_Hook {

@@ -1,8 +1,13 @@
 <?php
 /**
- * Front-end AJAX Functionalities
+ * Front-end AJAX Hooks
  * // @echo HEADER
  */
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die('No Naughty Business Please !');
+}
 
 /*******************************************************
   Start AJAX From Here

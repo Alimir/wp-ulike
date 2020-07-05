@@ -228,7 +228,7 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	        if ( is_admin() ) {
 	            // Load AJAX specific codes on demand
 	            if ( defined('DOING_AJAX') && DOING_AJAX ){
-					include( WP_ULIKE_INC_DIR . '/frontend-ajax.php' );
+					include( WP_ULIKE_INC_DIR . '/hooks/frontend-ajax.php' );
 					include( WP_ULIKE_ADMIN_DIR . '/admin-ajax.php'  );
 	            }
 
