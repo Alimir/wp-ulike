@@ -319,7 +319,7 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 		}
 
 		// Change array arrange
-		if( !empty( $item_opts['setting'] ) && wp_ulike_get_option( $item_opts['setting'] . '|likers_order', 'desc' ) === 'desc' ){
+		if( ! empty( $get_likers ) && !empty( $item_opts['setting'] ) && wp_ulike_get_option( $item_opts['setting'] . '|likers_order', 'desc' ) === 'desc' ){
 			$get_likers = array_reverse( $get_likers );
 		}
 
