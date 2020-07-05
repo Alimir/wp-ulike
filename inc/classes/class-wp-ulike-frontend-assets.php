@@ -22,7 +22,7 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 	   	 */
 	  	function __construct() {
 	    	// If user has been disabled this page in options, then return.
-			if( ! is_wp_ulike( wp_ulike_get_option( 'disable_plugin_files' ) ) ) {
+			if( ! is_wp_ulike( wp_ulike_get_option( 'disable_plugin_files' ), array(), true ) ) {
 				return;
 			}
 	        // general assets

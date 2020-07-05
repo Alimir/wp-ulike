@@ -159,7 +159,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 	 * @since           1.9
 	 * @return			boolean
 	 */
-	function is_wp_ulike( $options, $args = array() ){
+	function is_wp_ulike( $options, $args = array(), $force_type = false ){
 
 		if( empty( $options ) ){
 			return true;
@@ -182,7 +182,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 
 		foreach ( $options as $key => $value ) {
 			if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
-				if( $value === 'single' ){
+				if( $value === 'single' && ! $force_type ){
 					$post_types = wp_ulike_get_option( 'posts_group|auto_display_filter_post_types' );
 					if( ! empty( $post_types ) ){
 						foreach ($post_types as $p_key => $p_value) {
