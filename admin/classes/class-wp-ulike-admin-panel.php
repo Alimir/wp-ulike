@@ -386,6 +386,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'title'        => __('Custom Spinner',WP_ULIKE_SLUG),
                         'library'      => 'image',
                         'placeholder'  => 'http://'
+                    ),
+                    array(
+                        'id'    => 'enable_inline_custom_css',
+                        'type'  => 'switcher',
+                        'title' => __('Enable Inline Custom CSS', WP_ULIKE_SLUG),
+                        'desc'  => __('If you don\'t want to use "custom.css" file for any reason, by activating this option, the styles will be added to the page as inline.', WP_ULIKE_SLUG)
                     )
                 ) )
             ) );

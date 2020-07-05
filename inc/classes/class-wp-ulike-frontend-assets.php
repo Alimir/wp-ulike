@@ -50,7 +50,8 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 			// @endif
 
 			// load custom.css if the directory is writable. else use inline css fallback - Make sure the auxin-elements is installed
-			if( ! wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) ) ){
+			if( ! wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) ) &&
+			! wp_ulike_is_true( wp_ulike_get_option( 'enable_inline_custom_css', false ) ) ){
 				$uploads   = wp_get_upload_dir();
 				$css_file  = $uploads['baseurl'] . '/' . WP_ULIKE_SLUG . '/custom.css';
 
