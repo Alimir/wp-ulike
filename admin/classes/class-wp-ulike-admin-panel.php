@@ -645,6 +645,17 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'  => 'switcher',
                     'title' => __('Display Likers Box', WP_ULIKE_SLUG),
                 ),
+                'likers_order' => array(
+                    'id'         => 'likers_order',
+                    'type'       => 'button_set',
+                    'title'      => __( 'User List Arrange', WP_ULIKE_SLUG),
+                    'default'    => 'desc',
+                    'options'    => array(
+                        'asc'  => __('Ascending', WP_ULIKE_SLUG),
+                        'desc' => __('Descending', WP_ULIKE_SLUG)
+                    ),
+                    'dependency' => array( 'enable_likers_box', '==', 'true' ),
+                ),
                 'disable_likers_pophover' => array(
                     'id'         => 'disable_likers_pophover',
                     'type'       => 'switcher',

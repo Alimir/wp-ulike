@@ -299,6 +299,7 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 		global $wpdb;
 
 		$item_type  = wp_ulike_get_type_by_table( $table_name );
+		$item_opts  = wp_ulike_get_post_settings_by_type( $item_type );
 		$get_likers = wp_ulike_get_meta_data( $item_ID, $item_type, 'likers_list', true );
 
 		if( empty( $get_likers ) ){
@@ -315,6 +316,11 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 				$get_likers = explode( ',', $get_likers );
 				wp_ulike_update_meta_data( $item_ID, $item_type, 'likers_list', $get_likers );
 			}
+		}
+
+		// Change array arrange
+		if( !empty( $item_opts['setting'] ) && wp_ulike_get_option( $item_opts['setting'] . '|likers_order', 'desc' ) === 'desc' ){
+			$get_likers = array_reverse( $get_likers );
 		}
 
 		return ! empty( $get_likers ) ? array_slice( $get_likers, 0, $limit ) : array();
