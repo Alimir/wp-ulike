@@ -578,7 +578,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'        => __('With this option, you can disable automatic display on these pages.', WP_ULIKE_SLUG),
                     'chosen'      => true,
                     'multiple'    => true,
-                    'default'     => array( 'single', 'home' ),
+                    // 'default'     => array( 'single', 'home' ),
                     'options'     => array(
                         'home'     => __('Home', WP_ULIKE_SLUG),
                         'single'   => __('Singular', WP_ULIKE_SLUG),
@@ -598,7 +598,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'        => __( 'Make these post types an exception and display the button on them.',WP_ULIKE_SLUG ),
                     'chosen'      => true,
                     'multiple'    => true,
-                    'default'     => 'post',
+                    // 'default'     => 'post',
                     'options'     => 'post_types',
                     'dependency'  => array( 'auto_display_filter|enable_auto_display', 'any|==', 'single|true' ),
                 ),
