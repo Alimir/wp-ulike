@@ -1,4 +1,4 @@
-/*! WP ULike - v4.2.5
+/*! WP ULike - v4.2.6
  *  https://wpulike.com
  *  TechnoWich 2020;
  */
@@ -8,7 +8,7 @@
 
 
 /* 'WordpressUlikeNotifications' plugin : https://github.com/alimir/wp-ulike */
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   "use strict";
 
   // Create the defaults once
@@ -31,7 +31,7 @@
 
   // Avoid Plugin.prototype conflicts
   $.extend(Plugin.prototype, {
-    init: function() {
+    init: function () {
       // Create Message Wrapper
       this._message();
       // Create Notification Container
@@ -45,7 +45,7 @@
     /**
      * Create Message Wrapper
      */
-    _message: function() {
+    _message: function () {
       this.$messageElement = $("<div/>")
         .addClass(
           this.settings.messageElement + " wpulike-" + this.settings.messageType
@@ -56,7 +56,7 @@
     /**
      * Create notification container
      */
-    _container: function() {
+    _container: function () {
       // Make notification container if not exist
       if (!$("." + this.settings.notifContainer).length) {
         this.$element.append(
@@ -71,7 +71,7 @@
     /**
      * Append notice
      */
-    _append: function() {
+    _append: function () {
       // Append Notification
       this.$notifContainer
         .append(this.$messageElement)
@@ -81,12 +81,12 @@
     /**
      * Disappear notice
      */
-    _remove: function() {
+    _remove: function () {
       var self = this;
       // Remove Message On Click
-      this.$messageElement.click(function() {
+      this.$messageElement.click(function () {
         $(this)
-          .fadeOut(300, function() {
+          .fadeOut(300, function () {
             $(this).remove();
             if (!$("." + self.settings.messageElement).length) {
               self.$notifContainer.remove();
@@ -95,9 +95,9 @@
           .trigger("WordpressUlikeRemoveNotification");
       });
       // Remove Message With Timeout
-      setTimeout(function() {
+      setTimeout(function () {
         self.$messageElement
-          .fadeOut(300, function() {
+          .fadeOut(300, function () {
             $(this).remove();
             if (!$("." + self.settings.messageElement).length) {
               self.$notifContainer.remove();
@@ -110,8 +110,8 @@
 
   // A really lightweight plugin wrapper around the constructor,
   // preventing against multiple instantiations
-  $.fn[pluginName] = function(options) {
-    return this.each(function() {
+  $.fn[pluginName] = function (options) {
+    return this.each(function () {
       new Plugin(this, options);
     });
   };
@@ -300,7 +300,7 @@
       // Update general element class names
       this._updateGeneralClassNames(response.data.status);
       // If data exist
-      if( response.data.data !== null ){
+      if (response.data.data !== null) {
         // Update counter + check refresh likers box
         if (response.data.status < 5) {
           this.__updateCounter(response.data.data);
@@ -375,14 +375,14 @@
     },
 
     _setSbilingButtons: function () {
-      this.siblingButton = this.buttonElement.siblings( this.settings.buttonSelector );
+      this.siblingButton = this.buttonElement.siblings(this.settings.buttonSelector);
     },
 
     __updateCounter: function (counterValue) {
       if (typeof counterValue !== "object") {
         this.counterElement.text(counterValue);
       } else {
-        if( this.settings.isTotal && typeof counterValue.sub !== "undefined" ){
+        if (this.settings.isTotal && typeof counterValue.sub !== "undefined") {
           this.counterElement.text(counterValue.sub);
         } else {
           if (this.settings.factor === 'down') {
@@ -400,9 +400,6 @@
       }
 
       $document.trigger("WordpressUlikeCounterUpdated", [this.buttonElement]);
-      // // $document.on( "WordpressUlikeCounterUpdated", function( event, param1, param2 ) {
-      // //   console.log( param1 );
-      // // });
     },
 
     /**
@@ -487,7 +484,7 @@
         if (this.siblingElement.length) {
           this.siblingElement.find(this.settings.buttonSelector).removeClass("image-unlike wp_ulike_btn_is_active");
         }
-        if( this.siblingButton.length ) {
+        if (this.siblingButton.length) {
           this.siblingButton.removeClass("image-unlike wp_ulike_btn_is_active");
         }
       } else if (this.buttonElement.hasClass("wp_ulike_put_text") && btnText !== null) {
@@ -541,11 +538,11 @@
 
 
 /* Run :) */
-(function($) {
+(function ($) {
   // on document ready
-  $(function() {
+  $(function () {
     // Upgrading 'WordpressUlike' datasheets when new DOM has been inserted
-    $(this).bind("DOMNodeInserted", function(e) {
+    $(this).bind("DOMNodeInserted", function (e) {
       $(".wpulike").WordpressUlike();
     });
   });
