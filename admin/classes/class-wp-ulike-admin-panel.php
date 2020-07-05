@@ -386,6 +386,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'title'        => __('Custom Spinner',WP_ULIKE_SLUG),
                         'library'      => 'image',
                         'placeholder'  => 'http://'
+                    ),
+                    array(
+                        'id'    => 'enable_inline_custom_css',
+                        'type'  => 'switcher',
+                        'title' => __('Enable Inline Custom CSS', WP_ULIKE_SLUG),
+                        'desc'  => __('If you don\'t want to use "custom.css" file for any reason, by activating this option, the styles will be added to the page as inline.', WP_ULIKE_SLUG)
                     )
                 ) )
             ) );
@@ -572,7 +578,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'        => __('With this option, you can disable automatic display on these pages.', WP_ULIKE_SLUG),
                     'chosen'      => true,
                     'multiple'    => true,
-                    'default'     => array( 'single', 'home' ),
+                    // 'default'     => array( 'single', 'home' ),
                     'options'     => array(
                         'home'     => __('Home', WP_ULIKE_SLUG),
                         'single'   => __('Singular', WP_ULIKE_SLUG),
@@ -592,7 +598,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'        => __( 'Make these post types an exception and display the button on them.',WP_ULIKE_SLUG ),
                     'chosen'      => true,
                     'multiple'    => true,
-                    'default'     => 'post',
+                    // 'default'     => 'post',
                     'options'     => 'post_types',
                     'dependency'  => array( 'auto_display_filter|enable_auto_display', 'any|==', 'single|true' ),
                 ),
@@ -644,6 +650,17 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'    => 'enable_likers_box',
                     'type'  => 'switcher',
                     'title' => __('Display Likers Box', WP_ULIKE_SLUG),
+                ),
+                'likers_order' => array(
+                    'id'         => 'likers_order',
+                    'type'       => 'button_set',
+                    'title'      => __( 'User List Arrange', WP_ULIKE_SLUG),
+                    'default'    => 'desc',
+                    'options'    => array(
+                        'asc'  => __('Ascending', WP_ULIKE_SLUG),
+                        'desc' => __('Descending', WP_ULIKE_SLUG)
+                    ),
+                    'dependency' => array( 'enable_likers_box', '==', 'true' ),
                 ),
                 'disable_likers_pophover' => array(
                     'id'         => 'disable_likers_pophover',

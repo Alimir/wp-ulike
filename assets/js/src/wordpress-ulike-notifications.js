@@ -1,5 +1,5 @@
 /* 'WordpressUlikeNotifications' plugin : https://github.com/alimir/wp-ulike */
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   "use strict";
 
   // Create the defaults once
@@ -22,7 +22,7 @@
 
   // Avoid Plugin.prototype conflicts
   $.extend(Plugin.prototype, {
-    init: function() {
+    init: function () {
       // Create Message Wrapper
       this._message();
       // Create Notification Container
@@ -36,7 +36,7 @@
     /**
      * Create Message Wrapper
      */
-    _message: function() {
+    _message: function () {
       this.$messageElement = $("<div/>")
         .addClass(
           this.settings.messageElement + " wpulike-" + this.settings.messageType
@@ -47,7 +47,7 @@
     /**
      * Create notification container
      */
-    _container: function() {
+    _container: function () {
       // Make notification container if not exist
       if (!$("." + this.settings.notifContainer).length) {
         this.$element.append(
@@ -62,7 +62,7 @@
     /**
      * Append notice
      */
-    _append: function() {
+    _append: function () {
       // Append Notification
       this.$notifContainer
         .append(this.$messageElement)
@@ -72,12 +72,12 @@
     /**
      * Disappear notice
      */
-    _remove: function() {
+    _remove: function () {
       var self = this;
       // Remove Message On Click
-      this.$messageElement.click(function() {
+      this.$messageElement.click(function () {
         $(this)
-          .fadeOut(300, function() {
+          .fadeOut(300, function () {
             $(this).remove();
             if (!$("." + self.settings.messageElement).length) {
               self.$notifContainer.remove();
@@ -86,9 +86,9 @@
           .trigger("WordpressUlikeRemoveNotification");
       });
       // Remove Message With Timeout
-      setTimeout(function() {
+      setTimeout(function () {
         self.$messageElement
-          .fadeOut(300, function() {
+          .fadeOut(300, function () {
             $(this).remove();
             if (!$("." + self.settings.messageElement).length) {
               self.$notifContainer.remove();
@@ -101,8 +101,8 @@
 
   // A really lightweight plugin wrapper around the constructor,
   // preventing against multiple instantiations
-  $.fn[pluginName] = function(options) {
-    return this.each(function() {
+  $.fn[pluginName] = function (options) {
+    return this.each(function () {
       new Plugin(this, options);
     });
   };

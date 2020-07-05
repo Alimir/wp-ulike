@@ -4,6 +4,11 @@
  * // @echo HEADER
  */
 
+// no direct access allowed
+if ( ! defined('ABSPATH') ) {
+    die();
+}
+
 if ( ! class_exists( 'wp_ulike' ) ) {
 
 	class wp_ulike{

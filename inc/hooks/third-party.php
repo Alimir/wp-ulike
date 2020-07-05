@@ -1,302 +1,13 @@
 <?php
 /**
- * General Hooks
+ * Third-Party Plugins
  * // @echo HEADER
  */
 
-/*******************************************************
-  General Hooks
-*******************************************************/
-
-if( ! function_exists( 'wp_ulike_register_widget' ) ){
-	/**
-	 * Register WP ULike Widgets
-	 *
-	 * @author Alimir
-	 * @since 1.2
-	 * @return Void
-	 */
-	function wp_ulike_register_widget() {
-		register_widget( 'wp_ulike_widget' );
-	}
-	add_action( 'widgets_init', 'wp_ulike_register_widget' );
+ // If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die('No Naughty Business Please !');
 }
-
-if( ! function_exists( 'wp_ulike_shortcode' ) ){
-	/**
-	 * Create shortcode: [wp_ulike]
-	 *
-	 * @author Alimir
-	 * @param array $atts
-	 * @param string $content
-	 * @since 1.4
-	 * @return void
-	 */
-	function  wp_ulike_shortcode( $atts, $content = null ){
-		// Final result
-		$result = '';
-		// Default Args
-		$args   = shortcode_atts( array(
-			"for"           => 'post',	// shortcode Type (post, comment, activity, topic)
-			"id"            => '',		// Post ID
-			"slug"          => 'post',	// Slug Name
-			"style"         => '',		// Get Default Theme
-			"button_type"   => '',		// Set Button Type ('image' || 'text')
-			"attributes"    => '',		// Get Attributes Filter
-			"wrapper_class" => ''		// Extra Wrapper class
-		), $atts );
-
-		switch ( $args['for'] ) {
-			case 'comment':
-				$result = $content . wp_ulike_comments( 'put', array_filter( $args ) );
-				break;
-
-			case 'activity':
-				$result = $content . wp_ulike_buddypress( 'put', array_filter( $args ) );
-				break;
-
-			case 'topic':
-				$result = $content . wp_ulike_bbpress( 'put', array_filter( $args ) );
-				break;
-
-			default:
-				$result = $content . wp_ulike( 'put', array_filter( $args ) );
-		}
-
-		return $result;
-	}
-	add_shortcode( 'wp_ulike', 'wp_ulike_shortcode' );
-}
-
-if( ! function_exists( 'wp_ulike_generate_microdata' ) ){
-	/**
-	 * Generate rich snippet hooks
-	 *
-	 * @param array $args
-	 * @return string
-	 */
-	function wp_ulike_generate_microdata( $args ){
-		// Bulk output
-		$output = '';
-
-		// Check ulike type
-		switch ( $args['type'] ) {
-			case 'likeThis':
-				$output = apply_filters( 'wp_ulike_posts_microdata', null );
-				break;
-
-			case 'likeThisComment':
-				$output = apply_filters( 'wp_ulike_comments_microdata', null );
-				break;
-
-			case 'likeThisActivity':
-				$output = apply_filters( 'wp_ulike_activities_microdata', null );
-				break;
-
-			case 'likeThisTopic':
-				$output = apply_filters( 'wp_ulike_topics_microdata', null );
-				break;
-		}
-
-		echo $output;
-	}
-	add_action( 'wp_ulike_inside_template', 'wp_ulike_generate_microdata' );
-}
-
-if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
-	/**
-	 * Display inline likers box without AJAX request
-	 *
-	 * @param array $args
-	 * @since 3.5.1
-	 * @return void
-	 */
-	function wp_ulike_display_inline_likers_template( $args ){
-		// Get settings for current type
-		$get_settings     = wp_ulike_get_post_settings_by_type( $args['type'] );
-		// If method not exist, then return error message
-		if( empty( $get_settings ) ) {
-			return;
-		}
-		// Extract settings array
-		extract( $get_settings );
-		// Display likers box
-		echo $args['disable_pophover'] && $args['display_likers'] ? sprintf(
-			'<div class="wp_ulike_likers_wrapper wp_ulike_display_inline">%s</div>',
-			wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting )
-		) : '';
-	}
-	add_action( 'wp_ulike_inside_template', 'wp_ulike_display_inline_likers_template' );
-}
-
-if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
-	/**
-	 * Update button icons
-	 *
-	 * @param array $args
-	 * @return void
-	 */
-	function wp_ulike_update_button_icon( $args ){
-		$button_type  = wp_ulike_get_option( $args['setting'] . '|button_type' );
-		$image_group  = wp_ulike_get_option( $args['setting'] . '|image_group' );
-		$return_style = null;
-
-		// Check value
-		if( $button_type !== 'image' || empty( $image_group ) || ! in_array( $args['style'], array( 'wpulike-default', 'wp-ulike-pro-default', 'wpulike-heart' ) ) ){
-			return;
-		}
-
-		if( isset( $image_group['like'] ) && ! empty( $image_group['like'] ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$image_group['like'].') !important; }';
-		}
-		if( isset( $image_group['unlike'] ) && ! empty( $image_group['unlike'] ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$image_group['unlike'].') !important; filter:none; }';
-		}
-		if( isset( $image_group['dislike'] ) && ! empty( $image_group['dislike'] ) ) {
-			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$image_group['dislike'].') !important; }';
-		}
-		if( isset( $image_group['undislike'] ) && ! empty( $image_group['undislike'] ) ) {
-			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$image_group['undislike'].') !important; filter:none; }';
-		}
-
-		echo !empty( $return_style ) ? sprintf( '<style>%s</style>', $return_style ) : '';
-	}
-	add_action( 'wp_ulike_inside_template', 'wp_ulike_update_button_icon', 1 );
-}
-
-
-/*******************************************************
-  Posts
-*******************************************************/
-
-if( ! function_exists( 'wp_ulike_put_posts' ) ){
-	/**
-	 * Auto insert wp_ulike function in the posts/pages content
-	 *
-	 * @param string $content
-	 * @since 1.0
-	 * @return string
-	 */
-	function wp_ulike_put_posts( $content ) {
-		// Stack variable
-		$output = $content;
-
-		if ( in_the_loop() && is_main_query() && wp_ulike_is_true( wp_ulike_get_option( 'posts_group|enable_auto_display', 1 ) ) ) {
-			//auto display position
-			$position = wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' );
-
-			if(	!is_feed() && is_wp_ulike( wp_ulike_get_option( 'posts_group|auto_display_filter' ) ) ){
-				// Get button
-				$button = wp_ulike('put');
-				switch ($position) {
-					case 'top':
-						$output = $button . $content;
-						break;
-
-					case 'top_bottom':
-						$output = $button . $content . $button;
-						break;
-
-					default:
-						$output = $content . $button;
-						break;
-				}
-			}
-		}
-
-		return apply_filters( 'wp_ulike_the_content', $output, $content );
-	}
-	add_filter('the_content', 'wp_ulike_put_posts');
-}
-
-if( ! function_exists( 'wp_ulike_get_posts_microdata_itemtype' ) ){
-	/**
-	 * Add itemtype to wp_ulike_posts_add_attr filter
-	 *
-	 * @return mixed
-	 */
-	function wp_ulike_get_posts_microdata_itemtype(){
-		$get_ulike_count = wp_ulike_get_post_likes( get_the_ID() );
-		if(!is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0) return;
-		return 'itemscope itemtype="http://schema.org/CreativeWork"';
-	}
-	// add_filter('wp_ulike_posts_add_attr', 'wp_ulike_get_posts_microdata_itemtype');
-}
-
-if( ! function_exists( 'wp_ulike_get_posts_microdata' ) ){
-	/**
-	 * Add rich snippet for ratings in form of schema.org
-	 *
-	 * @since 2.7
-	 * @return string
-	 */
-	function wp_ulike_get_posts_microdata(){
-		global $post;
-  		$get_ulike_count = wp_ulike_get_post_likes( $post->ID );
-		// Check data output
-		if( !is_singular() || !wp_ulike_get_setting( 'wp_ulike_posts', 'google_rich_snippets') || $get_ulike_count == 0 ) {
-			return;
-		}
-		// Post meta structure
-		$post_meta  = '<meta itemprop="name" content="' . the_title_attribute( 'echo=0' ) . '" />';
-		$post_meta .= apply_filters( 'wp_ulike_extra_structured_data', NULL );
-		$post_meta .= '<span itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="' . esc_attr( get_the_author() ) . '" /></span>';
-		$post_meta .= '<meta itemprop="datePublished" content="' . esc_attr( get_post_time('c') ) . '" />';
-		// Rating meta structure
-		$ratings_meta  = '<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
-		$ratings_meta	.= '<meta itemprop="bestRating" content="5" />';
-		$ratings_meta .= '<meta itemprop="worstRating" content="1" />';
-		$ratings_meta .= '<meta itemprop="ratingValue" content="'. wp_ulike_get_rating_value( $post->ID ) .'" />';
-		$ratings_meta .= '<meta itemprop="ratingCount" content="' . $get_ulike_count . '" />';
-		$ratings_meta .= '</span>';
-		// Return value
-		$itemtype  = apply_filters( 'wp_ulike_remove_microdata_post_meta', false );
-		return apply_filters( 'wp_ulike_generate_google_structured_data', ( $itemtype ? $ratings_meta : ( $post_meta . $ratings_meta ) ) );
-	}
-	// add_filter( 'wp_ulike_posts_microdata', 'wp_ulike_get_posts_microdata');
-}
-
-/*******************************************************
-  Comments
-*******************************************************/
-
-if( ! function_exists( 'wp_ulike_put_comments' ) ){
-	/**
-	 * Auto insert wp_ulike_comments in the comments content
-	 *
-	 * @since 1.6
-	 * @param string $content
-	 * @return string
-	 */
-	function wp_ulike_put_comments( $content ) {
-		// Stack variable
-		$output = $content;
-
-		if ( wp_ulike_is_true( wp_ulike_get_option( 'comments_group|enable_auto_display', 1 ) ) && ! is_admin() ) {
-			//auto display position
-			$position = wp_ulike_get_option( 'comments_group|auto_display_position', 'bottom' );
-			//add wp_ulike function
-			$button   = wp_ulike_comments('put');
-			switch ($position) {
-				case 'top':
-					$output = $button . $content;
-					break;
-
-				case 'top_bottom':
-					$output = $button . $content . $button;
-					break;
-
-				default:
-					$output = $content . $button;
-					break;
-			}
-		}
-
-		return apply_filters( 'wp_ulike_comment_text', $output, $content );
-	}
-	add_filter( 'comment_text', 'wp_ulike_put_comments' );
-}
-
 
 /*******************************************************
   BuddyPress
@@ -774,6 +485,206 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) && function_exists( 'is_bbpress'
 }
 
 /*******************************************************
+  Cache Plugins
+*******************************************************/
+
+// Litespeed cache plugin
+if( ! function_exists( 'wp_ulike_purge_litespeed_cache' ) && class_exists( 'LiteSpeed\Core' ) ){
+	/**
+	 * Purge litespeed post cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_litespeed_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			if( get_post_type( $ID ) ){
+				do_action( 'litespeed_purge_post', $ID );
+			} else {
+				global $wp;
+				do_action( 'litespeed_purge_url', home_url( add_query_arg( array(), $wp->request ) ) );
+			}
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				do_action( 'litespeed_purge_post', $comment->comment_post_ID );
+			}
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_litespeed_cache'	, 10, 2 );
+}
+
+// w3 total cache plugin
+if( ! function_exists( 'wp_ulike_purge_w3_total_cache' ) && function_exists( 'w3tc_flush_post' ) ){
+	/**
+	 * Purge w3 total post cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_w3_total_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			if( get_post_type( $ID ) ){
+				w3tc_flush_post( $ID );
+			} else {
+				global $wp;
+				w3tc_flush_url( home_url( add_query_arg( array(), $wp->request ) ) );
+			}
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				w3tc_flush_post( $comment->comment_post_ID );
+			}
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_w3_total_cache'	, 10, 2 );
+}
+
+// wp fastest cache plugin
+if( ! function_exists( 'wp_ulike_purge_wp_fastest_cache' ) && class_exists( 'WpFastestCache' ) ){
+	/**
+	 * Purge wp fastest cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_wp_fastest_cache( $ID, $type ){
+		if( !isset( $GLOBALS["wp_fastest_cache"] ) ){
+			return;
+		}
+		$cache_interface = $GLOBALS["wp_fastest_cache"];
+
+		// to remove cache if vote is from homepage or category page or tag
+		if( isset($_SERVER["HTTP_REFERER"]) && $_SERVER["HTTP_REFERER"] ){
+			$url =  parse_url( $_SERVER["HTTP_REFERER"] );
+
+			$url["path"] = isset($url["path"]) ? $url["path"] : "/index.html";
+
+			$paths = array();
+
+			array_push($paths, $cache_interface->getWpContentDir("/cache/all").$url["path"]);
+
+			if(class_exists("WpFcMobileCache")){
+				$wpfc_mobile = new WpFcMobileCache();
+				array_push($paths, $cache_interface->getWpContentDir("/cache/wpfc-mobile-cache").$url["path"]);
+			}
+
+			foreach ($paths as $key => $value){
+				if(file_exists($value)){
+					if(preg_match("/\/(all|wpfc-mobile-cache)\/index\.html$/i", $value)){
+						@unlink($value);
+					}else{
+						$cache_interface->rm_folder_recursively($value);
+					}
+				}
+			}
+		} elseif( in_array( $type, array( '_liked', '_commentliked' ) ) ){
+			$comment_id = false;
+			$post_id    = $ID;
+			if( $type === '_commentliked' ){
+				$comment = get_comment( $ID );
+				if( isset( $comment->comment_post_ID ) ){
+					$comment_id = $ID;
+					$post_id = $comment->comment_post_ID;
+				} else {
+					$post_id = NULL;
+				}
+			}
+			if( ! empty( $post_id ) ){
+				$cache_interface->singleDeleteCache( $comment_id, $post_id );
+			}
+		}
+
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_fastest_cache'	, 10, 2 );
+}
+
+// wp super cache plugin
+if( ! function_exists( 'wp_ulike_purge_wp_super_cache' ) && function_exists( 'wpsc_delete_post_cache' ) ){
+	/**
+	 * Purge super post cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_wp_super_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			if( get_post_type( $ID ) ){
+				wpsc_delete_post_cache( $ID );
+			} else {
+				global $wp;
+				wpsc_delete_url_cache( home_url( add_query_arg( array(), $wp->request ) ) );
+			}
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				wpsc_delete_post_cache( $comment->comment_post_ID );
+			}
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_super_cache'	, 10, 2 );
+}
+
+// wp rocket cache plugin
+if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) && function_exists( 'rocket_clean_post' ) ){
+	/**
+   * Purge wp rocket cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_rocket_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			// Check post type ID
+			if( get_post_type( $ID ) ){
+				rocket_clean_post( $ID );
+			} else {
+				global $wp;
+				rocket_clean_files( home_url( add_query_arg( array(), $wp->request ) ) );
+			}
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				rocket_clean_post( $comment->comment_post_ID );
+			}
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_rocket_cache'	, 10, 2 );
+}
+
+// wp optimize cache plugin
+if( ! function_exists( 'wp_ulike_purge_wp_optimize_cache' ) && class_exists('WPO_Page_Cache') ){
+	/**
+   * Purge wp optimize cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_wp_optimize_cache( $ID, $type ){
+		if( $type === '_liked' ){
+			if( get_post_type( $ID ) ){
+				WPO_Page_Cache::delete_single_post_cache( $ID );
+			} else {
+				global $wp;
+				WPO_Page_Cache::delete_cache_by_url( home_url( add_query_arg( array(), $wp->request ) ) );
+			}
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				WPO_Page_Cache::delete_single_post_cache( $comment->comment_post_ID );
+			}
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_optimize_cache'	, 10, 2 );
+}
+
+/*******************************************************
   Other Plugins
 *******************************************************/
 
@@ -928,264 +839,3 @@ if ( defined( 'ultimatemember_version' ) ) {
 		add_action('um_profile_content_wp-ulike-comments_default', 'wp_ulike_comments_um_profile_content');
 	}
 }
-
-if( ! function_exists( 'wp_ulike_update_meta_data_info' ) ){
-	/**
-	 * Upgrade meta data
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @param integer $user_ID
-	 * @param string $status
-	 * @param boolean $has_log
-	 * @param string $slug
-	 * @param string $table
-	 * @return void
-	 */
-	function wp_ulike_update_meta_data_info( $ID, $type, $user_ID, $status, $has_log, $slug, $table, $is_distinct ){
-
-		// Update total stats
-		if( ( ! $has_log || ! $is_distinct ) && strpos( $status, 'un') === false ){
-			global $wpdb;
-			// update all logs period
-			$wpdb->query( "
-					UPDATE `{$wpdb->prefix}ulike_meta`
-					SET `meta_value` = (`meta_value` + 1)
-					WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
-			" );
-			$wpdb->query( "
-					UPDATE `{$wpdb->prefix}ulike_meta`
-					SET `meta_value` = (`meta_value` + 1)
-					WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
-			" );
-		}
-
-		// Update likers list
-		$get_likers = wp_ulike_get_meta_data( $ID, $slug, 'likers_list', true );
-		if( ! empty( $get_likers ) ){
-			$get_user   = get_userdata( $user_ID );
-			$is_updated = false;
-			if( $get_user ){
-				if( in_array( $get_user->ID, $get_likers ) ){
-					if( strpos( $status, 'un') !== false ){
-						$get_likers = array_diff( $get_likers, array( $get_user->ID ) );
-						$is_updated = true;
-					}
-				} else {
-					if( strpos( $status, 'un') === false ){
-						array_push( $get_likers, $get_user->ID );
-						$is_updated = true;
-					}
-				}
-				// If array list has been changed, then update meta data.
-				if( $is_updated ){
-					wp_ulike_update_meta_data( $ID, $slug, 'likers_list', $get_likers );
-				}
-			}
-		}
-
-		// Delete object cache
-		if( wp_ulike_is_cache_exist() ){
-			wp_cache_delete( 'calculate_new_votes', WP_ULIKE_SLUG );
-			wp_cache_delete( 'count_logs_period_all', WP_ULIKE_SLUG );
-			wp_cache_delete( 1, 'wp_ulike_statistics_meta' );
-		}
-
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_update_meta_data_info'	, 10, 8 );
-}
-
-// Litespeed cache plugin
-if( ! function_exists( 'wp_ulike_purge_litespeed_cache' ) && class_exists( 'LiteSpeed\Core' ) ){
-	/**
-	 * Purge litespeed post cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_litespeed_cache( $ID, $type ){
-		if( $type === '_liked' ){
-			do_action( 'litespeed_purge_post', $ID );
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				do_action( 'litespeed_purge_post', $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_litespeed_cache'	, 10, 2 );
-}
-
-// w3 total cache plugin
-if( ! function_exists( 'wp_ulike_purge_w3_total_cache' ) && function_exists( 'w3tc_pgcache_flush_post' ) ){
-	/**
-	 * Purge w3 total post cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_w3_total_cache( $ID, $type ){
-		if( $type === '_liked' ){
-			w3tc_pgcache_flush_post( $ID );
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				w3tc_pgcache_flush_post( $comment->comment_post_ID );
-			}
-		} else {
-			w3tc_pgcache_flush();
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_w3_total_cache'	, 10, 2 );
-}
-
-// wp fastest cache plugin
-if( ! function_exists( 'wp_ulike_purge_wp_fastest_cache' ) && class_exists( 'WpFastestCache' ) ){
-	/**
-	 * Purge wp fastest cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_wp_fastest_cache( $ID, $type ){
-		if( !isset( $GLOBALS["wp_fastest_cache"] ) ){
-			return;
-		}
-		$cache_interface = $GLOBALS["wp_fastest_cache"];
-
-		// to remove cache if vote is from homepage or category page or tag
-		if( isset($_SERVER["HTTP_REFERER"]) && $_SERVER["HTTP_REFERER"] ){
-			$url =  parse_url( $_SERVER["HTTP_REFERER"] );
-
-			$url["path"] = isset($url["path"]) ? $url["path"] : "/index.html";
-
-			$paths = array();
-
-			array_push($paths, $cache_interface->getWpContentDir("/cache/all").$url["path"]);
-
-			if(class_exists("WpFcMobileCache")){
-				$wpfc_mobile = new WpFcMobileCache();
-				array_push($paths, $cache_interface->getWpContentDir("/cache/wpfc-mobile-cache").$url["path"]);
-			}
-
-			foreach ($paths as $key => $value){
-				if(file_exists($value)){
-					if(preg_match("/\/(all|wpfc-mobile-cache)\/index\.html$/i", $value)){
-						@unlink($value);
-					}else{
-						$cache_interface->rm_folder_recursively($value);
-					}
-				}
-			}
-		} elseif( in_array( $type, array( '_liked', '_commentliked' ) ) ){
-			$comment_id = false;
-			$post_id    = $ID;
-			if( $type === '_commentliked' ){
-				$comment = get_comment( $ID );
-				if( isset( $comment->comment_post_ID ) ){
-					$comment_id = $ID;
-					$post_id = $comment->comment_post_ID;
-				} else {
-					$post_id = NULL;
-				}
-			}
-			if( ! empty( $post_id ) ){
-				$cache_interface->singleDeleteCache( $comment_id, $post_id );
-			}
-		}
-
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_fastest_cache'	, 10, 2 );
-}
-
-// wp super cache plugin
-if( ! function_exists( 'wp_ulike_purge_wp_super_cache' ) && function_exists( 'wpsc_delete_post_cache' ) ){
-	/**
-	 * Purge super post cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_wp_super_cache( $ID, $type ){
-		if( $type === '_liked' ){
-			wpsc_delete_post_cache( $ID );
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				wpsc_delete_post_cache( $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_super_cache'	, 10, 2 );
-}
-
-// wp rocket cache plugin
-if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) && function_exists( 'rocket_clean_post' ) ){
-	/**
-   * Purge wp rocket cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_rocket_cache( $ID, $type ){
-		if( $type === '_liked' ){
-			rocket_clean_post( $ID );
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				rocket_clean_post( $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_rocket_cache'	, 10, 2 );
-}
-
-// wp optimize cache plugin
-if( ! function_exists( 'wp_ulike_purge_wp_optimize_cache' ) && class_exists('WPO_Page_Cache') ){
-	/**
-   * Purge wp optimize cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_wp_optimize_cache( $ID, $type ){
-		if( $type === '_liked' ){
-			WPO_Page_Cache::delete_single_post_cache( $ID );
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				WPO_Page_Cache::delete_single_post_cache( $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_optimize_cache'	, 10, 2 );
-}
-
-// @if DEV
-// function wp_ulike_pro_custom_hreview( $content ){
-// 	global $post;
-
-// 	if( is_singular() && 0 != ( $counter = wp_ulike_get_post_likes( $post->ID ) ) ){
-// 			$content .= sprintf('<div style="display:none" class="hreview-aggregate">
-// 							<div class=item>
-// 							<p class="fn">%s</p>
-// 							</div>
-// 							<span class=rating>%s</span>
-// 							<span class=count>%s</span>
-// 					</div>',
-// 					$post->post_title,
-// 					wp_ulike_get_rating_value( $post->ID ),
-// 					$counter
-// 			);
-// 	}
-
-// 	return $content;
-// }
-// add_filter('the_content', 'wp_ulike_pro_custom_hreview');
-// @endif

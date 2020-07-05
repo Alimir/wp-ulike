@@ -448,8 +448,9 @@ function wp_ulike_put_contents_dir( $content, $file_name = '', $file_dir = null,
  */
 function wp_ulike_save_custom_css(){
     $css_string = wp_ulike_get_custom_style();
+    $css_string = wp_ulike_minify_css( $css_string );
 
-    if ( wp_ulike_put_contents_dir( wp_ulike_minify_css( $css_string ), 'custom.css' ) ) {
+    if ( ! empty( $css_string ) && wp_ulike_put_contents_dir( $css_string, 'custom.css' ) ) {
         update_option( 'wp_ulike_use_inline_custom_css' , 0 ); // disable inline css output
         return true;
     // if the directory is not writable, try inline css fallback
