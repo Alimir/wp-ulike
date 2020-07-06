@@ -25,7 +25,7 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 		// Stack variable
 		$output = $content;
 
-		if ( in_the_loop() && is_main_query() && wp_ulike_is_true( wp_ulike_get_option( 'posts_group|enable_auto_display', 1 ) ) ) {
+		if ( is_singular() && in_the_loop() && is_main_query() && wp_ulike_is_true( wp_ulike_get_option( 'posts_group|enable_auto_display', 1 ) ) ) {
 			//auto display position
 			$position = wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' );
 
