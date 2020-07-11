@@ -26,6 +26,18 @@ class wp_ulike_setting_type_repo {
 		return ! empty( $this->typeSettings['cookie'] ) ? $this->typeSettings['cookie'] : NULL;
 	}
 
+	public function getOptionKey(){
+		return $this->key;
+	}
+
+	public function getTableName(){
+		return ! empty( $this->typeSettings['table'] ) ? $this->typeSettings['table'] : NULL;
+	}
+
+	public function getColumnName(){
+		return ! empty( $this->typeSettings['column'] ) ? $this->typeSettings['column'] : NULL;
+	}
+
 	private function setOptions(){
 		$this->options = wp_ulike_get_option( $this->key );
 	}
