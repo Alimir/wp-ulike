@@ -46,7 +46,18 @@ class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			}
 
 			$settings = new wp_ulike_setting_type_repo( $this->data['type'] );
-			$process  = new wp_ulike_cta_process( $this->data['id'], $settings->getType(), $this->data['factor'], $this->data['template'], $settings );
+
+			if( empty( $settings->getType() ) ){
+				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
+			}
+
+			$process  = new wp_ulike_cta_process( array(
+				'item_id'           => $this->data['id'],
+				'item_type'         => $settings->getType(),
+				'item_factor'       => $this->data['factor'],
+				'item_template'     => $this->data['template'],
+				'item_settings'     => $settings
+			) );
 
 			if( $settings->requireLogin() && ! $this->user ){
 				$this->response['message'] = $settings->getLoginNotice();
@@ -109,7 +120,7 @@ class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	* Provides hook for performing actions before a like/dislike
 	*/
 	private function beforeUpdateAction(){
-		do_action('wp_ulike_before_process', $this->data['id'], $this->data['type'], $this->data['factor'], $this->data['template'], $this->user );
+		do_action_ref_array('wp_ulike_before_process', $this->data );
 	}
 
 	/**

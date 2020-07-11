@@ -21,68 +21,62 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		public static $currentUser;
 
 		/**
-		 * Instance of this class.
-		 *
-		 * @var      object
-		 */
-		protected static $instance  = null;
-
-		/**
 		 * Constructor
 		 */
-		function __construct(){
+		function __construct( $atts = array() ){
 			global $wpdb;
 
+			// Defining default attributes
+			$default_atts = array(
+				'user_id' => NULL,
+				'user_ip' => NULL
+			);
+			$parsed_args = wp_parse_args( $atts, $default_atts );
+
 			$this->wpdb = $wpdb;
-			self::setCurrentIP();
-			self::setIsUserLoggedIn();
-			self::setCurrentUser();
-		}
-
-		private static function setCurrentIP(){
-			self::$currentIP = wp_ulike_get_user_ip();
-		}
-
-		private static function setIsUserLoggedIn(){
-			self::$isUserLoggedIn = is_user_logged_in();
-		}
-
-		private static function setCurrentUser(){
-			self::$currentUser = self::$isUserLoggedIn ? get_current_user_id() : wp_ulike_generate_user_id( self::$currentIP );
+			self::setCurrentIP( $parsed_args['user_ip'] );
+			self::setIsUserLoggedIn( $parsed_args['user_id'] );
+			self::setCurrentUser( $parsed_args['user_id'] );
 		}
 
 		/**
-		 * Update counter value in meta table
+		 * Set current user IP
 		 *
-		 * @param integer $id
-		 * @param string $value
-		 * @param string $slug
-		 * @return integer
+		 * @return void
 		 */
-		private function update_counter_value( $id, $value, $slug ){
-			// Remove 'un' prefix from status.
-			$status  = ltrim( $this->status, 'un');
-
-			// Update meta value
-			if( ! empty( $value ) || is_numeric( $value ) ){
-				$value  = strpos( $this->status, 'un') === false ? $value + 1 : $value - 1;
-			}
-			wp_ulike_update_meta_counter_value( $id, max( $value, 0 ), $slug, $status, $this->is_distinct );
-
-			// Decrease reverse meta value
-			if( $this->is_distinct ){
-				$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
-				$reverse_val = wp_ulike_meta_counter_value( $id, $slug, $reverse_key, $this->is_distinct );
-				if( ! empty( $reverse_val ) || is_numeric( $reverse_val ) ){
-					if( strpos( $this->status, 'un') === false && strpos( $this->prev_status, 'un') === false  ){
-						wp_ulike_update_meta_counter_value( $id, max( $reverse_val - 1, 0 ), $slug, $reverse_key, $this->is_distinct );
-					}
-				}
-			}
-
-			return $value;
+		private static function setCurrentIP( $user_ip ){
+			self::$currentIP = $user_ip === NULL ? wp_ulike_get_user_ip() : $user_ip;
 		}
 
+		/**
+		 * Set is user logged in status
+		 *
+		 * @return void
+		 */
+		private static function setIsUserLoggedIn( $user_id ){
+			self::$isUserLoggedIn = $user_id === NULL ? is_user_logged_in() : true;
+		}
+
+		/**
+		 * Set current user ID
+		 *
+		 * @return void
+		 */
+		private static function setCurrentUser( $user_id ){
+			if( $user_id === NULL ){
+				self::$currentUser = self::$isUserLoggedIn ? get_current_user_id() : wp_ulike_generate_user_id( self::$currentIP );
+			} else {
+				self::$currentUser = $user_id;
+			}
+		}
+
+		/**
+		 * Update current status
+		 *
+		 * @param string $factor
+		 * @param boolean $keep_status
+		 * @return void
+		 */
 		public static function updateStatus( $factor = 'up', $keep_status = false ){
 			if( $factor === 'down' ){
 				self::$currentStatus = self::$prevStatus !== 'dislike' || $keep_status ? 'dislike' : 'undislike';
@@ -92,29 +86,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
-		 * Update user meta status
+		 * Set user previous status
 		 *
-		 * @param integer $id
-		 * @param string $slug
-		 * @param string $status
+		 * @param int $item_type
+		 * @param string $item_id
+		 * @param string $table
+		 * @param string $column
 		 * @return void
 		 */
-		public function update_user_meta_status( $id, $slug, $status ){
-			// Update object cache (memcached issue)
-			$meta_key  = sanitize_key( $slug . '_status' );
-			$user_info = wp_ulike_get_meta_data( $this->user_id, 'user', $meta_key, true );
-
-			if( empty( $user_info ) ){
-				$user_info = array( $id => $status );
-			} else {
-				$user_info[$id] = $status;
-			}
-
-			// Update meta value
-			wp_ulike_update_meta_data( $this->user_id, 'user', $meta_key, $user_info );
-		}
-
-
 		public function setPrevStatus( $item_type, $item_id, $table, $column ){
 			$meta_key  = sanitize_key( $item_type . '_status' );
 			$user_info = wp_ulike_get_meta_data( self::$currentUser, 'user', $meta_key, true );
@@ -151,10 +130,21 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			self::$prevStatus = isset( $user_info[ $item_id ] ) ? $user_info[ $item_id ] : NULL;
 		}
 
+		/**
+		 * Get user previous status
+		 *
+		 * @return string
+		 */
 		public function getPrevStatus(){
 			return self::$prevStatus;
 		}
 
+		/**
+		 * Check permission access
+		 *
+		 * @param array $args
+		 * @return boolean
+		 */
 		public static function hasPermission( $args ){
 			switch ( $args['method'] ) {
 				case 'by_cookie':
@@ -165,6 +155,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			}
 		}
 
+		/**
+		 * Check distinct status by logging method
+		 *
+		 * @param string $method
+		 * @return boolean
+		 */
 		public static function isDistinct( $method ){
 			switch ( $method ) {
 				case 'by_cookie':
@@ -176,6 +172,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			}
 		}
 
+		/**
+		 * Get data args
+		 *
+		 * @param string $type
+		 * @return array
+		 */
 		public static function getDataArgs( $type ){
 			return wp_ulike_get_post_settings_by_type( $type );
 		}
