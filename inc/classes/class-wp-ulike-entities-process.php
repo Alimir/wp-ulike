@@ -183,24 +183,38 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		public function insertData( $item_id, $table, $column ){
+			$
 			$this->wpdb->insert(
 				$this->wpdb->prefix . $table,
 				array(
-					$column     => $item_id,
+					$column     => esc_sql( $item_id ),
 					'date_time' => current_time( 'mysql' ),
-					'ip'        => self::$currentIP,
-					'user_id'   => self::$currentUser,
-					'status'    => self::$currentStatus
+					'ip'        => maybeAnonymiseIp( self::$currentIP ),
+					'user_id'   => esc_sql( self::$currentUser ),
+					'status'    => esc_sql( self::$currentStatus )
 				),
 				array( '%d', '%s', '%s', '%s', '%s' )
 			);
+		}
+
+		private function maybeAnonymiseIp( $ip ){
+			// Check anonymise enable
+			if( wp_ulike_get_option( 'enable_anonymise_ip' ) ){
+				if ( strpos( $ip, "." ) == true ) {
+					$ip = preg_replace('~[0-9]+$~', '0', $ip );
+				} else {
+					$ip = preg_replace('~[0-9]*:[0-9]+$~', '0000:0000', $ip );
+				}
+			}
+
+			return esc_sql( $ip );
 		}
 
 		public function updateData( $item_id, $table, $column ){
 			$this->wpdb->update(
 				$this->wpdb->prefix . $table,
 				array(
-					'status' 	=> self::$currentStatus
+					'status' => esc_sql( self::$currentStatus )
 				),
 				array( $column => $item_id, 'user_id' => self::$currentUser )
 			);
