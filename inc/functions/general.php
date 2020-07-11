@@ -391,14 +391,14 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_display_button( array $args, $deprecated_value = null ){
-		global $wp_ulike_class;
+		$template = new wp_ulike_cta_template( $args );
 
 		if( ! wp_ulike_is_true( $args['only_logged_in_users'] ) || is_user_logged_in() ) {
 			// Return ulike template
-			return $wp_ulike_class->wp_get_ulike( $args );
+			return $template->display();
 		} else {
 			if( $args['logged_out_action'] === 'button' ){
-				return $wp_ulike_class->get_template( $args, 0 );
+				return $template->get_template( 0 );
 			} else {
 				$template = wp_ulike_get_option( $args['options_group'] . '|login_template', sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>', __('You need to login in order to like this post: ',WP_ULIKE_SLUG),
 				wp_login_url( get_permalink() ),
