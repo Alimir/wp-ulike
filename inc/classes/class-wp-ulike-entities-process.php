@@ -182,8 +182,15 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			return wp_ulike_get_post_settings_by_type( $type );
 		}
 
+		/**
+		 * Inset log data
+		 *
+		 * @param integer $item_id
+		 * @param string $table
+		 * @param string $column
+		 * @return void
+		 */
 		public function insertData( $item_id, $table, $column ){
-			$
 			$this->wpdb->insert(
 				$this->wpdb->prefix . $table,
 				array(
@@ -197,6 +204,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			);
 		}
 
+		/**
+		 * Anonymise IP address if option enabled.
+		 *
+		 * @param string $ip
+		 * @return string
+		 */
 		private function maybeAnonymiseIp( $ip ){
 			// Check anonymise enable
 			if( wp_ulike_get_option( 'enable_anonymise_ip' ) ){
@@ -210,6 +223,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			return esc_sql( $ip );
 		}
 
+		/**
+		 * Update log data
+		 *
+		 * @param integer $item_id
+		 * @param string $table
+		 * @param string $column
+		 * @return void
+		 */
 		public function updateData( $item_id, $table, $column ){
 			$this->wpdb->update(
 				$this->wpdb->prefix . $table,
@@ -220,7 +241,15 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			);
 		}
 
-
+		/**
+		 * Update and return counter value
+		 *
+		 * @param integer $item_id
+		 * @param string $item_type
+		 * @param string $item_status
+		 * @param boolean $is_distinct
+		 * @return integer
+		 */
 		public function updateCounterValue( $item_id, $item_type, $item_status, $is_distinct ){
 			// Get current value
 			$value = wp_ulike_get_counter_value( $item_id, $item_type, $item_status, $is_distinct );
@@ -248,6 +277,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			return $value;
 		}
 
+		/**
+		 * Update user meta status
+		 *
+		 * @param integer $item_id
+		 * @param string $item_type
+		 * @param string $item_status
+		 * @return void
+		 */
 		public function updateUserMetaStatus( $item_id, $item_type, $item_status ){
 			// Update object cache (memcached issue)
 			$meta_key  = sanitize_key( $item_type . '_status' );

@@ -11,8 +11,7 @@ class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 		'data'        => NULL
 	);
 
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 		$this->setFormData();
 		$this->setUser();
@@ -20,8 +19,10 @@ class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	}
 
 	/**
-	* Set Form Data
-	*/
+	 * Set Form Data
+	 *
+	 * @return void
+	 */
 	private function setFormData(){
 		$this->data['id']       = isset( $_POST['id'] ) ? intval(sanitize_text_field($_POST['id'])) : NULL;
 		$this->data['type']     = isset( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : NULL;
@@ -30,13 +31,20 @@ class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 		$this->data['template'] = isset( $_POST['template'] ) ? sanitize_text_field($_POST['template']) : 'wpulike-default';
 	}
 
+	/**
+	 * Set current user id if exist
+	 *
+	 * @return void
+	 */
 	private function setUser(){
 		$this->user = is_user_logged_in() ? get_current_user_id() : false;
 	}
 
 	/**
-	* Update the Favorite
-	*/
+	 * Update button
+	 *
+	 * @return void
+	 */
 	private function updateButton(){
 		try {
 			$this->beforeUpdateAction();
@@ -134,8 +142,7 @@ class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	/**
 	* Validate the Favorite
 	*/
-	private function validates()
-	{
+	private function validates(){
 		// Return false when ID not exist
 		if( empty( $this->data['id'] ) ) return false;
 		// Return false when nonce invalid

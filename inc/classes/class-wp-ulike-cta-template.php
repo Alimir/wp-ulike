@@ -28,37 +28,58 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 			$this->setIsDistinct();
 		}
 
+		/**
+		 * Set is distinct param
+		 *
+		 * @return void
+		 */
 		private function setIsDistinct(){
-			$this->isDistinct = parent::isDistinct( $this->item_settings->getMethod() );
+			$this->isDistinct = $this->isDistinct( $this->item_settings->getMethod() );
 		}
 
+		/**
+		 * Display button template
+		 *
+		 * @return string
+		 */
 		public function display(){
-			parent::setPrevStatus( $this->args['slug'], $this->args['id'], $this->args['table'], $this->args['column'] );
+			$this->setPrevStatus( $this->args['slug'], $this->args['id'], $this->args['table'], $this->args['column'] );
 			return $this->get_template( $this->get_method_id() );
 		}
 
+		/**
+		 * Get method ID number
+		 *
+		 * @return integer
+		 */
 		public function get_method_id(){
 			switch( $this->item_settings->getMethod() ){
 				case 'do_not_log':
 					return 1;
 				case 'by_cookie':
-					return parent::hasPermission( array(
+					return $this->hasPermission( array(
 						'method' => $this->item_settings->getMethod(),
 						'type'   => $this->item_settings->getCookieName(),
 						'id'     => $this->args['id']
 					) ) ? 1 : 4;
 				default:
-					if( ! parent::getPrevStatus() ){
+					if( ! $this->getPrevStatus() ){
 						return 1;
 					} else {
-						return substr( parent::getPrevStatus(), 0, 2 ) !== "un" ? 2 : 3;
+						return substr( $this->getPrevStatus(), 0, 2 ) !== "un" ? 2 : 3;
 					}
 			}
 		}
 
+		/**
+		 * Get final template
+		 *
+		 * @param integer $method_id
+		 * @return string
+		 */
 		public function get_template( $method_id ){
 
-			$user_status = parent::getPrevStatus() && $this->isDistinct ? parent::getPrevStatus() : 'like';
+			$user_status = $this->getPrevStatus() && $this->isDistinct ? $this->getPrevStatus() : 'like';
 
 			//Primary button class name
 			$button_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_button_selector', 'wp_ulike_btn' ) );
@@ -117,6 +138,12 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 
 		}
 
+		/**
+		 * Get general class selectors
+		 *
+		 * @param integer $method_id
+		 * @return string
+		 */
 		private function get_general_selectors( $method_id ){
 			$selectors	= str_replace( ".", "", apply_filters( 'wp_ulike_general_selector', 'wp_ulike_general_class' ) );
 
@@ -139,7 +166,6 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 
 			return esc_attr( $selectors );
 		}
-
 
 	}
 

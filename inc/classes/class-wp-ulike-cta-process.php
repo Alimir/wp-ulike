@@ -41,15 +41,25 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 				'user_ip' => $this->parsedArgs['user_ip']
 			) );
 
-			$this->dataArgs = parent::getDataArgs( $this->parsedArgs['item_type'] );
+			$this->dataArgs = $this->getDataArgs( $this->parsedArgs['item_type'] );
 
 			$this->setIsDistinct();
 		}
 
+		/**
+		 * Set is distinct param
+		 *
+		 * @return void
+		 */
 		private function setIsDistinct(){
-			$this->isDistinct = parent::isDistinct( $this->parsedArgs['item_settings']->getMethod() );
+			$this->isDistinct = $this->isDistinct( $this->parsedArgs['item_settings']->getMethod() );
 		}
 
+		/**
+		 * Get status code
+		 *
+		 * @return integer
+		 */
 		public function getStatusCode(){
 			if( ! self::$currentStatus ){
 				return 1;
@@ -62,22 +72,27 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 			}
 		}
 
+		/**
+		 * Update button info
+		 *
+		 * @return void
+		 */
 		public function update(){
-			parent::setPrevStatus( $this->parsedArgs['item_type'], $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
+			$this->setPrevStatus( $this->parsedArgs['item_type'], $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
 
 			switch( $this->parsedArgs['item_settings']->getMethod() ){
 				case 'do_not_log':
-					parent::updateStatus( $this->parsedArgs['item_factor'], true );
+					$this->updateStatus( $this->parsedArgs['item_factor'], true );
 					// Insert log data
 					$this->insertData( $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
 					break;
 				case 'by_cookie':
-					if( parent::hasPermission( array(
+					if( $this->hasPermission( array(
 						'method' => $this->parsedArgs['item_settings']->getMethod(),
 						'type'   => $this->parsedArgs['item_settings']->getCookieName(),
 						'id'     => $this->parsedArgs['item_id']
 					) ) ){
-						parent::updateStatus( $this->parsedArgs['item_factor'], true );
+						$this->updateStatus( $this->parsedArgs['item_factor'], true );
 						// Set cookie
 						setcookie( $this->parsedArgs['item_settings']->getCookieName(). $this->parsedArgs['item_id'], time(), 2147483647, '/' );
 						// Insert log data
@@ -85,8 +100,8 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 					}
 					break;
 				default:
-					parent::updateStatus( $this->parsedArgs['item_factor'] );
-					if( parent::getPrevStatus() ){
+					$this->updateStatus( $this->parsedArgs['item_factor'] );
+					if( $this->getPrevStatus() ){
 						$this->updateData( $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
 					} else {
 						$this->insertData( $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
@@ -98,6 +113,11 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 
 		}
 
+		/**
+		 * Get deprecated ajax process atts
+		 *
+		 * @return array
+		 */
 		public function getAjaxProcessAtts(){
 			return apply_filters( 'wp_ulike_ajax_process_atts', array(
 					"id"                   => $this->parsedArgs['item_id'],
@@ -117,6 +137,11 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 			);
 		}
 
+		/**
+		 * Get action atts
+		 *
+		 * @return array
+		 */
 		public function getActionAtts(){
 			return array(
 				'id'          => $this->parsedArgs['item_id'],
@@ -133,8 +158,6 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		/**
 		 * Get counter value for ajax responses
 		 *
-		 * @param integer $id
-		 * @param string $slug
 		 * @return integer
 		 */
 		public function getCounterValue(){

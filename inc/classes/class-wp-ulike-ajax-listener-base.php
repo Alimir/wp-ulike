@@ -9,16 +9,19 @@ abstract class wp_ulike_ajax_listener_base{
 
 	/**
 	* Send an Error Response
-	* @param $error string
+	*
+	* @param string $error
 	*/
-	protected function sendError($error = null){
-		$error = ( $error ) ? $error : __('There was an error processing the request.', WP_ULIKE_SLUG);
+	protected function sendError( $error = null ){
+		$error = ! empty( $error ) ? $error : __( 'There was an error processing the request.', WP_ULIKE_SLUG );
 		return wp_send_json_error( $error );
 	}
 
 	/**
-	* Send a response
-	*/
+	 * Send a response
+	 *
+	 * @param array $response
+	 */
 	protected function response( $response ){
 		return wp_send_json_success( $response );
 	}
