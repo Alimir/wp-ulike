@@ -14,9 +14,7 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 	class wp_ulike_cta_process extends wp_ulike_entities_process {
 
 		private $parsedArgs;
-
-		private $isDistinct;
-		private $dataArgs;
+		private $infoArgs;
 
 		/**
 		 * Constructor
@@ -37,22 +35,13 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 			$this->parsedArgs = wp_parse_args( $atts, $default_atts );
 
 			parent::__construct( array(
-				'user_id' => $this->parsedArgs['user_id'],
-				'user_ip' => $this->parsedArgs['user_ip']
+				'user_id'     => $this->parsedArgs['user_id'],
+				'user_ip'     => $this->parsedArgs['user_ip'],
+				'item_type'   => $this->parsedArgs['item_type'],
+				'item_method' => $this->parsedArgs['item_settings']->getMethod()
 			) );
 
-			$this->dataArgs = $this->getDataArgs( $this->parsedArgs['item_type'] );
-
-			$this->setIsDistinct();
-		}
-
-		/**
-		 * Set is distinct param
-		 *
-		 * @return void
-		 */
-		private function setIsDistinct(){
-			$this->isDistinct = $this->isDistinct( $this->parsedArgs['item_settings']->getMethod() );
+			$this->infoArgs = $this->getDataInfo();
 		}
 
 		/**
@@ -63,7 +52,7 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		public function getStatusCode(){
 			if( ! $this->getCurrentStatus() ){
 				return 1;
-			} elseif( ! $this->isDistinct ){
+			} elseif( ! $this->isDistinct() ){
 				return 4;
 			} elseif( strpos( $this->getCurrentStatus(), 'un') === 0 ){
 				return 2;
@@ -78,13 +67,13 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		 * @return void
 		 */
 		public function update(){
-			$this->setPrevStatus( $this->parsedArgs['item_type'], $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
+			$this->setPrevStatus( $this->parsedArgs['item_id'] );
 
 			switch( $this->parsedArgs['item_settings']->getMethod() ){
 				case 'do_not_log':
-					$this->updateStatus( $this->parsedArgs['item_factor'], true );
+					$this->setCurrentStatus( $this->parsedArgs['item_factor'], true );
 					// Insert log data
-					$this->insertData( $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
+					$this->insertData( $this->parsedArgs['item_id'] );
 					break;
 				case 'by_cookie':
 					if( $this->hasPermission( array(
@@ -92,25 +81,25 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 						'type'   => $this->parsedArgs['item_settings']->getCookieName(),
 						'id'     => $this->parsedArgs['item_id']
 					) ) ){
-						$this->updateStatus( $this->parsedArgs['item_factor'], true );
+						$this->setCurrentStatus( $this->parsedArgs['item_factor'], true );
 						// Set cookie
 						setcookie( $this->parsedArgs['item_settings']->getCookieName(). $this->parsedArgs['item_id'], time(), 2147483647, '/' );
 						// Insert log data
-						$this->insertData( $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
+						$this->insertData( $this->parsedArgs['item_id'] );
 					}
 					break;
 				default:
-					$this->updateStatus( $this->parsedArgs['item_factor'] );
+					$this->setCurrentStatus( $this->parsedArgs['item_factor'] );
 					if( $this->getPrevStatus() ){
-						$this->updateData( $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
+						$this->updateData( $this->parsedArgs['item_id'] );
 					} else {
-						$this->insertData( $this->parsedArgs['item_id'], $this->dataArgs['table'], $this->dataArgs['column'] );
+						$this->insertData( $this->parsedArgs['item_id'] );
 					}
 					break;
 			}
 
-			$this->updateUserMetaStatus( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'] );
-			$this->updateMetaData( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->dataArgs['table'], $this->isDistinct );
+			$this->updateUserMetaStatus( $this->parsedArgs['item_id'] );
+			$this->updateMetaData( $this->parsedArgs['item_id'] );
 
 		}
 
@@ -124,17 +113,17 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 					"id"                   => $this->parsedArgs['item_id'],
 					"method"               => $this->parsedArgs['item_type'],
 					"type"                 => 'process',
-					"table"                => $this->dataArgs['table'],
-					"column"               => $this->dataArgs['column'],
-					"key"                  => $this->dataArgs['key'],
-					"slug"                 => $this->dataArgs['slug'],
-					"cookie"               => $this->dataArgs['cookie'],
+					"table"                => $this->infoArgs['table'],
+					"column"               => $this->infoArgs['column'],
+					"key"                  => $this->infoArgs['key'],
+					"slug"                 => $this->infoArgs['slug'],
+					"cookie"               => $this->infoArgs['cookie'],
 					"factor"               => $this->parsedArgs['item_factor'],
 					"style"                => $this->parsedArgs['item_template'],
 					"logging_method"       => $this->parsedArgs['item_settings']->getMethod(),
 					"only_logged_in_users" => $this->parsedArgs['item_settings']->requireLogin(),
 					"logged_out_action"    => $this->parsedArgs['item_settings']->anonymousDisplay(),
-				), $this->parsedArgs['item_id'], $this->dataArgs
+				), $this->parsedArgs['item_id'], $this->infoArgs
 			);
 		}
 
@@ -146,13 +135,13 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		public function getActionAtts(){
 			return array(
 				'id'          => $this->parsedArgs['item_id'],
-				'key'         => $this->dataArgs['key'],
+				'key'         => $this->infoArgs['key'],
 				'user_id'     => $this->getCurrentUser(),
 				'status'      => $this->getCurrentStatus(),
 				'has_log'     => ! $this->getPrevStatus() ? 0 : 1,
 				'slug'        => $this->parsedArgs['item_type'],
-				'table'       => $this->dataArgs['table'],
-				'is_distinct' => $this->isDistinct
+				'table'       => $this->infoArgs['table'],
+				'is_distinct' => $this->isDistinct()
 			);
 		}
 
@@ -162,9 +151,9 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		 * @return integer
 		 */
 		public function getCounterValue(){
-			$counter_val = $this->updateCounterValue( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->isDistinct );
+			$counter_val = $this->updateCounterMeta( $this->parsedArgs['item_id'] );
 			$counter_val = wp_ulike_format_number( $counter_val, $this->getCurrentStatus() );
-			return apply_filters( 'wp_ulike_ajax_counter_value', $counter_val, $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct );
+			return apply_filters( 'wp_ulike_ajax_counter_value', $counter_val, $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct() );
 		}
 
 	}

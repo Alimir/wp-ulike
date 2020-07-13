@@ -15,26 +15,16 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 
 		protected $item_settings, $method_id, $args;
 
-		private $isDistinct;
-
 		/**
 		 * Constructor
 		 */
 		function __construct( $args ){
 			$this->args = $args;
 			$this->item_settings = new wp_ulike_setting_type_repo( $this->args['slug'] );
-			parent::__construct();
-
-			$this->setIsDistinct();
-		}
-
-		/**
-		 * Set is distinct param
-		 *
-		 * @return void
-		 */
-		private function setIsDistinct(){
-			$this->isDistinct = $this->isDistinct( $this->item_settings->getMethod() );
+			parent::__construct(array(
+				'item_type'   => $this->args['slug'],
+				'item_method' => $this->item_settings->getMethod()
+			));
 		}
 
 		/**
@@ -43,7 +33,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		 * @return string
 		 */
 		public function display(){
-			$this->setPrevStatus( $this->args['slug'], $this->args['id'], $this->args['table'], $this->args['column'] );
+			$this->setPrevStatus( $this->args['id'] );
 			return $this->get_template( $this->get_method_id() );
 		}
 
@@ -105,9 +95,9 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 			// Add unique class name for each button
 			$button_class_name .= strtolower( ' wp_' . $this->args['method'] . '_' . $this->args['id'] );
 
-			$total_likes   = wp_ulike_get_counter_value( $this->args['id'], $this->args['slug'], 'like', $this->isDistinct );
+			$total_likes   = wp_ulike_get_counter_value( $this->args['id'], $this->args['slug'], 'like', $this->isDistinct() );
 			$formatted_val = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $total_likes ) .'</span>' , $total_likes );
-			$this->args['is_distinct'] = $this->isDistinct;
+			$this->args['is_distinct'] = $this->isDistinct();
 
 			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(
 					"ID"               => esc_attr( $this->args['id'] ),
