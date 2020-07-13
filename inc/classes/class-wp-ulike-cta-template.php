@@ -79,8 +79,6 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		 */
 		public function get_template( $method_id ){
 
-			$user_status = $this->getPrevStatus() && $this->isDistinct ? $this->getPrevStatus() : 'like';
-
 			//Primary button class name
 			$button_class_name	= str_replace( ".", "", apply_filters( 'wp_ulike_button_selector', 'wp_ulike_btn' ) );
 			//Button text value
@@ -97,7 +95,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 				}
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';
- 				if( in_array( $method_id, array( 2, 4 ) ) && strpos( $user_status, 'dis') !== 0){
+ 				if( in_array( $method_id, array( 2, 4 ) ) && strpos( $this->getPrevStatus(), 'dis') !== 0){
 					$button_text = wp_ulike_get_button_text( 'unlike', $this->args['setting'] );
 				} else {
 					$button_text = wp_ulike_get_button_text( 'like', $this->args['setting'] );
@@ -119,7 +117,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					"total_likes"      => $total_likes,
 					"type"             => esc_attr( $this->args['method'] ),
 					"status"           => esc_attr( $method_id ),
-					"user_status"      => esc_attr( $user_status ),
+					"user_status"      => esc_attr( $this->getPrevStatus() ),
 					"setting"      	   => esc_attr( $this->args['setting'] ),
 					"attributes"       => $this->args['attributes'],
 					"style"            => esc_html( $this->args['style'] ),

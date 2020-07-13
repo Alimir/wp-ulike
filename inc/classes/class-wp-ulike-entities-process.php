@@ -71,6 +71,33 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
+		 * Get current user id
+		 *
+		 * @return string
+		 */
+		public function getCurrentUser(){
+			return self::$currentUser;
+		}
+
+		/**
+		 * Get user previous status
+		 *
+		 * @return string
+		 */
+		public function getPrevStatus(){
+			return self::$prevStatus;
+		}
+
+		/**
+		 * Get user current status
+		 *
+		 * @return string
+		 */
+		public function getCurrentStatus(){
+			return self::$currentStatus;
+		}
+
+		/**
 		 * Update current status
 		 *
 		 * @param string $factor
@@ -128,15 +155,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			}
 
 			self::$prevStatus = isset( $user_info[ $item_id ] ) ? $user_info[ $item_id ] : NULL;
-		}
-
-		/**
-		 * Get user previous status
-		 *
-		 * @return string
-		 */
-		public function getPrevStatus(){
-			return self::$prevStatus;
 		}
 
 		/**
@@ -246,20 +264,19 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 *
 		 * @param integer $item_id
 		 * @param string $item_type
-		 * @param string $item_status
 		 * @param boolean $is_distinct
 		 * @return integer
 		 */
-		public function updateCounterValue( $item_id, $item_type, $item_status, $is_distinct ){
+		public function updateCounterValue( $item_id, $item_type, $is_distinct ){
 			// Get current value
-			$value = wp_ulike_get_counter_value( $item_id, $item_type, $item_status, $is_distinct );
+			$value = wp_ulike_get_counter_value( $item_id, $item_type, self::$currentStatus, $is_distinct );
 
 			// Remove 'un' prefix from status.
-			$status  = ltrim( $item_status, 'un');
+			$status  = ltrim( self::$currentStatus, 'un');
 
 			// Update meta value
 			if( ! empty( $value ) || is_numeric( $value ) ){
-				$value  = strpos( $item_status, 'un') === false ? $value + 1 : $value - 1;
+				$value  = strpos( self::$currentStatus, 'un') === false ? $value + 1 : $value - 1;
 			}
 			wp_ulike_update_meta_counter_value( $item_id, max( $value, 0 ), $item_type, $status, $is_distinct );
 
@@ -268,7 +285,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
 				$reverse_val = wp_ulike_meta_counter_value( $item_id, $item_type, $reverse_key, $is_distinct );
 				if( ! empty( $reverse_val ) || is_numeric( $reverse_val ) ){
-					if( strpos( $item_status, 'un') === false && strpos( self::getPrevStatus(), 'un') === false  ){
+					if( strpos( self::$currentStatus, 'un') === false && strpos( self::getPrevStatus(), 'un') === false  ){
 						wp_ulike_update_meta_counter_value( $item_id, max( $reverse_val - 1, 0 ), $item_type, $reverse_key, $is_distinct );
 					}
 				}
@@ -282,22 +299,78 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 *
 		 * @param integer $item_id
 		 * @param string $item_type
-		 * @param string $item_status
 		 * @return void
 		 */
-		public function updateUserMetaStatus( $item_id, $item_type, $item_status ){
+		public function updateUserMetaStatus( $item_id, $item_type ){
 			// Update object cache (memcached issue)
 			$meta_key  = sanitize_key( $item_type . '_status' );
 			$user_info = wp_ulike_get_meta_data( self::$currentUser, 'user', $meta_key, true );
 
 			if( empty( $user_info ) ){
-				$user_info = array( $item_id => $item_status );
+				$user_info = array( $item_id => self::$currentStatus );
 			} else {
-				$user_info[$item_id] = $item_status;
+				$user_info[$item_id] = self::$currentStatus;
 			}
 
 			// Update meta value
 			wp_ulike_update_meta_data( self::$currentUser, 'user', $meta_key, $user_info );
+		}
+
+		/**
+		 * Update user meta status
+		 *
+		 * @param integer $item_id
+		 * @param string $item_type
+		 * @param string $table
+		 * @param boolean $is_distinct
+		 * @return void
+		 */
+		public function updateMetaData( $item_id, $item_type, $table, $is_distinct ){
+			// Update total stats
+			if( ( ! self::$prevStatus || ! $is_distinct ) && strpos( self::$currentStatus, 'un') === false ){
+				// update all logs period
+				$this->wpdb->query( "
+						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						SET `meta_value` = (`meta_value` + 1)
+						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
+				" );
+				$this->wpdb->query( "
+						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						SET `meta_value` = (`meta_value` + 1)
+						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
+				" );
+			}
+
+			// Update likers list
+			$get_likers = wp_ulike_get_meta_data( $item_id, $item_type, 'likers_list', true );
+			if( ! empty( $get_likers ) ){
+				$get_user   = get_userdata( self::$currentUser );
+				$is_updated = false;
+				if( $get_user ){
+					if( in_array( $get_user->ID, $get_likers ) ){
+						if( strpos( self::$currentStatus, 'un') !== false ){
+							$get_likers = array_diff( $get_likers, array( $get_user->ID ) );
+							$is_updated = true;
+						}
+					} else {
+						if( strpos( self::$currentStatus, 'un') === false ){
+							array_push( $get_likers, $get_user->ID );
+							$is_updated = true;
+						}
+					}
+					// If array list has been changed, then update meta data.
+					if( $is_updated ){
+						wp_ulike_update_meta_data( $item_id, $item_type, 'likers_list', $get_likers );
+					}
+				}
+			}
+
+			// Delete object cache
+			if( wp_ulike_is_cache_exist() ){
+				wp_cache_delete( 'calculate_new_votes', WP_ULIKE_SLUG );
+				wp_cache_delete( 'count_logs_period_all', WP_ULIKE_SLUG );
+				wp_cache_delete( 1, 'wp_ulike_statistics_meta' );
+			}
 		}
 
 	}

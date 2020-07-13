@@ -61,11 +61,11 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		 * @return integer
 		 */
 		public function getStatusCode(){
-			if( ! self::$currentStatus ){
+			if( ! $this->getCurrentStatus() ){
 				return 1;
 			} elseif( ! $this->isDistinct ){
 				return 4;
-			} elseif( strpos( self::$currentStatus, 'un') === 0 ){
+			} elseif( strpos( $this->getCurrentStatus(), 'un') === 0 ){
 				return 2;
 			} else {
 				return 3;
@@ -109,7 +109,8 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 					break;
 			}
 
-			$this->updateUserMetaStatus( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], parent::$currentStatus );
+			$this->updateUserMetaStatus( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'] );
+			$this->updateMetaData( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->dataArgs['table'], $this->isDistinct );
 
 		}
 
@@ -146,9 +147,9 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 			return array(
 				'id'          => $this->parsedArgs['item_id'],
 				'key'         => $this->dataArgs['key'],
-				'user_id'     => parent::$currentUser,
-				'status'      => parent::$currentStatus,
-				'has_log'     => ! parent::$prevStatus ? 0 : 1,
+				'user_id'     => $this->getCurrentUser(),
+				'status'      => $this->getCurrentStatus(),
+				'has_log'     => ! $this->getPrevStatus() ? 0 : 1,
 				'slug'        => $this->parsedArgs['item_type'],
 				'table'       => $this->dataArgs['table'],
 				'is_distinct' => $this->isDistinct
@@ -161,9 +162,9 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		 * @return integer
 		 */
 		public function getCounterValue(){
-			$counter_val = $this->updateCounterValue( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], parent::$currentStatus, $this->isDistinct );
-			$counter_val = wp_ulike_format_number( $counter_val, parent::$currentStatus );
-			return apply_filters( 'wp_ulike_ajax_counter_value', $counter_val, $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], parent::$currentStatus, $this->isDistinct );
+			$counter_val = $this->updateCounterValue( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->isDistinct );
+			$counter_val = wp_ulike_format_number( $counter_val, $this->getCurrentStatus() );
+			return apply_filters( 'wp_ulike_ajax_counter_value', $counter_val, $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct );
 		}
 
 	}
