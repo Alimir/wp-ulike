@@ -263,6 +263,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 
 			case 'likeThisActivity':
 			case 'buddypress':
+			case 'activity':
 				$settings = array(
 					'setting'  => 'buddypress_group',
 					'table'    => 'ulike_activities',
@@ -275,6 +276,7 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 
 			case 'likeThisTopic':
 			case 'bbpress':
+			case 'topic':
 				$settings = array(
 					'setting'  => 'bbpress_group',
 					'table'    => 'ulike_forums',
