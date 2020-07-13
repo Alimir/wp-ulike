@@ -281,11 +281,17 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			wp_ulike_update_meta_counter_value( $item_id, max( $value, 0 ), $item_type, $status, $is_distinct );
 
 			// Decrease reverse meta value
-			if( $is_distinct ){
-				$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
-				$reverse_val = wp_ulike_meta_counter_value( $item_id, $item_type, $reverse_key, $is_distinct );
-				if( ! empty( $reverse_val ) || is_numeric( $reverse_val ) ){
-					if( strpos( self::$currentStatus, 'un') === false && strpos( self::getPrevStatus(), 'un') === false  ){
+			if( $is_distinct && self::$prevStatus ){
+				// Check user conditions
+				if( ltrim( self::$prevStatus, 'un') !== $status &&
+					strpos( self::$currentStatus, 'un') === false &&
+					strpos( self::$prevStatus, 'un') === false ){
+					// Get reverse key
+					$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
+					// Get reverse counter value
+					$reverse_val = wp_ulike_meta_counter_value( $item_id, $item_type, $reverse_key, $is_distinct );
+					// Update if reverse value exist
+					if( ! empty( $reverse_val ) || is_numeric( $reverse_val ) ){
 						wp_ulike_update_meta_counter_value( $item_id, max( $reverse_val - 1, 0 ), $item_type, $reverse_key, $is_distinct );
 					}
 				}
@@ -317,7 +323,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
-		 * Update user meta status
+		 * Update meta data
 		 *
 		 * @param integer $item_id
 		 * @param string $item_type
