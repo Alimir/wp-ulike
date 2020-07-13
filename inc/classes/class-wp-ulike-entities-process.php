@@ -196,7 +196,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				array(
 					$column     => esc_sql( $item_id ),
 					'date_time' => current_time( 'mysql' ),
-					'ip'        => maybeAnonymiseIp( self::$currentIP ),
+					'ip'        => $this->maybeAnonymiseIp( self::$currentIP ),
 					'user_id'   => esc_sql( self::$currentUser ),
 					'status'    => esc_sql( self::$currentStatus )
 				),
