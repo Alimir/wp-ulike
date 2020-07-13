@@ -762,36 +762,45 @@ if ( defined( 'ultimatemember_version' ) ) {
 		 * @param array $args
 		 * @return void
 		 */
-		function wp_ulike_posts_um_profile_content( $args ) {
-			global $wp_ulike_class,$ultimatemember;
-
+		function wp_ulike_posts_um_profile_content() {
+			//Main data
 			$args = array(
-				"user_id" 	=> um_profile_id(),			//User ID
-				"col" 		=> 'post_id',				//Table Column (post_id,comment_id,activity_id,topic_id)
-				"table" 	=> 'ulike',					//Table Name
-				"limit" 	=> 10,						//limit Number
+				"type"       => 'post',
+				"rel_type"   => 'post',
+				"status"     => 'like',
+				"user_id"    => um_profile_id(),
+				"is_popular" => false,
+				"limit"      => 10
 			);
 
-			$user_logs = $wp_ulike_class->get_current_user_likes($args);
+			$get_items = wp_ulike_get_popular_items_ids( $args );
 
-			if($user_logs != null){
-				echo '<div class="um-profile-note"><span>'. __('Recent Posts Liked',WP_ULIKE_SLUG).'</span></div>';
-				foreach ($user_logs as $user_log) {
-					$get_post 	= get_post(stripslashes($user_log->post_id));
-					$get_date 	= $user_log->date_time;
+			$query_args = array(
+				'post__in'       => $get_items,
+				'orderby'        => 'post__in',
+				'posts_per_page' => $args['limit']
+			);
 
-					echo '<div class="um-item">';
-					echo '<div class="um-item-link">
-						  <i class="um-icon-ios-paper"></i>
-						  <a href="'.get_permalink($get_post->ID).'">'.$get_post->post_title.'</a>
-						  </div>';
-					echo '<div class="um-item-meta">
-						  <span>'.wp_ulike_date_i18n($get_date).'</span>
-						  <span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_post_likes( $get_post->ID ).'</span>
-						  </div>';
-					echo '</div>';
-				}
-			} else echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. __('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			$query = new WP_Query( $query_args );
+
+			if( $query->have_posts() ):
+					while( $query->have_posts() ): $query->the_post();
+						echo '<div class="um-item">';
+						echo '<div class="um-item-link">
+								<i class="um-icon-ios-paper"></i>
+								<a href="'.get_permalink().'">'.get_the_title().'</a>
+								</div>';
+						echo '<div class="um-item-meta">
+								<span>'.get_the_date().'</span>
+								<span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_post_likes( get_the_ID() ).'</span>
+								</div>';
+						echo '</div>';
+					endwhile;
+			else:
+				echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. __('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			endif;
+			wp_reset_postdata();
+
 		}
 		add_action('um_profile_content_wp-ulike-posts_default', 'wp_ulike_posts_um_profile_content');
 	}
@@ -804,37 +813,47 @@ if ( defined( 'ultimatemember_version' ) ) {
 		 * @param array $args
 		 * @return void
 		 */
-		function wp_ulike_comments_um_profile_content( $args ) {
-			global $wp_ulike_class,$ultimatemember;
-
+		function wp_ulike_comments_um_profile_content() {
+			//Main data
 			$args = array(
-				"user_id" 	=> um_profile_id(),			//User ID
-				"col" 		=> 'comment_id',			//Table Column (post_id,comment_id,activity_id,topic_id)
-				"table" 	=> 'ulike_comments',		//Table Name
-				"limit" 	=> 10,						//limit Number
+				"type"       => 'comment',
+				"rel_type"   => '',
+				"status"     => 'like',
+				"user_id"    => um_profile_id(),
+				"is_popular" => false,
+				"limit"      => 10
 			);
 
-			$user_logs = $wp_ulike_class->get_current_user_likes($args);
+			$get_items = wp_ulike_get_popular_items_ids( $args );
 
-			if($user_logs != null){
-				echo '<div class="um-profile-note"><span>'. __('Recent Comments Liked',WP_ULIKE_SLUG).'</span></div>';
-				foreach ($user_logs as $user_log) {
-					$comment 	= get_comment(stripslashes($user_log->comment_id));
-					$get_date 	= $user_log->date_time;
+			$query_args = array(
+				'comment__in'    => $get_items,
+				'orderby'        => 'comment__in',
+				'posts_per_page' => $args['limit']
+			);
 
-					echo '<div class="um-item">';
-					echo '<div class="um-item-link">
-						  <i class="um-icon-ios-chatboxes"></i>
-						  <a href="'.get_comment_link($comment->comment_ID).'">'.$comment->comment_content .'</a>
-						  <em style="font-size:.7em;padding:0 10px;"><span class="um-faicon-quote-left"></span> '.$comment->comment_author.' <span class="um-faicon-quote-right"></span></em>
-						  </div>';
-					echo '<div class="um-item-meta">
-						  <span>'.wp_ulike_date_i18n($get_date).'</span>
-						  <span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_comment_likes( $comment->comment_ID ).'</span>
-						  </div>';
-					echo '</div>';
-				}
-			} else echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. __('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			// The Query
+			$comments_query = new WP_Comment_Query;
+			$comments = $comments_query->query( $query_args );
+
+			// Comment Loop
+			if ( $comments ) {
+					foreach ( $comments as $comment ) {
+						echo '<div class="um-item">';
+						echo '<div class="um-item-link">
+								<i class="um-icon-ios-chatboxes"></i>
+								<a href="'.get_comment_link($comment->comment_ID).'">'.$comment->comment_content .'</a>
+								<em style="font-size:.7em;padding:0 10px;"><span class="um-faicon-quote-left"></span> '.$comment->comment_author.' <span class="um-faicon-quote-right"></span></em>
+								</div>';
+						echo '<div class="um-item-meta">
+								<span>'.get_comment_date( '', $comment->comment_ID ).'</span>
+								<span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_comment_likes( $comment->comment_ID ).'</span>
+								</div>';
+						echo '</div>';
+					}
+			} else {
+				echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. __('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			}
 		}
 		add_action('um_profile_content_wp-ulike-comments_default', 'wp_ulike_comments_um_profile_content');
 	}
