@@ -149,7 +149,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @param boolean $keep_status
 		 * @return void
 		 */
-		public static function setCurrentStatus( $factor = 'up', $keep_status = false ){
+		public static function setCurrentStatus( $factor = 'up', $keep_status = false, $force_status = false ){
+			if( $force_status ){
+				self::$currentStatus = $force_status;
+				return;
+			}
+
 			if( $factor === 'down' ){
 				self::$currentStatus = self::$prevStatus !== 'dislike' || $keep_status ? 'dislike' : 'undislike';
 			} else {
@@ -235,10 +240,10 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * Inset log data
 		 *
 		 * @param integer $item_id
-		 * @return void
+		 * @return integer|false
 		 */
 		public function insertData( $item_id ){
-			$this->wpdb->insert(
+			return $this->wpdb->insert(
 				$this->wpdb->prefix . self::$dataInfo['table'],
 				array(
 					self::$dataInfo['column'] => esc_sql( $item_id ),
@@ -274,10 +279,10 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * Update log data
 		 *
 		 * @param integer $item_id
-		 * @return void
+		 * @return integer|false
 		 */
 		public function updateData( $item_id ){
-			$this->wpdb->update(
+			return $this->wpdb->update(
 				$this->wpdb->prefix . self::$dataInfo['table'],
 				array(
 					'status' => esc_sql( self::$currentStatus )
