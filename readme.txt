@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, favorite, statistics, multisite, rating, votin
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.4.2
-Stable tag: 4.3.0
+Stable tag: 4.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,6 +151,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.3.1 =
+* Fixed: Third-party plugin issues.
 
 = 4.3.0 =
 * Added: ‌New php classification for front-end processes.
