@@ -141,6 +141,8 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 	 * @return string
 	 */
 	function wp_ulike_get_user_ip(){
+		$final_ip = '127.0.0.1';
+
 		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
 			if ( array_key_exists( $key, $_SERVER ) === true ) {
 				foreach ( explode(',', $_SERVER[$key]) as $ip ) {
@@ -148,13 +150,13 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 					$ip = trim( $ip );
 					// attempt to validate IP
 					if ( wp_ulike_validate_ip( $ip ) ) {
-						return $ip;
+						$final_ip = $ip;
 					}
 				}
 			}
 		}
 
-		return '127.0.0.1';
+		return $final_ip;
 	}
 }
 

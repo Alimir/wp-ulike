@@ -50,7 +50,7 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 
 		return apply_filters( 'wp_ulike_the_content', $output, $content );
 	}
-	add_filter('the_content', 'wp_ulike_put_posts');
+	add_filter( 'the_content', 'wp_ulike_put_posts', 15 );
 }
 
 /*******************************************************
@@ -91,7 +91,7 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 
 		return apply_filters( 'wp_ulike_comment_text', $output, $content );
 	}
-	add_filter( 'comment_text', 'wp_ulike_put_comments' );
+	add_filter( 'comment_text', 'wp_ulike_put_comments', 15 );
 }
 
 /*******************************************************
@@ -206,72 +206,6 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 		echo !empty( $return_style ) ? sprintf( '<style>%s</style>', $return_style ) : '';
 	}
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_update_button_icon', 1 );
-}
-
-if( ! function_exists( 'wp_ulike_update_meta_data_info' ) ){
-	/**
-	 * Upgrade meta data
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @param integer $user_ID
-	 * @param string $status
-	 * @param boolean $has_log
-	 * @param string $slug
-	 * @param string $table
-	 * @return void
-	 */
-	function wp_ulike_update_meta_data_info( $ID, $type, $user_ID, $status, $has_log, $slug, $table, $is_distinct ){
-
-		// Update total stats
-		if( ( ! $has_log || ! $is_distinct ) && strpos( $status, 'un') === false ){
-			global $wpdb;
-			// update all logs period
-			$wpdb->query( "
-					UPDATE `{$wpdb->prefix}ulike_meta`
-					SET `meta_value` = (`meta_value` + 1)
-					WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
-			" );
-			$wpdb->query( "
-					UPDATE `{$wpdb->prefix}ulike_meta`
-					SET `meta_value` = (`meta_value` + 1)
-					WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
-			" );
-		}
-
-		// Update likers list
-		$get_likers = wp_ulike_get_meta_data( $ID, $slug, 'likers_list', true );
-		if( ! empty( $get_likers ) ){
-			$get_user   = get_userdata( $user_ID );
-			$is_updated = false;
-			if( $get_user ){
-				if( in_array( $get_user->ID, $get_likers ) ){
-					if( strpos( $status, 'un') !== false ){
-						$get_likers = array_diff( $get_likers, array( $get_user->ID ) );
-						$is_updated = true;
-					}
-				} else {
-					if( strpos( $status, 'un') === false ){
-						array_push( $get_likers, $get_user->ID );
-						$is_updated = true;
-					}
-				}
-				// If array list has been changed, then update meta data.
-				if( $is_updated ){
-					wp_ulike_update_meta_data( $ID, $slug, 'likers_list', $get_likers );
-				}
-			}
-		}
-
-		// Delete object cache
-		if( wp_ulike_is_cache_exist() ){
-			wp_cache_delete( 'calculate_new_votes', WP_ULIKE_SLUG );
-			wp_cache_delete( 'count_logs_period_all', WP_ULIKE_SLUG );
-			wp_cache_delete( 1, 'wp_ulike_statistics_meta' );
-		}
-
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_update_meta_data_info'	, 10, 8 );
 }
 
 // @if DEV

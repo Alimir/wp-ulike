@@ -1,6 +1,6 @@
 <?php
 /**
- * WP ULike Process Class
+ * Old WP ULike Process Class
  * // @echo HEADER
  */
 
