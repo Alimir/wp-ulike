@@ -47,7 +47,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	 */
 	private function updateButton(){
 		try {
-			$this->beforeUpdateAction();
+			$this->beforeUpdateAction( $this->data );
 
 			if ( !$this->validates() ){
 				throw new \Exception( __( 'Invalid format.', WP_ULIKE_SLUG ) );
@@ -127,8 +127,8 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	* Before Update Action
 	* Provides hook for performing actions before a like/dislike
 	*/
-	private function beforeUpdateAction(){
-		do_action_ref_array('wp_ulike_before_process', $this->data );
+	private function beforeUpdateAction( $args = array() ){
+		do_action_ref_array('wp_ulike_before_process', $args );
 	}
 
 	/**
