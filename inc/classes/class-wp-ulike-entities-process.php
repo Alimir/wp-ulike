@@ -14,14 +14,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 	class wp_ulike_entities_process {
 
 		private $wpdb;
-		public static $currentStatus = 'like';
-		public static $isUserLoggedIn;
-		public static $prevStatus;
-		public static $currentIP;
-		public static $currentUser;
-		public static $dataInfo;
-		public static $itemType;
-		public static $itemMethod;
+		protected static $currentStatus = 'like';
+		protected static $isUserLoggedIn;
+		protected static $prevStatus;
+		protected static $currentIP;
+		protected static $currentUser;
+		protected static $dataInfo;
+		protected static $itemType;
+		protected static $itemMethod;
 
 		/**
 		 * Constructor
@@ -52,7 +52,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 *
 		 * @return void
 		 */
-		private static function setCurrentIP( $user_ip ){
+		protected static function setCurrentIP( $user_ip ){
 			self::$currentIP = $user_ip === NULL ? wp_ulike_get_user_ip() : $user_ip;
 		}
 
@@ -61,7 +61,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 *
 		 * @return void
 		 */
-		private static function setItemType( $item_type ){
+		protected static function setItemType( $item_type ){
 			self::$itemType = $item_type;
 		}
 
@@ -70,7 +70,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 *
 		 * @return void
 		 */
-		private static function setItemMethod( $item_method ){
+		protected static function setItemMethod( $item_method ){
 			self::$itemMethod = $item_method;
 		}
 
@@ -79,7 +79,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 *
 		 * @return void
 		 */
-		private static function setDataInfo(){
+		protected static function setDataInfo(){
 			self::$dataInfo = wp_ulike_get_post_settings_by_type( self::$itemType );
 		}
 
@@ -88,7 +88,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 *
 		 * @return void
 		 */
-		private static function setIsUserLoggedIn( $user_id ){
+		protected static function setIsUserLoggedIn( $user_id ){
 			self::$isUserLoggedIn = $user_id === NULL ? is_user_logged_in() : true;
 		}
 
@@ -97,7 +97,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 *
 		 * @return void
 		 */
-		private static function setCurrentUser( $user_id ){
+		protected static function setCurrentUser( $user_id ){
 			if( $user_id === NULL ){
 				self::$currentUser = self::$isUserLoggedIn ? get_current_user_id() : wp_ulike_generate_user_id( self::$currentIP );
 			} else {
@@ -262,7 +262,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @param string $ip
 		 * @return string
 		 */
-		private function maybeAnonymiseIp( $ip ){
+		protected function maybeAnonymiseIp( $ip ){
 			// Check anonymise enable
 			if( wp_ulike_get_option( 'enable_anonymise_ip' ) ){
 				if ( strpos( $ip, "." ) == true ) {

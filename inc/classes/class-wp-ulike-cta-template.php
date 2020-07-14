@@ -13,7 +13,9 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 
 	class wp_ulike_cta_template extends wp_ulike_entities_process{
 
-		protected $item_settings, $method_id, $args;
+		protected $item_settings;
+		protected $method_id;
+		protected $args;
 
 		/**
 		 * Constructor
@@ -132,7 +134,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		 * @param integer $method_id
 		 * @return string
 		 */
-		private function get_general_selectors( $method_id ){
+		public function get_general_selectors( $method_id ){
 			$selectors	= str_replace( ".", "", apply_filters( 'wp_ulike_general_selector', 'wp_ulike_general_class' ) );
 
 			switch ( $method_id ){
