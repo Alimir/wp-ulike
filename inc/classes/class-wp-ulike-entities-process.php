@@ -183,7 +183,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					esc_sql( $this->wpdb->prefix . self::$dataInfo['table'] ),
 					esc_sql( self::$dataInfo['column'] ),
 					esc_sql( $item_id ),
-					esc_sql( self::$currentUser ),
+					esc_sql( self::$currentUser )
 				);
 
 				// Get results
