@@ -98,9 +98,7 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 					break;
 			}
 
-			$this->updateUserMetaStatus( $this->parsedArgs['item_id'] );
 			$this->updateMetaData( $this->parsedArgs['item_id'] );
-
 		}
 
 		/**

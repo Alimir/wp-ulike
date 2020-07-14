@@ -347,28 +347,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
-		 * Update meta data
+		 * Update likers meta list
 		 *
 		 * @param integer $item_id
 		 * @return void
 		 */
-		public function updateMetaData( $item_id ){
-			// Update total stats
-			if( ( ! self::$prevStatus || ! $this->isDistinct() ) && strpos( self::$currentStatus, 'un') === false ){
-				// update all logs period
-				$this->wpdb->query( "
-						UPDATE `{$this->wpdb->prefix}ulike_meta`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
-				" );
-				$table = self::$dataInfo['table'];
-				$this->wpdb->query( "
-						UPDATE `{$this->wpdb->prefix}ulike_meta`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
-				" );
-			}
-
+		public function updateLikerMetaList( $item_id ){
 			// Update likers list
 			$get_likers = wp_ulike_get_meta_data( $item_id, self::$itemType, 'likers_list', true );
 			if( ! empty( $get_likers ) ){
@@ -392,13 +376,51 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					}
 				}
 			}
+		}
 
+		/**
+		 * Update stats meta data
+		 *
+		 * @param integer $item_id
+		 * @return void
+		 */
+		public function updateStatsMetaData( $item_id ){
+			// Update total stats
+			if( ( ! self::$prevStatus || ! $this->isDistinct() ) && strpos( self::$currentStatus, 'un') === false ){
+				// update all logs period
+				$this->wpdb->query( "
+						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						SET `meta_value` = (`meta_value` + 1)
+						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
+				" );
+				$table = self::$dataInfo['table'];
+				$this->wpdb->query( "
+						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						SET `meta_value` = (`meta_value` + 1)
+						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
+				" );
+			}
 			// Delete object cache
 			if( wp_ulike_is_cache_exist() ){
 				wp_cache_delete( 'calculate_new_votes', WP_ULIKE_SLUG );
 				wp_cache_delete( 'count_logs_period_all', WP_ULIKE_SLUG );
 				wp_cache_delete( 1, 'wp_ulike_statistics_meta' );
 			}
+		}
+
+		/**
+		 * Update meta data
+		 *
+		 * @param integer $item_id
+		 * @return void
+		 */
+		public function updateMetaData( $item_id ){
+			// Update user status
+			$this->updateUserMetaStatus( $item_id );
+			// Update likers list
+			$this->updateLikerMetaList( $item_id );
+			// Update stats meta data
+			$this->updateStatsMetaData( $item_id );
 		}
 
 	}
