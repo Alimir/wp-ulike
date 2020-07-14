@@ -1,6 +1,6 @@
 <?php
 /**
- * Old WP ULike Process Class
+ * Deprecated WP ULike Process Class
  * // @echo HEADER
  */
 
@@ -27,7 +27,7 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 */
 		function __construct(){
 			// Init core
-			add_action( 'wp_ulike_loaded', array( $this, 'init' ) );
+			$this->init();
 		}
 
 		/**
@@ -38,10 +38,12 @@ if ( ! class_exists( 'wp_ulike' ) ) {
 		 * @return          Void
 		 */
 		public function init(){
-			global $wpdb, $wp_user_IP;
+			_deprecated_function( __CLASS__, '4.2.7', 'wp_ulike_cta_process' );
+
+			global $wpdb;
 			$this->wpdb         = $wpdb;
 			$this->status       = 'like';
-			$this->user_ip      = $wp_user_IP;
+			$this->user_ip      = wp_ulike_get_user_ip();
 			$this->current_user = get_current_user_id();
 			$this->user_id      = $this->get_reutrn_id();
 			$this->is_distinct  = true;

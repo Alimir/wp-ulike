@@ -157,6 +157,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Added: Comment meta box options. [PRO]
 * Added: The "last X days" option for Elementor period limits. [PRO]
 * Added: New features to the Elementor "Top Posts" widget. [PRO]
+* Updated: Ultimate member functionalities.
 * Fixed: Some major issues.
 
 = 4.2.7 =
@@ -695,6 +696,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * The initial version
 
 == Upgrade Notice ==
+
+= 4.3.0 =
+In this update, we have made changes to the class structure that have made plugin development much easier. So we had to delete the $wp_ulike_class global variable. If you used this variable manually, replace it with the class wp_ulike_cta_process.
 
 = 4.1.3 =
 In this release we have added a new option called  "Enable Deprecated Options" which enables you to restore all the old settings.

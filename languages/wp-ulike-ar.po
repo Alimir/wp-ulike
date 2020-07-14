@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/plugins/wp-ulike/\n"
-"POT-Creation-Date: 2020-07-05 16:49:46+00:00\n"
+"POT-Creation-Date: 2020-07-14 18:21:59+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:26:42+0000\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,6 @@ msgstr ""
 #: build/wp-ulike/admin/admin-ajax.php:31
 #: build/wp-ulike/admin/admin-ajax.php:76
 #: build/wp-ulike/admin/admin-ajax.php:82
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:39
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:160
-#: inc/hooks/frontend-ajax.php:36 inc/hooks/frontend-ajax.php:157
 msgid "Error: Something Wrong Happened!"
 msgstr "خطأ: حدث شيء خاطئ! "
 
@@ -37,9 +34,9 @@ msgid "It's Ok!"
 msgstr "لا بأس!"
 
 #: admin/admin-functions.php:235
-#: admin/classes/class-wp-ulike-admin-panel.php:629
+#: admin/classes/class-wp-ulike-admin-panel.php:628
 #: build/wp-ulike/admin/admin-functions.php:238
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:632
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:631
 msgid "Button"
 msgstr ""
 
@@ -375,10 +372,10 @@ msgstr "النص لنشاطات المنشور :"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:192
 #: admin/classes/class-wp-ulike-admin-panel.php:204
-#: admin/classes/class-wp-ulike-admin-panel.php:698
+#: admin/classes/class-wp-ulike-admin-panel.php:697
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:195
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:207
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:701
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:700
 msgid "Allowed Variables:"
 msgstr "المتغیرات المسموحة :"
 
@@ -506,7 +503,8 @@ msgstr "الترجمة"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:331
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:334
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:84 inc/hooks/frontend-ajax.php:81
+#: build/wp-ulike/inc/classes/class-wp-ulike-setting-type-repo.php:74
+#: inc/classes/class-wp-ulike-setting-type-repo.php:74
 msgid "You have already registered a vote."
 msgstr ""
 
@@ -517,7 +515,8 @@ msgstr "إشعار تم التصويت بالفعل"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:337
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:340
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:75 inc/hooks/frontend-ajax.php:72
+#: build/wp-ulike/inc/classes/class-wp-ulike-setting-type-repo.php:65
+#: inc/classes/class-wp-ulike-setting-type-repo.php:65
 msgid "You Should Login To Submit Your Like"
 msgstr "عليك تسجيل الدخول لاعمال اعجاب"
 
@@ -528,11 +527,8 @@ msgstr "رسالة تسجيل الدخول مطلوب"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:343
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:346
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:97
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:115
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:124
-#: inc/hooks/frontend-ajax.php:94 inc/hooks/frontend-ajax.php:112
-#: inc/hooks/frontend-ajax.php:121
+#: build/wp-ulike/inc/classes/class-wp-ulike-setting-type-repo.php:83
+#: inc/classes/class-wp-ulike-setting-type-repo.php:83
 msgid "Thanks! You Liked This."
 msgstr "شكراً! لقد قمت بالإعجاب بهذا."
 
@@ -543,8 +539,8 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:349
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:352
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:106
-#: inc/hooks/frontend-ajax.php:103
+#: build/wp-ulike/inc/classes/class-wp-ulike-setting-type-repo.php:92
+#: inc/classes/class-wp-ulike-setting-type-repo.php:92
 msgid "Sorry! You unliked this."
 msgstr "نأسف لعدم إعجابك بهذا!"
 
@@ -556,11 +552,11 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:355
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:358
 #: build/wp-ulike/inc/functions/templates.php:73
-#: build/wp-ulike/inc/functions/templates.php:118
-#: build/wp-ulike/inc/functions/templates.php:163
-#: build/wp-ulike/inc/functions/templates.php:204
-#: inc/functions/templates.php:70 inc/functions/templates.php:115
-#: inc/functions/templates.php:160 inc/functions/templates.php:201
+#: build/wp-ulike/inc/functions/templates.php:119
+#: build/wp-ulike/inc/functions/templates.php:165
+#: build/wp-ulike/inc/functions/templates.php:209
+#: inc/functions/templates.php:70 inc/functions/templates.php:116
+#: inc/functions/templates.php:162 inc/functions/templates.php:206
 msgid "Like Button"
 msgstr "زر الاعجاب"
 
@@ -782,17 +778,12 @@ msgstr "تسجيل بواسطة كوكي"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:612
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:615
-msgid "Logged By IP"
-msgstr "تسجيل عن طريق IP"
-
-#: admin/classes/class-wp-ulike-admin-panel.php:613
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:616
 msgid "Logged By Username"
 msgstr "تسجيل بواسطة اسم المستخدم"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:616
+#: admin/classes/class-wp-ulike-admin-panel.php:615
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:619
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:618
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Do Not Log\"</strong> method: Any data logs can't "
@@ -803,9 +794,9 @@ msgstr ""
 "ليس هناك ای حدود  في اعمال الاعجاب / لغاء الاعجاب، والقدرة لغاء الاعجاب / لم "
 "يعجبني لا تعمل بعد"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:616
+#: admin/classes/class-wp-ulike-admin-panel.php:615
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:619
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:618
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By Cookie\"</strong> method: Any data logs "
@@ -816,9 +807,9 @@ msgstr ""
 "تحدید  اعمال الاعجاب /الغاء الاعجاب بواسطة کوکي، والقدرة لغاء الاعجاب / لم "
 "يعجبني لا تعمل بعد"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:616
+#: admin/classes/class-wp-ulike-admin-panel.php:615
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:619
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:618
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By IP\"</strong> method: Data logs will save "
@@ -827,9 +818,9 @@ msgstr ""
 "إذا قمت بتحديد <strong>\"IP \"</strong> :یتم تسجیل احداث المستخدمین،وشروط "
 "اعمال الاعجاب /الغاء الاعجاب یتم فحصهن بواسطة  IP"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:616
+#: admin/classes/class-wp-ulike-admin-panel.php:615
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:619
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:618
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By Username\"</strong> method: data logs only "
@@ -840,85 +831,85 @@ msgstr ""
 "المستخدمین للاعضاء فقط،وشروط اعمال الاعجاب /الغاء الاعجاب یتم فحصهن بواسطة "
 "اسم المستخدم ، و المستخدمین الضیوف لم یسمح لهم بالغاء الاعجاب."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:621
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:624
+#: admin/classes/class-wp-ulike-admin-panel.php:620
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:623
 msgid "Only logged in users"
 msgstr "فقط المستخدمين المسجلين"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:626
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:629
+#: admin/classes/class-wp-ulike-admin-panel.php:625
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:628
 msgid "Display Type"
 msgstr "عرض النوع"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:628
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:631
+#: admin/classes/class-wp-ulike-admin-panel.php:627
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:630
 msgid "Template"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:642
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:645
-#: build/wp-ulike/inc/functions/general.php:406 inc/functions/general.php:403
+#: admin/classes/class-wp-ulike-admin-panel.php:641
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
+#: build/wp-ulike/inc/functions/general.php:408 inc/functions/general.php:405
 msgid "You need to login in order to like this post: "
 msgstr "تحتاج إلى تسجيل الدخول لتقییم هذا المنشور  :"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:644
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:647
-#: build/wp-ulike/inc/functions/general.php:408 inc/functions/general.php:405
+#: admin/classes/class-wp-ulike-admin-panel.php:643
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:646
+#: build/wp-ulike/inc/functions/general.php:410 inc/functions/general.php:407
 msgid "click here"
 msgstr "اضغط هنا انقر للدخول"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:646
-#: admin/classes/class-wp-ulike-admin-panel.php:697
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:649
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:700
+#: admin/classes/class-wp-ulike-admin-panel.php:645
+#: admin/classes/class-wp-ulike-admin-panel.php:696
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:648
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:699
 msgid "Custom HTML Template"
 msgstr "قالب HTML المخصص"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:652
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:655
+#: admin/classes/class-wp-ulike-admin-panel.php:651
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:654
 msgid "Display Likers Box"
 msgstr "عرض صندوق Likers"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:657
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:660
+#: admin/classes/class-wp-ulike-admin-panel.php:656
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:659
 msgid "User List Arrange"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:659
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:662
+msgid "Ascending"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:660
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:663
-msgid "Ascending"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:661
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:664
 msgid "Descending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:668
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:671
+#: admin/classes/class-wp-ulike-admin-panel.php:667
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:670
 msgid "Disable Pophover"
 msgstr "تعطيل النافذة المنبثقة"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:670
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:673
+#: admin/classes/class-wp-ulike-admin-panel.php:669
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:672
 msgid ""
 "Active this option to show liked users avatars in the bottom of button like."
 msgstr ""
 "من خلال تفعیل هذا الخیار، بامکانکم مشاهدة آوتار اعضاء العاملین اعجاب اسفل زر "
 "الاعجاب ."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:675
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:678
+#: admin/classes/class-wp-ulike-admin-panel.php:674
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:677
 msgid "Size of Gravatars"
 msgstr "مقیاس قراواتار"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:683
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:686
+#: admin/classes/class-wp-ulike-admin-panel.php:682
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:685
 msgid "Likers Count"
 msgstr "عدد من قام بالضغط على زر الإعجاب"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:684
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:687
+#: admin/classes/class-wp-ulike-admin-panel.php:683
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:686
 msgid "The number of users to show in the users liked box"
 msgstr "حد الاقصی لإعرض عدد المستخدمين  فی الباکس   ؟!"
 
@@ -2668,6 +2659,25 @@ msgstr "خطأ! هذه الخانة مطلوبة!"
 msgid "Please write a valid url!"
 msgstr "من فضلك أدخل رابط صحيح!"
 
+#: build/wp-ulike/inc/classes/class-wp-ulike-ajax-listener-base.php:16
+#: inc/classes/class-wp-ulike-ajax-listener-base.php:16
+msgid "There was an error processing the request."
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-cta-listener.php:53
+#: build/wp-ulike/inc/classes/class-wp-ulike-voters-listener.php:55
+#: inc/classes/class-wp-ulike-cta-listener.php:53
+#: inc/classes/class-wp-ulike-voters-listener.php:55
+msgid "Invalid format."
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-cta-listener.php:59
+#: build/wp-ulike/inc/classes/class-wp-ulike-voters-listener.php:61
+#: inc/classes/class-wp-ulike-cta-listener.php:59
+#: inc/classes/class-wp-ulike-voters-listener.php:61
+msgid "Invalid item type."
+msgstr ""
+
 #: build/wp-ulike/inc/classes/class-wp-ulike-mycred.php:230
 #: inc/classes/class-wp-ulike-mycred.php:227
 msgid "Points for Liking content"
@@ -2755,22 +2765,6 @@ msgstr "قلب تويتر"
 msgid "Animated Heart"
 msgstr "قلب متحرك"
 
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:47
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:178
-#: inc/hooks/frontend-ajax.php:44 inc/hooks/frontend-ajax.php:175
-msgid "Error: This Method Is Not Exist!"
-msgstr ""
-
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:165
-#: inc/hooks/frontend-ajax.php:162
-msgid "Notice: The likers box is not activated!"
-msgstr ""
-
-#: build/wp-ulike/inc/hooks/frontend-ajax.php:170
-#: inc/hooks/frontend-ajax.php:167
-msgid "Notice: The likers box is refreshed only for logged in users!"
-msgstr ""
-
 #: build/wp-ulike/inc/hooks/third-party.php:125 inc/hooks/third-party.php:122
 msgid "WP ULike Activity"
 msgstr "نشاطات وردبرس یولایک"
@@ -2837,21 +2831,17 @@ msgstr ""
 msgid "Unliked Content"
 msgstr ""
 
-#: build/wp-ulike/inc/hooks/third-party.php:746
-#: build/wp-ulike/inc/hooks/third-party.php:781 inc/hooks/third-party.php:743
-#: inc/hooks/third-party.php:778
+#: build/wp-ulike/inc/hooks/third-party.php:746 inc/hooks/third-party.php:743
 msgid "Recent Posts Liked"
 msgstr "مشاركات تم الإعجاب بها مؤخراً"
 
-#: build/wp-ulike/inc/hooks/third-party.php:751
-#: build/wp-ulike/inc/hooks/third-party.php:823 inc/hooks/third-party.php:748
-#: inc/hooks/third-party.php:820
+#: build/wp-ulike/inc/hooks/third-party.php:751 inc/hooks/third-party.php:748
 msgid "Recent Comments Liked"
 msgstr "تعليقات تم الإعجاب بها مؤخراً"
 
-#: build/wp-ulike/inc/hooks/third-party.php:797
-#: build/wp-ulike/inc/hooks/third-party.php:840 inc/hooks/third-party.php:794
-#: inc/hooks/third-party.php:837
+#: build/wp-ulike/inc/hooks/third-party.php:803
+#: build/wp-ulike/inc/hooks/third-party.php:858 inc/hooks/third-party.php:800
+#: inc/hooks/third-party.php:855
 msgid "This user has not made any likes."
 msgstr ""
 
@@ -2859,7 +2849,7 @@ msgstr ""
 msgid "WP ULike"
 msgstr "وردبرس یولایک"
 
-#: build/wp-ulike/wp-ulike.php:596 wp-ulike.php:593
+#: build/wp-ulike/wp-ulike.php:563 wp-ulike.php:560
 msgid ""
 "You are using two instances of WP ULike plugin at same time, please deactive "
 "one of them."
@@ -2884,6 +2874,9 @@ msgid ""
 msgstr ""
 "https://wpulike.com/?utm_source=wp-plugins&utm_campaign=author-"
 "uri&utm_medium=wp-dash"
+
+#~ msgid "Logged By IP"
+#~ msgstr "تسجيل عن طريق IP"
 
 #~ msgid "WP Ulike Pro is Ready :))"
 #~ msgstr "النسخة الإحترافية من WP ULike جاهزه ((:"
