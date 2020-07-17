@@ -69,8 +69,9 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$post_count = $this->get_counter_value($post->ID, 'post', 'like', false, $period );
 
 				$result .= sprintf(
-					'%s <a href="%s">%s</a> %s %s',
+					'%s %s<a href="%s">%s</a> %s %s',
 					$before_item,
+					$show_thumb ? $this->get_post_thumbnail( $post->ID, $sizeOf ) : '',
 					$permalink,
 					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number($post_count) . '</span>' : '',
