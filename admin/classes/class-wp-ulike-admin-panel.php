@@ -665,7 +665,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'    => 'hide_likers_for_anonymous_users',
                     'type'  => 'switcher',
                     'default' => false,
-                    'title' => __('Hide Likers Box For Anonymous Users', WP_ULIKE_SLUG),
+                    'title' => __('Hide For Anonymous Users', WP_ULIKE_SLUG),
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),
                 ),
                 'disable_likers_pophover' => array(
