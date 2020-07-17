@@ -13,7 +13,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 
 	class wp_ulike_cta_template extends wp_ulike_entities_process{
 
-		protected $item_settings;
+		protected $settings;
 		protected $method_id;
 		protected $args;
 
@@ -22,10 +22,10 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		 */
 		function __construct( $args ){
 			$this->args = $args;
-			$this->item_settings = new wp_ulike_setting_type_repo( $this->args['slug'] );
+			$this->settings = new wp_ulike_setting_type( $this->args['slug'] );
 			parent::__construct(array(
 				'item_type'   => $this->args['slug'],
-				'item_method' => $this->item_settings->getMethod()
+				'item_method' => wp_ulike_setting_repo::getMethod( $this->args['slug'] )
 			));
 		}
 
@@ -45,13 +45,13 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		 * @return integer
 		 */
 		public function get_method_id(){
-			switch( $this->item_settings->getMethod() ){
+			switch( wp_ulike_setting_repo::getMethod( $this->args['slug'] ) ){
 				case 'do_not_log':
 					return 1;
 				case 'by_cookie':
 					return $this->hasPermission( array(
-						'method' => $this->item_settings->getMethod(),
-						'type'   => $this->item_settings->getCookieName(),
+						'method' => wp_ulike_setting_repo::getMethod( $this->args['slug'] ),
+						'type'   => $this->settings->getCookieName(),
 						'id'     => $this->args['id']
 					) ) ? 1 : 4;
 				default:

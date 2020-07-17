@@ -13,8 +13,8 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 
 	class wp_ulike_cta_process extends wp_ulike_entities_process {
 
-		private $parsedArgs;
-		private $infoArgs;
+		protected $parsedArgs;
+		protected $settings;
 
 		/**
 		 * Constructor
@@ -26,7 +26,6 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 				'item_type'         => 'post',
 				'item_factor'       => NULL,
 				'item_template'     => NULL,
-				'item_settings'     => array(),
 				'user_id'           => NULL,
 				'user_ip'           => NULL,
 				'is_user_logged_in' => NULL
@@ -34,14 +33,15 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 
 			$this->parsedArgs = wp_parse_args( $atts, $default_atts );
 
+			// Get settings type
+			$this->settings   = new wp_ulike_setting_type( $this->parsedArgs['item_type'] );
+
 			parent::__construct( array(
 				'user_id'     => $this->parsedArgs['user_id'],
 				'user_ip'     => $this->parsedArgs['user_ip'],
 				'item_type'   => $this->parsedArgs['item_type'],
-				'item_method' => $this->parsedArgs['item_settings']->getMethod()
+				'item_method' => wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] )
 			) );
-
-			$this->infoArgs = $this->getDataInfo();
 		}
 
 		/**
@@ -69,7 +69,7 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		public function update(){
 			$this->setPrevStatus( $this->parsedArgs['item_id'] );
 
-			switch( $this->parsedArgs['item_settings']->getMethod() ){
+			switch( wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] ) ){
 				case 'do_not_log':
 					$this->setCurrentStatus( $this->parsedArgs['item_factor'], true );
 					// Insert log data
@@ -77,13 +77,13 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 					break;
 				case 'by_cookie':
 					if( $this->hasPermission( array(
-						'method' => $this->parsedArgs['item_settings']->getMethod(),
-						'type'   => $this->parsedArgs['item_settings']->getCookieName(),
+						'method' => wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] ),
+						'type'   => $this->settings->getCookieName(),
 						'id'     => $this->parsedArgs['item_id']
 					) ) ){
 						$this->setCurrentStatus( $this->parsedArgs['item_factor'], true );
 						// Set cookie
-						setcookie( $this->parsedArgs['item_settings']->getCookieName(). $this->parsedArgs['item_id'], time(), 2147483647, '/' );
+						setcookie( $this->settings->getCookieName(). $this->parsedArgs['item_id'], time(), 2147483647, '/' );
 						// Insert log data
 						$this->insertData( $this->parsedArgs['item_id'] );
 					}
@@ -111,17 +111,17 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 					"id"                   => $this->parsedArgs['item_id'],
 					"method"               => $this->parsedArgs['item_type'],
 					"type"                 => 'process',
-					"table"                => $this->infoArgs['table'],
-					"column"               => $this->infoArgs['column'],
-					"key"                  => $this->infoArgs['key'],
-					"slug"                 => $this->infoArgs['slug'],
-					"cookie"               => $this->infoArgs['cookie'],
+					"table"                => $this->settings->getTableName(),
+					"column"               => $this->settings->getColumnName(),
+					"key"                  => $this->settings->getKey(),
+					"slug"                 => $this->settings->getType(),
+					"cookie"               => $this->settings->getCookieName(),
 					"factor"               => $this->parsedArgs['item_factor'],
 					"style"                => $this->parsedArgs['item_template'],
-					"logging_method"       => $this->parsedArgs['item_settings']->getMethod(),
-					"only_logged_in_users" => $this->parsedArgs['item_settings']->requireLogin(),
-					"logged_out_action"    => $this->parsedArgs['item_settings']->anonymousDisplay(),
-				), $this->parsedArgs['item_id'], $this->infoArgs
+					"logging_method"       => wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] ),
+					"only_logged_in_users" => wp_ulike_setting_repo::requireLogin( $this->parsedArgs['item_type'] ),
+					"logged_out_action"    => wp_ulike_setting_repo::anonymousDisplay( $this->parsedArgs['item_type'] ),
+				), $this->parsedArgs['item_id']
 			);
 		}
 
@@ -133,12 +133,12 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		public function getActionAtts(){
 			return array(
 				'id'          => $this->parsedArgs['item_id'],
-				'key'         => $this->infoArgs['key'],
+				'key'         => $this->settings->getKey(),
 				'user_id'     => $this->getCurrentUser(),
 				'status'      => $this->getCurrentStatus(),
 				'has_log'     => ! $this->getPrevStatus() ? 0 : 1,
 				'slug'        => $this->parsedArgs['item_type'],
-				'table'       => $this->infoArgs['table'],
+				'table'       => $this->settings->getTableName(),
 				'is_distinct' => $this->isDistinct()
 			);
 		}

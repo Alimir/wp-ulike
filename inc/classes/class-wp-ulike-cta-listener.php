@@ -53,7 +53,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				throw new \Exception( __( 'Invalid format.', WP_ULIKE_SLUG ) );
 			}
 
-			$settings = new wp_ulike_setting_type_repo( $this->data['type'] );
+			$settings = new wp_ulike_setting_type( $this->data['type'] );
 
 			if( empty( $settings->getType() ) ){
 				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
@@ -63,20 +63,19 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				'item_id'           => $this->data['id'],
 				'item_type'         => $settings->getType(),
 				'item_factor'       => $this->data['factor'],
-				'item_template'     => $this->data['template'],
-				'item_settings'     => $settings
+				'item_template'     => $this->data['template']
 			) );
 
-			if( $settings->requireLogin() && ! $this->user ){
-				$this->response['message'] = $settings->getLoginNotice();
+			if( wp_ulike_setting_repo::requireLogin( $settings->getType() ) && ! $this->user ){
+				$this->response['message'] = wp_ulike_setting_repo::getLoginNotice();
 				$this->response['status']  = 4;
 			} else {
 				if( ! wp_ulike_entities_process::hasPermission( array(
-					'method' => $settings->getMethod(),
+					'method' => wp_ulike_setting_repo::getMethod( $settings->getType() ) ,
 					'type'   => $settings->getCookieName(),
 					'id'     => $this->data['id']
 				) ) ){
-					$this->response['message']     = $settings->getPermissionNotice();
+					$this->response['message']     = wp_ulike_setting_repo::getPermissionNotice();
 					$this->response['status']      = 5;
 					$this->response['messageType'] = 'warning';
 				} else {
@@ -86,27 +85,27 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 
 					switch ( $this->response['status'] ){
 						case 1:
-							$this->response['message']     = $settings->getLikeNotice();
+							$this->response['message']     = wp_ulike_setting_repo::getLikeNotice();
 							$this->response['messageType'] = 'success';
-							$this->response['btnText'] = $settings->getButtonText('like');
+							$this->response['btnText'] = wp_ulike_setting_repo::getButtonText( $settings->getType(), 'like' );
 							$this->response['data'] = apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter_value, $this->data['id'] );
 							break;
 						case 2:
-							$this->response['message']     = $settings->getUnLikeNotice();
+							$this->response['message']     = wp_ulike_setting_repo::getUnLikeNotice();
 							$this->response['messageType'] = 'error';
-							$this->response['btnText'] = $settings->getButtonText('like');
+							$this->response['btnText'] = wp_ulike_setting_repo::getButtonText( $settings->getType(), 'like' );
 							$this->response['data'] = apply_filters( 'wp_ulike_respond_for_unliked_data', $counter_value, $this->data['id'] );
 							break;
 						case 3:
-							$this->response['message']     = $settings->getLikeNotice();
+							$this->response['message']     = wp_ulike_setting_repo::getLikeNotice();
 							$this->response['messageType'] = 'success';
-							$this->response['btnText'] = $settings->getButtonText('unlike');
+							$this->response['btnText'] = wp_ulike_setting_repo::getButtonText( $settings->getType(), 'unlike' );
 							$this->response['data'] = apply_filters( 'wp_ulike_respond_for_liked_data', $counter_value, $this->data['id'] );
 							break;
 						case 4:
-							$this->response['message']     = $settings->getLikeNotice();
+							$this->response['message']     = wp_ulike_setting_repo::getLikeNotice();
 							$this->response['messageType'] = 'success';
-							$this->response['btnText'] = $settings->getButtonText('like');
+							$this->response['btnText'] = wp_ulike_setting_repo::getButtonText( $settings->getType(), 'like' );
 							$this->response['data'] = apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter_value, $this->data['id'] );
 							break;
 					}

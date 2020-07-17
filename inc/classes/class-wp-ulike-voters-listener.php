@@ -55,7 +55,7 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 				throw new \Exception( __( 'Invalid format.', WP_ULIKE_SLUG ) );
 			}
 
-			$settings = new wp_ulike_setting_type_repo( $this->data['type'] );
+			$settings = new wp_ulike_setting_type( $this->data['type'] );
 
 			if( empty( $settings->getType() ) ){
 				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
@@ -67,7 +67,7 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 				$settings->getTableName(),
 				$settings->getColumnName(),
 				$this->data['id'],
-				$settings->getOptionKey()
+				$settings->getSettingKey()
 			);
 
 			$this->afterGetListAction();
