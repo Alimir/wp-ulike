@@ -18,7 +18,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getLoginNotice(){
-		return self::getOption( 'login_required_notice', _( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) );
+		return self::getOption( 'login_required_notice', __( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class wp_ulike_setting_repo {
 	 * @return boolean
 	 */
 	public static function requireLogin( $typeName ){
-		return wp_ulike_is_true( self::getOption( self::getSettingKey( $typeName ) . '|only_logged_in_users', false ) );
+		return wp_ulike_is_true( self::getOption( self::getSettingKey( $typeName ) . '|enable_only_logged_in_users', false ) );
 	}
 
 	/**
