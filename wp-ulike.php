@@ -509,15 +509,34 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	        return $wpdb->get_col( $sql );
 	    }
 
-	    /**
-	     * Load the plugin text domain for translation.
-	     *
-	     * @since    3.1
-	     */
+		/**
+		 * Load the plugin text domain for translation.
+		 *
+		 * @return void
+		 */
 	    public function load_plugin_textdomain() {
-	        $locale = apply_filters( 'plugin_locale', get_locale(), WP_ULIKE_SLUG );
-	        load_textdomain( WP_ULIKE_SLUG, trailingslashit( WP_LANG_DIR ) . WP_ULIKE_SLUG . '/' . WP_ULIKE_SLUG . '-' . $locale . '.mo' );
-	        load_plugin_textdomain( WP_ULIKE_SLUG, FALSE, dirname( WP_ULIKE_BASENAME ) . '/languages' );
+			// Set filter for language directory
+			$lang_dir = WP_ULIKE_DIR . 'languages/';
+			$lang_dir = apply_filters( 'wp_ulike_languages_directory', $lang_dir );
+
+			// Traditional WordPress plugin locale filter
+			$locale = apply_filters( 'plugin_locale', get_locale(), WP_ULIKE_SLUG );
+			$mofile = sprintf( '%1$s-%2$s.mo', WP_ULIKE_SLUG, $locale );
+
+			// Setup paths to current locale file
+			$mofile_local   = $lang_dir . $mofile;
+			$mofile_global  = WP_LANG_DIR . '/plugins/' . WP_ULIKE_SLUG . '/' . $mofile;
+
+			if( file_exists( $mofile_global ) ) {
+				// Look in global /wp-content/languages/plugins/wp-ulike/ folder
+				load_textdomain( WP_ULIKE_SLUG, $mofile_global );
+			} elseif( file_exists( $mofile_local ) ) {
+				// Look in local /wp-content/plugins/wp-ulike/languages/ folder
+				load_textdomain( WP_ULIKE_SLUG, $mofile_local );
+			} else {
+				// Load the default language files
+				load_plugin_textdomain( WP_ULIKE_SLUG, false, $lang_dir );
+			}
 		}
 
 	   /**
