@@ -86,4 +86,13 @@ class wp_ulike_setting_repo {
 		return self::getOption( self::getSettingKey( $typeName ) . '|logged_out_display_type', 'button' );
 	}
 
+	/**
+	 * Get anonymous user display type
+	 *
+	 * @return string
+	 */
+	public static function restrictLikersBox( $typeName ){
+		return wp_ulike_is_true(  self::getOption( self::getSettingKey( $typeName ) . '|hide_likers_for_anonymous_users', false ) );
+	}
+
 }

@@ -105,6 +105,8 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 	{
 		// Return false when ID not exist
 		if( empty( $this->data['id'] ) ) return false;
+		// Return false when anonymous display is off
+		if( wp_ulike_setting_repo::restrictLikersBox( $this->settings_type->getType() ) && ! $this->user ) return false;
 		// Return false display is off
 		if( ! $this->data['displayLikers'] ) return false;
 		// Return false when nonce invalid
