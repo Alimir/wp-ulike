@@ -2,20 +2,9 @@
 
 final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 
-	private $user;
-	private $response = array(
-		'message'     => NULL,
-		'btnText'     => NULL,
-		'messageType' => 'info',
-		'status'      => 0,
-		'data'        => NULL
-	);
-
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 		$this->setFormData();
-		$this->setUser();
 		$this->getList();
 	}
 
@@ -34,15 +23,6 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 	}
 
 	/**
-	 * Set current user id if exist
-	 *
-	 * @return void
-	 */
-	private function setUser(){
-		$this->user = is_user_logged_in() ? get_current_user_id() : false;
-	}
-
-	/**
 	 * Get likers list info
 	 *
 	 * @return void
@@ -51,23 +31,23 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 		try {
 			$this->beforeGetListAction();
 
+			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
+
 			if ( !$this->validates() ){
 				throw new \Exception( __( 'Invalid format.', WP_ULIKE_SLUG ) );
 			}
 
-			$settings = new wp_ulike_setting_type_repo( $this->data['type'] );
-
-			if( empty( $settings->getType() ) ){
+			if( empty( $this->settings_type->getType() ) ){
 				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
 			}
 
 			// Add specific class name with popover checkup
 			$class_names   = wp_ulike_is_true( $this->data['disablePophover'] ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
 			$template_name = wp_ulike_get_likers_template(
-				$settings->getTableName(),
-				$settings->getColumnName(),
+				$this->settings_type->getTableName(),
+				$this->settings_type->getColumnName(),
 				$this->data['id'],
-				$settings->getOptionKey()
+				$this->settings_type->getSettingKey()
 			);
 
 			$this->afterGetListAction();
@@ -105,6 +85,8 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 	{
 		// Return false when ID not exist
 		if( empty( $this->data['id'] ) ) return false;
+		// Return false when anonymous display is off
+		if( wp_ulike_setting_repo::restrictLikersBox( $this->settings_type->getType() ) && ! $this->user ) return false;
 		// Return false display is off
 		if( ! $this->data['displayLikers'] ) return false;
 		// Return false when nonce invalid

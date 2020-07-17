@@ -5,7 +5,33 @@
 */
 abstract class wp_ulike_ajax_listener_base{
 
-	public function __construct(){}
+	/**
+	* Form Data
+	*/
+	protected $data;
+
+	/**
+	* User info
+	*/
+	protected $user;
+
+	/**
+	* Settings Type
+	*/
+	protected $settings_type;
+
+	public function __construct(){
+		$this->setUser();
+	}
+
+	/**
+	 * Set current user id if exist
+	 *
+	 * @return void
+	 */
+	protected function setUser(){
+		$this->user = is_user_logged_in() ? get_current_user_id() : false;
+	}
 
 	/**
 	* Send an Error Response
