@@ -421,3 +421,38 @@ function wp_ulike_upgrade_deprecated_options_value(){
 	update_option( 'wp_ulike_settings', $final_options_stack  );
 }
 // add_filter( 'admin_init', 'wp_ulike_upgrade_deprecated_options_value' );
+
+
+/**
+ * Display custom column
+ *
+ * @param   array  		$column
+ * @param   integer  	$post_id
+ *
+ * @return  void
+ */
+function wp_ulike_manage_posts_custom_column( $column, $post_id ) {
+    if ( $column === 'wp-ulike-thumbs-up' ){
+        echo sprintf( '<span class="wp-ulike-counter-box">%d</span>',  wp_ulike_get_counter_value_info( $post_id, 'post', 'like' ));
+    }
+}
+add_action( 'manage_posts_custom_column' , 'wp_ulike_manage_posts_custom_column', 10, 2 );
+
+/**
+ * Add custom column to post list
+ *
+ * @param   array  $columns
+ *
+ * @return  array
+ */
+function wp_ulike_manage_posts_columns( $columns ) {
+	$post_types = wp_ulike_get_option( 'enable_admin_posts_columns', array() );
+
+	if( ! empty( $post_types ) && false !== ( $current_post_type = get_post_type( get_the_ID() ) ) ){
+		$columns =  in_array( $current_post_type, $post_types ) ? apply_filters( 'wp_ulike_manage_posts_columns', array_merge( $columns,
+        array( 'wp-ulike-thumbs-up' => '<i class="dashicons dashicons-thumbs-up"></i> ' . __('Like',WP_ULIKE_SLUG) ) ) ) : $columns;
+	}
+
+    return $columns;
+}
+add_filter( 'manage_posts_columns' , 'wp_ulike_manage_posts_columns' );

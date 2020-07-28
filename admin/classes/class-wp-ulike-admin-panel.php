@@ -143,6 +143,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'woocommerce' => __('WooCommerce Pages', WP_ULIKE_SLUG)
                         )
                     ),
+                    array(
+                        'id'          => 'enable_admin_posts_columns',
+                        'type'        => 'select',
+                        'title'       => __( 'Enable Admin Columns',WP_ULIKE_SLUG ),
+                        'desc'        => __('Add counter stats column to the selected post types', WP_ULIKE_SLUG),
+                        'chosen'      => true,
+                        'multiple'    => true,
+                        'options'     => 'post_types'
+                    )
                 ) )
             ) );
 
