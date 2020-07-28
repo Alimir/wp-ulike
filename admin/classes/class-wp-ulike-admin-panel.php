@@ -238,10 +238,11 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'fields' => array(
                     // Posts
                     array(
-                        'id'     => 'posts_group',
-                        'type'   => 'fieldset',
-                        'title'  => __('Posts'),
-                        'fields' => array_values( apply_filters( 'wp_ulike_panel_post_type_options', $get_content_fields['posts'] ) )
+                        'id'       => 'posts_group',
+                        'type'     => 'fieldset',
+                        'title'    => __('Posts'),
+                        'fields'   => array_values( apply_filters( 'wp_ulike_panel_post_type_options', $get_content_fields['posts'] ) ),
+                        'sanitize' => 'wp_ulike_sanitize_multiple_select'
                     ),
                     // Comments
                     array(
@@ -578,7 +579,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'        => __('With this option, you can disable automatic display on these pages.', WP_ULIKE_SLUG),
                     'chosen'      => true,
                     'multiple'    => true,
-                    // 'default'     => array( 'single', 'home' ),
+                    'default'     => array( 'single', 'home' ),
                     'options'     => array(
                         'home'     => __('Home', WP_ULIKE_SLUG),
                         'single'   => __('Singular', WP_ULIKE_SLUG),
@@ -598,7 +599,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'        => __( 'Make these post types an exception and display the button on them.',WP_ULIKE_SLUG ),
                     'chosen'      => true,
                     'multiple'    => true,
-                    // 'default'     => 'post',
+                    'default'     => 'post',
                     'options'     => 'post_types',
                     'dependency'  => array( 'auto_display_filter|enable_auto_display', 'any|==', 'single|true' ),
                 ),

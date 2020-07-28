@@ -510,3 +510,25 @@ function wp_ulike_minify_css( $input ) {
         ),
     $input);
 }
+
+/**
+ * Fix multiple select issue
+ *
+ * @param   array  $value
+ *
+ * @return  array
+ */
+function wp_ulike_sanitize_multiple_select( $value ) {
+    $multiple_selects = array(
+        'auto_display_filter',
+        'auto_display_filter_post_types',
+    );
+
+    foreach ( $multiple_selects as $id ) {
+        if ( ! isset( $value[$id] ) ) {
+            $value[$id] = array();
+        }
+    }
+
+    return $value;
+}
