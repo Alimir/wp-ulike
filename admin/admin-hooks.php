@@ -420,4 +420,4 @@ function wp_ulike_upgrade_deprecated_options_value(){
 	// Update option values
 	update_option( 'wp_ulike_settings', $final_options_stack  );
 }
-add_filter( 'admin_init', 'wp_ulike_upgrade_deprecated_options_value' );
+// add_filter( 'admin_init', 'wp_ulike_upgrade_deprecated_options_value' );
