@@ -433,7 +433,7 @@ function wp_ulike_upgrade_deprecated_options_value(){
  */
 function wp_ulike_manage_posts_custom_column( $column, $post_id ) {
     if ( $column === 'wp-ulike-thumbs-up' ){
-        echo sprintf( '<span class="wp-ulike-counter-box">%d</span>',  wp_ulike_get_counter_value_info( $post_id, 'post', 'like' ));
+        echo sprintf( '<span class="wp-ulike-counter-box">%d</span>',  wp_ulike_get_counter_value_info( $post_id, 'post', 'like', false ) );
     }
 }
 add_action( 'manage_posts_custom_column' , 'wp_ulike_manage_posts_custom_column', 10, 2 );
@@ -449,10 +449,46 @@ function wp_ulike_manage_posts_columns( $columns ) {
 	$post_types = wp_ulike_get_option( 'enable_admin_posts_columns', array() );
 
 	if( ! empty( $post_types ) && false !== ( $current_post_type = get_post_type( get_the_ID() ) ) ){
-		$columns =  in_array( $current_post_type, $post_types ) ? apply_filters( 'wp_ulike_manage_posts_columns', array_merge( $columns,
-        array( 'wp-ulike-thumbs-up' => '<i class="dashicons dashicons-thumbs-up"></i> ' . __('Like',WP_ULIKE_SLUG) ) ) ) : $columns;
+		if( in_array( $current_post_type, $post_types ) ){
+			$columns = apply_filters( 'wp_ulike_manage_posts_columns', array_merge( $columns,
+			array( 'wp-ulike-thumbs-up' => '<i class="dashicons dashicons-thumbs-up"></i> ' . __('Like',WP_ULIKE_SLUG) ) ), $current_post_type );
+			// add sortable columns
+			add_filter( 'manage_edit-' . $current_post_type . '_sortable_columns', function( $columns ){
+				$columns['wp-ulike-thumbs-up'] = 'likes';
+				return $columns;
+			} );
+		}
 	}
 
     return $columns;
 }
 add_filter( 'manage_posts_columns' , 'wp_ulike_manage_posts_columns' );
+
+/**
+ * Manage the query of sortable columns
+ *
+ * @param object $query
+ * @return void
+ */
+function wp_ulike_manage_sortable_columns_order( $query ) {
+	if ( ! is_admin() ){
+		return;
+	}
+
+	$orderby = $query->get('orderby');
+
+	if ( 'likes' == $orderby ) {
+		$post__in = wp_ulike_get_popular_items_ids(array(
+			'rel_type' => $query->get('post_type'),
+			'status'   => 'like',
+			"order"    => $query->get('order'),
+			"offset"   => $query->get('paged'),
+			"limit"    => $query->get('posts_per_page')
+		));
+		$query->set( 'post__in', $post__in );
+		$query->set( 'orderby', 'post__in' );
+	}
+
+	do_action( 'wp_ulike_manage_sortable_columns_order', $query );
+}
+add_action( 'pre_get_posts', 'wp_ulike_manage_sortable_columns_order' );
