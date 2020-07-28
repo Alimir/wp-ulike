@@ -147,6 +147,11 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 			define( 'WP_ULIKE_CUSTOM_DIR' , $uploads['basedir'] . '/' . WP_ULIKE_SLUG );
 		}
 
+		public function plugins_loaded(){
+			// Load plugin text domain
+			$this->load_plugin_textdomain();
+		}
+
 	    /**
 	     * Add custom links too plugin info
 	     *
@@ -197,7 +202,6 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 	    }
 
-
 	    /**
 	     * Include Files
 	     *
@@ -228,8 +232,6 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 	    /**
 	     * Get Client IP address
-	     *
-	     * @since    3.1
 	     *
 	     * @return   String
 	    */
