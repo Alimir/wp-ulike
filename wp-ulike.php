@@ -52,13 +52,13 @@ define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	 );
 define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	 );
 define( 'WP_ULIKE_BASENAME'     , plugin_basename( __FILE__ ) 	 );
 
-define( 'WP_ULIKE_ADMIN_DIR'    , WP_ULIKE_DIR . '/admin' 		 );
+define( 'WP_ULIKE_ADMIN_DIR'    , WP_ULIKE_DIR . 'admin' 		 );
 define( 'WP_ULIKE_ADMIN_URL'    , WP_ULIKE_URL . '/admin' 		 );
 
-define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . '/inc' 		 );
+define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . 'inc' 		 );
 define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/inc' 		 );
 
-define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . '/assets' 		 );
+define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . 'assets' 		 );
 define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		 );
 
 /**
@@ -134,8 +134,8 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	    	// Include Files
 	    	$this->includes();
 
-			// Load plugin text domain
-			$this->load_plugin_textdomain();
+			// This hook is called once any activated plugins have been loaded.
+			add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 
 			// Loaded action
 			do_action( 'wp_ulike_loaded' );
