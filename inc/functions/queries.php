@@ -238,13 +238,12 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			} else {
 				$status_type = sprintf( " AND t.meta_key LIKE '%%\_%s'", $parsed_args['status'] );
 			}
-
 			// generate query string
 			$query  = sprintf( '
 				SELECT COUNT(DISTINCT t.item_id)
 				FROM %1$s t
 				INNER JOIN %2$s r ON t.item_id = r.%3$s %4$s
-				WHERE t.meta_group = "%5$s" %6$s',
+				WHERE t.meta_value > 0 AND t.meta_group = "%5$s" %6$s',
 				$wpdb->prefix . 'ulike_meta',
 				$wpdb->prefix . $info_args['related_table'],
 				$info_args['related_column'],
