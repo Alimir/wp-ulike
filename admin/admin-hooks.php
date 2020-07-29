@@ -448,9 +448,12 @@ add_action( 'manage_posts_custom_column' , 'wp_ulike_manage_posts_custom_column'
  * @return  array
  */
 function wp_ulike_manage_posts_columns( $columns ) {
+	// Get settings list
 	$post_types = wp_ulike_get_option( 'enable_admin_posts_columns', array() );
+	// Get current post type
+	$current_post_type = isset( $_GET['post_type'] ) && $_GET['post_type'] === 'page' ? 'page' : get_post_type( get_the_ID() );
 
-	if( ! empty( $post_types ) && false !== ( $current_post_type = get_post_type( get_the_ID() ) ) ){
+	if( ! empty( $post_types ) && false !== $current_post_type ){
 		if( in_array( $current_post_type, $post_types ) ){
 			$columns = apply_filters( 'wp_ulike_manage_posts_columns', array_merge( $columns,
 			array( 'wp-ulike-thumbs-up' => '<i class="dashicons dashicons-thumbs-up"></i> ' . __('Like',WP_ULIKE_SLUG) ) ), $current_post_type );
@@ -460,11 +463,13 @@ function wp_ulike_manage_posts_columns( $columns ) {
 				return $columns;
 			} );
 		}
-	}
+    }
 
     return $columns;
 }
-add_filter( 'manage_posts_columns' , 'wp_ulike_manage_posts_columns' );
+add_filter( 'manage_posts_columns' , 'wp_ulike_manage_posts_columns', 10 );
+add_filter( 'manage_pages_columns' , 'wp_ulike_manage_posts_columns', 10 );
+
 
 /**
  * Manage the query of sortable columns
