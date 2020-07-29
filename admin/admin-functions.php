@@ -98,7 +98,12 @@ function wp_ulike_get_number_of_new_likes() {
 
 	if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false && is_super_admin() ) {
         update_option( 'wpulike_lastvisit', current_time( 'mysql' ) );
-        wp_cache_delete( $cache_key, WP_ULIKE_SLUG );
+        // Fix object cache issue
+        if ( ! get_transient( 'wp_ulike_calculate_new_votes_cache' ) ) {
+            wp_cache_delete( $cache_key, WP_ULIKE_SLUG );
+            set_transient( 'wp_ulike_calculate_new_votes_cache', true, 300 );
+        }
+
     }
 
     // Get cached counter value
