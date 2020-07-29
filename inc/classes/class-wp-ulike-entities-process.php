@@ -228,14 +228,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return boolean
 		 */
 		public function isDistinct(){
-			switch ( $this->itemMethod ) {
-				case 'by_cookie':
-				case 'do_not_log':
-					return false;
-
-				default:
-					return true;
-			}
+			return wp_ulike_setting_repo::isDistinct( $this->itemMethod );
 		}
 
 		/**

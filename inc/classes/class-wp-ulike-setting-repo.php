@@ -95,4 +95,20 @@ class wp_ulike_setting_repo {
 		return wp_ulike_is_true(  self::getOption( self::getSettingKey( $typeName ) . '|hide_likers_for_anonymous_users', false ) );
 	}
 
+	/**
+	 * Check distinct status by logging method
+	 *
+	 * @return boolean
+	 */
+	public static function isDistinct( $typeName ){
+		switch ( self::getMethod( $typeName ) ) {
+			case 'by_cookie':
+			case 'do_not_log':
+				return false;
+
+			default:
+				return true;
+		}
+	}
+
 }
