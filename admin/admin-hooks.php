@@ -20,8 +20,10 @@ if ( ! defined( 'WPINC' ) ) {
 function wp_ulike_copyright( $text ) {
 	if( isset($_GET["page"]) && stripos( $_GET["page"], "wp-ulike") !== false ) {
 		return sprintf(
-			__( ' Thank you for choosing <a href="%s" title="Wordpress ULike" target="_blank">WP ULike</a>.', WP_ULIKE_SLUG ),
-			WP_ULIKE_PLUGIN_URI . '?utm_source=footer-link&utm_campaign=plugin-uri&utm_medium=wp-dash'
+			'%s <a href="%s" title="TechnoWich" target="_blank">%s</a>',
+			__( 'Proudly Powered By', WP_ULIKE_SLUG ),
+			'https://technowich.com/?utm_source=footer-link&utm_campaign=wp-ulike&utm_medium=wp-dash',
+			__( 'TechnoWich', WP_ULIKE_SLUG )
 		);
 	}
 

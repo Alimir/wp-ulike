@@ -56,7 +56,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'sticky_header'      => true,
                 'save_defaults'      => true,
                 'ajax_save'          => true,
-                'footer_credit'      => 'Thank you for choosing <a href="https://wpulike.com/?utm_source=footer-link&amp;utm_campaign=plugin-uri&amp;utm_medium=wp-dash" title="Wordpress ULike" target="_blank">WP ULike</a>.',
+                'footer_credit'      => sprintf(
+                    '%s <a href="%s" title="TechnoWich" target="_blank">%s</a>',
+                    __( 'Proudly Powered By', WP_ULIKE_SLUG ),
+                    'https://technowich.com/?utm_source=footer-link&utm_campaign=wp-ulike&utm_medium=wp-dash',
+                    __( 'TechnoWich', WP_ULIKE_SLUG )
+                ),
                 'footer_after'       => '',
                 'enqueue_webfont'    => true,
                 'async_webfont'      => false,
