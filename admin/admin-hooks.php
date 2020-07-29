@@ -435,10 +435,12 @@ function wp_ulike_upgrade_deprecated_options_value(){
  */
 function wp_ulike_manage_posts_custom_column( $column, $post_id ) {
     if ( $column === 'wp-ulike-thumbs-up' ){
-        echo sprintf( '<span class="wp-ulike-counter-box">%d</span>',  wp_ulike_get_counter_value_info( $post_id, 'post', 'like', false ) );
+		$is_distinct = wp_ulike_setting_repo::isDistinct('post');
+        echo sprintf( '<span class="wp-ulike-counter-box">%d</span>',  wp_ulike_get_counter_value( $post_id, 'post', 'like', $is_distinct ) );
     }
 }
 add_action( 'manage_posts_custom_column' , 'wp_ulike_manage_posts_custom_column', 10, 2 );
+add_action( 'manage_pages_custom_column' , 'wp_ulike_manage_posts_custom_column', 10, 2 );
 
 /**
  * Add custom column to post list

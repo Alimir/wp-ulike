@@ -72,7 +72,6 @@ if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
 			"id"          => '',
 			"type"        => 'post',
 			"status"      => 'like',
-			"is_distinct" => true,
 			"date_range"  => ''
 		), $atts );
 
@@ -94,7 +93,9 @@ if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
 			}
 		}
 
-		return wp_ulike_get_counter_value( $args['id'], $args['type'], $args['status'], $args['is_distinct'], $args['date_range'] );
+		$is_distinct = wp_ulike_setting_repo::isDistinct( $args['type'] );
+
+		return wp_ulike_get_counter_value( $args['id'], $args['type'], $args['status'], $is_distinct, $args['date_range'] );
 	}
 	add_shortcode( 'wp_ulike_counter', 'wp_ulike_counter_shortcode' );
 }
