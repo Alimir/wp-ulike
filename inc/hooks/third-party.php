@@ -407,7 +407,7 @@ if( ! function_exists( 'wp_ulike_seen_bp_notifications' ) ){
 	 * @since 3.6.0
 	 */
 	function wp_ulike_seen_bp_notifications() {
-		if ( ! is_user_logged_in() ) {
+		if ( ! is_user_logged_in() || ! defined( 'BP_VERSION' ) ) {
 			return;
 		}
 

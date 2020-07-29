@@ -54,3 +54,47 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 	}
 	add_shortcode( 'wp_ulike', 'wp_ulike_shortcode' );
 }
+
+if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
+	/**
+	 * Create shortcode: [wp_ulike_counter]
+	 *
+	 * @param   array	$atts
+	 * @param   string	$content
+	 *
+	 * @return  string
+	 */
+	function wp_ulike_counter_shortcode( $atts, $content = null ){
+		// Final result
+		$result = '';
+		// Default Args
+		$args   = shortcode_atts( array(
+			"id"          => '',
+			"type"        => 'post',
+			"status"      => 'like',
+			"is_distinct" => true,
+			"date_range"  => ''
+		), $atts );
+
+		if( empty( $args['id'] ) ){
+			switch ( $args['type'] ) {
+				case 'comment':
+					$args['id'] = get_comment_ID();
+					break;
+
+				case 'activity':
+					if( function_exists( 'bp_get_activity_comment_id' ) ){
+						$args['id'] = bp_get_activity_comment_id() !== NULL ? bp_get_activity_comment_id() : bp_get_activity_id();
+					}
+					break;
+
+				default:
+					$args['id'] = get_the_ID();
+					break;
+			}
+		}
+
+		return wp_ulike_get_counter_value( $args['id'], $args['type'], $args['status'], $args['is_distinct'], $args['date_range'] );
+	}
+	add_shortcode( 'wp_ulike_counter', 'wp_ulike_counter_shortcode' );
+}

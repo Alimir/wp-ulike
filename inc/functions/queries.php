@@ -327,7 +327,9 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 			$get_likers = array_reverse( $get_likers );
 		}
 
-		return ! empty( $get_likers ) ? array_slice( $get_likers, 0, $limit ) : array();
+		$output = ! empty( $get_likers ) ? array_slice( $get_likers, 0, $limit ) : array();
+
+		return apply_filters( 'wp_ulike_get_likers_list', $output, $item_type, $item_ID );
 	}
 }
 

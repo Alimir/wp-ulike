@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, favorite, statistics, multisite, rating, votin
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.4.2
-Stable tag: 4.3.2
+Stable tag: 4.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,7 +105,7 @@ You can also add a new language via [translate.wordpress.org](https://translate.
 == Frequently Asked Questions ==
 
 = How To Use this plugin? =
-Just install the plugin and activate "automatic display" in plugin configuration panel. (WP ULike has four auto options for posts, comments, BuddyPress activities & bbPress Topics.)
+Just install the plugin and activate "automatic display" in the plugin configuration panel. (WP ULike has four auto options for posts, comments, BuddyPress activities & bbPress Topics.)
 Also you can use of the following function and shortcode for your posts:
 *   Function:
 `if(function_exists('wp_ulike')) wp_ulike('get');`
@@ -152,6 +152,13 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 
 == Changelog ==
 
+= 4.3.3 =
+* Added: New shortcode to display the counter value. [wp_ulike_counter]
+* Added: New option to enable counter value on admin post columns with sorting capability (Like/Dislike).
+* Added: FAQpage type for schema list [PRO]
+* Added: New meta-box option to delete singular data. [PRO]
+* Fixed: Some major issues.
+
 = 4.3.2 =
 * Added: New option to hide likers box for anonymous users.
 * Fixed: Display thumbnail issue on Widget.
@@ -162,7 +169,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Fixed: Third-party plugin issues.
 
 = 4.3.0 =
-* Added: ‌New php classification for front-end processes.
+* Added: ‌New PHP classification for front-end processes.
 * Added: Comment meta box options. [PRO]
 * Added: The "last X days" option for Elementor period limits. [PRO]
 * Added: New features to the Elementor "Top Posts" widget. [PRO]
@@ -175,30 +182,30 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 = 4.2.6 =
 * Added: New file structure for includes path.
 * Added: An option to change likers list arrange.
-* Added: An option to force inline custom css.
+* Added: An option to force inline custom CSS.
 * Updated: Third-party plugins cache methods. (WP Rocket, Total Cache, etc.)
 * Fixed: An issue with comment auto display. (rest routes issue)
 * Fixed: Some major issues.
 
 = 4.2.5 =
-* Added: Filesystem support for custom css option. (Inline CSS Alternative)
+* Added: Filesystem support for custom CSS option. (Inline CSS Alternative)
 * Updated: Object cache methods and troubleshooting Redis and Memcached issues.
-* Updated: Option panel framework.
+* Updated: Options panel framework.
 * Fixed: Some issues on the stats panel.
 
 = 4.2.4 =
 * Added: Object cache method for user status functionality.
 * Updated: LiteSpeed purge cache method.
-* Fixed: Some issues in popular items functionlity.
+* Fixed: Some issues in popular items functionality.
 * Fixed: Button hover style issue.
 
 = 4.2.3 =
-* Added: Ultimate user profiles builder. [pro]
-* Added: Easy shortcode generator for wordpress editor & Gutenberg. [PRO]
-* Added: Pagination option for all elementor widgets. [PRO]
+* Added: Ultimate user-profiles builder. [pro]
+* Added: Easy shortcode generator for WordPress editor & Gutenberg. [PRO]
+* Added: Pagination option for all Elementor widgets. [PRO]
 * Added: Flexible shortcodes to get user profiles, user info & recent items. [PRO]
 * Updated: Fetch popular items functionality and algorithms.
-* Updated: Option panel framework.
+* Updated: Options panel framework.
 * Updated: Language files.
 * Fixed: An issue with top likers functionality performance.
 * Fixed: bbPress topic display issue.
@@ -210,7 +217,7 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Added: "WP Optimize" plugin cache support.
 * Fixed: Some issues in stats panel.
 * Modified: Twitter template structure & styles.
-* Updated: Option panel framework.
+* Updated: Options panel framework.
 
 = 4.2.1 =
 * Fixed: An issue in database tables.
@@ -219,21 +226,21 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 = 4.2.0 =
 * Added: New algorithms to make essential queries more faster and flexible. (New Metadata Table)
 * Added: 2 new templates. (Arrow Votings, Minimal Votings) [PRO]
-* Added: New routes to Rest API to get top users list and single user details for each table. [PRO]
-* Added: New options to the elementor top posts widget. (Enable normal query, Status selector) [PRO]
+* Added: New routes to Rest API to get top users list and single-user details for each table. [PRO]
+* Added: New options to the Elementor top posts widget. (Enable normal query, Status selector) [PRO]
 * Added: Improvements on database design.
 * Fixed: An issue in getting user IP functionality.
 * Fixed: Subtotal issues in JS functionality.
-* Fixed: Display like button issue on BuddyPress activity loadmore.
+* Fixed: Display like button issue on BuddyPress activity load more.
 * Fixed: Reported bugs.
 * Updated: Language files.
 
 = 4.1.9 =
-* Added: Improvements on getting likers data from database.
+* Added: Improvements on getting likers data from the database.
 * Added: Aria-label option for buttons to make more accessibility support.
 * Added: Database structure upgrade to fix IPv6 issues.
 * Fixed: Auto display issue in BuddyPress comments content.
-* Fixed: An issue with author points in mycred integration.
+* Fixed: An issue with author points in myCred integration.
 * Fixed: PopHover display issues.
 * Fixed: An issue with CSS validation.
 * Fixed: Some small issues.
@@ -348,9 +355,9 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 * Added: Better admin notice system.
 * Added: Some improvements in statistics functionalities and data controllers.
 * Added: Better capability control for stats&logs admin menu pages. [PRO]
-* Added: BuddyPress & bbpress compatible with new improvements.
+* Added: BuddyPress & bbPress compatible with new improvements.
 * Added: New option to delete orphaned rows.
-* Fixed: An issue with catching of nonce fields problem.
+* Fixed: An  issue with chaching of nonce fields problem.
 * Fixed: An issue with display likers in JS functionality.
 * Fixed: Some styling issues.
 * Fixed: bbPress functionality conflict.

@@ -7,7 +7,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           4.3.2
+ * Version:           4.3.3
  * Author:            Ali Mirzaei
  * Author URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
@@ -43,7 +43,7 @@ if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 );
-define( 'WP_ULIKE_VERSION'      , '4.3.2' 					 	 );
+define( 'WP_ULIKE_VERSION'      , '4.3.3' 					 	 );
 define( 'WP_ULIKE_DB_VERSION'   , '2.1' 					 	 );
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 );
 define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG ));
@@ -52,13 +52,13 @@ define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	 );
 define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	 );
 define( 'WP_ULIKE_BASENAME'     , plugin_basename( __FILE__ ) 	 );
 
-define( 'WP_ULIKE_ADMIN_DIR'    , WP_ULIKE_DIR . '/admin' 		 );
+define( 'WP_ULIKE_ADMIN_DIR'    , WP_ULIKE_DIR . 'admin' 		 );
 define( 'WP_ULIKE_ADMIN_URL'    , WP_ULIKE_URL . '/admin' 		 );
 
-define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . '/inc' 		 );
+define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . 'inc' 		 );
 define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/inc' 		 );
 
-define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . '/assets' 		 );
+define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . 'assets' 		 );
 define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		 );
 
 /**
@@ -134,8 +134,8 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 	    	// Include Files
 	    	$this->includes();
 
-			// Load plugin text domain
-			$this->load_plugin_textdomain();
+			// This hook is called once any activated plugins have been loaded.
+			add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 
 			// Loaded action
 			do_action( 'wp_ulike_loaded' );
@@ -145,6 +145,11 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 			// a custom directory in uploads directory for storing custom files. Default uploads/{TWT_DOMAIN}
 			$uploads = wp_get_upload_dir();
 			define( 'WP_ULIKE_CUSTOM_DIR' , $uploads['basedir'] . '/' . WP_ULIKE_SLUG );
+		}
+
+		public function plugins_loaded(){
+			// Load plugin text domain
+			$this->load_plugin_textdomain();
 		}
 
 	    /**
@@ -197,7 +202,6 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 	    }
 
-
 	    /**
 	     * Include Files
 	     *
@@ -228,8 +232,6 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 
 	    /**
 	     * Get Client IP address
-	     *
-	     * @since    3.1
 	     *
 	     * @return   String
 	    */
