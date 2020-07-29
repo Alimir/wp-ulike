@@ -76,14 +76,15 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		 */
 		if( empty( $period_limit ) && empty( $user_condition ) ){
 			// create query condition from status
-			$status_type  = '';
+			$status_type = '';
+			$meta_prefix = wp_ulike_setting_repo::isDistinct( $parsed_args['type'] ) ? 'count_distinct_' : 'count_total_';
 			if( is_array( $parsed_args['status'] ) ){
 				foreach ($parsed_args['status'] as $key => $value) {
-					$status_type .= $key === 0 ? sprintf( "t.meta_key LIKE '%%\_%s'", $value ) : sprintf( " OR t.meta_key LIKE '%%\_%s'", $value );
+					$status_type .= $key === 0 ? sprintf( "t.meta_key LIKE '%s'", $meta_prefix . $value ) : sprintf( " OR t.meta_key LIKE '%s'", $meta_prefix . $value );
 				}
 				$status_type = sprintf( " AND (%s)",  $status_type );
 			} else {
-				$status_type = sprintf( " AND t.meta_key LIKE '%%\_%s'", $parsed_args['status'] );
+				$status_type = sprintf( " AND t.meta_key LIKE '%s'",  $meta_prefix . $parsed_args['status'] );
 			}
 
 			// generate query string
@@ -229,14 +230,14 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 		 */
 		if( empty( $period_limit ) && empty( $user_condition ) ){
 			// create query condition from status
-			$status_type  = '';
+			$meta_prefix = wp_ulike_setting_repo::isDistinct( $parsed_args['type'] ) ? 'count_distinct_' : 'count_total_';
 			if( is_array( $parsed_args['status'] ) ){
 				foreach ($parsed_args['status'] as $key => $value) {
-					$status_type.= $key === 0 ? sprintf( "t.meta_key LIKE '%%\_%s'", $value ) : sprintf( " OR t.meta_key LIKE '%%\_%s'", $value );
+					$status_type .= $key === 0 ? sprintf( "t.meta_key LIKE '%s'", $meta_prefix . $value ) : sprintf( " OR t.meta_key LIKE '%s'", $meta_prefix . $value );
 				}
 				$status_type = sprintf( " AND (%s)",  $status_type );
 			} else {
-				$status_type = sprintf( " AND t.meta_key LIKE '%%\_%s'", $parsed_args['status'] );
+				$status_type = sprintf( " AND t.meta_key LIKE '%s'",  $meta_prefix . $parsed_args['status'] );
 			}
 			// generate query string
 			$query  = sprintf( '
