@@ -484,9 +484,7 @@ function wp_ulike_manage_sortable_columns_order( $query ) {
 		return;
 	}
 
-	$orderby = $query->get('orderby');
-
-	if ( 'likes' == $orderby ) {
+	if ( ! empty( $query->query['orderby'] ) && 'likes' == $query->query['orderby'] ) {
 		$post__in = wp_ulike_get_popular_items_ids(array(
 			'rel_type' => $query->get('post_type'),
 			'status'   => 'like',
@@ -494,10 +492,29 @@ function wp_ulike_manage_sortable_columns_order( $query ) {
 			"offset"   => $query->get('paged'),
 			"limit"    => $query->get('posts_per_page')
 		));
+
+		$query->set( 'offset', 0 );
 		$query->set( 'post__in', $post__in );
 		$query->set( 'orderby', 'post__in' );
 	}
 
 	do_action( 'wp_ulike_manage_sortable_columns_order', $query );
 }
-add_action( 'pre_get_posts', 'wp_ulike_manage_sortable_columns_order' );
+add_action( 'pre_get_posts', 'wp_ulike_manage_sortable_columns_order', 10, 1 );
+
+
+function wp_ulike_manage_columns_found_posts( $found_posts, $query ){
+	if ( ! is_admin() ){
+		return $found_posts;
+	}
+
+	if ( ! empty( $query->query['orderby'] ) && 'likes' == $query->query['orderby'] ) {
+		$found_posts = wp_ulike_get_popular_items_total_number(array(
+			"rel_type" => $query->get('post_type'),
+			"status"   => 'like'
+		));
+	}
+
+	return $found_posts;
+}
+add_filter( 'found_posts', 'wp_ulike_manage_columns_found_posts', 10, 2 );
