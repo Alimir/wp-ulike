@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Abstract' ) ) {
-  abstract class CSF_Abstract {
+if ( ! class_exists( 'ULF_Abstract' ) ) {
+  abstract class ULF_Abstract {
 
     public $abstract   = '';
     public $output_css = '';
@@ -41,9 +41,9 @@ if ( ! class_exists( 'CSF_Abstract' ) ) {
 
           if ( $field_type && $field_id ) {
 
-            CSF::maybe_include_field( $field_type );
+            ULF::maybe_include_field( $field_type );
 
-            $class_name = 'CSF_Field_' . $field_type;
+            $class_name = 'ULF_Field_' . $field_type;
 
             if( $field_type === 'fieldset' ) {
               if ( ! empty( $field['fields'] ) ) {
@@ -109,14 +109,14 @@ if ( ! class_exists( 'CSF_Abstract' ) ) {
                   $method = ( ! empty( $this->args['async_webfont'] ) ) ? 'async' : 'enqueue';
                   $family = $instance->enqueue_google_fonts();
 
-                  CSF::$webfonts[$method][$family] = ( ! empty( $this->webfonts[$family] ) ) ? $family . ':' . implode( ',', $this->webfonts[$family] ) : $family;
-                  CSF::$subsets = $this->subsets;
+                  ULF::$webfonts[$method][$family] = ( ! empty( $this->webfonts[$family] ) ) ? $family . ':' . implode( ',', $this->webfonts[$family] ) : $family;
+                  ULF::$subsets = $this->subsets;
 
                 }
 
                 // output css
                 if ( $field_output && $this->args['output_css'] ) {
-                  CSF::$css .= $instance->output();
+                  ULF::$css .= $instance->output();
                 }
 
                 unset( $instance );

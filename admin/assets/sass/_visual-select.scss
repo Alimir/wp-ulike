@@ -5,8 +5,8 @@
 
 .wp-ulike-visual-select{
 
-    .csf--image{
-        &.csf--active{
+    .ulf--image{
+        &.ulf--active{
             > img{
                 filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%);
             }

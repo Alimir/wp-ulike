@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_image_select' ) ) {
-  class CSF_Field_image_select extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_image_select' ) ) {
+  class ULF_Field_image_select extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -27,7 +27,7 @@ if ( ! class_exists( 'CSF_Field_image_select' ) ) {
 
       if ( ! empty( $args['options'] ) ) {
 
-        echo '<div class="csf-siblings csf--image-group" data-multiple="'. esc_attr( $args['multiple'] ) .'">';
+        echo '<div class="ulf-siblings ulf--image-group" data-multiple="'. esc_attr( $args['multiple'] ) .'">';
 
         $num = 1;
 
@@ -35,10 +35,10 @@ if ( ! class_exists( 'CSF_Field_image_select' ) ) {
 
           $type    = ( $args['multiple'] ) ? 'checkbox' : 'radio';
           $extra   = ( $args['multiple'] ) ? '[]' : '';
-          $active  = ( in_array( $key, $value ) ) ? ' csf--active' : '';
+          $active  = ( in_array( $key, $value ) ) ? ' ulf--active' : '';
           $checked = ( in_array( $key, $value ) ) ? ' checked' : '';
 
-          echo '<div class="csf--sibling csf--image'. esc_attr( $active ) .'">';
+          echo '<div class="ulf--sibling ulf--image'. esc_attr( $active ) .'">';
           echo '<img src="'. esc_url( $option ) .'" alt="img-'. esc_attr( $num++ ) .'" />';
           echo '<input type="'. esc_attr( $type ) .'" name="'. esc_attr( $this->field_name( $extra ) ) .'" value="'. esc_attr( $key ) .'"'. $this->field_attributes() . esc_attr( $checked ) .'/>';
           echo '</div>';

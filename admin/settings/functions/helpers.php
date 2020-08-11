@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! function_exists( 'csf_array_search' ) ) {
-  function csf_array_search( $array, $key, $value ) {
+if ( ! function_exists( 'ulf_array_search' ) ) {
+  function ulf_array_search( $array, $key, $value ) {
 
     $results = array();
 
@@ -18,7 +18,7 @@ if ( ! function_exists( 'csf_array_search' ) ) {
       }
 
       foreach ( $array as $sub_array ) {
-        $results = array_merge( $results, csf_array_search( $sub_array, $key, $value ) );
+        $results = array_merge( $results, ulf_array_search( $sub_array, $key, $value ) );
       }
 
     }
@@ -36,8 +36,8 @@ if ( ! function_exists( 'csf_array_search' ) ) {
  * @version 1.0.0
  *
  */
-if ( ! function_exists( 'csf_microtime' ) ) {
-  function csf_timeout( $timenow, $starttime, $timeout = 30 ) {
+if ( ! function_exists( 'ulf_microtime' ) ) {
+  function ulf_timeout( $timenow, $starttime, $timeout = 30 ) {
     return ( ( $timenow - $starttime ) < $timeout ) ? true : false;
   }
 }
@@ -50,8 +50,8 @@ if ( ! function_exists( 'csf_microtime' ) ) {
  * @version 1.0.0
  *
  */
-if ( ! function_exists( 'csf_wp_editor_api' ) ) {
-  function csf_wp_editor_api() {
+if ( ! function_exists( 'ulf_wp_editor_api' ) ) {
+  function ulf_wp_editor_api() {
     global $wp_version;
     return version_compare( $wp_version, '4.8', '>=' );
   }

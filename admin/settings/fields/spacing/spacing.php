@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_spacing' ) ) {
-  class CSF_Field_spacing extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_spacing' ) ) {
+  class ULF_Field_spacing extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -22,11 +22,11 @@ if ( ! class_exists( 'CSF_Field_spacing' ) ) {
         'bottom_icon'        => '<i class="fas fa-long-arrow-alt-down"></i>',
         'left_icon'          => '<i class="fas fa-long-arrow-alt-left"></i>',
         'all_icon'           => '<i class="fas fa-arrows-alt"></i>',
-        'top_placeholder'    => esc_html__( 'top', 'csf' ),
-        'right_placeholder'  => esc_html__( 'right', 'csf' ),
-        'bottom_placeholder' => esc_html__( 'bottom', 'csf' ),
-        'left_placeholder'   => esc_html__( 'left', 'csf' ),
-        'all_placeholder'    => esc_html__( 'all', 'csf' ),
+        'top_placeholder'    => esc_html__( 'top', 'ulf' ),
+        'right_placeholder'  => esc_html__( 'right', 'ulf' ),
+        'bottom_placeholder' => esc_html__( 'bottom', 'ulf' ),
+        'left_placeholder'   => esc_html__( 'left', 'ulf' ),
+        'all_placeholder'    => esc_html__( 'all', 'ulf' ),
         'top'                => true,
         'left'               => true,
         'bottom'             => true,
@@ -48,20 +48,20 @@ if ( ! class_exists( 'CSF_Field_spacing' ) ) {
 
       $value   = wp_parse_args( $this->value, $default_values );
       $unit    = ( count( $args['units'] ) === 1 && ! empty( $args['unit'] ) ) ? $args['units'][0] : '';
-      $is_unit = ( ! empty( $unit ) ) ? ' csf--is-unit' : '';
+      $is_unit = ( ! empty( $unit ) ) ? ' ulf--is-unit' : '';
 
       echo $this->field_before();
 
-      echo '<div class="csf--inputs">';
+      echo '<div class="ulf--inputs">';
 
       if ( ! empty( $args['all'] ) ) {
 
         $placeholder = ( ! empty( $args['all_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args['all_placeholder'] ) .'"' : '';
 
-        echo '<div class="csf--input">';
-        echo ( ! empty( $args['all_icon'] ) ) ? '<span class="csf--label csf--icon">'. wp_kses_post( $args['all_icon'] ) .'</span>' : '';
-        echo '<input type="number" name="'. esc_attr( $this->field_name( '[all]' ) ) .'" value="'. esc_attr( $value['all'] ) .'"'. $placeholder .' class="csf-input-number'. esc_attr( $is_unit ) .'" />';
-        echo ( $unit ) ? '<span class="csf--label csf--unit">'. esc_attr( $args['units'][0] ) .'</span>' : '';
+        echo '<div class="ulf--input">';
+        echo ( ! empty( $args['all_icon'] ) ) ? '<span class="ulf--label ulf--icon">'. wp_kses_post( $args['all_icon'] ) .'</span>' : '';
+        echo '<input type="number" name="'. esc_attr( $this->field_name( '[all]' ) ) .'" value="'. esc_attr( $value['all'] ) .'"'. $placeholder .' class="ulf-input-number'. esc_attr( $is_unit ) .'" />';
+        echo ( $unit ) ? '<span class="ulf--label ulf--unit">'. esc_attr( $args['units'][0] ) .'</span>' : '';
         echo '</div>';
 
       } else {
@@ -80,10 +80,10 @@ if ( ! class_exists( 'CSF_Field_spacing' ) ) {
 
           $placeholder = ( ! empty( $args[$property.'_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args[$property.'_placeholder'] ) .'"' : '';
 
-          echo '<div class="csf--input">';
-          echo ( ! empty( $args[$property.'_icon'] ) ) ? '<span class="csf--label csf--icon">'. wp_kses_post( $args[$property.'_icon'] ) .'</span>' : '';
-          echo '<input type="number" name="'. esc_attr( $this->field_name( '['. $property .']' ) ) .'" value="'. esc_attr( $value[$property] ) .'"'. $placeholder .' class="csf-input-number'. esc_attr( $is_unit ) .'" />';
-          echo ( $unit ) ? '<span class="csf--label csf--unit">'. esc_attr( $args['units'][0] ) .'</span>' : '';
+          echo '<div class="ulf--input">';
+          echo ( ! empty( $args[$property.'_icon'] ) ) ? '<span class="ulf--label ulf--icon">'. wp_kses_post( $args[$property.'_icon'] ) .'</span>' : '';
+          echo '<input type="number" name="'. esc_attr( $this->field_name( '['. $property .']' ) ) .'" value="'. esc_attr( $value[$property] ) .'"'. $placeholder .' class="ulf-input-number'. esc_attr( $is_unit ) .'" />';
+          echo ( $unit ) ? '<span class="ulf--label ulf--unit">'. esc_attr( $args['units'][0] ) .'</span>' : '';
           echo '</div>';
 
         }
@@ -91,7 +91,7 @@ if ( ! class_exists( 'CSF_Field_spacing' ) ) {
       }
 
       if ( ! empty( $args['unit'] ) && ! empty( $args['show_units'] ) && count( $args['units'] ) > 1 ) {
-        echo '<div class="csf--input">';
+        echo '<div class="ulf--input">';
         echo '<select name="'. esc_attr( $this->field_name( '[unit]' ) ) .'">';
         foreach ( $args['units'] as $unit ) {
           $selected = ( $value['unit'] === $unit ) ? ' selected' : '';

@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_textarea' ) ) {
-  class CSF_Field_textarea extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_textarea' ) ) {
+  class ULF_Field_textarea extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -31,12 +31,12 @@ if ( ! class_exists( 'CSF_Field_textarea' ) ) {
 
         foreach ( $shortcoder as $shortcode_id ) {
 
-          if ( isset( CSF::$args['shortcode_options'][$shortcode_id] ) ) {
+          if ( isset( ULF::$args['shortcode_options'][$shortcode_id] ) ) {
 
-            $setup_args   = CSF::$args['shortcode_options'][$shortcode_id];
-            $button_title = ( ! empty( $setup_args['button_title'] ) ) ? $setup_args['button_title'] : esc_html__( 'Add Shortcode', 'csf' );
+            $setup_args   = ULF::$args['shortcode_options'][$shortcode_id];
+            $button_title = ( ! empty( $setup_args['button_title'] ) ) ? $setup_args['button_title'] : esc_html__( 'Add Shortcode', 'ulf' );
 
-            echo '<a href="#" class="button button-primary csf-shortcode-button" data-modal-id="'. esc_attr( $shortcode_id ) .'">'. wp_kses_post( $button_title ) .'</a>';
+            echo '<a href="#" class="button button-primary ulf-shortcode-button" data-modal-id="'. esc_attr( $shortcode_id ) .'">'. wp_kses_post( $button_title ) .'</a>';
 
           }
 

@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_submessage' ) ) {
-  class CSF_Field_submessage extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_submessage' ) ) {
+  class ULF_Field_submessage extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -18,7 +18,7 @@ if ( ! class_exists( 'CSF_Field_submessage' ) ) {
 
       $style = ( ! empty( $this->field['style'] ) ) ? $this->field['style'] : 'normal';
 
-      echo '<div class="csf-submessage csf-submessage-'. esc_attr( $style ) .'">'. wp_kses_post( $this->field['content'] ) .'</div>';
+      echo '<div class="ulf-submessage ulf-submessage-'. esc_attr( $style ) .'">'. wp_kses_post( $this->field['content'] ) .'</div>';
 
     }
 

@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Metabox' ) ) {
-  class CSF_Metabox extends CSF_Abstract{
+if ( ! class_exists( 'ULF_Metabox' ) ) {
+  class ULF_Metabox extends ULF_Abstract{
 
     // constans
     public $unique         = '';
@@ -38,8 +38,8 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
     public function __construct( $key, $params = array() ) {
 
       $this->unique         = $key;
-      $this->args           = apply_filters( "csf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
-      $this->sections       = apply_filters( "csf_{$this->unique}_sections", $params['sections'], $this );
+      $this->args           = apply_filters( "ulf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
+      $this->sections       = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
       $this->post_type      = ( is_array( $this->args['post_type'] ) ) ? $this->args['post_type'] : array_filter( (array) $this->args['post_type'] );
       $this->post_formats   = ( is_array( $this->args['post_formats'] ) ) ? $this->args['post_formats'] : array_filter( (array) $this->args['post_formats'] );
       $this->page_templates = ( is_array( $this->args['page_templates'] ) ) ? $this->args['page_templates'] : array_filter( (array) $this->args['page_templates'] );
@@ -90,7 +90,7 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
         $saved_post_format = ( is_object( $post ) ) ? get_post_format( $post ) : false;
         $saved_post_format = ( ! empty( $saved_post_format ) ) ? $saved_post_format : 'default';
 
-        $classes[] = 'csf-post-formats';
+        $classes[] = 'ulf-post-formats';
 
         // Sanitize post format for standard to default
         if ( ( $key = array_search( 'standard', $this->post_formats ) ) !== false ) {
@@ -98,13 +98,13 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
         }
 
         foreach ( $this->post_formats as $format ) {
-          $classes[] = 'csf-post-format-'. $format;
+          $classes[] = 'ulf-post-format-'. $format;
         }
 
         if ( ! in_array( $saved_post_format, $this->post_formats ) ) {
-          $classes[] = 'csf-metabox-hide';
+          $classes[] = 'ulf-metabox-hide';
         } else {
-          $classes[] = 'csf-metabox-show';
+          $classes[] = 'ulf-metabox-show';
         }
 
       }
@@ -113,16 +113,16 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
         $saved_template = ( is_object( $post ) && ! empty( $post->page_template ) ) ? $post->page_template : 'default';
 
-        $classes[] = 'csf-page-templates';
+        $classes[] = 'ulf-page-templates';
 
         foreach ( $this->page_templates as $template ) {
-          $classes[] = 'csf-page-'. preg_replace( '/[^a-zA-Z0-9]+/', '-', strtolower( $template ) );
+          $classes[] = 'ulf-page-'. preg_replace( '/[^a-zA-Z0-9]+/', '-', strtolower( $template ) );
         }
 
         if ( ! in_array( $saved_template, $this->page_templates ) ) {
-          $classes[] = 'csf-metabox-hide';
+          $classes[] = 'ulf-metabox-hide';
         } else {
-          $classes[] = 'csf-metabox-show';
+          $classes[] = 'ulf-metabox-show';
         }
 
       }
@@ -186,24 +186,24 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
       global $post;
 
       $has_nav  = ( count( $this->sections ) > 1 && $this->args['context'] !== 'side' ) ? true : false;
-      $show_all = ( ! $has_nav ) ? ' csf-show-all' : '';
-      $errors   = ( is_object ( $post ) ) ? get_post_meta( $post->ID, '_csf_errors_'. $this->unique, true ) : array();
+      $show_all = ( ! $has_nav ) ? ' ulf-show-all' : '';
+      $errors   = ( is_object ( $post ) ) ? get_post_meta( $post->ID, '_ulf_errors_'. $this->unique, true ) : array();
       $errors   = ( ! empty( $errors ) ) ? $errors : array();
-      $theme    = ( $this->args['theme'] ) ? ' csf-theme-'. $this->args['theme'] : '';
+      $theme    = ( $this->args['theme'] ) ? ' ulf-theme-'. $this->args['theme'] : '';
 
       if ( is_object ( $post ) && ! empty( $errors ) ) {
-        delete_post_meta( $post->ID, '_csf_errors_'. $this->unique );
+        delete_post_meta( $post->ID, '_ulf_errors_'. $this->unique );
       }
 
-      wp_nonce_field( 'csf_metabox_nonce', 'csf_metabox_nonce'. $this->unique );
+      wp_nonce_field( 'ulf_metabox_nonce', 'ulf_metabox_nonce'. $this->unique );
 
-      echo '<div class="csf csf-metabox'. esc_attr( $theme ) .'">';
+      echo '<div class="ulf ulf-metabox'. esc_attr( $theme ) .'">';
 
-        echo '<div class="csf-wrapper'. esc_attr( $show_all ) .'">';
+        echo '<div class="ulf-wrapper'. esc_attr( $show_all ) .'">';
 
           if ( $has_nav ) {
 
-            echo '<div class="csf-nav csf-nav-metabox">';
+            echo '<div class="ulf-nav ulf-nav-metabox">';
 
               echo '<ul>';
 
@@ -211,8 +211,8 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
               foreach ( $this->sections as $section ) {
 
-                $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="csf-label-error csf-error">!</i>' : '';
-                $tab_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+                $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="ulf-label-error ulf-error">!</i>' : '';
+                $tab_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
                 echo '<li><a href="#">'. wp_kses_post( $tab_icon . $section['title'] . $tab_error ) .'</a></li>';
 
@@ -226,22 +226,22 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
           }
 
-          echo '<div class="csf-content">';
+          echo '<div class="ulf-content">';
 
-            echo '<div class="csf-sections">';
+            echo '<div class="ulf-sections">';
 
             $section_key = 0;
 
             foreach ( $this->sections as $section ) {
 
-              $section_onload = ( ! $has_nav ) ? ' csf-onload' : '';
+              $section_onload = ( ! $has_nav ) ? ' ulf-onload' : '';
               $section_class  = ( ! empty( $section['class'] ) ) ? ' '. $section['class'] : '';
               $section_title  = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
-              $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+              $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-              echo '<div class="csf-section'. esc_attr( $section_onload . $section_class ) .'">';
+              echo '<div class="ulf-section'. esc_attr( $section_onload . $section_class ) .'">';
 
-              echo ( $section_title || $section_icon ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
+              echo ( $section_title || $section_icon ) ? '<div class="ulf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
 
               if ( ! empty( $section['fields'] ) ) {
 
@@ -255,13 +255,13 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
                     $field['default'] = $this->get_default( $field );
                   }
 
-                  CSF::field( $field, $this->get_meta_value( $field ), $this->unique, 'metabox' );
+                  ULF::field( $field, $this->get_meta_value( $field ), $this->unique, 'metabox' );
 
                 }
 
               } else {
 
-                echo '<div class="csf-no-option">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
+                echo '<div class="ulf-no-option">'. esc_html__( 'No option provided by developer.', 'ulf' ) .'</div>';
 
               }
 
@@ -275,11 +275,11 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
             if ( ! empty( $this->args['show_restore'] ) ) {
 
-              echo '<div class="csf-sections-restore">';
+              echo '<div class="ulf-sections-restore">';
               echo '<label>';
               echo '<input type="checkbox" name="'. esc_attr( $this->unique ) .'[_restore]" />';
-              echo '<span class="button csf-button-restore">'. esc_html__( 'Restore', 'csf' ) .'</span>';
-              echo '<span class="button csf-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post for restore ', 'csf' ), esc_html__( 'Cancel', 'csf' ) ) .'</span>';
+              echo '<span class="button ulf-button-restore">'. esc_html__( 'Restore', 'ulf' ) .'</span>';
+              echo '<span class="button ulf-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post for restore ', 'ulf' ), esc_html__( 'Cancel', 'ulf' ) ) .'</span>';
               echo '</label>';
               echo '</div>';
 
@@ -287,7 +287,7 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
           echo '</div>';
 
-          echo ( $has_nav ) ? '<div class="csf-nav-background"></div>' : '';
+          echo ( $has_nav ) ? '<div class="ulf-nav-background"></div>' : '';
 
           echo '<div class="clear"></div>';
 
@@ -303,10 +303,10 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
       $count    = 1;
       $data     = array();
       $errors   = array();
-      $noncekey = 'csf_metabox_nonce'. $this->unique;
+      $noncekey = 'ulf_metabox_nonce'. $this->unique;
       $nonce    = ( ! empty( $_POST[ $noncekey ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $noncekey ] ) ) : '';
 
-      if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! wp_verify_nonce( $nonce, 'csf_metabox_nonce' ) ) {
+      if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! wp_verify_nonce( $nonce, 'ulf_metabox_nonce' ) ) {
         return $post_id;
       }
 
@@ -373,9 +373,9 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
 
       }
 
-      $data = apply_filters( "csf_{$this->unique}_save", $data, $post_id, $this );
+      $data = apply_filters( "ulf_{$this->unique}_save", $data, $post_id, $this );
 
-      do_action( "csf_{$this->unique}_save_before", $data, $post_id, $this );
+      do_action( "ulf_{$this->unique}_save_before", $data, $post_id, $this );
 
       if ( empty( $data ) || ! empty( $request['_restore'] ) ) {
 
@@ -398,14 +398,14 @@ if ( ! class_exists( 'CSF_Metabox' ) ) {
         }
 
         if ( ! empty( $errors ) ) {
-          update_post_meta( $post_id, '_csf_errors_'. $this->unique, $errors );
+          update_post_meta( $post_id, '_ulf_errors_'. $this->unique, $errors );
         }
 
       }
 
-      do_action( "csf_{$this->unique}_saved", $data, $post_id, $this );
+      do_action( "ulf_{$this->unique}_saved", $data, $post_id, $this );
 
-      do_action( "csf_{$this->unique}_save_after", $data, $post_id, $this );
+      do_action( "ulf_{$this->unique}_save_after", $data, $post_id, $this );
 
     }
   }

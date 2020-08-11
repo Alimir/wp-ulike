@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_heading' ) ) {
-  class CSF_Field_heading extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_heading' ) ) {
+  class ULF_Field_heading extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );

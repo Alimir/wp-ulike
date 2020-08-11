@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_button_set' ) ) {
-  class CSF_Field_button_set extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_button_set' ) ) {
+  class ULF_Field_button_set extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -33,16 +33,16 @@ if ( ! class_exists( 'CSF_Field_button_set' ) ) {
 
         if ( is_array( $options ) && ! empty( $options ) ) {
 
-          echo '<div class="csf-siblings csf--button-group" data-multiple="'. esc_attr( $args['multiple'] ) .'">';
+          echo '<div class="ulf-siblings ulf--button-group" data-multiple="'. esc_attr( $args['multiple'] ) .'">';
 
           foreach ( $options as $key => $option ) {
 
             $type    = ( $args['multiple'] ) ? 'checkbox' : 'radio';
             $extra   = ( $args['multiple'] ) ? '[]' : '';
-            $active  = ( in_array( $key, $value ) || ( empty( $value ) && empty( $key ) )  ) ? ' csf--active' : '';
+            $active  = ( in_array( $key, $value ) || ( empty( $value ) && empty( $key ) )  ) ? ' ulf--active' : '';
             $checked = ( in_array( $key, $value ) || ( empty( $value ) && empty( $key ) ) ) ? ' checked' : '';
 
-            echo '<div class="csf--sibling csf--button'. esc_attr( $active ) .'">';
+            echo '<div class="ulf--sibling ulf--button'. esc_attr( $active ) .'">';
             echo '<input type="'. esc_attr( $type ) .'" name="'. esc_attr( $this->field_name( $extra ) ) .'" value="'. esc_attr( $key ) .'"'. $this->field_attributes() . esc_attr( $checked ) .'/>';
             echo wp_kses_post( $option );
             echo '</div>';
@@ -53,7 +53,7 @@ if ( ! class_exists( 'CSF_Field_button_set' ) ) {
 
         } else {
 
-          echo ( ! empty( $this->field['empty_message'] ) ) ? esc_attr( $this->field['empty_message'] ) : esc_html__( 'No data provided for this option type.', 'csf' );
+          echo ( ! empty( $this->field['empty_message'] ) ) ? esc_attr( $this->field['empty_message'] ) : esc_html__( 'No data provided for this option type.', 'ulf' );
 
         }
 

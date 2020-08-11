@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_media' ) ) {
-  class CSF_Field_media extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_media' ) ) {
+  class ULF_Field_media extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -20,8 +20,8 @@ if ( ! class_exists( 'CSF_Field_media' ) ) {
         'url'          => true,
         'preview'      => true,
         'library'      => array(),
-        'button_title' => esc_html__( 'Upload', 'csf' ),
-        'remove_title' => esc_html__( 'Remove', 'csf' ),
+        'button_title' => esc_html__( 'Upload', 'ulf' ),
+        'remove_title' => esc_html__( 'Remove', 'ulf' ),
         'preview_size' => 'thumbnail',
       ) );
 
@@ -54,29 +54,29 @@ if ( ! class_exists( 'CSF_Field_media' ) ) {
       $preview_src = ( $args['preview_size'] !== 'thumbnail' ) ? $this->value['url'] : $this->value['thumbnail'];
       $hidden_url  = ( empty( $args['url'] ) ) ? ' hidden' : '';
       $hidden_auto = ( empty( $this->value['url'] ) ) ? ' hidden' : '';
-      $placeholder = ( empty( $this->field['placeholder'] ) ) ? ' placeholder="'.  esc_html__( 'No media selected', 'csf' ) .'"' : '';
+      $placeholder = ( empty( $this->field['placeholder'] ) ) ? ' placeholder="'.  esc_html__( 'No media selected', 'ulf' ) .'"' : '';
 
       echo $this->field_before();
 
       if ( ! empty( $args['preview'] ) ) {
-        echo '<div class="csf--preview'. esc_attr( $hidden_auto ) .'">';
-        echo '<div class="csf-image-preview"><a href="#" class="csf--remove fas fa-times"></a><img src="'. esc_url( $preview_src ) .'" class="csf--src" /></div>';
+        echo '<div class="ulf--preview'. esc_attr( $hidden_auto ) .'">';
+        echo '<div class="ulf-image-preview"><a href="#" class="ulf--remove fas fa-times"></a><img src="'. esc_url( $preview_src ) .'" class="ulf--src" /></div>';
         echo '</div>';
       }
 
-      echo '<div class="csf--placeholder">';
-      echo '<input type="text" name="'. esc_attr( $this->field_name( '[url]' ) ) .'" value="'. esc_attr( $this->value['url'] ) .'" class="csf--url'. esc_attr( $hidden_url ) .'" readonly="readonly"'. $this->field_attributes() . $placeholder .' />';
-      echo '<a href="#" class="button button-primary csf--button" data-library="'. esc_attr( $library ) .'" data-preview-size="'. esc_attr( $args['preview_size'] ) .'">'. wp_kses_post( $args['button_title'] ) .'</a>';
-      echo ( empty( $args['preview'] ) ) ? '<a href="#" class="button button-secondary csf-warning-primary csf--remove'. esc_attr( $hidden_auto ) .'">'. wp_kses_post( $args['remove_title'] ) .'</a>' : '';
+      echo '<div class="ulf--placeholder">';
+      echo '<input type="text" name="'. esc_attr( $this->field_name( '[url]' ) ) .'" value="'. esc_attr( $this->value['url'] ) .'" class="ulf--url'. esc_attr( $hidden_url ) .'" readonly="readonly"'. $this->field_attributes() . $placeholder .' />';
+      echo '<a href="#" class="button button-primary ulf--button" data-library="'. esc_attr( $library ) .'" data-preview-size="'. esc_attr( $args['preview_size'] ) .'">'. wp_kses_post( $args['button_title'] ) .'</a>';
+      echo ( empty( $args['preview'] ) ) ? '<a href="#" class="button button-secondary ulf-warning-primary ulf--remove'. esc_attr( $hidden_auto ) .'">'. wp_kses_post( $args['remove_title'] ) .'</a>' : '';
       echo '</div>';
 
-      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[id]' ) ) .'" value="'. esc_attr( $this->value['id'] ) .'" class="csf--id"/>';
-      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[width]' ) ) .'" value="'. esc_attr( $this->value['width'] ) .'" class="csf--width"/>';
-      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[height]' ) ) .'" value="'. esc_attr( $this->value['height'] ) .'" class="csf--height"/>';
-      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[thumbnail]' ) ) .'" value="'. esc_attr( $this->value['thumbnail'] ) .'" class="csf--thumbnail"/>';
-      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[alt]' ) ) .'" value="'. esc_attr( $this->value['alt'] ) .'" class="csf--alt"/>';
-      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[title]' ) ) .'" value="'. esc_attr( $this->value['title'] ) .'" class="csf--title"/>';
-      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[description]' ) ) .'" value="'. esc_attr( $this->value['description'] ) .'" class="csf--description"/>';
+      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[id]' ) ) .'" value="'. esc_attr( $this->value['id'] ) .'" class="ulf--id"/>';
+      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[width]' ) ) .'" value="'. esc_attr( $this->value['width'] ) .'" class="ulf--width"/>';
+      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[height]' ) ) .'" value="'. esc_attr( $this->value['height'] ) .'" class="ulf--height"/>';
+      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[thumbnail]' ) ) .'" value="'. esc_attr( $this->value['thumbnail'] ) .'" class="ulf--thumbnail"/>';
+      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[alt]' ) ) .'" value="'. esc_attr( $this->value['alt'] ) .'" class="ulf--alt"/>';
+      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[title]' ) ) .'" value="'. esc_attr( $this->value['title'] ) .'" class="ulf--title"/>';
+      echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[description]' ) ) .'" value="'. esc_attr( $this->value['description'] ) .'" class="ulf--description"/>';
 
       echo $this->field_after();
 

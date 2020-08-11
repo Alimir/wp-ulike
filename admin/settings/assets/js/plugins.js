@@ -12,13 +12,13 @@
 */
 (function($) {
 
-  function CSFAjaxChosen(element, options) {
+  function ULFAjaxChosen(element, options) {
     this.element = $(element);
     this.options = options;
     this.init();
   };
 
-  CSFAjaxChosen.prototype.init = function() {
+  ULFAjaxChosen.prototype.init = function() {
     this.element.chosen(this.options);
     this.container    = this.element.next('.chosen-container');
     this.search_field = this.container.find('.chosen-search-input');
@@ -28,7 +28,7 @@
     this.events();
   };
 
-  CSFAjaxChosen.prototype.events = function() {
+  ULFAjaxChosen.prototype.events = function() {
 
     var _this = this;
 
@@ -51,14 +51,14 @@
 
   };
 
-  CSFAjaxChosen.prototype.search_field_focused = function() {
+  ULFAjaxChosen.prototype.search_field_focused = function() {
     this.search_welcome_message();
     if ( this.options.min_length === 0 && this.search_field.val().length === 0 ) {
       this.update_list();
     }
   };
 
-  CSFAjaxChosen.prototype.search_welcome_message = function() {
+  ULFAjaxChosen.prototype.search_welcome_message = function() {
 
     var value   = $.trim(this.search_field.val());
     var results = this.container.find('.chosen-results');
@@ -69,7 +69,7 @@
 
   };
 
-  CSFAjaxChosen.prototype.update_list = function() {
+  ULFAjaxChosen.prototype.update_list = function() {
 
     var _this = this;
 
@@ -100,7 +100,7 @@
 
       _this.options.data['term'] = value;
 
-      _this.chosenXhr = window.wp.ajax.post('csf-chosen', _this.options.data).done( function( response ) {
+      _this.chosenXhr = window.wp.ajax.post('ulf-chosen', _this.options.data).done( function( response ) {
         _this.show_results( response );
       }).fail( function( response ) {
         _this.container.find('.no-results').text(response.error);
@@ -110,7 +110,7 @@
 
   };
 
-  CSFAjaxChosen.prototype.show_results = function( items ) {
+  ULFAjaxChosen.prototype.show_results = function( items ) {
 
     var _this = this;
 
@@ -147,10 +147,10 @@
 
     if( this.is_multiple ) {
 
-      var $hidden_select = this.element.parent().find('.csf-hide-select');
+      var $hidden_select = this.element.parent().find('.ulf-hide-select');
       var $hidden_value  = $hidden_select.val() || [];
 
-      this.element.CSFChosenOrder($hidden_value, true);
+      this.element.ULFChosenOrder($hidden_value, true);
       this.search_field.css('width', width_before_trigger);
 
     }
@@ -163,9 +163,9 @@
 
   };
 
-  $.fn.CSFAjaxChosen = function(chosenOptions) {
+  $.fn.ULFAjaxChosen = function(chosenOptions) {
     return this.each(function() {
-      new CSFAjaxChosen(this, chosenOptions);
+      new ULFAjaxChosen(this, chosenOptions);
     });
   };
 
@@ -175,20 +175,20 @@
 // Full source at https://github.com/tristanjahier/chosen-order
 // Copyright (c) 2013 - Tristan Jahier, http://tristan-jahier.fr
 (function() {
-  var $, CSFAbstractChosenOrder, _ref,
+  var $, ULFAbstractChosenOrder, _ref,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  CSFAbstractChosenOrder = (function() {
+  ULFAbstractChosenOrder = (function() {
 
-    function CSFAbstractChosenOrder() {}
+    function ULFAbstractChosenOrder() {}
 
-    CSFAbstractChosenOrder.insertAt = function(node, index, parentNode) {
+    ULFAbstractChosenOrder.insertAt = function(node, index, parentNode) {
       return parentNode.insertBefore(node, parentNode.children[index].nextSibling);
     };
 
-    CSFAbstractChosenOrder.getFlattenedOptionsAndGroups = function(select) {
+    ULFAbstractChosenOrder.getFlattenedOptionsAndGroups = function(select) {
       var flattened_options, opt, options, sub_opt, sub_options, _i, _j, _len, _len1;
       options = Array.prototype.filter.call(select.childNodes, function(o) {
         var _ref;
@@ -211,11 +211,11 @@
       return flattened_options;
     };
 
-    CSFAbstractChosenOrder.isValidMultipleSelectElement = function(element) {
+    ULFAbstractChosenOrder.isValidMultipleSelectElement = function(element) {
       return element !== null && typeof element !== "undefined" && element.nodeName === "SELECT" && element.multiple;
     };
 
-    CSFAbstractChosenOrder.getChosenUIContainer = function(select) {
+    ULFAbstractChosenOrder.getChosenUIContainer = function(select) {
       if (select.id !== "") {
         return document.getElementById(select.id.replace(/-/g, "_") + "_chosen");
       } else {
@@ -223,11 +223,11 @@
       }
     };
 
-    CSFAbstractChosenOrder.isChosenified = function(select) {
+    ULFAbstractChosenOrder.isChosenified = function(select) {
       return this.getChosenUIContainer(select) != null;
     };
 
-    CSFAbstractChosenOrder.forceSelection = function(select, selection) {
+    ULFAbstractChosenOrder.forceSelection = function(select, selection) {
       var i, opt, options, _ref;
       options = this.getFlattenedOptionsAndGroups(select);
       i = 0;
@@ -245,7 +245,7 @@
       return this.triggerEvent(select, "chosen:updated");
     };
 
-    CSFAbstractChosenOrder.CSFChosenOrder = function(select, order, force) {
+    ULFAbstractChosenOrder.ULFChosenOrder = function(select, order, force) {
       var chosen_choices, chosen_options, chosen_ui, i, j, opt, opt_val, option, options, rel, relAttributeName, _i, _j, _len, _len1, _results;
       if (this.getDOMElement != null) {
         select = this.getDOMElement(select);
@@ -290,33 +290,33 @@
       }
     };
 
-    return CSFAbstractChosenOrder;
+    return ULFAbstractChosenOrder;
 
   })();
 
   $ = jQuery;
 
   $.fn.extend({
-    CSFChosenOrder: function(order, force) {
-      return _CSFChosenOrder.CSFChosenOrder(this, order, force);
+    ULFChosenOrder: function(order, force) {
+      return _ULFChosenOrder.ULFChosenOrder(this, order, force);
     }
   });
 
-  this._CSFChosenOrder = (function(_super) {
-    __extends(_CSFChosenOrder, _super);
+  this._ULFChosenOrder = (function(_super) {
+    __extends(_ULFChosenOrder, _super);
 
-    function _CSFChosenOrder() {
-      _ref = _CSFChosenOrder.__super__.constructor.apply(this, arguments);
+    function _ULFChosenOrder() {
+      _ref = _ULFChosenOrder.__super__.constructor.apply(this, arguments);
       return _ref;
     }
 
-    _CSFChosenOrder.relAttributeName = 'data-option-array-index';
+    _ULFChosenOrder.relAttributeName = 'data-option-array-index';
 
-    _CSFChosenOrder.isjQueryObject = function(obj) {
+    _ULFChosenOrder.isjQueryObject = function(obj) {
       return (typeof jQuery !== "undefined" && jQuery !== null) && obj instanceof jQuery;
     };
 
-    _CSFChosenOrder.getDOMElement = function(element) {
+    _ULFChosenOrder.getDOMElement = function(element) {
       if (this.isjQueryObject(element)) {
         return element.get(0);
       } else {
@@ -324,7 +324,7 @@
       }
     };
 
-    _CSFChosenOrder.searchChosenUIContainer = function(element) {
+    _ULFChosenOrder.searchChosenUIContainer = function(element) {
       if ($(element).data("chosen") != null) {
         return $(element).data("chosen").container[0];
       } else {
@@ -332,13 +332,13 @@
       }
     };
 
-    _CSFChosenOrder.triggerEvent = function(target, event_name) {
+    _ULFChosenOrder.triggerEvent = function(target, event_name) {
       return $(target).trigger(event_name);
     };
 
-    return _CSFChosenOrder;
+    return _ULFChosenOrder;
 
-  })(CSFAbstractChosenOrder);
+  })(ULFAbstractChosenOrder);
 
 }).call(this);
 ;(function() {
@@ -1876,7 +1876,7 @@
       if( result ) {
 
         $(controls).each(function() {
-          $(this).removeClass('csf-depend-on');
+          $(this).removeClass('ulf-depend-on');
         });
 
         $(this.rules).each(function() {
@@ -1886,7 +1886,7 @@
       } else {
 
         $(controls).each(function() {
-          $(this).addClass('csf-depend-on');
+          $(this).addClass('ulf-depend-on');
         });
 
         $(this.rules).each(function() {
@@ -1916,7 +1916,7 @@
     }
   });
 
-  $.csf_deps = {
+  $.ulf_deps = {
 
     createRuleset: function() {
       return new Ruleset();
@@ -2082,8 +2082,8 @@
   //
 
   if (typeof $.fn !== "undefined") {
-    $.fn.serializeObjectCSF = FormSerializer.serializeObject;
-    $.fn.serializeJSONCSF   = FormSerializer.serializeJSON;
+    $.fn.serializeObjectULF = FormSerializer.serializeObject;
+    $.fn.serializeJSONULF   = FormSerializer.serializeJSON;
   }
 
   exports.FormSerializer = FormSerializer;

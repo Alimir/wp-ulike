@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_checkbox' ) ) {
-  class CSF_Field_checkbox extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_checkbox' ) ) {
+  class ULF_Field_checkbox extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -21,7 +21,7 @@ if ( ! class_exists( 'CSF_Field_checkbox' ) ) {
         'query_args' => array(),
       ) );
 
-      $inline_class = ( $args['inline'] ) ? ' class="csf--inline-list"' : '';
+      $inline_class = ( $args['inline'] ) ? ' class="ulf--inline-list"' : '';
 
       echo $this->field_before();
 
@@ -47,7 +47,7 @@ if ( ! class_exists( 'CSF_Field_checkbox' ) ) {
                     echo '<li>';
                     echo '<label>';
                     echo '<input type="checkbox" name="'. esc_attr( $this->field_name( '[]' ) ) .'" value="'. esc_attr( $sub_key ) .'"'. $this->field_attributes() . esc_attr( $checked ) .'/>';
-                    echo '<span class="csf--text">'. esc_attr( $sub_value ) .'</span>';
+                    echo '<span class="ulf--text">'. esc_attr( $sub_value ) .'</span>';
                     echo '</label>';
                     echo '</li>';
                   }
@@ -61,7 +61,7 @@ if ( ! class_exists( 'CSF_Field_checkbox' ) ) {
               echo '<li>';
               echo '<label>';
               echo '<input type="checkbox" name="'. esc_attr( $this->field_name( '[]' ) ) .'" value="'. esc_attr( $option_key ) .'"'. $this->field_attributes() . esc_attr( $checked ) .'/>';
-              echo '<span class="csf--text">'. esc_attr( $option_value ) .'</span>';
+              echo '<span class="ulf--text">'. esc_attr( $option_value ) .'</span>';
               echo '</label>';
               echo '</li>';
 
@@ -73,16 +73,16 @@ if ( ! class_exists( 'CSF_Field_checkbox' ) ) {
 
         } else {
 
-          echo ( ! empty( $this->field['empty_message'] ) ) ? esc_attr( $this->field['empty_message'] ) : esc_html__( 'No data provided for this option type.', 'csf' );
+          echo ( ! empty( $this->field['empty_message'] ) ) ? esc_attr( $this->field['empty_message'] ) : esc_html__( 'No data provided for this option type.', 'ulf' );
 
         }
 
       } else {
 
-        echo '<label class="csf-checkbox">';
-        echo '<input type="hidden" name="'. esc_attr( $this->field_name() ) .'" value="'. $this->value .'" class="csf--input"'. $this->field_attributes() .'/>';
-        echo '<input type="checkbox" name="_pseudo" class="csf--checkbox"'. esc_attr( checked( $this->value, 1, false ) ) .'/>';
-        echo ( ! empty( $this->field['label'] ) ) ? '<span class="csf--text">'. esc_attr( $this->field['label'] ) .'</span>' : '';
+        echo '<label class="ulf-checkbox">';
+        echo '<input type="hidden" name="'. esc_attr( $this->field_name() ) .'" value="'. $this->value .'" class="ulf--input"'. $this->field_attributes() .'/>';
+        echo '<input type="checkbox" name="_pseudo" class="ulf--checkbox"'. esc_attr( checked( $this->value, 1, false ) ) .'/>';
+        echo ( ! empty( $this->field['label'] ) ) ? '<span class="ulf--text">'. esc_attr( $this->field['label'] ) .'</span>' : '';
         echo '</label>';
 
       }
