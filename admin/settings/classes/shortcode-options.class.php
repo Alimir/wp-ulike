@@ -54,7 +54,7 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
         // elementor editor support
         if ( ULF::is_active_plugin( 'elementor/elementor.php' ) ) {
           add_action( 'elementor/editor/before_enqueue_scripts', array( 'ULF', 'add_admin_enqueue_scripts' ) );
-          add_action( 'elementor/editor/footer', array( 'ULF_Field_icon', 'add_footer_modal_icon' ) );
+          // add_action( 'elementor/editor/footer', array( 'ULF_Field_icon', 'add_footer_modal_icon' ) );
           add_action( 'elementor/editor/footer', array( &$this, 'add_footer_modal_shortcode' ) );
         }
 
