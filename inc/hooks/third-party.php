@@ -25,27 +25,24 @@ if( ! function_exists( 'wp_ulike_put_buddypress' ) ){
 		$action  = current_action();
 
 		if ( isset( $options['enable_auto_display'] ) && wp_ulike_is_true( $options['enable_auto_display'] ) ) {
-			// Add wp_ulike function
-			$button  = wp_ulike_buddypress('put');
-
 			switch ( $action ) {
 				case 'bp_activity_comment_options':
 					if( isset( $options['enable_comments'] ) && wp_ulike_is_true( $options['enable_comments'] ) ) {
 						if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'meta' ){
-							echo $button;
+							echo wp_ulike_buddypress('put');
 						}
 					}
 					break;
 
 				case 'bp_activity_entry_meta':
 					if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'meta' ){
-						echo $button;
+						echo wp_ulike_buddypress('put');
 					}
 					break;
 
 				case 'bp_activity_entry_content':
 					if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'content' ){
-						echo $button;
+						echo wp_ulike_buddypress('put');
 					}
 					break;
 			}
@@ -131,11 +128,52 @@ if( ! function_exists( 'wp_ulike_bp_activity_filter_options' ) ){
 	 * @return void
 	 */
 	function wp_ulike_bp_activity_filter_options() {
-		echo "<option value='wp_like_group'>". __( 'Votes', WP_ULIKE_SLUG ) ."</option>";
+		// Display Vote Notifications
+		echo sprintf( '<option value="wp_like_group">%s</option>', __( 'Votes', WP_ULIKE_SLUG ) );
 	}
-	add_action( 'bp_activity_filter_options', 'wp_ulike_bp_activity_filter_options' ); // Activity Directory
-	add_action( 'bp_member_activity_filter_options', 'wp_ulike_bp_activity_filter_options' ); // Member's profile activity
-	add_action( 'bp_group_activity_filter_options', 'wp_ulike_bp_activity_filter_options' ); // Group's activity
+	add_action( 'bp_activity_filter_options', 'wp_ulike_bp_activity_filter_options', 20 ); // Activity Directory
+	add_action( 'bp_member_activity_filter_options', 'wp_ulike_bp_activity_filter_options', 20 ); // Member's profile activity
+	add_action( 'bp_group_activity_filter_options', 'wp_ulike_bp_activity_filter_options', 20 ); // Group's activity
+}
+
+if( ! function_exists( 'wp_ulike_activity_querystring_filter' ) ){
+	/**
+	 * Builds an Activity Meta Query
+	 *
+	 * @param string $query_string
+	 * @param string $object
+	 * @return array
+	 */
+	function wp_ulike_activity_querystring_filter( $query_string = '', $object = '' ) {
+		if( $object != 'activity' ){
+			return $query_string;
+		}
+
+		// You can easily manipulate the query string
+		// by transforming it into an array and merging
+		// arguments with these default ones
+		$args = wp_parse_args( $query_string, array(
+			'action'  => false,
+			'type'    => false,
+			'user_id' => false,
+			'page'    => 1
+		) );
+
+		if( $args['type'] === 'wp_like_group' ) {
+			if( empty( $args['action'] ) ){
+				$args['action'] = 'wp_like_group';
+			}
+			// on user's profile, shows the most favorited activities for displayed user
+			if( bp_is_user() ){
+				$args['user_id'] = bp_displayed_user_id();
+			}
+
+			$query_string = empty( $args ) ? $query_string : $args;
+		}
+
+		return $query_string;
+	}
+	add_filter( 'bp_ajax_querystring', 'wp_ulike_activity_querystring_filter', 20, 2 );
 }
 
 if( ! function_exists( 'wp_ulike_filter_notifications_get_registered_components' ) ){
@@ -447,13 +485,11 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 	 */
 	function wp_ulike_put_bbpress() {
 		if ( wp_ulike_is_true( wp_ulike_get_option( 'bbpress_group|enable_auto_display', 1 ) ) ) {
-			// Add wp_ulike function
-			$button   = wp_ulike_bbpress('put');
 			$action   = current_action();
 			$position = wp_ulike_get_option( 'bbpress_group|auto_display_position', 'bottom' );
 
 			if( $position === 'top_bottom' ){
-				echo $button;
+				echo wp_ulike_bbpress('put');
 				return;
 			}
 
@@ -461,14 +497,14 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 				case 'bbp_theme_before_reply_content':
 				case 'bbp_theme_before_topic_content':
 					if( $position === 'top' ){
-						echo $button;
+						echo wp_ulike_bbpress('put');
 					}
 					return;
 
 				case 'bbp_theme_after_reply_content':
 				case 'bbp_theme_after_topic_content':
 					if( $position === 'bottom' ){
-						echo $button;
+						echo wp_ulike_bbpress('put');
 					}
 					return;
 			}
