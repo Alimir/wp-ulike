@@ -148,6 +148,10 @@ if ( ! class_exists( 'WpUlikeInit' ) ) :
 		}
 
 		public function plugins_loaded(){
+			// include _deprecated settings panel
+			if ( defined('WP_ULIKE_PRO_VERSION') && version_compare( WP_ULIKE_PRO_VERSION, '1.4.4', '>=' ) ) {
+				include( WP_ULIKE_ADMIN_DIR . '/settings/_deprecated/deprecated.class.php');
+			}
 			// Load plugin text domain
 			$this->load_plugin_textdomain();
 		}
