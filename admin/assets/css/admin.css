@@ -92,8 +92,8 @@ https://wordpress.org/plugins/wp-ulike/
 .wp-ulike-icons-refresh:before { content: "\e05a"; }
 
 /** 	Visual Select */
-.wp-ulike-visual-select .csf--image.csf--active > img { filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%); }
-.wp-ulike-visual-select .csf--image > img { height: 40px; padding: 10px; }
+.wp-ulike-visual-select .ulf--image.ulf--active > img { filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%); }
+.wp-ulike-visual-select .ulf--image > img { height: 40px; padding: 10px; }
 
 /** 	Settings Page */
 .wp-ulike-settings-notice, .wp-ulike-notice-wrapper { position: relative; }
