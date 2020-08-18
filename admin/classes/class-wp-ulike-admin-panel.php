@@ -18,11 +18,11 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 		 * __construct
 		 */
 		function __construct() {
-            add_action( 'csf_loaded', array( $this, 'register_panel' ) );
+            add_action( 'ulf_loaded', array( $this, 'register_panel' ) );
             add_action( 'wp_ulike_settings_loaded', array( $this, 'register_sections' ) );
             add_action( 'wp_ulike_settings_loaded', array( $this, 'register_pages' ) );
 
-            add_action( 'csf_'.$this->option_domain.'_saved', array( $this, 'options_saved' ) );
+            add_action( 'ulf_'.$this->option_domain.'_saved', array( $this, 'options_saved' ) );
         }
 
         public function options_saved(){
@@ -37,7 +37,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
          */
         public function register_panel(){
             // Create options
-            CSF::createOptions( $this->option_domain, array(
+            ULF::createOptions( $this->option_domain, array(
                 'framework_title'    => apply_filters( 'wp_ulike_plugin_name', WP_ULIKE_NAME ),
                 'menu_title'         => apply_filters( 'wp_ulike_plugin_name', WP_ULIKE_NAME ),
                 'sub_menu_title'     => __( 'Settings', WP_ULIKE_SLUG ),
@@ -93,13 +93,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             /**
              * Configuration Section
              */
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'id'    => 'configuration',
                 'title' => __( 'Configuration',WP_ULIKE_SLUG),
                 'icon'  => 'fa fa-home',
             ) );
             // General
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'parent' => 'configuration',
                 'title'  => __( 'General',WP_ULIKE_SLUG),
                 'fields' => apply_filters( 'wp_ulike_panel_general', array(
@@ -246,7 +246,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             }
 
             // Content Groups
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'parent' => 'configuration',
                 'title'  => __( 'Content Types',WP_ULIKE_SLUG),
                 'fields' => array(
@@ -283,7 +283,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 )
             ) );
             // Integrations
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'parent' => 'configuration',
                 'title'  => __( 'Integrations',WP_ULIKE_SLUG),
                 'fields' => apply_filters( 'wp_ulike_panel_integrations', array(
@@ -303,7 +303,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             ) );
 
             // Profiles
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'parent' => 'configuration',
                 'title'  => __( 'Profiles',WP_ULIKE_SLUG),
                 'fields' => apply_filters( 'wp_ulike_panel_profiles', array(
@@ -336,7 +336,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             /**
              * Translations Section
              */
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'title'  => __( 'Translations',WP_ULIKE_SLUG),
                 'icon'   => 'fa fa-language',
                 'fields' => apply_filters( 'wp_ulike_panel_translations', array(
@@ -376,13 +376,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             /**
              * Customization Section
              */
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'id'    => 'customization',
                 'title' => __( 'Developer Tools',WP_ULIKE_SLUG),
                 'icon'  => 'fa fa-code',
             ) );
 
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'parent' => 'customization',
                 'title'  => __( 'Custom Style',WP_ULIKE_SLUG),
                 'fields' => apply_filters( 'wp_ulike_panel_customization', array(
@@ -411,7 +411,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             ) );
 
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'parent' => 'customization',
                 'title'  => __( 'REST API',WP_ULIKE_SLUG ),
                 'fields' => apply_filters( 'wp_ulike_panel_rest_api', array(
@@ -440,7 +440,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             ) );
 
-            CSF::createSection( $this->option_domain, array(
+            ULF::createSection( $this->option_domain, array(
                 'parent' => 'customization',
                 'title'  => __( 'Optimization',WP_ULIKE_SLUG ),
                 'fields' => apply_filters( 'wp_ulike_panel_optimization', array(

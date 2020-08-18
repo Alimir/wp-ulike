@@ -55,7 +55,7 @@
 /**
  * 01. Base
  */
-.csf-options {
+.ulf-options {
   margin-left: 20px;
   margin-right: 0;
 }
@@ -63,69 +63,69 @@
 /**
  * 01. 01. Header
  */
-.csf-header h1 {
+.ulf-header h1 {
   float: right;
 }
-.csf-header fieldset {
+.ulf-header fieldset {
   float: left;
 }
 
 /**
  * 01. 02. Header Buttons
  */
-.csf-buttons {
+.ulf-buttons {
   float: left;
   direction: ltr;
 }
 
-.csf-header-left {
+.ulf-header-left {
   float: right;
 }
 
-.csf-header-right {
+.ulf-header-right {
   float: left;
 }
 
 /**
  * 01. 03. Navigation
  */
-.csf-nav {
+.ulf-nav {
   float: right;
 }
-.csf-nav ul {
+.ulf-nav ul {
   clear: right;
 }
-.csf-nav ul li .csf-active:after {
+.ulf-nav ul li .ulf-active:after {
   right: auto;
   left: 0;
   border-left-color: #fff;
   border-right-color: transparent;
 }
-.csf-nav ul li .csf-arrow:after {
+.ulf-nav ul li .ulf-arrow:after {
   content: "\f053";
   right: auto;
   left: 10px;
 }
-.csf-nav ul li.csf-tab-expanded .csf-arrow:after {
+.ulf-nav ul li.ulf-tab-expanded .ulf-arrow:after {
   -moz-transform: rotate(-90deg);
   -ms-transform: rotate(-90deg);
   -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
 }
-.csf-nav ul ul li a {
+.ulf-nav ul ul li a {
   padding-right: 25px;
   padding-left: 15px;
 }
-.csf-nav ul ul:before {
+.ulf-nav ul ul:before {
   left: auto;
   right: 15px;
 }
-.csf-nav .csf-tab-icon {
+.ulf-nav .ulf-tab-icon {
   margin-left: 5px;
   margin-right: 0;
 }
 
-.csf-nav-background {
+.ulf-nav-background {
   left: auto;
   right: 0;
 }
@@ -133,7 +133,7 @@
 /**
  * 01. 04. Content
  */
-.csf-content {
+.ulf-content {
   margin-left: 0;
   margin-right: 225px;
 }
@@ -141,19 +141,19 @@
 /**
  * 01. 05. Section
  */
-.csf-sections {
+.ulf-sections {
   float: right;
 }
 
 /**
  * 01. 06. Show all options
  */
-.csf-show-all .csf-content {
+.ulf-show-all .ulf-content {
   margin-right: 0;
   overflow: hidden;
 }
 
-.csf-expand-all {
+.ulf-expand-all {
   float: right;
   right: auto;
   left: 40px;
@@ -164,31 +164,31 @@
 /**
  * 01. 07. Search Input
  */
-.csf-search {
+.ulf-search {
   float: right;
 }
-.csf-search input {
+.ulf-search input {
   margin: 0 0 0 5px;
 }
 
 /**
  * 01. 08. Copyright
  */
-.csf-copyright {
+.ulf-copyright {
   float: right;
 }
 
 /**
  * 01. 09. Metabox
  */
-.csf-metabox {
+.ulf-metabox {
   margin: -6px -12px -12px -12px;
 }
-.csf-metabox .csf-section-title {
+.ulf-metabox .ulf-section-title {
   padding: 20px;
 }
 
-.csf-section-title .csf-section-icon {
+.ulf-section-title .ulf-section-icon {
   margin-left: 5px;
   margin-right: 0;
 }
@@ -196,47 +196,47 @@
 /**
  * 02. Fields
  */
-.csf-field .csf-title {
+.ulf-field .ulf-title {
   float: right;
 }
-.csf-field .csf-fieldset {
+.ulf-field .ulf-fieldset {
   float: left;
 }
 
-.csf-pseudo-field {
+.ulf-pseudo-field {
   padding: 0 0 0 5px !important;
 }
 
 /**
  * 02. 01. Field: typography
  */
-.csf-field-typography select {
+.ulf-field-typography select {
   margin: 0;
   width: 100%;
 }
-.csf-field-typography .csf--blocks-inputs .csf--blocks {
+.ulf-field-typography .ulf--blocks-inputs .ulf--blocks {
   flex-direction: row-reverse;
 }
 
 /**
  * 02. 02. Field: checkbox, radio
  */
-.csf-field-checkbox ul ul li,
-.csf-field-radio ul ul li {
+.ulf-field-checkbox ul ul li,
+.ulf-field-radio ul ul li {
   margin-left: 0;
   margin-right: 8px;
 }
-.csf-field-checkbox ul ul li:first-child,
-.csf-field-radio ul ul li:first-child {
+.ulf-field-checkbox ul ul li:first-child,
+.ulf-field-radio ul ul li:first-child {
   margin-right: 0;
 }
-.csf-field-checkbox .csf--inline-list li,
-.csf-field-radio .csf--inline-list li {
+.ulf-field-checkbox .ulf--inline-list li,
+.ulf-field-radio .ulf--inline-list li {
   margin-right: 0;
   margin-left: 15px;
 }
-.csf-field-checkbox .csf--text,
-.csf-field-radio .csf--text {
+.ulf-field-checkbox .ulf--text,
+.ulf-field-radio .ulf--text {
   margin-left: 0;
   margin-right: 5px;
 }
@@ -244,10 +244,10 @@
 /**
  * 02. 03. Field: switcher
  */
-.csf-field-switcher .csf--switcher {
+.ulf-field-switcher .ulf--switcher {
   float: right;
 }
-.csf-field-switcher .csf--label {
+.ulf-field-switcher .ulf--label {
   float: right;
   margin-left: 0;
   margin-right: 5px;
@@ -256,8 +256,8 @@
 /**
  * 02. 04. Field: upload
  */
-.csf-field-upload .csf--remove,
-.csf-field-upload .csf--button {
+.ulf-field-upload .ulf--remove,
+.ulf-field-upload .ulf--button {
   margin-left: 0;
   margin-right: 5px;
 }
@@ -265,10 +265,10 @@
 /**
  * 02. 05. Field: group
  */
-.csf-field-group .csf-cloneable-title {
+.ulf-field-group .ulf-cloneable-title {
   padding: 15px 10px 15px 65px;
 }
-.csf-field-group .csf-cloneable-helper {
+.ulf-field-group .ulf-cloneable-helper {
   right: auto;
   left: 10px;
 }
@@ -276,7 +276,7 @@
 /**
  * 02. 06. Field: repeater
  */
-.csf-field-repeater .csf-repeater-helper {
+.ulf-field-repeater .ulf-repeater-helper {
   border-left: 0;
   border-right: 1px solid #eee;
 }
@@ -284,7 +284,7 @@
 /**
  * 02. 07. Field: help
  */
-.csf-help {
+.ulf-help {
   right: auto;
   left: 5px;
 }
@@ -292,11 +292,11 @@
 /**
  * 02. 08. Field: icon
  */
-.csf-field-icon .button {
+.ulf-field-icon .button {
   margin-right: 0;
   margin-left: 5px;
 }
-.csf-field-icon .csf-icon-preview i {
+.ulf-field-icon .ulf-icon-preview i {
   margin-right: 0;
   margin-left: 5px;
 }
@@ -304,11 +304,11 @@
 /**
  * 02. 09. Field: gallery
  */
-.csf-field-gallery ul li {
+.ulf-field-gallery ul li {
   margin-right: 0;
   margin-left: 5px;
 }
-.csf-field-gallery .button {
+.ulf-field-gallery .button {
   margin-right: 0;
   margin-left: 5px;
 }
@@ -316,11 +316,11 @@
 /**
  * 02. 11. Field: tabbed
  */
-.csf-field-tabbed .csf-tabbed-nav .csf--icon {
+.ulf-field-tabbed .ulf-tabbed-nav .ulf--icon {
   padding-right: 0;
   padding-left: 5px;
 }
-.csf-field-tabbed .csf-tabbed-nav a {
+.ulf-field-tabbed .ulf-tabbed-nav a {
   margin-right: 0;
   margin-left: 5px;
 }
@@ -328,18 +328,18 @@
 /**
  * 02. 12. Field: media
  */
-.csf-field-media .button {
+.ulf-field-media .button {
   margin-left: 0;
   margin-right: 7px;
 }
-.csf-field-media .hidden + .button {
+.ulf-field-media .hidden + .button {
   margin-right: 0;
 }
 
 /**
  * 02. 13. Field: notice
  */
-.csf-notice {
+.ulf-notice {
   border-left: none;
   border-right-style: solid;
   border-right-width: 4px;
@@ -348,25 +348,25 @@
 /**
  * 02. 14. Field: border, spacing, dimensions
  */
-.csf-field-dimensions .csf--input,
-.csf-field-dimensions .csf-fieldset,
-.csf-field-spacing .csf--input,
-.csf-field-spacing .csf-fieldset,
-.csf-field-border .csf--input,
-.csf-field-border .csf-fieldset {
+.ulf-field-dimensions .ulf--input,
+.ulf-field-dimensions .ulf-fieldset,
+.ulf-field-spacing .ulf--input,
+.ulf-field-spacing .ulf-fieldset,
+.ulf-field-border .ulf--input,
+.ulf-field-border .ulf-fieldset {
   direction: ltr;
 }
-.csf-field-dimensions .csf--inputs,
-.csf-field-dimensions .csf--color,
-.csf-field-spacing .csf--inputs,
-.csf-field-spacing .csf--color,
-.csf-field-border .csf--inputs,
-.csf-field-border .csf--color {
+.ulf-field-dimensions .ulf--inputs,
+.ulf-field-dimensions .ulf--color,
+.ulf-field-spacing .ulf--inputs,
+.ulf-field-spacing .ulf--color,
+.ulf-field-border .ulf--inputs,
+.ulf-field-border .ulf--color {
   float: right;
 }
-.csf-field-dimensions .csf--color,
-.csf-field-spacing .csf--color,
-.csf-field-border .csf--color {
+.ulf-field-dimensions .ulf--color,
+.ulf-field-spacing .ulf--color,
+.ulf-field-border .ulf--color {
   margin-right: 4px;
   direction: rtl;
 }
@@ -374,14 +374,14 @@
 /**
  * 02. 15. Field: background
  */
-.csf-field-background .csf--block {
+.ulf-field-background .ulf--block {
   float: right;
 }
-.csf-field-background .csf--select,
-.csf-field-background .csf--media {
+.ulf-field-background .ulf--select,
+.ulf-field-background .ulf--media {
   padding-right: 0;
 }
-.csf-field-background .csf--title {
+.ulf-field-background .ulf--title {
   margin-right: 0;
   margin-left: 5px;
 }
@@ -389,7 +389,7 @@
 /**
  * 02. 16. Field: spinner
  */
-.csf-field-spinner .csf--spin {
+.ulf-field-spinner .ulf--spin {
   float: right;
   direction: ltr;
 }
@@ -397,26 +397,26 @@
 /**
  * 02. 17. Field: slider
  */
-.csf-field-slider .csf-slider-ui {
+.ulf-field-slider .ulf-slider-ui {
   direction: ltr;
   margin-right: 0;
   margin-left: 15px;
 }
-.csf-field-slider .csf--input {
+.ulf-field-slider .ulf--input {
   direction: ltr;
 }
 
 /**
  * 02. 18. Field: button_set
  */
-.csf-field-button_set .csf--button-group {
+.ulf-field-button_set .ulf--button-group {
   float: right;
 }
 
 /**
  * 02. 19. Field: link_color
  */
-.csf-field-link_color .csf--left {
+.ulf-field-link_color .ulf--left {
   float: right;
   margin-right: 0;
   margin-left: 10px;
@@ -425,7 +425,7 @@
 /**
  * 02. 20. Field: color_group
  */
-.csf-field-color_group .csf--left {
+.ulf-field-color_group .ulf--left {
   float: right;
   margin-right: 0;
   margin-left: 10px;
@@ -434,7 +434,7 @@
 /**
  * 02. 21. Field: palette
  */
-.csf-field-palette .csf--palette {
+.ulf-field-palette .ulf--palette {
   margin-right: 0;
   margin-left: 10px;
 }
@@ -442,7 +442,7 @@
 /**
  * 02. 22. Field: accordion
  */
-.csf-field-accordion .csf--icon {
+.ulf-field-accordion .ulf--icon {
   margin-right: 0;
   margin-left: 2px;
 }
@@ -450,7 +450,7 @@
 /**
  * 02. 23. Field: date
  */
-.csf-field-date .csf--to {
+.ulf-field-date .ulf--to {
   margin-left: 0;
   margin-right: 7px;
 }
@@ -458,7 +458,7 @@
 /**
  * 02. 24. Field: map
  */
-.csf-field-map .csf--map-input:last-child {
+.ulf-field-map .ulf--map-input:last-child {
   padding-left: 0;
   padding-right: 10px;
 }
@@ -466,7 +466,7 @@
 /**
  * 02. 25. Field: sortable
  */
-.csf-field-sortable .csf--sortable-helper {
+.ulf-field-sortable .ulf--sortable-helper {
   border-left: none;
   border-right: 1px solid #eee;
 }
@@ -474,27 +474,27 @@
 /**
  * 02. 26. Field: number
  */
-.csf-field-number .csf--wrap {
+.ulf-field-number .ulf--wrap {
   float: right;
 }
 
 /**
  * 03. Taxonomy
  */
-.csf-taxonomy-add-fields {
+.ulf-taxonomy-add-fields {
   margin-right: 0;
   margin-left: 30px;
 }
-.csf-taxonomy-add-fields .csf-field > .csf-fieldset > .csf-help {
+.ulf-taxonomy-add-fields .ulf-field > .ulf-fieldset > .ulf-help {
   left: -5px;
   right: auto;
 }
 
-.csf-taxonomy-edit-fields {
+.ulf-taxonomy-edit-fields {
   margin-right: 0;
   margin-left: 35px;
 }
-.csf-taxonomy-edit-fields .csf-field > .csf-fieldset > .csf-help {
+.ulf-taxonomy-edit-fields .ulf-field > .ulf-fieldset > .ulf-help {
   right: auto;
   left: -5px;
 }
@@ -502,11 +502,11 @@
 /**
  * 04. Profile
  */
-.csf-profile-options > h2 > .fa {
+.ulf-profile-options > h2 > .fa {
   padding-right: 0;
   padding-left: 7px;
 }
-.csf-profile-options > .csf-field > .csf-fieldset > .csf-help {
+.ulf-profile-options > .ulf-field > .ulf-fieldset > .ulf-help {
   left: -5px;
   right: auto;
 }
@@ -514,17 +514,17 @@
 /**
  * 05. Nav Menu
  */
-.csf-nav-menu-options > .csf-fields {
+.ulf-nav-menu-options > .ulf-fields {
   margin-left: 0;
   margin-right: -10px;
 }
 
-.csf-nav-menu-title {
+.ulf-nav-menu-title {
   padding-left: 14px;
   padding-right: 12px;
 }
 
-.csf-nav-menu-icon {
+.ulf-nav-menu-icon {
   margin-right: 0;
   margin-left: 5px;
 }
@@ -532,15 +532,15 @@
 /**
  * 06. Modal
  */
-.csf-modal-content .csf-field {
+.ulf-modal-content .ulf-field {
   padding: 15px 15px 15px 30px;
 }
 
-.csf-modal-title {
+.ulf-modal-title {
   padding: 0 16px 0 36px;
 }
 
-.csf-modal-close {
+.ulf-modal-close {
   right: auto;
   left: 0;
 }
@@ -548,7 +548,7 @@
 /**
  * 07. Customizer
  */
-.control-section .csf-field .csf-fieldset {
+.control-section .ulf-field .ulf-fieldset {
   margin-right: 0;
 }
 
@@ -556,30 +556,30 @@
  * 08. Responsive
  */
 @media only screen and (max-width: 1200px) {
-  .csf-metabox .csf-field .csf-fieldset {
+  .ulf-metabox .ulf-field .ulf-fieldset {
     margin-left: 0;
   }
 }
 @media only screen and (max-width: 782px) {
-  .csf .csf-fieldset,
-  .csf .csf-content {
+  .ulf .ulf-fieldset,
+  .ulf .ulf-content {
     margin-right: 0;
   }
 }
 /**
  * 09. Others
  */
-.csf-field .csf--transparent-slider {
+.ulf-field .ulf--transparent-slider {
   margin-left: 0;
   margin-right: 2px;
 }
-.csf-field .csf--transparent-slider .ui-slider-handle {
+.ulf-field .ulf--transparent-slider .ui-slider-handle {
   margin: 0 -11px;
 }
-.csf-field .csf--transparent-offset {
+.ulf-field .ulf--transparent-offset {
   background-position: center right;
 }
-.csf-field .csf--transparent-text {
+.ulf-field .ulf--transparent-text {
   right: auto;
   left: 10px;
 }

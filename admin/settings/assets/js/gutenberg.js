@@ -10,9 +10,9 @@
  */
 ( function( blocks, blockEditor, element, components ) {
 
-  if( !window.csf_gutenberg_blocks ) { return; }
+  if( !window.ulf_gutenberg_blocks ) { return; }
 
-  window.csf_gutenberg_blocks.forEach( function( block ) {
+  window.ulf_gutenberg_blocks.forEach( function( block ) {
 
     var registerBlockType = blocks.registerBlockType;
     var PlainText         = blockEditor.PlainText;
@@ -20,7 +20,7 @@
     var RawHTML           = element.RawHTML;
     var Button            = components.Button;
 
-    registerBlockType('csf-gutenberg-block/block-'+block.hash, {
+    registerBlockType('ulf-gutenberg-block/block-'+block.hash, {
       title: block.gutenberg.title,
       icon: block.gutenberg.icon,
       category: block.gutenberg.category,
@@ -39,14 +39,14 @@
       },
       edit: function (props) {
         return (
-          createElement('div', {className: 'csf-shortcode-block'},
+          createElement('div', {className: 'ulf-shortcode-block'},
 
             createElement(Button, {
               'data-modal-id': block.modal_id,
               'data-gutenberg-id': block.hash,
-              className: 'is-secondary csf-shortcode-button',
+              className: 'is-secondary ulf-shortcode-button',
               onClick: function () {
-                window.csf_gutenberg_props = props;
+                window.ulf_gutenberg_props = props;
               },
             }, block.button_title ),
 

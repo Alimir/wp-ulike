@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_typography' ) ) {
-  class CSF_Field_typography extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_typography' ) ) {
+  class ULF_Field_typography extends ULF_Fields {
 
     public $chosen = false;
 
@@ -71,28 +71,28 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
       $default_value    = ( ! empty( $this->field['default'] ) ) ? wp_parse_args( $this->field['default'], $default_value ) : $default_value;
       $this->value      = wp_parse_args( $this->value, $default_value );
       $this->chosen     = $args['chosen'];
-      $chosen_class     = ( $this->chosen ) ? ' csf--chosen' : '';
+      $chosen_class     = ( $this->chosen ) ? ' ulf--chosen' : '';
       $line_height_unit = ( ! empty( $args['line_height_unit'] ) ) ? $args['line_height_unit'] : $args['unit'];
 
-      echo '<div class="csf--typography'. esc_attr( $chosen_class ) .'" data-unit="'. esc_attr( $args['unit'] ) .'" data-line-height-unit="'. esc_attr( $line_height_unit ) .'" data-exclude="'. esc_attr( $args['exclude'] ) .'">';
+      echo '<div class="ulf--typography'. esc_attr( $chosen_class ) .'" data-unit="'. esc_attr( $args['unit'] ) .'" data-line-height-unit="'. esc_attr( $line_height_unit ) .'" data-exclude="'. esc_attr( $args['exclude'] ) .'">';
 
-        echo '<div class="csf--blocks csf--blocks-selects">';
+        echo '<div class="ulf--blocks ulf--blocks-selects">';
 
           //
           // Font Family
           if ( ! empty( $args['font_family'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Font Family', 'csf' ) .'</div>';
-            echo $this->create_select( array( $this->value['font-family'] => $this->value['font-family'] ), 'font-family', esc_html__( 'Select a font', 'csf' ) );
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Font Family', 'ulf' ) .'</div>';
+            echo $this->create_select( array( $this->value['font-family'] => $this->value['font-family'] ), 'font-family', esc_html__( 'Select a font', 'ulf' ) );
             echo '</div>';
           }
 
           //
           // Backup Font Family
           if ( ! empty( $args['backup_font_family'] ) ) {
-            echo '<div class="csf--block csf--block-backup-font-family hidden">';
-            echo '<div class="csf--title">'. esc_html__( 'Backup Font Family', 'csf' ) .'</div>';
-            echo $this->create_select( apply_filters( 'csf_field_typography_backup_font_family', array(
+            echo '<div class="ulf--block ulf--block-backup-font-family hidden">';
+            echo '<div class="ulf--title">'. esc_html__( 'Backup Font Family', 'ulf' ) .'</div>';
+            echo $this->create_select( apply_filters( 'ulf_field_typography_backup_font_family', array(
               'Arial, Helvetica, sans-serif',
               "'Arial Black', Gadget, sans-serif",
               "'Comic Sans MS', cursive, sans-serif",
@@ -105,7 +105,7 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
               "'Lucida Console', Monaco, monospace",
               'Georgia, serif',
               'Palatino Linotype'
-            ) ), 'backup-font-family', esc_html__( 'Default', 'csf' ) );
+            ) ), 'backup-font-family', esc_html__( 'Default', 'ulf' ) );
             echo '</div>';
           }
 
@@ -115,23 +115,23 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
 
             //
             // Font Style Select
-            echo '<div class="csf--block csf--block-font-style hidden">';
-            echo '<div class="csf--title">'. esc_html__( 'Font Style', 'csf') .'</div>';
-            echo '<select class="csf--font-style-select" data-placeholder="Default">';
-            echo '<option value="">'. ( ! $this->chosen ? esc_html__( 'Default', 'csf' ) : '' ) .'</option>';
+            echo '<div class="ulf--block ulf--block-font-style hidden">';
+            echo '<div class="ulf--title">'. esc_html__( 'Font Style', 'ulf') .'</div>';
+            echo '<select class="ulf--font-style-select" data-placeholder="Default">';
+            echo '<option value="">'. ( ! $this->chosen ? esc_html__( 'Default', 'ulf' ) : '' ) .'</option>';
             if ( ! empty( $this->value['font-weight'] ) || ! empty( $this->value['font-style'] ) ) {
               echo '<option value="'. esc_attr( strtolower( $this->value['font-weight'] . $this->value['font-style'] ) ) .'" selected></option>';
             }
             echo '</select>';
-            echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[font-weight]' ) ) .'" class="csf--font-weight" value="'. esc_attr( $this->value['font-weight'] ) .'" />';
-            echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[font-style]' ) ) .'" class="csf--font-style" value="'. esc_attr( $this->value['font-style'] ) .'" />';
+            echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[font-weight]' ) ) .'" class="ulf--font-weight" value="'. esc_attr( $this->value['font-weight'] ) .'" />';
+            echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[font-style]' ) ) .'" class="ulf--font-style" value="'. esc_attr( $this->value['font-style'] ) .'" />';
 
             //
             // Extra Font Style Select
             if ( ! empty( $args['extra_styles'] ) ) {
-              echo '<div class="csf--block-extra-styles hidden">';
-              echo ( ! $this->chosen ) ? '<div class="csf--title">'. esc_html__( 'Load Extra Styles', 'csf' ) .'</div>' : '';
-              $placeholder = ( $this->chosen ) ? esc_html__( 'Load Extra Styles', 'csf' ) : esc_html__( 'Default', 'csf' );
+              echo '<div class="ulf--block-extra-styles hidden">';
+              echo ( ! $this->chosen ) ? '<div class="ulf--title">'. esc_html__( 'Load Extra Styles', 'ulf' ) .'</div>' : '';
+              $placeholder = ( $this->chosen ) ? esc_html__( 'Load Extra Styles', 'ulf' ) : esc_html__( 'Default', 'ulf' );
               echo $this->create_select( $this->value['extra-styles'], 'extra-styles', $placeholder, true );
               echo '</div>';
             }
@@ -143,86 +143,86 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
           //
           // Subset
           if ( ! empty( $args['subset'] ) ) {
-            echo '<div class="csf--block csf--block-subset hidden">';
-            echo '<div class="csf--title">'. esc_html__( 'Subset', 'csf' ) .'</div>';
+            echo '<div class="ulf--block ulf--block-subset hidden">';
+            echo '<div class="ulf--title">'. esc_html__( 'Subset', 'ulf' ) .'</div>';
             $subset = ( is_array( $this->value['subset'] ) ) ? $this->value['subset'] : array_filter( (array) $this->value['subset'] );
-            echo $this->create_select( $subset, 'subset', esc_html__( 'Default', 'csf' ), $args['multi_subset'] );
+            echo $this->create_select( $subset, 'subset', esc_html__( 'Default', 'ulf' ), $args['multi_subset'] );
             echo '</div>';
           }
 
           //
           // Text Align
           if ( ! empty( $args['text_align'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Text Align', 'csf' ) .'</div>';
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Text Align', 'ulf' ) .'</div>';
             echo $this->create_select( array(
-              'inherit' => esc_html__( 'Inherit', 'csf' ),
-              'left'    => esc_html__( 'Left', 'csf' ),
-              'center'  => esc_html__( 'Center', 'csf' ),
-              'right'   => esc_html__( 'Right', 'csf' ),
-              'justify' => esc_html__( 'Justify', 'csf' ),
-              'initial' => esc_html__( 'Initial', 'csf' )
-            ), 'text-align', esc_html__( 'Default', 'csf' ) );
+              'inherit' => esc_html__( 'Inherit', 'ulf' ),
+              'left'    => esc_html__( 'Left', 'ulf' ),
+              'center'  => esc_html__( 'Center', 'ulf' ),
+              'right'   => esc_html__( 'Right', 'ulf' ),
+              'justify' => esc_html__( 'Justify', 'ulf' ),
+              'initial' => esc_html__( 'Initial', 'ulf' )
+            ), 'text-align', esc_html__( 'Default', 'ulf' ) );
             echo '</div>';
           }
 
           //
           // Font Variant
           if ( ! empty( $args['font_variant'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Font Variant', 'csf' ) .'</div>';
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Font Variant', 'ulf' ) .'</div>';
             echo $this->create_select( array(
-              'normal'         => esc_html__( 'Normal', 'csf' ),
-              'small-caps'     => esc_html__( 'Small Caps', 'csf' ),
-              'all-small-caps' => esc_html__( 'All Small Caps', 'csf' )
-            ), 'font-variant', esc_html__( 'Default', 'csf' ) );
+              'normal'         => esc_html__( 'Normal', 'ulf' ),
+              'small-caps'     => esc_html__( 'Small Caps', 'ulf' ),
+              'all-small-caps' => esc_html__( 'All Small Caps', 'ulf' )
+            ), 'font-variant', esc_html__( 'Default', 'ulf' ) );
             echo '</div>';
           }
 
           //
           // Text Transform
           if ( ! empty( $args['text_transform'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Text Transform', 'csf' ) .'</div>';
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Text Transform', 'ulf' ) .'</div>';
             echo $this->create_select( array(
-              'none'       => esc_html__( 'None', 'csf' ),
-              'capitalize' => esc_html__( 'Capitalize', 'csf' ),
-              'uppercase'  => esc_html__( 'Uppercase', 'csf' ),
-              'lowercase'  => esc_html__( 'Lowercase', 'csf' )
-            ), 'text-transform', esc_html__( 'Default', 'csf' ) );
+              'none'       => esc_html__( 'None', 'ulf' ),
+              'capitalize' => esc_html__( 'Capitalize', 'ulf' ),
+              'uppercase'  => esc_html__( 'Uppercase', 'ulf' ),
+              'lowercase'  => esc_html__( 'Lowercase', 'ulf' )
+            ), 'text-transform', esc_html__( 'Default', 'ulf' ) );
             echo '</div>';
           }
 
           //
           // Text Decoration
           if ( ! empty( $args['text_decoration'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Text Decoration', 'csf' ) .'</div>';
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Text Decoration', 'ulf' ) .'</div>';
             echo $this->create_select( array(
-              'none'               => esc_html__( 'None', 'csf' ),
-              'underline'          => esc_html__( 'Solid', 'csf' ),
-              'underline double'   => esc_html__( 'Double', 'csf' ),
-              'underline dotted'   => esc_html__( 'Dotted', 'csf' ),
-              'underline dashed'   => esc_html__( 'Dashed', 'csf' ),
-              'underline wavy'     => esc_html__( 'Wavy', 'csf' ),
-              'underline overline' => esc_html__( 'Overline', 'csf' ),
-              'line-through'       => esc_html__( 'Line-through', 'csf' )
-            ), 'text-decoration', esc_html__( 'Default', 'csf' ) );
+              'none'               => esc_html__( 'None', 'ulf' ),
+              'underline'          => esc_html__( 'Solid', 'ulf' ),
+              'underline double'   => esc_html__( 'Double', 'ulf' ),
+              'underline dotted'   => esc_html__( 'Dotted', 'ulf' ),
+              'underline dashed'   => esc_html__( 'Dashed', 'ulf' ),
+              'underline wavy'     => esc_html__( 'Wavy', 'ulf' ),
+              'underline overline' => esc_html__( 'Overline', 'ulf' ),
+              'line-through'       => esc_html__( 'Line-through', 'ulf' )
+            ), 'text-decoration', esc_html__( 'Default', 'ulf' ) );
             echo '</div>';
           }
 
         echo '</div>';
 
-        echo '<div class="csf--blocks csf--blocks-inputs">';
+        echo '<div class="ulf--blocks ulf--blocks-inputs">';
 
           //
           // Font Size
           if ( ! empty( $args['font_size'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Font Size', 'csf' ) .'</div>';
-            echo '<div class="csf--input-wrap">';
-            echo '<input type="number" name="'. esc_attr( $this->field_name( '[font-size]' ) ) .'" class="csf--font-size csf--input csf-input-number" value="'. esc_attr( $this->value['font-size'] ) .'" />';
-            echo '<span class="csf--unit">'. esc_attr( $args['unit'] ) .'</span>';
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Font Size', 'ulf' ) .'</div>';
+            echo '<div class="ulf--input-wrap">';
+            echo '<input type="number" name="'. esc_attr( $this->field_name( '[font-size]' ) ) .'" class="ulf--font-size ulf--input ulf-input-number" value="'. esc_attr( $this->value['font-size'] ) .'" />';
+            echo '<span class="ulf--unit">'. esc_attr( $args['unit'] ) .'</span>';
             echo '</div>';
             echo '</div>';
           }
@@ -230,11 +230,11 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
           //
           // Line Height
           if ( ! empty( $args['line_height'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Line Height', 'csf' ) .'</div>';
-            echo '<div class="csf--input-wrap">';
-            echo '<input type="number" name="'. esc_attr( $this->field_name( '[line-height]' ) ) .'" class="csf--line-height csf--input csf-input-number" value="'. esc_attr( $this->value['line-height'] ) .'" />';
-            echo '<span class="csf--unit">'. esc_attr( $line_height_unit ) .'</span>';
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Line Height', 'ulf' ) .'</div>';
+            echo '<div class="ulf--input-wrap">';
+            echo '<input type="number" name="'. esc_attr( $this->field_name( '[line-height]' ) ) .'" class="ulf--line-height ulf--input ulf-input-number" value="'. esc_attr( $this->value['line-height'] ) .'" />';
+            echo '<span class="ulf--unit">'. esc_attr( $line_height_unit ) .'</span>';
             echo '</div>';
             echo '</div>';
           }
@@ -242,11 +242,11 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
           //
           // Letter Spacing
           if ( ! empty( $args['letter_spacing'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Letter Spacing', 'csf' ) .'</div>';
-            echo '<div class="csf--input-wrap">';
-            echo '<input type="number" name="'. esc_attr( $this->field_name( '[letter-spacing]' ) ) .'" class="csf--letter-spacing csf--input csf-input-number" value="'. esc_attr( $this->value['letter-spacing'] ) .'" />';
-            echo '<span class="csf--unit">'. esc_attr( $args['unit'] ) .'</span>';
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Letter Spacing', 'ulf' ) .'</div>';
+            echo '<div class="ulf--input-wrap">';
+            echo '<input type="number" name="'. esc_attr( $this->field_name( '[letter-spacing]' ) ) .'" class="ulf--letter-spacing ulf--input ulf-input-number" value="'. esc_attr( $this->value['letter-spacing'] ) .'" />';
+            echo '<span class="ulf--unit">'. esc_attr( $args['unit'] ) .'</span>';
             echo '</div>';
             echo '</div>';
           }
@@ -254,11 +254,11 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
           //
           // Word Spacing
           if ( ! empty( $args['word_spacing'] ) ) {
-            echo '<div class="csf--block">';
-            echo '<div class="csf--title">'. esc_html__( 'Word Spacing', 'csf' ) .'</div>';
-            echo '<div class="csf--input-wrap">';
-            echo '<input type="number" name="'. esc_attr( $this->field_name( '[word-spacing]' ) ) .'" class="csf--word-spacing csf--input csf-input-number" value="'. esc_attr( $this->value['word-spacing'] ) .'" />';
-            echo '<span class="csf--unit">'. esc_attr( $args['unit'] ) .'</span>';
+            echo '<div class="ulf--block">';
+            echo '<div class="ulf--title">'. esc_html__( 'Word Spacing', 'ulf' ) .'</div>';
+            echo '<div class="ulf--input-wrap">';
+            echo '<input type="number" name="'. esc_attr( $this->field_name( '[word-spacing]' ) ) .'" class="ulf--word-spacing ulf--input ulf-input-number" value="'. esc_attr( $this->value['word-spacing'] ) .'" />';
+            echo '<span class="ulf--unit">'. esc_attr( $args['unit'] ) .'</span>';
             echo '</div>';
             echo '</div>';
           }
@@ -269,10 +269,10 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
         // Font Color
         if ( ! empty( $args['color'] ) ) {
           $default_color_attr = ( ! empty( $default_value['color'] ) ) ? ' data-default-color="'. esc_attr( $default_value['color'] ) .'"' : '';
-          echo '<div class="csf--block csf--block-font-color">';
-          echo '<div class="csf--title">'. esc_html__( 'Font Color', 'csf' ) .'</div>';
-          echo '<div class="csf-field-color">';
-          echo '<input type="text" name="'. esc_attr( $this->field_name( '[color]' ) ) .'" class="csf-color csf--color" value="'. esc_attr( $this->value['color'] ) .'"'. $default_color_attr .' />';
+          echo '<div class="ulf--block ulf--block-font-color">';
+          echo '<div class="ulf--title">'. esc_html__( 'Font Color', 'ulf' ) .'</div>';
+          echo '<div class="ulf-field-color">';
+          echo '<input type="text" name="'. esc_attr( $this->field_name( '[color]' ) ) .'" class="ulf-color ulf--color" value="'. esc_attr( $this->value['color'] ) .'"'. $default_color_attr .' />';
           echo '</div>';
           echo '</div>';
         }
@@ -280,9 +280,9 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
         //
         // Custom style
         if ( ! empty( $args['custom_style'] ) ) {
-          echo '<div class="csf--block csf--block-custom-style">';
-          echo '<div class="csf--title">'. esc_html__( 'Custom Style', 'csf' ) .'</div>';
-          echo '<textarea name="'. esc_attr( $this->field_name( '[custom-style]' ) ) .'" class="csf--custom-style">'. esc_attr( $this->value['custom-style'] ) .'</textarea>';
+          echo '<div class="ulf--block ulf--block-custom-style">';
+          echo '<div class="ulf--title">'. esc_html__( 'Custom Style', 'ulf' ) .'</div>';
+          echo '<textarea name="'. esc_attr( $this->field_name( '[custom-style]' ) ) .'" class="ulf--custom-style">'. esc_attr( $this->value['custom-style'] ) .'</textarea>';
           echo '</div>';
         }
 
@@ -291,14 +291,14 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
         $always_preview = ( $args['preview'] !== 'always' ) ? ' hidden' : '';
 
         if ( ! empty( $args['preview'] ) ) {
-          echo '<div class="csf--block csf--block-preview'. esc_attr( $always_preview ) .'">';
-          echo '<div class="csf--toggle fas fa-toggle-off"></div>';
-          echo '<div class="csf--preview">'. esc_attr( $args['preview_text'] ) .'</div>';
+          echo '<div class="ulf--block ulf--block-preview'. esc_attr( $always_preview ) .'">';
+          echo '<div class="ulf--toggle fas fa-toggle-off"></div>';
+          echo '<div class="ulf--preview">'. esc_attr( $args['preview_text'] ) .'</div>';
           echo '</div>';
         }
 
-        echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[type]' ) ) .'" class="csf--type" value="'. esc_attr( $this->value['type'] ) .'" />';
-        echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[unit]' ) ) .'" class="csf--unit-save" value="'. esc_attr( $args['unit'] ) .'" />';
+        echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[type]' ) ) .'" class="ulf--type" value="'. esc_attr( $this->value['type'] ) .'" />';
+        echo '<input type="hidden" name="'. esc_attr( $this->field_name( '[unit]' ) ) .'" class="ulf--unit-save" value="'. esc_attr( $args['unit'] ) .'" />';
 
       echo '</div>';
 
@@ -312,7 +312,7 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
       $multiple_attr = ( $is_multiple ) ? ' multiple data-multiple="true"' : '';
       $chosen_rtl    = ( $this->chosen && is_rtl() ) ? ' chosen-rtl' : '';
 
-      $output  = '<select name="'. esc_attr( $this->field_name( '['. $name .']'. $multiple_name ) ) .'" class="csf--'. esc_attr( $name ) . esc_attr( $chosen_rtl ) .'" data-placeholder="'. esc_attr( $placeholder ) .'"'. $multiple_attr .'>';
+      $output  = '<select name="'. esc_attr( $this->field_name( '['. $name .']'. $multiple_name ) ) .'" class="ulf--'. esc_attr( $name ) . esc_attr( $chosen_rtl ) .'" data-placeholder="'. esc_attr( $placeholder ) .'"'. $multiple_attr .'>';
       $output .= ( ! empty( $placeholder ) ) ? '<option value="">'. esc_attr( ( ! $this->chosen ) ? $placeholder : '' ) .'</option>' : '';
 
       if ( ! empty( $options ) ) {
@@ -336,26 +336,26 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
 
     public function enqueue() {
 
-      if ( ! wp_script_is( 'csf-webfontloader' ) ) {
+      if ( ! wp_script_is( 'ulf-webfontloader' ) ) {
 
-        CSF::include_plugin_file( 'fields/typography/google-fonts.php' );
+        ULF::include_plugin_file( 'fields/typography/google-fonts.php' );
 
-        wp_enqueue_script( 'csf-webfontloader', 'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js', array( 'csf' ), '1.6.28', true );
+        wp_enqueue_script( 'ulf-webfontloader', 'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js', array( 'ulf' ), '1.6.28', true );
 
         $webfonts = array();
 
-        $customwebfonts = apply_filters( 'csf_field_typography_customwebfonts', array() );
+        $customwebfonts = apply_filters( 'ulf_field_typography_customwebfonts', array() );
 
         if ( ! empty( $customwebfonts ) ) {
           $webfonts['custom'] = array(
-            'label' => esc_html__( 'Custom Web Fonts', 'csf' ),
+            'label' => esc_html__( 'Custom Web Fonts', 'ulf' ),
             'fonts' => $customwebfonts
           );
         }
 
         $webfonts['safe'] = array(
-          'label' => esc_html__( 'Safe Web Fonts', 'csf' ),
-          'fonts' => apply_filters( 'csf_field_typography_safewebfonts', array(
+          'label' => esc_html__( 'Safe Web Fonts', 'ulf' ),
+          'fonts' => apply_filters( 'ulf_field_typography_safewebfonts', array(
             'Arial',
             'Arial Black',
             'Helvetica',
@@ -374,13 +374,13 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
         ) );
 
         $webfonts['google'] = array(
-          'label' => esc_html__( 'Google Web Fonts', 'csf' ),
-          'fonts' => apply_filters( 'csf_field_typography_googlewebfonts', csf_get_google_fonts()
+          'label' => esc_html__( 'Google Web Fonts', 'ulf' ),
+          'fonts' => apply_filters( 'ulf_field_typography_googlewebfonts', ulf_get_google_fonts()
         ) );
 
-        $defaultstyles = apply_filters( 'csf_field_typography_defaultstyles', array( 'normal', 'italic', '700', '700italic' ) );
+        $defaultstyles = apply_filters( 'ulf_field_typography_defaultstyles', array( 'normal', 'italic', '700', '700italic' ) );
 
-        $googlestyles = apply_filters( 'csf_field_typography_googlestyles', array(
+        $googlestyles = apply_filters( 'ulf_field_typography_googlestyles', array(
           '100'       => 'Thin 100',
           '100italic' => 'Thin 100 Italic',
           '200'       => 'Extra-Light 200',
@@ -401,9 +401,9 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
           '900italic' => 'Black 900 Italic'
         ) );
 
-        $webfonts = apply_filters( 'csf_field_typography_webfonts', $webfonts );
+        $webfonts = apply_filters( 'ulf_field_typography_webfonts', $webfonts );
 
-        wp_localize_script( 'csf', 'csf_typography_json', array(
+        wp_localize_script( 'ulf', 'ulf_typography_json', array(
           'webfonts'      => $webfonts,
           'defaultstyles' => $defaultstyles,
           'googlestyles'  => $googlestyles
@@ -420,8 +420,8 @@ if ( ! class_exists( 'CSF_Field_typography' ) ) {
       if ( ! empty( $this->value['type'] ) ) {
         $is_google = ( $this->value['type'] === 'google' ) ? true : false;
       } else {
-        CSF::include_plugin_file( 'fields/typography/google-fonts.php' );
-        $is_google = ( array_key_exists( $this->value['font-family'], csf_get_google_fonts() ) ) ? true : false;
+        ULF::include_plugin_file( 'fields/typography/google-fonts.php' );
+        $is_google = ( array_key_exists( $this->value['font-family'], ulf_get_google_fonts() ) ) ? true : false;
       }
 
       if ( $is_google ) {

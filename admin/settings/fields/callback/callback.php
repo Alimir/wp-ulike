@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_callback' ) ) {
-  class CSF_Field_callback extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_callback' ) ) {
+  class ULF_Field_callback extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );

@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_dimensions' ) ) {
-  class CSF_Field_dimensions extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_dimensions' ) ) {
+  class ULF_Field_dimensions extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -19,8 +19,8 @@ if ( ! class_exists( 'CSF_Field_dimensions' ) ) {
       $args = wp_parse_args( $this->field, array(
         'width_icon'         => '<i class="fas fa-arrows-alt-h"></i>',
         'height_icon'        => '<i class="fas fa-arrows-alt-v"></i>',
-        'width_placeholder'  => esc_html__( 'width', 'csf' ),
-        'height_placeholder' => esc_html__( 'height', 'csf' ),
+        'width_placeholder'  => esc_html__( 'width', 'ulf' ),
+        'height_placeholder' => esc_html__( 'height', 'ulf' ),
         'width'              => true,
         'height'             => true,
         'unit'               => true,
@@ -36,32 +36,32 @@ if ( ! class_exists( 'CSF_Field_dimensions' ) ) {
 
       $value   = wp_parse_args( $this->value, $default_values );
       $unit    = ( count( $args['units'] ) === 1 && ! empty( $args['unit'] ) ) ? $args['units'][0] : '';
-      $is_unit = ( ! empty( $unit ) ) ? ' csf--is-unit' : '';
+      $is_unit = ( ! empty( $unit ) ) ? ' ulf--is-unit' : '';
 
       echo $this->field_before();
 
-      echo '<div class="csf--inputs">';
+      echo '<div class="ulf--inputs">';
 
       if ( ! empty( $args['width'] ) ) {
         $placeholder = ( ! empty( $args['width_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args['width_placeholder'] ) .'"' : '';
-        echo '<div class="csf--input">';
-        echo ( ! empty( $args['width_icon'] ) ) ? '<span class="csf--label csf--icon">'. wp_kses_post( $args['width_icon'] ) .'</span>' : '';
-        echo '<input type="number" name="'. esc_attr( $this->field_name( '[width]' ) ) .'" value="'. esc_attr( $value['width'] ) .'"'. $placeholder .' class="csf-input-number'. esc_attr( $is_unit ) .'" />';
-        echo ( ! empty( $unit ) ) ? '<span class="csf--label csf--unit">'. esc_attr( $args['units'][0] ) .'</span>' : '';
+        echo '<div class="ulf--input">';
+        echo ( ! empty( $args['width_icon'] ) ) ? '<span class="ulf--label ulf--icon">'. wp_kses_post( $args['width_icon'] ) .'</span>' : '';
+        echo '<input type="number" name="'. esc_attr( $this->field_name( '[width]' ) ) .'" value="'. esc_attr( $value['width'] ) .'"'. $placeholder .' class="ulf-input-number'. esc_attr( $is_unit ) .'" />';
+        echo ( ! empty( $unit ) ) ? '<span class="ulf--label ulf--unit">'. esc_attr( $args['units'][0] ) .'</span>' : '';
         echo '</div>';
       }
 
       if ( ! empty( $args['height'] ) ) {
         $placeholder = ( ! empty( $args['height_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args['height_placeholder'] ) .'"' : '';
-        echo '<div class="csf--input">';
-        echo ( ! empty( $args['height_icon'] ) ) ? '<span class="csf--label csf--icon">'. wp_kses_post( $args['height_icon'] ) .'</span>' : '';
-        echo '<input type="number" name="'. esc_attr( $this->field_name( '[height]' ) ) .'" value="'. esc_attr( $value['height'] ) .'"'. $placeholder .' class="csf-input-number'. esc_attr( $is_unit ) .'" />';
-        echo ( ! empty( $unit ) ) ? '<span class="csf--label csf--unit">'. esc_attr( $args['units'][0] ) .'</span>' : '';
+        echo '<div class="ulf--input">';
+        echo ( ! empty( $args['height_icon'] ) ) ? '<span class="ulf--label ulf--icon">'. wp_kses_post( $args['height_icon'] ) .'</span>' : '';
+        echo '<input type="number" name="'. esc_attr( $this->field_name( '[height]' ) ) .'" value="'. esc_attr( $value['height'] ) .'"'. $placeholder .' class="ulf-input-number'. esc_attr( $is_unit ) .'" />';
+        echo ( ! empty( $unit ) ) ? '<span class="ulf--label ulf--unit">'. esc_attr( $args['units'][0] ) .'</span>' : '';
         echo '</div>';
       }
 
       if ( ! empty( $args['unit'] ) && ! empty( $args['show_units'] ) && count( $args['units'] ) > 1 ) {
-        echo '<div class="csf--input">';
+        echo '<div class="ulf--input">';
         echo '<select name="'. esc_attr( $this->field_name( '[unit]' ) ) .'">';
         foreach ( $args['units'] as $unit ) {
           $selected = ( $value['unit'] === $unit ) ? ' selected' : '';

@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_number' ) ) {
-  class CSF_Field_number extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_number' ) ) {
+  class ULF_Field_number extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -21,9 +21,9 @@ if ( ! class_exists( 'CSF_Field_number' ) ) {
       ) );
 
       echo $this->field_before();
-      echo '<div class="csf--wrap">';
-      echo '<input type="number" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes( array( 'class' => 'csf-input-number' ) ) .'/>';
-      echo ( ! empty( $args['unit'] ) ) ? '<span class="csf--unit">'. esc_attr( $args['unit'] ) .'</span>' : '';
+      echo '<div class="ulf--wrap">';
+      echo '<input type="number" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes( array( 'class' => 'ulf-input-number' ) ) .'/>';
+      echo ( ! empty( $args['unit'] ) ) ? '<span class="ulf--unit">'. esc_attr( $args['unit'] ) .'</span>' : '';
       echo '</div>';
       echo $this->field_after();
 

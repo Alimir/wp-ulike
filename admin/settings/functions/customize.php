@@ -7,9 +7,9 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'WP_Customize_Panel_CSF' ) && class_exists( 'WP_Customize_Panel' ) ) {
-  class WP_Customize_Panel_CSF extends WP_Customize_Panel {
-    public $type = 'csf';
+if ( ! class_exists( 'WP_Customize_Panel_ULF' ) && class_exists( 'WP_Customize_Panel' ) ) {
+  class WP_Customize_Panel_ULF extends WP_Customize_Panel {
+    public $type = 'ulf';
   }
 }
 
@@ -21,9 +21,9 @@ if ( ! class_exists( 'WP_Customize_Panel_CSF' ) && class_exists( 'WP_Customize_P
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'WP_Customize_Section_CSF' ) && class_exists( 'WP_Customize_Section' ) ) {
-  class WP_Customize_Section_CSF extends WP_Customize_Section {
-    public $type = 'csf';
+if ( ! class_exists( 'WP_Customize_Section_ULF' ) && class_exists( 'WP_Customize_Section' ) ) {
+  class WP_Customize_Section_ULF extends WP_Customize_Section {
+    public $type = 'ulf';
   }
 }
 
@@ -35,10 +35,10 @@ if ( ! class_exists( 'WP_Customize_Section_CSF' ) && class_exists( 'WP_Customize
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'WP_Customize_Control_CSF' ) && class_exists( 'WP_Customize_Control' ) ) {
-  class WP_Customize_Control_CSF extends WP_Customize_Control {
+if ( ! class_exists( 'WP_Customize_Control_ULF' ) && class_exists( 'WP_Customize_Control' ) ) {
+  class WP_Customize_Control_ULF extends WP_Customize_Control {
 
-    public $type   = 'csf';
+    public $type   = 'ulf';
     public $field  = '';
     public $unique = '';
 
@@ -75,8 +75,8 @@ if ( ! class_exists( 'WP_Customize_Control_CSF' ) && class_exists( 'WP_Customize
         $depend .= ' data-value="'. esc_attr( $data_value ) .'"';
         $depend .= ( ! empty( $data_global ) ) ? ' data-depend-global="true"' : '';
 
-        $visible  = ' csf-dependency-control';
-        $visible .= ( ! empty( $depend_visible ) ) ? ' csf-depend-visible' : ' csf-depend-hidden';
+        $visible  = ' ulf-dependency-control';
+        $visible .= ( ! empty( $depend_visible ) ) ? ' ulf-depend-visible' : ' ulf-depend-hidden';
 
       }
 
@@ -118,7 +118,7 @@ if ( ! class_exists( 'WP_Customize_Control_CSF' ) && class_exists( 'WP_Customize
       $field_id   = ( ! empty( $this->field['id'] ) ) ? $this->field['id'] : '';
       $custom     = ( ! empty( $this->field['customizer'] ) ) ? true : false;
       $is_complex = ( in_array( $this->field['type'], $complex ) ) ? true : false;
-      $class      = ( $is_complex || $custom ) ? ' csf-customize-complex' : '';
+      $class      = ( $is_complex || $custom ) ? ' ulf-customize-complex' : '';
       $atts       = ( $is_complex || $custom ) ? ' data-unique-id="'. esc_attr( $this->unique ) .'" data-option-id="'. esc_attr( $field_id ) .'"' : '';
 
       if ( ! $is_complex && ! $custom ) {
@@ -129,9 +129,9 @@ if ( ! class_exists( 'WP_Customize_Control_CSF' ) && class_exists( 'WP_Customize
 
       $this->field['dependency'] = array();
 
-      echo '<div class="csf-customize-field'. esc_attr( $class ) .'"'. $atts .'>';
+      echo '<div class="ulf-customize-field'. esc_attr( $class ) .'"'. $atts .'>';
 
-      CSF::field( $this->field, $this->value(), $this->unique, 'customize' );
+      ULF::field( $this->field, $this->value(), $this->unique, 'customize' );
 
       echo '</div>';
 

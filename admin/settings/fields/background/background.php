@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_background' ) ) {
-  class CSF_Field_background extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_background' ) ) {
+  class ULF_Field_background extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -32,7 +32,7 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
         'background_image_preview'      => true,
         'background_auto_attributes'    => false,
         'background_image_library'      => 'image',
-        'background_image_placeholder'  => esc_html__( 'No background selected', 'csf' ),
+        'background_image_placeholder'  => esc_html__( 'No background selected', 'ulf' ),
       ) );
 
       $default_value                    = array(
@@ -55,17 +55,17 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="csf--background-colors">';
+      echo '<div class="ulf--background-colors">';
 
       //
       // Background Color
       if ( ! empty( $args['background_color'] ) ) {
 
-        echo '<div class="csf--color">';
+        echo '<div class="ulf--color">';
 
-        echo ( ! empty( $args['background_gradient'] ) ) ? '<div class="csf--title">'. esc_html__( 'From', 'csf' ) .'</div>' : '';
+        echo ( ! empty( $args['background_gradient'] ) ) ? '<div class="ulf--title">'. esc_html__( 'From', 'ulf' ) .'</div>' : '';
 
-        CSF::field( array(
+        ULF::field( array(
           'id'      => 'background-color',
           'type'    => 'color',
           'default' => $default_value['background-color'],
@@ -79,11 +79,11 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Gradient Color
       if ( ! empty( $args['background_gradient_color'] ) && ! empty( $args['background_gradient'] ) ) {
 
-        echo '<div class="csf--color">';
+        echo '<div class="ulf--color">';
 
-        echo ( ! empty( $args['background_gradient'] ) ) ? '<div class="csf--title">'. esc_html__( 'To', 'csf' ) .'</div>' : '';
+        echo ( ! empty( $args['background_gradient'] ) ) ? '<div class="ulf--title">'. esc_html__( 'To', 'ulf' ) .'</div>' : '';
 
-        CSF::field( array(
+        ULF::field( array(
           'id'      => 'background-gradient-color',
           'type'    => 'color',
           'default' => $default_value['background-gradient-color'],
@@ -97,19 +97,19 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Gradient Direction
       if ( ! empty( $args['background_gradient_direction'] ) && ! empty( $args['background_gradient'] ) ) {
 
-        echo '<div class="csf--color">';
+        echo '<div class="ulf--color">';
 
-        echo ( ! empty( $args['background_gradient'] ) ) ? '<div class="csf---title">'. esc_html__( 'Direction', 'csf' ) .'</div>' : '';
+        echo ( ! empty( $args['background_gradient'] ) ) ? '<div class="ulf---title">'. esc_html__( 'Direction', 'ulf' ) .'</div>' : '';
 
-        CSF::field( array(
+        ULF::field( array(
           'id'          => 'background-gradient-direction',
           'type'        => 'select',
           'options'     => array(
-            ''          => esc_html__( 'Gradient Direction', 'csf' ),
-            'to bottom' => esc_html__( '&#8659; top to bottom', 'csf' ),
-            'to right'  => esc_html__( '&#8658; left to right', 'csf' ),
-            '135deg'    => esc_html__( '&#8664; corner top to right', 'csf' ),
-            '-135deg'   => esc_html__( '&#8665; corner top to left', 'csf' ),
+            ''          => esc_html__( 'Gradient Direction', 'ulf' ),
+            'to bottom' => esc_html__( '&#8659; top to bottom', 'ulf' ),
+            'to right'  => esc_html__( '&#8658; left to right', 'ulf' ),
+            '135deg'    => esc_html__( '&#8664; corner top to right', 'ulf' ),
+            '-135deg'   => esc_html__( '&#8665; corner top to left', 'ulf' ),
           ),
         ), $this->value['background-gradient-direction'], $this->field_name(), 'field/background' );
 
@@ -123,12 +123,12 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Image
       if ( ! empty( $args['background_image'] ) ) {
 
-        echo '<div class="csf--background-image">';
+        echo '<div class="ulf--background-image">';
 
-        CSF::field( array(
+        ULF::field( array(
           'id'          => 'background-image',
           'type'        => 'media',
-          'class'       => 'csf-assign-field-background',
+          'class'       => 'ulf-assign-field-background',
           'library'     => $args['background_image_library'],
           'preview'     => $args['background_image_preview'],
           'placeholder' => $args['background_image_placeholder'],
@@ -139,29 +139,29 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
 
       }
 
-      $auto_class   = ( ! empty( $args['background_auto_attributes'] ) ) ? ' csf--auto-attributes' : '';
-      $hidden_class = ( ! empty( $args['background_auto_attributes'] ) && empty( $this->value['background-image']['url'] ) ) ? ' csf--attributes-hidden' : '';
+      $auto_class   = ( ! empty( $args['background_auto_attributes'] ) ) ? ' ulf--auto-attributes' : '';
+      $hidden_class = ( ! empty( $args['background_auto_attributes'] ) && empty( $this->value['background-image']['url'] ) ) ? ' ulf--attributes-hidden' : '';
 
-      echo '<div class="csf--background-attributes'. esc_attr( $auto_class . $hidden_class ) .'">';
+      echo '<div class="ulf--background-attributes'. esc_attr( $auto_class . $hidden_class ) .'">';
 
       //
       // Background Position
       if ( ! empty( $args['background_position'] ) ) {
 
-        CSF::field( array(
+        ULF::field( array(
           'id'              => 'background-position',
           'type'            => 'select',
           'options'         => array(
-            ''              => esc_html__( 'Background Position', 'csf' ),
-            'left top'      => esc_html__( 'Left Top', 'csf' ),
-            'left center'   => esc_html__( 'Left Center', 'csf' ),
-            'left bottom'   => esc_html__( 'Left Bottom', 'csf' ),
-            'center top'    => esc_html__( 'Center Top', 'csf' ),
-            'center center' => esc_html__( 'Center Center', 'csf' ),
-            'center bottom' => esc_html__( 'Center Bottom', 'csf' ),
-            'right top'     => esc_html__( 'Right Top', 'csf' ),
-            'right center'  => esc_html__( 'Right Center', 'csf' ),
-            'right bottom'  => esc_html__( 'Right Bottom', 'csf' ),
+            ''              => esc_html__( 'Background Position', 'ulf' ),
+            'left top'      => esc_html__( 'Left Top', 'ulf' ),
+            'left center'   => esc_html__( 'Left Center', 'ulf' ),
+            'left bottom'   => esc_html__( 'Left Bottom', 'ulf' ),
+            'center top'    => esc_html__( 'Center Top', 'ulf' ),
+            'center center' => esc_html__( 'Center Center', 'ulf' ),
+            'center bottom' => esc_html__( 'Center Bottom', 'ulf' ),
+            'right top'     => esc_html__( 'Right Top', 'ulf' ),
+            'right center'  => esc_html__( 'Right Center', 'ulf' ),
+            'right bottom'  => esc_html__( 'Right Bottom', 'ulf' ),
           ),
         ), $this->value['background-position'], $this->field_name(), 'field/background' );
 
@@ -171,15 +171,15 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Repeat
       if ( ! empty( $args['background_repeat'] ) ) {
 
-        CSF::field( array(
+        ULF::field( array(
           'id'          => 'background-repeat',
           'type'        => 'select',
           'options'     => array(
-            ''          => esc_html__( 'Background Repeat', 'csf' ),
-            'repeat'    => esc_html__( 'Repeat', 'csf' ),
-            'no-repeat' => esc_html__( 'No Repeat', 'csf' ),
-            'repeat-x'  => esc_html__( 'Repeat Horizontally', 'csf' ),
-            'repeat-y'  => esc_html__( 'Repeat Vertically', 'csf' ),
+            ''          => esc_html__( 'Background Repeat', 'ulf' ),
+            'repeat'    => esc_html__( 'Repeat', 'ulf' ),
+            'no-repeat' => esc_html__( 'No Repeat', 'ulf' ),
+            'repeat-x'  => esc_html__( 'Repeat Horizontally', 'ulf' ),
+            'repeat-y'  => esc_html__( 'Repeat Vertically', 'ulf' ),
           ),
         ), $this->value['background-repeat'], $this->field_name(), 'field/background' );
 
@@ -189,13 +189,13 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Attachment
       if ( ! empty( $args['background_attachment'] ) ) {
 
-        CSF::field( array(
+        ULF::field( array(
           'id'       => 'background-attachment',
           'type'     => 'select',
           'options'  => array(
-            ''       => esc_html__( 'Background Attachment', 'csf' ),
-            'scroll' => esc_html__( 'Scroll', 'csf' ),
-            'fixed'  => esc_html__( 'Fixed', 'csf' ),
+            ''       => esc_html__( 'Background Attachment', 'ulf' ),
+            'scroll' => esc_html__( 'Scroll', 'ulf' ),
+            'fixed'  => esc_html__( 'Fixed', 'ulf' ),
           ),
         ), $this->value['background-attachment'], $this->field_name(), 'field/background' );
 
@@ -205,14 +205,14 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Size
       if ( ! empty( $args['background_size'] ) ) {
 
-        CSF::field( array(
+        ULF::field( array(
           'id'        => 'background-size',
           'type'      => 'select',
           'options'   => array(
-            ''        => esc_html__( 'Background Size', 'csf' ),
-            'cover'   => esc_html__( 'Cover', 'csf' ),
-            'contain' => esc_html__( 'Contain', 'csf' ),
-            'auto'    => esc_html__( 'Auto', 'csf' ),
+            ''        => esc_html__( 'Background Size', 'ulf' ),
+            'cover'   => esc_html__( 'Cover', 'ulf' ),
+            'contain' => esc_html__( 'Contain', 'ulf' ),
+            'auto'    => esc_html__( 'Auto', 'ulf' ),
           ),
         ), $this->value['background-size'], $this->field_name(), 'field/background' );
 
@@ -222,14 +222,14 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Origin
       if ( ! empty( $args['background_origin'] ) ) {
 
-        CSF::field( array(
+        ULF::field( array(
           'id'            => 'background-origin',
           'type'          => 'select',
           'options'       => array(
-            ''            => esc_html__( 'Background Origin', 'csf' ),
-            'padding-box' => esc_html__( 'Padding Box', 'csf' ),
-            'border-box'  => esc_html__( 'Border Box', 'csf' ),
-            'content-box' => esc_html__( 'Content Box', 'csf' ),
+            ''            => esc_html__( 'Background Origin', 'ulf' ),
+            'padding-box' => esc_html__( 'Padding Box', 'ulf' ),
+            'border-box'  => esc_html__( 'Border Box', 'ulf' ),
+            'content-box' => esc_html__( 'Content Box', 'ulf' ),
           ),
         ), $this->value['background-origin'], $this->field_name(), 'field/background' );
 
@@ -239,14 +239,14 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Clip
       if ( ! empty( $args['background_clip'] ) ) {
 
-        CSF::field( array(
+        ULF::field( array(
           'id'            => 'background-clip',
           'type'          => 'select',
           'options'       => array(
-            ''            => esc_html__( 'Background Clip', 'csf' ),
-            'border-box'  => esc_html__( 'Border Box', 'csf' ),
-            'padding-box' => esc_html__( 'Padding Box', 'csf' ),
-            'content-box' => esc_html__( 'Content Box', 'csf' ),
+            ''            => esc_html__( 'Background Clip', 'ulf' ),
+            'border-box'  => esc_html__( 'Border Box', 'ulf' ),
+            'padding-box' => esc_html__( 'Padding Box', 'ulf' ),
+            'content-box' => esc_html__( 'Content Box', 'ulf' ),
           ),
         ), $this->value['background-clip'], $this->field_name(), 'field/background' );
 
@@ -256,21 +256,21 @@ if ( ! class_exists( 'CSF_Field_background' ) ) {
       // Background Blend Mode
       if ( ! empty( $args['background_blend_mode'] ) ) {
 
-        CSF::field( array(
+        ULF::field( array(
           'id'            => 'background-blend-mode',
           'type'          => 'select',
           'options'       => array(
-            ''            => esc_html__( 'Background Blend Mode', 'csf' ),
-            'normal'      => esc_html__( 'Normal', 'csf' ),
-            'multiply'    => esc_html__( 'Multiply', 'csf' ),
-            'screen'      => esc_html__( 'Screen', 'csf' ),
-            'overlay'     => esc_html__( 'Overlay', 'csf' ),
-            'darken'      => esc_html__( 'Darken', 'csf' ),
-            'lighten'     => esc_html__( 'Lighten', 'csf' ),
-            'color-dodge' => esc_html__( 'Color Dodge', 'csf' ),
-            'saturation'  => esc_html__( 'Saturation', 'csf' ),
-            'color'       => esc_html__( 'Color', 'csf' ),
-            'luminosity'  => esc_html__( 'Luminosity', 'csf' ),
+            ''            => esc_html__( 'Background Blend Mode', 'ulf' ),
+            'normal'      => esc_html__( 'Normal', 'ulf' ),
+            'multiply'    => esc_html__( 'Multiply', 'ulf' ),
+            'screen'      => esc_html__( 'Screen', 'ulf' ),
+            'overlay'     => esc_html__( 'Overlay', 'ulf' ),
+            'darken'      => esc_html__( 'Darken', 'ulf' ),
+            'lighten'     => esc_html__( 'Lighten', 'ulf' ),
+            'color-dodge' => esc_html__( 'Color Dodge', 'ulf' ),
+            'saturation'  => esc_html__( 'Saturation', 'ulf' ),
+            'color'       => esc_html__( 'Color', 'ulf' ),
+            'luminosity'  => esc_html__( 'Luminosity', 'ulf' ),
           ),
         ), $this->value['background-blend-mode'], $this->field_name(), 'field/background' );
 

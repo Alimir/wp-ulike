@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_palette' ) ) {
-  class CSF_Field_palette extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_palette' ) ) {
+  class ULF_Field_palette extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -22,14 +22,14 @@ if ( ! class_exists( 'CSF_Field_palette' ) ) {
 
       if ( ! empty( $palette ) ) {
 
-        echo '<div class="csf-siblings csf--palettes">';
+        echo '<div class="ulf-siblings ulf--palettes">';
 
         foreach ( $palette as $key => $colors ) {
 
-          $active  = ( $key === $this->value ) ? ' csf--active' : '';
+          $active  = ( $key === $this->value ) ? ' ulf--active' : '';
           $checked = ( $key === $this->value ) ? ' checked' : '';
 
-          echo '<div class="csf--sibling csf--palette'. esc_attr( $active ) .'">';
+          echo '<div class="ulf--sibling ulf--palette'. esc_attr( $active ) .'">';
 
           if ( ! empty( $colors ) ) {
 

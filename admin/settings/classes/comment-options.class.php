@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
-  class CSF_Comment_Metabox extends CSF_Abstract{
+if ( ! class_exists( 'ULF_Comment_Metabox' ) ) {
+  class ULF_Comment_Metabox extends ULF_Abstract{
 
     // constans
     public $unique     = '';
@@ -29,8 +29,8 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
     public function __construct( $key, $params = array() ) {
 
       $this->unique     = $key;
-      $this->args       = apply_filters( "csf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
-      $this->sections   = apply_filters( "csf_{$this->unique}_sections", $params['sections'], $this );
+      $this->args       = apply_filters( "ulf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
+      $this->sections   = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
       $this->pre_fields = $this->pre_fields( $this->sections );
 
       add_action( 'add_meta_boxes_comment', array( &$this, 'add_comment_meta_box' ) );
@@ -117,24 +117,24 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
     public function add_comment_meta_box_content( $comment, $callback ) {
 
       $has_nav  = ( count( $this->sections ) > 1 ) ? true : false;
-      $show_all = ( ! $has_nav ) ? ' csf-show-all' : '';
-      $errors   = ( is_object ( $comment ) ) ? get_comment_meta( $comment->comment_ID, '_csf_errors_'. $this->unique, true ) : array();
+      $show_all = ( ! $has_nav ) ? ' ulf-show-all' : '';
+      $errors   = ( is_object ( $comment ) ) ? get_comment_meta( $comment->comment_ID, '_ulf_errors_'. $this->unique, true ) : array();
       $errors   = ( ! empty( $errors ) ) ? $errors : array();
-      $theme    = ( $this->args['theme'] ) ? ' csf-theme-'. $this->args['theme'] : '';
+      $theme    = ( $this->args['theme'] ) ? ' ulf-theme-'. $this->args['theme'] : '';
 
       if ( is_object( $comment ) && ! empty( $errors ) ) {
-        delete_comment_meta( $comment->comment_ID, '_csf_errors_'. $this->unique );
+        delete_comment_meta( $comment->comment_ID, '_ulf_errors_'. $this->unique );
       }
 
-      wp_nonce_field( 'csf_comment_metabox_nonce', 'csf_comment_metabox_nonce'. $this->unique );
+      wp_nonce_field( 'ulf_comment_metabox_nonce', 'ulf_comment_metabox_nonce'. $this->unique );
 
-      echo '<div class="csf csf-comment-metabox'. esc_attr( $theme ) .'">';
+      echo '<div class="ulf ulf-comment-metabox'. esc_attr( $theme ) .'">';
 
-        echo '<div class="csf-wrapper'. esc_attr( $show_all ) .'">';
+        echo '<div class="ulf-wrapper'. esc_attr( $show_all ) .'">';
 
           if ( $has_nav ) {
 
-            echo '<div class="csf-nav csf-nav-metabox">';
+            echo '<div class="ulf-nav ulf-nav-metabox">';
 
               echo '<ul>';
 
@@ -142,8 +142,8 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
               foreach ( $this->sections as $section ) {
 
-                $tab_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
-                $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="csf-label-error csf-error">!</i>' : '';
+                $tab_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+                $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="ulf-label-error ulf-error">!</i>' : '';
 
                 echo '<li><a href="#">'. wp_kses_post( $tab_icon . $section['title'] . $tab_error ) .'</a></li>';
 
@@ -157,22 +157,22 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
           }
 
-          echo '<div class="csf-content">';
+          echo '<div class="ulf-content">';
 
-            echo '<div class="csf-sections">';
+            echo '<div class="ulf-sections">';
 
             $section_key = 1;
 
             foreach ( $this->sections as $section ) {
 
-              $section_onload = ( ! $has_nav ) ? ' csf-onload' : '';
+              $section_onload = ( ! $has_nav ) ? ' ulf-onload' : '';
               $section_class  = ( ! empty( $section['class'] ) ) ? ' '. $section['class'] : '';
               $section_title  = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
-              $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="csf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+              $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-              echo '<div class="csf-section'. esc_attr( $section_onload . $section_class ) .'">';
+              echo '<div class="ulf-section'. esc_attr( $section_onload . $section_class ) .'">';
 
-              echo ( $section_title || $section_icon ) ? '<div class="csf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
+              echo ( $section_title || $section_icon ) ? '<div class="ulf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
 
               if ( ! empty( $section['fields'] ) ) {
 
@@ -186,13 +186,13 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
                     $field['default'] = $this->get_default( $field );
                   }
 
-                  CSF::field( $field, $this->get_meta_value( $comment->comment_ID, $field ), $this->unique, 'comment_metabox' );
+                  ULF::field( $field, $this->get_meta_value( $comment->comment_ID, $field ), $this->unique, 'comment_metabox' );
 
                 }
 
               } else {
 
-                echo '<div class="csf-no-option">'. esc_html__( 'No option provided by developer.', 'csf' ) .'</div>';
+                echo '<div class="ulf-no-option">'. esc_html__( 'No option provided by developer.', 'ulf' ) .'</div>';
 
               }
 
@@ -206,11 +206,11 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
             if ( ! empty( $this->args['show_restore'] ) ) {
 
-              echo '<div class="csf-sections-restore">';
+              echo '<div class="ulf-sections-restore">';
               echo '<label>';
               echo '<input type="checkbox" name="'. esc_attr( $this->unique ) .'[_restore]" />';
-              echo '<span class="button csf-button-restore">'. esc_html__( 'Restore', 'csf' ) .'</span>';
-              echo '<span class="button csf-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post for restore ', 'csf' ), esc_html__( 'Cancel', 'csf' ) ) .'</span>';
+              echo '<span class="button ulf-button-restore">'. esc_html__( 'Restore', 'ulf' ) .'</span>';
+              echo '<span class="button ulf-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post for restore ', 'ulf' ), esc_html__( 'Cancel', 'ulf' ) ) .'</span>';
               echo '</label>';
               echo '</div>';
 
@@ -218,7 +218,7 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
           echo '</div>';
 
-          echo ( $has_nav ) ? '<div class="csf-nav-background"></div>' : '';
+          echo ( $has_nav ) ? '<div class="ulf-nav-background"></div>' : '';
 
           echo '<div class="clear"></div>';
 
@@ -234,10 +234,10 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
       $count    = 1;
       $data     = array();
       $errors   = array();
-      $noncekey = 'csf_comment_metabox_nonce'. $this->unique;
+      $noncekey = 'ulf_comment_metabox_nonce'. $this->unique;
       $nonce    = ( ! empty( $_POST[ $noncekey ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $noncekey ] ) ) : '';
 
-      if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! wp_verify_nonce( $nonce, 'csf_comment_metabox_nonce' ) ) {
+      if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! wp_verify_nonce( $nonce, 'ulf_comment_metabox_nonce' ) ) {
         return $comment_id;
       }
 
@@ -304,9 +304,9 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
 
       }
 
-      $data = apply_filters( "csf_{$this->unique}_save", $data, $comment_id, $this );
+      $data = apply_filters( "ulf_{$this->unique}_save", $data, $comment_id, $this );
 
-      do_action( "csf_{$this->unique}_save_before", $data, $comment_id, $this );
+      do_action( "ulf_{$this->unique}_save_before", $data, $comment_id, $this );
 
       if ( empty( $data ) || ! empty( $request['_restore'] ) ) {
 
@@ -329,14 +329,14 @@ if ( ! class_exists( 'CSF_Comment_Metabox' ) ) {
         }
 
         if ( ! empty( $errors ) ) {
-          update_comment_meta( $comment_id, '_csf_errors_'. $this->unique, $errors );
+          update_comment_meta( $comment_id, '_ulf_errors_'. $this->unique, $errors );
         }
 
       }
 
-      do_action( "csf_{$this->unique}_saved", $data, $comment_id, $this );
+      do_action( "ulf_{$this->unique}_saved", $data, $comment_id, $this );
 
-      do_action( "csf_{$this->unique}_save_after", $data, $comment_id, $this );
+      do_action( "ulf_{$this->unique}_save_after", $data, $comment_id, $this );
 
     }
   }

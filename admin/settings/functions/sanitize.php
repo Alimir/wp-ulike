@@ -8,8 +8,8 @@
  * @version 1.0.0
  *
  */
-if ( ! function_exists( 'csf_sanitize_replace_a_to_b' ) ) {
-  function csf_sanitize_replace_a_to_b( $value ) {
+if ( ! function_exists( 'ulf_sanitize_replace_a_to_b' ) ) {
+  function ulf_sanitize_replace_a_to_b( $value ) {
     return str_replace( 'a', 'b', $value );
   }
 }
@@ -22,8 +22,8 @@ if ( ! function_exists( 'csf_sanitize_replace_a_to_b' ) ) {
  * @version 1.0.0
  *
  */
-if ( ! function_exists( 'csf_sanitize_title' ) ) {
-  function csf_sanitize_title( $value ) {
+if ( ! function_exists( 'ulf_sanitize_title' ) ) {
+  function ulf_sanitize_title( $value ) {
     return sanitize_title( $value );
   }
 }

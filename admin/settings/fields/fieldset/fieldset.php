@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_fieldset' ) ) {
-  class CSF_Field_fieldset extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_fieldset' ) ) {
+  class ULF_Field_fieldset extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -18,7 +18,7 @@ if ( ! class_exists( 'CSF_Field_fieldset' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="csf-fieldset-content">';
+      echo '<div class="ulf-fieldset-content">';
 
       foreach ( $this->field['fields'] as $field ) {
 
@@ -27,7 +27,7 @@ if ( ! class_exists( 'CSF_Field_fieldset' ) ) {
         $field_value   = ( isset( $this->value[$field_id] ) ) ? $this->value[$field_id] : $field_default;
         $unique_id     = ( ! empty( $this->unique ) ) ? $this->unique .'['. $this->field['id'] .']' : $this->field['id'];
 
-        CSF::field( $field, $field_value, $unique_id, 'field/fieldset' );
+        ULF::field( $field, $field_value, $unique_id, 'field/fieldset' );
 
       }
 

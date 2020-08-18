@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Fields' ) ) {
-  abstract class CSF_Fields extends CSF_Abstract {
+if ( ! class_exists( 'ULF_Fields' ) ) {
+  abstract class ULF_Fields extends ULF_Abstract {
 
     public function __construct( $field = array(), $value = '', $unique = '', $where = '', $parent = '' ) {
       $this->field  = $field;
@@ -65,15 +65,15 @@ if ( ! class_exists( 'CSF_Fields' ) ) {
     }
 
     public function field_before() {
-      return ( ! empty( $this->field['before'] ) ) ? '<div class="csf-before-text">'. wp_kses_post( $this->field['before'] ) .'</div>' : '';
+      return ( ! empty( $this->field['before'] ) ) ? '<div class="ulf-before-text">'. wp_kses_post( $this->field['before'] ) .'</div>' : '';
     }
 
     public function field_after() {
 
-      $output  = ( ! empty( $this->field['after'] ) ) ? '<div class="csf-after-text">'. wp_kses_post( $this->field['after'] ) .'</div>' : '';
-      $output .= ( ! empty( $this->field['desc'] ) ) ? '<div class="clear"></div><div class="csf-desc-text">'. wp_kses_post( $this->field['desc'] ) .'</div>' : '';
-      $output .= ( ! empty( $this->field['help'] ) ) ? '<div class="csf-help"><span class="csf-help-text">'. wp_kses_post( $this->field['help'] ) .'</span><i class="fas fa-question-circle"></i></div>' : '';
-      $output .= ( ! empty( $this->field['_error'] ) ) ? '<div class="csf-error-text">'. wp_kses_post( $this->field['_error'] ) .'</div>' : '';
+      $output  = ( ! empty( $this->field['after'] ) ) ? '<div class="ulf-after-text">'. wp_kses_post( $this->field['after'] ) .'</div>' : '';
+      $output .= ( ! empty( $this->field['desc'] ) ) ? '<div class="clear"></div><div class="ulf-desc-text">'. wp_kses_post( $this->field['desc'] ) .'</div>' : '';
+      $output .= ( ! empty( $this->field['help'] ) ) ? '<div class="ulf-help"><span class="ulf-help-text">'. wp_kses_post( $this->field['help'] ) .'</span><i class="fas fa-question-circle"></i></div>' : '';
+      $output .= ( ! empty( $this->field['_error'] ) ) ? '<div class="ulf-error-text">'. wp_kses_post( $this->field['_error'] ) .'</div>' : '';
 
       return $output;
 

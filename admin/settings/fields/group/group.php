@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Field_group' ) ) {
-  class CSF_Field_group extends CSF_Fields {
+if ( ! class_exists( 'ULF_Field_group' ) ) {
+  class ULF_Field_group extends ULF_Fields {
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
       parent::__construct( $field, $value, $unique, $where, $parent );
@@ -20,7 +20,7 @@ if ( ! class_exists( 'CSF_Field_group' ) ) {
         'max'                    => 0,
         'min'                    => 0,
         'fields'                 => array(),
-        'button_title'           => esc_html__( 'Add New', 'csf' ),
+        'button_title'           => esc_html__( 'Add New', 'ulf' ),
         'accordion_title_prefix' => '',
         'accordion_title_number' => false,
         'accordion_title_auto'   => true,
@@ -32,42 +32,42 @@ if ( ! class_exists( 'CSF_Field_group' ) ) {
 
       if ( ! empty( $this->parent ) && preg_match( '/'. preg_quote( '['. $this->field['id'] .']' ) .'/', $this->parent ) ) {
 
-        echo '<div class="csf-notice csf-notice-danger">'. esc_html__( 'Error: Nested field id can not be same with another nested field id.', 'csf' ) .'</div>';
+        echo '<div class="ulf-notice ulf-notice-danger">'. esc_html__( 'Error: Nested field id can not be same with another nested field id.', 'ulf' ) .'</div>';
 
       } else {
 
         echo $this->field_before();
 
-        echo '<div class="csf-cloneable-item csf-cloneable-hidden">';
+        echo '<div class="ulf-cloneable-item ulf-cloneable-hidden">';
 
-          echo '<div class="csf-cloneable-helper">';
-          echo '<i class="csf-cloneable-sort fas fa-arrows-alt"></i>';
-          echo '<i class="csf-cloneable-clone far fa-clone"></i>';
-          echo '<i class="csf-cloneable-remove csf-confirm fas fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'csf' ) .'"></i>';
+          echo '<div class="ulf-cloneable-helper">';
+          echo '<i class="ulf-cloneable-sort fas fa-arrows-alt"></i>';
+          echo '<i class="ulf-cloneable-clone far fa-clone"></i>';
+          echo '<i class="ulf-cloneable-remove ulf-confirm fas fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'ulf' ) .'"></i>';
           echo '</div>';
 
-          echo '<h4 class="csf-cloneable-title">';
-          echo '<span class="csf-cloneable-text">';
-          echo ( $title_number ) ? '<span class="csf-cloneable-title-number"></span>' : '';
-          echo ( $title_prefix ) ? '<span class="csf-cloneable-title-prefix">'. esc_attr( $title_prefix ) .'</span>' : '';
-          echo ( $title_auto ) ? '<span class="csf-cloneable-value"><span class="csf-cloneable-placeholder"></span></span>' : '';
+          echo '<h4 class="ulf-cloneable-title">';
+          echo '<span class="ulf-cloneable-text">';
+          echo ( $title_number ) ? '<span class="ulf-cloneable-title-number"></span>' : '';
+          echo ( $title_prefix ) ? '<span class="ulf-cloneable-title-prefix">'. esc_attr( $title_prefix ) .'</span>' : '';
+          echo ( $title_auto ) ? '<span class="ulf-cloneable-value"><span class="ulf-cloneable-placeholder"></span></span>' : '';
           echo '</span>';
           echo '</h4>';
 
-          echo '<div class="csf-cloneable-content">';
+          echo '<div class="ulf-cloneable-content">';
           foreach ( $this->field['fields'] as $field ) {
 
             $field_parent  = $this->parent .'['. $this->field['id'] .']';
             $field_default = ( isset( $field['default'] ) ) ? $field['default'] : '';
 
-            CSF::field( $field, $field_default, '_nonce', 'field/group', $field_parent );
+            ULF::field( $field, $field_default, '_nonce', 'field/group', $field_parent );
 
           }
           echo '</div>';
 
         echo '</div>';
 
-        echo '<div class="csf-cloneable-wrapper csf-data-wrapper" data-title-number="'. esc_attr( $title_number ) .'" data-unique-id="'. esc_attr( $this->unique ) .'" data-field-id="['. esc_attr( $this->field['id'] ) .']" data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'">';
+        echo '<div class="ulf-cloneable-wrapper ulf-data-wrapper" data-title-number="'. esc_attr( $title_number ) .'" data-unique-id="'. esc_attr( $this->unique ) .'" data-field-id="['. esc_attr( $this->field['id'] ) .']" data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'">';
 
         if ( ! empty( $this->value ) ) {
 
@@ -79,23 +79,23 @@ if ( ! class_exists( 'CSF_Field_group' ) ) {
             $first_value = ( isset( $value[$first_id] ) ) ? $value[$first_id] : '';
             $first_value = ( is_array( $first_value ) ) ? reset( $first_value ) : $first_value;
 
-            echo '<div class="csf-cloneable-item">';
+            echo '<div class="ulf-cloneable-item">';
 
-              echo '<div class="csf-cloneable-helper">';
-              echo '<i class="csf-cloneable-sort fas fa-arrows-alt"></i>';
-              echo '<i class="csf-cloneable-clone far fa-clone"></i>';
-              echo '<i class="csf-cloneable-remove csf-confirm fas fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'csf' ) .'"></i>';
+              echo '<div class="ulf-cloneable-helper">';
+              echo '<i class="ulf-cloneable-sort fas fa-arrows-alt"></i>';
+              echo '<i class="ulf-cloneable-clone far fa-clone"></i>';
+              echo '<i class="ulf-cloneable-remove ulf-confirm fas fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'ulf' ) .'"></i>';
               echo '</div>';
 
-              echo '<h4 class="csf-cloneable-title">';
-              echo '<span class="csf-cloneable-text">';
-              echo ( $title_number ) ? '<span class="csf-cloneable-title-number">'. esc_attr( $num+1 ) .'.</span>' : '';
-              echo ( $title_prefix ) ? '<span class="csf-cloneable-title-prefix">'. esc_attr( $title_prefix ) .'</span>' : '';
-              echo ( $title_auto ) ? '<span class="csf-cloneable-value">' . esc_attr( $first_value ) .'</span>' : '';
+              echo '<h4 class="ulf-cloneable-title">';
+              echo '<span class="ulf-cloneable-text">';
+              echo ( $title_number ) ? '<span class="ulf-cloneable-title-number">'. esc_attr( $num+1 ) .'.</span>' : '';
+              echo ( $title_prefix ) ? '<span class="ulf-cloneable-title-prefix">'. esc_attr( $title_prefix ) .'</span>' : '';
+              echo ( $title_auto ) ? '<span class="ulf-cloneable-value">' . esc_attr( $first_value ) .'</span>' : '';
               echo '</span>';
               echo '</h4>';
 
-              echo '<div class="csf-cloneable-content">';
+              echo '<div class="ulf-cloneable-content">';
 
               foreach ( $this->field['fields'] as $field ) {
 
@@ -103,7 +103,7 @@ if ( ! class_exists( 'CSF_Field_group' ) ) {
                 $field_unique = ( ! empty( $this->unique ) ) ? $this->unique .'['. $this->field['id'] .']['. $num .']' : $this->field['id'] .'['. $num .']';
                 $field_value  = ( isset( $field['id'] ) && isset( $value[$field['id']] ) ) ? $value[$field['id']] : '';
 
-                CSF::field( $field, $field_value, $field_unique, 'field/group', $field_parent );
+                ULF::field( $field, $field_value, $field_unique, 'field/group', $field_parent );
 
               }
 
@@ -119,10 +119,10 @@ if ( ! class_exists( 'CSF_Field_group' ) ) {
 
         echo '</div>';
 
-        echo '<div class="csf-cloneable-alert csf-cloneable-max">'. esc_html__( 'You can not add more than', 'csf' ) .' '. esc_attr( $args['max'] ) .'</div>';
-        echo '<div class="csf-cloneable-alert csf-cloneable-min">'. esc_html__( 'You can not remove less than', 'csf' ) .' '. esc_attr( $args['min'] ) .'</div>';
+        echo '<div class="ulf-cloneable-alert ulf-cloneable-max">'. esc_html__( 'You can not add more than', 'ulf' ) .' '. esc_attr( $args['max'] ) .'</div>';
+        echo '<div class="ulf-cloneable-alert ulf-cloneable-min">'. esc_html__( 'You can not remove less than', 'ulf' ) .' '. esc_attr( $args['min'] ) .'</div>';
 
-        echo '<a href="#" class="button button-primary csf-cloneable-add">'. wp_kses_post( $args['button_title'] ) .'</a>';
+        echo '<a href="#" class="button button-primary ulf-cloneable-add">'. wp_kses_post( $args['button_title'] ) .'</a>';
 
         echo $this->field_after();
 

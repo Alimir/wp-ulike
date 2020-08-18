@@ -7,8 +7,8 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'CSF_Nav_Menu_Options' ) ) {
-  class CSF_Nav_Menu_Options extends CSF_Abstract{
+if ( ! class_exists( 'ULF_Nav_Menu_Options' ) ) {
+  class ULF_Nav_Menu_Options extends ULF_Abstract{
 
     // constans
     public $unique   = '';
@@ -24,8 +24,8 @@ if ( ! class_exists( 'CSF_Nav_Menu_Options' ) ) {
     public function __construct( $key, $params ) {
 
       $this->unique   = $key;
-      $this->args     = apply_filters( "csf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
-      $this->sections = apply_filters( "csf_{$this->unique}_sections", $params['sections'], $this );
+      $this->args     = apply_filters( "ulf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
+      $this->sections = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
 
       add_action( 'wp_nav_menu_item_custom_fields', array( &$this, 'wp_nav_menu_item_custom_fields' ), 10, 4 );
       add_action( 'wp_update_nav_menu_item', array( &$this, 'wp_update_nav_menu_item' ), 10, 3 );
@@ -45,11 +45,11 @@ if ( ! class_exists( 'CSF_Nav_Menu_Options' ) ) {
 
       if( version_compare( $wp_version, '5.4.0', '<' ) ) {
 
-        if ( ! class_exists( 'CSF_Walker_Nav_Menu_Edit' ) ) {
-          CSF::include_plugin_file( 'functions/walker.php' );
+        if ( ! class_exists( 'ULF_Walker_Nav_Menu_Edit' ) ) {
+          ULF::include_plugin_file( 'functions/walker.php' );
         }
 
-        return 'CSF_Walker_Nav_Menu_Edit';
+        return 'ULF_Walker_Nav_Menu_Edit';
 
       }
 
@@ -94,24 +94,24 @@ if ( ! class_exists( 'CSF_Nav_Menu_Options' ) ) {
     //
     public function wp_nav_menu_item_custom_fields( $menu_item_id, $item, $depth, $args ) {
 
-      $errors = ( ! empty( $menu_item_id ) ) ? get_post_meta( $menu_item_id, '_csf_errors_'. $this->unique, true ) : array();
+      $errors = ( ! empty( $menu_item_id ) ) ? get_post_meta( $menu_item_id, '_ulf_errors_'. $this->unique, true ) : array();
       $errors = ( ! empty( $errors ) ) ? $errors : array();
       $class  = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
 
       if ( ! empty( $errors ) ) {
-        delete_post_meta( $menu_item_id, '_csf_errors_'. $this->unique );
+        delete_post_meta( $menu_item_id, '_ulf_errors_'. $this->unique );
       }
 
-      echo '<div class="csf csf-nav-menu-options'. esc_attr( $class ) .'">';
+      echo '<div class="ulf ulf-nav-menu-options'. esc_attr( $class ) .'">';
 
         foreach ( $this->sections as $section ) {
 
-          $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="csf-nav-menu-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
+          $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-nav-menu-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
           $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
 
-          echo '<div class="csf-fields">';
+          echo '<div class="ulf-fields">';
 
-          echo ( $section_title || $section_icon ) ? '<div class="csf-nav-menu-title"><h4>'. wp_kses_post( $section_icon . $section_title ) .'</h4></div>' : '';
+          echo ( $section_title || $section_icon ) ? '<div class="ulf-nav-menu-title"><h4>'. wp_kses_post( $section_icon . $section_title ) .'</h4></div>' : '';
 
           if ( ! empty( $section['fields'] ) ) {
 
@@ -125,7 +125,7 @@ if ( ! class_exists( 'CSF_Nav_Menu_Options' ) ) {
                 $field['default'] = $this->get_default( $field );
               }
 
-              CSF::field( $field, $this->get_meta_value( $menu_item_id, $field ), $this->unique .'['. $menu_item_id .']', 'menu' );
+              ULF::field( $field, $this->get_meta_value( $menu_item_id, $field ), $this->unique .'['. $menu_item_id .']', 'menu' );
 
             }
 
@@ -214,9 +214,9 @@ if ( ! class_exists( 'CSF_Nav_Menu_Options' ) ) {
 
       }
 
-      $data = apply_filters( "csf_{$this->unique}_save", $data, $menu_item_db_id, $this );
+      $data = apply_filters( "ulf_{$this->unique}_save", $data, $menu_item_db_id, $this );
 
-      do_action( "csf_{$this->unique}_save_before", $data, $menu_item_db_id, $this );
+      do_action( "ulf_{$this->unique}_save_before", $data, $menu_item_db_id, $this );
 
       if ( empty( $data ) ) {
 
@@ -239,14 +239,14 @@ if ( ! class_exists( 'CSF_Nav_Menu_Options' ) ) {
         }
 
         if ( ! empty( $errors ) ) {
-          update_post_meta( $menu_item_db_id, '_csf_errors_'. $this->unique, $errors );
+          update_post_meta( $menu_item_db_id, '_ulf_errors_'. $this->unique, $errors );
         }
 
       }
 
-      do_action( "csf_{$this->unique}_saved", $data, $menu_item_db_id, $this );
+      do_action( "ulf_{$this->unique}_saved", $data, $menu_item_db_id, $this );
 
-      do_action( "csf_{$this->unique}_save_after", $data, $menu_item_db_id, $this );
+      do_action( "ulf_{$this->unique}_save_after", $data, $menu_item_db_id, $this );
 
     }
 
