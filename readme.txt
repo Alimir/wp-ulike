@@ -1,12 +1,12 @@
 === WP ULike - Most Advanced WordPress Marketing Toolkit ===
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
-Author: Ali Mirzaei
+Author: TechnoWich
 Tags: like, marketing, elementor, favorite, statistics, multisite, rating, voting, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 5.4.2
-Stable tag: 4.3.3
+Tested up to: 5.5
+Stable tag: 4.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,6 +151,14 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.3.4 =
+* Added: Animated Fave Star Template. [PRO]
+* Added: Minimal Pin Button Template. [PRO]
+* Added: Ability to use Other plugins shortcodes in user profiles. (such as gamipress) [PRO]
+* Fixed: BuddyPress filter issue in activity stream.
+* Improved: Compatibility with WordPress 5.5 applied.
+* Updated: Options panel framework.
 
 = 4.3.3 =
 * Added: New shortcode to display the counter value. [wp_ulike_counter]
