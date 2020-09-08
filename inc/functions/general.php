@@ -315,14 +315,19 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	 *
 	 * @param string $table_name
 	 * @param string $column_name
-	 * @param integer $post_ID
+	 * @param integer $item_ID
 	 * @param string $setting_key
 	 * @param array $args
 	 * @return string
 	 */
-	function wp_ulike_get_likers_template( $table_name, $column_name, $post_ID, $setting_key, $args = array() ){
+	function wp_ulike_get_likers_template( $table_name, $column_name, $item_ID, $setting_key, $args = array() ){
 
 		$options  = wp_ulike_get_option( $setting_key );
+
+		if( empty( $options ) || empty( $item_ID ) ){
+			return;
+		}
+
 		//Main data
 		$defaults = array(
 			"counter"     => isset( $options['likers_count'] ) ? $options['likers_count'] : 10,
@@ -332,7 +337,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		$parsed_args = wp_parse_args( $args, $defaults );
 
 		// Get likers list
-		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $post_ID, $parsed_args['counter'] );
+		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $item_ID, $parsed_args['counter'] );
 		// Bulk user list
 		$users_list = '';
 
