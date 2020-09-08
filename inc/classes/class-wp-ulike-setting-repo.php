@@ -96,6 +96,26 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Check counter value visibility
+	 *
+	 * @return boolean
+	 */
+	public static function isCounterBoxVisible( $typeName ){
+		$display_condition = self::getOption( self::getSettingKey( $typeName ) . '|counter_display_condition', 'visible' );
+		switch ( $display_condition ) {
+			case 'hidden':
+				return false;
+
+			case 'logged_in_users':
+				return is_user_logged_in();
+
+			default:
+				return true;
+		}
+	}
+
+
+	/**
 	 * Check distinct status by logging method
 	 *
 	 * @return boolean
