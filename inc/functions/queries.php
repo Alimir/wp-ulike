@@ -71,12 +71,12 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 
 
 		$query = '';
+		$status_type = '';
 		/**
 		 * If user id and period limit are not set, we use the meta table to get the information. This creates more optimization.
 		 */
 		if( empty( $period_limit ) && empty( $user_condition ) ){
 			// create query condition from status
-			$status_type = '';
 			$meta_prefix = wp_ulike_setting_repo::isDistinct( $parsed_args['type'] ) ? 'count_distinct_' : 'count_total_';
 			if( is_array( $parsed_args['status'] ) ){
 				foreach ($parsed_args['status'] as $key => $value) {
@@ -109,7 +109,6 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 
 		} else {
 			// create query condition from status
-			$status_type  = '';
 			if( is_array( $parsed_args['status'] ) ){
 				$status_type = sprintf( "t.status IN ('%s')", implode ("','", $parsed_args['status'] ) );
 			} else {
@@ -225,6 +224,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 		}
 
 		$query = '';
+		$status_type = '';
 		/**
 		 * If user id and period limit are not set, we use the meta table to get the information. This creates more optimization.
 		 */
