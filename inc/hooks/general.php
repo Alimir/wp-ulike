@@ -166,8 +166,8 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		extract( $get_settings );
 		// Display likers box
 		echo $args['disable_pophover'] && $args['display_likers'] ? sprintf(
-			'<div class="wp_ulike_likers_wrapper wp_ulike_display_inline">%s</div>',
-			wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting )
+			'<div class="wp_ulike_likers_wrapper wp_ulike_display_inline wp_%s_likers_%d">%s</div>',
+			wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting ), $args['type'], $args['ID']
 		) : '';
 	}
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_display_inline_likers_template' );

@@ -54,7 +54,7 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 
 			$this->response( array(
 				'template' => $template_name,
-				'class'    => $class_names
+				'class'    => $class_names . sprintf( ' wp_%s_likers_%d', $this->settings_type->getType(), $this->data['id'] )
 			) );
 
 		} catch ( \Exception $e ){
