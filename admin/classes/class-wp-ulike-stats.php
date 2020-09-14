@@ -260,7 +260,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				$query .= wp_ulike_get_period_limit_sql( $date );
 
 				$counter_value = $this->wpdb->get_var( $query );
-				wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+				wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 			}
 
 			if( $date === 'all' ){

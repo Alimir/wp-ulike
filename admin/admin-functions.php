@@ -123,7 +123,7 @@ function wp_ulike_get_number_of_new_likes() {
 		);
 
 		$counter_value = $wpdb->get_var( $query );
-        wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+        wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 	}
 
 	return empty( $counter_value ) ? 0 : $counter_value;

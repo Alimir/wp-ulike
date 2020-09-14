@@ -39,12 +39,18 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		$info_args    = wp_ulike_get_table_info( $parsed_args['type'] );
 		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
 
+		// Check object cache value
+		$cache_key = sanitize_key( sprintf( 'items_%s', md5( serialize( $parsed_args ) ) ) );
+		$results   = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+		if( false !== $results ){
+			return $results;
+		}
+
 		$limit_records = '';
 		if( (int) $parsed_args['limit'] > 0 ){
 			$offset = $parsed_args['offset'] > 0 ? ( $parsed_args['offset'] - 1 ) * $parsed_args['limit'] : 0;
 			$limit_records = sprintf( "LIMIT %d, %d", $offset, $parsed_args['limit'] );
 		}
-
 
 		$related_condition = '';
 		switch ($parsed_args['type']) {
@@ -140,7 +146,13 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 
 		}
 
-		return !empty( $query ) ? $wpdb->get_results( $query ): null;
+		$results = !empty( $query ) ? $wpdb->get_results( $query ): null;
+
+		if( ! empty( $results ) ){
+			wp_cache_add( $cache_key, $results, WP_ULIKE_SLUG, 300 );
+		}
+
+		return $results;
 	}
 }
 
@@ -656,7 +668,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 			);
 
 			$counter_value = $wpdb->get_var( $query );
-			wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+			wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 		}
 
 		if( $period === 'all' ){
