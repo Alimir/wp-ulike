@@ -17,7 +17,6 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 		$this->data['id']              = isset( $_POST['id'] ) ? intval(sanitize_text_field($_POST['id'])) : NULL;
 		$this->data['type']            = isset( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : NULL;
 		$this->data['nonce']           = isset( $_POST['nonce'] ) ? esc_html( $_POST['nonce'] ) : NULL;
-		$this->data['refresh']         = isset( $_POST['refresh'] ) ? sanitize_text_field($_POST['refresh']) : false;
 		$this->data['displayLikers']   = isset( $_POST['displayLikers'] ) ? sanitize_text_field($_POST['displayLikers']) : false;
 		$this->data['disablePophover'] = isset( $_POST['disablePophover'] ) ? sanitize_text_field($_POST['disablePophover']) : false;
 	}
@@ -34,7 +33,7 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
 
 			if ( !$this->validates() ){
-				throw new \Exception( __( 'Invalid format.', WP_ULIKE_SLUG ) );
+				throw new \Exception( __( 'permission denied.', WP_ULIKE_SLUG ) );
 			}
 
 			if( empty( $this->settings_type->getType() ) ){
@@ -91,8 +90,6 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 		if( ! $this->data['displayLikers'] ) return false;
 		// Return false when nonce invalid
 		if( ! wp_verify_nonce( $this->data['nonce'], $this->data['type'] . $this->data['id'] ) && wp_ulike_is_cache_exist() ) return false;
-		// Don't refresh likers data, when user is not logged in.
-		if( $this->data['refresh'] && ! $this->user ) return false;
 
 		return true;
 	}

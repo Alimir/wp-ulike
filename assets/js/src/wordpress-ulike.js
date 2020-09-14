@@ -44,8 +44,6 @@
     this._defaults = defaults;
     this._name = pluginName;
 
-    this._refreshTheLikers = false;
-
     // Create main selectors
     this.buttonElement = this.$element.find(this.settings.buttonSelector);
     this.generalElement = this.$element.find(this.settings.generalSelector);
@@ -128,8 +126,7 @@
           type: this.settings.type,
           template: this.settings.template,
           displayLikers: this.settings.displayLikers,
-          disablePophover: this.settings.disablePophover,
-          refresh: this._refreshTheLikers ? 1 : 0
+          disablePophover: this.settings.disablePophover
         },
         function (response) {
           //remove progress class
@@ -190,7 +187,7 @@
         if (response.data.status < 5) {
           this.__updateCounter(response.data.data);
           // Refresh likers box on data update
-          if (this.settings.displayLikers) {
+          if (this.settings.displayLikers && typeof response.data.likers !== "undefined") {
             this._updateLikersMarkup(response.data.likers);
           }
         }
@@ -291,7 +288,7 @@
      */
     _updateLikers: function () {
       // Make a request to generate or refresh the likers box
-      if (this.settings.displayLikers && (!this.likersElement.length || this._refreshTheLikers)) {
+      if (this.settings.displayLikers && !this.likersElement.length) {
         // Add progress status class
         this.generalElement.addClass("wp_ulike_is_getting_likers_list");
         // Start ajax process
@@ -302,8 +299,7 @@
             nonce: this.settings.nonce,
             type: this.settings.type,
             displayLikers: this.settings.displayLikers,
-            disablePophover: this.settings.disablePophover,
-            refresh: this._refreshTheLikers ? 1 : 0
+            disablePophover: this.settings.disablePophover
           },
           function (response) {
             // Remove progress status class
@@ -312,7 +308,6 @@
             if (response.success) {
               this._updateLikersMarkup(response.data);
             }
-            this._refreshTheLikers = false;
           }.bind(this)
         );
       }

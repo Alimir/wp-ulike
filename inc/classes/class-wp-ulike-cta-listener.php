@@ -27,7 +27,6 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 		$this->data['nonce']           = isset( $_POST['nonce'] ) ? esc_html( $_POST['nonce'] ) : NULL;
 		$this->data['factor']          = isset( $_POST['factor'] ) ? sanitize_text_field($_POST['factor']) : NULL;
 		$this->data['template']        = isset( $_POST['template'] ) ? sanitize_text_field($_POST['template']) : 'wpulike-default';
-		$this->data['refresh']         = isset( $_POST['refresh'] ) ? sanitize_text_field($_POST['refresh']) : false;
 		$this->data['displayLikers']   = isset( $_POST['displayLikers'] ) ? sanitize_text_field($_POST['displayLikers']) : false;
 		$this->data['disablePophover'] = isset( $_POST['disablePophover'] ) ? sanitize_text_field($_POST['disablePophover']) : false;
 	}
@@ -44,7 +43,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
 
 			if ( !$this->validates() ){
-				throw new \Exception( __( 'Invalid format.', WP_ULIKE_SLUG ) );
+				throw new \Exception( __( 'permission denied.', WP_ULIKE_SLUG ) );
 			}
 
 			if( empty( $this->settings_type->getType() ) ){
@@ -104,19 +103,17 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				}
 			}
 
-			if( $this->data['displayLikers'] ){
-				if( ! wp_ulike_setting_repo::restrictLikersBox( $this->settings_type->getType() ) || $this->user ){
-					$likers_selectors = wp_ulike_is_true( $this->data['disablePophover'] ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
-					$this->response['likers'] = array(
-						'class'    => $likers_selectors . sprintf( ' wp_%s_likers_%d', $this->settings_type->getType(), $this->data['id'] ) ,
-						'template' => wp_ulike_get_likers_template(
-							$this->settings_type->getTableName(),
-							$this->settings_type->getColumnName(),
-							$this->data['id'],
-							$this->settings_type->getSettingKey()
-						)
-					);
-				}
+			if( $this->data['displayLikers'] && $this->user ){
+				$likers_selectors = wp_ulike_is_true( $this->data['disablePophover'] ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
+				$this->response['likers'] = array(
+					'class'    => $likers_selectors . sprintf( ' wp_%s_likers_%d', $this->settings_type->getType(), $this->data['id'] ) ,
+					'template' => wp_ulike_get_likers_template(
+						$this->settings_type->getTableName(),
+						$this->settings_type->getColumnName(),
+						$this->data['id'],
+						$this->settings_type->getSettingKey()
+					)
+				);
 			}
 
 			$response = apply_filters( 'wp_ulike_ajax_respond', $this->response, $this->data['id'], $this->response['status'], $process->getAjaxProcessAtts() );
