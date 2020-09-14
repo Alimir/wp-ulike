@@ -108,8 +108,10 @@
       event.stopPropagation();
       // Update element if there's more thab one button
       this._maybeUpdateElements(event);
-      // check for same buttons
+      // Check for same buttons elements
       this._updateSameButtons();
+      // Check for same likers elements
+      this._updateSameLikers();
       // Disable button
       this.buttonElement.prop("disabled", true);
       // Manipulations
@@ -319,7 +321,7 @@
     /**
      * Update likers markup
      */
-    _updateLikersMarkup: function ( data ) {
+    _updateLikersMarkup: function (data) {
       // If the likers container is not exist, we've to add it.
       if (!this.likersElement.length) {
         this.likersElement = $("<div>", {
@@ -339,9 +341,9 @@
      */
     _updateSameButtons: function () {
       // Get buttons with same unique class names
-      var factorMethod = typeof this.settings.factor !== "undefined" ? this.settings.factor : '';
+      var factorMethod = typeof this.settings.factor !== "undefined" ? '_' + this.settings.factor : '';
       this.sameButtons = $document.find(
-        ".wp_" + this.settings.type.toLowerCase() + factorMethod + "_" + this.settings.ID
+        ".wp_" + this.settings.type.toLowerCase() + factorMethod + "_btn_" + this.settings.ID
       );
       // Update general elements
       if (this.sameButtons.length > 1) {
@@ -356,10 +358,23 @@
     },
 
     /**
+     * Update the elements of same buttons at the same time
+     */
+    _updateSameLikers: function () {
+      this.sameLikers = $document.find(
+        ".wp_" + this.settings.type.toLowerCase() + "_likers_" + this.settings.ID
+      );
+      // Update general elements
+      if (this.sameLikers.length > 1) {
+        this.likersElement = this.sameLikers;
+      }
+    },
+
+    /**
      * Get likers wrapper element
      */
     _getLikersElement: function () {
-      return this.$element.find(this.settings.likersSelector);
+      return this.likersElement;
     },
 
     /**
