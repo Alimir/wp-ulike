@@ -98,15 +98,15 @@ if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
 	add_shortcode( 'wp_ulike_counter', 'wp_ulike_counter_shortcode' );
 }
 
-if( ! function_exists( 'wp_ulike_likers_shortcode' ) ){
+if( ! function_exists( 'wp_ulike_likers_box_shortcode' ) ){
 	/**
-	 * Create shortcode: [wp_ulike_likers_shortcode]
+	 * Create shortcode: [wp_ulike_likers_box]
 	 *
 	 * @param array $atts
 	 * @param string $content
 	 * @return void
 	 */
-	function wp_ulike_likers_shortcode( $atts, $content = null ){
+	function wp_ulike_likers_box_shortcode( $atts, $content = null ){
 		// Final result
 		$result = '';
 		// Default Args
@@ -147,8 +147,8 @@ if( ! function_exists( 'wp_ulike_likers_shortcode' ) ){
 			$args['template'] = html_entity_decode( $args['template']  );
 		}
 
-		return apply_filters( 'wp_ulike_likers_shortcode', sprintf( '<div class="wp_ulike_manual_likers_wrapper wp_%s_likers_%d">%s</div>', $args['type'], $args['id'],
+		return apply_filters( 'wp_ulike_likers_box_shortcode', sprintf( '<div class="wp_ulike_manual_likers_wrapper wp_%s_likers_%d">%s</div>', $args['type'], $args['id'],
 		wp_ulike_get_likers_template( $get_settings['table'], $get_settings['column'], $args['id'], $get_settings['setting'], $args ) ), $args['id'], $args['type'] );
 	}
-	add_shortcode( 'wp_ulike_likers', 'wp_ulike_likers_shortcode' );
+	add_shortcode( 'wp_ulike_likers_box', 'wp_ulike_likers_box_shortcode' );
 }
