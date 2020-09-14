@@ -617,6 +617,17 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'options'     => 'post_types',
                     'dependency'  => array( 'auto_display_filter|enable_auto_display', 'any|==', 'single|true' ),
                 ),
+                'counter_display_condition' => array(
+                    'id'         => 'counter_display_condition',
+                    'type'       => 'button_set',
+                    'title'      => __( 'Display Counter Value Condition', WP_ULIKE_SLUG),
+                    'default'    => 'visible',
+                    'options'    => array(
+                        'visible'         => __('Visible', WP_ULIKE_SLUG),
+                        'hidden'          => __('Hidden', WP_ULIKE_SLUG),
+                        'logged_in_users' => __('Only Logged In Users', WP_ULIKE_SLUG)
+                    )
+                ),
                 'logging_method' => array(
                     'id'          => 'logging_method',
                     'type'        => 'select',

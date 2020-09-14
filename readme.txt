@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: like, marketing, elementor, favorite, statistics, multisite, rating, voting, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 5.5
-Stable tag: 4.3.5
+Tested up to: 5.5.1
+Stable tag: 4.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,6 +151,14 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.3.6 =
+* Added: New shortcode to display likers box. [wp_ulike_likers]
+* Added: Option to display counter value by the conditions.
+* Added: New method to display the list of likers with better performance.
+* Fixed: BuddyPress translate notification issue.
+* Fixed: Some major issues.
+* Updated: Language files.
 
 = 4.3.5 =
 * Fixed: Some major issues.

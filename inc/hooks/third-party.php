@@ -210,7 +210,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 	 * @param boolean $has_log
 	 * @return void
 	 */
-	function wp_ulike_add_bp_notifications( $cp_ID, $type, $user_ID, $status, $has_log  ){
+	function wp_ulike_add_bp_notifications( $cp_ID, $type, $user_ID, $status, $has_log, $slug  ){
 
 		// Return if user not logged in or an older data log exist
 		if( ! is_user_logged_in() || $has_log > 0 || ! function_exists( 'bp_is_active' ) || ! defined( 'BP_VERSION' ) ){
@@ -222,10 +222,10 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 		//Create a new activity when an user likes something
 		if ( isset( $options['enable_add_bp_activity'] ) && wp_ulike_is_true( $options['enable_add_bp_activity'] ) ) {
 
-			switch ( $type ) {
-				case '_liked':
+			switch ( $slug ) {
+				case 'post':
 					// Replace the post variables
-					$post_template = wp_ulike_get_option( 'posts_notification_template', '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)' );
+					$post_template =  ! empty( $options['posts_notification_template'] ) ? $options['posts_notification_template'] : '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)';
 
 					if ( strpos( $post_template, '%POST_LIKER%' ) !== false ) {
 						$POST_LIKER    = bp_core_get_userlink( $user_ID );
@@ -252,9 +252,9 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 					));
 					break;
 
-				case '_commentliked':
+				case 'comment':
 					// Replace the comment variables
-					$comment_template = wp_ulike_get_option( 'comments_notification_template', '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)' );
+					$comment_template =  ! empty( $options['comments_notification_template'] ) ? $options['comments_notification_template'] : '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)';
 
 					if ( strpos( $comment_template, '%COMMENT_LIKER%' ) !== false ) {
 						$COMMENT_LIKER    = bp_core_get_userlink( $user_ID );
@@ -310,7 +310,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 		}
 
 	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_add_bp_notifications', 10, 5 );
+	add_action( 'wp_ulike_after_process', 'wp_ulike_add_bp_notifications', 10, 6 );
 }
 
 if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){

@@ -95,7 +95,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 			}
 
 			// Add unique class name for each button
-			$button_class_name .= strtolower( ' wp_' . $this->args['method'] . '_' . $this->args['id'] );
+			$button_class_name .= strtolower( ' wp_' . $this->args['slug'] . '_btn_' . $this->args['id'] );
 
 			$total_likes   = wp_ulike_get_counter_value( $this->args['id'], $this->args['slug'], 'like', $this->isDistinct() );
 			$formatted_val = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $total_likes ) .'</span>' , $total_likes );
@@ -105,9 +105,9 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					"ID"                   => esc_attr( $this->args['id'] ),
 					"wrapper_class"        => esc_attr( $this->args['wrapper_class'] ),
 					"slug"                 => esc_attr( $this->args['slug'] ),
-					"counter"              => $formatted_val,
+					"counter"              => wp_ulike_setting_repo::isCounterBoxVisible( $this->args['slug'] ) ? $formatted_val: '',
 					"total_likes"          => $total_likes,
-					"type"                 => esc_attr( $this->args['method'] ),
+					"type"                 => esc_attr( $this->args['slug'] ),
 					"status"               => esc_attr( $method_id ),
 					"user_status"          => esc_attr( $this->getPrevStatus() ),
 					"setting"              => esc_attr( $this->args['setting'] ),
@@ -117,6 +117,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					"style"                => esc_html( $this->args['style'] ),
 					"button_type"          => esc_html( $this->args['button_type'] ),
 					"display_likers"       => esc_attr( $this->args['display_likers'] ),
+					"display_counters"     => wp_ulike_setting_repo::isCounterBoxVisible( $this->args['slug'] ),
 					"disable_pophover"     => esc_attr( $this->args['disable_pophover'] ),
 					"button_text"          => $button_text,
 					"general_class"        => $this->get_general_selectors( $method_id ),
