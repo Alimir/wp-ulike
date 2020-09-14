@@ -22,11 +22,14 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	 * @return void
 	 */
 	private function setFormData(){
-		$this->data['id']       = isset( $_POST['id'] ) ? intval(sanitize_text_field($_POST['id'])) : NULL;
-		$this->data['type']     = isset( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : NULL;
-		$this->data['nonce']    = isset( $_POST['nonce'] ) ? esc_html( $_POST['nonce'] ) : NULL;
-		$this->data['factor']   = isset( $_POST['factor'] ) ? sanitize_text_field($_POST['factor']) : NULL;
-		$this->data['template'] = isset( $_POST['template'] ) ? sanitize_text_field($_POST['template']) : 'wpulike-default';
+		$this->data['id']              = isset( $_POST['id'] ) ? intval(sanitize_text_field($_POST['id'])) : NULL;
+		$this->data['type']            = isset( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : NULL;
+		$this->data['nonce']           = isset( $_POST['nonce'] ) ? esc_html( $_POST['nonce'] ) : NULL;
+		$this->data['factor']          = isset( $_POST['factor'] ) ? sanitize_text_field($_POST['factor']) : NULL;
+		$this->data['template']        = isset( $_POST['template'] ) ? sanitize_text_field($_POST['template']) : 'wpulike-default';
+		$this->data['refresh']         = isset( $_POST['refresh'] ) ? sanitize_text_field($_POST['refresh']) : false;
+		$this->data['displayLikers']   = isset( $_POST['displayLikers'] ) ? sanitize_text_field($_POST['displayLikers']) : false;
+		$this->data['disablePophover'] = isset( $_POST['disablePophover'] ) ? sanitize_text_field($_POST['disablePophover']) : false;
 	}
 
 	/**
@@ -98,6 +101,21 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 							$this->response['data'] = apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter_value, $this->data['id'] );
 							break;
 					}
+				}
+			}
+
+			if( $this->data['displayLikers'] ){
+				if( ! wp_ulike_setting_repo::restrictLikersBox( $this->settings_type->getType() ) || $this->user ){
+					$likers_selectors = wp_ulike_is_true( $this->data['disablePophover'] ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
+					$this->response['likers'] = array(
+						'class'    => $likers_selectors . sprintf( ' wp_%s_likers_%d', $this->settings_type->getType(), $this->data['id'] ) ,
+						'template' => wp_ulike_get_likers_template(
+							$this->settings_type->getTableName(),
+							$this->settings_type->getColumnName(),
+							$this->data['id'],
+							$this->settings_type->getSettingKey()
+						)
+					);
 				}
 			}
 

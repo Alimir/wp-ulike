@@ -53,6 +53,9 @@
       this.settings.counterSelector
     );
 
+    // Get likers box container element
+    this.likersElement = this.$element.find(this.settings.likersSelector);
+
     // read attributes
     for (var attrName in attributesMap) {
       var value = this.buttonElement.data(attrName);
@@ -121,7 +124,10 @@
           nonce: this.settings.nonce,
           factor: this.settings.factor,
           type: this.settings.type,
-          template: this.settings.template
+          template: this.settings.template,
+          displayLikers: this.settings.displayLikers,
+          disablePophover: this.settings.disablePophover,
+          refresh: this._refreshTheLikers ? 1 : 0
         },
         function (response) {
           //remove progress class
@@ -181,17 +187,16 @@
         // Update counter + check refresh likers box
         if (response.data.status < 5) {
           this.__updateCounter(response.data.data);
-          this._refreshTheLikers = true;
+          // Refresh likers box on data update
+          if (this.settings.displayLikers) {
+            this._updateLikersMarkup(response.data.likers);
+          }
         }
         // Update button status
         this._updateButton(response.data.btnText, response.data.status);
       }
       // Display Notifications
       this._sendNotification(response.data.messageType, response.data.message);
-      // Refresh likers box on data update
-      if (this._refreshTheLikers) {
-        this._updateLikers();
-      }
     },
 
     _updateGeneralClassNames: function (status) {
@@ -283,8 +288,6 @@
      * init & update likers box
      */
     _updateLikers: function () {
-      // Get likers box container element
-      this.likersElement = this._getLikersElement();
       // Make a request to generate or refresh the likers box
       if (this.settings.displayLikers && (!this.likersElement.length || this._refreshTheLikers)) {
         // Add progress status class
@@ -305,22 +308,29 @@
             this.generalElement.removeClass("wp_ulike_is_getting_likers_list");
             // Change markup
             if (response.success) {
-              // If the likers container is not exist, we've to add it.
-              if (!this.likersElement.length) {
-                this.likersElement = $("<div>", {
-                  class: response.data.class
-                }).appendTo(this.$element);
-              }
-              // Modify likers box innerHTML
-              if (response.data.template) {
-                this.likersElement.show().html(response.data.template);
-              } else {
-                this.likersElement.hide();
-              }
+              this._updateLikersMarkup(response.data);
             }
             this._refreshTheLikers = false;
           }.bind(this)
         );
+      }
+    },
+
+    /**
+     * Update likers markup
+     */
+    _updateLikersMarkup: function ( data ) {
+      // If the likers container is not exist, we've to add it.
+      if (!this.likersElement.length) {
+        this.likersElement = $("<div>", {
+          class: data.class
+        }).appendTo(this.$element);
+      }
+      // Modify likers box innerHTML
+      if (data.template) {
+        this.likersElement.show().html(data.template);
+      } else {
+        this.likersElement.hide();
       }
     },
 
