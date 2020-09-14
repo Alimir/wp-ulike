@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/plugins/wp-ulike/\n"
-"POT-Creation-Date: 2020-08-19 19:56:34+00:00\n"
+"POT-Creation-Date: 2020-09-14 12:55:20+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:27:25+0000\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -34,9 +34,9 @@ msgid "It's Ok!"
 msgstr ""
 
 #: admin/admin-functions.php:240
-#: admin/classes/class-wp-ulike-admin-panel.php:643
+#: admin/classes/class-wp-ulike-admin-panel.php:654
 #: build/wp-ulike/admin/admin-functions.php:243
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:646
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:657
 msgid "Button"
 msgstr ""
 
@@ -385,10 +385,10 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:206
 #: admin/classes/class-wp-ulike-admin-panel.php:218
-#: admin/classes/class-wp-ulike-admin-panel.php:719
+#: admin/classes/class-wp-ulike-admin-panel.php:730
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:209
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:221
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:722
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:733
 msgid "Allowed Variables:"
 msgstr ""
 
@@ -758,30 +758,50 @@ msgid "Make these post types an exception and display the button on them."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:623
-#: admin/classes/class-wp-ulike-settings.php:58
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:626
-#: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
-msgid "Logging Method"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:625
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:628
-msgid "Do Not Log"
+msgid "Display Counter Value Condition"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:626
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:629
-msgid "Logged By Cookie"
+msgid "Visible"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:627
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:630
+msgid "Hidden"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:628
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:631
+msgid "Only Logged In Users"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:634
+#: admin/classes/class-wp-ulike-settings.php:58
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:637
+#: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
+msgid "Logging Method"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:636
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:639
+msgid "Do Not Log"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:637
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:640
+msgid "Logged By Cookie"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:638
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:641
 msgid "Logged By Username"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:630
+#: admin/classes/class-wp-ulike-admin-panel.php:641
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:633
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Do Not Log\"</strong> method: Any data logs can't "
@@ -789,9 +809,9 @@ msgid ""
 "do not work"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:630
+#: admin/classes/class-wp-ulike-admin-panel.php:641
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:633
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By Cookie\"</strong> method: Any data logs "
@@ -799,18 +819,18 @@ msgid ""
 "undislike capacity do not work"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:630
+#: admin/classes/class-wp-ulike-admin-panel.php:641
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:633
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By IP\"</strong> method: Data logs will save "
 "for all users, the convey of like/dislike condition will check by user IP"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:630
+#: admin/classes/class-wp-ulike-admin-panel.php:641
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:633
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By Username\"</strong> method: data logs only "
@@ -818,88 +838,88 @@ msgid ""
 "check by username, There is no permission for guest users to unlike/undislike"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:635
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:638
+#: admin/classes/class-wp-ulike-admin-panel.php:646
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:649
 msgid "Only logged in users"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:640
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:643
+#: admin/classes/class-wp-ulike-admin-panel.php:651
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:654
 msgid "Display Type"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:642
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:645
+#: admin/classes/class-wp-ulike-admin-panel.php:653
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:656
 msgid "Template"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:656
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:659
-#: build/wp-ulike/inc/functions/general.php:408 inc/functions/general.php:405
+#: admin/classes/class-wp-ulike-admin-panel.php:667
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:670
+#: build/wp-ulike/inc/functions/general.php:414 inc/functions/general.php:426
 msgid "You need to login in order to like this post: "
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:658
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:661
-#: build/wp-ulike/inc/functions/general.php:410 inc/functions/general.php:407
+#: admin/classes/class-wp-ulike-admin-panel.php:669
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:672
+#: build/wp-ulike/inc/functions/general.php:416 inc/functions/general.php:428
 msgid "click here"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:660
-#: admin/classes/class-wp-ulike-admin-panel.php:718
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:663
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:721
+#: admin/classes/class-wp-ulike-admin-panel.php:671
+#: admin/classes/class-wp-ulike-admin-panel.php:729
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:674
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:732
 msgid "Custom HTML Template"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:666
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:669
+#: admin/classes/class-wp-ulike-admin-panel.php:677
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:680
 msgid "Display Likers Box"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:671
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:674
+#: admin/classes/class-wp-ulike-admin-panel.php:682
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:685
 msgid "User List Arrange"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:674
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:677
+#: admin/classes/class-wp-ulike-admin-panel.php:685
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:688
 msgid "Ascending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:675
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:678
+#: admin/classes/class-wp-ulike-admin-panel.php:686
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:689
 msgid "Descending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:683
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:686
+#: admin/classes/class-wp-ulike-admin-panel.php:694
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:697
 msgid "Hide For Anonymous Users"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:689
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:692
+#: admin/classes/class-wp-ulike-admin-panel.php:700
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:703
 msgid "Disable Pophover"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:691
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:694
+#: admin/classes/class-wp-ulike-admin-panel.php:702
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:705
 msgid ""
 "Active this option to show liked users avatars in the bottom of button like."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:696
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:699
+#: admin/classes/class-wp-ulike-admin-panel.php:707
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:710
 msgid "Size of Gravatars"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:704
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:707
+#: admin/classes/class-wp-ulike-admin-panel.php:715
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:718
 msgid "Likers Count"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:705
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:708
+#: admin/classes/class-wp-ulike-admin-panel.php:716
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:719
 msgid "The number of users to show in the users liked box"
 msgstr ""
 
@@ -2627,17 +2647,17 @@ msgstr ""
 msgid "There was an error processing the request."
 msgstr ""
 
-#: build/wp-ulike/inc/classes/class-wp-ulike-cta-listener.php:44
-#: build/wp-ulike/inc/classes/class-wp-ulike-voters-listener.php:37
-#: inc/classes/class-wp-ulike-cta-listener.php:44
-#: inc/classes/class-wp-ulike-voters-listener.php:37
-msgid "Invalid format."
+#: build/wp-ulike/inc/classes/class-wp-ulike-cta-listener.php:46
+#: build/wp-ulike/inc/classes/class-wp-ulike-voters-listener.php:36
+#: inc/classes/class-wp-ulike-cta-listener.php:46
+#: inc/classes/class-wp-ulike-voters-listener.php:36
+msgid "permission denied."
 msgstr ""
 
-#: build/wp-ulike/inc/classes/class-wp-ulike-cta-listener.php:48
-#: build/wp-ulike/inc/classes/class-wp-ulike-voters-listener.php:41
-#: inc/classes/class-wp-ulike-cta-listener.php:48
-#: inc/classes/class-wp-ulike-voters-listener.php:41
+#: build/wp-ulike/inc/classes/class-wp-ulike-cta-listener.php:50
+#: build/wp-ulike/inc/classes/class-wp-ulike-voters-listener.php:40
+#: inc/classes/class-wp-ulike-cta-listener.php:50
+#: inc/classes/class-wp-ulike-voters-listener.php:40
 msgid "Invalid item type."
 msgstr ""
 
@@ -2726,6 +2746,10 @@ msgstr ""
 
 #: build/wp-ulike/inc/functions/templates.php:44 inc/functions/templates.php:41
 msgid "Animated Heart"
+msgstr ""
+
+#: build/wp-ulike/inc/hooks/shortcodes.php:146 inc/hooks/shortcodes.php:143
+msgid "Error receiving input parameters"
 msgstr ""
 
 #: build/wp-ulike/inc/hooks/third-party.php:120 inc/hooks/third-party.php:117
