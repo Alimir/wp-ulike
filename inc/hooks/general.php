@@ -159,7 +159,7 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		// Get settings for current type
 		$get_settings     = wp_ulike_get_post_settings_by_type( $args['type'] );
 		// If method not exist, then return error message
-		if( empty( $get_settings ) || empty( $args['ID'] ) ) {
+		if( wp_ulike_setting_repo::restrictLikersBox( $args['type'] ) || empty( $get_settings ) || empty( $args['ID'] ) ) {
 			return;
 		}
 		// Extract settings array
