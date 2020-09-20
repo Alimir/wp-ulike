@@ -97,7 +97,7 @@ function wp_ulike_get_number_of_new_likes() {
     $cache_key = sanitize_key( 'calculate_new_votes' );
 
 	if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false && is_super_admin() ) {
-        update_option( 'wpulike_lastvisit', current_time( 'mysql' ) );
+        update_option( 'wp_ulike_admin_count_visit', current_time( 'mysql' ) );
         // Fix object cache issue
         if ( ! get_transient( 'wp_ulike_calculate_new_votes_cache' ) ) {
             wp_cache_delete( $cache_key, WP_ULIKE_SLUG );
@@ -119,7 +119,7 @@ function wp_ulike_get_number_of_new_likes() {
 			( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) )
 			',
 			$wpdb->prefix,
-			get_option( 'wpulike_lastvisit')
+			get_option( 'wp_ulike_admin_count_visit', current_time( 'mysql' ) )
 		);
 
 		$counter_value = $wpdb->get_var( $query );
