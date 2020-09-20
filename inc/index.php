@@ -9,6 +9,10 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
+// include settings panel core
+require_once( WP_ULIKE_ADMIN_DIR . '/settings/classes/setup.class.php');
+// include _deprecated settings panel
+require_once( WP_ULIKE_ADMIN_DIR . '/settings/_deprecated/deprecated.class.php');
 // Functions
 include_once( 'functions/utilities.php' );
 include_once( 'functions/general.php' );
