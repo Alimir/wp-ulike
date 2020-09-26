@@ -207,7 +207,6 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 	}
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_update_button_icon', 1 );
 }
-
 // @if DEV
 // function wp_ulike_pro_custom_hreview( $content ){
 // 	global $post;
@@ -229,4 +228,18 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 // 	return $content;
 // }
 // add_filter('the_content', 'wp_ulike_pro_custom_hreview');
+
+// //show it on single media page
+// add_action( 'mpp_media_meta', 'mpp_wpulike_show_button' );
+// //show it in lightbox
+// add_action( 'mpp_lightbox_media_meta', 'mpp_wpulike_show_button' );
+
+// function mpp_wpulike_show_button() {
+// 	echo wp_ulike('put');
+// }
+
+// function wp_ulike_pro_update_counter_value_text( $value, $id, $type, $status ){
+//     return in_array( $status, array( 'like', 'liked') ) ?  $value . ' Likes' : $value . ' Dislikes' ;
+// }
+// add_filter( 'wp_ulike_counter_value', 'wp_ulike_pro_update_counter_value_text', 4, 20 );
 // @endif
