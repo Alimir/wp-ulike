@@ -832,6 +832,11 @@ if( ! function_exists( 'wp_ulike_posts_um_profile_content' ) ){
 
 		$get_items = wp_ulike_get_popular_items_ids( $args );
 
+		if( empty( $get_items ) ){
+			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. __('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			return;
+		}
+
 		$query_args = array(
 			'post__in'       => $get_items,
 			'orderby'        => 'post__in',
@@ -882,6 +887,11 @@ if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
 		);
 
 		$get_items = wp_ulike_get_popular_items_ids( $args );
+
+		if( empty( $get_items ) ){
+			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. __('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			return;
+		}
 
 		$query_args = array(
 			'comment__in'    => $get_items,
