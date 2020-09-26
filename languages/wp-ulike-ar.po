@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/plugins/wp-ulike/\n"
-"POT-Creation-Date: 2020-09-14 12:55:20+00:00\n"
+"POT-Creation-Date: 2020-09-26 21:41:37+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:26:42+0000\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -34,9 +34,11 @@ msgid "It's Ok!"
 msgstr "لا بأس!"
 
 #: admin/admin-functions.php:240
-#: admin/classes/class-wp-ulike-admin-panel.php:654
+#: admin/classes/class-wp-ulike-admin-panel.php:694
 #: build/wp-ulike/admin/admin-functions.php:243
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:657
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:697
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:152
+#: inc/classes/class-wp-ulike-customizer.php:149
 msgid "Button"
 msgstr ""
 
@@ -73,21 +75,50 @@ msgstr ""
 msgid "Not Now"
 msgstr "ليس الآن"
 
-#: admin/admin-hooks.php:147 admin/admin-hooks.php:173
-#: admin/admin-hooks.php:196 build/wp-ulike/admin/admin-hooks.php:150
-#: build/wp-ulike/admin/admin-hooks.php:176
-#: build/wp-ulike/admin/admin-hooks.php:199
+#: admin/admin-hooks.php:147 admin/admin-hooks.php:174
+#: admin/admin-hooks.php:198 admin/admin-hooks.php:221
+#: build/wp-ulike/admin/admin-hooks.php:150
+#: build/wp-ulike/admin/admin-hooks.php:177
+#: build/wp-ulike/admin/admin-hooks.php:201
+#: build/wp-ulike/admin/admin-hooks.php:224
 msgid "No thanks and never ask me again"
 msgstr "لا شكراً ولا تسألني ابداً مجدداً "
 
-#: admin/admin-hooks.php:163 admin/classes/class-wp-ulike-admin-panel.php:315
-#: build/wp-ulike/admin/admin-hooks.php:166
+#: admin/admin-hooks.php:164 build/wp-ulike/admin/admin-hooks.php:167
+msgid "Good news for Persian WordPress users. :)"
+msgstr ""
+
+#: admin/admin-hooks.php:165 build/wp-ulike/admin/admin-hooks.php:168
+msgid ""
+"Following the request of our friends in Persian WordPress to access the "
+"premium version in Iran, we made the necessary arrangements and our new "
+"website has become available. From now on, you can use our new articles and "
+"premium service by visiting this website."
+msgstr ""
+
+#: admin/admin-hooks.php:170 admin/admin-hooks.php:194
+#: admin/admin-hooks.php:217 admin/classes/class-wp-ulike-admin-panel.php:321
+#: admin/classes/class-wp-ulike-admin-panel.php:351
+#: admin/classes/class-wp-ulike-admin-panel.php:469
+#: admin/classes/class-wp-ulike-admin-panel.php:498
+#: build/wp-ulike/admin/admin-hooks.php:173
+#: build/wp-ulike/admin/admin-hooks.php:197
+#: build/wp-ulike/admin/admin-hooks.php:220
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:324
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:354
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:472
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:501
+msgid "Get More Information"
+msgstr "احصل على المزيد من المعلومات"
+
+#: admin/admin-hooks.php:188 admin/classes/class-wp-ulike-admin-panel.php:315
+#: build/wp-ulike/admin/admin-hooks.php:191
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:318
 msgid "How to Create Ultimate User Profiles with WP ULike?"
 msgstr ""
 
-#: admin/admin-hooks.php:164 admin/classes/class-wp-ulike-admin-panel.php:316
-#: build/wp-ulike/admin/admin-hooks.php:167
+#: admin/admin-hooks.php:189 admin/classes/class-wp-ulike-admin-panel.php:316
+#: build/wp-ulike/admin/admin-hooks.php:192
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:319
 msgid ""
 "The simplest way to create your own WordPress user profile page is by using "
@@ -96,23 +127,11 @@ msgid ""
 "knowledge or the use of advanced functions."
 msgstr ""
 
-#: admin/admin-hooks.php:169 admin/admin-hooks.php:192
-#: admin/classes/class-wp-ulike-admin-panel.php:321
-#: admin/classes/class-wp-ulike-admin-panel.php:429
-#: admin/classes/class-wp-ulike-admin-panel.php:458
-#: build/wp-ulike/admin/admin-hooks.php:172
-#: build/wp-ulike/admin/admin-hooks.php:195
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:324
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:432
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:461
-msgid "Get More Information"
-msgstr "احصل على المزيد من المعلومات"
-
-#: admin/admin-hooks.php:186 build/wp-ulike/admin/admin-hooks.php:189
+#: admin/admin-hooks.php:211 build/wp-ulike/admin/admin-hooks.php:214
 msgid "Boost Your SEO by Using Schema Rich Snippets"
 msgstr ""
 
-#: admin/admin-hooks.php:187 build/wp-ulike/admin/admin-hooks.php:190
+#: admin/admin-hooks.php:212 build/wp-ulike/admin/admin-hooks.php:215
 msgid ""
 "WP ULike Pro in its latest update evolved to an innovative and powerful SEO "
 "Plugin which can manage +13 types of Schema Markups to make a better "
@@ -124,18 +143,18 @@ msgstr ""
 "صفحات الويب ومحركات البحث. بإمكانك الآن التحدث بلغة محرك البحث وإخباره بنوع "
 "المحتوى الذي تروج له."
 
-#: admin/admin-hooks.php:229 admin/includes/templates/about.php:26
-#: build/wp-ulike/admin/admin-hooks.php:232
+#: admin/admin-hooks.php:253 admin/includes/templates/about.php:26
+#: build/wp-ulike/admin/admin-hooks.php:256
 #: build/wp-ulike/admin/includes/templates/about.php:29
 msgid "Go Pro"
 msgstr "استعمل النسخة الإحترافية"
 
-#: admin/admin-hooks.php:461 admin/classes/class-wp-ulike-admin-panel.php:509
-#: admin/classes/class-wp-ulike-admin-panel.php:545
+#: admin/admin-hooks.php:485 admin/classes/class-wp-ulike-admin-panel.php:549
+#: admin/classes/class-wp-ulike-admin-panel.php:585
 #: admin/classes/class-wp-ulike-widget.php:355
-#: build/wp-ulike/admin/admin-hooks.php:464
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:512
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:548
+#: build/wp-ulike/admin/admin-hooks.php:488
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:552
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:588
 #: build/wp-ulike/admin/classes/class-wp-ulike-widget.php:358
 msgid "Like"
 msgstr "اعجاب"
@@ -281,53 +300,53 @@ msgid "With this option, you can disable all plugin assets on these pages."
 msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل جميع مكونات الإضافة في هذه الصفحات."
 
 #: admin/classes/class-wp-ulike-admin-panel.php:139
-#: admin/classes/class-wp-ulike-admin-panel.php:598
+#: admin/classes/class-wp-ulike-admin-panel.php:638
 #: admin/includes/templates/about.php:46
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:142
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:601
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:641
 #: build/wp-ulike/admin/includes/templates/about.php:49
 msgid "Home"
 msgstr "الرئیسیة"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:140
-#: admin/classes/class-wp-ulike-admin-panel.php:599
+#: admin/classes/class-wp-ulike-admin-panel.php:639
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:143
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:602
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:642
 msgid "Singular"
 msgstr "التفرد"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:141
-#: admin/classes/class-wp-ulike-admin-panel.php:600
+#: admin/classes/class-wp-ulike-admin-panel.php:640
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:144
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:603
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:643
 msgid "Archives"
 msgstr "أرشيف"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:142
-#: admin/classes/class-wp-ulike-admin-panel.php:601
+#: admin/classes/class-wp-ulike-admin-panel.php:641
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:145
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:604
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
 msgid "Categories"
 msgstr "تصنیفات"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:143
-#: admin/classes/class-wp-ulike-admin-panel.php:602
+#: admin/classes/class-wp-ulike-admin-panel.php:642
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:146
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:605
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:645
 msgid "Search Results"
 msgstr "نتائج البحث"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:144
-#: admin/classes/class-wp-ulike-admin-panel.php:603
+#: admin/classes/class-wp-ulike-admin-panel.php:643
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:147
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:606
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:646
 msgid "Tags"
 msgstr "الوسوم"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:145
-#: admin/classes/class-wp-ulike-admin-panel.php:604
+#: admin/classes/class-wp-ulike-admin-panel.php:644
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:148
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:607
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:647
 msgid "Author Page"
 msgstr "صفحة المبرمج"
 
@@ -394,10 +413,10 @@ msgstr "النص لنشاطات المنشور :"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:206
 #: admin/classes/class-wp-ulike-admin-panel.php:218
-#: admin/classes/class-wp-ulike-admin-panel.php:730
+#: admin/classes/class-wp-ulike-admin-panel.php:770
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:209
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:221
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:733
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:773
 msgid "Allowed Variables:"
 msgstr "المتغیرات المسموحة :"
 
@@ -518,61 +537,86 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:340
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:343
-msgid "Translations"
-msgstr "الترجمة"
+#: admin/classes/class-wp-ulike-admin-panel.php:338
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:341
+msgid "Login & Signup"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:345
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:348
+msgid "How to make AJAX Based Login/Registration system?"
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:346
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:349
+msgid ""
+"Transform your default WordPress login, registration, and reset password "
+"forms with the new WP ULike Pro features. In this section, we provide you "
+"with tools that you can use to make modern & ajax based forms on your pages "
+"with just a few simple clicks."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:371
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:374
+msgid "Translations"
+msgstr "الترجمة"
+
+#: admin/classes/class-wp-ulike-admin-panel.php:380
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:383
+#, fuzzy
+msgid "Strings"
+msgstr "الإعدادات"
+
+#: admin/classes/class-wp-ulike-admin-panel.php:386
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:389
 #: build/wp-ulike/inc/classes/class-wp-ulike-setting-repo.php:30
 #: inc/classes/class-wp-ulike-setting-repo.php:30
 msgid "You have already registered a vote."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:347
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:350
+#: admin/classes/class-wp-ulike-admin-panel.php:387
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:390
 msgid "Already Voted Message"
 msgstr "إشعار تم التصويت بالفعل"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:352
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:355
+#: admin/classes/class-wp-ulike-admin-panel.php:392
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:395
 #: build/wp-ulike/inc/classes/class-wp-ulike-setting-repo.php:21
 #: inc/classes/class-wp-ulike-setting-repo.php:21
 msgid "You Should Login To Submit Your Like"
 msgstr "عليك تسجيل الدخول لاعمال اعجاب"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:353
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:356
+#: admin/classes/class-wp-ulike-admin-panel.php:393
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:396
 msgid "Login Required Message"
 msgstr "رسالة تسجيل الدخول مطلوب"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:358
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:361
+#: admin/classes/class-wp-ulike-admin-panel.php:398
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:401
 #: build/wp-ulike/inc/classes/class-wp-ulike-setting-repo.php:39
 #: inc/classes/class-wp-ulike-setting-repo.php:39
 msgid "Thanks! You Liked This."
 msgstr "شكراً! لقد قمت بالإعجاب بهذا."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:359
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:362
+#: admin/classes/class-wp-ulike-admin-panel.php:399
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:402
 msgid "Liked Notice Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:364
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:367
+#: admin/classes/class-wp-ulike-admin-panel.php:404
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:407
 #: build/wp-ulike/inc/classes/class-wp-ulike-setting-repo.php:48
 #: inc/classes/class-wp-ulike-setting-repo.php:48
 msgid "Sorry! You unliked this."
 msgstr "نأسف لعدم إعجابك بهذا!"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:365
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:368
+#: admin/classes/class-wp-ulike-admin-panel.php:405
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:408
 msgid "Unliked Notice Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:370
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:373
+#: admin/classes/class-wp-ulike-admin-panel.php:410
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:413
 #: build/wp-ulike/inc/functions/templates.php:73
 #: build/wp-ulike/inc/functions/templates.php:119
 #: build/wp-ulike/inc/functions/templates.php:165
@@ -582,106 +626,106 @@ msgstr ""
 msgid "Like Button"
 msgstr "زر الاعجاب"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:371
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:374
+#: admin/classes/class-wp-ulike-admin-panel.php:411
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:414
 msgid "Like Button Aria Label"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:381
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:384
+#: admin/classes/class-wp-ulike-admin-panel.php:421
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:424
 msgid "Developer Tools"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:387
+#: admin/classes/class-wp-ulike-admin-panel.php:427
 #: admin/settings/fields/typography/typography.php:284
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:390
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:430
 #: build/wp-ulike/admin/settings/fields/typography/typography.php:284
 msgid "Custom Style"
 msgstr "تخصیص الاسلوب ( Style) : "
 
-#: admin/classes/class-wp-ulike-admin-panel.php:401
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:404
+#: admin/classes/class-wp-ulike-admin-panel.php:441
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:444
 msgid "Custom Spinner"
 msgstr "سبينر مخصص"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:408
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:411
+#: admin/classes/class-wp-ulike-admin-panel.php:448
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:451
 msgid "Enable Inline Custom CSS"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:409
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:412
+#: admin/classes/class-wp-ulike-admin-panel.php:449
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:452
 msgid ""
 "If you don't want to use \"custom.css\" file for any reason, by activating "
 "this option, the styles will be added to the page as inline."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:416
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:419
+#: admin/classes/class-wp-ulike-admin-panel.php:456
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:459
 msgid "REST API"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:423
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:426
+#: admin/classes/class-wp-ulike-admin-panel.php:463
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:466
 msgid "How to Get Started with WP ULike REST API?"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:424
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:427
+#: admin/classes/class-wp-ulike-admin-panel.php:464
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:467
 msgid ""
 "Have you ever tried to get data from online sources like WP ULike logs and "
 "use them in your Application or website? the solution is Rest API!"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:445
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:448
+#: admin/classes/class-wp-ulike-admin-panel.php:485
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:488
 msgid "Optimization"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:452
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:455
+#: admin/classes/class-wp-ulike-admin-panel.php:492
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:495
 msgid "How to Optimize or Repair WP ULike Database Tables?"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:453
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:456
+#: admin/classes/class-wp-ulike-admin-panel.php:493
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:496
 msgid ""
 "Have you ever optimized your WP ULike database? Optimizing your database "
 "cleans up unwanted data which reduces database size and improves performance."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:485
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:488
+#: admin/classes/class-wp-ulike-admin-panel.php:525
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:528
 msgid "Select a Template"
 msgstr "اختر قالب"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:486
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:489
+#: admin/classes/class-wp-ulike-admin-panel.php:526
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:529
 msgid "Display online preview"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:486
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:489
+#: admin/classes/class-wp-ulike-admin-panel.php:526
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:529
 msgid "Here"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:494
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:497
+#: admin/classes/class-wp-ulike-admin-panel.php:534
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:537
 msgid "Button Type"
 msgstr "نوع الزر"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:497
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:500
+#: admin/classes/class-wp-ulike-admin-panel.php:537
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:540
 msgid "Image"
 msgstr "الصورة"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:498
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:501
+#: admin/classes/class-wp-ulike-admin-panel.php:538
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:541
 msgid "Text"
 msgstr "نص"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:505
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:508
+#: admin/classes/class-wp-ulike-admin-panel.php:545
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:548
 msgid ""
 "Enter your custom button text in the fields above. You can also use HTML "
 "tags in these fields."
@@ -689,37 +733,37 @@ msgstr ""
 "ادخل نص المخصص للزر بالحقل أعلاه. وكذلك بإمكانك استخدام وسوم HTML في هذه "
 "الحقول."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:506
-#: admin/classes/class-wp-ulike-admin-panel.php:517
-#: admin/classes/class-wp-ulike-admin-panel.php:531
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:509
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:520
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:534
+#: admin/classes/class-wp-ulike-admin-panel.php:546
+#: admin/classes/class-wp-ulike-admin-panel.php:557
+#: admin/classes/class-wp-ulike-admin-panel.php:571
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:549
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:560
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:574
 msgid "Button Text"
 msgstr "نص الزر"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:523
-#: admin/classes/class-wp-ulike-admin-panel.php:557
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:526
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:560
+#: admin/classes/class-wp-ulike-admin-panel.php:563
+#: admin/classes/class-wp-ulike-admin-panel.php:597
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:566
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:600
 msgid "Unlike"
 msgstr "الغاء اعجابي"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:542
-#: admin/classes/class-wp-ulike-admin-panel.php:550
-#: admin/classes/class-wp-ulike-admin-panel.php:562
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:545
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:553
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:565
+#: admin/classes/class-wp-ulike-admin-panel.php:582
+#: admin/classes/class-wp-ulike-admin-panel.php:590
+#: admin/classes/class-wp-ulike-admin-panel.php:602
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:585
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:593
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:605
 msgid "Button Image"
 msgstr "صورة الزر"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:575
+#: admin/classes/class-wp-ulike-admin-panel.php:615
 #: admin/classes/class-wp-ulike-settings.php:65
 #: admin/classes/class-wp-ulike-settings.php:72
 #: admin/classes/class-wp-ulike-settings.php:78
 #: admin/classes/class-wp-ulike-settings.php:84
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:578
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:618
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:68
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:75
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:81
@@ -727,98 +771,98 @@ msgstr "صورة الزر"
 msgid "Automatic display"
 msgstr "عرض تلقائي"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:580
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:583
+#: admin/classes/class-wp-ulike-admin-panel.php:620
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:623
 msgid "Button Position"
 msgstr "موضع الزر"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:583
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:586
+#: admin/classes/class-wp-ulike-admin-panel.php:623
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:626
 msgid "Top of Content"
 msgstr "اعلی المحتوا"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:584
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:587
+#: admin/classes/class-wp-ulike-admin-panel.php:624
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:627
 msgid "Bottom of Content"
 msgstr "اسفل المحتوا"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:585
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:588
+#: admin/classes/class-wp-ulike-admin-panel.php:625
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:628
 msgid "Top and Bottom"
 msgstr "أعلى وأسفل"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:592
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:595
+#: admin/classes/class-wp-ulike-admin-panel.php:632
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:635
 msgid "Automatic Display Restriction"
 msgstr "تقييد العرض التلقائي"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:593
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:596
+#: admin/classes/class-wp-ulike-admin-panel.php:633
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:636
 msgid "With this option, you can disable automatic display on these pages."
 msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل العرض التلقائي في هذه الصفحات."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:611
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:614
+#: admin/classes/class-wp-ulike-admin-panel.php:651
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:654
 msgid "Post Types Filter"
 msgstr "تصفية أنواع المنشورات"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:612
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:615
+#: admin/classes/class-wp-ulike-admin-panel.php:652
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:655
 msgid "Select a post type"
 msgstr "تحديد مقالة لنسخها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:613
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:616
+#: admin/classes/class-wp-ulike-admin-panel.php:653
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:656
 msgid "Make these post types an exception and display the button on them."
 msgstr "اجعل لأنواع المنشورات هذه إستثناء واعرض الزر فيها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:623
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:626
+#: admin/classes/class-wp-ulike-admin-panel.php:663
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:666
 msgid "Display Counter Value Condition"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:626
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:629
+#: admin/classes/class-wp-ulike-admin-panel.php:666
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:669
 #, fuzzy
 msgid "Visible"
 msgstr "تم الزيارة"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:627
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:630
+#: admin/classes/class-wp-ulike-admin-panel.php:667
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:670
 msgid "Hidden"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:628
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:631
+#: admin/classes/class-wp-ulike-admin-panel.php:668
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:671
 #, fuzzy
 msgid "Only Logged In Users"
 msgstr "فقط المستخدمين المسجلين"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:634
+#: admin/classes/class-wp-ulike-admin-panel.php:674
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:637
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:677
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid "Logging Method"
 msgstr "طريقة تسجيل"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:636
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:639
+#: admin/classes/class-wp-ulike-admin-panel.php:676
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:679
 msgid "Do Not Log"
 msgstr "عدم تسجيل الاحداث"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:637
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:640
+#: admin/classes/class-wp-ulike-admin-panel.php:677
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:680
 msgid "Logged By Cookie"
 msgstr "تسجيل بواسطة كوكي"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:638
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:641
+#: admin/classes/class-wp-ulike-admin-panel.php:678
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:681
 msgid "Logged By Username"
 msgstr "تسجيل بواسطة اسم المستخدم"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:641
+#: admin/classes/class-wp-ulike-admin-panel.php:681
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:684
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Do Not Log\"</strong> method: Any data logs can't "
@@ -829,9 +873,9 @@ msgstr ""
 "ليس هناك ای حدود  في اعمال الاعجاب / لغاء الاعجاب، والقدرة لغاء الاعجاب / لم "
 "يعجبني لا تعمل بعد"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:641
+#: admin/classes/class-wp-ulike-admin-panel.php:681
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:684
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By Cookie\"</strong> method: Any data logs "
@@ -842,9 +886,9 @@ msgstr ""
 "تحدید  اعمال الاعجاب /الغاء الاعجاب بواسطة کوکي، والقدرة لغاء الاعجاب / لم "
 "يعجبني لا تعمل بعد"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:641
+#: admin/classes/class-wp-ulike-admin-panel.php:681
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:684
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By IP\"</strong> method: Data logs will save "
@@ -853,9 +897,9 @@ msgstr ""
 "إذا قمت بتحديد <strong>\"IP \"</strong> :یتم تسجیل احداث المستخدمین،وشروط "
 "اعمال الاعجاب /الغاء الاعجاب یتم فحصهن بواسطة  IP"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:641
+#: admin/classes/class-wp-ulike-admin-panel.php:681
 #: admin/classes/class-wp-ulike-settings.php:58
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:644
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:684
 #: build/wp-ulike/admin/classes/class-wp-ulike-settings.php:61
 msgid ""
 "If you select <strong>\"Logged By Username\"</strong> method: data logs only "
@@ -866,90 +910,90 @@ msgstr ""
 "المستخدمین للاعضاء فقط،وشروط اعمال الاعجاب /الغاء الاعجاب یتم فحصهن بواسطة "
 "اسم المستخدم ، و المستخدمین الضیوف لم یسمح لهم بالغاء الاعجاب."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:646
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:649
+#: admin/classes/class-wp-ulike-admin-panel.php:686
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:689
 msgid "Only logged in users"
 msgstr "فقط المستخدمين المسجلين"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:651
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:654
+#: admin/classes/class-wp-ulike-admin-panel.php:691
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:694
 msgid "Display Type"
 msgstr "عرض النوع"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:653
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:656
+#: admin/classes/class-wp-ulike-admin-panel.php:693
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:696
 msgid "Template"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:667
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:670
+#: admin/classes/class-wp-ulike-admin-panel.php:707
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:710
 #: build/wp-ulike/inc/functions/general.php:414 inc/functions/general.php:426
 msgid "You need to login in order to like this post: "
 msgstr "تحتاج إلى تسجيل الدخول لتقییم هذا المنشور  :"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:669
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:672
+#: admin/classes/class-wp-ulike-admin-panel.php:709
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:712
 #: build/wp-ulike/inc/functions/general.php:416 inc/functions/general.php:428
 msgid "click here"
 msgstr "اضغط هنا انقر للدخول"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:671
-#: admin/classes/class-wp-ulike-admin-panel.php:729
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:674
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:732
+#: admin/classes/class-wp-ulike-admin-panel.php:711
+#: admin/classes/class-wp-ulike-admin-panel.php:769
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:714
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:772
 msgid "Custom HTML Template"
 msgstr "قالب HTML المخصص"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:677
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:680
+#: admin/classes/class-wp-ulike-admin-panel.php:717
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:720
 msgid "Display Likers Box"
 msgstr "عرض صندوق Likers"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:682
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:685
+#: admin/classes/class-wp-ulike-admin-panel.php:722
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:725
 msgid "User List Arrange"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:685
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:688
+#: admin/classes/class-wp-ulike-admin-panel.php:725
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:728
 msgid "Ascending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:686
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:689
+#: admin/classes/class-wp-ulike-admin-panel.php:726
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:729
 msgid "Descending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:694
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:697
+#: admin/classes/class-wp-ulike-admin-panel.php:734
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:737
 msgid "Hide For Anonymous Users"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:700
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:703
+#: admin/classes/class-wp-ulike-admin-panel.php:740
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:743
 msgid "Disable Pophover"
 msgstr "تعطيل النافذة المنبثقة"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:702
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:705
+#: admin/classes/class-wp-ulike-admin-panel.php:742
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:745
 msgid ""
 "Active this option to show liked users avatars in the bottom of button like."
 msgstr ""
 "من خلال تفعیل هذا الخیار، بامکانکم مشاهدة آوتار اعضاء العاملین اعجاب اسفل زر "
 "الاعجاب ."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:707
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:710
+#: admin/classes/class-wp-ulike-admin-panel.php:747
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:750
 msgid "Size of Gravatars"
 msgstr "مقیاس قراواتار"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:715
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:718
+#: admin/classes/class-wp-ulike-admin-panel.php:755
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:758
 msgid "Likers Count"
 msgstr "عدد من قام بالضغط على زر الإعجاب"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:716
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:719
+#: admin/classes/class-wp-ulike-admin-panel.php:756
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:759
 msgid "The number of users to show in the users liked box"
 msgstr "حد الاقصی لإعرض عدد المستخدمين  فی الباکس   ؟!"
 
@@ -1664,8 +1708,8 @@ msgstr ""
 msgid "WP ULike Premium"
 msgstr "نسخة البريميوم من WP ULike"
 
-#: admin/includes/templates/go-pro.php:130
-#: build/wp-ulike/admin/includes/templates/go-pro.php:133
+#: admin/includes/templates/go-pro.php:135
+#: build/wp-ulike/admin/includes/templates/go-pro.php:138
 msgid ""
 "Elementor is the #1 WordPress page builder. In the new version of the WP "
 "ULike PRO plugin we fully support this page builder and have a variety of "
@@ -1675,8 +1719,8 @@ msgstr ""
 "PRO ، قمنا بدعم بانئ الصفحات هذا بشكل كامل ولدينا مجموعة متنوعة من عناصر "
 "التحكم وأدوات التحكم التي تجعل الأمر أسهل لك."
 
-#: admin/includes/templates/go-pro.php:130
-#: build/wp-ulike/admin/includes/templates/go-pro.php:133
+#: admin/includes/templates/go-pro.php:135
+#: build/wp-ulike/admin/includes/templates/go-pro.php:138
 msgid ""
 "Just drag your desired widget and drop it in your Elementor sections, "
 "customize as you go and enjoy your like and dislike buttons on your contents."
@@ -2131,6 +2175,12 @@ msgstr "وضع مزيج الخلفية"
 #: build/wp-ulike/admin/settings/fields/background/background.php:264
 #: build/wp-ulike/admin/settings/fields/link_color/link_color.php:36
 #: build/wp-ulike/admin/settings/fields/typography/typography.php:175
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:76
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:164
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:306
+#: inc/classes/class-wp-ulike-customizer.php:73
+#: inc/classes/class-wp-ulike-customizer.php:161
+#: inc/classes/class-wp-ulike-customizer.php:303
 msgid "Normal"
 msgstr "عادي"
 
@@ -2385,11 +2435,21 @@ msgstr "البحث عن أيقونة..."
 
 #: admin/settings/fields/link_color/link_color.php:37
 #: build/wp-ulike/admin/settings/fields/link_color/link_color.php:37
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:94
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:202
+#: inc/classes/class-wp-ulike-customizer.php:91
+#: inc/classes/class-wp-ulike-customizer.php:199
 msgid "Hover"
 msgstr "المرور فوق"
 
 #: admin/settings/fields/link_color/link_color.php:38
 #: build/wp-ulike/admin/settings/fields/link_color/link_color.php:38
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:114
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:237
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:330
+#: inc/classes/class-wp-ulike-customizer.php:111
+#: inc/classes/class-wp-ulike-customizer.php:234
+#: inc/classes/class-wp-ulike-customizer.php:327
 msgid "Active"
 msgstr "تفعيل"
 
@@ -2718,6 +2778,212 @@ msgstr ""
 msgid "Invalid item type."
 msgstr ""
 
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:52
+#: inc/classes/class-wp-ulike-customizer.php:49
+#, fuzzy
+msgid "Button Templates"
+msgstr "نص الزر"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:56
+#: inc/classes/class-wp-ulike-customizer.php:53
+#, fuzzy
+msgid "Template Wrapper"
+msgstr "متغيرات القالب"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:61
+#: inc/classes/class-wp-ulike-customizer.php:58
+msgid "In this section, you can customize the template wrapper styles."
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:68
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:380
+#: inc/classes/class-wp-ulike-customizer.php:65
+#: inc/classes/class-wp-ulike-customizer.php:377
+msgid "Typography"
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:81
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:100
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:120
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:176
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:215
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:249
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:317
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:342
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:399
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:437
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:475
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:513
+#: inc/classes/class-wp-ulike-customizer.php:78
+#: inc/classes/class-wp-ulike-customizer.php:97
+#: inc/classes/class-wp-ulike-customizer.php:117
+#: inc/classes/class-wp-ulike-customizer.php:173
+#: inc/classes/class-wp-ulike-customizer.php:212
+#: inc/classes/class-wp-ulike-customizer.php:246
+#: inc/classes/class-wp-ulike-customizer.php:314
+#: inc/classes/class-wp-ulike-customizer.php:339
+#: inc/classes/class-wp-ulike-customizer.php:396
+#: inc/classes/class-wp-ulike-customizer.php:434
+#: inc/classes/class-wp-ulike-customizer.php:472
+#: inc/classes/class-wp-ulike-customizer.php:510
+#, fuzzy
+msgid "Background"
+msgstr "حجم الخلفية"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:88
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:108
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:126
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:182
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:223
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:255
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:324
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:348
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:406
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:444
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:482
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:520
+#: inc/classes/class-wp-ulike-customizer.php:85
+#: inc/classes/class-wp-ulike-customizer.php:105
+#: inc/classes/class-wp-ulike-customizer.php:123
+#: inc/classes/class-wp-ulike-customizer.php:179
+#: inc/classes/class-wp-ulike-customizer.php:220
+#: inc/classes/class-wp-ulike-customizer.php:252
+#: inc/classes/class-wp-ulike-customizer.php:321
+#: inc/classes/class-wp-ulike-customizer.php:345
+#: inc/classes/class-wp-ulike-customizer.php:403
+#: inc/classes/class-wp-ulike-customizer.php:441
+#: inc/classes/class-wp-ulike-customizer.php:479
+#: inc/classes/class-wp-ulike-customizer.php:517
+#, fuzzy
+msgid "Border"
+msgstr "حدود الصندوق"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:137
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:280
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:358
+#: inc/classes/class-wp-ulike-customizer.php:134
+#: inc/classes/class-wp-ulike-customizer.php:277
+#: inc/classes/class-wp-ulike-customizer.php:355
+#, fuzzy
+msgid "Padding"
+msgstr "حشوة الصندوق"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:145
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:288
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:365
+#: inc/classes/class-wp-ulike-customizer.php:142
+#: inc/classes/class-wp-ulike-customizer.php:285
+#: inc/classes/class-wp-ulike-customizer.php:362
+msgid "Margin"
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:157
+#: inc/classes/class-wp-ulike-customizer.php:154
+msgid ""
+"In this section, you can customize the styles related to the buttons. Please "
+"note that some buttons have different structures (such as SVG based) and "
+"therefore you should be more careful in setting them."
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:169
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:208
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:242
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:311
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:335
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:393
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:431
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:469
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:507
+#: inc/classes/class-wp-ulike-customizer.php:166
+#: inc/classes/class-wp-ulike-customizer.php:205
+#: inc/classes/class-wp-ulike-customizer.php:239
+#: inc/classes/class-wp-ulike-customizer.php:308
+#: inc/classes/class-wp-ulike-customizer.php:332
+#: inc/classes/class-wp-ulike-customizer.php:390
+#: inc/classes/class-wp-ulike-customizer.php:428
+#: inc/classes/class-wp-ulike-customizer.php:466
+#: inc/classes/class-wp-ulike-customizer.php:504
+#, fuzzy
+msgid "Text Color"
+msgstr "لون الخط"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:189
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:413
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:451
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:489
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:527
+#: inc/classes/class-wp-ulike-customizer.php:186
+#: inc/classes/class-wp-ulike-customizer.php:410
+#: inc/classes/class-wp-ulike-customizer.php:448
+#: inc/classes/class-wp-ulike-customizer.php:486
+#: inc/classes/class-wp-ulike-customizer.php:524
+msgid "Image Dimensions"
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:196
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:231
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:262
+#: inc/classes/class-wp-ulike-customizer.php:193
+#: inc/classes/class-wp-ulike-customizer.php:228
+#: inc/classes/class-wp-ulike-customizer.php:259
+#, fuzzy
+msgid "Like Image"
+msgstr "الصورة"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:273
+#: inc/classes/class-wp-ulike-customizer.php:270
+#, fuzzy
+msgid "Button Dimensions"
+msgstr "موضع الزر"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:294
+#: inc/classes/class-wp-ulike-customizer.php:291
+#, fuzzy
+msgid "Counter"
+msgstr "وسط"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:299
+#: inc/classes/class-wp-ulike-customizer.php:296
+msgid "In this section, you can customize the template counter styles."
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:373
+#: inc/classes/class-wp-ulike-customizer.php:370
+msgid "Toast Messages"
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:388
+#: inc/classes/class-wp-ulike-customizer.php:385
+msgid "Info"
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:420
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:458
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:496
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:534
+#: inc/classes/class-wp-ulike-customizer.php:417
+#: inc/classes/class-wp-ulike-customizer.php:455
+#: inc/classes/class-wp-ulike-customizer.php:493
+#: inc/classes/class-wp-ulike-customizer.php:531
+#, fuzzy
+msgid "Icon Image"
+msgstr "صورة الزر"
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:426
+#: inc/classes/class-wp-ulike-customizer.php:423
+msgid "Success"
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:464
+#: inc/classes/class-wp-ulike-customizer.php:461
+msgid "Error"
+msgstr ""
+
+#: build/wp-ulike/inc/classes/class-wp-ulike-customizer.php:502
+#: inc/classes/class-wp-ulike-customizer.php:499
+msgid "Warning"
+msgstr ""
+
 #: build/wp-ulike/inc/classes/class-wp-ulike-mycred.php:230
 #: inc/classes/class-wp-ulike-mycred.php:227
 msgid "Points for Liking content"
@@ -2883,9 +3149,12 @@ msgstr "مشاركات تم الإعجاب بها مؤخراً"
 msgid "Recent Comments Liked"
 msgstr "تعليقات تم الإعجاب بها مؤخراً"
 
-#: build/wp-ulike/inc/hooks/third-party.php:860
-#: build/wp-ulike/inc/hooks/third-party.php:915 inc/hooks/third-party.php:857
-#: inc/hooks/third-party.php:912
+#: build/wp-ulike/inc/hooks/third-party.php:839
+#: build/wp-ulike/inc/hooks/third-party.php:865
+#: build/wp-ulike/inc/hooks/third-party.php:895
+#: build/wp-ulike/inc/hooks/third-party.php:925 inc/hooks/third-party.php:836
+#: inc/hooks/third-party.php:862 inc/hooks/third-party.php:892
+#: inc/hooks/third-party.php:922
 msgid "This user has not made any likes."
 msgstr ""
 
