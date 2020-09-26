@@ -73,7 +73,7 @@ function wp_ulike_set_lastvisit() {
 	if ( ! is_super_admin() ) {
 		return;
 	}
-	update_option( 'wpulike_lastvisit', current_time( 'mysql' ) );
+	update_option( 'wp_ulike_admin_count_visit', current_time( 'mysql' ) );
 }
 add_action('wp_logout', 'wp_ulike_set_lastvisit');
 
@@ -422,7 +422,7 @@ function wp_ulike_upgrade_deprecated_options_value(){
 	// Update option values
 	update_option( 'wp_ulike_settings', $final_options_stack  );
 }
-// add_filter( 'admin_init', 'wp_ulike_upgrade_deprecated_options_value' );
+// add_action( 'admin_init', 'wp_ulike_upgrade_deprecated_options_value' );
 
 
 /**

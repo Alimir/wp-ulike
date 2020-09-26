@@ -7,6 +7,7 @@
     defaults = {
       messageType: "success",
       messageText: "Hello World!",
+      timeout: 8000,
       messageElement: "wpulike-message",
       notifContainer: "wpulike-notification"
     };
@@ -86,16 +87,19 @@
           .trigger("WordpressUlikeRemoveNotification");
       });
       // Remove Message With Timeout
-      setTimeout(function () {
-        self.$messageElement
-          .fadeOut(300, function () {
-            $(this).remove();
-            if (!$("." + self.settings.messageElement).length) {
-              self.$notifContainer.remove();
-            }
-          })
-          .trigger("WordpressUlikeRemoveNotification");
-      }, 8000);
+      if( self.settings.timeout ){
+        setTimeout(function () {
+          self.$messageElement
+            .fadeOut(300, function () {
+              $(this).remove();
+              if (!$("." + self.settings.messageElement).length) {
+                self.$notifContainer.remove();
+              }
+            })
+            .trigger("WordpressUlikeRemoveNotification");
+        }, self.settings.timeout);
+      }
+
     }
   });
 
