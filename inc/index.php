@@ -13,6 +13,10 @@ if ( ! defined( 'WPINC' ) ) {
 require_once( WP_ULIKE_ADMIN_DIR . '/settings/classes/setup.class.php');
 // include _deprecated settings panel
 require_once( WP_ULIKE_ADMIN_DIR . '/settings/_deprecated/deprecated.class.php');
+
+// Register customizer options
+new wp_ulike_customizer();
+
 // Functions
 include_once( 'functions/utilities.php' );
 include_once( 'functions/general.php' );
