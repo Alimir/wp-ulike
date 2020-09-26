@@ -158,6 +158,31 @@ function wp_ulike_notice_manager(){
 	}
 
 	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) && strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
+		if( get_locale() === 'fa_IR' ){
+			$notice_list[ 'wp_ulike_fa_IR_banner' ] = new wp_ulike_notices([
+				'id'          => 'wp_ulike_fa_IR_banner',
+				'title'       => __( 'Good news for Persian WordPress users. :)', WP_ULIKE_SLUG ),
+				'description' => __( "Following the request of our friends in Persian WordPress to access the premium version in Iran, we made the necessary arrangements and our new website has become available. From now on, you can use our new articles and premium service by visiting this website." , WP_ULIKE_SLUG ),
+				'skin'        => 'default',
+				'has_close'   => true,
+				'buttons'     => array(
+					array(
+						'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+						'link'       => 'https://wpulike.ir/?utm_source=fa-IR-banner&utm_campaign=gopro&utm_medium=wp-dash'
+					),
+					array(
+						'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+						'type'       => 'skip',
+						'color_name' => 'error',
+						'expiration' => YEAR_IN_SECONDS * 10
+					)
+				),
+				'image'     => array(
+					'width' => '140',
+					'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/news.svg'
+				)
+			]);
+		}
 		$notice_list[ 'wp_ulike_pro_user_profiles_banner' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_pro_user_profiles_banner',
 			'title'       => __( 'How to Create Ultimate User Profiles with WP ULike?', WP_ULIKE_SLUG ),
@@ -178,7 +203,7 @@ function wp_ulike_notice_manager(){
 			),
 			'image'     => array(
 				'width' => '140',
-				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/hero.svg'
+				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
 			)
 		]);
 		$notice_list[ 'wp_ulike_seo_tools_banner' ] = new wp_ulike_notices([
@@ -205,7 +230,6 @@ function wp_ulike_notice_manager(){
 			)
 		]);
 	}
-
 
     $notice_list = apply_filters( 'wp_ulike_admin_notices_instances', $notice_list );
 

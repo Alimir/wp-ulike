@@ -53,6 +53,11 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'content' => __( 'Template Wrapper', WP_ULIKE_SLUG ),
                     ),
                     array(
+                        'type'    => 'submessage',
+                        'style'   => 'info',
+                        'content' => __( 'In this section, you can customize the template wrapper styles.', WP_ULIKE_SLUG ),
+                    ),
+                    array(
                         'id'               => 'template_typography',
                         'type'             => 'typography',
                         'color'            => false,
@@ -142,6 +147,11 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'type'    => 'heading',
                         'content' => __( 'Button', WP_ULIKE_SLUG ),
+                    ),
+                    array(
+                        'type'    => 'submessage',
+                        'style'   => 'info',
+                        'content' => __( 'In this section, you can customize the styles related to the buttons. Please note that some buttons have different structures (such as SVG based) and therefore you should be more careful in setting them.', WP_ULIKE_SLUG ),
                     ),
                     array(
                         'id'            => 'button_group',
@@ -279,6 +289,11 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'type'    => 'heading',
                         'content' => __( 'Counter', WP_ULIKE_SLUG ),
+                    ),
+                    array(
+                        'type'    => 'submessage',
+                        'style'   => 'info',
+                        'content' => __( 'In this section, you can customize the template counter styles.', WP_ULIKE_SLUG ),
                     ),
                     array(
                         'id'            => 'counter_group',

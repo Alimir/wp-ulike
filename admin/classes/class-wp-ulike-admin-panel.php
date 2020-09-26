@@ -324,8 +324,38 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '140',
-                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/hero.svg'
+                                'width' => '200',
+                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
+                            )
+                        )
+                    )
+                ) )
+            ) );
+
+            // Profiles
+            ULF::createSection( $this->option_domain, array(
+                'parent' => 'configuration',
+                'title'  => __( 'Login & Signup',WP_ULIKE_SLUG),
+                'fields' => apply_filters( 'wp_ulike_panel_forms', array(
+                    array(
+                        'type'     => 'callback',
+                        'function' => 'wp_ulike_get_notice_render',
+                        'args'     => array(
+                            'id'          => 'wp_ulike_pro_user_login_register_banner',
+                            'title'       => __( 'How to make AJAX Based Login/Registration system?', WP_ULIKE_SLUG ),
+                            'description' => __( "Transform your default WordPress login, registration, and reset password forms with the new WP ULike Pro features. In this section, we provide you with tools that you can use to make modern & ajax based forms on your pages with just a few simple clicks." , WP_ULIKE_SLUG ),
+                            'skin'        => 'info',
+                            'has_close'   => false,
+                            'buttons'     => array(
+                                array(
+                                    'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+                                    'color_name' => 'info',
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-system/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                )
+                            ),
+                            'image'     => array(
+                                'width' => '200',
+                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/login.svg'
                             )
                         )
                     )
@@ -334,11 +364,21 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
 
             /**
+             * Customization Section
+             */
+            ULF::createSection( $this->option_domain, array(
+                'id'    => 'translations',
+                'title' => __( 'Translations',WP_ULIKE_SLUG),
+                'icon'  => 'fa fa-language',
+            ) );
+
+
+            /**
              * Translations Section
              */
             ULF::createSection( $this->option_domain, array(
-                'title'  => __( 'Translations',WP_ULIKE_SLUG),
-                'icon'   => 'fa fa-language',
+                'title'  => __( 'Strings',WP_ULIKE_SLUG),
+                'parent' => 'translations',
                 'fields' => apply_filters( 'wp_ulike_panel_translations', array(
                     array(
                         'id'      => 'already_registered_notice',
@@ -432,7 +472,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '140',
+                                'width' => '200',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/api.svg'
                             )
                         )
@@ -461,7 +501,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '140',
+                                'width' => '200',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/database.svg'
                             )
                         )

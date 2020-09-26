@@ -62,6 +62,11 @@
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
+						<td>AJAX Based Login, Registration and Reset Password forms.</td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
+					</tr>
+					<tr>
 						<td>Supports Rest APIs with a Variety of Routes for Use in Apps</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
