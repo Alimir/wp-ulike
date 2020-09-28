@@ -25,6 +25,24 @@ abstract class wp_ulike_ajax_listener_base{
 	}
 
 	/**
+	 * Set data
+	 *
+	 * @return void
+	 */
+    public function setData( $data ) {
+        $this->data = $data;
+	}
+
+	/**
+	 * Set data
+	 *
+	 * @return void
+	 */
+    public function getData( $data ) {
+        return $this->data;
+    }
+
+	/**
 	 * Set current user id if exist
 	 *
 	 * @return void
