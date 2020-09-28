@@ -63,7 +63,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'color'            => false,
                         'output_important' => true,
                         'title'            => __( 'Typography', WP_ULIKE_SLUG ),
-                        'output'           => '.wpulike .wp_ulike_general_class, .wpulike .wp_ulike_general_class .count-box',
+                        'output'           => '.wpulike .wp_ulike_general_class, .wpulike .wp_ulike_put_text, .wpulike .wp_ulike_general_class .count-box',
                     ),
                     array(
                         'id'            => 'template_group',

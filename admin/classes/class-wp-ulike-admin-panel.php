@@ -350,7 +350,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 array(
                                     'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
                                     'color_name' => 'info',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-system/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-plugin/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
                                 )
                             ),
                             'image'     => array(
