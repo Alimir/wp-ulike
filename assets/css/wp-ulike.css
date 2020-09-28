@@ -483,6 +483,7 @@
   padding: 3px;
   margin: 0;
   list-style: none;
+  display: block;
 }
 .wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .wp-ulike-likers-list li a > img, .wp_ulike_likers_wrapper .tiles .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .tiles li a > img {
   border-radius: 5px;
