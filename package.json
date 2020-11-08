@@ -23,6 +23,7 @@
     "axios": "^0.18.0",
     "babel-preset-stage-0": "^6.24.1",
     "chart.js": "^2.7.2",
+    "grunt-phplint": "^0.1.0",
     "preprocess": ">=2.1.1",
     "react": "^15.6.2",
     "request": ">=2.69.0",

@@ -117,6 +117,18 @@ module.exports = function(grunt) {
             }
         },
 
+		phplint: {
+			options: {
+				phpArgs: {
+                    "-d": null,
+                    "-f": null,
+				}
+			},
+			all : {
+				src: ['*.php', '**/*.php', '!node_modules/**', '!vendor/**']
+			}
+		},
+
         // Generate POT file
         makepot: {
             target: {
@@ -468,6 +480,9 @@ module.exports = function(grunt) {
 
     // rename tasks
     grunt.renameTask('rsync', 'deploy');
+
+    // phplint
+    grunt.registerTask( "php", ["phplint"] );
 
     // register task
     grunt.registerTask( 'syncversion'   , ['shell:updateVersion'] );
