@@ -10,9 +10,9 @@
  */
 ( function( blocks, blockEditor, element, components ) {
 
-  if( !window.ulf_gutenberg_blocks ) { return; }
+  if ( !window.ulf_gutenberg_blocks ) { return; }
 
-  window.ulf_gutenberg_blocks.forEach( function( block ) {
+  Object.values(window.ulf_gutenberg_blocks).forEach( function( block ) {
 
     var registerBlockType = blocks.registerBlockType;
     var PlainText         = blockEditor.PlainText;
@@ -22,9 +22,9 @@
 
     registerBlockType('ulf-gutenberg-block/block-'+block.hash, {
       title: block.gutenberg.title,
-      icon: block.gutenberg.icon,
-      category: block.gutenberg.category,
       description: block.gutenberg.description,
+      icon: block.gutenberg.icon || 'screenoptions',
+      category: block.gutenberg.category || 'widgets',
       keywords: block.gutenberg.keywords,
       supports: {
         html: false,
@@ -52,7 +52,7 @@
 
             createElement(PlainText, {
               placeholder: block.gutenberg.placeholder,
-              className: 'input-control',
+              className: 'input-control blocks-shortcode__textarea',
               onChange: function (value) {
                 props.setAttributes({
                   shortcode: value

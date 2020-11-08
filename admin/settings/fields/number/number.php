@@ -22,7 +22,7 @@ if ( ! class_exists( 'ULF_Field_number' ) ) {
 
       echo $this->field_before();
       echo '<div class="ulf--wrap">';
-      echo '<input type="number" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes( array( 'class' => 'ulf-input-number' ) ) .'/>';
+      echo '<input type="number" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes( array( 'class' => 'ulf-input-number' ) ) .' step="any" />';
       echo ( ! empty( $args['unit'] ) ) ? '<span class="ulf--unit">'. esc_attr( $args['unit'] ) .'</span>' : '';
       echo '</div>';
       echo $this->field_after();

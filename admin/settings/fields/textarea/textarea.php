@@ -27,16 +27,15 @@ if ( ! class_exists( 'ULF_Field_textarea' ) ) {
 
       if ( ! empty( $this->field['shortcoder'] ) ) {
 
-        $shortcoder = ( is_array( $this->field['shortcoder'] ) ) ? $this->field['shortcoder'] : array_filter( (array) $this->field['shortcoder'] );
+        $instances = ( is_array( $this->field['shortcoder'] ) ) ? $this->field['shortcoder'] : array_filter( (array) $this->field['shortcoder'] );
 
-        foreach ( $shortcoder as $shortcode_id ) {
+        foreach ( $instances as $instance_key ) {
 
-          if ( isset( ULF::$args['shortcode_options'][$shortcode_id] ) ) {
+          if ( isset( ULF::$shortcode_instances[$instance_key] ) ) {
 
-            $setup_args   = ULF::$args['shortcode_options'][$shortcode_id];
-            $button_title = ( ! empty( $setup_args['button_title'] ) ) ? $setup_args['button_title'] : esc_html__( 'Add Shortcode', 'ulf' );
+            $button_title = ULF::$shortcode_instances[$instance_key]['button_title'];
 
-            echo '<a href="#" class="button button-primary ulf-shortcode-button" data-modal-id="'. esc_attr( $shortcode_id ) .'">'. wp_kses_post( $button_title ) .'</a>';
+            echo '<a href="#" class="button button-primary ulf-shortcode-button" data-modal-id="'. esc_attr( $instance_key ) .'">'. $button_title .'</a>';
 
           }
 

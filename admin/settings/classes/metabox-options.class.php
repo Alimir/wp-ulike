@@ -25,6 +25,7 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
       'exclude_post_types' => array(),
       'page_templates'     => '',
       'post_formats'       => '',
+      'show_reset'         => false,
       'show_restore'       => false,
       'enqueue_webfont'    => true,
       'async_webfont'      => false,
@@ -139,7 +140,7 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
     public function add_meta_box( $post_type ) {
 
       if ( ! in_array( $post_type, $this->args['exclude_post_types'] ) ) {
-        add_meta_box( $this->unique, wp_kses_post( $this->args['title'] ), array( &$this, 'add_meta_box_content' ), $this->post_type, $this->args['context'], $this->args['priority'], $this->args );
+        add_meta_box( $this->unique, $this->args['title'], array( &$this, 'add_meta_box_content' ), $this->post_type, $this->args['context'], $this->args['priority'], $this->args );
       }
 
     }
@@ -214,7 +215,7 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
                 $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="ulf-label-error ulf-error">!</i>' : '';
                 $tab_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-                echo '<li><a href="#">'. wp_kses_post( $tab_icon . $section['title'] . $tab_error ) .'</a></li>';
+                echo '<li><a href="#">'. $tab_icon . $section['title'] . $tab_error .'</a></li>';
 
                 $tab_key++;
 
@@ -239,9 +240,9 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
               $section_title  = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
               $section_icon   = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
 
-              echo '<div class="ulf-section'. esc_attr( $section_onload . $section_class ) .'">';
+              echo '<div class="ulf-section hidden'. esc_attr( $section_onload . $section_class ) .'">';
 
-              echo ( $section_title || $section_icon ) ? '<div class="ulf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
+              echo ( $section_title || $section_icon ) ? '<div class="ulf-section-title"><h3>'. $section_icon . $section_title .'</h3></div>' : '';
 
               if ( ! empty( $section['fields'] ) ) {
 
@@ -261,7 +262,7 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
 
               } else {
 
-                echo '<div class="ulf-no-option">'. esc_html__( 'No option provided by developer.', 'ulf' ) .'</div>';
+                echo '<div class="ulf-no-option">'. esc_html__( 'No data available.', 'ulf' ) .'</div>';
 
               }
 
@@ -273,13 +274,13 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
 
             echo '</div>';
 
-            if ( ! empty( $this->args['show_restore'] ) ) {
+            if ( ! empty( $this->args['show_restore'] ) || ! empty( $this->args['show_reset'] ) ) {
 
-              echo '<div class="ulf-sections-restore">';
+              echo '<div class="ulf-sections-reset">';
               echo '<label>';
-              echo '<input type="checkbox" name="'. esc_attr( $this->unique ) .'[_restore]" />';
-              echo '<span class="button ulf-button-restore">'. esc_html__( 'Restore', 'ulf' ) .'</span>';
-              echo '<span class="button ulf-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post for restore ', 'ulf' ), esc_html__( 'Cancel', 'ulf' ) ) .'</span>';
+              echo '<input type="checkbox" name="'. esc_attr( $this->unique ) .'[_reset]" />';
+              echo '<span class="button ulf-button-reset">'. esc_html__( 'Reset', 'ulf' ) .'</span>';
+              echo '<span class="button ulf-button-cancel">'. sprintf( '<small>( %s )</small> %s', esc_html__( 'update post', 'ulf' ), esc_html__( 'Cancel', 'ulf' ) ) .'</span>';
               echo '</label>';
               echo '</div>';
 
@@ -377,7 +378,7 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
 
       do_action( "ulf_{$this->unique}_save_before", $data, $post_id, $this );
 
-      if ( empty( $data ) || ! empty( $request['_restore'] ) ) {
+      if ( empty( $data ) || ! empty( $request['_reset'] ) ) {
 
         if ( $this->args['data_type'] !== 'serialize' ) {
           foreach ( $data as $key => $value ) {

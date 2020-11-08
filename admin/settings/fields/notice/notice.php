@@ -18,7 +18,7 @@ if ( ! class_exists( 'ULF_Field_notice' ) ) {
 
       $style = ( ! empty( $this->field['style'] ) ) ? $this->field['style'] : 'normal';
 
-      echo ( ! empty( $this->field['content'] ) ) ? '<div class="ulf-notice ulf-notice-'. esc_attr( $style ) .'">'. wp_kses_post( $this->field['content'] ) .'</div>' : '';
+      echo ( ! empty( $this->field['content'] ) ) ? '<div class="ulf-notice ulf-notice-'. esc_attr( $style ) .'">'. $this->field['content'] .'</div>' : '';
 
     }
 

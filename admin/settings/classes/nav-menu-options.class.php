@@ -111,7 +111,7 @@ if ( ! class_exists( 'ULF_Nav_Menu_Options' ) ) {
 
           echo '<div class="ulf-fields">';
 
-          echo ( $section_title || $section_icon ) ? '<div class="ulf-nav-menu-title"><h4>'. wp_kses_post( $section_icon . $section_title ) .'</h4></div>' : '';
+          echo ( $section_title || $section_icon ) ? '<div class="ulf-nav-menu-title"><h4>'. $section_icon . $section_title .'</h4></div>' : '';
 
           if ( ! empty( $section['fields'] ) ) {
 

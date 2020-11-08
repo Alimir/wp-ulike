@@ -30,9 +30,9 @@ if ( ! class_exists( 'ULF_Field_group' ) ) {
       $title_number = ( ! empty( $args['accordion_title_number'] ) ) ? true : false;
       $title_auto   = ( ! empty( $args['accordion_title_auto'] ) ) ? true : false;
 
-      if ( ! empty( $this->parent ) && preg_match( '/'. preg_quote( '['. $this->field['id'] .']' ) .'/', $this->parent ) ) {
+      if ( preg_match( '/'. preg_quote( '['. $this->field['id'] .']' ) .'/', $this->unique ) ) {
 
-        echo '<div class="ulf-notice ulf-notice-danger">'. esc_html__( 'Error: Nested field id can not be same with another nested field id.', 'ulf' ) .'</div>';
+        echo '<div class="ulf-notice ulf-notice-danger">'. esc_html__( 'Error: Field ID conflict.', 'ulf' ) .'</div>';
 
       } else {
 
@@ -57,17 +57,17 @@ if ( ! class_exists( 'ULF_Field_group' ) ) {
           echo '<div class="ulf-cloneable-content">';
           foreach ( $this->field['fields'] as $field ) {
 
-            $field_parent  = $this->parent .'['. $this->field['id'] .']';
             $field_default = ( isset( $field['default'] ) ) ? $field['default'] : '';
+            $field_unique  = ( ! empty( $this->unique ) ) ? $this->unique .'['. $this->field['id'] .'][0]' : $this->field['id'] .'[0]';
 
-            ULF::field( $field, $field_default, '_nonce', 'field/group', $field_parent );
+            ULF::field( $field, $field_default, '___'. $field_unique, 'field/group' );
 
           }
           echo '</div>';
 
         echo '</div>';
 
-        echo '<div class="ulf-cloneable-wrapper ulf-data-wrapper" data-title-number="'. esc_attr( $title_number ) .'" data-unique-id="'. esc_attr( $this->unique ) .'" data-field-id="['. esc_attr( $this->field['id'] ) .']" data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'">';
+        echo '<div class="ulf-cloneable-wrapper ulf-data-wrapper" data-title-number="'. esc_attr( $title_number ) .'" data-field-id="['. esc_attr( $this->field['id'] ) .']" data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'">';
 
         if ( ! empty( $this->value ) ) {
 
@@ -99,11 +99,10 @@ if ( ! class_exists( 'ULF_Field_group' ) ) {
 
               foreach ( $this->field['fields'] as $field ) {
 
-                $field_parent  = $this->parent .'['. $this->field['id'] .']';
                 $field_unique = ( ! empty( $this->unique ) ) ? $this->unique .'['. $this->field['id'] .']['. $num .']' : $this->field['id'] .'['. $num .']';
                 $field_value  = ( isset( $field['id'] ) && isset( $value[$field['id']] ) ) ? $value[$field['id']] : '';
 
-                ULF::field( $field, $field_value, $field_unique, 'field/group', $field_parent );
+                ULF::field( $field, $field_value, $field_unique, 'field/group' );
 
               }
 
@@ -119,10 +118,9 @@ if ( ! class_exists( 'ULF_Field_group' ) ) {
 
         echo '</div>';
 
-        echo '<div class="ulf-cloneable-alert ulf-cloneable-max">'. esc_html__( 'You can not add more than', 'ulf' ) .' '. esc_attr( $args['max'] ) .'</div>';
-        echo '<div class="ulf-cloneable-alert ulf-cloneable-min">'. esc_html__( 'You can not remove less than', 'ulf' ) .' '. esc_attr( $args['min'] ) .'</div>';
-
-        echo '<a href="#" class="button button-primary ulf-cloneable-add">'. wp_kses_post( $args['button_title'] ) .'</a>';
+        echo '<div class="ulf-cloneable-alert ulf-cloneable-max">'. esc_html__( 'You cannot add more.', 'ulf' ) .'</div>';
+        echo '<div class="ulf-cloneable-alert ulf-cloneable-min">'. esc_html__( 'You cannot remove more.', 'ulf' ) .'</div>';
+        echo '<a href="#" class="button button-primary ulf-cloneable-add">'. $args['button_title'] .'</a>';
 
         echo $this->field_after();
 

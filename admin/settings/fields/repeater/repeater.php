@@ -22,12 +22,9 @@ if ( ! class_exists( 'ULF_Field_repeater' ) ) {
         'button_title' => '<i class="fas fa-plus-circle"></i>',
       ) );
 
-      $fields    = $this->field['fields'];
-      $unique_id = ( ! empty( $this->unique ) ) ? $this->unique : $this->field['id'];
+      if ( preg_match( '/'. preg_quote( '['. $this->field['id'] .']' ) .'/', $this->unique ) ) {
 
-      if ( $this->parent && preg_match( '/'. preg_quote( '['. $this->field['id'] .']' ) .'/', $this->parent ) ) {
-
-        echo '<div class="ulf-notice ulf-notice-danger">'. esc_html__( 'Error: Nested field id can not be same with another nested field id.', 'ulf' ) .'</div>';
+        echo '<div class="ulf-notice ulf-notice-danger">'. esc_html__( 'Error: Field ID conflict.', 'ulf' ) .'</div>';
 
       } else {
 
@@ -35,12 +32,12 @@ if ( ! class_exists( 'ULF_Field_repeater' ) ) {
 
         echo '<div class="ulf-repeater-item ulf-repeater-hidden">';
         echo '<div class="ulf-repeater-content">';
-        foreach ( $fields as $field ) {
+        foreach ( $this->field['fields'] as $field ) {
 
-          $field_parent  = $this->parent .'['. $this->field['id'] .']';
           $field_default = ( isset( $field['default'] ) ) ? $field['default'] : '';
+          $field_unique  = ( ! empty( $this->unique ) ) ? $this->unique .'['. $this->field['id'] .'][0]' : $this->field['id'] .'[0]';
 
-          ULF::field( $field, $field_default, '_nonce', 'field/repeater', $field_parent );
+          ULF::field( $field, $field_default, '___'. $field_unique, 'field/repeater' );
 
         }
         echo '</div>';
@@ -53,7 +50,7 @@ if ( ! class_exists( 'ULF_Field_repeater' ) ) {
         echo '</div>';
         echo '</div>';
 
-        echo '<div class="ulf-repeater-wrapper ulf-data-wrapper" data-unique-id="'. esc_attr( $this->unique ) .'" data-field-id="['. esc_attr( $this->field['id'] ) .']" data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'">';
+        echo '<div class="ulf-repeater-wrapper ulf-data-wrapper" data-field-id="['. esc_attr( $this->field['id'] ) .']" data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'">';
 
         if ( ! empty( $this->value ) && is_array( $this->value ) ) {
 
@@ -62,19 +59,16 @@ if ( ! class_exists( 'ULF_Field_repeater' ) ) {
           foreach ( $this->value as $key => $value ) {
 
             echo '<div class="ulf-repeater-item">';
-
             echo '<div class="ulf-repeater-content">';
-            foreach ( $fields as $field ) {
+            foreach ( $this->field['fields'] as $field ) {
 
-              $field_parent = $this->parent .'['. $this->field['id'] .']';
               $field_unique = ( ! empty( $this->unique ) ) ? $this->unique .'['. $this->field['id'] .']['. $num .']' : $this->field['id'] .'['. $num .']';
               $field_value  = ( isset( $field['id'] ) && isset( $this->value[$key][$field['id']] ) ) ? $this->value[$key][$field['id']] : '';
 
-              ULF::field( $field, $field_value, $field_unique, 'field/repeater', $field_parent );
+              ULF::field( $field, $field_value, $field_unique, 'field/repeater' );
 
             }
             echo '</div>';
-
             echo '<div class="ulf-repeater-helper">';
             echo '<div class="ulf-repeater-helper-inner">';
             echo '<i class="ulf-repeater-sort fas fa-arrows-alt"></i>';
@@ -82,7 +76,6 @@ if ( ! class_exists( 'ULF_Field_repeater' ) ) {
             echo '<i class="ulf-repeater-remove ulf-confirm fas fa-times" data-confirm="'. esc_html__( 'Are you sure to delete this item?', 'ulf' ) .'"></i>';
             echo '</div>';
             echo '</div>';
-
             echo '</div>';
 
             $num++;
@@ -93,10 +86,9 @@ if ( ! class_exists( 'ULF_Field_repeater' ) ) {
 
         echo '</div>';
 
-        echo '<div class="ulf-repeater-alert ulf-repeater-max">'. esc_html__( 'You can not add more than', 'ulf' ) .' '. esc_attr( $args['max'] ) .'</div>';
-        echo '<div class="ulf-repeater-alert ulf-repeater-min">'. esc_html__( 'You can not remove less than', 'ulf' ) .' '. esc_attr( $args['min'] ) .'</div>';
-
-        echo '<a href="#" class="button button-primary ulf-repeater-add">'. wp_kses_post( $args['button_title'] ) .'</a>';
+        echo '<div class="ulf-repeater-alert ulf-repeater-max">'. esc_html__( 'You cannot add more.', 'ulf' ) .'</div>';
+        echo '<div class="ulf-repeater-alert ulf-repeater-min">'. esc_html__( 'You cannot remove more.', 'ulf' ) .'</div>';
+        echo '<a href="#" class="button button-primary ulf-repeater-add">'. $args['button_title'] .'</a>';
 
         echo $this->field_after();
 

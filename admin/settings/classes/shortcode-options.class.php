@@ -22,6 +22,7 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
       'select_title'     => 'Select a shortcode',
       'insert_title'     => 'Insert Shortcode',
       'show_in_editor'   => true,
+      'show_in_custom'   => false,
       'defaults'         => array(),
       'class'            => '',
       'gutenberg'        => array(
@@ -49,12 +50,12 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
 
       if ( ! empty( $this->args['show_in_editor'] ) ) {
 
-        ULF::$shortcode_instances[] = wp_parse_args( array( 'hash' => md5( $key ), 'modal_id' => $this->unique ), $this->args );
+        ULF::$shortcode_instances[$this->unique] = wp_parse_args( array( 'hash' => md5( $key ), 'modal_id' => $this->unique ), $this->args );
 
         // elementor editor support
         if ( ULF::is_active_plugin( 'elementor/elementor.php' ) ) {
           add_action( 'elementor/editor/before_enqueue_scripts', array( 'ULF', 'add_admin_enqueue_scripts' ) );
-          // add_action( 'elementor/editor/footer', array( 'ULF_Field_icon', 'add_footer_modal_icon' ) );
+          add_action( 'elementor/editor/footer', array( 'ULF_Field_icon', 'add_footer_modal_icon' ) );
           add_action( 'elementor/editor/footer', array( &$this, 'add_footer_modal_shortcode' ) );
         }
 
@@ -140,7 +141,7 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
             <div class="ulf-modal-overlay"></div>
             <div class="ulf-modal-inner">
               <div class="ulf-modal-title">
-                <?php echo wp_kses_post( $this->args['button_title'] ); ?>
+                <?php echo $this->args['button_title']; ?>
                 <div class="ulf-modal-close"></div>
               </div>
               <?php
@@ -193,7 +194,7 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
                 <div class="ulf-modal-loading"><div class="ulf-loading"></div></div>
                 <div class="ulf-modal-load"></div>
               </div>
-              <div class="ulf-modal-insert-wrapper hidden"><a href="#" class="button button-primary ulf-modal-insert"><?php echo wp_kses_post( $this->args['insert_title'] ); ?></a></div>
+              <div class="ulf-modal-insert-wrapper hidden"><a href="#" class="button button-primary ulf-modal-insert"><?php echo $this->args['insert_title']; ?></a></div>
             </div>
           </div>
         </div>
@@ -247,7 +248,7 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
 
           if ( ! empty( $repeatable_fields ) ) {
 
-            $button_title    = ( ! empty( $section['button_title'] ) ) ? ' '. $section['button_title'] : esc_html__( 'Add one more', 'ulf' );
+            $button_title    = ( ! empty( $section['button_title'] ) ) ? ' '. $section['button_title'] : esc_html__( 'Add New', 'ulf' );
             $inner_shortcode = ( ! empty( $section['group_shortcode'] ) ) ? $section['group_shortcode'] : $shortcode;
 
             echo '<div class="ulf--repeatable">';
@@ -277,14 +278,14 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
 
             echo '</div>';
 
-            echo '<div class="ulf--repeat-button-block"><a class="button ulf--repeat-button" href="#"><i class="fas fa-plus-circle"></i> '. wp_kses_post( $button_title ) .'</a></div>';
+            echo '<div class="ulf--repeat-button-block"><a class="button ulf--repeat-button" href="#"><i class="fas fa-plus-circle"></i> '. $button_title .'</a></div>';
 
           }
 
         }
 
       } else {
-        echo '<div class="ulf-field ulf-error-text">'. esc_html__( 'Error: Nonce verification has failed. Please try again.', 'ulf' ) .'</div>';
+        echo '<div class="ulf-field ulf-error-text">'. esc_html__( 'Error: Invalid nonce verification.', 'ulf' ) .'</div>';
       }
 
       wp_send_json_success( array( 'content' => ob_get_clean() ) );
@@ -295,7 +296,7 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
     public static function once_editor_setup() {
 
       if ( function_exists( 'register_block_type' ) ) {
-        add_action( 'init', array( 'ULF_Shortcoder', 'add_guteberg_block' ) );
+        add_action( 'enqueue_block_editor_assets', array( 'ULF_Shortcoder', 'add_guteberg_blocks' ) );
       }
 
       if ( ulf_wp_editor_api() ) {
@@ -305,15 +306,15 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
     }
 
     // Add gutenberg blocks.
-    public static function add_guteberg_block() {
+    public static function add_guteberg_blocks() {
 
-      wp_register_script( 'ulf-gutenberg-block', ULF::include_plugin_url( 'assets/js/gutenberg.js' ), array( 'wp-blocks', 'wp-editor', 'wp-element', 'wp-components' ) );
+      wp_enqueue_script( 'ulf-gutenberg-block', ULF::include_plugin_url( 'assets/js/gutenberg.js' ), array( 'wp-blocks', 'wp-editor', 'wp-element', 'wp-components' ) );
 
       wp_localize_script( 'ulf-gutenberg-block', 'ulf_gutenberg_blocks', ULF::$shortcode_instances );
 
-      foreach ( ULF::$shortcode_instances as $hash => $value ) {
+      foreach ( ULF::$shortcode_instances as $value ) {
 
-        register_block_type( 'ulf-gutenberg-block/block-'. $hash, array(
+        register_block_type( 'ulf-gutenberg-block/block-'. $value['hash'], array(
           'editor_script' => 'ulf-gutenberg-block',
         ) );
 
@@ -324,8 +325,8 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
     // Add media buttons
     public static function add_media_buttons( $editor_id ) {
 
-      foreach ( ULF::$shortcode_instances as $hash => $value ) {
-        echo '<a href="#" class="button button-primary ulf-shortcode-button" data-editor-id="'. esc_attr( $editor_id ) .'" data-modal-id="'. esc_attr( $value['modal_id'] ) .'">'. wp_kses_post( $value['button_title'] ) .'</a>';
+      foreach ( ULF::$shortcode_instances as $value ) {
+        echo '<a href="#" class="button button-primary ulf-shortcode-button" data-editor-id="'. esc_attr( $editor_id ) .'" data-modal-id="'. esc_attr( $value['modal_id'] ) .'">'. $value['button_title'] .'</a>';
       }
 
     }

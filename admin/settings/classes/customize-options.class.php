@@ -240,6 +240,7 @@ if ( ! class_exists( 'ULF_Customize_Options' ) ) {
           $field_sanitize  = ( isset( $field['sanitize'] ) ) ? $field['sanitize'] : '';
           $field_validate  = ( isset( $field['validate'] ) ) ? $field['validate'] : '';
           $field_default   = ( isset( $field['default'] ) ) ? $field['default'] : '';
+          $field_customize = ( isset( $field['customize'] ) ) ? true : false;
           $has_selective   = ( isset( $field['selective_refresh'] ) && isset( $wp_customize->selective_refresh ) ) ? true : false;
 
           $setting_id = $this->unique .'['. $field_id .']';
@@ -248,7 +249,7 @@ if ( ! class_exists( 'ULF_Customize_Options' ) ) {
             wp_parse_args( $setting_args, array(
               'default'           => $field_default,
               'type'              => $this->args['database'],
-              'transport'         => ( $has_selective ) ? 'postMessage' : $field_transport,
+              'transport'         => ( $has_selective || $field_customize ) ? 'postMessage' : $field_transport,
               'capability'        => $this->args['capability'],
               'sanitize_callback' => $field_sanitize,
               'validate_callback' => $field_validate

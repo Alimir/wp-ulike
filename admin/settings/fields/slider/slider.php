@@ -30,7 +30,7 @@ if ( ! class_exists( 'ULF_Field_slider' ) ) {
       echo '<div class="ulf--wrap">';
       echo '<div class="ulf-slider-ui"></div>';
       echo '<div class="ulf--input">';
-      echo '<input type="number" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes( array( 'class' => 'ulf-input-number'. esc_attr( $is_unit ) ) ) .' data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'" data-step="'. esc_attr( $args['step'] ) .'" />';
+      echo '<input type="number" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes( array( 'class' => 'ulf-input-number'. esc_attr( $is_unit ) ) ) .' data-min="'. esc_attr( $args['min'] ) .'" data-max="'. esc_attr( $args['max'] ) .'" data-step="'. esc_attr( $args['step'] ) .'" step="any" />';
       echo ( ! empty( $args['unit'] ) ) ? '<span class="ulf--unit">'. esc_attr( $args['unit'] ) .'</span>' : '';
       echo '</div>';
       echo '</div>';

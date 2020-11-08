@@ -31,9 +31,15 @@ if ( ! class_exists( 'ULF_Field_background' ) ) {
         'background_gradient_direction' => true,
         'background_image_preview'      => true,
         'background_auto_attributes'    => false,
+        'compact'                       => false,
         'background_image_library'      => 'image',
-        'background_image_placeholder'  => esc_html__( 'No background selected', 'ulf' ),
+        'background_image_placeholder'  => esc_html__( 'Not selected', 'ulf' ),
       ) );
+
+      if ( $args['compact'] ) {
+        $args['background_color']           = false;
+        $args['background_auto_attributes'] = true;
+      }
 
       $default_value                    = array(
         'background-color'              => '',

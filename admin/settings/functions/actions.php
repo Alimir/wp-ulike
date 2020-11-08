@@ -13,7 +13,7 @@ if ( ! function_exists( 'ulf_get_icons' ) ) {
     $nonce = ( ! empty( $_POST[ 'nonce' ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ 'nonce' ] ) ) : '';
 
     if ( ! wp_verify_nonce( $nonce, 'ulf_icon_nonce' ) ) {
-      wp_send_json_error( array( 'error' => esc_html__( 'Error: Nonce verification has failed. Please try again.', 'ulf' ) ) );
+      wp_send_json_error( array( 'error' => esc_html__( 'Error: Invalid nonce verification.', 'ulf' ) ) );
     }
 
     ob_start();
@@ -38,7 +38,7 @@ if ( ! function_exists( 'ulf_get_icons' ) ) {
 
     } else {
 
-      echo '<div class="ulf-error-text">'. esc_html__( 'No data provided by developer', 'ulf' ) .'</div>';
+      echo '<div class="ulf-error-text">'. esc_html__( 'No data available.', 'ulf' ) .'</div>';
 
     }
 
@@ -65,11 +65,11 @@ if ( ! function_exists( 'ulf_export' ) ) {
     $unique = ( ! empty( $_GET[ 'unique' ] ) ) ? sanitize_text_field( wp_unslash( $_GET[ 'unique' ] ) ) : '';
 
     if ( ! wp_verify_nonce( $nonce, 'ulf_backup_nonce' ) ) {
-      die( esc_html__( 'Error: Nonce verification has failed. Please try again.', 'ulf' ) );
+      die( esc_html__( 'Error: Invalid nonce verification.', 'ulf' ) );
     }
 
     if ( empty( $unique ) ) {
-      die( esc_html__( 'Error: Options unique id could not valid.', 'ulf' ) );
+      die( esc_html__( 'Error: Invalid key.', 'ulf' ) );
     }
 
     // Export
@@ -103,15 +103,15 @@ if ( ! function_exists( 'ulf_import_ajax' ) ) {
     $data   = ( ! empty( $_POST[ 'data' ] ) ) ? wp_kses_post_deep( json_decode( wp_unslash( trim( $_POST[ 'data' ] ) ), true ) ) : array();
 
     if ( ! wp_verify_nonce( $nonce, 'ulf_backup_nonce' ) ) {
-      wp_send_json_error( array( 'error' => esc_html__( 'Error: Nonce verification has failed. Please try again.', 'ulf' ) ) );
+      wp_send_json_error( array( 'error' => esc_html__( 'Error: Invalid nonce verification.', 'ulf' ) ) );
     }
 
     if ( empty( $unique ) ) {
-      wp_send_json_error( array( 'error' => esc_html__( 'Error: Options unique id could not valid.', 'ulf' ) ) );
+      wp_send_json_error( array( 'error' => esc_html__( 'Error: Invalid key.', 'ulf' ) ) );
     }
 
     if ( empty( $data ) || ! is_array( $data ) ) {
-      wp_send_json_error( array( 'error' => esc_html__( 'Error: Import data could not valid.', 'ulf' ) ) );
+      wp_send_json_error( array( 'error' => esc_html__( 'Error: The response is not a valid JSON response.', 'ulf' ) ) );
     }
 
     // Success
@@ -138,7 +138,7 @@ if ( ! function_exists( 'ulf_reset_ajax' ) ) {
     $unique = ( ! empty( $_POST[ 'unique' ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ 'unique' ] ) ) : '';
 
     if ( ! wp_verify_nonce( $nonce, 'ulf_backup_nonce' ) ) {
-      wp_send_json_error( array( 'error' => esc_html__( 'Error: Nonce verification has failed. Please try again.', 'ulf' ) ) );
+      wp_send_json_error( array( 'error' => esc_html__( 'Error: Invalid nonce verification.', 'ulf' ) ) );
     }
 
     // Success
@@ -167,17 +167,17 @@ if ( ! function_exists( 'ulf_chosen_ajax' ) ) {
     $query = ( ! empty( $_POST[ 'query_args' ] ) ) ? wp_kses_post_deep( $_POST[ 'query_args' ] ) : array();
 
     if ( ! wp_verify_nonce( $nonce, 'ulf_chosen_ajax_nonce' ) ) {
-      wp_send_json_error( array( 'error' => esc_html__( 'Error: Nonce verification has failed. Please try again.', 'ulf' ) ) );
+      wp_send_json_error( array( 'error' => esc_html__( 'Error: Invalid nonce verification.', 'ulf' ) ) );
     }
 
     if ( empty( $type ) || empty( $term ) ) {
-      wp_send_json_error( array( 'error' => esc_html__( 'Error: Missing request arguments.', 'ulf' ) ) );
+      wp_send_json_error( array( 'error' => esc_html__( 'Error: Invalid term ID.', 'ulf' ) ) );
     }
 
     $capability = apply_filters( 'ulf_chosen_ajax_capability', 'manage_options' );
 
     if ( ! current_user_can( $capability ) ) {
-      wp_send_json_error( array( 'error' => esc_html__( 'You do not have required permissions to access.', 'ulf' ) ) );
+      wp_send_json_error( array( 'error' => esc_html__( 'Error: You do not have permission to do that.', 'ulf' ) ) );
     }
 
     // Success

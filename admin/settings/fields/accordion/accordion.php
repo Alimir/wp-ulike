@@ -30,7 +30,7 @@ if ( ! class_exists( 'ULF_Field_accordion' ) ) {
 
           echo '<h4 class="ulf-accordion-title">';
           echo '<i class="'. esc_attr( $icon ) .'"></i>';
-          echo esc_attr( $accordion['title'] );
+          echo esc_html( $accordion['title'] );
           echo '</h4>';
 
           echo '<div class="ulf-accordion-content">';

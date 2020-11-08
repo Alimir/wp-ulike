@@ -10,7 +10,7 @@
  *     01. 03. Navigation
  *     01. 04. Content
  *     01. 05. Section
- *     01. 06. Show All Options
+ *     01. 06. Show All Settings
  *     01. 07. Search Input
  *     01. 08. Copyright
  *     01. 09. Metabox
@@ -107,9 +107,6 @@
   left: 10px;
 }
 .ulf-nav ul li.ulf-tab-expanded .ulf-arrow:after {
-  -moz-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
 }
 .ulf-nav ul ul li a {
@@ -216,6 +213,10 @@
 }
 .ulf-field-typography .ulf--blocks-inputs .ulf--blocks {
   flex-direction: row-reverse;
+}
+.ulf-field-typography .ulf--unit {
+  left: 4px;
+  right: auto;
 }
 
 /**
@@ -466,7 +467,7 @@
 /**
  * 02. 25. Field: sortable
  */
-.ulf-field-sortable .ulf--sortable-helper {
+.ulf-field-sortable .ulf-sortable-helper {
   border-left: none;
   border-right: 1px solid #eee;
 }
@@ -476,6 +477,10 @@
  */
 .ulf-field-number .ulf--wrap {
   float: right;
+}
+.ulf-field-number .ulf--unit {
+  left: 4px;
+  right: auto;
 }
 
 /**
