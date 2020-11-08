@@ -28,8 +28,8 @@ if ( ! class_exists( 'ULF_Field_icon' ) ) {
 
       echo '<div class="ulf-icon-select">';
       echo '<span class="ulf-icon-preview'. esc_attr( $hidden ) .'"><i class="'. esc_attr( $this->value ) .'"></i></span>';
-      echo '<a href="#" class="button button-primary ulf-icon-add" data-nonce="'. esc_attr( $nonce ) .'">'. wp_kses_post( $args['button_title'] ) .'</a>';
-      echo '<a href="#" class="button ulf-warning-primary ulf-icon-remove'. esc_attr( $hidden ) .'">'. wp_kses_post( $args['remove_title'] ) .'</a>';
+      echo '<a href="#" class="button button-primary ulf-icon-add" data-nonce="'. esc_attr( $nonce ) .'">'. $args['button_title'] .'</a>';
+      echo '<a href="#" class="button ulf-warning-primary ulf-icon-remove'. esc_attr( $hidden ) .'">'. $args['remove_title'] .'</a>';
       echo '<input type="text" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'" class="ulf-icon-value"'. $this->field_attributes() .' />';
       echo '</div>';
 
@@ -54,7 +54,7 @@ if ( ! class_exists( 'ULF_Field_icon' ) ) {
                 <div class="ulf-modal-close ulf-icon-close"></div>
               </div>
               <div class="ulf-modal-header">
-                <input type="text" placeholder="<?php esc_html_e( 'Search a Icon...', 'ulf' ); ?>" class="ulf-icon-search" />
+                <input type="text" placeholder="<?php esc_html_e( 'Search...', 'ulf' ); ?>" class="ulf-icon-search" />
               </div>
               <div class="ulf-modal-content">
                 <div class="ulf-modal-loading"><div class="ulf-loading"></div></div>

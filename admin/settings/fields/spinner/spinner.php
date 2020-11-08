@@ -25,7 +25,7 @@ if ( ! class_exists( 'ULF_Field_spinner' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="ulf--spin"><input type="number" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes( array( 'class' => 'ulf-input-number' ) ) .' data-max="'. esc_attr( $args['max'] ) .'" data-min="'. esc_attr( $args['min'] ) .'" data-step="'. esc_attr( $args['step'] ) .'" data-unit="'. esc_attr( $args['unit'] ) .'"/></div>';
+      echo '<div class="ulf--spin"><input type="number" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes( array( 'class' => 'ulf-input-number' ) ) .' data-min="'. esc_attr( $args['min'] ) .'" data-max="'. esc_attr( $args['max'] ) .'" data-step="'. esc_attr( $args['step'] ) .'" data-unit="'. esc_attr( $args['unit'] ) .'" step="any" /></div>';
 
       echo $this->field_after();
 

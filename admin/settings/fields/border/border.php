@@ -72,8 +72,8 @@ if ( ! class_exists( 'ULF_Field_border' ) ) {
         $placeholder = ( ! empty( $args['all_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args['all_placeholder'] ) .'"' : '';
 
         echo '<div class="ulf--input">';
-        echo ( ! empty( $args['all_icon'] ) ) ? '<span class="ulf--label ulf--icon">'. wp_kses_post( $args['all_icon'] ) .'</span>' : '';
-        echo '<input type="number" name="'. esc_attr( $this->field_name( '[all]' ) ) .'" value="'. esc_attr( $value['all'] ) .'"'. $placeholder .' class="ulf-input-number ulf--is-unit" />';
+        echo ( ! empty( $args['all_icon'] ) ) ? '<span class="ulf--label ulf--icon">'. $args['all_icon'] .'</span>' : '';
+        echo '<input type="number" name="'. esc_attr( $this->field_name( '[all]' ) ) .'" value="'. esc_attr( $value['all'] ) .'"'. $placeholder .' class="ulf-input-number ulf--is-unit" step="any" />';
         echo ( ! empty( $args['unit'] ) ) ? '<span class="ulf--label ulf--unit">'. esc_attr( $args['unit'] ) .'</span>' : '';
         echo '</div>';
 
@@ -94,8 +94,8 @@ if ( ! class_exists( 'ULF_Field_border' ) ) {
           $placeholder = ( ! empty( $args[$property.'_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args[$property.'_placeholder'] ) .'"' : '';
 
           echo '<div class="ulf--input">';
-          echo ( ! empty( $args[$property.'_icon'] ) ) ? '<span class="ulf--label ulf--icon">'. wp_kses_post( $args[$property.'_icon'] ) .'</span>' : '';
-          echo '<input type="number" name="'. esc_attr( $this->field_name( '['. $property .']' ) ) .'" value="'. esc_attr( $value[$property] ) .'"'. $placeholder .' class="ulf-input-number ulf--is-unit" />';
+          echo ( ! empty( $args[$property.'_icon'] ) ) ? '<span class="ulf--label ulf--icon">'. $args[$property.'_icon'] .'</span>' : '';
+          echo '<input type="number" name="'. esc_attr( $this->field_name( '['. $property .']' ) ) .'" value="'. esc_attr( $value[$property] ) .'"'. $placeholder .' class="ulf-input-number ulf--is-unit" step="any" />';
           echo ( ! empty( $args['unit'] ) ) ? '<span class="ulf--label ulf--unit">'. esc_attr( $args['unit'] ) .'</span>' : '';
           echo '</div>';
 

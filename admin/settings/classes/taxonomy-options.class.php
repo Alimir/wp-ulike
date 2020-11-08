@@ -11,16 +11,20 @@ if ( ! class_exists( 'ULF_Taxonomy_Options' ) ) {
   class ULF_Taxonomy_Options extends ULF_Abstract{
 
     // constans
-    public $unique     = '';
-    public $taxonomy   = '';
-    public $abstract   = 'taxonomy';
-    public $sections   = array();
-    public $taxonomies = array();
-    public $args       = array(
-      'taxonomy'       => 'category',
-      'data_type'      => 'serialize',
-      'class'          => '',
-      'defaults'       => array(),
+    public $unique      = '';
+    public $taxonomy    = '';
+    public $abstract    = 'taxonomy';
+    public $pre_fields  = array();
+    public $sections    = array();
+    public $taxonomies  = array();
+    public $args        = array(
+      'taxonomy'        => 'category',
+      'data_type'       => 'serialize',
+      'class'           => '',
+      'enqueue_webfont' => true,
+      'async_webfont'   => false,
+      'output_css'      => true,
+      'defaults'        => array(),
     );
 
     // run taxonomy construct
@@ -31,16 +35,36 @@ if ( ! class_exists( 'ULF_Taxonomy_Options' ) ) {
       $this->sections   = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
       $this->taxonomies = ( is_array( $this->args['taxonomy'] ) ) ? $this->args['taxonomy'] : array_filter( (array) $this->args['taxonomy'] );
       $this->taxonomy   = ( ! empty( $_REQUEST[ 'taxonomy' ] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST[ 'taxonomy' ] ) ) : '';
+      $this->pre_fields = $this->pre_fields( $this->sections );
 
       if ( ! empty( $this->taxonomies ) && in_array( $this->taxonomy, $this->taxonomies ) ) {
         add_action( 'admin_init', array( &$this, 'add_taxonomy_options' ) );
       }
+
+      // wp enqeueu for typography and output css
+      parent::__construct();
 
     }
 
     // instance
     public static function instance( $key, $params ) {
       return new self( $key, $params );
+    }
+
+    public function pre_fields( $sections ) {
+
+      $result  = array();
+
+      foreach ( $sections as $key => $section ) {
+        if ( ! empty( $section['fields'] ) ) {
+          foreach ( $section['fields'] as $field ) {
+            $result[] = $field;
+          }
+        }
+      }
+
+      return $result;
+
     }
 
     // add taxonomy add/edit fields
@@ -65,9 +89,11 @@ if ( ! class_exists( 'ULF_Taxonomy_Options' ) ) {
     }
 
     // get meta value
-    public function get_meta_value( $term_id, $field ) {
+    public function get_meta_value( $field, $term_id = null ) {
 
       $value = null;
+
+      $term_id = ( ! isset( $term_id ) ) ? get_queried_object_id() : $term_id;
 
       if ( ! empty( $term_id ) && ! empty( $field['id'] ) ) {
 
@@ -114,7 +140,7 @@ if ( ! class_exists( 'ULF_Taxonomy_Options' ) ) {
           $section_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-section-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
           $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
 
-          echo ( $section_title || $section_icon ) ? '<div class="ulf-section-title"><h3>'. wp_kses_post( $section_icon . $section_title ) .'</h3></div>' : '';
+          echo ( $section_title || $section_icon ) ? '<div class="ulf-section-title"><h3>'. $section_icon . $section_title .'</h3></div>' : '';
 
           if ( ! empty( $section['fields'] ) ) {
             foreach ( $section['fields'] as $field ) {
@@ -127,7 +153,7 @@ if ( ! class_exists( 'ULF_Taxonomy_Options' ) ) {
                 $field['default'] = $this->get_default( $field );
               }
 
-              ULF::field( $field, $this->get_meta_value( $term_id, $field ), $this->unique, 'taxonomy' );
+              ULF::field( $field, $this->get_meta_value( $field, $term_id ), $this->unique, 'taxonomy' );
 
             }
           }
@@ -198,7 +224,7 @@ if ( ! class_exists( 'ULF_Taxonomy_Options' ) ) {
 
                     $errors['sections'][$count] = true;
                     $errors['fields'][$field_id] = $has_validated;
-                    $data[$field_id] = $this->get_meta_value( $term_id, $field );
+                    $data[$field_id] = $this->get_meta_value( $field, $term_id );
 
                   }
 

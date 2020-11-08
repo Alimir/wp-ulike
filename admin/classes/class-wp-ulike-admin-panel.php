@@ -673,12 +673,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'        => 'select',
                     'title'       => __( 'Logging Method',WP_ULIKE_SLUG),
                     'options'     => array(
-                        'do_not_log'  => __('Do Not Log', WP_ULIKE_SLUG),
-                        'by_cookie'   => __('Logged By Cookie', WP_ULIKE_SLUG),
-                        'by_username' => __('Logged By Username', WP_ULIKE_SLUG)
+                        'do_not_log'  => __('No Limit', WP_ULIKE_SLUG),
+                        'by_cookie'   => __('Cookie', WP_ULIKE_SLUG),
+                        'by_username' => __('Username/IP', WP_ULIKE_SLUG)
                     ),
                     'default'     => 'by_username',
-                    'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>', __( 'If you select <strong>"Do Not Log"</strong> method: Any data logs can\'t save, There is no limitation in the like/dislike, unlike/undislike capacity do not work', WP_ULIKE_SLUG ), __( 'If you select <strong>"Logged By Cookie"</strong> method: Any data logs can\'t save, The like/dislike condition will be limited by SetCookie, unlike/undislike capacity do not work', WP_ULIKE_SLUG ), __( 'If you select <strong>"Logged By IP"</strong> method: Data logs will save for all users, the convey of like/dislike condition will check by user IP', WP_ULIKE_SLUG ), __( 'If you select <strong>"Logged By Username"</strong> method: data logs only is saved for registered users, the convey of like/dislike condition will check by username, There is no permission for guest users to unlike/undislike', WP_ULIKE_SLUG ) )
+                    'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p>', __( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', WP_ULIKE_SLUG ), __( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', WP_ULIKE_SLUG ), __( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', WP_ULIKE_SLUG ) )
                 ),
                 'enable_only_logged_in_users' => array(
                     'id'    => 'enable_only_logged_in_users',

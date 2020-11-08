@@ -65,15 +65,15 @@ if ( ! class_exists( 'ULF_Fields' ) ) {
     }
 
     public function field_before() {
-      return ( ! empty( $this->field['before'] ) ) ? '<div class="ulf-before-text">'. wp_kses_post( $this->field['before'] ) .'</div>' : '';
+      return ( ! empty( $this->field['before'] ) ) ? '<div class="ulf-before-text">'. $this->field['before'] .'</div>' : '';
     }
 
     public function field_after() {
 
-      $output  = ( ! empty( $this->field['after'] ) ) ? '<div class="ulf-after-text">'. wp_kses_post( $this->field['after'] ) .'</div>' : '';
-      $output .= ( ! empty( $this->field['desc'] ) ) ? '<div class="clear"></div><div class="ulf-desc-text">'. wp_kses_post( $this->field['desc'] ) .'</div>' : '';
-      $output .= ( ! empty( $this->field['help'] ) ) ? '<div class="ulf-help"><span class="ulf-help-text">'. wp_kses_post( $this->field['help'] ) .'</span><i class="fas fa-question-circle"></i></div>' : '';
-      $output .= ( ! empty( $this->field['_error'] ) ) ? '<div class="ulf-error-text">'. wp_kses_post( $this->field['_error'] ) .'</div>' : '';
+      $output  = ( ! empty( $this->field['after'] ) ) ? '<div class="ulf-after-text">'. $this->field['after'] .'</div>' : '';
+      $output .= ( ! empty( $this->field['desc'] ) ) ? '<div class="clear"></div><div class="ulf-desc-text">'. $this->field['desc'] .'</div>' : '';
+      $output .= ( ! empty( $this->field['help'] ) ) ? '<div class="ulf-help"><span class="ulf-help-text">'. $this->field['help'] .'</span><i class="fas fa-question-circle"></i></div>' : '';
+      $output .= ( ! empty( $this->field['_error'] ) ) ? '<div class="ulf-error-text">'. $this->field['_error'] .'</div>' : '';
 
       return $output;
 

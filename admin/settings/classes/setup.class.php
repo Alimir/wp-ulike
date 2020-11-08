@@ -12,7 +12,7 @@ if ( ! class_exists( 'ULF' ) ) {
 
     // Default constants
     public static $premium  = true;
-    public static $version  = '2.1.7';
+    public static $version  = '2.2.0';
     public static $dir      = '';
     public static $url      = '';
     public static $css      = '';
@@ -56,6 +56,7 @@ if ( ! class_exists( 'ULF' ) ) {
       add_action( 'admin_enqueue_scripts', array( 'ULF', 'add_admin_enqueue_scripts' ) );
       add_action( 'wp_enqueue_scripts', array( 'ULF', 'add_typography_enqueue_styles' ), 80 );
       add_action( 'wp_head', array( 'ULF', 'add_custom_css' ), 80 );
+      add_filter( 'admin_body_class', array( 'ULF', 'add_admin_body_class' ) );
 
     }
 
@@ -63,7 +64,7 @@ if ( ! class_exists( 'ULF' ) ) {
     public static function setup() {
 
       // Welcome page
-      // self::include_plugin_file( 'views/welcome.php' );
+      self::include_plugin_file( 'views/welcome.php' );
 
       // Setup admin option framework
       $params = array();
@@ -215,8 +216,13 @@ if ( ! class_exists( 'ULF' ) ) {
         }
 
         // Once editor setup for gutenberg and media buttons
-        if ( ! empty( ULF::$shortcode_instances ) ) {
-          ULF_Shortcoder::once_editor_setup();
+        if ( ! empty( self::$shortcode_instances ) ) {
+          foreach ( self::$shortcode_instances as $instance ) {
+            if ( ! empty( $instance['show_in_editor'] ) ) {
+              ULF_Shortcoder::once_editor_setup();
+              break;
+            }
+          }
         }
 
       }
@@ -426,63 +432,63 @@ if ( ! class_exists( 'ULF' ) ) {
       $enqueue  = false;
       $wpscreen = get_current_screen();
 
-      if( ! empty( self::$args['admin_options'] ) ) {
+      if ( ! empty( self::$args['admin_options'] ) ) {
         foreach ( self::$args['admin_options'] as $argument ) {
-          if( substr( $wpscreen->id, -strlen( $argument['menu_slug'] ) ) === $argument['menu_slug'] ) {
+          if ( substr( $wpscreen->id, -strlen( $argument['menu_slug'] ) ) === $argument['menu_slug'] ) {
             $enqueue = true;
           }
         }
       }
 
-      if( ! empty( self::$args['metabox_options'] ) ) {
+      if ( ! empty( self::$args['metabox_options'] ) ) {
         foreach ( self::$args['metabox_options'] as $argument ) {
-          if( in_array( $wpscreen->post_type, (array) $argument['post_type'] ) ) {
+          if ( in_array( $wpscreen->post_type, (array) $argument['post_type'] ) ) {
             $enqueue = true;
           }
         }
       }
 
-      if( ! empty( self::$args['taxonomy_options'] ) ) {
+      if ( ! empty( self::$args['taxonomy_options'] ) ) {
         foreach ( self::$args['taxonomy_options'] as $argument ) {
-          if( $wpscreen->taxonomy === $argument['taxonomy'] ) {
+          if ( $wpscreen->taxonomy === $argument['taxonomy'] ) {
             $enqueue = true;
           }
         }
       }
 
-      if( ! empty( self::$args['shortcode_options'] ) ) {
-        foreach ( self::$args['shortcode_options'] as $argument ) {
-          if( ! empty( $argument['show_in_editor'] ) && $wpscreen->base === 'post' ) {
+      if ( ! empty( self::$shortcode_instances ) ) {
+        foreach ( self::$shortcode_instances as $argument ) {
+          if ( ( $argument['show_in_editor'] && $wpscreen->base === 'post' ) || $argument['show_in_custom'] ) {
             $enqueue = true;
           }
         }
       }
 
-      if( ! empty( self::$args['widget_options'] ) && ( $wpscreen->id === 'widgets' || $wpscreen->id === 'customize' ) ) {
+      if ( ! empty( self::$args['widget_options'] ) && ( $wpscreen->id === 'widgets' || $wpscreen->id === 'customize' ) ) {
         $enqueue = true;
       }
 
-      if( ! empty( self::$args['customize_options'] ) && $wpscreen->id === 'customize' ) {
+      if ( ! empty( self::$args['customize_options'] ) && $wpscreen->id === 'customize' ) {
         $enqueue = true;
       }
 
-      if( ! empty( self::$args['nav_menu_options'] ) && $wpscreen->id === 'nav-menus' ) {
+      if ( ! empty( self::$args['nav_menu_options'] ) && $wpscreen->id === 'nav-menus' ) {
         $enqueue = true;
       }
 
-      if( ! empty( self::$args['profile_options'] ) && $wpscreen->id === 'profile' ) {
+      if ( ! empty( self::$args['profile_options'] ) && ( $wpscreen->id === 'profile' || $wpscreen->id === 'user-edit' ) ) {
         $enqueue = true;
       }
 
-      if( ! empty( self::$args['comment_options'] ) && $wpscreen->id === 'comment' ) {
+      if ( ! empty( self::$args['comment_options'] ) && $wpscreen->id === 'comment' ) {
         $enqueue = true;
       }
 
-      if( $wpscreen->id === 'tools_page_ulf-welcome' ) {
+      if ( $wpscreen->id === 'tools_page_ulf-welcome' ) {
         $enqueue = true;
       }
 
-      if( ! $enqueue ) {
+      if ( ! $enqueue ) {
         return;
       }
 
@@ -500,35 +506,30 @@ if ( ! class_exists( 'ULF' ) ) {
       if ( apply_filters( 'ulf_fa4', false ) ) {
         wp_enqueue_style( 'ulf-fa', 'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome'. $min .'.css', array(), '4.7.0', 'all' );
       } else {
-        wp_enqueue_style( 'ulf-fa5', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all'. $min .'.css', array(), '5.13.0', 'all' );
-        wp_enqueue_style( 'ulf-fa5-v4-shims', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/v4-shims'. $min .'.css', array(), '5.13.0', 'all' );
+        wp_enqueue_style( 'ulf-fa5', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all'. $min .'.css', array(), '5.14.0', 'all' );
+        wp_enqueue_style( 'ulf-fa5-v4-shims', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/v4-shims'. $min .'.css', array(), '5.14.0', 'all' );
       }
 
       // Main style
-      wp_enqueue_style( 'ulf', ULF::include_plugin_url( 'assets/css/style'. $min .'.css' ), array(), self::$version, 'all' );
+      wp_enqueue_style( 'ulf', self::include_plugin_url( 'assets/css/style'. $min .'.css' ), array(), self::$version, 'all' );
 
       // Main RTL styles
       if ( is_rtl() ) {
-        wp_enqueue_style( 'ulf-rtl', ULF::include_plugin_url( 'assets/css/style-rtl'. $min .'.css' ), array(), self::$version, 'all' );
+        wp_enqueue_style( 'ulf-rtl', self::include_plugin_url( 'assets/css/style-rtl'. $min .'.css' ), array(), self::$version, 'all' );
       }
 
       // Main scripts
-      wp_enqueue_script( 'ulf-plugins', ULF::include_plugin_url( 'assets/js/plugins'. $min .'.js' ), array(), self::$version, true );
-      wp_enqueue_script( 'ulf', ULF::include_plugin_url( 'assets/js/main'. $min .'.js' ), array( 'ulf-plugins' ), self::$version, true );
+      wp_enqueue_script( 'ulf-plugins', self::include_plugin_url( 'assets/js/plugins'. $min .'.js' ), array(), self::$version, true );
+      wp_enqueue_script( 'ulf', self::include_plugin_url( 'assets/js/main'. $min .'.js' ), array( 'ulf-plugins' ), self::$version, true );
 
       // Main variables
       wp_localize_script( 'ulf', 'ulf_vars', array(
-        'color_palette'  => apply_filters( 'ulf_color_palette', array() ),
-        'i18n'           => array(
-          // global localize
-          'confirm'             => esc_html__( 'Are you sure?', 'ulf' ),
-          'reset_notification'  => esc_html__( 'Restoring options.', 'ulf' ),
-          'import_notification' => esc_html__( 'Importing options.', 'ulf' ),
-
-          // chosen localize
+        'color_palette'     => apply_filters( 'ulf_color_palette', array() ),
+        'i18n'              => array(
+          'confirm'         => esc_html__( 'Are you sure?', 'ulf' ),
           'typing_text'     => esc_html__( 'Please enter %s or more characters', 'ulf' ),
           'searching_text'  => esc_html__( 'Searching...', 'ulf' ),
-          'no_results_text' => esc_html__( 'No results match', 'ulf' ),
+          'no_results_text' => esc_html__( 'No results found.', 'ulf' ),
         ),
       ) );
 
@@ -558,28 +559,58 @@ if ( ! class_exists( 'ULF' ) ) {
     // Add typography enqueue styles to front page
     public static function add_typography_enqueue_styles() {
 
-      if( ! empty( self::$webfonts ) ) {
+      if ( ! empty( self::$webfonts ) ) {
 
-        if( ! empty( self::$webfonts['enqueue'] ) ) {
+        if ( ! empty( self::$webfonts['enqueue'] ) ) {
 
-          $api    = '//fonts.googleapis.com/css';
-          $query  = array( 'family' => implode( '%7C', self::$webfonts['enqueue'] ), 'display' => 'swap' );
-          $handle = 'ulf-google-web-fonts';
+          $query = array();
+          $fonts = array();
 
-          if( ! empty( self::$subsets ) ) {
+          foreach ( self::$webfonts['enqueue'] as $family => $styles ) {
+            $fonts[] = $family . ( ( ! empty( $styles ) ) ? ':'. implode( ',', $styles ) : '' );
+          }
+
+          if ( ! empty( $fonts ) ) {
+            $query['family'] = implode( '%7C', $fonts );
+          }
+
+          if ( ! empty( self::$subsets ) ) {
             $query['subset'] = implode( ',', self::$subsets );
           }
 
-          wp_enqueue_style( $handle, esc_url( add_query_arg( $query, $api ) ), array(), null );
+          $query['display'] = 'swap';
 
-        } else {
+          wp_enqueue_style( 'ulf-google-web-fonts', esc_url( add_query_arg( $query, '//fonts.googleapis.com/css' ) ), array(), null );
+
+        }
+
+        if ( ! empty( self::$webfonts['async'] ) ) {
+
+          $fonts = array();
+
+          foreach ( self::$webfonts['async'] as $family => $styles ) {
+            $fonts[] = $family . ( ( ! empty( $styles ) ) ? ':'. implode( ',', $styles ) : '' );
+          }
 
           wp_enqueue_script( 'ulf-google-web-fonts', esc_url( '//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js' ), array(), null );
-          wp_localize_script( 'ulf-google-web-fonts', 'WebFontConfig', array( 'google' => array( 'families' => array_values( self::$webfonts['async'] ) ) ) );
+
+          wp_localize_script( 'ulf-google-web-fonts', 'WebFontConfig', array( 'google' => array( 'families' => $fonts ) ) );
 
         }
 
       }
+
+    }
+
+    // Add admin body class
+    public static function add_admin_body_class( $classes ) {
+
+      if ( apply_filters( 'ulf_fa4', false ) ) {
+        $classes .= 'ulf-fa5-shims';
+      }
+
+      return $classes;
+
     }
 
     // Add custom css to front page
@@ -600,7 +631,7 @@ if ( ! class_exists( 'ULF' ) ) {
         $field_type = $field['type'];
 
         $field            = array();
-        $field['content'] = sprintf( esc_html__( 'Ooops! This field type (%s) can not be used here, yet.', 'ulf' ), '<strong>'. $field_type .'</strong>' );
+        $field['content'] = esc_html__( 'Oops! Not allowed.', 'ulf' ) .' <strong>('. $field_type .')</strong>';
         $field['type']    = 'notice';
         $field['style']   = 'danger';
 
@@ -651,13 +682,13 @@ if ( ! class_exists( 'ULF' ) ) {
         echo '<div class="ulf-field ulf-field-'. $field_type . $is_pseudo . $class . $visible .'"'. $depend .'>';
 
         if ( ! empty( $field['fancy_title'] ) ) {
-          echo '<div class="ulf-fancy-title">' . wp_kses_post( $field['fancy_title'] ) .'</div>';
+          echo '<div class="ulf-fancy-title">' . $field['fancy_title'] .'</div>';
         }
 
         if ( ! empty( $field['title'] ) ) {
           echo '<div class="ulf-title">';
-          echo '<h4>'. wp_kses_post( $field['title'] ) .'</h4>';
-          echo ( ! empty( $field['subtitle'] ) ) ? '<div class="ulf-subtitle-text">'. wp_kses_post( $field['subtitle'] ) .'</div>' : '';
+          echo '<h4>'. $field['title'] .'</h4>';
+          echo ( ! empty( $field['subtitle'] ) ) ? '<div class="ulf-subtitle-text">'. $field['subtitle'] .'</div>' : '';
           echo '</div>';
         }
 
@@ -674,11 +705,11 @@ if ( ! class_exists( 'ULF' ) ) {
           $instance = new $classname( $field, $value, $unique, $where, $parent );
           $instance->render();
         } else {
-          echo '<p>'. esc_html__( 'This field class is not available!', 'ulf' ) .'</p>';
+          echo '<p>'. esc_html__( 'Field not found!', 'ulf' ) .'</p>';
         }
 
       } else {
-        echo '<p>'. esc_html__( 'This type is not found!', 'ulf' ) .'</p>';
+        echo '<p>'. esc_html__( 'Field not found!', 'ulf' ) .'</p>';
       }
 
       echo ( ! empty( $field['title'] ) || ! empty( $field['fancy_title'] ) ) ? '</div>' : '';

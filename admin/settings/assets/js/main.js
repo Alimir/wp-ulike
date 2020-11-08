@@ -45,7 +45,7 @@
     // Quote regular expression characters
     //
     preg_quote: function( str ) {
-      return (str+'').replace(/(\[|\-|\])/g, "\\$1");
+      return (str+'').replace(/(\[|\])/g, "\\$1");
     },
 
     //
@@ -54,7 +54,7 @@
     name_nested_replace: function( $selector, field_id ) {
 
       var checks = [];
-      var regex  = new RegExp('('+ ULF.helper.preg_quote(field_id) +')\\[(\\d+)\\]', 'g');
+      var regex  = new RegExp(ULF.helper.preg_quote(field_id +'[\\d+]'), 'g');
 
       $selector.find(':radio').each(function() {
         if ( this.checked || this.orginal_checked ) {
@@ -171,15 +171,15 @@
           $link.addClass('ulf-active');
 
           if ( $last ) {
-            $last.hide();
+            $last.addClass('hidden');
           }
 
           var $section = $('[data-section-id="'+slug+'"]');
 
-          $section.show();
+          $section.removeClass('hidden');
           $section.ulf_reload_script();
 
-          $('.ulf-section-id').val( $section.index() );
+          $('.ulf-section-id').val( $section.index()+1 );
 
           $last = $section;
 
@@ -213,12 +213,12 @@
           $link.addClass('ulf-active');
 
           if ( $last !== undefined ) {
-            $last.hide();
+            $last.addClass('hidden');
           }
 
           var $section = $sections.eq(index);
 
-          $section.show();
+          $section.removeClass('hidden');
           $section.ulf_reload_script();
 
           $last = $section;
@@ -480,7 +480,7 @@
           $import = $this.find('.ulf-import'),
           $reset  = $this.find('.ulf-reset');
 
-      base.notification = function( message_text ) {
+      base.notificationOverlay = function() {
 
         if ( wp.customize.notifications && wp.customize.OverlayNotification ) {
 
@@ -493,8 +493,8 @@
 
           // then show a notification overlay
           wp.customize.notifications.add( new wp.customize.OverlayNotification('ulf_field_backup_notification', {
-            type: 'info',
-            message: message_text,
+            type: 'default',
+            message: '&nbsp;',
             loading: true
           }));
 
@@ -508,7 +508,7 @@
 
         if ( ULF.vars.is_confirm ) {
 
-          base.notification( window.ulf_vars.i18n.reset_notification );
+          base.notificationOverlay();
 
           window.wp.ajax.post('ulf-reset', {
             unique: $reset.data('unique'),
@@ -532,7 +532,7 @@
 
         if ( ULF.vars.is_confirm ) {
 
-          base.notification( window.ulf_vars.i18n.import_notification );
+          base.notificationOverlay();
 
           window.wp.ajax.post( 'ulf-import', {
             unique: $import.data('unique'),
@@ -658,7 +658,7 @@
 
       }
 
-      $inputs.each( function(){
+      $inputs.each( function() {
 
         var $input = $(this);
 
@@ -781,7 +781,6 @@
           $max      = $group.children('.ulf-cloneable-max'),
           $min      = $group.children('.ulf-cloneable-min'),
           field_id  = $wrapper.data('field-id'),
-          unique_id = $wrapper.data('unique-id'),
           is_number = Boolean( Number( $wrapper.data('title-number') ) ),
           max       = parseInt( $wrapper.data('max') ),
           min       = parseInt( $wrapper.data('min') );
@@ -874,18 +873,12 @@
           return;
         }
 
-        var new_field_id = unique_id + field_id + '['+ count +']';
-
         var $cloned_item = $hidden.ulf_clone(true);
 
         $cloned_item.removeClass('ulf-cloneable-hidden');
 
         $cloned_item.find(':input[name!="_pseudo"]').each( function() {
-          this.name = new_field_id + this.name.replace( ( this.name.startsWith('_nonce') ? '_nonce' : unique_id ), '');
-        });
-
-        $cloned_item.find('.ulf-data-wrapper').each( function(){
-          $(this).attr('data-unique-id', new_field_id );
+          this.name = this.name.replace( '___', '' ).replace( field_id +'[0]', field_id +'['+ count +']' );
         });
 
         $wrapper.append($cloned_item);
@@ -918,20 +911,13 @@
             $cloned_helper  = $parent.children('.ulf-cloneable-helper').ulf_clone(true),
             $cloned_title   = $parent.children('.ulf-cloneable-title').ulf_clone(),
             $cloned_content = $parent.children('.ulf-cloneable-content').ulf_clone(),
-            cloned_regex    = new RegExp('('+ ULF.helper.preg_quote(field_id) +')\\[(\\d+)\\]', 'g');
+            $cloned_item    = $('<div class="ulf-cloneable-item" />');
 
-        $cloned_content.find('.ulf-data-wrapper').each( function(){
-          var $this = $(this);
-          $this.attr('data-unique-id', $this.attr('data-unique-id').replace(cloned_regex, field_id +'['+ ($parent.index()+1) +']') );
-        });
+        $cloned_item.append($cloned_helper);
+        $cloned_item.append($cloned_title);
+        $cloned_item.append($cloned_content);
 
-        var $cloned = $('<div class="ulf-cloneable-item" />');
-
-        $cloned.append($cloned_helper);
-        $cloned.append($cloned_title);
-        $cloned.append($cloned_content);
-
-        $wrapper.children().eq($parent.index()).after($cloned);
+        $wrapper.children().eq($parent.index()).after($cloned_item);
 
         ULF.helper.name_nested_replace( $wrapper.children('.ulf-cloneable-item'), field_id );
 
@@ -1019,10 +1005,10 @@
 
               var icon = $(this).attr('title');
 
-              ULF.vars.$icon_target.find('i').removeAttr('class').addClass(icon);
-              ULF.vars.$icon_target.find('input').val(icon).trigger('change');
+              ULF.vars.$icon_target.find('.ulf-icon-preview i').removeAttr('class').addClass(icon);
               ULF.vars.$icon_target.find('.ulf-icon-preview').removeClass('hidden');
               ULF.vars.$icon_target.find('.ulf-icon-remove').removeClass('hidden');
+              ULF.vars.$icon_target.find('input').val(icon).trigger('change');
 
               $modal.addClass('hidden');
 
@@ -1192,6 +1178,79 @@
   };
 
   //
+  // Field: link
+  //
+  $.fn.ulf_field_link = function() {
+    return this.each( function() {
+
+      var $this   = $(this),
+          $link   = $this.find('.ulf--link'),
+          $add    = $this.find('.ulf--add'),
+          $edit   = $this.find('.ulf--edit'),
+          $remove = $this.find('.ulf--remove'),
+          $result = $this.find('.ulf--result'),
+          uniqid  = ULF.helper.uid('ulf-wplink-textarea-');
+
+      $add.on('click', function( e ) {
+
+        e.preventDefault();
+
+        window.wpLink.open(uniqid);
+
+      });
+
+      $edit.on('click', function( e ) {
+
+        e.preventDefault();
+
+        $add.trigger('click');
+
+        $('#wp-link-url').val($this.find('.ulf--url').val());
+        $('#wp-link-text').val($this.find('.ulf--text').val());
+        $('#wp-link-target').prop('checked', ($this.find('.ulf--target').val() === '_blank'));
+
+      });
+
+      $remove.on('click', function( e ) {
+
+        e.preventDefault();
+
+        $this.find('.ulf--url').val('').trigger('change');
+        $this.find('.ulf--text').val('');
+        $this.find('.ulf--target').val('');
+
+        $add.removeClass('hidden');
+        $edit.addClass('hidden');
+        $remove.addClass('hidden');
+        $result.parent().addClass('hidden');
+
+      });
+
+      $link.attr('id', uniqid).on('change', function() {
+
+        var atts   = window.wpLink.getAttrs(),
+            href   = atts.href,
+            text   = $('#wp-link-text').val(),
+            target = ( atts.target ) ? atts.target : '';
+
+        $this.find('.ulf--url').val(href).trigger('change');
+        $this.find('.ulf--text').val(text);
+        $this.find('.ulf--target').val(target);
+
+        $result.html('{url:"'+href+'", text:"'+text+'", target:"'+target+'"}');
+
+        $add.addClass('hidden');
+        $edit.removeClass('hidden');
+        $remove.removeClass('hidden');
+        $result.parent().removeClass('hidden');
+
+      });
+
+    });
+
+  };
+
+  //
   // Field: media
   //
   $.fn.ulf_field_media = function() {
@@ -1298,10 +1357,8 @@
           $max      = $repeater.children('.ulf-repeater-max'),
           $min      = $repeater.children('.ulf-repeater-min'),
           field_id  = $wrapper.data('field-id'),
-          unique_id = $wrapper.data('unique-id'),
           max       = parseInt( $wrapper.data('max') ),
           min       = parseInt( $wrapper.data('min') );
-
 
       $wrapper.children('.ulf-repeater-item').children('.ulf-repeater-content').ulf_reload_script();
 
@@ -1333,18 +1390,12 @@
           return;
         }
 
-        var new_field_id = unique_id + field_id + '['+ count +']';
-
         var $cloned_item = $hidden.ulf_clone(true);
 
         $cloned_item.removeClass('ulf-repeater-hidden');
 
         $cloned_item.find(':input[name!="_pseudo"]').each( function() {
-          this.name = new_field_id + this.name.replace( ( this.name.startsWith('_nonce') ? '_nonce' : unique_id ), '');
-        });
-
-        $cloned_item.find('.ulf-data-wrapper').each( function(){
-          $(this).attr('data-unique-id', new_field_id );
+          this.name = this.name.replace( '___', '' ).replace( field_id +'[0]', field_id +'['+ count +']' );
         });
 
         $wrapper.append($cloned_item);
@@ -1371,21 +1422,14 @@
             $parent         = $this.parent().parent().parent(),
             $cloned_content = $parent.children('.ulf-repeater-content').ulf_clone(),
             $cloned_helper  = $parent.children('.ulf-repeater-helper').ulf_clone(true),
-            cloned_regex    = new RegExp('('+ ULF.helper.preg_quote(field_id) +')\\[(\\d+)\\]', 'g');
+            $cloned_item    = $('<div class="ulf-repeater-item" />');
 
-        $cloned_content.find('.ulf-data-wrapper').each( function(){
-          var $this = $(this);
-          $this.attr('data-unique-id', $this.attr('data-unique-id').replace(cloned_regex, field_id +'['+ ($parent.index()+1) +']') );
-        });
+        $cloned_item.append($cloned_content);
+        $cloned_item.append($cloned_helper);
 
-        var $cloned = $('<div class="ulf-repeater-item" />');
+        $wrapper.children().eq($parent.index()).after($cloned_item);
 
-        $cloned.append($cloned_content);
-        $cloned.append($cloned_helper);
-
-        $wrapper.children().eq($parent.index()).after($cloned);
-
-        $cloned.children('.ulf-repeater-content').ulf_reload_script();
+        $cloned_item.children('.ulf-repeater-content').ulf_reload_script();
 
         ULF.helper.name_nested_replace( $wrapper.children('.ulf-repeater-item'), field_id );
 
@@ -1444,9 +1488,9 @@
       $slider.slider({
         range: 'min',
         value: value,
-        min: data.min,
-        max: data.max,
-        step: data.step,
+        min: data.min || 0,
+        max: data.max || 100,
+        step: data.step || 1,
         slide: function( e, o ) {
           $input.val( o.value ).trigger('change');
         }
@@ -1535,19 +1579,19 @@
       var $this   = $(this),
           $input  = $this.find('input'),
           $inited = $this.find('.ui-spinner-button'),
-          $unit   = $input.data('unit');
+          data    = $input.data();
 
       if ( $inited.length ) {
         $inited.remove();
       }
 
       $input.spinner({
-        max: $input.data('max') || 100,
-        min: $input.data('min') || 0,
-        step: $input.data('step') || 1,
+        min: data.min || 0,
+        max: data.max || 100,
+        step: data.step || 1,
         create: function( event, ui ) {
-          if ( $unit.length ) {
-            $this.find('.ui-spinner-up').after('<span class="ui-button-text-only ulf--unit">'+ $unit +'</span>');
+          if ( data.unit ) {
+            $input.after('<span class="ui-button ulf--unit">'+ data.unit +'</span>');
           }
         },
         spin: function (event, ui ) {
@@ -1722,7 +1766,7 @@
 
           var $chosen_selects = $this.find('select');
 
-          $chosen_selects.each( function(){
+          $chosen_selects.each( function() {
 
             var $chosen_select = $(this),
                 $chosen_inited = $chosen_select.parent().find('.chosen-container');
@@ -2137,14 +2181,6 @@
       // Get default editor settings
       var field_editor_settings = $editor.data('editor-settings');
 
-      // Add on change event handle
-      var editor_on_change = function( editor ) {
-        editor.on('change', ULF.helper.debounce( function() {
-          editor.save();
-          $textarea.trigger('change');
-        }, 250 ) );
-      };
-
       // Callback for old wp editor
       var wpEditor = wp.oldEditor ? wp.oldEditor : wp.editor;
 
@@ -2153,6 +2189,14 @@
         wp.editor.removep = wpEditor.removep;
         wp.editor.initialize = wpEditor.initialize;
       }
+
+      // Add on change event handle
+      var editor_on_change = function( editor ) {
+        editor.on('change keyup', function() {
+          var value = ( field_editor_settings.wpautop ) ? editor.getContent() : wp.editor.removep(editor.getContent());
+          $textarea.val(value).trigger('change');
+        });
+      };
 
       // Extend editor selector and on change event handler
       default_editor_settings.tinymce = $.extend( {}, default_editor_settings.tinymce, { selector: '#'+ uid, setup: editor_on_change } );
@@ -2224,7 +2268,7 @@
     });
   };
 
-  $.fn.serializeObject = function(){
+  $.fn.serializeObject = function() {
 
     var obj = {};
 
@@ -2838,6 +2882,11 @@
                 $transparent_text.text(default_text);
                 $transparent_slider.slider('option', 'value', default_color.transparent);
 
+                if ( default_color.value === 'transparent' ) {
+                  $input.removeClass('iris-error');
+                  $container.addClass('ulf--transparent-active');
+                }
+
               });
 
             }
@@ -3116,14 +3165,14 @@
 
       if ( unique_id === undefined ) { return; }
 
-      $input.on('change keyup', ULF.helper.debounce( function() {
+      $input.on('change keyup', function() {
 
         var obj = $this.find(':input').serializeObjectULF();
         var val = ( !$.isEmptyObject(obj) && obj[unique_id] && obj[unique_id][option_id] ) ? obj[unique_id][option_id] : '';
 
         window.wp.customize.control( unique_id +'['+ option_id +']' ).setting.set( val );
 
-      }, 250 ) );
+      });
 
     });
   };
@@ -3247,6 +3296,7 @@
         $this.children('.ulf-field-gallery').ulf_field_gallery();
         $this.children('.ulf-field-group').ulf_field_group();
         $this.children('.ulf-field-icon').ulf_field_icon();
+        $this.children('.ulf-field-link').ulf_field_link();
         $this.children('.ulf-field-media').ulf_field_media();
         $this.children('.ulf-field-map').ulf_field_map();
         $this.children('.ulf-field-repeater').ulf_field_repeater();

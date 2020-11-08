@@ -30,8 +30,8 @@ if ( ! class_exists( 'ULF_Field_upload' ) ) {
 
       echo '<div class="ulf--wrap">';
       echo '<input type="text" name="'. esc_attr( $this->field_name() ) .'" value="'. esc_attr( $this->value ) .'"'. $this->field_attributes() .'/>';
-      echo '<a href="#" class="button button-primary ulf--button" data-library="'. esc_attr( $library ) .'">'. wp_kses_post( $args['button_title'] ) .'</a>';
-      echo '<a href="#" class="button button-secondary ulf-warning-primary ulf--remove'. esc_attr( $hidden ) .'">'. wp_kses_post( $args['remove_title'] ) .'</a>';
+      echo '<a href="#" class="button button-primary ulf--button" data-library="'. esc_attr( $library ) .'">'. $args['button_title'] .'</a>';
+      echo '<a href="#" class="button button-secondary ulf-warning-primary ulf--remove'. esc_attr( $hidden ) .'">'. $args['remove_title'] .'</a>';
       echo '</div>';
 
       echo $this->field_after();
