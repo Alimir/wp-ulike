@@ -5,15 +5,18 @@
 
 .wp-ulike-visual-select{
 
-    .ulf--image{
-        &.ulf--active{
-            > img{
+    .ulf-field-image_select{
+        .ulf--active{
+            img{
                 filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%);
             }
         }
-        > img{
-            height: 40px;
-            padding: 10px;
+        .ulf--image{
+            img {
+                height: 40px;
+                padding: 10px;
+            }
         }
     }
+
 }
