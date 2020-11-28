@@ -38,6 +38,9 @@ The [WP ULike profile builder](https://wpulike.com/blog/wordpress-ultimate-profi
 Elementor is the #1 WordPress page builder. In the new version of the WP ULike PRO plugin, we fully support this page builder and have a variety of widgets & controllers that make life much easier for you.
 Just drag your desired widget and drop it in your Elementor sections, customize as you go and enjoy your like and dislike buttons on your contents.
 
+= Easy WordPress login and registration forms [PRO] =
+Not happy with the default WordPress login and registration pages? In WP ULike Pro, We provide you with more control and flexibility over your WordPress default forms. It redefines what a login and registration plugin be able to do with fast AJAX requests & easy made templates.
+
 = Boost Your SEO by Using Our Schema Markup Generator [PRO] =
 Schema markup is a form of data structure and helps Search Engine to have a better understanding of content. The Process for adding these schemas to your webpage is quite messy and confusing. Because of that, WP ULike Pro adds a Metabox to your posts so you can easily generate your custom rich snippets.
 
@@ -50,6 +53,8 @@ There are many other [features](https://wpulike.com/blog/wp-ulike-pro-vs-free/?u
 * Supports Rest APIs with a Variety of Routes for Use in Apps
 * Advanced Settings Panel With Easy Backup and Flexible Customization Options
 * Professional Schema.org Generator + Start Ratings
+* AJAX Based Login, Registration, Reset Password and Edit Profile forms
+* Easy local avatar upload via front-end and dashboard area
 * Progressive Log Management Panel, with advanced search capabilities
 * Database optimization panel with various options
 * +20 Carefully Designed Premium Templates
@@ -96,11 +101,13 @@ You can also add a new language via [translate.wordpress.org](https://translate.
 
 == Screenshots ==
 
-1. **Get Ratings From Every Section of Your Website**
-2. **Check Votings, BestLikers & Top contents**
-3. **Start to Configure your Voting Plugin in a few Steps**
-4. **Boost Your SEO by Using Our Professional Schema Generator [PRO]**
-5. **Customize Every Aspect of Your Like Buttons with Elementor Widgets [PRO]**
+1. **+20 Carefully Designed Templates**
+2. **Professional Statistics Panel**
+3. **Simple and user-friendly settings to customize your plugin**
+4. **Progressive Log Management Panel**
+5. **Full Support for Elementor Page Builder With +7 Functional Widgets [PRO]**
+6. **Easy WordPress login and registration forms [PRO]**
+7. **Flexible Metabox Options  [PRO]**
 
 == Frequently Asked Questions ==
 
