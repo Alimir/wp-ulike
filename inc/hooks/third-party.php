@@ -744,6 +744,39 @@ if( ! function_exists( 'wp_ulike_purge_wp_optimize_cache' ) ){
 	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_optimize_cache'	, 10, 2 );
 }
 
+// SG optimizer cache plugin
+if( ! function_exists( 'wp_ulike_purge_sg_cachepress_cache' ) ){
+	/**
+   * Purge SG Optimizer cache
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_purge_sg_cachepress_cache( $ID, $type ){
+		// Check functionality existence
+		if( ! function_exists( 'sg_cachepress_purge_cache' ) ){
+			return;
+		}
+
+		if( $type === '_liked' ){
+			// Check post type ID
+			if( get_post_type( $ID ) ){
+				sg_cachepress_purge_cache( get_permalink( $ID ) );
+			} else {
+				global $wp;
+				sg_cachepress_purge_cache( home_url( add_query_arg( array(), $wp->request ) ) );
+			}
+		} elseif( $type === '_commentliked' ){
+			$comment = get_comment( $ID );
+			if( isset( $comment->comment_post_ID ) ){
+				sg_cachepress_purge_cache( get_permalink( $comment->comment_post_ID ) );
+			}
+		}
+	}
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_sg_cachepress_cache'	, 10, 2 );
+}
+
 /*******************************************************
   Other Plugins
 *******************************************************/
