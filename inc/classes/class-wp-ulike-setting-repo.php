@@ -114,6 +114,15 @@ class wp_ulike_setting_repo {
 		}
 	}
 
+	/**
+	 * Check counter zero visibility
+	 *
+	 * @return boolean
+	 */
+	public static function isCounterZeroVisible( $typeName ){
+		return self::getOption( self::getSettingKey( $typeName ) . '|hide_zero_counter', false );
+	}
+
 
 	/**
 	 * Check distinct status by logging method

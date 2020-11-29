@@ -72,6 +72,12 @@
         }
     }
 
+    .count-box {
+        &:empty{
+            display: none;
+        }
+    }
+
 }
 
 .wp_ulike_click_is_disabled {
