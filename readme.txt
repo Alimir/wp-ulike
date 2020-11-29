@@ -2,11 +2,11 @@
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: like, marketing, elementor, favorite, statistics, multisite, rating, voting, dislike, gamification, bookmark, member
+Tags: like, marketing, elementor, user profile, statistics, favorite, rating, button, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 5.5.3
-Stable tag: 4.4.1
+Tested up to: 5.6
+Stable tag: 4.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,7 @@ There are many other [features](https://wpulike.com/blog/wp-ulike-pro-vs-free/?u
 * Notifications System (Custom toast messages after each activity)
 * Applied Shortcodes with Easy Shortcode Generator Button
 * Full Support for Elementor Page Builder With Functional Widgets
+* Support Cache Plugins: WP Rocket, LiteSpeed, W3 Total Cache, Fastest Cache, Super Cache, etc.
 * And much more...
 
 Join the elite web professionals who enjoy **[WP ULike PRO](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
@@ -160,6 +161,17 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.4.2 =
+* Added: "SG Optimiser" plugin cache support.
+* Added: New option to hide counter box when no votes have been cast.
+* Added: User (profile) edit forms. (Using a new shortcode) [PRO]
+* Added: Local avatar upload option inside front-end and dashboard area. [PRO]
+* Added: Export CSV logs button on admin column filters. [PRO]
+* Updated: Meta query functions.
+* Fixed: Purge cache referrer url issue.
+* Fixed: Attachment post type issue on top items.
+* Fixed: Some major issues.
 
 = 4.4.1 =
 * Updated: Options panel framework.
