@@ -172,6 +172,11 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		public function setPrevStatus( $item_id ){
 			$meta_key  = sanitize_key( $this->itemType . '_status' );
+			// delete cache to get fresh data
+			if( wp_ulike_is_cache_exist() ){
+				wp_cache_delete( $this->currentUser, 'wp_ulike_user_meta' );
+			}
+			// Get meta data
 			$user_info = wp_ulike_get_meta_data( $this->currentUser, 'user', $meta_key, true );
 
 			if( empty( $user_info ) || ! isset( $user_info[$item_id] ) ){
@@ -293,6 +298,10 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer
 		 */
 		public function updateCounterMeta( $item_id ){
+			// delete cache to get fresh data
+			if( wp_ulike_is_cache_exist() ){
+				wp_cache_delete( $item_id, sprintf( 'wp_ulike_%s_meta', $this->itemType ) );
+			}
 			// Get current value
 			$value = wp_ulike_get_counter_value( $item_id, $this->itemType, $this->currentStatus, $this->isDistinct() );
 
@@ -334,6 +343,11 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		public function updateUserMetaStatus( $item_id ){
 			// Update object cache (memcached issue)
 			$meta_key  = sanitize_key( $this->itemType . '_status' );
+			// delete cache to get fresh data
+			if( wp_ulike_is_cache_exist() ){
+				wp_cache_delete( $this->currentUser, 'wp_ulike_user_meta' );
+			}
+			// Get meta data
 			$user_info = wp_ulike_get_meta_data( $this->currentUser, 'user', $meta_key, true );
 
 			if( empty( $user_info ) ){
@@ -353,7 +367,11 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return void
 		 */
 		public function updateLikerMetaList( $item_id ){
-			// Update likers list
+			// delete cache to get fresh data
+			if( wp_ulike_is_cache_exist() ){
+				wp_cache_delete( $item_id, sprintf( 'wp_ulike_%s_meta', $this->itemType ) );
+			}
+			// Get meta data
 			$get_likers = wp_ulike_get_meta_data( $item_id, $this->itemType, 'likers_list', true );
 			if( ! empty( $get_likers ) ){
 				$get_user   = get_userdata( $this->currentUser );
