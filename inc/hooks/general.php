@@ -242,8 +242,12 @@ function wp_ulike_hide_couter_box_ajax_when_zero( $counterValue, $id, $slug, $st
 function wp_ulike_hide_couter_box_when_zero( $args ){
 	// Check zero function
 	if( wp_ulike_setting_repo::isCounterZeroVisible( $args['slug'] ) ){
-		$args['total_likes']    =  empty( $args['total_likes'] ) ? '' : $args['total_likes'];
-		$args['total_dislikes']    =  empty( $args['total_dislikes'] ) ? '' : $args['total_dislikes'];
+		if( isset( $args['total_likes'] ) ){
+			$args['total_likes']    = empty( $args['total_likes'] ) ? '' : $args['total_likes'];
+		}
+		if( isset( $args['total_dislikes'] ) ){
+			$args['total_dislikes'] = empty( $args['total_dislikes'] ) ? '' : $args['total_dislikes'];
+		}
 	}
 
 	return $args;
@@ -276,9 +280,9 @@ function wp_ulike_hide_count_box_template( $string, $counter, $slug ) {
  * @return void
  */
 function wp_ulike_init_plugins_loaded_hook(){
-	add_filter('wp_ulike_count_box_template', 'wp_ulike_hide_count_box_template', 10, 3);
-    add_filter( 'wp_ulike_add_templates_args', 'wp_ulike_hide_couter_box_when_zero', 10, 1);
     add_filter( 'wp_ulike_ajax_counter_value', 'wp_ulike_hide_couter_box_ajax_when_zero', 5, 15 );
+    add_filter( 'wp_ulike_add_templates_args', 'wp_ulike_hide_couter_box_when_zero', 10, 1);
+	add_filter('wp_ulike_count_box_template', 'wp_ulike_hide_count_box_template', 10, 3);
 }
 add_action( 'plugins_loaded', 'wp_ulike_init_plugins_loaded_hook' );
 // @if DEV
@@ -398,8 +402,6 @@ function wp_ulike_pro_activity_comment_filter( $content, $wp_ulike_query, $query
 }
 add_filter( 'wp_ulike_pro_content_template_for_post_type', 'wp_ulike_pro_activity_comment_filter', 3, 20 );*/
 
-
-
 // function wp_ulike_pro_custom_stop_listener(){
 // 	date_default_timezone_set('Europe/Berlin');
 // 	$current_time = date("h:i a");
@@ -518,8 +520,6 @@ add_shortcode ('wpulike_custom_activity_shortcode', 'wpulike_custom_activity_sho
 
 //     return $info;
 // }
-
-
 
 // function wp_ulike_pro_add_custom_button_to_widget( $data, $widget ){
 // 	add_filter( 'the_excerpt', function( $content ){
