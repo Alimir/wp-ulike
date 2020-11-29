@@ -2,11 +2,11 @@
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: like, marketing, elementor, favorite, statistics, multisite, rating, voting, dislike, gamification, bookmark, member
+Tags: like, marketing, elementor, user profile, statistics, favorite, rating, button, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 5.5.3
-Stable tag: 4.4.1
+Tested up to: 5.6
+Stable tag: 4.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ The [WP ULike profile builder](https://wpulike.com/blog/wordpress-ultimate-profi
 Elementor is the #1 WordPress page builder. In the new version of the WP ULike PRO plugin, we fully support this page builder and have a variety of widgets & controllers that make life much easier for you.
 Just drag your desired widget and drop it in your Elementor sections, customize as you go and enjoy your like and dislike buttons on your contents.
 
+= Easy WordPress login and registration forms [PRO] =
+Not happy with the default WordPress login and registration pages? In WP ULike Pro, We provide you with more control and flexibility over your WordPress default forms. It redefines what a login and registration plugin be able to do with fast AJAX requests & easy made templates.
+
 = Boost Your SEO by Using Our Schema Markup Generator [PRO] =
 Schema markup is a form of data structure and helps Search Engine to have a better understanding of content. The Process for adding these schemas to your webpage is quite messy and confusing. Because of that, WP ULike Pro adds a Metabox to your posts so you can easily generate your custom rich snippets.
 
@@ -47,20 +50,24 @@ So let's talk [PROfessional](https://wpulike.com/pricing/?utm_source=wp-repo&utm
 There are many other [features](https://wpulike.com/blog/wp-ulike-pro-vs-free/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) to help you build better websites:
 
 * Like, Dislike and Subtotal Votings support
+* Simple and effective options to customize every aspect of plugin styles
 * Supports Rest APIs with a Variety of Routes for Use in Apps
 * Advanced Settings Panel With Easy Backup and Flexible Customization Options
 * Professional Schema.org Generator + Start Ratings
+* AJAX Based Login, Registration, Reset Password and Edit Profile forms
+* Easy local avatar upload inside front-end and dashboard area
 * Progressive Log Management Panel, with advanced search capabilities
 * Database optimization panel with various options
 * +20 Carefully Designed Premium Templates
 * Anonymize IP option for GDPR compliance
 * Flexible Metabox Options with More Customization Settings For Each Post
-* Full myCred (Points, Rewards, Gamification, Ranks, Badges & Loyalty Plugin) Support.
+* Full myCred (Points, Rewards, Gamification, Ranks, Badges & Loyalty Plugin) Support
 * Professional Statistics Panel With Date Range & Status Controllers
-* Notifications System. (Custom toast messages after each activity)
+* Notifications System (Custom toast messages after each activity)
 * Applied Shortcodes with Easy Shortcode Generator Button
 * Full Support for Elementor Page Builder With Functional Widgets
-* And much more.
+* Support Cache Plugins: WP Rocket, LiteSpeed, W3 Total Cache, Fastest Cache, Super Cache, etc.
+* And much more...
 
 Join the elite web professionals who enjoy **[WP ULike PRO](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
 
@@ -96,11 +103,14 @@ You can also add a new language via [translate.wordpress.org](https://translate.
 
 == Screenshots ==
 
-1. **Get Ratings From Every Section of Your Website**
-2. **Check Votings, BestLikers & Top contents**
-3. **Start to Configure your Voting Plugin in a few Steps**
-4. **Boost Your SEO by Using Our Professional Schema Generator [PRO]**
-5. **Customize Every Aspect of Your Like Buttons with Elementor Widgets [PRO]**
+1. **Carefully designed templates**
+2. **Professional statistics panel**
+3. **Simple and user-friendly settings panel**
+4. **Progressive log management panel**
+5. **Complete customizer options**
+6. **Full support for elementor with +7 functional widgets [PRO]**
+7. **Easy wordPress login and registration forms [PRO]**
+8. **Flexible metabox panel [PRO]**
 
 == Frequently Asked Questions ==
 
@@ -151,6 +161,17 @@ define( 'WP_MEMORY_LIMIT', '256M' );
 </code>
 
 == Changelog ==
+
+= 4.4.2 =
+* Added: "SG Optimiser" plugin cache support.
+* Added: New option to hide counter box when no votes have been cast.
+* Added: User (profile) edit forms. (Using a new shortcode) [PRO]
+* Added: Local avatar upload option inside front-end and dashboard area. [PRO]
+* Added: Export CSV logs button on admin column filters. [PRO]
+* Updated: Meta query functions.
+* Fixed: Purge cache referrer url issue.
+* Fixed: Attachment post type issue on top items.
+* Fixed: Some major issues.
 
 = 4.4.1 =
 * Updated: Options panel framework.

@@ -62,7 +62,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				} elseif( ! empty( $parsed_args['rel_type'] ) ) {
 					$post_type = sprintf( " AND r.post_type = '%s'", $parsed_args['rel_type'] );
 				}
-				$related_condition = 'AND r.post_status = \'publish\'' . $post_type;
+				$related_condition = 'AND r.post_status IN (\'publish\', \'inherit\', \'private\')' . $post_type;
 				break;
 		}
 
@@ -221,7 +221,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 				} elseif( ! empty( $parsed_args['rel_type'] ) ) {
 					$post_type = sprintf( " AND r.post_type = '%s'", $parsed_args['rel_type'] );
 				}
-				$related_condition = 'AND r.post_status = \'publish\'' . $post_type;
+				$related_condition = 'AND r.post_status IN (\'publish\', \'inherit\', \'private\')' . $post_type;
 				break;
 		}
 

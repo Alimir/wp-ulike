@@ -12,3 +12,5 @@ _devDependencies/
 deploy\.sh
 
 .vscode/
+
+dist/

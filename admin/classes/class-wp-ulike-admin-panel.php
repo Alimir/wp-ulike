@@ -668,6 +668,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'logged_in_users' => __('Only Logged In Users', WP_ULIKE_SLUG)
                     )
                 ),
+                'hide_zero_counter' => array(
+                    'id'         => 'hide_zero_counter',
+                    'type'       => 'switcher',
+                    'title'      => __('Hide Zero Counter Box', WP_ULIKE_SLUG),
+                    'dependency' => array( 'counter_display_condition', '!=', 'hidden' )
+                ),
                 'logging_method' => array(
                     'id'          => 'logging_method',
                     'type'        => 'select',

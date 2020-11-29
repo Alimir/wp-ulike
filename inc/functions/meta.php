@@ -37,13 +37,18 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 		}
 
 		$table     = $wpdb->prefix . 'ulike_meta';
-		$column    = sanitize_key( 'item_id' );
+		$column    = 'item_id';
 		$id_column = 'meta_id';
 
 		// expected_slashed ($meta_key)
 		$meta_group = wp_unslash( $meta_group );
 		$meta_key   = wp_unslash( $meta_key );
 		$meta_value = wp_unslash( $meta_value );
+
+		$check = apply_filters( "wp_ulike_add_{$meta_group}_metadata", null, $object_id, $meta_key, $meta_value, $unique  );
+		if ( null !== $check ) {
+			return $check;
+		}
 
 		if ( $unique && $wpdb->get_var(
 			$wpdb->prepare(
@@ -58,6 +63,8 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 
 		$_meta_value = $meta_value;
 		$meta_value  = maybe_serialize( $meta_value );
+
+		do_action( "wp_ulike_add_{$meta_group}_meta", $object_id, $meta_key, $_meta_value );
 
 		$result = $wpdb->insert(
 			$table,
@@ -76,6 +83,8 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 		$mid = (int) $wpdb->insert_id;
 
 		wp_cache_delete( $object_id, sprintf( 'wp_ulike_%s_meta', $meta_group ) );
+
+		do_action( "wp_ulike_added_{$meta_group}_meta", $mid, $object_id, $meta_key, $_meta_value );
 
 		return $mid;
 	}
@@ -110,7 +119,7 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 		}
 
 		$table     = $wpdb->prefix . 'ulike_meta';
-		$column    = sanitize_key( 'item_id' );
+		$column    = 'item_id';
 		$id_column = 'meta_id';
 
 		// expected_slashed ($meta_key)
@@ -121,10 +130,15 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 		$passed_value   = $meta_value;
 		$meta_value     = wp_unslash( $meta_value );
 
+		$check = apply_filters( "wp_ulike_update_{$meta_group}_metadata", null, $object_id, $meta_key, $meta_value, $prev_value );
+		if ( null !== $check ) {
+			return (bool) $check;
+		}
+
 		// Compare existing value to new value if no prev value given and the key exists only once.
 		if ( empty( $prev_value ) ) {
-			$old_value = wp_ulike_get_meta_data( $object_id, $meta_group, $meta_key );
-			if ( count( $old_value ) == 1 ) {
+			$old_value = wp_ulike_get_meta_data_raw( $object_id, $meta_group, $meta_key );
+			if ( is_countable( $old_value ) && count( $old_value ) == 1 ) {
 				if ( $old_value[0] === $meta_value ) {
 					return false;
 				}
@@ -143,12 +157,16 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 		$where = array(
 			$column      => $object_id,
 			'meta_group' => $meta_group,
-			'meta_key'   => $meta_key,
+			'meta_key'   => $meta_key
 		);
 
 		if ( ! empty( $prev_value ) ) {
 			$prev_value          = maybe_serialize( $prev_value );
 			$where['meta_value'] = $prev_value;
+		}
+
+		foreach ( $meta_ids as $meta_id ) {
+			do_action( "wp_ulike_update_{$meta_group}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 		}
 
 		$result = $wpdb->update( $table, $data, $where );
@@ -157,6 +175,10 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 		}
 
 		wp_cache_delete( $object_id, sprintf( 'wp_ulike_%s_meta', $meta_group ) );
+
+		foreach ( $meta_ids as $meta_id ) {
+			do_action( "wp_ulike_updated_{$meta_group}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
+		}
 
 		return true;
 	}
@@ -174,12 +196,12 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 	function wp_ulike_update_meta_cache( $object_ids, $meta_group ) {
 		global $wpdb;
 
-		if ( ! $object_ids ) {
+		if ( ! $object_ids || ! $meta_group ) {
 			return false;
 		}
 
 		$table     = $wpdb->prefix . 'ulike_meta';
-		$column    = sanitize_key( 'item_id' );
+		$column    = 'item_id';
 
 		if ( ! is_array( $object_ids ) ) {
 			$object_ids = preg_replace( '|[^0-9,]|', '', $object_ids );
@@ -188,24 +210,30 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 
 		$object_ids = array_map( 'intval', $object_ids );
 
-		$cache_key = sprintf( 'wp_ulike_%s_meta', $meta_group );
-		$ids       = array();
-		$cache     = array();
-		foreach ( $object_ids as $id ) {
-			$cached_object = wp_cache_get( $id, $cache_key );
+		$check = apply_filters( "wp_ulike_update_{$meta_group}_metadata_cache", null, $object_ids );
+		if ( null !== $check ) {
+			return (bool) $check;
+		}
+
+		$cache_key      = sprintf( 'wp_ulike_%s_meta', $meta_group );
+		$non_cached_ids = array();
+		$cache          = array();
+		$cache_values   = wp_cache_get_multiple( $object_ids, $cache_key );
+
+		foreach ( $cache_values as $id => $cached_object ) {
 			if ( false === $cached_object ) {
-				$ids[] = $id;
+				$non_cached_ids[] = $id;
 			} else {
 				$cache[ $id ] = $cached_object;
 			}
 		}
 
-		if ( empty( $ids ) ) {
+		if ( empty( $non_cached_ids ) ) {
 			return $cache;
 		}
 
 		// Get meta info.
-		$id_list   = join( ',', $ids );
+		$id_list   = join( ',', $non_cached_ids );
 		$id_column = 'meta_id';
 		$meta_list = $wpdb->get_results( "SELECT $column, meta_group, meta_key, meta_value FROM $table WHERE $column IN ($id_list) AND meta_group = '$meta_group' ORDER BY $id_column ASC", ARRAY_A );
 
@@ -228,7 +256,7 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 			}
 		}
 
-		foreach ( $ids as $id ) {
+		foreach ( $non_cached_ids as $id ) {
 			if ( ! isset( $cache[ $id ] ) ) {
 				$cache[ $id ] = array();
 			}
@@ -239,20 +267,21 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 	}
 }
 
-if( ! function_exists( 'wp_ulike_get_meta_data' ) ){
+if( ! function_exists( 'wp_ulike_get_meta_data_raw' ) ){
 	/**
-	 * Retrieves metadata for the specified object.
+	 * Retrieves raw metadata value for the specified object.
 	 *
-	 *
+	 * @param string $meta_type Type of object metadata is for. Accepts 'post', 'comment', 'term', 'user',
+	 *                          or any other object type with an associated meta table.
 	 * @param int    $object_id ID of the object metadata is for.
-	 * @param string $meta_group  Metadata group
 	 * @param string $meta_key  Optional. Metadata key. If not specified, retrieve all metadata for
 	 *                          the specified object. Default empty.
 	 * @param bool   $single    Optional. If true, return only the first value of the specified meta_key.
 	 *                          This parameter has no effect if meta_key is not specified. Default false.
-	 * @return mixed Single metadata value, or array of values
+	 * @return mixed Single metadata value, or array of values. Null if the value does not exist.
+	 *               False if there's a problem with the parameters passed to the function.
 	 */
-	function wp_ulike_get_meta_data( $object_id, $meta_group, $meta_key = '', $single = false ) {
+	function wp_ulike_get_meta_data_raw( $object_id, $meta_group, $meta_key = '', $single = false ) {
 		if ( ! is_numeric( $object_id ) ) {
 			return false;
 		}
@@ -290,5 +319,69 @@ if( ! function_exists( 'wp_ulike_get_meta_data' ) ){
 		} else {
 			return array();
 		}
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_meta_data' ) ){
+	/**
+	 * Retrieves the value of a metadata field for the specified object type and ID.
+	 *
+	 * If the meta field exists, a single value is returned if `$single` is true,
+	 * or an array of values if it's false.
+	 *
+	 * If the meta field does not exist, the result depends on get_metadata_default().
+	 * By default, an empty string is returned if `$single` is true, or an empty array
+	 * if it's false.
+	 *
+	 *
+	 * @param string $meta_type Type of object metadata is for. Accepts 'post', 'comment', 'term', 'user',
+	 *                          or any other object type with an associated meta table.
+	 * @param int    $object_id ID of the object metadata is for.
+	 * @param string $meta_key  Optional. Metadata key. If not specified, retrieve all metadata for
+	 *                          the specified object. Default empty.
+	 * @param bool   $single    Optional. If true, return only the first value of the specified meta_key.
+	 *                          This parameter has no effect if meta_key is not specified. Default false.
+	 * @return mixed Single metadata value, or array of values.
+	 *               False if there's a problem with the parameters passed to the function.
+	 */
+	function wp_ulike_get_meta_data( $object_id, $meta_group, $meta_key = '', $single = false ) {
+		$value = wp_ulike_get_meta_data_raw( $object_id, $meta_group, $meta_key, $single );
+		if ( ! is_null( $value ) ) {
+			return $value;
+		}
+
+		return wp_ulike_get_meta_data_default( $object_id, $meta_group, $meta_key, $single );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_meta_data_default' ) ){
+	/**
+	 * Retrieves default metadata value for the specified meta key and object.
+	 *
+	 * By default, an empty string is returned if `$single` is true, or an empty array
+	 * if it's false.
+	 *
+	 * @param string $meta_type Type of object metadata is for. Accepts 'post', 'comment', 'term', 'user',
+	 *                          or any other object type with an associated meta table.
+	 * @param int    $object_id ID of the object metadata is for.
+	 * @param string $meta_key  Metadata key.
+	 * @param bool   $single    Optional. If true, return only the first value of the specified meta_key.
+	 *                          This parameter has no effect if meta_key is not specified. Default false.
+	 * @return mixed Single metadata value, or array of values.
+	 */
+	function wp_ulike_get_meta_data_default( $object_id, $meta_group, $meta_key, $single = false ) {
+		if ( $single ) {
+			$value = '';
+		} else {
+			$value = array();
+		}
+
+		$value = apply_filters( "wp_ulike_default_{$meta_group}_metadata", $value, $object_id, $meta_key, $single, $meta_group );
+
+		if ( ! $single && ! wp_is_numeric_array( $value ) ) {
+			$value = array( $value );
+		}
+
+		return $value;
 	}
 }

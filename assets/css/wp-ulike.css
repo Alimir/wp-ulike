@@ -59,6 +59,9 @@
 .wpulike.wpulike-hide-counter .count-box {
   display: none;
 }
+.wpulike .count-box:empty {
+  display: none;
+}
 
 .wp_ulike_click_is_disabled {
   pointer-events: none;

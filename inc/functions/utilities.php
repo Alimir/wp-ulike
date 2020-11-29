@@ -189,11 +189,10 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 			$user_ip    = wp_ulike_get_user_ip();
 			$binary_val = '';
 		    foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
-		        $binary_val .= decbin( $byte );
+		        $binary_val .= str_pad( decbin( $byte ), 8, "0", STR_PAD_LEFT );
 		    }
 		    return base_convert( ltrim( $binary_val, '0' ), 2, 10 );
 		}
-
 	}
 }
 

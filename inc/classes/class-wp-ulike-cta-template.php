@@ -98,7 +98,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 			$button_class_name .= strtolower( ' wp_' . $this->args['slug'] . '_btn_' . $this->args['id'] );
 
 			$total_likes   = wp_ulike_get_counter_value( $this->args['id'], $this->args['slug'], 'like', $this->isDistinct() );
-			$formatted_val = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $total_likes ) .'</span>' , $total_likes );
+			$formatted_val = apply_filters( 'wp_ulike_count_box_template', '<span class="count-box">'. wp_ulike_format_number( $total_likes ) .'</span>' , $total_likes, $this->args['slug'] );
 			$this->args['is_distinct'] = $this->isDistinct();
 
 			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(

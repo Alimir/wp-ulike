@@ -108,6 +108,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 
 		$args = array(
 			'post_type'      => $post_type,
+			'post_status'    => array('publish', 'inherit'),
 			'posts_per_page' => $numberposts
 		);
 
