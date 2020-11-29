@@ -50,22 +50,23 @@ So let's talk [PROfessional](https://wpulike.com/pricing/?utm_source=wp-repo&utm
 There are many other [features](https://wpulike.com/blog/wp-ulike-pro-vs-free/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) to help you build better websites:
 
 * Like, Dislike and Subtotal Votings support
+* Simple and effective options to customize every aspect of plugin styles
 * Supports Rest APIs with a Variety of Routes for Use in Apps
 * Advanced Settings Panel With Easy Backup and Flexible Customization Options
 * Professional Schema.org Generator + Start Ratings
 * AJAX Based Login, Registration, Reset Password and Edit Profile forms
-* Easy local avatar upload via front-end and dashboard area
+* Easy local avatar upload inside front-end and dashboard area
 * Progressive Log Management Panel, with advanced search capabilities
 * Database optimization panel with various options
 * +20 Carefully Designed Premium Templates
 * Anonymize IP option for GDPR compliance
 * Flexible Metabox Options with More Customization Settings For Each Post
-* Full myCred (Points, Rewards, Gamification, Ranks, Badges & Loyalty Plugin) Support.
+* Full myCred (Points, Rewards, Gamification, Ranks, Badges & Loyalty Plugin) Support
 * Professional Statistics Panel With Date Range & Status Controllers
-* Notifications System. (Custom toast messages after each activity)
+* Notifications System (Custom toast messages after each activity)
 * Applied Shortcodes with Easy Shortcode Generator Button
 * Full Support for Elementor Page Builder With Functional Widgets
-* And much more.
+* And much more...
 
 Join the elite web professionals who enjoy **[WP ULike PRO](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
 
@@ -101,13 +102,14 @@ You can also add a new language via [translate.wordpress.org](https://translate.
 
 == Screenshots ==
 
-1. **+20 Carefully Designed Templates**
-2. **Professional Statistics Panel**
-3. **Simple and user-friendly settings to customize your plugin**
-4. **Progressive Log Management Panel**
-5. **Full Support for Elementor Page Builder With +7 Functional Widgets [PRO]**
-6. **Easy WordPress login and registration forms [PRO]**
-7. **Flexible Metabox Options  [PRO]**
+1. **Carefully designed templates**
+2. **Professional statistics panel**
+3. **Simple and user-friendly settings panel**
+4. **Progressive log management panel**
+5. **Complete customizer options**
+6. **Full support for elementor with +7 functional widgets [PRO]**
+7. **Easy wordPress login and registration forms [PRO]**
+8. **Flexible metabox panel [PRO]**
 
 == Frequently Asked Questions ==
 
