@@ -233,7 +233,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return boolean
 		 */
 		public function isDistinct(){
-			return wp_ulike_setting_repo::isDistinct( $this->itemMethod );
+			return wp_ulike_setting_repo::isDistinct( $this->itemType );
 		}
 
 		/**

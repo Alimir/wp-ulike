@@ -218,13 +218,25 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 		$cache_key      = sprintf( 'wp_ulike_%s_meta', $meta_group );
 		$non_cached_ids = array();
 		$cache          = array();
-		$cache_values   = wp_cache_get_multiple( $object_ids, $cache_key );
 
-		foreach ( $cache_values as $id => $cached_object ) {
-			if ( false === $cached_object ) {
-				$non_cached_ids[] = $id;
-			} else {
-				$cache[ $id ] = $cached_object;
+		// wp_cache_get_multiple function is exist only on wp +5.5
+		if( function_exists( 'wp_cache_get_multiple' ) ){
+			$cache_values   = wp_cache_get_multiple( $object_ids, $cache_key );
+			foreach ( $cache_values as $id => $cached_object ) {
+				if ( false === $cached_object ) {
+					$non_cached_ids[] = $id;
+				} else {
+					$cache[ $id ] = $cached_object;
+				}
+			}
+		} else {
+			foreach ( $object_ids as $id ) {
+				$cached_object = wp_cache_get( $id, $cache_key );
+				if ( false === $cached_object ) {
+					$non_cached_ids[] = $id;
+				} else {
+					$cache[ $id ] = $cached_object;
+				}
 			}
 		}
 
