@@ -57,6 +57,7 @@
     "grunt-rsync": ">=0.6.2",
     "grunt-shell": ">=1.1.1",
     "grunt-sync": ">=0.0.8",
+    "grunt-terser": "^1.0.0",
     "grunt-wp-deploy": "^2.0.0",
     "grunt-wp-i18n": ">=1.0.0",
     "http-server": "^0.8.5",
