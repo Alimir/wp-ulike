@@ -305,6 +305,16 @@ module.exports = function(grunt) {
             }
         },
 
+        // JS minification
+        terser: {
+            options: {},
+            main: {
+                files: {
+                    'assets/js/wp-ulike.min.js': ['<%= concat.frontJsScripts.dest %>'],
+                }
+            }
+        },
+
         preprocess : {
             options: {
                 context : {
@@ -404,7 +414,7 @@ module.exports = function(grunt) {
         watch: {
             concat_front_js_scripts: {
                 files: ['assets/js/src/*.js'],
-                tasks: ['concat:frontJsScripts', 'uglify:frontJsScripts']
+                tasks: ['concat:frontJsScripts', 'terser']
             },
 
             concat_admin_js_plugins: {
@@ -499,12 +509,12 @@ module.exports = function(grunt) {
     grunt.registerTask( 'beta'          , ['clean:build', 'compass:front_build', 'compass:back_build', 'cssmin', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
 
     // build the final lite version in /build folder and pack the product
-    grunt.registerTask( 'build'         , ['concat', 'uglify', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
+    grunt.registerTask( 'build'         , ['concat', 'terser', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
 
     grunt.registerTask( 'release'       , ['build', 'wp_deploy:deploy'] );
 
     // register task
-    grunt.registerTask( 'default'       , ['concat','cssmin', 'uglify']);
+    grunt.registerTask( 'default'       , ['concat','cssmin', 'terser']);
 
     grunt.registerTask( 'dev', ['concurrent'] );
 
