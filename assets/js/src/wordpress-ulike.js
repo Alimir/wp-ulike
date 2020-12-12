@@ -1,4 +1,3 @@
-/* 'WordpressUlike' plugin : https://github.com/alimir/wp-ulike */
 (function ($, window, document, undefined) {
   "use strict";
 
@@ -136,8 +135,8 @@
             this._updateMarkup(response);
             // Append html data
             this._appendChild();
-          } else {
-            this._sendNotification("error", response.data);
+          } else if (response.data.hasToast) {
+            this._sendNotification("error", response.data.message);
           }
           // Re-enable button
           this.buttonElement.prop("disabled", false);
@@ -195,7 +194,9 @@
         this._updateButton(response.data.btnText, response.data.status);
       }
       // Display Notifications
-      this._sendNotification(response.data.messageType, response.data.message);
+      if (response.data.hasToast) {
+        this._sendNotification(response.data.messageType, response.data.message);
+      }
     },
 
     _updateGeneralClassNames: function (status) {
@@ -407,10 +408,6 @@
      * Send notification by 'WordpressUlikeNotifications' plugin
      */
     _sendNotification: function (messageType, messageText) {
-      //Check notifications active mode
-      if (wp_ulike_params.notifications !== "1") {
-        return;
-      }
       // Display Notification
       $(document.body).WordpressUlikeNotifications({
         messageType: messageType,

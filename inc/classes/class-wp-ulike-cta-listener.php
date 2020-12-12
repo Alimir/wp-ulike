@@ -103,6 +103,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				}
 			}
 
+			// Display likers
 			if( $this->data['displayLikers'] && $this->user ){
 				$likers_selectors = wp_ulike_is_true( $this->data['disablePophover'] ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
 				$this->response['likers'] = array(
@@ -116,13 +117,19 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				);
 			}
 
+			// Display toasts
+			$this->response['hasToast'] = wp_ulike_setting_repo::hasToast( $this->settings_type->getType() );
+
 			$response = apply_filters( 'wp_ulike_ajax_respond', $this->response, $this->data['id'], $this->response['status'], $process->getAjaxProcessAtts() );
 
 			$this->afterUpdateAction( $process->getActionAtts() );
 
 			$this->response( $response );
 		} catch ( \Exception $e ){
-			return $this->sendError($e->getMessage());
+			return $this->sendError( array(
+				'message'  => $e->getMessage(),
+				'hasToast' => wp_ulike_setting_repo::hasToast( $this->settings_type->getType() )
+			) );
 		}
 	}
 

@@ -115,6 +115,17 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Check toast display condition
+	 *
+	 * @return boolean
+	 */
+	public static function hasToast( $typeName ){
+		$enable_toast = self::getOption( 'enable_toast_notice', true );
+		$filter_toast = self::getOption( 'filter_toast_types', array() );
+		return $enable_toast && ! in_array( $typeName, $filter_toast );
+	}
+
+	/**
 	 * Check counter zero visibility
 	 *
 	 * @return boolean

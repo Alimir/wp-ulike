@@ -117,6 +117,21 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'    => __('Custom toast messages after each activity', WP_ULIKE_SLUG)
                     ),
                     array(
+                        'id'          => 'filter_toast_types',
+                        'type'        => 'select',
+                        'title'       => __( 'Disable Toast Types',WP_ULIKE_SLUG ),
+                        'desc'        => __('With this option, you can disable toasts messages on content types.', WP_ULIKE_SLUG),
+                        'chosen'      => true,
+                        'multiple'    => true,
+                        'options'     => array(
+                            'post'     => __('Posts', WP_ULIKE_SLUG),
+                            'comment'  => __('Comments', WP_ULIKE_SLUG),
+                            'activity' => __('Activities', WP_ULIKE_SLUG),
+                            'topic'    => __('Topics', WP_ULIKE_SLUG)
+                        ),
+                        'dependency'=> array( 'enable_toast_notice', '==', 'true' ),
+                    ),
+                    array(
                         'id'    => 'enable_anonymise_ip',
                         'type'  => 'switcher',
                         'title' => __('Enable Anonymize IP', WP_ULIKE_SLUG),
