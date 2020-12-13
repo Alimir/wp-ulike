@@ -720,13 +720,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'login_template' => array(
                     'id'       => 'login_template',
                     'type'     => 'code_editor',
+                    'desc'     => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%CURRENT_PAGE_URL%</code>',
                     'settings' => array(
                         'theme' => 'shadowfox',
                         'mode'  => 'htmlmixed',
                     ),
                     'default'  => sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>',
                         __('You need to login in order to like this post: ',WP_ULIKE_SLUG),
-                        wp_login_url( get_permalink() ),
+                        wp_login_url(),
                         __('click here',WP_ULIKE_SLUG)
                     ),
                     'title'    => __('Custom HTML Template', WP_ULIKE_SLUG),
