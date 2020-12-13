@@ -319,15 +319,24 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 		$get_likers = wp_ulike_get_meta_data( $item_ID, $item_type, 'likers_list', true );
 
 		if( empty( $get_likers ) ){
-			// Get results
-			$get_likers = $wpdb->get_var( "
-				SELECT GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ',')
-				FROM {$wpdb->prefix}{$table_name}
-				INNER JOIN {$wpdb->users}
-				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table_name}.user_id )
-				WHERE {$wpdb->prefix}{$table_name}.status IN ('like', 'dislike')
-				AND {$column_name} = {$item_ID}"
-			);
+			// Cache data
+			$cache_key  = sanitize_key( sprintf( '%s_%s_%s_likers_list', $table_name, $column_name, $item_ID ) );
+			$get_likers = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+			if( false === $get_likers ){
+				// Get results
+				$get_likers = $wpdb->get_var( "
+					SELECT GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ',')
+					FROM {$wpdb->prefix}{$table_name}
+					INNER JOIN {$wpdb->users}
+					ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table_name}.user_id )
+					WHERE {$wpdb->prefix}{$table_name}.status IN ('like', 'dislike')
+					AND {$column_name} = {$item_ID}"
+				);
+
+				wp_cache_set( $cache_key, $get_likers, WP_ULIKE_SLUG, 300 );
+			}
+
 			if( ! empty( $get_likers) ){
 				$get_likers = explode( ',', $get_likers );
 				wp_ulike_update_meta_data( $item_ID, $item_type, 'likers_list', $get_likers );
