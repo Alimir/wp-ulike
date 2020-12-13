@@ -58,8 +58,9 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			) );
 
 			if( wp_ulike_setting_repo::requireLogin( $this->settings_type->getType() ) && ! $this->user ){
-				$this->response['message'] = wp_ulike_setting_repo::getLoginNotice();
-				$this->response['status']  = 4;
+				$this->response['message']      = wp_ulike_setting_repo::getLoginNotice();
+				$this->response['status']       = 4;
+				$this->response['requireLogin'] = true;
 			} else {
 				if( ! wp_ulike_entities_process::hasPermission( array(
 					'method' => wp_ulike_setting_repo::getMethod( $this->settings_type->getType() ) ,
