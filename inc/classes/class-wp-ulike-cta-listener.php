@@ -118,8 +118,13 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				);
 			}
 
-			// Display toasts
+			// Display toasts condition
 			$this->response['hasToast'] = wp_ulike_setting_repo::hasToast( $this->settings_type->getType() );
+
+			// Hide data when counter is not visible
+			if( ! wp_ulike_setting_repo::isCounterBoxVisible( $this->settings_type->getType() ) ){
+				$this->response['data'] = 0;
+			}
 
 			$response = apply_filters( 'wp_ulike_ajax_respond', $this->response, $this->data['id'], $this->response['status'], $process->getAjaxProcessAtts() );
 
