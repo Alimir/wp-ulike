@@ -231,7 +231,7 @@ function wp_ulike_hide_couter_box_ajax_when_zero( $counterValue, $id, $slug, $st
 	}
 
 	return $counterValue;
- }
+}
 
 /**
  * Hide counter args

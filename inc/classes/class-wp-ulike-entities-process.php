@@ -302,17 +302,22 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			if( wp_ulike_is_cache_exist() ){
 				wp_cache_delete( $item_id, sprintf( 'wp_ulike_%s_meta', $this->itemType ) );
 			}
-			// Get current value
-			$value = wp_ulike_get_counter_value( $item_id, $this->itemType, $this->currentStatus, $this->isDistinct() );
 
 			// Remove 'un' prefix from status.
 			$status  = ltrim( $this->currentStatus, 'un');
-
-			// Update meta value
-			if( ! empty( $value ) || is_numeric( $value ) ){
-				$value  = strpos( $this->currentStatus, 'un') === false ? $value + 1 : $value - 1;
+			// Get current value
+			$pre_val = wp_ulike_meta_counter_value( $item_id, $this->itemType, $status, $this->isDistinct() );
+			$new_val = is_null( $pre_val ) ? 0 : $pre_val;
+			// Update new val
+			if( strpos( $this->currentStatus, 'un') === false  ){
+				++$new_val;
+			} else {
+				--$new_val;
 			}
-			wp_ulike_update_meta_counter_value( $item_id, max( $value, 0 ), $this->itemType, $status, $this->isDistinct() );
+			// Abvoid neg values
+			$new_val = max( $new_val, 0 );
+			// Update meta
+			wp_ulike_update_meta_counter_value( $item_id, $new_val, $this->itemType, $status, $this->isDistinct() );
 
 			// Decrease reverse meta value
 			if( $this->isDistinct() && $this->prevStatus ){
@@ -324,14 +329,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
 					// Get reverse counter value
 					$reverse_val = wp_ulike_meta_counter_value( $item_id, $this->itemType, $reverse_key, $this->isDistinct() );
-					// Update if reverse value exist
-					if( ! empty( $reverse_val ) || is_numeric( $reverse_val ) ){
-						wp_ulike_update_meta_counter_value( $item_id, max( $reverse_val - 1, 0 ), $this->itemType, $reverse_key, $this->isDistinct() );
-					}
+					// Set new value
+					$new_rev_val = empty( $reverse_val ) ? 0 : $reverse_val - 1;
+					// Update meta
+					wp_ulike_update_meta_counter_value( $item_id, max( $new_rev_val, 0 ), $this->itemType, $reverse_key, $this->isDistinct() );
 				}
 			}
 
-			return $value;
+			return $new_val;
 		}
 
 		/**
