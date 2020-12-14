@@ -69,19 +69,23 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 	     * @return void
 	     */
 	  	public function load_scripts() {
+			// Return if pro assets exist
+			if( defined( 'WP_ULIKE_PRO_VERSION' ) && version_compare( WP_ULIKE_PRO_VERSION, '1.5.3' ) > 0 ){
+				return;
+			}
 
-	        // @if DEV
-	        /*
-	        // @endif
-	        //Add wp_ulike script file with special functions.
-	        wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), WP_ULIKE_VERSION, true );
-	        // @if DEV
-	        */
-	        // @endif
-	        // @if DEV
+			// @if DEV
+			/*
+			// @endif
+			//Add wp_ulike script file with special functions.
+			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array( 'jquery' ), WP_ULIKE_VERSION, true );
+			// @if DEV
+			*/
+			// @endif
+			// @if DEV
 			//Add wp_ulike script file with special functions.
 			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array( 'jquery' ), WP_ULIKE_VERSION, true );
-	        // @endif
+			// @endif
 
 			//localize script
 			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(

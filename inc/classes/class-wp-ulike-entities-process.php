@@ -171,44 +171,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return void
 		 */
 		public function setPrevStatus( $item_id ){
-			$meta_key  = sanitize_key( $this->itemType . '_status' );
-			// delete cache to get fresh data
-			if( wp_ulike_is_cache_exist() ){
-				wp_cache_delete( $this->currentUser, 'wp_ulike_user_meta' );
-			}
-			// Get meta data
-			$user_info = wp_ulike_get_meta_data( $this->currentUser, 'user', $meta_key, true );
-
-			if( empty( $user_info ) || ! isset( $user_info[$item_id] ) ){
-				$query  = sprintf( '
-						SELECT `status`
-						FROM %s
-						WHERE `%s` = \'%s\'
-						AND `user_id` = \'%s\'
-						ORDER BY id DESC LIMIT 1
-					',
-					esc_sql( $this->wpdb->prefix . $this->typeSettings->getTableName() ),
-					esc_sql( $this->typeSettings->getColumnName() ),
-					esc_sql( $item_id ),
-					esc_sql( $this->currentUser )
-				);
-
-				// Get results
-				$user_status = $this->wpdb->get_var( stripslashes( $query ) );
-
-				// Check user info value
-				$user_info = empty( $user_info ) ? array() : $user_info;
-
-				if( $user_status !== NULL || $this->isUserLoggedIn ){
-					$user_info[$item_id] =  $this->isUserLoggedIn && $user_status === NULL ? NULL : $user_status;
-					wp_ulike_update_meta_data( $this->currentUser, 'user', $meta_key, $user_info );
-				}
-			} elseif( empty( $user_info[$item_id] ) ) {
-				$this->prevStatus = false;
-				return;
-			}
-
-			$this->prevStatus = isset( $user_info[ $item_id ] ) ? $user_info[ $item_id ] : NULL;
+			$get_user_history = wp_ulike_get_user_item_history( array(
+				"item_id"           => $item_id,
+				"item_type"         => $this->itemType,
+				"current_user"      => $this->currentUser,
+				"settings"          => $this->typeSettings,
+				"is_user_logged_in" => $this->isUserLoggedIn
+			) );
+			$this->prevStatus = ! empty( $get_user_history[$item_id] ) ? $get_user_history[$item_id] : false;
 		}
 
 		/**
@@ -217,14 +187,71 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @param array $args
 		 * @return boolean
 		 */
-		public static function hasPermission( $args ){
-			switch ( $args['method'] ) {
-				case 'by_cookie':
-					return ! isset( $_COOKIE[ $args['type'] . $args['id'] ] );
+		public static function hasPermission( $args, $settings ){
+			// Get loggin method
+			$method = wp_ulike_setting_repo::getMethod( $args['type'] );
+			// Status check point
+			$status = true;
 
-				default:
-					return true;
+			// Check cookie permission
+			if( in_array( $method, array( 'by_cookie', 'by_user_ip_cookie' ) ) ){
+				$has_cookie  = false;
+				$cookie_key  = sanitize_key( 'wp_ulike_' . md5( $args['type'] . '_logs' ) );
+				$cookie_data = array();
+				$user_hash   = md5( $args['current_user'] );
+
+				if( isset( $_COOKIE[ $cookie_key ] ) ) {
+					$cookie_data = json_decode( wp_unslash( $_COOKIE[ $cookie_key ] ), true );
+					if( ! empty( $cookie_data[$user_hash] ) ){
+						if( isset( $cookie_data[$user_hash][ $args['item_id'] ] ) ){
+							$status     = false;
+							$has_cookie = true;
+						}
+					}
+				// support old cookies
+				} elseif( isset( $_COOKIE[ $settings->getCookieName() . $args['item_id'] ] ) ){
+					$status     = false;
+					$has_cookie = true;
+				}
+
+				// Check user permission
+				if( $method === 'by_user_ip_cookie' ){
+					$cookie_hash  = array_keys( $cookie_data );
+					$current_hash = md5( $args['current_user'] );
+					foreach ($cookie_hash as $key => $value) {
+						if( $current_hash != $value && ! empty($cookie_data[$value][$args['item_id']]) ){
+							$status     = false;
+							$has_cookie = true;
+						} elseif( $current_hash == $value && ! empty($cookie_data[$value][$args['item_id']]) ){
+							$status     = true;
+							$has_cookie = false;
+						}
+					}
+				}
+
+				// set cookie on process method
+				if( ! $has_cookie && $args['method'] === 'process' ){
+					if( empty( $args['current_status'] ) ){
+						$args['current_status'] = NULL;
+					}
+					if( empty( $cookie_data ) ){
+						$cookie_data = array( $user_hash => array(
+							$args['item_id'] => $args['current_status']
+						) );
+					} else {
+						foreach ($cookie_data as $hash => $info) {
+							if( ! isset( $info[$args['item_id']] ) && $hash != $user_hash ){
+								$cookie_data[ $user_hash ][ $args['item_id'] ] = $args['current_status'];
+							} elseif( $hash == $user_hash ) {
+								$cookie_data[ $hash ][ $args['item_id'] ] = $args['current_status'];
+							}
+						}
+					}
+					setcookie( $cookie_key, json_encode( $cookie_data ), 2147483647, '/' );
+				}
 			}
+
+			return apply_filters( 'wp_ulike_permission_status', $status, $args, $settings );
 		}
 
 		/**
@@ -302,17 +329,22 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			if( wp_ulike_is_cache_exist() ){
 				wp_cache_delete( $item_id, sprintf( 'wp_ulike_%s_meta', $this->itemType ) );
 			}
-			// Get current value
-			$value = wp_ulike_get_counter_value( $item_id, $this->itemType, $this->currentStatus, $this->isDistinct() );
 
 			// Remove 'un' prefix from status.
 			$status  = ltrim( $this->currentStatus, 'un');
-
-			// Update meta value
-			if( ! empty( $value ) || is_numeric( $value ) ){
-				$value  = strpos( $this->currentStatus, 'un') === false ? $value + 1 : $value - 1;
+			// Get current value
+			$pre_val = wp_ulike_meta_counter_value( $item_id, $this->itemType, $status, $this->isDistinct() );
+			$new_val = is_null( $pre_val ) ? 0 : $pre_val;
+			// Update new val
+			if( strpos( $this->currentStatus, 'un') === false  ){
+				++$new_val;
+			} else {
+				--$new_val;
 			}
-			wp_ulike_update_meta_counter_value( $item_id, max( $value, 0 ), $this->itemType, $status, $this->isDistinct() );
+			// Abvoid neg values
+			$new_val = max( $new_val, 0 );
+			// Update meta
+			wp_ulike_update_meta_counter_value( $item_id, $new_val, $this->itemType, $status, $this->isDistinct() );
 
 			// Decrease reverse meta value
 			if( $this->isDistinct() && $this->prevStatus ){
@@ -324,14 +356,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
 					// Get reverse counter value
 					$reverse_val = wp_ulike_meta_counter_value( $item_id, $this->itemType, $reverse_key, $this->isDistinct() );
-					// Update if reverse value exist
-					if( ! empty( $reverse_val ) || is_numeric( $reverse_val ) ){
+					// Update meta if exist
+					if( ! is_null( $reverse_val ) ){
 						wp_ulike_update_meta_counter_value( $item_id, max( $reverse_val - 1, 0 ), $this->itemType, $reverse_key, $this->isDistinct() );
 					}
 				}
 			}
 
-			return $value;
+			return $new_val;
 		}
 
 		/**

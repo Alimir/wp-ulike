@@ -319,15 +319,24 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 		$get_likers = wp_ulike_get_meta_data( $item_ID, $item_type, 'likers_list', true );
 
 		if( empty( $get_likers ) ){
-			// Get results
-			$get_likers = $wpdb->get_var( "
-				SELECT GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ',')
-				FROM {$wpdb->prefix}{$table_name}
-				INNER JOIN {$wpdb->users}
-				ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table_name}.user_id )
-				WHERE {$wpdb->prefix}{$table_name}.status IN ('like', 'dislike')
-				AND {$column_name} = {$item_ID}"
-			);
+			// Cache data
+			$cache_key  = sanitize_key( sprintf( '%s_%s_%s_likers_list', $table_name, $column_name, $item_ID ) );
+			$get_likers = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+
+			if( false === $get_likers ){
+				// Get results
+				$get_likers = $wpdb->get_var( "
+					SELECT GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ',')
+					FROM {$wpdb->prefix}{$table_name}
+					INNER JOIN {$wpdb->users}
+					ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table_name}.user_id )
+					WHERE {$wpdb->prefix}{$table_name}.status IN ('like', 'dislike')
+					AND {$column_name} = {$item_ID}"
+				);
+
+				wp_cache_set( $cache_key, $get_likers, WP_ULIKE_SLUG, 300 );
+			}
+
 			if( ! empty( $get_likers) ){
 				$get_likers = explode( ',', $get_likers );
 				wp_ulike_update_meta_data( $item_ID, $item_type, 'likers_list', $get_likers );
@@ -372,6 +381,64 @@ if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
 		);
 
 		return $wpdb->get_var( $query );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
+	/**
+	 * A simple function to get user activity history
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	function wp_ulike_get_user_item_history( $args ) {
+		global $wpdb;
+
+		$defaults = array(
+			"item_id"           => '',
+			"item_type"         => '',
+			"current_user"      => '',
+			"settings"          => '',
+			"is_user_logged_in" => ''
+		);
+		$parsed_args = wp_parse_args( $args, $defaults );
+
+		$meta_key  = sanitize_key( $parsed_args['item_type'] . '_status' );
+		// delete cache to get fresh data
+		if( wp_ulike_is_cache_exist() ){
+			wp_cache_delete( $parsed_args['current_user'], 'wp_ulike_user_meta' );
+		}
+
+		// Get meta data
+		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
+
+		if( empty( $user_info ) || ! isset( $user_info[$parsed_args['item_id']] ) ){
+			$query  = sprintf( '
+					SELECT `status`
+					FROM %s
+					WHERE `%s` = \'%s\'
+					AND `user_id` = \'%s\'
+					ORDER BY id DESC LIMIT 1
+				',
+				esc_sql( $wpdb->prefix . $parsed_args['settings']->getTableName() ),
+				esc_sql( $parsed_args['settings']->getColumnName() ),
+				esc_sql( $parsed_args['item_id'] ),
+				esc_sql( $parsed_args['current_user'] )
+			);
+
+			// Get results
+			$user_status = $wpdb->get_var( stripslashes( $query ) );
+
+			// Check user info value
+			$user_info = empty( $user_info ) ? array() : $user_info;
+
+			if( $user_status !== NULL || $parsed_args['is_user_logged_in'] ){
+				$user_info[$parsed_args['item_id']] =  $parsed_args['is_user_logged_in'] && $user_status === NULL ? NULL : $user_status;
+				wp_ulike_update_meta_data( $parsed_args['current_user'], 'user', $meta_key, $user_info );
+			}
+		}
+
+		return $user_info;
 	}
 }
 

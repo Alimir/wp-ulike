@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, user profile, statistics, favorite, rating, bu
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.6
-Stable tag: 4.4.2.1
+Stable tag: 4.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,53 +114,38 @@ You can also add a new language via [translate.wordpress.org](https://translate.
 
 == Frequently Asked Questions ==
 
-= How To Use this plugin? =
-Just install the plugin and activate "automatic display" in the plugin configuration panel. (WP ULike has four auto options for posts, comments, BuddyPress activities & bbPress Topics.)
-Also you can use of the following function and shortcode for your posts:
-*   Function:
-`if(function_exists('wp_ulike')) wp_ulike('get');`
-*   Shortcode:
-`[wp_ulike]`
+=  Does WP ULike work with all the themes? =
+It works with all the themes which respect the coding standards of WordPress set by its Codex.
 
-= How To Change The Counter Format? =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-the-counter-format)
+=  Does it work with other WordPress plugins? =
+It works with almost all the plugins especially with Elementor, BuddyPress, bbPress, WooCommerce, GamiPress, myCRED, etc. If you experience an incompatibility issue, please report it to us and to the plugin which conflicts with WP ULike.
 
-= How To Change Schema Type? =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-schema-type)
+=  What's the difference between WP ULike Pro vs Free? =
+WP ULike’s Free version offers limitless possibilities. WP ULike Pro, however, empowers you with more professional tools, up/down vote support and provide you a professional stats panel.
+See full comparison [Here](https://wpulike.com/blog/wp-ulike-pro-vs-free/).
 
-= How To Add Extra Microdata? =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-add-extra-microdata)
+= Is WP ULike compatible with multisite? =
+Yes.
 
-= How To Remove All Schema Data Except Of aggregateRating? =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-remove-all-schema-data-except-of-aggregaterating)
+=  Is WP ULike safe? =
+We are a professional and international team called TechnoWich that uses the latest coding and design methods in projects.
 
-= How To Remove "0" Count If There Are No Likes? =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-remove-0-count-if-there-are-no-likes)
+Our WP ULike project has been able to attract more than 50,000 active users in the last few years and has a high score in the WordPress repository. All functions of this plugin are documented and you can follow its development process on Github.
 
-= How To Change The Login Alert Template? =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-change-the-login-alert-template)
-
-= How To Get Post Likes Number? =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-get-post-likes-number)
-
-= How To Get Comment Likes Number? =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-get-comment-likes-number)
-
-= How To Sort Most Liked Posts?  =
-Documentation : [Github](https://github.com/alimir/wp-ulike#how-to-sort-most-liked-posts)
-
-= How Can I Create Custom Template In Users Liked Box?  =
-* We have provided some variables in setting panel. You can use them in textarea and then save the new options.
-* Attention: `%START_WHILE%` And `%END_WHILE%` variables are very important and you should use them out of the frequent string. (Such as `<li></li>` tags sample in default template)
-
-= Receive HTTP ERROR 500 on WP ULike > Statistics   =
-* Increasing Your WordPress Memory Limit in wp-config.php to fix this error. It is located in your WordPress site's root folder, and you will need to use an FTP client or file manager in your web hosting control panel.
-* Next, you need to paste this code in wp-config.php file just before the line that says "That's all, stop editing! Happy blogging."
-<code>
-define( 'WP_MEMORY_LIMIT', '256M' );
-</code>
+=  Does WP ULike run on Apache, Nginx, LiteSpeed, etc? =
+Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.4.3 =
+* Added: New logging method option. (Username/IP + Cookie)
+* Added: Option to filter toast messages on content types.
+* Added: Flexible modal preview option for require login mode. [PRO]
+* Added: New percentage counter option. [PRO]
+* Added: Variable support in require login template.
+* Improved: Plugin security to avoid duplicate votes.
+* Fixed: Topic link issue on activity notifications.
+* Fixed: Some major issues.
 
 = 4.4.2.1 =
 * Fixed: An issue with WordPress 5.5 functions.

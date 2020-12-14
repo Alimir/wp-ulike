@@ -115,6 +115,38 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Check toast display condition
+	 *
+	 * @return boolean
+	 */
+	public static function hasToast( $typeName ){
+		$enable_toast = self::getOption( 'enable_toast_notice', true );
+		$filter_toast = self::getOption( 'filter_toast_types', array() );
+		return $enable_toast && ! in_array( $typeName, $filter_toast );
+	}
+
+	/**
+	 * Get require login template
+	 *
+	 * @return boolean
+	 */
+	public static function getRequireLoginTemplate( $typeName ){
+		global $wp;
+		$current_url = home_url( add_query_arg( array(), $wp->request ) );
+		// Default template
+		$default = sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>', __('You need to login in order to like this post: ',WP_ULIKE_SLUG),
+		wp_login_url( $current_url ),
+		__('click here',WP_ULIKE_SLUG)
+		);
+		// Setting template
+		$template = self::getOption( self::getSettingKey( $typeName ) . '|login_template', $default );
+
+		$template = str_replace( "%CURRENT_PAGE_URL%", $current_url, $template );
+
+		return $template;
+	}
+
+	/**
 	 * Check counter zero visibility
 	 *
 	 * @return boolean

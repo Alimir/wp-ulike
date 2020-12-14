@@ -20,9 +20,10 @@ if( ! function_exists( 'wp_ulike_update_meta_counter_value' ) ){
 	 * @param boolean $is_distinct
 	 * @return int|bool
 	 */
-	function wp_ulike_update_meta_counter_value( $ID, $value, $type, $status, $is_distinct = true ){
-		$distinct_name = !$is_distinct ? 'total' : 'distinct';
-		return wp_ulike_update_meta_data( $ID, $type, sprintf( 'count_%s_%s', $distinct_name, $status ), $value );
+	function wp_ulike_update_meta_counter_value( $ID, $value, $type, $status, $is_distinct = true, $prev_value = '' ){
+		$distinct = !$is_distinct ? 'total' : 'distinct';
+		$meta_key = sprintf( 'count_%s_%s', $distinct, $status );
+		return wp_ulike_update_meta_data( $ID, $type, $meta_key, $value, $prev_value );
 	}
 }
 
@@ -39,8 +40,15 @@ if( ! function_exists( 'wp_ulike_meta_counter_value' ) ){
 	 * @return mixed Single metadata value, or array of values
 	 */
 	function wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct = true ){
-		$distinct_name = ! $is_distinct ? 'total' : 'distinct';
-		return wp_ulike_get_meta_data( $ID, $type, sprintf( 'count_%s_%s', $distinct_name, $status ), true );
+		$distinct = ! $is_distinct ? 'total' : 'distinct';
+		$meta_key = sprintf( 'count_%s_%s', $distinct, $status );
+		$meta_val = wp_ulike_get_meta_data( $ID, $type, $meta_key, true );
+
+		if( is_numeric( $meta_val ) || ! empty( $meta_val ) ){
+			return (int) $meta_val;
+		}
+
+		return NULL;
 	}
 }
 
@@ -65,7 +73,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 
 		$counter_value = wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct );
 
-		if( ( empty( $counter_value ) && ! is_numeric( $counter_value ) ) || ! empty( $date_range ) ){
+		if( is_null( $counter_value ) || ! empty( $date_range ) ){
 			global $wpdb;
 
 			// Peroid limit SQL
@@ -87,6 +95,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 				esc_sql( $period_limit )
 			);
 			$counter_value = $wpdb->get_var( stripslashes( $query ) );
+			$counter_value = empty( $counter_value ) ? 0 : (int) $counter_value;
 
 			// Add counter to meta value
 			wp_ulike_update_meta_counter_value( $ID, $counter_value, $type, $status, $is_distinct );

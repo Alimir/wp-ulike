@@ -117,6 +117,21 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'    => __('Custom toast messages after each activity', WP_ULIKE_SLUG)
                     ),
                     array(
+                        'id'          => 'filter_toast_types',
+                        'type'        => 'select',
+                        'title'       => __( 'Disable Toast Types',WP_ULIKE_SLUG ),
+                        'desc'        => __('With this option, you can disable toasts messages on content types.', WP_ULIKE_SLUG),
+                        'chosen'      => true,
+                        'multiple'    => true,
+                        'options'     => array(
+                            'post'     => __('Posts', WP_ULIKE_SLUG),
+                            'comment'  => __('Comments', WP_ULIKE_SLUG),
+                            'activity' => __('Activities', WP_ULIKE_SLUG),
+                            'topic'    => __('Topics', WP_ULIKE_SLUG)
+                        ),
+                        'dependency'=> array( 'enable_toast_notice', '==', 'true' ),
+                    ),
+                    array(
                         'id'    => 'enable_anonymise_ip',
                         'type'  => 'switcher',
                         'title' => __('Enable Anonymize IP', WP_ULIKE_SLUG),
@@ -679,9 +694,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'        => 'select',
                     'title'       => __( 'Logging Method',WP_ULIKE_SLUG),
                     'options'     => array(
-                        'do_not_log'  => __('No Limit', WP_ULIKE_SLUG),
-                        'by_cookie'   => __('Cookie', WP_ULIKE_SLUG),
-                        'by_username' => __('Username/IP', WP_ULIKE_SLUG)
+                        'do_not_log'        => __('No Limit', WP_ULIKE_SLUG),
+                        'by_cookie'         => __('Cookie', WP_ULIKE_SLUG),
+                        'by_username'       => __('Username/IP', WP_ULIKE_SLUG),
+                        'by_user_ip_cookie' => __('Username/IP + Cookie', WP_ULIKE_SLUG)
                     ),
                     'default'     => 'by_username',
                     'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p>', __( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', WP_ULIKE_SLUG ), __( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', WP_ULIKE_SLUG ), __( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', WP_ULIKE_SLUG ) )
@@ -705,13 +721,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'login_template' => array(
                     'id'       => 'login_template',
                     'type'     => 'code_editor',
+                    'desc'     => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%CURRENT_PAGE_URL%</code>',
                     'settings' => array(
                         'theme' => 'shadowfox',
                         'mode'  => 'htmlmixed',
                     ),
                     'default'  => sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>',
                         __('You need to login in order to like this post: ',WP_ULIKE_SLUG),
-                        wp_login_url( get_permalink() ),
+                        wp_login_url(),
                         __('click here',WP_ULIKE_SLUG)
                     ),
                     'title'    => __('Custom HTML Template', WP_ULIKE_SLUG),

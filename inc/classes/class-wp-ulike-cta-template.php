@@ -45,15 +45,21 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		 * @return integer
 		 */
 		public function get_method_id(){
+			if( ! $this->hasPermission( array(
+				'item_id'      => $this->args['id'],
+				'type'         => $this->args['slug'],
+				'current_user' => $this->getCurrentUser(),
+				'prev_status'  => $this->getPrevStatus(),
+				'method'       => 'lookup'
+			), $this->settings ) ){
+				return 4;
+			}
+
 			switch( wp_ulike_setting_repo::getMethod( $this->args['slug'] ) ){
 				case 'do_not_log':
-					return 1;
 				case 'by_cookie':
-					return $this->hasPermission( array(
-						'method' => wp_ulike_setting_repo::getMethod( $this->args['slug'] ),
-						'type'   => $this->settings->getCookieName(),
-						'id'     => $this->args['id']
-					) ) ? 1 : 4;
+					return 1;
+
 				default:
 					if( ! $this->getPrevStatus() ){
 						return 1;
