@@ -203,12 +203,9 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					$user_info[$item_id] =  $this->isUserLoggedIn && $user_status === NULL ? NULL : $user_status;
 					wp_ulike_update_meta_data( $this->currentUser, 'user', $meta_key, $user_info );
 				}
-			} elseif( empty( $user_info[$item_id] ) ) {
-				$this->prevStatus = false;
-				return;
 			}
 
-			$this->prevStatus = isset( $user_info[ $item_id ] ) ? $user_info[ $item_id ] : NULL;
+			$this->prevStatus = ! empty( $user_info[$item_id] ) ? $user_info[ $item_id ] : false;
 		}
 
 		/**
