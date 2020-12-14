@@ -329,10 +329,10 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					$reverse_key = strpos( $status, 'dis') === false ? 'dislike' : 'like';
 					// Get reverse counter value
 					$reverse_val = wp_ulike_meta_counter_value( $item_id, $this->itemType, $reverse_key, $this->isDistinct() );
-					// Set new value
-					$new_rev_val = empty( $reverse_val ) ? 0 : $reverse_val - 1;
-					// Update meta
-					wp_ulike_update_meta_counter_value( $item_id, max( $new_rev_val, 0 ), $this->itemType, $reverse_key, $this->isDistinct() );
+					// Update meta if exist
+					if( ! is_null( $reverse_val ) ){
+						wp_ulike_update_meta_counter_value( $item_id, max( $reverse_val - 1, 0 ), $this->itemType, $reverse_key, $this->isDistinct() );
+					}
 				}
 			}
 
