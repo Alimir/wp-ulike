@@ -51,10 +51,10 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			}
 
 			$process  = new wp_ulike_cta_process( array(
-				'item_id'           => $this->data['id'],
-				'item_type'         => $this->settings_type->getType(),
-				'item_factor'       => $this->data['factor'],
-				'item_template'     => $this->data['template']
+				'item_id'       => $this->data['id'],
+				'item_type'     => $this->settings_type->getType(),
+				'item_factor'   => $this->data['factor'],
+				'item_template' => $this->data['template']
 			) );
 
 			if( wp_ulike_setting_repo::requireLogin( $this->settings_type->getType() ) && ! $this->user ){
@@ -62,16 +62,14 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				$this->response['status']       = 4;
 				$this->response['requireLogin'] = true;
 			} else {
-				if( ! wp_ulike_entities_process::hasPermission( array(
-					'method' => wp_ulike_setting_repo::getMethod( $this->settings_type->getType() ) ,
-					'type'   => $this->settings_type->getCookieName(),
-					'id'     => $this->data['id']
-				) ) ){
+				// Start process
+				$has_permission = $process->update();
+				// Check permission
+				if( ! $has_permission ){
 					$this->response['message']     = wp_ulike_setting_repo::getPermissionNotice();
 					$this->response['status']      = 5;
 					$this->response['messageType'] = 'warning';
 				} else {
-					$process->update();
 					$this->response['status'] = $process->getStatusCode();
 					$counter_value = $process->getCounterValue();
 
@@ -105,7 +103,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			}
 
 			// Display likers
-			if( $this->data['displayLikers'] && $this->user ){
+			if( $this->data['displayLikers'] && $this->user && ! in_array( $this->response['status'], array(4,5) ) ){
 				$likers_selectors = wp_ulike_is_true( $this->data['disablePophover'] ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
 				$this->response['likers'] = array(
 					'class'    => $likers_selectors . sprintf( ' wp_%s_likers_%d', $this->settings_type->getType(), $this->data['id'] ) ,
@@ -123,7 +121,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 
 			// Hide data when counter is not visible
 			if( ! wp_ulike_setting_repo::isCounterBoxVisible( $this->settings_type->getType() ) ){
-				$this->response['data'] = 0;
+				$this->response['data'] = NULL;
 			}
 
 			$response = apply_filters( 'wp_ulike_ajax_respond', $this->response, $this->data['id'], $this->response['status'], $process->getAjaxProcessAtts() );
@@ -133,8 +131,9 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			$this->response( $response );
 		} catch ( \Exception $e ){
 			return $this->sendError( array(
-				'message'  => $e->getMessage(),
-				'hasToast' => wp_ulike_setting_repo::hasToast( $this->settings_type->getType() )
+				'message'     => $e->getMessage(),
+				'messageType' => 'error',
+				'hasToast'    => wp_ulike_setting_repo::hasToast( $this->settings_type->getType() )
 			) );
 		}
 	}

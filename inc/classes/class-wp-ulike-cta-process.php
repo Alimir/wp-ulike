@@ -64,41 +64,43 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		/**
 		 * Update button info
 		 *
-		 * @return void
+		 * @return boolean
 		 */
 		public function update(){
+			// Check prev status
 			$this->setPrevStatus( $this->parsedArgs['item_id'] );
-
-			switch( wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] ) ){
-				case 'do_not_log':
-					$this->setCurrentStatus( $this->parsedArgs['item_factor'], true );
-					// Insert log data
-					$this->insertData( $this->parsedArgs['item_id'] );
-					break;
-				case 'by_cookie':
-					if( $this->hasPermission( array(
-						'method' => wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] ),
-						'type'   => $this->settings->getCookieName(),
-						'id'     => $this->parsedArgs['item_id']
-					) ) ){
-						$this->setCurrentStatus( $this->parsedArgs['item_factor'], true );
-						// Set cookie
-						setcookie( $this->settings->getCookieName(). $this->parsedArgs['item_id'], time(), 2147483647, '/' );
-						// Insert log data
-						$this->insertData( $this->parsedArgs['item_id'] );
-					}
-					break;
-				default:
-					$this->setCurrentStatus( $this->parsedArgs['item_factor'] );
-					if( $this->getPrevStatus() ){
-						$this->updateData( $this->parsedArgs['item_id'] );
-					} else {
-						$this->insertData( $this->parsedArgs['item_id'] );
-					}
-					break;
+			// Get logging method
+			$logging_method = wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] );
+			// Set current status
+			if( in_array( $logging_method, array('do_not_log','by_cookie') ) ){
+				$this->setCurrentStatus( $this->parsedArgs['item_factor'], true );
+			} else {
+				$this->setCurrentStatus( $this->parsedArgs['item_factor'] );
 			}
 
+			// Check permission
+			if( ! $this->hasPermission( array(
+				'item_id'        => $this->parsedArgs['item_id'],
+				'type'           => $this->settings->getType(),
+				'current_user'   => $this->getCurrentUser(),
+				'current_status' => $this->getCurrentStatus(),
+				'prev_status'    => $this->getPrevStatus(),
+				'method'         => 'process'
+ 			), $this->settings ) ){
+				return false;
+			}
+
+			// Insert/Update logs
+			if( ! in_array( $logging_method, array('do_not_log','by_cookie') ) && $this->getPrevStatus() ){
+				$this->updateData( $this->parsedArgs['item_id'] );
+			} else {
+				$this->insertData( $this->parsedArgs['item_id'] );
+			}
+
+			// Update meta
 			$this->updateMetaData( $this->parsedArgs['item_id'] );
+
+			return true;
 		}
 
 		/**

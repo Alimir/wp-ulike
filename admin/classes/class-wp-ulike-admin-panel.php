@@ -694,9 +694,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'        => 'select',
                     'title'       => __( 'Logging Method',WP_ULIKE_SLUG),
                     'options'     => array(
-                        'do_not_log'  => __('No Limit', WP_ULIKE_SLUG),
-                        'by_cookie'   => __('Cookie', WP_ULIKE_SLUG),
-                        'by_username' => __('Username/IP', WP_ULIKE_SLUG)
+                        'do_not_log'        => __('No Limit', WP_ULIKE_SLUG),
+                        'by_cookie'         => __('Cookie', WP_ULIKE_SLUG),
+                        'by_username'       => __('Username/IP', WP_ULIKE_SLUG),
+                        'by_user_ip_cookie' => __('Username/IP + Cookie', WP_ULIKE_SLUG)
                     ),
                     'default'     => 'by_username',
                     'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p>', __( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', WP_ULIKE_SLUG ), __( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', WP_ULIKE_SLUG ), __( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', WP_ULIKE_SLUG ) )
