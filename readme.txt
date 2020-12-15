@@ -144,7 +144,7 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 * Added: New percentage counter option. [PRO]
 * Added: Variable support in require login template.
 * Improved: Plugin security to avoid duplicate votes.
-* Fixed: Topic link issue on activity notifications.
+* Fixed: bbPress permalink issues.
 * Fixed: Some major issues.
 
 = 4.4.2.1 =
