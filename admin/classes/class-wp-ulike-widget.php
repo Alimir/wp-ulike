@@ -236,7 +236,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			foreach ($posts as $post) {
 				$post_title = function_exists('bbp_get_forum_title') ? bbp_get_forum_title( $post->ID ) : $post->post_title;
-				$permalink  = get_permalink( $post->ID );
+				$permalink  = 'topic' === get_post_type( $post->ID ) ? bbp_get_topic_permalink( $post->ID ) : bbp_get_reply_url( $post->ID );
 				$post_count = $this->get_counter_value($post->ID, 'topic', 'like', $period);
 
 				$result .= sprintf(
