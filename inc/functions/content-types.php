@@ -417,12 +417,14 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 	 * @return			String
 	 */
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
-		//global variables
-		global $post;
 
-        //Thanks to @Yehonal for this commit
-		$replyID = bbp_get_reply_id();
-		$post_ID = !$replyID ? $post->ID : $replyID;
+		// Check reply type
+		$post_ID = bbp_get_reply_id();
+		// If not exist, Then it's a topic
+		if ( ! $post_ID ) {
+			$post_ID = bbp_get_topic_id();
+		}
+		// Update post id for manual usage
 		$post_ID = isset( $args['id'] ) ? $args['id'] : $post_ID;
 
 		$attributes       = apply_filters( 'wp_ulike_topics_add_attr', null );

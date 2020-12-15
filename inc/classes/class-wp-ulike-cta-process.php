@@ -151,7 +151,7 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		 * @return integer
 		 */
 		public function getCounterValue(){
-			$counter_val = $this->updateCounterMeta( $this->parsedArgs['item_id'] );
+			$counter_val = wp_ulike_get_counter_value( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct() );
 			$counter_val = wp_ulike_format_number( $counter_val, $this->getCurrentStatus() );
 			return apply_filters( 'wp_ulike_ajax_counter_value', $counter_val, $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct() );
 		}

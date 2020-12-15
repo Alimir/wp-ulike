@@ -31,24 +31,22 @@ if( ! function_exists( 'wp_ulike_meta_counter_value' ) ){
 	/**
 	 * Get meta counter value
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
-	 *
 	 * @param integer $ID
 	 * @param string $type
-	 * @param atring $status
+	 * @param string $status
 	 * @param boolean $is_distinct
-	 * @return mixed Single metadata value, or array of values
+	 * @return null|integer
 	 */
 	function wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct = true ){
 		$distinct = ! $is_distinct ? 'total' : 'distinct';
 		$meta_key = sprintf( 'count_%s_%s', $distinct, $status );
 		$meta_val = wp_ulike_get_meta_data( $ID, $type, $meta_key, true );
 
-		if( is_numeric( $meta_val ) || ! empty( $meta_val ) ){
-			return (int) $meta_val;
+		if( ( empty( $meta_val ) && ! is_numeric( $meta_val ) ) ){
+			return NULL;
 		}
 
-		return NULL;
+		return (int) $meta_val;
 	}
 }
 

@@ -334,17 +334,19 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$status  = ltrim( $this->currentStatus, 'un');
 			// Get current value
 			$pre_val = wp_ulike_meta_counter_value( $item_id, $this->itemType, $status, $this->isDistinct() );
-			$new_val = is_null( $pre_val ) ? 0 : $pre_val;
-			// Update new val
-			if( strpos( $this->currentStatus, 'un') === false  ){
-				++$new_val;
-			} else {
-				--$new_val;
+			// If metadata exist update it
+			if( ! is_null( $pre_val ) ){
+				// Update new val
+				if( strpos( $this->currentStatus, 'un') === false  ){
+					++$pre_val;
+				} else {
+					--$pre_val;
+				}
+				// Abvoid neg values
+				$pre_val = max( $pre_val, 0 );
+				// Update meta
+				wp_ulike_update_meta_counter_value( $item_id, $pre_val, $this->itemType, $status, $this->isDistinct() );
 			}
-			// Abvoid neg values
-			$new_val = max( $new_val, 0 );
-			// Update meta
-			wp_ulike_update_meta_counter_value( $item_id, $new_val, $this->itemType, $status, $this->isDistinct() );
 
 			// Decrease reverse meta value
 			if( $this->isDistinct() && $this->prevStatus ){
@@ -362,8 +364,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					}
 				}
 			}
-
-			return $new_val;
 		}
 
 		/**
@@ -465,6 +465,8 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return void
 		 */
 		public function updateMetaData( $item_id ){
+			// Update meta data
+			$this->updateCounterMeta( $item_id );
 			// Update user status
 			$this->updateUserMetaStatus( $item_id );
 			// Update likers list

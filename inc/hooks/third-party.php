@@ -349,17 +349,22 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 					break;
 
 				case 'activityliked':
-					$custom_link = bp_activity_get_permalink( $item_id );
-					$action_type = __( 'activities' , WP_ULIKE_SLUG );
+					if( function_exists('bp_activity_get_permalink') ){
+						$custom_link = bp_activity_get_permalink( $item_id );
+						$action_type = __( 'activities' , WP_ULIKE_SLUG );
+					}
 					break;
 
 				case 'topicliked':
-					if( 'topic' === get_post_type( $item_id) ){
-						$custom_link = bbp_get_topic_permalink( $item_id );
-					} else {
-						$custom_link = bbp_get_reply_permalink( $item_id );
+					if( function_exists('bbp_get_topic_permalink') ){
+						if( 'topic' === get_post_type( $item_id) ){
+							$custom_link = bbp_get_topic_permalink( $item_id );
+							$action_type = __( 'topics' , WP_ULIKE_SLUG );
+						} else {
+							$custom_link = bbp_get_reply_url( $item_id );
+							$action_type = __( 'replies' , WP_ULIKE_SLUG );
+						}
 					}
-					$action_type = __( 'topics' , WP_ULIKE_SLUG );
 					break;
 
 				default:
