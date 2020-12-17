@@ -176,7 +176,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,     // Enable dynamic expansion.
-                        cwd: '<%= pkg.bower.components %>chart.js/dist',      // Src matches are relative to this path.
+                        cwd: 'node_modules/chart.js/dist',      // Src matches are relative to this path.
                         src: ['Chart.min.js'],  // Actual pattern(s) to match.
                         dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
                     }
@@ -187,7 +187,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,     // Enable dynamic expansion.
-                        cwd: '<%= pkg.bower.components %>vue/dist',      // Src matches are relative to this path.
+                        cwd: 'node_modules/vue/dist',      // Src matches are relative to this path.
                         src: [ 'vue.min.js', 'vue.js' ],  // Actual pattern(s) to match.
                         dest: 'admin/assets/js/solo/vue/'   // Destination path prefix.
                     }
@@ -198,8 +198,8 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,     // Enable dynamic expansion.
-                        cwd: '<%= pkg.bower.components %>matchHeight/dist',      // Src matches are relative to this path.
-                        src: [ 'jquery.matchHeight-min.js' ],  // Actual pattern(s) to match.
+                        cwd: 'node_modules/matchheight/dist',      // Src matches are relative to this path.
+                        src: [ 'MatchHeight.min.js' ],  // Actual pattern(s) to match.
                         dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
                     }
                 ]
