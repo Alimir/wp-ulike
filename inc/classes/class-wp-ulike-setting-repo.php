@@ -4,7 +4,7 @@ class wp_ulike_setting_repo {
 
 	protected static function getOption( $key, $default = NULL ){
 		$option = wp_ulike_get_option( $key );
-		return ! empty( $option ) ? $option : $default;
+		return $option != '' ? $option : $default;
 	}
 
 	protected static function getSettingKey( $type ){
