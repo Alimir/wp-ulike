@@ -198,8 +198,8 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,     // Enable dynamic expansion.
-                        cwd: 'node_modules/matchheight/dist',      // Src matches are relative to this path.
-                        src: [ 'MatchHeight.min.js' ],  // Actual pattern(s) to match.
+                        cwd: 'node_modules/jquery-match-height/dist',      // Src matches are relative to this path.
+                        src: [ 'jquery.matchHeight-min.js' ],  // Actual pattern(s) to match.
                         dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
                     }
                 ]
