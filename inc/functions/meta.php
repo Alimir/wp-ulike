@@ -397,3 +397,101 @@ if( ! function_exists( 'wp_ulike_get_meta_data_default' ) ){
 		return $value;
 	}
 }
+
+if( ! function_exists( 'wp_ulike_delete_meta_data' ) ){
+	/**
+	 * Deletes metadata for the specified object.
+	 *
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @param string $meta_type  Type of object metadata is for. Accepts 'post', 'comment', 'term', 'user',
+	 *                           or any other object type with an associated meta table.
+	 * @param int    $object_id  ID of the object metadata is for.
+	 * @param string $meta_key   Metadata key.
+	 * @param mixed  $meta_value Optional. Metadata value. Must be serializable if non-scalar.
+	 *                           If specified, only delete metadata entries with this value.
+	 *                           Otherwise, delete all entries with the specified meta_key.
+	 *                           Pass `null`, `false`, or an empty string to skip this check.
+	 *                           (For backward compatibility, it is not possible to pass an empty string
+	 *                           to delete those entries with an empty string for a value.)
+	 * @param bool   $delete_all Optional. If true, delete matching metadata entries for all objects,
+	 *                           ignoring the specified object_id. Otherwise, only delete
+	 *                           matching metadata entries for the specified object_id. Default false.
+	 * @return bool True on successful delete, false on failure.
+	 */
+	function wp_ulike_delete_meta_data( $meta_group, $object_id, $meta_key, $meta_value = '', $delete_all = false ) {
+		global $wpdb;
+
+		if ( ! $meta_group || ! $meta_key || ! is_numeric( $object_id ) && ! $delete_all ) {
+			return false;
+		}
+
+		$object_id = absint( $object_id );
+		if ( ! $object_id && ! $delete_all ) {
+			return false;
+		}
+
+		$table       = $wpdb->prefix . 'ulike_meta';
+		$type_column = 'item_id';
+		$id_column   = 'meta_id';
+
+		// expected_slashed ($meta_key)
+		$meta_group = wp_unslash( $meta_group );
+		$meta_key   = wp_unslash( $meta_key );
+		$meta_value = wp_unslash( $meta_value );
+
+		$check = apply_filters( "wp_ulike_delete_{$meta_group}_metadata", null, $object_id, $meta_key, $meta_value, $delete_all );
+		if ( null !== $check ) {
+			return (bool) $check;
+		}
+
+		$_meta_value = $meta_value;
+		$meta_value  = maybe_serialize( $meta_value );
+
+		$query = $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_group = %s AND meta_key = %s", $meta_group, $meta_key );
+
+		if ( ! $delete_all ) {
+			$query .= $wpdb->prepare( " AND $type_column = %d", $object_id );
+		}
+
+		if ( '' !== $meta_value && null !== $meta_value && false !== $meta_value ) {
+			$query .= $wpdb->prepare( ' AND meta_value = %s', $meta_value );
+		}
+
+		$meta_ids = $wpdb->get_col( $query );
+		if ( ! count( $meta_ids ) ) {
+			return false;
+		}
+
+		if ( $delete_all ) {
+			if ( '' !== $meta_value && null !== $meta_value && false !== $meta_value ) {
+				$object_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $type_column FROM $table WHERE meta_group = %s AND meta_key = %s AND meta_value = %s", $meta_group, $meta_key, $meta_value ) );
+			} else {
+				$object_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $type_column FROM $table WHERE meta_group = %s AND meta_key = %s", $meta_group, $meta_key ) );
+			}
+		}
+
+		do_action( "wp_ulike_delete_{$meta_group}_meta", $meta_ids, $object_id, $meta_key, $_meta_value );
+
+		$query = "DELETE FROM $table WHERE $id_column IN( " . implode( ',', $meta_ids ) . ' )';
+
+		$count = $wpdb->query( $query );
+
+		if ( ! $count ) {
+			return false;
+		}
+
+		if ( $delete_all ) {
+			foreach ( (array) $object_ids as $o_id ) {
+				wp_cache_delete( $o_id, sprintf( 'wp_ulike_%s_meta', $meta_group ) );
+			}
+		} else {
+			wp_cache_delete( $object_id, sprintf( 'wp_ulike_%s_meta', $meta_group ) );
+		}
+
+		do_action( "wp_ulike_deleted_{$meta_group}_meta", $meta_ids, $object_id, $meta_key, $_meta_value );
+
+		return true;
+	}
+}
