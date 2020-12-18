@@ -261,7 +261,7 @@ function wp_ulike_go_pro_admin_menu( $submenus ){
 
 	return $submenus;
 }
-add_filter( 'wp_ulike_admin_pages', 'wp_ulike_go_pro_admin_menu', 1, 10 );
+add_filter( 'wp_ulike_admin_pages', 'wp_ulike_go_pro_admin_menu', 10, 1 );
 
 /**
  * Disable admin notices
@@ -273,7 +273,7 @@ function wp_ulike_hide_admin_notifications( $notice_list ){
 	$hide_admin_notice = wp_ulike_get_option( 'disable_admin_notice', false );
 	return wp_ulike_is_true( $hide_admin_notice ) && strpos( $screen->base, WP_ULIKE_SLUG ) === false ? array() : $notice_list;
 }
-add_filter( 'wp_ulike_admin_notices_instances', 'wp_ulike_hide_admin_notifications', 1, 20 );
+add_filter( 'wp_ulike_admin_notices_instances', 'wp_ulike_hide_admin_notifications', 20, 1 );
 
 
 /**
