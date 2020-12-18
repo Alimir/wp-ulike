@@ -163,7 +163,7 @@ class wp_ulike_setting_repo {
 	 */
 	public static function maybeHasUnitFormat( $number, $precision = 1 ){
 		// Check for option enable
-		if( self::getOption( 'enable_kilobyte_format', false ) && $number ){
+		if( self::getOption( 'enable_kilobyte_format', false ) && ! empty( $number ) || is_numeric( $number ) ){
 			// Setup default $divisors if not provided
 			$divisors = array(
 				pow(1000, 0) => '', // 1000^0 == 1
