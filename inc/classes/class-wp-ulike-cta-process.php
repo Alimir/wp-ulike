@@ -152,8 +152,15 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		 */
 		public function getCounterValue(){
 			$counter_val = wp_ulike_get_counter_value( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct() );
-			$counter_val = wp_ulike_format_number( $counter_val, $this->getCurrentStatus() );
-			return apply_filters( 'wp_ulike_ajax_counter_value', $counter_val, $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct() );
+
+			// Hide if zero
+			if( wp_ulike_setting_repo::isCounterZeroHidden( $this->parsedArgs['item_type'] ) && $counter_val == 0 ){
+				$counter_val = '';
+			} else {
+				$counter_val = wp_ulike_format_number( $counter_val, $this->getCurrentStatus() );
+			}
+
+			return apply_filters( 'wp_ulike_ajax_counter_value', $counter_val, $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct(), $this->parsedArgs['item_template'] );
 		}
 
 	}

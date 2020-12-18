@@ -84,7 +84,10 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 					?>
 				</button>
 				<?php
-					echo $counter;
+					if( isset( $display_counters ) && $display_counters ){
+						$status = wp_ulike_maybe_convert_status( $user_status, 'up' );
+						echo sprintf( '<span class="count-box">%s</span>', wp_ulike_format_number( $total_likes, $status ) );
+					}
 					do_action( 'wp_ulike_after_up_vote_button', $wp_ulike_template );
 				?>
 			</div>
@@ -133,7 +136,10 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 					?>
 				</button>
 				<?php
-					echo $counter;
+					if( isset( $display_counters ) && $display_counters ){
+						$status = wp_ulike_maybe_convert_status( $user_status, 'up' );
+						echo sprintf( '<span class="count-box">%s</span>', wp_ulike_format_number( $total_likes, $status ) );
+					}
 					do_action( 'wp_ulike_after_up_vote_button', $wp_ulike_template );
 				?>
 			</div>
@@ -179,7 +185,10 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 					?>
 				</button>
 				<?php
-					echo $counter;
+					if( isset( $display_counters ) && $display_counters ){
+						$status = wp_ulike_maybe_convert_status( $user_status, 'up' );
+						echo sprintf( '<span class="count-box">%s</span>', wp_ulike_format_number( $total_likes, $status ) );
+					}
 					do_action( 'wp_ulike_after_up_vote_button', $wp_ulike_template );
 				?>
 			</div>
@@ -231,7 +240,10 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 					</svg>
 				</button>
 				<?php
-					echo $counter;
+					if( isset( $display_counters ) && $display_counters ){
+						$status = wp_ulike_maybe_convert_status( $user_status, 'up' );
+						echo sprintf( '<span class="count-box">%s</span>', wp_ulike_format_number( $total_likes, $status ) );
+					}
 					do_action( 'wp_ulike_after_up_vote_button', $wp_ulike_template );
 				?>
 			</div>

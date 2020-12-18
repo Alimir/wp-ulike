@@ -496,25 +496,16 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 if( ! function_exists( 'wp_ulike_format_number' ) ){
 	/**
-	 * Convert numbers of Likes with string (kilobyte) format
+	 * Counter value formatter
 	 *
-	 * @author       	Alimir
-	 * @param           Integer $num (get like number)
-	 * @since           1.5
-	 * @return          String
+	 * @param integer $num
+	 * @param string $status
+	 * @return void
 	 */
-	function wp_ulike_format_number( $num, $status = 'like' ){
-		$sign = $value = '';
-		if( $num != 0 ){
-			$sign = strpos( $status, 'dis' ) === false ? '+' : '-';
-		}
-		if ( $num >= 1000 &&  wp_ulike_is_true( wp_ulike_get_option( 'enable_kilobyte_format', false ) ) ){
-			$value = round($num/1000, 2) . 'K' . $sign;
-		} else {
-			$value = $num . $sign;
-		}
-
-		return apply_filters( 'wp_ulike_format_number', $value, $num, $sign);
+	function wp_ulike_format_number( $number, $status = 'like' ){
+		// Maybe filter value
+		$value = wp_ulike_setting_repo::maybeFilterCounterValue( $number, $status );
+		return apply_filters( 'wp_ulike_format_number', $value, $number, $status );
 	}
 }
 
@@ -528,5 +519,22 @@ if( ! function_exists('wp_ulike_get_button_text') ){
 	function wp_ulike_get_button_text( $option_name, $setting_key = 'posts_group' ){
 		$value = wp_ulike_get_option( $setting_key . '|text_group|' . $option_name );
 		return apply_filters( 'wp_ulike_button_text', $value, $option_name, $setting_key );
+	}
+}
+
+if( ! function_exists('wp_ulike_maybe_convert_status') ){
+	/**
+	 * Get template status
+	 *
+	 * @param string $status
+	 * @param string $type
+	 * @return string
+	 */
+	function wp_ulike_maybe_convert_status( $status, $type ){
+		if( $type === 'up' ){
+			return in_array( $status, array( 'like', 'unlike' ) ) ? $status : 'like';
+		} else {
+			return in_array( $status, array( 'dislike', 'undislike' ) ) ? $status : 'dislike';
+		}
 	}
 }
