@@ -147,6 +147,15 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Deprecated function
+	 *
+	 * @return boolean
+	 */
+	public static function isCounterZeroVisible( $typeName ){
+		return self::isCounterZeroHidden( $typeName );
+	}
+
+	/**
 	 * Check counter zero visibility
 	 *
 	 * @return boolean

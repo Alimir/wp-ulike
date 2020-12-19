@@ -606,10 +606,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'fields'    => array(
                                 array(
                                     'id'      => 'like',
-                                    'type'    => 'code_editor',
-                                    'settings' => array(
-                                        'mode'    => 'htmlmixed',
-                                    ),
+                                    'type'    => 'text',
                                     'title'   => __('Button Text',WP_ULIKE_SLUG),
                                     'default' => 'Like'
                                 ),
@@ -620,10 +617,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'fields'    => array(
                                 array(
                                     'id'      => 'unlike',
-                                    'type'    => 'code_editor',
-                                    'settings' => array(
-                                        'mode'    => 'htmlmixed',
-                                    ),
+                                    'type'    => 'text',
                                     'title'   => __('Button Text',WP_ULIKE_SLUG),
                                     'default' => 'Liked'
                                 ),

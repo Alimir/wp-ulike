@@ -262,20 +262,20 @@
 
     __updateCounter: function (counterValue) {
       if (typeof counterValue !== "object") {
-        this.counterElement.text(counterValue);
+        this.counterElement.html(counterValue);
       } else {
         if (this.settings.isTotal && typeof counterValue.sub !== "undefined") {
-          this.counterElement.text(counterValue.sub);
+          this.counterElement.html(counterValue.sub);
         } else {
           if (this.settings.factor === 'down') {
-            this.counterElement.text(counterValue.down);
+            this.counterElement.html(counterValue.down);
             if (this.siblingElement.length) {
-              this.siblingElement.find(this.settings.counterSelector).text(counterValue.up);
+              this.siblingElement.find(this.settings.counterSelector).html(counterValue.up);
             }
           } else {
-            this.counterElement.text(counterValue.up);
+            this.counterElement.html(counterValue.up);
             if (this.siblingElement.length) {
-              this.siblingElement.find(this.settings.counterSelector).text(counterValue.down);
+              this.siblingElement.find(this.settings.counterSelector).html(counterValue.down);
             }
           }
         }
