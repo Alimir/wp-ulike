@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, user profile, statistics, favorite, rating, bu
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.6
-Stable tag: 4.4.3
+Stable tag: 4.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,15 @@ Our WP ULike project has been able to attract more than 50,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.4.4 =
+* Added: New option to set prefix/postfix on counter values.
+* Added: New option to support storing data in wp postmeta table. (+ Migrate option) [PRO]
+* Improved: Unit convertor functionality. (Shorten long numbers to K/M/B)
+* Updated: All js/css libraries.
+* Fixed: Update status issue for hidden counters.
+* Fixed: Notification display issue.
+* Fixed: Some other small issues.
 
 = 4.4.3 =
 * Added: New logging method option. (Username/IP + Cookie)

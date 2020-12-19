@@ -4,7 +4,7 @@ class wp_ulike_setting_repo {
 
 	protected static function getOption( $key, $default = NULL ){
 		$option = wp_ulike_get_option( $key );
-		return ! empty( $option ) ? $option : $default;
+		return $option != '' ? $option : $default;
 	}
 
 	protected static function getSettingKey( $type ){
@@ -147,14 +147,94 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
-	 * Check counter zero visibility
+	 * Deprecated function
 	 *
 	 * @return boolean
 	 */
 	public static function isCounterZeroVisible( $typeName ){
+		return self::isCounterZeroHidden( $typeName );
+	}
+
+	/**
+	 * Check counter zero visibility
+	 *
+	 * @return boolean
+	 */
+	public static function isCounterZeroHidden( $typeName ){
 		return self::getOption( self::getSettingKey( $typeName ) . '|hide_zero_counter', false );
 	}
 
+
+	/**
+	 * Check counter zero visibility
+	 *
+	 * @return boolean
+	 */
+	public static function maybeHasUnitFormat( $number, $precision = 1 ){
+		// Check for option enable
+		if( self::getOption( 'enable_kilobyte_format', false ) && ! empty( $number ) || is_numeric( $number ) ){
+			// Setup default $divisors if not provided
+			$divisors = array(
+				pow(1000, 0) => '', // 1000^0 == 1
+				pow(1000, 1) => 'K', // Thousand
+				pow(1000, 2) => 'M', // Million
+				pow(1000, 3) => 'B'
+			);
+
+			// Loop through each $divisor and find the
+			// lowest amount that matches
+			foreach ($divisors as $divisor => $shorthand) {
+				if (abs($number) < ($divisor * 1000)) {
+					// We found a match!
+					break;
+				}
+			}
+
+			// We found our match, or there were no matches.
+			// Either way, use the last defined value for $divisor.
+			$number = round( $number / $divisor, $precision ) . $shorthand;
+		}
+
+		return $number;
+	}
+
+
+	/**
+	 * Check distinct status by logging method
+	 *
+	 * @return boolean
+	 */
+	public static function maybeFilterCounterValue( $number, $status ){
+		// retund if empty or not number
+		if( empty( $number ) || ! is_numeric( $number ) ){
+			return $number;
+		}
+
+		// Create filter args
+		$filter_args = self::getOption( 'filter_counter_value', array(
+			'like_prefix'       => '+',
+			'dislike_prefix'    => '-',
+			'undislike_prefix'  => '-',
+			'like_postfix'      => '',
+			'unlike_postfix'    => '',
+			'dislike_postfix'   => '',
+			'undislike_postfix' => ''
+		) );
+
+		// Maybe convert to unit format
+		$number = self::maybeHasUnitFormat( $number );
+
+		// Add prefix
+		if( ! empty( $filter_args[ $status . '_prefix' ] ) ){
+			$number = $filter_args[ $status . '_prefix' ] . $number;
+		}
+		// Add postfix
+		if( ! empty( $filter_args[ $status . '_postfix' ] ) ){
+			$number =  $number . $filter_args[ $status . '_postfix' ];
+		}
+
+		return $number;
+	}
 
 	/**
 	 * Check distinct status by logging method

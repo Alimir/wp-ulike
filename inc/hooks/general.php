@@ -208,84 +208,6 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_update_button_icon', 1 );
 }
 
-/**
- * Hide ajax data when counter zero
- *
- * @param integer $counterValue
- * @param integer $id
- * @param string $slug
- * @param string $status
- * @param boolean $is_distinct
- * @return integer|string
- */
-function wp_ulike_hide_couter_box_ajax_when_zero( $counterValue, $id, $slug, $status, $is_distinct ){
-	// Check zero function
-	if( wp_ulike_setting_repo::isCounterZeroVisible( $slug ) ){
-		if( is_array( $counterValue ) ){
-			$counterValue['sub']  = ($counterValue['up'] - $counterValue['down']) == 0 ? '' : $counterValue['up'] - $counterValue['down'];
-			$counterValue['up']   = empty( $counterValue['up'] ) ? '' : $counterValue['up'];
-			$counterValue['down'] = empty( $counterValue['down'] ) ? '' : $counterValue['down'];
-		} elseif( empty( $counterValue ) ) {
-			$counterValue = '';
-		}
-	}
-
-	return $counterValue;
-}
-
-/**
- * Hide counter args
- *
- * @param array $args
- * @return array
- */
-function wp_ulike_hide_couter_box_when_zero( $args ){
-	// Check zero function
-	if( wp_ulike_setting_repo::isCounterZeroVisible( $args['slug'] ) ){
-		if( isset( $args['total_likes'] ) ){
-			$args['total_likes']    = empty( $args['total_likes'] ) ? '' : $args['total_likes'];
-		}
-		if( isset( $args['total_dislikes'] ) ){
-			$args['total_dislikes'] = empty( $args['total_dislikes'] ) ? '' : $args['total_dislikes'];
-		}
-	}
-
-	return $args;
-}
-
-/**
- * Hide counter box template
- *
- * @param string $string
- * @param integer $counter
- * @param string $slug
- * @return string
- */
-function wp_ulike_hide_count_box_template( $string, $counter, $slug ) {
-	// Check zero function
-	if( wp_ulike_setting_repo::isCounterZeroVisible( $slug ) ){
-		// Check counter value
-		$value = preg_replace("/[^0-9,.]/", "", $counter);
-		if( ! $value ){
-			return '<span class="count-box"></span>';
-		}
-	}
-
-	return  $string;
-}
-
-/**
- * Init plugins loaded hook
- *
- * @return void
- */
-function wp_ulike_init_plugins_loaded_hook(){
-    add_filter( 'wp_ulike_ajax_counter_value', 'wp_ulike_hide_couter_box_ajax_when_zero', 5, 15 );
-    add_filter( 'wp_ulike_add_templates_args', 'wp_ulike_hide_couter_box_when_zero', 10, 1);
-	add_filter('wp_ulike_count_box_template', 'wp_ulike_hide_count_box_template', 10, 3);
-}
-add_action( 'plugins_loaded', 'wp_ulike_init_plugins_loaded_hook' );
-
 // @if DEV
 // function replace_core_jquery_version() {
 //     wp_deregister_script( 'jquery' );
@@ -293,4 +215,28 @@ add_action( 'plugins_loaded', 'wp_ulike_init_plugins_loaded_hook' );
 //     wp_register_script( 'jquery', "https://code.jquery.com/jquery-3.5.1.min.js", array(), false );
 // }
 // add_action( 'wp_enqueue_scripts', 'replace_core_jquery_version' );
+
+// function wp_ulike_pro_custom_pre_archive( $query ) {
+
+//     /* only proceed on the front end */
+//     if( is_admin() ) {
+// 	    return;
+//     }
+
+//     /* only on the person post archive for the main query */
+//     if ( ( is_category() || is_tag() || is_archive() ) && $query->is_main_query() ) {
+// 		$post__in = wp_ulike_get_popular_items_ids(array(
+// 			'rel_type' => $query->get('post_type'),
+// 			'status'   => 'like',
+// 			"order"    => $query->get('order'),
+// 			"offset"   => $query->get('paged'),
+// 			"limit"    => $query->get('posts_per_page')
+// 		));
+
+// 		$query->set( 'post__in', $post__in );
+// 		$query->set( 'orderby', 'post__in' );
+//     }
+
+// }
+// add_action( 'pre_get_posts', 'wp_ulike_pro_custom_pre_archive' );
 // @endif

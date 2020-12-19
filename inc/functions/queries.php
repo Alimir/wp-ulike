@@ -402,13 +402,8 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 			"is_user_logged_in" => ''
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
-
+		// Meta key name
 		$meta_key  = sanitize_key( $parsed_args['item_type'] . '_status' );
-		// delete cache to get fresh data
-		if( wp_ulike_is_cache_exist() ){
-			wp_cache_delete( $parsed_args['current_user'], 'wp_ulike_user_meta' );
-		}
-
 		// Get meta data
 		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 

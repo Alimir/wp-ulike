@@ -104,10 +104,51 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'title'  => __( 'General',WP_ULIKE_SLUG),
                 'fields' => apply_filters( 'wp_ulike_panel_general', array(
                     array(
-                        'id'    => 'enable_kilobyte_format',
-                        'type'  => 'switcher',
-                        'title' => __('Enable Convertor', WP_ULIKE_SLUG),
-                        'desc'  => __('Convert numbers of Likes with string (kilobyte) format.', WP_ULIKE_SLUG) . '<strong> (WHEN? likes>=1000)</strong>'
+                        'id'      => 'enable_kilobyte_format',
+                        'type'    => 'switcher',
+                        'title'   => __('Enable Convertor', WP_ULIKE_SLUG),
+                        'default' => false,
+                        'desc'    => __('Convert numbers of Likes with string (kilobyte) format.', WP_ULIKE_SLUG) . '<strong> (WHEN? likes>=1000)</strong>'
+                    ),
+                    array(
+                        'id'            => 'filter_counter_value',
+                        'type'          => 'tabbed',
+                        'desc'          => __( 'Set your custom prefix/postfix on counter value', WP_ULIKE_SLUG),
+                        'title'         => __( 'Filter Counter Value', WP_ULIKE_SLUG),
+                        'tabs'          => array(
+                            array(
+                                'title'     => __('Prefix',WP_ULIKE_SLUG),
+                                'fields'    => apply_filters( 'wp_ulike_filter_counter_options', array(
+                                    array(
+                                        'id'      => 'like_prefix',
+                                        'type'    => 'text',
+                                        'title'   => __('Like',WP_ULIKE_SLUG),
+                                        'default' => '+'
+                                    ),
+                                    array(
+                                        'id'      => 'unlike_prefix',
+                                        'type'    => 'text',
+                                        'title'   => __('Unlike',WP_ULIKE_SLUG),
+                                        'default' => '+'
+                                    ),
+                                ), 'prefix' )
+                            ),
+                            array(
+                                'title'     => __('Postfix',WP_ULIKE_SLUG),
+                                'fields'    => apply_filters( 'wp_ulike_filter_counter_options', array(
+                                    array(
+                                        'id'      => 'like_postfix',
+                                        'type'    => 'text',
+                                        'title'   => __('Like',WP_ULIKE_SLUG)
+                                    ),
+                                    array(
+                                        'id'      => 'unlike_postfix',
+                                        'type'    => 'text',
+                                        'title'   => __('Unlike',WP_ULIKE_SLUG)
+                                    ),
+                                ), 'postfix' )
+                            ),
+                        )
                     ),
                     array(
                         'id'      => 'enable_toast_notice',
@@ -565,10 +606,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'fields'    => array(
                                 array(
                                     'id'      => 'like',
-                                    'type'    => 'code_editor',
-                                    'settings' => array(
-                                        'mode'    => 'htmlmixed',
-                                    ),
+                                    'type'    => 'text',
                                     'title'   => __('Button Text',WP_ULIKE_SLUG),
                                     'default' => 'Like'
                                 ),
@@ -579,10 +617,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'fields'    => array(
                                 array(
                                     'id'      => 'unlike',
-                                    'type'    => 'code_editor',
-                                    'settings' => array(
-                                        'mode'    => 'htmlmixed',
-                                    ),
+                                    'type'    => 'text',
                                     'title'   => __('Button Text',WP_ULIKE_SLUG),
                                     'default' => 'Liked'
                                 ),
