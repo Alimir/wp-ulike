@@ -241,6 +241,21 @@ if ( ! class_exists( 'ULF_Fields' ) ) {
 
         break;
 
+        case 'location':
+        case 'locations':
+
+          $nav_menus = get_registered_nav_menus();
+
+          if ( ! is_wp_error( $nav_menus ) && ! empty( $nav_menus ) ) {
+            foreach ( $nav_menus as $nav_menu_key => $nav_menu_name ) {
+              $options[$nav_menu_key] = $nav_menu_name;
+            }
+          }
+
+          $array_search = true;
+
+        break;
+
         default:
 
           if ( is_callable( $type ) ) {
@@ -280,6 +295,8 @@ if ( ! class_exists( 'ULF_Fields' ) ) {
       if ( ! empty( $values ) && is_array( $values ) ) {
 
         foreach ( $values as $value ) {
+
+          $options[$value] = ucfirst( $value );
 
           switch( $type ) {
 
@@ -347,11 +364,22 @@ if ( ! class_exists( 'ULF_Fields' ) ) {
             case 'post_type':
             case 'post_types':
 
-                $post_types = get_post_types( array( 'show_in_nav_menus' => true ) );
+              $post_types = get_post_types( array( 'show_in_nav_menus' => true ) );
 
-                if ( ! is_wp_error( $post_types ) && ! empty( $post_types ) && ! empty( $post_types[$value] ) ) {
-                  $options[$value] = ucfirst( $value );
-                }
+              if ( ! is_wp_error( $post_types ) && ! empty( $post_types ) && ! empty( $post_types[$value] ) ) {
+                $options[$value] = ucfirst( $value );
+              }
+
+            break;
+
+            case 'location':
+            case 'locations':
+
+              $nav_menus = get_registered_nav_menus();
+
+              if ( ! is_wp_error( $nav_menus ) && ! empty( $nav_menus ) && ! empty( $nav_menus[$value] ) ) {
+                $options[$value] = $nav_menus[$value];
+              }
 
             break;
 
@@ -359,8 +387,6 @@ if ( ! class_exists( 'ULF_Fields' ) ) {
 
               if ( is_callable( $type .'_title' ) ) {
                 $options[$value] = call_user_func( $type .'_title', $value );
-              } else {
-                $options[$value] = ucfirst( $value );
               }
 
             break;

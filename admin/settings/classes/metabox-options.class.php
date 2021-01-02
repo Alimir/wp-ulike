@@ -30,6 +30,7 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
       'enqueue_webfont'    => true,
       'async_webfont'      => false,
       'output_css'         => true,
+      'nav'                => 'normal',
       'theme'              => 'dark',
       'class'              => '',
       'defaults'           => array(),
@@ -186,11 +187,13 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
 
       global $post;
 
-      $has_nav  = ( count( $this->sections ) > 1 && $this->args['context'] !== 'side' ) ? true : false;
-      $show_all = ( ! $has_nav ) ? ' ulf-show-all' : '';
-      $errors   = ( is_object ( $post ) ) ? get_post_meta( $post->ID, '_ulf_errors_'. $this->unique, true ) : array();
-      $errors   = ( ! empty( $errors ) ) ? $errors : array();
-      $theme    = ( $this->args['theme'] ) ? ' ulf-theme-'. $this->args['theme'] : '';
+      $has_nav   = ( count( $this->sections ) > 1 && $this->args['context'] !== 'side' ) ? true : false;
+      $show_all  = ( ! $has_nav ) ? ' ulf-show-all' : '';
+      $post_type = ( is_object ( $post ) ) ? $post->post_type : '';
+      $errors    = ( is_object ( $post ) ) ? get_post_meta( $post->ID, '_ulf_errors_'. $this->unique, true ) : array();
+      $errors    = ( ! empty( $errors ) ) ? $errors : array();
+      $theme     = ( $this->args['theme'] ) ? ' ulf-theme-'. $this->args['theme'] : '';
+      $nav_type  = ( $this->args['nav'] === 'inline' ) ? 'inline' : 'normal';
 
       if ( is_object ( $post ) && ! empty( $errors ) ) {
         delete_post_meta( $post->ID, '_ulf_errors_'. $this->unique );
@@ -204,13 +207,17 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
 
           if ( $has_nav ) {
 
-            echo '<div class="ulf-nav ulf-nav-metabox">';
+            echo '<div class="ulf-nav ulf-nav-'. esc_attr( $nav_type ) .' ulf-nav-metabox">';
 
               echo '<ul>';
 
               $tab_key = 0;
 
               foreach ( $this->sections as $section ) {
+
+                if ( ! empty( $section['post_type'] ) && ! in_array( $post_type, array_filter( (array) $section['post_type'] ) ) ) {
+                  continue;
+                }
 
                 $tab_error = ( ! empty( $errors['sections'][$tab_key] ) ) ? '<i class="ulf-label-error ulf-error">!</i>' : '';
                 $tab_icon  = ( ! empty( $section['icon'] ) ) ? '<i class="ulf-tab-icon '. esc_attr( $section['icon'] ) .'"></i>' : '';
@@ -234,6 +241,10 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
             $section_key = 0;
 
             foreach ( $this->sections as $section ) {
+
+              if ( ! empty( $section['post_type'] ) && ! in_array( $post_type, array_filter( (array) $section['post_type'] ) ) ) {
+                continue;
+              }
 
               $section_onload = ( ! $has_nav ) ? ' ulf-onload' : '';
               $section_class  = ( ! empty( $section['class'] ) ) ? ' '. $section['class'] : '';
@@ -288,7 +299,7 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
 
           echo '</div>';
 
-          echo ( $has_nav ) ? '<div class="ulf-nav-background"></div>' : '';
+          echo ( $has_nav && $nav_type === 'normal' ) ? '<div class="ulf-nav-background"></div>' : '';
 
           echo '<div class="clear"></div>';
 

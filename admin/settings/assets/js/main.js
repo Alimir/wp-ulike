@@ -3122,12 +3122,17 @@
 
       if ( $complex.length ) {
 
-        var $input  = $complex.find(':input'),
-            $unique = $complex.data('unique-id'),
-            $option = $complex.data('option-id'),
-            obj     = $input.serializeObjectULF(),
-            data    = ( !$.isEmptyObject(obj) ) ? obj[$unique][$option] : '',
-            control = window.wp.customize.control($unique +'['+ $option +']');
+       var unique_id = $complex.data('unique-id');
+
+        if ( unique_id === undefined ) {
+          return;
+        }
+
+        var $input    = $complex.find(':input'),
+            option_id = $complex.data('option-id'),
+            obj       = $input.serializeObjectULF(),
+            data      = ( ! $.isEmptyObject(obj) && obj[unique_id] && obj[unique_id][option_id] ) ? obj[unique_id][option_id] : '',
+            control   = window.wp.customize.control(unique_id +'['+ option_id +']');
 
         // clear the value to force refresh.
         control.setting._value = null;
@@ -3163,7 +3168,9 @@
           unique_id = $this.data('unique-id'),
           option_id = $this.data('option-id');
 
-      if ( unique_id === undefined ) { return; }
+      if ( unique_id === undefined ) {
+        return;
+      }
 
       $input.on('change keyup', function() {
 

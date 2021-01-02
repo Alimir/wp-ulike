@@ -42,7 +42,14 @@ if ( ! class_exists( 'WP_Customize_Control_ULF' ) && class_exists( 'WP_Customize
     public $field  = '';
     public $unique = '';
 
-    protected function render() {
+    public function enqueue() {
+
+      // parent::enqueue();
+      // echo 'xxx';
+
+    }
+
+    public function render() {
 
       $depend  = '';
       $visible = '';

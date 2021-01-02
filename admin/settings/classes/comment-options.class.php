@@ -21,6 +21,7 @@ if ( ! class_exists( 'ULF_Comment_Metabox' ) ) {
       'priority'       => 'default',
       'show_reset'     => false,
       'show_restore'   => false,
+      'nav'            => 'normal',
       'theme'          => 'dark',
       'class'          => '',
       'defaults'       => array(),
@@ -122,6 +123,7 @@ if ( ! class_exists( 'ULF_Comment_Metabox' ) ) {
       $errors   = ( is_object ( $comment ) ) ? get_comment_meta( $comment->comment_ID, '_ulf_errors_'. $this->unique, true ) : array();
       $errors   = ( ! empty( $errors ) ) ? $errors : array();
       $theme    = ( $this->args['theme'] ) ? ' ulf-theme-'. $this->args['theme'] : '';
+      $nav_type = ( $this->args['nav'] === 'inline' ) ? 'inline' : 'normal';
 
       if ( is_object( $comment ) && ! empty( $errors ) ) {
         delete_comment_meta( $comment->comment_ID, '_ulf_errors_'. $this->unique );
@@ -135,7 +137,7 @@ if ( ! class_exists( 'ULF_Comment_Metabox' ) ) {
 
           if ( $has_nav ) {
 
-            echo '<div class="ulf-nav ulf-nav-metabox">';
+            echo '<div class="ulf-nav ulf-nav-'. esc_attr( $nav_type ) .' ulf-nav-metabox">';
 
               echo '<ul>';
 
@@ -219,7 +221,7 @@ if ( ! class_exists( 'ULF_Comment_Metabox' ) ) {
 
           echo '</div>';
 
-          echo ( $has_nav ) ? '<div class="ulf-nav-background"></div>' : '';
+          echo ( $has_nav && $nav_type === 'normal' ) ? '<div class="ulf-nav-background"></div>' : '';
 
           echo '<div class="clear"></div>';
 
