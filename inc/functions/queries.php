@@ -737,6 +737,6 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 			wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
 		}
 
-		return empty( $counter_value ) ? 0 : $counter_value;
+		return empty( $counter_value ) ? 0 : number_format_i18n( $counter_value );
 	}
 }
