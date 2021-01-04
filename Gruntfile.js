@@ -218,12 +218,13 @@ module.exports = function(grunt) {
                         " *  <%= meta.copyright %>;\n" +
                         " */\n",
 
-                    process: function(src, filepath) {
+                    process: function (src, filepath) {
                         var separator = "\n\n/* ================== " + filepath + " =================== */\n\n\n";
                         return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
                     },
                 },
                 src: [
+                    'assets/js/src/tooltip.js',
                     'assets/js/src/wordpress-ulike-notifications.js',
                     'assets/js/src/wordpress-ulike.js',
                     'assets/js/src/scripts.js'
