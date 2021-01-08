@@ -538,6 +538,39 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                 )
             ));
 
+            ULF::createSection( $this->option_domain, array(
+                'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
+                'title'  => __( 'Likers Box', WP_ULIKE_SLUG ),
+                'fields' => array(
+                    array(
+                        'type'    => 'heading',
+                        'content' => __( 'Popover', WP_ULIKE_SLUG ),
+                    ),
+                    array(
+                        'id'               => 'likers_popover_bg',
+                        'type'             => 'background',
+                        'output_important' => true,
+                        'title'            => __( 'Background', WP_ULIKE_SLUG ),
+                        'output'           => '.ulf-tooltip',
+                    ),
+                    array(
+                        'id'               => 'likers_popover_border',
+                        'type'             => 'border',
+                        'output_important' => true,
+                        'title'            => __( 'Border', WP_ULIKE_SLUG ),
+                        'output'           => '.ulf-tooltip',
+                    ),
+                    array(
+                        'id'               => 'likers_popover_arrow_color',
+                        'type'             => 'color',
+                        'output_important' => true,
+                        'title'            => __( 'Arrow Color', WP_ULIKE_SLUG ),
+                        'output'           => '.ulf-tooltip .ulf-arrow',
+                        'output_mode'      => 'border-top-color'
+                    ),
+                )
+            ));
+
             do_action( 'wp_ulike_customize_ended' );
 
         }
