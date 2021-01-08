@@ -92,7 +92,8 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function restrictLikersBox( $typeName ){
-		return wp_ulike_is_true(  self::getOption( self::getSettingKey( $typeName ) . '|hide_likers_for_anonymous_users', false ) );
+		$hide_anonymous_users = self::getOption( self::getSettingKey( $typeName ) . '|hide_likers_for_anonymous_users', false );
+		return wp_ulike_is_true( $hide_anonymous_users ) && ! is_user_logged_in();
 	}
 
 	/**
