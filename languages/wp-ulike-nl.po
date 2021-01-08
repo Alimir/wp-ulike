@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/plugins/wp-ulike/\n"
-"POT-Creation-Date: 2020-12-19 20:52:40+00:00\n"
+"POT-Creation-Date: 2021-01-08 21:55:36+00:00\n"
 "PO-Revision-Date: 2020-02-23 18:53:56+0000\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -479,7 +479,7 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:262
 #: admin/classes/class-wp-ulike-admin-panel.php:274
 #: admin/classes/class-wp-ulike-admin-panel.php:759
-#: admin/classes/class-wp-ulike-admin-panel.php:828
+#: admin/classes/class-wp-ulike-admin-panel.php:815
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:265
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:277
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:762
@@ -954,19 +954,19 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:765
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:768
 #: build/wp-ulike/inc/classes/class-wp-ulike-setting-repo.php:137
-#: inc/classes/class-wp-ulike-setting-repo.php:137
+#: inc/classes/class-wp-ulike-setting-repo.php:138
 msgid "You need to login in order to like this post: "
 msgstr "Je moet inloggen om dit bericht leuk te vinden:"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:767
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:770
 #: build/wp-ulike/inc/classes/class-wp-ulike-setting-repo.php:139
-#: inc/classes/class-wp-ulike-setting-repo.php:139
+#: inc/classes/class-wp-ulike-setting-repo.php:140
 msgid "click here"
 msgstr "klik hier"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:769
-#: admin/classes/class-wp-ulike-admin-panel.php:827
+#: admin/classes/class-wp-ulike-admin-panel.php:814
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:772
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:830
 msgid "Custom HTML Template"
@@ -998,27 +998,46 @@ msgid "Hide For Anonymous Users"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:798
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:801
-msgid "Disable Pophover"
+msgid "Likers Display"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:800
-#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:803
-msgid ""
-"Active this option to show liked users avatars in the bottom of button like."
-msgstr "Selecteer deze optie om avatars weer te geven naar de like knop"
+#: admin/classes/class-wp-ulike-admin-panel.php:801
+#: admin/settings/fields/typography/typography.php:119
+#: admin/settings/fields/typography/typography.php:132
+#: admin/settings/fields/typography/typography.php:145
+#: admin/settings/fields/typography/typography.php:160
+#: admin/settings/fields/typography/typography.php:176
+#: admin/settings/fields/typography/typography.php:189
+#: admin/settings/fields/typography/typography.php:203
+#: admin/settings/fields/typography/typography.php:221
+#: build/wp-ulike/admin/settings/fields/typography/typography.php:119
+#: build/wp-ulike/admin/settings/fields/typography/typography.php:132
+#: build/wp-ulike/admin/settings/fields/typography/typography.php:145
+#: build/wp-ulike/admin/settings/fields/typography/typography.php:160
+#: build/wp-ulike/admin/settings/fields/typography/typography.php:176
+#: build/wp-ulike/admin/settings/fields/typography/typography.php:189
+#: build/wp-ulike/admin/settings/fields/typography/typography.php:203
+#: build/wp-ulike/admin/settings/fields/typography/typography.php:221
+#: build/wp-ulike/inc/functions/templates.php:26 inc/functions/templates.php:23
+msgid "Default"
+msgstr "Standaard"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:805
+#: admin/classes/class-wp-ulike-admin-panel.php:802
+#: inc/classes/class-wp-ulike-customizer.php:547
+msgid "Popover"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:828
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:808
 msgid "Size of Gravatars"
 msgstr "Formaat avatars"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:813
+#: admin/classes/class-wp-ulike-admin-panel.php:836
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:816
 msgid "Likers Count"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:814
+#: admin/classes/class-wp-ulike-admin-panel.php:837
 #: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:817
 msgid "The number of users to show in the users liked box"
 msgstr ""
@@ -1835,41 +1854,41 @@ msgstr ""
 msgid "Topic Title"
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:224
+#: admin/settings/classes/admin-options.class.php:225
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:224
 msgid "Error while saving the changes."
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:284
+#: admin/settings/classes/admin-options.class.php:285
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:284
 msgid "Settings successfully imported."
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:296
-#: admin/settings/classes/admin-options.class.php:312
+#: admin/settings/classes/admin-options.class.php:297
+#: admin/settings/classes/admin-options.class.php:313
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:296
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:312
 #, fuzzy
 msgid "Default settings restored."
 msgstr "Standaardinstellingen zijn teruggezet."
 
-#: admin/settings/classes/admin-options.class.php:383
+#: admin/settings/classes/admin-options.class.php:384
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:383
 msgid "Settings saved."
 msgstr "Instellingen opgeslagen."
 
-#: admin/settings/classes/admin-options.class.php:561
+#: admin/settings/classes/admin-options.class.php:563
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:561
 msgid "You have unsaved changes, save your changes!"
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:563
+#: admin/settings/classes/admin-options.class.php:565
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:563
 #, fuzzy
 msgid "show all settings"
 msgstr "Aangepaste instellingen"
 
-#: admin/settings/classes/admin-options.class.php:565
+#: admin/settings/classes/admin-options.class.php:567
 #: admin/settings/fields/icon/icon.php:57 admin/settings/fields/map/map.php:23
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:565
 #: build/wp-ulike/admin/settings/fields/icon/icon.php:57
@@ -1877,45 +1896,45 @@ msgstr "Aangepaste instellingen"
 msgid "Search..."
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:568
-#: admin/settings/classes/admin-options.class.php:691
+#: admin/settings/classes/admin-options.class.php:570
+#: admin/settings/classes/admin-options.class.php:693
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:568
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:691
 msgid "Save"
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:568
-#: admin/settings/classes/admin-options.class.php:691
+#: admin/settings/classes/admin-options.class.php:570
+#: admin/settings/classes/admin-options.class.php:693
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:568
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:691
 msgid "Saving..."
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:569
-#: admin/settings/classes/admin-options.class.php:692
+#: admin/settings/classes/admin-options.class.php:571
+#: admin/settings/classes/admin-options.class.php:694
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:569
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:692
 msgid "Reset Section"
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:569
-#: admin/settings/classes/admin-options.class.php:692
+#: admin/settings/classes/admin-options.class.php:571
+#: admin/settings/classes/admin-options.class.php:694
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:569
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:692
 msgid "Are you sure to reset this section options?"
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:570
-#: admin/settings/classes/admin-options.class.php:693
+#: admin/settings/classes/admin-options.class.php:572
+#: admin/settings/classes/admin-options.class.php:695
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:570
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:693
 msgid "Reset All"
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:570
-#: admin/settings/classes/admin-options.class.php:693
-#: admin/settings/classes/comment-options.class.php:213
-#: admin/settings/classes/metabox-options.class.php:282
+#: admin/settings/classes/admin-options.class.php:572
+#: admin/settings/classes/admin-options.class.php:695
+#: admin/settings/classes/comment-options.class.php:215
+#: admin/settings/classes/metabox-options.class.php:293
 #: admin/settings/fields/backup/backup.php:31
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:570
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:693
@@ -1925,17 +1944,17 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: admin/settings/classes/admin-options.class.php:570
-#: admin/settings/classes/admin-options.class.php:693
+#: admin/settings/classes/admin-options.class.php:572
+#: admin/settings/classes/admin-options.class.php:695
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:570
 #: build/wp-ulike/admin/settings/classes/admin-options.class.php:693
 #, fuzzy
 msgid "Are you sure you want to reset all settings to default values?"
 msgstr "Wil je echt alle instellingen verwijderen?"
 
-#: admin/settings/classes/admin-options.class.php:668
-#: admin/settings/classes/comment-options.class.php:196
-#: admin/settings/classes/metabox-options.class.php:265
+#: admin/settings/classes/admin-options.class.php:670
+#: admin/settings/classes/comment-options.class.php:198
+#: admin/settings/classes/metabox-options.class.php:276
 #: admin/settings/fields/button_set/button_set.php:56
 #: admin/settings/fields/checkbox/checkbox.php:76
 #: admin/settings/fields/radio/radio.php:75
@@ -1952,15 +1971,15 @@ msgstr "Wil je echt alle instellingen verwijderen?"
 msgid "No data available."
 msgstr ""
 
-#: admin/settings/classes/comment-options.class.php:214
-#: admin/settings/classes/metabox-options.class.php:283
+#: admin/settings/classes/comment-options.class.php:216
+#: admin/settings/classes/metabox-options.class.php:294
 #: build/wp-ulike/admin/settings/classes/comment-options.class.php:214
 #: build/wp-ulike/admin/settings/classes/metabox-options.class.php:283
 msgid "update post"
 msgstr ""
 
-#: admin/settings/classes/comment-options.class.php:214
-#: admin/settings/classes/metabox-options.class.php:283
+#: admin/settings/classes/comment-options.class.php:216
+#: admin/settings/classes/metabox-options.class.php:294
 #: build/wp-ulike/admin/settings/classes/comment-options.class.php:214
 #: build/wp-ulike/admin/settings/classes/metabox-options.class.php:283
 msgid "Cancel"
@@ -2553,26 +2572,6 @@ msgstr ""
 msgid "Backup Font Family"
 msgstr ""
 
-#: admin/settings/fields/typography/typography.php:119
-#: admin/settings/fields/typography/typography.php:132
-#: admin/settings/fields/typography/typography.php:145
-#: admin/settings/fields/typography/typography.php:160
-#: admin/settings/fields/typography/typography.php:176
-#: admin/settings/fields/typography/typography.php:189
-#: admin/settings/fields/typography/typography.php:203
-#: admin/settings/fields/typography/typography.php:221
-#: build/wp-ulike/admin/settings/fields/typography/typography.php:119
-#: build/wp-ulike/admin/settings/fields/typography/typography.php:132
-#: build/wp-ulike/admin/settings/fields/typography/typography.php:145
-#: build/wp-ulike/admin/settings/fields/typography/typography.php:160
-#: build/wp-ulike/admin/settings/fields/typography/typography.php:176
-#: build/wp-ulike/admin/settings/fields/typography/typography.php:189
-#: build/wp-ulike/admin/settings/fields/typography/typography.php:203
-#: build/wp-ulike/admin/settings/fields/typography/typography.php:221
-#: build/wp-ulike/inc/functions/templates.php:26 inc/functions/templates.php:23
-msgid "Default"
-msgstr "Standaard"
-
 #: admin/settings/fields/typography/typography.php:130
 #: build/wp-ulike/admin/settings/fields/typography/typography.php:130
 msgid "Font Style"
@@ -2770,6 +2769,15 @@ msgstr ""
 msgid "Please enter a valid URL."
 msgstr ""
 
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:801
+msgid "Disable Pophover"
+msgstr ""
+
+#: build/wp-ulike/admin/classes/class-wp-ulike-admin-panel.php:803
+msgid ""
+"Active this option to show liked users avatars in the bottom of button like."
+msgstr "Selecteer deze optie om avatars weer te geven naar de like knop"
+
 #: build/wp-ulike/inc/classes/class-wp-ulike-ajax-listener-base.php:60
 #: inc/classes/class-wp-ulike-ajax-listener-base.php:60
 msgid "There was an error processing the request."
@@ -2837,6 +2845,7 @@ msgstr ""
 #: inc/classes/class-wp-ulike-customizer.php:434
 #: inc/classes/class-wp-ulike-customizer.php:472
 #: inc/classes/class-wp-ulike-customizer.php:510
+#: inc/classes/class-wp-ulike-customizer.php:553
 msgid "Background"
 msgstr ""
 
@@ -2864,6 +2873,7 @@ msgstr ""
 #: inc/classes/class-wp-ulike-customizer.php:441
 #: inc/classes/class-wp-ulike-customizer.php:479
 #: inc/classes/class-wp-ulike-customizer.php:517
+#: inc/classes/class-wp-ulike-customizer.php:560
 msgid "Border"
 msgstr ""
 
@@ -3178,6 +3188,14 @@ msgstr "WP ULike"
 msgid ""
 "You are using two instances of WP ULike plugin at same time, please deactive "
 "one of them."
+msgstr ""
+
+#: inc/classes/class-wp-ulike-customizer.php:543
+msgid "Likers Box"
+msgstr ""
+
+#: inc/classes/class-wp-ulike-customizer.php:567
+msgid "Arrow Color"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
