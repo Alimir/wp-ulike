@@ -46,8 +46,10 @@
             dom_wrapped: dom_wrapped,
             position_debug: options.position_debug,
             trigger: options.trigger,
+            id: options.id,
             title: options.title,
             content: options.title,
+            child_class: options.child,
             theme: options.theme,
             class: options.class,
             backdrop: options.backdrop,
@@ -140,6 +142,16 @@
                     $.WordpressUlikeTooltip.bodyClickInitialized = true;
                 }
 
+                // WP ULike Actions
+                $(document).on('WordpressUlikeLikersMarkupUpdated', function (e, b, t) {
+                    if (t) {
+                        helper.show();
+                    } else {
+                        helper.destroy();
+                        return;
+                    }
+                });
+
                 //attach to dom for easy access later
                 helper.dom_wrapped.data(helper.dataAttr, helper);
 
@@ -214,7 +226,7 @@
                 //attach resize handler to reposition tooltip
                 $(window).on('resize', helper.onResize);
                 //give the tooltip an id so we can set accessibility props
-                const id = 'WordpressUlikeTooltip' + Date.now();
+                const id = 'ulp-dom-' + helper.id;
                 helper.tooltip.attr('id', id);
                 helper.dom.attr('aria-describedby', id);
                 //add to open array
@@ -413,7 +425,12 @@
                 else if ((position === 'auto' || position === 'top') && fits.above && fits.left_half && fits.right_half) {
                     helper.positionDebug('Displaying above, centered');
                     arrow_dir = 'bottom';
-                    left = elem_position.left - (tooltip_width / 2) + (elem_width / 2);
+                    if (helper.child_class) {
+                        let child_position = helper.dom_wrapped.find(helper.child_class).first().offset();
+                        left = child_position.left;
+                    } else {
+                        left = elem_position.left - (tooltip_width / 2) + (elem_width / 2);
+                    }
                     top = elem_position.top - tooltip_height - (arrow_height / 2);
                 }
                 else if ((position === 'auto' || position === 'left') && fits.left && fits.vertical_half) {
@@ -474,6 +491,7 @@
     $.WordpressUlikeTooltip.visible = [];
     $.WordpressUlikeTooltip.body_click_initialized = false;
     $.WordpressUlikeTooltip.defaults = {
+        id: Date.now(),
         title: '',
         trigger: 'hoverfocus',
         position: 'auto',
