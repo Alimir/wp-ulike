@@ -6,13 +6,13 @@
     $window = $(window),
     $document = $(document),
     defaults = {
-      ID: 0 /*  Auto ID value by element type */,
-      nonce: 0 /*  Get nonce token */,
-      type:
-        "" /* Values : likeThis (Posts),likeThisComment, likeThisActivity, likeThisTopic */,
+      ID: 0,
+      nonce: 0,
+      type: "",
       append: '',
       appendTimeout: 2000,
       displayLikers: false,
+      likersTemplate: 'default',
       disablePophover: true,
       isTotal: false,
       factor: '',
@@ -29,6 +29,7 @@
       "ulike-append": "append",
       "ulike-is-total": "isTotal",
       "ulike-display-likers": "displayLikers",
+      "ulike-likers-style": "likersTemplate",
       "ulike-disable-pophover": "disablePophover",
       "ulike-append-timeout": "appendTimeout",
       "ulike-factor": "factor",
@@ -70,17 +71,6 @@
       this.buttonElement.click(this._initLike.bind(this));
       // Call likers box generator
       this.generalElement.one("mouseenter", this._updateLikers.bind(this));
-      // Fix PopHover Appearance
-      // if( !this.settings.disablePophover && this.settings.displayLikers ){
-      //   var self = this;
-      //   this.generalElement.hover(
-      //     function() {
-      //       self.$element.addClass( "wp_ulike_display_pophover" );
-      //     }, function() {
-      //       self.$element.removeClass( "wp_ulike_display_pophover" );
-      //     }
-      //   );
-      // }
     },
 
     /**
@@ -289,7 +279,13 @@
      */
     _updateLikers: function () {
       // Make a request to generate or refresh the likers box
-      if (this.settings.displayLikers && !this.likersElement.length) {
+      if (this.settings.displayLikers) {
+        // return on these conditions
+        if (this.settings.likersTemplate == 'popover' && this.$element.data('ulike-tooltip')) {
+          return;
+        } else if (this.settings.likersTemplate == 'default' && this.likersElement.length) {
+          return;
+        }
         // Add progress status class
         this.generalElement.addClass("wp_ulike_is_getting_likers_list");
         // Start ajax process
@@ -318,18 +314,36 @@
      * Update likers markup
      */
     _updateLikersMarkup: function (data) {
-      // If the likers container is not exist, we've to add it.
-      if (!this.likersElement.length) {
-        this.likersElement = $("<div>", {
-          class: data.class
-        }).appendTo(this.$element);
-      }
-      // Modify likers box innerHTML
-      if (data.template) {
-        this.likersElement.show().html(data.template);
+
+      if (this.settings.likersTemplate == 'popover') {
+        this.likersElement = this.$element;
+        if (data.template) {
+          this.likersElement.WordpressUlikeTooltip({
+            id: this.settings.type.toLowerCase() + '-' + this.settings.ID,
+            title: data.template,
+            position: 'top',
+            child: this.settings.generalSelector,
+            theme: 'white',
+            size: 'tiny',
+            trigger: 'hover'
+          });
+        }
       } else {
-        this.likersElement.hide();
+        // If the likers container is not exist, we've to add it.
+        if (!this.likersElement.length) {
+          this.likersElement = $("<div>", {
+            class: data.class
+          }).appendTo(this.$element);
+        }
+        // Modify likers box innerHTML
+        if (data.template) {
+          this.likersElement.show().html(data.template);
+        } else {
+          this.likersElement.hide();
+        }
       }
+
+      $document.trigger("WordpressUlikeLikersMarkupUpdated", [this.likersElement, this.settings.likersTemplate, data.template]);
     },
 
     /**

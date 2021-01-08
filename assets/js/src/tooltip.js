@@ -142,18 +142,22 @@
                     $.WordpressUlikeTooltip.bodyClickInitialized = true;
                 }
 
-                // WP ULike Actions
-                $(document).on('WordpressUlikeLikersMarkupUpdated', function (e, b, t) {
-                    if (t) {
-                        helper.show();
-                    } else {
-                        helper.destroy();
-                        return;
-                    }
-                });
-
                 //attach to dom for easy access later
                 helper.dom_wrapped.data(helper.dataAttr, helper);
+
+                // WP ULike Actions
+                $(document).on('WordpressUlikeLikersMarkupUpdated', function (e, el, type, temp) {
+                    if (type == 'popover') {
+                        if (temp.length) {
+                            helper.show();
+                        } else {
+                            let existing = el.data(helper.dataAttr);
+                            if (typeof existing !== 'undefined' && existing !== null) {
+                                existing.destroy();
+                            }
+                        }
+                    }
+                });
 
                 //return dom for chaining of event handlers and such
                 return helper.dom;
