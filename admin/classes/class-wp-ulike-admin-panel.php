@@ -179,6 +179,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'  => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
                     ),
                     array(
+                        'id'    => 'cache_exist',
+                        'type'  => 'switcher',
+                        'title' => __('Enable Cache Exist', WP_ULIKE_SLUG),
+                        'desc'  => __('Please enable this option, If you have any cache service on your website.', WP_ULIKE_SLUG)
+                    ),
+                    array(
                         'id'    => 'disable_admin_notice',
                         'type'  => 'switcher',
                         'title' => __('Hide Admin Notices', WP_ULIKE_SLUG),
@@ -795,7 +801,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'likers_style' => array(
                     'id'         => 'likers_style',
                     'type'       => 'button_set',
-                    'title'      => __( 'Likers Display', WP_ULIKE_SLUG),
+                    'title'      => __( 'Likers Box Display', WP_ULIKE_SLUG),
                     'default'    => 'popover',
                     'options'    => array(
                         'default' => __('Default', WP_ULIKE_SLUG),
