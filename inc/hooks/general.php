@@ -156,16 +156,21 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 	 * @return void
 	 */
 	function wp_ulike_display_inline_likers_template( $args ){
+		// Return if likers is hidden
+		if( empty( $args['display_likers'] ) ){
+			return;
+		}
 		// Get settings for current type
-		$get_settings     = wp_ulike_get_post_settings_by_type( $args['type'] );
+		$get_settings = wp_ulike_get_post_settings_by_type( $args['type'] );
 		// If method not exist, then return error message
 		if( wp_ulike_setting_repo::restrictLikersBox( $args['type'] ) || empty( $get_settings ) || empty( $args['ID'] ) ) {
 			return;
 		}
+
 		// Extract settings array
 		extract( $get_settings );
 		// Display likers box
-		echo $args['disable_pophover'] && $args['display_likers'] ? sprintf(
+		echo $args['disable_pophover'] || $args['likers_style'] !== 'popover' ? sprintf(
 			'<div class="wp_ulike_likers_wrapper wp_ulike_display_inline wp_%s_likers_%s">%s</div>',
 			$args['type'], $args['ID'], wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting )
 		) : '';

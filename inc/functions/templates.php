@@ -73,7 +73,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-template="<?php echo $style; ?>"
 					data-ulike-display-likers="<?php echo $display_likers; ?>"
-					data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
+					data-ulike-likers-style="<?php echo $likers_style; ?>"
 					class="<?php echo $button_class; ?>">
 					<?php
 						echo $up_vote_inner_text;
@@ -125,7 +125,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-template="<?php echo $style; ?>"
 					data-ulike-display-likers="<?php echo $display_likers; ?>"
-					data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
+					data-ulike-likers-style="<?php echo $likers_style; ?>"
 					class="<?php echo $button_class; ?>">
 					<?php
 						echo $up_vote_inner_text;
@@ -177,7 +177,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-template="<?php echo $style; ?>"
 					data-ulike-display-likers="<?php echo $display_likers; ?>"
-					data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
+					data-ulike-likers-style="<?php echo $likers_style; ?>"
 					class="<?php echo $button_class; ?>">
 					<?php
 						echo $up_vote_inner_text;
@@ -227,7 +227,7 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 					data-ulike-type="<?php echo $type; ?>"
 					data-ulike-template="<?php echo $style; ?>"
 					data-ulike-display-likers="<?php echo $display_likers; ?>"
-					data-ulike-disable-pophover="<?php echo $disable_pophover; ?>"
+					data-ulike-likers-style="<?php echo $likers_style; ?>"
 					data-ulike-append="<?php echo htmlspecialchars( '<svg class="wpulike-svg-heart wpulike-svg-heart-pop one" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop two" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop three" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop four" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop five" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop six" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop seven" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop eight" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop nine" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>' ); ?>"
 					class="<?php echo $button_class; ?>">
 					<?php
