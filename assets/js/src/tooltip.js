@@ -430,8 +430,8 @@
                     helper.positionDebug('Displaying above, centered');
                     arrow_dir = 'bottom';
                     if (helper.child_class) {
-                        let child_position = helper.dom_wrapped.find(helper.child_class).first().offset();
-                        left = child_position.left;
+                        let $child_element = helper.dom_wrapped.find(helper.child_class).first();
+                        left = $child_element.offset().left - (tooltip_width / 2) + ($child_element.width() / 2);
                     } else {
                         left = elem_position.left - (tooltip_width / 2) + (elem_width / 2);
                     }

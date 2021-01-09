@@ -1,32 +1,28 @@
-
 /**
  * Robeen template
  */
 .wpulike-robeen {
 
-  .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
-    bottom: 5px;
-  }
   .count-box {
     font-weight: 600;
     padding: 0 14px;
     font-size: 16px;
   }
 
-  .wp_ulike_is_loading{
-      .wp_ulike_btn{
-          background-image: initial;
-          padding: 0;
+  .wp_ulike_is_loading {
+    .wp_ulike_btn {
+      background-image: initial;
+      padding: 0;
 
-          &.wp_ulike_put_image{
-              &:after{
-                  content: '';
-              }
-          }
+      &.wp_ulike_put_image {
+        &:after {
+          content: '';
+        }
       }
+    }
   }
 
-  .wp_ulike_btn{
+  .wp_ulike_btn {
     width: 30px;
     height: 30px;
     overflow: hidden;
@@ -34,47 +30,52 @@
     border: 0;
     background: transparent;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: transparent;
     }
 
-    &:after{
-        content: '';
-        background: url(../img/icons/twitter-heart.png) no-repeat;
-        background-position: 0 0;
-        transition: background-position 1s steps(28);
-        transition-duration: 0s;
-        width: 100px;
-        height: 100px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%) ;
+    &:after {
+      content: '';
+      background: url(../img/icons/twitter-heart.png) no-repeat;
+      background-position: 0 0;
+      transition: background-position 1s steps(28);
+      transition-duration: 0s;
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
     }
 
-    &.wp_ulike_btn_is_active{
-        overflow: visible;
-        &:after{
-          transition-duration: 1s;
-          background-position: -2800px 0;
-        }
-    }
-}
+    &.wp_ulike_btn_is_active {
+      overflow: visible;
 
-}
-
-
-#buddypress #activity-stream{
-  .activity-meta, .activity-comments, .activity-inner {
-      .wpulike-robeen {
-          .wp_ulike_btn{
-            background: transparent;
-            border: 0;
-            width: 30px;
-            height: 30px;
-            border: 0;
-            padding: 0;
-          }
+      &:after {
+        transition-duration: 1s;
+        background-position: -2800px 0;
       }
+    }
+  }
+
+}
+
+
+#buddypress #activity-stream {
+
+  .activity-meta,
+  .activity-comments,
+  .activity-inner {
+    .wpulike-robeen {
+      .wp_ulike_btn {
+        background: transparent;
+        border: 0;
+        width: 30px;
+        height: 30px;
+        border: 0;
+        padding: 0;
+      }
+    }
   }
 }

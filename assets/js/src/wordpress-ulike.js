@@ -115,7 +115,7 @@
           type: this.settings.type,
           template: this.settings.template,
           displayLikers: this.settings.displayLikers,
-          disablePophover: this.settings.disablePophover
+          likersTemplate: this.settings.likersTemplate
         },
         function (response) {
           //remove progress class
@@ -296,7 +296,7 @@
             nonce: this.settings.nonce,
             type: this.settings.type,
             displayLikers: this.settings.displayLikers,
-            disablePophover: this.settings.disablePophover
+            likersTemplate: this.settings.likersTemplate
           },
           function (response) {
             // Remove progress status class
@@ -331,9 +331,7 @@
       } else {
         // If the likers container is not exist, we've to add it.
         if (!this.likersElement.length) {
-          this.likersElement = $("<div>", {
-            class: data.class
-          }).appendTo(this.$element);
+          this.likersElement = $(data.template).appendTo(this.$element);
         }
         // Modify likers box innerHTML
         if (data.template) {
