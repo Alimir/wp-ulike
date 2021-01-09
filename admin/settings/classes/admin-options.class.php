@@ -78,6 +78,7 @@ if ( ! class_exists( 'ULF_Options' ) ) {
       'output_css'              => true,
 
       // theme
+      'nav'                     => 'normal',
       'theme'                   => 'dark',
       'class'                   => '',
 
@@ -531,6 +532,7 @@ if ( ! class_exists( 'ULF_Options' ) ) {
       $wrapper_class = ( $this->args['framework_class'] ) ? ' '. $this->args['framework_class'] : '';
       $theme         = ( $this->args['theme'] ) ? ' ulf-theme-'. $this->args['theme'] : '';
       $class         = ( $this->args['class'] ) ? ' '. $this->args['class'] : '';
+      $nav_type      = ( $this->args['nav'] === 'inline' ) ? 'inline' : 'normal';
 
       do_action( 'ulf_options_before' );
 
@@ -580,7 +582,7 @@ if ( ! class_exists( 'ULF_Options' ) ) {
 
           if ( $has_nav ) {
 
-            echo '<div class="ulf-nav ulf-nav-options">';
+            echo '<div class="ulf-nav ulf-nav-'. esc_attr( $nav_type ) .' ulf-nav-options">';
 
               echo '<ul>';
 
@@ -679,7 +681,7 @@ if ( ! class_exists( 'ULF_Options' ) ) {
 
           echo '</div>';
 
-          echo '<div class="ulf-nav-background"></div>';
+          echo ( $has_nav && $nav_type === 'normal' ) ? '<div class="ulf-nav-background"></div>' : '';
 
         echo '</div>';
 

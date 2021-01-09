@@ -399,7 +399,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 			}
 		}
 
-		return NULL;
+		return '';
 	}
 }
 

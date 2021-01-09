@@ -92,7 +92,8 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function restrictLikersBox( $typeName ){
-		return wp_ulike_is_true(  self::getOption( self::getSettingKey( $typeName ) . '|hide_likers_for_anonymous_users', false ) );
+		$hide_anonymous_users = self::getOption( self::getSettingKey( $typeName ) . '|hide_likers_for_anonymous_users', false );
+		return wp_ulike_is_true( $hide_anonymous_users ) && ! is_user_logged_in();
 	}
 
 	/**
@@ -172,7 +173,7 @@ class wp_ulike_setting_repo {
 	 */
 	public static function maybeHasUnitFormat( $number, $precision = 1 ){
 		// Check for option enable
-		if( self::getOption( 'enable_kilobyte_format', false ) && ! empty( $number ) || is_numeric( $number ) ){
+		if( self::getOption( 'enable_kilobyte_format', false ) && ( ! empty( $number ) || is_numeric( $number ) ) ){
 			// Setup default $divisors if not provided
 			$divisors = array(
 				pow(1000, 0) => '', // 1000^0 == 1
@@ -223,6 +224,11 @@ class wp_ulike_setting_repo {
 
 		// Maybe convert to unit format
 		$number = self::maybeHasUnitFormat( $number );
+
+		// If has no unit, format integer number
+		if( is_numeric( $number ) ){
+			$number = number_format_i18n( $number );
+		}
 
 		// Add prefix
 		if( ! empty( $filter_args[ $status . '_prefix' ] ) ){

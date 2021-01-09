@@ -179,6 +179,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'  => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
                     ),
                     array(
+                        'id'    => 'cache_exist',
+                        'type'  => 'switcher',
+                        'title' => __('Enable Cache Exist', WP_ULIKE_SLUG),
+                        'desc'  => __('Please enable this option, If you have any cache service on your website.', WP_ULIKE_SLUG)
+                    ),
+                    array(
                         'id'    => 'disable_admin_notice',
                         'type'  => 'switcher',
                         'title' => __('Hide Admin Notices', WP_ULIKE_SLUG),
@@ -792,13 +798,36 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'title' => __('Hide For Anonymous Users', WP_ULIKE_SLUG),
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),
                 ),
-                'disable_likers_pophover' => array(
-                    'id'         => 'disable_likers_pophover',
-                    'type'       => 'switcher',
-                    'title'      => __('Disable Pophover', WP_ULIKE_SLUG),
+                'likers_style' => array(
+                    'id'         => 'likers_style',
+                    'type'       => 'button_set',
+                    'title'      => __( 'Likers Box Display', WP_ULIKE_SLUG),
+                    'default'    => 'popover',
+                    'options'    => array(
+                        'default' => __('Inline', WP_ULIKE_SLUG),
+                        'popover' => __('Popover', WP_ULIKE_SLUG)
+                    ),
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),
-                    'desc'       => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
                 ),
+                'likers_template' => array(
+                    'id'       => 'likers_template',
+                    'type'     => 'code_editor',
+                    'settings' => array(
+                        'theme' => 'shadowfox',
+                        'mode'  => 'htmlmixed',
+                    ),
+                    'default'  => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
+                    'title'    => __('Custom HTML Template', WP_ULIKE_SLUG),
+                    'desc'     => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>',
+                    'dependency'=> array( 'enable_likers_box|likers_style', '==|any', 'true|default,popover'  ),
+                ),
+                // 'disable_likers_pophover' => array(
+                //     'id'         => 'disable_likers_pophover',
+                //     'type'       => 'switcher',
+                //     'title'      => __('Disable Pophover', WP_ULIKE_SLUG),
+                //     'dependency' => array( 'enable_likers_box', '==', 'true' ),
+                //     'desc'       => __('Active this option to show liked users avatars in the bottom of button like.', WP_ULIKE_SLUG)
+                // ),
                 'likers_gravatar_size' => array(
                     'id'         => 'likers_gravatar_size',
                     'type'       => 'number',
@@ -815,18 +844,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'default'    => 10,
                     'unit'       => 'users',
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),
-                ),
-                'likers_template' => array(
-                    'id'       => 'likers_template',
-                    'type'     => 'code_editor',
-                    'settings' => array(
-                        'theme' => 'shadowfox',
-                        'mode'  => 'htmlmixed',
-                    ),
-                    'default'  => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
-                    'title'    => __('Custom HTML Template', WP_ULIKE_SLUG),
-                    'desc'     => __('Allowed Variables:', WP_ULIKE_SLUG) . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>',
-                    'dependency'=> array( 'enable_likers_box', '==', 'true' ),
                 )
             );
         }

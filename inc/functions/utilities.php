@@ -113,7 +113,8 @@ if( ! function_exists('wp_ulike_is_cache_exist') ){
 	 * @return void
 	 */
 	function wp_ulike_is_cache_exist(){
-		return defined( 'WP_CACHE' ) && WP_CACHE === true;
+		$cache_exist = wp_ulike_get_option( 'cache_exist', false );
+		return $cache_exist || ( defined( 'WP_CACHE' ) && WP_CACHE === true );
 	}
 }
 

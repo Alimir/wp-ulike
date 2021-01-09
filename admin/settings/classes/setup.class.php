@@ -12,7 +12,7 @@ if ( ! class_exists( 'ULF' ) ) {
 
     // Default constants
     public static $premium  = true;
-    public static $version  = '2.2.0';
+    public static $version  = '2.2.1';
     public static $dir      = '';
     public static $url      = '';
     public static $css      = '';
@@ -48,7 +48,7 @@ if ( ! class_exists( 'ULF' ) ) {
       self::includes();
 
       // Setup textdomain
-      // self::textdomain();
+      self::textdomain();
 
       add_action( 'after_setup_theme', array( 'ULF', 'setup' ) );
       add_action( 'init', array( 'ULF', 'setup' ) );
@@ -287,9 +287,9 @@ if ( ! class_exists( 'ULF' ) ) {
     public static function constants() {
 
       // We need this path-finder code for set URL of framework
-      $dirname        = wp_normalize_path( dirname( dirname( __FILE__ ) ) );
-      $theme_dir      = wp_normalize_path( get_parent_theme_file_path() );
-      $plugin_dir     = wp_normalize_path( WP_PLUGIN_DIR );
+      $dirname        = str_replace( '//', '/', wp_normalize_path( dirname( dirname( __FILE__ ) ) ) );
+      $theme_dir      = str_replace( '//', '/', wp_normalize_path( get_parent_theme_file_path() ) );
+      $plugin_dir     = str_replace( '//', '/', wp_normalize_path( WP_PLUGIN_DIR ) );
       $located_plugin = ( preg_match( '#'. self::sanitize_dirname( $plugin_dir ) .'#', self::sanitize_dirname( $dirname ) ) ) ? true : false;
       $directory      = ( $located_plugin ) ? $plugin_dir : $theme_dir;
       $directory_uri  = ( $located_plugin ) ? WP_PLUGIN_URL : get_parent_theme_file_uri();

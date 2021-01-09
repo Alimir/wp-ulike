@@ -1,14 +1,4 @@
-
 .rtl {
-    .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
-        left: auto;
-        right: 0;
-
-        &:after{
-            left: auto;
-            right: 15px;
-        }
-    }    
     .commentlist {
         .tiles {
             .avatar {
@@ -17,14 +7,17 @@
             }
         }
     }
+
     .wp_ulike_thumbnail {
         margin: 0 0 0 10px;
     }
+
     .most_liked_comment {
         .avatar {
             margin: 0 0 0 10px;
         }
     }
+
     .wp_ulike_style_love {
         .wp_counter_span {
             float: left;

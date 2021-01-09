@@ -1,5 +1,5 @@
 'use strict';
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     // load all grunt tasks matching the `grunt-*` pattern
     require('load-grunt-tasks')(grunt);
@@ -11,8 +11,8 @@ module.exports = function(grunt) {
 
         // Meta definitions
         meta: {
-            project:   "wp-ulike",
-            version:   "<%= pkg.title || pkg.name %> - v<%= pkg.version %>",
+            project: "wp-ulike",
+            version: "<%= pkg.title || pkg.name %> - v<%= pkg.version %>",
             copyright: "<%= pkg.author.name %> <%= grunt.template.today('yyyy') %>",
 
             header: "/*\n" +
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
             buildDir: "build",
             projectSubDir: '<%= meta.project %>',
-            buildPath:     '<%= meta.buildDir %>/<%= meta.projectSubDir %>',
+            buildPath: '<%= meta.buildDir %>/<%= meta.projectSubDir %>',
             installableZipFile: '<%= meta.project %>', // '<%= meta.project %>-installable'
             zipBuildPath: '<%= meta.buildDir %>/<%= meta.installableZipFile %>.zip'
         },
@@ -75,8 +75,8 @@ module.exports = function(grunt) {
                     sassDir: 'admin/assets/sass',
                     cssDir: 'admin/assets/css/',
                     environment: 'development',
-                    watch:true,
-                    trace:true,
+                    watch: true,
+                    trace: true,
                     outputStyle: 'compact' // nested, expanded, compact, compressed.
                 }
             },
@@ -86,8 +86,8 @@ module.exports = function(grunt) {
                     sassDir: 'admin/assets/sass',
                     cssDir: 'admin/assets/css/',
                     environment: 'development',
-                    watch:false,
-                    trace:true,
+                    watch: false,
+                    trace: true,
                     outputStyle: 'expanded' // nested, expanded, compact, compressed.
                 }
             },
@@ -98,8 +98,8 @@ module.exports = function(grunt) {
                     cssDir: 'assets/css',
                     specify: ['assets/sass/wp-ulike.scss'],
                     environment: 'development',
-                    watch:true,
-                    trace:true,
+                    watch: true,
+                    trace: true,
                     outputStyle: 'expanded' // nested, expanded, compact, compressed.
                 }
             },
@@ -110,24 +110,24 @@ module.exports = function(grunt) {
                     cssDir: 'assets/css',
                     specify: ['assets/sass/wp-ulike.scss'],
                     environment: 'development',
-                    watch:false,
-                    trace:true,
+                    watch: false,
+                    trace: true,
                     outputStyle: 'expanded' // nested, expanded, compact, compressed.
                 }
             }
         },
 
-		phplint: {
-			options: {
-				phpArgs: {
+        phplint: {
+            options: {
+                phpArgs: {
                     "-d": null,
                     "-f": null,
-				}
-			},
-			all : {
-				src: ['*.php', '**/*.php', '!node_modules/**', '!vendor/**']
-			}
-		},
+                }
+            },
+            all: {
+                src: ['*.php', '**/*.php', '!node_modules/**', '!vendor/**']
+            }
+        },
 
         // Generate POT file
         makepot: {
@@ -188,7 +188,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,     // Enable dynamic expansion.
                         cwd: 'node_modules/vue/dist',      // Src matches are relative to this path.
-                        src: [ 'vue.min.js', 'vue.js' ],  // Actual pattern(s) to match.
+                        src: ['vue.min.js', 'vue.js'],  // Actual pattern(s) to match.
                         dest: 'admin/assets/js/solo/vue/'   // Destination path prefix.
                     }
                 ]
@@ -199,7 +199,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,     // Enable dynamic expansion.
                         cwd: 'node_modules/jquery-match-height/dist',      // Src matches are relative to this path.
-                        src: [ 'jquery.matchHeight-min.js' ],  // Actual pattern(s) to match.
+                        src: ['jquery.matchHeight-min.js'],  // Actual pattern(s) to match.
                         dest: 'admin/assets/js/src/plugins/'   // Destination path prefix.
                     }
                 ]
@@ -218,12 +218,13 @@ module.exports = function(grunt) {
                         " *  <%= meta.copyright %>;\n" +
                         " */\n",
 
-                    process: function(src, filepath) {
+                    process: function (src, filepath) {
                         var separator = "\n\n/* ================== " + filepath + " =================== */\n\n\n";
                         return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
                     },
                 },
                 src: [
+                    'assets/js/src/tooltip.js',
                     'assets/js/src/wordpress-ulike-notifications.js',
                     'assets/js/src/wordpress-ulike.js',
                     'assets/js/src/scripts.js'
@@ -239,7 +240,7 @@ module.exports = function(grunt) {
                         " *  <%= meta.copyright %>;\n" +
                         " */\n",
 
-                    process: function(src, filepath) {
+                    process: function (src, filepath) {
                         var separator = "\n\n/* ================== " + filepath + " =================== */\n\n\n";
                         return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
                     },
@@ -315,50 +316,50 @@ module.exports = function(grunt) {
             }
         },
 
-        preprocess : {
+        preprocess: {
             options: {
-                context : {
+                context: {
                     VERSION: "<%= pkg.version %>",
-                    DEV  : true,
-                    TODO : true,
-                    LITE : false,
-                    PRO  : false,
+                    DEV: true,
+                    TODO: true,
+                    LITE: false,
+                    PRO: false,
                     HEADER: "<%= meta.phpheader %>"
                 }
             },
-            pro : {
-                src : [ '<%= meta.buildPath %>/**/*.php', '<%= meta.buildPath %>/**/*.css', '<%= meta.buildPath %>/README.txt' ],
+            pro: {
+                src: ['<%= meta.buildPath %>/**/*.php', '<%= meta.buildPath %>/**/*.css', '<%= meta.buildPath %>/README.txt'],
                 options: {
-                    inline : true,
-                    context : {
-                        DEV  : false,
-                        TODO : false,
-                        LITE : false,
-                        PRO  : true
+                    inline: true,
+                    context: {
+                        DEV: false,
+                        TODO: false,
+                        LITE: false,
+                        PRO: true
                     }
                 }
             },
-            liteOfficial : {
-                src : [ '<%= meta.buildPath %>/**/*.php', '<%= meta.buildPath %>/**/*.css', '<%= meta.buildPath %>/README.txt' ],
+            liteOfficial: {
+                src: ['<%= meta.buildPath %>/**/*.php', '<%= meta.buildPath %>/**/*.css', '<%= meta.buildPath %>/README.txt'],
                 options: {
-                    inline : true,
-                    context : {
-                        DEV  : false,
-                        TODO : false,
-                        LITE : true,
-                        PRO  : false
+                    inline: true,
+                    context: {
+                        DEV: false,
+                        TODO: false,
+                        LITE: true,
+                        PRO: false
                     }
                 }
             }
         },
 
-        shell:{
+        shell: {
 
-            install:{
+            install: {
                 command: "brew install jpegoptim; brew install pngquant; mkdir <%= meta.buildPath %>"
             },
             // Sync package.json version with git repo version
-            updateVersion:{
+            updateVersion: {
                 command: 'npm version $(git describe --tags `git rev-list --tags --max-count=1`);'
             },
             // Increase package.json version one step
@@ -375,27 +376,27 @@ module.exports = function(grunt) {
             zipDlPack: {
                 command: 'cd <%= meta.buildDir %>; zip -FSr -9 <%= meta.project %>-download-package * -x /<%= meta.projectSubDir %>/* */\.*; cd ..;' // exclude dotfiles
             },
-            createTextVersion:{
+            createTextVersion: {
                 command: 'echo Latest version: v<%= pkg.version %> >> <%= meta.buildDir %>/<%= pkg.version %>.txt'
             },
 
-            findLitePngs:{
+            findLitePngs: {
                 command: "find ./<%= meta.buildPath %>/ -name '*.png'"
             },
-            compressLitePngs:{
+            compressLitePngs: {
                 command: "find ./<%= meta.buildPath %>/ -name '*.png' -exec pngquant --speed 3 --quality=65-80 --skip-if-larger --ext .png --force 256 {}  \\;"
             },
-            getLitePngsSize:{
+            getLitePngsSize: {
                 command: "find ./<%= meta.buildPath %>/ -name '*.png' -exec du -ch {} + | grep total$ "
             },
 
-            findLiteJpgs:{
+            findLiteJpgs: {
                 command: "find ./<%= meta.buildPath %>/ -name '*.jpg'"
             },
-            compressLiteJpgs:{
+            compressLiteJpgs: {
                 command: "find ./<%= meta.buildPath %>/ -name '*.jpg' -exec jpegoptim -m80 -o -p  {} \\;"
             },
-            getLiteJpgsSize:{
+            getLiteJpgsSize: {
                 command: "find ./<%= meta.buildPath %>/ -name '*.jpg' -exec du -ch {} + | grep total$ "
             }
         },
@@ -403,7 +404,7 @@ module.exports = function(grunt) {
         // Running multiple blocking tasks
         concurrent: {
             watch_frontend_scss: {
-                tasks: [ 'compass_dev', 'watch', 'compass:front_dev' ],
+                tasks: ['compass_dev', 'watch', 'compass:front_dev'],
                 options: {
                     logConcurrentOutput: true
                 }
@@ -414,7 +415,7 @@ module.exports = function(grunt) {
         watch: {
             concat_front_js_scripts: {
                 files: ['assets/js/src/*.js'],
-                tasks: ['concat:frontJsScripts', 'terser']
+                tasks: ['concat:frontJsScripts']
             },
 
             concat_admin_js_plugins: {
@@ -430,9 +431,9 @@ module.exports = function(grunt) {
             livereload: {
                 options: { livereload: 35985 },
                 files: ['*.css', 'assets/css/*.css',
-                        'assets/js/src/*.js', 'assets/js/*.js',
-                        'assets/img/**/*.{png,jpg,jpeg,gif,webp,svg}'
-                        ]
+                    'assets/js/src/*.js', 'assets/js/*.js',
+                    'assets/img/**/*.{png,jpg,jpeg,gif,webp,svg}'
+                ]
             }
         },
 
@@ -452,9 +453,9 @@ module.exports = function(grunt) {
             options: {
                 args: ["--verbose --delete-after"], // z:compress while transfering data, P: display progress
                 exclude: [
-                        '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
-                        'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
-                        'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'wp-assets', 'docs', 'README.md', 'SUMMARY.md'
+                    '.git*', 'node_modules', 'Gruntfile.js', 'package.json', 'composer.json',
+                    'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json',
+                    'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'wp-assets', 'docs', 'README.md', 'SUMMARY.md'
                 ],
                 recursive: true,
                 syncDestIgnoreExcl: true
@@ -483,40 +484,42 @@ module.exports = function(grunt) {
 
     });
 
-    grunt.registerTask( 'install'       , ['shell:install'] );
-    grunt.registerTask( 'compress'      , ['shell:compressLitePngs', 'shell:compressLiteJpgs'] );
+    grunt.registerTask('install', ['shell:install']);
+    grunt.registerTask('compress', ['shell:compressLitePngs', 'shell:compressLiteJpgs']);
 
-    grunt.registerTask( 'buildVersion'  , ['clean:version', 'shell:createTextVersion'] );
+    grunt.registerTask('buildVersion', ['clean:version', 'shell:createTextVersion']);
 
     // rename tasks
     grunt.renameTask('rsync', 'deploy');
 
     // phplint
-    grunt.registerTask( "php", ["phplint"] );
+    grunt.registerTask("php", ["phplint"]);
 
     // register task
-    grunt.registerTask( 'syncversion'   , ['shell:updateVersion'] );
-    grunt.registerTask( 'bump'          , ['shell:bumpVersion'  ] );
+    grunt.registerTask('syncversion', ['shell:updateVersion']);
+    grunt.registerTask('bump', ['shell:bumpVersion']);
 
-    grunt.registerTask( 'i18n'          , [ 'makepot' , 'po2mo' ] );
+    grunt.registerTask('i18n', ['makepot', 'po2mo']);
 
-    grunt.registerTask( 'compass_dev'   , ['compass:back_dev'] );
+    grunt.registerTask('compass_dev', ['compass:back_dev']);
 
     // compress the product in one pack
-    grunt.registerTask( 'pack'          , ['shell:zipBuild'] );
+    grunt.registerTask('pack', ['shell:zipBuild']);
 
     // deploy the lite version in /build folder
-    grunt.registerTask( 'beta'          , ['clean:build', 'compass:front_build', 'compass:back_build', 'cssmin', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress'] );
+    grunt.registerTask('beta', ['clean:build', 'compass:front_build', 'compass:back_build', 'cssmin', 'deploy:lite', 'shell:cleanBuildDotFiles', 'compress']);
 
     // build the final lite version in /build folder and pack the product
-    grunt.registerTask( 'build'         , ['concat', 'terser', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack'] );
+    grunt.registerTask('build', ['concat', 'terser', 'beta', 'preprocess:liteOfficial', 'buildVersion', 'pack']);
 
-    grunt.registerTask( 'release'       , ['build', 'wp_deploy:deploy'] );
+    grunt.registerTask('release', ['build', 'wp_deploy:deploy']);
 
     // register task
-    grunt.registerTask( 'default'       , ['concat','cssmin', 'terser']);
+    grunt.registerTask('default', ['concat', 'cssmin', 'terser']);
 
-    grunt.registerTask( 'dev', ['concurrent'] );
+    grunt.registerTask('dev', ['concurrent']);
+
+    grunt.registerTask('update_dep', ['copy', 'concat']);
 
     grunt.registerTask( 'update_dep'    , ['copy', 'concat'] );
 

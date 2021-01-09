@@ -14,11 +14,11 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 	 * @return void
 	 */
 	private function setFormData(){
-		$this->data['id']              = isset( $_POST['id'] ) ? intval(sanitize_text_field($_POST['id'])) : NULL;
-		$this->data['type']            = isset( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : NULL;
-		$this->data['nonce']           = isset( $_POST['nonce'] ) ? esc_html( $_POST['nonce'] ) : NULL;
-		$this->data['displayLikers']   = isset( $_POST['displayLikers'] ) ? sanitize_text_field($_POST['displayLikers']) : false;
-		$this->data['disablePophover'] = isset( $_POST['disablePophover'] ) ? sanitize_text_field($_POST['disablePophover']) : false;
+		$this->data['id']             = isset( $_POST['id'] ) ? intval(sanitize_text_field($_POST['id'])) : NULL;
+		$this->data['type']           = isset( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : NULL;
+		$this->data['nonce']          = isset( $_POST['nonce'] ) ? esc_html( $_POST['nonce'] ) : NULL;
+		$this->data['displayLikers']  = isset( $_POST['displayLikers'] ) ? sanitize_text_field($_POST['displayLikers']) : false;
+		$this->data['likersTemplate'] = isset( $_POST['likersTemplate'] ) ? sanitize_text_field($_POST['likersTemplate']) : 'popover';
 	}
 
 	/**
@@ -40,9 +40,7 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
 			}
 
-			// Add specific class name with popover checkup
-			$class_names   = wp_ulike_is_true( $this->data['disablePophover'] ) ? 'wp_ulike_likers_wrapper wp_ulike_display_inline' : 'wp_ulike_likers_wrapper';
-			$template_name = wp_ulike_get_likers_template(
+			$template = wp_ulike_get_likers_template(
 				$this->settings_type->getTableName(),
 				$this->settings_type->getColumnName(),
 				$this->data['id'],
@@ -51,10 +49,10 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 
 			$this->afterGetListAction();
 
-			$this->response( array(
-				'template' => $template_name,
-				'class'    => $class_names . sprintf( ' wp_%s_likers_%d', $this->settings_type->getType(), $this->data['id'] )
-			) );
+			$this->response( ! empty( $template ) ? array(
+				'template' => $this->data['likersTemplate'] != 'popover' ? $template :  sprintf(
+					'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>', $this->settings_type->getType(), $this->data['id'], $template )
+			) : array( 'template' => '' ) );
 
 		} catch ( \Exception $e ){
 			return $this->sendError($e->getMessage());
