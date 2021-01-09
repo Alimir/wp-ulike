@@ -137,33 +137,32 @@
   margin: 0;
 }
 
-#buddypress #activity-stream .activity-meta .wpulike, #buddypress #activity-stream .activity-comments .wpulike {
+#buddypress #activity-stream .activity-meta .wpulike,
+#buddypress #activity-stream .activity-comments .wpulike {
   display: flex;
   align-items: center;
   padding: 0;
 }
-#buddypress #activity-stream .activity-meta .wpulike-default .wp_ulike_btn, #buddypress #activity-stream .activity-comments .wpulike-default .wp_ulike_btn {
+#buddypress #activity-stream .activity-meta .wpulike-default .wp_ulike_btn,
+#buddypress #activity-stream .activity-comments .wpulike-default .wp_ulike_btn {
   border-radius: 0;
   background-color: #ffffff;
   box-shadow: 0 0 0 1px #bdbdbd inset;
   font-size: initial;
   padding: initial;
 }
-#buddypress #activity-stream .wp_ulike_likers_wrapper li, #buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker {
+#buddypress #activity-stream .wp_ulike_likers_wrapper li,
+#buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker {
   border: none;
   padding: 0;
 }
-#buddypress #activity-stream .wp_ulike_likers_wrapper li a, #buddypress #activity-stream .wp_ulike_likers_wrapper li img, #buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker a, #buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker img {
+#buddypress #activity-stream .wp_ulike_likers_wrapper li a,
+#buddypress #activity-stream .wp_ulike_likers_wrapper li img,
+#buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker a,
+#buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker img {
   float: none;
   padding: 0;
   margin: 0;
-}
-
-#bbpress-forums .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) ul, #bbpress-forums .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) .wp-ulike-likers-list {
-  margin: 0 !important;
-}
-#bbpress-forums .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) ul li, #bbpress-forums .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) .wp-ulike-likers-list li {
-  list-style-type: none;
 }
 
 /**
@@ -187,9 +186,6 @@
   color: #757575;
   background-color: transparent;
   text-decoration: none;
-}
-.wpulike-heart .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
-  bottom: 10px;
 }
 .wpulike-heart .wp_ulike_put_image {
   background: none;
@@ -239,7 +235,8 @@
   padding: 0.2em 0.5em;
   margin-bottom: 0;
 }
-#buddypress #activity-stream .activity-meta, #buddypress #activity-stream .acomment-options {
+#buddypress #activity-stream .activity-meta,
+#buddypress #activity-stream .acomment-options {
   display: flex;
   align-items: center;
 }
@@ -247,9 +244,6 @@
 /**
  * Robeen template
  */
-.wpulike-robeen .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
-  bottom: 5px;
-}
 .wpulike-robeen .count-box {
   font-weight: 600;
   padding: 0 14px;
@@ -294,7 +288,9 @@
   background-position: -2800px 0;
 }
 
-#buddypress #activity-stream .activity-meta .wpulike-robeen .wp_ulike_btn, #buddypress #activity-stream .activity-comments .wpulike-robeen .wp_ulike_btn, #buddypress #activity-stream .activity-inner .wpulike-robeen .wp_ulike_btn {
+#buddypress #activity-stream .activity-meta .wpulike-robeen .wp_ulike_btn,
+#buddypress #activity-stream .activity-comments .wpulike-robeen .wp_ulike_btn,
+#buddypress #activity-stream .activity-inner .wpulike-robeen .wp_ulike_btn {
   background: transparent;
   border: 0;
   width: 30px;
@@ -404,9 +400,6 @@
   transform: rotate(8deg);
   animation-delay: 0.2s;
 }
-.wpulike-animated-heart .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
-  bottom: 30px;
-}
 .wpulike-animated-heart .count-box {
   margin: 0 15px;
   color: #ff6f63;
@@ -449,56 +442,35 @@
 .wp_ulike_likers_wrapper:empty {
   display: none;
 }
-.wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
-  transition: all 500ms cubic-bezier(0.19, 1, 0.22, 1);
-  display: block;
-  position: absolute;
-  left: 0;
-  transform: translateY(-30px);
-  bottom: 0;
-  background: #eeeeee;
-  padding: 5px;
-  opacity: 0;
-  visibility: hidden;
-  box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  z-index: 9;
-}
-.wp_ulike_likers_wrapper:not(.wp_ulike_display_inline):after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 15px;
-  width: 0;
-  height: 0;
-  border-top: 8px solid #eeeeee;
-  border-right: 8px solid transparent;
-  border-left: 8px solid transparent;
-}
-.wp_ulike_likers_wrapper .wp-ulike-likers-list, .wp_ulike_likers_wrapper .tiles {
+.wp_ulike_likers_wrapper .wp-ulike-likers-list,
+.wp_ulike_likers_wrapper .tiles {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   margin: 0;
   padding: 0;
 }
-.wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker, .wp_ulike_likers_wrapper .wp-ulike-likers-list li, .wp_ulike_likers_wrapper .tiles .wp-ulike-liker, .wp_ulike_likers_wrapper .tiles li {
+.wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker,
+.wp_ulike_likers_wrapper .wp-ulike-likers-list li,
+.wp_ulike_likers_wrapper .tiles .wp-ulike-liker,
+.wp_ulike_likers_wrapper .tiles li {
   padding: 3px;
   margin: 0;
   list-style: none;
   display: block;
 }
-.wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .wp-ulike-likers-list li a > img, .wp_ulike_likers_wrapper .tiles .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .tiles li a > img {
+.wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker a > img,
+.wp_ulike_likers_wrapper .wp-ulike-likers-list li a > img,
+.wp_ulike_likers_wrapper .tiles .wp-ulike-liker a > img,
+.wp_ulike_likers_wrapper .tiles li a > img {
   border-radius: 5px;
   display: block;
   border: 0;
   box-shadow: none;
 }
 
-.wpulike:hover .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
-  transform: translateY(-40px);
-  opacity: 1;
-  visibility: visible;
+.ulf-tooltip .wp_ulike_likers_wrapper {
+  margin: 0;
 }
 
 .most_liked_users {
@@ -521,7 +493,8 @@
   opacity: 0 !important;
 }
 
-.commentlist .tiles .avatar, .commentlist .wp-ulike-liker .avatar {
+.commentlist .tiles .avatar,
+.commentlist .wp-ulike-liker .avatar {
   left: 0 !important;
 }
 
@@ -651,6 +624,244 @@
     width: 25em;
   }
 }
+/* Confirm tooltip */
+.ulf-tooltip {
+  max-width: 360px;
+  position: absolute;
+  z-index: 999999;
+  background: #444444;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  top: 0;
+  left: 0;
+}
+
+/* Centers the tooltip on screens where it won't fit */
+.ulf-centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+
+.ulf-content {
+  margin: 5px 20px 5px 10px;
+  font-size: 1em;
+  line-height: 1.6em;
+  text-align: center;
+  color: #fff;
+  font-weight: 800;
+}
+
+/* Arrow */
+.ulf-arrow {
+  border: 15px solid rgba(232, 232, 232, 0);
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  margin-left: -15px;
+}
+
+/* Arrow - Top */
+.ulf-arrow-top {
+  border-bottom-color: #444444;
+  bottom: 100%;
+  left: 50%;
+  top: auto;
+  right: auto;
+}
+
+/* Arrow - Bottom */
+.ulf-arrow-bottom {
+  border-top-color: #444444;
+  top: 100%;
+  left: 50%;
+  bottom: auto;
+  right: auto;
+}
+
+/* Arrow - Left */
+.ulf-arrow-left {
+  border-right-color: #444444;
+  border-width: 15px;
+  left: -14px;
+  right: auto;
+  bottom: auto;
+  top: 50%;
+  margin-top: -15px;
+}
+
+/* Arrow - Right */
+.ulf-arrow-right {
+  border-left-color: #444444;
+  right: -29px;
+  left: auto;
+  bottom: auto;
+  border-width: 15px;
+  top: 50%;
+  margin-top: -15px;
+}
+
+/* Arrow - Hug Left */
+.ulf-arrow-hug-left {
+  left: 30px;
+  right: auto;
+}
+
+/* Arrow - Hug Right */
+.ulf-arrow-hug-right {
+  right: 30px;
+  left: auto;
+}
+
+/* Arrow - Get really close to the left because the button is small */
+.ulf-arrow-hug-left.ulf-arrow-super-hug {
+  left: 15px;
+  right: auto;
+}
+
+/* Arrow - Get really close to the right because the button is small  */
+.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  right: 1px;
+  left: auto;
+}
+
+/* Arrow - Get really close to the left because the button is small - need to adjust for border radius */
+.ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  top: -30px;
+}
+
+/* Arrow - Get really close to the left because the button is small - need to adjust for border radius */
+.ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  top: auto;
+  bottom: -30px;
+}
+
+.ulf-tiny .ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-tiny .ulf-arrow-hug-right.ulf-arrow-super-hug {
+  bottom: -21px;
+}
+
+.ulf-black-theme .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-black-theme .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  top: -27px;
+}
+
+.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  bottom: -28px;
+}
+
+/* White theme */
+.ulf-white-theme {
+  background: #fff;
+  border: 2px solid #e4e4e4;
+}
+
+.ulf-white-theme .ulf-content {
+  color: #333;
+}
+
+.ulf-white-theme .ulf-arrow-top {
+  border-bottom-color: #e4e4e4;
+}
+
+.ulf-white-theme .ulf-arrow-bottom {
+  border-top-color: #e4e4e4;
+}
+
+.ulf-white-theme .ulf-arrow-left {
+  border-right-color: #e4e4e4;
+}
+
+.ulf-white-theme .ulf-arrow-right {
+  border-left-color: #e4e4e4;
+}
+
+/* Large tooltip */
+.ulf-large {
+  font-size: 18px;
+}
+
+/* Medium tooltip */
+.ulf-medium {
+  font-size: 14px;
+}
+
+/* Small tooltip */
+.ulf-small {
+  font-size: 12px;
+  padding: 5px;
+}
+
+.ulf-small .ulf-content {
+  margin: 2px 8px;
+  line-height: 1.9em;
+}
+
+/* Tiny tooltip */
+.ulf-tiny {
+  padding: 2px 5px;
+  font-size: 10px;
+}
+
+.ulf-tiny .ulf-content {
+  margin: 3px;
+}
+
+.ulf-tiny .ulf-button {
+  margin: 0px 3px;
+}
+
+.ulf-tiny .ulf-arrow {
+  border-width: 10px;
+  margin-left: -10px;
+}
+
+.ulf-tiny .ulf-arrow-left {
+  left: -10px;
+  margin-top: -10px;
+}
+
+.ulf-tiny .ulf-arrow-right {
+  right: -20px;
+  margin-top: -10px;
+}
+
+/**
+@todo: Rewrite arrows in JS since they are so complicated in CSS
+ */
+.ulf-tiny .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-tiny .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug {
+  left: 11px;
+}
+
+.ulf-tiny .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug,
+.ulf-tiny .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  right: 1px;
+}
+
+.ulf-tiny.ulf-white-theme .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-tiny.ulf-white-theme .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  top: -18px;
+}
+
+.ulf-tiny.ulf-white-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-tiny.ulf-white-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  bottom: -21px;
+}
+
+.ulf-tiny.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
+.ulf-tiny.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
+  bottom: -18px;
+}
+
 /*!>>>>>>>>>>>>>>>>>>>>>>> #RTL <<<<<<<<<<<<<<<<<<<<<<<<<<< */
 .rtl .wpulike-default .count-box {
   margin-right: 8px;
@@ -662,14 +873,6 @@
   border-color: #bdbdbd #bdbdbd transparent transparent;
 }
 
-.rtl .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline) {
-  left: auto;
-  right: 0;
-}
-.rtl .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline):after {
-  left: auto;
-  right: 15px;
-}
 .rtl .commentlist .tiles .avatar {
   left: inherit !important;
   right: 0 !important;
