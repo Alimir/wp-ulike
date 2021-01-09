@@ -33,11 +33,6 @@
         //add size class
         options.class += ' ulf-' + options.size;
 
-        //if toggle on hover, no backdrop
-        if (options.trigger !== 'click') {
-            options.backdrop = false;
-        }
-
         //lowercase and trim whatever trigger is provided to try to make it more forgiving (this means "Hover " works just as well as "hover")
         options.trigger = options.trigger.toLowerCase().trim();
 
@@ -52,7 +47,6 @@
             child_class: options.child,
             theme: options.theme,
             class: options.class,
-            backdrop: options.backdrop,
             position: options.position,
             close_on_outside_click: options.close_on_outside_click,
             singleton: options.singleton,
@@ -61,39 +55,13 @@
             createTooltipHTML: function () {
                 return `<div class='ulf-tooltip ${helper.class}' role='tooltip'><div class='ulf-arrow'></div><div class='ulf-content'>${helper.content}</div></div>`;
             },
-            //creates backdrop html if necessary
-            createBackdropHTML: function () {
-                return helper.backdrop ? `<div class='ulf-backdrop ulf-${helper.backdrop}-backdrop'></div>` : false;
-            },
             //disable existing options/handlers
             destroy: function () {
                 //only if it's actually tied to this element
                 const existing = helper.dom_wrapped.data(helper.dataAttr);
                 if (typeof existing !== 'undefined' && existing !== null) {
-                    if (existing.trigger === 'click') {
-                        //disable handler
-                        existing.dom_wrapped.off('touchstart mousedown', existing.toggleTooltipHandler);
-                        existing.dom_wrapped.off('click', existing.preventDefaultHandler);
-                    }
-                    else if (existing.trigger === 'focus') {
-                        existing.dom_wrapped.off('touchstart focus', existing.show);
-                        existing.dom_wrapped.off('touchend blur', existing.hide);
-                    }
-                    else if (existing.trigger === 'hover') {
-                        existing.dom_wrapped.off('touchstart mouseenter', existing.show);
-                        existing.dom_wrapped.off('click', existing.preventDefaultHandler);
-                    }
-                    else if (existing.trigger === 'hoverfocus') {
-                        existing.dom_wrapped.off('focus', existing.hoverfocusFocusShow);
-                        existing.dom_wrapped.off('blur', existing.hoverfocusBlur);
-
-                        existing.dom_wrapped.off('touchstart mouseenter', existing.show);
-                        existing.dom_wrapped.off('touchend mouseleave', existing.hoverfocusHide);
-                    }
-                    else if (existing.trigger === 'hoverclick') {
-                        existing.dom_wrapped.off('touchstart click', existing.toggleTooltipHandler);
-                        existing.dom_wrapped.off('mouseenter', existing.show);
-                    }
+                    existing.dom_wrapped.off('touchstart mouseenter', existing.show);
+                    existing.dom_wrapped.off('click', existing.preventDefaultHandler);
 
                     //attach resize handler to reposition tooltip
                     $(window).off('resize', existing.onResize);
@@ -110,32 +78,10 @@
                 //attach on handler to show tooltip
                 //use touchstart and mousedown just like if you click outside the tooltip to close it
                 //this way it blocks the hide if you click the button a second time to close the tooltip
-                if (helper.trigger === 'click') {
-                    helper.dom_wrapped.on('touchstart mousedown', helper.toggleTooltipHandler);
-                    helper.dom_wrapped.on('click', helper.preventDefaultHandler);
-                }
-                else if (helper.trigger === 'focus') {
-                    helper.dom_wrapped.on('touchstart focus', helper.show);
-                    helper.dom_wrapped.on('touchend blur', helper.hide);
-                }
-                else if (helper.trigger === 'hover') {
-                    helper.dom_wrapped.on('touchstart mouseenter', helper.show);
-                    helper.dom_wrapped.on('click', helper.preventDefaultHandler);
-                    // helper.dom_wrapped.on('touchend mouseleave', helper.hide);
-                }
-                else if (helper.trigger === 'hoverfocus') {
-                    helper.dom_wrapped.on('focus', helper.hoverfocusFocusShow);
-                    helper.dom_wrapped.on('blur', helper.hoverfocusBlur);
+                helper.dom_wrapped.on('touchstart mouseenter', helper.show);
+                helper.dom_wrapped.on('click', helper.preventDefaultHandler);
+                // helper.dom_wrapped.on('touchend mouseleave', helper.hide);
 
-                    helper.dom_wrapped.on('touchstart mouseenter', helper.show);
-                    // helper.dom_wrapped.on('touchend mouseleave', helper.hoverfocusHide);
-                    helper.dom_wrapped.on('click', helper.preventDefaultHandler);
-                }
-                else if (helper.trigger === 'hoverclick') {
-                    helper.dom_wrapped.on('touchstart click', helper.toggleTooltipHandler);
-                    helper.dom_wrapped.on('mouseenter', helper.show);
-                    helper.dom_wrapped.on('touchend', helper.hoverfocusHide);
-                }
 
                 if (!$.WordpressUlikeTooltip.body_click_initialized) {
                     $(document).on('touchstart mousedown', helper.onClickOutside);
@@ -162,36 +108,9 @@
                 //return dom for chaining of event handlers and such
                 return helper.dom;
             },
-            //add class when focused for hoverfocus - this way mouseleave can detect if focused or not
-            //document.activeElement isn't working to detect focus
-            hoverfocusFocusShow: function () {
-                helper.dom_wrapped.addClass('ulf-focused');
-                helper.show();
-            },
-            //remove class on blur for hoverfocus
-            hoverfocusBlur: function () {
-                if (helper.dom_wrapped && helper.dom_wrapped.length) {
-                    helper.dom_wrapped.removeClass('ulf-focused');
-                }
-                helper.hide();
-            },
-            //prevent hiding a tooltip on mouseleave if the element is still focused
-            hoverfocusHide: function () {
-                //don't hide if focused. Hide on blur instead.
-                if (helper.dom_wrapped.hasClass('ulf-focused')) {
-                    return false;
-                }
-                helper.hide();
-            },
             //on click of element, prevent default
             preventDefaultHandler: function (e) {
                 e.preventDefault();
-                return false;
-            },
-            //toggle tooltip visibility (used for click event)
-            toggleTooltipHandler: function (e) {
-                e.preventDefault();
-                helper.isVisible() && helper.hide() || helper.show();
                 return false;
             },
             //shows the tooltip
@@ -208,15 +127,6 @@
                 //cache reference to the body
                 const body = $('body');
 
-                //blurred won't work like the standard separate div backdrop
-                //it has to be applied directly to the dom we're blurring
-                if (helper.backdrop === 'blurred') {
-                    body.addClass('ulf-blurred-body');
-                }
-                //if regular backdrop, append the div
-                else if (helper.backdrop) {
-                    body.append(helper.createBackdropHTML());
-                }
                 //get string from function
                 if (typeof trigger_event === 'undefined' || trigger_event) {
                     if (typeof helper.title === 'function') helper.content = helper.title(helper.dom_wrapped, helper);
@@ -269,14 +179,6 @@
                 //remove from dom
                 if (helper.tooltip && helper.tooltip.length) {
                     helper.tooltip.remove();
-                }
-                //remove blurring to body
-                if (helper.backdrop === 'blurred') {
-                    $('body').removeClass('ulf-blurred-body');
-                }
-                //remove backdrop
-                else if (helper.backdrop) {
-                    $('.ulf-backdrop').remove();
                 }
                 //trigger hide event
                 if (typeof trigger_event === 'undefined' || trigger_event) {
@@ -502,7 +404,6 @@
         class: '',
         theme: 'black',
         size: 'small',
-        backdrop: false,
         singleton: true,
         close_on_outside_click: true,
     }
