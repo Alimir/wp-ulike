@@ -172,9 +172,9 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		public function setPrevStatus( $item_id ){
 			// delete cache to get fresh data
-			if( wp_ulike_is_cache_exist() ){
-				wp_cache_delete( $this->currentUser, 'wp_ulike_user_meta' );
-			}
+			// if( wp_ulike_is_cache_exist() ){
+			// 	wp_cache_delete( $this->currentUser, 'wp_ulike_user_meta' );
+			// }
 			// get user log array
 			$get_user_history = wp_ulike_get_user_item_history( array(
 				"item_id"           => $item_id,
