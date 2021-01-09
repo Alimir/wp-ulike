@@ -110,10 +110,10 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 					$this->data['id'],
 					$this->settings_type->getSettingKey()
 				);
-				$this->response['likers'] = array(
+				$this->response['likers'] = ! empty( $template ) ? array(
 					'template' => $this->data['likersTemplate'] != 'popover' ? $template :  sprintf(
 					'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>', $this->settings_type->getType(), $this->data['id'], $template )
-				);
+				) : array( 'template' => '' );
 			}
 
 			// Display toasts condition

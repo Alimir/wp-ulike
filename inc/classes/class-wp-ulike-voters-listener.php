@@ -40,17 +40,6 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
 			}
 
-			// Add specific class name with popover checkup
-			$template = sprintf(
-			'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>',
-				$this->settings_type->getType(), $this->data['id'], wp_ulike_get_likers_template(
-					$this->settings_type->getTableName(),
-					$this->settings_type->getColumnName(),
-					$this->data['id'],
-					$this->settings_type->getSettingKey()
-				)
-			);
-
 			$template = wp_ulike_get_likers_template(
 				$this->settings_type->getTableName(),
 				$this->settings_type->getColumnName(),
@@ -60,10 +49,10 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 
 			$this->afterGetListAction();
 
-			$this->response( array(
+			$this->response( ! empty( $template ) ? array(
 				'template' => $this->data['likersTemplate'] != 'popover' ? $template :  sprintf(
 					'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>', $this->settings_type->getType(), $this->data['id'], $template )
-			) );
+			) : array( 'template' => '' ) );
 
 		} catch ( \Exception $e ){
 			return $this->sendError($e->getMessage());

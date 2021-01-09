@@ -804,7 +804,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'title'      => __( 'Likers Box Display', WP_ULIKE_SLUG),
                     'default'    => 'popover',
                     'options'    => array(
-                        'default' => __('Default', WP_ULIKE_SLUG),
+                        'default' => __('Inline', WP_ULIKE_SLUG),
                         'popover' => __('Popover', WP_ULIKE_SLUG)
                     ),
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),

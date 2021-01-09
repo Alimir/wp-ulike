@@ -166,14 +166,17 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		if( wp_ulike_setting_repo::restrictLikersBox( $args['type'] ) || empty( $get_settings ) || empty( $args['ID'] ) ) {
 			return;
 		}
-
 		// Extract settings array
 		extract( $get_settings );
-		// Display likers box
-		echo $args['disable_pophover'] || $args['likers_style'] !== 'popover' ? sprintf(
+
+		if( $args['disable_pophover'] || $args['likers_style'] == 'default' ){
+			echo sprintf(
 			'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>',
 			$args['type'], $args['ID'], wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting )
-		) : '';
+			);
+		}
+
+		do_action( 'wp_ulike_inline_display_likers_box', $args, $get_settings );
 	}
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_display_inline_likers_template' );
 }
