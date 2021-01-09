@@ -137,6 +137,14 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 
 == Changelog ==
 
+= 4.4.5 =
+* Added: New popover template for likers box.
+* Added: New customizer options for popover.
+* Updated: Options panel framework.
+* Fixed: Format number issues.
+* Fixed: An issue with fastest cache plugin.
+* Fixed: Some other small issues.
+
 = 4.4.4 =
 * Added: New option to set prefix/postfix on counter values.
 * Added: New option to support storing data in wp postmeta table. (+ Migrate option) [PRO]
