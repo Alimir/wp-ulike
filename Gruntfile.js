@@ -246,7 +246,8 @@ module.exports = function (grunt) {
                     },
                 },
                 src: [
-                    'admin/assets/js/src/plugins/**/*.js'
+                    'node_modules/chart.js/dist/Chart.js',
+                    'node_modules/jquery-match-height/dist/jquery.matchHeight.js'
                 ],
                 dest: 'admin/assets/js/plugins.js'
             },
@@ -312,6 +313,7 @@ module.exports = function (grunt) {
             main: {
                 files: {
                     'assets/js/wp-ulike.min.js': ['<%= concat.frontJsScripts.dest %>'],
+                    'admin/assets/js/plugins.js': ['<%= concat.adminJsPlugins.dest %>']
                 }
             }
         },
