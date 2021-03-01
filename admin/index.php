@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
-// Register admin menus
+// Register admin panel
 new wp_ulike_admin_panel();
 
 // include about menu functions

@@ -384,7 +384,7 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 
 			// WordPress Toolbar
 			if ( 'string' === $format ) {
-				$content = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . esc_attr( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_link, (int) $total_items, $item_id, $user_ID );
+				$content = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . wp_strip_all_tags( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_link, (int) $total_items, $item_id, $user_ID );
 			// Deprecated BuddyBar
 			} else {
 				$content = apply_filters( 'wp_ulike_bp_notifications_template', array(
