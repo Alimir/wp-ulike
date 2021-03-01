@@ -32,11 +32,13 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 					),
 					'add_unlike'  => array(
 						'creds'  => -1,
-						'log'    => '%plural% deduction for unliking a content'
+						'log'    => '%plural% deduction for unliking a content',
+						'limit'  => '0/x'
 					),
 					'get_unlike'  => array(
 						'creds'  => -1,
-						'log'    => '%plural% for getting Unliked from a content'
+						'log'    => '%plural% for getting Unliked from a content',
+						'limit'  => '0/x'
 					),
 					'limits'   => array(
 						'self_reply' => 0
@@ -78,9 +80,9 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		 */
 		public function like( $id , $key, $user_id, $author_id = 0 ) {
 			// Check for exclusion
-			if ( wp_ulike_is_true( $this->core->exclude_user( $user_id ) ) || ! is_user_logged_in() ) return;
+			if ( $this->core->exclude_user( $user_id ) || ! is_user_logged_in() ) return;
 
-			if ( $user_id != $author_id || wp_ulike_is_true( $this->prefs['limits']['self_reply'] ) ){
+			if ( $user_id != $author_id || $this->prefs['limits']['self_reply'] ){
 
 				// Award the user liking
 				if ( $this->prefs['add_like']['creds'] ) {
@@ -106,16 +108,19 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 				if ( $this->prefs['get_like']['creds'] && $author_id ) {
 					// If not over limit
 					if ( ! $this->over_hook_limit( 'get_like', 'wp_get_like', $author_id ) ) {
-						// Execute
-						$this->core->add_creds(
-							'wp_get_like',
-							$author_id,
-							$this->prefs['get_like']['creds'],
-							$this->prefs['get_like']['log'],
-							$id,
-							array( 'ref_type' => $key, 'by' => $user_id ),
-							$this->mycred_type
-						);
+						// Make sure this is unique event
+						if ( ! $this->core->has_entry( 'wp_get_like', $id, $author_id ) ) {
+							// Execute
+							$this->core->add_creds(
+								'wp_get_like',
+								$author_id,
+								$this->prefs['get_like']['creds'],
+								$this->prefs['get_like']['log'],
+								$id,
+								array( 'ref_type' => $key, 'by' => $user_id ),
+								$this->mycred_type
+							);
+						}
 					}
 				}
 
@@ -131,41 +136,47 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 		public function unlike( $id , $key, $user_id, $author_id = 0 ) {
 
 			// Check for exclusion
-			if ( wp_ulike_is_true( $this->core->exclude_user( $user_id ) ) || ! is_user_logged_in() ) return;
+			if ( $this->core->exclude_user( $user_id ) || ! is_user_logged_in() ) return;
 
-			if ( $user_id != $author_id || wp_ulike_is_true( $this->prefs['limits']['self_reply'] ) ){
+			if ( $user_id != $author_id || $this->prefs['limits']['self_reply'] ){
 
 				// Award the user liking
 				if ( $this->prefs['add_unlike']['creds'] ) {
-					// Make sure this is unique event
-					if ( ! $this->core->has_entry( 'wp_add_unlike', $id, $user_id ) ) {
-						// Execute
-						$this->core->add_creds(
-							'wp_add_unlike',
-							$user_id,
-							$this->prefs['add_unlike']['creds'],
-							$this->prefs['add_unlike']['log'],
-							$id,
-							array( 'ref_type' => $key ),
-							$this->mycred_type
-						);
+					// If not over limit
+					if ( ! $this->over_hook_limit( 'add_unlike', 'wp_add_unlike', $user_id ) ) {
+						// Make sure this is unique event
+						if ( ! $this->core->has_entry( 'wp_add_unlike', $id, $user_id ) ) {
+							// Execute
+							$this->core->add_creds(
+								'wp_add_unlike',
+								$user_id,
+								$this->prefs['add_unlike']['creds'],
+								$this->prefs['add_unlike']['log'],
+								$id,
+								array( 'ref_type' => $key ),
+								$this->mycred_type
+							);
+						}
 					}
 				}
 
 				// Award post author for being liked
 				if ( $this->prefs['get_unlike']['creds'] && $author_id ) {
-					// Make sure this is unique event
-					if ( ! $this->core->has_entry( 'wp_get_unlike', $id, $author_id ) ) {
-						// Execute
-						$this->core->add_creds(
-							'wp_get_unlike',
-							$author_id,
-							$this->prefs['get_unlike']['creds'],
-							$this->prefs['get_unlike']['log'],
-							$id,
-							array( 'ref_type' => $key, 'by' => $user_id ),
-							$this->mycred_type
-						);
+					// If not over limit
+					if ( ! $this->over_hook_limit( 'get_unlike', 'wp_get_unlike', $author_id ) ) {
+						// Make sure this is unique event
+						if ( ! $this->core->has_entry( 'wp_get_unlike', $id, $author_id ) ) {
+							// Execute
+							$this->core->add_creds(
+								'wp_get_unlike',
+								$author_id,
+								$this->prefs['get_unlike']['creds'],
+								$this->prefs['get_unlike']['log'],
+								$id,
+								array( 'ref_type' => $key, 'by' => $user_id ),
+								$this->mycred_type
+							);
+						}
 					}
 				}
 
@@ -283,7 +294,13 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 							<span class="description"><?php _e( 'Use zero to disable.', WP_ULIKE_SLUG ); ?></span>
 						</div>
 					</div>
-					<div class="col-lg-10 col-md-6 col-sm-12 col-xs-12">
+					<div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label for="<?php echo $this->field_id( array( 'add_unlike', 'limit' ) ); ?>"><?php _e( 'Limit', WP_ULIKE_SLUG ); ?></label>
+							<?php echo $this->hook_limit_setting( $this->field_name( array( 'add_unlike', 'limit' ) ), $this->field_id( array( 'add_unlike', 'limit' ) ), $prefs['add_unlike']['limit'] ); ?>
+						</div>
+					</div>
+					<div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
 						<div class="form-group">
 							<label for="<?php echo $this->field_id( array( 'add_unlike' => 'log' ) ); ?>"><?php _e( 'Log template', WP_ULIKE_SLUG ); ?></label>
 							<input type="text" name="<?php echo $this->field_name( array( 'add_unlike' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'add_unlike' => 'log' ) ); ?>" placeholder="<?php _e( 'required', WP_ULIKE_SLUG ); ?>" value="<?php echo esc_attr( $prefs['add_unlike']['log'] ); ?>" class="form-control" />
@@ -302,7 +319,13 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 							<span class="description"><?php _e( 'Use zero to disable.', WP_ULIKE_SLUG ); ?></span>
 						</div>
 					</div>
-					<div class="col-lg-10 col-md-6 col-sm-12 col-xs-12">
+					<div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label for="<?php echo $this->field_id( array( 'get_unlike', 'limit' ) ); ?>"><?php _e( 'Limit', WP_ULIKE_SLUG ); ?></label>
+							<?php echo $this->hook_limit_setting( $this->field_name( array( 'get_unlike', 'limit' ) ), $this->field_id( array( 'get_unlike', 'limit' ) ), $prefs['get_unlike']['limit'] ); ?>
+						</div>
+					</div>
+					<div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
 						<div class="form-group">
 							<label for="<?php echo $this->field_id( array( 'get_unlike' => 'log' ) ); ?>"><?php _e( 'Log template', WP_ULIKE_SLUG ); ?></label>
 							<input type="text" name="<?php echo $this->field_name( array( 'get_unlike' => 'log' ) ); ?>" id="<?php echo $this->field_id( array( 'get_unlike' => 'log' ) ); ?>" placeholder="<?php _e( 'required', WP_ULIKE_SLUG ); ?>" value="<?php echo esc_attr( $prefs['get_unlike']['log'] ); ?>" class="form-control" />
@@ -345,6 +368,20 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 				if ( $limit == '' ) $limit = 0;
 				$data['get_like']['limit'] = $limit . '/' . $data['get_like']['limit_by'];
 				unset( $data['get_like']['limit_by'] );
+			}
+
+			if ( isset( $data['add_unlike']['limit'] ) && isset( $data['add_unlike']['limit_by'] ) ) {
+				$limit = sanitize_text_field( $data['add_unlike']['limit'] );
+				if ( $limit == '' ) $limit = 0;
+				$data['add_unlike']['limit'] = $limit . '/' . $data['add_unlike']['limit_by'];
+				unset( $data['add_unlike']['limit_by'] );
+			}
+
+			if ( isset( $data['get_unlike']['limit'] ) && isset( $data['get_unlike']['limit_by'] ) ) {
+				$limit = sanitize_text_field( $data['get_unlike']['limit'] );
+				if ( $limit == '' ) $limit = 0;
+				$data['get_unlike']['limit'] = $limit . '/' . $data['get_unlike']['limit_by'];
+				unset( $data['get_unlike']['limit_by'] );
 			}
 
 			return $data;
