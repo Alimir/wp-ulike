@@ -373,20 +373,20 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'type'     => 'callback',
                         'function' => 'wp_ulike_get_notice_render',
                         'args'     => array(
-                            'id'          => 'wp_ulike_pro_user_profiles_banner',
+                            'id'          => 'wp_ulike_pro_ultimate_user_profiles_banner',
                             'title'       => __( 'How to Create Ultimate User Profiles with WP ULike?', WP_ULIKE_SLUG ),
                             'description' => __( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
-                            'skin'        => 'info',
+                            'skin'        => 'default',
                             'has_close'   => false,
                             'buttons'     => array(
                                 array(
                                     'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-                                    'color_name' => 'info',
+                                    'color_name' => 'default',
                                     'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
                                 )
                             ),
                             'image'     => array(
-                                'width' => '200',
+                                'width' => '180',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
                             )
                         )
@@ -394,7 +394,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             ) );
 
-            // Profiles
+            // Login & Signup
             ULF::createSection( $this->option_domain, array(
                 'parent' => 'configuration',
                 'title'  => __( 'Login & Signup',WP_ULIKE_SLUG),
@@ -406,17 +406,17 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'id'          => 'wp_ulike_pro_user_login_register_banner',
                             'title'       => __( 'How to make AJAX Based Login/Registration system?', WP_ULIKE_SLUG ),
                             'description' => __( "Transform your default WordPress login, registration, and reset password forms with the new WP ULike Pro features. In this section, we provide you with tools that you can use to make modern & ajax based forms on your pages with just a few simple clicks." , WP_ULIKE_SLUG ),
-                            'skin'        => 'info',
+                            'skin'        => 'default',
                             'has_close'   => false,
                             'buttons'     => array(
                                 array(
                                     'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-                                    'color_name' => 'info',
+                                    'color_name' => 'default',
                                     'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-plugin/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
                                 )
                             ),
                             'image'     => array(
-                                'width' => '200',
+                                'width' => '180',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/login.svg'
                             )
                         )
@@ -424,6 +424,35 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             ) );
 
+            // Share buttons
+            ULF::createSection( $this->option_domain, array(
+                'parent' => 'configuration',
+                'title'  => __( 'Share Buttons',WP_ULIKE_SLUG),
+                'fields' => apply_filters( 'wp_ulike_panel_share_buttons', array(
+                    array(
+                        'type'     => 'callback',
+                        'function' => 'wp_ulike_get_notice_render',
+                        'args'     => array(
+                            'id'          => 'wp_ulike_pro_share_buttons_banner',
+                            'title'       => __( 'Easy Social Share Buttons for WordPress', WP_ULIKE_SLUG ),
+                            'description' => __( "WP ULike Share buttons enables your website users to share the content over Facebook, Twitter, Google, Linkedin, Whatsapp, Tumblr, Pinterest, Reddit and over 23 more social sharing services. This is the Simplest and Smoothest Social Sharing service with optimized and great looking vector icons." , WP_ULIKE_SLUG ),
+                            'skin'        => 'default',
+                            'has_close'   => false,
+                            'buttons'     => array(
+                                array(
+                                    'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+                                    'color_name' => 'default',
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-social-share-buttons/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                )
+                            ),
+                            'image'     => array(
+                                'width' => '200',
+                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/share.svg'
+                            )
+                        )
+                    )
+                ) )
+            ) );
 
             /**
              * Customization Section
@@ -524,12 +553,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'id'          => 'wp_ulike_pro_rest_api_banner',
                             'title'       => __( 'How to Get Started with WP ULike REST API?', WP_ULIKE_SLUG ),
                             'description' => __( "Have you ever tried to get data from online sources like WP ULike logs and use them in your Application or website? the solution is Rest API!" , WP_ULIKE_SLUG ),
-                            'skin'        => 'info',
+                            'skin'        => 'default',
                             'has_close'   => false,
                             'buttons'     => array(
                                 array(
                                     'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-                                    'color_name' => 'info',
+                                    'color_name' => 'default',
                                     'link'       => WP_ULIKE_PLUGIN_URI . 'blog/how-to-get-started-with-wp-ulike-rest-api/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
                                 )
                             ),
@@ -553,12 +582,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'id'          => 'wp_ulike_pro_optimization_banner',
                             'title'       => __( 'How to Optimize or Repair WP ULike Database Tables?', WP_ULIKE_SLUG ),
                             'description' => __( "Have you ever optimized your WP ULike database? Optimizing your database cleans up unwanted data which reduces database size and improves performance." , WP_ULIKE_SLUG ),
-                            'skin'        => 'info',
+                            'skin'        => 'default',
                             'has_close'   => false,
                             'buttons'     => array(
                                 array(
                                     'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
-                                    'color_name' => 'info',
+                                    'color_name' => 'default',
                                     'link'       => WP_ULIKE_PLUGIN_URI . 'blog/database-optimization/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
                                 )
                             ),
