@@ -384,7 +384,7 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 
 			// WordPress Toolbar
 			if ( 'string' === $format ) {
-				$content = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . esc_attr( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_link, (int) $total_items, $item_id, $user_ID );
+				$content = apply_filters( 'wp_ulike_bp_notifications_template', '<a href="' . esc_url( $custom_link ) . '" title="' . wp_strip_all_tags( $custom_text ) . '">' . esc_html( $custom_text ) . '</a>', $custom_link, (int) $total_items, $item_id, $user_ID );
 			// Deprecated BuddyBar
 			} else {
 				$content = apply_filters( 'wp_ulike_bp_notifications_template', array(
@@ -793,7 +793,7 @@ if( ! function_exists( 'wp_ulike_register_myCRED_hook' ) ){
 	 */
 	function wp_ulike_register_myCRED_hook( $installed ) {
 		$installed['wp_ulike'] = array(
-			'title'       => WP_ULIKE_NAME,
+			'title'       => WP_ULIKE_NAME . ' : ' .  __( 'Points for liking content', WP_ULIKE_SLUG ),
 			'description' => __( 'This hook award / deducts points from users who Like/Unlike any content of WordPress, bbPress, BuddyPress & ...', WP_ULIKE_SLUG ),
 			'callback'    => array( 'wp_ulike_myCRED' )
 		);

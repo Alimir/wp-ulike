@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: like, marketing, elementor, user profile, statistics, favorite, rating, button, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 5.6
-Stable tag: 4.4.4
+Tested up to: 5.6.2
+Stable tag: 4.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +43,9 @@ Not happy with the default WordPress login and registration pages? In WP ULike P
 
 = Boost Your SEO by Using Our Schema Markup Generator [PRO] =
 Schema markup is a form of data structure and helps Search Engine to have a better understanding of content. The Process for adding these schemas to your webpage is quite messy and confusing. Because of that, WP ULike Pro adds a Metabox to your posts so you can easily generate your custom rich snippets.
+
+= Easy Social Share Buttons for WordPress [PRO] =
+WP ULike Share buttons enables your website users to share the content over Facebook, Twitter, Google, Linkedin, Whatsapp, Tumblr, Pinterest, Reddit and over 23 more social sharing services. This is the Simplest and Smoothest Social Sharing service with optimized and great looking vector icons.
 
 = Try WP ULike Pro - The Best Marketing Tool For WordPress =
 So let's talk [PROfessional](https://wpulike.com/pricing/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)! WP ULike Pro has support DisLike button alongside Like button, both of them are completely customizable in our redesigned settings menu with tones of features and more beautiful and stylish templates. the PRO version of the plugin is now compatible with Elementor Page builder and you can easily choose from +7 widgets by simply drag and drop them to your content. as you build your page and content with Elementor, you can add and customize Like and Dislike button in every part such as Posts, Comments, activities, etc.
@@ -136,6 +139,13 @@ Our WP ULike project has been able to attract more than 50,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.4.6 =
+* Added: Social share buttons generator. (+ auto display functionality) [PRO]
+* Added: New customizer options for social share, profile, login & register forms. [PRO]
+* Added: Compatibility with WPML plugin. [PRO]
+* Updated: myCred functionalities.
+* Fixed: Some major issues.
 
 = 4.4.5 =
 * Added: New popover template for likers box.

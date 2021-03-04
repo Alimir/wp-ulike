@@ -81,7 +81,6 @@
       $.ajax({
         url: wp_ulike_params.ajax_url,
         type: "POST",
-        cache: false,
         dataType: "json",
         data: args
       }).done(callback);

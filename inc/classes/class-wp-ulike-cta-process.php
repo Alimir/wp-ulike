@@ -123,6 +123,7 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 					"logging_method"       => wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] ),
 					"only_logged_in_users" => wp_ulike_setting_repo::requireLogin( $this->parsedArgs['item_type'] ),
 					"logged_out_action"    => wp_ulike_setting_repo::anonymousDisplay( $this->parsedArgs['item_type'] ),
+					"status"               => $this->getCurrentStatus()
 				), $this->parsedArgs['item_id']
 			);
 		}
