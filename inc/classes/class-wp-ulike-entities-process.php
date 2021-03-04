@@ -324,6 +324,19 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
+		 * Delete log data
+		 *
+		 * @param integer $item_id
+		 * @return integer|false
+		 */
+		public function deleteData( $item_id ){
+			return $this->wpdb->delete(
+				$this->wpdb->prefix . $this->typeSettings->getTableName(),
+				array( $this->typeSettings->getColumnName() => $item_id, 'user_id' => $this->currentUser )
+			);
+		}
+
+		/**
 		 * Update and return counter value
 		 *
 		 * @param integer $item_id
