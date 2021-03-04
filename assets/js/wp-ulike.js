@@ -1,4 +1,4 @@
-/*! WP ULike - v4.4.5
+/*! WP ULike - v4.4.6
  *  https://wpulike.com
  *  TechnoWich 2021;
  */
@@ -624,7 +624,6 @@
       $.ajax({
         url: wp_ulike_params.ajax_url,
         type: "POST",
-        cache: false,
         dataType: "json",
         data: args
       }).done(callback);
