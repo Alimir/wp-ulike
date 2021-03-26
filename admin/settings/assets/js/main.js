@@ -1303,6 +1303,8 @@
             thumbnail = attributes.sizes.thumbnail.url;
           } else if ( typeof attributes.sizes !== 'undefined' && typeof attributes.sizes.full !== 'undefined' ) {
             thumbnail = attributes.sizes.full.url;
+          } else if ( attributes.url.split('.').pop().toLowerCase() === 'svg' ) {
+            thumbnail = attributes.url;
           } else {
             thumbnail = attributes.icon;
           }
@@ -1578,7 +1580,7 @@
 
       var $this   = $(this),
           $input  = $this.find('input'),
-          $inited = $this.find('.ui-spinner-button'),
+          $inited = $this.find('.ui-button'),
           data    = $input.data();
 
       if ( $inited.length ) {

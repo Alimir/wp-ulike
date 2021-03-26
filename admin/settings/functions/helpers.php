@@ -36,7 +36,7 @@ if ( ! function_exists( 'ulf_array_search' ) ) {
  * @version 1.0.0
  *
  */
-if ( ! function_exists( 'ulf_microtime' ) ) {
+if ( ! function_exists( 'ulf_timeout' ) ) {
   function ulf_timeout( $timenow, $starttime, $timeout = 30 ) {
     return ( ( $timenow - $starttime ) < $timeout ) ? true : false;
   }
