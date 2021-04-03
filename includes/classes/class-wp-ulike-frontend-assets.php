@@ -4,9 +4,9 @@
  * // @echo HEADER
 */
 
-// no direct access allowed
-if ( ! defined('ABSPATH') ) {
-    die();
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
 }
 
 if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
@@ -21,6 +21,11 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 	   	 * __construct
 	   	 */
 	  	function __construct() {
+			// general assets
+        	add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
+	  	}
+
+		public function enqueue(){
 	    	// If user has been disabled this page in options, then return.
 			if( ! is_wp_ulike( wp_ulike_get_option( 'disable_plugin_files' ), array(), true ) ) {
 				return;
@@ -28,8 +33,7 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 	        // general assets
 	        $this->load_styles();
 	        $this->load_scripts();
-	  	}
-
+		}
 
 	  	/**
 	  	 * Styles for admin

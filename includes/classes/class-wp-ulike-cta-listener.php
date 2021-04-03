@@ -1,4 +1,13 @@
 <?php
+/**
+ * WP ULike CTA Listener
+ * // @echo HEADER
+ */
+
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
 final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 
