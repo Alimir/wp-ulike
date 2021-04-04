@@ -92,7 +92,7 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
       if( ! class_exists('wp_ulike_activator') ){
         require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-activator.php';
       }
-      wp_ulike_activator::activate();
+      wp_ulike_activator::get_instance()::activate();
 
       // Fire action
       do_action( 'wp_ulike_activated', get_current_blog_id() );

@@ -46,8 +46,20 @@ class WpUlikeInit {
    * @return void
    */
   public function plugins_loaded(){
+    // Upgrade database
+    if ( self::is_admin_backend() ) {
+      $this->maybe_upgrade_database();
+    }
     // Load plugin text domain
     $this->load_plugin_textdomain();
+  }
+
+  private function maybe_upgrade_database(){
+    $current_version = get_option( 'wp_ulike_dbVersion', '1.6' );
+    // Check database upgrade if needed
+    if ( version_compare( $current_version, '2.1', '<' ) ) {
+      wp_ulike_activator::get_instance()::upgrade_0();
+    }
   }
 
   /**
@@ -56,11 +68,6 @@ class WpUlikeInit {
   * @return void
   */
   public function init(){
-    // Check database upgrade if needed
-    if ( version_compare( get_option( 'wp_ulike_dbVersion', '1.6' ), WP_ULIKE_DB_VERSION, '<' ) ) {
-      wp_ulike_activator::upgrade();
-    }
-
     // Define constant values
     $this->define_constants();
 
@@ -237,7 +244,7 @@ class WpUlikeInit {
    *
    * @return void
    */
-    public function load_plugin_textdomain() {
+  public function load_plugin_textdomain() {
     // Set filter for language directory
     $lang_dir = WP_ULIKE_DIR . 'languages/';
     $lang_dir = apply_filters( 'wp_ulike_languages_directory', $lang_dir );
@@ -270,13 +277,12 @@ class WpUlikeInit {
   * @return    object    A single instance of this class.
   */
   public static function get_instance() {
+    // If the single instance hasn't been set, set it now.
+    if ( null == self::$instance ) {
+      self::$instance = new self;
+    }
 
-      // If the single instance hasn't been set, set it now.
-      if ( null == self::$instance ) {
-        self::$instance = new self;
-      }
-
-      return self::$instance;
+    return self::$instance;
   }
 
 }
