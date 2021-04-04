@@ -170,7 +170,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 		// Return false when ID not exist
 		if( empty( $this->data['id'] ) || empty( $this->data['type'] ) ) return false;
 		// Return false when nonce invalid
-		if( ! wp_verify_nonce( $this->data['nonce'], $this->data['type'] . $this->data['id'] ) && ! wp_ulike_is_cache_exist() ) return false;
+		if( ! $this->user && ! wp_verify_nonce( $this->data['nonce'], $this->data['type'] . $this->data['id'] ) && ! wp_ulike_is_cache_exist() ) return false;
 
 		return true;
 	}
