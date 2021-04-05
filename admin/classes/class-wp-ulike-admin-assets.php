@@ -17,15 +17,20 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 
 		private $hook;
 
-		/**
-		 * __construct
-		 */
-		function __construct( $hook ) {
+	  	/**
+	   	 * __construct
+	   	 */
+	  	function __construct() {
+			// general assets
+        	add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+	  	}
+
+		public function enqueue( $hook ){
 			$this->hook = $hook;
 			// general assets
 			$this->load_styles();
 			$this->load_scripts();
-		 }
+		}
 
 
 		/**

@@ -169,7 +169,7 @@ if( ! function_exists( 'wp_ulike_validate_ip' ) ){
 	 * @return boolean
 	 */
 	function wp_ulike_validate_ip( $ip ) {
-		return filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) === false ? false : true;
+		return filter_var( $ip, FILTER_VALIDATE_IP ) === false ? false : true;
 	}
 }
 

@@ -4,9 +4,9 @@
  * // @echo HEADER
 */
 
-// no direct access allowed
-if ( ! defined('ABSPATH') ) {
-    die();
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
 }
 
 if ( ! class_exists( 'wp_ulike_customizer' ) ) {

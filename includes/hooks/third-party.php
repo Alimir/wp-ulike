@@ -53,7 +53,6 @@ if( ! function_exists( 'wp_ulike_put_buddypress' ) ){
 	add_action( 'bp_activity_entry_content', 'wp_ulike_put_buddypress', 15 );
 }
 
-
 if( ! function_exists( 'wp_ulike_buddypress_activity_content_ajax_display' ) ){
 	/**
 	 * BuddyPress activity content display for ajax load more

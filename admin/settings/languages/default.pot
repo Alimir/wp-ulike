@@ -2,73 +2,73 @@
 # This file is distributed under the same license as the Codestar Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Codestar Framework 2.2.1\n"
+"Project-Id-Version: Codestar Framework 2.2.2\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/codestar-framework\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: classes/admin-options.class.php:225
+#: classes/admin-options.class.php:226
 msgid "Error while saving the changes."
 msgstr ""
 
-#: classes/admin-options.class.php:285
+#: classes/admin-options.class.php:286
 msgid "Settings successfully imported."
 msgstr ""
 
-#: classes/admin-options.class.php:297 classes/admin-options.class.php:313
+#: classes/admin-options.class.php:298 classes/admin-options.class.php:314
 msgid "Default settings restored."
 msgstr ""
 
-#: classes/admin-options.class.php:384
+#: classes/admin-options.class.php:385
 msgid "Settings saved."
 msgstr ""
 
-#: classes/admin-options.class.php:563
+#: classes/admin-options.class.php:565
 msgid "You have unsaved changes, save your changes!"
 msgstr ""
 
-#: classes/admin-options.class.php:565
+#: classes/admin-options.class.php:567
 msgid "show all settings"
 msgstr ""
 
-#: classes/admin-options.class.php:567 fields/icon/icon.php:57
+#: classes/admin-options.class.php:569 fields/icon/icon.php:57
 #: fields/map/map.php:23
 msgid "Search..."
 msgstr ""
 
-#: classes/admin-options.class.php:570 classes/admin-options.class.php:693
+#: classes/admin-options.class.php:572 classes/admin-options.class.php:695
 msgid "Save"
 msgstr ""
 
-#: classes/admin-options.class.php:570 classes/admin-options.class.php:693
+#: classes/admin-options.class.php:572 classes/admin-options.class.php:695
 msgid "Saving..."
 msgstr ""
 
-#: classes/admin-options.class.php:571 classes/admin-options.class.php:694
+#: classes/admin-options.class.php:573 classes/admin-options.class.php:696
 msgid "Reset Section"
 msgstr ""
 
-#: classes/admin-options.class.php:571 classes/admin-options.class.php:694
+#: classes/admin-options.class.php:573 classes/admin-options.class.php:696
 msgid "Are you sure to reset this section options?"
 msgstr ""
 
-#: classes/admin-options.class.php:572 classes/admin-options.class.php:695
+#: classes/admin-options.class.php:574 classes/admin-options.class.php:697
 msgid "Reset All"
 msgstr ""
 
-#: classes/admin-options.class.php:572 classes/admin-options.class.php:695
+#: classes/admin-options.class.php:574 classes/admin-options.class.php:697
 #: classes/comment-options.class.php:215 classes/metabox-options.class.php:293
 #: fields/backup/backup.php:31
 msgid "Reset"
 msgstr ""
 
-#: classes/admin-options.class.php:572 classes/admin-options.class.php:695
+#: classes/admin-options.class.php:574 classes/admin-options.class.php:697
 msgid "Are you sure you want to reset all settings to default values?"
 msgstr ""
 
-#: classes/admin-options.class.php:670 classes/comment-options.class.php:198
+#: classes/admin-options.class.php:672 classes/comment-options.class.php:198
 #: classes/metabox-options.class.php:276 fields/button_set/button_set.php:56
 #: fields/checkbox/checkbox.php:76 fields/radio/radio.php:75
 #: fields/select/select.php:113 functions/actions.php:41
@@ -83,27 +83,27 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: classes/setup.class.php:529
+#: classes/setup.class.php:592
 msgid "Are you sure?"
 msgstr ""
 
-#: classes/setup.class.php:530
+#: classes/setup.class.php:593
 msgid "Please enter %s or more characters"
 msgstr ""
 
-#: classes/setup.class.php:531
+#: classes/setup.class.php:594
 msgid "Searching..."
 msgstr ""
 
-#: classes/setup.class.php:532
+#: classes/setup.class.php:595
 msgid "No results found."
 msgstr ""
 
-#: classes/setup.class.php:634
+#: classes/setup.class.php:696
 msgid "Oops! Not allowed."
 msgstr ""
 
-#: classes/setup.class.php:708 classes/setup.class.php:712
+#: classes/setup.class.php:768 classes/setup.class.php:772
 msgid "Field not found!"
 msgstr ""
 

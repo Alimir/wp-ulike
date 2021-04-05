@@ -1,4 +1,13 @@
 <?php
+/**
+ * WP ULike AJAX Listener
+ * // @echo HEADER
+ */
+
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
 /**
 * Base AJAX class

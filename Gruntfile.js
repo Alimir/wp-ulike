@@ -473,7 +473,7 @@ module.exports = function (grunt) {
             lite: {
                 options: {
                     exclude: [
-                        '.git*', 'node_modules', '.sass-cache', 'Gruntfile.js', 'package.json', 'composer.json', '_devDependencies',
+                        '.git*', 'node_modules', '.sass-cache', 'dist', 'Gruntfile.js', 'package.json', 'composer.json', '_devDependencies',
                         'assets/js/src', 'admin/assets/js/src', 'readme.md', '.jshintrc', 'build', '.*', '.ds_store', 'package-lock.json', 'bower.json',
                         'config.rb', 'assets/sass/', 'admin/assets/sass/', 'deploy.sh', 'docs', 'wp-assets', 'README.md', 'SUMMARY.md'
                     ],

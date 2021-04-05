@@ -1492,8 +1492,8 @@
 .ulf-field-media .ulf--preview .fa-times {
   position: absolute;
   z-index: 1;
-  right: 4px;
-  top: 4px;
+  right: 2px;
+  top: 2px;
   font-size: 14px;
   width: 22px;
   height: 22px;
@@ -1502,7 +1502,8 @@
   text-decoration: none;
   color: #fff;
   background-color: #dd3333;
-  opacity: 0.8;
+  opacity: 0.75;
+  border-radius: 2px;
   transition: all .2s;
 }
 .ulf-field-media .ulf--preview .fa-times:hover {
@@ -2059,8 +2060,9 @@
  */
 .ulf-field-typography textarea,
 .ulf-field-typography select {
-  min-width: 100%;
   margin: 0;
+  min-width: 100%;
+  max-width: 100%;
 }
 .ulf-field-typography .ulf--title {
   color: #777;
@@ -2076,6 +2078,7 @@
 }
 .ulf-field-typography .ulf--block {
   flex: 1;
+  max-width: 100%;
   padding-right: 6px;
   padding-bottom: 6px;
 }
@@ -2389,17 +2392,22 @@
   display: inline-block;
   position: relative;
   padding: 4px;
-  min-width: 44px;
-  min-height: 22px;
+  min-width: 100px;
+  min-height: 100px;
+  line-height: 100px;
   margin-bottom: 10px;
+  text-align: center;
+  border-radius: 2px;
   border: 1px solid #ccc;
   background-color: #f9f9f9;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
 }
 .ulf-image-preview img {
-  max-height: 90px;
+  max-width: 100px;
+  max-height: 100px;
   display: inline-block;
   vertical-align: middle;
+  object-fit: contain;
 }
 
 .ulf-field-custom .ulf-field {
@@ -3725,7 +3733,7 @@
     display: none !important;
   }
 
-  .ulf-content {
+  .ulf-nav-normal + .ulf-content {
     margin-left: 0;
   }
 
