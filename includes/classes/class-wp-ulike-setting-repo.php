@@ -137,8 +137,8 @@ class wp_ulike_setting_repo {
 	 * @return boolean
 	 */
 	public static function hasNotification( $typeName ){
-		$enable_notice = self::getOption( 'enable_add_notification', false );
-		$filter_notice = self::getOption( 'filter_user_notification_types', array() );
+		$enable_notice = self::getOption( self::getSettingKey( $typeName ) . '|enable_add_notification', false );
+		$filter_notice = self::getOption( self::getSettingKey( $typeName ) . '|filter_user_notification_types', array() );
 		return $enable_notice && ! in_array( $typeName, $filter_notice );
 	}
 
