@@ -276,7 +276,7 @@
     /**
      * init & update likers box
      */
-    _updateLikers: function () {
+    _updateLikers: function (event) {
       // Make a request to generate or refresh the likers box
       if (this.settings.displayLikers) {
         // return on these conditions
@@ -306,6 +306,9 @@
             }
           }.bind(this)
         );
+
+        event.stopImmediatePropagation();
+        return false;
       }
     },
 

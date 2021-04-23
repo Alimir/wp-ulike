@@ -212,7 +212,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 	function wp_ulike_add_bp_notifications( $cp_ID, $type, $user_ID, $status, $has_log, $slug  ){
 
 		// Return if user not logged in or an older data log exist
-		if( ! is_user_logged_in() || $has_log > 0 || ! function_exists( 'bp_is_active' ) || ! defined( 'BP_VERSION' ) ){
+		if( ! is_user_logged_in() || $has_log > 0 || ! defined( 'BP_VERSION' ) ){
 			return;
 		}
 
@@ -286,8 +286,8 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 
 		}
 
-		//Sends out notifications when you get a like from someone
-		if ( isset( $options['enable_add_notification'] ) && wp_ulike_is_true( $options['enable_add_notification'] ) ) {
+		// Sends out notifications when you get a like from someone
+		if ( wp_ulike_setting_repo::hasNotification( $slug ) ) {
 			// No notifications from Anonymous
 			if ( ! $user_ID || false === get_userdata( $user_ID ) ) {
 				return false;

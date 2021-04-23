@@ -286,6 +286,21 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'title'      => __('Enable User Notification', WP_ULIKE_SLUG),
                 'desc'       => __('Sends out notifications when you get a like from someone', WP_ULIKE_SLUG),
             );
+            $get_content_fields['buddypress']['filter_user_notification_types'] = array(
+                'id'          => 'filter_user_notification_types',
+                'type'        => 'select',
+                'title'       => __( 'Disable Notification Types',WP_ULIKE_SLUG ),
+                'desc'        => __('With this option, you can disable user notification on content types.', WP_ULIKE_SLUG),
+                'chosen'      => true,
+                'multiple'    => true,
+                'options'     => array(
+                    'post'     => __('Posts', WP_ULIKE_SLUG),
+                    'comment'  => __('Comments', WP_ULIKE_SLUG),
+                    'activity' => __('Activities', WP_ULIKE_SLUG),
+                    'topic'    => __('Topics', WP_ULIKE_SLUG)
+                ),
+                'dependency'=> array( 'enable_add_notification', '==', 'true' ),
+            );
             $buddypress_options = array( array(
                 'type'    => 'content',
                 'content' => sprintf( '<strong>%s</strong> %s', __( 'BuddyPress', WP_ULIKE_SLUG ), __( 'plugin is not installed or activated', WP_ULIKE_SLUG ) ),

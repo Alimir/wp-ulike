@@ -73,6 +73,7 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 	 * @return void
 	 */
 	function wp_ulike_get_table_info( $type = 'post' ){
+		global $wpdb;
 		$output = array();
 
 		switch ( $type ) {
@@ -80,7 +81,7 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 				$output = array(
 					'table'          => 'ulike_comments',
 					'column'         => 'comment_id',
-					'related_table'  => 'comments',
+					'related_table'  => $wpdb->comments,
 					'related_column' => 'comment_ID'
 				);
 				break;
@@ -89,7 +90,7 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 				$output = array(
 					'table'          => 'ulike_activities',
 					'column'         => 'activity_id',
-					'related_table'  => 'bp_activity',
+					'related_table'  => is_multisite() ? $wpdb->base_prefix . 'bp_activity' : $wpdb->prefix . 'bp_activity',
 					'related_column' => 'id'
 				);
 				break;
@@ -98,7 +99,7 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 				$output = array(
 					'table'          => 'ulike_forums',
 					'column'         => 'topic_id',
-					'related_table'  => 'posts',
+					'related_table'  => $wpdb->posts,
 					'related_column' => 'ID'
 				);
 				break;
@@ -107,7 +108,7 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 				$output = array(
 					'table'          => 'ulike',
 					'column'         => 'post_id',
-					'related_table'  => 'posts',
+					'related_table'  => $wpdb->posts,
 					'related_column' => 'ID'
 				);
 				break;
@@ -353,11 +354,19 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		$parsed_args = wp_parse_args( $args, $defaults );
 
 		// Get likers list
-		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $item_ID, $parsed_args['counter'] );
+		$get_users  = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $item_ID, NULL );
 		// Bulk user list
 		$users_list = '';
 
+		// Create custom template
+		$custom_template = apply_filters( 'wp_ulike_get_likers_template', false, $get_users, $item_ID, $parsed_args, $table_name, $column_name, $options );
+		if( $custom_template !== false ){
+			return $custom_template;
+		}
+
 		if( ! empty( $get_users ) ) {
+			// Limit array content
+			$get_users  = array_slice( $get_users, 0, $parsed_args['counter'] );
 
 			// Get likers html template
  			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;

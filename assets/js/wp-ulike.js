@@ -1,4 +1,4 @@
-/*! WP ULike - v4.4.7
+/*! WP ULike - v4.4.8
  *  https://wpulike.com
  *  TechnoWich 2021;
  */
@@ -819,7 +819,7 @@
     /**
      * init & update likers box
      */
-    _updateLikers: function () {
+    _updateLikers: function (event) {
       // Make a request to generate or refresh the likers box
       if (this.settings.displayLikers) {
         // return on these conditions
@@ -849,6 +849,9 @@
             }
           }.bind(this)
         );
+
+        event.stopImmediatePropagation();
+        return false;
       }
     },
 

@@ -103,7 +103,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				ORDER BY %7$s
 				%8$s %9$s',
 				$wpdb->prefix . 'ulike_meta',
-				$wpdb->prefix . $info_args['related_table'],
+				$info_args['related_table'],
 				$info_args['related_column'],
 				$related_condition,
 				$parsed_args['type'],
@@ -126,16 +126,17 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				SELECT COUNT(t.%1$s) AS counter,
 				t.%1$s AS item_ID
 				FROM %2$s t
-				INNER JOIN %3$s r ON t.%1$s = r.%4$s
-				WHERE %5$s %6$s
-				%7$s
+				INNER JOIN %3$s r ON t.%1$s = r.%4$s %5$s
+				WHERE %6$s %7$s
+				%8$s
 				GROUP BY item_ID
-				ORDER BY %8$s
-				%9$s %10$s',
+				ORDER BY %9$s
+				%10$s %11$s',
 				$info_args['column'],
 				$wpdb->prefix . $info_args['table'],
-				$wpdb->prefix . $info_args['related_table'],
+				$info_args['related_table'],
 				$info_args['related_column'],
+				$related_condition,
 				$status_type,
 				$user_condition,
 				$period_limit,
@@ -258,7 +259,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 				INNER JOIN %2$s r ON t.item_id = r.%3$s %4$s
 				WHERE t.meta_value > 0 AND t.meta_group = "%5$s" %6$s',
 				$wpdb->prefix . 'ulike_meta',
-				$wpdb->prefix . $info_args['related_table'],
+				$info_args['related_table'],
 				$info_args['related_column'],
 				$related_condition,
 				$parsed_args['type'],
@@ -283,7 +284,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 				%8$s',
 				$info_args['column'],
 				$wpdb->prefix . $info_args['table'],
-				$wpdb->prefix . $info_args['related_table'],
+				$info_args['related_table'],
 				$info_args['related_column'],
 				$related_condition,
 				$status_type,

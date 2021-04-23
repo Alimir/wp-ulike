@@ -147,8 +147,10 @@ if( ! function_exists( 'wp_ulike_likers_box_shortcode' ) ){
 			$args['template'] = html_entity_decode( $args['template']  );
 		}
 
-		return apply_filters( 'wp_ulike_likers_box_shortcode', sprintf( '<div class="wp_ulike_manual_likers_wrapper wp_%s_likers_%d">%s</div>', $args['type'], $args['id'],
-		wp_ulike_get_likers_template( $get_settings['table'], $get_settings['column'], $args['id'], $get_settings['setting'], $args ) ), $args['id'], $args['type'] );
+		$output = sprintf( '<div class="wp_ulike_manual_likers_wrapper wp_%s_likers_%d">%s</div>', $args['type'], $args['id'],
+		wp_ulike_get_likers_template( $get_settings['table'], $get_settings['column'], $args['id'], $get_settings['setting'], $args ) );
+
+		return apply_filters( 'wp_ulike_likers_box_shortcode', $output, $args['id'], $args['type'] );
 	}
 	add_shortcode( 'wp_ulike_likers_box', 'wp_ulike_likers_box_shortcode' );
 }
