@@ -115,6 +115,7 @@ if( ! function_exists( 'wp_ulike_likers_box_shortcode' ) ){
 			"type"        => 'post',
 			"counter"     => 10,
 			"template"    => '',
+			"style"       => '',
 			"avatar_size" => 64
 		), $atts );
 

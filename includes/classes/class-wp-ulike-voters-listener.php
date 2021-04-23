@@ -49,7 +49,10 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 				$this->settings_type->getTableName(),
 				$this->settings_type->getColumnName(),
 				$this->data['id'],
-				$this->settings_type->getSettingKey()
+				$this->settings_type->getSettingKey(),
+				array(
+                	'style' => $this->data['likersTemplate']
+            	)
 			);
 
 			$this->afterGetListAction();

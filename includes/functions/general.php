@@ -349,6 +349,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		$defaults = array(
 			"counter"     => ! empty( $options['likers_count'] ) ? $options['likers_count'] : 10,
 			"template"    => ! empty( $options['likers_template'] ) ? $options['likers_template'] : null,
+			"style"       => ! empty( $options['likers_style'] ) ? $options['likers_style'] : 'popover',
 			"avatar_size" => ! empty( $options['likers_gravatar_size'] ) ? $options['likers_gravatar_size'] : 64
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
