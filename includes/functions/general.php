@@ -79,37 +79,41 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 		switch ( $type ) {
 			case 'comment':
 				$output = array(
-					'table'          => 'ulike_comments',
-					'column'         => 'comment_id',
-					'related_table'  => $wpdb->comments,
-					'related_column' => 'comment_ID'
+					'table'                => 'ulike_comments',
+					'column'               => 'comment_id',
+					'related_table'        => 'comments',
+					'related_table_prefix' => $wpdb->comments,
+					'related_column'       => 'comment_ID'
 				);
 				break;
 
 			case 'activity':
 				$output = array(
-					'table'          => 'ulike_activities',
-					'column'         => 'activity_id',
-					'related_table'  => is_multisite() ? $wpdb->base_prefix . 'bp_activity' : $wpdb->prefix . 'bp_activity',
-					'related_column' => 'id'
+					'table'                => 'ulike_activities',
+					'column'               => 'activity_id',
+					'related_table'        => 'bp_activity',
+					'related_table_prefix' => is_multisite() ? $wpdb->base_prefix . 'bp_activity' : $wpdb->prefix . 'bp_activity',
+					'related_column'       => 'id'
 				);
 				break;
 
 			case 'topic':
 				$output = array(
-					'table'          => 'ulike_forums',
-					'column'         => 'topic_id',
-					'related_table'  => $wpdb->posts,
-					'related_column' => 'ID'
+					'table'                => 'ulike_forums',
+					'column'               => 'topic_id',
+					'related_table'        => 'posts',
+					'related_table_prefix' => $wpdb->posts,
+					'related_column'       => 'ID'
 				);
 				break;
 
 			default:
 				$output = array(
-					'table'          => 'ulike',
-					'column'         => 'post_id',
-					'related_table'  => $wpdb->posts,
-					'related_column' => 'ID'
+					'table'                => 'ulike',
+					'column'               => 'post_id',
+					'related_table'        => 'posts',
+					'related_table_prefix' => $wpdb->posts,
+					'related_column'       => 'ID'
 				);
 				break;
 		}
