@@ -172,7 +172,9 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		if( $args['disable_pophover'] || $args['likers_style'] == 'default' ){
 			echo sprintf(
 			'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>',
-			$args['type'], $args['ID'], wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting )
+			$args['type'], $args['ID'], wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting, array(
+					'style' => 'default'
+				) )
 			);
 		}
 
