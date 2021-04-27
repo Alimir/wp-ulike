@@ -22,9 +22,9 @@
 		<div class="ulf-about-header-text"><?php echo _e( 'A professional WordPress plugin that makes your website more attractive and user-friendly.', WP_ULIKE_SLUG) ; ?></div>
 		<nav class="ulf-about-header-navigation nav-tab-wrapper wp-clearfix">
 			<a class="nav-tab nav-tab-active" href="admin.php?page=wp-ulike-about"><?php echo _e('About',WP_ULIKE_SLUG); ?></a>
-			<a target="_blank" class="nav-tab" href="<?php echo esc_url( self_admin_url( 'customize.php' ) ); ?>"><?php echo _e('Customize',WP_ULIKE_SLUG); ?></a>
 			<a target="_blank" class="nav-tab" href="admin.php?page=wp-ulike-settings#tab=configuration"><?php echo _e('Configuration',WP_ULIKE_SLUG); ?></a>
-			<a target="_blank" class="nav-tab" href="https://wpulike.com/blog/?utm_source=about-page&utm_campaign=blog-nav&utm_medium=wp-dash"><?php echo _e('Blog',WP_ULIKE_SLUG); ?></a>
+			<a target="_blank" class="nav-tab" href="<?php echo esc_url( self_admin_url( 'customize.php' ) ); ?>"><?php echo _e('Customize',WP_ULIKE_SLUG); ?></a>
+			<a target="_blank" class="nav-tab" href="https://wpulike.com/blog/?utm_source=about-page&utm_campaign=blog-nav&utm_medium=wp-dash"><?php echo _e('Our Blog',WP_ULIKE_SLUG); ?></a>
 			<a target="_blank" class="nav-tab go-pro" href="https://wpulike.com/pricing/?utm_source=about-page&utm_campaign=gopro-nav&utm_medium=wp-dash"><?php echo _e('Go Pro',WP_ULIKE_SLUG); ?><img alt="Go Pro" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/rocket-pro.gif"></a>
 		</nav>
 	</div>
