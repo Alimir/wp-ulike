@@ -287,4 +287,12 @@ class WpUlikeInit {
 
 }
 
-WpUlikeInit::get_instance();
+/**
+ * Start WP ULike service
+ *
+ * @return void
+ */
+function RUN_WPULIKE(){
+  WpUlikeInit::get_instance();
+}
+RUN_WPULIKE();

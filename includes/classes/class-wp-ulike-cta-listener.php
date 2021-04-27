@@ -49,11 +49,12 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 		try {
 			$this->beforeUpdateAction( $this->data );
 
-			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
-
+			// Validate inputs
 			if ( !$this->validates() ){
 				throw new \Exception( __( 'permission denied.', WP_ULIKE_SLUG ) );
 			}
+
+			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
 
 			if( empty( $this->settings_type->getType() ) ){
 				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
@@ -173,7 +174,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 		// Return false when ID not exist
 		if( empty( $this->data['id'] ) || empty( $this->data['type'] ) ) return false;
 		// Return false when nonce invalid
-		if( ! $this->user && ! wp_verify_nonce( $this->data['nonce'], $this->data['type'] . $this->data['id'] ) && ! wp_ulike_is_cache_exist() ) return false;
+		// if( ! $this->user && ! wp_verify_nonce( $this->data['nonce'], $this->data['type'] . $this->data['id'] ) && ! wp_ulike_is_cache_exist() ) return false;
 
 		return true;
 	}
