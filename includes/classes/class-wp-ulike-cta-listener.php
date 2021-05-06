@@ -146,7 +146,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			return $this->sendError( array(
 				'message'     => $e->getMessage(),
 				'messageType' => 'error',
-				'hasToast'    => wp_ulike_setting_repo::hasToast( $this->settings_type->getType() )
+				'hasToast'    => wp_ulike_setting_repo::hasToast( $this->data['type'] )
 			) );
 		}
 	}
