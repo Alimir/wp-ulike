@@ -54,7 +54,7 @@
     "grunt-contrib-jshint": "^3.0.0",
     "grunt-contrib-uglify": "^5.0.0",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-po2mo": ">=0.1.2",
+    "grunt-potomo": "^3.5.0",
     "grunt-preprocess": ">=5.1.0",
     "grunt-rsync": ">=3.0.0",
     "grunt-shell": ">=3.0.1",
