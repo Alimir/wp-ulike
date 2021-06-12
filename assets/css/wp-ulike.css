@@ -551,10 +551,10 @@
   word-wrap: break-word;
   overflow: hidden;
   margin: 0 0 6px;
-  padding: 15px 15px 15px 55px;
-  width: 280px;
+  padding: 14px 15px 14px 65px;
+  width: 290px;
   border-radius: 3px;
-  background-color: #00BCD4;
+  background-color: #007bc3;
   color: #FFFFFF;
   animation: wpUlikeNotifitcationsAnimation 200ms backwards;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08);
@@ -570,27 +570,28 @@
   background-position: center center;
   background-repeat: no-repeat;
   background-image: url(../img/svg/info.svg);
+  background-size: 25px;
   position: absolute;
   left: 0;
-  width: 45px;
+  width: 50px;
   top: 0;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.08);
+  background-color: rgba(0, 0, 0, 0.06);
 }
 .wpulike-notification .wpulike-message.wpulike-success {
-  background-color: #8bc34a;
+  background-color: #20a779;
 }
 .wpulike-notification .wpulike-message.wpulike-success:before {
   background-image: url(../img/svg/success.svg);
 }
 .wpulike-notification .wpulike-message.wpulike-error {
-  background-color: #EF5350;
+  background-color: #ec4d2c;
 }
 .wpulike-notification .wpulike-message.wpulike-error:before {
   background-image: url(../img/svg/error.svg);
 }
 .wpulike-notification .wpulike-message.wpulike-warning {
-  background-color: #FFAB00;
+  background-color: #f0a82f;
 }
 .wpulike-notification .wpulike-message.wpulike-warning:before {
   background-image: url(../img/svg/warning.svg);
@@ -606,22 +607,29 @@
     transform: translateY(0);
   }
 }
-@media all and (max-width: 240px) {
+@media screen and (max-width: 768px) {
   .wpulike-notification .wpulike-message {
-    padding: 8px 8px 8px 55px;
-    width: 11em;
+    padding: 11px 11px 11px 55px;
+    font-size: 13px;
+  }
+  .wpulike-notification .wpulike-message:before {
+    background-size: 25px;
+    width: 45px;
   }
 }
-@media all and (min-width: 241px) and (max-width: 480px) {
-  .wpulike-notification .wpulike-message {
-    padding: 8px 8px 8px 55px;
-    width: 18em;
+@media screen and (max-width: 320px) {
+  .wpulike-notification {
+    left: 10px;
+    right: 10px;
   }
-}
-@media all and (min-width: 481px) and (max-width: 768px) {
   .wpulike-notification .wpulike-message {
-    padding: 15px 15px 15px 55px;
-    width: 25em;
+    padding: 9px 9px 9px 45px;
+    font-size: 12px;
+    width: 100%;
+  }
+  .wpulike-notification .wpulike-message:before {
+    background-size: 15px;
+    width: 35px;
   }
 }
 /* Confirm tooltip */
@@ -895,24 +903,23 @@
   right: inherit;
 }
 .rtl .wpulike-notification .wpulike-message {
-  padding: 15px 55px 15px 15px;
+  padding: 14px 65px 14px 15px;
 }
 .rtl .wpulike-notification .wpulike-message:before {
   left: auto;
   right: 0;
 }
-@media all and (max-width: 240px) {
+@media screen and (max-width: 768px) {
   .rtl .wpulike-notification .wpulike-message {
-    padding: 8px 55px 8px 8px;
+    padding: 11px 55px 11px 11px;
   }
 }
-@media all and (min-width: 241px) and (max-width: 480px) {
-  .rtl .wpulike-notification .wpulike-message {
-    padding: 8px 55px 8px 8px;
+@media screen and (max-width: 320px) {
+  .rtl .wpulike-notification {
+    left: 10px;
+    right: 10px;
   }
-}
-@media all and (min-width: 481px) and (max-width: 768px) {
   .rtl .wpulike-notification .wpulike-message {
-    padding: 15px 55px 15px 15px;
+    padding: 9px 45px 9px 9px;
   }
 }
