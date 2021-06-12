@@ -65,17 +65,32 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 	 * @param object $com
 	 * @return string
 	 */
-	function wp_ulike_put_comments( $content, $com ) {
+	function wp_ulike_put_comments( $content, $comment = null ) {
 		// Stack variable
 		$output = $content;
 
-		if ( wp_ulike_get_option( 'comments_group|enable_auto_display', 1 ) && WpUlikeInit::is_frontend() && is_singular() && comments_open() ) {
+		/**
+		 * Don't append like dislike when links are being checked
+		 */
+		if( isset($_REQUEST['comment']) ){
+			return $content;
+		}
+
+		/**
+		 * Don't implement on admin section
+		 */
+		if( WpUlikeInit::is_admin_backend() && ! WpUlikeInit::is_ajax() ){
+			return $content;
+		}
+
+		if ( wp_ulike_get_option( 'comments_group|enable_auto_display', 1 ) && WpUlikeInit::is_frontend() ) {
 			//auto display position
 			$position = wp_ulike_get_option( 'comments_group|auto_display_position', 'bottom' );
 			//add wp_ulike function
 			$button   = wp_ulike_comments( 'put', array(
-				'id' => $com->comment_ID
+				'id' => $comment->comment_ID
 			) );
+			// Check position
 			switch ($position) {
 				case 'top':
 					$output = $button . $content;
@@ -91,9 +106,9 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 			}
 		}
 
-		return apply_filters( 'wp_ulike_comment_text', $output, $content, $com );
+		return apply_filters( 'wp_ulike_comment_text', $output, $content, $comment );
 	}
-	add_filter( 'get_comment_text', 'wp_ulike_put_comments', 15, 2 );
+	add_filter( 'comment_text', 'wp_ulike_put_comments', 15, 2 );
 }
 
 /*******************************************************
