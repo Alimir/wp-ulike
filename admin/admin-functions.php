@@ -93,6 +93,10 @@ function wp_ulike_get_paginated_logs( $table, $type ){
 function wp_ulike_get_number_of_new_likes() {
     global $wpdb;
 
+    if( ! apply_filters( 'wp_ulike_display_admin_new_likes', true ) ){
+        return;
+    }
+
     // Get cache key
     $cache_key = sanitize_key( 'calculate_new_votes' );
 

@@ -242,13 +242,13 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 						$POST_TITLE    = get_the_title( $cp_ID );
 						$post_template = str_replace( "%POST_TITLE%", $POST_TITLE, $post_template );
 					}
-					bp_activity_add( array(
+					bp_activity_add( apply_filters( 'wp_ulike_post_bp_notification_args',  array(
 						'user_id'   => $user_ID,
 						'action'    => $post_template,
 						'component' => 'activity',
 						'type'      => 'wp_like_group',
 						'item_id'   => $cp_ID
-					));
+					) ) );
 					break;
 
 				case 'comment':
@@ -271,13 +271,14 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 						$COMMENT_COUNT    = wp_ulike_get_comment_likes( $cp_ID );
 						$comment_template = str_replace( "%COMMENT_COUNT%", $COMMENT_COUNT, $comment_template );
 					}
-					bp_activity_add( array(
+
+					bp_activity_add( apply_filters( 'wp_ulike_comment_bp_notification_args', array(
 						'user_id'   => $user_ID,
 						'action'    => $comment_template,
 						'component' => 'activity',
 						'type'      => 'wp_like_group',
 						'item_id'   => $cp_ID
-					));
+					) ) );
 					break;
 
 				default:
@@ -296,7 +297,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 			if ( ! $author_ID || $author_ID == $user_ID ) {
 				return false;
 			}
-			bp_notifications_add_notification( array(
+			bp_notifications_add_notification( apply_filters( 'wp_ulike_bp_add_notification_args', array(
 					'user_id'           => $author_ID,
 					'item_id'           => $cp_ID,
 					'secondary_item_id' => $user_ID,
@@ -305,7 +306,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 					'date_notified'     => bp_core_current_time(),
 					'is_new'            => 1,
 				)
-			);
+			) );
 		}
 
 	}

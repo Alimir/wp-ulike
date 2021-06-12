@@ -133,17 +133,14 @@ module.exports = function (grunt) {
         makepot: {
             target: {
                 options: {
-                    domainPath: 'languages',
+                    domainPath: '/languages',
                     mainFile: 'wp-ulike.php',
                     potFilename: 'wp-ulike.pot',
-                    potHeaders: {
-                        poedit: true,
-                        'Report-Msgid-Bugs-To': 'https://wordpress.org/plugins/wp-ulike/',
-                        'Last-Translator': 'Alimir <info@alimir.ir>',
-                        'Language-Team': 'Alimir <info@alimir.ir>',
-                        'x-poedit-keywordslist': '__;_e;__ngettext:1,2;__ngettext_noop:1,2;_n:1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_attr_ex:1,2c;esc_html_x',
-                        'x-poedit-country': 'United States',
-                        'x-textdomain-support': 'yes',
+                    exclude: ['admin/settings/.*', 'build/.*'],
+                    processPot: function (pot, options) {
+                        pot.headers['report-msgid-bugs-to'] = 'https://wpulike.com';
+                        pot.headers['language-team'] = 'WP ULike Team <info@wpulike.com>';
+                        return pot;
                     },
                     type: 'wp-plugin',
                     updatePoFiles: true
@@ -151,10 +148,21 @@ module.exports = function (grunt) {
             }
         },
 
-        po2mo: {
-            files: {
-                src: 'languages/*.po',
-                expand: true,
+
+        // Convert po to mo
+        potomo: {
+            dist: {
+                options: {
+                    poDel: false
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'languages',
+                    src: ['*.po'],
+                    dest: 'languages',
+                    ext: '.mo',
+                    nonull: true
+                }]
             }
         },
 
@@ -501,7 +509,7 @@ module.exports = function (grunt) {
     grunt.registerTask('syncversion', ['shell:updateVersion']);
     grunt.registerTask('bump', ['shell:bumpVersion']);
 
-    grunt.registerTask('i18n', ['makepot', 'po2mo']);
+    grunt.registerTask('i18n', ['makepot', 'potomo']);
 
     grunt.registerTask('compass_dev', ['compass:back_dev']);
 

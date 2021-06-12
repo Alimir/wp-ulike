@@ -157,7 +157,7 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 			}
 		}
 
-		return $final_ip;
+		return apply_filters( 'wp_ulike_get_user_id', $final_ip );
 	}
 }
 
