@@ -93,7 +93,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 							break;
 						case 2:
 							$this->response['message']     = wp_ulike_setting_repo::getUnLikeNotice();
-							$this->response['messageType'] = 'error';
+							$this->response['messageType'] = 'info';
 							$this->response['btnText'] = wp_ulike_setting_repo::getButtonText( $this->settings_type->getType(), 'like' );
 							$this->response['data'] = apply_filters( 'wp_ulike_respond_for_unliked_data', $counter_value, $this->data['id'] );
 							break;
