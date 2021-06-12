@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2021-05-06 18:52:18+00:00\n"
+"POT-Creation-Date: 2021-06-12 09:17:51+00:00\n"
 "PO-Revision-Date: 2019-06-19 16:23:52+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "It's Ok!"
 msgstr ""
 
-#: admin/admin-functions.php:240
+#: admin/admin-functions.php:244
 #: admin/classes/class-wp-ulike-admin-panel.php:801
 #: includes/classes/class-wp-ulike-customizer.php:149
 msgid "Button"
@@ -1366,14 +1366,14 @@ msgstr ""
 msgid "WP ULike Premium"
 msgstr ""
 
-#: admin/includes/templates/go-pro.php:140
+#: admin/includes/templates/go-pro.php:145
 msgid ""
 "Elementor is the #1 WordPress page builder. In the new version of the WP "
 "ULike PRO plugin we fully support this page builder and have a variety of "
 "widgets & controllers that make life much easier for you."
 msgstr ""
 
-#: admin/includes/templates/go-pro.php:140
+#: admin/includes/templates/go-pro.php:145
 msgid ""
 "Just drag your desired widget and drop it in your Elementor sections, "
 "customize as you go and enjoy your like and dislike buttons on your contents."
@@ -1693,86 +1693,86 @@ msgstr ""
 msgid "Votes"
 msgstr ""
 
-#: includes/hooks/third-party.php:340
+#: includes/hooks/third-party.php:341
 msgid "posts"
 msgstr ""
 
-#: includes/hooks/third-party.php:347
+#: includes/hooks/third-party.php:348
 msgid "comments"
 msgstr ""
 
-#: includes/hooks/third-party.php:353
+#: includes/hooks/third-party.php:354
 msgid "activities"
 msgstr ""
 
-#: includes/hooks/third-party.php:361
+#: includes/hooks/third-party.php:362
 msgid "topics"
 msgstr ""
 
-#: includes/hooks/third-party.php:364
+#: includes/hooks/third-party.php:365
 msgid "replies"
 msgstr ""
 
-#: includes/hooks/third-party.php:376
+#: includes/hooks/third-party.php:377
 msgid "You have %d new %s likes"
 msgstr ""
 
-#: includes/hooks/third-party.php:380
+#: includes/hooks/third-party.php:381
 msgid "%s liked one of your %s"
 msgstr ""
 
-#: includes/hooks/third-party.php:424
+#: includes/hooks/third-party.php:425
 msgid "New activity liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:429
+#: includes/hooks/third-party.php:430
 msgid "New comment liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:434
+#: includes/hooks/third-party.php:435
 msgid "New post liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:439
+#: includes/hooks/third-party.php:440
 msgid "New topic liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:795
+#: includes/hooks/third-party.php:796
 msgid "Points for liking content"
 msgstr ""
 
-#: includes/hooks/third-party.php:796
+#: includes/hooks/third-party.php:797
 msgid ""
 "This hook award / deducts points from users who Like/Unlike any content of "
 "WordPress, bbPress, BuddyPress & ..."
 msgstr ""
 
-#: includes/hooks/third-party.php:812
+#: includes/hooks/third-party.php:813
 msgid "Liking Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:813
+#: includes/hooks/third-party.php:814
 msgid "Liked Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:814
+#: includes/hooks/third-party.php:815
 msgid "Unliking Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:815
+#: includes/hooks/third-party.php:816
 msgid "Unliked Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:833
+#: includes/hooks/third-party.php:834
 msgid "Recent Posts Liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:838
+#: includes/hooks/third-party.php:839
 msgid "Recent Comments Liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:869 includes/hooks/third-party.php:895
-#: includes/hooks/third-party.php:925 includes/hooks/third-party.php:955
+#: includes/hooks/third-party.php:870 includes/hooks/third-party.php:896
+#: includes/hooks/third-party.php:926 includes/hooks/third-party.php:956
 msgid "This user has not made any likes."
 msgstr ""
 
