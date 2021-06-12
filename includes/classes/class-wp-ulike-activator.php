@@ -21,36 +21,36 @@ class wp_ulike_activator {
 	/**
 	 * Other variables
 	 */
-	protected static $tables, $database;
+	protected $tables, $database;
 
 	public function __construct(){
 		global $wpdb;
 
-		self::$database = $wpdb;
-		self::$tables   = array(
-			'posts'      => self::$database->prefix . "ulike",
-			'comments'   => self::$database->prefix . "ulike_comments",
-			'activities' => self::$database->prefix . "ulike_activities",
-			'forums'     => self::$database->prefix . "ulike_forums",
-			'meta'       => self::$database->prefix . "ulike_meta"
+		$this->database = $wpdb;
+		$this->tables   = array(
+			'posts'      => $this->database->prefix . "ulike",
+			'comments'   => $this->database->prefix . "ulike_comments",
+			'activities' => $this->database->prefix . "ulike_activities",
+			'forums'     => $this->database->prefix . "ulike_forums",
+			'meta'       => $this->database->prefix . "ulike_meta"
 		);
 	}
 
 
-	public static function activate() {
-		self::install_tables();
+	public function activate() {
+		$this->install_tables();
 	}
 
-	public static function install_tables(){
+	public function install_tables(){
 
 		$max_index_length = 191;
 		$charset_collate  = '';
 
 		if ( ! empty( $wpdb->charset ) ) {
-			$charset_collate = "DEFAULT CHARACTER SET " . self::$database->charset;
+			$charset_collate = "DEFAULT CHARACTER SET " . $this->database->charset;
 		}
-		if ( ! empty( self::$database->collate ) ) {
-			$charset_collate .= " COLLATE " . self::$database->collate;
+		if ( ! empty( $this->database->collate ) ) {
+			$charset_collate .= " COLLATE " . $this->database->collate;
 		}
 
 		if( ! function_exists('maybe_create_table') ){
@@ -59,7 +59,7 @@ class wp_ulike_activator {
 		}
 
 		// Extract array to variables
-		extract( self::$tables );
+		extract( $this->tables );
 
 		// Posts table
 		maybe_create_table( $posts, "CREATE TABLE IF NOT EXISTS `{$posts}` (
@@ -136,35 +136,35 @@ class wp_ulike_activator {
 
 	}
 
-	public static function upgrade_0(){
+	public function upgrade_0(){
 		// Extract array to variables
-		extract( self::$tables );
+		extract( $this->tables );
 
 		// Upgrade Tables
 		if ( version_compare( get_option( 'wp_ulike_dbVersion', '1.6' ), WP_ULIKE_DB_VERSION, '<' ) ) {
 			// Posts ugrades
-			self::$database->query( "
+			$this->database->query( "
 				ALTER TABLE $posts
 				ADD INDEX( `post_id`, `date_time`, `user_id`, `status`),
 				CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
 				CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
 			" );
 			// Comments ugrades
-			self::$database->query( "
+			$this->database->query( "
 				ALTER TABLE $comments
 				ADD INDEX( `comment_id`, `date_time`, `user_id`, `status`),
 				CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
 				CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
 			" );
 			// BuddyPress ugrades
-			self::$database->query( "
+			$this->database->query( "
 				ALTER TABLE $activities
 				ADD INDEX( `activity_id`, `date_time`, `user_id`, `status`),
 				CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
 				CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
 			" );
 			// bbPress upgrades
-			self::$database->query( "
+			$this->database->query( "
 				ALTER TABLE $forums
 				ADD INDEX( `topic_id`, `date_time`, `user_id`, `status`),
 				CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,

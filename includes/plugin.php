@@ -58,7 +58,7 @@ class WpUlikeInit {
     $current_version = get_option( 'wp_ulike_dbVersion', '1.6' );
     // Check database upgrade if needed
     if ( version_compare( $current_version, '2.1', '<' ) ) {
-      wp_ulike_activator::get_instance()::upgrade_0();
+      wp_ulike_activator::get_instance()->upgrade_0();
     }
   }
 
