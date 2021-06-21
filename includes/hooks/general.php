@@ -26,13 +26,10 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 		$output = $content;
 
 		if ( WpUlikeInit::is_frontend() && in_the_loop() && is_main_query() && wp_ulike_get_option( 'posts_group|enable_auto_display', 1 ) ) {
-			//auto display position
-			$position = wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' );
-
-			if(	!is_feed() && is_wp_ulike( wp_ulike_get_option( 'posts_group|auto_display_filter' ) ) ){
+			if(	is_wp_ulike( wp_ulike_get_option( 'posts_group|auto_display_filter' ) ) ){
 				// Get button
 				$button = wp_ulike('put');
-				switch ($position) {
+				switch ( wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' ) ) {
 					case 'top':
 						$output = $button . $content;
 						break;
