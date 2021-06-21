@@ -85,7 +85,7 @@ if ( ! class_exists( 'ULF_Field_typography' ) ) {
       $chosen_class     = ( $this->chosen ) ? ' ulf--chosen' : '';
       $line_height_unit = ( ! empty( $args['line_height_unit'] ) ) ? $args['line_height_unit'] : $args['unit'];
 
-      echo '<div class="ulf--typography'. esc_attr( $chosen_class ) .'" data-unit="'. esc_attr( $args['unit'] ) .'" data-line-height-unit="'. esc_attr( $line_height_unit ) .'" data-exclude="'. esc_attr( $args['exclude'] ) .'">';
+      echo '<div class="ulf--typography'. esc_attr( $chosen_class ) .'" data-depend-id="'. esc_attr( $this->field['id'] ) .'" data-unit="'. esc_attr( $args['unit'] ) .'" data-line-height-unit="'. esc_attr( $line_height_unit ) .'" data-exclude="'. esc_attr( $args['exclude'] ) .'">';
 
         echo '<div class="ulf--blocks ulf--blocks-selects">';
 
@@ -518,7 +518,7 @@ if ( ! class_exists( 'ULF_Field_typography' ) ) {
         'word-spacing',
       );
 
-      $unit = ( ! empty( $this->value['unit'] ) ) ? $this->value['unit'] : '';
+      $unit = ( ! empty( $this->value['unit'] ) ) ? $this->value['unit'] : 'px';
       $line_height_unit = ( ! empty( $this->value['line_height_unit'] ) ) ? $this->value['line_height_unit'] : $unit;
 
       foreach ( $properties as $property ) {

@@ -146,11 +146,13 @@
   $.fn.ulf_nav_options = function() {
     return this.each( function() {
 
-      var $nav   = $(this),
-          $links = $nav.find('a'),
+      var $nav    = $(this),
+          $window = $(window),
+          $wpwrap = $('#wpwrap'),
+          $links  = $nav.find('a'),
           $last;
 
-      $(window).on('hashchange ulf.hashchange', function() {
+      $window.on('hashchange ulf.hashchange', function() {
 
         var hash  = window.location.hash.replace('#tab=', '');
         var slug  = hash ? hash : $links.first().attr('href').replace('#tab=', '');
@@ -182,6 +184,11 @@
           $('.ulf-section-id').val( $section.index()+1 );
 
           $last = $section;
+
+          if ( $wpwrap.hasClass('wp-responsive-open') ) {
+            $('html, body').animate({scrollTop:($section.offset().top-50)}, 200);
+            $wpwrap.removeClass('wp-responsive-open');
+          }
 
         }
 
@@ -338,7 +345,7 @@
 
             var offsetTop = $this.offset().top,
                 stickyTop = Math.max(offset, offsetTop - scrollTop ),
-                winWidth  = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                winWidth  = $window.innerWidth();
 
             if ( stickyTop <= offset && winWidth > 782 ) {
               $inner.css({width: $this.outerWidth()-padding});
@@ -1303,11 +1310,13 @@
             thumbnail = attributes.sizes.thumbnail.url;
           } else if ( typeof attributes.sizes !== 'undefined' && typeof attributes.sizes.full !== 'undefined' ) {
             thumbnail = attributes.sizes.full.url;
-          } else if ( attributes.url.split('.').pop().toLowerCase() === 'svg' ) {
+          } else if ( attributes.type === 'image' ) {
             thumbnail = attributes.url;
           } else {
             thumbnail = attributes.icon;
           }
+
+          console.log(attributes);
 
           if ( $auto_attributes ) {
             $auto_attributes.removeClass('ulf--attributes-hidden');
@@ -2091,16 +2100,10 @@
           $input         = $this.find('input'),
           $upload_button = $this.find('.ulf--button'),
           $remove_button = $this.find('.ulf--remove'),
+          $preview_wrap  = $this.find('.ulf--preview'),
+          $preview_src   = $this.find('.ulf--src'),
           $library       = $upload_button.data('library') && $upload_button.data('library').split(',') || '',
           wp_media_frame;
-
-      $input.on('change', function( e ) {
-        if ( $input.val() ) {
-          $remove_button.removeClass('hidden');
-        } else {
-          $remove_button.addClass('hidden');
-        }
-      });
 
       $upload_button.on('click', function( e ) {
 
@@ -2123,6 +2126,7 @@
 
         wp_media_frame.on( 'select', function() {
 
+          var src;
           var attributes = wp_media_frame.state().get('selection').first().attributes;
 
           if ( $library.length && $library.indexOf(attributes.subtype) === -1 && $library.indexOf(attributes.type) === -1 ) {
@@ -2140,6 +2144,29 @@
       $remove_button.on('click', function( e ) {
         e.preventDefault();
         $input.val('').trigger('change');
+      });
+
+      $input.on('change', function( e ) {
+
+        var $value = $input.val();
+
+        if ( $value ) {
+          $remove_button.removeClass('hidden');
+        } else {
+          $remove_button.addClass('hidden');
+        }
+
+        if ( $preview_wrap.length ) {
+
+          if ( $.inArray( $value.split('.').pop().toLowerCase(), ['jpg', 'jpeg', 'gif', 'png', 'svg', 'webp'] ) !== -1 ) {
+            $preview_wrap.removeClass('hidden');
+            $preview_src.attr('src', $value);
+          } else {
+            $preview_wrap.addClass('hidden');
+          }
+
+        }
+
       });
 
     });
@@ -2330,8 +2357,8 @@
                 $.each(response.errors, function( key, error_message ) {
 
                   var $field = $('[data-depend-id="'+ key +'"]'),
-                      $link  = $('#ulf-tab-link-'+ ($field.closest('.ulf-section').index()+1)),
-                      $tab   = $link.closest('.ulf-tab-depth-0');
+                      $link  = $('a[href="#tab='+ $field.closest('.ulf-section').data('section-id') +'"]' ),
+                      $tab   = $link.closest('.ulf-tab-item');
 
                   $field.closest('.ulf-fieldset').append( '<p class="ulf-error ulf-error-text">'+ error_message +'</p>' );
 

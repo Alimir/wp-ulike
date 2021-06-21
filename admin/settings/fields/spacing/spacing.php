@@ -52,7 +52,7 @@ if ( ! class_exists( 'ULF_Field_spacing' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="ulf--inputs">';
+      echo '<div class="ulf--inputs" data-depend-id="'. esc_attr( $this->field['id'] ) .'">';
 
       if ( ! empty( $args['all'] ) ) {
 

@@ -17,12 +17,14 @@ if ( ! class_exists( 'ULF_Field_media' ) ) {
     public function render() {
 
       $args = wp_parse_args( $this->field, array(
-        'url'          => true,
-        'preview'      => true,
-        'library'      => array(),
-        'button_title' => esc_html__( 'Upload', 'ulf' ),
-        'remove_title' => esc_html__( 'Remove', 'ulf' ),
-        'preview_size' => 'thumbnail',
+        'url'            => true,
+        'preview'        => true,
+        'preview_width'  => '',
+        'preview_height' => '',
+        'library'        => array(),
+        'button_title'   => esc_html__( 'Upload', 'ulf' ),
+        'remove_title'   => esc_html__( 'Remove', 'ulf' ),
+        'preview_size'   => 'thumbnail',
       ) );
 
       $default_values = array(
@@ -59,9 +61,17 @@ if ( ! class_exists( 'ULF_Field_media' ) ) {
       echo $this->field_before();
 
       if ( ! empty( $args['preview'] ) ) {
+
+        $preview_width  = ( ! empty( $args['preview_width'] ) ) ? 'width:'. esc_attr( $args['preview_width'] ) .'px;' : '';
+        $preview_height = ( ! empty( $args['preview_height'] ) ) ? 'height:'. esc_attr( $args['preview_height'] ) .'px;' : '';
+        $preview_style  = ( ! empty( $preview_width ) || ! empty( $preview_height ) ) ? ' style="'. esc_attr( $preview_width . $preview_height ) .'"': '';
+
         echo '<div class="ulf--preview'. esc_attr( $hidden_auto ) .'">';
-        echo '<div class="ulf-image-preview"><a href="#" class="ulf--remove fas fa-times"></a><img src="'. esc_url( $preview_src ) .'" class="ulf--src" /></div>';
+        echo '<div class="ulf-image-preview"'. $preview_style .'>';
+        echo '<a href="#" class="ulf--remove fas fa-times"></a><img src="'. esc_url( $preview_src ) .'" class="ulf--src" />';
         echo '</div>';
+        echo '</div>';
+
       }
 
       echo '<div class="ulf--placeholder">';

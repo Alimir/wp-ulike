@@ -1489,29 +1489,6 @@
 .ulf-field-media .ulf--preview {
   position: relative;
 }
-.ulf-field-media .ulf--preview .fa-times {
-  position: absolute;
-  z-index: 1;
-  right: 2px;
-  top: 2px;
-  font-size: 14px;
-  width: 22px;
-  height: 22px;
-  line-height: 22px;
-  text-align: center;
-  text-decoration: none;
-  color: #fff;
-  background-color: #dd3333;
-  opacity: 0.75;
-  border-radius: 2px;
-  transition: all .2s;
-}
-.ulf-field-media .ulf--preview .fa-times:hover {
-  opacity: 1;
-}
-.ulf-field-media .ulf--preview .fa-times:focus {
-  box-shadow: none;
-}
 
 /**
  * 03. 20. Field: palette
@@ -2153,6 +2130,9 @@
 .ulf-field-upload .button {
   margin-left: 5px;
 }
+.ulf-field-upload .ulf--preview {
+  position: relative;
+}
 
 /**
  * 03. 33. Field: wp_editor
@@ -2389,12 +2369,15 @@
 }
 
 .ulf-image-preview {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   position: relative;
-  padding: 4px;
-  min-width: 100px;
-  min-height: 100px;
-  line-height: 100px;
+  padding: 6px;
+  width: 120px;
+  height: 90px;
+  max-width: 100%;
   margin-bottom: 10px;
   text-align: center;
   border-radius: 2px;
@@ -2403,11 +2386,34 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
 }
 .ulf-image-preview img {
-  max-width: 100px;
-  max-height: 100px;
-  display: inline-block;
-  vertical-align: middle;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
+}
+.ulf-image-preview a {
+  position: absolute;
+  z-index: 1;
+  right: 4px;
+  top: 4px;
+  font-size: 14px;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #dd3333;
+  opacity: 0.75;
+  border-radius: 2px;
+  transition: all .2s;
+}
+.ulf-image-preview a:hover {
+  opacity: 1;
+}
+.ulf-image-preview a:focus {
+  box-shadow: none;
 }
 
 .ulf-field-custom .ulf-field {

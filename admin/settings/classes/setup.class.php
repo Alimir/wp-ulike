@@ -12,7 +12,7 @@ if ( ! class_exists( 'ULF' ) ) {
 
     // Default constants
     public static $premium  = true;
-    public static $version  = '2.2.2';
+    public static $version  = '2.2.3';
     public static $dir      = '';
     public static $url      = '';
     public static $css      = '';
