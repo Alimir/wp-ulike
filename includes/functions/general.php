@@ -300,27 +300,11 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 	}
 }
 
-// @if DEV
-// function wp_ulike_custom_author_counter( $user_id, $status = 'like' ){
-// 	global $wpdb;
-
-// 	$meta_key = wp_ulike_setting_repo::isDistinct( 'post' ) ? 'count_distinct_' . $status : 'count_total_' . $status;
-
-// 	return $wpdb->get_var(
-// 		$wpdb->prepare(
-// 			"SELECT SUM(m.meta_value) FROM {$wpdb->prefix}ulike_meta m INNER JOIN $wpdb->posts p ON m.item_id = p.ID AND p.post_author = %s WHERE m.meta_group = 'post' AND m.meta_key = %s",
-// 			$user_id,
-// 			$meta_key
-// 		)
-// 	);
-// }
-// @endif
-
 if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 	/**
 	 * Check current user capabilities to access admin pages
 	 *
-	 * @param [type] $type
+	 * @param array $type
 	 * @return void
 	 */
 	function wp_ulike_get_user_access_capability( $type ){

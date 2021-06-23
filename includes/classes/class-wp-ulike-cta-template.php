@@ -52,7 +52,12 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 				'prev_status'  => $this->getPrevStatus(),
 				'method'       => 'lookup'
 			), $this->settings ) ){
-				return 4;
+				// If has prev status
+				if( $this->getPrevStatus() ){
+					return substr( $this->getPrevStatus(), 0, 2 ) !== "un" ? 4 : 5;
+				}
+				// Else return zero
+				return 0;
 			}
 
 			switch( wp_ulike_setting_repo::getMethod( $this->args['slug'] ) ){
@@ -156,7 +161,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 
 			switch ( $method_id ){
 				case 0:
-					$selectors .= ' wp_ulike_is_not_logged';
+					$selectors .= ' wp_ulike_is_restricted';
 					break;
 				case 1:
 					$selectors .= ' wp_ulike_is_not_liked';
@@ -169,6 +174,10 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					break;
 				case 4:
 					$selectors .= ' wp_ulike_is_already_liked';
+					break;
+				case 5:
+					$selectors .= ' wp_ulike_is_already_unliked';
+					break;
 			}
 
 			return esc_attr( $selectors );

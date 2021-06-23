@@ -275,12 +275,15 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 	 * @return			String
 	 */
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
-
-        if ( bp_get_activity_comment_id() != null ){
-			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_comment_id();
+		// Set activity ID
+		if( isset( $args['id'] ) ){
+			$activityID = $args['id'];
 		} else {
-			$activityID 	= isset( $args['id'] ) ? $args['id'] : bp_get_activity_id();
+			// Get activity comment id
+			$commentID  = bp_get_activity_comment_id();
+			$activityID = ! empty( $commentID ) ? $commentID : bp_get_activity_id();
 		}
+
 		$attributes          = apply_filters( 'wp_ulike_activities_add_attr', null );
 		$options             = wp_ulike_get_option( 'buddypress_group' );
 		$buddypress_settings = wp_ulike_get_post_settings_by_type( 'likeThisActivity' );
