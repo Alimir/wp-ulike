@@ -148,8 +148,6 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 * @return			String
 		 */
 		public function last_posts_liked_by_current_user( $args = array(), $result = '' ) {
-			global $wpdb,$user_ID,$wp_user_IP;
-
 			$defaults = array(
 				"numberOf"    => 10,
 				"period"      => 'all',
@@ -162,36 +160,54 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				"after_item"  => '</li>'
 			);
 			// Parse args
-			$settings 		= wp_parse_args( $args, $defaults );
+			$settings = wp_parse_args( $args, $defaults );
 			// Extract settings
 			extract($settings);
 
-			$likes = $wpdb->get_results( "
-							SELECT U.post_id, P.meta_value AS counter
-							FROM ".$wpdb->prefix."ulike AS U,
-		                    $wpdb->postmeta AS P
-							WHERE ( U.ip LIKE '$wp_user_IP' OR U.user_id = $user_ID )
-		                    AND U.post_id = P.post_id AND meta_key='_liked'
-							GROUP BY U.post_id
-							ORDER BY MAX(U.date_time) DESC LIMIT $numberOf
-						" );
+			$currentUser = is_user_logged_in() ? get_current_user_id() : wp_ulike_generate_user_id( wp_ulike_get_user_ip() );
+			$getPosts    = NULL;
 
-			if( $likes !== 0 ){
-				foreach ($likes as $like) {
-					$permalink  = get_permalink($like->post_id);
-					$post_title = get_the_title($like->post_id);
-					$post_count = $like->counter;
-					$result .= $before_item;
-					$result .= $show_thumb ? $this->get_post_thumbnail( $like->post_id, $sizeOf ) : '';
-					$result .= '<a href="' . $permalink . '" title="' . $post_title.'" rel="nofollow">' . wp_trim_words( $post_title, $num_words = $trim, $more = null ) . '</a>';
-					$result .= $show_count ? ' <span class="wp_counter_span">'.wp_ulike_format_number( $post_count, 'like' ).'</span>' : '';
-					$result .= $after_item;
+
+			if( empty( $period ) || $period == 'all' ){
+				$pinnedItems = wp_ulike_get_meta_data( $currentUser, 'user', 'post_status', true );
+				// Exclude like status
+				$pinnedItems = ! empty( $pinnedItems ) ? array_filter($pinnedItems, function($v, $k) {
+					return $v == 'like';
+				}, ARRAY_FILTER_USE_BOTH) : NULL;
+
+				if( ! empty( $pinnedItems ) ){
+					$getPosts = get_posts( array(
+						'post_type'      => get_post_types_by_support( array(
+							'title',
+							'editor',
+							'thumbnail'
+						) ),
+						'post_status'    => array( 'publish', 'inherit' ),
+						'posts_per_page' => $numberOf,
+						'post__in'       => array_reverse( array_keys( $pinnedItems ) ),
+						'orderby'        => 'post__in'
+					) );
 				}
+
+			} else {
+				$getPosts = wp_ulike_get_most_liked_posts( $numberOf, '', 'post', $period, array( 'like' ), false, 1, $currentUser );
 			}
-			else{
-					$result .= $before_item;
-					$result .= __( 'you haven\'t liked any post yet!',WP_ULIKE_SLUG );
-					$result .= $after_item;
+
+			$result = '';
+
+			if( ! empty( $getPosts ) ){
+				ob_start();
+				foreach ( $getPosts as $post ) :
+					echo $before_item;
+					?>
+					<a href="<?php the_permalink( $post->ID ); ?>"><?php the_title( $post->ID ); ?></a>
+				<?php
+					echo $show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $this->get_counter_value($post->ID, 'post', 'like', $period ), 'like' ) . '</span>' : '';
+					echo $after_item;
+				endforeach;
+				$result = ob_get_clean();
+			} else {
+				$result = $before_item .  __( 'you haven\'t liked any post yet!',WP_ULIKE_SLUG ) . $after_item;
 			}
 
 			return $result;
