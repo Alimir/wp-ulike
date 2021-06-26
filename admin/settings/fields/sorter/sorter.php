@@ -28,6 +28,8 @@ if ( ! class_exists( 'ULF_Field_sorter' ) ) {
       $enabled_options  = ( ! empty( $this->value['enabled'] ) ) ? $this->value['enabled'] : array();
       $disabled_options = ( ! empty( $this->value['disabled'] ) ) ? $this->value['disabled'] : array();
 
+      echo '<div class="ulf-sorter" data-depend-id="'. esc_attr( $this->field['id'] ) .'"></div>';
+
       echo ( $args['disabled'] ) ? '<div class="ulf-modules">' : '';
 
       echo ( ! empty( $args['enabled_title'] ) ) ? '<div class="ulf-sorter-title">'. esc_attr( $args['enabled_title'] ) .'</div>' : '';
@@ -56,6 +58,7 @@ if ( ! class_exists( 'ULF_Field_sorter' ) ) {
         echo '</div>';
 
       }
+
 
       echo $this->field_after();
 

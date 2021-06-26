@@ -18,7 +18,7 @@ if ( ! class_exists( 'ULF_Field_sortable' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="ulf-sortable">';
+      echo '<div class="ulf-sortable" data-depend-id="'. esc_attr( $this->field['id'] ) .'">';
 
       $pre_sortby = array();
       $pre_fields = array();

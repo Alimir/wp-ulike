@@ -95,8 +95,10 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			$counter_value = $wpdb->get_var( stripslashes( $query ) );
 			$counter_value = empty( $counter_value ) ? 0 : (int) $counter_value;
 
-			// Add counter to meta value
-			wp_ulike_update_meta_counter_value( $ID, $counter_value, $type, $status, $is_distinct );
+			if( empty( $date_range ) ){
+				// Add counter to meta value
+				wp_ulike_update_meta_counter_value( $ID, $counter_value, $type, $status, $is_distinct );
+			}
 		}
 
 		// By checking this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.
@@ -108,7 +110,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		// Create an action when counter value is ready.
 		do_action('wp_ulike_counter_value_generated');
 
-		return apply_filters( 'wp_ulike_counter_value' , $counter_value, $ID, $type, $status );
+		return apply_filters( 'wp_ulike_counter_value' , $counter_value, $ID, $type, $status, $date_range );
 	}
 }
 

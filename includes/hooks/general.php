@@ -26,13 +26,10 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 		$output = $content;
 
 		if ( WpUlikeInit::is_frontend() && in_the_loop() && is_main_query() && wp_ulike_get_option( 'posts_group|enable_auto_display', 1 ) ) {
-			//auto display position
-			$position = wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' );
-
-			if(	!is_feed() && is_wp_ulike( wp_ulike_get_option( 'posts_group|auto_display_filter' ) ) ){
+			if(	is_wp_ulike( wp_ulike_get_option( 'posts_group|auto_display_filter' ) ) ){
 				// Get button
 				$button = wp_ulike('put');
-				switch ($position) {
+				switch ( wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' ) ) {
 					case 'top':
 						$output = $button . $content;
 						break;
@@ -189,10 +186,7 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		if( $args['disable_pophover'] || $args['likers_style'] == 'default' ){
 			echo sprintf(
 			'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>',
-			$args['type'], $args['ID'], wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting, array(
-					'style' => 'default'
-				) )
-			);
+			$args['type'], $args['ID'], wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting, array( 'style' => 'default' ) ) );
 		}
 
 		do_action( 'wp_ulike_inline_display_likers_box', $args, $get_settings );

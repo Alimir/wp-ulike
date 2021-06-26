@@ -77,8 +77,8 @@
 .wp-ulike-icons-refresh:before { content: "\e05a"; }
 
 /** 	Visual Select */
-.wp-ulike-visual-select .ulf-field-image_select .ulf--active img { filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%); }
-.wp-ulike-visual-select .ulf-field-image_select .ulf--image img { height: 40px; padding: 10px; }
+.wp-ulike-visual-select .ulf--image img { height: 35px; padding: 10px; }
+.wp-ulike-visual-select .ulf--image.ulf--active img { filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%); }
 
 /** 	Settings Page */
 .wp-ulike-settings-notice, .wp-ulike-notice-wrapper { position: relative; }

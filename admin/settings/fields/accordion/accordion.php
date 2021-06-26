@@ -20,7 +20,7 @@ if ( ! class_exists( 'ULF_Field_accordion' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="ulf-accordion-items">';
+      echo '<div class="ulf-accordion-items" data-depend-id="'. esc_attr( $this->field['id'] ) .'">';
 
       foreach ( $this->field['accordions'] as $key => $accordion ) {
 

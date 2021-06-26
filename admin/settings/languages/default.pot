@@ -2,12 +2,17 @@
 # This file is distributed under the same license as the Codestar Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Codestar Framework 2.2.2\n"
+"Project-Id-Version: Codestar Framework 2.2.3\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/codestar-framework\n"
+"POT-Creation-Date: 2021-06-21 09:17:35+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
 
 #: classes/admin-options.class.php:226
 msgid "Error while saving the changes."
@@ -59,7 +64,7 @@ msgid "Reset All"
 msgstr ""
 
 #: classes/admin-options.class.php:574 classes/admin-options.class.php:697
-#: classes/comment-options.class.php:215 classes/metabox-options.class.php:293
+#: classes/comment-options.class.php:216 classes/metabox-options.class.php:294
 #: fields/backup/backup.php:31
 msgid "Reset"
 msgstr ""
@@ -68,18 +73,18 @@ msgstr ""
 msgid "Are you sure you want to reset all settings to default values?"
 msgstr ""
 
-#: classes/admin-options.class.php:672 classes/comment-options.class.php:198
-#: classes/metabox-options.class.php:276 fields/button_set/button_set.php:56
+#: classes/admin-options.class.php:672 classes/comment-options.class.php:199
+#: classes/metabox-options.class.php:277 fields/button_set/button_set.php:56
 #: fields/checkbox/checkbox.php:76 fields/radio/radio.php:75
 #: fields/select/select.php:113 functions/actions.php:41
 msgid "No data available."
 msgstr ""
 
-#: classes/comment-options.class.php:216 classes/metabox-options.class.php:294
+#: classes/comment-options.class.php:217 classes/metabox-options.class.php:295
 msgid "update post"
 msgstr ""
 
-#: classes/comment-options.class.php:216 classes/metabox-options.class.php:294
+#: classes/comment-options.class.php:217 classes/metabox-options.class.php:295
 msgid "Cancel"
 msgstr ""
 
@@ -107,17 +112,17 @@ msgstr ""
 msgid "Field not found!"
 msgstr ""
 
-#: classes/shortcode-options.class.php:251 fields/group/group.php:23
+#: classes/shortcode-options.class.php:253 fields/group/group.php:23
 msgid "Add New"
 msgstr ""
 
-#: classes/shortcode-options.class.php:288 functions/actions.php:16
+#: classes/shortcode-options.class.php:290 functions/actions.php:16
 #: functions/actions.php:68 functions/actions.php:106 functions/actions.php:141
 #: functions/actions.php:170
 msgid "Error: Invalid nonce verification."
 msgstr ""
 
-#: fields/background/background.php:36 fields/media/media.php:57
+#: fields/background/background.php:36 fields/media/media.php:59
 msgid "Not selected"
 msgstr ""
 
@@ -452,11 +457,11 @@ msgstr ""
 msgid "Longitude"
 msgstr ""
 
-#: fields/media/media.php:23 fields/upload/upload.php:21
+#: fields/media/media.php:25 fields/upload/upload.php:25
 msgid "Upload"
 msgstr ""
 
-#: fields/media/media.php:24 fields/upload/upload.php:22
+#: fields/media/media.php:26 fields/upload/upload.php:26
 msgid "Remove"
 msgstr ""
 
@@ -645,4 +650,24 @@ msgstr ""
 
 #: functions/validate.php:68 functions/validate.php:146
 msgid "Please enter a valid URL."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Codestar Framework"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://codestarframework.com/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "A Simple and Lightweight WordPress Option Framework for Themes and Plugins"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Codestar"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://codestarthemes.com/"
 msgstr ""

@@ -104,6 +104,7 @@ if ( ! class_exists( 'ULF_Profile_Options' ) ) {
         $section_title = ( ! empty( $section['title'] ) ) ? $section['title'] : '';
 
         echo ( $section_title || $section_icon ) ? '<h2>'. $section_icon . $section_title .'</h2>' : '';
+        echo ( ! empty( $section['description'] ) ) ? '<div class="ulf-field ulf-section-description">'. $section['description'] .'</div>' : '';
 
         if ( ! empty( $section['fields'] ) ) {
 

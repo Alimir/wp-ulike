@@ -20,7 +20,7 @@ if ( ! class_exists( 'ULF_Field_tabbed' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="ulf-tabbed-nav">';
+      echo '<div class="ulf-tabbed-nav" data-depend-id="'. esc_attr( $this->field['id'] ) .'">';
       foreach ( $this->field['tabs'] as $key => $tab ) {
 
         $tabbed_icon   = ( ! empty( $tab['icon'] ) ) ? '<i class="ulf--icon '. esc_attr( $tab['icon'] ) .'"></i>' : '';

@@ -38,7 +38,7 @@ if ( ! class_exists( 'ULF_Field_group' ) ) {
 
         echo $this->field_before();
 
-        echo '<div class="ulf-cloneable-item ulf-cloneable-hidden">';
+        echo '<div class="ulf-cloneable-item ulf-cloneable-hidden" data-depend-id="'. esc_attr( $this->field['id'] ) .'">';
 
           echo '<div class="ulf-cloneable-helper">';
           echo '<i class="ulf-cloneable-sort fas fa-arrows-alt"></i>';

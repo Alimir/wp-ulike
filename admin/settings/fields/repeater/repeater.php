@@ -30,7 +30,7 @@ if ( ! class_exists( 'ULF_Field_repeater' ) ) {
 
         echo $this->field_before();
 
-        echo '<div class="ulf-repeater-item ulf-repeater-hidden">';
+        echo '<div class="ulf-repeater-item ulf-repeater-hidden" data-depend-id="'. esc_attr( $this->field['id'] ) .'">';
         echo '<div class="ulf-repeater-content">';
         foreach ( $this->field['fields'] as $field ) {
 

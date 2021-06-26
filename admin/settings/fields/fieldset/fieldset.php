@@ -18,7 +18,7 @@ if ( ! class_exists( 'ULF_Field_fieldset' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="ulf-fieldset-content">';
+      echo '<div class="ulf-fieldset-content" data-depend-id="'. esc_attr( $this->field['id'] ) .'">';
 
       foreach ( $this->field['fields'] as $field ) {
 

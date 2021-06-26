@@ -224,6 +224,8 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
 
             echo '<div class="ulf-fields">';
 
+            echo ( ! empty( $section['description'] ) ) ? '<div class="ulf-field ulf-section-description">'. $section['description'] .'</div>' : '';
+
             foreach ( $section['fields'] as $field ) {
 
               if ( in_array( $field['type'], $unallows ) ) { $field['_notice'] = true; }

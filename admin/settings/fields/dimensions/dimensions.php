@@ -40,7 +40,7 @@ if ( ! class_exists( 'ULF_Field_dimensions' ) ) {
 
       echo $this->field_before();
 
-      echo '<div class="ulf--inputs">';
+      echo '<div class="ulf--inputs" data-depend-id="'. esc_attr( $this->field['id'] ) .'">';
 
       if ( ! empty( $args['width'] ) ) {
         $placeholder = ( ! empty( $args['width_placeholder'] ) ) ? ' placeholder="'. esc_attr( $args['width_placeholder'] ) .'"' : '';

@@ -67,10 +67,11 @@ if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
 		$result = '';
 		// Default Args
 		$args   = shortcode_atts( array(
-			"id"          => '',
-			"type"        => 'post',
-			"status"      => 'like',
-			"date_range"  => ''
+			"id"         => '',
+			"type"       => 'post',
+			"status"     => 'like',
+			"date_range" => '',
+			"past_time"  => ''
 		), $atts );
 
 		if( empty( $args['id'] ) ){
@@ -89,6 +90,13 @@ if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
 					$args['id'] = get_the_ID();
 					break;
 			}
+		}
+
+		if( ! empty( $args['past_time'] ) ){
+			$args['date_range'] = array(
+                'interval_value' => $args['past_time'],
+                'interval_unit'  => 'HOUR'
+			);
 		}
 
 		$is_distinct = wp_ulike_setting_repo::isDistinct( $args['type'] );

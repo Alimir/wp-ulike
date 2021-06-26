@@ -61,21 +61,19 @@ function wp_ulike_remove_photo_class($avatar) {
 }
 add_filter('get_avatar', 'wp_ulike_remove_photo_class');
 
-
 /**
- * Set the admin login time.
+ * On user logged out
  *
- * @author       	Alimir
- * @since           2.4.2
- * @return			Void
+ * @return void
  */
-function wp_ulike_set_lastvisit() {
+function wp_ulike_on_logout_hook() {
 	if ( ! is_super_admin() ) {
 		return;
 	}
-	update_option( 'wp_ulike_admin_count_visit', current_time( 'mysql' ) );
+	// Refresh new votes
+	wp_ulike_update_meta_data( 1, 'statistics', 'calculate_new_votes', 0 );
 }
-add_action('wp_logout', 'wp_ulike_set_lastvisit');
+add_action('wp_logout', 'wp_ulike_on_logout_hook');
 
 /**
  *  Undocumented function
@@ -85,7 +83,7 @@ add_action('wp_logout', 'wp_ulike_set_lastvisit');
  * @return integer $count
  */
 function wp_ulike_update_menu_badge_count( $count ) {
-	if( 0 !== $count_new_likes = wp_ulike_get_number_of_new_likes() ){
+	if( 0 !== ( $count_new_likes = wp_ulike_get_number_of_new_likes() ) ){
 		$count += $count_new_likes;
 	}
 	return $count;
@@ -102,7 +100,7 @@ add_filter( 'wp_ulike_menu_badge_count', 'wp_ulike_update_menu_badge_count' );
  * @return string $title
  */
 function wp_ulike_update_admin_sub_menu_title( $title, $menu_slug ) {
-	if( ( 0 !== $count_new_likes = wp_ulike_get_number_of_new_likes() ) && $menu_slug === 'wp-ulike-statistics' ){
+	if( ( 0 !== ( $count_new_likes = wp_ulike_get_number_of_new_likes() ) ) && $menu_slug === 'wp-ulike-statistics' ){
 		$title .=  wp_ulike_badge_count_format( $count_new_likes );
 	}
 	return $title;

@@ -1,22 +1,18 @@
-
 /**
  *	Visual Select
  */
 
-.wp-ulike-visual-select{
+.wp-ulike-visual-select {
+    .ulf--image {
+        img {
+            height: 35px;
+            padding: 10px;
+        }
 
-    .ulf-field-image_select{
-        .ulf--active{
-            img{
+        &.ulf--active {
+            img {
                 filter: brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%);
             }
         }
-        .ulf--image{
-            img {
-                height: 40px;
-                padding: 10px;
-            }
-        }
     }
-
 }

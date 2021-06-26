@@ -157,7 +157,7 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 			}
 		}
 
-		return apply_filters( 'wp_ulike_get_user_id', $final_ip );
+		return apply_filters( 'wp_ulike_get_user_ip', $final_ip );
 	}
 }
 
@@ -262,14 +262,25 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 	function wp_ulike_get_period_limit_sql( $date_range ){
 		$period_limit = '';
 
-		if( is_array( $date_range ) && isset( $date_range['start'] ) ){
-			if( $date_range['start'] === $date_range['end'] ){
-				$period_limit = sprintf( 'AND DATE(`date_time`) = \'%s\'', $date_range['start'] );
-			} else {
-				$period_limit = sprintf( 'AND DATE(`date_time`) >= \'%s\' AND DATE(`date_time`) <= \'%s\'', $date_range['start'], $date_range['end'] );
+		if( is_array( $date_range ) ){
+
+			if( isset( $date_range['interval_value'] ) ){
+				// Interval time
+				$period_limit = sprintf( ' AND date_time >= DATE_ADD( NOW(), INTERVAL -%d %s)', $date_range['interval_value'], empty( $date_range['interval_unit'] ) ? 'DAY' : $date_range['interval_unit'] );
+			} elseif( isset( $date_range['start'] ) ){
+				// Start/End time
+				if( $date_range['start'] === $date_range['end'] ){
+					$period_limit = sprintf( ' AND DATE(`date_time`) = \'%s\'', $date_range['start'] );
+				} else {
+					$period_limit = sprintf( ' AND DATE(`date_time`) >= \'%s\' AND DATE(`date_time`) <= \'%s\'', $date_range['start'], $date_range['end'] );
+				}
 			}
+
 		} elseif( !empty( $date_range )) {
 			switch ($date_range) {
+				case "interval":
+
+					break;
 				case "today":
 					$period_limit = " AND DATE(date_time) = DATE(NOW())";
 					break;
@@ -288,6 +299,6 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 			}
 		}
 
-		return $period_limit;
+		return apply_filters( 'wp_ulike_period_limit_sql', $period_limit, $date_range );
 	}
 }

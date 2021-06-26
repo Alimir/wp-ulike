@@ -1,4 +1,4 @@
-/*! WP ULike - v4.5.0
+/*! WP ULike - v4.5.1
  *  https://wpulike.com
  *  TechnoWich 2021;
  */
@@ -555,6 +555,7 @@
       append: '',
       appendTimeout: 2000,
       displayLikers: false,
+      counterValue: '',
       likersTemplate: 'default',
       disablePophover: true,
       isTotal: false,
@@ -567,6 +568,7 @@
     },
     attributesMap = {
       "ulike-id": "ID",
+      "ulike-counter-value": "counterValue",
       "ulike-nonce": "nonce",
       "ulike-type": "type",
       "ulike-append": "append",
@@ -589,13 +591,6 @@
 
     // Create main selectors
     this.buttonElement = this.$element.find(this.settings.buttonSelector);
-    this.generalElement = this.$element.find(this.settings.generalSelector);
-    this.counterElement = this.generalElement.find(
-      this.settings.counterSelector
-    );
-
-    // Get likers box container element
-    this.likersElement = this.$element.find(this.settings.likersSelector);
 
     // read attributes
     for (var attrName in attributesMap) {
@@ -604,6 +599,30 @@
         this.settings[attributesMap[attrName]] = value;
       }
     }
+
+    // General element
+    this.generalElement = this.$element.find(this.settings.generalSelector);
+
+    // Append dom counter element
+    if (this.settings.counterValue !== '') {
+      this.buttonElement.each(function (index, element) {
+        if (typeof $(element).data('ulike-counter-value') !== 'undefined' && !$(element).next(this.settings.counterSelector).length) {
+          $(element).after($("<span/>")
+            .addClass(
+              this.settings.counterSelector.split('.').join("")
+            ).html($(element).data('ulike-counter-value')));
+        }
+      }.bind(this));
+    }
+
+    // Create counter element
+    this.counterElement = this.generalElement.find(
+      this.settings.counterSelector
+    );
+
+    // Get likers box container element
+    this.likersElement = this.$element.find(this.settings.likersSelector);
+
     this.init();
   }
 
@@ -882,7 +901,7 @@
         if (data.template) {
           this.likersElement.show().html(data.template);
         } else {
-          this.likersElement.hide();
+          this.likersElement.hide().empty();
         }
       }
 
@@ -988,16 +1007,18 @@
 /* ================== assets/js/src/scripts.js =================== */
 
 
-/* Run :) */
 (function ($) {
   // on document ready
   $(function () {
-    // Upgrading 'WordpressUlike' datasheets when new DOM has been inserted
-    $(this).bind("DOMNodeInserted", function (e) {
-      $(".wpulike").WordpressUlike();
-    });
+    $(".wpulike").WordpressUlike();
   });
 
-  // init WordpressUlike
+  // Init ulike buttons
   $(".wpulike").WordpressUlike();
+
+  // Update elements on ajax loaded
+  $(document).ajaxComplete(function () {
+    // init WordpressUlike
+    $(".wpulike").WordpressUlike();
+  });
 })(jQuery);

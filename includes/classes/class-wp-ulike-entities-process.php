@@ -461,6 +461,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 						SET `meta_value` = (`meta_value` + 1)
 						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
 				" );
+				// update new votes
+				$this->wpdb->query( "
+						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						SET `meta_value` = (`meta_value` + 1)
+						WHERE `meta_group` = 'statistics' AND `meta_key` = 'calculate_new_votes'
+				" );
 				$table = $this->typeSettings->getTableName();
 				$this->wpdb->query( "
 						UPDATE `{$this->wpdb->prefix}ulike_meta`
