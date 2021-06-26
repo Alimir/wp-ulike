@@ -91,8 +91,6 @@ function wp_ulike_get_paginated_logs( $table, $type ){
  * @return			string
  */
 function wp_ulike_get_number_of_new_likes() {
-    global $wpdb;
-
     if( ! apply_filters( 'wp_ulike_display_admin_new_likes', true ) ){
         return;
     }
@@ -100,37 +98,24 @@ function wp_ulike_get_number_of_new_likes() {
     // Get cache key
     $cache_key = sanitize_key( 'calculate_new_votes' );
 
-	if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false && is_super_admin() ) {
-        update_option( 'wp_ulike_admin_count_visit', current_time( 'mysql' ) );
-        // Fix object cache issue
-        if ( ! get_transient( 'wp_ulike_calculate_new_votes_cache' ) ) {
-            wp_cache_delete( $cache_key, WP_ULIKE_SLUG );
-            set_transient( 'wp_ulike_calculate_new_votes_cache', true, 300 );
-        }
-
+    // delete cache to get fresh data
+    if( wp_ulike_is_cache_exist() ){
+        wp_cache_delete( 1, 'wp_ulike_statistics_meta' );
     }
 
-    // Get cached counter value
-	$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+	if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false && is_super_admin() ) {
+        wp_ulike_update_meta_data( 1, 'statistics', $cache_key, 0 );
+        return;
+    }
 
-	// Make a cachable query to get new like count from all tables
-	if( false === $counter_value ){
-		$query = sprintf( '
-			SELECT
-			( SELECT COUNT(*) FROM `%1$sulike` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
-			( SELECT COUNT(*) FROM `%1$sulike_activities` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
-			( SELECT COUNT(*) FROM `%1$sulike_comments` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) ) +
-			( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE ( date_time <= NOW() AND date_time >= "%2$s" ) )
-			',
-			$wpdb->prefix,
-			get_option( 'wp_ulike_admin_count_visit', current_time( 'mysql' ) )
-		);
+    $calculate_new_votes = wp_ulike_get_meta_data( 1, 'statistics', 'calculate_new_votes', true );
 
-		$counter_value = $wpdb->get_var( $query );
-        wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
-	}
+    if( $calculate_new_votes == '' ){
+        wp_ulike_update_meta_data( 1, 'statistics', $cache_key, 0 );
+        return 0;
+    }
 
-	return empty( $counter_value ) ? 0 : $counter_value;
+	return $calculate_new_votes;
 }
 
 
