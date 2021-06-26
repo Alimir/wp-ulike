@@ -80,10 +80,6 @@
     // Get likers box container element
     this.likersElement = this.$element.find(this.settings.likersSelector);
 
-    if (typeof this.likersElement.data('likers') !== 'undefined' && !this.likersElement.html().length) {
-      this.likersElement.html(this.likersElement.data('likers'));
-    }
-
     this.init();
   }
 
