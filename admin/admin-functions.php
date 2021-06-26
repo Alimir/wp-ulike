@@ -85,10 +85,9 @@ function wp_ulike_get_paginated_logs( $table, $type ){
 }
 
 /**
- * The counter of last likes by the admin last login time.
+ * Get new votes counter
  *
- * @author       	Alimir
- * @return			string
+ * @return integer
  */
 function wp_ulike_get_number_of_new_likes() {
     if( ! apply_filters( 'wp_ulike_display_admin_new_likes', true ) ){
@@ -129,9 +128,9 @@ function wp_ulike_get_number_of_new_likes() {
  * @return string
  */
 function wp_ulike_badge_count_format( $number ){
-	return sprintf( ' <span class="update-plugins count-%1$s"><span class="update-count">%1$s</span></span>',
+	return ! empty( $number ) ? sprintf( ' <span class="update-plugins wp-ulike-notification-count-container count-%1$s"><span class="update-count wp-ulike-notification-count-value">%1$s</span></span>',
 		number_format_i18n( $number )
-	);
+	) : '';
 }
 
 /**
