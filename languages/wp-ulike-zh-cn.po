@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2021-06-12 09:17:51+00:00\n"
+"POT-Creation-Date: 2021-06-26 15:33:13+00:00\n"
 "PO-Revision-Date: 2018-05-27 09:01:52+0000\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "It's Ok!"
 msgstr ""
 
-#: admin/admin-functions.php:244
+#: admin/admin-functions.php:231
 #: admin/classes/class-wp-ulike-admin-panel.php:801
 #: includes/classes/class-wp-ulike-customizer.php:149
 msgid "Button"
@@ -43,11 +43,11 @@ msgstr ""
 msgid "TechnoWich"
 msgstr ""
 
-#: admin/admin-hooks.php:131
+#: admin/admin-hooks.php:129
 msgid "Wow! You've earned over a thousand likes"
 msgstr ""
 
-#: admin/admin-hooks.php:132
+#: admin/admin-hooks.php:130
 msgid ""
 "It's great to see that you've been using the WP ULike plugin. Hopefully "
 "you're happy with it!&nbsp; If so, would you consider leaving a positive "
@@ -55,24 +55,24 @@ msgid ""
 "it too!"
 msgstr ""
 
-#: admin/admin-hooks.php:137
+#: admin/admin-hooks.php:135
 msgid "Sure, I'd love to!"
 msgstr ""
 
-#: admin/admin-hooks.php:141
+#: admin/admin-hooks.php:139
 msgid "Not Now"
 msgstr ""
 
-#: admin/admin-hooks.php:147 admin/admin-hooks.php:174
-#: admin/admin-hooks.php:198 admin/admin-hooks.php:221
+#: admin/admin-hooks.php:145 admin/admin-hooks.php:172
+#: admin/admin-hooks.php:196 admin/admin-hooks.php:219
 msgid "No thanks and never ask me again"
 msgstr ""
 
-#: admin/admin-hooks.php:164
+#: admin/admin-hooks.php:162
 msgid "Good news for Persian WordPress users. :)"
 msgstr ""
 
-#: admin/admin-hooks.php:165
+#: admin/admin-hooks.php:163
 msgid ""
 "Following the request of our friends in Persian WordPress to access the "
 "premium version in Iran, we made the necessary arrangements and our new "
@@ -80,8 +80,8 @@ msgid ""
 "premium service by visiting this website."
 msgstr ""
 
-#: admin/admin-hooks.php:170 admin/admin-hooks.php:194
-#: admin/admin-hooks.php:217 admin/classes/class-wp-ulike-admin-panel.php:398
+#: admin/admin-hooks.php:168 admin/admin-hooks.php:192
+#: admin/admin-hooks.php:215 admin/classes/class-wp-ulike-admin-panel.php:398
 #: admin/classes/class-wp-ulike-admin-panel.php:428
 #: admin/classes/class-wp-ulike-admin-panel.php:458
 #: admin/classes/class-wp-ulike-admin-panel.php:575
@@ -89,11 +89,11 @@ msgstr ""
 msgid "Get More Information"
 msgstr ""
 
-#: admin/admin-hooks.php:188 admin/classes/class-wp-ulike-admin-panel.php:392
+#: admin/admin-hooks.php:186 admin/classes/class-wp-ulike-admin-panel.php:392
 msgid "How to Create Ultimate User Profiles with WP ULike?"
 msgstr ""
 
-#: admin/admin-hooks.php:189 admin/classes/class-wp-ulike-admin-panel.php:393
+#: admin/admin-hooks.php:187 admin/classes/class-wp-ulike-admin-panel.php:393
 msgid ""
 "The simplest way to create your own WordPress user profile page is by using "
 "the WP ULike Profile builder. This way, you can create professional profiles "
@@ -101,11 +101,11 @@ msgid ""
 "knowledge or the use of advanced functions."
 msgstr ""
 
-#: admin/admin-hooks.php:211
+#: admin/admin-hooks.php:209
 msgid "Boost Your SEO by Using Schema Rich Snippets"
 msgstr ""
 
-#: admin/admin-hooks.php:212
+#: admin/admin-hooks.php:210
 msgid ""
 "WP ULike Pro in its latest update evolved to an innovative and powerful SEO "
 "Plugin which can manage +13 types of Schema Markups to make a better "
@@ -113,15 +113,15 @@ msgid ""
 "search engine language and tell them which type of content you are promoting."
 msgstr ""
 
-#: admin/admin-hooks.php:253 admin/includes/templates/about.php:28
+#: admin/admin-hooks.php:251 admin/includes/templates/about.php:28
 msgid "Go Pro"
 msgstr ""
 
-#: admin/admin-hooks.php:485 admin/classes/class-wp-ulike-admin-panel.php:125
+#: admin/admin-hooks.php:483 admin/classes/class-wp-ulike-admin-panel.php:125
 #: admin/classes/class-wp-ulike-admin-panel.php:142
 #: admin/classes/class-wp-ulike-admin-panel.php:655
 #: admin/classes/class-wp-ulike-admin-panel.php:685
-#: admin/classes/class-wp-ulike-widget.php:355
+#: admin/classes/class-wp-ulike-widget.php:371
 msgid "Like"
 msgstr "喜欢"
 
@@ -408,8 +408,8 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:306
 #: admin/classes/class-wp-ulike-admin-panel.php:349
 #: admin/classes/class-wp-ulike-settings.php:76
-#: admin/classes/class-wp-ulike-widget.php:267
-#: admin/classes/class-wp-ulike-widget.php:556
+#: admin/classes/class-wp-ulike-widget.php:283
+#: admin/classes/class-wp-ulike-widget.php:572
 msgid "BuddyPress"
 msgstr "BuddyPress"
 
@@ -421,7 +421,7 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:319
 #: admin/classes/class-wp-ulike-admin-panel.php:356
 #: admin/classes/class-wp-ulike-settings.php:82
-#: admin/classes/class-wp-ulike-widget.php:211
+#: admin/classes/class-wp-ulike-widget.php:227
 msgid "bbPress"
 msgstr ""
 
@@ -547,8 +547,8 @@ msgid "Unliked Notice Message"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:516
-#: includes/functions/templates.php:70 includes/functions/templates.php:122
-#: includes/functions/templates.php:174 includes/functions/templates.php:224
+#: includes/functions/templates.php:70 includes/functions/templates.php:117
+#: includes/functions/templates.php:164 includes/functions/templates.php:209
 msgid "Like Button"
 msgstr ""
 
@@ -858,7 +858,7 @@ msgstr "恢复默认设置"
 msgid "Similar Settings"
 msgstr ""
 
-#. Description of the plugin/theme
+#: admin/classes/class-wp-ulike-settings.php:58
 msgid ""
 "WP ULike plugin allows to integrate a beautiful Ajax Like Button into your "
 "wordPress website to allow your visitors to like and unlike pages, posts, "
@@ -1050,15 +1050,15 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:58
 #: admin/classes/class-wp-ulike-widget.php:116
-#: admin/classes/class-wp-ulike-widget.php:234
-#: admin/classes/class-wp-ulike-widget.php:296
+#: admin/classes/class-wp-ulike-widget.php:250
+#: admin/classes/class-wp-ulike-widget.php:312
 msgid "No results were found in"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:58
 #: admin/classes/class-wp-ulike-widget.php:116
-#: admin/classes/class-wp-ulike-widget.php:234
-#: admin/classes/class-wp-ulike-widget.php:296
+#: admin/classes/class-wp-ulike-widget.php:250
+#: admin/classes/class-wp-ulike-widget.php:312
 msgid "period"
 msgstr ""
 
@@ -1066,119 +1066,119 @@ msgstr ""
 msgid "on"
 msgstr "on"
 
-#: admin/classes/class-wp-ulike-widget.php:193
+#: admin/classes/class-wp-ulike-widget.php:210
 msgid "you haven't liked any post yet!"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:211
-#: admin/classes/class-wp-ulike-widget.php:267
+#: admin/classes/class-wp-ulike-widget.php:227
+#: admin/classes/class-wp-ulike-widget.php:283
 msgid "%s is Not Activated!"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:491
+#: admin/classes/class-wp-ulike-widget.php:507
 msgid "Most Liked"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:506
+#: admin/classes/class-wp-ulike-widget.php:522
 msgid "Title:"
 msgstr "标题："
 
-#: admin/classes/class-wp-ulike-widget.php:511
+#: admin/classes/class-wp-ulike-widget.php:527
 msgid "Type:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:513
+#: admin/classes/class-wp-ulike-widget.php:529
 msgid "Most Liked Posts"
 msgstr "最多人喜欢的文章"
 
-#: admin/classes/class-wp-ulike-widget.php:514
+#: admin/classes/class-wp-ulike-widget.php:530
 msgid "Most Liked Comments"
 msgstr "最多人喜欢的评论"
 
-#: admin/classes/class-wp-ulike-widget.php:515
+#: admin/classes/class-wp-ulike-widget.php:531
 msgid "Most Liked Activities"
 msgstr "最多人喜欢的活动"
 
-#: admin/classes/class-wp-ulike-widget.php:516
+#: admin/classes/class-wp-ulike-widget.php:532
 msgid "Most Liked Topics"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:517
+#: admin/classes/class-wp-ulike-widget.php:533
 msgid "Most Liked Users"
 msgstr "最多人喜欢的用户"
 
-#: admin/classes/class-wp-ulike-widget.php:518
+#: admin/classes/class-wp-ulike-widget.php:534
 msgid "Last Posts Liked By User"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:523
+#: admin/classes/class-wp-ulike-widget.php:539
 msgid "Number of items to show:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:528
+#: admin/classes/class-wp-ulike-widget.php:544
 msgid "Period:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:530
+#: admin/classes/class-wp-ulike-widget.php:546
 msgid "All The Times"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:531
+#: admin/classes/class-wp-ulike-widget.php:547
 msgid "Year"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:532
+#: admin/classes/class-wp-ulike-widget.php:548
 msgid "Month"
 msgstr "月份"
 
-#: admin/classes/class-wp-ulike-widget.php:533
+#: admin/classes/class-wp-ulike-widget.php:549
 msgid "Week"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:534
+#: admin/classes/class-wp-ulike-widget.php:550
 #: admin/includes/templates/statistics.php:110
 msgid "Yesterday"
 msgstr "昨天"
 
-#: admin/classes/class-wp-ulike-widget.php:535
+#: admin/classes/class-wp-ulike-widget.php:551
 #: admin/includes/templates/statistics.php:93
 msgid "Today"
 msgstr "今天"
 
-#: admin/classes/class-wp-ulike-widget.php:540
+#: admin/classes/class-wp-ulike-widget.php:556
 msgid "Style:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:542
+#: admin/classes/class-wp-ulike-widget.php:558
 msgid "Simple"
 msgstr "简单"
 
-#: admin/classes/class-wp-ulike-widget.php:543
+#: admin/classes/class-wp-ulike-widget.php:559
 #: includes/functions/templates.php:29
 msgid "Heart"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:548
+#: admin/classes/class-wp-ulike-widget.php:564
 msgid "Title Trim (Length):"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:554
+#: admin/classes/class-wp-ulike-widget.php:570
 msgid "Profile URL:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:557
+#: admin/classes/class-wp-ulike-widget.php:573
 msgid "UltimateMember"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:563
+#: admin/classes/class-wp-ulike-widget.php:579
 msgid "Activate Like Counter"
 msgstr "启用喜欢计数"
 
-#: admin/classes/class-wp-ulike-widget.php:568
+#: admin/classes/class-wp-ulike-widget.php:584
 msgid "Activate Thumbnail/Avatar"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:572
+#: admin/classes/class-wp-ulike-widget.php:588
 msgid "Thumbnail/Avatar size:"
 msgstr ""
 
@@ -1197,7 +1197,7 @@ msgstr "自定义样式"
 msgid "Our Blog"
 msgstr ""
 
-#: admin/includes/templates/about.php:35
+#. Description of the plugin/theme
 msgid ""
 "Receiving feedback is crucial as a content creator, but unfortunately, the "
 "pieces of content you can collect it on are limited by default. However, "
@@ -1690,7 +1690,7 @@ msgstr ""
 msgid "Animated Heart"
 msgstr ""
 
-#: includes/hooks/shortcodes.php:144
+#: includes/hooks/shortcodes.php:152
 msgid "Error receiving input parameters"
 msgstr ""
 
@@ -1789,10 +1789,16 @@ msgstr ""
 msgid "WP ULike"
 msgstr "WP ULike"
 
-#: wp-ulike.php:76
+#. translators: %s: PHP version
+#: wp-ulike.php:74
+msgid "WP ULike requires PHP version %s+, plugin is currently NOT RUNNING."
+msgstr ""
+
+#. translators: %s: WordPress version
+#: wp-ulike.php:88
 msgid ""
-"You are using two instances of WP ULike plugin at same time, please deactive "
-"one of them."
+"WP ULike requires WordPress version %s+. Because you are using an earlier "
+"version, the plugin is currently NOT RUNNING."
 msgstr ""
 
 #. Plugin URI of the plugin/theme
