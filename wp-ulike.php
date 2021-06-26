@@ -65,18 +65,40 @@ require WP_ULIKE_INC_DIR . '/action.php';
 register_activation_hook  ( __FILE__, array( 'wp_ulike_register_action_hook', 'activate'   ) );
 register_deactivation_hook( __FILE__, array( 'wp_ulike_register_action_hook', 'deactivate' ) );
 
-if ( ! class_exists( 'WpUlikeInit' ) ) {
-	// Include plugin starter
+if ( ! version_compare( PHP_VERSION, '5.6', '>=' ) ) {
+	add_action( 'admin_notices', 'wp_ulike_fail_php_version' );
+} elseif ( ! version_compare( get_bloginfo( 'version' ), '5.0', '>=' ) ) {
+	add_action( 'admin_notices', 'wp_ulike_fail_wp_version' );
+} elseif( ! class_exists( 'WpUlikeInit' ) ) {
 	require WP_ULIKE_INC_DIR . '/plugin.php';
-
-} else {
-
-	function wp_ulike_two_instances_error() {
-		$class   = 'notice notice-error';
-		$message = __( 'You are using two instances of WP ULike plugin at same time, please deactive one of them.', WP_ULIKE_SLUG );
-		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
-	}
-	add_action( 'admin_notices', 'wp_ulike_two_instances_error' );
-
 }
+
+/**
+ * WP ULike admin notice for minimum PHP version.
+ *
+ * Warning when the site doesn't have the minimum required PHP version.
+ *
+ * @return void
+ */
+function wp_ulike_fail_php_version() {
+	/* translators: %s: PHP version */
+	$message = sprintf( esc_html__( 'WP ULike requires PHP version %s+, plugin is currently NOT RUNNING.', WP_ULIKE_SLUG ), '5.6' );
+	$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
+	echo wp_kses_post( $html_message );
+}
+
+/**
+ * WP ULike admin notice for minimum WordPress version.
+ *
+ * Warning when the site doesn't have the minimum required WordPress version.
+ *
+ * @return void
+ */
+function wp_ulike_fail_wp_version() {
+	/* translators: %s: WordPress version */
+	$message = sprintf( esc_html__( 'WP ULike requires WordPress version %s+. Because you are using an earlier version, the plugin is currently NOT RUNNING.', WP_ULIKE_SLUG ), '5.0' );
+	$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
+	echo wp_kses_post( $html_message );
+}
+
 /*============================================================================*/
