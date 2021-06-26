@@ -1,13 +1,15 @@
-/* Run :) */
 (function ($) {
   // on document ready
   $(function () {
-    // Upgrading 'WordpressUlike' datasheets when new DOM has been inserted
-    $(this).bind("DOMNodeInserted", function (e) {
-      $(".wpulike").WordpressUlike();
-    });
+    $(".wpulike").WordpressUlike();
   });
 
-  // init WordpressUlike
+  // Init ulike buttons
   $(".wpulike").WordpressUlike();
+
+  // Update elements on ajax loaded
+  $(document).ajaxComplete(function () {
+    // init WordpressUlike
+    $(".wpulike").WordpressUlike();
+  });
 })(jQuery);

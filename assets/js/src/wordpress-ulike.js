@@ -12,6 +12,7 @@
       append: '',
       appendTimeout: 2000,
       displayLikers: false,
+      counterValue: '',
       likersTemplate: 'default',
       disablePophover: true,
       isTotal: false,
@@ -24,6 +25,7 @@
     },
     attributesMap = {
       "ulike-id": "ID",
+      "ulike-counter-value": "counterValue",
       "ulike-nonce": "nonce",
       "ulike-type": "type",
       "ulike-append": "append",
@@ -46,13 +48,6 @@
 
     // Create main selectors
     this.buttonElement = this.$element.find(this.settings.buttonSelector);
-    this.generalElement = this.$element.find(this.settings.generalSelector);
-    this.counterElement = this.generalElement.find(
-      this.settings.counterSelector
-    );
-
-    // Get likers box container element
-    this.likersElement = this.$element.find(this.settings.likersSelector);
 
     // read attributes
     for (var attrName in attributesMap) {
@@ -61,6 +56,34 @@
         this.settings[attributesMap[attrName]] = value;
       }
     }
+
+    // General element
+    this.generalElement = this.$element.find(this.settings.generalSelector);
+
+    // Append dom counter element
+    if (this.settings.counterValue !== '') {
+      this.buttonElement.each(function (index, element) {
+        if (typeof $(element).data('ulike-counter-value') !== 'undefined' && !$(element).next(this.settings.counterSelector).length) {
+          $(element).after($("<span/>")
+            .addClass(
+              this.settings.counterSelector.split('.').join("")
+            ).html($(element).data('ulike-counter-value')));
+        }
+      }.bind(this));
+    }
+
+    // Create counter element
+    this.counterElement = this.generalElement.find(
+      this.settings.counterSelector
+    );
+
+    // Get likers box container element
+    this.likersElement = this.$element.find(this.settings.likersSelector);
+
+    if (typeof this.likersElement.data('likers') !== 'undefined' && !this.likersElement.html().length) {
+      this.likersElement.html(this.likersElement.data('likers'));
+    }
+
     this.init();
   }
 
@@ -339,7 +362,7 @@
         if (data.template) {
           this.likersElement.show().html(data.template);
         } else {
-          this.likersElement.hide();
+          this.likersElement.hide().empty();
         }
       }
 
