@@ -200,7 +200,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				foreach ( $getPosts as $post ) :
 					echo $before_item;
 					?>
-					<a href="<?php the_permalink( $post->ID ); ?>"><?php the_title( $post->ID ); ?></a>
+					<a href="<?php echo get_the_permalink( $post->ID ); ?>"><?php echo get_the_title( $post->ID ); ?></a>
 				<?php
 					echo $show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $this->get_counter_value($post->ID, 'post', 'like', $period ), 'like' ) . '</span>' : '';
 					echo $after_item;

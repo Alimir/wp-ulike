@@ -2,7 +2,7 @@
  * wp ulike admin statistics
  */
 (function ($) {
-  $(".wp_ulike_delete").click(function (e) {
+  $(".wp_ulike_delete").on('click', function (e) {
     e.preventDefault();
     var parent = $(this).closest("tr");
     var value = $(this).data("id");
