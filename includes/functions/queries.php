@@ -428,8 +428,8 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 			// Check user info value
 			$user_info = empty( $user_info ) ? array() : $user_info;
 
-			if( $user_status !== NULL || $parsed_args['is_user_logged_in'] ){
-				$user_info[$parsed_args['item_id']] =  $parsed_args['is_user_logged_in'] && $user_status === NULL ? NULL : $user_status;
+			if( ! empty( $user_status ) ){
+				$user_info[$parsed_args['item_id']] = $user_status;
 				wp_ulike_update_meta_data( $parsed_args['current_user'], 'user', $meta_key, $user_info );
 			}
 		}
