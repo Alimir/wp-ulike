@@ -1,44 +1,33 @@
 <?php
 /**
- * All wp-ulike functionalities starting from here...
- *
- * // @echo HEADER
- *
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
- * Description:       WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.
- * Version:           4.5.0
+ * Description:       Receiving feedback is crucial as a content creator, but unfortunately, the pieces of content you can collect it on are limited by default. However, with the help of the WP ULike plugin, it is possible to cast voting to any type of content you may have on your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your content would it be a post, comment, BuddyPress activity, bbPress topics, WooCommerce products, you name it. Now you can feel your users Love for each part of your work.
+ * Version:           4.5.1
  * Author:            TechnoWich
  * Author URI:        https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
- * License:           GPL2
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path:       /languages/
- * Tested up to: 	  5.7.2
-
- /------------------------------------------\
-  _     __     _ _____      _  _  _   _
- | |   /  \   | | ___ \    | |(_)| | / /
- | |  / /\ \  | | |_/ /   _| || || |/ / ___
- | | / /  \ \ | |  __/ | | | || ||   | / _ \
- | |/ /    \ \| | |  | |_| | || || |\ \  __/
- \___/      \__/\_|   \__,_|_||_||_| \_\___|
-
- \--> TechnoWich, 2021 <--/
-
- Thanks for using WP ULike plugin!
-
- \------------------------------------------/
-*/
+ *
+ * WP ULike is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * WP ULike is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ */
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+	exit; // Exit if accessed directly
 }
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 );
-define( 'WP_ULIKE_VERSION'      , '4.5.0' 					 	 );
+define( 'WP_ULIKE_VERSION'      , '4.5.1' 					 	 );
 define( 'WP_ULIKE_DB_VERSION'   , '2.1' 					 	 );
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 );
 define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG ));
