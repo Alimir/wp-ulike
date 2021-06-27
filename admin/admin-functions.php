@@ -94,18 +94,13 @@ function wp_ulike_get_number_of_new_likes() {
         return 0;
     }
 
-    // delete cache to get fresh data
-    if( wp_ulike_is_cache_exist() ){
-        wp_cache_delete( 1, 'wp_ulike_statistics_meta' );
-    }
-
     // Get cache key
     $cache_key = sanitize_key( 'calculate_new_votes' );
     // Get new votes
     $calculate_new_votes = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
 
     if( empty( $calculate_new_votes ) ){
-        if( $calculate_new_votes == '' ){
+        if( $calculate_new_votes === '' ){
             wp_ulike_update_meta_data( 1, 'statistics', $cache_key, 0 );
         }
 
@@ -115,6 +110,7 @@ function wp_ulike_get_number_of_new_likes() {
     // Refresh likes
 	if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false && is_super_admin() ) {
         wp_ulike_update_meta_data( 1, 'statistics', $cache_key, 0 );
+
         return 0;
     }
 

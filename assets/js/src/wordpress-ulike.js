@@ -87,7 +87,7 @@
   $.extend(Plugin.prototype, {
     init: function () {
       // Call _ajaxify function on click button
-      this.buttonElement.click(this._initLike.bind(this));
+      this.buttonElement.on('click', this._initLike.bind(this));
       // Call likers box generator
       this.generalElement.one("mouseenter", this._updateLikers.bind(this));
     },

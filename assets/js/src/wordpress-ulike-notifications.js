@@ -76,7 +76,7 @@
     _remove: function () {
       var self = this;
       // Remove Message On Click
-      this.$messageElement.click(function () {
+      this.$messageElement.on('click', function () {
         $(this)
           .fadeOut(300, function () {
             $(this).remove();
@@ -87,7 +87,7 @@
           .trigger("WordpressUlikeRemoveNotification");
       });
       // Remove Message With Timeout
-      if( self.settings.timeout ){
+      if (self.settings.timeout) {
         setTimeout(function () {
           self.$messageElement
             .fadeOut(300, function () {
