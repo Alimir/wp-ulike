@@ -813,6 +813,9 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 
 == Upgrade Notice ==
 
+= 4.5.1 =
+* Important: If page cache is enabled on your site, clear the cache immediately after updating.
+
 = 4.3.0 =
 In this update, we have made changes to the class structure that have made plugin development much easier. So we had to delete the $wp_ulike_class global variable. If you used this variable manually, replace it with the class wp_ulike_cta_process.
 
