@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, user profile, statistics, favorite, rating, bu
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.7.2
-Stable tag: 4.5.2
+Stable tag: 4.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,9 @@ Our WP ULike project has been able to attract more than 50,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.5.3 =
+* Fixed: Reported JS counter issues.
 
 = 4.5.2 =
 * Fixed: JS conflict issue with buddypress activity stream.
@@ -815,6 +818,9 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 * The initial version
 
 == Upgrade Notice ==
+
+= 4.5.3 =
+* Important: If page cache is enabled on your site, clear the cache immediately after updating.
 
 = 4.5.1 =
 * Important: If page cache is enabled on your site, clear the cache immediately after updating.
