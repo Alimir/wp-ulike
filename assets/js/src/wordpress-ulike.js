@@ -12,7 +12,6 @@
       append: '',
       appendTimeout: 2000,
       displayLikers: false,
-      counterValue: '',
       likersTemplate: 'default',
       disablePophover: true,
       isTotal: false,
@@ -25,7 +24,6 @@
     },
     attributesMap = {
       "ulike-id": "ID",
-      "ulike-counter-value": "counterValue",
       "ulike-nonce": "nonce",
       "ulike-type": "type",
       "ulike-append": "append",
@@ -60,21 +58,19 @@
     // General element
     this.generalElement = this.$element.find(this.settings.generalSelector);
 
-    // Append dom counter element
-    // Append dom counter element
-    this.buttonElement.each(function (index, element) {
-      if (!this._isEmpty($(element).data('ulike-counter-value')) && !$(element).next(this.settings.counterSelector).length) {
-        $(element).after($("<span/>")
-          .addClass(
-            this.settings.counterSelector.split('.').join("")
-          ).html($(element).data('ulike-counter-value')));
-      }
-    }.bind(this));
-
     // Create counter element
     this.counterElement = this.generalElement.find(
       this.settings.counterSelector
     );
+
+    // Append dom counter element
+    if (this.counterElement.length) {
+      this.counterElement.each(function (index, element) {
+        if (typeof $(element).data('ulike-counter-value') !== 'undefined') {
+          $(element).html($(element).data('ulike-counter-value'));
+        }
+      }.bind(this));
+    }
 
     // Get likers box container element
     this.likersElement = this.$element.find(this.settings.likersSelector);
@@ -267,42 +263,23 @@
       this.siblingButton = this.buttonElement.siblings(this.settings.buttonSelector);
     },
 
-    _isEmpty: function (arg) {
-      return (
-        arg == null || // Check for null or undefined
-        arg.length === 0 || // Check for empty String (Bonus check for empty Array)
-        (typeof arg === 'object' && Object.keys(arg).length === 0) // Check for empty Object or Array
-      );
-    },
-
     __updateCounter: function (counterValue) {
-      // Check empty element issue
-      if (!this._isEmpty(counterValue) && !this.counterElement.length) {
-        this.buttonElement.after($("<span/>")
-          .addClass(
-            this.settings.counterSelector.split('.').join("")
-          ));
-        // Create counter element
-        this.counterElement = this.generalElement.find(
-          this.settings.counterSelector
-        );
-      }
       // Update counter element
       if (typeof counterValue !== "object") {
-        this.counterElement.html(counterValue);
+        this.counterElement.attr('data-ulike-counter-value', counterValue).html(counterValue);
       } else {
         if (this.settings.isTotal && typeof counterValue.sub !== "undefined") {
-          this.counterElement.html(counterValue.sub);
+          this.counterElement.attr('data-ulike-counter-value', counterValue.sub).html(counterValue.sub);
         } else {
           if (this.settings.factor === 'down') {
-            this.counterElement.html(counterValue.down);
+            this.counterElement.attr('data-ulike-counter-value', counterValue.down).html(counterValue.down);
             if (this.siblingElement.length) {
-              this.siblingElement.find(this.settings.counterSelector).html(counterValue.up);
+              this.siblingElement.find(this.settings.counterSelector).attr('data-ulike-counter-value', counterValue.up).html(counterValue.up);
             }
           } else {
-            this.counterElement.html(counterValue.up);
+            this.counterElement.attr('data-ulike-counter-value', counterValue.up).html(counterValue.up);
             if (this.siblingElement.length) {
-              this.siblingElement.find(this.settings.counterSelector).html(counterValue.down);
+              this.siblingElement.find(this.settings.counterSelector).attr('data-ulike-counter-value', counterValue.down).html(counterValue.down);
             }
           }
         }
