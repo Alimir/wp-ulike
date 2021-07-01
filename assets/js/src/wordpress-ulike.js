@@ -61,16 +61,15 @@
     this.generalElement = this.$element.find(this.settings.generalSelector);
 
     // Append dom counter element
-    if (this.settings.counterValue !== '') {
-      this.buttonElement.each(function (index, element) {
-        if (typeof $(element).data('ulike-counter-value') !== 'undefined' && !$(element).next(this.settings.counterSelector).length) {
-          $(element).after($("<span/>")
-            .addClass(
-              this.settings.counterSelector.split('.').join("")
-            ).html($(element).data('ulike-counter-value')));
-        }
-      }.bind(this));
-    }
+    // Append dom counter element
+    this.buttonElement.each(function (index, element) {
+      if (!this._isEmpty($(element).data('ulike-counter-value')) && !$(element).next(this.settings.counterSelector).length) {
+        $(element).after($("<span/>")
+          .addClass(
+            this.settings.counterSelector.split('.').join("")
+          ).html($(element).data('ulike-counter-value')));
+      }
+    }.bind(this));
 
     // Create counter element
     this.counterElement = this.generalElement.find(
@@ -268,7 +267,27 @@
       this.siblingButton = this.buttonElement.siblings(this.settings.buttonSelector);
     },
 
+    _isEmpty: function (arg) {
+      return (
+        arg == null || // Check for null or undefined
+        arg.length === 0 || // Check for empty String (Bonus check for empty Array)
+        (typeof arg === 'object' && Object.keys(arg).length === 0) // Check for empty Object or Array
+      );
+    },
+
     __updateCounter: function (counterValue) {
+      // Check empty element issue
+      if (!this._isEmpty(counterValue) && !this.counterElement.length) {
+        this.buttonElement.after($("<span/>")
+          .addClass(
+            this.settings.counterSelector.split('.').join("")
+          ));
+        // Create counter element
+        this.counterElement = this.generalElement.find(
+          this.settings.counterSelector
+        );
+      }
+      // Update counter element
       if (typeof counterValue !== "object") {
         this.counterElement.html(counterValue);
       } else {
