@@ -1024,7 +1024,7 @@
 
   // Init on buddypress activity stream
   $('#buddypress').on('bp_ajax_request', '[data-bp-list="activity"]', function () {
-    ulp_main_elements();
+    $(".wpulike").WordpressUlike();
   });
 
 })(jQuery);

@@ -477,7 +477,30 @@ module.exports = function (grunt) {
                     dest: "<%= meta.buildPath %>"
                 }
             },
-
+            prod_ir: {
+                options: {
+                    exclude: [],
+                    src: "<%= meta.buildPath %>/",
+                    dest: "/home/wpulike.ir/public_html/wp-content/plugins/<%= meta.project %>/",
+                    host: "root@78.46.117.192"
+                }
+            },
+            prod: {
+                options: {
+                    exclude: [],
+                    src: "<%= meta.buildPath %>/",
+                    dest: "/home/wpulike.com/public_html/wp-content/plugins/<%= meta.project %>/",
+                    host: "root@159.69.92.197"
+                }
+            },
+            sandbox: {
+                options: {
+                    exclude: [],
+                    src: "<%= meta.buildPath %>/",
+                    dest: "/home/sandbox.wpulike.com/public_html/wp-content/plugins/<%= meta.project %>/",
+                    host: "root@159.69.92.197"
+                }
+            },
             lite: {
                 options: {
                     exclude: [
@@ -531,6 +554,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('update_dep', ['copy', 'concat']);
 
-    grunt.registerTask( 'update_dep'    , ['copy', 'concat'] );
+    grunt.registerTask('product', ['build', 'deploy:prod']);
+    grunt.registerTask('sandbox', ['build', 'deploy:sandbox']);
 
+    grunt.registerTask('product_fa', ['build', 'deploy:prod_ir']);
 };
