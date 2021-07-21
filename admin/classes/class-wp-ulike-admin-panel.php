@@ -246,9 +246,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $get_content_fields['buddypress']['enable_comments'] = array(
                 'id'         => 'enable_comments',
                 'type'       => 'switcher',
-                'title'      => __('Activity Comment', WP_ULIKE_SLUG),
-                'desc'       => __('Add the possibility to like Buddypress comments in the activity stream', WP_ULIKE_SLUG),
-                'dependency' => array( 'enable_auto_display', '==', 'true' )
+                'title'      => __('Enable Activity Comment', WP_ULIKE_SLUG),
+                'desc'       => __('Add the possibility to like Buddypress comments in the activity stream', WP_ULIKE_SLUG)
             );
             $get_content_fields['buddypress']['enable_add_bp_activity'] = array(
                 'id'         => 'enable_add_bp_activity',

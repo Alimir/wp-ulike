@@ -181,6 +181,25 @@ class wp_ulike_setting_repo {
 		return self::getOption( self::getSettingKey( $typeName ) . '|hide_zero_counter', false );
 	}
 
+	/**
+	 * Check auto display
+	 *
+	 * @return boolean
+	 */
+	public static function isAutoDisplayOn( $typeName ){
+		$auto_display = self::getOption( self::getSettingKey( $typeName ) . '|enable_auto_display', false );
+		return apply_filters( 'wp_ulike_enable_auto_display', $auto_display, $typeName );
+	}
+
+	/**
+	 * Check activity comment display
+	 *
+	 * @return boolean
+	 */
+	public static function isActivityCommentAutoDisplayOn(){
+		$auto_display = self::getOption( 'buddypress_group|enable_comments', false );
+		return apply_filters( 'wp_ulike_enable_auto_display', $auto_display, 'activity_comment' );
+	}
 
 	/**
 	 * Check counter zero visibility

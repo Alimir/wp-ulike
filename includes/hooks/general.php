@@ -25,7 +25,7 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 		// Stack variable
 		$output = $content;
 
-		if ( WpUlikeInit::is_frontend() && in_the_loop() && is_main_query() && wp_ulike_get_option( 'posts_group|enable_auto_display', 1 ) ) {
+		if ( WpUlikeInit::is_frontend() && in_the_loop() && is_main_query() && wp_ulike_setting_repo::isAutoDisplayOn('post') ) {
 			if(	is_wp_ulike( wp_ulike_get_option( 'posts_group|auto_display_filter' ) ) ){
 				// Get button
 				$button = wp_ulike('put');
@@ -80,7 +80,7 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 			return $content;
 		}
 
-		if ( wp_ulike_get_option( 'comments_group|enable_auto_display', 1 ) && WpUlikeInit::is_frontend() ) {
+		if ( wp_ulike_setting_repo::isAutoDisplayOn('comment') && WpUlikeInit::is_frontend() ) {
 			//auto display position
 			$position = wp_ulike_get_option( 'comments_group|auto_display_position', 'bottom' );
 			//add wp_ulike function
