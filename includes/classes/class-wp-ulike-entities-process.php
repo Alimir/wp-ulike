@@ -417,31 +417,40 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return void
 		 */
 		public function updateLikerMetaList( $item_id ){
+			// Only for logged in users
+			if(! $this->isUserLoggedIn){
+				return;
+			}
+
 			// delete cache to get fresh data
 			if( wp_ulike_is_cache_exist() ){
 				wp_cache_delete( $item_id, sprintf( 'wp_ulike_%s_meta', $this->itemType ) );
 			}
 			// Get meta data
 			$get_likers = wp_ulike_get_meta_data( $item_id, $this->itemType, 'likers_list', true );
-			if( ! empty( $get_likers ) ){
-				$get_user   = get_userdata( $this->currentUser );
-				$is_updated = false;
-				if( $get_user ){
-					if( in_array( $get_user->ID, $get_likers ) ){
-						if( strpos( $this->currentStatus, 'un') !== false ){
-							$get_likers = array_diff( $get_likers, array( $get_user->ID ) );
-							$is_updated = true;
-						}
-					} else {
-						if( strpos( $this->currentStatus, 'un') === false ){
-							array_push( $get_likers, $get_user->ID );
-							$is_updated = true;
-						}
+
+			// Check empty array
+			if( empty( $get_likers ) ){
+				$get_likers = array();
+			}
+
+			$get_user   = get_userdata( $this->currentUser );
+			$is_updated = false;
+			if( $get_user ){
+				if( in_array( $get_user->ID, $get_likers ) ){
+					if( strpos( $this->currentStatus, 'un') !== false ){
+						$get_likers = array_diff( $get_likers, array( $get_user->ID ) );
+						$is_updated = true;
 					}
-					// If array list has been changed, then update meta data.
-					if( $is_updated ){
-						wp_ulike_update_meta_data( $item_id, $this->itemType, 'likers_list', $get_likers );
+				} else {
+					if( strpos( $this->currentStatus, 'un') === false ){
+						array_push( $get_likers, $get_user->ID );
+						$is_updated = true;
 					}
+				}
+				// If array list has been changed, then update meta data.
+				if( $is_updated ){
+					wp_ulike_update_meta_data( $item_id, $this->itemType, 'likers_list', $get_likers );
 				}
 			}
 		}
