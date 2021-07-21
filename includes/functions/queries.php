@@ -319,7 +319,7 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 		$item_opts  = wp_ulike_get_post_settings_by_type( $item_type );
 		$get_likers = wp_ulike_get_meta_data( $item_ID, $item_type, 'likers_list', true );
 
-		if( empty( $get_likers ) ){
+		if( empty( $get_likers ) && $get_likers !== '0' ){
 			// Cache data
 			$cache_key  = sanitize_key( sprintf( '%s_%s_%s_likers_list', $table_name, $column_name, $item_ID ) );
 			$get_likers = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
@@ -408,7 +408,7 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 		// Get meta data
 		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 
-		if( empty( $user_info ) || ! isset( $user_info[$parsed_args['item_id']] ) ){
+		if( $user_info !== '0' && ! isset( $user_info[$parsed_args['item_id']] ) ){
 			$query  = sprintf( '
 					SELECT `status`
 					FROM %s
