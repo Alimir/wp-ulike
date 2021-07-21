@@ -328,7 +328,7 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 	 * @param int    $id                    Notification ID.
 	 * @return string $return Formatted notification.
 	 */
-	function wp_ulike_format_buddypress_notifications( $content, $item_id, $secondary_item_id, $total_items, $format = 'string', $action, $component, $id ) {
+	function wp_ulike_format_buddypress_notifications( $content, $item_id, $secondary_item_id, $total_items, $format, $action, $component, $id ) {
 		global $wp_filter,$wp_version;
 
 		if ( strpos( $action, 'wp_ulike_' ) !== false ) {
