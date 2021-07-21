@@ -408,7 +408,7 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 		// Get meta data
 		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 
-		if( $user_info !== '0' && ! isset( $user_info[$parsed_args['item_id']] ) ){
+		if( empty($user_info) || ! isset( $user_info[$parsed_args['item_id']] ) ){
 			$query  = sprintf( '
 					SELECT `status`
 					FROM %s
