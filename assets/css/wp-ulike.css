@@ -467,6 +467,7 @@
   display: block;
   border: 0;
   box-shadow: none;
+  position: relative;
 }
 
 .ulf-tooltip .wp_ulike_likers_wrapper {
