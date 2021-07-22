@@ -463,25 +463,42 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		public function updateStatsMetaData( $item_id ){
 			// Update total stats
-			if( ( ! $this->prevStatus || ! $this->isDistinct() ) && strpos( $this->currentStatus, 'un') === false ){
-				// update all logs period
-				$this->wpdb->query( "
-						UPDATE `{$this->wpdb->prefix}ulike_meta`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
-				" );
-				// update new votes
-				$this->wpdb->query( "
-						UPDATE `{$this->wpdb->prefix}ulike_meta`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = 'statistics' AND `meta_key` = 'calculate_new_votes'
-				" );
-				$table = $this->typeSettings->getTableName();
-				$this->wpdb->query( "
-						UPDATE `{$this->wpdb->prefix}ulike_meta`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
-				" );
+			if( ( ! $this->prevStatus || ! $this->isDistinct() ) ){
+				if( strpos( $this->currentStatus, 'un') === false  ){
+					// update all logs period
+					$this->wpdb->query( "
+							UPDATE `{$this->wpdb->prefix}ulike_meta`
+							SET `meta_value` = (`meta_value` + 1)
+							WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
+					" );
+					// update new votes
+					$this->wpdb->query( "
+							UPDATE `{$this->wpdb->prefix}ulike_meta`
+							SET `meta_value` = (`meta_value` + 1)
+							WHERE `meta_group` = 'statistics' AND `meta_key` = 'calculate_new_votes'
+					" );
+					$table = $this->typeSettings->getTableName();
+					$this->wpdb->query( "
+							UPDATE `{$this->wpdb->prefix}ulike_meta`
+							SET `meta_value` = (`meta_value` + 1)
+							WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
+					" );
+				}
+
+				// Save daily stats
+				// $current_time  = current_time( 'Ymd' );
+				// $current_key   = sanitize_key( $this->itemType . '_' . $this->currentStatus );
+				// $current_count = wp_ulike_get_meta_data( $current_time, 'statistics', $current_key, true );
+
+				// if( empty( $current_count ) ){
+				// 	wp_ulike_update_meta_data( $current_time, 'statistics', $current_key, 1 );
+				// } else {
+				// 	$this->wpdb->query( "
+				// 		UPDATE `{$this->wpdb->prefix}ulike_meta`
+				// 		SET `meta_value` = (`meta_value` + 1)
+				// 		WHERE `meta_group` = 'statistics' AND `meta_key` = '{$current_key}' AND `item_id` = {$current_time}
+				// 	" );
+				// }
 			}
 			// Delete object cache
 			if( wp_ulike_is_cache_exist() ){

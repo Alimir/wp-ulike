@@ -24,16 +24,8 @@ if( ! function_exists( 'wp_ulike_put_buddypress' ) ){
 		$options = wp_ulike_get_option( 'buddypress_group' );
 		$action  = current_action();
 
-		if ( isset( $options['enable_auto_display'] ) && wp_ulike_is_true( $options['enable_auto_display'] ) ) {
+		if ( wp_ulike_setting_repo::isAutoDisplayOn('activity') ) {
 			switch ( $action ) {
-				case 'bp_activity_comment_options':
-					if( isset( $options['enable_comments'] ) && wp_ulike_is_true( $options['enable_comments'] ) ) {
-						if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'meta' ){
-							echo wp_ulike_buddypress('put');
-						}
-					}
-					break;
-
 				case 'bp_activity_entry_meta':
 					if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'meta' ){
 						echo wp_ulike_buddypress('put');
@@ -49,7 +41,6 @@ if( ! function_exists( 'wp_ulike_put_buddypress' ) ){
 		}
 	}
 	add_action( 'bp_activity_entry_meta', 'wp_ulike_put_buddypress', 15 );
-	add_action( 'bp_activity_comment_options', 'wp_ulike_put_buddypress', 15 );
 	add_action( 'bp_activity_entry_content', 'wp_ulike_put_buddypress', 15 );
 }
 
@@ -65,7 +56,7 @@ if( ! function_exists( 'wp_ulike_buddypress_activity_content_ajax_display' ) ){
 
 		add_filter( 'bp_get_activity_content_body', function( $content ) use ( $activityID ){
 			$options = wp_ulike_get_option( 'buddypress_group' );
-			if ( isset( $options['enable_auto_display'] ) && wp_ulike_is_true( $options['enable_auto_display'] ) ) {
+			if ( wp_ulike_setting_repo::isAutoDisplayOn('activity') ) {
 				if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'content' ){
 						return $content . wp_ulike_buddypress( 'put', array( 'id' => $activityID  ) );
 				}
@@ -82,23 +73,35 @@ if( ! function_exists( 'wp_ulike_buddypress_comment_content_display' ) ){
 	 * BuddyPress Comment Content auto display hook
 	 *
 	 * @param string $content
+	 * @param string $context
 	 * @return string
 	 */
 	function wp_ulike_buddypress_comment_content_display( $content, $context ) {
-		$options = wp_ulike_get_option( 'buddypress_group' );
-
-		if ( isset( $options['enable_auto_display'] ) && wp_ulike_is_true( $options['enable_auto_display'] ) && $context === 'get' ) {
-
-			if( isset( $options['enable_comments'] ) && wp_ulike_is_true( $options['enable_comments'] ) ) {
-				if ( isset( $options['auto_display_position'] ) && $options['auto_display_position'] === 'content' ){
-						return $content . wp_ulike_buddypress('put');
-				}
+		if( $context === 'get' && wp_ulike_setting_repo::isActivityCommentAutoDisplayOn() ) {
+			if ( wp_ulike_get_option( 'buddypress_group|auto_display_position', 'content' ) === 'content' ){
+					return $content . wp_ulike_buddypress('put');
 			}
 		}
 
 		return $content;
 	}
 	add_filter( 'bp_activity_comment_content', 'wp_ulike_buddypress_comment_content_display', 15, 2 );
+}
+
+if( ! function_exists( 'wp_ulike_buddypress_comment_options_display' ) ){
+	/**
+	 * Buddypress comment meta auto display
+	 *
+	 * @return string
+	 */
+	function wp_ulike_buddypress_comment_options_display(){
+		if( wp_ulike_setting_repo::isActivityCommentAutoDisplayOn() ){
+			if ( wp_ulike_get_option( 'buddypress_group|auto_display_position', 'content' ) === 'meta' ){
+				echo wp_ulike_buddypress('put');
+			}
+		}
+	}
+	add_action( 'bp_activity_comment_options', 'wp_ulike_buddypress_comment_options_display', 15 );
 }
 
 if( ! function_exists( 'wp_ulike_register_activity_actions' ) ){
@@ -498,7 +501,7 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 	 * @return          filter on bbpPress hooks
 	 */
 	function wp_ulike_put_bbpress() {
-		if ( wp_ulike_is_true( wp_ulike_get_option( 'bbpress_group|enable_auto_display', 1 ) ) ) {
+		if ( wp_ulike_setting_repo::isAutoDisplayOn('topic')) {
 			$action   = current_action();
 			$position = wp_ulike_get_option( 'bbpress_group|auto_display_position', 'bottom' );
 
