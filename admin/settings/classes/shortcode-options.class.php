@@ -44,9 +44,9 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
       $this->pre_tabs     = $this->pre_tabs( $this->sections );
       $this->pre_sections = $this->pre_sections( $this->sections );
 
-      add_action( 'admin_footer', array( &$this, 'add_footer_modal_shortcode' ) );
-      add_action( 'customize_controls_print_footer_scripts', array( &$this, 'add_footer_modal_shortcode' ) );
-      add_action( 'wp_ajax_ulf-get-shortcode-'. $this->unique, array( &$this, 'get_shortcode' ) );
+      add_action( 'admin_footer', array( $this, 'add_footer_modal_shortcode' ) );
+      add_action( 'customize_controls_print_footer_scripts', array( $this, 'add_footer_modal_shortcode' ) );
+      add_action( 'wp_ajax_ulf-get-shortcode-'. $this->unique, array( $this, 'get_shortcode' ) );
 
       if ( ! empty( $this->args['show_in_editor'] ) ) {
 
@@ -55,8 +55,8 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
         // elementor editor support
         if ( ULF::is_active_plugin( 'elementor/elementor.php' ) ) {
           add_action( 'elementor/editor/before_enqueue_scripts', array( 'ULF', 'add_admin_enqueue_scripts' ) );
-          // add_action( 'elementor/editor/footer', array( 'ULF_Field_icon', 'add_footer_modal_icon' ) );
-          add_action( 'elementor/editor/footer', array( &$this, 'add_footer_modal_shortcode' ) );
+          add_action( 'elementor/editor/footer', array( 'ULF_Field_icon', 'add_footer_modal_icon' ) );
+          add_action( 'elementor/editor/footer', array( $this, 'add_footer_modal_shortcode' ) );
         }
 
       }
@@ -310,7 +310,15 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
     // Add gutenberg blocks.
     public static function add_guteberg_blocks() {
 
-      wp_enqueue_script( 'ulf-gutenberg-block', ULF::include_plugin_url( 'assets/js/gutenberg.js' ), array( 'wp-blocks', 'wp-editor', 'wp-element', 'wp-components' ) );
+      $depends = array( 'wp-blocks', 'wp-element', 'wp-components' );
+
+      if ( wp_script_is( 'wp-edit-widgets' ) ) {
+        $depends[] = 'wp-edit-widgets';
+      } else {
+        $depends[] = 'wp-edit-post';
+      }
+
+      wp_enqueue_script( 'ulf-gutenberg-block', ULF::include_plugin_url( 'assets/js/gutenberg.js' ), $depends );
 
       wp_localize_script( 'ulf-gutenberg-block', 'ulf_gutenberg_blocks', ULF::$shortcode_instances );
 

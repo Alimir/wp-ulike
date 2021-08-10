@@ -104,12 +104,12 @@ if ( ! class_exists( 'ULF_Options' ) ) {
       $this->set_options();
       $this->save_defaults();
 
-      add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
-      add_action( 'admin_bar_menu', array( &$this, 'add_admin_bar_menu' ), $this->args['admin_bar_menu_priority'] );
-      add_action( 'wp_ajax_ulf_'. $this->unique .'_ajax_save', array( &$this, 'ajax_save' ) );
+      add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
+      add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), $this->args['admin_bar_menu_priority'] );
+      add_action( 'wp_ajax_ulf_'. $this->unique .'_ajax_save', array( $this, 'ajax_save' ) );
 
       if ( $this->args['database'] === 'network' && ! empty( $this->args['show_in_network'] ) ) {
-        add_action( 'network_admin_menu', array( &$this, 'add_admin_menu' ) );
+        add_action( 'network_admin_menu', array( $this, 'add_admin_menu' ) );
       }
 
       // wp enqeueu for typography and output css
@@ -438,14 +438,14 @@ if ( ! class_exists( 'ULF_Options' ) ) {
 
       if ( $menu_type === 'submenu' ) {
 
-        $menu_page = call_user_func( 'add_submenu_page', $menu_parent, esc_attr( $menu_title ), esc_attr( $menu_title ), $menu_capability, $menu_slug, array( &$this, 'add_options_html' ) );
+        $menu_page = call_user_func( 'add_submenu_page', $menu_parent, esc_attr( $menu_title ), esc_attr( $menu_title ), $menu_capability, $menu_slug, array( $this, 'add_options_html' ) );
 
       } else {
 
-        $menu_page = call_user_func( 'add_menu_page', esc_attr( $menu_title ), esc_attr( $menu_title ), $menu_capability, $menu_slug, array( &$this, 'add_options_html' ), $menu_icon, $menu_position );
+        $menu_page = call_user_func( 'add_menu_page', esc_attr( $menu_title ), esc_attr( $menu_title ), $menu_capability, $menu_slug, array( $this, 'add_options_html' ), $menu_icon, $menu_position );
 
         if ( ! empty( $sub_menu_title ) ) {
-          call_user_func( 'add_submenu_page', $menu_slug, esc_attr( $sub_menu_title ), esc_attr( $sub_menu_title ), $menu_capability, $menu_slug, array( &$this, 'add_options_html' ) );
+          call_user_func( 'add_submenu_page', $menu_slug, esc_attr( $sub_menu_title ), esc_attr( $sub_menu_title ), $menu_capability, $menu_slug, array( $this, 'add_options_html' ) );
         }
 
         if ( ! empty( $this->args['show_sub_menu'] ) && count( $this->pre_tabs ) > 1 ) {
@@ -465,7 +465,7 @@ if ( ! class_exists( 'ULF_Options' ) ) {
 
       }
 
-      add_action( 'load-'. $menu_page, array( &$this, 'add_page_on_load' ) );
+      add_action( 'load-'. $menu_page, array( $this, 'add_page_on_load' ) );
 
     }
 
@@ -485,7 +485,7 @@ if ( ! class_exists( 'ULF_Options' ) ) {
 
       }
 
-      add_filter( 'admin_footer_text', array( &$this, 'add_admin_footer_text' ) );
+      add_filter( 'admin_footer_text', array( $this, 'add_admin_footer_text' ) );
 
     }
 

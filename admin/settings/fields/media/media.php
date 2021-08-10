@@ -62,13 +62,13 @@ if ( ! class_exists( 'ULF_Field_media' ) ) {
 
       if ( ! empty( $args['preview'] ) ) {
 
-        $preview_width  = ( ! empty( $args['preview_width'] ) ) ? 'width:'. esc_attr( $args['preview_width'] ) .'px;' : '';
-        $preview_height = ( ! empty( $args['preview_height'] ) ) ? 'height:'. esc_attr( $args['preview_height'] ) .'px;' : '';
+        $preview_width  = ( ! empty( $args['preview_width'] ) ) ? 'max-width:'. esc_attr( $args['preview_width'] ) .'px;' : '';
+        $preview_height = ( ! empty( $args['preview_height'] ) ) ? 'max-height:'. esc_attr( $args['preview_height'] ) .'px;' : '';
         $preview_style  = ( ! empty( $preview_width ) || ! empty( $preview_height ) ) ? ' style="'. esc_attr( $preview_width . $preview_height ) .'"': '';
 
         echo '<div class="ulf--preview'. esc_attr( $hidden_auto ) .'">';
         echo '<div class="ulf-image-preview"'. $preview_style .'>';
-        echo '<a href="#" class="ulf--remove fas fa-times"></a><img src="'. esc_url( $preview_src ) .'" class="ulf--src" />';
+        echo '<i class="ulf--remove fas fa-times"></i><span><img src="'. esc_url( $preview_src ) .'" class="ulf--src" /></span>';
         echo '</div>';
         echo '</div>';
 

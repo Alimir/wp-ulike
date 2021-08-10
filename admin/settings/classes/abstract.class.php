@@ -17,7 +17,7 @@ if ( ! class_exists( 'ULF_Abstract' ) ) {
 
       // Collect output css and typography
       if ( ! empty( $this->args['output_css'] ) || ! empty( $this->args['enqueue_webfont'] ) ) {
-        add_action( 'wp_enqueue_scripts', array( &$this, 'collect_output_css_and_typography' ), 10 );
+        add_action( 'wp_enqueue_scripts', array( $this, 'collect_output_css_and_typography' ), 10 );
         ULF::$css = apply_filters( "ulf_{$this->unique}_output_css", ULF::$css, $this );
       }
 
