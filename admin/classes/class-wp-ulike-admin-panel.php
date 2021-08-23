@@ -801,6 +801,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'default'     => 'by_username',
                     'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p>', __( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', WP_ULIKE_SLUG ), __( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', WP_ULIKE_SLUG ), __( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', WP_ULIKE_SLUG ) )
                 ),
+                'cookie_expires' => array(
+                    'id'         => 'cookie_expires',
+                    'type'       => 'number',
+                    'title'      => __( 'Cookie Expiration', WP_ULIKE_SLUG),
+                    'desc'       => __('Specify how long, in seconds, cookie expires. Default value: 31536000', WP_ULIKE_SLUG),
+                    'default'    => 31536000,
+                    'dependency' => array( 'logging_method', 'any', 'by_cookie,by_user_ip_cookie' ),
+                ),
                 'enable_only_logged_in_users' => array(
                     'id'    => 'enable_only_logged_in_users',
                     'type'  => 'switcher',

@@ -200,17 +200,23 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 
 			// Check cookie permission
 			if( in_array( $method, array( 'by_cookie', 'by_user_ip_cookie' ) ) ){
-				$has_cookie  = false;
-				$cookie_key  = sanitize_key( 'wp_ulike_' . md5( $args['type'] . '_logs' ) );
-				$cookie_data = array();
-				$user_hash   = md5( $args['current_user'] );
+				$has_cookie   = false;
+				$cookie_key   = sanitize_key( 'wp_ulike_' . md5( $args['type'] . '_logs' ) );
+				$cookie_data  = array();
+				$user_hash    = md5( $args['current_user'] );
+				$current_time = current_time( 'timestamp' );
 
 				if( isset( $_COOKIE[ $cookie_key ] ) ) {
 					$cookie_data = json_decode( wp_unslash( $_COOKIE[ $cookie_key ] ), true );
 					if( ! empty( $cookie_data[$user_hash] ) ){
 						if( isset( $cookie_data[$user_hash][ $args['item_id'] ] ) ){
-							$status     = false;
-							$has_cookie = true;
+							if( is_numeric( $cookie_data[$user_hash][ $args['item_id'] ] ) && $current_time >= $cookie_data[$user_hash][ $args['item_id'] ] ){
+								$status     = true;
+								$has_cookie = false;
+							} else {
+								$status     = false;
+								$has_cookie = true;
+							}
 						}
 					}
 				// support old cookies
@@ -224,31 +230,34 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					$cookie_hash  = array_keys( $cookie_data );
 					$current_hash = md5( $args['current_user'] );
 					foreach ($cookie_hash as $key => $value) {
-						if( $current_hash != $value && ! empty($cookie_data[$value][$args['item_id']]) ){
-							$status     = false;
-							$has_cookie = true;
-						} elseif( $current_hash == $value && ! empty($cookie_data[$value][$args['item_id']]) ){
-							$status     = true;
-							$has_cookie = false;
+						if( ! empty($cookie_data[$value][$args['item_id']]) ){
+							if( is_numeric( $cookie_data[$value][$args['item_id']] ) && $current_time >= $cookie_data[$value][$args['item_id']] ){
+								$status     = true;
+								$has_cookie = false;
+							} else {
+								$status     = $current_hash != $value ? false : true;
+								$has_cookie = $current_hash != $value ? true : false;
+							}
+
 						}
 					}
 				}
 
 				// set cookie on process method
 				if( ! $has_cookie && $args['method'] === 'process' ){
-					if( empty( $args['current_status'] ) ){
-						$args['current_status'] = NULL;
-					}
+					// Get current time
+					$cookie_expire = wp_ulike_setting_repo::getCookieExpiration( $args['type'] );
+
 					if( empty( $cookie_data ) ){
 						$cookie_data = array( $user_hash => array(
-							$args['item_id'] => $args['current_status']
+							$args['item_id'] => $cookie_expire
 						) );
 					} else {
 						foreach ($cookie_data as $hash => $info) {
 							if( ! isset( $info[$args['item_id']] ) && $hash != $user_hash ){
-								$cookie_data[ $user_hash ][ $args['item_id'] ] = $args['current_status'];
+								$cookie_data[ $user_hash ][ $args['item_id'] ] = $cookie_expire;
 							} elseif( $hash == $user_hash ) {
-								$cookie_data[ $hash ][ $args['item_id'] ] = $args['current_status'];
+								$cookie_data[ $hash ][ $args['item_id'] ] = $cookie_expire;
 							}
 						}
 					}
