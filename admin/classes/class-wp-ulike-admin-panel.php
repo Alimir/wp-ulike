@@ -63,6 +63,11 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     __( 'TechnoWich', WP_ULIKE_SLUG )
                 ),
                 'footer_after'       => '',
+                'footer_text'        => sprintf(
+                    '<a href="%s" title="Documents" target="_blank">%s</a>',
+                    'https://docs.wpulike.com/category/8-settings/',
+                    __( 'Explore Settings', WP_ULIKE_SLUG )
+                ),
                 'enqueue_webfont'    => true,
                 'async_webfont'      => false,
                 'output_css'         => true,
@@ -326,6 +331,16 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'parent' => 'configuration',
                 'title'  => __( 'Content Types',WP_ULIKE_SLUG),
                 'fields' => array(
+                    array(
+                        'type'    => 'submessage',
+                        'style'   => 'info',
+                        'content' => 'In this section, you have access to the 4 types of contents in WordPress and you can specify your config for each of them:<br><br>
+                        <strong>Posts (Including all standard and custom post types)</strong><br>
+                        <strong>Comments (Including comments for all post types)</strong><br>
+                        <strong>BuddyPress (Including BuddyPress activities & comments with supporting of user notifications)</strong><br>
+                        <strong>bbPress (Including bbPress topics & replies)</strong><br><br>
+                        ',
+                    ),
                     // Posts
                     array(
                         'id'       => 'posts_group',
