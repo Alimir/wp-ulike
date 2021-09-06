@@ -2,11 +2,11 @@
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: like, marketing, elementor, user profile, statistics, favorite, rating, button, dislike, gamification, bookmark, member
+Tags: like, marketing, elementor, user profile, rating, favorite, statistics, button, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.8
-Stable tag: 4.5.4
+Stable tag: 4.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,12 +133,20 @@ Yes.
 =  Is WP ULike safe? =
 We are a professional and international team called TechnoWich that uses the latest coding and design methods in projects.
 
-Our WP ULike project has been able to attract more than 50,000 active users in the last few years and has a high score in the WordPress repository. All functions of this plugin are documented and you can follow its development process on Github.
+Our WP ULike project has been able to attract more than 60,000 active users in the last few years and has a high score in the WordPress repository. All functions of this plugin are documented and you can follow its development process on Github.
 
 =  Does WP ULike run on Apache, Nginx, LiteSpeed, etc? =
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.5.5 =
+* Added: New option to set cookie expire time.
+* Added: Button alignment option in customizer panel.
+* Added: New option to enable counter value on admin comment columns with sorting capability.
+* Updated: Making admin banners smaller.
+* Updated: Options panel framework.
+* Fixed: Minor bug fixes.
 
 = 4.5.4 =
 * Improved: Compatibility with WordPress 5.8 applied.
