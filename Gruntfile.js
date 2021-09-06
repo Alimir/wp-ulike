@@ -290,6 +290,7 @@ module.exports = function (grunt) {
         files: {
           "assets/css/wp-ulike.min.css": ["assets/css/wp-ulike.css"],
           "admin/assets/css/admin.css": ["admin/assets/css/admin.css"],
+          "admin/assets/css/plugins.css": ["admin/assets/css/plugins.css"],
         },
       },
     },
