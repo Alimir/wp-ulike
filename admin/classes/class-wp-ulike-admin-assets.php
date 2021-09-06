@@ -42,7 +42,9 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 			// Enqueue admin styles
 			wp_enqueue_style(
 				'wp-ulike-admin',
-				WP_ULIKE_ADMIN_URL . '/assets/css/admin.css'
+				WP_ULIKE_ADMIN_URL . '/assets/css/admin.css',
+				array(),
+				WP_ULIKE_VERSION
 			);
 
 			// Scripts is only can be load on ulike pages.
@@ -53,7 +55,9 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 			// Enqueue third-party styles
 			wp_enqueue_style(
 				'wp-ulike-admin-plugins',
-				WP_ULIKE_ADMIN_URL . '/assets/css/plugins.css'
+				WP_ULIKE_ADMIN_URL . '/assets/css/plugins.css',
+				array(),
+				WP_ULIKE_VERSION
 			);
 
 		}
@@ -93,7 +97,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					'wp_ulike_vuejs',
 					WP_ULIKE_ADMIN_URL . '/assets/js/solo/vue/vue.js',
 					array(),
-					false,
+					WP_ULIKE_VERSION,
 					false
 				);
 				// @endif
@@ -104,7 +108,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 				'wp_ulike_admin_plugins',
 				WP_ULIKE_ADMIN_URL . '/assets/js/plugins.js',
 				array( 'jquery' ),
-				false,
+				WP_ULIKE_VERSION,
 				true
 			);
 
@@ -114,7 +118,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					'wp_ulike_admin_statistics_scripts',
 					WP_ULIKE_ADMIN_URL . '/assets/js/solo/statistics.js',
 					array( 'wp_ulike_admin_plugins'),
-					false,
+					WP_ULIKE_VERSION,
 					true
 				);
 			}
