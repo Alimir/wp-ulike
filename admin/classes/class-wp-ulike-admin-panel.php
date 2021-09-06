@@ -238,6 +238,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $get_content_fields['comments'] = $get_content_options;
             unset( $get_content_fields['comments']['auto_display_filter'] );
             unset( $get_content_fields['comments']['auto_display_filter_post_types'] );
+            $get_content_fields['comments']['enable_admin_columns'] = array(
+                'id'         => 'enable_admin_columns',
+                'type'       => 'switcher',
+                'title'      => __('Enable Admin Columns', WP_ULIKE_SLUG),
+                'desc'       => __('Add counter stats column to the admin comments list.', WP_ULIKE_SLUG)
+            );
 
             // Generate buddypress fields
             $get_content_fields['buddypress'] = $get_content_options;
