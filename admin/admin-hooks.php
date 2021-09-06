@@ -598,7 +598,7 @@ add_filter( 'manage_comments_custom_column', 'wp_ulike_comment_column_content', 
  * @param object $query
  * @return void
  */
-function wp_ulike_manage_comment_sortable_columns_order( &$query ) {
+function wp_ulike_manage_comment_sortable_columns_order( $query ) {
 	if ( ! is_admin() ){
 		return;
 	}
