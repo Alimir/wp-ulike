@@ -598,18 +598,18 @@ add_filter( 'manage_comments_custom_column', 'wp_ulike_comment_column_content', 
  * @param object $query
  * @return void
  */
-function wp_ulike_manage_comment_sortable_columns_order( $query ) {
+function wp_ulike_manage_comment_sortable_columns_order( &$query ) {
 	if ( ! is_admin() ){
 		return;
 	}
 
-	if ( ! empty( $_GET['orderby'] ) && 'likes' == $_GET['orderby'] ) {
+	if ( ! empty( $query->query_vars['orderby'] ) && 'likes' == $query->query_vars['orderby'] ) {
 		$comment__in = wp_ulike_get_popular_items_ids(array(
 			'type'     => 'comment',
 			'status'   => 'like',
-			"order"    => $query->get('order'),
-			"offset"   => $query->get('paged'),
-			"limit"    => $query->get('posts_per_page')
+			"order"    => $query->query_vars['order'],
+			"offset"   => $query->query_vars['paged'],
+			"limit"    => $query->query_vars['number']
 		));
 
 		$query->query_vars['comment__in'] = $comment__in;
