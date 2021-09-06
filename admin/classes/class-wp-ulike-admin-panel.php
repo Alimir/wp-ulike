@@ -63,6 +63,11 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     __( 'TechnoWich', WP_ULIKE_SLUG )
                 ),
                 'footer_after'       => '',
+                'footer_text'        => sprintf(
+                    '<a href="%s" title="Documents" target="_blank">%s</a>',
+                    'https://docs.wpulike.com/category/8-settings/',
+                    __( 'Explore Settings', WP_ULIKE_SLUG )
+                ),
                 'enqueue_webfont'    => true,
                 'async_webfont'      => false,
                 'output_css'         => true,
@@ -233,6 +238,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $get_content_fields['comments'] = $get_content_options;
             unset( $get_content_fields['comments']['auto_display_filter'] );
             unset( $get_content_fields['comments']['auto_display_filter_post_types'] );
+            $get_content_fields['comments']['enable_admin_columns'] = array(
+                'id'         => 'enable_admin_columns',
+                'type'       => 'switcher',
+                'title'      => __('Enable Admin Columns', WP_ULIKE_SLUG),
+                'desc'       => __('Add counter stats column to the admin comments list.', WP_ULIKE_SLUG)
+            );
 
             // Generate buddypress fields
             $get_content_fields['buddypress'] = $get_content_options;
@@ -326,6 +337,20 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'parent' => 'configuration',
                 'title'  => __( 'Content Types',WP_ULIKE_SLUG),
                 'fields' => array(
+                    array(
+                        'type'    => 'submessage',
+                        'style'   => 'info',
+                        'content' => 'In this section, you have access to the 4 types of contents in WordPress and you can specify your config for each of them:<br><br>
+                        <strong>Posts (Including all standard and custom post types + WooCommerce products)</strong><br>
+                        <strong>Comments (Including comments for all post types)</strong><br>
+                        <strong>BuddyPress (Including BuddyPress activities & comments with supporting of user notifications)</strong><br>
+                        <strong>bbPress (Including bbPress topics & replies)</strong><br><br>
+                        ' . sprintf(
+                            '<a href="%s" title="Documents" target="_blank">%s</a>',
+                            'https://docs.wpulike.com/article/14-content-types-settings',
+                            __( 'Read More', WP_ULIKE_SLUG )
+                        ),
+                    ),
                     // Posts
                     array(
                         'id'       => 'posts_group',
@@ -400,7 +425,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '180',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
                             )
                         )
@@ -430,7 +455,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '180',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/login.svg'
                             )
                         )
@@ -460,7 +485,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '200',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/share.svg'
                             )
                         )
@@ -577,7 +602,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '200',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/api.svg'
                             )
                         )
@@ -606,7 +631,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '200',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/database.svg'
                             )
                         )
@@ -785,6 +810,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     ),
                     'default'     => 'by_username',
                     'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p>', __( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', WP_ULIKE_SLUG ), __( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', WP_ULIKE_SLUG ), __( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', WP_ULIKE_SLUG ) )
+                ),
+                'cookie_expires' => array(
+                    'id'         => 'cookie_expires',
+                    'type'       => 'number',
+                    'title'      => __( 'Cookie Expiration', WP_ULIKE_SLUG),
+                    'desc'       => __('Specify how long, in seconds, cookie expires. Default value: 31536000', WP_ULIKE_SLUG),
+                    'default'    => 31536000,
+                    'dependency' => array( 'logging_method', 'any', 'by_cookie,by_user_ip_cookie' ),
                 ),
                 'enable_only_logged_in_users' => array(
                     'id'    => 'enable_only_logged_in_users',

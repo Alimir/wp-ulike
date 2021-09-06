@@ -666,20 +666,22 @@ if( ! function_exists( 'wp_ulike_purge_wp_super_cache' ) ){
 	 */
 	function wp_ulike_purge_wp_super_cache( $ID, $type ){
 		// Check functionality existence
-		if( ! function_exists( 'wpsc_delete_post_cache' ) ){
+		if( ! function_exists( 'wp_cache_post_change' ) ){
 			return;
 		}
 
+		$GLOBALS["super_cache_enabled"]=1;
+
 		if( $type === '_liked' ){
 			if( get_post_type( $ID ) ){
-				wpsc_delete_post_cache( $ID );
+				wp_cache_post_change( $ID );
 			} elseif( false !== ( $reffer_url = wp_get_referer() ) ) {
 				wpsc_delete_url_cache( $reffer_url );
 			}
 		} elseif( $type === '_commentliked' ){
 			$comment = get_comment( $ID );
 			if( isset( $comment->comment_post_ID ) ){
-				wpsc_delete_post_cache( $comment->comment_post_ID );
+				wp_cache_post_change( $comment->comment_post_ID );
 			}
 		}
 	}

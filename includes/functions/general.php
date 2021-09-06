@@ -429,13 +429,13 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 
 if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	/**
-	 * Get custom style setting from customize options
+	 * Get custom css styles
 	 *
-	 * @author       	Alimir
-	 * @since           1.3
-	 * @return          Void (Print new CSS styles)
+	 * @return void
 	 */
-	function wp_ulike_get_custom_style( $return_style = null ){
+	function wp_ulike_get_custom_style(){
+
+		$return_style = '';
 
 		// Display deprecated styles
 		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) && wp_ulike_get_option( 'enable_deprecated_options' ) ) {
@@ -474,6 +474,12 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 			if( $counter_style != '' ){
 				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
+			}
+		} else {
+			$customizer_options = get_option( 'wp_ulike_customize' );
+
+			if( ! empty($customizer_options['button_align']) ){
+				$return_style .= sprintf( '.wpulike{text-align:%1$s !important; justify-content: %1$s !important;}', $customizer_options['button_align'] );
 			}
 		}
 

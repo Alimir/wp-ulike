@@ -892,8 +892,8 @@
 .ulf-field-border .ulf--icon + input,
 .ulf-field-spacing .ulf--icon + input,
 .ulf-field-dimensions .ulf--icon + input {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 .ulf-field-border .ulf--unit,
 .ulf-field-spacing .ulf--unit,
@@ -904,8 +904,8 @@
 .ulf-field-border .ulf--is-unit,
 .ulf-field-spacing .ulf--is-unit,
 .ulf-field-dimensions .ulf--is-unit {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 /**
@@ -1196,9 +1196,6 @@
 /**
  * 03. 13. Field: gallery
  */
-.ulf-field-gallery input {
-  display: none;
-}
 .ulf-field-gallery ul {
   margin: 0;
   padding: 0;
@@ -1331,18 +1328,21 @@
 /**
  * 03. 15. Field: icon
  */
-.ulf-field-icon input {
-  display: none;
-}
 .ulf-field-icon .button {
   margin-right: 5px;
 }
+.ulf-field-icon .ulf-icon-select {
+  display: flex;
+}
+.ulf-field-icon .ulf-icon-preview:not(.hidden) {
+  display: flex;
+}
 .ulf-field-icon .ulf-icon-preview i {
-  display: inline-block;
-  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 30px;
-  height: 28px;
-  line-height: 28px;
+  font-size: 14px;
   margin-right: 5px;
   text-align: center;
   vertical-align: top;
@@ -1629,6 +1629,9 @@
   max-width: 100%;
   margin: 0;
 }
+.ulf-field-select .ulf-hide-select {
+  display: none !important;
+}
 
 /**
  * 03. 23. Field: slider
@@ -1665,8 +1668,8 @@
   text-align: center;
 }
 .ulf-field-slider .ulf--is-unit {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 .ulf-field-slider .ui-slider {
   position: relative;
@@ -1965,9 +1968,6 @@
   margin-left: 8px;
   font-weight: 400;
   color: #999;
-}
-.ulf-field-switcher input {
-  display: none;
 }
 
 /**
@@ -2314,9 +2314,6 @@
 /**
  * 03. 39. Field: link
  */
-.ulf-field-link input {
-  display: none;
-}
 .ulf-field-link .ulf--result {
   display: inline-block;
   font-size: 12px;
@@ -2368,16 +2365,21 @@
   display: none;
 }
 
+.ulf--preview {
+  max-width: 100%;
+}
+
 .ulf-image-preview {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   position: relative;
   padding: 6px;
-  width: 120px;
-  height: 90px;
-  max-width: 100%;
+  max-width: 120px;
+  max-height: 120px;
+  min-width: 40px;
+  min-height: 40px;
   margin-bottom: 10px;
   text-align: center;
   border-radius: 2px;
@@ -2385,14 +2387,8 @@
   background-color: #f9f9f9;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
 }
-.ulf-image-preview img {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-.ulf-image-preview a {
+.ulf-image-preview i {
+  cursor: pointer;
   position: absolute;
   z-index: 1;
   right: 4px;
@@ -2409,11 +2405,23 @@
   border-radius: 2px;
   transition: all .2s;
 }
-.ulf-image-preview a:hover {
+.ulf-image-preview i:hover {
   opacity: 1;
 }
-.ulf-image-preview a:focus {
+.ulf-image-preview i:focus {
   box-shadow: none;
+}
+.ulf-image-preview span {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+.ulf-image-preview img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .ulf-field-custom .ulf-field {
@@ -2604,13 +2612,9 @@
 .ulf-widgets > .ulf-field {
   position: relative;
   top: -1px;
-  margin-right: -15px;
   margin-left: -15px;
+  margin-right: -15px;
   padding: 12px 15px;
-}
-.ulf-widgets > .ulf-field .ulf-field {
-  margin-left: 0;
-  margin-right: 0;
 }
 .ulf-widgets > .ulf-field .ulf-title {
   float: none;
@@ -2629,9 +2633,23 @@
 }
 
 .control-section .ulf-widgets > .ulf-field {
-  margin-right: -10px;
   margin-left: -10px;
+  margin-right: -10px;
   padding: 10px 12px;
+}
+
+.wp-block .ulf-widgets {
+  font-size: 13px;
+}
+.wp-block .ulf-widgets > .ulf-field {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.wp-block .ulf-widgets > .ulf-field .button-primary {
+  color: #fff;
+}
+.wp-block .ulf-widgets > .ulf-field > .ulf-title > h4 {
+  font-size: 13px;
 }
 
 /**

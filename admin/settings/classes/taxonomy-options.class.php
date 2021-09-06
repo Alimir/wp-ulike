@@ -38,7 +38,7 @@ if ( ! class_exists( 'ULF_Taxonomy_Options' ) ) {
       $this->pre_fields = $this->pre_fields( $this->sections );
 
       if ( ! empty( $this->taxonomies ) && in_array( $this->taxonomy, $this->taxonomies ) ) {
-        add_action( 'admin_init', array( &$this, 'add_taxonomy_options' ) );
+        add_action( 'admin_init', array( $this, 'add_taxonomy_options' ) );
       }
 
       // wp enqeueu for typography and output css
@@ -70,11 +70,11 @@ if ( ! class_exists( 'ULF_Taxonomy_Options' ) ) {
     // add taxonomy add/edit fields
     public function add_taxonomy_options() {
 
-      add_action( $this->taxonomy .'_add_form_fields', array( &$this, 'render_taxonomy_form_fields' ) );
-      add_action( $this->taxonomy .'_edit_form', array( &$this, 'render_taxonomy_form_fields' ) );
+      add_action( $this->taxonomy .'_add_form_fields', array( $this, 'render_taxonomy_form_fields' ) );
+      add_action( $this->taxonomy .'_edit_form', array( $this, 'render_taxonomy_form_fields' ) );
 
-      add_action( 'created_'. $this->taxonomy, array( &$this, 'save_taxonomy' ) );
-      add_action( 'edited_'. $this->taxonomy, array( &$this, 'save_taxonomy' ) );
+      add_action( 'created_'. $this->taxonomy, array( $this, 'save_taxonomy' ) );
+      add_action( 'edited_'. $this->taxonomy, array( $this, 'save_taxonomy' ) );
 
     }
 

@@ -40,12 +40,12 @@ if ( ! class_exists( 'ULF_Customize_Options' ) ) {
       $this->get_options();
       $this->save_defaults();
 
-      add_action( 'customize_register', array( &$this, 'add_customize_options' ) );
-      add_action( 'customize_save_after', array( &$this, 'add_customize_save_after' ) );
+      add_action( 'customize_register', array( $this, 'add_customize_options' ) );
+      add_action( 'customize_save_after', array( $this, 'add_customize_save_after' ) );
 
       // Get options for enqueue actions
       if ( is_customize_preview() ) {
-        add_action( 'wp_enqueue_scripts', array( &$this, 'get_options' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'get_options' ) );
       }
 
       // wp enqeueu for typography and output css

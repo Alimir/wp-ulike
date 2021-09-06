@@ -285,6 +285,17 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'title'            => __( 'Margin', WP_ULIKE_SLUG ),
                         'output'           => '.wpulike .wp_ulike_general_class .wp_ulike_btn',
                     ),
+                    array(
+                        'id'         => 'button_align',
+                        'type'       => 'button_set',
+                        'title'      => __( 'Button Alignment', WP_ULIKE_SLUG ),
+                        'options'    => array(
+                            'left'   => __( 'Left', WP_ULIKE_SLUG ),
+                            'center' => __( 'Center', WP_ULIKE_SLUG ),
+                            'right'  => __( 'Right', WP_ULIKE_SLUG )
+                        ),
+                        'default'    => ''
+                    ),
                     // Start Counter Section
                     array(
                         'type'    => 'heading',

@@ -3255,21 +3255,33 @@
   // Widgets Framework
   //
   $.fn.ulf_widgets = function() {
-    if ( this.length ) {
+    return this.each( function() {
 
       $(document).on('widget-added widget-updated', function( event, $widget ) {
-        $widget.find('.ulf-fields').ulf_reload_script();
+
+        var $fields = $widget.find('.ulf-fields');
+
+        if ( $fields.length ) {
+          $fields.ulf_reload_script();
+        }
+
+      });
+
+      $(document).on('click', '.widget-top', function( event ) {
+
+        var $fields = $(this).parent().find('.ulf-fields');
+
+        if ( $fields.length ) {
+          $fields.ulf_reload_script();
+        }
+
       });
 
       $('.widgets-sortables, .control-section-sidebar').on('sortstop', function( event, ui ) {
         ui.item.find('.ulf-fields').ulf_reload_script_retry();
       });
 
-      $(document).on('click', '.widget-top', function( event ) {
-        $(this).parent().find('.ulf-fields').ulf_reload_script();
-      });
-
-    }
+    });
   };
 
   //
@@ -3399,7 +3411,8 @@
     $('.ulf-confirm').ulf_confirm();
     $('.ulf-expand-all').ulf_expand_all();
     $('.ulf-onload').ulf_reload_script();
-    $('.widget').ulf_widgets();
+    $('#widgets-editor').ulf_widgets();
+    $('#widgets-right').ulf_widgets();
     $('#menu-to-edit').ulf_nav_menu();
 
   });

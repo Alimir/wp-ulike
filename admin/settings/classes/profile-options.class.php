@@ -27,7 +27,7 @@ if ( ! class_exists( 'ULF_Profile_Options' ) ) {
       $this->args     = apply_filters( "ulf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
       $this->sections = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
 
-      add_action( 'admin_init', array( &$this, 'add_profile_options' ) );
+      add_action( 'admin_init', array( $this, 'add_profile_options' ) );
 
     }
 
@@ -39,11 +39,11 @@ if ( ! class_exists( 'ULF_Profile_Options' ) ) {
     // add profile add/edit fields
     public function add_profile_options() {
 
-      add_action( 'show_user_profile', array( &$this, 'render_profile_form_fields' ) );
-      add_action( 'edit_user_profile', array( &$this, 'render_profile_form_fields' ) );
+      add_action( 'show_user_profile', array( $this, 'render_profile_form_fields' ) );
+      add_action( 'edit_user_profile', array( $this, 'render_profile_form_fields' ) );
 
-      add_action( 'personal_options_update', array( &$this, 'save_profile' ) );
-      add_action( 'edit_user_profile_update', array( &$this, 'save_profile' ) );
+      add_action( 'personal_options_update', array( $this, 'save_profile' ) );
+      add_action( 'edit_user_profile_update', array( $this, 'save_profile' ) );
 
     }
 

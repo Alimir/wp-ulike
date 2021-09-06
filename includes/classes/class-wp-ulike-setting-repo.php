@@ -92,6 +92,16 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Get cookie expire time
+	 *
+	 * @return integer
+	 */
+	public static function getCookieExpiration( $typeName ){
+		$expires = self::getOption( self::getSettingKey( $typeName ) . '|cookie_expires', 31536000 );
+		return current_time( 'timestamp' ) + $expires;
+	}
+
+	/**
 	 * Get anonymous user display type
 	 *
 	 * @return string
