@@ -149,7 +149,7 @@ function wp_ulike_notice_manager(){
 				)
 			),
 			'image'     => array(
-				'width' => '150',
+				'width' => '110',
 				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/rating.svg'
 			)
 		]);
@@ -176,7 +176,7 @@ function wp_ulike_notice_manager(){
 					)
 				),
 				'image'     => array(
-					'width' => '140',
+					'width' => '110',
 					'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/news.svg'
 				)
 			]);
@@ -200,7 +200,7 @@ function wp_ulike_notice_manager(){
 				)
 			),
 			'image'     => array(
-				'width' => '140',
+				'width' => '110',
 				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
 			)
 		]);
@@ -223,7 +223,7 @@ function wp_ulike_notice_manager(){
 				)
 			),
 			'image'     => array(
-				'width' => '140',
+				'width' => '110',
 				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/seo.svg'
 			)
 		]);

@@ -341,11 +341,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'type'    => 'submessage',
                         'style'   => 'info',
                         'content' => 'In this section, you have access to the 4 types of contents in WordPress and you can specify your config for each of them:<br><br>
-                        <strong>Posts (Including all standard and custom post types)</strong><br>
+                        <strong>Posts (Including all standard and custom post types + WooCommerce products)</strong><br>
                         <strong>Comments (Including comments for all post types)</strong><br>
                         <strong>BuddyPress (Including BuddyPress activities & comments with supporting of user notifications)</strong><br>
                         <strong>bbPress (Including bbPress topics & replies)</strong><br><br>
-                        ',
+                        ' . sprintf(
+                            '<a href="%s" title="Documents" target="_blank">%s</a>',
+                            'https://docs.wpulike.com/article/14-content-types-settings',
+                            __( 'Read More', WP_ULIKE_SLUG )
+                        ),
                     ),
                     // Posts
                     array(
@@ -421,7 +425,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '180',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
                             )
                         )
@@ -451,7 +455,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '180',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/login.svg'
                             )
                         )
@@ -481,7 +485,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '200',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/share.svg'
                             )
                         )
@@ -598,7 +602,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '200',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/api.svg'
                             )
                         )
@@ -627,7 +631,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 )
                             ),
                             'image'     => array(
-                                'width' => '200',
+                                'width' => '120',
                                 'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/database.svg'
                             )
                         )
