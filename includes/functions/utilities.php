@@ -158,6 +158,8 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 
         $whip = new \Vectorface\Whip\Whip($methods, $whitelist);
 
+		do_action( 'wp_ulike_whip_action', $whip );
+
 		if (false === ($clientAddress = $whip->getValidIpAddress())) {
             $clientAddress = '127.0.0.1';
         }
