@@ -80,7 +80,7 @@ if( ! function_exists( 'wp_ulike_put_comments' ) ){
 			return $content;
 		}
 
-		if ( wp_ulike_setting_repo::isAutoDisplayOn('comment') && WpUlikeInit::is_frontend() ) {
+		if ( wp_ulike_setting_repo::isAutoDisplayOn('comment') && WpUlikeInit::is_frontend() && isset( $comment->comment_ID ) ) {
 			//auto display position
 			$position = wp_ulike_get_option( 'comments_group|auto_display_position', 'bottom' );
 			//add wp_ulike function
