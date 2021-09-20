@@ -149,6 +149,9 @@ class WpUlikeInit {
     }
     spl_autoload_register( array( $this, 'autoload' ) );
 
+    // load packages
+    include_once( WP_ULIKE_DIR . '/vendor/autoload.php' );
+
     // load common functionalities
     include_once( WP_ULIKE_INC_DIR . '/index.php' );
 
