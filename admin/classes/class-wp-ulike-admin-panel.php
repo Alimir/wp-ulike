@@ -223,6 +223,26 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'chosen'      => true,
                         'multiple'    => true,
                         'options'     => 'post_types'
+                    ),
+                    array(
+                        'id'          => 'blacklist_integration',
+                        'type'        => 'select',
+                        'title'       => __( 'Blacklist',WP_ULIKE_SLUG),
+                        'options'     => array(
+                            'default'  => __('Use the WP Ulike Blacklist', WP_ULIKE_SLUG),
+                            'comments' => __('Use the WordPress Disallowed Comment Keys', WP_ULIKE_SLUG)
+                        ),
+                        'default'     => 'default',
+                        'help'        => sprintf(__('Choose which Blacklist you would prefer to use for voting buttons. The %s option can be found in the WordPress Discussion Settings page.', WP_ULIKE_SLUG),
+                            '<a href="'.admin_url('options-discussion.php').'">'.__('Disallowed Comment Keys', WP_ULIKE_SLUG).'</a>'
+                        )
+                    ),
+                    array(
+                        'id'         => 'blacklist_entries',
+                        'type'       => 'textarea',
+                        'title'      => __( 'Review Blacklist', WP_ULIKE_SLUG),
+                        'desc'       => __('One IP address per line. When a vote contains any of these entries in its IP address, it will be rejected.', WP_ULIKE_SLUG),
+                        'dependency' => array( 'blacklist_integration', 'any', 'default' )
                     )
                 ) )
             ) );
@@ -510,6 +530,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'title'  => __( 'Strings',WP_ULIKE_SLUG),
                 'parent' => 'translations',
                 'fields' => apply_filters( 'wp_ulike_panel_translations', array(
+                    array(
+                        'id'      => 'validate_notice',
+                        'type'    => 'text',
+                        'default' => __( 'Your vote cannot be submitted at this time.',WP_ULIKE_SLUG),
+                        'title'   => __( 'Validation Notice Message', WP_ULIKE_SLUG)
+                    ),
                     array(
                         'id'      => 'already_registered_notice',
                         'type'    => 'text',

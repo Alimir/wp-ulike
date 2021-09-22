@@ -27,6 +27,15 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Get validation message
+	 *
+	 * @return string
+	 */
+	public static function getValidationNotice(){
+		return self::getOption( 'validate_notice', __( 'Your vote cannot be submitted at this time.', WP_ULIKE_SLUG ) );
+	}
+
+	/**
 	 * Get permission message
 	 *
 	 * @return string

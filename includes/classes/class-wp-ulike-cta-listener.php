@@ -22,11 +22,12 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	public function __construct(){
 		parent::__construct();
 		$this->setFormData();
+		$this->setInfoData();
 		$this->updateButton();
 	}
 
 	/**
-	 * Set Form Data
+	 * Set form data
 	 *
 	 * @return void
 	 */
@@ -41,19 +42,28 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	}
 
 	/**
+	 * Set more info data
+	 *
+	 * @return void
+	 */
+	private function setInfoData(){
+		$this->data['client_address'] = wp_ulike_get_user_ip();
+		// make filter for data args
+		$this->data = apply_filters( 'wp_ulike_listener_data', $this->data );
+	}
+
+	/**
 	 * Update button
 	 *
 	 * @return void
 	 */
 	private function updateButton(){
 		try {
+			// start actions
 			$this->beforeUpdateAction( $this->data );
-
 			// Validate inputs
-			if ( !$this->validates() ){
-				throw new \Exception( __( 'permission denied.', WP_ULIKE_SLUG ) );
-			}
-
+			$this->validates();
+			// get settings info 
 			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
 
 			if( empty( $this->settings_type->getType() ) ){
@@ -64,7 +74,8 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				'item_id'       => $this->data['id'],
 				'item_type'     => $this->settings_type->getType(),
 				'item_factor'   => $this->data['factor'],
-				'item_template' => $this->data['template']
+				'item_template' => $this->data['template'],
+				'user_ip'       => $this->data['client_address']
 			) );
 
 			if( wp_ulike_setting_repo::requireLogin( $this->settings_type->getType() ) && ! $this->user ){
@@ -173,10 +184,12 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	*/
 	private function validates(){
 		// Return false when ID not exist
-		if( empty( $this->data['id'] ) || empty( $this->data['type'] ) ) return false;
-		// Return false when nonce invalid
-		// if( ! $this->user && ! wp_verify_nonce( $this->data['nonce'], $this->data['type'] . $this->data['id'] ) && ! wp_ulike_is_cache_exist() ) return false;
-
-		return true;
+		if( empty( $this->data['id'] ) || empty( $this->data['type'] ) ){
+			throw new \Exception( wp_ulike_setting_repo::getValidationNotice() );
+		}
+		// check blacklist
+		if( ! wp_ulike_blacklist_validator::isValid( array( $this->data['client_address'] ) ) ){
+			throw new \Exception( wp_ulike_setting_repo::getValidationNotice() );
+		}
 	}
 }
