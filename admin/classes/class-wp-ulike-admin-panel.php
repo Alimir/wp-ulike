@@ -233,14 +233,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'comments' => __('Use the WordPress Disallowed Comment Keys', WP_ULIKE_SLUG)
                         ),
                         'default'     => 'default',
-                        'help'        => sprintf(__('Choose which Blacklist you would prefer to use for voting buttons. The %s option can be found in the WordPress Discussion Settings page.', WP_ULIKE_SLUG),
+                        'desc'        => sprintf(__('Choose which Blacklist you would prefer to use for voting buttons. The %s option can be found in the WordPress Discussion Settings page.', WP_ULIKE_SLUG),
                             '<a href="'.admin_url('options-discussion.php').'">'.__('Disallowed Comment Keys', WP_ULIKE_SLUG).'</a>'
                         )
                     ),
                     array(
                         'id'         => 'blacklist_entries',
                         'type'       => 'textarea',
-                        'title'      => __( 'Review Blacklist', WP_ULIKE_SLUG),
+                        'title'      => __( 'Blacklist Entries', WP_ULIKE_SLUG),
                         'desc'       => __('One IP address per line. When a vote contains any of these entries in its IP address, it will be rejected.', WP_ULIKE_SLUG),
                         'dependency' => array( 'blacklist_integration', 'any', 'default' )
                     )
