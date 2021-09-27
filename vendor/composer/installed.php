@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '011f0af22ab1cf513b64a68ac1304046580292c3',
+        'reference' => '3733aff1419953e2fa0a3c029d67f20f96910810',
         'name' => 'alimir/wp-ulike',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '011f0af22ab1cf513b64a68ac1304046580292c3',
+            'reference' => '3733aff1419953e2fa0a3c029d67f20f96910810',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
