@@ -27,6 +27,15 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Get validation message
+	 *
+	 * @return string
+	 */
+	public static function getValidationNotice(){
+		return self::getOption( 'validate_notice', __( 'Your vote cannot be submitted at this time.', WP_ULIKE_SLUG ) );
+	}
+
+	/**
 	 * Get permission message
 	 *
 	 * @return string
@@ -197,7 +206,7 @@ class wp_ulike_setting_repo {
 	 * @return boolean
 	 */
 	public static function isAutoDisplayOn( $typeName ){
-		$auto_display = self::getOption( self::getSettingKey( $typeName ) . '|enable_auto_display', false );
+		$auto_display = self::getOption( self::getSettingKey( $typeName ) . '|enable_auto_display', true );
 		return apply_filters( 'wp_ulike_enable_auto_display', $auto_display, $typeName );
 	}
 

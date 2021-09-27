@@ -142,22 +142,29 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 	 * @return string
 	 */
 	function wp_ulike_get_user_ip(){
-		$final_ip = '127.0.0.1';
+        $whitelist = [];
+        $isUsingCloudflare = !empty(filter_input(INPUT_SERVER, 'CF-Connecting-IP'));
 
-		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
-			if ( array_key_exists( $key, $_SERVER ) === true ) {
-				foreach ( explode(',', $_SERVER[$key]) as $ip ) {
-					// trim for safety measures
-					$ip = trim( $ip );
-					// attempt to validate IP
-					if ( wp_ulike_validate_ip( $ip ) ) {
-						$final_ip = $ip;
-					}
-				}
-			}
-		}
+        if (apply_filters('wp_ulike_whip_whitelist_cloudflare', $isUsingCloudflare)) {
+            $cloudflareIps = wp_ulike_get_cloudflare_ips();
+            $whitelist[\Vectorface\Whip\Whip::CLOUDFLARE_HEADERS] = [\Vectorface\Whip\Whip::IPV4 => $cloudflareIps['v4']];
+            if (defined('AF_INET6')) {
+                $whitelist[\Vectorface\Whip\Whip::CLOUDFLARE_HEADERS][\Vectorface\Whip\Whip::IPV6] = $cloudflareIps['v6'];
+            }
+        }
 
-		return apply_filters( 'wp_ulike_get_user_ip', $final_ip );
+        $whitelist = apply_filters('wp_ulike_whip_whitelist', $whitelist);
+        $methods   = apply_filters('wp_ulike_whip_methods', \Vectorface\Whip\Whip::ALL_METHODS);
+
+        $whip = new \Vectorface\Whip\Whip($methods, $whitelist);
+
+		do_action( 'wp_ulike_whip_action', $whip );
+
+		if (false === ($clientAddress = $whip->getValidIpAddress())) {
+            $clientAddress = '127.0.0.1';
+        }
+
+		return apply_filters( 'wp_ulike_get_user_ip', $clientAddress );
 	}
 }
 
@@ -301,4 +308,32 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 
 		return apply_filters( 'wp_ulike_period_limit_sql', $period_limit, $date_range );
 	}
+}
+
+if( ! function_exists('wp_ulike_get_cloudflare_ips') ){
+	/**
+	 * Get cloudflare ips
+	 *
+	 * @return array
+	 */
+    function wp_ulike_get_cloudflare_ips(){
+        if (false === ($ipAddresses = get_transient('wp_ulike_cloudflare_ips'))) {
+            $ipAddresses = array_fill_keys(['v4', 'v6'], []);
+            foreach (array_keys($ipAddresses) as $version) {
+                $url = 'https://www.cloudflare.com/ips-'.$version;
+                $response = wp_remote_get($url, ['sslverify' => false]);
+                if (is_wp_error($response)) {
+                    continue;
+                }
+                if ('200' != ($statusCode = wp_remote_retrieve_response_code($response))) {
+                    continue;
+                }
+                $ipAddresses[$version] = array_filter(
+                    (array) preg_split('/\R/', wp_remote_retrieve_body($response))
+                );
+            }
+            set_transient('wp_ulike_cloudflare_ips', $ipAddresses, WEEK_IN_SECONDS);
+        }
+        return $ipAddresses;
+    }
 }

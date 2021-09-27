@@ -422,6 +422,46 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 		return $wpdb->get_results( $query );
 	}
 }
+// @if DEV
+if( ! function_exists( 'wp_ulike_bp_get_activity_id' ) ) {
+	/**
+	 * Get buddypress current activit id
+	 *
+	 * @return void
+	 */
+	function wp_ulike_bp_get_activity_id() {
+		$type = wp_ulike_bp_get_entity_name();
+		$id   = bp_get_activity_id();
+
+		switch ($type) {
+			case 'bp_activity_topic':
+				$id = bp_get_activity_item_id();
+				break;
+			case 'bp_activity_post':
+				$id = bp_get_activity_secondary_item_id();
+				break;
+		}
+
+		return apply_filters( 'wp_ulike_bp_activity_id', $id, $type );
+	}
+}
+
+function wp_ulike_bp_get_entity_name(){
+    $activity_type = bp_get_activity_type();
+    $entity_name   = 'bp_activity_update';
+
+    switch ($activity_type) {
+        case 'bbp_topic_create':
+            $entity_name = 'bp_activity_topic';
+			break;
+        case 'new_blog_post':
+            $entity_name = 'bp_activity_post';
+			break;
+    }
+
+	return apply_filters( 'wp_ulike_bp_entity_name', $entity_name );
+}
+// @endif
 
 /*******************************************************
   bbPress
