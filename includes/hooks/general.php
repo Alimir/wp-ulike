@@ -229,6 +229,19 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_update_button_icon', 1 );
 }
 
+if( ! function_exists( 'wp_ulike_deprecated_csf_class' ) ){
+	/**
+	 * Require deprecated CSF class
+	 *
+	 * @return void
+	 */
+	function wp_ulike_deprecated_csf_class(){
+		// include _deprecated settings panel
+		require_once( WP_ULIKE_ADMIN_DIR . '/settings/_deprecated/deprecated.class.php');
+	}
+	add_action( 'plugins_loaded', 'wp_ulike_deprecated_csf_class' );
+}
+
 // @if DEV
 // function replace_core_jquery_version() {
 //     wp_deregister_script( 'jquery' );
