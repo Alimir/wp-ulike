@@ -42,8 +42,9 @@ define( 'WP_ULIKE_ADMIN_URL'    , WP_ULIKE_URL . '/admin' 		 );
 define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . 'includes' 	 );
 define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/includes'     );
 
-define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . 'assets' 		 );
-define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		 );
+// Option panel framework directory
+define( 'ULF_DIR'   			, WP_ULIKE_ADMIN_DIR . '/settings'	);
+define( 'ULF_URL'   			, WP_ULIKE_ADMIN_URL . '/settings'	);
 
 /**
  * Initialize the plugin

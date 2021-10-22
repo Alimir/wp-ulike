@@ -315,8 +315,8 @@ if ( ! class_exists( 'ULF' ) ) {
       $protocol_uri   = ( is_ssl() ) ? 'https' : 'http';
       $directory_uri  = set_url_scheme( $directory_uri, $protocol_uri );
 
-      self::$dir = $dirname;
-      self::$url = $directory_uri . $foldername;
+      self::$dir = defined( 'ULF_DIR' ) ? ULF_DIR : $dirname;
+      self::$url = defined( 'ULF_URL' ) ? ULF_URL : $directory_uri . $foldername;
 
     }
 
