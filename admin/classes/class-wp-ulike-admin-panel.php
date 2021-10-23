@@ -835,7 +835,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'by_user_ip_cookie' => __('Username/IP + Cookie', WP_ULIKE_SLUG)
                     ),
                     'default'     => 'by_username',
-                    'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p>', __( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', WP_ULIKE_SLUG ), __( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', WP_ULIKE_SLUG ), __( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', WP_ULIKE_SLUG ) )
+                    'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>', __( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', WP_ULIKE_SLUG ), __( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', WP_ULIKE_SLUG ), __( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', WP_ULIKE_SLUG ), __( 'Username/IP + Cookie: Same as username/IP description, However, if the user IP or username changes and the cookie is set, it does not allow the user to like /dislike.', WP_ULIKE_SLUG )  )
                 ),
                 'cookie_expires' => array(
                     'id'         => 'cookie_expires',
@@ -844,6 +844,16 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'       => __('Specify how long, in seconds, cookie expires. Default value: 31536000', WP_ULIKE_SLUG),
                     'default'    => 31536000,
                     'dependency' => array( 'logging_method', 'any', 'by_cookie,by_user_ip_cookie' ),
+                ),
+                'vote_limit_number' => array(
+                    'id'         => 'vote_limit_number',
+                    'type'       => 'spinner',
+                    'title'      => __( 'Vote Limit Per Day', WP_ULIKE_SLUG),
+                    'desc'       => __('Limits the number of votes that can be submitted to one-per-person-per-day.', WP_ULIKE_SLUG),
+                    'default'    => 50,
+                    'min'        => 1,
+                    'max'        => 1000,
+                    'dependency' => array( 'logging_method', '==', 'do_not_log' ),
                 ),
                 'enable_only_logged_in_users' => array(
                     'id'    => 'enable_only_logged_in_users',

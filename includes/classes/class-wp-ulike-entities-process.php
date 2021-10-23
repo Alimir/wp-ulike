@@ -198,6 +198,18 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			// Status check point
 			$status = true;
 
+			if( in_array( $method, array( 'do_not_log' ) ) ){
+				$user_item_count = wp_ulike_get_user_item_count_per_day( array(
+					"item_id"           => $args['item_id'],
+					"current_user"      => $args['current_user'],
+					"settings"          => $settings
+				) );
+
+				if( $user_item_count && $user_item_count > wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ){
+					$status = false;
+				}
+			}
+
 			// Check cookie permission
 			if( in_array( $method, array( 'by_cookie', 'by_user_ip_cookie' ) ) ){
 				$has_cookie   = false;

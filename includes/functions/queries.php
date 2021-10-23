@@ -438,6 +438,40 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_user_item_count_per_day' ) ) {
+	/**
+	 * A simple function to get user vote counter per day
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	function wp_ulike_get_user_item_count_per_day( $args ) {
+		global $wpdb;
+
+		$defaults = array(
+			"item_id"      => '',
+			"current_user" => '',
+			"settings"     => ''
+		);
+		$parsed_args = wp_parse_args( $args, $defaults );
+
+		$count_votes = $wpdb->get_var( stripslashes( sprintf( '
+				SELECT COUNT(*)
+				FROM %s
+				WHERE `%s` = \'%s\'
+				AND `user_id` = \'%s\'
+				AND DATE(date_time) = CURDATE()
+			',
+			esc_sql( $wpdb->prefix . $parsed_args['settings']->getTableName() ),
+			esc_sql( $parsed_args['settings']->getColumnName() ),
+			esc_sql( $parsed_args['item_id'] ),
+			esc_sql( $parsed_args['current_user'] )
+		) ) );
+
+		return $count_votes ? $count_votes : 0;
+	}
+}
+
 if( ! function_exists('wp_ulike_get_best_likers_info') ){
 	/**
 	 * Get most liked users in query
