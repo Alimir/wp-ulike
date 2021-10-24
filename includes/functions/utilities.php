@@ -190,17 +190,20 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_generate_user_id( $user_ip ) {
-		if( wp_ulike_validate_ip(  $user_ip  ) ) {
-		    return ip2long( $user_ip );
-		} else {
-			// Get non-anonymise IP address
-			$user_ip    = wp_ulike_get_user_ip();
-			$binary_val = '';
-		    foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
-		        $binary_val .= str_pad( decbin( $byte ), 8, "0", STR_PAD_LEFT );
-		    }
-		    return base_convert( ltrim( $binary_val, '0' ), 2, 10 );
+		$client_identifier = $user_ip;
+
+		if( ! empty( $_SERVER['HTTP_USER_AGENT'] ) ){
+			$client_identifier .= $_SERVER['HTTP_USER_AGENT'];
 		}
+		if( ! empty( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ){
+			$client_identifier .= $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		}
+
+		// Make numeric hash
+		$binhash = md5( $client_identifier, true );
+		$numhash = unpack( 'N2', $binhash );
+
+		return $numhash[1] . $numhash[2];
 	}
 }
 
