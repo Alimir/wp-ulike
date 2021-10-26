@@ -203,7 +203,7 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 		$binhash = md5( $client_identifier, true );
 		$numhash = unpack( 'N2', $binhash );
 
-		return $numhash[1] . $numhash[2];
+		return apply_filters( 'wp_ulike_generate_client_identifier', $numhash[1] . $numhash[2], $user_ip );
 	}
 }
 
