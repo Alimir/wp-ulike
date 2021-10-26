@@ -124,7 +124,7 @@ class wp_ulike_activator {
 		// Meta values table
 		maybe_create_table( $meta, "CREATE TABLE IF NOT EXISTS `{$meta}` (
 			`meta_id` bigint(20) unsigned NOT NULL auto_increment,
-			`item_id` bigint(20) unsigned NOT NULL default '0',
+			`item_id` varchar(100) unsigned NOT NULL default '0',
 			`meta_group` varchar(100) default NULL,
 			`meta_key` varchar(255) default NULL,
 			`meta_value` longtext,
@@ -140,40 +140,52 @@ class wp_ulike_activator {
 		// Extract array to variables
 		extract( $this->tables );
 
-		// Upgrade Tables
-		if ( version_compare( get_option( 'wp_ulike_dbVersion', '1.6' ), WP_ULIKE_DB_VERSION, '<' ) ) {
-			// Posts ugrades
-			$this->database->query( "
-				ALTER TABLE $posts
-				ADD INDEX( `post_id`, `date_time`, `user_id`, `status`),
-				CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
-				CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
-			" );
-			// Comments ugrades
-			$this->database->query( "
-				ALTER TABLE $comments
-				ADD INDEX( `comment_id`, `date_time`, `user_id`, `status`),
-				CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
-				CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
-			" );
-			// BuddyPress ugrades
-			$this->database->query( "
-				ALTER TABLE $activities
-				ADD INDEX( `activity_id`, `date_time`, `user_id`, `status`),
-				CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
-				CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
-			" );
-			// bbPress upgrades
-			$this->database->query( "
-				ALTER TABLE $forums
-				ADD INDEX( `topic_id`, `date_time`, `user_id`, `status`),
-				CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
-				CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
-			" );
-			// Update db version
-			update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
-		}
+		// Posts ugrades
+		$this->database->query( "
+			ALTER TABLE $posts
+			ADD INDEX( `post_id`, `date_time`, `user_id`, `status`),
+			CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
+			CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
+		" );
+		// Comments ugrades
+		$this->database->query( "
+			ALTER TABLE $comments
+			ADD INDEX( `comment_id`, `date_time`, `user_id`, `status`),
+			CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
+			CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
+		" );
+		// BuddyPress ugrades
+		$this->database->query( "
+			ALTER TABLE $activities
+			ADD INDEX( `activity_id`, `date_time`, `user_id`, `status`),
+			CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
+			CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
+		" );
+		// bbPress upgrades
+		$this->database->query( "
+			ALTER TABLE $forums
+			ADD INDEX( `topic_id`, `date_time`, `user_id`, `status`),
+			CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
+			CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
+		" );
+
+		// Update db version
+		update_option( 'wp_ulike_dbVersion', '2.1' );
 	}
+
+	public function upgrade_1(){
+		// Extract array to variables
+		extract( $this->tables );
+
+		// Posts ugrades
+		$this->database->query( "
+			ALTER TABLE $meta
+			CHANGE `item_id` `item_id` VARCHAR(100) NOT NULL;
+		" );
+		// Update db version
+		update_option( 'wp_ulike_dbVersion', '2.2' );
+	}
+
 
     /**
     * Return an instance of this class.

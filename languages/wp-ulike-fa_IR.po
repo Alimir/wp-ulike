@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2021-09-22 12:01:15+00:00\n"
+"POT-Creation-Date: 2021-10-25 08:29:05+00:00\n"
 "PO-Revision-Date: 2021-01-09 02:03+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -32,7 +32,7 @@ msgid "It's Ok!"
 msgstr ""
 
 #: admin/admin-functions.php:227
-#: admin/classes/class-wp-ulike-admin-panel.php:859
+#: admin/classes/class-wp-ulike-admin-panel.php:869
 #: includes/classes/class-wp-ulike-customizer.php:149
 msgid "Button"
 msgstr ""
@@ -157,13 +157,13 @@ msgid "Topics Likes Logs"
 msgstr "وقایع لایک در تاپیک ها"
 
 #: admin/classes/class-wp-ulike-admin-pages.php:59
-#: admin/includes/templates/statistics.php:124 includes/plugin.php:103
+#: admin/includes/templates/statistics.php:124 includes/plugin.php:106
 msgid "Statistics"
 msgstr "آماره"
 
 #: admin/classes/class-wp-ulike-admin-pages.php:67
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
-#: includes/plugin.php:104
+#: includes/plugin.php:107
 msgid "About"
 msgstr "درباره"
 
@@ -179,7 +179,7 @@ msgstr "درباره"
 msgid "Logs"
 msgstr "وقایع"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:102
+#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:105
 msgid "Settings"
 msgstr "تنظیمات"
 
@@ -430,8 +430,8 @@ msgstr "متن فعالیت مطالب"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:298
 #: admin/classes/class-wp-ulike-admin-panel.php:310
-#: admin/classes/class-wp-ulike-admin-panel.php:867
-#: admin/classes/class-wp-ulike-admin-panel.php:923
+#: admin/classes/class-wp-ulike-admin-panel.php:877
+#: admin/classes/class-wp-ulike-admin-panel.php:933
 msgid "Allowed Variables:"
 msgstr "متغیرهای قابل استفاده:"
 
@@ -821,6 +821,13 @@ msgid ""
 "are only allowed to have a specific point type."
 msgstr ""
 
+#: admin/classes/class-wp-ulike-admin-panel.php:838
+msgid ""
+"Username/IP + Cookie: Same as username/IP description, However, if the user "
+"IP or username changes and the cookie is set, it does not allow the user to "
+"like /dislike."
+msgstr ""
+
 #: admin/classes/class-wp-ulike-admin-panel.php:843
 #, fuzzy
 msgid "Cookie Expiration"
@@ -831,75 +838,85 @@ msgid "Specify how long, in seconds, cookie expires. Default value: 31536000"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:851
+msgid "Vote Limit Per Day"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:852
+msgid ""
+"Limits the number of votes that can be submitted by user on each item per "
+"day."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:861
 msgid "Only logged in users"
 msgstr "فقط کاربران وارد شده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:856
+#: admin/classes/class-wp-ulike-admin-panel.php:866
 msgid "Display Type"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:858
+#: admin/classes/class-wp-ulike-admin-panel.php:868
 msgid "Template"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:873
-#: includes/classes/class-wp-ulike-setting-repo.php:173
+#: admin/classes/class-wp-ulike-admin-panel.php:883
+#: includes/classes/class-wp-ulike-setting-repo.php:182
 msgid "You need to login in order to like this post: "
 msgstr "برای امتیاز دهی به این مطلب، لطفا وارد شوید: "
 
-#: admin/classes/class-wp-ulike-admin-panel.php:875
-#: includes/classes/class-wp-ulike-setting-repo.php:175
+#: admin/classes/class-wp-ulike-admin-panel.php:885
+#: includes/classes/class-wp-ulike-setting-repo.php:184
 msgid "click here"
 msgstr "برای ورود کلیک کنید"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:877
-#: admin/classes/class-wp-ulike-admin-panel.php:922
+#: admin/classes/class-wp-ulike-admin-panel.php:887
+#: admin/classes/class-wp-ulike-admin-panel.php:932
 msgid "Custom HTML Template"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:883
+#: admin/classes/class-wp-ulike-admin-panel.php:893
 msgid "Display Likers Box"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:888
+#: admin/classes/class-wp-ulike-admin-panel.php:898
 msgid "User List Arrange"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:891
+#: admin/classes/class-wp-ulike-admin-panel.php:901
 msgid "Ascending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:892
+#: admin/classes/class-wp-ulike-admin-panel.php:902
 msgid "Descending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:900
+#: admin/classes/class-wp-ulike-admin-panel.php:910
 msgid "Hide For Anonymous Users"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:906
+#: admin/classes/class-wp-ulike-admin-panel.php:916
 #, fuzzy
 msgid "Likers Box Display"
 msgstr "دکمه لایک"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:909
+#: admin/classes/class-wp-ulike-admin-panel.php:919
 msgid "Inline"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:910
+#: admin/classes/class-wp-ulike-admin-panel.php:920
 #: includes/classes/class-wp-ulike-customizer.php:558
 msgid "Popover"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:936
+#: admin/classes/class-wp-ulike-admin-panel.php:946
 msgid "Size of Gravatars"
 msgstr "سایز آوتار"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:944
+#: admin/classes/class-wp-ulike-admin-panel.php:954
 msgid "Likers Count"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:945
+#: admin/classes/class-wp-ulike-admin-panel.php:955
 msgid "The number of users to show in the users liked box"
 msgstr "حداکثر چند کاربر در باکس لایک کنندگان، نمایش داده شوند؟!؟"
 
@@ -1802,64 +1819,64 @@ msgstr ""
 msgid "Error receiving input parameters"
 msgstr ""
 
-#: includes/hooks/third-party.php:119
+#: includes/hooks/third-party.php:127
 msgid "WP ULike Activity"
 msgstr "فعالیت های وردپرس یولایک"
 
-#: includes/hooks/third-party.php:134
+#: includes/hooks/third-party.php:142
 msgid "Votes"
 msgstr ""
 
-#: includes/hooks/third-party.php:344
+#: includes/hooks/third-party.php:352
 msgid "posts"
 msgstr ""
 
-#: includes/hooks/third-party.php:351
+#: includes/hooks/third-party.php:359
 msgid "comments"
 msgstr ""
 
-#: includes/hooks/third-party.php:357
+#: includes/hooks/third-party.php:365
 msgid "activities"
 msgstr ""
 
-#: includes/hooks/third-party.php:365
+#: includes/hooks/third-party.php:373
 msgid "topics"
 msgstr ""
 
-#: includes/hooks/third-party.php:368
+#: includes/hooks/third-party.php:376
 msgid "replies"
 msgstr ""
 
-#: includes/hooks/third-party.php:380
+#: includes/hooks/third-party.php:388
 msgid "You have %d new %s likes"
 msgstr ""
 
-#: includes/hooks/third-party.php:384
+#: includes/hooks/third-party.php:392
 msgid "%s liked one of your %s"
 msgstr ""
 
-#: includes/hooks/third-party.php:428
+#: includes/hooks/third-party.php:436
 msgid "New activity liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:433
+#: includes/hooks/third-party.php:441
 msgid "New comment liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:438
+#: includes/hooks/third-party.php:446
 msgid "New post liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:443
+#: includes/hooks/third-party.php:451
 msgid "New topic liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:801
+#: includes/hooks/third-party.php:809
 #, fuzzy
 msgid "Points for liking content"
 msgstr "امتیاز لغو لایک یک نوشته"
 
-#: includes/hooks/third-party.php:802
+#: includes/hooks/third-party.php:810
 msgid ""
 "This hook award / deducts points from users who Like/Unlike any content of "
 "WordPress, bbPress, BuddyPress & ..."
@@ -1868,32 +1885,32 @@ msgstr ""
 "و... را لایک/آنلایک کنند (بعلاوه افرادی که نوشته آنها لایک/آنلایک شده)، می "
 "توانند به ترتیب امتیازات مثبت و منفی دریافت کنند."
 
-#: includes/hooks/third-party.php:818
+#: includes/hooks/third-party.php:826
 msgid "Liking Content"
 msgstr "لایک نوشته"
 
-#: includes/hooks/third-party.php:819
+#: includes/hooks/third-party.php:827
 msgid "Liked Content"
 msgstr "نوشته لایک شده"
 
-#: includes/hooks/third-party.php:820
+#: includes/hooks/third-party.php:828
 msgid "Unliking Content"
 msgstr "لغو لایک نوشته"
 
-#: includes/hooks/third-party.php:821
+#: includes/hooks/third-party.php:829
 msgid "Unliked Content"
 msgstr "نوشته لغو لایک شده"
 
-#: includes/hooks/third-party.php:839
+#: includes/hooks/third-party.php:847
 msgid "Recent Posts Liked"
 msgstr "تازه ترین مطالب لایک شده"
 
-#: includes/hooks/third-party.php:844
+#: includes/hooks/third-party.php:852
 msgid "Recent Comments Liked"
 msgstr "تازه ترین دیدگاه های لایک شده"
 
-#: includes/hooks/third-party.php:875 includes/hooks/third-party.php:901
-#: includes/hooks/third-party.php:931 includes/hooks/third-party.php:961
+#: includes/hooks/third-party.php:883 includes/hooks/third-party.php:909
+#: includes/hooks/third-party.php:939 includes/hooks/third-party.php:969
 msgid "This user has not made any likes."
 msgstr "این کاربر، هنوز هیچ موردی را نپسندیده است."
 
@@ -1902,12 +1919,12 @@ msgid "WP ULike"
 msgstr "یولایک"
 
 #. translators: %s: PHP version
-#: wp-ulike.php:74
+#: wp-ulike.php:78
 msgid "WP ULike requires PHP version %s+, plugin is currently NOT RUNNING."
 msgstr ""
 
 #. translators: %s: WordPress version
-#: wp-ulike.php:88
+#: wp-ulike.php:92
 msgid ""
 "WP ULike requires WordPress version %s+. Because you are using an earlier "
 "version, the plugin is currently NOT RUNNING."

@@ -62,6 +62,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 
 			switch( wp_ulike_setting_repo::getMethod( $this->args['slug'] ) ){
 				case 'do_not_log':
+					return $this->getPrevStatus() ? 4 : 1;
 				case 'by_cookie':
 					return 1;
 

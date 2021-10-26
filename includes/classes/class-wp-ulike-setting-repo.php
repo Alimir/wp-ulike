@@ -111,6 +111,15 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Get the number of votes that can be submitted to one-per-person
+	 *
+	 * @return integer
+	 */
+	public static function getVoteLimitNumber( $typeName ){
+		return self::getOption( self::getSettingKey( $typeName ) . '|vote_limit_number', 50 );
+	}
+
+	/**
 	 * Get anonymous user display type
 	 *
 	 * @return string

@@ -55,10 +55,13 @@ class WpUlikeInit {
   }
 
   private function maybe_upgrade_database(){
-    $current_version = get_option( 'wp_ulike_dbVersion', '1.6' );
+    $current_version = get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
     // Check database upgrade if needed
     if ( version_compare( $current_version, '2.1', '<' ) ) {
       wp_ulike_activator::get_instance()->upgrade_0();
+    }
+    if ( version_compare( $current_version, '2.2', '<' ) ) {
+      wp_ulike_activator::get_instance()->upgrade_1();
     }
   }
 

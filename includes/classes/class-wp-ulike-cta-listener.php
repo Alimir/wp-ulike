@@ -63,7 +63,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			$this->beforeUpdateAction( $this->data );
 			// Validate inputs
 			$this->validates();
-			// get settings info 
+			// get settings info
 			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
 
 			if( empty( $this->settings_type->getType() ) ){
@@ -117,8 +117,8 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 						case 4:
 							$this->response['message']     = wp_ulike_setting_repo::getLikeNotice();
 							$this->response['messageType'] = 'success';
-							$this->response['btnText'] = wp_ulike_setting_repo::getButtonText( $this->settings_type->getType(), 'like' );
-							$this->response['data'] = apply_filters( 'wp_ulike_respond_for_not_liked_data', $counter_value, $this->data['id'] );
+							$this->response['btnText'] = wp_ulike_setting_repo::getButtonText( $this->settings_type->getType(), 'unlike' );
+							$this->response['data'] = apply_filters( 'wp_ulike_respond_for_no_limit_data', $counter_value, $this->data['id'] );
 							break;
 					}
 				}

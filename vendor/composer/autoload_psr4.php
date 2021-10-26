@@ -8,5 +8,4 @@ $baseDir = dirname($vendorDir);
 return array(
     'Vectorface\\Whip\\' => array($vendorDir . '/vectorface/whip/src'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
-    'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
 );
