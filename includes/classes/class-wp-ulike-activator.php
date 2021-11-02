@@ -62,7 +62,7 @@ class wp_ulike_activator {
 		extract( $this->tables );
 
 		// Posts table
-		maybe_create_table( $posts, "CREATE TABLE IF NOT EXISTS `{$posts}` (
+		maybe_create_table( $posts, "CREATE TABLE `{$posts}` (
 			`id` bigint(20) NOT NULL AUTO_INCREMENT,
 			`post_id` bigint(20) NOT NULL,
 			`date_time` datetime NOT NULL,
@@ -77,7 +77,7 @@ class wp_ulike_activator {
 		) $charset_collate AUTO_INCREMENT=1;" );
 
 		// Comments table
-		maybe_create_table( $comments, "CREATE TABLE IF NOT EXISTS `{$comments}` (
+		maybe_create_table( $comments, "CREATE TABLE `{$comments}` (
 			`id` bigint(20) NOT NULL AUTO_INCREMENT,
 			`comment_id` bigint(20) NOT NULL,
 			`date_time` datetime NOT NULL,
@@ -92,7 +92,7 @@ class wp_ulike_activator {
 		) $charset_collate AUTO_INCREMENT=1;" );
 
 		// Activities table
-		maybe_create_table( $activities, "CREATE TABLE IF NOT EXISTS `{$activities}` (
+		maybe_create_table( $activities, "CREATE TABLE `{$activities}` (
 			`id` bigint(20) NOT NULL AUTO_INCREMENT,
 			`activity_id` bigint(20) NOT NULL,
 			`date_time` datetime NOT NULL,
@@ -107,7 +107,7 @@ class wp_ulike_activator {
 		) $charset_collate AUTO_INCREMENT=1;" );
 
 		// Forums table
-		maybe_create_table( $forums, "CREATE TABLE IF NOT EXISTS `{$forums}` (
+		maybe_create_table( $forums, "CREATE TABLE `{$forums}` (
 			`id` bigint(20) NOT NULL AUTO_INCREMENT,
 			`topic_id` bigint(20) NOT NULL,
 			`date_time` datetime NOT NULL,
@@ -121,10 +121,11 @@ class wp_ulike_activator {
 			KEY `status` (`status`)
 		) $charset_collate AUTO_INCREMENT=1;" );
 
+
 		// Meta values table
-		maybe_create_table( $meta, "CREATE TABLE IF NOT EXISTS `{$meta}` (
+		maybe_create_table( $meta, "CREATE TABLE `{$meta}` (
 			`meta_id` bigint(20) unsigned NOT NULL auto_increment,
-			`item_id` varchar(100) unsigned NOT NULL default '0',
+			`item_id` bigint(20) unsigned NOT NULL default '0',
 			`meta_group` varchar(100) default NULL,
 			`meta_key` varchar(255) default NULL,
 			`meta_value` longtext,
@@ -134,6 +135,10 @@ class wp_ulike_activator {
 			KEY `meta_key` (`meta_key`($max_index_length))
 		) $charset_collate AUTO_INCREMENT=1;" );
 
+		// Update db version
+		if( get_option( 'wp_ulike_dbVersion' ) === false ){
+			update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+		}
 	}
 
 	public function upgrade_0(){
@@ -186,6 +191,22 @@ class wp_ulike_activator {
 		update_option( 'wp_ulike_dbVersion', '2.2' );
 	}
 
+	public function upgrade_2(){
+		// Extract array to variables
+		extract( $this->tables );
+
+		// Maybe not installed meta table
+		$this->install_tables();
+
+		// Posts ugrades
+		$this->database->query( "
+			ALTER TABLE $meta
+			CHANGE `item_id` `item_id` bigint(20) unsigned NOT NULL;
+		" );
+
+		// Update db version
+		update_option( 'wp_ulike_dbVersion', '2.3' );
+	}
 
     /**
     * Return an instance of this class.
