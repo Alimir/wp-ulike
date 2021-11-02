@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, user profile, rating, favorite, statistics, bu
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.8
-Stable tag: 4.5.7
+Stable tag: 4.5.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,7 +140,10 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 
 == Changelog ==
 
-= 4.5.7 =
+= 4.5.7.1 =
+* Fixed: Meta table issues.
+
+= 4.5.7.1 =
 * Added: Animated Clapping Template. [PRO]
 * Added: New option to limit the number of votes that can be submitted by a user. (only for no-limit logging method)
 * Added: An option to change the permalink structure of user profiles. [PRO]
