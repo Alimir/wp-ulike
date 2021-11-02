@@ -52,7 +52,7 @@ if( ! function_exists( 'wp_ulike_add_meta_data' ) ){
 
 		if ( $unique && $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %s",
+				"SELECT COUNT(*) FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %d",
 				$meta_group,
 				$meta_key,
 				$object_id
@@ -145,7 +145,7 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 			}
 		}
 
-		$meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %s", $meta_group, $meta_key, $object_id ) );
+		$meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %d", $meta_group, $meta_key, $object_id ) );
 		if ( empty( $meta_ids ) ) {
 			return wp_ulike_add_meta_data( $object_id, $raw_meta_group, $raw_meta_key, $passed_value );
 		}
@@ -452,7 +452,7 @@ if( ! function_exists( 'wp_ulike_delete_meta_data' ) ){
 		$query = $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_group = %s AND meta_key = %s", $meta_group, $meta_key );
 
 		if ( ! $delete_all ) {
-			$query .= $wpdb->prepare( " AND $type_column = %s", $object_id );
+			$query .= $wpdb->prepare( " AND $type_column = %d", $object_id );
 		}
 
 		if ( '' !== $meta_value && null !== $meta_value && false !== $meta_value ) {
