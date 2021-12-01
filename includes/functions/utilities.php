@@ -190,20 +190,20 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_generate_user_id( $user_ip ) {
+		// set client identifier based on user ip
 		$client_identifier = $user_ip;
 
-		if( ! empty( $_SERVER['HTTP_USER_AGENT'] ) ){
-			$client_identifier .= $_SERVER['HTTP_USER_AGENT'];
-		}
-		if( ! empty( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ){
-			$client_identifier .= $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		if( wp_ulike_validate_ip(  $user_ip  ) ) {
+			$client_identifier = ip2long( $user_ip );
+		} else {
+			$binary_val = '';
+			foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
+				$binary_val .= str_pad( decbin( $byte ), 8, "0", STR_PAD_LEFT );
+			}
+			$client_identifier = base_convert( ltrim( $binary_val, '0' ), 2, 10 );
 		}
 
-		// Make numeric hash
-		$binhash = md5( $client_identifier, true );
-		$numhash = unpack( 'N2', $binhash );
-
-		return apply_filters( 'wp_ulike_generate_client_identifier', $numhash[1] . $numhash[2], $user_ip );
+		return apply_filters( 'wp_ulike_generate_client_identifier', $client_identifier, $user_ip );
 	}
 }
 
