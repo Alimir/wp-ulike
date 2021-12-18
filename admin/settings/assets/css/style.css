@@ -3782,31 +3782,6 @@
     min-height: 32px;
   }
 
-  .ulf-modal-inner {
-    width: 350px;
-    height: 400px;
-  }
-
-  .ulf-modal-content {
-    height: 237px;
-  }
-
-  .ulf-icon-dialog .ulf-modal-inner {
-    width: 305px;
-    height: 380px;
-  }
-  .ulf-icon-dialog .ulf-modal-content {
-    height: 267px;
-  }
-
-  .ulf-modal-icon .ulf-modal-inner {
-    width: 330px;
-    height: 385px;
-  }
-  .ulf-modal-icon .ulf-modal-content {
-    height: 252px;
-  }
-
   .ulf-profile-options > .ulf-field > .ulf-title,
   .ulf-taxonomy-edit-fields > .ulf-field > .ulf-title {
     float: none;
@@ -3825,6 +3800,19 @@
   }
   .ulf-nav-menu-options > .ulf-fields > .ulf-field {
     padding: 10px;
+  }
+}
+@media only screen and (max-width: 782px) {
+  .ulf-modal .ulf-modal-inner {
+    width: 90%;
+  }
+}
+@media only screen and (max-height: 750px) {
+  .ulf-modal .ulf-modal-inner {
+    height: auto;
+  }
+  .ulf-modal .ulf-modal-content {
+    height: calc(100vh - 200px);
   }
 }
 /**

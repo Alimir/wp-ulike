@@ -81,7 +81,7 @@ if ( ! class_exists( 'ULF_Field_checkbox' ) ) {
 
         echo '<label class="ulf-checkbox">';
         echo '<input type="hidden" name="'. esc_attr( $this->field_name() ) .'" value="'. $this->value .'" class="ulf--input"'. $this->field_attributes() .'/>';
-        echo '<input type="checkbox" name="_pseudo" class="ulf--checkbox"'. esc_attr( checked( $this->value, 1, false ) ) .'/>';
+        echo '<input type="checkbox" name="_pseudo" class="ulf--checkbox"'. esc_attr( checked( $this->value, 1, false ) ) . $this->field_attributes() .'/>';
         echo ( ! empty( $this->field['label'] ) ) ? '<span class="ulf--text">'. esc_attr( $this->field['label'] ) .'</span>' : '';
         echo '</label>';
 
