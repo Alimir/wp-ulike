@@ -205,7 +205,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					"settings"          => $settings
 				) );
 
-				if( $user_item_count && $user_item_count > wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ){
+				if( $user_item_count && ( $user_item_count >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) ){
 					$status = false;
 				}
 			}
