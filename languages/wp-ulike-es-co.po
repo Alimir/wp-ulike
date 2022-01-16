@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2021-10-25 08:29:05+00:00\n"
+"POT-Creation-Date: 2022-01-16 12:16:46+00:00\n"
 "PO-Revision-Date: +0000\n"
 "Language: es_CO\n"
 "MIME-Version: 1.0\n"
@@ -155,13 +155,13 @@ msgid "Topics Likes Logs"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:59
-#: admin/includes/templates/statistics.php:124 includes/plugin.php:106
+#: admin/includes/templates/statistics.php:124 includes/plugin.php:109
 msgid "Statistics"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:67
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
-#: includes/plugin.php:107
+#: includes/plugin.php:110
 msgid "About"
 msgstr ""
 
@@ -177,7 +177,7 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:105
+#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:108
 msgid "Settings"
 msgstr ""
 
@@ -1871,12 +1871,12 @@ msgid "WP ULike"
 msgstr ""
 
 #. translators: %s: PHP version
-#: wp-ulike.php:78
+#: wp-ulike.php:74
 msgid "WP ULike requires PHP version %s+, plugin is currently NOT RUNNING."
 msgstr ""
 
 #. translators: %s: WordPress version
-#: wp-ulike.php:92
+#: wp-ulike.php:88
 msgid ""
 "WP ULike requires WordPress version %s+. Because you are using an earlier "
 "version, the plugin is currently NOT RUNNING."

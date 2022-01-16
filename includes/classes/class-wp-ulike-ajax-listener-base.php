@@ -17,17 +17,17 @@ abstract class wp_ulike_ajax_listener_base{
 	/**
 	* Form Data
 	*/
-	protected $data;
+	public $data;
 
 	/**
 	* User info
 	*/
-	protected $user;
+	public $user;
 
 	/**
 	* Settings Type
 	*/
-	protected $settings_type;
+	public $settings_type;
 
 	public function __construct(){
 		$this->setUser();

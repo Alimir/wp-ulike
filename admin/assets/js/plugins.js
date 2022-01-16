@@ -1,6 +1,6 @@
-/*! WP ULike - v4.5.8
+/*! WP ULike - v4.5.9
  *  https://wpulike.com
- *  TechnoWich 2021;
+ *  TechnoWich 2022;
  */
 /*!
  * Chart.js v3.4.1
