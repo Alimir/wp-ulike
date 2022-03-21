@@ -240,7 +240,7 @@ if ( ! class_exists( 'ULF_Customize_Options' ) ) {
           $field_sanitize  = ( isset( $field['sanitize'] ) ) ? $field['sanitize'] : '';
           $field_validate  = ( isset( $field['validate'] ) ) ? $field['validate'] : '';
           $field_default   = ( isset( $field['default'] ) ) ? $field['default'] : '';
-          $field_customize = ( isset( $field['customize'] ) && ! isset( $field['transport'] ) ) ? true : false;
+          $field_customize = ( ( isset( $field['selectors'] ) || isset( $field['selector'] ) ) && ! isset( $field['transport'] ) ) ? true : false;
           $has_selective   = ( isset( $field['selective_refresh'] ) && isset( $wp_customize->selective_refresh ) ) ? true : false;
 
           $setting_id = $this->unique .'['. $field_id .']';
