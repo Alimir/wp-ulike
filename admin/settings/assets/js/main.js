@@ -814,19 +814,17 @@
   $.fn.ulf_field_group = function() {
     return this.each( function() {
 
-      var $this           = $(this),
-          $fieldset    = $this.children('.ulf-fieldset'),
-          $group       = $fieldset.length ? $fieldset : $this,
-          $wrapper     = $group.children('.ulf-cloneable-wrapper'),
-          $hidden      = $group.children('.ulf-cloneable-hidden'),
-          $max         = $group.children('.ulf-cloneable-max'),
-          $min         = $group.children('.ulf-cloneable-min'),
-          title_by     = $wrapper.data('title-by'),
-          title_prefix = $wrapper.data('title-by-prefix'),
-          field_id     = $wrapper.data('field-id'),
-          is_number    = Boolean( Number( $wrapper.data('title-number') ) ),
-          max          = parseInt( $wrapper.data('max') ),
-          min          = parseInt( $wrapper.data('min') );
+      var $this     = $(this),
+          $fieldset = $this.children('.ulf-fieldset'),
+          $group    = $fieldset.length ? $fieldset : $this,
+          $wrapper  = $group.children('.ulf-cloneable-wrapper'),
+          $hidden   = $group.children('.ulf-cloneable-hidden'),
+          $max      = $group.children('.ulf-cloneable-max'),
+          $min      = $group.children('.ulf-cloneable-min'),
+          field_id  = $wrapper.data('field-id'),
+          is_number = Boolean( Number( $wrapper.data('title-number') ) ),
+          max       = parseInt( $wrapper.data('max') ),
+          min       = parseInt( $wrapper.data('min') );
 
       // clear accordion arrows if multi-instance
       if ( $wrapper.hasClass('ui-accordion') ) {
@@ -856,35 +854,12 @@
 
           if ( $panel.length && !$panel.data( 'opened' ) ) {
 
-            var $title = $header.find('.ulf-cloneable-value');
-            var inputs = [];
+            var $fields = $panel.children();
+            var $first  = $fields.first().find(':input').first();
+            var $title  = $header.find('.ulf-cloneable-value');
 
-            $.each(title_by, function( key, title_key ) {
-              inputs.push($panel.find( '[data-depend-id="'+ title_key +'"]' ));
-            });
-
-            $.each(inputs, function( key, $input ) {
-
-              $input.on('change keyup ulf.keyup', function() {
-
-                var titles = [];
-
-                $.each(inputs, function( key, $input ) {
-
-                  var input_value = $input.val();
-
-                  if ( input_value ) {
-                    titles.push( input_value );
-                  }
-
-                });
-
-                if ( titles.length ) {
-                  $title.text( titles.join( title_prefix ) );
-                }
-
-              }).trigger('ulf.keyup');
-
+            $first.on('change keyup', function( event ) {
+              $title.text($first.val());
             });
 
             $panel.ulf_reload_script();
@@ -1374,6 +1349,8 @@
           } else {
             thumbnail = attributes.icon;
           }
+
+          console.log(attributes);
 
           if ( $auto_attributes ) {
             $auto_attributes.removeClass('ulf--attributes-hidden');
@@ -3258,7 +3235,7 @@
         return;
       }
 
-      $input.on('change keyup ulf.change', function() {
+      $input.on('change keyup', function() {
 
         var obj = $this.find(':input').serializeObjectULF();
         var val = ( !$.isEmptyObject(obj) && obj[unique_id] && obj[unique_id][option_id] ) ? obj[unique_id][option_id] : '';

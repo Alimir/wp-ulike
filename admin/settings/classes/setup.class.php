@@ -12,7 +12,7 @@ if ( ! class_exists( 'ULF' ) ) {
 
     // Default constants
     public static $premium  = true;
-    public static $version  = '2.2.7';
+    public static $version  = '2.2.6';
     public static $dir      = '';
     public static $url      = '';
     public static $css      = '';
@@ -748,6 +748,10 @@ if ( ! class_exists( 'ULF' ) ) {
 
       if ( ! empty( $field_type ) ) {
 
+        if ( ! empty( $field['fancy_title'] ) ) {
+          echo '<div class="ulf-fancy-title">' . $field['fancy_title'] .'</div>';
+        }
+
         if ( ! empty( $field['title'] ) ) {
           echo '<div class="ulf-title">';
           echo '<h4>'. $field['title'] .'</h4>';
@@ -755,7 +759,7 @@ if ( ! class_exists( 'ULF' ) ) {
           echo '</div>';
         }
 
-        echo ( ! empty( $field['title'] ) ) ? '<div class="ulf-fieldset">' : '';
+        echo ( ! empty( $field['title'] ) || ! empty( $field['fancy_title'] ) ) ? '<div class="ulf-fieldset">' : '';
 
         $value = ( ! isset( $value ) && isset( $field['default'] ) ) ? $field['default'] : $value;
         $value = ( isset( $field['value'] ) ) ? $field['value'] : $value;
@@ -773,7 +777,7 @@ if ( ! class_exists( 'ULF' ) ) {
         echo '<p>'. esc_html__( 'Field not found!', 'ulf' ) .'</p>';
       }
 
-      echo ( ! empty( $field['title'] ) ) ? '</div>' : '';
+      echo ( ! empty( $field['title'] ) || ! empty( $field['fancy_title'] ) ) ? '</div>' : '';
       echo '<div class="clear"></div>';
       echo '</div>';
 
