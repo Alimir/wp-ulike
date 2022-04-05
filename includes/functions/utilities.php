@@ -340,3 +340,103 @@ if( ! function_exists('wp_ulike_get_cloudflare_ips') ){
         return $ipAddresses;
     }
 }
+
+if( ! function_exists('wp_ulike_site_is_https') ){
+	/**
+	 * Check if the home URL is https. If it is, we don't need to do things such as 'force ssl'.
+	 *
+	 * @return bool
+	 */
+	function wp_ulike_site_is_https() {
+		return false !== strstr( get_option( 'home' ), 'https:' );
+	}
+}
+
+if( ! function_exists('wp_ulike_setcookie') ){
+	/**
+	 * Set a cookie - wrapper for setcookie using WP constants.
+	 *
+	 * @param  string  $name   Name of the cookie being set.
+	 * @param  string  $value  Value of the cookie.
+	 * @param  integer $expire Expiry of the cookie.
+	 * @param  bool    $secure Whether the cookie should be served only over https.
+	 * @param  bool    $httponly Whether the cookie is only accessible over HTTP, not scripting languages like JavaScript. @since 3.6.0.
+	 */
+	function wp_ulike_setcookie( $name, $value, $expire = 0, $secure = false, $httponly = false ) {
+		if ( ! apply_filters( 'wp_ulike_set_cookie_enabled', true, $name ,$value, $expire, $secure ) ) {
+			return;
+		}
+		if ( ! headers_sent() ) {
+			setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, apply_filters( 'wp_ulike_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
+		} elseif ( defined('WP_DEBUG') && WP_DEBUG ) {
+			headers_sent( $file, $line );
+			trigger_error( "{$name} cookie cannot be set - headers already sent by {$file} on line {$line}", E_USER_NOTICE ); // @codingStandardsIgnoreLine
+		}
+	}
+}
+
+
+/**
+ * Define a constant if it is not already defined.
+ *
+ * @since 3.0.0
+ * @param string $name  Constant name.
+ * @param mixed  $value Value.
+ */
+function wp_ulike_maybe_define_constant( $name, $value ) {
+	if ( ! defined( $name ) ) {
+		define( $name, $value );
+	}
+}
+
+if( ! function_exists('wp_ulike_string_util_starts_with') ){
+	/**
+	 * Checks to see whether or not a string starts with another.
+	 *
+	 * @param string $string The string we want to check.
+	 * @param string $starts_with The string we're looking for at the start of $string.
+	 * @param bool   $case_sensitive Indicates whether the comparison should be case-sensitive.
+	 *
+	 * @return bool True if the $string starts with $starts_with, false otherwise.
+	 */
+	function wp_ulike_string_util_starts_with( string $string, string $starts_with, bool $case_sensitive = true ): bool {
+		$len = strlen( $starts_with );
+		if ( $len > strlen( $string ) ) {
+			return false;
+		}
+
+		$string = substr( $string, 0, $len );
+
+		if ( $case_sensitive ) {
+			return strcmp( $string, $starts_with ) === 0;
+		}
+
+		return strcasecmp( $string, $starts_with ) === 0;
+	}
+}
+
+if( ! function_exists('wp_ulike_string_util_ends_with') ){
+	/**
+	 * Checks to see whether or not a string ends with another.
+	 *
+	 * @param string $string The string we want to check.
+	 * @param string $ends_with The string we're looking for at the end of $string.
+	 * @param bool   $case_sensitive Indicates whether the comparison should be case-sensitive.
+	 *
+	 * @return bool True if the $string ends with $ends_with, false otherwise.
+	 */
+	function wp_ulike_string_util_ends_with( string $string, string $ends_with, bool $case_sensitive = true ): bool {
+		$len = strlen( $ends_with );
+		if ( $len > strlen( $string ) ) {
+			return false;
+		}
+
+		$string = substr( $string, -$len );
+
+		if ( $case_sensitive ) {
+			return strcmp( $string, $ends_with ) === 0;
+		}
+
+		return strcasecmp( $string, $ends_with ) === 0;
+	}
+}

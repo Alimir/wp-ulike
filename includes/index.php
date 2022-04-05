@@ -9,6 +9,9 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
+// cache helper
+wp_ulike_cache_helper::init();
+
 // include settings panel core
 require_once( WP_ULIKE_ADMIN_DIR . '/settings/classes/setup.class.php');
 

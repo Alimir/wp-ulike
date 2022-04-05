@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 	);
 define( 'WP_ULIKE_VERSION'      , '4.5.9' 					 		);
-define( 'WP_ULIKE_DB_VERSION'   , '2.3' 					 	 	);
+define( 'WP_ULIKE_DB_VERSION'   , '2.4' 					 	 	);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 	);
 define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG )	);
 
@@ -44,6 +44,9 @@ define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/includes'     	);
 
 define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . 'assets' 			);
 define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		 	);
+
+// session cache group
+define( 'WP_ULIKE_SESSION_CACHE_GROUP'   , 'wp_ulike_session_id'	);
 
 /**
  * Initialize the plugin
