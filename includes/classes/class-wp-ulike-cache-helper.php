@@ -1,8 +1,6 @@
 <?php
 /**
  * wp_ulike_cache_helper class.
- *
- * @package WooCommerce\Classes
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -57,10 +55,6 @@ class wp_ulike_cache_helper {
 		 */
 		if ( false !== strpos( $agent, 'googleweblight' ) ) {
 			// no-transform: Opt-out of Google weblight. https://support.google.com/webmasters/answer/6211428?hl=en.
-			$set_cache = true;
-		}
-
-		if ( false !== strpos( $agent, 'Chrome' ) && is_cart() ) {
 			$set_cache = true;
 		}
 
@@ -142,9 +136,6 @@ class wp_ulike_cache_helper {
 	 * to append a unique string (based on time()) to each transient. When transients
 	 * are invalidated, the transient version will increment and data will be regenerated.
 	 *
-	 * Raised in issue https://github.com/woocommerce/woocommerce/issues/5777.
-	 * Adapted from ideas in http://tollmanz.com/invalidation-schemes/.
-	 *
 	 * @param  string  $group   Name for the group of transients we need to invalidate.
 	 * @param  boolean $refresh true to force a new version.
 	 * @return string transient version based on time(), 10 digits.
@@ -193,7 +184,7 @@ class wp_ulike_cache_helper {
     <p>
         <?php
 				/* translators: 1: key 2: URL */
-				echo wp_kses_post( sprintf( __( 'In order for <strong>database caching</strong> to work with WooCommerce you must add %1$s to the "Ignored Query Strings" option in <a href="%2$s">W3 Total Cache settings</a>.', 'woocommerce' ), '<code>_wc_session_</code>', esc_url( admin_url( 'admin.php?page=w3tc_dbcache' ) ) ) );
+				echo wp_kses_post( sprintf( __( 'In order for <strong>database caching</strong> to work with WP ULike you must add %1$s to the "Ignored Query Strings" option in <a href="%2$s">W3 Total Cache settings</a>.', WP_ULIKE_SLUG ), '<code>_wp_ulike_session_</code>', esc_url( admin_url( 'admin.php?page=w3tc_dbcache' ) ) ) );
 				?>
     </p>
 </div>

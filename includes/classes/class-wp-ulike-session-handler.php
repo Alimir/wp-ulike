@@ -140,7 +140,7 @@ class wp_ulike_session_handler extends wp_ulike_session {
 	}
 
 	/**
-	 * Sets the session cookie on-demand (usually after adding an item to the cart).
+	 * Sets the session cookie on-demand.
 	 *
 	 * Since the cookie name (as of 2.1) is prepended with wp, cache systems like batcache will not cache pages when set.
 	 *
@@ -351,7 +351,7 @@ class wp_ulike_session_handler extends wp_ulike_session {
 	}
 
 	/**
-	 * When a user is logged out, ensure they have a unique nonce to manage cart and more using the user/session ID.
+	 * When a user is logged out, ensure they have a unique nonce to using the user/session ID.
 	 * This filter runs everything `wp_verify_nonce()` and `wp_create_nonce()` gets called.
 	 *
 	 * @since 5.3.0
