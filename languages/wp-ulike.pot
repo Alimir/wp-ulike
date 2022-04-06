@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike 4.6.0\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2022-04-05 16:38:41+00:00\n"
+"POT-Creation-Date: 2022-04-06 11:48:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1519,10 +1519,10 @@ msgstr ""
 msgid "There was an error processing the request."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-cache-helper.php:196
+#: includes/classes/class-wp-ulike-cache-helper.php:187
 #. translators: 1: key 2: URL
 msgid ""
-"In order for <strong>database caching</strong> to work with WooCommerce you "
+"In order for <strong>database caching</strong> to work with WP ULike you "
 "must add %1$s to the \"Ignored Query Strings\" option in <a "
 "href=\"%2$s\">W3 Total Cache settings</a>."
 msgstr ""
