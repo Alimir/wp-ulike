@@ -11,20 +11,11 @@ defined( 'ABSPATH' ) || exit;
 class wp_ulike_cache_helper {
 
 	/**
-	 * Transients to delete on shutdown.
-	 *
-	 * @var array Array of transient keys.
-	 */
-	private static $delete_transients = array();
-
-	/**
 	 * Hook in methods.
 	 */
 	public static function init() {
 		add_filter( 'nocache_headers', array( __CLASS__, 'additional_nocache_headers' ), 10 );
-		add_action( 'shutdown', array( __CLASS__, 'delete_transients_on_shutdown' ), 10 );
 		add_action( 'admin_notices', array( __CLASS__, 'notices' ) );
-		add_action( 'delete_version_transients', array( __CLASS__, 'delete_version_transients' ), 10 );
 		add_action( 'wp', array( __CLASS__, 'prevent_caching' ) );
 	}
 
@@ -63,20 +54,6 @@ class wp_ulike_cache_helper {
 		}
 
 		return $headers;
-	}
-
-	/**
-	 * Transients that don't need to be cleaned right away can be deleted on shutdown to avoid repetition.
-	 *
-	 * @since 3.6.0
-	 */
-	public static function delete_transients_on_shutdown() {
-		if ( self::$delete_transients ) {
-			foreach ( self::$delete_transients as $key ) {
-				delete_transient( $key );
-			}
-			self::$delete_transients = array();
-		}
 	}
 
 	/**
@@ -189,34 +166,6 @@ class wp_ulike_cache_helper {
     </p>
 </div>
 <?php
-		}
-	}
-
-	/**
-	 * When the transient version increases, this is used to remove all past transients to avoid filling the DB.
-	 *
-	 * Note; this only works on transients appended with the transient version, and when object caching is not being used.
-	 *
-	 * @deprecated 3.6.0 Adjusted transient usage to include versions within the transient values, making this cleanup obsolete.
-	 * @since  2.3.10
-	 * @param string $version Version of the transient to remove.
-	 */
-	public static function delete_version_transients( $version = '' ) {
-		if ( ! wp_using_ext_object_cache() && ! empty( $version ) ) {
-			global $wpdb;
-
-			$limit = apply_filters( 'wp_ulike_delete_version_transients_limit', 1000 );
-
-			if ( ! $limit ) {
-				return;
-			}
-
-			$affected = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s LIMIT %d;", '\_transient\_%' . $version, $limit ) ); // WPCS: cache ok, db call ok.
-
-			// If affected rows is equal to limit, there are more rows to delete. Delete in 30 secs.
-			if ( $affected === $limit ) {
-				wp_schedule_single_event( time() + 30, 'delete_version_transients', array( $version ) );
-			}
 		}
 	}
 }
