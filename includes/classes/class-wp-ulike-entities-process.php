@@ -273,7 +273,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 							}
 						}
 					}
-					setcookie( $cookie_key, json_encode( $cookie_data ), 2147483647, '/' );
+					wp_ulike_setcookie( $cookie_key, json_encode( $cookie_data ), 2147483647 );
 				}
 			}
 
