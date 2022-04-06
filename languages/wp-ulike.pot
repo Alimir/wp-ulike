@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the WP ULike package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP ULike 4.5.9\n"
+"Project-Id-Version: WP ULike 4.6.0\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2022-01-16 12:16:46+00:00\n"
+"POT-Creation-Date: 2022-04-05 16:38:41+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -156,13 +156,13 @@ msgid "Topics Likes Logs"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:59
-#: admin/includes/templates/statistics.php:124 includes/plugin.php:109
+#: admin/includes/templates/statistics.php:124 includes/plugin.php:126
 msgid "Statistics"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:67
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
-#: includes/plugin.php:110
+#: includes/plugin.php:127
 msgid "About"
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:108
+#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:125
 msgid "Settings"
 msgstr ""
 
@@ -1519,6 +1519,14 @@ msgstr ""
 msgid "There was an error processing the request."
 msgstr ""
 
+#: includes/classes/class-wp-ulike-cache-helper.php:196
+#. translators: 1: key 2: URL
+msgid ""
+"In order for <strong>database caching</strong> to work with WooCommerce you "
+"must add %1$s to the \"Ignored Query Strings\" option in <a "
+"href=\"%2$s\">W3 Total Cache settings</a>."
+msgstr ""
+
 #: includes/classes/class-wp-ulike-cta-listener.php:70
 #: includes/classes/class-wp-ulike-voters-listener.php:45
 msgid "Invalid item type."
@@ -1873,12 +1881,12 @@ msgstr ""
 msgid "WP ULike"
 msgstr ""
 
-#: wp-ulike.php:74
+#: wp-ulike.php:77
 #. translators: %s: PHP version
 msgid "WP ULike requires PHP version %s+, plugin is currently NOT RUNNING."
 msgstr ""
 
-#: wp-ulike.php:88
+#: wp-ulike.php:91
 #. translators: %s: WordPress version
 msgid ""
 "WP ULike requires WordPress version %s+. Because you are using an earlier "

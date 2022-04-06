@@ -3,7 +3,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       Receiving feedback is crucial as a content creator, but unfortunately, the pieces of content you can collect it on are limited by default. However, with the help of the WP ULike plugin, it is possible to cast voting to any type of content you may have on your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your content would it be a post, comment, BuddyPress activity, bbPress topics, WooCommerce products, you name it. Now you can feel your users Love for each part of your work.
- * Version:           4.5.9
+ * Version:           4.6.0
  * Author:            TechnoWich
  * Author URI:        https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
@@ -27,8 +27,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 	);
-define( 'WP_ULIKE_VERSION'      , '4.5.9' 					 		);
-define( 'WP_ULIKE_DB_VERSION'   , '2.3' 					 	 	);
+define( 'WP_ULIKE_VERSION'      , '4.6.0' 					 		);
+define( 'WP_ULIKE_DB_VERSION'   , '2.4' 					 	 	);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 	);
 define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG )	);
 
@@ -44,6 +44,9 @@ define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/includes'     	);
 
 define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . 'assets' 			);
 define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		 	);
+
+// session cache group
+define( 'WP_ULIKE_SESSION_CACHE_GROUP'   , 'wp_ulike_session_id'	);
 
 /**
  * Initialize the plugin

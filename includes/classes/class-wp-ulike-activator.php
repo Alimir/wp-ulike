@@ -32,7 +32,8 @@ class wp_ulike_activator {
 			'comments'   => $this->database->prefix . "ulike_comments",
 			'activities' => $this->database->prefix . "ulike_activities",
 			'forums'     => $this->database->prefix . "ulike_forums",
-			'meta'       => $this->database->prefix . "ulike_meta"
+			'meta'       => $this->database->prefix . "ulike_meta",
+			'sessions'   => $this->database->prefix . "ulike_sessions"
 		);
 	}
 
@@ -135,6 +136,16 @@ class wp_ulike_activator {
 			KEY `meta_key` (`meta_key`($max_index_length))
 		) $charset_collate AUTO_INCREMENT=1;" );
 
+		// Sessions table
+		maybe_create_table( $sessions, "CREATE TABLE `{$sessions}` (
+			session_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			session_key char(32) NOT NULL,
+			session_value longtext NOT NULL,
+			session_expiry BIGINT UNSIGNED NOT NULL,
+			PRIMARY KEY  (session_id),
+			UNIQUE KEY session_key (session_key)
+		) $charset_collate AUTO_INCREMENT=1;" );
+
 		// Update db version
 		if( get_option( 'wp_ulike_dbVersion' ) === false ){
 			update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
@@ -206,6 +217,13 @@ class wp_ulike_activator {
 
 		// Update db version
 		update_option( 'wp_ulike_dbVersion', '2.3' );
+	}
+
+	public function upgrade_3(){
+		// Maybe not installed meta table
+		$this->install_tables();
+		// Update db version
+		update_option( 'wp_ulike_dbVersion', '2.4' );
 	}
 
     /**
