@@ -143,7 +143,6 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 = 4.6.0 =
 * Added: Increase security for user accounts by using 2-factor authentication steps. [PRO]
 * Added: Animated Smiley Switch Template. [PRO]
-* Added: Add a new session manager service.
 * Updated: Options panel framework.
 * Fixed: Minor bug fixes.
 

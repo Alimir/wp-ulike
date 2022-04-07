@@ -48,11 +48,7 @@ class WpUlikeInit {
    *
    * @return void
    */
-  public function init(){
-    if( self::is_frontend() || self::is_ajax() ){
-      $this->initialize_session();
-    }
-  }
+  public function init(){}
 
   /**
    * Plugins loaded hook
@@ -79,9 +75,6 @@ class WpUlikeInit {
     }
     if ( version_compare( $current_version, '2.3', '<' ) ) {
       wp_ulike_activator::get_instance()->upgrade_2();
-    }
-    if ( version_compare( $current_version, '2.4', '<' ) ) {
-      wp_ulike_activator::get_instance()->upgrade_3();
     }
   }
 
@@ -240,21 +233,6 @@ class WpUlikeInit {
   public static function is_frontend() {
     return ( ! self::is_admin_backend() || ! self::is_ajax() ) && ! self::is_cron() && ! self::is_rest();
   }
-
-	/**
-	 * Initialize the session class.
-	 *
-	 * @return void
-	 */
-	public function initialize_session() {
-    global $wp_ulike_session;
-		// Session class, handles session data for users - can be overwritten if custom handler is needed.
-		$session_class = apply_filters( 'wp_ulike_session_handler', 'wp_ulike_session_handler' );
-		if ( is_null( $wp_ulike_session ) || ! $wp_ulike_session instanceof $session_class ) {
-			$wp_ulike_session = new $session_class();
-			$wp_ulike_session->init();
-		}
-	}
 
   /**
    * Get Client IP address
