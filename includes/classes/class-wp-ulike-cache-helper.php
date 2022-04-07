@@ -64,14 +64,14 @@ class wp_ulike_cache_helper {
 	 */
 	public static function get_cache_prefix( $group ) {
 		// Get cache key
-		$prefix = wp_cache_get( 'wp_ulike_' . $group . '_cache_prefix', $group );
+		$prefix = wp_cache_get( 'ul_' . $group . '_cache_prefix', $group );
 
 		if ( false === $prefix ) {
 			$prefix = microtime();
-			wp_cache_set( 'wp_ulike_' . $group . '_cache_prefix', $prefix, $group );
+			wp_cache_set( 'ul_' . $group . '_cache_prefix', $prefix, $group );
 		}
 
-		return 'wp_ulike_' . $prefix . '_';
+		return 'ul_cache_' . $prefix . '_';
 	}
 
 	/**
@@ -81,7 +81,7 @@ class wp_ulike_cache_helper {
 	 * @since 3.9.0
 	 */
 	public static function invalidate_cache_group( $group ) {
-		wp_cache_set( 'wp_ulike_' . $group . '_cache_prefix', microtime(), $group );
+		wp_cache_set( 'ul_' . $group . '_cache_prefix', microtime(), $group );
 	}
 
 

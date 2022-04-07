@@ -64,7 +64,9 @@ class wp_ulike_session_handler extends wp_ulike_session {
 	public function init() {
 		$this->init_session_cookie();
 
-		add_action( 'wp_ulike_set_user_session_cookie', array( $this, 'set_user_session_cookie' ), 10 );
+		add_action( 'wp_ulike_set_user_cookie', array( $this, 'set_user_session_cookie' ), 10 );
+		add_action( 'wp_ulike_delete_user_cookie', array( $this, 'destroy_session' ), 10 );
+
 		add_action( 'shutdown', array( $this, 'save_data' ), 20 );
 		add_action( 'wp_logout', array( $this, 'destroy_session' ) );
 
@@ -100,7 +102,7 @@ class wp_ulike_session_handler extends wp_ulike_session {
 				$this->_user_id = strval( get_current_user_id() );
 				$this->_dirty       = true;
 				$this->save_data( $guest_session_id );
-				$this->set_user_session_cookie();
+				$this->set_user_session_cookie( true );
 			}
 
 			// Update session if its close to expiring.
@@ -145,15 +147,19 @@ class wp_ulike_session_handler extends wp_ulike_session {
 	 * Since the cookie name (as of 2.1) is prepended with wp, cache systems like batcache will not cache pages when set.
 	 *
 	 * Warning: Cookies will only be set if this is called before the headers are sent.
+	 *
+	 * @param bool $set Should the session cookie be set.
 	 */
-	public function set_user_session_cookie() {
-		$to_hash           = $this->_user_id . '|' . $this->_session_expiration;
-		$cookie_hash       = hash_hmac( 'md5', $to_hash, wp_hash( $to_hash ) );
-		$cookie_value      = $this->_user_id . '||' . $this->_session_expiration . '||' . $this->_session_expiring . '||' . $cookie_hash;
-		$this->_has_cookie = true;
+	public function set_user_session_cookie( $set ) {
+		if ( $set ) {
+			$to_hash           = $this->_user_id . '|' . $this->_session_expiration;
+			$cookie_hash       = hash_hmac( 'md5', $to_hash, wp_hash( $to_hash ) );
+			$cookie_value      = $this->_user_id . '||' . $this->_session_expiration . '||' . $this->_session_expiring . '||' . $cookie_hash;
+			$this->_has_cookie = true;
 
-		if ( ! isset( $_COOKIE[ $this->_cookie ] ) || $_COOKIE[ $this->_cookie ] !== $cookie_value ) {
-			wp_ulike_setcookie( $this->_cookie, $cookie_value, $this->_session_expiration, $this->use_secure_cookie(), true );
+			if ( ! isset( $_COOKIE[ $this->_cookie ] ) || $_COOKIE[ $this->_cookie ] !== $cookie_value ) {
+				wp_ulike_setcookie( $this->_cookie, $cookie_value, $this->_session_expiration, $this->use_secure_cookie(), true );
+			}
 		}
 	}
 
@@ -350,13 +356,12 @@ class wp_ulike_session_handler extends wp_ulike_session {
 	 * When a user is logged out, ensure they have a unique nonce to using the user/session ID.
 	 * This filter runs everything `wp_verify_nonce()` and `wp_create_nonce()` gets called.
 	 *
-	 * @since 5.3.0
 	 * @param int    $uid    User ID.
 	 * @param string $action The nonce action.
 	 * @return int|string
 	 */
 	public function maybe_update_nonce_user_logged_out( $uid, $action ) {
-		if ( wp_ulike_string_util_starts_with( $action, 'wp_ulike' ) ) {
+		if ( wp_ulike_string_util_starts_with( $action, 'wp-ulike' ) ) {
 			return $this->has_session() && $this->_user_id ? $this->_user_id : $uid;
 		}
 
