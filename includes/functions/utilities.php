@@ -375,17 +375,18 @@ if( ! function_exists('wp_ulike_setcookie') ){
 	}
 }
 
-
-/**
- * Define a constant if it is not already defined.
- *
- * @since 3.0.0
- * @param string $name  Constant name.
- * @param mixed  $value Value.
- */
-function wp_ulike_maybe_define_constant( $name, $value ) {
-	if ( ! defined( $name ) ) {
-		define( $name, $value );
+if( ! function_exists('wp_ulike_maybe_define_constant') ){
+	/**
+	 * Define a constant if it is not already defined.
+	 *
+	 * @since 3.0.0
+	 * @param string $name  Constant name.
+	 * @param mixed  $value Value.
+	 */
+	function wp_ulike_maybe_define_constant( $name, $value ) {
+		if ( ! defined( $name ) ) {
+			define( $name, $value );
+		}
 	}
 }
 

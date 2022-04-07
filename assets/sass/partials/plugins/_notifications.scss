@@ -28,8 +28,9 @@
         color: $wp-ulike-color-light;
         animation: wpUlikeNotifitcationsAnimation 200ms backwards;
         box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08);
-        font-size: 14px;
+        font-size: 0.9rem;
         font-weight: 500;
+        line-height: normal;
 
         &:hover {
             opacity: 0.9;
