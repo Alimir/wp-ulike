@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2022-04-06 11:48:02+00:00\n"
+"POT-Creation-Date: 2022-04-08 09:45:06+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:27:25+0000\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -156,13 +156,13 @@ msgid "Topics Likes Logs"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:59
-#: admin/includes/templates/statistics.php:124 includes/plugin.php:126
+#: admin/includes/templates/statistics.php:124 includes/plugin.php:119
 msgid "Statistics"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:67
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
-#: includes/plugin.php:127
+#: includes/plugin.php:120
 msgid "About"
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:125
+#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:118
 msgid "Settings"
 msgstr ""
 
@@ -1516,14 +1516,6 @@ msgstr ""
 msgid "There was an error processing the request."
 msgstr ""
 
-#. translators: 1: key 2: URL
-#: includes/classes/class-wp-ulike-cache-helper.php:187
-msgid ""
-"In order for <strong>database caching</strong> to work with WP ULike you "
-"must add %1$s to the \"Ignored Query Strings\" option in <a href=\"%2$s\">W3 "
-"Total Cache settings</a>."
-msgstr ""
-
 #: includes/classes/class-wp-ulike-cta-listener.php:70
 #: includes/classes/class-wp-ulike-voters-listener.php:45
 msgid "Invalid item type."
@@ -1880,12 +1872,12 @@ msgid "WP ULike"
 msgstr ""
 
 #. translators: %s: PHP version
-#: wp-ulike.php:77
+#: wp-ulike.php:74
 msgid "WP ULike requires PHP version %s+, plugin is currently NOT RUNNING."
 msgstr ""
 
 #. translators: %s: WordPress version
-#: wp-ulike.php:91
+#: wp-ulike.php:88
 msgid ""
 "WP ULike requires WordPress version %s+. Because you are using an earlier "
 "version, the plugin is currently NOT RUNNING."
