@@ -340,8 +340,7 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 	 * @return string $return Formatted notification.
 	 */
 	function wp_ulike_format_buddypress_notifications( $content, $item_id, $secondary_item_id, $total_items, $format, $action, $component, $id ) {
-		global $wp_filter,$wp_version;
-
+		// check for ulike notifications
 		if ( strpos( $action, 'wp_ulike_' ) !== false ) {
 			//Extracting ulike type from the action value.
 			preg_match('/wp_ulike_(.*?)_action/', $action, $type);
@@ -403,19 +402,6 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 					'link' => $custom_link
 				), $custom_link, (int) $total_items, $item_id, $user_ID );
 			}
-
-			if ( function_exists('bbp_get_version') && version_compare( bbp_get_version(), '2.6.0' , '<') ) {
-				// global wp_filter to call bbPress wrapper function
-				if( isset( $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'] ) ) {
-					if( version_compare( $wp_version, '4.7', '>=' ) ) {
-						$wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
-					} else {
-						$wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'wp_ulike_bbp_format_buddypress_notifications';
-					}
-				}
-			}
-
-			return $content;
 		}
 
 		return $content;
