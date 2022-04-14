@@ -7,12 +7,12 @@
  * @version 1.0.0
  *
  */
-if ( ! class_exists( 'ULF' ) ) {
-  class ULF {
+if ( ! class_exists( 'ULF_Setup' ) ) {
+  class ULF_Setup {
 
     // Default constants
     public static $premium  = true;
-    public static $version  = '2.2.7';
+    public static $version  = '2.2.8';
     public static $dir      = '';
     public static $url      = '';
     public static $css      = '';
@@ -39,10 +39,13 @@ if ( ! class_exists( 'ULF' ) ) {
 
     private static $instance = null;
 
-    public static function init( $file = __FILE__ ) {
+    public static function init( $file = __FILE__, $premium = true ) {
 
       // Set file constant
       self::$file = $file;
+
+      // Set file constant
+      self::$premium = $premium;
 
       // Set constants
       self::constants();
@@ -375,18 +378,18 @@ if ( ! class_exists( 'ULF' ) ) {
     // Include files
     public static function includes() {
 
-      // Helpers
+      // Include common functions
       self::include_plugin_file( 'functions/actions.php'  );
       self::include_plugin_file( 'functions/helpers.php'  );
       self::include_plugin_file( 'functions/sanitize.php' );
       self::include_plugin_file( 'functions/validate.php' );
 
-      // Includes free version classes
+      // Include free version classes
       self::include_plugin_file( 'classes/abstract.class.php'      );
       self::include_plugin_file( 'classes/fields.class.php'        );
       self::include_plugin_file( 'classes/admin-options.class.php' );
 
-      // Includes premium version classes
+      // Include premium version classes
       if ( self::$premium ) {
         self::include_plugin_file( 'classes/customize-options.class.php' );
         self::include_plugin_file( 'classes/metabox-options.class.php'   );
@@ -560,9 +563,6 @@ if ( ! class_exists( 'ULF' ) ) {
         return;
       }
 
-      // Check for developer mode
-      $min = ( self::$premium && SCRIPT_DEBUG ) ? '' : '.min';
-
       // Admin utilities
       wp_enqueue_media();
 
@@ -572,11 +572,14 @@ if ( ! class_exists( 'ULF' ) ) {
 
       // Font awesome 4 and 5 loader
       if ( apply_filters( 'ulf_fa4', false ) ) {
-        wp_enqueue_style( 'ulf-fa', 'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome'. $min .'.css', array(), '4.7.0', 'all' );
+        wp_enqueue_style( 'ulf-fa', 'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css', array(), '4.7.0', 'all' );
       } else {
-        wp_enqueue_style( 'ulf-fa5', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all'. $min .'.css', array(), '5.15.5', 'all' );
-        wp_enqueue_style( 'ulf-fa5-v4-shims', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/v4-shims'. $min .'.css', array(), '5.15.5', 'all' );
+        wp_enqueue_style( 'ulf-fa5', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css', array(), '5.15.5', 'all' );
+        wp_enqueue_style( 'ulf-fa5-v4-shims', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/v4-shims.min.css', array(), '5.15.5', 'all' );
       }
+
+      // Check for developer mode
+      $min = ( self::$premium && SCRIPT_DEBUG ) ? '' : '.min';
 
       // Main style
       wp_enqueue_style( 'ulf', self::include_plugin_url( 'assets/css/style'. $min .'.css' ), array(), self::$version, 'all' );
@@ -783,4 +786,16 @@ if ( ! class_exists( 'ULF' ) ) {
 
 }
 
-ULF::init( __FILE__ );
+ULF_Setup::init( __FILE__, true );
+
+/**
+ *
+ * Extended Setup Class for Shortland
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ *
+ */
+if ( ! class_exists( 'ULF' ) ) {
+  class ULF extends ULF_Setup{}
+}

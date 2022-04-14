@@ -2613,14 +2613,14 @@
             }
 
             if ( sub_shortcode_value !== '' ) {
-              shortcode += ' ' + sub_shortcode_tag.replace('-', '_') + '="' + sub_shortcode_value.toString() + '"';
+              shortcode += ' ' + sub_shortcode_tag + '="' + sub_shortcode_value.toString() + '"';
             }
 
           });
 
         } else {
 
-          shortcode += ' ' + shortcode_tag.replace('-', '_') + '="' + shortcode_value.toString() + '"';
+          shortcode += ' ' + shortcode_tag + '="' + shortcode_value.toString() + '"';
 
         }
 

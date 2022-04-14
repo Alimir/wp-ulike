@@ -20,7 +20,7 @@
     var RawHTML           = element.RawHTML;
     var Button            = components.Button;
 
-    registerBlockType('ulf-gutenberg-block/block-'+block.hash, {
+    registerBlockType(block.name, {
       title: block.gutenberg.title,
       description: block.gutenberg.description,
       icon: block.gutenberg.icon || 'screenoptions',
@@ -43,7 +43,7 @@
 
             createElement(Button, {
               'data-modal-id': block.modal_id,
-              'data-gutenberg-id': block.hash,
+              'data-gutenberg-id': block.name,
               className: 'is-secondary ulf-shortcode-button',
               onClick: function () {
                 window.ulf_gutenberg_props = props;

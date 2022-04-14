@@ -50,7 +50,9 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
 
       if ( ! empty( $this->args['show_in_editor'] ) ) {
 
-        ULF::$shortcode_instances[$this->unique] = wp_parse_args( array( 'hash' => md5( $key ), 'modal_id' => $this->unique ), $this->args );
+        $name = str_replace( '_', '-', sanitize_title( $this->unique ) );
+
+        ULF::$shortcode_instances[] = wp_parse_args( array( 'name' => 'ulf/'. $name, 'modal_id' => $this->unique ), $this->args );
 
         // elementor editor support
         if ( ULF::is_active_plugin( 'elementor/elementor.php' ) ) {
@@ -322,9 +324,9 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
 
       wp_localize_script( 'ulf-gutenberg-block', 'ulf_gutenberg_blocks', ULF::$shortcode_instances );
 
-      foreach ( ULF::$shortcode_instances as $value ) {
+      foreach ( ULF::$shortcode_instances as $block ) {
 
-        register_block_type( 'ulf-gutenberg-block/block-'. $value['hash'], array(
+        register_block_type( $block['name'], array(
           'editor_script' => 'ulf-gutenberg-block',
         ) );
 
