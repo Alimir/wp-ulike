@@ -507,6 +507,7 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 			switch ( $action ) {
 				case 'bbp_theme_before_reply_content':
 				case 'bbp_theme_before_topic_content':
+				case 'bbp_template_before_user_profile':
 					if( $position === 'top' ){
 						echo wp_ulike_bbpress('put');
 					}
@@ -514,6 +515,7 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 
 				case 'bbp_theme_after_reply_content':
 				case 'bbp_theme_after_topic_content':
+				case 'bbp_template_after_user_profile':
 					if( $position === 'bottom' ){
 						echo wp_ulike_bbpress('put');
 					}
@@ -525,7 +527,45 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 	add_action( 'bbp_theme_after_reply_content', 'wp_ulike_put_bbpress', 15 );
 	add_action( 'bbp_theme_before_topic_content', 'wp_ulike_put_bbpress', 15 );
 	add_action( 'bbp_theme_after_topic_content', 'wp_ulike_put_bbpress', 15 );
+	add_action( 'bbp_template_before_user_profile', 'wp_ulike_put_bbpress', 15 );
+	add_action( 'bbp_template_after_user_profile', 'wp_ulike_put_bbpress', 15 );
+}
 
+if( ! function_exists( 'wp_ulike_put_bbpress_topic_content' ) ){
+	/**
+	 * display like button in bbpress topic
+	 *
+	 * @param string $content
+	 * @param integer $topic_id
+	 * @return string
+	 */
+	function wp_ulike_put_bbpress_topic_content( $content, $topic_id ) {
+		// Stack variable
+		$output = $content;
+
+		if ( wp_ulike_setting_repo::isAutoDisplayOn('topic')) {
+			// Get button
+			$button = wp_ulike_bbpress('put', array(
+				'id' => $topic_id
+			));
+			switch ( wp_ulike_get_option( 'bbpress_group|auto_display_position', 'bottom' ) ) {
+				case 'top':
+					$output = $button . $content;
+					break;
+
+				case 'top_bottom':
+					$output = $button . $content . $button;
+					break;
+
+				default:
+					$output = $content . $button;
+					break;
+			}
+		}
+
+		return $output;
+	}
+	add_filter( 'bbp_get_topic_content', 'wp_ulike_put_bbpress_topic_content', 15, 2 );
 }
 
 /*******************************************************
