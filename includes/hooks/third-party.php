@@ -495,7 +495,7 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 	 * @return          filter on bbpPress hooks
 	 */
 	function wp_ulike_put_bbpress() {
-		if ( wp_ulike_setting_repo::isAutoDisplayOn('topic')) {
+		if ( wp_ulike_setting_repo::isAutoDisplayOn('topic') && WpUlikeInit::is_frontend() ) {
 			$action   = current_action();
 			$position = wp_ulike_get_option( 'bbpress_group|auto_display_position', 'bottom' );
 
@@ -527,8 +527,6 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 	add_action( 'bbp_theme_after_reply_content', 'wp_ulike_put_bbpress', 15 );
 	add_action( 'bbp_theme_before_topic_content', 'wp_ulike_put_bbpress', 15 );
 	add_action( 'bbp_theme_after_topic_content', 'wp_ulike_put_bbpress', 15 );
-	add_action( 'bbp_template_before_user_profile', 'wp_ulike_put_bbpress', 15 );
-	add_action( 'bbp_template_after_user_profile', 'wp_ulike_put_bbpress', 15 );
 }
 
 if( ! function_exists( 'wp_ulike_put_bbpress_topic_content' ) ){
@@ -543,7 +541,7 @@ if( ! function_exists( 'wp_ulike_put_bbpress_topic_content' ) ){
 		// Stack variable
 		$output = $content;
 
-		if ( wp_ulike_setting_repo::isAutoDisplayOn('topic')) {
+		if ( wp_ulike_setting_repo::isAutoDisplayOn('topic') && WpUlikeInit::is_frontend() ) {
 			// Get button
 			$button = wp_ulike_bbpress('put', array(
 				'id' => $topic_id
