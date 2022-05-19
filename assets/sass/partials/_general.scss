@@ -1,4 +1,3 @@
-
 .wpulike {
     display: block;
     position: relative;
@@ -6,7 +5,12 @@
     margin: 0;
     padding: 10px 0;
 
-    .wp_ulike_btn {
+    .wp_ulike_general_class {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    button.wp_ulike_btn {
         margin: 0;
         position: relative;
         display: inline-block;
@@ -16,10 +20,12 @@
         padding: 15px 25px;
         border: none;
         text-align: center;
-        transition-property: none;
+        transition: none;
         cursor: pointer;
 
-        &:hover, &:active, &:focus {
+        &:hover,
+        &:active,
+        &:focus {
             outline: none;
         }
 
@@ -27,15 +33,19 @@
             border: 0;
         }
 
-        &[disabled=disabled], &:disabled{
-            &:hover, &:active, &:focus {
+        &[disabled=disabled],
+        &:disabled {
+
+            &:hover,
+            &:active,
+            &:focus {
                 outline: none;
                 background-color: initial;
             }
         }
     }
 
-    .wp_ulike_put_text{
+    .wp_ulike_put_text {
         font-size: 14px;
         font-weight: 600;
         line-height: 28px;
@@ -43,13 +53,9 @@
         min-width: 50px;
     }
 
-    .wp_ulike_general_class{
-        display: inline-flex;
-        align-items: center;
-    }
 
     .wp_ulike_is_loading {
-        .wp_ulike_btn {
+        button.wp_ulike_btn {
             background-image: url(../img/svg/loader.svg);
             background-repeat: no-repeat;
             background-position: center center;
@@ -58,26 +64,54 @@
                 visibility: hidden;
             }
 
-            &.wp_ulike_put_image{
-                &:after{
+            &.wp_ulike_put_image {
+                &::after {
                     content: none;
                 }
             }
         }
     }
 
-    &.wpulike-hide-counter{
-        .count-box{
+    &.wpulike-hide-counter {
+        .count-box {
             display: none;
         }
     }
 
     .count-box {
-        &:empty{
+        &:empty {
             display: none;
         }
     }
 
+}
+
+#buddypress #activity-stream {
+
+    .activity-meta,
+    .activity-comments,
+    .activity-inner {
+        .wpulike {
+            display: inline-block;
+            vertical-align: super;
+        }
+    }
+
+    .wp_ulike_likers_wrapper {
+
+        li,
+        .wp-ulike-liker {
+            border: none;
+            padding: 0;
+
+            a,
+            img {
+                float: none;
+                padding: 0;
+                margin: 0;
+            }
+        }
+    }
 }
 
 .wp_ulike_click_is_disabled {

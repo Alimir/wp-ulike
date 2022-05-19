@@ -16,7 +16,7 @@
         color: #757575;
     }
 
-    .wp_ulike_btn {
+    button.wp_ulike_btn {
         background: transparent;
 
         &:hover,
@@ -45,6 +45,7 @@
             content: '';
             display: block;
             background: url(../img/svg/love.svg) no-repeat;
+            background-position: center center;
             background-size: contain;
             width: 20px;
             height: 20px;
@@ -76,28 +77,40 @@
 }
 
 #buddypress #activity-stream {
-    .wpulike-heart {
-        .wp_ulike_btn {
-            background: transparent;
-            border: 0;
-            font-size: initial;
-            padding: initial;
-        }
-
-        .wp_ulike_put_image {
-            padding: 10px 15px;
-        }
-
-        .wp_ulike_general_class {
-            border-radius: 0;
-            padding: 0.2em 0.5em;
-            margin-bottom: 0;
-        }
-    }
 
     .activity-meta,
-    .acomment-options {
-        display: flex;
-        align-items: center;
+    .activity-comments,
+    .activity-inner {
+        .wpulike-heart {
+            .wp_ulike_btn {
+                background-color: transparent;
+                border: 0;
+                font-size: initial;
+                padding: 1em;
+            }
+
+            .wp_ulike_put_image {
+                padding: 10px 15px;
+
+                &:after {
+                    width: 17px;
+                    height: 17px;
+                }
+            }
+
+            .wp_ulike_general_class {
+                border-radius: 0;
+                padding: 0.1em 0.3em;
+                margin-bottom: 0;
+            }
+
+            .wp_ulike_is_loading {
+                .wp_ulike_btn {
+                    background-image: url(../img/svg/loader.svg);
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                }
+            }
+        }
     }
 }

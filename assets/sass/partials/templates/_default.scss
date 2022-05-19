@@ -3,7 +3,7 @@
  */
 .wpulike-default {
 
-    .wp_ulike_btn {
+    button.wp_ulike_btn {
         color: #616161;
         background-color: #e0e0e0;
         min-height: 30px;
@@ -90,51 +90,25 @@
 #buddypress #activity-stream {
 
     .activity-meta,
-    .activity-comments {
-
-        .wpulike {
-            display: flex;
-            align-items: center;
-            padding: 0;
-        }
+    .activity-comments,
+    .activity-inner {
 
         .wpulike-default {
-            .wp_ulike_btn {
+            button.wp_ulike_btn {
                 border-radius: 0;
                 background-color: #ffffff;
                 box-shadow: 0 0 0 1px #bdbdbd inset;
                 font-size: initial;
-                padding: initial;
+                padding: 1em;
             }
-        }
 
-    }
-
-    .wp_ulike_likers_wrapper {
-
-        li,
-        .wp-ulike-liker {
-            border: none;
-            padding: 0;
-
-            a,
-            img {
-                float: none;
-                padding: 0;
-                margin: 0;
+            .wp_ulike_is_loading {
+                button.wp_ulike_btn {
+                    background-image: url(../img/svg/loader.svg);
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                }
             }
         }
     }
 }
-
-// #bbpress-forums {
-//     .wp_ulike_likers_wrapper:not(.wp_ulike_display_inline){
-//         ul, .wp-ulike-likers-list {
-//             margin: 0 !important;
-
-//             li{
-//                 list-style-type: none;
-//             }
-//         }
-//     }
-// }
