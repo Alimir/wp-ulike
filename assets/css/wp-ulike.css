@@ -190,6 +190,7 @@
 }
 .wpulike-heart button.wp_ulike_btn {
   background: transparent;
+  padding: 15px;
 }
 .wpulike-heart button.wp_ulike_btn:hover, .wpulike-heart button.wp_ulike_btn:focus {
   color: #757575;
