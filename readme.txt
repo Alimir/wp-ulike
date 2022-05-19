@@ -140,6 +140,12 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 
 == Changelog ==
 
+= 4.6.2 =
+* Improved: bbPress button display on main topic.
+* Improved: css conflicts with buddypress.
+* Fixed: myCred author points issue.
+* Fixed: Minor bug fixes.
+
 = 4.6.1 =
 * Updated: Options panel framework.
 * Fixed: BuddyPress notification error.
