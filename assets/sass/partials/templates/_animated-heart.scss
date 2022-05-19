@@ -1,17 +1,10 @@
-
 /**
  * Animated heart template
  */
 
 .wpulike-animated-heart {
 
-  .wp_ulike_is_loading{
-      .wp_ulike_btn{
-          background-image: none;
-      }
-  }
-
-  .wp_ulike_btn {
+  button.wp_ulike_btn {
     position: relative;
     border-radius: 50em;
     background-color: #ffffff;
@@ -21,41 +14,63 @@
     width: 50px;
     height: 50px;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: #ffffff;
       background-image: none;
     }
 
-    &[disabled=disabled], &:disabled{
-      &:hover, &:active, &:focus {
-          background-color: #ffffff;
+    &[disabled=disabled],
+    &:disabled {
+
+      &:hover,
+      &:active,
+      &:focus {
+        background-color: #ffffff;
       }
     }
 
-    &.wp_ulike_btn_is_active{
+    &.wp_ulike_btn_is_active {
       background-color: rgba(255, 111, 99, 1);
 
-      &[disabled=disabled], &:disabled{
-        &:hover, &:active, &:focus {
-            background-color: rgba(255, 111, 99, 1);
+      &[disabled=disabled],
+      &:disabled {
+
+        &:hover,
+        &:active,
+        &:focus {
+          background-color: rgba(255, 111, 99, 1);
         }
       }
 
-      .wpulike-svg-heart{
+      .wpulike-svg-heart {
         fill: #ffffff;
 
-        &-pop{
+        &-pop {
           animation-direction: normal;
         }
       }
     }
 
-    &:active{
+    &:active {
       box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
     }
   }
 
-  .wpulike-svg-heart{
+  .wp_ulike_is_loading {
+    button.wp_ulike_btn {
+      background-image: initial;
+      padding: 0;
+
+      &.wp_ulike_put_image {
+        &:after {
+          content: '';
+        }
+      }
+    }
+  }
+
+  .wpulike-svg-heart {
     width: 20px;
     fill: #ff6f63;
     transition: fill .5s, transform .5s;
@@ -65,63 +80,71 @@
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
 
-    &-pop{
-     position: absolute;
-     width: 30%;
-     fill: #ff6f63;
-     opacity: 0;
-     left: 0;
-     animation: popHearts 1s ease forwards reverse;
+    &-pop {
+      position: absolute;
+      width: 30%;
+      fill: #ff6f63;
+      opacity: 0;
+      left: 0;
+      animation: popHearts 1s ease forwards reverse;
 
-      &.one{
+      &.one {
         left: 1%;
         transform: rotate(-10deg);
         animation-delay: 0.45s;
       }
-      &.two{
+
+      &.two {
         left: 15%;
         transform: rotate(8deg);
         animation-delay: 0.25s;
       }
-      &.three{
+
+      &.three {
         left: 30%;
         transform: rotate(-5deg);
         animation-delay: 0s;
       }
-      &.four{
+
+      &.four {
         left: 50%;
         transform: rotate(-8deg);
         animation-delay: 0.3s;
       }
-      &.five{
+
+      &.five {
         left: 60%;
         transform: rotate(-10deg);
         animation-delay: 0.9s;
       }
-      &.six{
+
+      &.six {
         left: 70%;
         transform: rotate(-8deg);
         animation-delay: 0.2s;
       }
-      &.seven{
+
+      &.seven {
         left: 85%;
         transform: rotate(6deg);
         animation-delay: 0.35s;
       }
-      &.eight{
+
+      &.eight {
         left: 90%;
         transform: rotate(-4deg);
         animation-delay: 0.5s;
       }
-      &.nine{
+
+      &.nine {
         left: 95%;
         transform: rotate(8deg);
         animation-delay: 0.2s;
       }
     }
   }
-  
-  .count-box{
+
+  .count-box {
     margin: 0 15px;
     color: #ff6f63;
     display: inline-block;
@@ -130,33 +153,42 @@
 
 }
 
-#buddypress #activity-stream{
-  .wpulike-animated-heart {
-      .wp_ulike_btn{
+#buddypress #activity-stream {
+
+  .activity-meta,
+  .activity-comments,
+  .activity-inner {
+    .wpulike-animated-heart {
+      .wp_ulike_btn {
         background: inherit;
         border: 0;
         width: 40px;
         height: 40px;
+        border-radius: 50em;
 
-        &.wp_ulike_btn_is_active{
+        &.wp_ulike_btn_is_active {
           background-color: rgba(255, 111, 99, 1);
         }
       }
+    }
   }
 }
 
-@keyframes popHearts{
-  0%{
+@keyframes popHearts {
+  0% {
     left: calc(50% - 7px);
     top: 10px;
   }
-  20%{
+
+  20% {
     opacity: 1;
   }
-  80%{
+
+  80% {
     top: -20px;
   }
-  100%{
+
+  100% {
     opacity: 0;
   }
 }

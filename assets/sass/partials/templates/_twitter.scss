@@ -10,7 +10,7 @@
   }
 
   .wp_ulike_is_loading {
-    .wp_ulike_btn {
+    button.wp_ulike_btn {
       background-image: initial;
       padding: 0;
 
@@ -22,7 +22,7 @@
     }
   }
 
-  .wp_ulike_btn {
+  button.wp_ulike_btn {
     width: 30px;
     height: 30px;
     overflow: hidden;
