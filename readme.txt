@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, user profile, rating, favorite, statistics, bu
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.9.3
-Stable tag: 4.6.1
+Stable tag: 4.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
