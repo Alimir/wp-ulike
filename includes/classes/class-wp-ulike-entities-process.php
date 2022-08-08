@@ -151,17 +151,19 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @param boolean $keep_status
 		 * @return void
 		 */
-		public function setCurrentStatus( $factor = 'up', $keep_status = false, $force_status = false ){
+		public function setCurrentStatus( $args, $keep_status = false, $force_status = false ){
 			if( $force_status ){
 				$this->currentStatus = $force_status;
 				return;
 			}
 
-			if( $factor === 'down' ){
+			if( $args['item_factor'] === 'down' ){
 				$this->currentStatus = $this->prevStatus !== 'dislike' || $keep_status ? 'dislike' : 'undislike';
 			} else {
 				$this->currentStatus = $this->prevStatus !== 'like' || $keep_status ? 'like' : 'unlike';
 			}
+
+			$this->currentStatus = apply_filters( 'wp_ulike_user_current_status', $this->currentStatus, $this->prevStatus, $args );
 		}
 
 		/**
@@ -175,15 +177,19 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			// if( wp_ulike_is_cache_exist() ){
 			// 	wp_cache_delete( $this->currentUser, 'wp_ulike_user_meta' );
 			// }
-			// get user log array
-			$get_user_history = wp_ulike_get_user_item_history( array(
+
+			$args = array(
 				"item_id"           => $item_id,
 				"item_type"         => $this->itemType,
 				"current_user"      => $this->currentUser,
 				"settings"          => $this->typeSettings,
 				"is_user_logged_in" => $this->isUserLoggedIn
-			) );
-			$this->prevStatus = ! empty( $get_user_history[$item_id] ) ? $get_user_history[$item_id] : false;
+			);
+
+			// get user log array
+			$get_user_history = wp_ulike_get_user_item_history( $args );
+			// set prev status
+			$this->prevStatus = apply_filters( 'wp_ulike_user_prev_status', ! empty( $get_user_history[$item_id] ) ? $get_user_history[$item_id] : false, $args );
 		}
 
 		/**
@@ -273,7 +279,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 							}
 						}
 					}
-					wp_ulike_setcookie( $cookie_key, json_encode( $cookie_data ), 2147483647 );
+					wp_ulike_setcookie( $cookie_key, json_encode( $cookie_data ), time() + 2147483647 );
 				}
 			}
 

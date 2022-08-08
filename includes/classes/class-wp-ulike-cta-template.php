@@ -45,6 +45,8 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		 * @return integer
 		 */
 		public function get_method_id(){
+			$method_id = 0;
+
 			if( ! $this->hasPermission( array(
 				'item_id'      => $this->args['id'],
 				'type'         => $this->args['slug'],
@@ -54,25 +56,30 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 			), $this->settings ) ){
 				// If has prev status
 				if( $this->getPrevStatus() ){
-					return substr( $this->getPrevStatus(), 0, 2 ) !== "un" ? 4 : 5;
+					$method_id = substr( $this->getPrevStatus(), 0, 2 ) !== "un" ? 4 : 5;
 				}
-				// Else return zero
-				return 0;
+
+				$method_id = 0;
+			} else {
+				switch( wp_ulike_setting_repo::getMethod( $this->args['slug'] ) ){
+					case 'do_not_log':
+						$method_id = $this->getPrevStatus() ? 4 : 1;
+						break;
+					case 'by_cookie':
+						$method_id = 1;
+						break;
+
+					default:
+						if( ! $this->getPrevStatus() ){
+							$method_id = 1;
+						} else {
+							$method_id = substr( $this->getPrevStatus(), 0, 2 ) !== "un" ? 2 : 3;
+						}
+						break;
+				}
 			}
 
-			switch( wp_ulike_setting_repo::getMethod( $this->args['slug'] ) ){
-				case 'do_not_log':
-					return $this->getPrevStatus() ? 4 : 1;
-				case 'by_cookie':
-					return 1;
-
-				default:
-					if( ! $this->getPrevStatus() ){
-						return 1;
-					} else {
-						return substr( $this->getPrevStatus(), 0, 2 ) !== "un" ? 2 : 3;
-					}
-			}
+			return apply_filters( 'wp_ulike_method_id', $method_id, $this );
 		}
 
 		/**

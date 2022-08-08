@@ -73,9 +73,9 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 			$logging_method = wp_ulike_setting_repo::getMethod( $this->parsedArgs['item_type'] );
 			// Set current status
 			if( in_array( $logging_method, array('do_not_log','by_cookie') ) ){
-				$this->setCurrentStatus( $this->parsedArgs['item_factor'], true );
+				$this->setCurrentStatus( $this->parsedArgs, true );
 			} else {
-				$this->setCurrentStatus( $this->parsedArgs['item_factor'] );
+				$this->setCurrentStatus( $this->parsedArgs );
 			}
 
 			// Check permission

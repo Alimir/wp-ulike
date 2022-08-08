@@ -520,15 +520,25 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 
 			switch ( $action ) {
 				case 'bbp_theme_before_reply_content':
-				case 'bbp_theme_before_topic_content':
 					if( $position === 'top' ){
 						echo wp_ulike_bbpress('put');
 					}
 					return;
 
 				case 'bbp_theme_after_reply_content':
-				case 'bbp_theme_after_topic_content':
 					if( $position === 'bottom' ){
+						echo wp_ulike_bbpress('put');
+					}
+					return;
+
+				case 'bbp_theme_before_topic_content':
+					if( $position === 'top' && ! ( bbp_is_single_topic() && bbp_show_lead_topic() ) ){
+						echo wp_ulike_bbpress('put');
+					}
+					return;
+
+				case 'bbp_theme_after_topic_content':
+					if( $position === 'bottom' && ! ( bbp_is_single_topic() && bbp_show_lead_topic() ) ){
 						echo wp_ulike_bbpress('put');
 					}
 					return;
