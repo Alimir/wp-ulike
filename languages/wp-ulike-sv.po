@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2022-04-08 09:45:06+00:00\n"
+"POT-Creation-Date: 2022-08-08 19:43:02+00:00\n"
 "PO-Revision-Date: 2020-02-26 22:14:02+0000\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -990,10 +990,10 @@ msgid "Start the loop of logs"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-settings.php:59
-#: includes/classes/class-wp-ulike-mycred.php:256
-#: includes/classes/class-wp-ulike-mycred.php:281
-#: includes/classes/class-wp-ulike-mycred.php:306
-#: includes/classes/class-wp-ulike-mycred.php:331
+#: includes/classes/class-wp-ulike-mycred.php:263
+#: includes/classes/class-wp-ulike-mycred.php:296
+#: includes/classes/class-wp-ulike-mycred.php:329
+#: includes/classes/class-wp-ulike-mycred.php:362
 msgid "required"
 msgstr ""
 
@@ -1724,51 +1724,51 @@ msgstr "Typsnittsfärg"
 msgid "Points for Liking content"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-mycred.php:242
-#: includes/classes/class-wp-ulike-mycred.php:267
-#: includes/classes/class-wp-ulike-mycred.php:292
-#: includes/classes/class-wp-ulike-mycred.php:317
+#: includes/classes/class-wp-ulike-mycred.php:243
+#: includes/classes/class-wp-ulike-mycred.php:276
+#: includes/classes/class-wp-ulike-mycred.php:309
+#: includes/classes/class-wp-ulike-mycred.php:342
 msgid "Points"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-mycred.php:244
-#: includes/classes/class-wp-ulike-mycred.php:269
-#: includes/classes/class-wp-ulike-mycred.php:294
-#: includes/classes/class-wp-ulike-mycred.php:319
+#: includes/classes/class-wp-ulike-mycred.php:247
+#: includes/classes/class-wp-ulike-mycred.php:280
+#: includes/classes/class-wp-ulike-mycred.php:313
+#: includes/classes/class-wp-ulike-mycred.php:346
 msgid "Use zero to disable."
 msgstr "Använd noll för att inaktivera."
 
-#: includes/classes/class-wp-ulike-mycred.php:249
-#: includes/classes/class-wp-ulike-mycred.php:274
-#: includes/classes/class-wp-ulike-mycred.php:299
-#: includes/classes/class-wp-ulike-mycred.php:324
+#: includes/classes/class-wp-ulike-mycred.php:253
+#: includes/classes/class-wp-ulike-mycred.php:286
+#: includes/classes/class-wp-ulike-mycred.php:319
+#: includes/classes/class-wp-ulike-mycred.php:352
 msgid "Limit"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-mycred.php:255
-#: includes/classes/class-wp-ulike-mycred.php:280
-#: includes/classes/class-wp-ulike-mycred.php:305
-#: includes/classes/class-wp-ulike-mycred.php:330
+#: includes/classes/class-wp-ulike-mycred.php:260
+#: includes/classes/class-wp-ulike-mycred.php:293
+#: includes/classes/class-wp-ulike-mycred.php:326
+#: includes/classes/class-wp-ulike-mycred.php:359
 msgid "Log template"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-mycred.php:263
+#: includes/classes/class-wp-ulike-mycred.php:271
 msgid "Points for Author Who Get Liked"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-mycred.php:288
+#: includes/classes/class-wp-ulike-mycred.php:304
 msgid "Points for unliking content"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-mycred.php:313
+#: includes/classes/class-wp-ulike-mycred.php:337
 msgid "Points for Author Who Get Unliked"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-mycred.php:338
+#: includes/classes/class-wp-ulike-mycred.php:370
 msgid "Limits"
 msgstr "Begränsningar"
 
-#: includes/classes/class-wp-ulike-mycred.php:343
+#: includes/classes/class-wp-ulike-mycred.php:379
 msgid ""
 "%plural% is to be awarded even when item authors Like/Unlike their own item."
 msgstr ""
@@ -1801,94 +1801,94 @@ msgstr ""
 msgid "Error receiving input parameters"
 msgstr ""
 
-#: includes/hooks/third-party.php:127
+#: includes/hooks/third-party.php:134
 msgid "WP ULike Activity"
 msgstr ""
 
-#: includes/hooks/third-party.php:142
+#: includes/hooks/third-party.php:149
 msgid "Votes"
 msgstr ""
 
-#: includes/hooks/third-party.php:352
+#: includes/hooks/third-party.php:358
 msgid "posts"
 msgstr "inlägg"
 
-#: includes/hooks/third-party.php:359
+#: includes/hooks/third-party.php:365
 msgid "comments"
 msgstr "kommentarer"
 
-#: includes/hooks/third-party.php:365
+#: includes/hooks/third-party.php:371
 msgid "activities"
 msgstr "aktiviteter"
 
-#: includes/hooks/third-party.php:373
+#: includes/hooks/third-party.php:379
 msgid "topics"
 msgstr ""
 
-#: includes/hooks/third-party.php:376
+#: includes/hooks/third-party.php:382
 msgid "replies"
 msgstr ""
 
-#: includes/hooks/third-party.php:388
+#: includes/hooks/third-party.php:394
 msgid "You have %d new %s likes"
 msgstr ""
 
-#: includes/hooks/third-party.php:392
+#: includes/hooks/third-party.php:398
 msgid "%s liked one of your %s"
 msgstr ""
 
-#: includes/hooks/third-party.php:436
+#: includes/hooks/third-party.php:429
 msgid "New activity liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:441
+#: includes/hooks/third-party.php:434
 msgid "New comment liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:446
+#: includes/hooks/third-party.php:439
 msgid "New post liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:451
+#: includes/hooks/third-party.php:444
 msgid "New topic liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:809
+#: includes/hooks/third-party.php:862
 msgid "Points for liking content"
 msgstr ""
 
-#: includes/hooks/third-party.php:810
+#: includes/hooks/third-party.php:863
 msgid ""
 "This hook award / deducts points from users who Like/Unlike any content of "
 "WordPress, bbPress, BuddyPress & ..."
 msgstr ""
 
-#: includes/hooks/third-party.php:826
+#: includes/hooks/third-party.php:879
 msgid "Liking Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:827
+#: includes/hooks/third-party.php:880
 msgid "Liked Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:828
+#: includes/hooks/third-party.php:881
 msgid "Unliking Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:829
+#: includes/hooks/third-party.php:882
 msgid "Unliked Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:847
+#: includes/hooks/third-party.php:900
 msgid "Recent Posts Liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:852
+#: includes/hooks/third-party.php:905
 msgid "Recent Comments Liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:883 includes/hooks/third-party.php:909
-#: includes/hooks/third-party.php:939 includes/hooks/third-party.php:969
+#: includes/hooks/third-party.php:936 includes/hooks/third-party.php:962
+#: includes/hooks/third-party.php:992 includes/hooks/third-party.php:1022
 msgid "This user has not made any likes."
 msgstr ""
 
