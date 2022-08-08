@@ -100,7 +100,7 @@ class WpUlikeInit {
    * @return void
    */
   private function define_constants(){
-    // a custom directory in uploads directory for storing custom files. Default uploads/{TWT_DOMAIN}
+    // a custom directory in uploads directory for storing custom files. Default uploads/{WP_ULIKE_SLUG}
     $uploads = wp_get_upload_dir();
     define( 'WP_ULIKE_CUSTOM_DIR' , $uploads['basedir'] . '/' . WP_ULIKE_SLUG );
   }

@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: like, marketing, elementor, user profile, rating, favorite, statistics, button, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 5.9.3
-Stable tag: 4.6.2
+Tested up to: 6.0.1
+Stable tag: 4.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,12 @@ Our WP ULike project has been able to attract more than 60,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.6.3 =
+* Improved: bbPress duplicate issue on the lead topic.
+* Improved: Compatibility with WordPress 6.0 applied.
+* Improved: Add uninstall.php to clear out plugin data.
+* Fixed: Minor bug fixes.
 
 = 4.6.2 =
 * Improved: bbPress button display on main topic.
