@@ -542,3 +542,15 @@ if( ! function_exists('wp_ulike_maybe_convert_status') ){
 		}
 	}
 }
+
+if( ! function_exists('wp_ulike_html_entity_decode') ){
+	/**
+	 * Convert HTML entities to characters:
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	function wp_ulike_html_entity_decode( $value ){
+		return html_entity_decode( $value );
+	}
+}
