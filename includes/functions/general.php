@@ -554,3 +554,20 @@ if( ! function_exists('wp_ulike_html_entity_decode') ){
 		return html_entity_decode( $value );
 	}
 }
+
+if( ! function_exists('wp_ulike_is_wpml_active') ){
+	/**
+	 * Check if WPML is active
+	 *
+	 * @return bool|mixed
+	 */
+	function wp_ulike_is_wpml_active() {
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			global $sitepress;
+
+			return $sitepress->get_setting( 'setup_complete' );
+		}
+
+		return false;
+	}
+}

@@ -31,6 +31,17 @@ if( ! function_exists( 'wp_ulike' ) ){
 			//global variables
 			global $post;
 			$post_ID = isset( $post->ID ) ? $post->ID : NULL;
+
+			// wpml synchronization
+			if ( wp_ulike_is_wpml_active() && wp_ulike_setting_repo::isWpmlSynchronizationOn() ) {
+				global $sitepress;
+
+				if (has_filter( 'wpml_object_id' )) {
+					$post_ID = apply_filters('wpml_object_id', $post_ID, 'post', false, $sitepress->get_default_language());
+				} else {
+					$post_ID = icl_object_id( $post_ID, 'post', false, $sitepress->get_default_language());
+				}
+			}
 		}
 
 		// Return if post ID not exist

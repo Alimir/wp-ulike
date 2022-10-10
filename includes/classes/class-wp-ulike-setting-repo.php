@@ -230,6 +230,15 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Check WPML Synchronization
+	 *
+	 * @return boolean
+	 */
+	public static function isWpmlSynchronizationOn(){
+		return self::getOption( 'posts_group|enable_wpml_synchronization', false );
+	}
+
+	/**
 	 * Check counter zero visibility
 	 *
 	 * @return boolean

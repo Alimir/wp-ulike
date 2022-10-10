@@ -254,6 +254,16 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             // Generate posts fields
             $get_content_fields['posts']    = $get_content_options;
 
+            if( wp_ulike_is_wpml_active() ){
+                $get_content_fields['posts']['enable_wpml_synchronization'] = array(
+                    'id'         => 'enable_wpml_synchronization',
+                    'type'       => 'switcher',
+                    'title'      => __('Enable WPML Synchronization', WP_ULIKE_SLUG),
+                    'desc'       => __('Synchronize likes of post types, which are translated with WPML plugin', WP_ULIKE_SLUG)
+                );
+            }
+
+
             // Generate comment fields
             $get_content_fields['comments'] = $get_content_options;
             unset( $get_content_fields['comments']['auto_display_filter'] );
