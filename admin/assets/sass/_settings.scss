@@ -10,7 +10,7 @@
     &.wp-ulike-notice-control {
         display: flex;
         align-items: center;
-        padding: 30px 40px;
+        padding: 15px 25px;
         margin-top: 20px !important;
         margin-bottom: 20px !important;
         box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
@@ -64,7 +64,7 @@
     }
 
     .wp-ulike-notice-title {
-        font-size: 1.0625rem;
+        font-size: 1rem;
         line-height: 1.2;
         font-weight: 600;
         margin: 0;
@@ -75,13 +75,13 @@
     .wp-ulike-notice-description {
         font-size: 13px;
         line-height: 1.5;
-        color: #646970;
+        color: #555;
         font-weight: 400;
         margin: 0;
     }
 
     .wp-ulike-notice-submit {
-        margin: 1.5em 0 0 -5px;
+        margin: 1.2em 0 0 -5px;
         padding: 0;
 
         .wp-ulike-btn {

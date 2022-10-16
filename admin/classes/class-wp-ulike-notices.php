@@ -169,7 +169,8 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                             type: 'post',
                             data: {
                                 action : '<?php echo esc_js( $btn_args['ajax_request']['action'] ); ?>',
-                                nonce  : '<?php echo esc_js( wp_create_nonce( '_notice_nonce' ) ); ?>'
+                                nonce  : '<?php echo esc_js( wp_create_nonce( '_notice_nonce' ) ); ?>',
+                                id     : '<?php echo esc_js( $this->args['id'] ); ?>'
                             }
                         }).done(function( response ) {
                             $currentTargetElement.removeClass('wp-ulike-btn-is-loading');
