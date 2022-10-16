@@ -571,3 +571,27 @@ if( ! function_exists('wp_ulike_is_wpml_active') ){
 		return false;
 	}
 }
+
+if( ! function_exists('wp_ulike_get_the_id') ){
+	/**
+	 * get post id
+	 *
+	 * @return bool|mixed
+	 */
+	function wp_ulike_get_the_id() {
+		$post_ID = get_the_ID();
+
+		// wpml synchronization
+		if ( wp_ulike_is_wpml_active() && wp_ulike_setting_repo::isWpmlSynchronizationOn() ) {
+			global $sitepress;
+
+			if (has_filter( 'wpml_object_id' )) {
+				$post_ID = apply_filters('wpml_object_id', $post_ID, 'post', false, $sitepress->get_default_language());
+			} else {
+				$post_ID = icl_object_id( $post_ID, 'post', false, $sitepress->get_default_language());
+			}
+		}
+
+		return $post_ID;
+	}
+}
