@@ -87,7 +87,7 @@ if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
 					break;
 
 				default:
-					$args['id'] = get_the_ID();
+					$args['id'] = wp_ulike_get_the_id();
 					break;
 			}
 		}
@@ -140,7 +140,7 @@ if( ! function_exists( 'wp_ulike_likers_box_shortcode' ) ){
 					break;
 
 				default:
-					$args['id'] = get_the_ID();
+					$args['id'] = wp_ulike_get_the_id();
 					break;
 			}
 		}
