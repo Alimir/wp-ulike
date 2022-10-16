@@ -254,6 +254,16 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             // Generate posts fields
             $get_content_fields['posts']    = $get_content_options;
 
+            if( wp_ulike_is_wpml_active() ){
+                $get_content_fields['posts']['enable_wpml_synchronization'] = array(
+                    'id'    => 'enable_wpml_synchronization',
+                    'type'  => 'switcher',
+                    'title' => __('Enable WPML Synchronization', WP_ULIKE_SLUG),
+                    'desc'  => __('Synchronize likes of post types, which are translated with WPML plugin.', WP_ULIKE_SLUG)
+                );
+            }
+
+
             // Generate comment fields
             $get_content_fields['comments'] = $get_content_options;
             unset( $get_content_fields['comments']['auto_display_filter'] );
@@ -580,7 +590,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             ULF::createSection( $this->option_domain, array(
                 'parent' => 'customization',
-                'title'  => __( 'Custom Style',WP_ULIKE_SLUG),
+                'title'  => __( 'Scripts',WP_ULIKE_SLUG),
                 'fields' => apply_filters( 'wp_ulike_panel_customization', array(
                     array(
                         'id'    => 'custom_css',
@@ -589,7 +599,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'theme'  => 'mbo',
                             'mode'   => 'css',
                         ),
-                        'title' => 'Custom CSS',
+                        'title' => __('Custom CSS',WP_ULIKE_SLUG),
                     ),
                     array(
                         'id'           => 'custom_spinner',
@@ -603,7 +613,29 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'type'  => 'switcher',
                         'title' => __('Enable Inline Custom CSS', WP_ULIKE_SLUG),
                         'desc'  => __('If you don\'t want to use "custom.css" file for any reason, by activating this option, the styles will be added to the page as inline.', WP_ULIKE_SLUG)
-                    )
+                    ),
+                    array(
+                        'id'    => 'php_snippets',
+                        'type'  => 'code_editor',
+                        'settings' => array(
+                            'theme'  => 'mbo',
+                            'mode'   => 'php',
+                        ),
+                        'title'    => __('PHP Snippets',WP_ULIKE_SLUG),
+                        'sanitize' => 'wp_ulike_html_entity_decode',
+                        'desc'     => __('Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If you have lots of snippets, you may want to consider using Code Snippets plugin.', WP_ULIKE_SLUG)
+                    ),
+                    array(
+                        'id'    => 'js_snippets',
+                        'type'  => 'code_editor',
+                        'settings' => array(
+                            'theme'  => 'mbo',
+                            'mode'   => 'javascript',
+                        ),
+                        'title'    => __('Javascript Snippets',WP_ULIKE_SLUG),
+                        'sanitize' => 'wp_ulike_html_entity_decode',
+                        'desc'     => __('This code will output immediately before the closing &lt;/body&gt; tag in the document source. (Scripts must not be property wrapped in &lt;script&gt; tag.)', WP_ULIKE_SLUG)
+                    ),
                 ) )
             ) );
 

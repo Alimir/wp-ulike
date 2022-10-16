@@ -542,3 +542,56 @@ if( ! function_exists('wp_ulike_maybe_convert_status') ){
 		}
 	}
 }
+
+if( ! function_exists('wp_ulike_html_entity_decode') ){
+	/**
+	 * Convert HTML entities to characters:
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	function wp_ulike_html_entity_decode( $value ){
+		return html_entity_decode( $value );
+	}
+}
+
+if( ! function_exists('wp_ulike_is_wpml_active') ){
+	/**
+	 * Check if WPML is active
+	 *
+	 * @return bool|mixed
+	 */
+	function wp_ulike_is_wpml_active() {
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			global $sitepress;
+
+			return $sitepress->get_setting( 'setup_complete' );
+		}
+
+		return false;
+	}
+}
+
+if( ! function_exists('wp_ulike_get_the_id') ){
+	/**
+	 * get post id
+	 *
+	 * @return bool|mixed
+	 */
+	function wp_ulike_get_the_id( $post_id = '' ) {
+		$post_ID = empty( $post_id ) ? get_the_ID() : $post_id;
+
+		// wpml synchronization
+		if ( wp_ulike_is_wpml_active() && wp_ulike_setting_repo::isWpmlSynchronizationOn() ) {
+			global $sitepress;
+
+			if (has_filter( 'wpml_object_id' )) {
+				$post_ID = apply_filters('wpml_object_id', $post_ID, 'post', false, $sitepress->get_default_language());
+			} else {
+				$post_ID = icl_object_id( $post_ID, 'post', false, $sitepress->get_default_language());
+			}
+		}
+
+		return apply_filters( 'wp_ulike_get_the_id', $post_ID );
+	}
+}

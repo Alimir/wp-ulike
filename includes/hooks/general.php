@@ -242,6 +242,55 @@ if( ! function_exists( 'wp_ulike_deprecated_csf_class' ) ){
 	add_action( 'plugins_loaded', 'wp_ulike_deprecated_csf_class' );
 }
 
+
+if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
+	/**
+	 * Run php snippets
+	 *
+	 * @return void
+	 */
+	function wp_ulike_run_php_snippets(){
+		$php_snippets = wp_ulike_setting_repo::getPhpSnippets();
+
+
+		if( empty( $php_snippets ) ){
+			return;
+		}
+
+		if ( class_exists( '\\ParseError' ) ) {
+			try {
+				eval( $php_snippets ); // phpcs:ignore
+			} catch( \ParseError $e ) { // phpcs:ignore
+				error_log( $e->getMessage() );
+			}
+		} else {
+			eval( $php_snippets ); // phpcs:ignore
+		}
+	}
+	add_action( 'wp_ulike_loaded', 'wp_ulike_run_php_snippets' );
+}
+
+if( ! function_exists( 'wp_ulike_run_javascript_snippets' ) ){
+	/**
+	 * Run js snippets
+	 *
+	 * @return void
+	 */
+	function wp_ulike_run_javascript_snippets(){
+		$js_snippets = wp_ulike_setting_repo::getJsSnippets();
+
+		if( empty( $js_snippets ) ){
+			return;
+		}
+
+		$js_snippets = trim( $js_snippets, "\n" );
+
+		printf( "<script type='text/javascript' id='%s'>\n%s\n</script>\n", 'wp_ulike_js_snippets', $js_snippets );
+
+	}
+	add_action( 'wp_footer', 'wp_ulike_run_javascript_snippets', 100 );
+}
+
 // @if DEV
 // function replace_core_jquery_version() {
 //     wp_deregister_script( 'jquery' );

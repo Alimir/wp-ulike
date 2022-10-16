@@ -954,7 +954,7 @@ if( ! function_exists( 'wp_ulike_posts_um_profile_content' ) ){
 							</div>';
 					echo '<div class="um-item-meta">
 							<span>'.get_the_date().'</span>
-							<span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_post_likes( get_the_ID() ).'</span>
+							<span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_post_likes( wp_ulike_get_the_id() ).'</span>
 							</div>';
 					echo '</div>';
 				endwhile;

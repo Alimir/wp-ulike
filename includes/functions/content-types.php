@@ -28,9 +28,7 @@ if( ! function_exists( 'wp_ulike' ) ){
 		$post_ID = ! empty( $args['id'] ) ? $args['id'] : NULL;
 
 		if( empty( $post_ID ) ){
-			//global variables
-			global $post;
-			$post_ID = isset( $post->ID ) ? $post->ID : NULL;
+			$post_ID = wp_ulike_get_the_id();
 		}
 
 		// Return if post ID not exist

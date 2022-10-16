@@ -230,6 +230,15 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Check WPML Synchronization
+	 *
+	 * @return boolean
+	 */
+	public static function isWpmlSynchronizationOn(){
+		return self::getOption( 'posts_group|enable_wpml_synchronization', false );
+	}
+
+	/**
 	 * Check counter zero visibility
 	 *
 	 * @return boolean
@@ -320,5 +329,48 @@ class wp_ulike_setting_repo {
 				return true;
 		}
 	}
+
+	/**
+	 * get sanitized php code
+	 *
+	 * @return boolean
+	 */
+	public static function getPhpSnippets(){
+		$code = self::getOption( 'php_snippets', '' );
+
+		if( empty( $code ) ){
+			return;
+		}
+
+		/* Remove <?php and <? from beginning of snippet */
+		$code = preg_replace( '|^[\s]*<\?(php)?|', '', $code );
+
+		/* Remove ?> from end of snippet */
+		$code = preg_replace( '|\?>[\s]*$|', '', $code );
+
+		return strval( $code );
+	}
+
+	/**
+	 * get sanitized php code
+	 *
+	 * @return boolean
+	 */
+	public static function getJsSnippets(){
+		$code = self::getOption( 'js_snippets', '' );
+
+		if( empty( $code ) ){
+			return;
+		}
+
+		/* Remove script from beginning of snippet */
+		$code = preg_replace( '|^[\s]*<?(script)?>|', '', $code );
+
+		/* Remove ?> from end of snippet */
+		$code = preg_replace( '|\</script>[\s]*$|', '', $code );
+
+		return strval( $code );
+	}
+
 
 }

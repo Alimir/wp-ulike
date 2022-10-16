@@ -1,16 +1,15 @@
-
 /**
  *  Statistics Page
  */
 
-.wp-ulike-page-title{
+.wp-ulike-page-title {
     font-size: 38px;
     line-height: 50px;
     font-weight: 400;
     margin: 0;
 }
 
-.wp-ulike-header{
+.wp-ulike-header {
     margin: 0 2% 10px;
     padding: 0 20px 35px;
     display: flex;
@@ -19,7 +18,7 @@
     align-items: center;
     flex-wrap: wrap;
 
-    &:after{
+    &:after {
         content: "";
         position: absolute;
         bottom: 0;
@@ -29,7 +28,7 @@
         left: 20px;
     }
 
-    .wp-ulike-widget-title{
+    .wp-ulike-widget-title {
         text-transform: capitalize;
         font-size: 22px;
         font-weight: 500;
@@ -39,7 +38,7 @@
     }
 }
 
-.wp-ulike-button{
+.wp-ulike-button {
     background-color: #f9faff;
     padding: 10px 25px;
     text-decoration: none;
@@ -50,13 +49,13 @@
     font-size: 14px;
     line-height: 20px;
 
-    &:hover{
+    &:hover {
         background-color: #fff;
         color: #42484e;
     }
 }
 
-.wp-ulike-inner{
+.wp-ulike-inner {
     position: relative;
     padding: 35px 20px;
     border: 1px solid #e4e6eb;
@@ -66,23 +65,24 @@
     // min-height: 100px;
 }
 
-.wp-ulike-logs-count{
+.wp-ulike-logs-count {
     margin: 0 auto;
     text-align: center;
 
-    .wp-ulike-icon{
+    .wp-ulike-icon {
         font-size: 5vw;
         color: #8B93A6;
         line-height: 5vh;
     }
 
-    .wp-ulike-var{
+    .wp-ulike-var {
         font-size: 3vw;
-        line-height: 4vw;;
+        line-height: 4vw;
+        ;
         display: block;
     }
 
-    .wp-ulike-text{
+    .wp-ulike-text {
         display: block;
         color: #8B93A6;
         font-size: 1.5vw;
@@ -91,17 +91,17 @@
 }
 
 
-.wp-ulike-is-loading{
+.wp-ulike-is-loading {
     padding: 10px 0;
 
-    &:before{
+    &:before {
         content: "";
         position: absolute;
         left: 0;
         width: 100%;
         top: 0;
         height: 100%;
-        background-color: rgba(255,255,255, 1);
+        background-color: rgba(255, 255, 255, 1);
         background-image: url(../../../assets/img/svg/statistics.svg);
         background-repeat: no-repeat;
         background-position: center center;
@@ -109,31 +109,12 @@
     }
 }
 
-.wp-ulike-btn-is-loading{
-    position: relative;
+.wp-ulike-pro-stats-banner {
 
-    .wp-ulike-text{
-        visibility: hidden;
-    }
-
-    &:before{
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 25px;
-        height: 25px;
-        transform: translateX(-50%) translateY(-50%);
-        background-image: url(../../../assets/img/svg/button-spinner.svg);
-        z-index: 9;
-    }
-}
-
-.wp-ulike-pro-stats-banner{
-
-    .wp-ulike-inner{
+    .wp-ulike-inner {
         padding: 20px 40px;
-        &:before{
+
+        &:before {
             content: "";
             position: absolute;
             right: 5%;
@@ -146,7 +127,7 @@
             background-position: bottom right;
         }
 
-        h3{
+        h3 {
             margin: 0.5em 0;
             font-size: 32px;
             max-width: 360px;
@@ -155,53 +136,54 @@
             color: #017e52;
         }
 
-        p{
+        p {
             max-width: 540px;
             font-size: 15px;
             line-height: 1.4em;
             color: #8B93A6;
         }
 
-        .wp-ulike-button-group{
+        .wp-ulike-button-group {
             margin: 2em 0 1em;
 
-            .wp-ulike-btn{
+            .wp-ulike-btn {
                 margin: 0 5px;
             }
         }
     }
 }
 
-.wp-ulike-table{
+.wp-ulike-table {
     display: table;
 
-    .wp-ulike-table-cell{
+    .wp-ulike-table-cell {
         display: table-cell;
         vertical-align: middle;
     }
 
 }
 
-.wp-ulike-summary-charts{
+.wp-ulike-summary-charts {
 
-    .wp-ulike-info{
+    .wp-ulike-info {
         flex-basis: 35%;
     }
 
-    .wp-ulike-icon{
+    .wp-ulike-icon {
         font-size: 3vw;
         color: #8B93A6;
         line-height: normal;
         flex-basis: 25%;
     }
 
-    .wp-ulike-var{
+    .wp-ulike-var {
         font-size: 1.8vw;
-        line-height: normal;;
+        line-height: normal;
+        ;
         display: block;
     }
 
-    .wp-ulike-text{
+    .wp-ulike-text {
         display: block;
         color: #8B93A6;
         font-size: 1vw;
@@ -209,10 +191,10 @@
     }
 }
 
-.wp-ulike-top-likers{
+.wp-ulike-top-likers {
     margin: 0 2%;
 
-    .wp-ulike-users-list{
+    .wp-ulike-users-list {
         border-bottom: 1px solid #dde3e7;
         font-size: 15px;
         padding: 20px 0px;
@@ -224,34 +206,36 @@
         }
     }
 
-    .wp-ulike-info{
+    .wp-ulike-info {
         width: 60%;
     }
-    .wp-ulike-counter{
+
+    .wp-ulike-counter {
         width: 20%;
     }
-    .wp-ulike-total{
+
+    .wp-ulike-total {
         width: 20%;
     }
 }
 
-.wp-ulike-empty-stats{
+.wp-ulike-empty-stats {
     text-align: center;
     height: 50em;
     position: relative;
 
-    > div {
+    >div {
         position: relative;
         top: 50%;
         transform: translateY(-50%);
     }
 
-    .wp-ulike-icon{
+    .wp-ulike-icon {
         font-size: 110px;
         color: #8B93A6;
     }
 
-    .wp-ulike-info{
+    .wp-ulike-info {
         font-size: 28px;
         line-height: 42px;
         font-weight: 300;
@@ -259,34 +243,35 @@
     }
 }
 
-.wp-ulike-tops-list{
+.wp-ulike-tops-list {
     padding: 0 20px;
 
-    > ul{
+    >ul {
         font-size: 16px;
         font-weight: 300;
         line-height: 26px;
         color: #3d3d3d;
         margin: 0;
 
-        > li{
+        >li {
             display: flex;
             justify-content: space-between;
             border-bottom: 1px solid #dde3e7;
             padding: 8px 0;
 
-            .wp_ulike_item_counter{
-                .wp_ulike_up_vote_count{
+            .wp_ulike_item_counter {
+                .wp_ulike_up_vote_count {
                     margin: 0 5px;
                     color: green;
                 }
-                .wp_ulike_down_vote_count{
+
+                .wp_ulike_down_vote_count {
                     margin: 0 5px;
                     color: red;
                 }
             }
 
-            a{
+            a {
                 text-decoration: none;
                 color: #3d3d3d;
             }

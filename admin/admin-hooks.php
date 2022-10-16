@@ -149,7 +149,7 @@ function wp_ulike_notice_manager(){
 				)
 			),
 			'image'     => array(
-				'width' => '110',
+				'width' => '100',
 				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/rating.svg'
 			)
 		]);
@@ -176,7 +176,7 @@ function wp_ulike_notice_manager(){
 					)
 				),
 				'image'     => array(
-					'width' => '110',
+					'width' => '100',
 					'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/news.svg'
 				)
 			]);
@@ -200,7 +200,7 @@ function wp_ulike_notice_manager(){
 				)
 			),
 			'image'     => array(
-				'width' => '110',
+				'width' => '100',
 				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
 			)
 		]);
@@ -223,7 +223,7 @@ function wp_ulike_notice_manager(){
 				)
 			),
 			'image'     => array(
-				'width' => '110',
+				'width' => '100',
 				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/seo.svg'
 			)
 		]);
@@ -458,6 +458,7 @@ function wp_ulike_upgrade_deprecated_options_value(){
 function wp_ulike_manage_posts_custom_column( $column, $post_id ) {
     if ( $column === 'wp-ulike-thumbs-up' ){
 		$is_distinct = wp_ulike_setting_repo::isDistinct('post');
+		$post_id     = wp_ulike_get_the_id( $post_id );
         echo sprintf( '<span class="wp-ulike-counter-box">%d</span>',  wp_ulike_get_counter_value( $post_id, 'post', 'like', $is_distinct ) );
     }
 }

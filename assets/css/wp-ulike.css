@@ -439,16 +439,66 @@
 #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn,
 #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn,
 #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn {
-  background: inherit;
-  border: 0;
-  width: 40px;
-  height: 40px;
   border-radius: 50em;
+  background-color: #ffffff;
+  padding: 0;
+  box-shadow: 0px 5px 30px rgba(255, 111, 99, 0.4);
+  border: 0;
+  width: 50px;
+  height: 50px;
+}
+#buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:focus,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:hover,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:focus,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:hover,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:focus {
+  background-color: #ffffff;
+  background-image: none;
+}
+#buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:focus, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:disabled:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:disabled:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:disabled:focus,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:hover,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:active,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:focus,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:disabled:hover,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:disabled:active,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:disabled:focus,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:hover,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:active,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:focus,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:disabled:hover,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:disabled:active,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:disabled:focus {
+  background-color: #ffffff;
 }
 #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active,
 #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active,
 #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active {
   background-color: #ff6f63;
+}
+#buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:active,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:active,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus {
+  background-color: #ff6f63;
+}
+#buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:active,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:active,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:active {
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+}
+#buddypress #activity-stream .activity-meta .wp_ulike_is_loading button.wp_ulike_btn,
+#buddypress #activity-stream .activity-comments .wp_ulike_is_loading button.wp_ulike_btn,
+#buddypress #activity-stream .activity-inner .wp_ulike_is_loading button.wp_ulike_btn {
+  background-image: initial;
 }
 
 @keyframes popHearts {
