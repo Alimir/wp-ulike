@@ -70,6 +70,12 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
 			}
 
+			// Acquire lock
+			$fp_lock = wp_ulike_acquire_lock( $this->data['type'], $this->data['id'] );
+			if ( $fp_lock === false ) {
+				throw new \Exception( __( 'Unable to obtain lock for this request.', WP_ULIKE_SLUG ) );
+			}
+
 			$process  = new wp_ulike_cta_process( array(
 				'item_id'       => $this->data['id'],
 				'item_type'     => $this->settings_type->getType(),
@@ -153,7 +159,10 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 
 			$this->afterUpdateAction( $process->getActionAtts() );
 
+			wp_ulike_release_lock( $fp_lock, $this->data['type'], $this->data['id'] );
+			// success
 			$this->response( $response );
+
 		} catch ( \Exception $e ){
 			return $this->sendError( array(
 				'message'     => $e->getMessage(),
