@@ -372,5 +372,14 @@ class wp_ulike_setting_repo {
 		return strval( $code );
 	}
 
+	/**
+	 * check code snippets availability status
+	 *
+	 * @return boolean
+	 */
+	public static function isCodeSnippetsDisabled(){
+		return is_multisite() || ( defined('WP_ULIKE_DISABLE_CODE_SNIPPETS') && WP_ULIKE_DISABLE_CODE_SNIPPETS === true );
+	}
+
 
 }
