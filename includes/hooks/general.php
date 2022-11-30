@@ -250,6 +250,10 @@ if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 	 * @return void
 	 */
 	function wp_ulike_run_php_snippets(){
+		if( wp_ulike_setting_repo::isCodeSnippetsDisabled() ){
+			return;
+		}
+
 		$php_snippets = wp_ulike_setting_repo::getPhpSnippets();
 
 
@@ -277,6 +281,10 @@ if( ! function_exists( 'wp_ulike_run_javascript_snippets' ) ){
 	 * @return void
 	 */
 	function wp_ulike_run_javascript_snippets(){
+		if( wp_ulike_setting_repo::isCodeSnippetsDisabled() ){
+			return;
+		}
+
 		$js_snippets = wp_ulike_setting_repo::getJsSnippets();
 
 		if( empty( $js_snippets ) ){

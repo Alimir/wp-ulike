@@ -620,3 +620,36 @@ function wp_ulike_manage_comment_sortable_columns_order( $query ) {
 	do_action( 'wp_ulike_manage_comment_sortable_columns_order', $query );
 }
 add_action( 'pre_get_comments', 'wp_ulike_manage_comment_sortable_columns_order', 10, 1 );
+
+
+function wp_ulike_panel_customization_section( $options ) {
+	if( wp_ulike_setting_repo::isCodeSnippetsDisabled() ){
+		return $options;
+	}
+
+	$options[] = array(
+		'id'    => 'php_snippets',
+		'type'  => 'code_editor',
+		'settings' => array(
+			'theme'  => 'mbo',
+			'mode'   => 'php',
+		),
+		'title'    => __('PHP Snippets',WP_ULIKE_SLUG),
+		'sanitize' => 'wp_ulike_html_entity_decode',
+		'desc'     => __('Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If you have lots of snippets, you may want to consider using Code Snippets plugin.', WP_ULIKE_SLUG)
+	);
+	$options[] = array(
+		'id'    => 'js_snippets',
+		'type'  => 'code_editor',
+		'settings' => array(
+			'theme'  => 'mbo',
+			'mode'   => 'javascript',
+		),
+		'title'    => __('Javascript Snippets',WP_ULIKE_SLUG),
+		'sanitize' => 'wp_ulike_html_entity_decode',
+		'desc'     => __('This code will output immediately before the closing &lt;/body&gt; tag in the document source. (Scripts must not be property wrapped in &lt;script&gt; tag.)', WP_ULIKE_SLUG)
+	);
+
+	return $options;
+}
+add_filter( 'wp_ulike_panel_customization', 'wp_ulike_panel_customization_section', 10, 1 );

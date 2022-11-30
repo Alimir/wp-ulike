@@ -613,29 +613,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'type'  => 'switcher',
                         'title' => __('Enable Inline Custom CSS', WP_ULIKE_SLUG),
                         'desc'  => __('If you don\'t want to use "custom.css" file for any reason, by activating this option, the styles will be added to the page as inline.', WP_ULIKE_SLUG)
-                    ),
-                    array(
-                        'id'    => 'php_snippets',
-                        'type'  => 'code_editor',
-                        'settings' => array(
-                            'theme'  => 'mbo',
-                            'mode'   => 'php',
-                        ),
-                        'title'    => __('PHP Snippets',WP_ULIKE_SLUG),
-                        'sanitize' => 'wp_ulike_html_entity_decode',
-                        'desc'     => __('Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If you have lots of snippets, you may want to consider using Code Snippets plugin.', WP_ULIKE_SLUG)
-                    ),
-                    array(
-                        'id'    => 'js_snippets',
-                        'type'  => 'code_editor',
-                        'settings' => array(
-                            'theme'  => 'mbo',
-                            'mode'   => 'javascript',
-                        ),
-                        'title'    => __('Javascript Snippets',WP_ULIKE_SLUG),
-                        'sanitize' => 'wp_ulike_html_entity_decode',
-                        'desc'     => __('This code will output immediately before the closing &lt;/body&gt; tag in the document source. (Scripts must not be property wrapped in &lt;script&gt; tag.)', WP_ULIKE_SLUG)
-                    ),
+                    )
                 ) )
             ) );
 
