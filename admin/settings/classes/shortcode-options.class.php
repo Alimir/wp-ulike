@@ -70,51 +70,6 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
       return new self( $key, $params );
     }
 
-    public function pre_tabs( $sections ) {
-
-      $result  = array();
-      $parents = array();
-      $count   = 100;
-
-      foreach ( $sections as $key => $section ) {
-        if ( ! empty( $section['parent'] ) ) {
-          $section['priority'] = ( isset( $section['priority'] ) ) ? $section['priority'] : $count;
-          $parents[$section['parent']][] = $section;
-          unset( $sections[$key] );
-        }
-        $count++;
-      }
-
-      foreach ( $sections as $key => $section ) {
-        $section['priority'] = ( isset( $section['priority'] ) ) ? $section['priority'] : $count;
-        if ( ! empty( $section['id'] ) && ! empty( $parents[$section['id']] ) ) {
-          $section['subs'] = wp_list_sort( $parents[$section['id']], array( 'priority' => 'ASC' ), 'ASC', true );
-        }
-        $result[] = $section;
-        $count++;
-      }
-
-      return wp_list_sort( $result, array( 'priority' => 'ASC' ), 'ASC', true );
-    }
-
-    public function pre_sections( $sections ) {
-
-      $result = array();
-
-      foreach ( $this->pre_tabs as $tab ) {
-        if ( ! empty( $tab['subs'] ) ) {
-          foreach ( $tab['subs'] as $sub ) {
-            $result[] = $sub;
-          }
-        }
-        if ( empty( $tab['subs'] ) ) {
-          $result[] = $tab;
-        }
-      }
-
-      return $result;
-    }
-
     // get default value
     public function get_default( $field ) {
 
@@ -338,7 +293,7 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
     public static function add_media_buttons( $editor_id ) {
 
       foreach ( ULF::$shortcode_instances as $value ) {
-        echo '<a href="#" class="button button-primary ulf-shortcode-button" data-editor-id="'. esc_attr( $editor_id ) .'" data-modal-id="'. esc_attr( $value['modal_id'] ) .'">'. $value['button_title'] .'</a>';
+        echo '<a href="#" class="button button-primary ulf-shortcode-button" data-editor-id="'. esc_attr( $editor_id ) .'" data-modal-id="'. esc_attr( $value['modal_id'] ) .'">'. esc_html( $value['button_title'] ) .'</a>';
       }
 
     }

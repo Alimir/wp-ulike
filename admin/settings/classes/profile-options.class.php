@@ -11,21 +11,23 @@ if ( ! class_exists( 'ULF_Profile_Options' ) ) {
   class ULF_Profile_Options extends ULF_Abstract{
 
     // constans
-    public $unique   = '';
-    public $abstract = 'profile';
-    public $sections = array();
-    public $args     = array(
-      'data_type'    => 'serialize',
-      'class'        => '',
-      'defaults'     => array(),
+    public $unique     = '';
+    public $abstract   = 'profile';
+    public $sections   = array();
+    public $pre_fields = array();
+    public $args       = array(
+      'data_type'      => 'serialize',
+      'class'          => '',
+      'defaults'       => array(),
     );
 
     // run profile construct
     public function __construct( $key, $params ) {
 
-      $this->unique   = $key;
-      $this->args     = apply_filters( "ulf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
-      $this->sections = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
+      $this->unique     = $key;
+      $this->args       = apply_filters( "ulf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
+      $this->sections   = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
+      $this->pre_fields = $this->pre_fields( $this->sections );
 
       add_action( 'admin_init', array( $this, 'add_profile_options' ) );
 
@@ -213,8 +215,10 @@ if ( ! class_exists( 'ULF_Profile_Options' ) ) {
       if ( empty( $data ) ) {
 
         if ( $this->args['data_type'] !== 'serialize' ) {
-          foreach ( $data as $key => $value ) {
-            delete_user_meta( $user_id, $key );
+          foreach ( $this->pre_fields as $field ) {
+            if ( ! empty( $field['id'] ) ) {
+              delete_user_meta( $user_id, $field['id'] );
+            }
           }
         } else {
           delete_user_meta( $user_id, $this->unique );

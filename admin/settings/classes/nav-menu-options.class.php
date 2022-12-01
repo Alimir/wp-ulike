@@ -11,21 +11,23 @@ if ( ! class_exists( 'ULF_Nav_Menu_Options' ) ) {
   class ULF_Nav_Menu_Options extends ULF_Abstract{
 
     // constans
-    public $unique   = '';
-    public $abstract = 'menu';
-    public $sections = array();
-    public $args     = array(
-      'data_type'    => 'serialize',
-      'class'        => '',
-      'defaults'     => array(),
+    public $unique     = '';
+    public $abstract   = 'menu';
+    public $sections   = array();
+    public $pre_fields = array();
+    public $args       = array(
+      'data_type'      => 'serialize',
+      'class'          => '',
+      'defaults'       => array(),
     );
 
     // run menu construct
     public function __construct( $key, $params ) {
 
-      $this->unique   = $key;
-      $this->args     = apply_filters( "ulf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
-      $this->sections = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
+      $this->unique     = $key;
+      $this->args       = apply_filters( "ulf_{$this->unique}_args", wp_parse_args( $params['args'], $this->args ), $this );
+      $this->sections   = apply_filters( "ulf_{$this->unique}_sections", $params['sections'], $this );
+      $this->pre_fields = $this->pre_fields( $this->sections );
 
       add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'wp_nav_menu_item_custom_fields' ), 10, 4 );
       add_action( 'wp_update_nav_menu_item', array( $this, 'wp_update_nav_menu_item' ), 10, 3 );
@@ -222,8 +224,10 @@ if ( ! class_exists( 'ULF_Nav_Menu_Options' ) ) {
       if ( empty( $data ) ) {
 
         if ( $this->args['data_type'] !== 'serialize' ) {
-          foreach ( $data as $key => $value ) {
-            delete_post_meta( $menu_item_db_id, $key );
+          foreach ( $this->pre_fields as $field ) {
+            if ( ! empty( $field['id'] ) ) {
+              delete_post_meta( $menu_item_db_id, $field['id'] );
+            }
           }
         } else {
           delete_post_meta( $menu_item_db_id, $this->unique );

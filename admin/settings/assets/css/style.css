@@ -115,7 +115,7 @@
 
 .ulf-header-inner {
   padding: 25px;
-  transition: box-shadow .3s ease;
+  transition: box-shadow 0.3s ease;
 }
 .ulf-header-inner h1 {
   float: left;
@@ -348,7 +348,7 @@
   cursor: pointer;
   user-select: none;
   border-radius: 2px;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 .ulf-expand-all span {
   font-size: 11px;
@@ -750,7 +750,7 @@
   border: 1px solid #ccd0d4;
   background-color: #fafafa;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-  transition: border-color .15s;
+  transition: border-color 0.15s;
 }
 .ulf-field-accordion .ulf-accordion-title:active, .ulf-field-accordion .ulf-accordion-title:hover, .ulf-field-accordion .ulf-accordion-title:focus {
   outline: none;
@@ -997,6 +997,14 @@
 .ulf-field-radio .ulf-checker {
   cursor: pointer;
 }
+.ulf-field-checkbox .ulf-checkbox-all,
+.ulf-field-radio .ulf-checkbox-all {
+  user-select: none;
+  cursor: pointer;
+  margin-top: 5px;
+  font-weight: 500;
+  text-decoration: none;
+}
 
 /**
  * 03. 08. Field: code_editor
@@ -1128,10 +1136,10 @@
   float: right;
 }
 .ulf-datepicker-wrapper .ui-datepicker-prev:before {
-  content: '\f053';
+  content: "\f053";
 }
 .ulf-datepicker-wrapper .ui-datepicker-next:before {
-  content: '\f054';
+  content: "\f054";
 }
 .ulf-datepicker-wrapper .ui-datepicker-prev-hover,
 .ulf-datepicker-wrapper .ui-datepicker-next-hover {
@@ -1284,7 +1292,7 @@
   border: 1px solid #ccd0d4;
   background-color: #fafafa;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-  transition: border-color .15s;
+  transition: border-color 0.15s;
 }
 .ulf-field-group .ulf-cloneable-title:active, .ulf-field-group .ulf-cloneable-title:hover, .ulf-field-group .ulf-cloneable-title:focus {
   border-color: #999;
@@ -1393,7 +1401,7 @@
   border: 2px solid transparent;
   background-color: #fff;
   user-select: none;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 .ulf-field-image_select figure:before {
   position: absolute;
@@ -1410,7 +1418,7 @@
   opacity: 0;
   color: #fff;
   background-color: #222;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
 .ulf-field-image_select .ulf--active figure {
   border-color: #222;
@@ -1447,7 +1455,7 @@
 .ulf-field-map input {
   width: 100%;
 }
-.ulf-field-map input[type="text"].ui-autocomplete-loading {
+.ulf-field-map input[type=text].ui-autocomplete-loading {
   background-position-x: calc(100% - 5px);
 }
 .ulf-field-map .ulf--map-search + .ulf--map-osm-wrap {
@@ -1522,7 +1530,7 @@
   margin-bottom: 10px;
   user-select: none;
   -webkit-user-select: none;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 .ulf-field-palette .ulf--palette span {
   vertical-align: middle;
@@ -1548,7 +1556,7 @@
   opacity: 0;
   color: #fff;
   background-color: #222;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
 .ulf-field-palette .ulf--active {
   border-color: #222;
@@ -1810,7 +1818,7 @@
 }
 .ulf-field-sorter .ulf-disabled li {
   opacity: 0.5;
-  transition: opacity .15s;
+  transition: opacity 0.15s;
 }
 .ulf-field-sorter .ulf-disabled .ui-sortable-helper {
   opacity: 1;
@@ -1839,7 +1847,7 @@
   text-align: center;
   border: 1px solid #e5e5e5;
   background-color: #fafafa;
-  transition: border-color .15s;
+  transition: border-color 0.15s;
 }
 .ulf-field-sorter ul li:hover {
   border-color: #bbb;
@@ -1963,7 +1971,7 @@
   height: 18px;
   background-color: #fff;
   border-radius: 4px;
-  transition: all .1s;
+  transition: all 0.1s;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
 }
 .ulf-field-switcher .ulf--on,
@@ -1981,7 +1989,7 @@
   color: #fff;
   padding-right: 28px;
   opacity: 0;
-  transition: all .1s;
+  transition: all 0.1s;
 }
 .ulf-field-switcher .ulf--off {
   padding-right: 0;
@@ -2035,7 +2043,7 @@
   font-weight: 600;
   border: 1px solid #ccd0d4;
   background-color: #f3f3f3;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 .ulf-field-tabbed .ulf-tabbed-nav a:hover {
   background-color: #f9f9f9;
@@ -2132,7 +2140,7 @@
   border-radius: 2.5px;
   user-select: none;
   -webkit-user-select: none;
-  transition: background-color .2s, border-color .2s;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 .ulf-field-typography .ulf--block-preview {
   cursor: pointer;
@@ -2442,7 +2450,7 @@
   background-color: #dd3333;
   opacity: 0.75;
   border-radius: 2px;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 .ulf-image-preview i:hover {
   opacity: 1;
@@ -2533,7 +2541,7 @@
 .ulf-field .chosen-container-single .chosen-single-with-deselect span {
   margin-right: 40px;
 }
-.ulf-field .chosen-container-single .chosen-search input[type="text"] {
+.ulf-field .chosen-container-single .chosen-search input[type=text] {
   background: none;
 }
 .ulf-field .chosen-container-single .chosen-search:before {
@@ -2628,7 +2636,7 @@
   color: #777;
   border: 1px solid #ccc;
   background-color: #f7f7f7;
-  transition: background-color .2s, border-color .2s, color .2s;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
 .ulf-field .ulf--transparent-active .wp-color-result {
   background-image: url(../images/checkerboard.png);
@@ -3219,7 +3227,7 @@
   padding: 14px;
   font-size: 13px;
   background-color: #f5f5f5;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 .ulf-shortcode-block .components-button {
@@ -3732,7 +3740,6 @@
     border-right: none;
     border-bottom: 1px solid #e5e5e5;
   }
-
   .ulf-features-cols .ulf--key-features {
     width: 100%;
   }
@@ -3762,53 +3769,43 @@
     width: 100%;
     margin-bottom: 10px;
   }
-
   .ulf-form-result {
     float: none;
     margin-right: 0;
     margin-bottom: 10px;
   }
-
   .ulf-search,
-  .ulf-header-right,
-  .ulf-header-left {
+.ulf-header-right,
+.ulf-header-left {
     width: 100%;
   }
-
   .ulf-search {
     text-align: center;
     margin-bottom: 15px;
   }
-
   .ulf-footer {
     text-align: center;
   }
-
   .ulf-buttons {
     float: none;
   }
-
   .ulf-copyright {
     float: none;
     margin-top: 10px;
   }
-
   .ulf-nav,
-  .ulf-expand-all,
-  .ulf-reset-section,
-  .ulf-nav-background {
+.ulf-expand-all,
+.ulf-reset-section,
+.ulf-nav-background {
     display: none !important;
   }
-
   .ulf-nav-normal + .ulf-content {
     margin-left: 0;
   }
-
   .ulf-section-title,
-  .ulf-section {
+.ulf-section {
     display: block !important;
   }
-
   .ulf-field .ulf-title {
     float: none;
     width: 100%;
@@ -3818,25 +3815,22 @@
     float: none;
     width: 100%;
   }
-
   .ulf-field-color .button.wp-picker-clear {
     padding: 0 8px;
     line-height: 2.14285714;
     min-height: 32px;
   }
-
   .ulf-profile-options > .ulf-field > .ulf-title,
-  .ulf-taxonomy-edit-fields > .ulf-field > .ulf-title {
+.ulf-taxonomy-edit-fields > .ulf-field > .ulf-title {
     float: none;
     width: 100%;
     margin-bottom: 10px;
   }
   .ulf-profile-options > .ulf-field > .ulf-fieldset,
-  .ulf-taxonomy-edit-fields > .ulf-field > .ulf-fieldset {
+.ulf-taxonomy-edit-fields > .ulf-field > .ulf-fieldset {
     float: none;
     width: 100%;
   }
-
   .ulf-nav-menu-options > .ulf-fields {
     margin-left: -10px;
     margin-right: -10px;
@@ -3977,7 +3971,7 @@
   white-space: nowrap;
 }
 
-.chosen-container-single .chosen-search input[type="text"] {
+.chosen-container-single .chosen-search input[type=text] {
   margin: 1px 0;
   padding: 4px 20px 4px 5px;
   width: 100%;
@@ -4085,7 +4079,7 @@
   white-space: nowrap;
 }
 
-.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+.chosen-container-multi .chosen-choices li.search-field input[type=text] {
   margin: 1px 0;
   padding: 0;
   outline: 0;
@@ -4181,7 +4175,7 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-.chosen-container-active .chosen-choices li.search-field input[type="text"] {
+.chosen-container-active .chosen-choices li.search-field input[type=text] {
   color: #222 !important;
 }
 
@@ -4231,7 +4225,7 @@
   float: right;
 }
 
-.chosen-rtl .chosen-choices li.search-field input[type="text"] {
+.chosen-rtl .chosen-choices li.search-field input[type=text] {
   direction: rtl;
 }
 
@@ -4259,7 +4253,7 @@
   border-right: none;
 }
 
-.chosen-rtl .chosen-search input[type="text"] {
+.chosen-rtl .chosen-search input[type=text] {
   padding: 4px 5px 4px 20px;
   direction: rtl;
 }
@@ -4361,7 +4355,7 @@
   display: block;
   pointer-events: none;
   border: solid transparent;
-  content: '';
+  content: "";
   height: 0;
   width: 0;
   left: 22px;
@@ -4656,7 +4650,7 @@
 
 .flatpickr-current-month .numInputWrapper {
   width: 6ch;
-  width: 7ch\0;
+  width: 7ch\0 ;
   display: inline-block;
 }
 

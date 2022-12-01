@@ -13,8 +13,8 @@ if ( ! class_exists( 'ULF_Comment_Metabox' ) ) {
     // constans
     public $unique     = '';
     public $abstract   = 'comment_metabox';
-    public $pre_fields = array();
     public $sections   = array();
+    public $pre_fields = array();
     public $args       = array(
       'title'          => '',
       'data_type'      => 'serialize',
@@ -47,21 +47,6 @@ if ( ! class_exists( 'ULF_Comment_Metabox' ) ) {
     // instance
     public static function instance( $key, $params = array() ) {
       return new self( $key, $params );
-    }
-
-    public function pre_fields( $sections ) {
-
-      $result  = array();
-
-      foreach ( $sections as $key => $section ) {
-        if ( ! empty( $section['fields'] ) ) {
-          foreach ( $section['fields'] as $field ) {
-            $result[] = $field;
-          }
-        }
-      }
-
-      return $result;
     }
 
     public function add_comment_metabox_classes( $classes ) {
@@ -315,8 +300,10 @@ if ( ! class_exists( 'ULF_Comment_Metabox' ) ) {
       if ( empty( $data ) || ! empty( $request['_reset'] ) ) {
 
         if ( $this->args['data_type'] !== 'serialize' ) {
-          foreach ( $data as $key => $value ) {
-            delete_comment_meta( $comment_id, $key );
+          foreach ( $this->pre_fields as $field ) {
+            if ( ! empty( $field['id'] ) ) {
+              delete_comment_meta( $comment_id, $field['id'] );
+            }
           }
         } else {
           delete_comment_meta( $comment_id, $this->unique );
