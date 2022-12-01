@@ -500,10 +500,10 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
     // Enqueue admin and fields styles and scripts
     public static function add_admin_enqueue_scripts() {
 
-      if ( ! self::$enqueue ) {
+      // Loads scripts and styles only when needed
+      $wpscreen = get_current_screen();
 
-        // Loads scripts and styles only when needed
-        $wpscreen = get_current_screen();
+      if ( ! self::$enqueue ) {
 
         if ( ! empty( self::$args['admin_options'] ) ) {
           foreach ( self::$args['admin_options'] as $argument ) {
@@ -561,6 +561,11 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
           self::$enqueue = true;
         }
 
+      }
+
+      // fix conflict with custom css&js plugin
+      if ( $wpscreen->id === 'custom-css-js' ) {
+        self::$enqueue = false;
       }
 
       if ( ! apply_filters( 'ulf_enqueue_assets', self::$enqueue ) ) {
