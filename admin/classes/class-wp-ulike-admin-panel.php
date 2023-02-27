@@ -181,7 +181,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'    => 'enable_anonymise_ip',
                         'type'  => 'switcher',
                         'title' => __('Enable Anonymize IP', WP_ULIKE_SLUG),
-                        'desc'  => __('Anonymize the IP address for GDPR Compliance', WP_ULIKE_SLUG)
+                        'desc'  => __('IP anonymization, also known as IP masking, is a method of replacing the original IP address with one that cannot be associated with or traced back to an individual user. This can be done by setting the last octet of IPV4 addresses or the last 80 bits of IPv6 addresses to zeros.', WP_ULIKE_SLUG)
+                    ),
+                    array(
+                        'id'         => 'disable_ip_logging',
+                        'type'       => 'switcher',
+                        'title'      => __('Disable IP logging', WP_ULIKE_SLUG),
+                        'desc'       => __('Use this option to disable saving user IP in your database.', WP_ULIKE_SLUG),
+                        'dependency' => array( 'enable_anonymise_ip', '==', 'true' ),
                     ),
                     array(
                         'id'    => 'cache_exist',

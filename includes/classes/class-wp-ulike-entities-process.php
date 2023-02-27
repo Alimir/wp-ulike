@@ -323,15 +323,19 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		protected function maybeAnonymiseIp( $ip ){
 			// Check anonymise enable
-			if( wp_ulike_get_option( 'enable_anonymise_ip' ) ){
-				if ( strpos( $ip, "." ) == true ) {
-					$ip = preg_replace('~[0-9]+$~', '0', $ip );
+			if( wp_ulike_setting_repo::isAnonymiseIpOn() ){
+				if( wp_ulike_setting_repo::isIpLoggingOff() ){
+					$ip = '0.0.0.0';
 				} else {
-					$ip = preg_replace('~[0-9]*:[0-9]+$~', '0000:0000', $ip );
+					if ( strpos( $ip, "." ) == true ) {
+						$ip = preg_replace('~[0-9]+$~', '0', $ip );
+					} else {
+						$ip = preg_replace('~[0-9]*:[0-9]+$~', '0000:0000', $ip );
+					}
 				}
 			}
 
-			return esc_sql( $ip );
+			return apply_filters( 'wp_ulike_database_user_ip', esc_sql( $ip ) );
 		}
 
 		/**

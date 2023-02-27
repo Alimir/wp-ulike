@@ -381,5 +381,23 @@ class wp_ulike_setting_repo {
 		return is_multisite() || ( defined('WP_ULIKE_DISABLE_CODE_SNIPPETS') && WP_ULIKE_DISABLE_CODE_SNIPPETS === true );
 	}
 
+	/**
+	 * Check Anonymise Ip option enabled
+	 *
+	 * @return string
+	 */
+	public static function isAnonymiseIpOn(){
+		return self::getOption( 'enable_anonymise_ip', false );
+	}
+
+	/**
+	 * Check Anonymise Ip option enabled
+	 *
+	 * @return string
+	 */
+	public static function isIpLoggingOff(){
+		return self::getOption( 'disable_ip_logging', false );
+	}
+
 
 }
