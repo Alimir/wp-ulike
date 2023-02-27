@@ -73,7 +73,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					$before_item,
 					$show_thumb ? $this->get_post_thumbnail( $post->ID, $sizeOf ) : '',
 					$permalink,
-					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					wp_trim_words( $post_title, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $post_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -129,7 +129,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					$comment_author,
 					__('on',WP_ULIKE_SLUG),
 					$comment_permalink,
-					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					wp_trim_words( $post_title, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $comment_likes_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -259,7 +259,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					'%s <a href="%s">%s</a> %s %s',
 					$before_item,
 					$permalink,
-					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					wp_trim_words( $post_title, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $post_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -326,7 +326,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					'%s <a href="%s">%s</a> %s %s',
 					$before_item,
 					esc_url( $activity_permalink ),
-					wp_trim_words( $activity_action, $num_words = $trim, $more = null ),
+					wp_trim_words( $activity_action, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">'.wp_ulike_format_number( $post_count, 'like' ).'</span>' : '',
 					$after_item
 				);
