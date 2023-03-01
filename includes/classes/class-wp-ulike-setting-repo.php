@@ -23,7 +23,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getLoginNotice(){
-		return self::getOption( 'login_required_notice', __( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) );
+		return self::getOption( 'login_required_notice', esc_html__( 'You Should Login To Submit Your Like', WP_ULIKE_SLUG ) );
 	}
 
 	/**
@@ -32,7 +32,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getValidationNotice(){
-		return self::getOption( 'validate_notice', __( 'Your vote cannot be submitted at this time.', WP_ULIKE_SLUG ) );
+		return self::getOption( 'validate_notice', esc_html__( 'Your vote cannot be submitted at this time.', WP_ULIKE_SLUG ) );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getPermissionNotice(){
-		return self::getOption( 'already_registered_notice', __( 'You have already registered a vote.', WP_ULIKE_SLUG ) );
+		return self::getOption( 'already_registered_notice', esc_html__( 'You have already registered a vote.', WP_ULIKE_SLUG ) );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getLikeNotice(){
-		return self::getOption( 'like_notice', __( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) );
+		return self::getOption( 'like_notice', esc_html__( 'Thanks! You Liked This.', WP_ULIKE_SLUG ) );
 	}
 
 	/**
@@ -59,7 +59,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getUnLikeNotice(){
-		return self::getOption( 'unlike_notice', __( 'Sorry! You unliked this.', WP_ULIKE_SLUG ) );
+		return self::getOption( 'unlike_notice', esc_html__( 'Sorry! You unliked this.', WP_ULIKE_SLUG ) );
 	}
 
 	/**
@@ -179,9 +179,9 @@ class wp_ulike_setting_repo {
 		global $wp;
 		$current_url = home_url( add_query_arg( array(), $wp->request ) );
 		// Default template
-		$default = sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>', __('You need to login in order to like this post: ',WP_ULIKE_SLUG),
+		$default = sprintf( '<p class="alert alert-info fade in" role="alert">%s<a href="%s">%s</a></p>', esc_html__('You need to login in order to like this post: ',WP_ULIKE_SLUG),
 		wp_login_url( $current_url ),
-		__('click here',WP_ULIKE_SLUG)
+		esc_html__('click here',WP_ULIKE_SLUG)
 		);
 		// Setting template
 		$template = self::getOption( self::getSettingKey( $typeName ) . '|login_template', $default );
@@ -308,7 +308,7 @@ class wp_ulike_setting_repo {
 		}
 		// Add postfix
 		if( ! empty( $filter_args[ $status . '_postfix' ] ) ){
-			$number =  $number . $filter_args[ $status . '_postfix' ];
+			$number = $number . $filter_args[ $status . '_postfix' ];
 		}
 
 		return $number;

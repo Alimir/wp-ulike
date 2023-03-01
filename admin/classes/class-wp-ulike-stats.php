@@ -127,7 +127,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			switch ( $table ) {
 				case 'ulike':
 					$options = array(
-						'label'                => __( "Posts Stats", WP_ULIKE_SLUG ),
+						'label'                => esc_html__( "Posts Stats", WP_ULIKE_SLUG ),
 						'backgroundColor'      => "rgba(66, 165, 245,0.8)",
 						'borderColor'          => "rgba(21, 101, 192,1)",
 						'pointBackgroundColor' => "rgba(255,255,255,1)",
@@ -137,7 +137,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 				case 'ulike_comments':
 					$options = array(
-						'label'                => __( "Comments Stats", WP_ULIKE_SLUG ),
+						'label'                => esc_html__( "Comments Stats", WP_ULIKE_SLUG ),
 						'backgroundColor'      => "rgba(255, 202, 40,0.8)",
 						'borderColor'          => "rgba(255, 143, 0,1)",
 						'pointBackgroundColor' => "rgba(255,255,255,1)",
@@ -147,7 +147,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 				case 'ulike_activities':
 					$options = array(
-						'label'                => __( "Activities Stats", WP_ULIKE_SLUG ),
+						'label'                => esc_html__( "Activities Stats", WP_ULIKE_SLUG ),
 						'backgroundColor'      => "rgba(239, 83, 80,0.8)",
 						'borderColor'          => "rgba(198, 40, 40,1)",
 						'pointBackgroundColor' => "rgba(255,255,255,1)",
@@ -157,7 +157,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 				case 'ulike_forums':
 					$options = array(
-						'label'                => __( "Topics Stats", WP_ULIKE_SLUG ),
+						'label'                => esc_html__( "Topics Stats", WP_ULIKE_SLUG ),
 						'backgroundColor'      => "rgba(102, 187, 106,0.8)",
 						'borderColor'          => "rgba(27, 94, 32,1)",
 						'pointBackgroundColor' => "rgba(255,255,255,1)",
@@ -192,7 +192,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$result = $this->wpdb->get_results( $query );
 
 			if( empty( $result ) ) {
-				$result =  new stdClass();
+				$result = new stdClass();
 				$result->labels = $result->counts = NULL;
 			}
 
@@ -281,7 +281,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			foreach ( $top_likers as $user ) {
 				$user_ID  = stripslashes( $user->user_id );
 				$userdata = get_userdata( $user_ID );
-				$username = empty( $userdata ) ? __('Guest User',WP_ULIKE_SLUG) : $userdata->display_name;
+				$username = empty( $userdata ) ? esc_html__('Guest User',WP_ULIKE_SLUG) : $userdata->display_name;
 
 				$result  .= '
 	            <div class="wp-ulike-flex wp-ulike-users-list">
