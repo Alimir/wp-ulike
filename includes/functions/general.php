@@ -350,7 +350,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 		// Create custom template
 		$custom_template = apply_filters( 'wp_ulike_get_likers_template', false, $get_users, $item_ID, $parsed_args, $table_name, $column_name, $options );
 		if( $custom_template !== false ){
-			return $custom_template;
+			return wp_kses_post( $custom_template );
 		}
 
 		if( ! empty( $get_users ) ) {

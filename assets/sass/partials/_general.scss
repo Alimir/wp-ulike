@@ -43,16 +43,15 @@
                 background-color: initial;
             }
         }
-    }
 
-    .wp_ulike_put_text {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 28px;
-        padding: 0 10px;
-        min-width: 50px;
+        &.wp_ulike_put_text {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 28px;
+            padding: 0 10px;
+            min-width: 50px;
+        }
     }
-
 
     .wp_ulike_is_loading {
         .wp_ulike_btn {

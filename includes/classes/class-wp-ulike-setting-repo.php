@@ -311,7 +311,7 @@ class wp_ulike_setting_repo {
 			$number = $number . $filter_args[ $status . '_postfix' ];
 		}
 
-		return $number;
+		return wp_kses_post( $number );
 	}
 
 	/**

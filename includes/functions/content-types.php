@@ -94,11 +94,13 @@ if( ! function_exists( 'wp_ulike_get_most_liked_posts' ) ){
 	 */
 	function wp_ulike_get_most_liked_posts( $numberposts = 10, $post_type = '', $method = 'post', $period = 'all', $status = 'like', $is_noraml = false, $offset = 1, $user_id = '' ){
 		// Get post types
-		$post_type =  empty( $post_type ) ? get_post_types_by_support( array(
+		$post_type = empty( $post_type ) ? get_post_types_by_support( array(
 			'title',
 			'editor',
 			'thumbnail'
 		) ) : $post_type;
+
+		$post_type = apply_filters( 'wp_ulike_supported_post_types_for_top_posts_list', $post_type );
 
 		$post__in = wp_ulike_get_popular_items_ids(array(
 			'type'     => $method,
@@ -213,7 +215,7 @@ if( ! function_exists( 'wp_ulike_get_most_liked_comments' ) ){
 	 */
 	function wp_ulike_get_most_liked_comments( $numbercomments = 10, $post_type = '', $period = 'all', $status = 'like', $offset = 1, $user_id = ''){
 		// Get post types
-		$post_type =  empty( $post_type ) ? get_post_types_by_support( array(
+		$post_type = empty( $post_type ) ? get_post_types_by_support( array(
 			'title',
 			'editor',
 			'thumbnail'

@@ -143,7 +143,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					"status"                => esc_attr( $method_id ),
 					"user_status"           => esc_attr( $this->getPrevStatus() ),
 					"setting"               => esc_attr( $this->args['setting'] ),
-					"attributes"            => esc_attr( $this->args['attributes'] ),
+					"attributes"            => ! is_array($this->args['attributes']) ? esc_attr( $this->args['attributes'] ) : '',
 					"up_vote_inner_text"    => wp_kses_post( $this->args['up_vote_inner_text'] ),
 					"down_vote_inner_text"  => wp_kses_post( $this->args['down_vote_inner_text'] ),
 					"style"                 => esc_html( $this->args['style'] ),

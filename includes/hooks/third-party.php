@@ -262,7 +262,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 					}
 					bp_activity_add( apply_filters( 'wp_ulike_post_bp_notification_args',  array(
 						'user_id'   => $user_ID,
-						'action'    => $post_template,
+						'action'    => wp_kses_post( $post_template ),
 						'component' => 'activity',
 						'type'      => 'wp_like_group',
 						'item_id'   => $cp_ID
@@ -292,7 +292,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 
 					bp_activity_add( apply_filters( 'wp_ulike_comment_bp_notification_args', array(
 						'user_id'   => $user_ID,
-						'action'    => $comment_template,
+						'action'    => wp_kses_post( $comment_template ),
 						'component' => 'activity',
 						'type'      => 'wp_like_group',
 						'item_id'   => $cp_ID
