@@ -66,7 +66,7 @@ abstract class wp_ulike_ajax_listener_base{
 	* @param string $error
 	*/
 	protected function sendError( $error = null ){
-		$error = ! empty( $error ) ? $error : __( 'There was an error processing the request.', WP_ULIKE_SLUG );
+		$error = ! empty( $error ) ? $error : esc_html__( 'There was an error processing the request.', WP_ULIKE_SLUG );
 		return wp_send_json_error( $error );
 	}
 

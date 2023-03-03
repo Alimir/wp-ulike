@@ -149,14 +149,14 @@ if( ! function_exists( 'wp_ulike_likers_box_shortcode' ) ){
 
 		// If method not exist, then return error message
 		if( empty( $get_settings ) || empty( $args['id'] ) ) {
-			return __( 'Error receiving input parameters', WP_ULIKE_SLUG );
+			return esc_html__( 'Error receiving input parameters', WP_ULIKE_SLUG );
 		}
 
 		if( ! empty( $args['template']  ) ){
 			$args['template'] = html_entity_decode( $args['template']  );
 		}
 
-		$output = sprintf( '<div class="wp_ulike_manual_likers_wrapper wp_%s_likers_%d">%s</div>', $args['type'], $args['id'],
+		$output = sprintf( '<div class="wp_ulike_manual_likers_wrapper wp_%s_likers_%d">%s</div>', esc_attr( $args['type'] ), esc_attr( $args['id'] ),
 		wp_ulike_get_likers_template( $get_settings['table'], $get_settings['column'], $args['id'], $get_settings['setting'], $args ) );
 
 		return apply_filters( 'wp_ulike_likers_box_shortcode', $output, $args['id'], $args['type'] );

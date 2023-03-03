@@ -19,8 +19,8 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		function __construct() {
 			parent::__construct(
 				'wp_ulike',
-				__('WP Ulike Widget', WP_ULIKE_SLUG),
-				array( 'description' => __( 'An advanced widget that gives you all most liked records with different types', WP_ULIKE_SLUG ))
+				esc_html__('WP Ulike Widget', WP_ULIKE_SLUG),
+				array( 'description' => esc_html__( 'An advanced widget that gives you all most liked records with different types', WP_ULIKE_SLUG ))
 				);
 		}
 
@@ -55,7 +55,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			if( empty( $posts ) ){
 				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
-				return sprintf( '<li>%s "%s" %s</li>', __( 'No results were found in', WP_ULIKE_SLUG ), $period_info, __( 'period', WP_ULIKE_SLUG ) );
+				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', WP_ULIKE_SLUG ), $period_info, esc_html__( 'period', WP_ULIKE_SLUG ) );
 			}
 
 			foreach ($posts as $post) {
@@ -73,7 +73,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					$before_item,
 					$show_thumb ? $this->get_post_thumbnail( $post->ID, $sizeOf ) : '',
 					$permalink,
-					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					wp_trim_words( $post_title, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $post_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -113,7 +113,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			if( empty( $comments ) ){
 				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
-				return sprintf( '<li>%s "%s" %s</li>', __( 'No results were found in', WP_ULIKE_SLUG ), $period_info, __( 'period', WP_ULIKE_SLUG ) );
+				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', WP_ULIKE_SLUG ), $period_info, esc_html__( 'period', WP_ULIKE_SLUG ) );
 			}
 
 			foreach ($comments as $comment) {
@@ -127,9 +127,9 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					$before_item,
 					$show_thumb ? get_avatar( $comment->comment_author_email, $sizeOf ) : '',
 					$comment_author,
-					__('on',WP_ULIKE_SLUG),
+					esc_html__('on',WP_ULIKE_SLUG),
 					$comment_permalink,
-					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					wp_trim_words( $post_title, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $comment_likes_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -207,7 +207,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				endforeach;
 				$result = ob_get_clean();
 			} else {
-				$result = $before_item .  __( 'you haven\'t liked any post yet!',WP_ULIKE_SLUG ) . $after_item;
+				$result = $before_item .  esc_html__( 'you haven\'t liked any post yet!',WP_ULIKE_SLUG ) . $after_item;
 			}
 
 			return $result;
@@ -224,7 +224,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function most_liked_topics( $args = array(), $result = '' ) {
 
 			if( ! function_exists( 'is_bbpress' ) ) {
-				return '<li>' . sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ) ,__( 'bbPress', WP_ULIKE_SLUG ) ) .'</li>';
+				return '<li>' . sprintf( esc_html__( '%s is Not Activated!', WP_ULIKE_SLUG ) ,esc_html__( 'bbPress', WP_ULIKE_SLUG ) ) .'</li>';
 			}
 
 			$defaults = array(
@@ -247,7 +247,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			if( empty( $posts ) ){
 				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
-				return sprintf( '<li>%s "%s" %s</li>', __( 'No results were found in', WP_ULIKE_SLUG ), $period_info, __( 'period', WP_ULIKE_SLUG ) );
+				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', WP_ULIKE_SLUG ), $period_info, esc_html__( 'period', WP_ULIKE_SLUG ) );
 			}
 
 			foreach ($posts as $post) {
@@ -259,7 +259,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					'%s <a href="%s">%s</a> %s %s',
 					$before_item,
 					$permalink,
-					wp_trim_words( $post_title, $num_words = $trim, $more = null ),
+					wp_trim_words( $post_title, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $post_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -280,7 +280,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function most_liked_activities( $args = array(), $result = '' ) {
 
 			if( ! defined( 'BP_VERSION' ) ) {
-				return '<li>' . sprintf( __( '%s is Not Activated!', WP_ULIKE_SLUG ) ,__( 'BuddyPress', WP_ULIKE_SLUG ) ) . '</li>';
+				return '<li>' . sprintf( esc_html__( '%s is Not Activated!', WP_ULIKE_SLUG ) ,esc_html__( 'BuddyPress', WP_ULIKE_SLUG ) ) . '</li>';
 			}
 
 			$defaults = array(
@@ -309,7 +309,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			if( empty( $activities ) ){
 				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
-				return sprintf( '<li>%s "%s" %s</li>', __( 'No results were found in', WP_ULIKE_SLUG ), $period_info, __( 'period', WP_ULIKE_SLUG ) );
+				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', WP_ULIKE_SLUG ), $period_info, esc_html__( 'period', WP_ULIKE_SLUG ) );
 			}
 
 			foreach ($activities as $activity) {
@@ -326,7 +326,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					'%s <a href="%s">%s</a> %s %s',
 					$before_item,
 					esc_url( $activity_permalink ),
-					wp_trim_words( $activity_action, $num_words = $trim, $more = null ),
+					wp_trim_words( $activity_action, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">'.wp_ulike_format_number( $post_count, 'like' ).'</span>' : '',
 					$after_item
 				);
@@ -368,7 +368,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$get_user_info      = get_userdata($get_user_id);
 				$get_likes_count    = $liker->SumUser;
 				$return_profile_url = '#';
-				$echo_likes_count   = $show_count ? ' ('.$get_likes_count . ' ' . __('Like',WP_ULIKE_SLUG).')' : '';
+				$echo_likes_count   = $show_count ? ' ('.$get_likes_count . ' ' . esc_html__('Like',WP_ULIKE_SLUG).')' : '';
 
 				if( $profile_url == 'bp' && function_exists('bp_core_get_user_domain') ) {
 					$return_profile_url = bp_core_get_user_domain( $liker->user_id );
@@ -504,7 +504,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function form( $instance ) {
 			//Set up some default widget settings.
 			$defaults = array(
-					'title'       => __('Most Liked', WP_ULIKE_SLUG),
+					'title'       => esc_html__('Most Liked', WP_ULIKE_SLUG),
 					'count'       => 10,
 					'size'        => 32,
 					'trim'        => 10,
@@ -519,73 +519,73 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			$instance = wp_parse_args( (array) $instance, $defaults );
 			?>
 			<p>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e('Title:', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e('Title:', WP_ULIKE_SLUG); ?></label>
 				<input id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" type="text">
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'type' ); ?>"><?php _e('Type:', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'type' ); ?>"><?php esc_html_e('Type:', WP_ULIKE_SLUG); ?></label>
 				<select name="<?php echo $this->get_field_name( 'type' ); ?>" style="width:100%;">
-					<option value="post" <?php selected( $instance['type'], "post" ); ?>><?php echo _e('Most Liked Posts', WP_ULIKE_SLUG); ?></option>
-					<option value="comment" <?php selected( $instance['type'], "comment" ); ?>><?php echo _e('Most Liked Comments', WP_ULIKE_SLUG); ?></option>
-					<option value="activity" <?php selected( $instance['type'], "activity" ); ?>><?php echo _e('Most Liked Activities', WP_ULIKE_SLUG); ?></option>
-					<option value="topic" <?php selected( $instance['type'], "topic" ); ?>><?php echo _e('Most Liked Topics', WP_ULIKE_SLUG); ?></option>
-					<option value="users" <?php selected( $instance['type'], "users" ); ?>><?php echo _e('Most Liked Users', WP_ULIKE_SLUG); ?></option>
-					<option value="last_posts_liked" <?php selected( $instance['type'], "last_posts_liked" ); ?>><?php echo _e('Last Posts Liked By User', WP_ULIKE_SLUG); ?></option>
+					<option value="post" <?php selected( $instance['type'], "post" ); ?>><?php esc_html_e('Most Liked Posts', WP_ULIKE_SLUG); ?></option>
+					<option value="comment" <?php selected( $instance['type'], "comment" ); ?>><?php esc_html_e('Most Liked Comments', WP_ULIKE_SLUG); ?></option>
+					<option value="activity" <?php selected( $instance['type'], "activity" ); ?>><?php esc_html_e('Most Liked Activities', WP_ULIKE_SLUG); ?></option>
+					<option value="topic" <?php selected( $instance['type'], "topic" ); ?>><?php esc_html_e('Most Liked Topics', WP_ULIKE_SLUG); ?></option>
+					<option value="users" <?php selected( $instance['type'], "users" ); ?>><?php esc_html_e('Most Liked Users', WP_ULIKE_SLUG); ?></option>
+					<option value="last_posts_liked" <?php selected( $instance['type'], "last_posts_liked" ); ?>><?php esc_html_e('Last Posts Liked By User', WP_ULIKE_SLUG); ?></option>
 				</select>
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e('Number of items to show:', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php esc_html_e('Number of items to show:', WP_ULIKE_SLUG); ?></label>
 				<input id="<?php echo $this->get_field_id( 'count' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'count' ); ?>" value="<?php echo $instance['count']; ?>"  step="1" min="1" size="3" type="number">
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'period' ); ?>"><?php _e('Period:', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'period' ); ?>"><?php esc_html_e('Period:', WP_ULIKE_SLUG); ?></label>
 				<select name="<?php echo $this->get_field_name( 'period' ); ?>" style="width:100%;">
-					<option value="all" <?php selected( $instance['period'], "all" ); ?>><?php echo _e('All The Times', WP_ULIKE_SLUG); ?></option>
-					<option value="year" <?php selected( $instance['period'], "year" ); ?>><?php echo _e('Year', WP_ULIKE_SLUG); ?></option>
-					<option value="month" <?php selected( $instance['period'], "month" ); ?>><?php echo _e('Month', WP_ULIKE_SLUG); ?></option>
-					<option value="week" <?php selected( $instance['period'], "week" ); ?>><?php echo _e('Week', WP_ULIKE_SLUG); ?></option>
-					<option value="yesterday" <?php selected( $instance['period'], "yesterday" ); ?>><?php echo _e('Yesterday', WP_ULIKE_SLUG); ?></option>
-					<option value="today" <?php selected( $instance['period'], "today" ); ?>><?php echo _e('Today', WP_ULIKE_SLUG); ?></option>
+					<option value="all" <?php selected( $instance['period'], "all" ); ?>><?php esc_html_e('All The Times', WP_ULIKE_SLUG); ?></option>
+					<option value="year" <?php selected( $instance['period'], "year" ); ?>><?php esc_html_e('Year', WP_ULIKE_SLUG); ?></option>
+					<option value="month" <?php selected( $instance['period'], "month" ); ?>><?php esc_html_e('Month', WP_ULIKE_SLUG); ?></option>
+					<option value="week" <?php selected( $instance['period'], "week" ); ?>><?php esc_html_e('Week', WP_ULIKE_SLUG); ?></option>
+					<option value="yesterday" <?php selected( $instance['period'], "yesterday" ); ?>><?php esc_html_e('Yesterday', WP_ULIKE_SLUG); ?></option>
+					<option value="today" <?php selected( $instance['period'], "today" ); ?>><?php esc_html_e('Today', WP_ULIKE_SLUG); ?></option>
 				</select>
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'style' ); ?>"><?php _e('Style:', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'style' ); ?>"><?php esc_html_e('Style:', WP_ULIKE_SLUG); ?></label>
 				<select name="<?php echo $this->get_field_name( 'style' ); ?>" style="width:100%;">
-					<option value="simple" <?php selected( $instance['style'], "simple" ); ?>><?php echo _e('Simple', WP_ULIKE_SLUG); ?></option>
-					<option value="love" <?php selected( $instance['style'], "love" ); ?>><?php echo _e('Heart', WP_ULIKE_SLUG); ?></option>
+					<option value="simple" <?php selected( $instance['style'], "simple" ); ?>><?php esc_html_e('Simple', WP_ULIKE_SLUG); ?></option>
+					<option value="love" <?php selected( $instance['style'], "love" ); ?>><?php esc_html_e('Heart', WP_ULIKE_SLUG); ?></option>
 				</select>
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'trim' ); ?>"><?php _e('Title Trim (Length):', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'trim' ); ?>"><?php esc_html_e('Title Trim (Length):', WP_ULIKE_SLUG); ?></label>
 				<input id="<?php echo $this->get_field_name( 'trim' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'trim' ); ?>" value="<?php echo $instance['trim']; ?>"  step="1" min="1" size="3" type="number">
 			</p>
 
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'profile_url' ); ?>"><?php _e('Profile URL:', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'profile_url' ); ?>"><?php esc_html_e('Profile URL:', WP_ULIKE_SLUG); ?></label>
 				<select name="<?php echo $this->get_field_name( 'profile_url' ); ?>" style="width:100%;">
-					<option value="bp" <?php selected( $instance['profile_url'], "bp" ); ?>><?php echo _e('BuddyPress', WP_ULIKE_SLUG); ?></option>
-					<option value="um" <?php selected( $instance['profile_url'], "um" ); ?>><?php echo _e('UltimateMember', WP_ULIKE_SLUG); ?></option>
+					<option value="bp" <?php selected( $instance['profile_url'], "bp" ); ?>><?php esc_html_e('BuddyPress', WP_ULIKE_SLUG); ?></option>
+					<option value="um" <?php selected( $instance['profile_url'], "um" ); ?>><?php esc_html_e('UltimateMember', WP_ULIKE_SLUG); ?></option>
 				</select>
 			</p>
 
 			<p>
 				<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id( 'show_count' ); ?>" name="<?php echo $this->get_field_name( 'show_count' ); ?>" <?php if($instance['show_count'] == true) echo 'checked="checked"'; ?> />
-				<label for="<?php echo $this->get_field_id( 'show_count' ); ?>"><?php _e('Activate Like Counter', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'show_count' ); ?>"><?php esc_html_e('Activate Like Counter', WP_ULIKE_SLUG); ?></label>
 			</p>
 
 			<p>
 				<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id( 'show_thumb' ); ?>" name="<?php echo $this->get_field_name( 'show_thumb' ); ?>" <?php if($instance['show_thumb'] == true) echo 'checked="checked"'; ?> />
-				<label for="<?php echo $this->get_field_id( 'show_thumb' ); ?>"><?php _e('Activate Thumbnail/Avatar', WP_ULIKE_SLUG); ?></label>
+				<label for="<?php echo $this->get_field_id( 'show_thumb' ); ?>"><?php esc_html_e('Activate Thumbnail/Avatar', WP_ULIKE_SLUG); ?></label>
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'size' ); ?>"><?php _e('Thumbnail/Avatar size:', WP_ULIKE_SLUG); ?><small> (min. 8)</small></label>
+				<label for="<?php echo $this->get_field_id( 'size' ); ?>"><?php esc_html_e('Thumbnail/Avatar size:', WP_ULIKE_SLUG); ?><small> (min. 8)</small></label>
 				<input id="<?php echo $this->get_field_id( 'size' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'size' ); ?>" value="<?php echo $instance['size']; ?>" step="1" min="8" size="3" type="number">
 			</p>
 

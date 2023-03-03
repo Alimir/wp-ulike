@@ -21,9 +21,9 @@ function wp_ulike_copyright( $text ) {
 	if( isset($_GET["page"]) && stripos( $_GET["page"], "wp-ulike") !== false ) {
 		return sprintf(
 			'%s <a href="%s" title="TechnoWich" target="_blank">%s</a>',
-			__( 'Proudly Powered By', WP_ULIKE_SLUG ),
+			esc_html__( 'Proudly Powered By', WP_ULIKE_SLUG ),
 			'https://technowich.com/?utm_source=footer-link&utm_campaign=wp-ulike&utm_medium=wp-dash',
-			__( 'TechnoWich', WP_ULIKE_SLUG )
+			esc_html__( 'TechnoWich', WP_ULIKE_SLUG )
 		);
 	}
 
@@ -126,23 +126,23 @@ function wp_ulike_notice_manager(){
 	if( $count_logs > 1000 ){
 		$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_leave_a_review',
-			'title'       => __( 'Wow! You\'ve earned over a thousand likes', WP_ULIKE_SLUG ) . ' :)',
-			'description' => __( "It's great to see that you've been using the WP ULike plugin. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ),
+			'title'       => esc_html__( 'Wow! You\'ve earned over a thousand likes', WP_ULIKE_SLUG ) . ' :)',
+			'description' => esc_html__( "It's great to see that you've been using the WP ULike plugin. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ),
 			'skin'        => 'info',
 			'has_close'   => true,
 			'buttons'     => array(
 				array(
-					'label'      => __( "Sure, I'd love to!", WP_ULIKE_SLUG ),
+					'label'      => esc_html__( "Sure, I'd love to!", WP_ULIKE_SLUG ),
 					'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5'
 				),
 				array(
-					'label'      => __('Not Now', WP_ULIKE_SLUG),
+					'label'      => esc_html__('Not Now', WP_ULIKE_SLUG),
 					'type'       => 'skip',
 					'color_name' => 'info',
 					'expiration' => WEEK_IN_SECONDS * 2
 				),
 				array(
-					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+					'label'      => esc_html__('No thanks and never ask me again', WP_ULIKE_SLUG),
 					'type'       => 'skip',
 					'color_name' => 'error',
 					'expiration' => YEAR_IN_SECONDS * 10
@@ -159,17 +159,17 @@ function wp_ulike_notice_manager(){
 		if( get_locale() === 'fa_IR' ){
 			$notice_list[ 'wp_ulike_fa_IR_banner' ] = new wp_ulike_notices([
 				'id'          => 'wp_ulike_fa_IR_banner',
-				'title'       => __( 'Good news for Persian WordPress users. :)', WP_ULIKE_SLUG ),
-				'description' => __( "Following the request of our friends in Persian WordPress to access the premium version in Iran, we made the necessary arrangements and our new website has become available. From now on, you can use our new articles and premium service by visiting this website." , WP_ULIKE_SLUG ),
+				'title'       => esc_html__( 'Good news for Persian WordPress users. :)', WP_ULIKE_SLUG ),
+				'description' => esc_html__( "Following the request of our friends in Persian WordPress to access the premium version in Iran, we made the necessary arrangements and our new website has become available. From now on, you can use our new articles and premium service by visiting this website." , WP_ULIKE_SLUG ),
 				'skin'        => 'default',
 				'has_close'   => true,
 				'buttons'     => array(
 					array(
-						'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+						'label'      => esc_html__( "Get More Information", WP_ULIKE_SLUG ),
 						'link'       => 'https://wpulike.ir/?utm_source=fa-IR-banner&utm_campaign=gopro&utm_medium=wp-dash'
 					),
 					array(
-						'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+						'label'      => esc_html__('No thanks and never ask me again', WP_ULIKE_SLUG),
 						'type'       => 'skip',
 						'color_name' => 'error',
 						'expiration' => YEAR_IN_SECONDS * 10
@@ -183,17 +183,17 @@ function wp_ulike_notice_manager(){
 		}
 		$notice_list[ 'wp_ulike_pro_user_profiles_banner' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_pro_user_profiles_banner',
-			'title'       => __( 'How to Create Ultimate User Profiles with WP ULike?', WP_ULIKE_SLUG ),
-			'description' => __( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
+			'title'       => esc_html__( 'How to Create Ultimate User Profiles with WP ULike?', WP_ULIKE_SLUG ),
+			'description' => esc_html__( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
 			'skin'        => 'default',
 			'has_close'   => true,
 			'buttons'     => array(
 				array(
-					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+					'label'      => esc_html__( "Get More Information", WP_ULIKE_SLUG ),
 					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
 				),
 				array(
-					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+					'label'      => esc_html__('No thanks and never ask me again', WP_ULIKE_SLUG),
 					'type'       => 'skip',
 					'color_name' => 'error',
 					'expiration' => YEAR_IN_SECONDS * 10
@@ -206,17 +206,17 @@ function wp_ulike_notice_manager(){
 		]);
 		$notice_list[ 'wp_ulike_seo_tools_banner' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_seo_tools_banner',
-			'title'       => __( 'Boost Your SEO by Using Schema Rich Snippets', WP_ULIKE_SLUG ),
-			'description' => __( "WP ULike Pro in its latest update evolved to an innovative and powerful SEO Plugin which can manage +13 types of Schema Markups to make a better connection between your webpages and search engines. Now you can talk in search engine language and tell them which type of content you are promoting." , WP_ULIKE_SLUG ),
+			'title'       => esc_html__( 'Boost Your SEO by Using Schema Rich Snippets', WP_ULIKE_SLUG ),
+			'description' => esc_html__( "WP ULike Pro in its latest update evolved to an innovative and powerful SEO Plugin which can manage +13 types of Schema Markups to make a better connection between your webpages and search engines. Now you can talk in search engine language and tell them which type of content you are promoting." , WP_ULIKE_SLUG ),
 			'skin'        => 'default',
 			'has_close'   => true,
 			'buttons'     => array(
 				array(
-					'label'      => __( "Get More Information", WP_ULIKE_SLUG ),
+					'label'      => esc_html__( "Get More Information", WP_ULIKE_SLUG ),
 					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-rich-snippets-generator/?utm_source=seo-tools-banner&utm_campaign=gopro&utm_medium=wp-dash'
 				),
 				array(
-					'label'      => __('No thanks and never ask me again', WP_ULIKE_SLUG),
+					'label'      => esc_html__('No thanks and never ask me again', WP_ULIKE_SLUG),
 					'type'       => 'skip',
 					'color_name' => 'error',
 					'expiration' => YEAR_IN_SECONDS * 10
@@ -248,7 +248,7 @@ add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 function wp_ulike_go_pro_admin_menu( $submenus ){
 	if( is_array( $submenus ) && ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
 		$submenus['go_pro'] = array(
-			'title'       =>  sprintf( '<span class="wp-ulike-gopro-menu-link"><strong>%s</strong></span>', __( 'Go Pro', WP_ULIKE_SLUG )),
+			'title'       =>  sprintf( '<span class="wp-ulike-gopro-menu-link"><strong>%s</strong></span>', esc_html__( 'Go Pro', WP_ULIKE_SLUG )),
 			'parent_slug' => 'wp-ulike-settings',
  			'capability'  => 'manage_options',
 			'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/go-pro.php',
@@ -481,7 +481,7 @@ function wp_ulike_manage_posts_columns( $columns ) {
 	if( ! empty( $post_types ) && false !== $current_post_type ){
 		if( in_array( $current_post_type, $post_types ) ){
 			$columns = apply_filters( 'wp_ulike_manage_posts_columns', array_merge( $columns,
-			array( 'wp-ulike-thumbs-up' => '<i class="dashicons dashicons-thumbs-up"></i> ' . __('Like',WP_ULIKE_SLUG) ) ), $current_post_type );
+			array( 'wp-ulike-thumbs-up' => '<i class="dashicons dashicons-thumbs-up"></i> ' . esc_html__('Like',WP_ULIKE_SLUG) ) ), $current_post_type );
 			// add sortable columns
 			add_filter( 'manage_edit-' . $current_post_type . '_sortable_columns', function( $columns ){
 				$columns['wp-ulike-thumbs-up'] = 'likes';
@@ -556,7 +556,7 @@ add_filter( 'found_posts', 'wp_ulike_manage_columns_found_posts', 10, 2 );
  */
 function wp_ulike_comment_columns( $columns ) {
 	if( wp_ulike_get_option( 'comments_group|enable_admin_columns', false ) ){
-		$columns['wp-ulike-thumbs-up'] = '<i class="dashicons dashicons-thumbs-up"></i> ' . __('Like',WP_ULIKE_SLUG);
+		$columns['wp-ulike-thumbs-up'] = '<i class="dashicons dashicons-thumbs-up"></i> ' . esc_html__('Like',WP_ULIKE_SLUG);
 	}
 
 	return $columns;
@@ -634,9 +634,9 @@ function wp_ulike_panel_customization_section( $options ) {
 			'theme'  => 'mbo',
 			'mode'   => 'php',
 		),
-		'title'    => __('PHP Snippets',WP_ULIKE_SLUG),
+		'title'    => esc_html__('PHP Snippets',WP_ULIKE_SLUG),
 		'sanitize' => 'wp_ulike_html_entity_decode',
-		'desc'     => __('Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If you have lots of snippets, you may want to consider using Code Snippets plugin.', WP_ULIKE_SLUG)
+		'desc'     => esc_html__('Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If you have lots of snippets, you may want to consider using Code Snippets plugin.', WP_ULIKE_SLUG)
 	);
 	$options[] = array(
 		'id'    => 'js_snippets',
@@ -645,9 +645,9 @@ function wp_ulike_panel_customization_section( $options ) {
 			'theme'  => 'mbo',
 			'mode'   => 'javascript',
 		),
-		'title'    => __('Javascript Snippets',WP_ULIKE_SLUG),
+		'title'    => esc_html__('Javascript Snippets',WP_ULIKE_SLUG),
 		'sanitize' => 'wp_ulike_html_entity_decode',
-		'desc'     => __('This code will output immediately before the closing &lt;/body&gt; tag in the document source. (Scripts must not be property wrapped in &lt;script&gt; tag.)', WP_ULIKE_SLUG)
+		'desc'     => esc_html__('This code will output immediately before the closing &lt;/body&gt; tag in the document source. (Scripts must not be property wrapped in &lt;script&gt; tag.)', WP_ULIKE_SLUG)
 	);
 
 	return $options;

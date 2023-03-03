@@ -661,7 +661,7 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 		global $wpdb;
 		if (false === ($rating_value = wp_cache_get($cache_key = 'get_rich_rating_value_' . $post_ID, $cache_group = 'wp_ulike'))) {
 			// get the average, likes count & date_time columns by $post_ID
-			$request =  "SELECT
+			$request = "SELECT
 							FORMAT(
 								(
 								SELECT

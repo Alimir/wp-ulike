@@ -27,15 +27,25 @@ if ( ! class_exists( 'ULF_Field_textarea' ) ) {
 
       if ( ! empty( $this->field['shortcoder'] ) ) {
 
-        $instances = ( is_array( $this->field['shortcoder'] ) ) ? $this->field['shortcoder'] : array_filter( (array) $this->field['shortcoder'] );
+        $shortcodes = ( is_array( $this->field['shortcoder'] ) ) ? $this->field['shortcoder'] : array_filter( (array) $this->field['shortcoder'] );
+        $instances  = ( ! empty( ULF::$shortcode_instances ) ) ? ULF::$shortcode_instances : array();
 
-        foreach ( $instances as $instance_key ) {
+        if ( ! empty( $shortcodes ) && ! empty( $instances ) ) {
 
-          if ( isset( ULF::$shortcode_instances[$instance_key] ) ) {
+          foreach ( $shortcodes as $shortcode ) {
 
-            $button_title = ULF::$shortcode_instances[$instance_key]['button_title'];
+            foreach ( $instances as $instance ) {
 
-            echo '<a href="#" class="button button-primary ulf-shortcode-button" data-modal-id="'. esc_attr( $instance_key ) .'">'. $button_title .'</a>';
+              if ( $instance['modal_id'] === $shortcode ) {
+
+                $id    = $instance['modal_id'];
+                $title = $instance['button_title'];
+
+                echo '<a href="#" class="button button-primary ulf-shortcode-button" data-modal-id="'. esc_attr( $id ) .'">'. esc_html( $title ) .'</a>';
+
+              }
+
+            }
 
           }
 

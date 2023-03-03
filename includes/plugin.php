@@ -115,9 +115,9 @@ class WpUlikeInit {
   public function add_links( $actions, $plugin_file ) {
 
     if (  $plugin_file === WP_ULIKE_BASENAME ) {
-      $settings = array('settings'  => '<a href="admin.php?page=wp-ulike-settings">' . __('Settings', WP_ULIKE_SLUG) . '</a>');
-      $stats    = array('stats'     => '<a href="admin.php?page=wp-ulike-statistics">' . __('Statistics', WP_ULIKE_SLUG) . '</a>');
-      $about    = array('about'     => '<a href="admin.php?page=wp-ulike-about">' . __('About', WP_ULIKE_SLUG) . '</a>');
+      $settings = array('settings'  => '<a href="admin.php?page=wp-ulike-settings">' . esc_html__('Settings', WP_ULIKE_SLUG) . '</a>');
+      $stats    = array('stats'     => '<a href="admin.php?page=wp-ulike-statistics">' . esc_html__('Statistics', WP_ULIKE_SLUG) . '</a>');
+      $about    = array('about'     => '<a href="admin.php?page=wp-ulike-about">' . esc_html__('About', WP_ULIKE_SLUG) . '</a>');
       // Merge on actions array
       $actions  = array_merge( $about, $actions );
       $actions  = array_merge( $stats, $actions );

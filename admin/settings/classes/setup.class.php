@@ -12,7 +12,7 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
 
     // Default constants
     public static $premium  = true;
-    public static $version  = '2.2.8';
+    public static $version  = '2.2.9';
     public static $dir      = '';
     public static $url      = '';
     public static $css      = '';
@@ -483,6 +483,10 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
             self::set_used_fields( array( 'fields' => $field['accordions'] ) );
           }
 
+          if ( ! empty( $field['elements'] ) ) {
+            self::set_used_fields( array( 'fields' => $field['elements'] ) );
+          }
+
           if ( ! empty( $field['type'] ) ) {
             self::$fields[$field['type']] = $field;
           }
@@ -496,10 +500,10 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
     // Enqueue admin and fields styles and scripts
     public static function add_admin_enqueue_scripts() {
 
-      if ( ! self::$enqueue ) {
+      // Loads scripts and styles only when needed
+      $wpscreen = get_current_screen();
 
-        // Loads scripts and styles only when needed
-        $wpscreen = get_current_screen();
+      if ( ! self::$enqueue ) {
 
         if ( ! empty( self::$args['admin_options'] ) ) {
           foreach ( self::$args['admin_options'] as $argument ) {
@@ -557,6 +561,11 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
           self::$enqueue = true;
         }
 
+      }
+
+      // fix conflict with custom css&js plugin
+      if ( $wpscreen->id === 'custom-css-js' ) {
+        self::$enqueue = false;
       }
 
       if ( ! apply_filters( 'ulf_enqueue_assets', self::$enqueue ) ) {

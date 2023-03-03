@@ -38,11 +38,11 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
 
 			if ( !$this->validates() ){
-				throw new \Exception( __( 'permission denied.', WP_ULIKE_SLUG ) );
+				throw new \Exception( esc_html__( 'permission denied.', WP_ULIKE_SLUG ) );
 			}
 
 			if( empty( $this->settings_type->getType() ) ){
-				throw new \Exception( __( 'Invalid item type.', WP_ULIKE_SLUG ) );
+				throw new \Exception( esc_html__( 'Invalid item type.', WP_ULIKE_SLUG ) );
 			}
 
 			$template = wp_ulike_get_likers_template(

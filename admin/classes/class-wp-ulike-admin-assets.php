@@ -127,8 +127,8 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 			wp_localize_script( 'wp_ulike_admin_plugins', 'wp_ulike_admin', array(
 				'hook_address'    => esc_html( $this->hook ),
 				'nonce_field'     => wp_create_nonce( 'wp-ulike-ajax-nonce' ),
-				'logs_notif'      => __('Are you sure to remove this item?!',WP_ULIKE_SLUG),
-				'not_found_notif' => __('No information was found in this database!',WP_ULIKE_SLUG),
+				'logs_notif'      => esc_html__('Are you sure to remove this item?!',WP_ULIKE_SLUG),
+				'not_found_notif' => esc_html__('No information was found in this database!',WP_ULIKE_SLUG),
 				'spinner'         => admin_url( 'images/spinner.gif' )
 			));
 
