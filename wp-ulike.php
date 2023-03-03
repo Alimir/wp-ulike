@@ -27,24 +27,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Do not change these values
-define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 	);
-define( 'WP_ULIKE_VERSION'      , '4.6.6' 					 		);
-define( 'WP_ULIKE_DB_VERSION'   , '2.3' 					 	 	);
-define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 	);
-define( 'WP_ULIKE_NAME'         , __( 'WP ULike', WP_ULIKE_SLUG )	);
+define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 			);
+define( 'WP_ULIKE_VERSION'      , '4.6.6' 					 				);
+define( 'WP_ULIKE_DB_VERSION'   , '2.3' 					 	 			);
+define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 			);
+define( 'WP_ULIKE_NAME'         , esc_html__( 'WP ULike', WP_ULIKE_SLUG )	);
 
-define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	 	);
-define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	 	);
-define( 'WP_ULIKE_BASENAME'     , plugin_basename( __FILE__ ) 	 	);
+define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	 			);
+define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	 			);
+define( 'WP_ULIKE_BASENAME'     , plugin_basename( __FILE__ ) 	 			);
 
-define( 'WP_ULIKE_ADMIN_DIR'    , WP_ULIKE_DIR . 'admin' 		 	);
-define( 'WP_ULIKE_ADMIN_URL'    , WP_ULIKE_URL . '/admin' 		 	);
+define( 'WP_ULIKE_ADMIN_DIR'    , WP_ULIKE_DIR . 'admin' 		 			);
+define( 'WP_ULIKE_ADMIN_URL'    , WP_ULIKE_URL . '/admin' 		 			);
 
-define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . 'includes' 	 	);
-define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/includes'     	);
+define( 'WP_ULIKE_INC_DIR'      , WP_ULIKE_DIR . 'includes' 	 			);
+define( 'WP_ULIKE_INC_URL'      , WP_ULIKE_URL . '/includes'     			);
 
-define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . 'assets' 			);
-define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		 	);
+define( 'WP_ULIKE_ASSETS_DIR'   , WP_ULIKE_DIR . 'assets' 					);
+define( 'WP_ULIKE_ASSETS_URL'   , WP_ULIKE_URL . '/assets' 		 			);
 
 /**
  * Initialize the plugin
