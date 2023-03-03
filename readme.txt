@@ -144,6 +144,7 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 * Added: "Cache Cleaner" plugin cache support.
 * Added: Disable IP logging option.
 * Updated: Options panel framework.
+* Fixed: Escaping translations and output strings.
 * Fixed: Javascript conflict with "custom css&js" plugin.
 * Fixed: Minor bug fixes.
 
