@@ -298,6 +298,78 @@ if( ! function_exists( 'wp_ulike_run_javascript_snippets' ) ){
 	add_action( 'wp_footer', 'wp_ulike_run_javascript_snippets', 100 );
 }
 
+if( ! function_exists( 'wp_ulike_delete_post_votes' ) ){
+	/**
+	 * Fires after the activity item has been deleted.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	function wp_ulike_delete_post_votes( $ID ) {
+		global $wpdb, $post_type;
+		$type = in_array( $post_type, array('forum','topic','reply') ) ? 'topic' : 'post';
+
+		// delete post votes
+		wp_ulike_delete_vote_data( $ID, $type );
+
+		// don't check comments for bbpress
+		if( $type == 'topic' ){
+			return;
+		}
+
+		// delete comments if exist
+		$comments = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT
+				c.comment_ID
+				FROM
+					$wpdb->comments c
+					INNER JOIN {$wpdb->prefix}ulike_comments uc ON c.comment_ID = uc.comment_id
+				WHERE
+					c.comment_post_ID = %d
+					GROUP BY c.comment_ID",
+				$ID
+			)
+		);
+
+		if( ! empty( $comments ) ){
+			foreach ($comments as $comment_ID) {
+				wp_ulike_delete_vote_data( $comment_ID, 'comment' );
+			}
+		}
+	}
+	add_action( 'before_delete_post', 'wp_ulike_delete_post_votes', 1, 10 );
+}
+
+if( ! function_exists( 'wp_ulike_delete_comment_votes' ) ){
+	/**
+	 * Fires after the comment item has been deleted.
+	 *
+	 * @param integer $ID
+	 * @return void
+	 */
+	function wp_ulike_delete_comment_votes( $ID ) {
+		wp_ulike_delete_vote_data( $ID, 'comment' );
+	}
+	add_action( 'deleted_comment', 'wp_ulike_delete_comment_votes', 1, 10 );
+}
+
+
+if( ! function_exists( 'wp_ulike_delete_activity_votes' ) ){
+	/**
+	 * Fires after the activity item has been deleted.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	function wp_ulike_delete_activity_votes( $args ){
+		if( ! empty( $args['id'] ) ){
+			wp_ulike_delete_vote_data( $args['id'], 'activity' );
+		}
+	}
+	add_action( 'bp_activity_delete', 'wp_ulike_delete_activity_votes', 1, 10 );
+}
+
 // @if DEV
 // function replace_core_jquery_version() {
 //     wp_deregister_script( 'jquery' );
