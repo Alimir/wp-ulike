@@ -47,6 +47,7 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 		return apply_filters( 'wp_ulike_the_content', $output, $content );
 	}
 	add_filter( 'the_content', 'wp_ulike_put_posts', 15 );
+	add_filter( 'the_excerpt', 'wp_ulike_put_posts', 15 );
 }
 
 /*******************************************************
