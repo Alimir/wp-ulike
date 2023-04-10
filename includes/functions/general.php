@@ -188,7 +188,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 		foreach ( $options as $key => $value ) {
 			if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
 				if( $value === 'single' && ! $force_type ){
-					$post_types = wp_ulike_get_option( 'posts_group|auto_display_filter_post_types' );
+					$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
 					if( ! empty( $post_types ) ){
 						foreach ($post_types as $p_key => $p_value) {
 							if( get_post_type() === $p_value ){

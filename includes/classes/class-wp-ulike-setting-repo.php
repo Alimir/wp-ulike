@@ -399,5 +399,22 @@ class wp_ulike_setting_repo {
 		return self::getOption( 'disable_ip_logging', false );
 	}
 
+	/**
+	 * Check auto display filter
+	 *
+	 * @return array
+	 */
+	public static function getPostAutoDisplayFilters(){
+		return self::getOption( 'posts_group|auto_display_filter', array( 'single', 'home' ) );
+	}
+
+	/**
+	 * Check get post
+	 *
+	 * @return array
+	 */
+	public static function getPostTypesFilterList(){
+		return self::getOption( 'posts_group|auto_display_filter_post_types', array( 'post' ) );
+	}
 
 }

@@ -24,9 +24,8 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 	function wp_ulike_put_posts( $content ) {
 		// Stack variable
 		$output = $content;
-
 		if ( WpUlikeInit::is_frontend() && in_the_loop() && is_main_query() && wp_ulike_setting_repo::isAutoDisplayOn('post') ) {
-			if(	is_wp_ulike( wp_ulike_get_option( 'posts_group|auto_display_filter' ) ) ){
+			if(	is_wp_ulike( wp_ulike_setting_repo::getPostAutoDisplayFilters() ) ){
 				// Get button
 				$button = wp_ulike('put');
 				switch ( wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' ) ) {
