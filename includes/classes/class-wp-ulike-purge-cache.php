@@ -148,9 +148,11 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 		 */
 		protected function purgeSwiftPerformanceCache($post_ids = [], $reffer_url = NULL)
 		{
+			// Check functionality existence
 			if (!class_exists('Swift_Performance_Cache')) {
 				return;
 			}
+
 			if (empty($post_ids)) {
 				\Swift_Performance_Cache::clear_all_cache();
 			} else {
@@ -161,7 +163,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 					// purge reffer url if is not same as triggered post
 					$post_url = get_permalink($post_id);
 					if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
-						\Swift_Performance_Cache::sp_clear_permalink_cache($reffer_url);
+						\Swift_Performance_Cache::clear_permalink_cache($reffer_url);
 					}
 				}
 			}
@@ -194,6 +196,11 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 		 */
 		protected function purgeWPFastestCache($post_ids = [], $reffer_url = NULL)
 		{
+			// Check functionality existence
+			if( ! class_exists( 'WpFastestCache' ) ){
+				return;
+			}
+
 			if (empty($post_ids)) {
 				do_action('wpfc_clear_all_cache');
 			}
@@ -209,9 +216,11 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 		 */
 		protected function purgeWPOptimizeCache($post_ids = [], $reffer_url = NULL)
 		{
+			// Check functionality existence
 			if (function_exists('WP_Optimize') && empty($post_ids)) {
 				WP_Optimize()->get_page_cache()->purge();
 			}
+
 			if (class_exists('WPO_Page_Cache')) {
 				foreach ($post_ids as $post_id) {
 					if( get_post_type( $post_id ) ){
@@ -231,9 +240,11 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 		 */
 		protected function purgeWPRocketCache($post_ids = [], $reffer_url = NULL)
 		{
+			// Check functionality existence
 			if (function_exists('rocket_clean_home') && empty($post_ids)) {
 				rocket_clean_home();
 			}
+
 			if (function_exists('rocket_clean_post')) {
 				foreach ($post_ids as $post_id) {
 					if( get_post_type( $post_id ) ){
@@ -253,9 +264,11 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 		 */
 		protected function purgeWPSuperCache($post_ids = [], $reffer_url = NULL)
 		{
+			// Check functionality existence
 			if (function_exists('wp_cache_clear_cache') && empty($post_ids)) {
 				wp_cache_clear_cache();
 			}
+
 			if (function_exists('wp_cache_post_change')) {
 				foreach ($post_ids as $post_id) {
 					if( get_post_type( $post_id ) ){
