@@ -599,281 +599,29 @@ if( ! function_exists( 'wp_ulike_put_bbpress_topic_content' ) ){
   Cache Plugins
 *******************************************************/
 
-// Litespeed cache plugin
-if( ! function_exists( 'wp_ulike_purge_litespeed_cache' ) ){
+
+if( ! function_exists( 'wp_ulike_purge_cache' ) ){
 	/**
-	 * Purge litespeed post cache
+     * Purge third-party plugins cache
 	 *
 	 * @param integer $ID
 	 * @param string $type
 	 * @return void
 	 */
-	function wp_ulike_purge_litespeed_cache( $ID, $type ){
-		// Check functionality existence
-		if( ! class_exists('LiteSpeed\Core') ){
-			return;
-		}
+	function wp_ulike_purge_cache( $ID, $type ){
+		$controller = new wp_ulike_purge_cache();
+		$reffer_url = wp_get_referer();
 
 		if( $type === '_liked' ){
-			if( get_post_type( $ID ) ){
-				do_action( 'litespeed_purge_post', $ID );
-			} elseif( false !== ( $reffer_url = wp_get_referer() ) ) {
-				do_action( 'litespeed_purge_url', $reffer_url );
-			}
+			$controller->purgeForPost( array( $ID ), $reffer_url );
 		} elseif( $type === '_commentliked' ){
 			$comment = get_comment( $ID );
 			if( isset( $comment->comment_post_ID ) ){
-				do_action( 'litespeed_purge_post', $comment->comment_post_ID );
+				$controller->purgeForPost( array( $comment->comment_post_ID ), $reffer_url );
 			}
 		}
 	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_litespeed_cache'	, 10, 2 );
-}
-
-// w3 total cache plugin
-if( ! function_exists( 'wp_ulike_purge_w3_total_cache' ) ){
-	/**
-	 * Purge w3 total post cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_w3_total_cache( $ID, $type ){
-		// Check functionality existence
-		if( ! function_exists( 'w3tc_flush_post' ) ){
-			return;
-		}
-
-		if( $type === '_liked' ){
-			if( get_post_type( $ID ) ){
-				w3tc_flush_post( $ID );
-			} elseif( false !== ( $reffer_url = wp_get_referer() ) ) {
-				w3tc_flush_url( $reffer_url );
-			}
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				w3tc_flush_post( $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_w3_total_cache'	, 10, 2 );
-}
-
-// wp fastest cache plugin
-if( ! function_exists( 'wp_ulike_purge_wp_fastest_cache' ) ){
-	/**
-	 * Purge wp fastest cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_wp_fastest_cache( $ID, $type ){
-		// Check functionality existence
-		if( ! isset( $GLOBALS["wp_fastest_cache"] ) || ! class_exists( 'WpFastestCache' ) ){
-			return;
-		}
-
-		$cache_interface = $GLOBALS["wp_fastest_cache"];
-
-		// to remove cache if vote is from homepage or category page or tag
-		if( isset($_SERVER["HTTP_REFERER"]) && $_SERVER["HTTP_REFERER"] ){
-			$url = parse_url($_SERVER["HTTP_REFERER"]);
-			$url["path"] = isset($url["path"]) ? $url["path"] : "/index.html";
-
-			if(isset($url["path"])){
-				if($url["path"] == "/"){
-					$cache_interface->rm_folder_recursively( $cache_interface->getWpContentDir("/cache/all/index.html") );
-				}else{
-					// to prevent changing path with ../ or with another method
-					if($url["path"] == realpath(".".$url["path"])){
-						$cache_interface->rm_folder_recursively( $cache_interface->getWpContentDir("/cache/all").$url["path"] );
-					}
-				}
-			}
-		}
-		// Delete post cache
-		if( in_array( $type, array( '_liked', '_commentliked' ) ) ){
-			$comment_id = false;
-			$post_id    = $ID;
-			if( $type === '_commentliked' ){
-				$comment = get_comment( $ID );
-				if( isset( $comment->comment_post_ID ) ){
-					$comment_id = $ID;
-					$post_id = $comment->comment_post_ID;
-				} else {
-					$post_id = NULL;
-				}
-			}
-			if( ! empty( $post_id ) ){
-				$cache_interface->singleDeleteCache( $comment_id, $post_id );
-			}
-		}
-
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_fastest_cache'	, 10, 2 );
-}
-
-// wp super cache plugin
-if( ! function_exists( 'wp_ulike_purge_wp_super_cache' ) ){
-	/**
-	 * Purge super post cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_wp_super_cache( $ID, $type ){
-		// Check functionality existence
-		if( ! function_exists( 'wp_cache_post_change' ) ){
-			return;
-		}
-
-		$GLOBALS["super_cache_enabled"]=1;
-
-		if( $type === '_liked' ){
-			if( get_post_type( $ID ) ){
-				wp_cache_post_change( $ID );
-			} elseif( false !== ( $reffer_url = wp_get_referer() ) ) {
-				wpsc_delete_url_cache( $reffer_url );
-			}
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				wp_cache_post_change( $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_super_cache'	, 10, 2 );
-}
-
-// wp rocket cache plugin
-if( ! function_exists( 'wp_ulike_purge_rocket_cache' ) ){
-	/**
-   * Purge wp rocket cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_rocket_cache( $ID, $type ){
-		// Check functionality existence
-		if( ! function_exists( 'rocket_clean_post' ) ){
-			return;
-		}
-
-		if( $type === '_liked' ){
-			// Check post type ID
-			if( get_post_type( $ID ) ){
-				rocket_clean_post( $ID );
-			} elseif( false !== ( $reffer_url = wp_get_referer() ) ) {
-				rocket_clean_files( $reffer_url );
-			}
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				rocket_clean_post( $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_rocket_cache'	, 10, 2 );
-}
-
-// wp optimize cache plugin
-if( ! function_exists( 'wp_ulike_purge_wp_optimize_cache' ) ){
-	/**
-   * Purge wp optimize cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_wp_optimize_cache( $ID, $type ){
-		// Check functionality existence
-		if( ! class_exists('WPO_Page_Cache') ){
-			return;
-		}
-
-		if( $type === '_liked' ){
-			if( get_post_type( $ID ) ){
-				WPO_Page_Cache::delete_single_post_cache( $ID );
-			} elseif ( false !== ( $reffer_url = wp_get_referer() ) ) {
-				WPO_Page_Cache::delete_cache_by_url( $reffer_url );
-			}
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				WPO_Page_Cache::delete_single_post_cache( $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_wp_optimize_cache'	, 10, 2 );
-}
-
-// SG optimizer cache plugin
-if( ! function_exists( 'wp_ulike_purge_sg_cachepress_cache' ) ){
-	/**
-   * Purge SG Optimizer cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_sg_cachepress_cache( $ID, $type ){
-		// Check functionality existence
-		if( ! function_exists( 'sg_cachepress_purge_cache' ) ){
-			return;
-		}
-
-		if( $type === '_liked' ){
-			// Check post type ID
-			if( get_post_type( $ID ) ){
-				sg_cachepress_purge_cache( get_permalink( $ID ) );
-			} elseif( false !== ( $reffer_url = wp_get_referer() ) ) {
-				sg_cachepress_purge_cache( $reffer_url );
-			}
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				sg_cachepress_purge_cache( get_permalink( $comment->comment_post_ID ) );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_sg_cachepress_cache'	, 10, 2 );
-}
-
-// Cache Enabler plugin
-if( ! function_exists( 'wp_ulike_purge_cache_enabler_cache' ) ){
-	/**
-     * Purge Cache Enabler cache
-	 *
-	 * @param integer $ID
-	 * @param string $type
-	 * @return void
-	 */
-	function wp_ulike_purge_cache_enabler_cache( $ID, $type ){
-		// Check functionality existence
-		if( ! class_exists( 'Cache_Enabler' ) ){
-			return;
-		}
-
-		if( $type === '_liked' ){
-			// Check post type ID
-			if( get_post_type( $ID ) ){
-				do_action( 'cache_enabler_clear_page_cache_by_post', $ID );
-			} elseif( false !== ( $reffer_url = wp_get_referer() ) ) {
-				do_action( 'cache_enabler_clear_page_cache_by_url', $reffer_url );
-			}
-		} elseif( $type === '_commentliked' ){
-			$comment = get_comment( $ID );
-			if( isset( $comment->comment_post_ID ) ){
-				do_action( 'cache_enabler_clear_page_cache_by_post', $comment->comment_post_ID );
-			}
-		}
-	}
-	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_cache_enabler_cache'	, 10, 2 );
+	add_action( 'wp_ulike_after_process', 'wp_ulike_purge_cache', 10, 2 );
 }
 
 /*******************************************************
