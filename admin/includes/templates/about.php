@@ -32,7 +32,7 @@
 	<div class="ulf-about-section is-feature has-subtle-background-color">
 		<div class="column">
 			<h1 class="is-smaller-heading"><?php esc_html_e('About',WP_ULIKE_SLUG) . ' ' . WP_ULIKE_NAME; ?></h1>
-			<p><?php esc_html_e( 'Receiving feedback is crucial as a content creator, but unfortunately, the pieces of content you can collect it on are limited by default. However, with the help of the WP ULike plugin, it is possible to cast voting to any type of content you may have on your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your content would it be a post, comment, BuddyPress activity, bbPress topics, WooCommerce products, you name it. Now you can feel your users Love for each part of your work.', WP_ULIKE_SLUG) ; ?></p>
+			<p><?php esc_html_e( 'Looking to increase user engagement on your WordPress site? WP ULike plugin lets you easily add voting buttons to your content. With customizable settings and detailed analytics, you can track user engagement, optimize your content, and build a loyal following.', WP_ULIKE_SLUG) ; ?></p>
 		</div>
 	</div>
 
