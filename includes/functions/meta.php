@@ -495,3 +495,30 @@ if( ! function_exists( 'wp_ulike_delete_meta_data' ) ){
 		return true;
 	}
 }
+
+if( ! function_exists('wp_ulike_delete_vote_data') ){
+	/**
+	 * Delete single vote data
+	 *
+	 * @param integer $ID
+	 * @param string $type
+	 * @return void
+	 */
+	function wp_ulike_delete_vote_data( $ID, $type ){
+		global $wpdb;
+
+		// delete meta values
+		wp_ulike_delete_meta_data( $type, $ID, 'count_distinct_dislike' );
+		wp_ulike_delete_meta_data( $type, $ID, 'count_distinct_like' );
+		wp_ulike_delete_meta_data( $type, $ID, 'count_total_dislike' );
+		wp_ulike_delete_meta_data( $type, $ID, 'count_total_like' );
+		wp_ulike_delete_meta_data( $type, $ID, 'likers_list' );
+
+		// delete table values
+		$settings = new wp_ulike_setting_type( $type );
+		$wpdb->query( $wpdb->prepare( "DELETE from {$wpdb->prefix}{$settings->getTableName()} WHERE {$settings->getColumnName()} = %d", $ID ) );
+
+		// Fires after the post item has been deleted.
+		do_action( 'wp_ulike_delete_vote_data', $ID, $type, $settings );
+	}
+}

@@ -188,7 +188,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 		foreach ( $options as $key => $value ) {
 			if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
 				if( $value === 'single' && ! $force_type ){
-					$post_types = wp_ulike_get_option( 'posts_group|auto_display_filter_post_types' );
+					$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
 					if( ! empty( $post_types ) ){
 						foreach ($post_types as $p_key => $p_value) {
 							if( get_post_type() === $p_value ){
@@ -596,54 +596,60 @@ if( ! function_exists('wp_ulike_get_the_id') ){
 	}
 }
 
-/**
- *  Use mutex lock to prevent race condition.
- *
- * @param string $item_type
- * @param integer $item_id
- * @return resource
- */
-function wp_ulike_acquire_lock( $item_type, $item_id ) {
-	$fp = fopen( wp_ulike_lock_file( $item_type, $item_id ), 'w+' );
+if( ! function_exists('wp_ulike_acquire_lock') ){
+	/**
+	 *  Use mutex lock to prevent race condition.
+	 *
+	 * @param string $item_type
+	 * @param integer $item_id
+	 * @return resource
+	 */
+	function wp_ulike_acquire_lock( $item_type, $item_id ) {
+		$fp = fopen( wp_ulike_lock_file( $item_type, $item_id ), 'w+' );
 
-	if ( ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
+		if ( ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
+			return false;
+		}
+
+		ftruncate( $fp, 0 );
+		fwrite( $fp, microtime( true ) );
+
+		return $fp;
+	}
+}
+
+if( ! function_exists('wp_ulike_release_lock') ){
+	/**
+	 * release mutex
+	 *
+	 * @param resource $fp
+	 * @param string $item_type
+	 * @param integer $item_id
+	 * @return boolean
+	 */
+	function wp_ulike_release_lock( $fp, $item_type, $item_id ) {
+		if ( is_resource( $fp ) ) {
+			fflush( $fp );
+			flock( $fp, LOCK_UN );
+			fclose( $fp );
+			unlink( wp_ulike_lock_file( $item_type, $item_id ) );
+
+			return true;
+		}
+
 		return false;
 	}
-
-	ftruncate( $fp, 0 );
-	fwrite( $fp, microtime( true ) );
-
-	return $fp;
 }
 
-/**
- * release mutex
- *
- * @param resource $fp
- * @param string $item_type
- * @param integer $item_id
- * @return boolean
- */
-function wp_ulike_release_lock( $fp, $item_type, $item_id ) {
-	if ( is_resource( $fp ) ) {
-		fflush( $fp );
-		flock( $fp, LOCK_UN );
-		fclose( $fp );
-		unlink( wp_ulike_lock_file( $item_type, $item_id ) );
-
-		return true;
+if( ! function_exists('wp_ulike_lock_file') ){
+	/**
+	 * get lock file
+	 *
+	 * @param string $item_type
+	 * @param integer $item_id
+	 * @return string
+	 */
+	function wp_ulike_lock_file( $item_type, $item_id ) {
+		return apply_filters( 'wp_ulike_lock_file', get_temp_dir() . '/wp-ulike-' . $item_type . '-' . $item_id . '.lock', $item_type, $item_id );
 	}
-
-	return false;
-}
-
-/**
- * get lock file
- *
- * @param string $item_type
- * @param integer $item_id
- * @return string
- */
-function wp_ulike_lock_file( $item_type, $item_id ) {
-	return apply_filters( 'wp_ulike_lock_file', get_temp_dir() . '/wp-ulike-' . $item_type . '-' . $item_id . '.lock', $item_type, $item_id );
 }

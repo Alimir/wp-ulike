@@ -25,7 +25,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 			$this->submenus = apply_filters( 'wp_ulike_admin_pages', array(
 				'posts_logs'      => array(
 					'title'       => esc_html__( 'Post Likes Logs', WP_ULIKE_SLUG ),
-					'parent_slug' => NULL,
+					'parent_slug' => '',
 					'capability'  => wp_ulike_get_user_access_capability('logs'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/posts-logs.php',
 					'menu_slug'   => 'wp-ulike-posts-logs',
@@ -33,7 +33,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 				),
 				'comments_logs'   => array(
 					'title'       => esc_html__( 'Comment Likes Logs', WP_ULIKE_SLUG ),
-					'parent_slug' => NULL,
+					'parent_slug' => '',
 					'capability'  => wp_ulike_get_user_access_capability('logs'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/comments-logs.php',
 					'menu_slug'   => 'wp-ulike-comments-logs',
@@ -41,7 +41,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 				),
 				'activities_logs' =>  array(
 					'title'       => esc_html__( 'Activity Likes Logs', WP_ULIKE_SLUG ),
-					'parent_slug' => NULL,
+					'parent_slug' => '',
 					'capability'  => wp_ulike_get_user_access_capability('logs'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/activities-logs.php',
 					'menu_slug'   => 'wp-ulike-activities-logs',
@@ -49,7 +49,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 				),
 				'topics_logs'     => array(
 					'title'       => esc_html__( 'Topics Likes Logs', WP_ULIKE_SLUG ),
-					'parent_slug' => NULL,
+					'parent_slug' =>  '',
 					'capability'  => wp_ulike_get_user_access_capability('logs'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/topics-logs.php',
 					'menu_slug'   => 'wp-ulike-topics-logs',

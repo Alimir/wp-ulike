@@ -1,6 +1,7 @@
 "use strict";
 module.exports = function (grunt) {
   // load all grunt tasks matching the `grunt-*` pattern
+  const sass = require('node-sass');
   require("load-grunt-tasks")(grunt);
   require("time-grunt")(grunt);
 
@@ -60,60 +61,18 @@ module.exports = function (grunt) {
       },
     },
 
-    // watch and compile scss files to css
-    compass: {
+    sass: {
       options: {
-        config: "assets/sass/config.rb",
-        sassDir: "assets/sass",
-        cssDir: "assets/css",
-        sourcemap: false,
+        implementation: sass,
+        sourceMap: false
       },
-
-      back_dev: {
-        options: {
-          sassDir: "admin/assets/sass",
-          cssDir: "admin/assets/css/",
-          environment: "development",
-          watch: true,
-          trace: true,
-          outputStyle: "compact", // nested, expanded, compact, compressed.
-        },
-      },
-
-      back_build: {
-        options: {
-          sassDir: "admin/assets/sass",
-          cssDir: "admin/assets/css/",
-          environment: "development",
-          watch: false,
-          trace: true,
-          outputStyle: "expanded", // nested, expanded, compact, compressed.
-        },
-      },
-
-      front_dev: {
-        options: {
-          sassDir: "assets/sass",
-          cssDir: "assets/css",
-          specify: ["assets/sass/wp-ulike.scss"],
-          environment: "development",
-          watch: true,
-          trace: true,
-          outputStyle: "expanded", // nested, expanded, compact, compressed.
-        },
-      },
-
-      front_build: {
-        options: {
-          sassDir: "assets/sass",
-          cssDir: "assets/css",
-          specify: ["assets/sass/wp-ulike.scss"],
-          environment: "development",
-          watch: false,
-          trace: true,
-          outputStyle: "expanded", // nested, expanded, compact, compressed.
-        },
-      },
+      dist: {
+        files: {
+          'assets/css/wp-ulike.css': 'assets/sass/wp-ulike.scss',
+          'admin/assets/css/admin.css': 'admin/assets/sass/admin.scss',
+          'admin/assets/css/plugins.css': 'admin/assets/sass/plugins.scss',
+        }
+      }
     },
 
     phplint: {
@@ -284,7 +243,11 @@ module.exports = function (grunt) {
     // css minify
     cssmin: {
       options: {
-        keepSpecialComments: 1,
+        level: {
+          1: {
+            specialComments: 0,
+          },
+        },
       },
       target: {
         files: {
@@ -315,7 +278,13 @@ module.exports = function (grunt) {
 
     // JS minification
     terser: {
-      options: {},
+      options: {
+        compress: true,
+        mangle: true,
+        output: {
+          comments: false,
+        }
+      },
       main: {
         files: {
           "assets/js/wp-ulike.min.js": ["<%= concat.frontJsScripts.dest %>"],
@@ -428,7 +397,7 @@ module.exports = function (grunt) {
     // Running multiple blocking tasks
     concurrent: {
       watch_frontend_scss: {
-        tasks: ["compass_dev", "watch", "compass:front_dev"],
+        tasks: ["watch"],
         options: {
           logConcurrentOutput: true,
         },
@@ -445,6 +414,11 @@ module.exports = function (grunt) {
       concat_admin_js_plugins: {
         files: ["admin/assets/js/src/plugins/**/*.js"],
         tasks: ["concat:adminJsPlugins"],
+      },
+
+      compile_sass: {
+        files: ["assets/sass/**/*.scss", "admin/assets/sass/**/*.scss"],
+        tasks: ["sass:dist"],
       },
 
       // concat_admin_js_scripts: {
@@ -597,16 +571,13 @@ module.exports = function (grunt) {
 
   grunt.registerTask("i18n", ["makepot", "potomo"]);
 
-  grunt.registerTask("compass_dev", ["compass:back_dev"]);
-
   // compress the product in one pack
   grunt.registerTask("pack", ["shell:zipBuild"]);
 
   // deploy the lite version in /build folder
   grunt.registerTask("beta", [
     "clean:build",
-    "compass:front_build",
-    "compass:back_build",
+    "sass:dist",
     "cssmin",
     "deploy:lite",
     "shell:cleanBuildDotFiles",

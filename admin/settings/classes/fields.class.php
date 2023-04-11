@@ -9,6 +9,12 @@
  */
 if ( ! class_exists( 'ULF_Fields' ) ) {
   abstract class ULF_Fields extends ULF_Abstract {
+    // constans
+    public $field  = array();
+    public $value  = '';
+    public $unique = '';
+    public $where  = '';
+    public $parent = '';
 
     public function __construct( $field = array(), $value = '', $unique = '', $where = '', $parent = '' ) {
       $this->field  = $field;

@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: like, marketing, elementor, user profile, rating, favorite, statistics, button, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 6.1.1
-Stable tag: 4.6.6
+Tested up to: 6.2
+Stable tag: 4.6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,41 +14,43 @@ Like/Dislike button for any post type, comments, BuddyPress, bbPress. Track what
 
 == Description ==
 
-Receiving feedback is crucial as a content creator, but unfortunately, the pieces of content you can collect it on are limited by default. However, with the help of the WP ULike plugin, it is possible to cast voting to any type of content you may have on your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your content would it be a post, comment, BuddyPress activity, bbPress topics, WooCommerce products, you name it. Now you can feel your users Love for each part of your work.
+WP ULike is the ultimate user engagement plugin for WordPress, designed to enhance interaction and feedback on your website. With WP ULike, you can easily add like and dislike buttons to all post types, comments, BuddyPress activities, bbPress topics, and WooCommerce products. Collect valuable feedback from your audience and gain insights on how to optimize your content and grow your WordPress community.
 
 It's time for **[WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
 
 = Surprises you won’t see anywhere else =
-With WP ULike’s unique features, the great transformation of your website will begin, and with high speed and precision, along with the features that are added day by day, you will have a comprehensive tool that meets all your marketing needs.
+With WP ULike’s unique features, you can transform your website and meet all your marketing needs with high speed and precision. Unlock advanced features, like our professional Schema.org generator with star ratings, AJAX-based login, registration, reset password and edit profile forms, easy local avatar upload, notifications system, and more.
 
 = Start Configure your Voting System in a few Steps =
-We revamped our settings panel design and features to be more user-friendly and more straight forward approach. Easy settings, Happy customers. WP ULike plugin has clean coding, resource management and tones of features so you can customize every part of your buttons just by a few clicks.
+Our revamped settings panel design and features make it easy to configure your voting system. WP ULike has clean coding, resource management, and a ton of features, so you can customize every part of your buttons with just a few clicks.
 
 = Pre-Designed Templates =
-Choose from 20+ of our beautiful [templates](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) and customize them to make them your own.
+Choose from over 25 beautiful [templates](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) and customize them to make them your own. Our templates are optimized for all devices and have been designed to increase user engagement and feedback.
 
 = Check Votings, Best Likers & Top contents =
-With [WP ULike comprehensive Statistics tools](https://wpulike.com/blog/wp-ulike-pro-statistics/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme), you can track what your users love and what annoys them in an instance. You can extract reports of likes and dislikes in Tables, Charts, Pie Charts or whichever you prefer with some easy steps, no confusing options and coding needed.
+WP ULike provides [comprehensive statistics tools](https://wpulike.com/blog/wp-ulike-pro-statistics/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme), allowing you to track what your users love and what annoys them. Extract reports of likes and dislikes in tables, charts, pie charts, or whichever you prefer with some easy steps. No confusing options or coding needed.
 
 = The Ultimate User Profile Builder [PRO] =
 Now that you have equipped your website using WP ULike plugin, you probably want people to stick around and use it right? Well, if you want to keep people on your website or just have a panel that displays user information as well, especially if it is a social platform, then you have got to allow them to easily create profiles.
 The [WP ULike profile builder](https://wpulike.com/blog/wordpress-ultimate-profile-builder/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) is packed with tons of features and functionalities to boost your experience of profile management. Not only this but it also comes with functional hooks and easy development structure, and if you’re a developer, you can customize all the components to your liking.
 
 = Customize Every Part of Your YouLike Plugin [PRO] =
-Elementor is the #1 WordPress page builder. In the new version of the WP ULike PRO plugin, we fully support this page builder and have a variety of widgets & controllers that make life much easier for you.
+Elementor is the #1 WordPress page builder. We fully support this page builder and have a variety of widgets & controllers that make life much easier for you.
 Just drag your desired widget and drop it in your Elementor sections, customize as you go and enjoy your like and dislike buttons on your contents.
 
 = Easy WordPress login and registration forms [PRO] =
-Not happy with the default WordPress login and registration pages? In WP ULike Pro, We provide you with more control and flexibility over your WordPress default forms. It redefines what a login and registration plugin be able to do with fast AJAX requests & easy made templates.
+Take control of your WordPress default login and registration pages with WP ULike PRO. Redefine what a login and registration plugin can do with fast AJAX requests and easy-made templates.
 
 = Boost Your SEO by Using Our Schema Markup Generator [PRO] =
-Schema markup is a form of data structure and helps Search Engine to have a better understanding of content. The Process for adding these schemas to your webpage is quite messy and confusing. Because of that, WP ULike Pro adds a Metabox to your posts so you can easily generate your custom rich snippets.
+Add schema markup to your webpage with WP ULike PRO's easy-to-use metabox. Schema markup is a form of data structure that helps search engines better understand your content.
+
 
 = Easy Social Share Buttons for WordPress [PRO] =
-WP ULike Share buttons enables your website users to share the content over Facebook, Twitter, Google, Linkedin, Whatsapp, Tumblr, Pinterest, Reddit and over 23 more social sharing services. This is the Simplest and Smoothest Social Sharing service with optimized and great looking vector icons.
+Enable your website users to share content over Facebook, Twitter, Google, LinkedIn, Whatsapp, Tumblr, Pinterest, Reddit, and over 23 more social sharing services with WP ULike Share buttons. This is the simplest and smoothest social sharing service with optimized and great-looking vector icons.
 
 = Try WP ULike Pro - The Best Marketing Tool For WordPress =
-So let's talk [PROfessional](https://wpulike.com/pricing/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)! WP ULike Pro has support DisLike button alongside Like button, both of them are completely customizable in our redesigned settings menu with tones of features and more beautiful and stylish templates. the PRO version of the plugin is now compatible with Elementor Page builder and you can easily choose from +7 widgets by simply drag and drop them to your content. as you build your page and content with Elementor, you can add and customize Like and Dislike button in every part such as Posts, Comments, activities, etc.
+Are you ready to take your website to the next level? WP ULike PRO offers a range of advanced features that will help you engage with your audience like never before. With the ability to add dislike buttons, create custom login and registration forms, and build user profiles, you'll be able to fully customize your website's user experience. Plus, with our schema markup generator and social sharing buttons, you can boost your website's visibility and make your content easily shareable. Don't miss out on these powerful tools that will help you grow your website and community. Upgrade to [WP ULike PRO](https://wpulike.com/pricing/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) today!
+
 
 There are many other [features](https://wpulike.com/blog/wp-ulike-pro-vs-free/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) to help you build better websites:
 
@@ -139,6 +141,13 @@ Our WP ULike project has been able to attract more than 60,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.6.7 =
+* Added: Automatic removal of votes from the database when posts, comments, etc. are removed.
+* Improved: Purge cache controller with support for new cache plugins (FlyingPress, SwiftPerformance, Hummingbird, EnduranceCache).
+* Updated: Improved PHP 8.2 compatibility.
+* Updated: Auto display support on "the_excerpt" hook.
+* Fixed: Set default value for auto display filter (which caused the button to be displayed on pages after the plugin was activated).
 
 = 4.6.6 =
 * Added: "Cache Cleaner" plugin cache support.

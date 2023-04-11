@@ -2,13 +2,13 @@
 /**
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
- * Description:       Receiving feedback is crucial as a content creator, but unfortunately, the pieces of content you can collect it on are limited by default. However, with the help of the WP ULike plugin, it is possible to cast voting to any type of content you may have on your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your content would it be a post, comment, BuddyPress activity, bbPress topics, WooCommerce products, you name it. Now you can feel your users Love for each part of your work.
- * Version:           4.6.6
+ * Description:       Looking to increase user engagement on your WordPress site? WP ULike plugin lets you easily add voting buttons to your content. With customizable settings and detailed analytics, you can track user engagement, optimize your content, and build a loyal following.
+ * Version:           4.6.7
  * Author:            TechnoWich
  * Author URI:        https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
  * Domain Path:       /languages/
- * Tested up to: 	  6.1.1
+ * Tested up to: 	  6.2
  *
  * WP ULike is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 			);
-define( 'WP_ULIKE_VERSION'      , '4.6.6' 					 				);
+define( 'WP_ULIKE_VERSION'      , '4.6.7' 					 				);
 define( 'WP_ULIKE_DB_VERSION'   , '2.3' 					 	 			);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 			);
 define( 'WP_ULIKE_NAME'         , esc_html__( 'WP ULike', WP_ULIKE_SLUG )	);

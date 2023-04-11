@@ -4,14 +4,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2023-03-01 06:53:41+00:00\n"
+"POT-Creation-Date: 2023-04-11 08:42:20+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:27:25+0000\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: GlotPress/2.4.0-alpha\n"
 
 #: admin/admin-ajax.php:28 admin/admin-ajax.php:73 admin/admin-ajax.php:79
@@ -1315,14 +1315,10 @@ msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"Receiving feedback is crucial as a content creator, but unfortunately, the "
-"pieces of content you can collect it on are limited by default. However, "
-"with the help of the WP ULike plugin, it is possible to cast voting to any "
-"type of content you may have on your website. With outstanding and eye-"
-"catching widgets, you can have Like and Dislike Button on all of your "
-"content would it be a post, comment, BuddyPress activity, bbPress topics, "
-"WooCommerce products, you name it. Now you can feel your users Love for each "
-"part of your work."
+"Looking to increase user engagement on your WordPress site? WP ULike plugin "
+"lets you easily add voting buttons to your content. With customizable "
+"settings and detailed analytics, you can track user engagement, optimize "
+"your content, and build a loyal following."
 msgstr ""
 
 #: admin/includes/templates/about.php:43
@@ -1878,42 +1874,42 @@ msgstr ""
 msgid "New topic liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:894
+#: includes/hooks/third-party.php:642
 msgid "Points for liking content"
 msgstr ""
 
-#: includes/hooks/third-party.php:895
+#: includes/hooks/third-party.php:643
 msgid ""
 "This hook award / deducts points from users who Like/Unlike any content of "
 "WordPress, bbPress, BuddyPress & ..."
 msgstr ""
 
-#: includes/hooks/third-party.php:911
+#: includes/hooks/third-party.php:659
 msgid "Liking Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:912
+#: includes/hooks/third-party.php:660
 msgid "Liked Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:913
+#: includes/hooks/third-party.php:661
 msgid "Unliking Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:914
+#: includes/hooks/third-party.php:662
 msgid "Unliked Content"
 msgstr ""
 
-#: includes/hooks/third-party.php:932
+#: includes/hooks/third-party.php:680
 msgid "Recent Posts Liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:937
+#: includes/hooks/third-party.php:685
 msgid "Recent Comments Liked"
 msgstr ""
 
-#: includes/hooks/third-party.php:968 includes/hooks/third-party.php:994
-#: includes/hooks/third-party.php:1024 includes/hooks/third-party.php:1054
+#: includes/hooks/third-party.php:716 includes/hooks/third-party.php:742
+#: includes/hooks/third-party.php:772 includes/hooks/third-party.php:802
 msgid "This user has not made any likes."
 msgstr ""
 

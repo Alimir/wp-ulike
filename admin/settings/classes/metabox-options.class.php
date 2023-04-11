@@ -16,6 +16,8 @@ if ( ! class_exists( 'ULF_Metabox' ) ) {
     public $sections       = array();
     public $pre_fields     = array();
     public $post_type      = array();
+    public $post_formats   = array();
+    public $page_templates = array();
     public $args           = array(
       'title'              => '',
       'post_type'          => 'post',

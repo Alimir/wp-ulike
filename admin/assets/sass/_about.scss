@@ -56,8 +56,6 @@
 	}
 
 	.ulf-about-section {
-		background: #fff;
-		background: var(--about-background);
 		clear: both;
 	}
 
@@ -117,11 +115,12 @@
 			}
 
 			.column {
-				box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.08);
+				box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.05);
 				padding: 0;
 				display: flex;
 				justify-content: center;
 				flex-wrap: wrap;
+				background: #fff;
 			}
 
 			.column-header {
