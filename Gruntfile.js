@@ -278,7 +278,13 @@ module.exports = function (grunt) {
 
     // JS minification
     terser: {
-      options: {},
+      options: {
+        compress: true,
+        mangle: true,
+        output: {
+          comments: false,
+        }
+      },
       main: {
         files: {
           "assets/js/wp-ulike.min.js": ["<%= concat.frontJsScripts.dest %>"],
