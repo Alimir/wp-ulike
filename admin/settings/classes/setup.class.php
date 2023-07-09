@@ -12,7 +12,7 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
 
     // Default constants
     public static $premium  = true;
-    public static $version  = '2.2.9';
+    public static $version  = '2.3.0';
     public static $dir      = '';
     public static $url      = '';
     public static $css      = '';
@@ -500,10 +500,10 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
     // Enqueue admin and fields styles and scripts
     public static function add_admin_enqueue_scripts() {
 
-      // Loads scripts and styles only when needed
-      $wpscreen = get_current_screen();
-
       if ( ! self::$enqueue ) {
+
+        // Loads scripts and styles only when needed
+        $wpscreen = get_current_screen();
 
         if ( ! empty( self::$args['admin_options'] ) ) {
           foreach ( self::$args['admin_options'] as $argument ) {

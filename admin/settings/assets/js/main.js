@@ -2527,7 +2527,7 @@
       if ( $form.attr('id') === 'addtag' ) {
 
         var $submit = $form.find('#submit'),
-            $cloned = $this.find('.ulf-field').ulf_clone();
+            $cloned = $this.children('.ulf-field').ulf_clone();
 
         $submit.on( 'click', function() {
 
