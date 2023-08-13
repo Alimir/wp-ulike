@@ -123,11 +123,11 @@ function wp_ulike_notice_manager(){
 	$screen      = get_current_screen();
 	$notice_list = [];
 
-	if( $count_logs > 1000 ){
+	if( $count_logs > 150 ){
 		$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_leave_a_review',
-			'title'       => esc_html__( 'Wow! You\'ve earned over a thousand likes', WP_ULIKE_SLUG ) . ' :)',
-			'description' => esc_html__( "It's great to see that you've been using the WP ULike plugin. Hopefully you're happy with it!&nbsp; If so, would you consider leaving a positive review? It really helps to support the plugin and helps others to discover it too!" , WP_ULIKE_SLUG ),
+			'title'       => esc_html__( 'Congratulations! You\'ve Earned Over a Hundred Likes', WP_ULIKE_SLUG ) . ' &#127775;',
+			'description' => esc_html__( "It's truly wonderful to witness your active engagement with the WP ULike plugin. We sincerely hope your experience has been nothing short of excellent! If that's the case, could we kindly ask for your valuable input in the form of a positive review? Your constructive feedback not only uplifts and fuels the plugin but also serves as a guiding light for those seeking its benefits. Let's unite in spreading the positive impact and help more individuals uncover the power of WP ULike!" , WP_ULIKE_SLUG ),
 			'skin'        => 'info',
 			'has_close'   => true,
 			'buttons'     => array(
@@ -183,8 +183,8 @@ function wp_ulike_notice_manager(){
 		}
 		$notice_list[ 'wp_ulike_pro_user_profiles_banner' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_pro_user_profiles_banner',
-			'title'       => esc_html__( 'How to Create Ultimate User Profiles with WP ULike?', WP_ULIKE_SLUG ),
-			'description' => esc_html__( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website without the need for coding knowledge or the use of advanced functions." , WP_ULIKE_SLUG ),
+			'title'       => esc_html__( 'Unlock the Power of WP ULike: Crafting Ultimate User Profiles', WP_ULIKE_SLUG ),
+			'description' => esc_html__( "Discover the seamless path to curating captivating WordPress user profiles with the WP ULike Profile Builder. This revolutionary tool empowers you to sculpt professional profiles effortlessly, showcasing them on your website's front-end sans the hassle of coding or intricate maneuvers. Unleash the potential and redefine user engagement today!" , WP_ULIKE_SLUG ),
 			'skin'        => 'default',
 			'has_close'   => true,
 			'buttons'     => array(
@@ -206,8 +206,8 @@ function wp_ulike_notice_manager(){
 		]);
 		$notice_list[ 'wp_ulike_seo_tools_banner' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_seo_tools_banner',
-			'title'       => esc_html__( 'Boost Your SEO by Using Schema Rich Snippets', WP_ULIKE_SLUG ),
-			'description' => esc_html__( "WP ULike Pro in its latest update evolved to an innovative and powerful SEO Plugin which can manage +13 types of Schema Markups to make a better connection between your webpages and search engines. Now you can talk in search engine language and tell them which type of content you are promoting." , WP_ULIKE_SLUG ),
+			'title'       => esc_html__( 'Elevate Your SEO with Schema Rich Snippets', WP_ULIKE_SLUG ),
+			'description' => esc_html__( "Empower your website's SEO potential through Schema Rich Snippets in WP ULike Pro. With the inclusion of +13 Schema Markups, your site gains the ability to establish robust connections with search engines. Fluent communication in search engine language allows you to precisely convey your content's nature. Upgrade now for a refined SEO experience!" , WP_ULIKE_SLUG ),
 			'skin'        => 'default',
 			'has_close'   => true,
 			'buttons'     => array(
