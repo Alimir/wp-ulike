@@ -500,6 +500,37 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             ) );
 
+            // Social login integration
+            ULF::createSection( $this->option_domain, array(
+                'parent' => 'configuration',
+                'title'  => esc_html__( 'Social Logins',WP_ULIKE_SLUG),
+                'fields' => apply_filters( 'wp_ulike_panel_social_logins', array(
+                    array(
+                        'type'     => 'callback',
+                        'function' => 'wp_ulike_get_notice_render',
+                        'args'     => array(
+                            'id'          => 'wp_ulike_pro_social_logins_banner',
+                            'title'       => esc_html__( 'Social Logins Integration with Your WordPress Site', WP_ULIKE_SLUG ),
+                            'description' => esc_html__( "In the fast-evolving world of website development, staying ahead is crucial. WP ULike Pro's latest update introduces a potent social logins integration that's set to redefine user interactions. With robust support for Google, Facebook, GitHub, and more, this plugin offers unparalleled convenience. In this article, we delve into the groundbreaking features that are reshaping WordPress user experiences." , WP_ULIKE_SLUG ),
+                            'skin'        => 'default',
+                            'has_close'   => false,
+                            'buttons'     => array(
+                                array(
+                                    'label'      => esc_html__( "Get More Information", WP_ULIKE_SLUG ),
+                                    'color_name' => 'default',
+                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/social-login/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+                                )
+                            ),
+                            'image'     => array(
+                                'width' => '120',
+                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/news.svg'
+                            )
+                        )
+                    )
+                ) )
+            ) );
+
+
             // Share buttons
             ULF::createSection( $this->option_domain, array(
                 'parent' => 'configuration',
