@@ -421,6 +421,11 @@ module.exports = function (grunt) {
         tasks: ["sass:dist"],
       },
 
+      compile_sass: {
+        files: ["assets/sass/**/*.scss", "admin/assets/sass/**/*.scss"],
+        tasks: ["sass:dist"],
+      },
+
       // concat_admin_js_scripts: {
       //     files: ['admin/assets/js/src/*.js'],
       //     tasks: ['concat:adminJsScripts']
