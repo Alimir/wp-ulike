@@ -46,88 +46,99 @@
 					</tr>
 				</thead>
 				<tbody>
+
 					<tr>
-						<td>The #1 WordPress Rating Plugin</td>
+						<td>WP plugin: Boost Interactions with Top-rated WordPress Plugin.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Like, Dislike and Subtotal Votings support</td>
+						<td>Enhance Engagement: Support for Flexible Votings Amplifies User Interaction.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Ultimate User Profile Builder With Flexible Options</td>
+						<td>Dynamic User Profiles: Effortlessly Crafted via Versatile Builder Options.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>AJAX Based Login, Registration, Reset Password and edit account forms.</td>
+						<td>Streamlined Interactions: AJAX Forms for Smooth Login, Registration, Management.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Easy Social Share Buttons for WordPress</td>
+						<td>Stronger Security: Add Two-Factor Authentication for Enhanced Account Safety.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Supports Rest APIs with a Variety of Routes for Use in Apps</td>
+						<td>Effortless Access: Log In Easily via Seamless Social Integration.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-  						<td>Advanced Settings Panel With Easy Backup and Flexible Customization Options</td>
+						<td>Simplify Sharing: Intuitive Social Buttons for WordPress Content.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Simple Local Avatars With Revolutionary File Uploader</td>
+						<td>Extensive API Support: Diverse Routes for App Integration.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Professional Schema.org Generator + Start Ratings</td>
+  						<td>Manage with Ease: Advanced Settings, Backup, Customization Choices.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Progressive Log Management Panel, with advanced search capabilities</td>
+						<td>Manage Avatars: Simple Local Avatars for Effortless User Image Management.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Database optimization panel with various options</td>
+						<td>Boost Credibility: Generate Schema.org Markup and Star Ratings.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>+20 Carefully Designed Premium Templates</td>
+						<td>Advanced Tracking: Utilize Progressive Log Management for Insights.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-  						<td>Flexible Metabox Options with More Customization Settings For Each Post</td>
+						<td>Optimize Performance: Versatile Database Tools Panel for Efficiency.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Professional Statistics Panel With Date Range & Status Controllers</td>
+						<td>Elevate Site Design: Choose from our PRO Templates for Enhanced Aesthetics.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Applied Shortcodes with Easy Shortcode Generator Button</td>
+  						<td>Tailored Customization: Metabox Options for Individual Content.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Full Support for Elementor Page Builder With Functional Widgets</td>
+						<td>Professional Insights: Stats Panel with Date Range and More Controls.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
 					<tr>
-						<td>Fast & Complete Supporting Services</td>
+						<td>Easy Integration: Apply Shortcodes via User-Friendly Generator.</td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
+					</tr>
+					<tr>
+						<td>Seamless Support: Elementor Page Builder with Functional Widgets.</td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
+						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
+					</tr>
+					<tr>
+						<td>Swift Assistance: Comprehensive Support Services for Your Needs.</td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/cross-remove.svg" alt="Cross Remove" /></td>
 						<td><img class="wp-ulike-table-icon" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/checkmark.svg" alt="Checkmark" /></td>
 					</tr>
@@ -163,7 +174,7 @@
 	<div class="has-3-columns">
 		<div class="column">
 			<h3>What's the difference between WP ULike Pro vs free?</h3>
-			<p>WP ULike's Free version offers limitless  possibilities. WP ULike Pro, however, empowers you with more professional tools, up/down vote support and provide you a professional stats panel. See <a target="_blank" href="https://wpulike.com/blog/wp-ulike-pro-vs-free/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash" title=" WP ULike Pro Vs. Free: Which One Helps You Better?
+			<p>WP ULike's Free version offers limitless  possibilities. WP ULike Pro, however, empowers you with more professional tools, up/down vote support and provide you a professional stats panel. See <a target="_blank" href="https://wpulike.com/blog/wp-ulike-pro-version-vs-free/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash" title=" WP ULike Pro Vs. Free: Which One Helps You Better?
 ">full comparison here</a>.</p>
 		</div>
 		<div class="column">

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2023-04-11 08:42:20+00:00\n"
+"POT-Creation-Date: 2023-08-13 15:54:58+00:00\n"
 "PO-Revision-Date: 2020-02-26 22:14:02+0000\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -1502,14 +1502,14 @@ msgstr ""
 msgid "WP ULike Premium"
 msgstr "WP ULike Premium"
 
-#: admin/includes/templates/go-pro.php:145
+#: admin/includes/templates/go-pro.php:156
 msgid ""
 "Elementor is the #1 WordPress page builder. In the new version of the WP "
 "ULike PRO plugin we fully support this page builder and have a variety of "
 "widgets & controllers that make life much easier for you."
 msgstr ""
 
-#: admin/includes/templates/go-pro.php:145
+#: admin/includes/templates/go-pro.php:156
 msgid ""
 "Just drag your desired widget and drop it in your Elementor sections, "
 "customize as you go and enjoy your like and dislike buttons on your contents."

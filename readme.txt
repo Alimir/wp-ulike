@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: like, marketing, elementor, user profile, rating, favorite, statistics, button, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 6.2
-Stable tag: 4.6.7
+Tested up to: 6.3
+Stable tag: 4.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,7 +52,7 @@ Enable your website users to share content over Facebook, Twitter, Google, Linke
 Are you ready to take your website to the next level? WP ULike PRO offers a range of advanced features that will help you engage with your audience like never before. With the ability to add dislike buttons, create custom login and registration forms, and build user profiles, you'll be able to fully customize your website's user experience. Plus, with our schema markup generator and social sharing buttons, you can boost your website's visibility and make your content easily shareable. Don't miss out on these powerful tools that will help you grow your website and community. Upgrade to [WP ULike PRO](https://wpulike.com/pricing/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) today!
 
 
-There are many other [features](https://wpulike.com/blog/wp-ulike-pro-vs-free/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) to help you build better websites:
+There are many other [features](https://wpulike.com/blog/wp-ulike-pro-version-vs-free/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) to help you build better websites:
 
 * Like, Dislike and Subtotal Votings support
 * Simple and effective options to customize every aspect of plugin styles
@@ -127,7 +127,7 @@ It works with almost all the plugins especially with Elementor, BuddyPress, bbPr
 
 =  What's the difference between WP ULike Pro vs Free? =
 WP ULike’s Free version offers limitless possibilities. WP ULike Pro, however, empowers you with more professional tools, up/down vote support and provide you a professional stats panel.
-See full comparison [Here](https://wpulike.com/blog/wp-ulike-pro-vs-free/).
+See full comparison [Here](https://wpulike.com/blog/wp-ulike-pro-version-vs-free/).
 
 = Is WP ULike compatible with multisite? =
 Yes.
@@ -141,6 +141,11 @@ Our WP ULike project has been able to attract more than 60,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.6.8 =
+* Added: Connect and Login Effortlessly with Our Latest Social Integration. [PRO]
+* Updated: Options panel framework.
+* Fixed: Various minor bug fixes for a smoother experience.
 
 = 4.6.7 =
 * Added: Automatic removal of votes from the database when posts, comments, etc. are removed.

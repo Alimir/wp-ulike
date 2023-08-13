@@ -44,13 +44,11 @@ class wp_ulike_activator {
 	public function install_tables(){
 
 		$max_index_length = 191;
-		$charset_collate  = '';
 
-		if ( ! empty( $wpdb->charset ) ) {
-			$charset_collate = "DEFAULT CHARACTER SET " . $this->database->charset;
-		}
-		if ( ! empty( $this->database->collate ) ) {
-			$charset_collate .= " COLLATE " . $this->database->collate;
+		$charset_collate = '';
+
+		if ( $this->database->has_cap( 'collation' ) ) {
+			$charset_collate = $this->database->get_charset_collate();
 		}
 
 		if( ! function_exists('maybe_create_table') ){
