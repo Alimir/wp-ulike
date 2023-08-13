@@ -367,7 +367,24 @@ if( ! function_exists('wp_ulike_setcookie') ){
 			return;
 		}
 		if ( ! headers_sent() ) {
-			setcookie( $name, $value, $expire, '/', COOKIE_DOMAIN, $secure, apply_filters( 'wp_ulike_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
+			$options = apply_filters(
+				'wp_ulike_set_cookie_options',
+				array(
+					'expires'  => $expire,
+					'secure'   => $secure,
+					'path'     => '/',
+					'domain'   => COOKIE_DOMAIN,
+					'httponly' => apply_filters( 'wp_ulike_cookie_httponly', $httponly, $name, $value, $expire, $secure ),
+				),
+				$name,
+				$value
+			);
+
+			if ( version_compare( PHP_VERSION, '7.3.0', '>=' ) ) {
+				setcookie( $name, $value, $options );
+			} else {
+				setcookie( $name, $value, $options['expires'], $options['path'], $options['domain'], $options['secure'], $options['httponly'] );
+			}
 		} elseif ( defined('WP_DEBUG') && WP_DEBUG ) {
 			headers_sent( $file, $line );
 			trigger_error( "{$name} cookie cannot be set - headers already sent by {$file} on line {$line}", E_USER_NOTICE ); // @codingStandardsIgnoreLine
