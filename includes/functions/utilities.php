@@ -190,17 +190,19 @@ if( ! function_exists( 'wp_ulike_generate_user_id' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_generate_user_id( $user_ip ) {
+
 		// set client identifier based on user ip
 		$client_identifier = $user_ip;
 
-		if( wp_ulike_validate_ip(  $user_ip  ) ) {
-			$client_identifier = ip2long( $user_ip );
-		} else {
-			$binary_val = '';
-			foreach ( unpack( 'C*', inet_pton( $user_ip ) ) as $byte ) {
-				$binary_val .= str_pad( decbin( $byte ), 8, "0", STR_PAD_LEFT );
+		if ( wp_ulike_validate_ip( $user_ip ) ) {
+			if ( filter_var( $user_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) !== false ) {
+				// Convert IPv6 address to a standardized format
+				$standardized_ipv6 = inet_ntop( inet_pton( $user_ip ) );
+				$hash = crc32( $standardized_ipv6 );
+				$client_identifier = abs( $hash % 10000000000000000 ); // Ensure it's less than 16 digits
+			} else {
+				$client_identifier = ip2long( $user_ip );
 			}
-			$client_identifier = base_convert( ltrim( $binary_val, '0' ), 2, 10 );
 		}
 
 		return apply_filters( 'wp_ulike_generate_client_identifier', $client_identifier, $user_ip );
