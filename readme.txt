@@ -19,7 +19,7 @@ WP ULike is the ultimate user engagement plugin for WordPress, designed to enhan
 It's time for **[WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
 
 = Surprises you won’t see anywhere else =
-With WP ULike’s unique features, you can transform your website and meet all your marketing needs with high speed and precision. Unlock advanced features, like our professional Schema.org generator with star ratings, AJAX-based login, registration, reset password and edit profile forms, easy local avatar upload, notifications system, and more.
+With WP ULike’s unique features, you can transform your website and meet all your marketing needs with high speed and precision. Unlock advanced features, like our professional Schema.org markup generators, AJAX forms for smoth Login/Registration management with 2-Factor authentication support, social login integration, share buttons, simple local avatar upload, notifications system, and more.
 
 = Start Configure your Voting System in a few Steps =
 Our revamped settings panel design and features make it easy to configure your voting system. WP ULike has clean coding, resource management, and a ton of features, so you can customize every part of your buttons with just a few clicks.
@@ -144,7 +144,9 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 
 = 4.6.8 =
 * Added: Connect and Login Effortlessly with Our Latest Social Integration. [PRO]
+* Added: Introducing a New Session Handler Class. [PRO]
 * Updated: Options panel framework.
+* Updated: Expanded WordPress REST API with Votes Details. [PRO]
 * Fixed: Various minor bug fixes for a smoother experience.
 
 = 4.6.7 =

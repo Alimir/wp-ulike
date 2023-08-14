@@ -523,7 +523,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             ),
                             'image'     => array(
                                 'width' => '120',
-                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/news.svg'
+                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/social.svg'
                             )
                         )
                     )
