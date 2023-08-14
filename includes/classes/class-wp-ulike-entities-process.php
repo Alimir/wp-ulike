@@ -204,14 +204,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			// Status check point
 			$status = true;
 
-			if( in_array( $method, array( 'do_not_log' ) ) ){
+			if ( in_array( $method, array( 'do_not_log' ) ) ) {
 				$user_item_count = wp_ulike_get_user_item_count_per_day( array(
-					"item_id"           => $args['item_id'],
-					"current_user"      => $args['current_user'],
-					"settings"          => $settings
+					"item_id"      => $args['item_id'],
+					"current_user" => $args['current_user'],
+					"settings"     => $settings
 				) );
 
-				if( $user_item_count && ( $user_item_count >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) ){
+				if ( $user_item_count >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) {
 					$status = false;
 				}
 			}
@@ -220,43 +220,37 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			if( in_array( $method, array( 'by_cookie', 'by_user_ip_cookie' ) ) ){
 				$has_cookie   = false;
 				$cookie_key   = sanitize_key( 'wp_ulike_' . md5( $args['type'] . '_logs' ) );
-				$cookie_data  = array();
+				$cookie_data  = self::getDecodedCookieData( $cookie_key );
 				$user_hash    = md5( $args['current_user'] );
 				$current_time = current_time( 'timestamp' );
 
-				if( isset( $_COOKIE[ $cookie_key ] ) ) {
-					$cookie_data = json_decode( wp_unslash( $_COOKIE[ $cookie_key ] ), true );
-					if( ! empty( $cookie_data[$user_hash] ) ){
-						if( isset( $cookie_data[$user_hash][ $args['item_id'] ] ) ){
-							if( is_numeric( $cookie_data[$user_hash][ $args['item_id'] ] ) && $current_time >= $cookie_data[$user_hash][ $args['item_id'] ] ){
-								$status     = true;
-								$has_cookie = false;
-							} else {
-								$status     = false;
-								$has_cookie = true;
-							}
-						}
+				if ( isset( $cookie_data[ $user_hash ][ $args['item_id'] ] ) ) {
+					if ( is_numeric( $cookie_data[ $user_hash ][ $args['item_id'] ] ) && $current_time >= $cookie_data[ $user_hash ][ $args['item_id'] ] ) {
+						$status = true;
+					} else {
+						$status = false;
+						$has_cookie = true;
 					}
 				// support old cookies
-				} elseif( isset( $_COOKIE[ $settings->getCookieName() . $args['item_id'] ] ) ){
-					$status     = false;
+				} elseif ( isset( $_COOKIE[ $settings->getCookieName() . $args['item_id'] ] ) ) {
+					$status = false;
 					$has_cookie = true;
 				}
 
 				// Check user permission
 				if( $method === 'by_user_ip_cookie' ){
 					$cookie_hash  = array_keys( $cookie_data );
-					$current_hash = md5( $args['current_user'] );
-					foreach ($cookie_hash as $key => $value) {
-						if( ! empty($cookie_data[$value][$args['item_id']]) ){
-							if( is_numeric( $cookie_data[$value][$args['item_id']] ) && $current_time >= $cookie_data[$value][$args['item_id']] ){
-								$status     = true;
-								$has_cookie = false;
-							} else {
-								$status     = $current_hash != $value ? false : true;
-								$has_cookie = $current_hash != $value ? true : false;
-							}
 
+					foreach ($cookie_hash as $value) {
+						if ( ! empty( $cookie_data[ $value ][ $args['item_id'] ] ) ) {
+							if ( is_numeric( $cookie_data[ $value ][ $args['item_id'] ] ) && $current_time >= $cookie_data[ $value ][ $args['item_id'] ] ) {
+								$status = true;
+							} else {
+								$status = $user_hash !== $value ? false : true;
+								if ( $user_hash !== $value ) {
+									$has_cookie = true;
+								}
+							}
 						}
 					}
 				}
@@ -284,6 +278,17 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			}
 
 			return apply_filters( 'wp_ulike_permission_status', $status, $args, $settings );
+		}
+
+		/**
+		 * Get decoded cookie data
+		 *
+		 * @param string $cookie_key
+		 * @return void
+		 */
+		private static function getDecodedCookieData( $cookie_key ) {
+			$cookie_data = isset( $_COOKIE[ $cookie_key ] ) ? json_decode( wp_unslash( $_COOKIE[ $cookie_key ] ), true ) : array();
+			return is_array( $cookie_data ) ? $cookie_data : array();
 		}
 
 		/**
@@ -375,7 +380,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		public function updateCounterMeta( $item_id ){
 			// delete cache to get fresh data
-			if( wp_ulike_is_cache_exist() ){
+			if( wp_ulike_is_cache_exist() && $item_id ){
 				wp_cache_delete( $item_id, sprintf( 'wp_ulike_%s_meta', $this->itemType ) );
 			}
 
@@ -425,7 +430,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			// Update object cache (memcached issue)
 			$meta_key  = sanitize_key( $this->itemType . '_status' );
 			// delete cache to get fresh data
-			if( wp_ulike_is_cache_exist() ){
+			if( wp_ulike_is_cache_exist() && $this->currentUser ){
 				wp_cache_delete( $this->currentUser, 'wp_ulike_user_meta' );
 			}
 			// Get meta data
@@ -454,7 +459,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			}
 
 			// delete cache to get fresh data
-			if( wp_ulike_is_cache_exist() ){
+			if( wp_ulike_is_cache_exist() && $item_id ){
 				wp_cache_delete( $item_id, sprintf( 'wp_ulike_%s_meta', $this->itemType ) );
 			}
 			// Get meta data

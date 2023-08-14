@@ -55,11 +55,12 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 				'method'       => 'lookup'
 			), $this->settings ) ){
 				// If has prev status
+				$method_id = 0;
+
 				if( $this->getPrevStatus() ){
 					$method_id = substr( $this->getPrevStatus(), 0, 2 ) !== "un" ? 4 : 5;
 				}
 
-				$method_id = 0;
 			} else {
 				switch( wp_ulike_setting_repo::getMethod( $this->args['slug'] ) ){
 					case 'do_not_log':
