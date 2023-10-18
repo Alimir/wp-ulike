@@ -27,7 +27,6 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 			"slug"          => 'post',	// Slug Name
 			"style"         => '',		// Get Default Theme
 			"button_type"   => '',		// Set Button Type ('image' || 'text')
-			"attributes"    => '',		// Get Attributes Filter
 			"wrapper_class" => ''		// Extra Wrapper class
 		), $atts );
 
