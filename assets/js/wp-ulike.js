@@ -1,4 +1,4 @@
-/*! WP ULike - v4.6.8
+/*! WP ULike - v4.6.9
  *  https://wpulike.com
  *  TechnoWich 2023;
  */
@@ -161,7 +161,17 @@
                 //if the trigger element is modified, reposition tooltip (hides if no longer exists or invisible)
                 //if tooltip is modified, trigger reposition
                 //this is admittedly inefficient, but it's only listening when the tooltip is open
-                $('body').on('DOMSubtreeModified', helper.positionTooltip);
+                // Create a MutationObserver instance to replace the deprecated DOMSubtreeModified event
+                helper.observer = new MutationObserver(function(mutations) {
+                    // Call the positionTooltip method on DOM modifications
+                    helper.positionTooltip();
+                });
+
+                // Configuration for the observer to listen to DOM modifications
+                const config = { attributes: true, childList: true, subtree: true };
+
+                // Start observing the body for DOM modifications
+                helper.observer.observe(document.body, config);
             },
             //is this tooltip visible
             isVisible: function () {
@@ -179,8 +189,11 @@
             },
             //hides the tooltip for this element
             hide: function (trigger_event) {
-                //remove the dom modification handler
-                $('body').off('DOMSubtreeModified', helper.positionTooltip);
+                // Disconnect the MutationObserver to stop listening for DOM modifications
+                if (helper.observer) {
+                    helper.observer.disconnect();
+                    helper.observer = null;
+                }
                 //remove scroll handler to reposition tooltip
                 $(window).off('resize', helper.onResize);
                 //remove accessbility props
