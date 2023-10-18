@@ -504,16 +504,18 @@ module.exports = function (grunt) {
         options: {
           exclude: [],
           src: "<%= meta.buildPath %>/",
-          dest: "/home/wpulike.com/public_html/wp-content/plugins/<%= meta.project %>/",
-          host: "root@159.69.92.197",
+          dest: "/home/wpulikec/www/wp-content/plugins/<%= meta.project %>/",
+          host: "wpulikec@nl1-ts106.a2hosting.com",
+          port: "7822",
         },
       },
       sandbox: {
         options: {
           exclude: [],
           src: "<%= meta.buildPath %>/",
-          dest: "/home/sandbox.wpulike.com/public_html/wp-content/plugins/<%= meta.project %>/",
-          host: "root@159.69.92.197",
+          dest: "/home/u743-m0zi3gdikuac/www/maryamr1.sg-host.com/public_html/wp-content/plugins/<%= meta.project %>/",
+          host: "u743-m0zi3gdikuac@35.207.156.31",
+          port: "18765",
         },
       },
       lite: {
