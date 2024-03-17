@@ -10,7 +10,7 @@
 if ( ! class_exists( 'ULF_Field_map' ) ) {
   class ULF_Field_map extends ULF_Fields {
 
-    public $version = '1.9.2';
+    public $version = '1.9.4';
     public $cdn_url = 'https://cdn.jsdelivr.net/npm/leaflet@';
 
     public function __construct( $field, $value = '', $unique = '', $where = '', $parent = '' ) {
