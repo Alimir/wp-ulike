@@ -20,25 +20,25 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	function wp_ulike_generate_templates_list(){
 		$default = array(
 			'wpulike-default' => array(
-				'name'            => esc_html__('Default', WP_ULIKE_SLUG),
+				'name'            => esc_html__('Default', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_default_template',
 				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg',
 				'is_text_support' => true
 			),
 			'wpulike-heart' => array(
-				'name'            => esc_html__('Heart', WP_ULIKE_SLUG),
+				'name'            => esc_html__('Heart', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_simple_heart_template',
 				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg',
 				'is_text_support' => true
 			),
 			'wpulike-robeen' => array(
-				'name'            => esc_html__('Twitter Heart', WP_ULIKE_SLUG),
+				'name'            => esc_html__('Twitter Heart', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_robeen_template',
 				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg',
 				'is_text_support' => false
 			),
 			'wpulike-animated-heart' => array(
-				'name'            => esc_html__('Animated Heart', WP_ULIKE_SLUG),
+				'name'            => esc_html__('Animated Heart', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_animated_heart_template',
 				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/animated-heart.svg',
 				'is_text_support' => false
@@ -67,7 +67,7 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 		<div class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
-					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', esc_html__( 'Like Button',WP_ULIKE_SLUG) ) ?>"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', esc_html__( 'Like Button','wp-ulike') ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
@@ -116,7 +116,7 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 		<div class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
-					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', esc_html__( 'Like Button',WP_ULIKE_SLUG) ) ?>"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', esc_html__( 'Like Button','wp-ulike') ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
@@ -165,7 +165,7 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
-					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', esc_html__( 'Like Button',WP_ULIKE_SLUG) ) ?>"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', esc_html__( 'Like Button','wp-ulike') ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"
@@ -212,7 +212,7 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 		<div class="wpulike wpulike-animated-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
 			<div class="<?php echo $general_class; ?>">
 				<button type="button"
-					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', esc_html__( 'Like Button',WP_ULIKE_SLUG) ) ?>"
+					aria-label="<?php echo wp_ulike_get_option( 'like_button_aria_label', esc_html__( 'Like Button','wp-ulike') ) ?>"
 					data-ulike-id="<?php echo $ID; ?>"
 					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
 					data-ulike-type="<?php echo $type; ?>"

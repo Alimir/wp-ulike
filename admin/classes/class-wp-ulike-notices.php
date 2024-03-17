@@ -35,7 +35,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             $this->args = wp_parse_args( $args, $defaults );
 
             if( empty( $this->args['id'] ) ){
-                return new WP_Error( 'missing_id', esc_html__( "You need to enter a unique id for notice.", WP_ULIKE_SLUG ) );
+                return new WP_Error( 'missing_id', esc_html__( "You need to enter a unique id for notice.", 'wp-ulike' ) );
             }
 
             if( is_array( $this->args['dismissible'] ) ){
@@ -206,7 +206,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             if( $this->args['has_close'] ){
     ?>
             <a href="<?php echo esc_url( $this->get_nonce_url() ); ?>" class="notice-dismiss wp-ulike-skip-notice wp-ulike-close-notice">
-                <span class="screen-reader-text"><?php esc_html_e( 'Skip', WP_ULIKE_SLUG ); ?></span>
+                <span class="screen-reader-text"><?php esc_html_e( 'Skip', 'wp-ulike' ); ?></span>
             </a>
     <?php } ?>
             <script>
@@ -242,7 +242,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
         private function flush_dismissible(){
             if ( isset( $_GET[ $this->args['dismissible']['url_key'] ] ) && isset( $_GET[ '_notice_nonce' ] ) && $_GET[ $this->args['dismissible']['url_key'] ] === $this->args['id'] ) {
                 if ( ! wp_verify_nonce( $_GET[ '_notice_nonce' ],  $this->args['dismissible']['action'] ) ) {
-                    wp_die( esc_html__( 'Authorization failed. Please refresh the page and try again.', WP_ULIKE_SLUG ) );
+                    wp_die( esc_html__( 'Authorization failed. Please refresh the page and try again.', 'wp-ulike' ) );
                 }
                 wp_ulike_set_transient( $this->get_transient_key(), 1, $this->args['dismissible']['expiration'] );
                 $this->args['dismissible'] = false;

@@ -66,7 +66,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		$status = ltrim( $status, 'un');
 
 		if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
-			return new WP_Error( 'broke', esc_html__( "Please enter some value for required variables.", WP_ULIKE_SLUG ) );
+			return new WP_Error( 'broke', esc_html__( "Please enter some value for required variables.", 'wp-ulike' ) );
 		}
 
 		$counter_value = wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct );
@@ -80,7 +80,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			// get table info
 			$table_info   = wp_ulike_get_table_info( $type );
 			if( empty( $table_info ) ){
-				return new WP_Error( 'broke', esc_html__( "Table info is empty.", WP_ULIKE_SLUG ) );
+				return new WP_Error( 'broke', esc_html__( "Table info is empty.", 'wp-ulike' ) );
 			}
 			extract( $table_info );
 

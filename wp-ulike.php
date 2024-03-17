@@ -31,7 +31,7 @@ define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 			);
 define( 'WP_ULIKE_VERSION'      , '4.7.0' 					 				);
 define( 'WP_ULIKE_DB_VERSION'   , '2.3' 					 	 			);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 			);
-define( 'WP_ULIKE_NAME'         , esc_html__( 'WP ULike', WP_ULIKE_SLUG )	);
+define( 'WP_ULIKE_NAME'         , esc_html__( 'WP ULike', 'wp-ulike' )	    );
 
 define( 'WP_ULIKE_DIR'          , plugin_dir_path( __FILE__ ) 	 			);
 define( 'WP_ULIKE_URL'          , plugins_url( '', __FILE__ ) 	 			);
@@ -72,7 +72,7 @@ if ( ! version_compare( PHP_VERSION, '5.6', '>=' ) ) {
  */
 function wp_ulike_fail_php_version() {
 	/* translators: %s: PHP version */
-	$message = sprintf( esc_html__( 'WP ULike requires PHP version %s+, plugin is currently NOT RUNNING.', WP_ULIKE_SLUG ), '5.6' );
+	$message = sprintf( esc_html__( 'WP ULike requires PHP version %s+, plugin is currently NOT RUNNING.', 'wp-ulike' ), '5.6' );
 	$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 	echo wp_kses_post( $html_message );
 }
@@ -86,7 +86,7 @@ function wp_ulike_fail_php_version() {
  */
 function wp_ulike_fail_wp_version() {
 	/* translators: %s: WordPress version */
-	$message = sprintf( esc_html__( 'WP ULike requires WordPress version %s+. Because you are using an earlier version, the plugin is currently NOT RUNNING.', WP_ULIKE_SLUG ), '5.0' );
+	$message = sprintf( esc_html__( 'WP ULike requires WordPress version %s+. Because you are using an earlier version, the plugin is currently NOT RUNNING.', 'wp-ulike' ), '5.0' );
 	$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 	echo wp_kses_post( $html_message );
 }

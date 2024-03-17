@@ -23,7 +23,7 @@
 				<i class="wp-ulike-icons-hourglass"></i>
 			</div>
 			<div class="wp-ulike-info">
-				<?php echo esc_html__( 'No data found! This is because there is still no data in your database.', WP_ULIKE_SLUG ); ?>
+				<?php echo esc_html__( 'No data found! This is because there is still no data in your database.', 'wp-ulike' ); ?>
 			</div>
 		</div>
 	</div>
@@ -37,15 +37,15 @@
 		<div class="col-12">
 			<div class="wp-ulike-inner">
 				<div class="wp-ulike-row">
-					<h3><?php esc_html_e( 'Check Votings, Best Likers & Top contents', WP_ULIKE_SLUG ); ?></h3>
+					<h3><?php esc_html_e( 'Check Votings, Best Likers & Top contents', 'wp-ulike' ); ?></h3>
 					<?php
-						echo sprintf( '<p>%s</p><div class="wp-ulike-button-group">%s%s</div>', esc_html__('With WP ULike Pro comprehensive Statistics tools, you can track what your users love and what annoys them in an instance. You can extract reports of likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with dateRange picker and status selector controllers, no confusing options and coding needed.',WP_ULIKE_SLUG), wp_ulike_widget_button_callback( array(
-							'label'         => esc_html__( 'Buy WP ULike Premium', WP_ULIKE_SLUG ),
+						echo sprintf( '<p>%s</p><div class="wp-ulike-button-group">%s%s</div>', esc_html__('With WP ULike Pro comprehensive Statistics tools, you can track what your users love and what annoys them in an instance. You can extract reports of likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with dateRange picker and status selector controllers, no confusing options and coding needed.','wp-ulike'), wp_ulike_widget_button_callback( array(
+							'label'         => esc_html__( 'Buy WP ULike Premium', 'wp-ulike' ),
 							'color_name'    => 'default',
 							'link'          => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=statistics-page&utm_campaign=gopro&utm_medium=wp-dash',
 							'target'        => '_blank'
 						) ), wp_ulike_widget_button_callback( array(
-							'label'         => esc_html__( 'More information', WP_ULIKE_SLUG ),
+							'label'         => esc_html__( 'More information', 'wp-ulike' ),
 							'color_name'    => 'info',
 							'link'          => WP_ULIKE_PLUGIN_URI . 'blog/wp-ulike-pro-statistics/?utm_source=statistics-page&utm_campaign=gopro&utm_medium=wp-dash',
 							'target'        => '_blank'
@@ -57,25 +57,25 @@
 	</div>
 	<div class="wp-ulike-row">
 		<div class="col-12">
-			<h2 class="wp-ulike-page-title"><?php esc_html_e('WP ULike Logs', WP_ULIKE_SLUG); ?></h2>
-			<h3><?php esc_html_e('Activity Likes Logs', WP_ULIKE_SLUG); ?></h3>
+			<h2 class="wp-ulike-page-title"><?php esc_html_e('WP ULike Logs', 'wp-ulike'); ?></h2>
+			<h3><?php esc_html_e('Activity Likes Logs', 'wp-ulike'); ?></h3>
 			<div class="tablenav">
 				<div class='tablenav-pages'>
-					<span class="displaying-num"><?php echo $datasets['num_rows'] . ' ' .  esc_html__('Logs',WP_ULIKE_SLUG); ?></span>
+					<span class="displaying-num"><?php echo $datasets['num_rows'] . ' ' .  esc_html__('Logs','wp-ulike'); ?></span>
 					<?php echo $datasets['paginate']->show();  // Echo out the list of paging. ?>
 				</div>
 			</div>
 			<table class="widefat">
 				<thead>
 					<tr>
-						<th width="3%"><?php esc_html_e('ID', WP_ULIKE_SLUG); ?></th>
-						<th width="13%"><?php esc_html_e('Username', WP_ULIKE_SLUG); ?></th>
-						<th><?php esc_html_e('Status', WP_ULIKE_SLUG); ?></th>
-						<th width="6%"><?php esc_html_e('Activity ID', WP_ULIKE_SLUG); ?></th>
-						<th><?php esc_html_e('Permalink', WP_ULIKE_SLUG); ?></th>
-						<th><?php esc_html_e('Date / Time', WP_ULIKE_SLUG); ?></th>
-						<th><?php esc_html_e('IP', WP_ULIKE_SLUG); ?></th>
-						<th><?php esc_html_e('Actions', WP_ULIKE_SLUG); ?></th>
+						<th width="3%"><?php esc_html_e('ID', 'wp-ulike'); ?></th>
+						<th width="13%"><?php esc_html_e('Username', 'wp-ulike'); ?></th>
+						<th><?php esc_html_e('Status', 'wp-ulike'); ?></th>
+						<th width="6%"><?php esc_html_e('Activity ID', 'wp-ulike'); ?></th>
+						<th><?php esc_html_e('Permalink', 'wp-ulike'); ?></th>
+						<th><?php esc_html_e('Date / Time', 'wp-ulike'); ?></th>
+						<th><?php esc_html_e('IP', 'wp-ulike'); ?></th>
+						<th><?php esc_html_e('Actions', 'wp-ulike'); ?></th>
 					</tr>
 				</thead>
 				<tbody class="wp_ulike_logs">
@@ -95,7 +95,7 @@
 								echo get_avatar( $user_info->user_email, 16, '' , 'avatar') . '<em> @' . $user_info->user_login . '</em>';
 							}
 							else {
-								echo '<em> #'. esc_html__('Guest User',WP_ULIKE_SLUG) .'</em>';
+								echo '<em> #'. esc_html__('Guest User','wp-ulike') .'</em>';
 							}
 						?>
 						</td>
@@ -111,7 +111,7 @@
 						</td>
 						<td>
 						<?php
-							printf( esc_html__( '<a href="%1$s">Activity Permalink</a>', WP_ULIKE_SLUG ), bp_activity_get_permalink( $data_row->activity_id ) );
+							printf( esc_html__( '<a href="%1$s">Activity Permalink</a>', 'wp-ulike' ), bp_activity_get_permalink( $data_row->activity_id ) );
 						?>
 						</td>
 						<td>
@@ -138,7 +138,7 @@
 			</table>
 			<div class="tablenav">
 				<div class='tablenav-pages'>
-					<span class="displaying-num"><?php echo $datasets['num_rows'] . ' ' .  esc_html__('Logs',WP_ULIKE_SLUG); ?></span>
+					<span class="displaying-num"><?php echo $datasets['num_rows'] . ' ' .  esc_html__('Logs','wp-ulike'); ?></span>
 					<?php echo $datasets['paginate']->show();  // Echo out the list of paging. ?>
 				</div>
 			</div>

@@ -23,7 +23,7 @@
 				<i class="wp-ulike-icons-hourglass"></i>
 			</div>
 			<div class="wp-ulike-info">
-				<?php echo esc_html__( 'No data found! This is because there is still no data in your database.', WP_ULIKE_SLUG ); ?>
+				<?php echo esc_html__( 'No data found! This is because there is still no data in your database.', 'wp-ulike' ); ?>
 			</div>
 		</div>
 	</div>
@@ -35,22 +35,22 @@
 <div id="wp-ulike-stats-app" class="wrap wp-ulike-container">
 	<div class="wp-ulike-row">
 		<div class="col-12">
-			<h2 class="wp-ulike-page-title"><?php esc_html_e( 'WP ULike Statistics', WP_ULIKE_SLUG ); ?></h2>
+			<h2 class="wp-ulike-page-title"><?php esc_html_e( 'WP ULike Statistics', 'wp-ulike' ); ?></h2>
 		</div>
 	</div>
 	<div class="wp-ulike-pro-stats-banner wp-ulike-row">
 		<div class="col-12">
 			<div class="wp-ulike-inner">
 				<div class="wp-ulike-row">
-					<h3><?php esc_html_e( 'Check Votings, Best Likers & Top contents', WP_ULIKE_SLUG ); ?></h3>
+					<h3><?php esc_html_e( 'Check Votings, Best Likers & Top contents', 'wp-ulike' ); ?></h3>
 					<?php
-						echo sprintf( '<p>%s</p><div class="wp-ulike-button-group">%s%s</div>', esc_html__('With WP ULike Pro comprehensive Statistics tools, you can track what your users love and what annoys them in an instance. You can extract reports of likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with dateRange picker and status selector controllers, no confusing options and coding needed.',WP_ULIKE_SLUG), wp_ulike_widget_button_callback( array(
-							'label'         => esc_html__( 'Buy WP ULike Premium', WP_ULIKE_SLUG ),
+						echo sprintf( '<p>%s</p><div class="wp-ulike-button-group">%s%s</div>', esc_html__('With WP ULike Pro comprehensive Statistics tools, you can track what your users love and what annoys them in an instance. You can extract reports of likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with dateRange picker and status selector controllers, no confusing options and coding needed.','wp-ulike'), wp_ulike_widget_button_callback( array(
+							'label'         => esc_html__( 'Buy WP ULike Premium', 'wp-ulike' ),
 							'color_name'    => 'default',
 							'link'          => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=statistics-page&utm_campaign=gopro&utm_medium=wp-dash',
 							'target'        => '_blank'
 						) ), wp_ulike_widget_button_callback( array(
-							'label'         => esc_html__( 'More information', WP_ULIKE_SLUG ),
+							'label'         => esc_html__( 'More information', 'wp-ulike' ),
 							'color_name'    => 'info',
 							'link'          => WP_ULIKE_PLUGIN_URI . 'blog/wp-ulike-pro-statistics/?utm_source=statistics-page&utm_campaign=gopro&utm_medium=wp-dash',
 							'target'        => '_blank'
@@ -73,7 +73,7 @@
 						<get-var dataset="count_all_logs_all" inline-template>
 							<span class="wp-ulike-var" v-html="output"></span>
 						</get-var>
-						<span class="wp-ulike-text"><?php esc_html_e( 'Total', WP_ULIKE_SLUG ); ?></span>
+						<span class="wp-ulike-text"><?php esc_html_e( 'Total', 'wp-ulike' ); ?></span>
 					</div>
 				</div>
 			</div>
@@ -90,7 +90,7 @@
 						<get-var dataset="count_all_logs_today" inline-template>
 							<span class="wp-ulike-var" v-html="output"></span>
 						</get-var>
-						<span class="wp-ulike-text"><?php esc_html_e( 'Today', WP_ULIKE_SLUG ); ?></span>
+						<span class="wp-ulike-text"><?php esc_html_e( 'Today', 'wp-ulike' ); ?></span>
 					</div>
 				</div>
 			</div>
@@ -107,7 +107,7 @@
 						<get-var dataset="count_all_logs_yesterday" inline-template>
 							<span class="wp-ulike-var" v-html="output"></span>
 						</get-var>
-						<span class="wp-ulike-text"><?php esc_html_e( 'Yesterday', WP_ULIKE_SLUG ); ?></span>
+						<span class="wp-ulike-text"><?php esc_html_e( 'Yesterday', 'wp-ulike' ); ?></span>
 					</div>
 				</div>
 			</div>
@@ -121,10 +121,10 @@
 	        <div class="wp-ulike-inner">
 		    	<div class="wp-ulike-header">
 		    		<h3 class="wp-ulike-widget-title">
-						<?php echo $type . ' ' .  esc_html__( 'Statistics', WP_ULIKE_SLUG ); ?>
+						<?php echo $type . ' ' .  esc_html__( 'Statistics', 'wp-ulike' ); ?>
 		    		</h3>
 		    		<a target="_blank" href="admin.php?page=wp-ulike-<?php echo $type; ?>-logs" class="wp-ulike-button">
-		    			<?php esc_html_e( 'View All Logs', WP_ULIKE_SLUG ); ?>
+		    			<?php esc_html_e( 'View All Logs', 'wp-ulike' ); ?>
 		    		</a>
 		    	</div>
 	            <div class="wp-ulike-row wp-ulike-flex wp-ulike-is-loading">
@@ -142,7 +142,7 @@
 		                        <get-var dataset="count_logs_<?php echo $table; ?>_week" inline-template>
 									<span class="wp-ulike-var" v-html="output"></span>
 		                        </get-var>
-		                        <span class="wp-ulike-text"><?php esc_html_e( 'Weekly', WP_ULIKE_SLUG ); ?></span>
+		                        <span class="wp-ulike-text"><?php esc_html_e( 'Weekly', 'wp-ulike' ); ?></span>
 	                       	</div>
 	                    </div>
 	                    <div class="wp-ulike-flex">
@@ -153,7 +153,7 @@
 		                        <get-var dataset="count_logs_<?php echo $table; ?>_month" inline-template>
 									<span class="wp-ulike-var" v-html="output"></span>
 		                        </get-var>
-		                        <span class="wp-ulike-text"><?php esc_html_e( 'Monthly', WP_ULIKE_SLUG ); ?></span>
+		                        <span class="wp-ulike-text"><?php esc_html_e( 'Monthly', 'wp-ulike' ); ?></span>
 	                       	</div>
 	                    </div>
 	                    <div class="wp-ulike-flex">
@@ -164,7 +164,7 @@
 		                        <get-var dataset="count_logs_<?php echo $table; ?>_year" inline-template>
 									<span class="wp-ulike-var" v-html="output"></span>
 		                        </get-var>
-		                        <span class="wp-ulike-text"><?php esc_html_e( 'Yearly', WP_ULIKE_SLUG ); ?></span>
+		                        <span class="wp-ulike-text"><?php esc_html_e( 'Yearly', 'wp-ulike' ); ?></span>
 	                       	</div>
 	                    </div>
 	                    <div class="wp-ulike-flex">
@@ -175,7 +175,7 @@
 		                        <get-var dataset="count_logs_<?php echo $table; ?>_all" inline-template>
 									<span class="wp-ulike-var" v-html="output"></span>
 		                        </get-var>
-		                        <span class="wp-ulike-text"><?php esc_html_e( 'Totally',WP_ULIKE_SLUG ); ?></span>
+		                        <span class="wp-ulike-text"><?php esc_html_e( 'Totally','wp-ulike' ); ?></span>
 	                       	</div>
 	                    </div>
 	                </div>
@@ -191,7 +191,7 @@
 	        <div class="wp-ulike-inner">
 				<div class="wp-ulike-header">
 		    		<h3 class="wp-ulike-widget-title">
-						<?php esc_html_e( 'Allocation Statistics', WP_ULIKE_SLUG ); ?>
+						<?php esc_html_e( 'Allocation Statistics', 'wp-ulike' ); ?>
 		    		</h3>
 				</div>
             	<div class="wp-ulike-row wp-ulike-match-height wp-ulike-flex wp-ulike-is-loading">
@@ -209,7 +209,7 @@
 	        <div class="wp-ulike-inner">
 				<div class="wp-ulike-header">
 		    		<h3 class="wp-ulike-widget-title">
-						<?php esc_html_e( 'Top Likers', WP_ULIKE_SLUG ); ?>
+						<?php esc_html_e( 'Top Likers', 'wp-ulike' ); ?>
 		    		</h3>
 				</div>
             	<div class="wp-ulike-row wp-ulike-match-height wp-ulike-flex wp-ulike-is-loading">
@@ -232,7 +232,7 @@
 	        <div class="wp-ulike-inner">
 				<div class="wp-ulike-header">
 		    		<h3 class="wp-ulike-widget-title">
-						<?php esc_html_e( 'Top', WP_ULIKE_SLUG ) . ' ' .  $type; ?>
+						<?php esc_html_e( 'Top', 'wp-ulike' ) . ' ' .  $type; ?>
 		    		</h3>
 				</div>
 				<div class="wp-ulike-row wp-ulike-is-loading">
