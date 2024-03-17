@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: like, marketing, elementor, user profile, rating, favorite, statistics, button, dislike, gamification, bookmark, member
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 6.3
-Stable tag: 4.6.9
+Tested up to: 6.4.3
+Stable tag: 4.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,11 @@ Our WP ULike project has been able to attract more than 60,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.7.0 =
+- Fixed: security vulnerabilities by implementing proper sanitization and escaping methods throughout the plugin codebase.
+- Improved: overall performance and reliability by optimizing SQL queries and utilizing WordPress API functions where applicable.
+- Updated: setting panel to enhance user experience and provide better customization options.
 
 = 4.6.9 =
 * Fixed: Removed "attributes" from [wp_ulike] shortcode to protect against potential vulnerabilities.
