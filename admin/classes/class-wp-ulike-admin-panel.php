@@ -139,7 +139,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                 ), 'prefix' )
                             ),
                             array(
-                                'title'     => esc_html__('Postfix',WP_ULIKE_SLUG),
+                                'title'     => esc_html__('Suffix',WP_ULIKE_SLUG),
                                 'fields'    => apply_filters( 'wp_ulike_filter_counter_options', array(
                                     array(
                                         'id'      => 'like_postfix',
