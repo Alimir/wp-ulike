@@ -31,7 +31,7 @@ function wp_ulike_ajax_stats() {
 	$instance = wp_ulike_stats::get_instance();
 	$output   = $instance->get_all_data();
 
-	wp_send_json_success( json_encode( $output ) );
+	wp_send_json_success( wp_json_encode( $output ) );
 
 }
 add_action( 'wp_ajax_wp_ulike_ajax_stats', 'wp_ulike_ajax_stats' );

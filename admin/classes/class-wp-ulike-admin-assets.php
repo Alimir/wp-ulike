@@ -86,7 +86,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					'wp_ulike_vuejs',
 					WP_ULIKE_ADMIN_URL . '/assets/js/solo/vue/vue.min.js',
 					array(),
-					null,
+					WP_ULIKE_VERSION,
 					false
 				);
 				// @if DEV

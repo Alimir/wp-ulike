@@ -41,7 +41,7 @@ if ( ! class_exists( 'ULF_Field_wp_editor' ) ) {
 
       echo $this->field_before();
 
-      echo ( ulf_wp_editor_api() ) ? '<div class="ulf-wp-editor" data-editor-settings="'. esc_attr( json_encode( $editor_settings ) ) .'">' : '';
+      echo ( ulf_wp_editor_api() ) ? '<div class="ulf-wp-editor" data-editor-settings="'. esc_attr( wp_json_encode( $editor_settings ) ) .'">' : '';
 
       echo '<textarea name="'. esc_attr( $this->field_name() ) .'"'. $this->field_attributes( $attributes ) . $editor_height .'>'. $this->value .'</textarea>';
 
@@ -79,7 +79,7 @@ if ( ! class_exists( 'ULF_Field_wp_editor' ) ) {
       $media_buttons = ob_get_clean();
 
       echo '<script type="text/javascript">';
-      echo 'var ulf_media_buttons = '. json_encode( $media_buttons ) .';';
+      echo 'var ulf_media_buttons = '. wp_json_encode( $media_buttons ) .';';
       echo '</script>';
 
     }
