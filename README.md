@@ -125,7 +125,7 @@ Make use of the following query on a loop:
  * @param integer $numberposts		The number of items
  * @param array|string $post_type	Select post type
  * @param string $method			keep this as default value (post, comment, activity, topic)
- * @param string $period			Date peroid (all|today|yeterday|week|month|year)
+ * @param string $period			Date period (all|today|yeterday|week|month|year)
  * @param string $status			Log status (like|unlike|dislike|undislike)
  * @return WP_Post[]|int[] 			Array of post objects or post IDs.
  */

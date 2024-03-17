@@ -409,14 +409,14 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 			return false;
 		}
 
+
+		$activity_list = implode(',',$activity_ids);
 		// generate query string
-		$query  = sprintf( '
-			SELECT * FROM
-			`%1$sbp_activity`
-			WHERE `id` IN (%2$s)
-			ORDER BY FIELD(`id`, %2$s)',
-			$wpdb->$bp_prefix,
-			implode(',',$activity_ids)
+		$query  = $wpdb->prepare( "
+			SELECT * FROM %i
+			WHERE `id` IN ({$activity_list})
+			ORDER BY FIELD(`id`, {$activity_list})",
+			$wpdb->$bp_prefix . 'bp_activity',
 		);
 
 		return $wpdb->get_results( $query );

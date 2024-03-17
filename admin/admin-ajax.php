@@ -65,9 +65,9 @@ function wp_ulike_logs_process(){
 	// Global wpdb calss
 	global $wpdb;
 	// Variables
-	$id    = isset( $_POST['id'] ) ? $_POST['id'] : '';
-	$table = isset( $_POST['table'] ) ? $_POST['table'] : '';
-	$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
+	$id    = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : '';
+	$table = isset( $_POST['table'] ) ? esc_sql( $_POST['table'] ) : '';
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : '';
 
 	if( $id == '' || ! wp_verify_nonce( $nonce, $table . $id ) || ! current_user_can( wp_ulike_get_user_access_capability('logs') ) ) {
 		wp_send_json_error( esc_html__( 'Error: Something Wrong Happened!', WP_ULIKE_SLUG ) );

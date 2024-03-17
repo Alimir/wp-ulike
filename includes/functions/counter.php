@@ -74,7 +74,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		if( is_null( $counter_value ) || ! empty( $date_range ) ){
 			global $wpdb;
 
-			// Peroid limit SQL
+			// period limit SQL
 			$period_limit = wp_ulike_get_period_limit_sql( $date_range );
 
 			// get table info
@@ -84,16 +84,19 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			}
 			extract( $table_info );
 
-			$query = sprintf(
-				'SELECT COUNT(%1$s) FROM %2$s WHERE %3$s AND %4$s %5$s',
-				esc_sql( $is_distinct ? "DISTINCT `user_id`" : "*" ),
-				esc_sql( $wpdb->prefix . $table ),
-				esc_sql( $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'" ),
-				esc_sql( "`$column` = '$ID'" ),
-				esc_sql( $period_limit )
+
+			$status_condition = $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'";
+			$count_type       = $is_distinct ? "DISTINCT `user_id`" : "*";
+
+			$query = $wpdb->prepare(
+				"SELECT COUNT({$count_type}) FROM %i WHERE {$status_condition} AND %i = %d {$period_limit}",
+				$wpdb->prefix . $table,
+				$column,
+				$ID
 			);
-			$counter_value = $wpdb->get_var( stripslashes( $query ) );
-			$counter_value = empty( $counter_value ) ? 0 : (int) $counter_value;
+
+			$counter_value  = $wpdb->get_var( $query );
+			$counter_value  = empty( $counter_value ) ? 0 : (int) $counter_value;
 
 			if( empty( $date_range ) ){
 				// Add counter to meta value

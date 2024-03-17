@@ -62,7 +62,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				} elseif( ! empty( $parsed_args['rel_type'] ) ) {
 					$post_type = sprintf( " AND r.post_type = '%s'", $parsed_args['rel_type'] );
 				}
-				$related_condition = 'AND r.post_status IN (\'publish\', \'inherit\', \'private\')' . $post_type;
+				$related_condition = "AND r.post_status IN ('publish', 'inherit', 'private')" . $post_type;
 				break;
 		}
 
@@ -222,7 +222,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 				} elseif( ! empty( $parsed_args['rel_type'] ) ) {
 					$post_type = sprintf( " AND r.post_type = '%s'", $parsed_args['rel_type'] );
 				}
-				$related_condition = 'AND r.post_status IN (\'publish\', \'inherit\', \'private\')' . $post_type;
+				$related_condition = "AND r.post_status IN ('publish', 'inherit', 'private')" . $post_type;
 				break;
 		}
 
@@ -326,14 +326,14 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 
 			if( false === $get_likers ){
 				// Get results
-				$get_likers = $wpdb->get_var( "
+				$get_likers = $wpdb->get_var( $wpdb->prepare("
 					SELECT GROUP_CONCAT(DISTINCT(`user_id`) SEPARATOR ',')
 					FROM {$wpdb->prefix}{$table_name}
 					INNER JOIN {$wpdb->users}
 					ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$table_name}.user_id )
 					WHERE {$wpdb->prefix}{$table_name}.status IN ('like', 'dislike')
-					AND {$column_name} = {$item_ID}"
-				);
+					AND %i = %d", $column_name, $item_ID
+				) );
 
 				wp_cache_set( $cache_key, $get_likers, WP_ULIKE_SLUG, 300 );
 			}
@@ -369,16 +369,16 @@ if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
 		// Get ULike settings
 		$get_settings = wp_ulike_get_post_settings_by_type( $type );
 
-		$query  = sprintf( "
+		$query  =  $wpdb->prepare( "
 			SELECT COUNT(*)
-			FROM %s
-			WHERE `%s` = %s
+			FROM %i
+			WHERE %i = %s
 			AND `status` = 'like'
-			And `user_id` = %s",
-			esc_sql( $wpdb->prefix . $get_settings['table'] ),
-			esc_html( $get_settings['column'] ),
-			esc_html( $item_ID ),
-			esc_html( $user_ID )
+			And `user_id` = %d",
+			$wpdb->prefix . $get_settings['table'],
+			$get_settings['column'],
+			$item_ID,
+			$user_ID
 		);
 
 		return $wpdb->get_var( $query );
@@ -409,21 +409,21 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 
 		if( empty($user_info) || ! isset( $user_info[$parsed_args['item_id']] ) ){
-			$query  = sprintf( '
+			$query  = $wpdb->prepare( '
 					SELECT `status`
-					FROM %s
-					WHERE `%s` = \'%s\'
-					AND `user_id` = \'%s\'
+					FROM %i
+					WHERE %i = %s
+					AND `user_id` = %d
 					ORDER BY id DESC LIMIT 1
 				',
-				esc_sql( $wpdb->prefix . $parsed_args['settings']->getTableName() ),
-				esc_sql( $parsed_args['settings']->getColumnName() ),
-				esc_sql( $parsed_args['item_id'] ),
-				esc_sql( $parsed_args['current_user'] )
+				$wpdb->prefix . $parsed_args['settings']->getTableName(),
+				$parsed_args['settings']->getColumnName(),
+				$parsed_args['item_id'],
+				$parsed_args['current_user']
 			);
 
 			// Get results
-			$user_status = $wpdb->get_var( stripslashes( $query ) );
+			$user_status = $wpdb->get_var( $query );
 
 			// Check user info value
 			$user_info = empty( $user_info ) ? array() : $user_info;
@@ -455,83 +455,85 @@ if( ! function_exists( 'wp_ulike_get_user_item_count_per_day' ) ) {
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
 
-		$count_votes = $wpdb->get_var( stripslashes( sprintf( '
-				SELECT COUNT(*)
-				FROM %s
-				WHERE `%s` = \'%s\'
-				AND `user_id` = \'%s\'
-				AND DATE(date_time) = CURDATE()
-			',
-			esc_sql( $wpdb->prefix . $parsed_args['settings']->getTableName() ),
-			esc_sql( $parsed_args['settings']->getColumnName() ),
-			esc_sql( $parsed_args['item_id'] ),
-			esc_sql( $parsed_args['current_user'] )
-		) ) );
+		$query = $wpdb->prepare( "
+			SELECT COUNT(*)
+			FROM %i
+			WHERE %i = %s
+			AND `user_id` = %d
+			AND DATE(date_time) = CURDATE()",
+			$wpdb->prefix . $parsed_args['settings']->getTableName(),
+			$parsed_args['settings']->getColumnName(),
+			$parsed_args['item_id'],
+			$parsed_args['current_user']
+		);
+
+		$count_votes = $wpdb->get_var( $query );
 
 		return $count_votes ? $count_votes : 0;
 	}
 }
 
 if( ! function_exists('wp_ulike_get_best_likers_info') ){
-	/**
-	 * Get most liked users in query
-	 *
-	 * @param integer $limit
-	 * @param string $peroid
-	 * @param integer $offset
-	 * @return object
-	 */
-	function wp_ulike_get_best_likers_info( $limit, $peroid, $offset = 1 ){
-		global $wpdb;
-		// Peroid limit SQL
-		$period_limit = wp_ulike_get_period_limit_sql( $peroid );
+    /**
+     * Get most liked users in query
+     *
+     * @param integer $limit
+     * @param string $period
+     * @param integer $offset
+     * @return object
+     */
+    function wp_ulike_get_best_likers_info( $limit, $period, $offset = 1 ){
+        global $wpdb;
+        // Period limit SQL
+        $period_limit = wp_ulike_get_period_limit_sql( $period );
 
-		$limit_records = '';
-		if( (int) $limit > 0 ){
-			$offset = $offset > 0 ? ( $offset - 1 ) * $limit : 0;
-			$limit_records = sprintf( "LIMIT %d, %d", $offset, $limit );
-		}
+        $limit_records = '';
+        if( (int) $limit > 0 ){
+            $offset = $offset > 0 ? ( $offset - 1 ) * $limit : 0;
+            $limit_records = $wpdb->prepare( "LIMIT %d, %d", $offset, $limit );
+        }
 
-		$query  = sprintf( 'SELECT T.user_id, SUM(T.CountUser) AS SumUser
-		FROM(
-		SELECT user_id, count(user_id) AS CountUser
-		FROM `%1$sulike`
-		INNER JOIN %4$s
-		ON ( %4$s.ID = %1$sulike.user_id )
-		WHERE status IN (\'like\', \'dislike\')
-		%2$s
-		GROUP BY user_id
-		UNION ALL
-		SELECT user_id, count(user_id) AS CountUser
-		FROM `%1$sulike_activities`
-		INNER JOIN %4$s
-		ON ( %4$s.ID = %1$sulike_activities.user_id )
-		WHERE status IN (\'like\', \'dislike\')
-		%2$s
-		GROUP BY user_id
-		UNION ALL
-		SELECT user_id, count(user_id) AS CountUser
-		FROM `%1$sulike_comments`
-		INNER JOIN %4$s
-		ON ( %4$s.ID = %1$sulike_comments.user_id )
-		WHERE status IN (\'like\', \'dislike\')
-		%2$s
-		GROUP BY user_id
-		UNION ALL
-		SELECT user_id, count(user_id) AS CountUser
-		FROM `%1$sulike_forums`
-		INNER JOIN %4$s
-		ON ( %4$s.ID = %1$sulike_forums.user_id )
-		WHERE status IN (\'like\', \'dislike\')
-		%2$s
-		GROUP BY user_id
-		) AS T
-		GROUP BY T.user_id
-		ORDER BY SumUser DESC %3$s', $wpdb->prefix, $period_limit, $limit_records, $wpdb->users );
+        $query  = "
+            SELECT T.user_id, SUM(T.CountUser) AS SumUser
+            FROM(
+                SELECT user_id, count(user_id) AS CountUser
+                FROM `{$wpdb->prefix}ulike`
+                INNER JOIN {$wpdb->users}
+                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike.user_id )
+                WHERE status IN ('like', 'dislike')
+                {$period_limit}
+                GROUP BY user_id
+                UNION ALL
+                SELECT user_id, count(user_id) AS CountUser
+                FROM `{$wpdb->prefix}ulike_activities`
+                INNER JOIN {$wpdb->users}
+                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_activities.user_id )
+                WHERE status IN ('like', 'dislike')
+                {$period_limit}
+                GROUP BY user_id
+                UNION ALL
+                SELECT user_id, count(user_id) AS CountUser
+                FROM `{$wpdb->prefix}ulike_comments`
+                INNER JOIN {$wpdb->users}
+                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_comments.user_id )
+                WHERE status IN ('like', 'dislike')
+                {$period_limit}
+                GROUP BY user_id
+                UNION ALL
+                SELECT user_id, count(user_id) AS CountUser
+                FROM `{$wpdb->prefix}ulike_forums`
+                INNER JOIN {$wpdb->users}
+                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_forums.user_id )
+                WHERE status IN ('like', 'dislike')
+                {$period_limit}
+                GROUP BY user_id
+            ) AS T
+            GROUP BY T.user_id
+            ORDER BY SumUser DESC {$limit_records}";
 
-		// Make new sql request
-		return $wpdb->get_results( $query );
-	}
+        // Make new SQL request
+        return $wpdb->get_results( $query );
+    }
 }
 
 if( ! function_exists('wp_ulike_get_user_data') ){
@@ -565,84 +567,71 @@ if( ! function_exists('wp_ulike_get_user_data') ){
 		}
 
 		// generate query string
-		$query  = sprintf( "
-			SELECT `%s` AS itemID, max(`date_time`) AS datetime, max(`status`) AS lastStatus
-			FROM %s
-			WHERE `user_id` = '%s'
-			AND %s %s
+		$query  = $wpdb->prepare( "
+			SELECT %i AS itemID, max(`date_time`) AS datetime, max(`status`) AS lastStatus
+			FROM %i
+			WHERE `user_id` = %d
+			AND {$status_type} {$period_limit}
 			GROUP BY itemID
 			ORDER BY datetime
-			%s LIMIT %s, %s",
+			{$parsed_args['order']} LIMIT %d, %d",
 			$parsed_args['column'],
 			$wpdb->prefix . $parsed_args['table'],
 			$user_ID,
-			$status_type,
-			$period_limit,
-			$parsed_args['order'],
 			( $parsed_args['page'] - 1 ) * $parsed_args['per_page'],
 			$parsed_args['per_page']
 		);
 
-		return $wpdb->get_results( $query );
+		return $wpdb->get_results(  $query );
 	}
 
 }
 
 if( ! function_exists( 'wp_ulike_get_users' ) ){
-	/**
-	 * Retrieve list of users
-	 *
-	 * @param array $args
-	 * @return object|null
-	 */
-	function wp_ulike_get_users( $args = array() ){
-		global $wpdb;
+    /**
+     * Retrieve list of users
+     *
+     * @param array $args
+     * @return object|null
+     */
+    function wp_ulike_get_users( $args = array() ){
+        global $wpdb;
 
-		$defaults = array(
-			'type'     => 'post',
-			'period'   => 'all',
-			'order'    => 'DESC',
-			'status'   => 'like',
-			'page'     => 1,
-			'per_page' => 10
-		);
-		$parsed_args  = wp_parse_args( $args, $defaults );
-		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
-		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
+        $defaults = array(
+            'type'     => 'post',
+            'period'   => 'all',
+            'order'    => 'DESC',
+            'status'   => 'like',
+            'page'     => 1,
+            'per_page' => 10
+        );
+        $parsed_args  = wp_parse_args( $args, $defaults );
+        $parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
+        $period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
 
-		$status_type  = '';
-		if( is_array( $parsed_args['status'] ) ){
-			$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
-		} else {
-			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
-		}
+        $status_type  = '';
+        if( is_array( $parsed_args['status'] ) ){
+            $status_type = $wpdb->prepare( "`status` IN (%s)", implode( ",", array_fill( 0, count( $parsed_args['status'] ), '%s' ) ), ...$parsed_args['status'] );
+        } else {
+            $status_type = $wpdb->prepare( "`status` = %s", $parsed_args['status'] );
+        }
 
-		// generate query string
-		$query  = sprintf( '
-			SELECT %1$s.user_id AS userID, count(%1$s.user_id) AS score,
-			max(%1$s.date_time) AS datetime, max(%1$s.status) AS lastStatus,
-			GROUP_CONCAT(DISTINCT(%1$s.%3$s) SEPARATOR ",") AS itemsList
-			FROM %1$s
-			INNER JOIN %2$s
-			ON ( %2$s.ID = %1$s.user_id )
-			WHERE %4$s %5$s
-			GROUP BY user_id
-			ORDER BY score
-			%6$s LIMIT %7$s, %8$s',
-			$wpdb->prefix . $parsed_args['table'],
-			$wpdb->users,
-			$parsed_args['column'],
-			$status_type,
-			$period_limit,
-			$parsed_args['order'],
-			( $parsed_args['page'] - 1 ) * $parsed_args['per_page'],
-			$parsed_args['per_page']
-		);
+        // generate query string
+        $query  = "
+            SELECT {$wpdb->prefix}{$parsed_args['table']}.user_id AS userID, count({$wpdb->prefix}{$parsed_args['table']}.user_id) AS score,
+            max({$wpdb->prefix}{$parsed_args['table']}.date_time) AS datetime, max({$wpdb->prefix}{$parsed_args['table']}.status) AS lastStatus,
+            GROUP_CONCAT(DISTINCT({$wpdb->prefix}{$parsed_args['table']}.{$parsed_args['column']}) SEPARATOR ',') AS itemsList
+            FROM {$wpdb->prefix}{$parsed_args['table']}
+            INNER JOIN {$wpdb->users}
+            ON ( {$wpdb->users}.ID = {$wpdb->prefix}{$parsed_args['table']}.user_id )
+            WHERE {$status_type} {$period_limit}
+            GROUP BY user_id
+            ORDER BY score {$parsed_args['order']}
+            LIMIT %d, %d";
 
-		return $wpdb->get_results( $query );
-	}
+        return $wpdb->get_results(  $wpdb->prepare( $query, ( $parsed_args['page'] - 1 ) * $parsed_args['per_page'], $parsed_args['per_page'] ) );
+    }
 }
-
 /*******************************************************
   General
 *******************************************************/
@@ -685,9 +674,10 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 						JOIN
 							".$wpdb->prefix."posts AS posts
 						ON
-							ulike.post_id = ".$post_ID." AND posts.ID = ulike.post_id;";
+							ulike.post_id = %d AND posts.ID = ulike.post_id;";
+
 			//get columns in a row
-			$likes 	= $wpdb->get_row($request);
+			$likes 	= $wpdb->get_row( $wpdb->prepare( $request, $post_ID ) );
 			$avg 	= $likes->average;
 			$count 	= $likes->counter;
 			$date 	= strtotime($likes->post_date);
@@ -725,53 +715,50 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 }
 
 if( ! function_exists('wp_ulike_count_all_logs') ){
-	/**
-	 * Count logs from all tables
-	 *
-	 * @param string $period		Availabe values: all, today, yesterday
-	 * @return integer
-	 */
-	function wp_ulike_count_all_logs( $period = 'all' ){
-		global $wpdb;
+    /**
+     * Count logs from all tables
+     *
+     * @param string $period    Available values: all, today, yesterday
+     * @return integer
+     */
+    function wp_ulike_count_all_logs( $period = 'all' ){
+        global $wpdb;
 
-		// Convert array period
-		if( is_array( $period ) ){
-			$period = implode( '-', $period );
-		}
+        // Convert array period
+        if( is_array( $period ) ){
+            $period = implode( '-', $period );
+        }
 
-		$cache_key = sanitize_key( sprintf( 'count_logs_period_%s', $period ) );
+        $cache_key = sanitize_key( sprintf( 'count_logs_period_%s', $period ) );
 
-		if( $period === 'all' ){
-			$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
-			if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
-				return $count_all_logs;
-			}
-		}
+        if( $period === 'all' ){
+            $count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
+            if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
+                return $count_all_logs;
+            }
+        }
 
-		$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+        $counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
-		// Make a cachable query to get new like count from all tables
-		if( false === $counter_value ){
+        // Make a cachable query to get new like count from all tables
+        if( false === $counter_value ){
+			$period_limit = wp_ulike_get_period_limit_sql( $period );
 
-			$query = sprintf( '
-				SELECT
-				( SELECT COUNT(*) FROM `%1$sulike` WHERE 1=1 %2$s ) +
-				( SELECT COUNT(*) FROM `%1$sulike_activities` WHERE 1=1 %2$s ) +
-				( SELECT COUNT(*) FROM `%1$sulike_comments` WHERE 1=1 %2$s ) +
-				( SELECT COUNT(*) FROM `%1$sulike_forums` WHERE 1=1 %2$s )
-				',
-				$wpdb->prefix,
-				wp_ulike_get_period_limit_sql( $period )
-			);
+            $counter_value = $wpdb->get_var( "
+			SELECT
+			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike` WHERE 1=1 {$period_limit} ) +
+			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_activities` WHERE 1=1 {$period_limit} ) +
+			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_comments` WHERE 1=1 {$period_limit} ) +
+			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_forums` WHERE 1=1 {$period_limit} )
+			" );
 
-			$counter_value = $wpdb->get_var( $query );
-			wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
-		}
+            wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+        }
 
-		if( $period === 'all' ){
-			wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
-		}
+        if( $period === 'all' ){
+            wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
+        }
 
-		return empty( $counter_value ) ? 0 : number_format_i18n( $counter_value );
-	}
+        return empty( $counter_value ) ? 0 : number_format_i18n( $counter_value );
+    }
 }

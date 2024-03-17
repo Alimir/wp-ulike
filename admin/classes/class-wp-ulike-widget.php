@@ -379,7 +379,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 				if( ! empty( $get_user_info ) ){
 					$result .= $before_item;
-					$result .= '<a href="'.$return_profile_url.'" class="user-tooltip" title="'.$get_user_info->display_name . $echo_likes_count.'">'.get_avatar( $get_user_info->user_email, $sizeOf, '' , 'avatar').'</a>';
+					$result .= '<a href="'.$return_profile_url.'" class="user-tooltip" title="'.esc_attr( $get_user_info->display_name ) . $echo_likes_count.'">'.get_avatar( $get_user_info->user_email, $sizeOf, '' , 'avatar').'</a>';
 					$result .= $after_item;
 				}
 			}
@@ -399,7 +399,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			if($thumbnail != ''){
 				return $thumbnail;
 			} else {
-				return '<img src="'.WP_ULIKE_ASSETS_URL.'/img/no-thumbnail.png" class="wp_ulike_thumbnail" alt="no-thumbnail" width="'.$sizeOf.'"/>';
+				return '<img src="'.WP_ULIKE_ASSETS_URL.'/img/no-thumbnail.png" class="wp_ulike_thumbnail" alt="no-thumbnail" width="'.esc_attr($sizeOf).'"/>';
 			}
 		}
 

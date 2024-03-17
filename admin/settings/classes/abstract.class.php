@@ -8,6 +8,7 @@
  *
  */
 if ( ! class_exists( 'ULF_Abstract' ) ) {
+  #[AllowDynamicProperties]
   abstract class ULF_Abstract {
 
     public $abstract   = '';
