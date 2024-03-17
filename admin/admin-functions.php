@@ -37,13 +37,13 @@ function wp_ulike_get_paginated_logs( $table, $type ){
 	global $wpdb;
 
 	// Make new sql request
-	$query   = sprintf( "
+	$query   = $wpdb->prepare( "
 		SELECT COUNT(*)
-		FROM %s",
+		FROM %i",
 		$wpdb->prefix . $table
 	);
 
-	$num_rows = $wpdb->get_var( $query );
+	$num_rows = $wpdb->get_var( $query);
 
 	if( empty( $num_rows ) ) {
 		return;
@@ -66,17 +66,18 @@ function wp_ulike_get_paginated_logs( $table, $type ){
 	}
 
 	// Make new sql request
-	$query  = sprintf( '
+	$query  = $wpdb->prepare( "
 		SELECT *
-		FROM %s
+		FROM %i
 		ORDER BY id
 		DESC
-		LIMIT %s',
+		LIMIT %d, %d",
 		$wpdb->prefix . $table,
-		($pagination->page - 1) * $pagination->limit  . ", " . $pagination->limit
+		($pagination->page - 1) * $pagination->limit,
+        $pagination->limit
 	);
 
-	return array(
+    return array(
 		'data_rows' => $wpdb->get_results( $query ),
 		'paginate'  => $pagination,
 		'num_rows'  => $num_rows

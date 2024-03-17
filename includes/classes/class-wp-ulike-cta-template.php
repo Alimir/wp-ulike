@@ -135,7 +135,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 
 			$wp_ulike_template 	= apply_filters( 'wp_ulike_add_templates_args', array(
 					"ID"                    => esc_attr( $this->args['id'] ),
-					"wrapper_class"         => sanitize_text_field( $this->args['wrapper_class'] ),
+					"wrapper_class"         => esc_attr( $this->args['wrapper_class'] ),
 					"slug"                  => esc_attr( $this->args['slug'] ),
 					"counter"               => wp_ulike_setting_repo::isCounterBoxVisible( $this->args['slug'] ) ?  wp_kses_post( $formatted_val ) : '',
 					"total_likes"           => esc_attr( $total_likes ),
