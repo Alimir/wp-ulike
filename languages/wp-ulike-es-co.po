@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2023-08-14 08:16:22+00:00\n"
+"POT-Creation-Date: 2024-03-17 10:22:53+00:00\n"
 "PO-Revision-Date: +0000\n"
 "Language: es_CO\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "It's Ok!"
 msgstr ""
 
-#: admin/admin-functions.php:227
+#: admin/admin-functions.php:228
 #: admin/classes/class-wp-ulike-admin-panel.php:917
 #: includes/classes/class-wp-ulike-customizer.php:149
 msgid "Button"
@@ -250,7 +250,7 @@ msgid "Unlike"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:142
-msgid "Postfix"
+msgid "Suffix"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:161
@@ -1853,7 +1853,11 @@ msgstr ""
 msgid "Animated Heart"
 msgstr ""
 
-#: includes/hooks/shortcodes.php:152
+#: includes/hooks/shortcodes.php:163
+msgid "Invalid type specified for [wp_ulike_likers_box] shortcode."
+msgstr ""
+
+#: includes/hooks/shortcodes.php:188
 msgid "Error receiving input parameters"
 msgstr ""
 

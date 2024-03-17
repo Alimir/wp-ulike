@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2023-08-14 08:16:22+00:00\n"
+"POT-Creation-Date: 2024-03-17 10:22:53+00:00\n"
 "PO-Revision-Date: 2021-01-09 02:03+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -31,7 +31,7 @@ msgstr ""
 msgid "It's Ok!"
 msgstr ""
 
-#: admin/admin-functions.php:227
+#: admin/admin-functions.php:228
 #: admin/classes/class-wp-ulike-admin-panel.php:917
 #: includes/classes/class-wp-ulike-customizer.php:149
 msgid "Button"
@@ -255,9 +255,8 @@ msgid "Unlike"
 msgstr "آنلایک"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:142
-#, fuzzy
-msgid "Postfix"
-msgstr "نوشته ها"
+msgid "Suffix"
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:161
 msgid "Enable Notifications"
@@ -1898,7 +1897,11 @@ msgstr ""
 msgid "Animated Heart"
 msgstr ""
 
-#: includes/hooks/shortcodes.php:152
+#: includes/hooks/shortcodes.php:163
+msgid "Invalid type specified for [wp_ulike_likers_box] shortcode."
+msgstr ""
+
+#: includes/hooks/shortcodes.php:188
 msgid "Error receiving input parameters"
 msgstr ""
 
@@ -2024,6 +2027,10 @@ msgid ""
 "https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-"
 "uri&utm_medium=wp-dash"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Postfix"
+#~ msgstr "نوشته ها"
 
 #~ msgid "Default settings restored."
 #~ msgstr "تنظیمات پیشفرض، بازیابی شد."
