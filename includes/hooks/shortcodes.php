@@ -41,6 +41,18 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 			'wrapper_class' => $args['wrapper_class']
 		);
 
+		if( empty( $attributes['id'] ) ){
+			unset( $attributes['id'] );
+		}
+		if( empty( $attributes['style'] ) ){
+			unset( $attributes['style'] );
+		}
+		if( empty( $attributes['button_type'] ) ){
+			unset( $attributes['button_type'] );
+		}
+		if( empty( $attributes['wrapper_class'] ) ){
+			unset( $attributes['wrapper_class'] );
+		}
 
 		// Generate the shortcode content based on the 'for' attribute
 		switch ( $args['for'] ) {
@@ -101,7 +113,6 @@ if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
         if (!in_array($attributes['status'], $allowed_statuses)) {
             $attributes['status'] = 'like'; // Default to 'like' if the status is not one of the allowed values
         }
-
 
         if( empty( $args['id'] ) ){
             switch ( $args['type'] ) {

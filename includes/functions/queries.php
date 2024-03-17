@@ -611,7 +611,8 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 
         $status_type  = '';
         if( is_array( $parsed_args['status'] ) ){
-            $status_type = $wpdb->prepare( "`status` IN (%s)", implode( ",", array_fill( 0, count( $parsed_args['status'] ), '%s' ) ), ...$parsed_args['status'] );
+			$status_list = implode ("','", $parsed_args['status'] );
+            $status_type = $wpdb->prepare( "`status` IN ('{$status_list}')" );
         } else {
             $status_type = $wpdb->prepare( "`status` = %s", $parsed_args['status'] );
         }
@@ -629,9 +630,11 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
             ORDER BY score {$parsed_args['order']}
             LIMIT %d, %d";
 
+
         return $wpdb->get_results(  $wpdb->prepare( $query, ( $parsed_args['page'] - 1 ) * $parsed_args['per_page'], $parsed_args['per_page'] ) );
     }
 }
+
 /*******************************************************
   General
 *******************************************************/
