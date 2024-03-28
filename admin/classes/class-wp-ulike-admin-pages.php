@@ -24,7 +24,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 
 			$this->submenus = apply_filters( 'wp_ulike_admin_pages', array(
 				'posts_logs'      => array(
-					'title'       => esc_html__( 'Post Likes Logs', WP_ULIKE_SLUG ),
+					'title'       => esc_html__( 'Post Likes Logs', 'wp-ulike' ),
 					'parent_slug' => '',
 					'capability'  => wp_ulike_get_user_access_capability('logs'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/posts-logs.php',
@@ -32,7 +32,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'load_screen' => true
 				),
 				'comments_logs'   => array(
-					'title'       => esc_html__( 'Comment Likes Logs', WP_ULIKE_SLUG ),
+					'title'       => esc_html__( 'Comment Likes Logs', 'wp-ulike' ),
 					'parent_slug' => '',
 					'capability'  => wp_ulike_get_user_access_capability('logs'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/comments-logs.php',
@@ -40,7 +40,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'load_screen' => true
 				),
 				'activities_logs' =>  array(
-					'title'       => esc_html__( 'Activity Likes Logs', WP_ULIKE_SLUG ),
+					'title'       => esc_html__( 'Activity Likes Logs', 'wp-ulike' ),
 					'parent_slug' => '',
 					'capability'  => wp_ulike_get_user_access_capability('logs'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/activities-logs.php',
@@ -48,7 +48,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'load_screen' => true
 				),
 				'topics_logs'     => array(
-					'title'       => esc_html__( 'Topics Likes Logs', WP_ULIKE_SLUG ),
+					'title'       => esc_html__( 'Topics Likes Logs', 'wp-ulike' ),
 					'parent_slug' =>  '',
 					'capability'  => wp_ulike_get_user_access_capability('logs'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/topics-logs.php',
@@ -56,7 +56,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'load_screen' => true
 				),
 				'statistics'      => array(
-					'title'       => esc_html__( 'Statistics', WP_ULIKE_SLUG ),
+					'title'       => esc_html__( 'Statistics', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
 					'capability'  => wp_ulike_get_user_access_capability('stats'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/statistics.php',
@@ -64,7 +64,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'load_screen' => false
 				),
 				'about'           => array(
-					'title'       => esc_html__( 'About', WP_ULIKE_SLUG ),
+					'title'       => esc_html__( 'About', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
 					'capability'  => wp_ulike_get_user_access_capability('stats'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/about.php',
@@ -130,7 +130,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 		 */
 		public function add_screen_option(){
 			add_screen_option( 'per_page', array(
-					'label'   => esc_html__('Logs',WP_ULIKE_SLUG),
+					'label'   => esc_html__('Logs','wp-ulike'),
 					'default' => 30,
 					'option'  => 'wp_ulike_logs_per_page'
 				)
