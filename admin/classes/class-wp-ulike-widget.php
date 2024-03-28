@@ -604,14 +604,14 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function update( $new_instance, $old_instance ) {
 			$instance = $old_instance;
 
-			$instance['title']       = strip_tags( $new_instance['title'] );
-			$instance['count']       = strip_tags( $new_instance['count'] );
-			$instance['type']        = strip_tags( $new_instance['type'] );
-			$instance['period']      = strip_tags( $new_instance['period'] );
-			$instance['style']       = strip_tags( $new_instance['style'] );
-			$instance['size']        = strip_tags( $new_instance['size'] );
-			$instance['trim']        = strip_tags( $new_instance['trim'] );
-			$instance['profile_url'] = strip_tags( $new_instance['profile_url'] );
+			$instance['title']       = wp_strip_all_tags( $new_instance['title'] );
+			$instance['count']       = wp_strip_all_tags( $new_instance['count'] );
+			$instance['type']        = wp_strip_all_tags( $new_instance['type'] );
+			$instance['period']      = wp_strip_all_tags( $new_instance['period'] );
+			$instance['style']       = wp_strip_all_tags( $new_instance['style'] );
+			$instance['size']        = wp_strip_all_tags( $new_instance['size'] );
+			$instance['trim']        = wp_strip_all_tags( $new_instance['trim'] );
+			$instance['profile_url'] = wp_strip_all_tags( $new_instance['profile_url'] );
 			$instance['show_count']  = isset($new_instance['show_count']) ? true : false;
 			$instance['show_thumb']  = isset($new_instance['show_thumb']) ? true : false;
 

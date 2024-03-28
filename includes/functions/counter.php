@@ -89,9 +89,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			$count_type       = $is_distinct ? "DISTINCT `user_id`" : "*";
 
 			$query = $wpdb->prepare(
-				"SELECT COUNT({$count_type}) FROM %i WHERE {$status_condition} AND %i = %d {$period_limit}",
-				$wpdb->prefix . $table,
-				$column,
+				"SELECT COUNT({$count_type}) FROM `{$wpdb->prefix}{$table}` WHERE {$status_condition} AND `{$column}` = %d {$period_limit}",
 				$ID
 			);
 

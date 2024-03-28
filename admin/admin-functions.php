@@ -37,13 +37,10 @@ function wp_ulike_get_paginated_logs( $table, $type ){
 	global $wpdb;
 
 	// Make new sql request
-	$query   = $wpdb->prepare( "
-		SELECT COUNT(*)
-		FROM %i",
-		$wpdb->prefix . $table
-	);
-
-	$num_rows = $wpdb->get_var( $query);
+	$num_rows = $wpdb->get_var( "
+        SELECT COUNT(*)
+        FROM `{$wpdb->prefix}{$table}`"
+    );
 
 	if( empty( $num_rows ) ) {
 		return;
@@ -68,11 +65,10 @@ function wp_ulike_get_paginated_logs( $table, $type ){
 	// Make new sql request
 	$query  = $wpdb->prepare( "
 		SELECT *
-		FROM %i
+		FROM `{$wpdb->prefix}{$table}`
 		ORDER BY id
 		DESC
 		LIMIT %d, %d",
-		$wpdb->prefix . $table,
 		($pagination->page - 1) * $pagination->limit,
         $pagination->limit
 	);
@@ -214,7 +210,7 @@ function wp_ulike_widget_button_callback( $atts = array() ){
             }
         }
 
-        $extra_styles = 'style="' . $extra_styles . '"';
+        $extra_styles = 'style="' . esc_attr( $extra_styles ) . '"';
 
     }
 
