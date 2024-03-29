@@ -70,7 +70,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 					do_action('epc_purge_request', $post_url);
 				}
 				// purge reffer url if is not same as triggered post
-				if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+				if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 					do_action( 'epc_purge_request', $reffer_url );
 				}
 			}
@@ -115,7 +115,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 				}
 				// purge reffer url if is not same as triggered post
 				$post_url = get_permalink($post_id);
-				if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+				if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 					do_action( 'litespeed_purge_url', $reffer_url );
 				}
 			}
@@ -136,7 +136,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 						sg_cachepress_purge_cache( $post_url );
 					}
 					// purge reffer url if is not same as triggered post
-					if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+					if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 						sg_cachepress_purge_cache( $reffer_url );
 					}
 				}
@@ -162,7 +162,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 					}
 					// purge reffer url if is not same as triggered post
 					$post_url = get_permalink($post_id);
-					if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+					if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 						\Swift_Performance_Cache::clear_permalink_cache($reffer_url);
 					}
 				}
@@ -184,7 +184,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 					}
 					// purge reffer url if is not same as triggered post
 					$post_url = get_permalink($post_id);
-					if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+					if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 						w3tc_flush_url( $reffer_url );
 					}
 				}
@@ -228,7 +228,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 					}
 					// purge reffer url if is not same as triggered post
 					$post_url = get_permalink($post_id);
-					if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+					if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 						\WPO_Page_Cache::delete_cache_by_url( $reffer_url );
 					}
 				}
@@ -252,7 +252,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 					}
 					// purge reffer url if is not same as triggered post
 					$post_url = get_permalink($post_id);
-					if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+					if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 						rocket_clean_files( $reffer_url );
 					}
 				}
@@ -277,7 +277,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 
 					// purge reffer url if is not same as triggered post
 					$post_url = get_permalink($post_id);
-					if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+					if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 						wpsc_delete_url_cache( $reffer_url );
 					}
 				}
@@ -303,7 +303,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 				}
 				// purge reffer url if is not same as triggered post
 				$post_url = get_permalink($post_id);
-				if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+				if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 					do_action( 'cache_enabler_clear_page_cache_by_url', $reffer_url );
 				}
 			}
@@ -328,7 +328,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 					\FlyingPress\Purge::purge_url( $post_url );
 				}
 				// purge reffer url if is not same as triggered post
-				if( $reffer_url && ( parse_url( $reffer_url ) != parse_url( $post_url ) ) ){
+				if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 					\FlyingPress\Purge::purge_url( $reffer_url );
 				}
 			}

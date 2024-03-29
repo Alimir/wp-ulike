@@ -123,14 +123,14 @@
 		    		<h3 class="wp-ulike-widget-title">
 						<?php echo $type . ' ' .  esc_html__( 'Statistics', 'wp-ulike' ); ?>
 		    		</h3>
-		    		<a target="_blank" href="admin.php?page=wp-ulike-<?php echo $type; ?>-logs" class="wp-ulike-button">
+		    		<a target="_blank" href="admin.php?page=wp-ulike-<?php echo esc_attr( $type ); ?>-logs" class="wp-ulike-button">
 		    			<?php esc_html_e( 'View All Logs', 'wp-ulike' ); ?>
 		    		</a>
 		    	</div>
 	            <div class="wp-ulike-row wp-ulike-flex wp-ulike-is-loading">
 	                <div class="col-8">
-						<get-chart type="line" identify="wp-ulike-<?php echo $type; ?>-chart" dataset="dataset_<?php echo $table; ?>" inline-template>
-							<canvas id="wp-ulike-<?php echo $type; ?>-chart"></canvas>
+						<get-chart type="line" identify="wp-ulike-<?php echo esc_attr( $type ); ?>-chart" dataset="dataset_<?php echo $table; ?>" inline-template>
+							<canvas id="wp-ulike-<?php echo esc_attr( $type ); ?>-chart"></canvas>
 						</get-chart>
 	                </div>
 	                <div class="col-4">
@@ -139,7 +139,7 @@
 								<i class="wp-ulike-icons-magnifying-glass"></i>
 							</div>
 							<div class="wp-ulike-info">
-		                        <get-var dataset="count_logs_<?php echo $table; ?>_week" inline-template>
+		                        <get-var dataset="count_logs_<?php echo esc_attr( $table ); ?>_week" inline-template>
 									<span class="wp-ulike-var" v-html="output"></span>
 		                        </get-var>
 		                        <span class="wp-ulike-text"><?php esc_html_e( 'Weekly', 'wp-ulike' ); ?></span>
@@ -150,7 +150,7 @@
 								<i class="wp-ulike-icons-bargraph"></i>
 							</div>
 							<div class="wp-ulike-info">
-		                        <get-var dataset="count_logs_<?php echo $table; ?>_month" inline-template>
+		                        <get-var dataset="count_logs_<?php echo esc_attr( $table ); ?>_month" inline-template>
 									<span class="wp-ulike-var" v-html="output"></span>
 		                        </get-var>
 		                        <span class="wp-ulike-text"><?php esc_html_e( 'Monthly', 'wp-ulike' ); ?></span>
@@ -161,7 +161,7 @@
 								<i class="wp-ulike-icons-linegraph"></i>
 							</div>
 							<div class="wp-ulike-info">
-		                        <get-var dataset="count_logs_<?php echo $table; ?>_year" inline-template>
+		                        <get-var dataset="count_logs_<?php echo esc_attr( $table ); ?>_year" inline-template>
 									<span class="wp-ulike-var" v-html="output"></span>
 		                        </get-var>
 		                        <span class="wp-ulike-text"><?php esc_html_e( 'Yearly', 'wp-ulike' ); ?></span>
@@ -172,7 +172,7 @@
 								<i class="wp-ulike-icons-global"></i>
 							</div>
 							<div class="wp-ulike-info">
-		                        <get-var dataset="count_logs_<?php echo $table; ?>_all" inline-template>
+		                        <get-var dataset="count_logs_<?php echo esc_attr( $table ); ?>_all" inline-template>
 									<span class="wp-ulike-var" v-html="output"></span>
 		                        </get-var>
 		                        <span class="wp-ulike-text"><?php esc_html_e( 'Totally','wp-ulike' ); ?></span>
@@ -237,8 +237,8 @@
 				</div>
 				<div class="wp-ulike-row wp-ulike-is-loading">
 					<div class="col-12">
-						<div class="wp-ulike-tops-list wp-ulike-top-<?php echo $type; ?>">
-							<get-var dataset="get_top_<?php echo $type; ?>" inline-template>
+						<div class="wp-ulike-tops-list wp-ulike-top-<?php echo esc_attr( $type ); ?>">
+							<get-var dataset="get_top_<?php echo esc_attr( $type ); ?>" inline-template>
 								<ul class="wp-ulike-var" v-html="output"></ul>
 							</get-var>
 						</div>

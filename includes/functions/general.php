@@ -604,18 +604,22 @@ if( ! function_exists('wp_ulike_acquire_lock') ){
 	 * @param integer $item_id
 	 * @return resource
 	 */
-	function wp_ulike_acquire_lock( $item_type, $item_id ) {
-		$fp = fopen( wp_ulike_lock_file( $item_type, $item_id ), 'w+' );
+    function wp_ulike_acquire_lock( $item_type, $item_id ) {
+        $lock_file = wp_ulike_lock_file( $item_type, $item_id );
+        $fp = fopen( $lock_file, 'w+' );
 
-		if ( ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
-			return false;
-		}
+        if ( ! $fp || ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
+            if ($fp) {
+                fclose($fp);
+            }
+            return false;
+        }
 
-		ftruncate( $fp, 0 );
-		fwrite( $fp, microtime( true ) );
+        ftruncate( $fp, 0 );
+        fwrite( $fp, microtime( true ) );
 
-		return $fp;
-	}
+        return $fp;
+    }
 }
 
 if( ! function_exists('wp_ulike_release_lock') ){
@@ -627,18 +631,20 @@ if( ! function_exists('wp_ulike_release_lock') ){
 	 * @param integer $item_id
 	 * @return boolean
 	 */
-	function wp_ulike_release_lock( $fp, $item_type, $item_id ) {
-		if ( is_resource( $fp ) ) {
-			fflush( $fp );
-			flock( $fp, LOCK_UN );
-			fclose( $fp );
-			unlink( wp_ulike_lock_file( $item_type, $item_id ) );
+    function wp_ulike_release_lock( $fp, $item_type, $item_id ) {
+        if ( is_resource( $fp ) ) {
+            fflush( $fp );
+            flock( $fp, LOCK_UN );
+            fclose( $fp );
 
-			return true;
-		}
+            $lock_file = wp_ulike_lock_file( $item_type, $item_id );
+            wp_delete_file( $lock_file );
 
-		return false;
-	}
+            return true;
+        }
+
+        return false;
+    }
 }
 
 if( ! function_exists('wp_ulike_lock_file') ){
@@ -650,6 +656,6 @@ if( ! function_exists('wp_ulike_lock_file') ){
 	 * @return string
 	 */
 	function wp_ulike_lock_file( $item_type, $item_id ) {
-		return apply_filters( 'wp_ulike_lock_file', get_temp_dir() . '/wp-ulike-' . $item_type . '-' . $item_id . '.lock', $item_type, $item_id );
+		return apply_filters( 'wp_ulike_lock_file', get_temp_dir() . 'wp-ulike-' . $item_type . '-' . $item_id . '.lock', $item_type, $item_id );
 	}
 }

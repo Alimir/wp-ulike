@@ -88,12 +88,11 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			$status_condition = $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'";
 			$count_type       = $is_distinct ? "DISTINCT `user_id`" : "*";
 
-			$query = $wpdb->prepare(
+			$counter_value  = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT({$count_type}) FROM `{$wpdb->prefix}{$table}` WHERE {$status_condition} AND `{$column}` = %d {$period_limit}",
 				$ID
-			);
+			) );
 
-			$counter_value  = $wpdb->get_var( $query );
 			$counter_value  = empty( $counter_value ) ? 0 : (int) $counter_value;
 
 			if( empty( $date_range ) ){
