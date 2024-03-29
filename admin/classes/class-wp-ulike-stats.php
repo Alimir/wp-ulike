@@ -179,15 +179,16 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 */
 		public function select_data( $table ){
 
-			$query  = sprintf( "
-					SELECT DATE(date_time) AS labels,
-					count(date_time) AS counts
-					FROM %s
-					WHERE TO_DAYS(NOW()) - TO_DAYS(date_time) <= 30
-					GROUP BY labels ORDER BY labels ASC LIMIT %d",
-					$this->wpdb->prefix . $table,
-					30
-				);
+			$data_limit = apply_filters( 'wp_ulike_stats_data_limit', 30 );
+
+			$query  = $this->wpdb->prepare( "
+				SELECT DATE(date_time) AS labels,
+				count(date_time) AS counts
+				FROM `{$this->wpdb->prefix}{$table}`
+				WHERE TO_DAYS(NOW()) - TO_DAYS(date_time) <= 30
+				GROUP BY labels ORDER BY labels ASC LIMIT %d",
+				$data_limit
+			);
 
 			$result = $this->wpdb->get_results( $query );
 

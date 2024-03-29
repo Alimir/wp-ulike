@@ -40,7 +40,7 @@ function wp_ulike_get_paginated_logs( $table, $type ) {
 
     // Define items per page and calculate offset
     $per_page = wp_ulike_logs_return_per_page(); // Items per page
-    $current_page = isset($_GET['page_number']) ? max(1, intval($_GET['page_number'])) : 1;
+    $current_page = isset($_GET['page_number']) ? max(1, absint($_GET['page_number'])) : 1;
     $offset = ($current_page - 1) * $per_page;
 
     // Fetch total number of items
@@ -52,8 +52,9 @@ function wp_ulike_get_paginated_logs( $table, $type ) {
     }
 
     // Fetch the items for the current page
-    $query = $wpdb->prepare( "SELECT * FROM `{$wpdb->prefix}{$table}` ORDER BY id DESC LIMIT %d, %d", $offset, $per_page );
-    $data_rows = $wpdb->get_results( $query );
+    $data_rows = $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM `{$wpdb->prefix}{$table}` ORDER BY id DESC LIMIT %d, %d", $offset, $per_page )
+    );
 
     // Calculate total pages
     $total_pages = ceil( $total_rows / $per_page );
