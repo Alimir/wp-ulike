@@ -1,8 +1,8 @@
-=== WP ULike - Most Advanced WordPress Marketing Toolkit ===
+=== WP ULike - Most Advanced Marketing Toolkit ===
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: like, marketing, elementor, user profile, rating, favorite, statistics, button, dislike, gamification, bookmark, member
+Tags: like, marketing, elementor, user profile, rating
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 6.4.3
@@ -10,7 +10,7 @@ Stable tag: 4.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Like/Dislike button for any post type, comments, BuddyPress, bbPress. Track what your users love and what annoys them, using comprehensive statistics tools.
+Track user reactions with a Like/Dislike button across posts, comments, BuddyPress, bbPress. Analyze user preferences with detailed stats
 
 == Description ==
 
