@@ -391,11 +391,17 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 
 			// Setup the output strings
 			if ( (int) $total_items > 1 ) {
-				$custom_text = sprintf( esc_html__( 'You have %d new %s likes', 'wp-ulike' ), (int) $total_items, $action_type );
+				$custom_text = sprintf(
+					/* translators: 1: Total items, 2: Item type. */
+					esc_html__( 'You have %1$d new %2$s likes', 'wp-ulike' ),
+					(int) $total_items, $action_type );
 				$custom_link = add_query_arg( 'type', $action, bp_get_notifications_permalink() );
 			} else {
 				$user_fullname = bp_core_get_user_displayname( $user_ID );
-				$custom_text   = sprintf( esc_html__( '%s liked one of your %s', 'wp-ulike' ), $user_fullname, $action_type );
+				$custom_text   = sprintf(
+					/* translators: 1: User full name, 2: Item type. */
+					esc_html__( '%1$s liked one of your %2$s', 'wp-ulike' ),
+					$user_fullname, $action_type );
 				$custom_link   = add_query_arg( 'read_ulike_notification', (int) $id, $custom_link );
 			}
 

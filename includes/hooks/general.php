@@ -186,7 +186,7 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		if( $args['disable_pophover'] || $args['likers_style'] == 'default' ){
 			echo sprintf(
 			'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>',
-			$args['type'], $args['ID'], wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting, array( 'style' => 'default' ) ) );
+			esc_attr($args['type']), esc_attr( $args['ID'] ), wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting, array( 'style' => 'default' ) ) );
 		}
 
 		do_action( 'wp_ulike_inline_display_likers_box', $args, $get_settings );
@@ -224,7 +224,7 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$image_group['undislike'].') !important; filter:none; }';
 		}
 
-		echo !empty( $return_style ) ? sprintf( '<style>%s</style>', $return_style ) : '';
+		echo !empty( $return_style ) ? sprintf( '<style>%s</style>', wp_strip_all_tags( $return_style ) ) : '';
 	}
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_update_button_icon', 1 );
 }

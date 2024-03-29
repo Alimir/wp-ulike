@@ -155,7 +155,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					"likers_style"          => esc_attr( $this->args['likers_style'] ),
 					"button_text"           => wp_kses_post( $button_text ),
 					"general_class"         => $this->get_general_selectors( $method_id ),
-					"button_class"          => sanitize_text_field( $button_class_name )
+					"button_class"          => esc_attr( $button_class_name )
 				), $this->args, $temp_list
 			);
 
@@ -195,7 +195,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					break;
 			}
 
-			return sanitize_text_field( $selectors );
+			return esc_attr( $selectors );
 		}
 
 	}
