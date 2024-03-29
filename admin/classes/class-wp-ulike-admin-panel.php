@@ -240,7 +240,9 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'comments' => esc_html__('Use the WordPress Disallowed Comment Keys', 'wp-ulike')
                         ),
                         'default'     => 'default',
-                        'desc'        => sprintf(esc_html__('Choose which Blacklist you would prefer to use for voting buttons. The %s option can be found in the WordPress Discussion Settings page.', 'wp-ulike'),
+                        'desc'        => sprintf(
+                            /* translators: %s: Link to options-discussion.php */
+                            esc_html__('Choose which Blacklist you would prefer to use for voting buttons. The %s option can be found in the WordPress Discussion Settings page.', 'wp-ulike'),
                             '<a href="'.admin_url('options-discussion.php').'">'.esc_html__('Disallowed Comment Keys', 'wp-ulike').'</a>'
                         )
                     ),

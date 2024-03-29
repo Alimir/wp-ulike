@@ -59,12 +59,7 @@
 		<div class="col-12">
 			<h2 class="wp-ulike-page-title"><?php esc_html_e('WP ULike Logs', 'wp-ulike'); ?></h2>
 			<h3><?php esc_html_e('Activity Likes Logs', 'wp-ulike'); ?></h3>
-			<div class="tablenav">
-				<div class='tablenav-pages'>
-					<span class="displaying-num"><?php echo $datasets['num_rows'] . ' ' .  esc_html__('Logs','wp-ulike'); ?></span>
-					<?php echo $datasets['paginate']->show();  // Echo out the list of paging. ?>
-				</div>
-			</div>
+			<?php echo $datasets['pagination_html'];  // Echo out the list of paging. ?>
 			<table class="widefat">
 				<thead>
 					<tr>
@@ -110,9 +105,7 @@
 						?>
 						</td>
 						<td>
-						<?php
-							printf( esc_html__( '<a href="%1$s">Activity Permalink</a>', 'wp-ulike' ), bp_activity_get_permalink( $data_row->activity_id ) );
-						?>
+							<a href="<?php echo bp_activity_get_permalink( $data_row->activity_id ); ?>"><?php esc_html_e( 'Activity Permalink', 'wp-ulike' ) ?></a>
 						</td>
 						<td>
 						<?php
@@ -136,12 +129,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="tablenav">
-				<div class='tablenav-pages'>
-					<span class="displaying-num"><?php echo $datasets['num_rows'] . ' ' .  esc_html__('Logs','wp-ulike'); ?></span>
-					<?php echo $datasets['paginate']->show();  // Echo out the list of paging. ?>
-				</div>
-			</div>
+			<?php echo $datasets['pagination_html'];  // Echo out the list of paging. ?>
 		</div>
 	</div>
 </div>

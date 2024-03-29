@@ -224,7 +224,11 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function most_liked_topics( $args = array(), $result = '' ) {
 
 			if( ! function_exists( 'is_bbpress' ) ) {
-				return '<li>' . sprintf( esc_html__( '%s is Not Activated!', 'wp-ulike' ) ,esc_html__( 'bbPress', 'wp-ulike' ) ) .'</li>';
+				return '<li>' . sprintf(
+					/* translators: %s: Plugin name */
+					esc_html__( '%s is Not Activated!', 'wp-ulike' ) ,
+					esc_html__( 'bbPress', 'wp-ulike' )
+				) .'</li>';
 			}
 
 			$defaults = array(
@@ -280,7 +284,11 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function most_liked_activities( $args = array(), $result = '' ) {
 
 			if( ! defined( 'BP_VERSION' ) ) {
-				return '<li>' . sprintf( esc_html__( '%s is Not Activated!', 'wp-ulike' ) ,esc_html__( 'BuddyPress', 'wp-ulike' ) ) . '</li>';
+				return '<li>' . sprintf(
+					/* translators: %s: Plugin name */
+					esc_html__( '%s is Not Activated!', 'wp-ulike' ) ,
+					esc_html__( 'BuddyPress', 'wp-ulike' )
+				) . '</li>';
 			}
 
 			$defaults = array(

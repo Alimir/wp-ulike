@@ -25,6 +25,8 @@ function wp_ulike_logs_return_per_page(){
 	return ( empty( $per_page ) || $per_page < 1 ) ? 30 : $per_page;
 }
 
+
+
 /**
  * Get paginated logs dataset
  *
@@ -33,52 +35,48 @@ function wp_ulike_logs_return_per_page(){
  * @param string $type
  * @return array
  */
-function wp_ulike_get_paginated_logs( $table, $type ){
-	global $wpdb;
+function wp_ulike_get_paginated_logs( $table, $type ) {
+    global $wpdb;
 
-	// Make new sql request
-	$num_rows = $wpdb->get_var( "
-        SELECT COUNT(*)
-        FROM `{$wpdb->prefix}{$table}`"
-    );
+    // Define items per page and calculate offset
+    $per_page = wp_ulike_logs_return_per_page(); // Items per page
+    $current_page = isset($_GET['page_number']) ? max(1, intval($_GET['page_number'])) : 1;
+    $offset = ($current_page - 1) * $per_page;
 
-	if( empty( $num_rows ) ) {
-		return;
-	}
+    // Fetch total number of items
+    $total_rows = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}{$table}`");
 
-	$per_page   = wp_ulike_logs_return_per_page();
+    // Early return if no rows exist
+    if( empty( $total_rows ) ) {
+        return;
+    }
 
-	$pagination = new wp_ulike_pagination;
-	$pagination->items( $num_rows );
-	$pagination->limit( $per_page ); // Limit entries per page
-	$pagination->target( 'admin.php?page=wp-ulike-' . $type . '-logs'  );
-	$pagination->calculate(); // Calculates what to show
-	$pagination->parameterName( 'page_number' );
-	$pagination->adjacents(1); //No. of page away from the current page
+    // Fetch the items for the current page
+    $query = $wpdb->prepare( "SELECT * FROM `{$wpdb->prefix}{$table}` ORDER BY id DESC LIMIT %d, %d", $offset, $per_page );
+    $data_rows = $wpdb->get_results( $query );
 
-	if( ! isset( $_GET['page_number'] ) ) {
-		$pagination->page = 1;
-	} else {
-		$pagination->page = (int) $_GET['page_number'];
-	}
+    // Calculate total pages
+    $total_pages = ceil( $total_rows / $per_page );
 
-	// Make new sql request
-	$query  = $wpdb->prepare( "
-		SELECT *
-		FROM `{$wpdb->prefix}{$table}`
-		ORDER BY id
-		DESC
-		LIMIT %d, %d",
-		($pagination->page - 1) * $pagination->limit,
-        $pagination->limit
-	);
+    // Generate pagination links
+    $page_links = paginate_links( array(
+        'base'      => add_query_arg( 'page_number', '%#%' ),
+        'format'    => '',
+        'prev_text' => '&laquo;',
+        'next_text' => '&raquo;',
+        'total'     => $total_pages,
+        'current'   => $current_page
+    ) );
 
+    // Wrap the pagination links in standard WordPress admin pagination markup
+    $pagination_html = '<div class="tablenav"><div class="tablenav-pages">' . ($total_pages > 1 ? "<span class=\"displaying-num\">$total_rows items</span>" : '') . '<span class="pagination-links">' . "$page_links</span></div></div>";
+
+    // Return results and pagination HTML
     return array(
-		'data_rows' => $wpdb->get_results( $query ),
-		'paginate'  => $pagination,
-		'num_rows'  => $num_rows
-	);
-
+        'data_rows'       => $data_rows,
+        'pagination_html' => $pagination_html,
+        'total_rows'      => $total_rows
+    );
 }
 
 /**
