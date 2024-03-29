@@ -378,8 +378,8 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$return_profile_url = '#';
 				$echo_likes_count   = $show_count ? ' ('.$get_likes_count . ' ' . esc_html__('Like','wp-ulike').')' : '';
 
-				if( $profile_url == 'bp' && function_exists('bp_core_get_user_domain') ) {
-					$return_profile_url = bp_core_get_user_domain( $liker->user_id );
+				if( $profile_url == 'bp' && function_exists('bp_members_get_user_url') ) {
+					$return_profile_url = bp_members_get_user_url( $liker->user_id );
 				} elseif( $profile_url == 'um' && function_exists('um_fetch_user') ) {
 					um_fetch_user( $liker->user_id );
 					$return_profile_url = um_user_profile_url();

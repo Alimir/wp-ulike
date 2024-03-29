@@ -384,8 +384,8 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 						$UM_PROFILE_URL = um_user_profile_url();
 						$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
 					}
-					if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
-						$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
+					if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_members_get_user_url') ) {
+						$BP_PROFILE_URL = bp_members_get_user_url( $user_info->ID );
 						$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
 					}
 					$users_list .= $out_template;
