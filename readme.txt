@@ -3,9 +3,9 @@ Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
 Tags: like, marketing, elementor, user profile, rating
-Requires PHP: 5.6
-Requires at least: 5.0
-Tested up to: 6.4.3
+Requires PHP: 7.2
+Requires at least: 6.0
+Tested up to: 6.5.5
 Stable tag: 4.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
