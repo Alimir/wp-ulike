@@ -485,7 +485,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 		// Custom Spinner
 		if( '' != ( $custom_spinner = wp_ulike_get_option( 'custom_spinner' ) ) ) {
-			$return_style .= '.wpulike .wp_ulike_is_loading button.wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn {background-image: url('.$custom_spinner.') !important;}';
+			$return_style .= '.wpulike .wp_ulike_is_loading button.wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn {background-image: url('.esc_url($custom_spinner).') !important;}';
 		}
 
 		// Custom Styles
@@ -493,7 +493,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$return_style .= $custom_css;
 		}
 
-		return apply_filters( 'wp_ulike_custom_css', $return_style );
+		return apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );
 	}
 
 }

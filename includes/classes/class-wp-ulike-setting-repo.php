@@ -23,7 +23,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getLoginNotice(){
-		return self::getOption( 'login_required_notice', esc_html__( 'You Should Login To Submit Your Like', 'wp-ulike' ) );
+		return wp_ulike_kses( self::getOption( 'login_required_notice', esc_html__( 'You Should Login To Submit Your Like', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -32,7 +32,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getValidationNotice(){
-		return self::getOption( 'validate_notice', esc_html__( 'Your vote cannot be submitted at this time.', 'wp-ulike' ) );
+		return wp_ulike_kses( self::getOption( 'validate_notice', esc_html__( 'Your vote cannot be submitted at this time.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getPermissionNotice(){
-		return self::getOption( 'already_registered_notice', esc_html__( 'You have already registered a vote.', 'wp-ulike' ) );
+		return wp_ulike_kses( self::getOption( 'already_registered_notice', esc_html__( 'You have already registered a vote.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getLikeNotice(){
-		return self::getOption( 'like_notice', esc_html__( 'Thanks! You Liked This.', 'wp-ulike' ) );
+		return wp_ulike_kses( self::getOption( 'like_notice', esc_html__( 'Thanks! You Liked This.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -59,7 +59,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getUnLikeNotice(){
-		return self::getOption( 'unlike_notice', esc_html__( 'Sorry! You unliked this.', 'wp-ulike' ) );
+		return wp_ulike_kses( self::getOption( 'unlike_notice', esc_html__( 'Sorry! You unliked this.', 'wp-ulike' ) ) );
 	}
 
 	/**
