@@ -659,3 +659,96 @@ if( ! function_exists('wp_ulike_lock_file') ){
 		return apply_filters( 'wp_ulike_lock_file', get_temp_dir() . 'wp-ulike-' . $item_type . '-' . $item_id . '.lock', $item_type, $item_id );
 	}
 }
+
+
+if( ! function_exists('wp_ulike_kses') ){
+	/**
+	 * Filters text content and strips out disallowed HTML.
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	function wp_ulike_kses( $value ) {
+		$allowedtags = array(
+			'a' => array(
+				'href'   => true,
+				'rel'    => true,
+				'rev'    => true,
+				'name'   => true,
+				'target' => true
+			),
+			'img'        => array(
+				'alt'      => true,
+				'align'    => true,
+				'border'   => true,
+				'height'   => true,
+				'hspace'   => true,
+				'loading'  => true,
+				'longdesc' => true,
+				'vspace'   => true,
+				'src'      => true,
+				'usemap'   => true,
+				'width'    => true,
+			),
+			'span'       => array(
+				'align' => true,
+			),
+			'div'  => array(
+				'align' => true,
+			),
+			'u'      => array(),
+			'p'      => array(),
+			'b'      => array(),
+			'strong' => array(),
+			'i'      => array(),
+			'em'     => array()
+		);
+
+		$allowedtags = array_map( 'wp_ulike_global_attributes', $allowedtags );
+
+		return wp_kses($value, $allowedtags);
+	}
+}
+
+
+if( ! function_exists('wp_ulike_global_attributes') ){
+	/**
+	 * Helper function to add global attributes to a tag in the allowed HTML list.
+	 *
+	 * @param array $value An array of attributes.
+	 * @return array The array of attributes with global attributes added.
+	 */
+	function wp_ulike_global_attributes( $value ) {
+		$global_attributes = array(
+			'aria-controls'    => true,
+			'aria-current'     => true,
+			'aria-describedby' => true,
+			'aria-details'     => true,
+			'aria-expanded'    => true,
+			'aria-hidden'      => true,
+			'aria-label'       => true,
+			'aria-labelledby'  => true,
+			'aria-live'        => true,
+			'class'            => true,
+			'data-*'           => true,
+			'dir'              => true,
+			'hidden'           => true,
+			'id'               => true,
+			'lang'             => true,
+			'style'            => true,
+			'title'            => true,
+			'role'             => true,
+			'xml:lang'         => true,
+		);
+
+		if ( true === $value ) {
+			$value = array();
+		}
+
+		if ( is_array( $value ) ) {
+			return array_merge( $value, $global_attributes );
+		}
+
+		return $value;
+	}
+}

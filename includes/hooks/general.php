@@ -212,16 +212,16 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 		}
 
 		if( isset( $image_group['like'] ) && ! empty( $image_group['like'] ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$image_group['like'].') !important; }';
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.esc_url($image_group['like']).') !important; }';
 		}
 		if( isset( $image_group['unlike'] ) && ! empty( $image_group['unlike'] ) ) {
-			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$image_group['unlike'].') !important; filter:none; }';
+			$return_style .= '.wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.esc_url($image_group['unlike']).') !important; filter:none; }';
 		}
 		if( isset( $image_group['dislike'] ) && ! empty( $image_group['dislike'] ) ) {
-			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.$image_group['dislike'].') !important; }';
+			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image:after { background-image: url('.esc_url($image_group['dislike']).') !important; }';
 		}
 		if( isset( $image_group['undislike'] ) && ! empty( $image_group['undislike'] ) ) {
-			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.$image_group['undislike'].') !important; filter:none; }';
+			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.esc_url($image_group['undislike']).') !important; filter:none; }';
 		}
 
 		echo !empty( $return_style ) ? sprintf( '<style>%s</style>', wp_strip_all_tags( $return_style ) ) : '';

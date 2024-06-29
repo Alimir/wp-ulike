@@ -79,7 +79,7 @@ class wp_ulike_setting_repo {
 	public static function getButtonText( $typeName, $status ){
 		$text_group = self::getOption( self::getSettingKey( $typeName ) . '|text_group' );
 		$text_value = ! empty( $text_group[$status] ) ? $text_group[$status] : ucfirst( $status );
-		return apply_filters( 'wp_ulike_button_text', $text_value, $status, self::getSettingKey( $typeName ) );
+		return apply_filters( 'wp_ulike_button_text', wp_ulike_kses( $text_value ), $status, self::getSettingKey( $typeName ) );
 	}
 
 	/**
@@ -311,7 +311,7 @@ class wp_ulike_setting_repo {
 			$number = $number . $filter_args[ $status . '_postfix' ];
 		}
 
-		return wp_kses_post( $number );
+		return wp_ulike_kses( $number );
 	}
 
 	/**
