@@ -216,10 +216,15 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			case 'topic':
 				$post_type = '';
 				if( is_array( $parsed_args['rel_type'] ) ){
-					$post_type = sprintf( " AND r.post_type IN ('%s')", implode ("','", $parsed_args['rel_type'] ) );
+					$rel_types = array_map(function($rel_type) use ($wpdb) {
+						return $wpdb->prepare('%s', $rel_type);
+					}, $parsed_args['rel_type']);
+
+					$post_type = " AND r.post_type IN (" . implode(',', $rel_types) . ")";
 				} elseif( ! empty( $parsed_args['rel_type'] ) ) {
-					$post_type = sprintf( " AND r.post_type = '%s'", $parsed_args['rel_type'] );
+					$post_type = $wpdb->prepare( " AND r.post_type = %s", $parsed_args['rel_type'] );
 				}
+
 				$related_condition = "AND r.post_status IN ('publish', 'inherit', 'private')" . $post_type;
 				break;
 		}
@@ -228,9 +233,13 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 		$user_condition = '';
 		if( !empty( $parsed_args['user_id'] ) ){
 			if( is_array( $parsed_args['user_id'] ) ){
-				$user_condition = sprintf( " AND t.user_id IN ('%s')", implode ("','", $parsed_args['user_id'] ) );
+				$user_ids = array_map(function($user_id) use ($wpdb) {
+					return $wpdb->prepare('%d', $user_id);
+				}, $parsed_args['user_id']);
+
+				$user_condition = " AND t.user_id IN (" . implode(',', $user_ids) . ")";
 			} else {
-				$user_condition = sprintf( " AND t.user_id = '%s'", $parsed_args['user_id'] );
+				$user_condition = $wpdb->prepare( " AND t.user_id = %d", $parsed_args['user_id'] );
 			}
 		}
 
@@ -244,12 +253,13 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			$meta_prefix = wp_ulike_setting_repo::isDistinct( $parsed_args['type'] ) ? 'count_distinct_' : 'count_total_';
 			if( is_array( $parsed_args['status'] ) ){
 				foreach ($parsed_args['status'] as $key => $value) {
-					$status_type .= $key === 0 ? sprintf( "t.meta_key LIKE '%s'", $meta_prefix . $value ) : sprintf( " OR t.meta_key LIKE '%s'", $meta_prefix . $value );
+					$status_type .= $key === 0 ? $wpdb->prepare( "t.meta_key LIKE %s", $meta_prefix . $value ) : $wpdb->prepare( " OR t.meta_key LIKE %s", $meta_prefix . $value );
 				}
 				$status_type = sprintf( " AND (%s)",  $status_type );
 			} else {
-				$status_type = sprintf( " AND t.meta_key LIKE '%s'",  $meta_prefix . $parsed_args['status'] );
+				$status_type = $wpdb->prepare( " AND t.meta_key LIKE %s",  $meta_prefix . $parsed_args['status'] );
 			}
+
 			// generate query string
 			$query  = sprintf( '
 				SELECT COUNT(DISTINCT t.item_id)
@@ -268,9 +278,13 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			// create query condition from status
 			$status_type  = '';
 			if( is_array( $parsed_args['status'] ) ){
-				$status_type = sprintf( "t.status IN ('%s')", implode ("','", $parsed_args['status'] ) );
+				$status_values = array_map(function($status) use ($wpdb) {
+					return $wpdb->prepare('%s', $status);
+				}, $parsed_args['status']);
+
+				$status_type = "t.status IN (" . implode(',', $status_values) . ")";
 			} else {
-				$status_type = sprintf( "t.status = '%s'", $parsed_args['status'] );
+				$status_type = $wpdb->prepare( "t.status = %s", $parsed_args['status'] );
 			}
 
 			// generate query string
@@ -560,9 +574,13 @@ if( ! function_exists('wp_ulike_get_user_data') ){
 
 		$status_type  = '';
 		if( is_array( $parsed_args['status'] ) ){
-			$status_type = sprintf( "`status` IN ('%s')", implode ("','", $parsed_args['status'] ) );
+			$status_values = array_map(function($status) use ($wpdb) {
+				return $wpdb->prepare('%s', $status);
+			}, $parsed_args['status']);
+
+			$status_type = "`status` IN (" . implode(',', $status_values) . ")";
 		} else {
-			$status_type = sprintf( "`status` = '%s'", $parsed_args['status'] );
+			$status_type = $wpdb->prepare( "`status` = %s", $parsed_args['status'] );
 		}
 
 		$table_name = $wpdb->prefix . $parsed_args['table'];

@@ -127,7 +127,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value' ) ){
 	 */
 	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
 		$counter_info = wp_ulike_get_counter_value_info( $ID, $type, $status, $is_distinct, $date_range );
-		return ! is_wp_error( $counter_info ) ? (int) $counter_info : 0;
+		return ! is_wp_error( $counter_info ) ? absint( $counter_info ) : 0;
 	}
 }
 
