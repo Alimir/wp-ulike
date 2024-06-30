@@ -232,7 +232,7 @@
 	        <div class="wp-ulike-inner">
 				<div class="wp-ulike-header">
 		    		<h3 class="wp-ulike-widget-title">
-						<?php esc_html_e( 'Top', 'wp-ulike' ) . ' ' .  $type; ?>
+						<?php echo esc_html__( 'Top', 'wp-ulike' ) . ' ' .  $type; ?>
 		    		</h3>
 				</div>
 				<div class="wp-ulike-row wp-ulike-is-loading">
