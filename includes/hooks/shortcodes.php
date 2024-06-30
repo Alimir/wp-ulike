@@ -57,14 +57,17 @@ if( ! function_exists( 'wp_ulike_shortcode' ) ){
 		// Generate the shortcode content based on the 'for' attribute
 		switch ( $args['for'] ) {
 			case 'comment':
+                $attributes['slug'] = 'comment';
 				$result = $content . wp_ulike_comments( 'put', $attributes );
 				break;
 
 			case 'activity':
+                $attributes['slug'] = 'activity';
 				$result = $content . wp_ulike_buddypress( 'put', $attributes );
 				break;
 
 			case 'topic':
+                $attributes['slug'] = 'topic';
 				$result = $content . wp_ulike_bbpress( 'put', $attributes );
 				break;
 
