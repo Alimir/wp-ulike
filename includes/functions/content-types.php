@@ -50,6 +50,7 @@ if( ! function_exists( 'wp_ulike' ) ){
 			"id"                   => $post_ID,
 			"method"               => 'likeThis',
 			"type"                 => 'post',
+			"slug"                 => 'post',
 			"wrapper_class"        => '',
 			"up_vote_inner_text"   => '',
 			"down_vote_inner_text" => '',
@@ -174,7 +175,8 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 		$defaults = array_merge( $comment_settings, array(
 			"id"                   => $comment_ID,
 			"method"               => 'likeThisComment',
-			"type"                 => 'post',
+			"type"                 => 'comment',
+			"slug"                 => 'comment',
 			"wrapper_class"        => '',
 			"up_vote_inner_text"   => '',
 			"down_vote_inner_text" => '',
@@ -191,6 +193,7 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
 		) );
 
 		$parsed_args = wp_parse_args( $args, $defaults );
+
 		// Output templayte
 		$output      = wp_ulike_display_button( $parsed_args );
 		// Select retrun or print
@@ -297,7 +300,8 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 		$defaults = array_merge( $buddypress_settings, array(
 			"id"                   => $activityID,
 			"method"               => 'likeThisActivity',
-			"type"                 => 'post',
+			"type"                 => 'activity',
+			"slug"                 => 'activity',
 			"wrapper_class"        => '',
 			"up_vote_inner_text"   => '',
 			"down_vote_inner_text" => '',
@@ -500,7 +504,8 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 		$defaults = array_merge( $bbpress_settings, array(
 			"id"                   => $post_ID,
 			"method"               => 'likeThisTopic',
-			"type"                 => 'post',
+			"type"                 => 'topic',
+			"slug"                 => 'topic',
 			"wrapper_class"        => '',
 			"up_vote_inner_text"   => '',
 			"down_vote_inner_text" => '',
