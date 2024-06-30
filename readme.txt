@@ -88,23 +88,25 @@ You can also add a new language via [translate.wordpress.org](https://translate.
 
 == Installation ==
 
-= From your WordPress dashboard =
+= Minimum Requirements =
 
-1. Visit 'Plugins > Add New'
-2. Search for 'WP ULike'
-3. Activate 'WP ULike' from your Plugins page. (You will be greeted with a Welcome page.)
+* WordPress 6.0 or greater
+* PHP version 7.2 or greater
+* MySQL version 5.0 or greater
 
-= From WordPress.org =
+= Recommended Requirements =
 
-1. Download 'WP ULike'.
-2. Upload the 'WP ULike' directory to your '/wp-content/plugins/' directory, using your favorite method (ftp, sftp, scp, etc...)
-3. Activate 'WP ULike' from your Plugins page. (You will be greeted with a Welcome page.)
+* PHP version 8.1 or greater
+* MySQL version 5.6 or greater
+* WordPress Memory limit of 64 MB or greater (128 MB or higher is preferred)
 
-= Once Activated =
+= Installation =
 
-1. Visit 'WP ULike > Settings' and take a moment to match ULike's settings to your expectations. We pick the most common configuration by default, but every taste is different.
-2. Visit 'WP ULike > Statistics' and observe your likes stats with useful statistics tools such as "Line charts", "Pie Chart", "World Map" and "Summary Details".
-3. If you have already installed myCRED plugin, Visit 'myCRED > hooks' and enable 'wp ulike' hook to award / deducts points from users who Like/Unlike any content of WordPress, bbPress, BuddyPress and etc.
+1. Install using the WordPress built-in Plugin installer, or Extract the zip file and drop the contents in the `wp-content/plugins/` directory of your WordPress installation.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+
+For documentation and tutorials visit our [Knowledge Base](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
+
 
 == Screenshots ==
 
@@ -143,72 +145,50 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 == Changelog ==
 
 = 4.7.1 =
-* Fixed: security vulnerabilities by implementing proper sanitization and escaping methods throughout the plugin codebase.
-* Fixed: Various minor bug fixes for a smoother experience.
+* Added   : Compatibility with WordPress 6.5 for seamless integration.
+* Updated : Minimum PHP version requirement increased to 7.2 and WordPress to version 6.0.
+* Improved: Comprehensive security enhancement with sanitization and escaping across all methods.
+* Improved: Optimized queries for better performance.
+* Removed : Deprecated class contents for cleaner code.
+* Replaced: Some PHP methods with standard WordPress ones for better compatibility.
+* Enhanced: Admin logs pagination functionality for improved usability.
+* Fixed   : Minor bug fixes for a smoother experience.
 
 = 4.7.0 =
-* Fixed: security vulnerabilities by implementing proper sanitization and escaping methods throughout the plugin codebase.
+* Fixed   : security vulnerabilities by implementing proper sanitization and escaping methods throughout the plugin codebase.
 * Improved: overall performance and reliability by optimizing SQL queries and utilizing WordPress API functions where applicable.
-* Updated: setting panel to enhance user experience and provide better customization options.
+* Updated : setting panel to enhance user experience and provide better customization options.
 
 = 4.6.9 =
 * Fixed: Removed "attributes" from [wp_ulike] shortcode to protect against potential vulnerabilities.
 * Fixed: Addressed an issue where an outdated JavaScript method was causing compatibility problems.
 
 = 4.6.8 =
-* Added: Connect and Login Effortlessly with Our Latest Social Integration. [PRO]
-* Added: Introducing a New Session Handler Class. [PRO]
+* Added  : Connect and Login Effortlessly with Our Latest Social Integration. [PRO]
+* Added  : Introducing a New Session Handler Class. [PRO]
 * Updated: Options panel framework.
 * Updated: Expanded WordPress REST API with Votes Details. [PRO]
-* Fixed: Various minor bug fixes for a smoother experience.
+* Fixed  : Various minor bug fixes for a smoother experience.
 
 = 4.6.7 =
-* Added: Automatic removal of votes from the database when posts, comments, etc. are removed.
+* Added   : Automatic removal of votes from the database when posts, comments, etc. are removed.
 * Improved: Purge cache controller with support for new cache plugins (FlyingPress, SwiftPerformance, Hummingbird, EnduranceCache).
-* Updated: Improved PHP 8.2 compatibility.
-* Updated: Auto display support on "the_excerpt" hook.
-* Fixed: Set default value for auto display filter (which caused the button to be displayed on pages after the plugin was activated).
+* Updated : Improved PHP 8.2 compatibility.
+* Updated : Auto display support on "the_excerpt" hook.
+* Fixed   : Set default value for auto display filter (which caused the button to be displayed on pages after the plugin was activated).
 
 = 4.6.6 =
-* Added: "Cache Cleaner" plugin cache support.
-* Added: Disable IP logging option.
+* Added  : "Cache Cleaner" plugin cache support.
+* Added  : Disable IP logging option.
 * Updated: Options panel framework.
-* Fixed: Escaping translations and output strings.
-* Fixed: Javascript conflict with "custom css&js" plugin.
-* Fixed: Minor bug fixes.
+* Fixed  : Escaping translations and output strings.
+* Fixed  : Javascript conflict with "custom css&js" plugin.
+* Fixed  : Minor bug fixes.
 
 = 4.6.5 =
 * Improved: Compatibility with WordPress 6.1 applied.
-* Fixed: Use mutex lock to prevent race condition.
-* Fixed: Disable code snippet options when using 'WP_ULIKE_DISABLE_CODE_SNIPPETS' constant or having multisite enabled.
-
-= 4.6.4 =
-* Added: Custom PHP & JavaScript snippets support in the options panel.
-* Improved: Synchronize likes of post types, which are translated with WPML plugin.
-* Improved: Admin notices display.
-* Fixed: Minor bug fixes.
-
-= 4.6.3 =
-* Improved: bbPress duplicate issue on the lead topic.
-* Improved: Compatibility with WordPress 6.0 applied.
-* Improved: Add uninstall.php to clear out plugin data.
-* Fixed: Minor bug fixes.
-
-= 4.6.2 =
-* Improved: bbPress button display on the main topic.
-* Improved: CSS conflicts with the BuddyPress.
-* Fixed: myCred author points issue.
-* Fixed: Minor bug fixes.
-
-= 4.6.1 =
-* Updated: Options panel framework.
-* Fixed: BuddyPress notification error.
-
-= 4.6.0 =
-* Added: Increase security for user accounts by using 2-factor authentication steps. [PRO]
-* Added: Animated Smiley Switch Template. [PRO]
-* Updated: Options panel framework.
-* Fixed: Minor bug fixes.
+* Fixed   : Use mutex lock to prevent race condition.
+* Fixed   : Disable code snippet options when using 'WP_ULIKE_DISABLE_CODE_SNIPPETS' constant or having multisite enabled.
 
 == Upgrade Notice ==
 
