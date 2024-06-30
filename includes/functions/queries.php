@@ -71,20 +71,18 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				break;
 		}
 
-
 		$user_condition = '';
 		if( !empty( $parsed_args['user_id'] ) ){
 			if( is_array( $parsed_args['user_id'] ) ){
 				$user_ids = array_map(function($user_id) use ($wpdb) {
-					return $wpdb->prepare('%d', $user_id);
+					return $wpdb->prepare('%s', $user_id);
 				}, $parsed_args['user_id']);
 
 				$user_condition = " AND t.user_id IN (" . implode(',', $user_ids) . ")";
 			} else {
-				$user_condition = $wpdb->prepare( " AND t.user_id = %d", $parsed_args['user_id'] );
+				$user_condition = $wpdb->prepare( " AND t.user_id = %s", $parsed_args['user_id'] );
 			}
 		}
-
 
 		$order_by = $parsed_args['is_popular'] ? 'counter' : 'item_ID';
 
@@ -234,12 +232,12 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 		if( !empty( $parsed_args['user_id'] ) ){
 			if( is_array( $parsed_args['user_id'] ) ){
 				$user_ids = array_map(function($user_id) use ($wpdb) {
-					return $wpdb->prepare('%d', $user_id);
+					return $wpdb->prepare('%s', $user_id);
 				}, $parsed_args['user_id']);
 
 				$user_condition = " AND t.user_id IN (" . implode(',', $user_ids) . ")";
 			} else {
-				$user_condition = $wpdb->prepare( " AND t.user_id = %d", $parsed_args['user_id'] );
+				$user_condition = $wpdb->prepare( " AND t.user_id = %s", $parsed_args['user_id'] );
 			}
 		}
 
