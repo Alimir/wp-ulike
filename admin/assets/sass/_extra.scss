@@ -159,3 +159,55 @@
      background-size: 60% 60%;
    }
  }
+
+ .wp-ulike-container {
+  .tablenav {
+    .tablenav-pages {
+      color: #444;
+      font-size: 14px;
+
+      .pagination-links {
+        a.page-numbers,
+        span.page-numbers {
+          display: inline-block;
+          padding: 4px 8px;
+          margin: 0 2px;
+          line-height: 1.65;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          background-color: #f7f7f7;
+          color: #0071a1;
+          text-decoration: none;
+          box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+          transition: all 0.2s ease-in-out;
+          cursor: pointer;
+
+          &:hover,
+          &.current {
+            border-color: #0073aa;
+            background-color: #0073aa;
+            color: #ffffff;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+          }
+
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, 0.8);
+          }
+        }
+
+
+        span.page-numbers.dots {
+          background-color: transparent;
+          border: none;
+          box-shadow: none;
+        }
+      }
+
+      .displaying-num {
+        margin-right: 10px;
+        font-weight: 600;
+      }
+    }
+  }
+}

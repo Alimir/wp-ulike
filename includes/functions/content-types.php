@@ -368,9 +368,11 @@ if( ! function_exists( 'wp_ulike_bbp_is_component_exist' ) ) {
 		global $wpdb;
 		$bp = buddypress();
 
+		$table_name = $bp->notifications->table_name;
+
 		return $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$bp->notifications->table_name} WHERE component_action = %s",
+					"SELECT COUNT(*) FROM {$table_name} WHERE component_action = %s",
 					$component_name
 				)
 			);
@@ -410,16 +412,13 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 		}
 
 
-		$activity_list = implode(',',$activity_ids);
-		// generate query string
-		$query  = $wpdb->prepare( "
-			SELECT * FROM %i
-			WHERE `id` IN ({$activity_list})
-			ORDER BY FIELD(`id`, {$activity_list})",
-			$wpdb->$bp_prefix . 'bp_activity',
-		);
+		$activity_list = esc_sql( implode(',',$activity_ids) );
 
-		return $wpdb->get_results( $query );
+		return $wpdb->get_results( "
+			SELECT * FROM `{$wpdb->$bp_prefix}bp_activity`
+			WHERE `id` IN ({$activity_list})
+			ORDER BY FIELD(`id`, {$activity_list})
+		" );
 	}
 }
 // @if DEV

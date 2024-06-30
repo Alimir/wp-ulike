@@ -335,10 +335,10 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 
 		//Main data
 		$defaults = array(
-			"counter"     => ! empty( $options['likers_count'] ) ? esc_attr( $options['likers_count'] ) : 10,
+			"counter"     => ! empty( $options['likers_count'] ) ? absint( $options['likers_count'] ) : 10,
 			"template"    => ! empty( $options['likers_template'] ) ? wp_kses_post( $options['likers_template'] ) : null,
 			"style"       => ! empty( $options['likers_style'] ) ? esc_attr( $options['likers_style'] ) : 'popover',
-			"avatar_size" => ! empty( $options['likers_gravatar_size'] ) ? esc_attr( $options['likers_gravatar_size'] ) : 64
+			"avatar_size" => ! empty( $options['likers_gravatar_size'] ) ? absint( $options['likers_gravatar_size'] ) : 64
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
 
@@ -384,8 +384,8 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 						$UM_PROFILE_URL = um_user_profile_url();
 						$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
 					}
-					if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_core_get_user_domain') ) {
-						$BP_PROFILE_URL = bp_core_get_user_domain( $user_info->ID );
+					if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_members_get_user_url') ) {
+						$BP_PROFILE_URL = bp_members_get_user_url( $user_info->ID );
 						$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
 					}
 					$users_list .= $out_template;
@@ -485,7 +485,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 		// Custom Spinner
 		if( '' != ( $custom_spinner = wp_ulike_get_option( 'custom_spinner' ) ) ) {
-			$return_style .= '.wpulike .wp_ulike_is_loading button.wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn {background-image: url('.$custom_spinner.') !important;}';
+			$return_style .= '.wpulike .wp_ulike_is_loading button.wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn {background-image: url('.esc_url($custom_spinner).') !important;}';
 		}
 
 		// Custom Styles
@@ -493,7 +493,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$return_style .= $custom_css;
 		}
 
-		return apply_filters( 'wp_ulike_custom_css', $return_style );
+		return apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );
 	}
 
 }
@@ -604,18 +604,22 @@ if( ! function_exists('wp_ulike_acquire_lock') ){
 	 * @param integer $item_id
 	 * @return resource
 	 */
-	function wp_ulike_acquire_lock( $item_type, $item_id ) {
-		$fp = fopen( wp_ulike_lock_file( $item_type, $item_id ), 'w+' );
+    function wp_ulike_acquire_lock( $item_type, $item_id ) {
+        $lock_file = wp_ulike_lock_file( $item_type, $item_id );
+        $fp = fopen( $lock_file, 'w+' );
 
-		if ( ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
-			return false;
-		}
+        if ( ! $fp || ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
+            if ($fp) {
+                fclose($fp);
+            }
+            return false;
+        }
 
-		ftruncate( $fp, 0 );
-		fwrite( $fp, microtime( true ) );
+        ftruncate( $fp, 0 );
+        fwrite( $fp, microtime( true ) );
 
-		return $fp;
-	}
+        return $fp;
+    }
 }
 
 if( ! function_exists('wp_ulike_release_lock') ){
@@ -627,18 +631,20 @@ if( ! function_exists('wp_ulike_release_lock') ){
 	 * @param integer $item_id
 	 * @return boolean
 	 */
-	function wp_ulike_release_lock( $fp, $item_type, $item_id ) {
-		if ( is_resource( $fp ) ) {
-			fflush( $fp );
-			flock( $fp, LOCK_UN );
-			fclose( $fp );
-			unlink( wp_ulike_lock_file( $item_type, $item_id ) );
+    function wp_ulike_release_lock( $fp, $item_type, $item_id ) {
+        if ( is_resource( $fp ) ) {
+            fflush( $fp );
+            flock( $fp, LOCK_UN );
+            fclose( $fp );
 
-			return true;
-		}
+            $lock_file = wp_ulike_lock_file( $item_type, $item_id );
+            wp_delete_file( $lock_file );
 
-		return false;
-	}
+            return true;
+        }
+
+        return false;
+    }
 }
 
 if( ! function_exists('wp_ulike_lock_file') ){
@@ -650,6 +656,99 @@ if( ! function_exists('wp_ulike_lock_file') ){
 	 * @return string
 	 */
 	function wp_ulike_lock_file( $item_type, $item_id ) {
-		return apply_filters( 'wp_ulike_lock_file', get_temp_dir() . '/wp-ulike-' . $item_type . '-' . $item_id . '.lock', $item_type, $item_id );
+		return apply_filters( 'wp_ulike_lock_file', get_temp_dir() . 'wp-ulike-' . $item_type . '-' . $item_id . '.lock', $item_type, $item_id );
+	}
+}
+
+
+if( ! function_exists('wp_ulike_kses') ){
+	/**
+	 * Filters text content and strips out disallowed HTML.
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	function wp_ulike_kses( $value ) {
+		$allowedtags = array(
+			'a' => array(
+				'href'   => true,
+				'rel'    => true,
+				'rev'    => true,
+				'name'   => true,
+				'target' => true
+			),
+			'img'        => array(
+				'alt'      => true,
+				'align'    => true,
+				'border'   => true,
+				'height'   => true,
+				'hspace'   => true,
+				'loading'  => true,
+				'longdesc' => true,
+				'vspace'   => true,
+				'src'      => true,
+				'usemap'   => true,
+				'width'    => true,
+			),
+			'span'       => array(
+				'align' => true,
+			),
+			'div'  => array(
+				'align' => true,
+			),
+			'u'      => array(),
+			'p'      => array(),
+			'b'      => array(),
+			'strong' => array(),
+			'i'      => array(),
+			'em'     => array()
+		);
+
+		$allowedtags = array_map( 'wp_ulike_global_attributes', $allowedtags );
+
+		return wp_kses($value, $allowedtags);
+	}
+}
+
+
+if( ! function_exists('wp_ulike_global_attributes') ){
+	/**
+	 * Helper function to add global attributes to a tag in the allowed HTML list.
+	 *
+	 * @param array $value An array of attributes.
+	 * @return array The array of attributes with global attributes added.
+	 */
+	function wp_ulike_global_attributes( $value ) {
+		$global_attributes = array(
+			'aria-controls'    => true,
+			'aria-current'     => true,
+			'aria-describedby' => true,
+			'aria-details'     => true,
+			'aria-expanded'    => true,
+			'aria-hidden'      => true,
+			'aria-label'       => true,
+			'aria-labelledby'  => true,
+			'aria-live'        => true,
+			'class'            => true,
+			'data-*'           => true,
+			'dir'              => true,
+			'hidden'           => true,
+			'id'               => true,
+			'lang'             => true,
+			'style'            => true,
+			'title'            => true,
+			'role'             => true,
+			'xml:lang'         => true,
+		);
+
+		if ( true === $value ) {
+			$value = array();
+		}
+
+		if ( is_array( $value ) ) {
+			return array_merge( $value, $global_attributes );
+		}
+
+		return $value;
 	}
 }

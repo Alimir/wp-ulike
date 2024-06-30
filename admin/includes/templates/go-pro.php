@@ -13,19 +13,19 @@
 <div class="wrap about-wrap wp-ulike-go-pro-page full-width-layout">
 	<div class="has-1-columns">
 		<div class="column">
-			<h1><?php esc_html_e( 'WP ULike Premium', WP_ULIKE_SLUG ); ?></h1>
+			<h1><?php esc_html_e( 'WP ULike Premium', 'wp-ulike' ); ?></h1>
 			<div class="is-feature">
 			<p>WP ULike Pro is our ultimate solution to cast voting to any type of content you may have on your website. With outstanding and eye-catching widgets, you can have Like and Dislike Button on all of your contents would it be a Post, Comment, BuddyPress Activities, bbPress Topics, WooCommerce products, you name it. Now you can feel your users Love for each part of your content.</p>
 			<p>Besides, this plugin includes detailed logs and analytic reports of all the like and dislike activities on your pages. If you’ like to have complete control and a wide variety of options available to customize your plugins, then WP Ulike Pro is the best choice for you.</p>
 			<?php
 				echo wp_ulike_widget_button_callback( array(
-					'label'         => esc_html__( 'Buy WP ULike Premium', WP_ULIKE_SLUG ),
+					'label'         => esc_html__( 'Buy WP ULike Premium', 'wp-ulike' ),
 					'color_name'    => 'default',
 					'link'          => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash',
 					'target'        => '_blank'
 				) );
 				echo wp_ulike_widget_button_callback( array(
-					'label'         => esc_html__( 'More information', WP_ULIKE_SLUG ),
+					'label'         => esc_html__( 'More information', 'wp-ulike' ),
 					'color_name'    => 'info',
 					'link'          => WP_ULIKE_PLUGIN_URI . '?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash',
 					'target'        => '_blank'
@@ -153,7 +153,7 @@
 		<div class="column is-vertically-aligned-center">
 			<h2>Customize Every Part of Your WP ULlike Pro Plugin</h2>
 			<?php
-				echo sprintf('<p>%s</p><p>%s</p>', esc_html__('Elementor is the #1 WordPress page builder. In the new version of the WP ULike PRO plugin we fully support this page builder and have a variety of widgets & controllers that make life much easier for you.',WP_ULIKE_SLUG), esc_html__('Just drag your desired widget and drop it in your Elementor sections, customize as you go and enjoy your like and dislike buttons on your contents.',WP_ULIKE_SLUG) );
+				echo sprintf('<p>%s</p><p>%s</p>', esc_html__('Elementor is the #1 WordPress page builder. In the new version of the WP ULike PRO plugin we fully support this page builder and have a variety of widgets & controllers that make life much easier for you.','wp-ulike'), esc_html__('Just drag your desired widget and drop it in your Elementor sections, customize as you go and enjoy your like and dislike buttons on your contents.','wp-ulike') );
 			?>
 		</div>
 	</div>

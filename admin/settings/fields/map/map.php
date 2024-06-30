@@ -56,7 +56,7 @@ if ( ! class_exists( 'ULF_Field_map' ) ) {
         echo '<div class="ulf--address-field" data-address-field="'. esc_attr( $args['address_field'] ) .'"></div>';
       }
 
-      echo '<div class="ulf--map-osm-wrap"><div class="ulf--map-osm" data-map="'. esc_attr( json_encode( $settings ) ) .'"'. $style_attr .'></div></div>';
+      echo '<div class="ulf--map-osm-wrap"><div class="ulf--map-osm" data-map="'. esc_attr( wp_json_encode( $settings ) ) .'"'. $style_attr .'></div></div>';
 
       echo '<div class="ulf--map-inputs">';
 

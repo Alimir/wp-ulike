@@ -251,7 +251,7 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 
 		if ( ! empty( $meta_list ) ) {
 			foreach ( $meta_list as $metarow ) {
-				$mpid = intval( $metarow[ $column ] );
+				$mpid = absint( $metarow[ $column ] );
 				$mkey = $metarow['meta_group'] . '_' . $metarow['meta_key'];
 				$mval = $metarow['meta_value'];
 

@@ -131,7 +131,7 @@ if( ! function_exists( 'wp_ulike_register_activity_actions' ) ){
 		bp_activity_set_action(
 			$bp->activity->id,
 			'wp_like_group',
-			esc_html__( 'WP ULike Activity', WP_ULIKE_SLUG )
+			esc_html__( 'WP ULike Activity', 'wp-ulike' )
 		);
 	}
 	add_action( 'bp_register_activity_actions', 'wp_ulike_register_activity_actions' );
@@ -146,7 +146,7 @@ if( ! function_exists( 'wp_ulike_bp_activity_filter_options' ) ){
 	 */
 	function wp_ulike_bp_activity_filter_options() {
 		// Display Vote Notifications
-		echo sprintf( '<option value="wp_like_group">%s</option>', esc_html__( 'Votes', WP_ULIKE_SLUG ) );
+		echo sprintf( '<option value="wp_like_group">%s</option>', esc_html__( 'Votes', 'wp-ulike' ) );
 	}
 	add_action( 'bp_activity_filter_options', 'wp_ulike_bp_activity_filter_options', 20 ); // Activity Directory
 	add_action( 'bp_member_activity_filter_options', 'wp_ulike_bp_activity_filter_options', 20 ); // Member's profile activity
@@ -355,20 +355,20 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 				preg_match('/action_([0-9]+)/', $action, $user_ID);
 			//Get user info
 			$user_ID     = isset( $user_ID[1] ) ? $user_ID[1] : $secondary_item_id;
-			$action_type = esc_html__( 'posts' , WP_ULIKE_SLUG );
+			$action_type = esc_html__( 'posts' , 'wp-ulike' );
 			$custom_link = '';
 
 			// Check the the ulike types
 			switch ( $type[1] ) {
 				case 'commentliked':
 					$custom_link = get_comment_link( $item_id );
-					$action_type = esc_html__( 'comments' , WP_ULIKE_SLUG );
+					$action_type = esc_html__( 'comments' , 'wp-ulike' );
 					break;
 
 				case 'activityliked':
 					if( function_exists('bp_activity_get_permalink') ){
 						$custom_link = bp_activity_get_permalink( $item_id );
-						$action_type = esc_html__( 'activities' , WP_ULIKE_SLUG );
+						$action_type = esc_html__( 'activities' , 'wp-ulike' );
 					}
 					break;
 
@@ -376,10 +376,10 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 					if( function_exists('bbp_get_topic_permalink') ){
 						if( 'topic' === get_post_type( $item_id) ){
 							$custom_link = bbp_get_topic_permalink( $item_id );
-							$action_type = esc_html__( 'topics' , WP_ULIKE_SLUG );
+							$action_type = esc_html__( 'topics' , 'wp-ulike' );
 						} else {
 							$custom_link = bbp_get_reply_url( $item_id );
-							$action_type = esc_html__( 'replies' , WP_ULIKE_SLUG );
+							$action_type = esc_html__( 'replies' , 'wp-ulike' );
 						}
 					}
 					break;
@@ -391,11 +391,17 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 
 			// Setup the output strings
 			if ( (int) $total_items > 1 ) {
-				$custom_text = sprintf( esc_html__( 'You have %d new %s likes', WP_ULIKE_SLUG ), (int) $total_items, $action_type );
+				$custom_text = sprintf(
+					/* translators: 1: Total items, 2: Item type. */
+					esc_html__( 'You have %1$d new %2$s likes', 'wp-ulike' ),
+					(int) $total_items, $action_type );
 				$custom_link = add_query_arg( 'type', $action, bp_get_notifications_permalink() );
 			} else {
 				$user_fullname = bp_core_get_user_displayname( $user_ID );
-				$custom_text   = sprintf( esc_html__( '%s liked one of your %s', WP_ULIKE_SLUG ), $user_fullname, $action_type );
+				$custom_text   = sprintf(
+					/* translators: 1: User full name, 2: Item type. */
+					esc_html__( '%1$s liked one of your %2$s', 'wp-ulike' ),
+					$user_fullname, $action_type );
 				$custom_link   = add_query_arg( 'read_ulike_notification', (int) $id, $custom_link );
 			}
 
@@ -426,22 +432,22 @@ if( ! function_exists( 'wp_ulike_notification_filters' ) ){
 		$notifications = array(
 			array(
 				'id'       => 'wp_ulike_activityliked_action',
-				'label'    => esc_html__( 'New activity liked', WP_ULIKE_SLUG ),
+				'label'    => esc_html__( 'New activity liked', 'wp-ulike' ),
 				'position' => 340,
 			),
 			array(
 				'id'       => 'wp_ulike_commentliked_action',
-				'label'    => esc_html__( 'New comment liked', WP_ULIKE_SLUG ),
+				'label'    => esc_html__( 'New comment liked', 'wp-ulike' ),
 				'position' => 345,
 			),
 			array(
 				'id'       => 'wp_ulike_liked_action',
-				'label'    => esc_html__( 'New post liked', WP_ULIKE_SLUG ),
+				'label'    => esc_html__( 'New post liked', 'wp-ulike' ),
 				'position' => 355,
 			),
 			array(
 				'id'       => 'wp_ulike_topicliked_action',
-				'label'    => esc_html__( 'New topic liked', WP_ULIKE_SLUG ),
+				'label'    => esc_html__( 'New topic liked', 'wp-ulike' ),
 				'position' => 365,
 			)
 		);
@@ -639,8 +645,8 @@ if( ! function_exists( 'wp_ulike_register_myCRED_hook' ) ){
 	 */
 	function wp_ulike_register_myCRED_hook( $installed ) {
 		$installed['wp_ulike'] = array(
-			'title'       => WP_ULIKE_NAME . ' : ' .  esc_html__( 'Points for liking content', WP_ULIKE_SLUG ),
-			'description' => esc_html__( 'This hook award / deducts points from users who Like/Unlike any content of WordPress, bbPress, BuddyPress & ...', WP_ULIKE_SLUG ),
+			'title'       => WP_ULIKE_NAME . ' : ' .  esc_html__( 'Points for liking content', 'wp-ulike' ),
+			'description' => esc_html__( 'This hook award / deducts points from users who Like/Unlike any content of WordPress, bbPress, BuddyPress & ...', 'wp-ulike' ),
 			'callback'    => array( 'wp_ulike_myCRED' )
 		);
 		return $installed;
@@ -656,10 +662,10 @@ if( ! function_exists( 'wp_ulike_myCRED_references' ) ){
 	 * @return void
 	 */
 	function wp_ulike_myCRED_references( $list ) {
-		$list['wp_add_like'] 	= esc_html__( 'Liking Content', WP_ULIKE_SLUG );
-		$list['wp_get_like'] 	= esc_html__( 'Liked Content', WP_ULIKE_SLUG );
-		$list['wp_add_unlike'] = esc_html__( 'Unliking Content', WP_ULIKE_SLUG );
-		$list['wp_get_unlike'] = esc_html__( 'Unliked Content', WP_ULIKE_SLUG );
+		$list['wp_add_like'] 	= esc_html__( 'Liking Content', 'wp-ulike' );
+		$list['wp_get_like'] 	= esc_html__( 'Liked Content', 'wp-ulike' );
+		$list['wp_add_unlike'] = esc_html__( 'Unliking Content', 'wp-ulike' );
+		$list['wp_get_unlike'] = esc_html__( 'Unliked Content', 'wp-ulike' );
 		return $list;
 	}
 	add_filter( 'mycred_all_references', 'wp_ulike_myCRED_references' );
@@ -677,12 +683,12 @@ if( ! function_exists( 'wp_ulike_add_custom_profile_tab' ) ){
 	function wp_ulike_add_custom_profile_tab( $tabs ) {
 
 		$tabs['wp-ulike-posts'] = array(
-			'name' => esc_html__('Recent Posts Liked',WP_ULIKE_SLUG),
+			'name' => esc_html__('Recent Posts Liked','wp-ulike'),
 			'icon' => 'um-faicon-thumbs-up',
 		);
 
 		$tabs['wp-ulike-comments'] = array(
-			'name' => esc_html__('Recent Comments Liked',WP_ULIKE_SLUG),
+			'name' => esc_html__('Recent Comments Liked','wp-ulike'),
 			'icon' => 'um-faicon-thumbs-o-up',
 		);
 
@@ -713,7 +719,7 @@ if( ! function_exists( 'wp_ulike_posts_um_profile_content' ) ){
 		$get_items = wp_ulike_get_popular_items_ids( $args );
 
 		if( empty( $get_items ) ){
-			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. esc_html__('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. esc_html__('This user has not made any likes.','wp-ulike').'</span></div>';
 			return;
 		}
 
@@ -739,7 +745,7 @@ if( ! function_exists( 'wp_ulike_posts_um_profile_content' ) ){
 					echo '</div>';
 				endwhile;
 		else:
-			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. esc_html__('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. esc_html__('This user has not made any likes.','wp-ulike').'</span></div>';
 		endif;
 		wp_reset_postdata();
 
@@ -769,7 +775,7 @@ if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
 		$get_items = wp_ulike_get_popular_items_ids( $args );
 
 		if( empty( $get_items ) ){
-			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. esc_html__('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. esc_html__('This user has not made any likes.','wp-ulike').'</span></div>';
 			return;
 		}
 
@@ -799,7 +805,7 @@ if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
 					echo '</div>';
 				}
 		} else {
-			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. esc_html__('This user has not made any likes.',WP_ULIKE_SLUG).'</span></div>';
+			echo '<div style="display: block;" class="um-profile-note"><i class="um-faicon-frown-o"></i><span>'. esc_html__('This user has not made any likes.','wp-ulike').'</span></div>';
 		}
 	}
 	add_action('um_profile_content_wp-ulike-comments_default', 'wp_ulike_comments_um_profile_content');

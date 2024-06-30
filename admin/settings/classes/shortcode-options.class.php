@@ -275,7 +275,7 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
         $depends[] = 'wp-edit-post';
       }
 
-      wp_enqueue_script( 'ulf-gutenberg-block', ULF::include_plugin_url( 'assets/js/gutenberg.js' ), $depends );
+      wp_enqueue_script( 'ulf-gutenberg-block', ULF::include_plugin_url( 'assets/js/gutenberg.js' ), $depends, WP_ULIKE_VERSION, true );
 
       wp_localize_script( 'ulf-gutenberg-block', 'ulf_gutenberg_blocks', ULF::$shortcode_instances );
 

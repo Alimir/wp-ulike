@@ -79,7 +79,7 @@ if ( ! function_exists( 'ulf_export' ) ) {
     header('Pragma: no-cache');
     header('Expires: 0');
 
-    echo json_encode( get_option( $unique ) );
+    echo wp_json_encode( get_option( $unique ) );
 
     die();
 

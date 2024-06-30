@@ -127,7 +127,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			switch ( $table ) {
 				case 'ulike':
 					$options = array(
-						'label'                => esc_html__( "Posts Stats", WP_ULIKE_SLUG ),
+						'label'                => esc_html__( "Posts Stats", 'wp-ulike' ),
 						'backgroundColor'      => "rgba(66, 165, 245,0.8)",
 						'borderColor'          => "rgba(21, 101, 192,1)",
 						'pointBackgroundColor' => "rgba(255,255,255,1)",
@@ -137,7 +137,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 				case 'ulike_comments':
 					$options = array(
-						'label'                => esc_html__( "Comments Stats", WP_ULIKE_SLUG ),
+						'label'                => esc_html__( "Comments Stats", 'wp-ulike' ),
 						'backgroundColor'      => "rgba(255, 202, 40,0.8)",
 						'borderColor'          => "rgba(255, 143, 0,1)",
 						'pointBackgroundColor' => "rgba(255,255,255,1)",
@@ -147,7 +147,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 				case 'ulike_activities':
 					$options = array(
-						'label'                => esc_html__( "Activities Stats", WP_ULIKE_SLUG ),
+						'label'                => esc_html__( "Activities Stats", 'wp-ulike' ),
 						'backgroundColor'      => "rgba(239, 83, 80,0.8)",
 						'borderColor'          => "rgba(198, 40, 40,1)",
 						'pointBackgroundColor' => "rgba(255,255,255,1)",
@@ -157,7 +157,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 				case 'ulike_forums':
 					$options = array(
-						'label'                => esc_html__( "Topics Stats", WP_ULIKE_SLUG ),
+						'label'                => esc_html__( "Topics Stats", 'wp-ulike' ),
 						'backgroundColor'      => "rgba(102, 187, 106,0.8)",
 						'borderColor'          => "rgba(27, 94, 32,1)",
 						'pointBackgroundColor' => "rgba(255,255,255,1)",
@@ -179,15 +179,16 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 */
 		public function select_data( $table ){
 
-			$query  = sprintf( "
-					SELECT DATE(date_time) AS labels,
-					count(date_time) AS counts
-					FROM %s
-					WHERE TO_DAYS(NOW()) - TO_DAYS(date_time) <= 30
-					GROUP BY labels ORDER BY labels ASC LIMIT %d",
-					$this->wpdb->prefix . $table,
-					30
-				);
+			$data_limit = apply_filters( 'wp_ulike_stats_data_limit', 30 );
+
+			$query  = $this->wpdb->prepare( "
+				SELECT DATE(date_time) AS labels,
+				count(date_time) AS counts
+				FROM `{$this->wpdb->prefix}{$table}`
+				WHERE TO_DAYS(NOW()) - TO_DAYS(date_time) <= 30
+				GROUP BY labels ORDER BY labels ASC LIMIT %d",
+				$data_limit
+			);
 
 			$result = $this->wpdb->get_results( $query );
 
@@ -281,7 +282,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			foreach ( $top_likers as $user ) {
 				$user_ID  = stripslashes( $user->user_id );
 				$userdata = get_userdata( $user_ID );
-				$username = empty( $userdata ) ? esc_html__('Guest User',WP_ULIKE_SLUG) : $userdata->display_name;
+				$username = empty( $userdata ) ? esc_html__('Guest User','wp-ulike') : $userdata->display_name;
 
 				$result  .= '
 	            <div class="wp-ulike-flex wp-ulike-users-list">

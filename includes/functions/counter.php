@@ -66,7 +66,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		$status = ltrim( $status, 'un');
 
 		if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
-			return new WP_Error( 'broke', esc_html__( "Please enter some value for required variables.", WP_ULIKE_SLUG ) );
+			return new WP_Error( 'broke', esc_html__( "Please enter some value for required variables.", 'wp-ulike' ) );
 		}
 
 		$counter_value = wp_ulike_meta_counter_value( $ID, $type, $status, $is_distinct );
@@ -80,7 +80,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			// get table info
 			$table_info   = wp_ulike_get_table_info( $type );
 			if( empty( $table_info ) ){
-				return new WP_Error( 'broke', esc_html__( "Table info is empty.", WP_ULIKE_SLUG ) );
+				return new WP_Error( 'broke', esc_html__( "Table info is empty.", 'wp-ulike' ) );
 			}
 			extract( $table_info );
 
@@ -88,14 +88,11 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			$status_condition = $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'";
 			$count_type       = $is_distinct ? "DISTINCT `user_id`" : "*";
 
-			$query = $wpdb->prepare(
-				"SELECT COUNT({$count_type}) FROM %i WHERE {$status_condition} AND %i = %d {$period_limit}",
-				$wpdb->prefix . $table,
-				$column,
+			$counter_value  = $wpdb->get_var( $wpdb->prepare(
+				"SELECT COUNT({$count_type}) FROM `{$wpdb->prefix}{$table}` WHERE {$status_condition} AND `{$column}` = %d {$period_limit}",
 				$ID
-			);
+			) );
 
-			$counter_value  = $wpdb->get_var( $query );
 			$counter_value  = empty( $counter_value ) ? 0 : (int) $counter_value;
 
 			if( empty( $date_range ) ){
@@ -130,7 +127,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value' ) ){
 	 */
 	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
 		$counter_info = wp_ulike_get_counter_value_info( $ID, $type, $status, $is_distinct, $date_range );
-		return ! is_wp_error( $counter_info ) ? (int) $counter_info : 0;
+		return ! is_wp_error( $counter_info ) ? absint( $counter_info ) : 0;
 	}
 }
 
