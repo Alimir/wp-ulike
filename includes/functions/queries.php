@@ -97,14 +97,14 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			// create query condition from status
 			$meta_prefix = wp_ulike_setting_repo::isDistinct( $parsed_args['type'] ) ? 'count_distinct_' : 'count_total_';
 			if( is_array( $parsed_args['status'] ) ){
-				foreach ($parsed_args['status'] as $key => $value) {
-					$status_type .= $key === 0 ? $wpdb->prepare( "t.meta_key LIKE %s", $meta_prefix . $value ) : $wpdb->prepare( " OR t.meta_key LIKE %s", $meta_prefix . $value );
+				$status_conditions = [];
+				foreach ($parsed_args['status'] as $value) {
+					$status_conditions[] = $wpdb->prepare("t.meta_key LIKE %s", $meta_prefix . $value);
 				}
-				$status_type = sprintf( " AND (%s)",  $status_type );
+				$status_type = sprintf(" AND (%s)", implode(" OR ", $status_conditions));
 			} else {
 				$status_type = $wpdb->prepare( " AND t.meta_key LIKE %s",  $meta_prefix . $parsed_args['status'] );
 			}
-
 
 			// generate query string
 			$query  = $wpdb->prepare( "
@@ -252,10 +252,11 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			// create query condition from status
 			$meta_prefix = wp_ulike_setting_repo::isDistinct( $parsed_args['type'] ) ? 'count_distinct_' : 'count_total_';
 			if( is_array( $parsed_args['status'] ) ){
-				foreach ($parsed_args['status'] as $key => $value) {
-					$status_type .= $key === 0 ? $wpdb->prepare( "t.meta_key LIKE %s", $meta_prefix . $value ) : $wpdb->prepare( " OR t.meta_key LIKE %s", $meta_prefix . $value );
+				$status_conditions = [];
+				foreach ($parsed_args['status'] as $value) {
+					$status_conditions[] = $wpdb->prepare("t.meta_key LIKE %s", $meta_prefix . $value);
 				}
-				$status_type = sprintf( " AND (%s)",  $status_type );
+				$status_type = sprintf(" AND (%s)", implode(" OR ", $status_conditions));
 			} else {
 				$status_type = $wpdb->prepare( " AND t.meta_key LIKE %s",  $meta_prefix . $parsed_args['status'] );
 			}
@@ -628,8 +629,11 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 
         $status_type  = '';
         if( is_array( $parsed_args['status'] ) ){
-			$status_list = implode ("','", $parsed_args['status'] );
-            $status_type = $wpdb->prepare( "`status` IN ('{$status_list}')" );
+			$status_values = array_map(function($status) use ($wpdb) {
+				return $wpdb->prepare('%s', $status);
+			}, $parsed_args['status']);
+
+			$status_type = "`status` IN (" . implode(',', $status_values) . ")";
         } else {
             $status_type = $wpdb->prepare( "`status` = %s", $parsed_args['status'] );
         }
