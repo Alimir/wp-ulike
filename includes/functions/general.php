@@ -383,7 +383,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 						$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
 					}
 					if( strpos( $out_template, '%USER_NAME%' ) !== false) {
-						$USER_NAME 		= $user_info->display_name;
+						$USER_NAME 		= esc_attr( $user_info->display_name );
 						$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
 					}
 					if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
