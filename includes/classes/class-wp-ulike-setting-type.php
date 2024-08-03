@@ -31,6 +31,7 @@ class wp_ulike_setting_type {
 			case 'likeThisActivity':
 			case 'buddypress':
 			case 'activity':
+			case 'activities':
 				$this->typeSettings = array(
 					'setting'  => 'buddypress_group',
 					'table'    => 'ulike_activities',
@@ -44,6 +45,7 @@ class wp_ulike_setting_type {
 			case 'likeThisTopic':
 			case 'bbpress':
 			case 'topic':
+			case 'topics':
 				$this->typeSettings = array(
 					'setting'  => 'bbpress_group',
 					'table'    => 'ulike_forums',

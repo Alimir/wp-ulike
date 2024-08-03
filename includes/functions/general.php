@@ -77,7 +77,9 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 		$output = array();
 
 		switch ( $type ) {
+			case 'likeThisComment':
 			case 'comment':
+			case 'comments':
 				$output = array(
 					'table'                => 'ulike_comments',
 					'column'               => 'comment_id',
@@ -87,7 +89,10 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 				);
 				break;
 
+			case 'likeThisActivity':
+			case 'buddypress':
 			case 'activity':
+			case 'activities':
 				$output = array(
 					'table'                => 'ulike_activities',
 					'column'               => 'activity_id',
@@ -97,7 +102,10 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 				);
 				break;
 
+			case 'likeThisTopic':
+			case 'bbpress':
 			case 'topic':
+			case 'topics':
 				$output = array(
 					'table'                => 'ulike_forums',
 					'column'               => 'topic_id',
