@@ -23,38 +23,6 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 		function __construct() {
 
 			$this->submenus = apply_filters( 'wp_ulike_admin_pages', array(
-				'posts_logs'      => array(
-					'title'       => esc_html__( 'Post Likes Logs', 'wp-ulike' ),
-					'parent_slug' => '',
-					'capability'  => wp_ulike_get_user_access_capability('logs'),
-					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/posts-logs.php',
-					'menu_slug'   => 'wp-ulike-posts-logs',
-					'load_screen' => true
-				),
-				'comments_logs'   => array(
-					'title'       => esc_html__( 'Comment Likes Logs', 'wp-ulike' ),
-					'parent_slug' => '',
-					'capability'  => wp_ulike_get_user_access_capability('logs'),
-					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/comments-logs.php',
-					'menu_slug'   => 'wp-ulike-comments-logs',
-					'load_screen' => true
-				),
-				'activities_logs' =>  array(
-					'title'       => esc_html__( 'Activity Likes Logs', 'wp-ulike' ),
-					'parent_slug' => '',
-					'capability'  => wp_ulike_get_user_access_capability('logs'),
-					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/activities-logs.php',
-					'menu_slug'   => 'wp-ulike-activities-logs',
-					'load_screen' => true
-				),
-				'topics_logs'     => array(
-					'title'       => esc_html__( 'Topics Likes Logs', 'wp-ulike' ),
-					'parent_slug' =>  '',
-					'capability'  => wp_ulike_get_user_access_capability('logs'),
-					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/topics-logs.php',
-					'menu_slug'   => 'wp-ulike-topics-logs',
-					'load_screen' => true
-				),
 				'statistics'      => array(
 					'title'       => esc_html__( 'Statistics', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
