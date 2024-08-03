@@ -64,7 +64,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 
 		function load_statistics_app(){
 			// only load on stats menu
-			if (  strpos( $this->hook, WP_ULIKE_SLUG ) !== false && preg_match("/(statistics)/i", $this->hook ) ) {
+			if ( ! defined( 'WP_ULIKE_PRO_DOMAIN' ) &&  strpos( $this->hook, WP_ULIKE_SLUG ) !== false && preg_match("/(statistics)/i", $this->hook ) ) {
 				$manifest_path = WP_ULIKE_ADMIN_DIR . '/statistics/asset-manifest.json';
 
 				if (!file_exists($manifest_path)) {
