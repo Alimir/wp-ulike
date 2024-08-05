@@ -61,33 +61,84 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Set all data info for ajax requests
+		 * Get all data for api
 		 *
-		 * @author       	Alimir
-		 * @since           3.5.1
-		 * @return			Array
+		 * @return array
 		 */
-		public function get_all_data(){
-
-			$tables = $this->get_tables();
-
+		public function get_all_data() {
 			$output = array(
-				'count_all_logs_all'       => $this->count_all_logs('all'),
-				'count_all_logs_today'     => $this->count_all_logs('today'),
-				'count_all_logs_yesterday' => $this->count_all_logs('yesterday'),
-				'display_top_likers' 	   => $this->display_top_likers(),
+				'overview' => $this->get_overview(),
+				'charts'   => $this->get_datasets(),
+				'items'    => $this->get_top_items(),
+				'metrics'  => $this->get_count_logs()
 			);
 
-			foreach ( $tables as $type => $table ) {
-				$output[ 'dataset_' . $table ]              = $this->dataset( $table );
-				$output[ 'get_top_' . $type ]               = $this->get_top( $type );
-				$output[ 'count_logs_' . $table . '_week' ] = $this->count_logs( array( "table" => $table, "date" => 'week' ) );
-				$output[ 'count_logs_' . $table . '_month'] = $this->count_logs( array( "table" => $table, "date" => 'month' ) );
-				$output[ 'count_logs_' . $table . '_year' ] = $this->count_logs( array( "table" => $table, "date" => 'year' ) );
-				$output[ 'count_logs_' . $table . '_all' ]  = $this->count_logs( array( "table" => $table, "date" => 'all' ) );
+			return $output;
+		}
+
+		/**
+		 * Get basic statistics
+		 *
+		 * @return array
+		 */
+		private function get_overview() {
+			return array(
+				'total'                => $this->count_all_logs('all'),
+				'today'                => $this->count_all_logs('today'),
+				'yesterday'            => $this->count_all_logs('yesterday')
+			);
+		}
+
+		// Get datasets for each table
+		private function get_datasets() {
+			$tables = $this->get_tables();
+			$datasets = array();
+
+			foreach ($tables as $type => $table) {
+				$datasets[$type] = $this->dataset($table);
 			}
 
-			return $output;
+			return $datasets;
+		}
+
+		// Get top items for each type
+		private function get_top_items() {
+			$tables = $this->get_tables();
+			$top_items = array();
+
+			$posts      = esc_html__( 'Most Popular Posts', 'wp-ulike');
+			$comments   = esc_html__( 'Most Popular Comments', 'wp-ulike');
+			$activities = esc_html__( 'Most Engaged Activities', 'wp-ulike');
+			$topics     = esc_html__( 'Most Engaged Topics', 'wp-ulike');
+			$users      = esc_html__( 'Top Engagers', 'wp-ulike' );
+
+			$top_items[$posts]      = $this->get_top( 'posts' );
+			$top_items[$comments]   = $this->get_top( 'comments' );
+			$top_items[$activities] = $this->get_top( 'activities' );
+			$top_items[$topics]     = $this->get_top( 'topics' );
+			$top_items[$users]      = $this->display_top_likers();
+
+			return $top_items;
+		}
+
+		// Get count logs for each table with different time ranges
+		private function get_count_logs() {
+			$tables = $this->get_tables();
+			$count_logs = array();
+
+			foreach ($tables as $type => $table) {
+				$count_logs[$type] = array(
+					'week'       => $this->count_logs(array("table" => $table, "date" => 'week')),
+					'last_week'  => $this->count_logs(array("table" => $table, "date" => 'last_week')),
+					'month'      => $this->count_logs(array("table" => $table, "date" => 'month')),
+					'last_month' => $this->count_logs(array("table" => $table, "date" => 'last_month')),
+					'year'       => $this->count_logs(array("table" => $table, "date" => 'year')),
+					'last_year'  => $this->count_logs(array("table" => $table, "date" => 'last_year')),
+					'all'        => $this->count_logs(array("table" => $table, "date" => 'all'))
+				);
+			}
+
+			return $count_logs;
 		}
 
 		/**
@@ -101,74 +152,37 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$output  = array();
 			// Get data
 			$results = $this->select_data( $table );
+
+			$title = esc_html__( "Post Engagement Statistics", 'wp-ulike' );
+			switch ($table) {
+				case 'ulike_comments':
+					$title = esc_html__( "Comment Engagement Statistics", 'wp-ulike' );
+					break;
+
+				case 'ulike_activities':
+					$title = esc_html__( "Activity Engagement Statistics", 'wp-ulike' );
+					break;
+
+				case 'ulike_forums':
+					$title = esc_html__( "Forum Topics Statistics", 'wp-ulike' );
+					break;
+			}
+
+			// section title
+			$output['title'] = $title;
+
 			// Create chart dataset
 			foreach( $results as $result ){
-				$output['label'][] = !empty( $result->labels ) ? date_i18n( "Y-m-d", strtotime( $result->labels ) ) : array();
-				$output['data'][]  = !empty( $result->counts ) ? $result->counts : array();
-			}
-			// Add chart options
-			if( ! empty( $output['data'] ) ){
-				$output['options'] = $this->charts( $table );
+				if( isset( $result->labels ) & isset( $result->counts ) ){
+					$output['data'][]= [
+						'date'  => date_i18n( "Y-m-d", strtotime( $result->labels ) ),
+						'total' => (int) $result->counts
+					];
+				}
 			}
 
 			return $output;
 		}
-
-		/**
-		 * Set custom options for charts
-		 *
-		 * @since 3.5
-		 * @param string $table
-		 * @param array $options
-		 * @return void
-		 */
-		public function charts( $table, $options = array() ){
-
-			switch ( $table ) {
-				case 'ulike':
-					$options = array(
-						'label'                => esc_html__( "Posts Stats", 'wp-ulike' ),
-						'backgroundColor'      => "rgba(66, 165, 245,0.8)",
-						'borderColor'          => "rgba(21, 101, 192,1)",
-						'pointBackgroundColor' => "rgba(255,255,255,1)",
-						'borderWidth'          => 2
-					);
-					break;
-
-				case 'ulike_comments':
-					$options = array(
-						'label'                => esc_html__( "Comments Stats", 'wp-ulike' ),
-						'backgroundColor'      => "rgba(255, 202, 40,0.8)",
-						'borderColor'          => "rgba(255, 143, 0,1)",
-						'pointBackgroundColor' => "rgba(255,255,255,1)",
-						'borderWidth'          => 2
-					);
-					break;
-
-				case 'ulike_activities':
-					$options = array(
-						'label'                => esc_html__( "Activities Stats", 'wp-ulike' ),
-						'backgroundColor'      => "rgba(239, 83, 80,0.8)",
-						'borderColor'          => "rgba(198, 40, 40,1)",
-						'pointBackgroundColor' => "rgba(255,255,255,1)",
-						'borderWidth'          => 2
-					);
-					break;
-
-				case 'ulike_forums':
-					$options = array(
-						'label'                => esc_html__( "Topics Stats", 'wp-ulike' ),
-						'backgroundColor'      => "rgba(102, 187, 106,0.8)",
-						'borderColor'          => "rgba(27, 94, 32,1)",
-						'pointBackgroundColor' => "rgba(255,255,255,1)",
-						'borderWidth'          => 2
-					);
-					break;
-			}
-
-			return $options;
-		}
-
 		/**
 		 * Get The Logs Data From Tables
 		 *
@@ -198,18 +212,6 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			}
 
 			return $result;
-		}
-
-		/**
-		 * Get The Summary Of Like Data
-		 *
-		 * @param string $table
-		 * @param string $date
-		 * @return integer
-		 */
-		public function get_data_date( $table, $date ){
-			_deprecated_function( 'get_data_date', '3.5', 'count_logs' );
-			return $this->count_logs( array( "table" => $table, "date" => $date ) );
 		}
 
 		/**
@@ -277,28 +279,18 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 */
 		public function display_top_likers(){
 			$top_likers = $this->get_top_likers();
-			$result     = '';
-			$counter    = 1;
+			$result     = [];
+
 			foreach ( $top_likers as $user ) {
 				$user_ID  = stripslashes( $user->user_id );
 				$userdata = get_userdata( $user_ID );
 				$username = empty( $userdata ) ? esc_html__('Guest User','wp-ulike') : $userdata->display_name;
 
-				$result  .= '
-	            <div class="wp-ulike-flex wp-ulike-users-list">
-	                <div class="wp-ulike-counter">
-	                	<i class="wp-ulike-icons-trophy"></i>
-	                	<span class="wp-ulike-counter">'.$counter++.'th</span>
-	                </div>
-	                <div class="wp-ulike-info">
-	                	<i class="wp-ulike-icons-profile-male"></i>
-						<span class="wp-ulike-user-name">'.$username.'</span>
-	                </div>
-	                <div class="wp-ulike-total">
-	                	<i class="wp-ulike-icons-heart"></i>
-						<span class="wp-ulike-user-name">'.$user->SumUser.'</span>
-	                </div>
-	            </div>';
+				$result[] = [
+					'permalink'   => get_edit_profile_url( $user_ID ),
+					'title'       => $username,
+					'likes_count' => $user->SumUser
+				];
 			}
 
 			return $result;
@@ -312,18 +304,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @return			Array
 		 */
 		public function get_top_likers(){
-			return wp_ulike_get_best_likers_info( 5, NULL );
-		}
-
-		/**
-		 * Deprecated get top likers function
-		 *
-		 * @param string $type
-		 * @return void
-		 */
-		public function get_tops( $type ){
-			_deprecated_function( 'get_tops', '3.5', 'get_top' );
-			return $this->get_top( $type );
+			return wp_ulike_get_best_likers_info( 10, NULL );
 		}
 
 		/**
@@ -336,20 +317,134 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		public function get_top( $type ){
 			switch( $type ){
 				case 'posts':
-					return parent::most_liked_posts();
+					return $this->top_posts();
 					break;
 				case 'comments':
-					return parent::most_liked_comments();
+					return $this->top_comments();
 				break;
 				case 'activities':
-					return parent::most_liked_activities();
+					return $this->top_activities();
 				break;
 				case 'topics':
-					return parent::most_liked_topics();
+					return $this->top_topics();
 				break;
 				default:
 					return;
 			}
+		}
+
+		/**
+		 * Top posts
+		 *
+		 * @return array
+		 */
+		public function top_posts() {
+
+			$posts       = wp_ulike_get_most_liked_posts( 10, '', 'post',  'all' );
+			$result      = [];
+			$is_distinct = wp_ulike_setting_repo::isDistinct( 'post' );
+
+			foreach ($posts as $post) {
+				// Check post title existence
+				if( empty( $post->post_title ) ){
+					continue;
+				}
+
+				$counter_value = wp_ulike_get_counter_value( $post->ID, 'post', 'like', $is_distinct );
+
+				$result[] = [
+					'title'       => stripslashes($post->post_title),
+					'permalink'   => get_permalink($post->ID),
+					'likes_count' => $counter_value
+				];
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Top comments
+		 *
+		 * @return array
+		 */
+		public function top_comments() {
+
+			$comments    = wp_ulike_get_most_liked_comments( 10, '', 'all' );
+			$result      = [];
+			$is_distinct = wp_ulike_setting_repo::isDistinct( 'comment' );
+
+			foreach ($comments as $comment) {
+				$comment_author    = stripslashes($comment->comment_author);
+				$post_title        = get_the_title($comment->comment_post_ID);
+				$comment_permalink = get_comment_link($comment->comment_ID);
+				$counter_value     = wp_ulike_get_counter_value( $comment->comment_ID, 'comment', 'like', $is_distinct );
+
+				$result[] = [
+					'author'      => $comment_author,
+					'title'       => $post_title,
+					'permalink'   => $comment_permalink,
+					'likes_count' => $counter_value
+				];
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Top buddypress activities
+		 *
+		 * @return void
+		 */
+		public function top_activities() {
+
+			$activities  = wp_ulike_get_most_liked_activities( 10, 'all' );
+			$result      = [];
+			$is_distinct = wp_ulike_setting_repo::isDistinct( 'activity' );
+
+			foreach ($activities as $activity) {
+				$activity_permalink = function_exists('bp_activity_get_permalink') ? bp_activity_get_permalink( $activity->id ) : '';
+				$activity_action    = ! empty( $activity->content ) ? $activity->content : $activity->action;
+				$counter_value      = wp_ulike_get_counter_value( $activity->id, 'activity', 'like', $is_distinct );
+
+				// Skip empty activities
+				if( empty( $activity_action ) ){
+					continue;
+				}
+
+				$result[] = [
+					'permalink'   => $activity_permalink,
+					'title'       => wp_strip_all_tags( $activity_action ),
+					'likes_count' => $counter_value
+				];
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Top bbpress topics
+		 *
+		 * @return void
+		 */
+		public function top_topics() {
+
+			$posts       = wp_ulike_get_most_liked_posts( 10, array( 'topic', 'reply' ), 'topic', 'all' );
+			$result      = [];
+			$is_distinct = wp_ulike_setting_repo::isDistinct( 'topic' );
+
+			foreach ($posts as $post) {
+				$post_title    = function_exists('bbp_get_forum_title') ? bbp_get_forum_title( $post->ID ) : $post->post_title;
+				$permalink     = 'topic' === get_post_type( $post->ID ) ? bbp_get_topic_permalink( $post->ID ) : bbp_get_reply_url( $post->ID );
+				$counter_value = wp_ulike_get_counter_value( $post->ID, 'topic', 'like', $is_distinct );
+
+				$result[] = [
+					'title'       => $post_title,
+					'permalink'   => $permalink,
+					'likes_count' => $counter_value
+				];
+			}
+
+			return $result;
 		}
 
 		/**
