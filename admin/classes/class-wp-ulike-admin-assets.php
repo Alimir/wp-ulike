@@ -65,7 +65,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 		function load_statistics_app(){
 			// only load on stats menu
 			if ( ! defined( 'WP_ULIKE_PRO_DOMAIN' ) &&  strpos( $this->hook, WP_ULIKE_SLUG ) !== false && preg_match("/(statistics)/i", $this->hook ) ) {
-				$manifest_path = WP_ULIKE_ADMIN_DIR . '/statistics/asset-manifest.json';
+				$manifest_path = WP_ULIKE_ADMIN_DIR . '/includes/statistics/asset-manifest.json';
 
 				if (!file_exists($manifest_path)) {
 					return;
@@ -79,13 +79,13 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 
 				// Enqueue the CSS file
 				if (isset($manifest['files']['main.css'])) {
-					$css_file = WP_ULIKE_ADMIN_URL . '/statistics' . $manifest['files']['main.css'];
+					$css_file = WP_ULIKE_ADMIN_URL . '/includes/statistics' . $manifest['files']['main.css'];
 					wp_enqueue_style('wp_ulike_admin_react', $css_file);
 				}
 
 				// Enqueue the JS file
 				if (isset($manifest['files']['main.js'])) {
-					$js_file = WP_ULIKE_ADMIN_URL . '/statistics' . $manifest['files']['main.js'];
+					$js_file = WP_ULIKE_ADMIN_URL . '/includes/statistics' . $manifest['files']['main.js'];
 					wp_enqueue_script('wp_ulike_admin_react', $js_file, array(), null, true);
 				}
 			}
