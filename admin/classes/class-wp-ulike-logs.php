@@ -42,7 +42,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 			$orderType = $this->sort['type'];
 
 			return $this->wpdb->get_results(
-				$this->wpdb->prepare( "SELECT * FROM {$table} $serachBy ORDER BY {$orderBy} {$orderType} LIMIT {$paged}, {$this->per_page}" )
+				$this->wpdb->prepare( "SELECT * FROM {$table} ORDER BY {$orderBy} {$orderType} LIMIT {$paged}, {$this->per_page}" )
 			);
 		}
 
