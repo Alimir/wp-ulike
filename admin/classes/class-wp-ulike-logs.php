@@ -100,6 +100,22 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		}
 
 		/**
+		 * Delete single row
+		 *
+		 * @param integer $item_id
+		 * @return integer|false
+		 */
+		public function delete_row( $item_id ){
+			$table   = esc_sql( $this->wpdb->prefix . $this->table );
+
+			return $this->wpdb->delete(
+				$table,
+				[ 'ID' => esc_sql( $item_id ) ],
+				['%d'],
+			);
+		}
+
+		/**
 		 * Get total rows per table
 		 *
 		 * @return string

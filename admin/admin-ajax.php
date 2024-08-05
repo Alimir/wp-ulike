@@ -86,6 +86,43 @@ add_action('wp_ajax_nopriv_wp_ulike_history_api', 'wp_ulike_history_api');
 // @endif
 
 /**
+ * Engagement history api
+ *
+ * @return void
+ */
+function wp_ulike_delete_history_api(){
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( wp_ulike_get_user_access_capability('stats') ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	$item_id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
+	$type    = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : '';
+
+	if( empty( $item_id ) || empty( $type ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+
+	$settings = new wp_ulike_setting_type( $type );
+	$instance = new wp_ulike_logs( $settings->getTableName()  );
+
+	if( ! $instance->delete_row( $item_id ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+
+	wp_send_json_success();
+}
+add_action('wp_ajax_wp_ulike_delete_history_api','wp_ulike_delete_history_api');
+// @if DEV
+add_action('wp_ajax_nopriv_wp_ulike_delete_history_api', 'wp_ulike_delete_history_api');
+// @endif
+
+/**
  * Localization api
  *
  * @return void
