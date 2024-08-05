@@ -106,17 +106,11 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$tables = $this->get_tables();
 			$top_items = array();
 
-			$posts      = esc_html__( 'Most Popular Posts', 'wp-ulike');
-			$comments   = esc_html__( 'Most Popular Comments', 'wp-ulike');
-			$activities = esc_html__( 'Most Engaged Activities', 'wp-ulike');
-			$topics     = esc_html__( 'Most Engaged Topics', 'wp-ulike');
-			$users      = esc_html__( 'Top Engagers', 'wp-ulike' );
-
-			$top_items[$posts]      = $this->get_top( 'posts' );
-			$top_items[$comments]   = $this->get_top( 'comments' );
-			$top_items[$activities] = $this->get_top( 'activities' );
-			$top_items[$topics]     = $this->get_top( 'topics' );
-			$top_items[$users]      = $this->display_top_likers();
+			$top_items['posts']      = $this->get_top( 'posts' );
+			$top_items['comments']   = $this->get_top( 'comments' );
+			$top_items['activities'] = $this->get_top( 'activities' );
+			$top_items['topics']     = $this->get_top( 'topics' );
+			$top_items['engagers']   = $this->display_top_likers();
 
 			return $top_items;
 		}
@@ -153,28 +147,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			// Get data
 			$results = $this->select_data( $table );
 
-			$title = esc_html__( "Post Engagement Statistics", 'wp-ulike' );
-			switch ($table) {
-				case 'ulike_comments':
-					$title = esc_html__( "Comment Engagement Statistics", 'wp-ulike' );
-					break;
-
-				case 'ulike_activities':
-					$title = esc_html__( "Activity Engagement Statistics", 'wp-ulike' );
-					break;
-
-				case 'ulike_forums':
-					$title = esc_html__( "Forum Topics Statistics", 'wp-ulike' );
-					break;
-			}
-
-			// section title
-			$output['title'] = $title;
-
 			// Create chart dataset
 			foreach( $results as $result ){
 				if( isset( $result->labels ) & isset( $result->counts ) ){
-					$output['data'][]= [
+					$output[]= [
 						'date'  => date_i18n( "Y-m-d", strtotime( $result->labels ) ),
 						'total' => (int) $result->counts
 					];

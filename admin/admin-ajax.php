@@ -102,6 +102,8 @@ function wp_ulike_localization_api(){
 		'Monthly Engagement Report'    => esc_html__( 'Monthly Engagement Report', 'wp-ulike' ),
 		'Yearly Engagement Analysis'   => esc_html__( 'Yearly Engagement Analysis', 'wp-ulike' ),
 		'All-Time Performance'         => esc_html__( 'All-Time Performance', 'wp-ulike' ),
+		'Engagement Statistics'        => esc_html__( 'Engagement Statistics', 'wp-ulike' ),
+		'Top'                          => esc_html__( 'Top', 'wp-ulike' ),
 
 		// Filters
 		'Like'          => esc_html__( 'Like', 'wp-ulike' ),
