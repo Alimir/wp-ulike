@@ -129,18 +129,18 @@ add_action('wp_ajax_nopriv_wp_ulike_delete_history_api', 'wp_ulike_delete_histor
  */
 function wp_ulike_localization_api(){
 	wp_send_json( [
-		'Dashboard'                    => esc_html__( 'Dashboard', 'wp-ulike' ),
-		'Engagement History'           => esc_html__( 'Engagement History', 'wp-ulike' ),
-		'View All History'             => esc_html__( 'View All History', 'wp-ulike' ),
-		'All-Time Interaction Summary' => esc_html__( 'All-Time Interaction Summary', 'wp-ulike' ),
-		'Today\'s Activity Snapshot'   => esc_html__( 'Today\'s Activity Snapshot', 'wp-ulike' ),
-		'Yesterday\'s Activity Recap'  => esc_html__( 'Yesterday\'s Activity Recap', 'wp-ulike' ),
-		'This Week\'s Engagement'      => esc_html__( 'This Week\'s Engagement', 'wp-ulike' ),
-		'Monthly Engagement Report'    => esc_html__( 'Monthly Engagement Report', 'wp-ulike' ),
-		'Yearly Engagement Analysis'   => esc_html__( 'Yearly Engagement Analysis', 'wp-ulike' ),
-		'All-Time Performance'         => esc_html__( 'All-Time Performance', 'wp-ulike' ),
-		'Engagement Statistics'        => esc_html__( 'Engagement Statistics', 'wp-ulike' ),
-		'Top'                          => esc_html__( 'Top', 'wp-ulike' ),
+		'Dashboard'                       => esc_html__( 'Dashboard', 'wp-ulike' ),
+		'Engagement History'              => esc_html__( 'Engagement History', 'wp-ulike' ),
+		'View Full History'               => esc_html__( 'View Full History', 'wp-ulike' ),
+		'Total Interactions To Date'      => esc_html__( 'Total Interactions To Date', 'wp-ulike' ),
+		'Today\'s Engagement Overview'    => esc_html__( 'Today\'s Engagement Overview', 'wp-ulike' ),
+		'Yesterday\'s Engagement Summary' => esc_html__( 'Yesterday\'s Engagement Summary', 'wp-ulike' ),
+		'Engagement This Week'            => esc_html__( 'Engagement This Week', 'wp-ulike' ),
+		'Monthly Engagement Overview'     => esc_html__( 'Monthly Engagement Overview', 'wp-ulike' ),
+		'Yearly Engagement Trends'        => esc_html__( 'Yearly Engagement Trends', 'wp-ulike' ),
+		'Overall Performance'             => esc_html__( 'Overall Performance', 'wp-ulike' ),
+		'Engagement Statistics'           => esc_html__( 'Engagement Statistics', 'wp-ulike' ),
+		'Top'                             => esc_html__( 'Top', 'wp-ulike' ),
 
 		// Filters
 		'Like'          => esc_html__( 'Like', 'wp-ulike' ),
@@ -150,6 +150,9 @@ function wp_ulike_localization_api(){
 		'Start Date'    => esc_html__( 'Start Date', 'wp-ulike' ),
 		'End Date'      => esc_html__( 'End Date', 'wp-ulike' ),
 		'Status Filter' => esc_html__( 'Status Filter', 'wp-ulike' ),
+		'Show Filters'  => esc_html__( 'Show Filters', 'wp-ulike' ),
+		'Hide Filters'  => esc_html__( 'Hide Filters', 'wp-ulike' ),
+		'Clear all'     => esc_html__( 'Clear all', 'wp-ulike' ),
 
 		// Charts
 		'Dates'              => esc_html__( 'Dates', 'wp-ulike' ),
@@ -171,6 +174,11 @@ function wp_ulike_localization_api(){
 		'to'              => esc_html__( 'to', 'wp-ulike' ),
 		'of'              => esc_html__( 'of', 'wp-ulike' ),
 		'results'         => esc_html__( 'results', 'wp-ulike' ),
+		'Back'            => esc_html__( 'Back', 'wp-ulike' ),
+		'Search'          => esc_html__( 'Search', 'wp-ulike' ),
+		'Loading...'      => esc_html__( 'Loading...', 'wp-ulike' ),
+		'Download CSV'    => esc_html__( 'Download CSV', 'wp-ulike' ),
+		'Delete Selected' => esc_html__( 'Delete Selected', 'wp-ulike' ),
 
 		// Types
 		'Posts'      => esc_html__('Posts', 'wp-ulike'),
@@ -183,11 +191,10 @@ function wp_ulike_localization_api(){
 		'This is because there is still no data in your database.' => esc_html__( 'This is because there is still no data in your database.', 'wp-ulike' ),
 
 		// Banners
-		'Discover Voting Insights, Top Likers & Best Content' => esc_html__( 'Discover Voting Insights, Top Likers & Best Content', 'wp-ulike'),
-		'Unlock the full power of WP ULike Pro with our advanced Statistics tools. Instantly see what your users love and what they don\'t. Easily generate detailed reports using various chart options with a simple date range picker and status selector. No complicated settings or coding required.' => esc_html__( 'Unlock the full power of WP ULike Pro with our advanced Statistics tools. Instantly see what your users love and what they don\'t. Easily generate detailed reports using various chart options with a simple date range picker and status selector. No complicated settings or coding required.', 'wp-ulike'),
-		'Discover Voting Insights, Top Likers & Best Content' => esc_html__( 'Discover Voting Insights, Top Likers & Best Content', 'wp-ulike'),
-		'Get WP ULike Pro'  => esc_html__('Get WP ULike Pro', 'wp-ulike'),
-		'Learn More' 		=> esc_html__('Learn More', 'wp-ulike'),
+		'Discover Key Insights, Identify Top Fans & Boost Your Best Content' => esc_html__( 'Discover Key Insights, Identify Top Fans & Boost Your Best Content', 'wp-ulike'),
+		'Unlock WP ULike Pro—Turn Your Data into Actionable Insights. Instantly find out what your users love and fine-tune your content for maximum engagement. Elevate your performance with detailed reports and real-time analysis.' => esc_html__( 'Unlock WP ULike Pro—Turn Your Data into Actionable Insights. Instantly find out what your users love and fine-tune your content for maximum engagement. Elevate your performance with detailed reports and real-time analysis.', 'wp-ulike'),
+		'Unlock WP ULike Pro'  => esc_html__('Unlock WP ULike Pro', 'wp-ulike'),
+		'Discover More Features' => esc_html__('Discover More Features', 'wp-ulike'),
 
 	] );
 }
