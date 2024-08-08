@@ -3,10 +3,10 @@ Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
 Tags: like, marketing, elementor, user profile, rating
-Requires PHP: 7.2
+Requires PHP: 7.2.5
 Requires at least: 6.0
-Tested up to: 6.5.5
-Stable tag: 4.7.1
+Tested up to: 6.6.1
+Stable tag: 4.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,12 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 
 == Changelog ==
 
+= 4.7.2 =
+* Added: Launched an advanced, React-based statistics panel.
+* Improved: Removed deprecated menus and scripts.
+* Improved: Enhanced SQL queries for date ranges.
+* Fixed: Addressed various minor bugs.
+
 = 4.7.1 =
 * Added   : Compatibility with WordPress 6.5 for seamless integration.
 * Updated : Minimum PHP version requirement increased to 7.2 and WordPress to version 6.0.
@@ -158,37 +164,6 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 * Fixed   : security vulnerabilities by implementing proper sanitization and escaping methods throughout the plugin codebase.
 * Improved: overall performance and reliability by optimizing SQL queries and utilizing WordPress API functions where applicable.
 * Updated : setting panel to enhance user experience and provide better customization options.
-
-= 4.6.9 =
-* Fixed: Removed "attributes" from [wp_ulike] shortcode to protect against potential vulnerabilities.
-* Fixed: Addressed an issue where an outdated JavaScript method was causing compatibility problems.
-
-= 4.6.8 =
-* Added  : Connect and Login Effortlessly with Our Latest Social Integration. [PRO]
-* Added  : Introducing a New Session Handler Class. [PRO]
-* Updated: Options panel framework.
-* Updated: Expanded WordPress REST API with Votes Details. [PRO]
-* Fixed  : Various minor bug fixes for a smoother experience.
-
-= 4.6.7 =
-* Added   : Automatic removal of votes from the database when posts, comments, etc. are removed.
-* Improved: Purge cache controller with support for new cache plugins (FlyingPress, SwiftPerformance, Hummingbird, EnduranceCache).
-* Updated : Improved PHP 8.2 compatibility.
-* Updated : Auto display support on "the_excerpt" hook.
-* Fixed   : Set default value for auto display filter (which caused the button to be displayed on pages after the plugin was activated).
-
-= 4.6.6 =
-* Added  : "Cache Cleaner" plugin cache support.
-* Added  : Disable IP logging option.
-* Updated: Options panel framework.
-* Fixed  : Escaping translations and output strings.
-* Fixed  : Javascript conflict with "custom css&js" plugin.
-* Fixed  : Minor bug fixes.
-
-= 4.6.5 =
-* Improved: Compatibility with WordPress 6.1 applied.
-* Fixed   : Use mutex lock to prevent race condition.
-* Fixed   : Disable code snippet options when using 'WP_ULIKE_DISABLE_CODE_SNIPPETS' constant or having multisite enabled.
 
 == Upgrade Notice ==
 
