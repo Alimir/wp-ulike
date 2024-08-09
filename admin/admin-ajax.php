@@ -150,9 +150,11 @@ function wp_ulike_localization_api(){
 		'Start Date'    => esc_html__( 'Start Date', 'wp-ulike' ),
 		'End Date'      => esc_html__( 'End Date', 'wp-ulike' ),
 		'Status Filter' => esc_html__( 'Status Filter', 'wp-ulike' ),
+		'Post Types'    => esc_html__( 'Post Types', 'wp-ulike' ),
 		'Show Filters'  => esc_html__( 'Show Filters', 'wp-ulike' ),
 		'Hide Filters'  => esc_html__( 'Hide Filters', 'wp-ulike' ),
 		'Clear all'     => esc_html__( 'Clear all', 'wp-ulike' ),
+		'Apply'         => esc_html__( 'Apply', 'wp-ulike' ),
 
 		// Charts
 		'Dates'              => esc_html__( 'Dates', 'wp-ulike' ),
