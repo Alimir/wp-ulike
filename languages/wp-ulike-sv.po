@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2024-08-08 15:38:17+00:00\n"
+"POT-Creation-Date: 2024-08-09 11:48:44+00:00\n"
 "PO-Revision-Date: 2020-02-26 22:14:02+0000\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -114,166 +114,175 @@ msgid "Status Filter"
 msgstr "Status"
 
 #: admin/admin-ajax.php:153
+#, fuzzy
+msgid "Post Types"
+msgstr "Inläggsrubrik"
+
+#: admin/admin-ajax.php:154
 msgid "Show Filters"
 msgstr ""
 
-#: admin/admin-ajax.php:154
+#: admin/admin-ajax.php:155
 msgid "Hide Filters"
 msgstr ""
 
-#: admin/admin-ajax.php:155
+#: admin/admin-ajax.php:156
 #, fuzzy
 msgid "Clear all"
 msgstr "Rensa"
 
-#: admin/admin-ajax.php:158
+#: admin/admin-ajax.php:157
+msgid "Apply"
+msgstr ""
+
+#: admin/admin-ajax.php:160
 msgid "Dates"
 msgstr ""
 
-#: admin/admin-ajax.php:159
+#: admin/admin-ajax.php:161
 #, fuzzy
 msgid "Totals"
 msgstr "Totalt"
 
-#: admin/admin-ajax.php:160
+#: admin/admin-ajax.php:162
 msgid "No data to display"
 msgstr ""
 
-#: admin/admin-ajax.php:163
+#: admin/admin-ajax.php:165
 msgid "Date"
 msgstr ""
 
-#: admin/admin-ajax.php:164
+#: admin/admin-ajax.php:166
 #, fuzzy
 msgid "User"
 msgstr "Användarnamn"
 
-#: admin/admin-ajax.php:165
+#: admin/admin-ajax.php:167
 msgid "IP"
 msgstr ""
 
-#: admin/admin-ajax.php:166
+#: admin/admin-ajax.php:168
 msgid "Status"
 msgstr "Status"
 
-#: admin/admin-ajax.php:167
+#: admin/admin-ajax.php:169
 msgid "Comment Author"
 msgstr ""
 
-#: admin/admin-ajax.php:168
+#: admin/admin-ajax.php:170
 #, fuzzy
 msgid "Comment Content"
 msgstr "Botten på inlägg"
 
-#: admin/admin-ajax.php:169
+#: admin/admin-ajax.php:171
 #, fuzzy
 msgid "Activity Title"
 msgstr "aktiviteter"
 
-#: admin/admin-ajax.php:170
+#: admin/admin-ajax.php:172
 msgid "Topic Title"
 msgstr ""
 
-#: admin/admin-ajax.php:171
+#: admin/admin-ajax.php:173
 msgid "Post Title"
 msgstr "Inläggsrubrik"
 
-#: admin/admin-ajax.php:172
+#: admin/admin-ajax.php:174
 #, fuzzy
 msgid "Category"
 msgstr "Kategorier"
 
-#: admin/admin-ajax.php:173
-msgid "Showing"
-msgstr ""
-
-#: admin/admin-ajax.php:174
-#, fuzzy
-msgid "to"
-msgstr "toppen"
-
 #: admin/admin-ajax.php:175
-msgid "of"
+msgid "Showing"
 msgstr ""
 
 #: admin/admin-ajax.php:176
 #, fuzzy
-msgid "results"
-msgstr "Sökresultat"
+msgid "to"
+msgstr "toppen"
 
 #: admin/admin-ajax.php:177
-msgid "Back"
+msgid "of"
 msgstr ""
 
 #: admin/admin-ajax.php:178
 #, fuzzy
+msgid "results"
+msgstr "Sökresultat"
+
+#: admin/admin-ajax.php:179
+msgid "Back"
+msgstr ""
+
+#: admin/admin-ajax.php:180
+#, fuzzy
 msgid "Search"
 msgstr "Söker…"
 
-#: admin/admin-ajax.php:179
+#: admin/admin-ajax.php:181
 #, fuzzy
 msgid "Loading..."
 msgstr "Sparar…"
 
-#: admin/admin-ajax.php:180
+#: admin/admin-ajax.php:182
 msgid "Download CSV"
 msgstr ""
 
-#: admin/admin-ajax.php:181
+#: admin/admin-ajax.php:183
 #, fuzzy
 msgid "Delete Selected"
 msgstr "Inget media valt"
 
-#: admin/admin-ajax.php:184 admin/classes/class-wp-ulike-admin-panel.php:173
+#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:173
 #: admin/classes/class-wp-ulike-admin-panel.php:346
 #: admin/classes/class-wp-ulike-admin-panel.php:397
 msgid "Posts"
 msgstr "Inlägg"
 
-#: admin/admin-ajax.php:185 admin/classes/class-wp-ulike-admin-panel.php:174
+#: admin/admin-ajax.php:187 admin/classes/class-wp-ulike-admin-panel.php:174
 #: admin/classes/class-wp-ulike-admin-panel.php:347
 #: admin/classes/class-wp-ulike-admin-panel.php:405
 msgid "Comments"
 msgstr "Kommentarer"
 
-#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:175
+#: admin/admin-ajax.php:188 admin/classes/class-wp-ulike-admin-panel.php:175
 #: admin/classes/class-wp-ulike-admin-panel.php:348
 #, fuzzy
 msgid "Activities"
 msgstr "aktiviteter"
 
-#: admin/admin-ajax.php:187 admin/classes/class-wp-ulike-admin-panel.php:176
+#: admin/admin-ajax.php:189 admin/classes/class-wp-ulike-admin-panel.php:176
 #: admin/classes/class-wp-ulike-admin-panel.php:349
 #, fuzzy
 msgid "Topics"
 msgstr "Ämnesstatistik"
 
-#: admin/admin-ajax.php:190
+#: admin/admin-ajax.php:192
 #, fuzzy
 msgid "No data found!"
 msgstr "Inga resultat hittades i"
 
-#: admin/admin-ajax.php:191
+#: admin/admin-ajax.php:193
 msgid "This is because there is still no data in your database."
 msgstr ""
 
-#: admin/admin-ajax.php:194
+#: admin/admin-ajax.php:196
 msgid "Discover Key Insights, Identify Top Fans & Boost Your Best Content"
 msgstr ""
 
-#: admin/admin-ajax.php:195
+#: admin/admin-ajax.php:197
 msgid ""
 "Unlock WP ULike Pro—Turn Your Data into Actionable Insights. Instantly find "
 "out what your users love and fine-tune your content for maximum engagement. "
 "Elevate your performance with detailed reports and real-time analysis."
 msgstr ""
 
-#: admin/admin-ajax.php:196
+#: admin/admin-ajax.php:198
 #, fuzzy
 msgid "Unlock WP ULike Pro"
 msgstr "WP ULike Premium"
 
-#: admin/admin-ajax.php:197
+#: admin/admin-ajax.php:199
 msgid "Discover More Features"
 msgstr ""
 
