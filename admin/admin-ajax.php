@@ -141,12 +141,14 @@ function wp_ulike_localization_api(){
 		'Overall Performance'             => esc_html__( 'Overall Performance', 'wp-ulike' ),
 		'Engagement Statistics'           => esc_html__( 'Engagement Statistics', 'wp-ulike' ),
 		'Top'                             => esc_html__( 'Top', 'wp-ulike' ),
+		'for'                             => esc_html__( 'for', 'wp-ulike' ),
 
 		// Filters
 		'Like'          => esc_html__( 'Like', 'wp-ulike' ),
 		'Unlike'        => esc_html__( 'Unlike', 'wp-ulike' ),
 		'Dislike'       => esc_html__( 'Dislike', 'wp-ulike' ),
 		'Undislike'     => esc_html__( 'Undislike', 'wp-ulike' ),
+		'Select...'     => esc_html__( 'Select...', 'wp-ulike' ),
 		'Start Date'    => esc_html__( 'Start Date', 'wp-ulike' ),
 		'End Date'      => esc_html__( 'End Date', 'wp-ulike' ),
 		'Status Filter' => esc_html__( 'Status Filter', 'wp-ulike' ),
@@ -187,6 +189,7 @@ function wp_ulike_localization_api(){
 		'Comments'   => esc_html__('Comments', 'wp-ulike'),
 		'Activities' => esc_html__('Activities', 'wp-ulike'),
 		'Topics'     => esc_html__('Topics', 'wp-ulike'),
+		'Engagers'   => esc_html__('Engagers', 'wp-ulike'),
 
 		// 404
 		'No data found!'                                           => esc_html__( 'No data found!', 'wp-ulike' ),
