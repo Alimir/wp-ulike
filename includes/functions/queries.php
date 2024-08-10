@@ -495,69 +495,84 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
      * @param integer $offset
      * @return object
      */
-    function wp_ulike_get_best_likers_info( $limit, $period, $offset = 1, $status = [ 'like', 'dislike' ] ){
-        global $wpdb;
-        // Period limit SQL
-        $period_limit = wp_ulike_get_period_limit_sql( $period );
+	function wp_ulike_get_best_likers_info($limit, $period, $offset = 1, $status = ['like', 'dislike']) {
+		global $wpdb;
 
-        $limit_records = '';
-        if( (int) $limit > 0 ){
-            $offset = $offset > 0 ? ( $offset - 1 ) * $limit : 0;
-            $limit_records = $wpdb->prepare( "LIMIT %d, %d", $offset, $limit );
-        }
+		// Period limit SQL
+		$period_limit = wp_ulike_get_period_limit_sql($period);
 
-		$status_type = '';
-		if( is_array( $status ) ){
+		// Limit clause
+		$limit_records = '';
+		if ((int)$limit > 0) {
+			$offset = $offset > 0 ? (($offset - 1) * $limit) : 0;
+			$limit_records = $wpdb->prepare("LIMIT %d, %d", $offset, $limit);
+		}
+
+		// Prepare status filter
+		if (is_array($status)) {
 			$status_values = array_map(function($status) use ($wpdb) {
 				return $wpdb->prepare('%s', $status);
 			}, $status);
 
 			$status_type = "status IN (" . implode(',', $status_values) . ")";
 		} else {
-			$status_type = $wpdb->prepare( "status = %s", $status );
+			$status_type = $wpdb->prepare("status = %s", $status);
 		}
 
-        $query  = "
-            SELECT T.user_id, SUM(T.CountUser) AS SumUser
-            FROM(
-                SELECT user_id, count(user_id) AS CountUser
-                FROM `{$wpdb->prefix}ulike`
-                INNER JOIN {$wpdb->users}
-                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike.user_id )
-                WHERE {$status_type}
-                {$period_limit}
-                GROUP BY user_id
-                UNION ALL
-                SELECT user_id, count(user_id) AS CountUser
-                FROM `{$wpdb->prefix}ulike_activities`
-                INNER JOIN {$wpdb->users}
-                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_activities.user_id )
-                WHERE {$status_type}
-                {$period_limit}
-                GROUP BY user_id
-                UNION ALL
-                SELECT user_id, count(user_id) AS CountUser
-                FROM `{$wpdb->prefix}ulike_comments`
-                INNER JOIN {$wpdb->users}
-                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_comments.user_id )
-                WHERE {$status_type}
-                {$period_limit}
-                GROUP BY user_id
-                UNION ALL
-                SELECT user_id, count(user_id) AS CountUser
-                FROM `{$wpdb->prefix}ulike_forums`
-                INNER JOIN {$wpdb->users}
-                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_forums.user_id )
-                WHERE {$status_type}
-                {$period_limit}
-                GROUP BY user_id
-            ) AS T
-            GROUP BY T.user_id
-            ORDER BY SumUser DESC {$limit_records}";
+		// Dynamic SUM(CASE WHEN ...) clauses
+		$dynamic_sums = [];
+		foreach ($status as $stat) {
+			$stat_escaped = esc_sql($stat);
+			$dynamic_sums[] = "SUM(CASE WHEN T.status = '{$stat_escaped}' THEN T.CountUser ELSE 0 END) AS {$stat_escaped}Count";
+		}
+		$dynamic_sums_sql = implode(', ', $dynamic_sums);
 
-        // Make new SQL request
-        return $wpdb->get_results( $query );
-    }
+		// SQL Query
+		$query = "
+			SELECT
+				T.user_id,
+				{$dynamic_sums_sql},
+				SUM(T.CountUser) AS SumUser
+			FROM (
+				SELECT user_id, status, COUNT(user_id) AS CountUser
+				FROM `{$wpdb->prefix}ulike`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = {$wpdb->prefix}ulike.user_id
+				WHERE {$status_type}
+				{$period_limit}
+				GROUP BY user_id, status
+				UNION ALL
+				SELECT user_id, status, COUNT(user_id) AS CountUser
+				FROM `{$wpdb->prefix}ulike_activities`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = {$wpdb->prefix}ulike_activities.user_id
+				WHERE {$status_type}
+				{$period_limit}
+				GROUP BY user_id, status
+				UNION ALL
+				SELECT user_id, status, COUNT(user_id) AS CountUser
+				FROM `{$wpdb->prefix}ulike_comments`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = {$wpdb->prefix}ulike_comments.user_id
+				WHERE {$status_type}
+				{$period_limit}
+				GROUP BY user_id, status
+				UNION ALL
+				SELECT user_id, status, COUNT(user_id) AS CountUser
+				FROM `{$wpdb->prefix}ulike_forums`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = {$wpdb->prefix}ulike_forums.user_id
+				WHERE {$status_type}
+				{$period_limit}
+				GROUP BY user_id, status
+			) AS T
+			GROUP BY T.user_id
+			ORDER BY SumUser DESC
+			{$limit_records}";
+
+		// Execute query and return results
+		return $wpdb->get_results($query);
+	}
 }
 
 
