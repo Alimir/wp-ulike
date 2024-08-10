@@ -390,6 +390,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 */
 		public function top_activities() {
 
+			if( ! defined( 'BP_VERSION' ) ) {
+				return [];
+			}
+
 			$activities  = wp_ulike_get_most_liked_activities( 10, 'all' );
 			$result      = [];
 			$is_distinct = wp_ulike_setting_repo::isDistinct( 'activity' );
@@ -424,6 +428,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @return void
 		 */
 		public function top_topics() {
+
+			if( ! function_exists( 'is_bbpress' ) ) {
+				return [];
+			}
 
 			$posts       = wp_ulike_get_most_liked_posts( 10, array( 'topic', 'reply' ), 'topic', 'all' );
 			$result      = [];
