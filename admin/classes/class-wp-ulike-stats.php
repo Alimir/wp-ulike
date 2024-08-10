@@ -329,6 +329,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$result      = [];
 			$is_distinct = wp_ulike_setting_repo::isDistinct( 'post' );
 
+			if( empty( $posts ) ){
+				return $result;
+			}
+
 			foreach ($posts as $post) {
 				// Check post title existence
 				if( empty( $post->post_title ) ){
@@ -358,6 +362,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$result      = [];
 			$is_distinct = wp_ulike_setting_repo::isDistinct( 'comment' );
 
+			if( empty( $comments ) ){
+				return $result;
+			}
+
 			foreach ($comments as $comment) {
 				$comment_author    = stripslashes($comment->comment_author);
 				$post_title        = get_the_title($comment->comment_post_ID);
@@ -385,6 +393,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$activities  = wp_ulike_get_most_liked_activities( 10, 'all' );
 			$result      = [];
 			$is_distinct = wp_ulike_setting_repo::isDistinct( 'activity' );
+
+			if( empty( $activities ) ){
+				return $result;
+			}
 
 			foreach ($activities as $activity) {
 				$activity_permalink = function_exists('bp_activity_get_permalink') ? bp_activity_get_permalink( $activity->id ) : '';
@@ -416,6 +428,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$posts       = wp_ulike_get_most_liked_posts( 10, array( 'topic', 'reply' ), 'topic', 'all' );
 			$result      = [];
 			$is_distinct = wp_ulike_setting_repo::isDistinct( 'topic' );
+
+			if( empty( $posts ) ){
+				return $result;
+			}
 
 			foreach ($posts as $post) {
 				$post_title    = function_exists('bbp_get_forum_title') ? bbp_get_forum_title( $post->ID ) : $post->post_title;
