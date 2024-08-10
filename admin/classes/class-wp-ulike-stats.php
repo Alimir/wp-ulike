@@ -151,7 +151,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			foreach( $results as $result ){
 				if( isset( $result->labels ) & isset( $result->counts ) ){
 					$output[]= [
-						'date'  => date_i18n( "Y-m-d", strtotime( $result->labels ) ),
+						'date'  => wp_date( "Y-m-d", strtotime( $result->labels ) ),
 						'total' => (int) $result->counts
 					];
 				}
@@ -171,12 +171,21 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			$data_limit = apply_filters( 'wp_ulike_stats_data_limit', 30 );
 
+			// Fetch the most recent date_time from the table
+			$latest_date = $this->wpdb->get_var( "
+				SELECT MAX(date_time) FROM `{$this->wpdb->prefix}{$table}`
+			");
+
+			// Prepare the main query with the fetched latest date
 			$query  = $this->wpdb->prepare( "
 				SELECT DATE(date_time) AS labels,
 				count(date_time) AS counts
 				FROM `{$this->wpdb->prefix}{$table}`
-				WHERE TO_DAYS(NOW()) - TO_DAYS(date_time) <= 30
-				GROUP BY labels ORDER BY labels ASC LIMIT %d",
+				WHERE DATEDIFF(%s, date_time) <= 30
+				GROUP BY labels
+				ORDER BY labels ASC
+				LIMIT %d",
+				$latest_date,
 				$data_limit
 			);
 
@@ -226,7 +235,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			if( $date === 'all' ){
 				$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
 				if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
-					return $count_all_logs;
+					return absint($count_all_logs);
 				}
 			}
 
@@ -245,7 +254,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				wp_ulike_update_meta_data( 1, 'statistics', $cache_key, $counter_value );
 			}
 
-	        return  empty( $counter_value ) ? 0 : $counter_value;
+	        return  empty( $counter_value ) ? 0 : absint( $counter_value );
 		}
 
 		/**
@@ -265,7 +274,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				$result[] = [
 					'permalink'   => get_edit_profile_url( $user_ID ),
 					'title'       => $username,
-					'likes_count' => $user->SumUser
+					'likes_count' => absint($user->SumUser)
 				];
 			}
 

@@ -836,7 +836,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
         if( $period === 'all' ){
             $count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
             if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
-                return $count_all_logs;
+                return absint($count_all_logs);
             }
         }
 
@@ -861,6 +861,6 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
             wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
         }
 
-        return empty( $counter_value ) ? 0 : $counter_value;
+        return empty( $counter_value ) ? 0 : absint($counter_value);
     }
 }
