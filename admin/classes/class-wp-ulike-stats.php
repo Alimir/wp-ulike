@@ -269,7 +269,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			foreach ( $top_likers as $user ) {
 				$user_ID  = stripslashes( $user->user_id );
 				$userdata = get_userdata( $user_ID );
-				$username = empty( $userdata ) ? esc_html__('Guest User','wp-ulike') : $userdata->display_name;
+				$username = empty( $userdata ) ? esc_html__('Guest User','wp-ulike') : esc_attr( $userdata->display_name );
 
 				$result[] = [
 					'permalink'   => get_edit_profile_url( $user_ID ),
