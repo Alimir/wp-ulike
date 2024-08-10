@@ -15,25 +15,6 @@
     "url": "https://wpulike.com"
   },
   "main": "Gruntfile.js",
-  "scripts": {
-    "dev": "watchify -vd -p browserify-hmr -e admin/assets/js/solo/vue/src/main.js -o admin/assets/js/solo/vue/vue.js",
-    "build": "cross-env NODE_ENV=production browserify admin/assets/js/solo/vue/src/main.js | uglifyjs -c warnings=false -m > admin/assets/js/solo/vue/vue.js"
-  },
-  "dependencies": {
-    "axios": "^0.21.0",
-    "babel-preset-stage-0": "^6.24.1",
-    "chart.js": "^3.4.1",
-    "grunt-phplint": "^0.1.0",
-    "jquery-match-height": "^0.7.2",
-    "matchheight": "^0.1.2",
-    "preprocess": "^3.2.0",
-    "react": "^17.0.1",
-    "request": "^2.88.2",
-    "vue": "^2.6.12",
-    "vue-chartjs": "^3.5.1",
-    "vue-resource": "^1.5.1",
-    "vue-router": "^3.4.9"
-  },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -67,17 +48,14 @@
     "load-grunt-tasks": ">=5.1.0",
     "time-grunt": ">=1.4.0",
     "uglify-js": "^3.12.2",
-    "vue-hot-reload-api": "^2.3.4",
-    "vueify": "^9.4.1",
     "node-sass": "^9.0.0",
-    "vueify-insert-css": "^1.0.0",
     "watchify": "^4.0.0"
   },
-  "browserify": {
-    "transform": [
-      "vueify",
-      "babelify"
-    ]
+  "dependencies": {
+    "grunt-phplint": "^0.1.0",
+    "grunt-sync": "^0.8.2",
+    "grunt-text-replace": "^0.4.0",
+    "preprocess": "^3.2.0"
   },
   "bugs": {
     "url": "https://github.com/Alimir/wp-ulike/issues"
