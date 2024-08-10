@@ -334,7 +334,7 @@ if ( ! class_exists( 'ULF_Fields' ) ) {
               $user = get_user_by( 'id', $value );
 
               if ( ! is_wp_error( $user ) && ! empty( $user ) ) {
-                $options[$value] = $user->display_name;
+                $options[$value] = esc_attr( $user->display_name );
               }
 
             break;

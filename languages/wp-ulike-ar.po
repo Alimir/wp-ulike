@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2024-06-29 16:57:57+00:00\n"
+"POT-Creation-Date: 2024-08-10 08:18:54+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:26:42+0000\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -14,21 +14,297 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: GlotPress/2.4.0-alpha\n"
 
-#: admin/admin-ajax.php:28 admin/admin-ajax.php:73 admin/admin-ajax.php:79
-msgid "Error: Something Wrong Happened!"
-msgstr "خطأ: حدث شيء خاطئ! "
-
-#: admin/admin-ajax.php:49
+#: admin/admin-ajax.php:24
 msgid "Token Error."
 msgstr "خطأ الرمز"
 
-#: admin/admin-ajax.php:52
+#: admin/admin-ajax.php:27
 msgid "It's OK."
 msgstr "لا بأس."
 
-#: admin/admin-ajax.php:77
-msgid "It's Ok!"
-msgstr "لا بأس!"
+#: admin/admin-ajax.php:108 admin/admin-ajax.php:115
+#, fuzzy
+msgid "Error: You do not have permission to do that."
+msgstr "ليس لديك ما يكفي من الصلاحيات للقيام بذلك."
+
+#: admin/admin-ajax.php:132
+#, fuzzy
+msgid "Dashboard"
+msgstr "متقطع"
+
+#: admin/admin-ajax.php:133
+msgid "Engagement History"
+msgstr ""
+
+#: admin/admin-ajax.php:134
+#, fuzzy
+msgid "View Full History"
+msgstr "عرض جميع السجلات"
+
+#: admin/admin-ajax.php:135
+msgid "Total Interactions To Date"
+msgstr ""
+
+#: admin/admin-ajax.php:136
+msgid "Today's Engagement Overview"
+msgstr ""
+
+#: admin/admin-ajax.php:137
+msgid "Yesterday's Engagement Summary"
+msgstr ""
+
+#: admin/admin-ajax.php:138
+msgid "Engagement This Week"
+msgstr ""
+
+#: admin/admin-ajax.php:139
+msgid "Monthly Engagement Overview"
+msgstr ""
+
+#: admin/admin-ajax.php:140
+msgid "Yearly Engagement Trends"
+msgstr ""
+
+#: admin/admin-ajax.php:141
+msgid "Overall Performance"
+msgstr ""
+
+#: admin/admin-ajax.php:142
+#, fuzzy
+msgid "Engagement Statistics"
+msgstr "إحصائيات"
+
+#: admin/admin-ajax.php:143
+msgid "Top"
+msgstr ""
+
+#: admin/admin-ajax.php:144
+msgid "for"
+msgstr ""
+
+#: admin/admin-ajax.php:147 admin/admin-hooks.php:484 admin/admin-hooks.php:559
+#: admin/classes/class-wp-ulike-admin-panel.php:130
+#: admin/classes/class-wp-ulike-admin-panel.php:147
+#: admin/classes/class-wp-ulike-admin-panel.php:755
+#: admin/classes/class-wp-ulike-admin-panel.php:785
+#: admin/classes/class-wp-ulike-widget.php:379
+msgid "Like"
+msgstr "اعجاب"
+
+#: admin/admin-ajax.php:148 admin/classes/class-wp-ulike-admin-panel.php:136
+#: admin/classes/class-wp-ulike-admin-panel.php:152
+#: admin/classes/class-wp-ulike-admin-panel.php:766
+#: admin/classes/class-wp-ulike-admin-panel.php:797
+msgid "Unlike"
+msgstr "الغاء اعجابي"
+
+#: admin/admin-ajax.php:149
+#, fuzzy
+msgid "Dislike"
+msgstr "الغاء اعجابي"
+
+#: admin/admin-ajax.php:150
+#, fuzzy
+msgid "Undislike"
+msgstr "الغاء اعجابي"
+
+#: admin/admin-ajax.php:151
+#, fuzzy
+msgid "Select..."
+msgstr "اختار %s"
+
+#: admin/admin-ajax.php:152
+msgid "Start Date"
+msgstr ""
+
+#: admin/admin-ajax.php:153
+msgid "End Date"
+msgstr ""
+
+#: admin/admin-ajax.php:154
+#, fuzzy
+msgid "Status Filter"
+msgstr "وضعیة"
+
+#: admin/admin-ajax.php:155
+#, fuzzy
+msgid "Post Types"
+msgstr "تصفية أنواع المنشورات"
+
+#: admin/admin-ajax.php:156
+msgid "Show Filters"
+msgstr ""
+
+#: admin/admin-ajax.php:157
+#, fuzzy
+msgid "Hide Filters"
+msgstr "إخفاء اشعارات المدير"
+
+#: admin/admin-ajax.php:158
+#, fuzzy
+msgid "Clear all"
+msgstr "إزالة"
+
+#: admin/admin-ajax.php:159
+msgid "Apply"
+msgstr ""
+
+#: admin/admin-ajax.php:162
+msgid "Dates"
+msgstr ""
+
+#: admin/admin-ajax.php:163
+#, fuzzy
+msgid "Totals"
+msgstr "مجموع"
+
+#: admin/admin-ajax.php:164
+#, fuzzy
+msgid "No data to display"
+msgstr "عرض تلقائي"
+
+#: admin/admin-ajax.php:167
+msgid "Date"
+msgstr ""
+
+#: admin/admin-ajax.php:168
+#, fuzzy
+msgid "User"
+msgstr "اسم المستخدم : "
+
+#: admin/admin-ajax.php:169
+msgid "IP"
+msgstr "عنوان IP"
+
+#: admin/admin-ajax.php:170
+msgid "Status"
+msgstr "وضعیة"
+
+#: admin/admin-ajax.php:171
+msgid "Comment Author"
+msgstr "کاتب التعلیق"
+
+#: admin/admin-ajax.php:172
+#, fuzzy
+msgid "Comment Content"
+msgstr "نص التعليق"
+
+#: admin/admin-ajax.php:173
+#, fuzzy
+msgid "Activity Title"
+msgstr "إحصائيات الأنشطة"
+
+#: admin/admin-ajax.php:174
+msgid "Topic Title"
+msgstr "عنوان الموضوع"
+
+#: admin/admin-ajax.php:175
+msgid "Post Title"
+msgstr "عنوان المنشور"
+
+#: admin/admin-ajax.php:176
+#, fuzzy
+msgid "Category"
+msgstr "تصنیفات"
+
+#: admin/admin-ajax.php:177
+msgid "Showing"
+msgstr ""
+
+#: admin/admin-ajax.php:178
+#, fuzzy
+msgid "to"
+msgstr "الأعلى"
+
+#: admin/admin-ajax.php:179
+msgid "of"
+msgstr ""
+
+#: admin/admin-ajax.php:180
+#, fuzzy
+msgid "results"
+msgstr "نتائج البحث"
+
+#: admin/admin-ajax.php:181
+msgid "Back"
+msgstr ""
+
+#: admin/admin-ajax.php:182
+#, fuzzy
+msgid "Search"
+msgstr "يتم البحث..."
+
+#: admin/admin-ajax.php:183
+#, fuzzy
+msgid "Loading..."
+msgstr "جاري الحفظ..."
+
+#: admin/admin-ajax.php:184
+msgid "Download CSV"
+msgstr ""
+
+#: admin/admin-ajax.php:185
+#, fuzzy
+msgid "Delete Selected"
+msgstr "لايوجد ملف وسائط تمّ تحديده"
+
+#: admin/admin-ajax.php:188 admin/classes/class-wp-ulike-admin-panel.php:173
+#: admin/classes/class-wp-ulike-admin-panel.php:346
+#: admin/classes/class-wp-ulike-admin-panel.php:397
+msgid "Posts"
+msgstr "المقالات "
+
+#: admin/admin-ajax.php:189 admin/classes/class-wp-ulike-admin-panel.php:174
+#: admin/classes/class-wp-ulike-admin-panel.php:347
+#: admin/classes/class-wp-ulike-admin-panel.php:405
+msgid "Comments"
+msgstr "التعالیقات"
+
+#: admin/admin-ajax.php:190 admin/classes/class-wp-ulike-admin-panel.php:175
+#: admin/classes/class-wp-ulike-admin-panel.php:348
+#, fuzzy
+msgid "Activities"
+msgstr "إحصائيات الأنشطة"
+
+#: admin/admin-ajax.php:191 admin/classes/class-wp-ulike-admin-panel.php:176
+#: admin/classes/class-wp-ulike-admin-panel.php:349
+#, fuzzy
+msgid "Topics"
+msgstr "إحصائيات المواضيع"
+
+#: admin/admin-ajax.php:192
+msgid "Engagers"
+msgstr ""
+
+#: admin/admin-ajax.php:195
+#, fuzzy
+msgid "No data found!"
+msgstr "لم نجد نتائج في"
+
+#: admin/admin-ajax.php:196
+#, fuzzy
+msgid "This is because there is still no data in your database."
+msgstr "لا توجد بيانات! وهذا بسبب عدم وجود أي بيانات في قاعدة البيانات لديك."
+
+#: admin/admin-ajax.php:199
+msgid "Discover Key Insights, Identify Top Fans & Boost Your Best Content"
+msgstr ""
+
+#: admin/admin-ajax.php:200
+msgid ""
+"Unlock WP ULike Pro—Turn Your Data into Actionable Insights. Instantly find "
+"out what your users love and fine-tune your content for maximum engagement. "
+"Elevate your performance with detailed reports and real-time analysis."
+msgstr ""
+
+#: admin/admin-ajax.php:201
+#, fuzzy
+msgid "Unlock WP ULike Pro"
+msgstr "نسخة البريميوم من WP ULike"
+
+#: admin/admin-ajax.php:202
+msgid "Discover More Features"
+msgstr ""
 
 #: admin/admin-functions.php:223
 #: admin/classes/class-wp-ulike-admin-panel.php:919
@@ -124,15 +400,6 @@ msgstr ""
 msgid "Go Pro"
 msgstr "استعمل النسخة الإحترافية"
 
-#: admin/admin-hooks.php:484 admin/admin-hooks.php:559
-#: admin/classes/class-wp-ulike-admin-panel.php:130
-#: admin/classes/class-wp-ulike-admin-panel.php:147
-#: admin/classes/class-wp-ulike-admin-panel.php:755
-#: admin/classes/class-wp-ulike-admin-panel.php:785
-#: admin/classes/class-wp-ulike-widget.php:379
-msgid "Like"
-msgstr "اعجاب"
-
 #: admin/admin-hooks.php:637
 msgid "PHP Snippets"
 msgstr ""
@@ -155,46 +422,17 @@ msgid ""
 "tag.)"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-assets.php:130
-msgid "Are you sure to remove this item?!"
-msgstr "هل أنت متأكد لإزالة هذا البند ؟!"
-
-#: admin/classes/class-wp-ulike-admin-assets.php:131
-msgid "No information was found in this database!"
-msgstr "لا من نجد معلومات في قاعدة البيانات هذه!"
-
-#: admin/classes/class-wp-ulike-admin-pages.php:27
-#: admin/includes/templates/posts-logs.php:61
-msgid "Post Likes Logs"
-msgstr "احداث الاعجابات في المنشورات"
-
-#: admin/classes/class-wp-ulike-admin-pages.php:35
-#: admin/includes/templates/comments-logs.php:61
-msgid "Comment Likes Logs"
-msgstr "احداث الاعجابات في التعالیق"
-
-#: admin/classes/class-wp-ulike-admin-pages.php:43
-#: admin/includes/templates/activities-logs.php:61
-msgid "Activity Likes Logs"
-msgstr "احداث الاعجابات في الانشطة"
-
-#: admin/classes/class-wp-ulike-admin-pages.php:51
-#: admin/includes/templates/topics-logs.php:61
-msgid "Topics Likes Logs"
-msgstr "سجلات مواضيع الإعجاب"
-
-#: admin/classes/class-wp-ulike-admin-pages.php:59
-#: admin/includes/templates/statistics.php:124 includes/plugin.php:119
+#: admin/classes/class-wp-ulike-admin-pages.php:27 includes/plugin.php:119
 msgid "Statistics"
 msgstr "إحصائيات"
 
-#: admin/classes/class-wp-ulike-admin-pages.php:67
+#: admin/classes/class-wp-ulike-admin-pages.php:35
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
 #: includes/plugin.php:120
 msgid "About"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-pages.php:133
+#: admin/classes/class-wp-ulike-admin-pages.php:101
 msgid "Logs"
 msgstr "السجلات"
 
@@ -237,13 +475,6 @@ msgstr ""
 msgid "Prefix"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:136
-#: admin/classes/class-wp-ulike-admin-panel.php:152
-#: admin/classes/class-wp-ulike-admin-panel.php:766
-#: admin/classes/class-wp-ulike-admin-panel.php:797
-msgid "Unlike"
-msgstr "الغاء اعجابي"
-
 #: admin/classes/class-wp-ulike-admin-panel.php:142
 msgid "Suffix"
 msgstr ""
@@ -265,30 +496,6 @@ msgstr "عرض النوع"
 #, fuzzy
 msgid "With this option, you can disable toasts messages on content types."
 msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل العرض التلقائي في هذه الصفحات."
-
-#: admin/classes/class-wp-ulike-admin-panel.php:173
-#: admin/classes/class-wp-ulike-admin-panel.php:346
-#: admin/classes/class-wp-ulike-admin-panel.php:397
-msgid "Posts"
-msgstr "المقالات "
-
-#: admin/classes/class-wp-ulike-admin-panel.php:174
-#: admin/classes/class-wp-ulike-admin-panel.php:347
-#: admin/classes/class-wp-ulike-admin-panel.php:405
-msgid "Comments"
-msgstr "التعالیقات"
-
-#: admin/classes/class-wp-ulike-admin-panel.php:175
-#: admin/classes/class-wp-ulike-admin-panel.php:348
-#, fuzzy
-msgid "Activities"
-msgstr "إحصائيات الأنشطة"
-
-#: admin/classes/class-wp-ulike-admin-panel.php:176
-#: admin/classes/class-wp-ulike-admin-panel.php:349
-#, fuzzy
-msgid "Topics"
-msgstr "إحصائيات المواضيع"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:183
 msgid "Enable Anonymize IP"
@@ -998,6 +1205,20 @@ msgstr "عدد من قام بالضغط على زر الإعجاب"
 msgid "The number of users to show in the users liked box"
 msgstr "حد الاقصی لإعرض عدد المستخدمين  فی الباکس   ؟!"
 
+#: admin/classes/class-wp-ulike-logs.php:168
+#: admin/classes/class-wp-ulike-stats.php:263
+msgid "Guest User"
+msgstr "مستخدم ضيف"
+
+#: admin/classes/class-wp-ulike-logs.php:199
+#, fuzzy
+msgid "Activity Permalink"
+msgstr "Activity Meta"
+
+#: admin/classes/class-wp-ulike-logs.php:217
+msgid "Not Found!"
+msgstr ""
+
 #: admin/classes/class-wp-ulike-notices.php:38
 msgid "You need to enter a unique id for notice."
 msgstr "تحتاج إلى إدخال معرف فريد للإشعار."
@@ -1009,30 +1230,6 @@ msgstr ""
 #: admin/classes/class-wp-ulike-notices.php:245
 msgid "Authorization failed. Please refresh the page and try again."
 msgstr ""
-
-#: admin/classes/class-wp-ulike-stats.php:130
-msgid "Posts Stats"
-msgstr "إحصائيات المقالات"
-
-#: admin/classes/class-wp-ulike-stats.php:140
-msgid "Comments Stats"
-msgstr "إحصائيات التعليقات"
-
-#: admin/classes/class-wp-ulike-stats.php:150
-msgid "Activities Stats"
-msgstr "إحصائيات الأنشطة"
-
-#: admin/classes/class-wp-ulike-stats.php:160
-msgid "Topics Stats"
-msgstr "إحصائيات المواضيع"
-
-#: admin/classes/class-wp-ulike-stats.php:285
-#: admin/includes/templates/activities-logs.php:93
-#: admin/includes/templates/comments-logs.php:98
-#: admin/includes/templates/posts-logs.php:92
-#: admin/includes/templates/topics-logs.php:92
-msgid "Guest User"
-msgstr "مستخدم ضيف"
 
 #: admin/classes/class-wp-ulike-widget.php:22
 msgid "WP Ulike Widget"
@@ -1132,12 +1329,10 @@ msgid "Week"
 msgstr "أسبوع"
 
 #: admin/classes/class-wp-ulike-widget.php:558
-#: admin/includes/templates/statistics.php:110
 msgid "Yesterday"
 msgstr "أمس"
 
 #: admin/classes/class-wp-ulike-widget.php:559
-#: admin/includes/templates/statistics.php:93
 msgid "Today"
 msgstr "اليوم"
 
@@ -1238,134 +1433,17 @@ msgstr ""
 msgid "Submit Review"
 msgstr "التقييم"
 
-#: admin/includes/templates/activities-logs.php:26
-#: admin/includes/templates/comments-logs.php:26
-#: admin/includes/templates/posts-logs.php:26
-#: admin/includes/templates/statistics.php:26
-#: admin/includes/templates/topics-logs.php:26
-msgid "No data found! This is because there is still no data in your database."
-msgstr "لا توجد بيانات! وهذا بسبب عدم وجود أي بيانات في قاعدة البيانات لديك."
-
-#: admin/includes/templates/activities-logs.php:40
-#: admin/includes/templates/comments-logs.php:40
-#: admin/includes/templates/posts-logs.php:40
-#: admin/includes/templates/statistics.php:45
-#: admin/includes/templates/topics-logs.php:40
-msgid "Check Votings, Best Likers & Top contents"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:42
-#: admin/includes/templates/comments-logs.php:42
-#: admin/includes/templates/posts-logs.php:42
-#: admin/includes/templates/statistics.php:47
-#: admin/includes/templates/topics-logs.php:42
-msgid ""
-"With WP ULike Pro comprehensive Statistics tools, you can track what your "
-"users love and what annoys them in an instance. You can extract reports of "
-"likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with "
-"dateRange picker and status selector controllers, no confusing options and "
-"coding needed."
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:43
-#: admin/includes/templates/comments-logs.php:43
-#: admin/includes/templates/go-pro.php:22
-#: admin/includes/templates/posts-logs.php:43
-#: admin/includes/templates/statistics.php:48
-#: admin/includes/templates/topics-logs.php:43
-msgid "Buy WP ULike Premium"
-msgstr "شراء نسخة البريميوم من WP ULike"
-
-#: admin/includes/templates/activities-logs.php:48
-#: admin/includes/templates/comments-logs.php:48
-#: admin/includes/templates/go-pro.php:28
-#: admin/includes/templates/posts-logs.php:48
-#: admin/includes/templates/statistics.php:53
-#: admin/includes/templates/topics-logs.php:48
-msgid "More information"
-msgstr "المزيد من المعلومات"
-
-#: admin/includes/templates/activities-logs.php:60
-#: admin/includes/templates/comments-logs.php:60
-#: admin/includes/templates/posts-logs.php:60
-#: admin/includes/templates/topics-logs.php:60
-msgid "WP ULike Logs"
-msgstr "الاحداث في وردبرس یولایک"
-
-#: admin/includes/templates/activities-logs.php:66
-#: admin/includes/templates/comments-logs.php:66
-#: admin/includes/templates/posts-logs.php:66
-#: admin/includes/templates/topics-logs.php:66
-msgid "ID"
-msgstr "ID"
-
-#: admin/includes/templates/activities-logs.php:67
-#: admin/includes/templates/comments-logs.php:67
-#: admin/includes/templates/posts-logs.php:67
-#: admin/includes/templates/topics-logs.php:67
-msgid "Username"
-msgstr "اسم المستخدم : "
-
-#: admin/includes/templates/activities-logs.php:68
-#: admin/includes/templates/comments-logs.php:68
-#: admin/includes/templates/posts-logs.php:68
-#: admin/includes/templates/topics-logs.php:68
-msgid "Status"
-msgstr "وضعیة"
-
-#: admin/includes/templates/activities-logs.php:69
-msgid "Activity ID"
-msgstr "ID النشاط"
-
-#: admin/includes/templates/activities-logs.php:70
-msgid "Permalink"
-msgstr "روابط دائمة"
-
-#: admin/includes/templates/activities-logs.php:71
-#: admin/includes/templates/comments-logs.php:72
-#: admin/includes/templates/posts-logs.php:71
-#: admin/includes/templates/topics-logs.php:71
-msgid "Date / Time"
-msgstr "تاريخ / وقت"
-
-#: admin/includes/templates/activities-logs.php:72
-#: admin/includes/templates/comments-logs.php:73
-#: admin/includes/templates/posts-logs.php:72
-#: admin/includes/templates/topics-logs.php:72
-msgid "IP"
-msgstr "عنوان IP"
-
-#: admin/includes/templates/activities-logs.php:73
-#: admin/includes/templates/comments-logs.php:74
-#: admin/includes/templates/posts-logs.php:73
-#: admin/includes/templates/topics-logs.php:73
-msgid "Actions"
-msgstr "تطبیقات"
-
-#: admin/includes/templates/activities-logs.php:108
-#, fuzzy
-msgid "Activity Permalink"
-msgstr "Activity Meta"
-
-#: admin/includes/templates/comments-logs.php:69
-msgid "Comment ID"
-msgstr "ID التعلیق"
-
-#: admin/includes/templates/comments-logs.php:70
-msgid "Comment Author"
-msgstr "کاتب التعلیق"
-
-#: admin/includes/templates/comments-logs.php:71
-msgid "Comment Text"
-msgstr "نص التعليق"
-
-#: admin/includes/templates/comments-logs.php:80
-msgid "Not Found!"
-msgstr ""
-
 #: admin/includes/templates/go-pro.php:16
 msgid "WP ULike Premium"
 msgstr "نسخة البريميوم من WP ULike"
+
+#: admin/includes/templates/go-pro.php:22
+msgid "Buy WP ULike Premium"
+msgstr "شراء نسخة البريميوم من WP ULike"
+
+#: admin/includes/templates/go-pro.php:28
+msgid "More information"
+msgstr "المزيد من المعلومات"
 
 #: admin/includes/templates/go-pro.php:156
 msgid ""
@@ -1385,62 +1463,6 @@ msgstr ""
 "ما عليك سوى سحب عنصر واجهة المستخدم المرغوب فيه وإفلاته في أقسام Elementor "
 "الخاصة بك ، قم بالتخصيص كما تريد واستمتع بأزرار الإعجاب وعدم الإعجاب في "
 "منشوراتك."
-
-#: admin/includes/templates/posts-logs.php:69
-msgid "Post ID"
-msgstr "ID المنشور"
-
-#: admin/includes/templates/posts-logs.php:70
-msgid "Post Title"
-msgstr "عنوان المنشور"
-
-#: admin/includes/templates/statistics.php:38
-msgid "WP ULike Statistics"
-msgstr "الاحصائیات وردپرس یولایک"
-
-#: admin/includes/templates/statistics.php:76
-msgid "Total"
-msgstr "مجموع"
-
-#: admin/includes/templates/statistics.php:127
-msgid "View All Logs"
-msgstr "عرض جميع السجلات"
-
-#: admin/includes/templates/statistics.php:145
-msgid "Weekly"
-msgstr "أسبوعياً"
-
-#: admin/includes/templates/statistics.php:156
-msgid "Monthly"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:167
-msgid "Yearly"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:178
-msgid "Totally"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:194
-msgid "Allocation Statistics"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:212
-msgid "Top Likers"
-msgstr "مجموع کل الاعجابات"
-
-#: admin/includes/templates/statistics.php:235
-msgid "Top"
-msgstr ""
-
-#: admin/includes/templates/topics-logs.php:69
-msgid "Topic ID"
-msgstr ""
-
-#: admin/includes/templates/topics-logs.php:70
-msgid "Topic Title"
-msgstr "عنوان الموضوع"
 
 #: includes/classes/class-wp-ulike-ajax-listener-base.php:69
 msgid "There was an error processing the request."
@@ -1726,11 +1748,11 @@ msgstr "قلب تويتر"
 msgid "Animated Heart"
 msgstr "قلب متحرك"
 
-#: includes/hooks/shortcodes.php:174
+#: includes/hooks/shortcodes.php:177
 msgid "Invalid type specified for [wp_ulike_likers_box] shortcode."
 msgstr ""
 
-#: includes/hooks/shortcodes.php:199
+#: includes/hooks/shortcodes.php:202
 msgid "Error receiving input parameters"
 msgstr ""
 
@@ -1860,6 +1882,75 @@ msgstr ""
 "https://wpulike.com/?utm_source=wp-plugins&utm_campaign=author-"
 "uri&utm_medium=wp-dash"
 
+#~ msgid "Error: Something Wrong Happened!"
+#~ msgstr "خطأ: حدث شيء خاطئ! "
+
+#~ msgid "It's Ok!"
+#~ msgstr "لا بأس!"
+
+#~ msgid "Are you sure to remove this item?!"
+#~ msgstr "هل أنت متأكد لإزالة هذا البند ؟!"
+
+#~ msgid "No information was found in this database!"
+#~ msgstr "لا من نجد معلومات في قاعدة البيانات هذه!"
+
+#~ msgid "Post Likes Logs"
+#~ msgstr "احداث الاعجابات في المنشورات"
+
+#~ msgid "Comment Likes Logs"
+#~ msgstr "احداث الاعجابات في التعالیق"
+
+#~ msgid "Activity Likes Logs"
+#~ msgstr "احداث الاعجابات في الانشطة"
+
+#~ msgid "Topics Likes Logs"
+#~ msgstr "سجلات مواضيع الإعجاب"
+
+#~ msgid "Posts Stats"
+#~ msgstr "إحصائيات المقالات"
+
+#~ msgid "Comments Stats"
+#~ msgstr "إحصائيات التعليقات"
+
+#~ msgid "Activities Stats"
+#~ msgstr "إحصائيات الأنشطة"
+
+#~ msgid "Topics Stats"
+#~ msgstr "إحصائيات المواضيع"
+
+#~ msgid "WP ULike Logs"
+#~ msgstr "الاحداث في وردبرس یولایک"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Activity ID"
+#~ msgstr "ID النشاط"
+
+#~ msgid "Permalink"
+#~ msgstr "روابط دائمة"
+
+#~ msgid "Date / Time"
+#~ msgstr "تاريخ / وقت"
+
+#~ msgid "Actions"
+#~ msgstr "تطبیقات"
+
+#~ msgid "Comment ID"
+#~ msgstr "ID التعلیق"
+
+#~ msgid "Post ID"
+#~ msgstr "ID المنشور"
+
+#~ msgid "WP ULike Statistics"
+#~ msgstr "الاحصائیات وردپرس یولایک"
+
+#~ msgid "Weekly"
+#~ msgstr "أسبوعياً"
+
+#~ msgid "Top Likers"
+#~ msgstr "مجموع کل الاعجابات"
+
 #~ msgid "Custom Settings"
 #~ msgstr "إعدادات مخصصة"
 
@@ -1964,9 +2055,6 @@ msgstr ""
 #~ msgid "No options defined."
 #~ msgstr "لیس هناک تعريف لأي خيارات."
 
-#~ msgid "Select %s"
-#~ msgstr "اختار %s"
-
 #~ msgid "Remove %s"
 #~ msgstr "إزالة %s"
 
@@ -2025,15 +2113,8 @@ msgstr ""
 #~ msgid "show all settings"
 #~ msgstr "عرض جميع الخيارات"
 
-#, fuzzy
-#~ msgid "Search..."
-#~ msgstr "يتم البحث..."
-
 #~ msgid "Save"
 #~ msgstr "حفظ"
-
-#~ msgid "Saving..."
-#~ msgstr "جاري الحفظ..."
 
 #~ msgid "Reset Section"
 #~ msgstr "إعادة تعيين القسم"
@@ -2069,19 +2150,11 @@ msgstr ""
 #~ msgstr "يتم البحث..."
 
 #, fuzzy
-#~ msgid "No results found."
-#~ msgstr "لم نجد نتائج في"
-
-#, fuzzy
 #~ msgid "Field not found!"
 #~ msgstr "لم يتم العثور على هذا النوع!"
 
 #~ msgid "Add New"
 #~ msgstr "أضف جديد"
-
-#, fuzzy
-#~ msgid "Not selected"
-#~ msgstr "لايوجد ملف وسائط تمّ تحديده"
 
 #~ msgid "From"
 #~ msgstr "من"
@@ -2222,9 +2295,6 @@ msgstr ""
 #~ msgid "Export & Download"
 #~ msgstr "استخرج وحمل النسخة الإحتياطية"
 
-#~ msgid "top"
-#~ msgstr "الأعلى"
-
 #~ msgid "right"
 #~ msgstr "یمین"
 
@@ -2239,9 +2309,6 @@ msgstr ""
 
 #~ msgid "Solid"
 #~ msgstr "لون كامل"
-
-#~ msgid "Dashed"
-#~ msgstr "متقطع"
 
 #~ msgid "Dotted"
 #~ msgstr "منقط"
@@ -2275,9 +2342,6 @@ msgstr ""
 
 #~ msgid "Edit Gallery"
 #~ msgstr "تحرير الألبوم"
-
-#~ msgid "Clear"
-#~ msgstr "إزالة"
 
 #~ msgid "Are you sure to delete this item?"
 #~ msgstr "هل أنت متأكد من رغبتك بحذف هذا العنصر؟"
@@ -2420,10 +2484,6 @@ msgstr ""
 
 #~ msgid "Google Web Fonts"
 #~ msgstr "خطوط الويب من Google"
-
-#, fuzzy
-#~ msgid "Error: You do not have permission to do that."
-#~ msgstr "ليس لديك ما يكفي من الصلاحيات للقيام بذلك."
 
 #, fuzzy
 #~ msgid "Please enter a valid email address."

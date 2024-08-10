@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2024-06-29 16:57:57+00:00\n"
+"POT-Creation-Date: 2024-08-10 08:18:54+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:27:25+0000\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -14,20 +14,269 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: GlotPress/2.4.0-alpha\n"
 
-#: admin/admin-ajax.php:28 admin/admin-ajax.php:73 admin/admin-ajax.php:79
-msgid "Error: Something Wrong Happened!"
-msgstr ""
-
-#: admin/admin-ajax.php:49
+#: admin/admin-ajax.php:24
 msgid "Token Error."
 msgstr ""
 
-#: admin/admin-ajax.php:52
+#: admin/admin-ajax.php:27
 msgid "It's OK."
 msgstr ""
 
-#: admin/admin-ajax.php:77
-msgid "It's Ok!"
+#: admin/admin-ajax.php:108 admin/admin-ajax.php:115
+msgid "Error: You do not have permission to do that."
+msgstr ""
+
+#: admin/admin-ajax.php:132
+msgid "Dashboard"
+msgstr ""
+
+#: admin/admin-ajax.php:133
+msgid "Engagement History"
+msgstr ""
+
+#: admin/admin-ajax.php:134
+msgid "View Full History"
+msgstr ""
+
+#: admin/admin-ajax.php:135
+msgid "Total Interactions To Date"
+msgstr ""
+
+#: admin/admin-ajax.php:136
+msgid "Today's Engagement Overview"
+msgstr ""
+
+#: admin/admin-ajax.php:137
+msgid "Yesterday's Engagement Summary"
+msgstr ""
+
+#: admin/admin-ajax.php:138
+msgid "Engagement This Week"
+msgstr ""
+
+#: admin/admin-ajax.php:139
+msgid "Monthly Engagement Overview"
+msgstr ""
+
+#: admin/admin-ajax.php:140
+msgid "Yearly Engagement Trends"
+msgstr ""
+
+#: admin/admin-ajax.php:141
+msgid "Overall Performance"
+msgstr ""
+
+#: admin/admin-ajax.php:142
+msgid "Engagement Statistics"
+msgstr ""
+
+#: admin/admin-ajax.php:143
+msgid "Top"
+msgstr ""
+
+#: admin/admin-ajax.php:144
+msgid "for"
+msgstr ""
+
+#: admin/admin-ajax.php:147 admin/admin-hooks.php:484 admin/admin-hooks.php:559
+#: admin/classes/class-wp-ulike-admin-panel.php:130
+#: admin/classes/class-wp-ulike-admin-panel.php:147
+#: admin/classes/class-wp-ulike-admin-panel.php:755
+#: admin/classes/class-wp-ulike-admin-panel.php:785
+#: admin/classes/class-wp-ulike-widget.php:379
+msgid "Like"
+msgstr ""
+
+#: admin/admin-ajax.php:148 admin/classes/class-wp-ulike-admin-panel.php:136
+#: admin/classes/class-wp-ulike-admin-panel.php:152
+#: admin/classes/class-wp-ulike-admin-panel.php:766
+#: admin/classes/class-wp-ulike-admin-panel.php:797
+msgid "Unlike"
+msgstr ""
+
+#: admin/admin-ajax.php:149
+msgid "Dislike"
+msgstr ""
+
+#: admin/admin-ajax.php:150
+msgid "Undislike"
+msgstr ""
+
+#: admin/admin-ajax.php:151
+msgid "Select..."
+msgstr ""
+
+#: admin/admin-ajax.php:152
+msgid "Start Date"
+msgstr ""
+
+#: admin/admin-ajax.php:153
+msgid "End Date"
+msgstr ""
+
+#: admin/admin-ajax.php:154
+msgid "Status Filter"
+msgstr ""
+
+#: admin/admin-ajax.php:155
+msgid "Post Types"
+msgstr ""
+
+#: admin/admin-ajax.php:156
+msgid "Show Filters"
+msgstr ""
+
+#: admin/admin-ajax.php:157
+msgid "Hide Filters"
+msgstr ""
+
+#: admin/admin-ajax.php:158
+msgid "Clear all"
+msgstr ""
+
+#: admin/admin-ajax.php:159
+msgid "Apply"
+msgstr ""
+
+#: admin/admin-ajax.php:162
+msgid "Dates"
+msgstr ""
+
+#: admin/admin-ajax.php:163
+msgid "Totals"
+msgstr ""
+
+#: admin/admin-ajax.php:164
+msgid "No data to display"
+msgstr ""
+
+#: admin/admin-ajax.php:167
+msgid "Date"
+msgstr ""
+
+#: admin/admin-ajax.php:168
+msgid "User"
+msgstr ""
+
+#: admin/admin-ajax.php:169
+msgid "IP"
+msgstr ""
+
+#: admin/admin-ajax.php:170
+msgid "Status"
+msgstr ""
+
+#: admin/admin-ajax.php:171
+msgid "Comment Author"
+msgstr ""
+
+#: admin/admin-ajax.php:172
+msgid "Comment Content"
+msgstr ""
+
+#: admin/admin-ajax.php:173
+msgid "Activity Title"
+msgstr ""
+
+#: admin/admin-ajax.php:174
+msgid "Topic Title"
+msgstr ""
+
+#: admin/admin-ajax.php:175
+msgid "Post Title"
+msgstr ""
+
+#: admin/admin-ajax.php:176
+msgid "Category"
+msgstr ""
+
+#: admin/admin-ajax.php:177
+msgid "Showing"
+msgstr ""
+
+#: admin/admin-ajax.php:178
+msgid "to"
+msgstr ""
+
+#: admin/admin-ajax.php:179
+msgid "of"
+msgstr ""
+
+#: admin/admin-ajax.php:180
+msgid "results"
+msgstr ""
+
+#: admin/admin-ajax.php:181
+msgid "Back"
+msgstr ""
+
+#: admin/admin-ajax.php:182
+msgid "Search"
+msgstr ""
+
+#: admin/admin-ajax.php:183
+msgid "Loading..."
+msgstr ""
+
+#: admin/admin-ajax.php:184
+msgid "Download CSV"
+msgstr ""
+
+#: admin/admin-ajax.php:185
+msgid "Delete Selected"
+msgstr ""
+
+#: admin/admin-ajax.php:188 admin/classes/class-wp-ulike-admin-panel.php:173
+#: admin/classes/class-wp-ulike-admin-panel.php:346
+#: admin/classes/class-wp-ulike-admin-panel.php:397
+msgid "Posts"
+msgstr ""
+
+#: admin/admin-ajax.php:189 admin/classes/class-wp-ulike-admin-panel.php:174
+#: admin/classes/class-wp-ulike-admin-panel.php:347
+#: admin/classes/class-wp-ulike-admin-panel.php:405
+msgid "Comments"
+msgstr ""
+
+#: admin/admin-ajax.php:190 admin/classes/class-wp-ulike-admin-panel.php:175
+#: admin/classes/class-wp-ulike-admin-panel.php:348
+msgid "Activities"
+msgstr ""
+
+#: admin/admin-ajax.php:191 admin/classes/class-wp-ulike-admin-panel.php:176
+#: admin/classes/class-wp-ulike-admin-panel.php:349
+msgid "Topics"
+msgstr ""
+
+#: admin/admin-ajax.php:192
+msgid "Engagers"
+msgstr ""
+
+#: admin/admin-ajax.php:195
+msgid "No data found!"
+msgstr ""
+
+#: admin/admin-ajax.php:196
+msgid "This is because there is still no data in your database."
+msgstr ""
+
+#: admin/admin-ajax.php:199
+msgid "Discover Key Insights, Identify Top Fans & Boost Your Best Content"
+msgstr ""
+
+#: admin/admin-ajax.php:200
+msgid ""
+"Unlock WP ULike Pro—Turn Your Data into Actionable Insights. Instantly find "
+"out what your users love and fine-tune your content for maximum engagement. "
+"Elevate your performance with detailed reports and real-time analysis."
+msgstr ""
+
+#: admin/admin-ajax.php:201
+msgid "Unlock WP ULike Pro"
+msgstr ""
+
+#: admin/admin-ajax.php:202
+msgid "Discover More Features"
 msgstr ""
 
 #: admin/admin-functions.php:223
@@ -124,15 +373,6 @@ msgstr ""
 msgid "Go Pro"
 msgstr ""
 
-#: admin/admin-hooks.php:484 admin/admin-hooks.php:559
-#: admin/classes/class-wp-ulike-admin-panel.php:130
-#: admin/classes/class-wp-ulike-admin-panel.php:147
-#: admin/classes/class-wp-ulike-admin-panel.php:755
-#: admin/classes/class-wp-ulike-admin-panel.php:785
-#: admin/classes/class-wp-ulike-widget.php:379
-msgid "Like"
-msgstr ""
-
 #: admin/admin-hooks.php:637
 msgid "PHP Snippets"
 msgstr ""
@@ -155,46 +395,17 @@ msgid ""
 "tag.)"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-assets.php:130
-msgid "Are you sure to remove this item?!"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-assets.php:131
-msgid "No information was found in this database!"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-pages.php:27
-#: admin/includes/templates/posts-logs.php:61
-msgid "Post Likes Logs"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-pages.php:35
-#: admin/includes/templates/comments-logs.php:61
-msgid "Comment Likes Logs"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-pages.php:43
-#: admin/includes/templates/activities-logs.php:61
-msgid "Activity Likes Logs"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-pages.php:51
-#: admin/includes/templates/topics-logs.php:61
-msgid "Topics Likes Logs"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-pages.php:59
-#: admin/includes/templates/statistics.php:124 includes/plugin.php:119
+#: admin/classes/class-wp-ulike-admin-pages.php:27 includes/plugin.php:119
 msgid "Statistics"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-pages.php:67
+#: admin/classes/class-wp-ulike-admin-pages.php:35
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
 #: includes/plugin.php:120
 msgid "About"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-pages.php:133
+#: admin/classes/class-wp-ulike-admin-pages.php:101
 msgid "Logs"
 msgstr ""
 
@@ -235,13 +446,6 @@ msgstr ""
 msgid "Prefix"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:136
-#: admin/classes/class-wp-ulike-admin-panel.php:152
-#: admin/classes/class-wp-ulike-admin-panel.php:766
-#: admin/classes/class-wp-ulike-admin-panel.php:797
-msgid "Unlike"
-msgstr ""
-
 #: admin/classes/class-wp-ulike-admin-panel.php:142
 msgid "Suffix"
 msgstr ""
@@ -260,28 +464,6 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:169
 msgid "With this option, you can disable toasts messages on content types."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:173
-#: admin/classes/class-wp-ulike-admin-panel.php:346
-#: admin/classes/class-wp-ulike-admin-panel.php:397
-msgid "Posts"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:174
-#: admin/classes/class-wp-ulike-admin-panel.php:347
-#: admin/classes/class-wp-ulike-admin-panel.php:405
-msgid "Comments"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:175
-#: admin/classes/class-wp-ulike-admin-panel.php:348
-msgid "Activities"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:176
-#: admin/classes/class-wp-ulike-admin-panel.php:349
-msgid "Topics"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:183
@@ -970,6 +1152,19 @@ msgstr ""
 msgid "The number of users to show in the users liked box"
 msgstr ""
 
+#: admin/classes/class-wp-ulike-logs.php:168
+#: admin/classes/class-wp-ulike-stats.php:263
+msgid "Guest User"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-logs.php:199
+msgid "Activity Permalink"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-logs.php:217
+msgid "Not Found!"
+msgstr ""
+
 #: admin/classes/class-wp-ulike-notices.php:38
 msgid "You need to enter a unique id for notice."
 msgstr ""
@@ -980,30 +1175,6 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-notices.php:245
 msgid "Authorization failed. Please refresh the page and try again."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-stats.php:130
-msgid "Posts Stats"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-stats.php:140
-msgid "Comments Stats"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-stats.php:150
-msgid "Activities Stats"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-stats.php:160
-msgid "Topics Stats"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-stats.php:285
-#: admin/includes/templates/activities-logs.php:93
-#: admin/includes/templates/comments-logs.php:98
-#: admin/includes/templates/posts-logs.php:92
-#: admin/includes/templates/topics-logs.php:92
-msgid "Guest User"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:22
@@ -1104,12 +1275,10 @@ msgid "Week"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:558
-#: admin/includes/templates/statistics.php:110
 msgid "Yesterday"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-widget.php:559
-#: admin/includes/templates/statistics.php:93
 msgid "Today"
 msgstr ""
 
@@ -1208,132 +1377,16 @@ msgstr ""
 msgid "Submit Review"
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:26
-#: admin/includes/templates/comments-logs.php:26
-#: admin/includes/templates/posts-logs.php:26
-#: admin/includes/templates/statistics.php:26
-#: admin/includes/templates/topics-logs.php:26
-msgid "No data found! This is because there is still no data in your database."
+#: admin/includes/templates/go-pro.php:16
+msgid "WP ULike Premium"
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:40
-#: admin/includes/templates/comments-logs.php:40
-#: admin/includes/templates/posts-logs.php:40
-#: admin/includes/templates/statistics.php:45
-#: admin/includes/templates/topics-logs.php:40
-msgid "Check Votings, Best Likers & Top contents"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:42
-#: admin/includes/templates/comments-logs.php:42
-#: admin/includes/templates/posts-logs.php:42
-#: admin/includes/templates/statistics.php:47
-#: admin/includes/templates/topics-logs.php:42
-msgid ""
-"With WP ULike Pro comprehensive Statistics tools, you can track what your "
-"users love and what annoys them in an instance. You can extract reports of "
-"likes and dislikes in Linear Charts, Pie Charts or whichever you prefer with "
-"dateRange picker and status selector controllers, no confusing options and "
-"coding needed."
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:43
-#: admin/includes/templates/comments-logs.php:43
 #: admin/includes/templates/go-pro.php:22
-#: admin/includes/templates/posts-logs.php:43
-#: admin/includes/templates/statistics.php:48
-#: admin/includes/templates/topics-logs.php:43
 msgid "Buy WP ULike Premium"
 msgstr ""
 
-#: admin/includes/templates/activities-logs.php:48
-#: admin/includes/templates/comments-logs.php:48
 #: admin/includes/templates/go-pro.php:28
-#: admin/includes/templates/posts-logs.php:48
-#: admin/includes/templates/statistics.php:53
-#: admin/includes/templates/topics-logs.php:48
 msgid "More information"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:60
-#: admin/includes/templates/comments-logs.php:60
-#: admin/includes/templates/posts-logs.php:60
-#: admin/includes/templates/topics-logs.php:60
-msgid "WP ULike Logs"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:66
-#: admin/includes/templates/comments-logs.php:66
-#: admin/includes/templates/posts-logs.php:66
-#: admin/includes/templates/topics-logs.php:66
-msgid "ID"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:67
-#: admin/includes/templates/comments-logs.php:67
-#: admin/includes/templates/posts-logs.php:67
-#: admin/includes/templates/topics-logs.php:67
-msgid "Username"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:68
-#: admin/includes/templates/comments-logs.php:68
-#: admin/includes/templates/posts-logs.php:68
-#: admin/includes/templates/topics-logs.php:68
-msgid "Status"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:69
-msgid "Activity ID"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:70
-msgid "Permalink"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:71
-#: admin/includes/templates/comments-logs.php:72
-#: admin/includes/templates/posts-logs.php:71
-#: admin/includes/templates/topics-logs.php:71
-msgid "Date / Time"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:72
-#: admin/includes/templates/comments-logs.php:73
-#: admin/includes/templates/posts-logs.php:72
-#: admin/includes/templates/topics-logs.php:72
-msgid "IP"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:73
-#: admin/includes/templates/comments-logs.php:74
-#: admin/includes/templates/posts-logs.php:73
-#: admin/includes/templates/topics-logs.php:73
-msgid "Actions"
-msgstr ""
-
-#: admin/includes/templates/activities-logs.php:108
-msgid "Activity Permalink"
-msgstr ""
-
-#: admin/includes/templates/comments-logs.php:69
-msgid "Comment ID"
-msgstr ""
-
-#: admin/includes/templates/comments-logs.php:70
-msgid "Comment Author"
-msgstr ""
-
-#: admin/includes/templates/comments-logs.php:71
-msgid "Comment Text"
-msgstr ""
-
-#: admin/includes/templates/comments-logs.php:80
-msgid "Not Found!"
-msgstr ""
-
-#: admin/includes/templates/go-pro.php:16
-msgid "WP ULike Premium"
 msgstr ""
 
 #: admin/includes/templates/go-pro.php:156
@@ -1347,62 +1400,6 @@ msgstr ""
 msgid ""
 "Just drag your desired widget and drop it in your Elementor sections, "
 "customize as you go and enjoy your like and dislike buttons on your contents."
-msgstr ""
-
-#: admin/includes/templates/posts-logs.php:69
-msgid "Post ID"
-msgstr ""
-
-#: admin/includes/templates/posts-logs.php:70
-msgid "Post Title"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:38
-msgid "WP ULike Statistics"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:76
-msgid "Total"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:127
-msgid "View All Logs"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:145
-msgid "Weekly"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:156
-msgid "Monthly"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:167
-msgid "Yearly"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:178
-msgid "Totally"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:194
-msgid "Allocation Statistics"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:212
-msgid "Top Likers"
-msgstr ""
-
-#: admin/includes/templates/statistics.php:235
-msgid "Top"
-msgstr ""
-
-#: admin/includes/templates/topics-logs.php:69
-msgid "Topic ID"
-msgstr ""
-
-#: admin/includes/templates/topics-logs.php:70
-msgid "Topic Title"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-ajax-listener-base.php:69
@@ -1676,11 +1673,11 @@ msgstr ""
 msgid "Animated Heart"
 msgstr ""
 
-#: includes/hooks/shortcodes.php:174
+#: includes/hooks/shortcodes.php:177
 msgid "Invalid type specified for [wp_ulike_likers_box] shortcode."
 msgstr ""
 
-#: includes/hooks/shortcodes.php:199
+#: includes/hooks/shortcodes.php:202
 msgid "Error receiving input parameters"
 msgstr ""
 

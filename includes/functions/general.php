@@ -77,7 +77,9 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 		$output = array();
 
 		switch ( $type ) {
+			case 'likeThisComment':
 			case 'comment':
+			case 'comments':
 				$output = array(
 					'table'                => 'ulike_comments',
 					'column'               => 'comment_id',
@@ -87,7 +89,10 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 				);
 				break;
 
+			case 'likeThisActivity':
+			case 'buddypress':
 			case 'activity':
+			case 'activities':
 				$output = array(
 					'table'                => 'ulike_activities',
 					'column'               => 'activity_id',
@@ -97,7 +102,10 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 				);
 				break;
 
+			case 'likeThisTopic':
+			case 'bbpress':
 			case 'topic':
+			case 'topics':
 				$output = array(
 					'table'                => 'ulike_forums',
 					'column'               => 'topic_id',
@@ -375,7 +383,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 						$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
 					}
 					if( strpos( $out_template, '%USER_NAME%' ) !== false) {
-						$USER_NAME 		= $user_info->display_name;
+						$USER_NAME 		= esc_attr( $user_info->display_name );
 						$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
 					}
 					if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
@@ -750,5 +758,73 @@ if( ! function_exists('wp_ulike_global_attributes') ){
 		}
 
 		return $value;
+	}
+}
+
+if( ! function_exists('wp_ulike_put_contents') ){
+	/**
+	 * Creates and stores content in a file (#admin)
+	 *
+	 * @param  string $content    The content for writing in the file
+	 * @param  string $file_location  The address that we plan to create the file in.
+	 *
+	 * @return boolean            Returns true if the file is created and updated successfully, false on failure
+	 */
+	function wp_ulike_put_contents( $content, $file_location = '', $chmode = 0644 ){
+
+		if( empty( $file_location ) ){
+			return false;
+		}
+
+		/**
+		 * Initialize the WP_Filesystem
+		 */
+		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once ( ABSPATH.'/wp-admin/includes/file.php' );
+			WP_Filesystem();
+		}
+
+		// Write the content, if possible
+		if ( wp_mkdir_p( dirname( $file_location ) ) && ! $wp_filesystem->put_contents( $file_location, $content, $chmode ) ) {
+			// If writing the content in the file was not successful
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+}
+
+if( ! function_exists('wp_ulike_put_contents_dir') ){
+	/**
+	 * Creates and stores content in a file (#admin)
+	 *
+	 * @param  string $content    The content for writing in the file
+	 * @param  string $file_name  The name of the file that we plan to store the content in. Default value is 'customfile'
+	 * @param  string $file_dir   The directory that we plan to store the file in. Default dir is wp-contents/uploads/{THEME_ID}
+	 *
+	 * @return boolean            Returns true if the file is created and updated successfully, false on failure
+	 */
+	function wp_ulike_put_contents_dir( $content, $file_name = '', $file_dir = null, $chmode = 0644 ){
+
+		// Check if the fucntion for writing the files is enabled
+		if( ! function_exists('wp_ulike_put_contents') ){
+			return false;
+		}
+
+		if( is_null( $file_dir ) ){
+			$file_dir  = WP_ULIKE_CUSTOM_DIR;
+		}
+		$file_dir = trailingslashit( $file_dir );
+
+
+		if( empty( $file_name ) ){
+			$file_name = 'customfile';
+		}
+
+		$file_location = $file_dir . $file_name;
+
+		return wp_ulike_put_contents( $content, $file_location, $chmode );
 	}
 }

@@ -141,6 +141,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				ORDER BY {$order_by}
 				{$parsed_args['order']} {$limit_records}"
 			);
+
 		}
 
 		$results = !empty( $query ) ? $wpdb->get_results( $query ): null;
@@ -304,7 +305,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			);
 		}
 
-		return !empty( $query ) ? $wpdb->get_var( $query ): null;
+		return !empty( $query ) ? (int) $wpdb->get_var( $query ): null;
 	}
 }
 
@@ -494,57 +495,151 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
      * @param integer $offset
      * @return object
      */
-    function wp_ulike_get_best_likers_info( $limit, $period, $offset = 1 ){
+	function wp_ulike_get_best_likers_info($limit, $period, $offset = 1, $status = ['like', 'dislike']) {
+		global $wpdb;
+
+		// Period limit SQL
+		$period_limit = wp_ulike_get_period_limit_sql($period);
+
+		// Limit clause
+		$limit_records = '';
+		if ((int)$limit > 0) {
+			$offset = $offset > 0 ? (($offset - 1) * $limit) : 0;
+			$limit_records = $wpdb->prepare("LIMIT %d, %d", $offset, $limit);
+		}
+
+		// Prepare status filter
+		if (is_array($status)) {
+			$status_values = array_map(function($status) use ($wpdb) {
+				return $wpdb->prepare('%s', $status);
+			}, $status);
+
+			$status_type = "status IN (" . implode(',', $status_values) . ")";
+		} else {
+			$status_type = $wpdb->prepare("status = %s", $status);
+		}
+
+		// Dynamic SUM(CASE WHEN ...) clauses
+		$dynamic_sums = [];
+		foreach ($status as $stat) {
+			$stat_escaped = esc_sql($stat);
+			$dynamic_sums[] = "SUM(CASE WHEN T.status = '{$stat_escaped}' THEN T.CountUser ELSE 0 END) AS {$stat_escaped}Count";
+		}
+		$dynamic_sums_sql = implode(', ', $dynamic_sums);
+
+		// SQL Query
+		$query = "
+			SELECT
+				T.user_id,
+				{$dynamic_sums_sql},
+				SUM(T.CountUser) AS SumUser
+			FROM (
+				SELECT user_id, status, COUNT(user_id) AS CountUser
+				FROM `{$wpdb->prefix}ulike`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = {$wpdb->prefix}ulike.user_id
+				WHERE {$status_type}
+				{$period_limit}
+				GROUP BY user_id, status
+				UNION ALL
+				SELECT user_id, status, COUNT(user_id) AS CountUser
+				FROM `{$wpdb->prefix}ulike_activities`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = {$wpdb->prefix}ulike_activities.user_id
+				WHERE {$status_type}
+				{$period_limit}
+				GROUP BY user_id, status
+				UNION ALL
+				SELECT user_id, status, COUNT(user_id) AS CountUser
+				FROM `{$wpdb->prefix}ulike_comments`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = {$wpdb->prefix}ulike_comments.user_id
+				WHERE {$status_type}
+				{$period_limit}
+				GROUP BY user_id, status
+				UNION ALL
+				SELECT user_id, status, COUNT(user_id) AS CountUser
+				FROM `{$wpdb->prefix}ulike_forums`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = {$wpdb->prefix}ulike_forums.user_id
+				WHERE {$status_type}
+				{$period_limit}
+				GROUP BY user_id, status
+			) AS T
+			GROUP BY T.user_id
+			ORDER BY SumUser DESC
+			{$limit_records}";
+
+		// Execute query and return results
+		return $wpdb->get_results($query);
+	}
+}
+
+
+if( ! function_exists('wp_ulike_get_top_enagers_total_number') ){
+    /**
+	 * calculate the total number of unique users based on their engagement
+	 *
+	 * @param string|array $period
+	 * @return integer
+	 */
+    function wp_ulike_get_top_enagers_total_number( $period, $status = [ 'like', 'dislike' ] ){
         global $wpdb;
         // Period limit SQL
         $period_limit = wp_ulike_get_period_limit_sql( $period );
 
-        $limit_records = '';
-        if( (int) $limit > 0 ){
-            $offset = $offset > 0 ? ( $offset - 1 ) * $limit : 0;
-            $limit_records = $wpdb->prepare( "LIMIT %d, %d", $offset, $limit );
-        }
+		$status_type = '';
+		if( is_array( $status ) ){
+			$status_values = array_map(function($status) use ($wpdb) {
+				return $wpdb->prepare('%s', $status);
+			}, $status);
 
-        $query  = "
-            SELECT T.user_id, SUM(T.CountUser) AS SumUser
-            FROM(
-                SELECT user_id, count(user_id) AS CountUser
-                FROM `{$wpdb->prefix}ulike`
-                INNER JOIN {$wpdb->users}
-                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike.user_id )
-                WHERE status IN ('like', 'dislike')
-                {$period_limit}
-                GROUP BY user_id
-                UNION ALL
-                SELECT user_id, count(user_id) AS CountUser
-                FROM `{$wpdb->prefix}ulike_activities`
-                INNER JOIN {$wpdb->users}
-                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_activities.user_id )
-                WHERE status IN ('like', 'dislike')
-                {$period_limit}
-                GROUP BY user_id
-                UNION ALL
-                SELECT user_id, count(user_id) AS CountUser
-                FROM `{$wpdb->prefix}ulike_comments`
-                INNER JOIN {$wpdb->users}
-                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_comments.user_id )
-                WHERE status IN ('like', 'dislike')
-                {$period_limit}
-                GROUP BY user_id
-                UNION ALL
-                SELECT user_id, count(user_id) AS CountUser
-                FROM `{$wpdb->prefix}ulike_forums`
-                INNER JOIN {$wpdb->users}
-                ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_forums.user_id )
-                WHERE status IN ('like', 'dislike')
-                {$period_limit}
-                GROUP BY user_id
-            ) AS T
-            GROUP BY T.user_id
-            ORDER BY SumUser DESC {$limit_records}";
+			$status_type = "status IN (" . implode(',', $status_values) . ")";
+		} else {
+			$status_type = $wpdb->prepare( "status = %s", $status );
+		}
 
-        // Make new SQL request
-        return $wpdb->get_results( $query );
+		$query = "
+        SELECT COUNT(DISTINCT user_id) AS total_users
+        FROM (
+            SELECT user_id
+            FROM `{$wpdb->prefix}ulike`
+            INNER JOIN {$wpdb->users}
+			ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike.user_id )
+            WHERE {$status_type}
+            {$period_limit}
+            GROUP BY user_id
+            UNION
+            SELECT user_id
+            FROM `{$wpdb->prefix}ulike_activities`
+            INNER JOIN {$wpdb->users}
+			ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_activities.user_id )
+            WHERE {$status_type}
+            {$period_limit}
+            GROUP BY user_id
+            UNION
+            SELECT user_id
+            FROM `{$wpdb->prefix}ulike_comments`
+            INNER JOIN {$wpdb->users}
+			ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_comments.user_id )
+            WHERE {$status_type}
+            {$period_limit}
+            GROUP BY user_id
+            UNION
+            SELECT user_id
+            FROM `{$wpdb->prefix}ulike_forums`
+            INNER JOIN {$wpdb->users}
+			ON ( {$wpdb->users}.ID = {$wpdb->prefix}ulike_forums.user_id )
+            WHERE {$status_type}
+            {$period_limit}
+            GROUP BY user_id
+        ) AS combined_users";
+
+
+		// Get the total count of distinct users
+		$result = $wpdb->get_var($query);
+
+		return (int) $result;
     }
 }
 
@@ -756,7 +851,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
         if( $period === 'all' ){
             $count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
             if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
-                return $count_all_logs;
+                return absint($count_all_logs);
             }
         }
 
@@ -781,6 +876,6 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
             wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
         }
 
-        return empty( $counter_value ) ? 0 : number_format_i18n( $counter_value );
+        return empty( $counter_value ) ? 0 : absint($counter_value);
     }
 }

@@ -303,14 +303,26 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
                 case "yesterday":
                     $period_limit = " AND DATE(date_time) = DATE(subdate(current_date, 1))";
                     break;
+                case "day_before_yesterday":
+                    $period_limit = " AND DATE(date_time) = DATE(subdate(current_date, 2))";
+                    break;
                 case "week":
-                    $period_limit = " AND week(DATE(date_time)) = week(DATE(NOW()))";
+                    $period_limit = " AND WEEK(DATE(date_time), 1) = WEEK(DATE(NOW()), 1) AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()))";
+                    break;
+                case "last_week":
+                    $period_limit = " AND WEEK(DATE(date_time), 1) = ( WEEK(DATE(NOW()), 1) - 1 ) AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()))";
                     break;
                 case "month":
-                    $period_limit = " AND month(DATE(date_time)) = month(DATE(NOW()))";
+                    $period_limit = " AND MONTH(DATE(date_time)) = MONTH(DATE(NOW())) AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()))";
+                    break;
+                case "last_month":
+                    $period_limit = " AND MONTH(DATE(date_time)) = MONTH(DATE(NOW()) - INTERVAL 1 MONTH) AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()) - INTERVAL 1 MONTH)";
                     break;
                 case "year":
-                    $period_limit = " AND year(DATE(date_time)) = year(DATE(NOW()))";
+                    $period_limit = " AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()))";
+                    break;
+                case "last_year":
+                    $period_limit = " AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()) - INTERVAL 1 YEAR)";
                     break;
             }
         }

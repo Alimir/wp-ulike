@@ -372,6 +372,15 @@ if( ! function_exists( 'wp_ulike_delete_activity_votes' ) ){
 }
 
 // @if DEV
+function wp_ulike_add_cors_http_header() {
+    header("Access-Control-Allow-Origin: *"); // Allow all origins
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Allow specific methods
+    header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Allow specific headers
+}
+add_action('init', 'wp_ulike_add_cors_http_header');
+// @endif
+
+// @if DEV
 // function replace_core_jquery_version() {
 //     wp_deregister_script( 'jquery' );
 //     // Change the URL if you want to load a local copy of jQuery from your own server.

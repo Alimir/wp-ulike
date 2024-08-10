@@ -138,36 +138,36 @@ module.exports = function (grunt) {
       //         }
       //     ]
       // },
-      chartjs: {
-        files: [
-          {
-            expand: true, // Enable dynamic expansion.
-            cwd: "node_modules/chart.js/dist", // Src matches are relative to this path.
-            src: ["Chart.min.js"], // Actual pattern(s) to match.
-            dest: "admin/assets/js/src/plugins/", // Destination path prefix.
-          },
-        ],
-      },
-      vueJs: {
-        files: [
-          {
-            expand: true, // Enable dynamic expansion.
-            cwd: "node_modules/vue/dist", // Src matches are relative to this path.
-            src: ["vue.min.js", "vue.js"], // Actual pattern(s) to match.
-            dest: "admin/assets/js/solo/vue/", // Destination path prefix.
-          },
-        ],
-      },
-      matchHeight: {
-        files: [
-          {
-            expand: true, // Enable dynamic expansion.
-            cwd: "node_modules/jquery-match-height/dist", // Src matches are relative to this path.
-            src: ["jquery.matchHeight-min.js"], // Actual pattern(s) to match.
-            dest: "admin/assets/js/src/plugins/", // Destination path prefix.
-          },
-        ],
-      },
+      // chartjs: {
+      //   files: [
+      //     {
+      //       expand: true, // Enable dynamic expansion.
+      //       cwd: "node_modules/chart.js/dist", // Src matches are relative to this path.
+      //       src: ["Chart.min.js"], // Actual pattern(s) to match.
+      //       dest: "admin/assets/js/src/plugins/", // Destination path prefix.
+      //     },
+      //   ],
+      // },
+      // vueJs: {
+      //   files: [
+      //     {
+      //       expand: true, // Enable dynamic expansion.
+      //       cwd: "node_modules/vue/dist", // Src matches are relative to this path.
+      //       src: ["vue.min.js", "vue.js"], // Actual pattern(s) to match.
+      //       dest: "admin/assets/js/solo/vue/", // Destination path prefix.
+      //     },
+      //   ],
+      // },
+      // matchHeight: {
+      //   files: [
+      //     {
+      //       expand: true, // Enable dynamic expansion.
+      //       cwd: "node_modules/jquery-match-height/dist", // Src matches are relative to this path.
+      //       src: ["jquery.matchHeight-min.js"], // Actual pattern(s) to match.
+      //       dest: "admin/assets/js/src/plugins/", // Destination path prefix.
+      //     },
+      //   ],
+      // },
     },
 
     // merge js files
@@ -197,28 +197,28 @@ module.exports = function (grunt) {
         dest: "assets/js/wp-ulike.js",
       },
 
-      adminJsPlugins: {
-        options: {
-          banner:
-            "/*! <%= meta.version %>\n" +
-            " *  <%= pkg.homepage %>\n" +
-            " *  <%= meta.copyright %>;\n" +
-            " */\n",
+      // adminJsPlugins: {
+      //   options: {
+      //     banner:
+      //       "/*! <%= meta.version %>\n" +
+      //       " *  <%= pkg.homepage %>\n" +
+      //       " *  <%= meta.copyright %>;\n" +
+      //       " */\n",
 
-          process: function (src, filepath) {
-            var separator =
-              "\n\n/* ================== " +
-              filepath +
-              " =================== */\n\n\n";
-            return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
-          },
-        },
-        src: [
-          "node_modules/chart.js/dist/Chart.js",
-          "node_modules/jquery-match-height/dist/jquery.matchHeight.js",
-        ],
-        dest: "admin/assets/js/plugins.js",
-      },
+      //     process: function (src, filepath) {
+      //       var separator =
+      //         "\n\n/* ================== " +
+      //         filepath +
+      //         " =================== */\n\n\n";
+      //       return (separator + src).replace(/;\s*$/, "") + ";"; // make sure always a semicolon is at the end
+      //     },
+      //   },
+      //   src: [
+      //     "node_modules/chart.js/dist/Chart.js",
+      //     "node_modules/jquery-match-height/dist/jquery.matchHeight.js",
+      //   ],
+      //   dest: "admin/assets/js/plugins.js",
+      // },
 
       // adminJsScripts: {
       //     options: {
@@ -287,8 +287,7 @@ module.exports = function (grunt) {
       },
       main: {
         files: {
-          "assets/js/wp-ulike.min.js": ["<%= concat.frontJsScripts.dest %>"],
-          "admin/assets/js/plugins.js": ["<%= concat.adminJsPlugins.dest %>"],
+          "assets/js/wp-ulike.min.js": ["<%= concat.frontJsScripts.dest %>"]
         },
       },
     },
