@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the WP ULike package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP ULike 4.7.2.1\n"
+"Project-Id-Version: WP ULike 4.7.3\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2024-08-12 19:47:00+00:00\n"
+"POT-Creation-Date: 2024-08-13 12:12:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -162,11 +162,11 @@ msgid "Monthly Interactions"
 msgstr ""
 
 #: admin/admin-ajax.php:168
-msgid "User Engagement"
+msgid "User Role Engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:169
-msgid "User Roles Distribution"
+msgid "Insights from the Last {{months}} Months"
 msgstr ""
 
 #: admin/admin-ajax.php:172

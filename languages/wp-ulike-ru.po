@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2024-08-12 19:47:00+00:00\n"
+"POT-Creation-Date: 2024-08-13 12:12:00+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:27:25+0000\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -163,11 +163,11 @@ msgid "Monthly Interactions"
 msgstr ""
 
 #: admin/admin-ajax.php:168
-msgid "User Engagement"
+msgid "User Role Engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:169
-msgid "User Roles Distribution"
+msgid "Insights from the Last {{months}} Months"
 msgstr ""
 
 #: admin/admin-ajax.php:172
