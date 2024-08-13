@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2024-08-10 08:18:54+00:00\n"
+"POT-Creation-Date: 2024-08-13 12:12:00+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:27:07+0000\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -66,19 +66,23 @@ msgid "Overall Performance"
 msgstr ""
 
 #: admin/admin-ajax.php:142
+msgid "Daily Interaction Overview"
+msgstr ""
+
+#: admin/admin-ajax.php:143
 #, fuzzy
 msgid "Engagement Statistics"
 msgstr "Statistiques"
 
-#: admin/admin-ajax.php:143
+#: admin/admin-ajax.php:144
 msgid "Top"
 msgstr ""
 
-#: admin/admin-ajax.php:144
+#: admin/admin-ajax.php:145
 msgid "for"
 msgstr ""
 
-#: admin/admin-ajax.php:147 admin/admin-hooks.php:484 admin/admin-hooks.php:559
+#: admin/admin-ajax.php:148 admin/admin-hooks.php:484 admin/admin-hooks.php:559
 #: admin/classes/class-wp-ulike-admin-panel.php:130
 #: admin/classes/class-wp-ulike-admin-panel.php:147
 #: admin/classes/class-wp-ulike-admin-panel.php:755
@@ -87,211 +91,228 @@ msgstr ""
 msgid "Like"
 msgstr "J'aime"
 
-#: admin/admin-ajax.php:148 admin/classes/class-wp-ulike-admin-panel.php:136
+#: admin/admin-ajax.php:149 admin/classes/class-wp-ulike-admin-panel.php:136
 #: admin/classes/class-wp-ulike-admin-panel.php:152
 #: admin/classes/class-wp-ulike-admin-panel.php:766
 #: admin/classes/class-wp-ulike-admin-panel.php:797
 msgid "Unlike"
 msgstr "J'aime pas"
 
-#: admin/admin-ajax.php:149
+#: admin/admin-ajax.php:150
 #, fuzzy
 msgid "Dislike"
 msgstr "J'aime pas"
 
-#: admin/admin-ajax.php:150
+#: admin/admin-ajax.php:151
 #, fuzzy
 msgid "Undislike"
 msgstr "J'aime pas"
 
-#: admin/admin-ajax.php:151
+#: admin/admin-ajax.php:152
 #, fuzzy
 msgid "Select..."
 msgstr "Sélectionnez %s"
 
-#: admin/admin-ajax.php:152
+#: admin/admin-ajax.php:153
 msgid "Start Date"
 msgstr ""
 
-#: admin/admin-ajax.php:153
+#: admin/admin-ajax.php:154
 msgid "End Date"
 msgstr ""
 
-#: admin/admin-ajax.php:154
+#: admin/admin-ajax.php:155
 #, fuzzy
 msgid "Status Filter"
 msgstr "Statut"
 
-#: admin/admin-ajax.php:155
+#: admin/admin-ajax.php:156
 #, fuzzy
 msgid "Post Types"
 msgstr "Titre d'article"
 
-#: admin/admin-ajax.php:156
+#: admin/admin-ajax.php:157
 msgid "Show Filters"
 msgstr ""
 
-#: admin/admin-ajax.php:157
+#: admin/admin-ajax.php:158
 msgid "Hide Filters"
 msgstr ""
 
-#: admin/admin-ajax.php:158
+#: admin/admin-ajax.php:159
 msgid "Clear all"
 msgstr ""
 
-#: admin/admin-ajax.php:159
+#: admin/admin-ajax.php:160
 msgid "Apply"
 msgstr ""
 
-#: admin/admin-ajax.php:162
+#: admin/admin-ajax.php:163
 msgid "Dates"
 msgstr ""
 
-#: admin/admin-ajax.php:163
+#: admin/admin-ajax.php:164
 #, fuzzy
 msgid "Totals"
 msgstr "Total"
 
-#: admin/admin-ajax.php:164
+#: admin/admin-ajax.php:165
 #, fuzzy
 msgid "No data to display"
 msgstr "Affichage automatique"
 
+#: admin/admin-ajax.php:166
+msgid "Daily Interactions"
+msgstr ""
+
 #: admin/admin-ajax.php:167
-msgid "Date"
+msgid "Monthly Interactions"
 msgstr ""
 
 #: admin/admin-ajax.php:168
 #, fuzzy
-msgid "User"
+msgid "User Role Engagement"
 msgstr "Identifiant"
 
 #: admin/admin-ajax.php:169
+msgid "Insights from the Last {{months}} Months"
+msgstr ""
+
+#: admin/admin-ajax.php:172
+msgid "Date"
+msgstr ""
+
+#: admin/admin-ajax.php:173
+#, fuzzy
+msgid "User"
+msgstr "Identifiant"
+
+#: admin/admin-ajax.php:174
 msgid "IP"
 msgstr "IP"
 
-#: admin/admin-ajax.php:170
+#: admin/admin-ajax.php:175
 msgid "Status"
 msgstr "Statut"
 
-#: admin/admin-ajax.php:171
+#: admin/admin-ajax.php:176
 msgid "Comment Author"
 msgstr "Auteur du commentaire"
 
-#: admin/admin-ajax.php:172
+#: admin/admin-ajax.php:177
 #, fuzzy
 msgid "Comment Content"
 msgstr "Texte du commentaire"
 
-#: admin/admin-ajax.php:173
+#: admin/admin-ajax.php:178
 #, fuzzy
 msgid "Activity Title"
 msgstr "Méta activité"
 
-#: admin/admin-ajax.php:174
+#: admin/admin-ajax.php:179
 msgid "Topic Title"
 msgstr "Titre du sujet"
 
-#: admin/admin-ajax.php:175
+#: admin/admin-ajax.php:180
 msgid "Post Title"
 msgstr "Titre d'article"
 
-#: admin/admin-ajax.php:176
+#: admin/admin-ajax.php:181
 #, fuzzy
 msgid "Category"
 msgstr "Catégories"
 
-#: admin/admin-ajax.php:177
+#: admin/admin-ajax.php:182
 msgid "Showing"
 msgstr ""
 
-#: admin/admin-ajax.php:178
+#: admin/admin-ajax.php:183
 msgid "to"
 msgstr ""
 
-#: admin/admin-ajax.php:179
+#: admin/admin-ajax.php:184
 msgid "of"
 msgstr ""
 
-#: admin/admin-ajax.php:180
+#: admin/admin-ajax.php:185
 #, fuzzy
 msgid "results"
 msgstr "Chercher les résultats"
 
-#: admin/admin-ajax.php:181
+#: admin/admin-ajax.php:186
 msgid "Back"
 msgstr ""
 
-#: admin/admin-ajax.php:182
+#: admin/admin-ajax.php:187
 #, fuzzy
 msgid "Search"
 msgstr "Chercher les résultats"
 
-#: admin/admin-ajax.php:183
+#: admin/admin-ajax.php:188
 msgid "Loading..."
 msgstr ""
 
-#: admin/admin-ajax.php:184
+#: admin/admin-ajax.php:189
 msgid "Download CSV"
 msgstr ""
 
-#: admin/admin-ajax.php:185
+#: admin/admin-ajax.php:190
 msgid "Delete Selected"
 msgstr ""
 
-#: admin/admin-ajax.php:188 admin/classes/class-wp-ulike-admin-panel.php:173
+#: admin/admin-ajax.php:193 admin/classes/class-wp-ulike-admin-panel.php:173
 #: admin/classes/class-wp-ulike-admin-panel.php:346
 #: admin/classes/class-wp-ulike-admin-panel.php:397
 msgid "Posts"
 msgstr "Articles"
 
-#: admin/admin-ajax.php:189 admin/classes/class-wp-ulike-admin-panel.php:174
+#: admin/admin-ajax.php:194 admin/classes/class-wp-ulike-admin-panel.php:174
 #: admin/classes/class-wp-ulike-admin-panel.php:347
 #: admin/classes/class-wp-ulike-admin-panel.php:405
 msgid "Comments"
 msgstr "Commentaires"
 
-#: admin/admin-ajax.php:190 admin/classes/class-wp-ulike-admin-panel.php:175
+#: admin/admin-ajax.php:195 admin/classes/class-wp-ulike-admin-panel.php:175
 #: admin/classes/class-wp-ulike-admin-panel.php:348
 #, fuzzy
 msgid "Activities"
 msgstr "Méta activité"
 
-#: admin/admin-ajax.php:191 admin/classes/class-wp-ulike-admin-panel.php:176
+#: admin/admin-ajax.php:196 admin/classes/class-wp-ulike-admin-panel.php:176
 #: admin/classes/class-wp-ulike-admin-panel.php:349
 #, fuzzy
 msgid "Topics"
 msgstr "ID du sujet"
 
-#: admin/admin-ajax.php:192
+#: admin/admin-ajax.php:197
 msgid "Engagers"
 msgstr ""
 
-#: admin/admin-ajax.php:195
+#: admin/admin-ajax.php:200
 msgid "No data found!"
 msgstr ""
 
-#: admin/admin-ajax.php:196
+#: admin/admin-ajax.php:201
 msgid "This is because there is still no data in your database."
 msgstr ""
 
-#: admin/admin-ajax.php:199
+#: admin/admin-ajax.php:204
 msgid "Discover Key Insights, Identify Top Fans & Boost Your Best Content"
 msgstr ""
 
-#: admin/admin-ajax.php:200
+#: admin/admin-ajax.php:205
 msgid ""
 "Unlock WP ULike Pro—Turn Your Data into Actionable Insights. Instantly find "
 "out what your users love and fine-tune your content for maximum engagement. "
 "Elevate your performance with detailed reports and real-time analysis."
 msgstr ""
 
-#: admin/admin-ajax.php:201
+#: admin/admin-ajax.php:206
 #, fuzzy
 msgid "Unlock WP ULike Pro"
 msgstr "Journaux WP ULike"
 
-#: admin/admin-ajax.php:202
+#: admin/admin-ajax.php:207
 msgid "Discover More Features"
 msgstr ""
 
@@ -1180,17 +1201,17 @@ msgid "The number of users to show in the users liked box"
 msgstr ""
 "Le nombre d'utilisateurs à afficher dans la boite des utilisateurs qui aiment"
 
-#: admin/classes/class-wp-ulike-logs.php:168
-#: admin/classes/class-wp-ulike-stats.php:263
+#: admin/classes/class-wp-ulike-logs.php:166
+#: admin/classes/class-wp-ulike-stats.php:272
 msgid "Guest User"
 msgstr "Utilisateur invité"
 
-#: admin/classes/class-wp-ulike-logs.php:199
+#: admin/classes/class-wp-ulike-logs.php:197
 #, fuzzy
 msgid "Activity Permalink"
 msgstr "Méta activité"
 
-#: admin/classes/class-wp-ulike-logs.php:217
+#: admin/classes/class-wp-ulike-logs.php:215
 msgid "Not Found!"
 msgstr ""
 
