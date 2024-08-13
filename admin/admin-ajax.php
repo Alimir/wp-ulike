@@ -160,13 +160,13 @@ function wp_ulike_localization_api(){
 		'Apply'         => esc_html__( 'Apply', 'wp-ulike' ),
 
 		// Charts
-		'Dates'                   => esc_html__( 'Dates', 'wp-ulike' ),
-		'Totals'                  => esc_html__( 'Totals', 'wp-ulike' ),
-		'No data to display'      => esc_html__( 'No data to display', 'wp-ulike' ),
-		'Daily Interactions'      => esc_html__( 'Daily Interactions', 'wp-ulike' ),
-		'Monthly Interactions'    => esc_html__( 'Monthly Interactions', 'wp-ulike' ),
-		'User Engagement'         => esc_html__( 'User Engagement', 'wp-ulike' ),
-		'User Roles Distribution' => esc_html__( 'User Roles Distribution', 'wp-ulike' ),
+		'Dates'                                    => esc_html__( 'Dates', 'wp-ulike' ),
+		'Totals'                                   => esc_html__( 'Totals', 'wp-ulike' ),
+		'No data to display'                       => esc_html__( 'No data to display', 'wp-ulike' ),
+		'Daily Interactions'                       => esc_html__( 'Daily Interactions', 'wp-ulike' ),
+		'Monthly Interactions'                     => esc_html__( 'Monthly Interactions', 'wp-ulike' ),
+		'User Role Engagement'                     => esc_html__( 'User Role Engagement', 'wp-ulike' ),
+		'Insights from the Last {{months}} Months' => esc_html__( 'Insights from the Last {{months}} Months', 'wp-ulike' ),
 
 		// History
 		'Date'            => esc_html__( 'Date', 'wp-ulike' ),

@@ -77,7 +77,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
          * @param string $after
          * @return void | string
          */
-        private function get_title( $before = '<h3 class="wp-ulike-notice-title">', $after = '</h3>' ){
+        private function get_title( $before = '<h3 class="wp-ulike-notice-title dark:text-white">', $after = '</h3>' ){
 
             if ( empty( $this->args['title'] ) ) {
                 return;
@@ -105,7 +105,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
          * @param string $after
          * @return void | string
          */
-        private function get_description( $before = '<p class="wp-ulike-notice-description">', $after = '</p>' ){
+        private function get_description( $before = '<p class="wp-ulike-notice-description  dark:text-gray-100">', $after = '</p>' ){
 
             if ( strlen( $this->args['description'] ) == 0 ) {
                 return;
@@ -355,7 +355,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             }
 
             echo sprintf(
-                '<div class="updated wp-ulike-message wp-ulike-notice-control wp-ulike-notice-wrapper %s %s" %s>%s <div class="wp-ulike-notice-info">%s %s <div class="wp-ulike-notice-submit submit">%s %s</div></div></div>',
+                '<div class="updated dark:bg-gray-800 dark:border-0 wp-ulike-message wp-ulike-notice-control wp-ulike-notice-wrapper %s %s" %s>%s <div class="wp-ulike-notice-info">%s %s <div class="wp-ulike-notice-submit submit">%s %s</div></div></div>',
                 $this->get_unique_class(),
                 $this->get_skin(),
                 $this->get_custom_styles(),
