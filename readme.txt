@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, user profile, rating
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.6.1
-Stable tag: 4.7.2.1
+Stable tag: 4.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,15 @@ Our WP ULike project has been able to attract more than 60,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.7.3 =
+* Added: Dark mode support on the stats panel for a more comfortable viewing experience.
+* Added: New overview data sections to show monthly & daily performance, including CAGR calculations for more detailed trend analysis. [PRO]
+* Added: User roles engagement displayed through pie charts, offering insights into user interactions. [PRO]
+* Added: Option to download charts in CSV, PNG, or SVG formats, making it easier to export and share data. [PRO]
+* Improved: Replaced the stats charts library with a lighter and faster alternative, improving load times and performance.
+* Improved: General improvements in the stats code for better reliability and accuracy.
+* Fixed: Resolved all ESLint issues for cleaner code.
 
 = 4.7.2.1 =
 * Fixed: Resolved a minor bug in the stats panel that caused incorrect data display under certain conditions.
