@@ -370,7 +370,6 @@ if( ! function_exists( 'wp_ulike_delete_activity_votes' ) ){
 	}
 	add_action( 'bp_activity_delete', 'wp_ulike_delete_activity_votes', 1, 10 );
 }
-
 // @if DEV
 function wp_ulike_add_cors_http_header() {
     header("Access-Control-Allow-Origin: *"); // Allow all origins

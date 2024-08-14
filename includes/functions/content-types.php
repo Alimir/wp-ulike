@@ -415,7 +415,6 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 			return false;
 		}
 
-
 		$activity_list = esc_sql( implode(',',$activity_ids) );
 
 		return $wpdb->get_results( "

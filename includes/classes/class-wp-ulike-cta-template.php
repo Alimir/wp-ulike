@@ -108,9 +108,9 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 			} else {
 				$button_class_name .= ' wp_ulike_put_text';
  				if( in_array( $method_id, array( 2, 4 ) ) && strpos( $this->getPrevStatus(), 'dis') !== 0){
-					$button_text = wp_ulike_setting_repo::getButtonText( $this->args['setting'], 'unlike' );
+					$button_text = wp_ulike_setting_repo::getButtonText( $this->args['type'], 'unlike' );
 				} else {
-					$button_text = wp_ulike_setting_repo::getButtonText( $this->args['setting'], 'like' );
+					$button_text = wp_ulike_setting_repo::getButtonText( $this->args['type'], 'like' );
 				}
 			}
 
