@@ -188,7 +188,7 @@ class wp_ulike_setting_repo {
 
 		$template = str_replace( "%CURRENT_PAGE_URL%", $current_url, $template );
 
-		return $template;
+		return wp_ulike_kses( $template );
 	}
 
 	/**
