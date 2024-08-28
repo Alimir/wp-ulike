@@ -18,7 +18,7 @@ if ( ! class_exists( 'ULF_Field_textarea' ) ) {
 
       echo $this->field_before();
       echo $this->shortcoder();
-      echo '<textarea name="'. esc_attr( $this->field_name() ) .'"'. $this->field_attributes() .'>'. $this->value .'</textarea>';
+      echo '<textarea name="'. esc_attr( $this->field_name() ) .'"'. $this->field_attributes() .'>'. wp_ulike_kses( $this->value ) .'</textarea>';
       echo $this->field_after();
 
     }
