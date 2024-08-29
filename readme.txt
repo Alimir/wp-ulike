@@ -145,9 +145,10 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web s
 == Changelog ==
 
 = 4.7.4 =
-* New: Added email verification support for newly registered users. [PRO]
-* Tweak: Enhanced stats panel datepicker with a modern, stylish design, including support for preset date ranges. [PRO]
-* Tweak: Optimized select fields for better compatibility with dark mode.
+* Added: Added email verification support for newly registered users. [PRO]
+* Improved: Enhanced stats panel datepicker with a modern, stylish design, including support for preset date ranges. [PRO]
+* Improved: Optimized select fields for better compatibility with dark mode.
+* Improved: Improved sorting functionality on the logs page.
 * Fixed: Addressed several minor bugs and performance issues.
 
 = 4.7.3 =
