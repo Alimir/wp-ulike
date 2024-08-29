@@ -104,7 +104,7 @@ function wp_ulike_get_number_of_new_likes() {
     }
 
     // Refresh likes
-	if( isset( $_GET["page"] ) && stripos( $_GET["page"], "wp-ulike-statistics" ) !== false && is_super_admin() ) {
+	if( isset( $_GET["page"] ) && stripos( sanitize_text_field( wp_unslash( $_GET["page"] ) ), "wp-ulike-statistics" ) !== false && is_super_admin() ) {
         wp_ulike_update_meta_data( 1, 'statistics', $cache_key, 0 );
 
         return 0;

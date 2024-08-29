@@ -33,12 +33,12 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	 */
 	private function setFormData(){
 		$this->data['id']             = isset( $_POST['id'] ) ? absint($_POST['id']) : NULL;
-		$this->data['type']           = isset( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : NULL;
-		$this->data['nonce']          = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : NULL;
-		$this->data['factor']         = isset( $_POST['factor'] ) ? sanitize_text_field($_POST['factor']) : NULL;
-		$this->data['template']       = isset( $_POST['template'] ) ? sanitize_text_field($_POST['template']) : 'wpulike-default';
-		$this->data['displayLikers']  = isset( $_POST['displayLikers'] ) ? sanitize_text_field($_POST['displayLikers']) : false;
-		$this->data['likersTemplate'] = isset( $_POST['likersTemplate'] ) ? sanitize_text_field($_POST['likersTemplate']) : 'popover';
+		$this->data['type']           = isset( $_POST['type'] ) ? sanitize_text_field( wp_unslash( $_POST['type'] ) ) : NULL;
+		$this->data['nonce']          = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : NULL;
+		$this->data['factor']         = isset( $_POST['factor'] ) ? sanitize_text_field( wp_unslash( $_POST['factor'] ) ) : NULL;
+		$this->data['template']       = isset( $_POST['template'] ) ? sanitize_text_field( wp_unslash( $_POST['template'] ) ) : 'wpulike-default';
+		$this->data['displayLikers']  = isset( $_POST['displayLikers'] ) ? sanitize_text_field( wp_unslash( $_POST['displayLikers'] ) ) : false;
+		$this->data['likersTemplate'] = isset( $_POST['likersTemplate'] ) ? sanitize_text_field( wp_unslash( $_POST['likersTemplate'] ) ) : 'popover';
 	}
 
 	/**

@@ -20,10 +20,10 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function wp_ulike_ajax_notice_handler() {
     // Store it in the options table
-	if ( ! isset( $_POST['id'] ) ||  ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), '_notice_nonce' ) ) {
+	if ( ! isset( $_POST['id'] ) ||  ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), '_notice_nonce' ) ) {
 		wp_send_json_error(  esc_html__( 'Token Error.', 'wp-ulike' ) );
 	} else {
-		wp_ulike_set_transient( 'wp-ulike-notice-' . sanitize_text_field( $_POST['id' ] ), 1, absint( $_POST['expiration'] ) );
+		wp_ulike_set_transient( 'wp-ulike-notice-' . sanitize_text_field( wp_unslash( $_POST['id' ] ) ), 1, absint( $_POST['expiration'] ) );
 		wp_send_json_success( esc_html__( 'It\'s OK.', 'wp-ulike' ) );
 	}
 }
@@ -70,7 +70,7 @@ function wp_ulike_history_api(){
 	*/
 	// @endif
 
-	$type    = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : 'post';
+	$type    = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : 'post';
 	$page    = isset( $_GET['page'] ) ? absint( $_GET['page'] ) : 1;
 	$perPage = isset( $_GET['perPage'] ) ? absint( $_GET['perPage'] ) : 15;
 
@@ -102,7 +102,7 @@ function wp_ulike_delete_history_api(){
 	// @endif
 
 	$item_id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
-	$type    = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : '';
+	$type    = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
 
 	if( empty( $item_id ) || empty( $type ) ){
 		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );

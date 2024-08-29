@@ -241,7 +241,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
          */
         private function flush_dismissible(){
             if ( isset( $_GET[ $this->args['dismissible']['url_key'] ] ) && isset( $_GET[ '_notice_nonce' ] ) && $_GET[ $this->args['dismissible']['url_key'] ] === $this->args['id'] ) {
-                if ( ! wp_verify_nonce( $_GET[ '_notice_nonce' ],  $this->args['dismissible']['action'] ) ) {
+                if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET[ '_notice_nonce' ] ) ),  $this->args['dismissible']['action'] ) ) {
                     wp_die( esc_html__( 'Authorization failed. Please refresh the page and try again.', 'wp-ulike' ) );
                 }
                 wp_ulike_set_transient( $this->get_transient_key(), 1, $this->args['dismissible']['expiration'] );

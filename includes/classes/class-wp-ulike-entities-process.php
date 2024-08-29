@@ -503,21 +503,21 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				if( strpos( $this->currentStatus, 'un') === false  ){
 					// update all logs period
 					$this->wpdb->query( "
-							UPDATE `{$this->wpdb->prefix}ulike_meta`
-							SET `meta_value` = (`meta_value` + 1)
-							WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
+						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						SET `meta_value` = (`meta_value` + 1)
+						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
 					" );
 					// update new votes
 					$this->wpdb->query( "
-							UPDATE `{$this->wpdb->prefix}ulike_meta`
-							SET `meta_value` = (`meta_value` + 1)
-							WHERE `meta_group` = 'statistics' AND `meta_key` = 'calculate_new_votes'
+						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						SET `meta_value` = (`meta_value` + 1)
+						WHERE `meta_group` = 'statistics' AND `meta_key` = 'calculate_new_votes'
 					" );
 					$table = $this->typeSettings->getTableName();
 					$this->wpdb->query( "
-							UPDATE `{$this->wpdb->prefix}ulike_meta`
-							SET `meta_value` = (`meta_value` + 1)
-							WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
+						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						SET `meta_value` = (`meta_value` + 1)
+						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
 					" );
 				}
 

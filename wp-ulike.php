@@ -9,6 +9,8 @@
  * Text Domain:       wp-ulike
  * Domain Path:       /languages/
  * Tested up to: 	  6.6.1
+ * License: GPL-2.0+
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
  * WP ULike is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
