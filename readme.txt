@@ -6,7 +6,7 @@ Tags: like, marketing, elementor, user profile, rating
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.6.1
-Stable tag: 4.7.3
+Stable tag: 4.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,12 @@ Our WP ULike project has been able to attract more than 60,000 active users in t
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS et LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.7.4 =
+* New: Added email verification support for newly registered users. [PRO]
+* Tweak: Enhanced stats panel datepicker with a modern, stylish design, including support for preset date ranges. [PRO]
+* Tweak: Optimized select fields for better compatibility with dark mode.
+* Fixed: Addressed several minor bugs and performance issues.
 
 = 4.7.3 =
 * Added: Dark mode support on the stats panel for a more comfortable viewing experience.
