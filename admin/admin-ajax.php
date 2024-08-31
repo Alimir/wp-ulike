@@ -128,7 +128,15 @@ add_action('wp_ajax_nopriv_wp_ulike_delete_history_api', 'wp_ulike_delete_histor
  * @return void
  */
 function wp_ulike_localization_api(){
+	global $current_user;
+
 	wp_send_json( [
+		// variables
+		'{{site_name}}'    => get_bloginfo('name'),
+		'{{language}}'     => substr(get_bloginfo('language'), 0, 2),
+		'{{display_name}}' => esc_attr( $current_user->display_name ),
+
+		// dashboard
 		'Dashboard'                       => esc_html__( 'Dashboard', 'wp-ulike' ),
 		'Engagement History'              => esc_html__( 'Engagement History', 'wp-ulike' ),
 		'View Full History'               => esc_html__( 'View Full History', 'wp-ulike' ),
@@ -145,19 +153,24 @@ function wp_ulike_localization_api(){
 		'for'                             => esc_html__( 'for', 'wp-ulike' ),
 
 		// Filters
-		'Like'          => esc_html__( 'Like', 'wp-ulike' ),
-		'Unlike'        => esc_html__( 'Unlike', 'wp-ulike' ),
-		'Dislike'       => esc_html__( 'Dislike', 'wp-ulike' ),
-		'Undislike'     => esc_html__( 'Undislike', 'wp-ulike' ),
-		'Select...'     => esc_html__( 'Select...', 'wp-ulike' ),
-		'Start Date'    => esc_html__( 'Start Date', 'wp-ulike' ),
-		'End Date'      => esc_html__( 'End Date', 'wp-ulike' ),
-		'Status Filter' => esc_html__( 'Status Filter', 'wp-ulike' ),
-		'Post Types'    => esc_html__( 'Post Types', 'wp-ulike' ),
-		'Show Filters'  => esc_html__( 'Show Filters', 'wp-ulike' ),
-		'Hide Filters'  => esc_html__( 'Hide Filters', 'wp-ulike' ),
-		'Clear all'     => esc_html__( 'Clear all', 'wp-ulike' ),
-		'Apply'         => esc_html__( 'Apply', 'wp-ulike' ),
+		'Like'                   => esc_html__( 'Like', 'wp-ulike' ),
+		'Unlike'                 => esc_html__( 'Unlike', 'wp-ulike' ),
+		'Dislike'                => esc_html__( 'Dislike', 'wp-ulike' ),
+		'Undislike'              => esc_html__( 'Undislike', 'wp-ulike' ),
+		'Select...'              => esc_html__( 'Select...', 'wp-ulike' ),
+		'Date Range'             => esc_html__( 'Date Range', 'wp-ulike' ),
+		'This Week'              => esc_html__( 'This Week', 'wp-ulike' ),
+		'Last Week'              => esc_html__( 'Last Week', 'wp-ulike' ),
+		'Last {{days}} Days'     => esc_html__( 'Last {{days}} Days', 'wp-ulike' ),
+		'Last {{months}} Months' => esc_html__( 'Last {{months}} Months', 'wp-ulike' ),
+		'This Year'              => esc_html__( 'This Year', 'wp-ulike' ),
+		'Last Year'              => esc_html__( 'Last Year', 'wp-ulike' ),
+		'Status Filter'          => esc_html__( 'Status Filter', 'wp-ulike' ),
+		'Post Types'             => esc_html__( 'Post Types', 'wp-ulike' ),
+		'Show Filters'           => esc_html__( 'Show Filters', 'wp-ulike' ),
+		'Hide Filters'           => esc_html__( 'Hide Filters', 'wp-ulike' ),
+		'Clear all'              => esc_html__( 'Clear all', 'wp-ulike' ),
+		'Apply'                  => esc_html__( 'Apply', 'wp-ulike' ),
 
 		// Charts
 		'Dates'                                    => esc_html__( 'Dates', 'wp-ulike' ),
@@ -206,6 +219,23 @@ function wp_ulike_localization_api(){
 		'Unlock WP ULike Pro'  => esc_html__('Unlock WP ULike Pro', 'wp-ulike'),
 		'Discover More Features' => esc_html__('Discover More Features', 'wp-ulike'),
 
+		// TimeAgo
+		"timeAgo"       => esc_html__('{{count}} {{interval}} ago', 'wp-ulike'),
+		"year"          => esc_html__('year', 'wp-ulike'),
+		"year_plural"   => esc_html__('years', 'wp-ulike'),
+		"month"         => esc_html__('month', 'wp-ulike'),
+		"month_plural"  => esc_html__('months', 'wp-ulike'),
+		"week"          => esc_html__('week', 'wp-ulike'),
+		"week_plural"   => esc_html__('weeks', 'wp-ulike'),
+		"day"           => esc_html__('day', 'wp-ulike'),
+		"day_plural"    => esc_html__('days', 'wp-ulike'),
+		"hour"          => esc_html__('hour', 'wp-ulike'),
+		"hour_plural"   => esc_html__('hours', 'wp-ulike'),
+		"minute"        => esc_html__('minute', 'wp-ulike'),
+		"minute_plural" => esc_html__('minutes', 'wp-ulike'),
+		"second"        => esc_html__('second', 'wp-ulike'),
+		"second_plural" => esc_html__('seconds', 'wp-ulike'),
+		"Just Now"      => esc_html__('Just Now', 'wp-ulike'),
 	] );
 }
 add_action('wp_ajax_wp_ulike_localization','wp_ulike_localization_api');
