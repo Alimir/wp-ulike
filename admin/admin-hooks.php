@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @return			string
  */
 function wp_ulike_copyright( $text ) {
-	if( isset($_GET["page"]) && stripos( $_GET["page"], "wp-ulike") !== false ) {
+	if( isset($_GET["page"]) && stripos( sanitize_text_field( wp_unslash( $_GET["page"] ) ), "wp-ulike") !== false ) {
 		return sprintf(
 			'%s <a href="%s" title="TechnoWich" target="_blank">%s</a>',
 			esc_html__( 'Proudly Powered By', 'wp-ulike' ),

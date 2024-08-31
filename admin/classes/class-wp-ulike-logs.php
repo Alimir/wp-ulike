@@ -19,7 +19,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * Constructor
 		 */
 		function __construct( $table, $page = 1, $per_page = 15, $sort = array(
-			'type'  => 'ASC',
+			'type'  => 'DESC',
 			'field' => 'id'
 		) ){
 			global $wpdb;

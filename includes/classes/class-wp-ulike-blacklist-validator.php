@@ -21,9 +21,12 @@ class wp_ulike_blacklist_validator {
      */
     protected static function blacklist()
     {
-        return 'comments' === wp_ulike_get_option('blacklist_integration')
-            ? trim(get_option( 'disallowed_keys' ))
-            : trim(wp_ulike_get_option('blacklist_entries'));
+        $blacklist_option = 'comments' === wp_ulike_get_option('blacklist_integration')
+            ? get_option('disallowed_keys')
+            : wp_ulike_get_option('blacklist_entries');
+
+        // Ensure $blacklist_option is a string before passing to trim()
+        return trim((string) $blacklist_option);
     }
 
     /**

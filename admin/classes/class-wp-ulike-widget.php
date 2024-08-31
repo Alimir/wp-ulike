@@ -459,7 +459,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 * @return			String
 		 */
 		public function widget( $args, $instance ) {
-			$title = apply_filters('widget_title', $instance['title'] );
+			$title = apply_filters('widget_title', esc_html( $instance['title'] ) );
 			$type  = $instance['type'];
 			$style = $instance['style'];
 
@@ -478,7 +478,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			echo $args['before_widget'];
 
 			if ( ! empty( $title ) ) {
-				echo $args['before_title'] . $title . $args['after_title'];
+				echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
 			}
 
 			echo '<ul class="most_liked_'.$type.' wp_ulike_style_'.$style.'">';
