@@ -528,7 +528,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			?>
 			<p>
 				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e('Title:', 'wp-ulike'); ?></label>
-				<input id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" type="text">
+				<input id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title']); ?>" type="text">
 			</p>
 
 			<p>
@@ -545,7 +545,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			<p>
 				<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php esc_html_e('Number of items to show:', 'wp-ulike'); ?></label>
-				<input id="<?php echo $this->get_field_id( 'count' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'count' ); ?>" value="<?php echo $instance['count']; ?>"  step="1" min="1" size="3" type="number">
+				<input id="<?php echo $this->get_field_id( 'count' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'count' ); ?>" value="<?php echo esc_attr( $instance['count'] ); ?>"  step="1" min="1" size="3" type="number">
 			</p>
 
 			<p>
@@ -570,7 +570,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			<p>
 				<label for="<?php echo $this->get_field_id( 'trim' ); ?>"><?php esc_html_e('Title Trim (Length):', 'wp-ulike'); ?></label>
-				<input id="<?php echo $this->get_field_name( 'trim' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'trim' ); ?>" value="<?php echo $instance['trim']; ?>"  step="1" min="1" size="3" type="number">
+				<input id="<?php echo $this->get_field_name( 'trim' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'trim' ); ?>" value="<?php echo esc_attr( $instance['trim'] ); ?>"  step="1" min="1" size="3" type="number">
 			</p>
 
 
@@ -594,7 +594,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			<p>
 				<label for="<?php echo $this->get_field_id( 'size' ); ?>"><?php esc_html_e('Thumbnail/Avatar size:', 'wp-ulike'); ?><small> (min. 8)</small></label>
-				<input id="<?php echo $this->get_field_id( 'size' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'size' ); ?>" value="<?php echo $instance['size']; ?>" step="1" min="8" size="3" type="number">
+				<input id="<?php echo $this->get_field_id( 'size' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'size' ); ?>" value="<?php echo esc_attr( $instance['size'] ); ?>" step="1" min="8" size="3" type="number">
 			</p>
 
 			<?php
