@@ -1,16 +1,16 @@
-=== WP ULike - The Ultimate Engagement Toolkit for Websites ===
+=== WP ULike - All-in-One Engagement Toolkit ===
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: like, marketing, elementor, user profile, analytics
+Tags: marketing, performance, analytics, feedback, elementor
 Requires PHP: 7.2.5
 Requires at least: 6.0
-Tested up to: 6.6.1
-Stable tag: 4.7.4
+Tested up to: 6.6.2
+Stable tag: 4.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Track user reactions with a Like/Dislike button across posts, comments, BuddyPress, bbPress. Analyze user preferences with detailed stats
+Monitor user engagement with Like/Dislike buttons on posts, comments, and forums, and gain insights through comprehensive stats.
 
 == Description ==
 
@@ -135,6 +135,11 @@ Yes, developed by TechnoWich, WP ULike adheres to the latest coding and security
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS, and LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.7.5 =
+* Improved: Enhanced functionalities of the stats panel for better performance.
+* Improved: Addressed remaining security issues by properly escaping values.
+* Fixed: Resolved several minor bugs.
 
 = 4.7.4 =
 * Added: Added email verification support for newly registered users. [PRO]
