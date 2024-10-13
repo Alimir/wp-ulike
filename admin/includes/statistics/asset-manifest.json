@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.bbc11368.css",
-    "main.js": "/static/js/main.b06e4875.js",
+    "main.css": "/static/css/main.86f601a0.css",
+    "main.js": "/static/js/main.ca8109d1.js",
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.bbc11368.css",
-    "static/js/main.b06e4875.js"
+    "static/css/main.86f601a0.css",
+    "static/js/main.ca8109d1.js"
   ]
 }
