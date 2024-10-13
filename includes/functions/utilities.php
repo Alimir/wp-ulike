@@ -129,7 +129,7 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 	 */
 	function wp_ulike_date_i18n($date){
 		return date_i18n(
-			get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ),
+			get_option( 'date_format' ) . ' ' . get_option( 'time_format' ),
 			strtotime($date)
 		);
 	}

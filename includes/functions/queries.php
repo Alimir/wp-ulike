@@ -480,7 +480,7 @@ if( ! function_exists( 'wp_ulike_get_user_latest_activity' ) ) {
 		$result = $wpdb->get_row( $query, ARRAY_A );
 
 		if( ! empty( $result['date_time'] ) ){
-			$result['date_time'] = wp_date( 'j F Y H:i:s', strtotime( $result['date_time'] ) );
+			$result['date_time'] = wp_ulike_date_i18n( $result['date_time'] );
 		}
 
 		return $result;
