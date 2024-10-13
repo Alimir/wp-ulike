@@ -278,6 +278,11 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
 	 * @return			String
 	 */
 	function wp_ulike_buddypress( $type = 'get', $args = array() ) {
+		// check buddypress activation
+		if ( ! defined( 'BP_VERSION' ) ) {
+			return;
+		}
+
 		// Set activity ID
 		if( isset( $args['id'] ) ){
 			$activityID = $args['id'];
@@ -480,6 +485,10 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
 	 * @return			String
 	 */
 	function wp_ulike_bbpress( $type = 'get', $args = array() ) {
+		// check buddypress activation
+		if( ! function_exists( 'is_bbpress' ) ) {
+			return;
+		}
 
 		// Check reply type
 		$post_ID = bbp_get_reply_id();
