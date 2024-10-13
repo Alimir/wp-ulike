@@ -230,7 +230,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			// Extract variables
 			extract( $parsed_args );
 
-			$cache_key = sanitize_key( sprintf( 'count_logs_for_%s_table_in_%s_daterange', $table, $date ) );
+			$cache_key = sanitize_key( sprintf( 'count_logs_for_%s_table_in_%s_daterange', $table, is_array($date) ? implode('_', $date) : $date ) );
 
 			if( $date === 'all' ){
 				$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );

@@ -450,6 +450,43 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_user_latest_activity' ) ) {
+	/**
+	 * Get user latest activity details for each item
+	 *
+	 * @param integer $item_id
+	 * @param integer $user_id
+	 * @param string $type
+	 * @return array|null
+	 */
+	function wp_ulike_get_user_latest_activity( $item_id, $user_id, $type ) {
+		global $wpdb;
+
+		$settings    = new wp_ulike_setting_type( $type );
+		$table_name  = $wpdb->prefix . $settings->getTableName();
+		$column_name = $settings->getColumnName();
+
+		$query  = $wpdb->prepare( "
+				SELECT `date_time`, `status`
+				FROM `{$table_name}`
+				WHERE `{$column_name}` = %s
+				AND `user_id` = %d
+				ORDER BY id DESC LIMIT 1
+			",
+			$item_id,
+			$user_id
+		);
+
+		$result = $wpdb->get_row( $query, ARRAY_A );
+
+		if( ! empty( $result['date_time'] ) ){
+			$result['date_time'] = wp_ulike_date_i18n( $result['date_time'] );
+		}
+
+		return $result;
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_user_item_count_per_day' ) ) {
 	/**
 	 * A simple function to get user vote counter per day

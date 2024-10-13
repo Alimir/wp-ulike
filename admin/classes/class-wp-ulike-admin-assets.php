@@ -88,6 +88,11 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					$js_file = WP_ULIKE_ADMIN_URL . '/includes/statistics' . $manifest['files']['main.js'];
 					wp_enqueue_script('wp_ulike_admin_react', $js_file, array(), null, true);
 				}
+
+				// Pass the app config to the frontend
+				wp_localize_script( 'wp_ulike_admin_react', 'StatsAppConfig', array(
+					'nonce' => wp_create_nonce( WP_ULIKE_SLUG )
+				));
 			}
 		}
 

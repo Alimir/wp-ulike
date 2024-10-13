@@ -129,7 +129,7 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 	 */
 	function wp_ulike_date_i18n($date){
 		return date_i18n(
-			get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ),
+			get_option( 'date_format' ) . ' ' . get_option( 'time_format' ),
 			strtotime($date)
 		);
 	}
@@ -422,6 +422,33 @@ if( ! function_exists('wp_ulike_maybe_define_constant') ){
 	function wp_ulike_maybe_define_constant( $name, $value ) {
 		if ( ! defined( $name ) ) {
 			define( $name, $value );
+		}
+	}
+}
+
+if( ! function_exists('wp_ulike_validate_x_wp_nonce') ){
+	/**
+	 * Validate wp nonce in header request
+	 *
+	 * @param string $action
+	 * @return boolean
+	 */
+	function wp_ulike_validate_x_wp_nonce( $action = 'wp_ulike_nonce_action' ) {
+		// Get all headers
+		$headers = getallheaders();
+
+		// Check if the X-WP-Nonce header is set
+		if (isset($headers['X-WP-Nonce'])) {
+			$nonce = $headers['X-WP-Nonce'];
+
+			// Verify the nonce
+			if (!wp_verify_nonce($nonce, $action)) {
+				return false;
+			}
+
+			return true; // Nonce is valid
+		} else {
+			return false;
 		}
 	}
 }
