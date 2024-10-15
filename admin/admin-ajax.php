@@ -131,7 +131,7 @@ function wp_ulike_localization_api(){
 	// @if DEV
 	/*
 	// @endif
-	if( ! current_user_can( wp_ulike_get_user_access_capability('stats') ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+	if( ! current_user_can( wp_ulike_get_user_access_capability('stats') ) ){
 		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
 	}
 	// @if DEV
