@@ -587,20 +587,17 @@ if( ! function_exists('wp_ulike_get_the_id') ){
 	 * @return bool|mixed
 	 */
 	function wp_ulike_get_the_id( $post_id = '' ) {
-		$post_ID = empty( $post_id ) ? get_the_ID() : $post_id;
+		$post_id = empty( $post_id ) ? get_the_ID() : $post_id;
 
-		// wpml synchronization
+		// Check if WPML synchronization is active
 		if ( wp_ulike_is_wpml_active() && wp_ulike_setting_repo::isWpmlSynchronizationOn() ) {
-			global $sitepress;
-
-			if (has_filter( 'wpml_object_id' )) {
-				$post_ID = apply_filters('wpml_object_id', $post_ID, 'post', false, $sitepress->get_default_language());
-			} else {
-				$post_ID = icl_object_id( $post_ID, 'post', false, $sitepress->get_default_language());
-			}
+			$current_language = apply_filters( 'wpml_current_language', null );
+			$post_type        = get_post_type( $post_id );
+			$post_id          = apply_filters( 'wpml_object_id', $post_id, $post_type, false, $current_language );
 		}
 
-		return apply_filters( 'wp_ulike_get_the_id', $post_ID );
+		// Return the filtered post ID
+		return apply_filters( 'wp_ulike_get_the_id', $post_id );
 	}
 }
 

@@ -25,11 +25,7 @@ if( ! function_exists( 'wp_ulike' ) ){
 	 */
 	function wp_ulike( $type = 'get', $args = array() ) {
 		// Get item ID
-		$post_ID = ! empty( $args['id'] ) ? $args['id'] : NULL;
-
-		if( empty( $post_ID ) ){
-			$post_ID = wp_ulike_get_the_id();
-		}
+		$post_ID = wp_ulike_get_the_id( $args['id'] ?? '' );
 
 		// Return if post ID not exist
 		if( empty( $post_ID ) ){

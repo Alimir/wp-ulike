@@ -64,14 +64,16 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					continue;
 				}
 
+				$post_id = wp_ulike_get_the_id( $post->ID );
+
 				$post_title = stripslashes($post->post_title);
-				$permalink  = get_permalink($post->ID);
-				$post_count = $this->get_counter_value($post->ID, 'post', 'like', $period );
+				$permalink  = get_permalink( $post_id );
+				$post_count = $this->get_counter_value($post_id, 'post', 'like', $period );
 
 				$result .= sprintf(
 					'%s %s<a href="%s">%s</a> %s %s',
 					$before_item,
-					$show_thumb ? $this->get_post_thumbnail( $post->ID, $sizeOf ) : '',
+					$show_thumb ? $this->get_post_thumbnail( $post_id, $sizeOf ) : '',
 					$permalink,
 					wp_trim_words( $post_title, $trim, '...' ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $post_count, 'like' ) . '</span>' : '',
@@ -198,11 +200,12 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			if( ! empty( $getPosts ) ){
 				ob_start();
 				foreach ( $getPosts as $post ) :
+					$post_id = wp_ulike_get_the_id( $post->ID );
 					echo $before_item;
 					?>
-					<a href="<?php echo get_the_permalink( $post->ID ); ?>"><?php echo get_the_title( $post->ID ); ?></a>
+					<a href="<?php echo get_the_permalink( $post_id ); ?>"><?php echo get_the_title( $post_id ); ?></a>
 				<?php
-					echo $show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $this->get_counter_value($post->ID, 'post', 'like', $period ), 'like' ) . '</span>' : '';
+					echo $show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $this->get_counter_value($post_id, 'post', 'like', $period ), 'like' ) . '</span>' : '';
 					echo $after_item;
 				endforeach;
 				$result = ob_get_clean();

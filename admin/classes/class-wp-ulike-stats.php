@@ -339,11 +339,12 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 					continue;
 				}
 
-				$counter_value = wp_ulike_get_counter_value( $post->ID, 'post', 'like', $is_distinct );
+				$post_id       = wp_ulike_get_the_id( $post->ID );
+				$counter_value = wp_ulike_get_counter_value( $post_id, 'post', 'like', $is_distinct );
 
 				$result[] = [
 					'title'       => stripslashes($post->post_title),
-					'permalink'   => get_permalink($post->ID),
+					'permalink'   => get_permalink($post_id),
 					'likes_count' => $counter_value
 				];
 			}
