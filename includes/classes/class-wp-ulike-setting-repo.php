@@ -63,6 +63,15 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Get aria label for like buttons
+	 *
+	 * @return string
+	 */
+	public static function getLikeAriaLabel(){
+		return esc_attr( self::getOption( 'like_button_aria_label', esc_html__( 'Like Button', 'wp-ulike' ) ) );
+	}
+
+	/**
 	 * Require Login?
 	 *
 	 * @return boolean
