@@ -136,6 +136,10 @@ Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS, and LiteSpeed web
 
 == Changelog ==
 
+= 4.7.6 =
+* Improved: WPML compatibility to better handle multilingual setups.
+* Fixed: Addressed several minor bugs to improve overall stability.
+
 = 4.7.5 =
 * Improved: Enhanced functionalities of the stats panel for better performance.
 * Improved: Addressed remaining security issues by properly escaping values.
