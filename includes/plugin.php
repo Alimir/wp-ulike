@@ -48,7 +48,10 @@ class WpUlikeInit {
    *
    * @return void
    */
-  public function init(){}
+  public function init(){
+    // Load plugin text domain
+    $this->load_plugin_textdomain();
+  }
 
   /**
    * Plugins loaded hook
@@ -60,8 +63,6 @@ class WpUlikeInit {
     if ( self::is_admin_backend() ) {
       $this->maybe_upgrade_database();
     }
-    // Load plugin text domain
-    $this->load_plugin_textdomain();
   }
 
   private function maybe_upgrade_database(){
