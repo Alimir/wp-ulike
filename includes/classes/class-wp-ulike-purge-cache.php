@@ -325,11 +325,11 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 			foreach ($post_ids as $post_id) {
 				$post_url = get_permalink($post_id);
 				if( get_post_type( $post_id ) ){
-					\FlyingPress\Purge::purge_url( $post_url );
+					\FlyingPress\Purge::purge_urls( [ $post_url ] );
 				}
 				// purge reffer url if is not same as triggered post
 				if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
-					\FlyingPress\Purge::purge_url( $reffer_url );
+					\FlyingPress\Purge::purge_urls( [ $reffer_url ] );
 				}
 			}
 		}
