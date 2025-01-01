@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2024-11-18 14:12:15+00:00\n"
+"POT-Creation-Date: 2025-01-01 12:41:41+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:27:07+0000\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -542,13 +542,13 @@ msgid ""
 "tag.)"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-pages.php:27 includes/plugin.php:119
+#: admin/classes/class-wp-ulike-admin-pages.php:27 includes/plugin.php:120
 msgid "Statistics"
 msgstr "Statistiques"
 
 #: admin/classes/class-wp-ulike-admin-pages.php:35
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
-#: includes/plugin.php:120
+#: includes/plugin.php:121
 msgid "About"
 msgstr "À propos"
 
@@ -556,7 +556,11 @@ msgstr "À propos"
 msgid "Logs"
 msgstr "Fichiers journaux"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:118
+#. Plugin Name of the plugin/theme
+msgid "WP ULike"
+msgstr "WP ULike"
+
+#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:119
 msgid "Settings"
 msgstr "Réglages"
 
@@ -1944,10 +1948,6 @@ msgstr "Commentaires récemment non aimés"
 #: includes/hooks/third-party.php:778 includes/hooks/third-party.php:808
 msgid "This user has not made any likes."
 msgstr "Cet utilisateur n'a fait aucun J'aime"
-
-#. Plugin Name of the plugin/theme
-msgid "WP ULike"
-msgstr "WP ULike"
 
 #. translators: %s: PHP version
 #: wp-ulike.php:77
