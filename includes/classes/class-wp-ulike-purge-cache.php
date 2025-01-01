@@ -30,6 +30,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 			$this->purgeWPSuperCache();
 			$this->purgeCacheEnablerCache();
 			$this->purgeFlyingPressCache();
+			$this->purgeNitropackCache();
 		}
 
 
@@ -48,6 +49,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 				$this->purgeWPSuperCache($post_ids, $reffer_url);
 				$this->purgeCacheEnablerCache($post_ids, $reffer_url);
 				$this->purgeFlyingPressCache($post_ids, $reffer_url);
+				$this->purgeNitropackCache($post_ids, $reffer_url);
 			}
 		}
 
@@ -269,10 +271,10 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 				wp_cache_clear_cache();
 			}
 
-			if (function_exists('wp_cache_post_change')) {
+			if (function_exists('wpsc_delete_post_cache')) {
 				foreach ($post_ids as $post_id) {
 					if( get_post_type( $post_id ) ){
-						wp_cache_post_change($post_id);
+						wpsc_delete_post_cache($post_id);
 					}
 
 					// purge reffer url if is not same as triggered post
@@ -346,7 +348,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 			}
 
 			if (empty($post_ids)) {
-				\FlyingPress\Purge::purge_everything();
+				\FlyingPress\Purge::purge_pages();
 			}
 			foreach ($post_ids as $post_id) {
 				$post_url = get_permalink($post_id);
