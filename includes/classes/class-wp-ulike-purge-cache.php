@@ -30,6 +30,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 			$this->purgeWPSuperCache();
 			$this->purgeCacheEnablerCache();
 			$this->purgeFlyingPressCache();
+			$this->purgeNitropackCache();
 		}
 
 
@@ -48,6 +49,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 				$this->purgeWPSuperCache($post_ids, $reffer_url);
 				$this->purgeCacheEnablerCache($post_ids, $reffer_url);
 				$this->purgeFlyingPressCache($post_ids, $reffer_url);
+				$this->purgeNitropackCache($post_ids, $reffer_url);
 			}
 		}
 
@@ -269,10 +271,10 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 				wp_cache_clear_cache();
 			}
 
-			if (function_exists('wp_cache_post_change')) {
+			if (function_exists('wpsc_delete_post_cache')) {
 				foreach ($post_ids as $post_id) {
 					if( get_post_type( $post_id ) ){
-						wp_cache_post_change($post_id);
+						wpsc_delete_post_cache($post_id);
 					}
 
 					// purge reffer url if is not same as triggered post
@@ -280,6 +282,32 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 					if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
 						wpsc_delete_url_cache( $reffer_url );
 					}
+				}
+			}
+		}
+
+		/**
+		 * @see https://nitropack.io/
+		 */
+		protected function purgeNitropackCache($post_ids = [], $reffer_url = NULL)
+		{
+			if (!function_exists('nitropack_invalidate') || !function_exists('nitropack_get_cacheable_object_types')) {
+				return;
+			}
+			if (!get_option('nitropack-autoCachePurge', 1)) {
+				return;
+			}
+			if (empty($post_ids)) {
+				nitropack_invalidate(null, null, 'Invalidating all pages after user engagement (likes/dislikes) via WP ULike.');
+				return;
+			}
+			foreach ($post_ids as $postId) {
+				$cacheableTypes = nitropack_get_cacheable_object_types();
+				$post = get_post($postId);
+				$postType = $post->post_type ?? 'post';
+				$postTitle = $post->post_title ?? '';
+				if (in_array($postType, $cacheableTypes)) {
+					nitropack_invalidate(null, "single:{$postId}", sprintf('Invalidating "%s" after user engagement (likes/dislikes) via WP ULike.', $postTitle));
 				}
 			}
 		}
@@ -320,16 +348,16 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 			}
 
 			if (empty($post_ids)) {
-				\FlyingPress\Purge::purge_everything();
+				\FlyingPress\Purge::purge_pages();
 			}
 			foreach ($post_ids as $post_id) {
 				$post_url = get_permalink($post_id);
 				if( get_post_type( $post_id ) ){
-					\FlyingPress\Purge::purge_url( $post_url );
+					\FlyingPress\Purge::purge_urls( [ $post_url ] );
 				}
 				// purge reffer url if is not same as triggered post
 				if( $reffer_url && ( wp_parse_url( $reffer_url ) != wp_parse_url( $post_url ) ) ){
-					\FlyingPress\Purge::purge_url( $reffer_url );
+					\FlyingPress\Purge::purge_urls( [ $reffer_url ] );
 				}
 			}
 		}

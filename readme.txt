@@ -6,7 +6,7 @@ Tags: marketing, performance, analytics, feedback, elementor
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 4.7.6
+Stable tag: 4.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,11 @@ Yes, developed by TechnoWich, WP ULike adheres to the latest coding and security
 Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS, and LiteSpeed web servers.
 
 == Changelog ==
+
+= 4.7.7 =
+* Added: Support for NitroPack cache plugin to enhance caching capabilities.
+* Fixed: Improved compatibility with the FlyingPress plugin.
+* Fixed: Resolved several minor issues for smoother functionality.
 
 = 4.7.6 =
 * Improved: WPML compatibility to better handle multilingual setups.

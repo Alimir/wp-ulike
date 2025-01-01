@@ -17,7 +17,7 @@
 			<img alt="Need Some Help?" src="<?php echo WP_ULIKE_ASSETS_URL; ?>/img/svg/group.svg">
 		</div>
 		<div class="ulf-about-header-title">
-			<p><?php echo WP_ULIKE_NAME . ' ' . WP_ULIKE_VERSION; ?></p>
+			<p><?php echo esc_html__( 'WP ULike', 'wp-ulike' ) . ' ' . WP_ULIKE_VERSION; ?></p>
 		</div>
 		<div class="ulf-about-header-text"><?php esc_html_e( 'A professional WordPress plugin that makes your website more attractive and user-friendly.', 'wp-ulike') ; ?></div>
 		<nav class="ulf-about-header-navigation nav-tab-wrapper wp-clearfix">
@@ -31,7 +31,7 @@
 
 	<div class="ulf-about-section is-feature has-subtle-background-color">
 		<div class="column">
-			<h1 class="is-smaller-heading"><?php esc_html_e('About','wp-ulike') . ' ' . WP_ULIKE_NAME; ?></h1>
+			<h1 class="is-smaller-heading"><?php esc_html_e('About','wp-ulike') . ' ' . esc_html__( 'WP ULike', 'wp-ulike' ); ?></h1>
 			<p><?php esc_html_e( 'Looking to increase user engagement on your WordPress site? WP ULike plugin lets you easily add voting buttons to your content. With customizable settings and detailed analytics, you can track user engagement, optimize your content, and build a loyal following.', 'wp-ulike') ; ?></p>
 		</div>
 	</div>
