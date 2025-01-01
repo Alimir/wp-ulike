@@ -285,6 +285,32 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 		}
 
 		/**
+		 * @see https://nitropack.io/
+		 */
+		protected function purgeNitropackCache($post_ids = [], $reffer_url = NULL)
+		{
+			if (!function_exists('nitropack_invalidate') || !function_exists('nitropack_get_cacheable_object_types')) {
+				return;
+			}
+			if (!get_option('nitropack-autoCachePurge', 1)) {
+				return;
+			}
+			if (empty($post_ids)) {
+				nitropack_invalidate(null, null, 'Invalidating all pages after user engagement (likes/dislikes) via WP ULike.');
+				return;
+			}
+			foreach ($post_ids as $postId) {
+				$cacheableTypes = nitropack_get_cacheable_object_types();
+				$post = get_post($postId);
+				$postType = $post->post_type ?? 'post';
+				$postTitle = $post->post_title ?? '';
+				if (in_array($postType, $cacheableTypes)) {
+					nitropack_invalidate(null, "single:{$postId}", sprintf('Invalidating "%s" after user engagement (likes/dislikes) via WP ULike.', $postTitle));
+				}
+			}
+		}
+
+		/**
 		 * @see https://www.keycdn.com/support/wordpress-cache-enabler-plugin
 		 */
 		protected function purgeCacheEnablerCache($post_ids = [], $reffer_url = NULL)
