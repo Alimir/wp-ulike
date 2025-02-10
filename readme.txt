@@ -2,11 +2,11 @@
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: marketing, performance, analytics, feedback, elementor
+Tags: marketing, performance, analytics, feedback, conversion
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 4.7.7
+Stable tag: 4.7.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,71 +14,31 @@ Monitor user engagement with Like/Dislike buttons on posts, comments, and forums
 
 == Description ==
 
-WP ULike is the ultimate engagement plugin for WordPress, designed to supercharge interaction and feedback on your site. Seamlessly add like and dislike buttons to posts, comments, BuddyPress activities, bbPress topics, and WooCommerce products. Collect invaluable feedback from your audience and unlock the potential to optimize your content and grow your community.
+Turn Visitors into Fans! **WP ULike** makes engagement effortless with **Like & Dislike buttons** for WordPress. Whether it’s blog posts, comments, WooCommerce products, BuddyPress activities, or forum topics, visitors can interact instantly.
 
-Experience the power of **[WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**.
+✔ **Easy to Use** – Set up in seconds with no coding required.
+✔ **Customizable** – Style buttons to match your website perfectly.
+✔ **Smart Insights** – See what your audience loves with built-in stats.
+✔ **Fast & Lightweight** – Optimized for speed and caching plugins.
+✔ **Safe & GDPR Ready** – No personal data stored, with IP anonymization.
 
-= Unique Features You Won't Find Anywhere Else =
-WP ULike’s distinctive features let you transform your website with speed and precision. Whether you're adding like/dislike buttons, configuring login/register forms with 2-Factor authentication, or utilizing our professional Schema.org markup generators, WP ULike has you covered. Enjoy features like social login integration, share buttons, local avatar upload, a notification system, and much more.
+[youtube https://www.youtube.com/watch?v=nxQto2Yj_yc]
 
-= Quick and Easy Voting System Configuration =
-Our intuitive settings panel makes it effortless to set up your voting system. With clean coding and extensive resource management, WP ULike lets you customize every aspect of your buttons with just a few clicks.
+### **Supercharge WP ULike with Pro Features:**
+🚀 **Advanced Stats** – Deep insights with filters and reports.
+🎨 **Premium Templates** – 25+ modern button styles.
+👤 **User Profiles** – Track likes and dislikes with personalized profiles.
+🔑 **Login/Registration Forms** – Simple, AJAX-powered with social login.
+📢 **Social Sharing** – One-click sharing for more exposure.
+⚡ **SEO-Boosting Schema** – Improve search rankings.
+📡 **Developer-Friendly** – REST API & Elementor widgets for full flexibility.
 
-= Stunning Pre-Designed Templates =
-Choose from over 25 beautifully crafted [templates](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) optimized for all devices. These templates are designed to boost user engagement and feedback effortlessly.
+WP ULike gives you **powerful engagement tools for free**, and **WP ULike Pro** helps you take it even further.
 
-= Detailed Analytics at Your Fingertips =
-WP ULike provides a robust [analytics](https://wpulike.com/blog/wp-ulike-pro-statistics/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) suite to help you understand user interactions on your site. With real-time stats and customizable reports, you can track how your audience engages with your content. Advanced filtering and visualization tools make it easy to analyze trends and optimize your strategy.
-
-= The Ultimate User Profile Builder [PRO] =
-With WP ULike’s [profile builder](https://wpulike.com/blog/wordpress-ultimate-profile-builder/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme), you can create rich user profiles that keep your audience engaged. Perfect for social platforms, this feature is developer-friendly, with functional hooks and an easy development structure, allowing full customization.
-
-= Seamless Integration with Elementor [PRO] =
-WP ULike is fully compatible with Elementor, the #1 WordPress page builder. Use our widgets and controllers to effortlessly integrate like/dislike buttons within your Elementor sections.
-
-= Enhanced Login and Registration Forms  [PRO] =
-Redefine your site's login and registration experience with WP ULike PRO. Take advantage of fast AJAX requests and easily customizable templates to elevate your site's user experience.
-
-= Boost Your SEO with Schema Markup [PRO] =
-Enhance your site's visibility with WP ULike PRO’s schema markup generator. This tool helps search engines understand your content better, giving you an edge in search rankings.
-
-= Effortless Social Sharing [PRO] =
-Enable seamless content sharing across major platforms like Facebook, Twitter, LinkedIn, WhatsApp, and more with WP ULike’s social share buttons. Our optimized vector icons ensure your share buttons look great on any device.
-
-= Upgrade to WP ULike PRO =
-Ready to take your site to the next level? WP ULike PRO offers a suite of advanced features designed to maximize user engagement and site performance. Customize your site with dislike buttons, custom login forms, user profiles, schema markup, and social sharing tools. Don’t miss out—upgrade to [WP ULike PRO](https://wpulike.com/pricing/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) today and grow your website like never before.
-
-
-There are many other [features](https://wpulike.com/blog/wp-ulike-pro-version-vs-free/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) to help you build better websites:
-
-* Full voting support, including like, dislike, and subtotal options
-* Customization for every aspect of plugin styles
-* REST API support with versatile routes for app use
-* Advanced settings panel with easy backup and customization options
-* Schema.org generator with star ratings
-* AJAX-based login, registration, password reset, and profile editing forms
-* Easy local avatar upload for front-end and dashboard
-* Progressive log management with advanced search
-* Database optimization tools
-* Over 25 stunning pre-designed templates
-* GDPR-compliant anonymize IP option
-* Extensive metabox options for post customization
-* Full myCred support for points, rewards, gamification, and more
-* Detailed statistics panel with date range and status controls
-* Notifications system with custom messages for each activity
-* Easy shortcode generator with applied shortcodes
-* Elementor page builder support with functional widgets
-* Compatibility with popular cache plugins: WP Rocket, LiteSpeed, W3 Total Cache, and more
-
-Join the ranks of elite web professionals using [WP ULike PRO](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
-
-= Be a contributor =
-Want to contribute? Visit our [GitHub Repository](https://github.com/Alimir/wp-ulike) to see how you can help.
-
-You can also support us by adding a new language via [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/wp-ulike).
+🔹 **Join 80,000+ websites using WP ULike – [Download Now](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**
 
 = More Information =
-* Visit our [Home Page](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
+
 * Check out our [Online Demo](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
 * Access our [Documentation](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) for tutorials and more.
 
@@ -116,25 +76,29 @@ For more guidance, visit our [Knowledge Base](https://docs.wpulike.com/?utm_sour
 
 == Frequently Asked Questions ==
 
-= Does WP ULike work with all themes? =
-Yes, it works with all themes that adhere to WordPress coding standards.
+= Does WP ULike work with any theme? =
+Yes, it’s compatible with all WordPress themes that follow coding standards.
 
-= Is WP ULike compatible with other WordPress plugins? =
-Absolutely. It integrates smoothly with plugins like Elementor, BuddyPress, bbPress, WooCommerce, GamiPress, myCRED, and more. If you encounter any compatibility issues, please let us know.
+= Is WP ULike compatible with other plugins? =
+Absolutely! It integrates smoothly with Elementor, BuddyPress, bbPress, WooCommerce, GamiPress, myCRED, and more. If you face any issues, let us know!
 
-= What’s the difference between WP ULike Pro and Free? =
-The Free version of WP ULike offers extensive features, but WP ULike Pro unlocks professional tools, including up/down voting and an advanced statistics panel. [Learn more](https://wpulike.com/blog/wp-ulike-pro-version-vs-free/).
+= What’s the difference between WP ULike Free and Pro? =
+The Free version includes essential features, while WP ULike Pro unlocks advanced tools like up/down voting, premium templates, and an in-depth stats panel. [Learn more](https://wpulike.com/blog/wp-ulike-pro-version-vs-free/).
 
-= Is WP ULike compatible with multisite? =
-Yes, WP ULike works seamlessly in multisite environments.
+= Can I use WP ULike on a multisite setup? =
+Yes, WP ULike works seamlessly across WordPress multisite networks.
 
-= Is WP ULike safe? =
-Yes, developed by TechnoWich, WP ULike adheres to the latest coding and security standards, boasting over 80,000 active users and a high rating in the WordPress repository.
+= Is WP ULike secure? =
+Yes, developed by TechnoWich, WP ULike follows the latest security and coding standards, with over 80,000 active users and a high WordPress rating.
 
-= Can WP ULike run on Apache, Nginx, LiteSpeed, etc.? =
-Yes, WP ULike is compatible with Apache, Nginx, Microsoft IIS, and LiteSpeed web servers.
+= Which web servers does WP ULike support? =
+WP ULike runs smoothly on Apache, Nginx, LiteSpeed, Microsoft IIS, and other popular web servers.
 
 == Changelog ==
+
+= 4.7.8 =
+* Improved: UI enhancements in the Stats Panel.
+* Fixed: Various small issues and optimizations.
 
 = 4.7.7 =
 * Added: Support for NitroPack cache plugin to enhance caching capabilities.
