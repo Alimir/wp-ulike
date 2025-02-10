@@ -147,8 +147,9 @@ function wp_ulike_localization_api(){
 		'{{display_name}}' => esc_attr( $current_user->display_name ),
 
 		// dashboard
-		'Dashboard'                       => esc_html__( 'Dashboard', 'wp-ulike' ),
-		'Engagement History'              => esc_html__( 'Engagement History', 'wp-ulike' ),
+		'Metrics Dashboard'               => esc_html__( 'Metrics Dashboard', 'wp-ulike' ),
+		'Engagement Logs'                 => esc_html__( 'Engagement Logs', 'wp-ulike' ),
+		'Top Trends'                      => esc_html__( 'Top Trends', 'wp-ulike' ),
 		'View Full History'               => esc_html__( 'View Full History', 'wp-ulike' ),
 		'Total Interactions To Date'      => esc_html__( 'Total Interactions To Date', 'wp-ulike' ),
 		'Today\'s Engagement Overview'    => esc_html__( 'Today\'s Engagement Overview', 'wp-ulike' ),
@@ -161,6 +162,9 @@ function wp_ulike_localization_api(){
 		'Engagement Statistics'           => esc_html__( 'Engagement Statistics', 'wp-ulike' ),
 		'Top'                             => esc_html__( 'Top', 'wp-ulike' ),
 		'for'                             => esc_html__( 'for', 'wp-ulike' ),
+		'Overview'                        => esc_html__( 'Overview', 'wp-ulike' ),
+		'Insights'                        => esc_html__( 'Insights', 'wp-ulike' ),
+		'Logs'                            => esc_html__( 'Logs', 'wp-ulike' ),
 
 		// Filters
 		'Like'                   => esc_html__( 'Like', 'wp-ulike' ),
@@ -219,6 +223,7 @@ function wp_ulike_localization_api(){
 		'Loading...'      => esc_html__( 'Loading...', 'wp-ulike' ),
 		'Download CSV'    => esc_html__( 'Download CSV', 'wp-ulike' ),
 		'Delete Selected' => esc_html__( 'Delete Selected', 'wp-ulike' ),
+		'Filter by type:' => esc_html__( 'Filter by type:', 'wp-ulike' ),
 
 		// Types
 		'Posts'      => esc_html__('Posts', 'wp-ulike'),
@@ -228,14 +233,14 @@ function wp_ulike_localization_api(){
 		'Engagers'   => esc_html__('Engagers', 'wp-ulike'),
 
 		// 404
-		'No data found!'                                           => esc_html__( 'No data found!', 'wp-ulike' ),
-		'This is because there is still no data in your database.' => esc_html__( 'This is because there is still no data in your database.', 'wp-ulike' ),
+		'Nothing to See Here!'                                      => esc_html__( 'Nothing to See Here!', 'wp-ulike' ),
+		'No content available. Try refreshing or check back later.' => esc_html__( 'No content available. Try refreshing or check back later.', 'wp-ulike' ),
 
 		// Banners
-		'Discover Key Insights, Identify Top Fans & Boost Your Best Content' => esc_html__( 'Discover Key Insights, Identify Top Fans & Boost Your Best Content', 'wp-ulike'),
-		'Elevate Your Insights by unlocking advanced features for in-depth analytics through our enhanced stats panel. Discover detailed reports, use powerful filters, and gain real-time analysis to optimize your content and boost engagement.' => esc_html__( 'Elevate Your Insights by unlocking advanced features for in-depth analytics through our enhanced stats panel. Discover detailed reports, use powerful filters, and gain real-time analysis to optimize your content and boost engagement.', 'wp-ulike'),
-		'Get Started'  => esc_html__('Get Started', 'wp-ulike'),
-		'Learn More' => esc_html__('Learn More', 'wp-ulike'),
+		'Unlock Your Website\'s True Potential!' => esc_html__( 'Unlock Your Website\'s True Potential!', 'wp-ulike'),
+		'Imagine knowing exactly what makes your content shine and how to connect with the fans who\'ll help you grow. Picture having the tools to make smarter decisions, boost your engagement, and take your website to the next level. Ready to uncover what\'s possible?' => esc_html__( 'Imagine knowing exactly what makes your content shine and how to connect with the fans who\'ll help you grow. Picture having the tools to make smarter decisions, boost your engagement, and take your website to the next level. Ready to uncover what\'s possible?', 'wp-ulike'),
+		'Get Started'   => esc_html__('Get Started', 'wp-ulike'),
+		'Discover More' => esc_html__('Discover More', 'wp-ulike'),
 
 		// TimeAgo
 		"timeAgo"       => esc_html__('{{count}} {{interval}} ago', 'wp-ulike'),
