@@ -65,14 +65,12 @@ For more guidance, visit our [Knowledge Base](https://docs.wpulike.com/?utm_sour
 
 == Screenshots ==
 
-1. **Carefully designed templates**
-2. **Professional statistics panel**
-3. **Simple and user-friendly settings panel**
-4. **Progressive log management panel**
-5. **Complete customizer options**
-6. **Full support for elementor with +7 functional widgets [PRO]**
-7. **Easy wordPress login and registration forms [PRO]**
-8. **Flexible metabox panel [PRO]**
+1. **Like & Dislike Templates – A collection of customizable like and dislike button templates for seamless integration.**
+2. **Metrics Dashboard (Stats Panel) – A detailed analytics dashboard displaying voting statistics and engagement trends.**
+3. **Top Trends & Insights (Stats Panel) – A visual breakdown of top-performing content with engagement insights.**
+4. **Engagement Logs (Stats Panel) – A comprehensive log tracking user interactions, votes, and activity history.**
+5. **Elementor Widgets – WP ULike’s interactive widgets designed for Elementor page builder integration.**
+6. **Customizer Panel – Flexible customization options for fine-tuning voting styles and behaviors.**
 
 == Frequently Asked Questions ==
 
