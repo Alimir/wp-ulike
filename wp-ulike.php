@@ -7,7 +7,7 @@
  * Author:            TechnoWich
  * Author URI:        https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Text Domain:       wp-ulike
- * Domain Path:       /languages/
+ * Domain Path:       /languages
  * Tested up to: 	  6.7
  * License: GPL-2.0+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html

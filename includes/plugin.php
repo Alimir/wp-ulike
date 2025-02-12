@@ -36,21 +36,9 @@ class WpUlikeInit {
     // Activate plugin when new blog is added
     add_action( 'activated_plugin', array( $this, 'after_activation' ) );
 
-    // init action
-    add_action( 'init', array( $this, 'init' ) );
 
     $prefix = is_network_admin() ? 'network_admin_' : '';
     add_filter( "{$prefix}plugin_action_links",  array( $this, 'add_links' ), 10, 5 );
-  }
-
-  /**
-   * init method
-   *
-   * @return void
-   */
-  public function init(){
-    // Load plugin text domain
-    $this->load_plugin_textdomain();
   }
 
   /**
@@ -87,6 +75,9 @@ class WpUlikeInit {
   public function plugin(){
     // Define constant values
     $this->define_constants();
+
+    // load trasnlations
+    $this->load_plugin_textdomain();
 
     // Include Files
     $this->includes();
@@ -266,27 +257,17 @@ class WpUlikeInit {
    */
   public function load_plugin_textdomain() {
     // Set filter for language directory
-    $lang_dir = WP_ULIKE_DIR . 'languages/';
+		$lang_dir = WP_ULIKE_SLUG . '/languages';
     $lang_dir = apply_filters( 'wp_ulike_languages_directory', $lang_dir );
 
-    // Traditional WordPress plugin locale filter
-    $locale = apply_filters( 'plugin_locale', get_locale(), WP_ULIKE_SLUG );
-    $mofile = sprintf( '%1$s-%2$s.mo', WP_ULIKE_SLUG, $locale );
+		$locale   = determine_locale();
+    /**
+     * Filter to adjust the wp ulike locale to use for translations.
+     */
+    $locale = apply_filters( 'plugin_locale', $locale, WP_ULIKE_SLUG );
 
-    // Setup paths to current locale file
-    $mofile_local   = $lang_dir . $mofile;
-    $mofile_global  = WP_LANG_DIR . '/plugins/' . WP_ULIKE_SLUG . '/' . $mofile;
-
-    if( file_exists( $mofile_global ) ) {
-      // Look in global /wp-content/languages/plugins/wp-ulike/ folder
-      load_textdomain( WP_ULIKE_SLUG, $mofile_global );
-    } elseif( file_exists( $mofile_local ) ) {
-      // Look in local /wp-content/plugins/wp-ulike/languages/ folder
-      load_textdomain( WP_ULIKE_SLUG, $mofile_local );
-    } else {
-      // Load the default language files
-      load_plugin_textdomain( WP_ULIKE_SLUG, false, $lang_dir );
-    }
+    load_textdomain( WP_ULIKE_SLUG, WP_LANG_DIR . '/' . WP_ULIKE_SLUG . '/' . WP_ULIKE_SLUG . '-' . $locale . '.mo' );
+    load_plugin_textdomain( WP_ULIKE_SLUG, false, $lang_dir );
   }
 
   /**

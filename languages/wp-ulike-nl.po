@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-02-10 15:28:35+00:00\n"
+"POT-Creation-Date: 2025-02-12 16:35:32+00:00\n"
 "PO-Revision-Date: 2020-02-23 18:53:56+0000\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -564,13 +564,13 @@ msgid ""
 "tag.)"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-pages.php:27 includes/plugin.php:120
+#: admin/classes/class-wp-ulike-admin-pages.php:27 includes/plugin.php:111
 msgid "Statistics"
 msgstr "Statistieken"
 
 #: admin/classes/class-wp-ulike-admin-pages.php:35
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
-#: includes/plugin.php:121
+#: includes/plugin.php:112
 msgid "About"
 msgstr "Over"
 
@@ -578,7 +578,7 @@ msgstr "Over"
 msgid "WP ULike"
 msgstr "WP ULike"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:119
+#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:110
 msgid "Settings"
 msgstr "Settings"
 
