@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
 "POT-Creation-Date: 2025-02-12 16:35:32+00:00\n"
-"PO-Revision-Date: 2025-02-12 20:19+0330\n"
+"PO-Revision-Date: 2025-02-12 20:25+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa_IR\n"
@@ -120,7 +120,7 @@ msgstr "لایک"
 #: admin/classes/class-wp-ulike-admin-panel.php:766
 #: admin/classes/class-wp-ulike-admin-panel.php:797
 msgid "Unlike"
-msgstr "نمی پسندم"
+msgstr "لغو لایک"
 
 #: admin/admin-ajax.php:172
 msgid "Dislike"
@@ -128,7 +128,7 @@ msgstr "دیسلایک"
 
 #: admin/admin-ajax.php:173
 msgid "Undislike"
-msgstr "نمیپسندم"
+msgstr "لغو دیسلایک"
 
 #: admin/admin-ajax.php:174
 msgid "Select..."
