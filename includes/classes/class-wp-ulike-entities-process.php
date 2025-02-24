@@ -307,17 +307,30 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function insertData( $item_id ){
-			return $this->wpdb->insert(
-				$this->wpdb->prefix . $this->typeSettings->getTableName(),
-				array(
-					$this->typeSettings->getColumnName() => esc_sql( $item_id ),
-					'date_time' => current_time( 'mysql' ),
-					'ip'        => $this->maybeAnonymiseIp( $this->currentIP ),
-					'user_id'   => esc_sql( $this->currentUser ),
-					'status'    => esc_sql( $this->currentStatus )
-				),
-				array( '%d', '%s', '%s', '%s', '%s' )
+			$table = $this->wpdb->prefix . $this->typeSettings->getType();
+			$data  = array(
+				$this->typeSettings->getColumnName() => $item_id,
+				'date_time' => current_time( 'mysql' ),
+				'ip'        => $this->maybeAnonymiseIp( $this->currentIP ),
+				'user_id'   => $this->currentUser,
+				'status'    => $this->currentStatus
 			);
+			$format = array( '%d', '%s', '%s', '%s', '%s' ); // Adjust format specifiers
+
+			if ( false !== $row ) {
+				do_action( 'wp_ulike_data_inserted', [
+					'id'             => $this->wpdb->insert_id,  // New insert ID
+					'item_id'        => $item_id,                // Item ID for the inserted data
+					'table'          => $table,                  // Table name where the insert occurred
+					'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
+					'type'           => $this->typeSettings->getType(),        // Type of the item
+					'user_id'        => $this->currentUser,      // User who performed the action
+					'status'         => $this->currentStatus,    // Status of the action
+					'ip'             => $this->currentIP         // IP address of the user
+				] );
+			}
+
+			return $row;
 		}
 
 		/**
@@ -350,13 +363,30 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function updateData( $item_id ){
-			return $this->wpdb->update(
-				$this->wpdb->prefix . $this->typeSettings->getTableName(),
-				array(
-					'status' => esc_sql( $this->currentStatus )
-				),
-				array( $this->typeSettings->getColumnName() => $item_id, 'user_id' => $this->currentUser )
+			$table  = $this->wpdb->prefix . $this->typeSettings->getTableName();
+			$data   = array( 'status' => $this->currentStatus ); // No need for esc_sql
+			$where  = array(
+				$this->typeSettings->getColumnName() => $item_id,
+				'user_id' => $this->currentUser // Ensure user_id is an integer
 			);
+			$format = array( '%s' ); // Format for 'status'
+			$where_format = array( '%d', '%s' ); // Ensure proper format for WHERE clause
+
+			$row = $this->wpdb->update( $table, $data, $where, $format, $where_format );
+
+			if ( false !== $row ) {
+				do_action( 'wp_ulike_data_updated', [
+					'item_id'        => $item_id,                // Item ID for the inserted data
+					'table'          => $table,                  // Table name where the insert occurred
+					'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
+					'type'           => $this->typeSettings->getType(),        // Type of the item
+					'user_id'        => $this->currentUser,      // User who performed the action
+					'status'         => $this->currentStatus,    // Status of the action
+					'ip'             => $this->currentIP         // IP address of the user
+				] );
+			}
+
+			return $row;
 		}
 
 		/**
