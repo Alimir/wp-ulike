@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-03-02 14:29:04+00:00\n"
+"POT-Creation-Date: 2025-03-02 18:19:20+00:00\n"
 "PO-Revision-Date: 2020-02-26 22:14:02+0000\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -163,7 +163,15 @@ msgstr "Aktiv"
 msgid "Users"
 msgstr "Användarnamn"
 
-#: admin/admin-ajax.php:183 admin/admin-hooks.php:484 admin/admin-hooks.php:559
+#: admin/admin-ajax.php:181
+msgid "Other Countries"
+msgstr ""
+
+#: admin/admin-ajax.php:182
+msgid "for"
+msgstr ""
+
+#: admin/admin-ajax.php:185 admin/admin-hooks.php:484 admin/admin-hooks.php:559
 #: admin/classes/class-wp-ulike-admin-panel.php:130
 #: admin/classes/class-wp-ulike-admin-panel.php:147
 #: admin/classes/class-wp-ulike-admin-panel.php:755
@@ -172,262 +180,262 @@ msgstr "Användarnamn"
 msgid "Like"
 msgstr "Gilla"
 
-#: admin/admin-ajax.php:184 admin/classes/class-wp-ulike-admin-panel.php:136
+#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:136
 #: admin/classes/class-wp-ulike-admin-panel.php:152
 #: admin/classes/class-wp-ulike-admin-panel.php:766
 #: admin/classes/class-wp-ulike-admin-panel.php:797
 msgid "Unlike"
 msgstr ""
 
-#: admin/admin-ajax.php:185
+#: admin/admin-ajax.php:187
 msgid "Dislike"
 msgstr ""
 
-#: admin/admin-ajax.php:186
-msgid "Undislike"
-msgstr ""
-
-#: admin/admin-ajax.php:187
-#, fuzzy
-msgid "Select..."
-msgstr "Välj %s"
-
 #: admin/admin-ajax.php:188
-msgid "Date Range"
+msgid "Undislike"
 msgstr ""
 
 #: admin/admin-ajax.php:189
 #, fuzzy
+msgid "Select..."
+msgstr "Välj %s"
+
+#: admin/admin-ajax.php:190
+msgid "Date Range"
+msgstr ""
+
+#: admin/admin-ajax.php:191
+#, fuzzy
 msgid "This Week"
 msgstr "Vecka"
 
-#: admin/admin-ajax.php:190
+#: admin/admin-ajax.php:192
 #, fuzzy
 msgid "Last Week"
 msgstr "Vecka"
 
-#: admin/admin-ajax.php:191
+#: admin/admin-ajax.php:193
 msgid "Last {{days}} Days"
 msgstr ""
 
-#: admin/admin-ajax.php:192
+#: admin/admin-ajax.php:194
 msgid "Last {{months}} Months"
 msgstr ""
 
-#: admin/admin-ajax.php:193
+#: admin/admin-ajax.php:195
 #, fuzzy
 msgid "This Year"
 msgstr "År"
 
-#: admin/admin-ajax.php:194
+#: admin/admin-ajax.php:196
 #, fuzzy
 msgid "Last Year"
 msgstr "År"
 
-#: admin/admin-ajax.php:195
+#: admin/admin-ajax.php:197
 #, fuzzy
 msgid "Status Filter"
 msgstr "Status"
 
-#: admin/admin-ajax.php:196
+#: admin/admin-ajax.php:198
 #, fuzzy
 msgid "Post Types"
 msgstr "Inläggsrubrik"
 
-#: admin/admin-ajax.php:197
+#: admin/admin-ajax.php:199
 msgid "Show Filters"
 msgstr ""
 
-#: admin/admin-ajax.php:198
+#: admin/admin-ajax.php:200
 msgid "Hide Filters"
 msgstr ""
 
-#: admin/admin-ajax.php:199
+#: admin/admin-ajax.php:201
 #, fuzzy
 msgid "Clear all"
 msgstr "Rensa"
 
-#: admin/admin-ajax.php:200
+#: admin/admin-ajax.php:202
 msgid "Apply"
 msgstr ""
 
-#: admin/admin-ajax.php:203
+#: admin/admin-ajax.php:205
 msgid "Dates"
 msgstr ""
 
-#: admin/admin-ajax.php:204
+#: admin/admin-ajax.php:206
 #, fuzzy
 msgid "Totals"
 msgstr "Totalt"
 
-#: admin/admin-ajax.php:205
+#: admin/admin-ajax.php:207
 msgid "No data to display"
 msgstr ""
 
-#: admin/admin-ajax.php:206
+#: admin/admin-ajax.php:208
 msgid "Daily Interactions"
 msgstr ""
 
-#: admin/admin-ajax.php:207
+#: admin/admin-ajax.php:209
 msgid "Monthly Interactions"
 msgstr ""
 
-#: admin/admin-ajax.php:210
+#: admin/admin-ajax.php:212
 msgid "Engaged Users"
 msgstr ""
 
-#: admin/admin-ajax.php:211
+#: admin/admin-ajax.php:213
 msgid "Published"
 msgstr ""
 
-#: admin/admin-ajax.php:212 admin/admin-ajax.php:214 admin/admin-ajax.php:243
+#: admin/admin-ajax.php:214 admin/admin-ajax.php:216 admin/admin-ajax.php:245
 #: admin/classes/class-wp-ulike-admin-panel.php:174
 #: admin/classes/class-wp-ulike-admin-panel.php:347
 #: admin/classes/class-wp-ulike-admin-panel.php:405
 msgid "Comments"
 msgstr "Kommentarer"
 
-#: admin/admin-ajax.php:213
+#: admin/admin-ajax.php:215
 #, fuzzy
 msgid "Engagement"
 msgstr "Användarnamn"
 
-#: admin/admin-ajax.php:215
+#: admin/admin-ajax.php:217
 msgid "By"
 msgstr ""
 
-#: admin/admin-ajax.php:218
+#: admin/admin-ajax.php:220
 msgid "Date"
 msgstr ""
 
-#: admin/admin-ajax.php:219
+#: admin/admin-ajax.php:221
 #, fuzzy
 msgid "User"
 msgstr "Användarnamn"
 
-#: admin/admin-ajax.php:220
+#: admin/admin-ajax.php:222
 msgid "IP"
 msgstr ""
 
-#: admin/admin-ajax.php:221
+#: admin/admin-ajax.php:223
 msgid "Status"
 msgstr "Status"
 
-#: admin/admin-ajax.php:222
+#: admin/admin-ajax.php:224
 msgid "Comment Author"
 msgstr ""
 
-#: admin/admin-ajax.php:223
+#: admin/admin-ajax.php:225
 #, fuzzy
 msgid "Comment Content"
 msgstr "Botten på inlägg"
 
-#: admin/admin-ajax.php:224
+#: admin/admin-ajax.php:226
 #, fuzzy
 msgid "Activity Title"
 msgstr "aktiviteter"
 
-#: admin/admin-ajax.php:225
+#: admin/admin-ajax.php:227
 msgid "Topic Title"
 msgstr ""
 
-#: admin/admin-ajax.php:226
+#: admin/admin-ajax.php:228
 msgid "Post Title"
 msgstr "Inläggsrubrik"
 
-#: admin/admin-ajax.php:227
+#: admin/admin-ajax.php:229
 #, fuzzy
 msgid "Category"
 msgstr "Kategorier"
 
-#: admin/admin-ajax.php:228
+#: admin/admin-ajax.php:230
 msgid "Actions"
 msgstr "Åtgärd"
 
-#: admin/admin-ajax.php:229
-msgid "Showing"
-msgstr ""
-
-#: admin/admin-ajax.php:230
-#, fuzzy
-msgid "to"
-msgstr "toppen"
-
 #: admin/admin-ajax.php:231
-msgid "of"
+msgid "Showing"
 msgstr ""
 
 #: admin/admin-ajax.php:232
 #, fuzzy
-msgid "results"
-msgstr "Sökresultat"
+msgid "to"
+msgstr "toppen"
 
 #: admin/admin-ajax.php:233
-msgid "Back"
+msgid "of"
 msgstr ""
 
 #: admin/admin-ajax.php:234
 #, fuzzy
+msgid "results"
+msgstr "Sökresultat"
+
+#: admin/admin-ajax.php:235
+msgid "Back"
+msgstr ""
+
+#: admin/admin-ajax.php:236
+#, fuzzy
 msgid "Search"
 msgstr "Söker…"
 
-#: admin/admin-ajax.php:235
+#: admin/admin-ajax.php:237
 #, fuzzy
 msgid "Loading..."
 msgstr "Sparar…"
 
-#: admin/admin-ajax.php:236
+#: admin/admin-ajax.php:238
 msgid "Download CSV"
 msgstr ""
 
-#: admin/admin-ajax.php:237
+#: admin/admin-ajax.php:239
 #, fuzzy
 msgid "Delete Selected"
 msgstr "Inget media valt"
 
-#: admin/admin-ajax.php:238
+#: admin/admin-ajax.php:240
 msgid "Filter by type:"
 msgstr ""
 
-#: admin/admin-ajax.php:239
+#: admin/admin-ajax.php:241
 msgid "per page"
 msgstr ""
 
-#: admin/admin-ajax.php:242 admin/classes/class-wp-ulike-admin-panel.php:173
+#: admin/admin-ajax.php:244 admin/classes/class-wp-ulike-admin-panel.php:173
 #: admin/classes/class-wp-ulike-admin-panel.php:346
 #: admin/classes/class-wp-ulike-admin-panel.php:397
 msgid "Posts"
 msgstr "Inlägg"
 
-#: admin/admin-ajax.php:244 admin/classes/class-wp-ulike-admin-panel.php:175
+#: admin/admin-ajax.php:246 admin/classes/class-wp-ulike-admin-panel.php:175
 #: admin/classes/class-wp-ulike-admin-panel.php:348
 #, fuzzy
 msgid "Activities"
 msgstr "aktiviteter"
 
-#: admin/admin-ajax.php:245 admin/classes/class-wp-ulike-admin-panel.php:176
+#: admin/admin-ajax.php:247 admin/classes/class-wp-ulike-admin-panel.php:176
 #: admin/classes/class-wp-ulike-admin-panel.php:349
 #, fuzzy
 msgid "Topics"
 msgstr "Ämnesstatistik"
 
-#: admin/admin-ajax.php:246
+#: admin/admin-ajax.php:248
 msgid "Engagers"
 msgstr ""
 
-#: admin/admin-ajax.php:249
+#: admin/admin-ajax.php:251
 msgid "Nothing to See Here!"
 msgstr ""
 
-#: admin/admin-ajax.php:250
+#: admin/admin-ajax.php:252
 msgid "No content available. Try refreshing or check back later."
 msgstr ""
 
-#: admin/admin-ajax.php:253
+#: admin/admin-ajax.php:255
 msgid "Unlock Your Website's True Potential!"
 msgstr ""
 
-#: admin/admin-ajax.php:254
+#: admin/admin-ajax.php:256
 msgid ""
 "Imagine knowing exactly what makes your content shine and how to connect "
 "with the fans who'll help you grow. Picture having the tools to make smarter "
@@ -435,81 +443,81 @@ msgid ""
 "Ready to uncover what's possible?"
 msgstr ""
 
-#: admin/admin-ajax.php:255
+#: admin/admin-ajax.php:257
 #, fuzzy
 msgid "Get Started"
 msgstr "Komma igång"
 
-#: admin/admin-ajax.php:256
+#: admin/admin-ajax.php:258
 msgid "Discover More"
 msgstr ""
 
-#: admin/admin-ajax.php:259
+#: admin/admin-ajax.php:261
 msgid "{{count}} {{interval}} ago"
 msgstr ""
 
-#: admin/admin-ajax.php:260
+#: admin/admin-ajax.php:262
 msgid "year"
 msgstr ""
 
-#: admin/admin-ajax.php:261
+#: admin/admin-ajax.php:263
 #, fuzzy
 msgid "years"
 msgstr "År"
 
-#: admin/admin-ajax.php:262
+#: admin/admin-ajax.php:264
 #, fuzzy
 msgid "month"
 msgstr "Månad"
 
-#: admin/admin-ajax.php:263
+#: admin/admin-ajax.php:265
 #, fuzzy
 msgid "months"
 msgstr "Månad"
 
-#: admin/admin-ajax.php:264
+#: admin/admin-ajax.php:266
 msgid "week"
 msgstr ""
 
-#: admin/admin-ajax.php:265
+#: admin/admin-ajax.php:267
 #, fuzzy
 msgid "weeks"
 msgstr "Vecka"
 
-#: admin/admin-ajax.php:266
+#: admin/admin-ajax.php:268
 #, fuzzy
 msgid "day"
 msgstr "Idag"
 
-#: admin/admin-ajax.php:267
+#: admin/admin-ajax.php:269
 msgid "days"
 msgstr ""
 
-#: admin/admin-ajax.php:268
+#: admin/admin-ajax.php:270
 msgid "hour"
 msgstr ""
 
-#: admin/admin-ajax.php:269
+#: admin/admin-ajax.php:271
 msgid "hours"
 msgstr ""
 
-#: admin/admin-ajax.php:270
+#: admin/admin-ajax.php:272
 msgid "minute"
 msgstr ""
 
-#: admin/admin-ajax.php:271
+#: admin/admin-ajax.php:273
 msgid "minutes"
 msgstr ""
 
-#: admin/admin-ajax.php:272
+#: admin/admin-ajax.php:274
 msgid "second"
 msgstr ""
 
-#: admin/admin-ajax.php:273
+#: admin/admin-ajax.php:275
 msgid "seconds"
 msgstr ""
 
-#: admin/admin-ajax.php:274
+#: admin/admin-ajax.php:276
 #, fuzzy
 msgid "just now"
 msgstr "Inte nu"

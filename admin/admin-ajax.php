@@ -178,6 +178,8 @@ function wp_ulike_localization_api(){
 		'Country'                                                  => esc_html__( 'Country', 'wp-ulike' ),
 		'Active Users'                                             => esc_html__( 'Active Users', 'wp-ulike' ),
 		'Users'                                                    => esc_html__( 'Users', 'wp-ulike' ),
+		'Other Countries'                                          => esc_html__( 'Other Countries', 'wp-ulike' ),
+		'for'                                                      => esc_html__( 'for', 'wp-ulike' ),
 
 		// Filters
 		'Like'                   => esc_html__( 'Like', 'wp-ulike' ),

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-03-02 14:29:04+00:00\n"
-"PO-Revision-Date: 2025-03-02 17:59+0330\n"
+"POT-Creation-Date: 2025-03-02 18:19:20+00:00\n"
+"PO-Revision-Date: 2025-03-02 21:52+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa_IR\n"
@@ -158,7 +158,15 @@ msgstr "کاربران فعال"
 msgid "Users"
 msgstr "کاربران"
 
-#: admin/admin-ajax.php:183 admin/admin-hooks.php:484 admin/admin-hooks.php:559
+#: admin/admin-ajax.php:181
+msgid "Other Countries"
+msgstr "سایر کشورها"
+
+#: admin/admin-ajax.php:182
+msgid "for"
+msgstr "در"
+
+#: admin/admin-ajax.php:185 admin/admin-hooks.php:484 admin/admin-hooks.php:559
 #: admin/classes/class-wp-ulike-admin-panel.php:130
 #: admin/classes/class-wp-ulike-admin-panel.php:147
 #: admin/classes/class-wp-ulike-admin-panel.php:755
@@ -167,241 +175,241 @@ msgstr "کاربران"
 msgid "Like"
 msgstr "لایک"
 
-#: admin/admin-ajax.php:184 admin/classes/class-wp-ulike-admin-panel.php:136
+#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:136
 #: admin/classes/class-wp-ulike-admin-panel.php:152
 #: admin/classes/class-wp-ulike-admin-panel.php:766
 #: admin/classes/class-wp-ulike-admin-panel.php:797
 msgid "Unlike"
 msgstr "لغو لایک"
 
-#: admin/admin-ajax.php:185
+#: admin/admin-ajax.php:187
 msgid "Dislike"
 msgstr "دیسلایک"
 
-#: admin/admin-ajax.php:186
+#: admin/admin-ajax.php:188
 msgid "Undislike"
 msgstr "لغو دیسلایک"
 
-#: admin/admin-ajax.php:187
+#: admin/admin-ajax.php:189
 msgid "Select..."
 msgstr "انتخاب..."
 
-#: admin/admin-ajax.php:188
+#: admin/admin-ajax.php:190
 msgid "Date Range"
 msgstr "محدوده زمانی"
 
-#: admin/admin-ajax.php:189
+#: admin/admin-ajax.php:191
 msgid "This Week"
 msgstr "این هفته"
 
-#: admin/admin-ajax.php:190
+#: admin/admin-ajax.php:192
 msgid "Last Week"
 msgstr "هفته گذشته"
 
-#: admin/admin-ajax.php:191
+#: admin/admin-ajax.php:193
 msgid "Last {{days}} Days"
 msgstr "{{days}} روز گذشته"
 
-#: admin/admin-ajax.php:192
+#: admin/admin-ajax.php:194
 msgid "Last {{months}} Months"
 msgstr "{{months}} ماه گذشته"
 
-#: admin/admin-ajax.php:193
+#: admin/admin-ajax.php:195
 msgid "This Year"
 msgstr "امسال"
 
-#: admin/admin-ajax.php:194
+#: admin/admin-ajax.php:196
 msgid "Last Year"
 msgstr "سال گذشته"
 
-#: admin/admin-ajax.php:195
+#: admin/admin-ajax.php:197
 msgid "Status Filter"
 msgstr "فیلتر وضعیت"
 
-#: admin/admin-ajax.php:196
+#: admin/admin-ajax.php:198
 msgid "Post Types"
 msgstr "انواع پست"
 
-#: admin/admin-ajax.php:197
+#: admin/admin-ajax.php:199
 msgid "Show Filters"
 msgstr "نمایش فیلترها"
 
-#: admin/admin-ajax.php:198
+#: admin/admin-ajax.php:200
 msgid "Hide Filters"
 msgstr "مخفی کردن فیلترها"
 
-#: admin/admin-ajax.php:199
+#: admin/admin-ajax.php:201
 msgid "Clear all"
 msgstr "پاک کردن همه"
 
-#: admin/admin-ajax.php:200
+#: admin/admin-ajax.php:202
 msgid "Apply"
 msgstr "اعمال"
 
-#: admin/admin-ajax.php:203
+#: admin/admin-ajax.php:205
 msgid "Dates"
 msgstr "تاریخ ها"
 
-#: admin/admin-ajax.php:204
+#: admin/admin-ajax.php:206
 msgid "Totals"
 msgstr "کل"
 
-#: admin/admin-ajax.php:205
+#: admin/admin-ajax.php:207
 msgid "No data to display"
 msgstr "اطلاعاتی برای نمایش وجود ندارد"
 
-#: admin/admin-ajax.php:206
+#: admin/admin-ajax.php:208
 msgid "Daily Interactions"
 msgstr "تعاملات روزانه"
 
-#: admin/admin-ajax.php:207
+#: admin/admin-ajax.php:209
 msgid "Monthly Interactions"
 msgstr "تعاملات ماهانه"
 
-#: admin/admin-ajax.php:210
+#: admin/admin-ajax.php:212
 msgid "Engaged Users"
 msgstr "کاربران درگیر"
 
-#: admin/admin-ajax.php:211
+#: admin/admin-ajax.php:213
 msgid "Published"
 msgstr "منتشر شده"
 
-#: admin/admin-ajax.php:212 admin/admin-ajax.php:214 admin/admin-ajax.php:243
+#: admin/admin-ajax.php:214 admin/admin-ajax.php:216 admin/admin-ajax.php:245
 #: admin/classes/class-wp-ulike-admin-panel.php:174
 #: admin/classes/class-wp-ulike-admin-panel.php:347
 #: admin/classes/class-wp-ulike-admin-panel.php:405
 msgid "Comments"
 msgstr "دیدگاه ها"
 
-#: admin/admin-ajax.php:213
+#: admin/admin-ajax.php:215
 msgid "Engagement"
 msgstr "تعامل"
 
-#: admin/admin-ajax.php:215
+#: admin/admin-ajax.php:217
 msgid "By"
 msgstr "توسط"
 
-#: admin/admin-ajax.php:218
+#: admin/admin-ajax.php:220
 msgid "Date"
 msgstr "تاریخ"
 
-#: admin/admin-ajax.php:219
+#: admin/admin-ajax.php:221
 msgid "User"
 msgstr "کاربر"
 
-#: admin/admin-ajax.php:220
+#: admin/admin-ajax.php:222
 msgid "IP"
 msgstr "آدرس IP"
 
-#: admin/admin-ajax.php:221
+#: admin/admin-ajax.php:223
 msgid "Status"
 msgstr "وضعیت"
 
-#: admin/admin-ajax.php:222
+#: admin/admin-ajax.php:224
 msgid "Comment Author"
 msgstr "نویسنده دیدگاه"
 
-#: admin/admin-ajax.php:223
+#: admin/admin-ajax.php:225
 msgid "Comment Content"
 msgstr "متن دیدگاه"
 
-#: admin/admin-ajax.php:224
+#: admin/admin-ajax.php:226
 msgid "Activity Title"
 msgstr "عنوان فعالیت"
 
-#: admin/admin-ajax.php:225
+#: admin/admin-ajax.php:227
 msgid "Topic Title"
 msgstr "عنوان تاپیک"
 
-#: admin/admin-ajax.php:226
+#: admin/admin-ajax.php:228
 msgid "Post Title"
 msgstr "عنوان نوشتار"
 
-#: admin/admin-ajax.php:227
+#: admin/admin-ajax.php:229
 msgid "Category"
 msgstr "دسته بندی"
 
-#: admin/admin-ajax.php:228
+#: admin/admin-ajax.php:230
 msgid "Actions"
 msgstr "اقدامات"
 
-#: admin/admin-ajax.php:229
+#: admin/admin-ajax.php:231
 msgid "Showing"
 msgstr "نمایش"
 
-#: admin/admin-ajax.php:230
+#: admin/admin-ajax.php:232
 msgid "to"
 msgstr "تا"
 
-#: admin/admin-ajax.php:231
+#: admin/admin-ajax.php:233
 msgid "of"
 msgstr "از"
 
-#: admin/admin-ajax.php:232
+#: admin/admin-ajax.php:234
 msgid "results"
 msgstr "نتایج"
 
-#: admin/admin-ajax.php:233
+#: admin/admin-ajax.php:235
 msgid "Back"
 msgstr "بازگشت"
 
-#: admin/admin-ajax.php:234
+#: admin/admin-ajax.php:236
 msgid "Search"
 msgstr "جستجو"
 
-#: admin/admin-ajax.php:235
+#: admin/admin-ajax.php:237
 msgid "Loading..."
 msgstr "بارگذاری…"
 
-#: admin/admin-ajax.php:236
+#: admin/admin-ajax.php:238
 msgid "Download CSV"
 msgstr "دانلود CSV"
 
-#: admin/admin-ajax.php:237
+#: admin/admin-ajax.php:239
 msgid "Delete Selected"
 msgstr "حذف انتخاب شده ها"
 
-#: admin/admin-ajax.php:238
+#: admin/admin-ajax.php:240
 msgid "Filter by type:"
 msgstr "فیلتر بر اساس نوع:"
 
-#: admin/admin-ajax.php:239
+#: admin/admin-ajax.php:241
 msgid "per page"
 msgstr "در هر صفحه"
 
-#: admin/admin-ajax.php:242 admin/classes/class-wp-ulike-admin-panel.php:173
+#: admin/admin-ajax.php:244 admin/classes/class-wp-ulike-admin-panel.php:173
 #: admin/classes/class-wp-ulike-admin-panel.php:346
 #: admin/classes/class-wp-ulike-admin-panel.php:397
 msgid "Posts"
 msgstr "نوشته ها"
 
-#: admin/admin-ajax.php:244 admin/classes/class-wp-ulike-admin-panel.php:175
+#: admin/admin-ajax.php:246 admin/classes/class-wp-ulike-admin-panel.php:175
 #: admin/classes/class-wp-ulike-admin-panel.php:348
 msgid "Activities"
 msgstr "فعالیت ها"
 
-#: admin/admin-ajax.php:245 admin/classes/class-wp-ulike-admin-panel.php:176
+#: admin/admin-ajax.php:247 admin/classes/class-wp-ulike-admin-panel.php:176
 #: admin/classes/class-wp-ulike-admin-panel.php:349
 msgid "Topics"
 msgstr "تاپیک ها"
 
-#: admin/admin-ajax.php:246
+#: admin/admin-ajax.php:248
 msgid "Engagers"
 msgstr "مشارکت کنندگان"
 
-#: admin/admin-ajax.php:249
+#: admin/admin-ajax.php:251
 msgid "Nothing to See Here!"
 msgstr "اطلاعاتی برای نمایش وجود ندارد!"
 
-#: admin/admin-ajax.php:250
+#: admin/admin-ajax.php:252
 msgid "No content available. Try refreshing or check back later."
 msgstr "محتوایی موجود نیست. دوباره بارگذاری کنید یا بعداً بررسی کنید."
 
-#: admin/admin-ajax.php:253
+#: admin/admin-ajax.php:255
 msgid "Unlock Your Website's True Potential!"
 msgstr "پتانسیل واقعی وب‌سایتتو آزاد کن!"
 
-#: admin/admin-ajax.php:254
+#: admin/admin-ajax.php:256
 msgid ""
 "Imagine knowing exactly what makes your content shine and how to connect with "
 "the fans who'll help you grow. Picture having the tools to make smarter "
@@ -413,75 +421,75 @@ msgstr ""
 "تصمیم‌های هوشمندانه‌تری بگیری، تعاملتو بیشتر کنی و وب‌سایتتو به مرحله بعدی برسونی. "
 "آماده‌ای ببینی چه چیزایی ممکنه؟"
 
-#: admin/admin-ajax.php:255
+#: admin/admin-ajax.php:257
 msgid "Get Started"
 msgstr "شروع کن"
 
-#: admin/admin-ajax.php:256
+#: admin/admin-ajax.php:258
 msgid "Discover More"
 msgstr "ادامه مطلب"
 
-#: admin/admin-ajax.php:259
+#: admin/admin-ajax.php:261
 msgid "{{count}} {{interval}} ago"
 msgstr "{{count}} {{interval}} پیش"
 
-#: admin/admin-ajax.php:260
+#: admin/admin-ajax.php:262
 msgid "year"
 msgstr "سال"
 
-#: admin/admin-ajax.php:261
+#: admin/admin-ajax.php:263
 msgid "years"
 msgstr "سال"
 
-#: admin/admin-ajax.php:262
+#: admin/admin-ajax.php:264
 msgid "month"
 msgstr "ماه"
 
-#: admin/admin-ajax.php:263
+#: admin/admin-ajax.php:265
 msgid "months"
 msgstr "ماه"
 
-#: admin/admin-ajax.php:264
+#: admin/admin-ajax.php:266
 msgid "week"
 msgstr "هفته"
 
-#: admin/admin-ajax.php:265
+#: admin/admin-ajax.php:267
 msgid "weeks"
 msgstr "هفته"
 
-#: admin/admin-ajax.php:266
+#: admin/admin-ajax.php:268
 msgid "day"
 msgstr "روز"
 
-#: admin/admin-ajax.php:267
+#: admin/admin-ajax.php:269
 msgid "days"
 msgstr "روز"
 
-#: admin/admin-ajax.php:268
+#: admin/admin-ajax.php:270
 msgid "hour"
 msgstr "ساعت"
 
-#: admin/admin-ajax.php:269
+#: admin/admin-ajax.php:271
 msgid "hours"
 msgstr "ساعت"
 
-#: admin/admin-ajax.php:270
+#: admin/admin-ajax.php:272
 msgid "minute"
 msgstr "دقیقه"
 
-#: admin/admin-ajax.php:271
+#: admin/admin-ajax.php:273
 msgid "minutes"
 msgstr "دقیقه"
 
-#: admin/admin-ajax.php:272
+#: admin/admin-ajax.php:274
 msgid "second"
 msgstr "ثانیه"
 
-#: admin/admin-ajax.php:273
+#: admin/admin-ajax.php:275
 msgid "seconds"
 msgstr "ثانیه"
 
-#: admin/admin-ajax.php:274
+#: admin/admin-ajax.php:276
 msgid "just now"
 msgstr "همین الان"
 
@@ -2106,9 +2114,6 @@ msgstr ""
 
 #~ msgid "Engagement Statistics"
 #~ msgstr "آمار مشارکت"
-
-#~ msgid "for"
-#~ msgstr "در"
 
 #~ msgid "Dismiss"
 #~ msgstr "رد کردن"
