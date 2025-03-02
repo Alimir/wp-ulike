@@ -307,7 +307,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function insertData( $item_id ){
-			$table = $this->wpdb->prefix . $this->typeSettings->getType();
+			$table = $this->wpdb->prefix . $this->typeSettings->getTableName();
 			$data  = array(
 				$this->typeSettings->getColumnName() => $item_id,
 				'date_time' => current_time( 'mysql' ),
@@ -316,6 +316,8 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				'status'    => $this->currentStatus
 			);
 			$format = array( '%d', '%s', '%s', '%s', '%s' ); // Adjust format specifiers
+
+			$row = $this->wpdb->insert( $table, $data, $format );
 
 			if ( false !== $row ) {
 				do_action( 'wp_ulike_data_inserted', [
@@ -364,12 +366,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		public function updateData( $item_id ){
 			$table  = $this->wpdb->prefix . $this->typeSettings->getTableName();
-			$data   = array( 'status' => $this->currentStatus ); // No need for esc_sql
+			$data   = array( 'status' => $this->currentStatus, 'date_time' => current_time( 'mysql' ) ); // No need for esc_sql
 			$where  = array(
 				$this->typeSettings->getColumnName() => $item_id,
-				'user_id' => $this->currentUser // Ensure user_id is an integer
+				'user_id'   => $this->currentUser
 			);
-			$format = array( '%s' ); // Format for 'status'
+			$format = array( '%s', '%s' ); // Format for 'status'
 			$where_format = array( '%d', '%s' ); // Ensure proper format for WHERE clause
 
 			$row = $this->wpdb->update( $table, $data, $where, $format, $where_format );
