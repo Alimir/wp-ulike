@@ -177,7 +177,7 @@ function wp_ulike_localization_api(){
 		'Unknown'                                                  => esc_html__( 'Unknown', 'wp-ulike' ),
 		'Country'                                                  => esc_html__( 'Country', 'wp-ulike' ),
 		'Active Users'                                             => esc_html__( 'Active Users', 'wp-ulike' ),
-		'Users'                                                    => esc_html__( 'Users', 'wp-ulike' ),
+		'User(s)'                                                  => esc_html__( 'User(s)', 'wp-ulike' ),
 		'Other Countries'                                          => esc_html__( 'Other Countries', 'wp-ulike' ),
 		'for'                                                      => esc_html__( 'for', 'wp-ulike' ),
 
