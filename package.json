@@ -1,8 +1,8 @@
 {
   "name": "wp-ulike",
   "title": "WP ULike",
-  "version": "4.7.8",
-  "description": "WP ULike plugin allows to integrate a beautiful Ajax Like Button into your wordPress website to allow your visitors to like and unlike pages, posts, comments AND buddypress activities. Its very simple to use and supports many options.",
+  "version": "4.7.9",
+  "description": "Looking to increase user engagement on your WordPress site? WP ULike plugin lets you easily add voting buttons to your content. With customizable settings and detailed analytics, you can track user engagement, optimize your content, and build a loyal following.",
   "homepage": "https://wpulike.com",
   "repository": {
     "type": "git",
