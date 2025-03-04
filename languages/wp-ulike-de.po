@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-03-02 18:19:20+00:00\n"
+"POT-Creation-Date: 2025-03-04 19:24:42+00:00\n"
 "PO-Revision-Date: 2019-06-19 16:23:52+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -152,7 +152,7 @@ msgstr ""
 
 #: admin/admin-ajax.php:180
 #, fuzzy
-msgid "Users"
+msgid "User(s)"
 msgstr "Benutzername"
 
 #: admin/admin-ajax.php:181
