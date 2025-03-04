@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-02-10 15:28:35+00:00\n"
+"POT-Creation-Date: 2025-03-04 19:24:42+00:00\n"
 "PO-Revision-Date: 2019-07-03 14:50:28+0000\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -57,52 +57,116 @@ msgid "Yesterday's Engagement Summary"
 msgstr ""
 
 #: admin/admin-ajax.php:157
-msgid "Engagement This Week"
+msgid "Device type"
 msgstr ""
 
 #: admin/admin-ajax.php:158
-msgid "Monthly Engagement Overview"
+msgid "Explore the variety of user devices."
 msgstr ""
 
 #: admin/admin-ajax.php:159
-msgid "Yearly Engagement Trends"
+msgid "Engagement This Week"
 msgstr ""
 
 #: admin/admin-ajax.php:160
-msgid "Overall Performance"
+msgid "Monthly Engagement Overview"
 msgstr ""
 
 #: admin/admin-ajax.php:161
-msgid "Daily Interaction Overview"
+msgid "Yearly Engagement Trends"
 msgstr ""
 
 #: admin/admin-ajax.php:162
-#, fuzzy
-msgid "Engagement Statistics"
-msgstr "統計"
+msgid "Overall Performance"
+msgstr ""
 
 #: admin/admin-ajax.php:163
+msgid "Daily Interaction Overview"
+msgstr ""
+
+#: admin/admin-ajax.php:164
+#, fuzzy
+msgid "User Engagement by Country"
+msgstr "ユーザー名"
+
+#: admin/admin-ajax.php:165
+msgid "See where your audience is most active across the globe."
+msgstr ""
+
+#: admin/admin-ajax.php:166
+#, fuzzy
+msgid "Engagement Summary"
+msgstr "ユーザー名"
+
+#: admin/admin-ajax.php:167
 msgid "Top"
 msgstr "トップ"
 
-#: admin/admin-ajax.php:164
-msgid "for"
+#: admin/admin-ajax.php:168
+msgid "Showing data for"
 msgstr ""
 
-#: admin/admin-ajax.php:165
+#: admin/admin-ajax.php:169
 #, fuzzy
 msgid "Overview"
 msgstr "レビュー"
 
-#: admin/admin-ajax.php:166
+#: admin/admin-ajax.php:170
 msgid "Insights"
 msgstr ""
 
-#: admin/admin-ajax.php:167 admin/classes/class-wp-ulike-admin-pages.php:101
+#: admin/admin-ajax.php:171 admin/classes/class-wp-ulike-admin-pages.php:101
 msgid "Logs"
 msgstr "ログ"
 
-#: admin/admin-ajax.php:170 admin/admin-hooks.php:484 admin/admin-hooks.php:559
+#: admin/admin-ajax.php:172
+msgid "No new notifications"
+msgstr ""
+
+#: admin/admin-ajax.php:173
+msgid "New Notifications"
+msgstr ""
+
+#: admin/admin-ajax.php:174
+msgid "Tablet"
+msgstr ""
+
+#: admin/admin-ajax.php:175
+msgid "Mobile"
+msgstr ""
+
+#: admin/admin-ajax.php:176
+msgid "Desktop"
+msgstr ""
+
+#: admin/admin-ajax.php:177
+msgid "Unknown"
+msgstr ""
+
+#: admin/admin-ajax.php:178
+#, fuzzy
+msgid "Country"
+msgstr "中央"
+
+#: admin/admin-ajax.php:179
+#, fuzzy
+msgid "Active Users"
+msgstr "最もいいねしたユーザー"
+
+#: admin/admin-ajax.php:180
+#, fuzzy
+msgid "User(s)"
+msgstr "ユーザー名"
+
+#: admin/admin-ajax.php:181
+msgid "Other Countries"
+msgstr ""
+
+#: admin/admin-ajax.php:182
+msgid "for"
+msgstr ""
+
+#: admin/admin-ajax.php:185 admin/admin-hooks.php:484 admin/admin-hooks.php:559
 #: admin/classes/class-wp-ulike-admin-panel.php:130
 #: admin/classes/class-wp-ulike-admin-panel.php:147
 #: admin/classes/class-wp-ulike-admin-panel.php:755
@@ -111,263 +175,262 @@ msgstr "ログ"
 msgid "Like"
 msgstr "いいね"
 
-#: admin/admin-ajax.php:171 admin/classes/class-wp-ulike-admin-panel.php:136
+#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:136
 #: admin/classes/class-wp-ulike-admin-panel.php:152
 #: admin/classes/class-wp-ulike-admin-panel.php:766
 #: admin/classes/class-wp-ulike-admin-panel.php:797
 msgid "Unlike"
 msgstr "よくないね"
 
-#: admin/admin-ajax.php:172
+#: admin/admin-ajax.php:187
 #, fuzzy
 msgid "Dislike"
 msgstr "よくないね"
 
-#: admin/admin-ajax.php:173
+#: admin/admin-ajax.php:188
 #, fuzzy
 msgid "Undislike"
 msgstr "よくないね"
 
-#: admin/admin-ajax.php:174
+#: admin/admin-ajax.php:189
 #, fuzzy
 msgid "Select..."
 msgstr "%s を選択"
 
-#: admin/admin-ajax.php:175
-msgid "Date Range"
-msgstr ""
-
-#: admin/admin-ajax.php:176
-#, fuzzy
-msgid "This Week"
-msgstr "週"
-
-#: admin/admin-ajax.php:177
-#, fuzzy
-msgid "Last Week"
-msgstr "週"
-
-#: admin/admin-ajax.php:178
-msgid "Last {{days}} Days"
-msgstr ""
-
-#: admin/admin-ajax.php:179
-msgid "Last {{months}} Months"
-msgstr ""
-
-#: admin/admin-ajax.php:180
-#, fuzzy
-msgid "This Year"
-msgstr "年"
-
-#: admin/admin-ajax.php:181
-#, fuzzy
-msgid "Last Year"
-msgstr "年"
-
-#: admin/admin-ajax.php:182
-#, fuzzy
-msgid "Status Filter"
-msgstr "ステータス"
-
-#: admin/admin-ajax.php:183
-#, fuzzy
-msgid "Post Types"
-msgstr "投稿タイトル"
-
-#: admin/admin-ajax.php:184
-msgid "Show Filters"
-msgstr ""
-
-#: admin/admin-ajax.php:185
-msgid "Hide Filters"
-msgstr ""
-
-#: admin/admin-ajax.php:186
-msgid "Clear all"
-msgstr ""
-
-#: admin/admin-ajax.php:187
-msgid "Apply"
-msgstr ""
-
 #: admin/admin-ajax.php:190
-msgid "Dates"
+msgid "Date Range"
 msgstr ""
 
 #: admin/admin-ajax.php:191
 #, fuzzy
-msgid "Totals"
-msgstr "合計"
+msgid "This Week"
+msgstr "週"
 
 #: admin/admin-ajax.php:192
 #, fuzzy
-msgid "No data to display"
-msgstr "自動表示"
+msgid "Last Week"
+msgstr "週"
 
 #: admin/admin-ajax.php:193
-msgid "Daily Interactions"
+msgid "Last {{days}} Days"
 msgstr ""
 
 #: admin/admin-ajax.php:194
-msgid "Monthly Interactions"
+msgid "Last {{months}} Months"
 msgstr ""
 
 #: admin/admin-ajax.php:195
 #, fuzzy
-msgid "User Role Engagement"
-msgstr "ユーザー名"
+msgid "This Year"
+msgstr "年"
 
 #: admin/admin-ajax.php:196
-msgid "Insights from the Last {{months}} Months"
-msgstr ""
+#, fuzzy
+msgid "Last Year"
+msgstr "年"
+
+#: admin/admin-ajax.php:197
+#, fuzzy
+msgid "Status Filter"
+msgstr "ステータス"
+
+#: admin/admin-ajax.php:198
+#, fuzzy
+msgid "Post Types"
+msgstr "投稿タイトル"
 
 #: admin/admin-ajax.php:199
+msgid "Show Filters"
+msgstr ""
+
+#: admin/admin-ajax.php:200
+msgid "Hide Filters"
+msgstr ""
+
+#: admin/admin-ajax.php:201
+msgid "Clear all"
+msgstr ""
+
+#: admin/admin-ajax.php:202
+msgid "Apply"
+msgstr ""
+
+#: admin/admin-ajax.php:205
+msgid "Dates"
+msgstr ""
+
+#: admin/admin-ajax.php:206
+#, fuzzy
+msgid "Totals"
+msgstr "合計"
+
+#: admin/admin-ajax.php:207
+#, fuzzy
+msgid "No data to display"
+msgstr "自動表示"
+
+#: admin/admin-ajax.php:208
+msgid "Daily Interactions"
+msgstr ""
+
+#: admin/admin-ajax.php:209
+msgid "Monthly Interactions"
+msgstr ""
+
+#: admin/admin-ajax.php:212
 #, fuzzy
 msgid "Engaged Users"
 msgstr "ユーザー名でログイン"
 
-#: admin/admin-ajax.php:200
+#: admin/admin-ajax.php:213
 msgid "Published"
 msgstr ""
 
-#: admin/admin-ajax.php:201 admin/admin-ajax.php:203 admin/admin-ajax.php:230
+#: admin/admin-ajax.php:214 admin/admin-ajax.php:216 admin/admin-ajax.php:245
 #: admin/classes/class-wp-ulike-admin-panel.php:174
 #: admin/classes/class-wp-ulike-admin-panel.php:347
 #: admin/classes/class-wp-ulike-admin-panel.php:405
 msgid "Comments"
 msgstr "コメント"
 
-#: admin/admin-ajax.php:202
+#: admin/admin-ajax.php:215
 #, fuzzy
 msgid "Engagement"
 msgstr "ユーザー名"
 
-#: admin/admin-ajax.php:204
+#: admin/admin-ajax.php:217
 msgid "By"
 msgstr ""
 
-#: admin/admin-ajax.php:207
+#: admin/admin-ajax.php:220
 msgid "Date"
 msgstr ""
 
-#: admin/admin-ajax.php:208
+#: admin/admin-ajax.php:221
 #, fuzzy
 msgid "User"
 msgstr "ユーザー名"
 
-#: admin/admin-ajax.php:209
+#: admin/admin-ajax.php:222
 msgid "IP"
 msgstr "IP"
 
-#: admin/admin-ajax.php:210
+#: admin/admin-ajax.php:223
 msgid "Status"
 msgstr "ステータス"
 
-#: admin/admin-ajax.php:211
+#: admin/admin-ajax.php:224
 msgid "Comment Author"
 msgstr "コメント投稿者"
 
-#: admin/admin-ajax.php:212
+#: admin/admin-ajax.php:225
 #, fuzzy
 msgid "Comment Content"
 msgstr "コメントテキスト"
 
-#: admin/admin-ajax.php:213
+#: admin/admin-ajax.php:226
 #, fuzzy
 msgid "Activity Title"
 msgstr "アクティビティ"
 
-#: admin/admin-ajax.php:214
+#: admin/admin-ajax.php:227
 msgid "Topic Title"
 msgstr "トピックタイトル"
 
-#: admin/admin-ajax.php:215
+#: admin/admin-ajax.php:228
 msgid "Post Title"
 msgstr "投稿タイトル"
 
-#: admin/admin-ajax.php:216
+#: admin/admin-ajax.php:229
 #, fuzzy
 msgid "Category"
 msgstr "カテゴリー"
 
-#: admin/admin-ajax.php:217
+#: admin/admin-ajax.php:230
+msgid "Actions"
+msgstr "アクション"
+
+#: admin/admin-ajax.php:231
 msgid "Showing"
 msgstr ""
 
-#: admin/admin-ajax.php:218
+#: admin/admin-ajax.php:232
 msgid "to"
 msgstr ""
 
-#: admin/admin-ajax.php:219
+#: admin/admin-ajax.php:233
 msgid "of"
 msgstr ""
 
-#: admin/admin-ajax.php:220
+#: admin/admin-ajax.php:234
 #, fuzzy
 msgid "results"
 msgstr "検索結果"
 
-#: admin/admin-ajax.php:221
+#: admin/admin-ajax.php:235
 msgid "Back"
 msgstr ""
 
-#: admin/admin-ajax.php:222
+#: admin/admin-ajax.php:236
 #, fuzzy
 msgid "Search"
 msgstr "検索結果"
 
-#: admin/admin-ajax.php:223
+#: admin/admin-ajax.php:237
 msgid "Loading..."
 msgstr ""
 
-#: admin/admin-ajax.php:224
+#: admin/admin-ajax.php:238
 msgid "Download CSV"
 msgstr ""
 
-#: admin/admin-ajax.php:225
+#: admin/admin-ajax.php:239
 msgid "Delete Selected"
 msgstr ""
 
-#: admin/admin-ajax.php:226
+#: admin/admin-ajax.php:240
 msgid "Filter by type:"
 msgstr ""
 
-#: admin/admin-ajax.php:229 admin/classes/class-wp-ulike-admin-panel.php:173
+#: admin/admin-ajax.php:241
+msgid "per page"
+msgstr ""
+
+#: admin/admin-ajax.php:244 admin/classes/class-wp-ulike-admin-panel.php:173
 #: admin/classes/class-wp-ulike-admin-panel.php:346
 #: admin/classes/class-wp-ulike-admin-panel.php:397
 msgid "Posts"
 msgstr "投稿"
 
-#: admin/admin-ajax.php:231 admin/classes/class-wp-ulike-admin-panel.php:175
+#: admin/admin-ajax.php:246 admin/classes/class-wp-ulike-admin-panel.php:175
 #: admin/classes/class-wp-ulike-admin-panel.php:348
 #, fuzzy
 msgid "Activities"
 msgstr "アクティビティ"
 
-#: admin/admin-ajax.php:232 admin/classes/class-wp-ulike-admin-panel.php:176
+#: admin/admin-ajax.php:247 admin/classes/class-wp-ulike-admin-panel.php:176
 #: admin/classes/class-wp-ulike-admin-panel.php:349
 #, fuzzy
 msgid "Topics"
 msgstr "トピック ID"
 
-#: admin/admin-ajax.php:233
+#: admin/admin-ajax.php:248
 msgid "Engagers"
 msgstr ""
 
-#: admin/admin-ajax.php:236
+#: admin/admin-ajax.php:251
 msgid "Nothing to See Here!"
 msgstr ""
 
-#: admin/admin-ajax.php:237
+#: admin/admin-ajax.php:252
 msgid "No content available. Try refreshing or check back later."
 msgstr ""
 
-#: admin/admin-ajax.php:240
+#: admin/admin-ajax.php:255
 msgid "Unlock Your Website's True Potential!"
 msgstr ""
 
-#: admin/admin-ajax.php:241
+#: admin/admin-ajax.php:256
 msgid ""
 "Imagine knowing exactly what makes your content shine and how to connect "
 "with the fans who'll help you grow. Picture having the tools to make smarter "
@@ -375,81 +438,81 @@ msgid ""
 "Ready to uncover what's possible?"
 msgstr ""
 
-#: admin/admin-ajax.php:242
+#: admin/admin-ajax.php:257
 #, fuzzy
 msgid "Get Started"
 msgstr "はじめに"
 
-#: admin/admin-ajax.php:243
+#: admin/admin-ajax.php:258
 msgid "Discover More"
 msgstr ""
 
-#: admin/admin-ajax.php:246
+#: admin/admin-ajax.php:261
 msgid "{{count}} {{interval}} ago"
 msgstr ""
 
-#: admin/admin-ajax.php:247
+#: admin/admin-ajax.php:262
 msgid "year"
 msgstr ""
 
-#: admin/admin-ajax.php:248
+#: admin/admin-ajax.php:263
 #, fuzzy
 msgid "years"
 msgstr "年"
 
-#: admin/admin-ajax.php:249
+#: admin/admin-ajax.php:264
 #, fuzzy
 msgid "month"
 msgstr "月"
 
-#: admin/admin-ajax.php:250
+#: admin/admin-ajax.php:265
 #, fuzzy
 msgid "months"
 msgstr "月"
 
-#: admin/admin-ajax.php:251
+#: admin/admin-ajax.php:266
 msgid "week"
 msgstr ""
 
-#: admin/admin-ajax.php:252
+#: admin/admin-ajax.php:267
 #, fuzzy
 msgid "weeks"
 msgstr "週"
 
-#: admin/admin-ajax.php:253
+#: admin/admin-ajax.php:268
 #, fuzzy
 msgid "day"
 msgstr "今日"
 
-#: admin/admin-ajax.php:254
+#: admin/admin-ajax.php:269
 msgid "days"
 msgstr ""
 
-#: admin/admin-ajax.php:255
+#: admin/admin-ajax.php:270
 msgid "hour"
 msgstr ""
 
-#: admin/admin-ajax.php:256
+#: admin/admin-ajax.php:271
 msgid "hours"
 msgstr ""
 
-#: admin/admin-ajax.php:257
+#: admin/admin-ajax.php:272
 msgid "minute"
 msgstr ""
 
-#: admin/admin-ajax.php:258
+#: admin/admin-ajax.php:273
 msgid "minutes"
 msgstr ""
 
-#: admin/admin-ajax.php:259
+#: admin/admin-ajax.php:274
 msgid "second"
 msgstr ""
 
-#: admin/admin-ajax.php:260
+#: admin/admin-ajax.php:275
 msgid "seconds"
 msgstr ""
 
-#: admin/admin-ajax.php:261
+#: admin/admin-ajax.php:276
 msgid "just now"
 msgstr ""
 
@@ -569,13 +632,13 @@ msgid ""
 "tag.)"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-pages.php:27 includes/plugin.php:120
+#: admin/classes/class-wp-ulike-admin-pages.php:27 includes/plugin.php:111
 msgid "Statistics"
 msgstr "統計"
 
 #: admin/classes/class-wp-ulike-admin-pages.php:35
 #: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
-#: includes/plugin.php:121
+#: includes/plugin.php:112
 msgid "About"
 msgstr "プラグインについて"
 
@@ -583,7 +646,7 @@ msgstr "プラグインについて"
 msgid "WP ULike"
 msgstr "WP ULike"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:119
+#: admin/classes/class-wp-ulike-admin-panel.php:43 includes/plugin.php:110
 msgid "Settings"
 msgstr "設定"
 
@@ -1999,6 +2062,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "Engagement Statistics"
+#~ msgstr "統計"
+
+#, fuzzy
 #~ msgid "This is because there is still no data in your database."
 #~ msgstr ""
 #~ "データが見つかりません!これは、まだデータベースにデータが存在しないためで"
@@ -2055,9 +2122,6 @@ msgstr ""
 
 #~ msgid "Date / Time"
 #~ msgstr "日時"
-
-#~ msgid "Actions"
-#~ msgstr "アクション"
 
 #~ msgid "Comment ID"
 #~ msgstr "コメント ID"
