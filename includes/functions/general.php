@@ -711,8 +711,8 @@ if( ! function_exists('wp_ulike_kses') ){
 
 		$allowedtags = array_map( 'wp_ulike_global_attributes', $allowedtags );
 
-        // Sanitize the JS attributes first to remove any inline event handlers (e.g., onclick, onerror).
-        $value = wp_ulike_sanitize_js_attributes( $value );
+		// Decode HTML entities (in case the input is encoded)
+		$value = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );
 
 		return wp_kses($value, $allowedtags);
 	}
@@ -758,53 +758,6 @@ if( ! function_exists('wp_ulike_global_attributes') ){
 		}
 
 		return $value;
-	}
-}
-
-if( ! function_exists('wp_ulike_sanitize_js_attributes') ){
-	/**
-	 * Sanitizes HTML by stripping out all inline JavaScript code, event handler attributes,
-	 * and dangerous protocol usages while leaving valid HTML intact.
-	 *
-	 * This function removes:
-	 *  - Any attribute starting with "on" (e.g. onclick, onerror, onload)
-	 *  - Dangerous protocols (e.g., javascript:, vbscript:, data:, mocha:, livescript:)
-	 *    from attribute values.
-	 *  - CSS expressions (e.g., expression(...)) and javascript: URLs inside style attributes.
-	 *
-	 * @param string $html The HTML content to sanitize.
-	 * @return string The sanitized HTML content.
-	 */
-	function wp_ulike_sanitize_js_attributes($html) {
-        if ( ! is_string( $html ) ) {
-            return $html;
-        }
-
-        // Decode HTML entities to handle encoded tags
-        $html = html_entity_decode( $html, ENT_QUOTES, 'UTF-8' );
-
-        // Remove all event handler attributes (e.g., onclick, onerror) with quoted values.
-        $html = preg_replace( '/\s*on[a-z]+\s*=\s*(["\']).*?\1/si', '', $html );
-
-        // Also remove event attributes with unquoted values.
-        $html = preg_replace( '/\s*on[a-z]+\s*=\s*[^ >]+/si', '', $html );
-
-        // List dangerous protocols similar to those checked by wp_kses_bad_protocol.
-        $dangerous_protocols = array( 'javascript', 'vbscript', 'data', 'mocha', 'livescript' );
-        foreach ( $dangerous_protocols as $protocol ) {
-            // Remove occurrences of dangerous protocols from attribute values.
-            // This regex looks for attributes containing the dangerous protocol and removes the protocol part.
-            $pattern = '/(=\s*["\']?)\s*' . preg_quote( $protocol, '/' ) . ':[^"\']*["\']?/i';
-            $html = preg_replace( $pattern, '$1', $html );
-        }
-
-        // In style attributes, remove CSS expressions (e.g., expression(...)) that can execute JavaScript.
-        $html = preg_replace( '/expression\s*\([^)]*\)/i', '', $html );
-        // Also remove javascript: URLs inside CSS url() functions in style attributes.
-        $html = preg_replace( '/url\(\s*(["\']?)\s*javascript:[^"\')]+(["\']?)\s*\)/i', 'url()', $html );
-
-        // Re-encode the HTML entities back to their original format
-        return htmlentities( $html, ENT_QUOTES, 'UTF-8' );
 	}
 }
 

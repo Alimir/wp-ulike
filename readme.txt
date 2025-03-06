@@ -6,7 +6,7 @@ Tags: marketing, performance, analytics, feedback, conversion
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 4.7.9
+Stable tag: 4.7.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,9 @@ Yes, developed by TechnoWich, WP ULike follows the latest security and coding st
 WP ULike runs smoothly on Apache, Nginx, LiteSpeed, Microsoft IIS, and other popular web servers.
 
 == Changelog ==
+
+= 4.7.9.1 =
+Fixed: Critical HTML sanitization issue.
 
 = 4.7.9 =
 * Added: Global engagement insights with world map and device type charts in the stats panel. [PRO]

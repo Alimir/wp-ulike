@@ -295,6 +295,7 @@ class wp_ulike_setting_repo {
 		// Create filter args
 		$filter_args = self::getOption( 'filter_counter_value', array(
 			'like_prefix'       => '+',
+			'unlike_prefix'     => '+',
 			'dislike_prefix'    => '-',
 			'undislike_prefix'  => '-',
 			'like_postfix'      => '',
