@@ -363,7 +363,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				'fingerprint'                        => $this->currentFingerPrint,
 				'status'                             => $this->currentStatus
 			);
-			$format = array( '%d', '%s', '%s', '%s', '%s' ); // Adjust format specifiers
+			$format = array( '%d', '%s', '%s', '%s', '%s', '%s'  ); // Adjust format specifiers
 
 			$row = $this->wpdb->insert( $table, $data, $format );
 
