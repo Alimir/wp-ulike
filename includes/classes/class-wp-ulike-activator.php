@@ -206,6 +206,40 @@ class wp_ulike_activator {
 		update_option( 'wp_ulike_dbVersion', '2.3' );
 	}
 
+	public function upgrade_3(){
+		// Extract table names
+		extract( $this->tables );
+
+		// Add 'fingerprint' column to posts table
+		$this->database->query( "
+			ALTER TABLE $posts
+			ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`;
+		" );
+
+		// Add 'fingerprint' column to comments table
+		$this->database->query( "
+			ALTER TABLE $comments
+			ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`;
+		" );
+
+		// Add 'fingerprint' column to activities table
+		$this->database->query( "
+			ALTER TABLE $activities
+			ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`,
+			ADD INDEX (`fingerprint`);
+		" );
+
+		// Add 'fingerprint' column to forums table
+		$this->database->query( "
+			ALTER TABLE $forums
+			ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`;
+		" );
+
+		// Update db version
+		update_option( 'wp_ulike_dbVersion', '2.4' );
+	}
+
+
     /**
     * Return an instance of this class.
     *

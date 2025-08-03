@@ -65,6 +65,9 @@ class WpUlikeInit {
     if ( version_compare( $current_version, '2.3', '<' ) ) {
       wp_ulike_activator::get_instance()->upgrade_2();
     }
+    if ( version_compare( $current_version, '2.4', '<' ) ) {
+      wp_ulike_activator::get_instance()->upgrade_3();
+    }
   }
 
   /**
