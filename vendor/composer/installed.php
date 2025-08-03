@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'alimir/wp-ulike',
-        'pretty_version' => 'dev-develop',
-        'version' => 'dev-develop',
-        'reference' => 'c76435f4074ec7010a6e4a1b1a5e5e297390c1fe',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '80637c2b09cb04264809b7465eb774f3a56b06b8',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,13 +11,37 @@
     ),
     'versions' => array(
         'alimir/wp-ulike' => array(
-            'pretty_version' => 'dev-develop',
-            'version' => 'dev-develop',
-            'reference' => 'c76435f4074ec7010a6e4a1b1a5e5e297390c1fe',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '80637c2b09cb04264809b7465eb774f3a56b06b8',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'matomo/device-detector' => array(
+            'pretty_version' => '6.4.6',
+            'version' => '6.4.6.0',
+            'reference' => '6f07f615199851548db47a900815d2ea2cdcde08',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../matomo/device-detector',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'mustangostang/spyc' => array(
+            'pretty_version' => '0.6.3',
+            'version' => '0.6.3.0',
+            'reference' => '4627c838b16550b666d15aeae1e5289dd5b77da0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../mustangostang/spyc',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'piwik/device-detector' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.4.6',
+            ),
         ),
         'psr/http-message' => array(
             'pretty_version' => '1.0.1',

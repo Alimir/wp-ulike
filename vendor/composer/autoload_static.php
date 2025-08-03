@@ -6,6 +6,10 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitc58ba4e8ae01fe624f24a47c3b1dc47f
 {
+    public static $files = array (
+        '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'V' => 
         array (
@@ -14,6 +18,10 @@ class ComposerStaticInitc58ba4e8ae01fe624f24a47c3b1dc47f
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
+        ),
+        'D' => 
+        array (
+            'DeviceDetector\\' => 15,
         ),
     );
 
@@ -26,10 +34,51 @@ class ComposerStaticInitc58ba4e8ae01fe624f24a47c3b1dc47f
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'DeviceDetector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/matomo/device-detector',
+        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'DeviceDetector\\Cache\\CacheInterface' => __DIR__ . '/..' . '/matomo/device-detector/Cache/CacheInterface.php',
+        'DeviceDetector\\Cache\\DoctrineBridge' => __DIR__ . '/..' . '/matomo/device-detector/Cache/DoctrineBridge.php',
+        'DeviceDetector\\Cache\\LaravelCache' => __DIR__ . '/..' . '/matomo/device-detector/Cache/LaravelCache.php',
+        'DeviceDetector\\Cache\\PSR16Bridge' => __DIR__ . '/..' . '/matomo/device-detector/Cache/PSR16Bridge.php',
+        'DeviceDetector\\Cache\\PSR6Bridge' => __DIR__ . '/..' . '/matomo/device-detector/Cache/PSR6Bridge.php',
+        'DeviceDetector\\Cache\\StaticCache' => __DIR__ . '/..' . '/matomo/device-detector/Cache/StaticCache.php',
+        'DeviceDetector\\ClientHints' => __DIR__ . '/..' . '/matomo/device-detector/ClientHints.php',
+        'DeviceDetector\\DeviceDetector' => __DIR__ . '/..' . '/matomo/device-detector/DeviceDetector.php',
+        'DeviceDetector\\Parser\\AbstractBotParser' => __DIR__ . '/..' . '/matomo/device-detector/Parser/AbstractBotParser.php',
+        'DeviceDetector\\Parser\\AbstractParser' => __DIR__ . '/..' . '/matomo/device-detector/Parser/AbstractParser.php',
+        'DeviceDetector\\Parser\\Bot' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Bot.php',
+        'DeviceDetector\\Parser\\Client\\AbstractClientParser' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/AbstractClientParser.php',
+        'DeviceDetector\\Parser\\Client\\Browser' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/Browser.php',
+        'DeviceDetector\\Parser\\Client\\Browser\\Engine' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/Browser/Engine.php',
+        'DeviceDetector\\Parser\\Client\\Browser\\Engine\\Version' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/Browser/Engine/Version.php',
+        'DeviceDetector\\Parser\\Client\\FeedReader' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/FeedReader.php',
+        'DeviceDetector\\Parser\\Client\\Hints\\AppHints' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/Hints/AppHints.php',
+        'DeviceDetector\\Parser\\Client\\Hints\\BrowserHints' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/Hints/BrowserHints.php',
+        'DeviceDetector\\Parser\\Client\\Library' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/Library.php',
+        'DeviceDetector\\Parser\\Client\\MediaPlayer' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/MediaPlayer.php',
+        'DeviceDetector\\Parser\\Client\\MobileApp' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/MobileApp.php',
+        'DeviceDetector\\Parser\\Client\\PIM' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Client/PIM.php',
+        'DeviceDetector\\Parser\\Device\\AbstractDeviceParser' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/AbstractDeviceParser.php',
+        'DeviceDetector\\Parser\\Device\\Camera' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/Camera.php',
+        'DeviceDetector\\Parser\\Device\\CarBrowser' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/CarBrowser.php',
+        'DeviceDetector\\Parser\\Device\\Console' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/Console.php',
+        'DeviceDetector\\Parser\\Device\\HbbTv' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/HbbTv.php',
+        'DeviceDetector\\Parser\\Device\\Mobile' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/Mobile.php',
+        'DeviceDetector\\Parser\\Device\\Notebook' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/Notebook.php',
+        'DeviceDetector\\Parser\\Device\\PortableMediaPlayer' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/PortableMediaPlayer.php',
+        'DeviceDetector\\Parser\\Device\\ShellTv' => __DIR__ . '/..' . '/matomo/device-detector/Parser/Device/ShellTv.php',
+        'DeviceDetector\\Parser\\OperatingSystem' => __DIR__ . '/..' . '/matomo/device-detector/Parser/OperatingSystem.php',
+        'DeviceDetector\\Parser\\VendorFragment' => __DIR__ . '/..' . '/matomo/device-detector/Parser/VendorFragment.php',
+        'DeviceDetector\\Yaml\\ParserInterface' => __DIR__ . '/..' . '/matomo/device-detector/Yaml/ParserInterface.php',
+        'DeviceDetector\\Yaml\\Pecl' => __DIR__ . '/..' . '/matomo/device-detector/Yaml/Pecl.php',
+        'DeviceDetector\\Yaml\\Spyc' => __DIR__ . '/..' . '/matomo/device-detector/Yaml/Spyc.php',
+        'DeviceDetector\\Yaml\\Symfony' => __DIR__ . '/..' . '/matomo/device-detector/Yaml/Symfony.php',
         'Psr\\Http\\Message\\MessageInterface' => __DIR__ . '/..' . '/psr/http-message/src/MessageInterface.php',
         'Psr\\Http\\Message\\RequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/RequestInterface.php',
         'Psr\\Http\\Message\\ResponseInterface' => __DIR__ . '/..' . '/psr/http-message/src/ResponseInterface.php',
