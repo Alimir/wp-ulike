@@ -48,11 +48,12 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 			$method_id = 0;
 
 			if( ! $this->hasPermission( array(
-				'item_id'      => $this->args['id'],
-				'type'         => $this->args['slug'],
-				'current_user' => $this->getCurrentUser(),
-				'prev_status'  => $this->getPrevStatus(),
-				'method'       => 'lookup'
+				'item_id'              => $this->args['id'],
+				'type'                 => $this->args['slug'],
+				'current_user'         => $this->getCurrentUser(),
+				'prev_status'          => $this->getPrevStatus(),
+				'current_finger_print' => $this->getCurrentFingerPrint(),
+				'method'               => 'lookup'
 			), $this->settings ) ){
 				// If has prev status
 				$method_id = 0;

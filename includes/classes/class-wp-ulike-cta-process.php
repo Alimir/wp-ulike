@@ -85,7 +85,7 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 				'current_user'         => $this->getCurrentUser(),
 				'current_status'       => $this->getCurrentStatus(),
 				'prev_status'          => $this->getPrevStatus(),
-				'current_finger_print' => $this->getFingerprintCount($this->parsedArgs['item_id'], $this->settings->getType()),
+				'current_finger_print' => $this->getCurrentFingerPrint(),
 				'method'               => 'process'
  			), $this->settings ) ){
 				return false;

@@ -119,6 +119,15 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
+		 * Get current user finger print
+		 *
+		 * @return string
+		 */
+		public function getCurrentFingerPrint(){
+			return $this->currentFingerPrint;
+		}
+
+		/**
 		 * Get current user id
 		 *
 		 * @return string
@@ -222,8 +231,10 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			// Check for logging method
 			$method = wp_ulike_setting_repo::getMethod( $args['type'] );
 
+			// check cookie existense
+			$has_cookie   = false;
+
 			if ( in_array( $method, array( 'by_cookie', 'by_user_ip_cookie' ) ) ) {
-				$has_cookie   = false;
 				$cookie_key   = sanitize_key( 'wp_ulike_' . md5( $args['type'] . '_logs' ) );
 				$cookie_data  = self::getDecodedCookieData( $cookie_key );
 				$user_hash    = md5( $args['current_user'] );
@@ -278,17 +289,28 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				}
 			}
 
-			if( ! empty($args['current_finger_print']) && ! is_user_logged_in() ){
-				if ( $method === 'do_not_log' ) {
-					if ( $args['current_finger_print'] >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) {
-						$status = false;
-					}
-				} elseif( $method === 'by_cookie' ) {
-					if ( $args['current_finger_print'] >= 1 ) {
-						$status = false;
+			// Fingerprint check for guests or requests without cookies
+			if ( ! is_user_logged_in() && $args['method'] === 'process' && in_array( $method, ['do_not_log', 'by_cookie'] ) ) {
+
+				$fingerprint_count = wp_ulike_count_current_fingerprint(
+					$args['current_finger_print'],
+					$args['item_id'],
+					$args['type']
+				);
+
+				if ( ! empty( $fingerprint_count ) ) {
+					if ( $method === 'do_not_log' ) {
+						if ( $fingerprint_count >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) {
+							$status = false;
+						}
+					} elseif ( ! $has_cookie && $method === 'by_cookie' ) {
+						if ( $fingerprint_count >= 1 ) {
+							$status = false;
+						}
 					}
 				}
 			}
+
 
 			return apply_filters( 'wp_ulike_permission_status', $status, $args, $settings );
 		}
@@ -313,39 +335,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		public function isDistinct(){
 			return wp_ulike_setting_repo::isDistinct( $this->itemType );
 		}
-
-		/**
-		 * Check if user fingerprint has exceeded vote limit for the given item.
-		 *
-		 * Uses WordPress object caching to minimize DB queries.
-		 *
-		 * @param int $item_id
-		 * @param string $type
-		 * @return integer
-		 */
-		public function getFingerprintCount( $item_id, $type ) {
-			// Sanitize key & prepare cache key
-			$cache_key = 'fingerprint_' . md5( $type . '_' . $item_id . '_' . $this->currentFingerPrint );
-
-			// Try to get from cache
-			$existing_count = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
-
-			if ( false === $existing_count ) {
-				$table = $this->wpdb->prefix . $this->typeSettings->getTableName();
-
-				$existing_count = (int) $this->wpdb->get_var( $this->wpdb->prepare(
-					"SELECT COUNT(*) FROM {$table} WHERE {$this->typeSettings->getColumnName()} = %d AND fingerprint = %s",
-					$item_id,
-					$this->currentFingerPrint
-				) );
-
-				// Store in cache to avoid repeated queries for same request
-				wp_cache_add( $cache_key, $existing_count, WP_ULIKE_SLUG, 10 ); // TTL = 10 seconds
-			}
-
-			return (int) $existing_count;
-		}
-
 
 		/**
 		 * Inset log data
