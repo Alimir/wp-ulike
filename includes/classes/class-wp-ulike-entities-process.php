@@ -18,6 +18,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		protected $isUserLoggedIn;
 		protected $prevStatus;
 		protected $currentIP;
+		protected $currentFingerPrint;
 		protected $currentUser;
 		protected $typeSettings;
 		protected $itemType;
@@ -44,6 +45,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$this->setIsUserLoggedIn( $parsed_args['user_id'] );
 			$this->setCurrentUser( $parsed_args['user_id'] );
 			$this->setItemMethod( $parsed_args['item_method'] );
+			$this->setCurrentFingerPrint();
 
 			// Set type settings
 			$this->setTypeSettings();
@@ -56,6 +58,15 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		protected function setCurrentIP( $user_ip ){
 			$this->currentIP = $user_ip === NULL ? wp_ulike_get_user_ip() : $user_ip;
+		}
+
+		/**
+		 * Set current user IP
+		 *
+		 * @return void
+		 */
+		protected function setCurrentFingerPrint(){
+			$this->currentFingerPrint = wp_ulike_generate_fingerprint();
 		}
 
 		/**
@@ -105,6 +116,15 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			} else {
 				$this->currentUser = $user_id;
 			}
+		}
+
+		/**
+		 * Get current user finger print
+		 *
+		 * @return string
+		 */
+		public function getCurrentFingerPrint(){
+			return $this->currentFingerPrint;
 		}
 
 		/**
@@ -193,32 +213,28 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
-		 * Check permission access
+		 * Check permission access with bot + fingerprint protection
 		 *
 		 * @param array $args
+		 * @param object $settings
 		 * @return boolean
 		 */
 		public static function hasPermission( $args, $settings ){
-			// Get loggin method
-			$method = wp_ulike_setting_repo::getMethod( $args['type'] );
-			// Status check point
+			// Default status
 			$status = true;
 
-			if ( in_array( $method, array( 'do_not_log' ) ) ) {
-				$user_item_count = wp_ulike_get_user_item_count_per_day( array(
-					"item_id"      => $args['item_id'],
-					"current_user" => $args['current_user'],
-					"settings"     => $settings
-				) );
-
-				if ( $user_item_count >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) {
-					$status = false;
-				}
+			// Check bot status first
+			if ( wp_ulike_is_bot_request() ) {
+				return false;
 			}
 
-			// Check cookie permission
-			if( in_array( $method, array( 'by_cookie', 'by_user_ip_cookie' ) ) ){
-				$has_cookie   = false;
+			// Check for logging method
+			$method = wp_ulike_setting_repo::getMethod( $args['type'] );
+
+			// check cookie existense
+			$has_cookie   = false;
+
+			if ( in_array( $method, array( 'by_cookie', 'by_user_ip_cookie' ) ) ) {
 				$cookie_key   = sanitize_key( 'wp_ulike_' . md5( $args['type'] . '_logs' ) );
 				$cookie_data  = self::getDecodedCookieData( $cookie_key );
 				$user_hash    = md5( $args['current_user'] );
@@ -231,17 +247,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 						$status = false;
 						$has_cookie = true;
 					}
-				// support old cookies
 				} elseif ( isset( $_COOKIE[ $settings->getCookieName() . $args['item_id'] ] ) ) {
 					$status = false;
 					$has_cookie = true;
 				}
 
-				// Check user permission
-				if( $method === 'by_user_ip_cookie' ){
-					$cookie_hash  = array_keys( $cookie_data );
-
-					foreach ($cookie_hash as $value) {
+				if ( $method === 'by_user_ip_cookie' ) {
+					$cookie_hash = array_keys( $cookie_data );
+					foreach ( $cookie_hash as $value ) {
 						if ( ! empty( $cookie_data[ $value ][ $args['item_id'] ] ) ) {
 							if ( is_numeric( $cookie_data[ $value ][ $args['item_id'] ] ) && $current_time >= $cookie_data[ $value ][ $args['item_id'] ] ) {
 								$status = true;
@@ -255,30 +268,53 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					}
 				}
 
-				// set cookie on process method
-				if( ! $has_cookie && $args['method'] === 'process' ){
-					// Get current time
+				if ( ! $has_cookie && $args['method'] === 'process' ) {
 					$cookie_expire = wp_ulike_setting_repo::getCookieExpiration( $args['type'] );
 
-					if( empty( $cookie_data ) ){
+					if ( empty( $cookie_data ) ) {
 						$cookie_data = array( $user_hash => array(
 							$args['item_id'] => $cookie_expire
 						) );
 					} else {
-						foreach ($cookie_data as $hash => $info) {
-							if( ! isset( $info[$args['item_id']] ) && $hash != $user_hash ){
+						foreach ( $cookie_data as $hash => $info ) {
+							if ( ! isset( $info[$args['item_id']] ) && $hash != $user_hash ) {
 								$cookie_data[ $user_hash ][ $args['item_id'] ] = $cookie_expire;
-							} elseif( $hash == $user_hash ) {
+							} elseif ( $hash == $user_hash ) {
 								$cookie_data[ $hash ][ $args['item_id'] ] = $cookie_expire;
 							}
 						}
 					}
+
 					wp_ulike_setcookie( $cookie_key, wp_json_encode( $cookie_data ), time() + 2147483647 );
 				}
 			}
 
+			// Fingerprint check for guests or requests without cookies
+			if ( ! is_user_logged_in() && $args['method'] === 'process' && in_array( $method, ['do_not_log', 'by_cookie'] ) ) {
+
+				$fingerprint_count = wp_ulike_count_current_fingerprint(
+					$args['current_finger_print'],
+					$args['item_id'],
+					$args['type']
+				);
+
+				if ( ! empty( $fingerprint_count ) ) {
+					if ( $method === 'do_not_log' ) {
+						if ( $fingerprint_count >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) {
+							$status = false;
+						}
+					} elseif ( ! $has_cookie && $method === 'by_cookie' ) {
+						if ( $fingerprint_count >= 1 ) {
+							$status = false;
+						}
+					}
+				}
+			}
+
+
 			return apply_filters( 'wp_ulike_permission_status', $status, $args, $settings );
 		}
+
 
 		/**
 		 * Get decoded cookie data
@@ -310,12 +346,13 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$table = $this->wpdb->prefix . $this->typeSettings->getTableName();
 			$data  = array(
 				$this->typeSettings->getColumnName() => $item_id,
-				'date_time' => current_time( 'mysql' ),
-				'ip'        => $this->maybeAnonymiseIp( $this->currentIP ),
-				'user_id'   => $this->currentUser,
-				'status'    => $this->currentStatus
+				'date_time'                          => current_time( 'mysql' ),
+				'ip'                                 => $this->maybeAnonymiseIp( $this->currentIP ),
+				'user_id'                            => $this->currentUser,
+				'fingerprint'                        => $this->currentFingerPrint,
+				'status'                             => $this->currentStatus
 			);
-			$format = array( '%d', '%s', '%s', '%s', '%s' ); // Adjust format specifiers
+			$format = array( '%d', '%s', '%s', '%s', '%s', '%s'  ); // Adjust format specifiers
 
 			$row = $this->wpdb->insert( $table, $data, $format );
 

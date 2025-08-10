@@ -916,3 +916,40 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
         return empty( $counter_value ) ? 0 : absint($counter_value);
     }
 }
+
+if( ! function_exists('wp_ulike_count_current_fingerprint') ){
+	/**
+	 * Check if user fingerprint has exceeded vote limit for the given item.
+	 *
+	 * Uses WordPress object caching to minimize DB queries.
+	 *
+	 * @param int $current_fingerprint
+	 * @param int $item_id
+	 * @param string $type
+	 * @return integer
+	 */
+	function wp_ulike_count_current_fingerprint( $current_fingerprint, $item_id, $type ) {
+		global $wpdb;
+		// Sanitize key & prepare cache key
+		$cache_key = 'fingerprint_' . md5( $type . '_' . $item_id . '_' . $current_fingerprint );
+
+		// Try to get from cache
+		$existing_count = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+		$settings       = new wp_ulike_setting_type( $type );
+
+		if ( false === $existing_count ) {
+			$table = $wpdb->prefix . $settings->getTableName();
+
+			$existing_count = (int) $wpdb->get_var( $wpdb->prepare(
+				"SELECT COUNT(*) FROM {$table} WHERE {$settings->getColumnName()} = %d AND fingerprint = %s",
+				$item_id,
+				$current_fingerprint
+			) );
+
+			// Store in cache to avoid repeated queries for same request
+			wp_cache_add( $cache_key, $existing_count, WP_ULIKE_SLUG, 10 ); // TTL = 10 seconds
+		}
+
+		return (int) $existing_count;
+	}
+}

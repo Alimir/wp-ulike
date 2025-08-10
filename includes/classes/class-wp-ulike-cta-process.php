@@ -80,12 +80,13 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 
 			// Check permission
 			if( ! $this->hasPermission( array(
-				'item_id'        => $this->parsedArgs['item_id'],
-				'type'           => $this->settings->getType(),
-				'current_user'   => $this->getCurrentUser(),
-				'current_status' => $this->getCurrentStatus(),
-				'prev_status'    => $this->getPrevStatus(),
-				'method'         => 'process'
+				'item_id'              => $this->parsedArgs['item_id'],
+				'type'                 => $this->settings->getType(),
+				'current_user'         => $this->getCurrentUser(),
+				'current_status'       => $this->getCurrentStatus(),
+				'prev_status'          => $this->getPrevStatus(),
+				'current_finger_print' => $this->getCurrentFingerPrint(),
+				'method'               => 'process'
  			), $this->settings ) ){
 				return false;
 			}
