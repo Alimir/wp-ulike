@@ -56,12 +56,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'sticky_header'      => true,
                 'save_defaults'      => true,
                 'ajax_save'          => true,
-                'footer_credit'      => sprintf(
-                    '%s <a href="%s" title="TechnoWich" target="_blank">%s</a>',
-                    esc_html__( 'Proudly Powered By', 'wp-ulike' ),
-                    'https://technowich.com/?utm_source=footer-link&utm_campaign=wp-ulike&utm_medium=wp-dash',
-                    esc_html__( 'TechnoWich', 'wp-ulike' )
-                ),
                 'footer_after'       => '',
                 'footer_text'        => sprintf(
                     '<a href="%s" title="Documents" target="_blank">%s</a>',
