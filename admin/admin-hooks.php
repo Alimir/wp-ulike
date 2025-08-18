@@ -18,18 +18,24 @@ if ( ! defined( 'WPINC' ) ) {
  * @return			string
  */
 function wp_ulike_copyright( $text ) {
-	if( isset($_GET["page"]) && stripos( sanitize_text_field( wp_unslash( $_GET["page"] ) ), "wp-ulike") !== false ) {
-		return sprintf(
-			'%s <a href="%s" title="TechnoWich" target="_blank">%s</a>',
-			esc_html__( 'Proudly Powered By', 'wp-ulike' ),
-			'https://technowich.com/?utm_source=footer-link&utm_campaign=wp-ulike&utm_medium=wp-dash',
-			esc_html__( 'TechnoWich', 'wp-ulike' )
-		);
+	if ( ! wp_ulike_is_plugin_screen() ) {
+		return $text;
 	}
 
-	return $text;
+	$link = sprintf(
+		'<a href="%s" title="%s" target="_blank">%s</a>',
+		esc_url( 'https://technowich.com/?utm_source=footer-link&utm_campaign=wp-ulike&utm_medium=wp-dash' ),
+		esc_attr__( 'TechnoWich', 'wp-ulike' ),
+		esc_html__( 'TechnoWich', 'wp-ulike' )
+	);
+
+	return sprintf(
+		'<span id="footer-thankyou">%s %s</span>',
+		esc_html__( 'Proudly Powered By', 'wp-ulike' ),
+		$link
+	);
 }
-add_filter( 'admin_footer_text', 'wp_ulike_copyright');
+add_filter( 'admin_footer_text', 'wp_ulike_copyright' );
 
 
 /**

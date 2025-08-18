@@ -290,7 +290,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			}
 
 			// Fingerprint check for guests or requests without cookies
-			if ( ! is_user_logged_in() && $args['method'] === 'process' && in_array( $method, ['do_not_log', 'by_cookie'] ) ) {
+			if ( $args['method'] === 'process' && in_array( $method, ['do_not_log', 'by_cookie'] ) ) {
 
 				$fingerprint_count = wp_ulike_count_current_fingerprint(
 					$args['current_finger_print'],
@@ -303,7 +303,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 						if ( $fingerprint_count >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) {
 							$status = false;
 						}
-					} elseif ( ! $has_cookie && $method === 'by_cookie' ) {
+					} elseif ( ! $has_cookie && $method === 'by_cookie' && ! is_user_logged_in() ) {
 						if ( $fingerprint_count >= 1 ) {
 							$status = false;
 						}
@@ -346,7 +346,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$table = $this->wpdb->prefix . $this->typeSettings->getTableName();
 			$data  = array(
 				$this->typeSettings->getColumnName() => $item_id,
-				'date_time'                          => current_time( 'mysql' ),
+				'date_time'                          => current_time( 'mysql', true ),
 				'ip'                                 => $this->maybeAnonymiseIp( $this->currentIP ),
 				'user_id'                            => $this->currentUser,
 				'fingerprint'                        => $this->currentFingerPrint,
@@ -403,7 +403,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		public function updateData( $item_id ){
 			$table  = $this->wpdb->prefix . $this->typeSettings->getTableName();
-			$data   = array( 'status' => $this->currentStatus, 'date_time' => current_time( 'mysql' ) ); // No need for esc_sql
+			$data   = array( 'status' => $this->currentStatus, 'date_time' => current_time( 'mysql', true ) ); // No need for esc_sql
 			$where  = array(
 				$this->typeSettings->getColumnName() => $item_id,
 				'user_id'   => $this->currentUser
