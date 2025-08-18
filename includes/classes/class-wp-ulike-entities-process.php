@@ -290,7 +290,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			}
 
 			// Fingerprint check for guests or requests without cookies
-			if ( ! is_user_logged_in() && $args['method'] === 'process' && in_array( $method, ['do_not_log', 'by_cookie'] ) ) {
+			if ( $args['method'] === 'process' && in_array( $method, ['do_not_log', 'by_cookie'] ) ) {
 
 				$fingerprint_count = wp_ulike_count_current_fingerprint(
 					$args['current_finger_print'],
@@ -303,7 +303,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 						if ( $fingerprint_count >= wp_ulike_setting_repo::getVoteLimitNumber( $args['type'] ) ) {
 							$status = false;
 						}
-					} elseif ( ! $has_cookie && $method === 'by_cookie' ) {
+					} elseif ( ! $has_cookie && $method === 'by_cookie' && ! is_user_logged_in() ) {
 						if ( $fingerprint_count >= 1 ) {
 							$status = false;
 						}
