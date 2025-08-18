@@ -346,7 +346,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$table = $this->wpdb->prefix . $this->typeSettings->getTableName();
 			$data  = array(
 				$this->typeSettings->getColumnName() => $item_id,
-				'date_time'                          => current_time( 'mysql' ),
+				'date_time'                          => current_time( 'mysql', true ),
 				'ip'                                 => $this->maybeAnonymiseIp( $this->currentIP ),
 				'user_id'                            => $this->currentUser,
 				'fingerprint'                        => $this->currentFingerPrint,
@@ -403,7 +403,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		public function updateData( $item_id ){
 			$table  = $this->wpdb->prefix . $this->typeSettings->getTableName();
-			$data   = array( 'status' => $this->currentStatus, 'date_time' => current_time( 'mysql' ) ); // No need for esc_sql
+			$data   = array( 'status' => $this->currentStatus, 'date_time' => current_time( 'mysql', true ) ); // No need for esc_sql
 			$where  = array(
 				$this->typeSettings->getColumnName() => $item_id,
 				'user_id'   => $this->currentUser
