@@ -10,77 +10,6 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Return per_page option value
- *
- * @author       	Alimir
- * @since           2.1
- * @return			integer
- */
-function wp_ulike_logs_return_per_page(){
-	$user     = get_current_user_id();
-	$screen   = get_current_screen();
-	$option   = $screen->get_option( 'per_page', 'option' );
-	$per_page = get_user_meta( $user, $option, true );
-
-	return ( empty( $per_page ) || $per_page < 1 ) ? 30 : $per_page;
-}
-
-
-
-/**
- * Get paginated logs dataset
- *
- * @since 3.5
- * @param string $table
- * @param string $type
- * @return array
- */
-function wp_ulike_get_paginated_logs( $table, $type ) {
-    global $wpdb;
-
-    // Define items per page and calculate offset
-    $per_page = wp_ulike_logs_return_per_page(); // Items per page
-    $current_page = isset($_GET['page_number']) ? max(1, absint($_GET['page_number'])) : 1;
-    $offset = ($current_page - 1) * $per_page;
-
-    // Fetch total number of items
-    $total_rows = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}{$table}`");
-
-    // Early return if no rows exist
-    if( empty( $total_rows ) ) {
-        return;
-    }
-
-    // Fetch the items for the current page
-    $data_rows = $wpdb->get_results(
-        $wpdb->prepare( "SELECT * FROM `{$wpdb->prefix}{$table}` ORDER BY id DESC LIMIT %d, %d", $offset, $per_page )
-    );
-
-    // Calculate total pages
-    $total_pages = ceil( $total_rows / $per_page );
-
-    // Generate pagination links
-    $page_links = paginate_links( array(
-        'base'      => add_query_arg( 'page_number', '%#%' ),
-        'format'    => '',
-        'prev_text' => '&laquo;',
-        'next_text' => '&raquo;',
-        'total'     => $total_pages,
-        'current'   => $current_page
-    ) );
-
-    // Wrap the pagination links in standard WordPress admin pagination markup
-    $pagination_html = '<div class="tablenav"><div class="tablenav-pages">' . ($total_pages > 1 ? "<span class=\"displaying-num\">$total_rows items</span>" : '') . '<span class="pagination-links">' . "$page_links</span></div></div>";
-
-    // Return results and pagination HTML
-    return array(
-        'data_rows'       => $data_rows,
-        'pagination_html' => $pagination_html,
-        'total_rows'      => $total_rows
-    );
-}
-
-/**
  * Get new votes counter
  *
  * @return integer
@@ -123,33 +52,6 @@ function wp_ulike_badge_count_format( $number ){
 	return ! empty( $number ) ? sprintf( ' <span class="update-plugins wp-ulike-notification-count-container count-%1$s"><span class="update-count wp-ulike-notification-count-value">%1$s</span></span>',
 		number_format_i18n( $number )
 	) : '';
-}
-
-/**
- * Get plugin downloads info from wordpress.org
- *
- * @return void
- */
-function wp_ulike_get_repository_downloads_info(){
-
-	$key = sanitize_key( 'wp_ulike_repository_downloads_info' );
-
-	if ( false === ( $info = wp_ulike_get_transient( $key ) ) ) {
-		$request = wp_remote_get( 'https://api.wordpress.org/stats/plugin/1.0/downloads.php?slug=wp-ulike&limit=30' );
-		if( is_wp_error( $request ) ) {
-			return NULL;
-		}
-		// get body info
-		$body = wp_remote_retrieve_body( $request );
-		$data = json_decode( $body, true );
-		$info = is_array( $data ) ? array(
-			'labels' => array_keys( $data ),
-			'data' => array_values( $data ),
-		) : NULL;
-		wp_ulike_set_transient( $key, $info, 3 * HOUR_IN_SECONDS );
-	}
-
-	return $info;
 }
 
 /**
