@@ -74,7 +74,7 @@ if ( ! version_compare( PHP_VERSION, '7.2.5', '>=' ) ) {
  */
 function wp_ulike_fail_php_version() {
 	/* translators: %s: PHP version */
-	$message = sprintf( esc_html__( 'WP ULike requires PHP version %s+, plugin is currently NOT RUNNING.', 'wp-ulike' ), '7.2' );
+	$message = sprintf( esc_html__( 'WP ULike requires PHP version %s+, plugin is currently NOT RUNNING.', 'wp-ulike' ), '7.2.5' );
 	$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 	echo wp_kses_post( $html_message );
 }
