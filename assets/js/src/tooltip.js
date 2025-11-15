@@ -112,11 +112,20 @@
     tooltip.setAttribute("data-positioned", "true");
   };
 
+  // Safe Array.from polyfill for older browsers (if needed)
+  const arrayFrom = (arrayLike) => {
+    if (Array.from) {
+      return Array.from(arrayLike);
+    }
+    // Fallback for very old browsers
+    return Array.prototype.slice.call(arrayLike);
+  };
+
   // Main plugin
   function WordpressUlikeTooltipPlugin(element, options) {
     // Handle multiple elements
     if (element.length !== undefined && element.length > 1) {
-      Array.from(element).forEach((el) => {
+      arrayFrom(element).forEach((el) => {
         new WordpressUlikeTooltipPlugin(el, options);
       });
       return element;

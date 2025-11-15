@@ -64,6 +64,15 @@
     element.dispatchEvent(event);
   };
 
+  // Safe Array.from polyfill for older browsers (if needed)
+  const arrayFrom = (arrayLike) => {
+    if (Array.from) {
+      return Array.from(arrayLike);
+    }
+    // Fallback for very old browsers
+    return Array.prototype.slice.call(arrayLike);
+  };
+
   // Helper function to handle multiple elements
   const forEachElement = (elements, callback) => {
     if (!elements) return;
@@ -72,7 +81,7 @@
       callback(elements, 0);
     } else {
       // NodeList or Array
-      Array.from(elements).forEach(callback);
+      arrayFrom(elements).forEach(callback);
     }
   };
 

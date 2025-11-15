@@ -1,13 +1,22 @@
 (function (window, document) {
   "use strict";
 
+  // Safe Array.from polyfill for older browsers (if needed)
+  const arrayFrom = (arrayLike) => {
+    if (Array.from) {
+      return Array.from(arrayLike);
+    }
+    // Fallback for very old browsers
+    return Array.prototype.slice.call(arrayLike);
+  };
+
   // Helper function to initialize ulike on elements
   const initUlike = (elements) => {
     if (!elements) return;
 
     // Handle single element or NodeList
     const elementArray = elements.length !== undefined
-      ? Array.from(elements)
+      ? arrayFrom(elements)
       : [elements];
 
     elementArray.forEach((element) => {
@@ -44,7 +53,7 @@
             // Check for children that match
             if (node.nodeType === 1 && node.querySelectorAll) {
               const elements = node.querySelectorAll(elementSelector);
-              elements.forEach((el) => callback(el));
+              arrayFrom(elements).forEach((el) => callback(el));
             }
           });
         }
