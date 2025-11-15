@@ -212,47 +212,6 @@ $color-spinner-dark: #a8a8a8;
   }
 }
 
-// Dark Theme
-.ulf-black-theme {
-  background: $color-dark;
-  border: $tooltip-border-width solid rgba(255, 255, 255, 0.1);
-  border-radius: $tooltip-border-radius;
-  overflow: visible;
-
-  .ulf-content {
-    color: $color-white;
-    padding: 8px 12px;
-  }
-
-  .ulf-arrow-bottom {
-    background: $color-dark;
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-    border-right-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .ulf-arrow-top {
-    background: $color-dark;
-    border-top-color: rgba(255, 255, 255, 0.1);
-    border-left-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .ulf-arrow-left {
-    background: $color-dark;
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-    border-left-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .ulf-arrow-right {
-    background: $color-dark;
-    border-top-color: rgba(255, 255, 255, 0.1);
-    border-right-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .ulf-spinner-circle {
-    background-color: $color-spinner-dark;
-  }
-}
-
 // Sizes
 .ulf-small {
   .ulf-content {
