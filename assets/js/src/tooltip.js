@@ -6,12 +6,12 @@
   "use strict";
 
   // Store tooltip instances
-  var tooltipInstances = new WeakMap();
-  var tooltipInstancesById = {}; // For easier access by ID
-  var activeTooltips = [];
+  const tooltipInstances = new WeakMap();
+  const tooltipInstancesById = {}; // For easier access by ID
+  const activeTooltips = [];
 
   // Default options
-  var defaults = {
+  const defaults = {
     id: Date.now(),
     title: "",
     trigger: "hover",
@@ -23,82 +23,75 @@
     close_on_outside_click: true,
   };
 
+  // Constants
+  const SPACING = 13;
+  const SHOW_DELAY = 100;
+  const HIDE_DELAY = 100;
+
   // Helper: Get element position
-  function getOffset(element) {
-    var rect = element.getBoundingClientRect();
+  const getOffset = (element) => {
+    const rect = element.getBoundingClientRect();
     return {
       top: rect.top + window.pageYOffset,
       left: rect.left + window.pageXOffset,
       width: rect.width,
       height: rect.height,
     };
-  }
+  };
 
   // Helper: Create loading spinner HTML
-  function createSpinnerHTML() {
-    return (
-      '<div class="ulf-loading-spinner">' +
-      '<div class="ulf-spinner-circle"></div>' +
-      '<div class="ulf-spinner-circle"></div>' +
-      '<div class="ulf-spinner-circle"></div>' +
-      "</div>"
-    );
-  }
+  const createSpinnerHTML = () => {
+    return '<div class="ulf-loading-spinner"><div class="ulf-spinner-circle"></div><div class="ulf-spinner-circle"></div><div class="ulf-spinner-circle"></div></div>';
+  };
 
   // Helper: Create tooltip element
-  function createTooltipElement(content, className, isLoading) {
-    var tooltip = document.createElement("div");
-    tooltip.className = "ulf-tooltip " + (className || "");
+  const createTooltipElement = (content, className, isLoading) => {
+    const tooltip = document.createElement("div");
+    tooltip.className = `ulf-tooltip ${className || ""}`;
     tooltip.setAttribute("role", "tooltip");
     
     // Ensure content is never empty to prevent glitch
-    var contentHTML = isLoading ? createSpinnerHTML() : (content || "&nbsp;");
-    tooltip.innerHTML =
-      '<div class="ulf-arrow"></div><div class="ulf-content">' +
-      contentHTML +
-      "</div>";
+    const contentHTML = isLoading ? createSpinnerHTML() : (content || "&nbsp;");
+    tooltip.innerHTML = `<div class="ulf-arrow"></div><div class="ulf-content">${contentHTML}</div>`;
     return tooltip;
-  }
+  };
 
   // Helper: Position tooltip
-  function positionTooltip(tooltip, reference, placement) {
-    var refRect = getOffset(reference);
-    var tooltipRect = tooltip.getBoundingClientRect();
-    var arrow = tooltip.querySelector(".ulf-arrow");
-    var arrowSize = 8;
-    var spacing = 13; // Increased spacing for better visual separation
-
-    var positions = {
-      top: {
-        top: refRect.top - tooltipRect.height - spacing,
-        left: refRect.left + refRect.width / 2 - tooltipRect.width / 2,
-        arrow: "bottom", // Arrow at bottom pointing down when tooltip is above
-      },
-      bottom: {
-        top: refRect.top + refRect.height + spacing,
-        left: refRect.left + refRect.width / 2 - tooltipRect.width / 2,
-        arrow: "top", // Arrow at top pointing up when tooltip is below
-      },
-      left: {
-        top: refRect.top + refRect.height / 2 - tooltipRect.height / 2,
-        left: refRect.left - tooltipRect.width - spacing,
-        arrow: "right", // Arrow at right pointing right when tooltip is on left
-      },
-      right: {
-        top: refRect.top + refRect.height / 2 - tooltipRect.height / 2,
-        left: refRect.left + refRect.width + spacing,
-        arrow: "left", // Arrow at left pointing left when tooltip is on right
-      },
-    };
-
-    var pos = positions[placement] || positions.top;
-
-    // Keep tooltip in viewport
-    var viewport = {
+  const positionTooltip = (tooltip, reference, placement) => {
+    const refRect = getOffset(reference);
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const arrow = tooltip.querySelector(".ulf-arrow");
+    const viewport = {
       width: window.innerWidth,
       height: window.innerHeight,
     };
 
+    const positions = {
+      top: {
+        top: refRect.top - tooltipRect.height - SPACING,
+        left: refRect.left + refRect.width / 2 - tooltipRect.width / 2,
+        arrow: "bottom",
+      },
+      bottom: {
+        top: refRect.top + refRect.height + SPACING,
+        left: refRect.left + refRect.width / 2 - tooltipRect.width / 2,
+        arrow: "top",
+      },
+      left: {
+        top: refRect.top + refRect.height / 2 - tooltipRect.height / 2,
+        left: refRect.left - tooltipRect.width - SPACING,
+        arrow: "right",
+      },
+      right: {
+        top: refRect.top + refRect.height / 2 - tooltipRect.height / 2,
+        left: refRect.left + refRect.width + SPACING,
+        arrow: "left",
+      },
+    };
+
+    const pos = positions[placement] || positions.top;
+
+    // Keep tooltip in viewport
     if (pos.left < 10) pos.left = 10;
     if (pos.left + tooltipRect.width > viewport.width - 10) {
       pos.left = viewport.width - tooltipRect.width - 10;
@@ -108,22 +101,22 @@
       pos.top = viewport.height - tooltipRect.height - 10;
     }
 
-    tooltip.style.left = pos.left + "px";
-    tooltip.style.top = pos.top + "px";
+    tooltip.style.left = `${pos.left}px`;
+    tooltip.style.top = `${pos.top}px`;
 
     if (arrow) {
-      arrow.className = "ulf-arrow ulf-arrow-" + pos.arrow;
+      arrow.className = `ulf-arrow ulf-arrow-${pos.arrow}`;
     }
     
     // Mark as positioned to show arrow
     tooltip.setAttribute("data-positioned", "true");
-  }
+  };
 
   // Main plugin
   function WordpressUlikeTooltipPlugin(element, options) {
     // Handle multiple elements
     if (element.length !== undefined && element.length > 1) {
-      Array.prototype.forEach.call(element, function (el) {
+      Array.from(element).forEach((el) => {
         new WordpressUlikeTooltipPlugin(el, options);
       });
       return element;
@@ -136,7 +129,7 @@
 
     // Get title from attribute
     if (!options.title) {
-      var titleAttr = element.getAttribute("title");
+      const titleAttr = element.getAttribute("title");
       if (titleAttr) {
         options.title = titleAttr;
         element.removeAttribute("title");
@@ -144,39 +137,35 @@
     }
 
     // Destroy existing
-    var existing = tooltipInstances.get(element);
+    const existing = tooltipInstances.get(element);
     if (existing) {
       existing.destroy();
     }
 
-    var tooltip = null;
-    var showTimeout = null;
-    var hideTimeout = null;
-    var isLoading = false;
+    let tooltip = null;
+    let showTimeout = null;
+    let hideTimeout = null;
+    let isLoading = false;
 
-    function show(showLoading) {
+    const show = (showLoading) => {
       // If showing loading, always show even if tooltip exists
       if (tooltip && tooltip.parentNode && !showLoading) return;
 
       // Hide others if singleton
       if (options.singleton !== false) {
-        activeTooltips.forEach(function (t) {
+        activeTooltips.forEach((t) => {
           if (t && t.hide && t.element !== element) t.hide();
         });
       }
 
       // Create or update tooltip
-      var className =
-        "ulf-" +
-        (options.theme || "light") +
-        "-theme ulf-" +
-        (options.size || "small");
-      if (options.class) className += " " + options.class;
+      let className = `ulf-${options.theme || "light"}-theme ulf-${options.size || "small"}`;
+      if (options.class) className += ` ${options.class}`;
 
       // Get reference element for positioning
-      var reference = element;
+      let reference = element;
       if (options.child) {
-        var childEl = element.querySelector(options.child);
+        const childEl = element.querySelector(options.child);
         if (childEl) reference = childEl;
       }
 
@@ -195,7 +184,7 @@
         positionTooltip(tooltip, reference, options.position || "top");
       } else {
         // Update existing tooltip content
-        var contentEl = tooltip.querySelector(".ulf-content");
+        const contentEl = tooltip.querySelector(".ulf-content");
         if (contentEl) {
           isLoading = showLoading === true;
           contentEl.innerHTML = isLoading
@@ -208,50 +197,48 @@
 
       // Add hover handlers to tooltip if trigger is hover
       if (options.trigger === "hover" || !options.trigger) {
-        tooltip.addEventListener("mouseenter", function () {
+        tooltip.addEventListener("mouseenter", () => {
           clearTimeout(hideTimeout);
         });
         tooltip.addEventListener("mouseleave", handleHide);
       }
 
       // Add to active
-      var isInActive = activeTooltips.some(function (t) {
-        return t.element === element;
-      });
+      const isInActive = activeTooltips.some((t) => t.element === element);
       if (!isInActive) {
-        activeTooltips.push({ element: element, hide: hide });
+        activeTooltips.push({ element, hide });
       }
 
       // Set ID for accessibility
-      var id = "ulp-dom-" + options.id;
+      const id = `ulp-dom-${options.id}`;
       tooltip.setAttribute("id", id);
       element.setAttribute("aria-describedby", id);
 
       // Trigger event
-      var event = new CustomEvent("ulf-show", {
+      const event = new CustomEvent("ulf-show", {
         bubbles: true,
-        detail: { tooltip: tooltip },
+        detail: { tooltip },
       });
       element.dispatchEvent(event);
-    }
+    };
 
-    function updateContent(content) {
+    const updateContent = (content) => {
       if (!tooltip || !tooltip.parentNode) return;
-      var contentEl = tooltip.querySelector(".ulf-content");
+      const contentEl = tooltip.querySelector(".ulf-content");
       if (contentEl) {
         contentEl.innerHTML = content || "&nbsp;";
         isLoading = false;
         // Reposition after content update
-        var reference = element;
+        let reference = element;
         if (options.child) {
-          var childEl = element.querySelector(options.child);
+          const childEl = element.querySelector(options.child);
           if (childEl) reference = childEl;
         }
         positionTooltip(tooltip, reference, options.position || "top");
       }
-    }
+    };
 
-    function hide() {
+    const hide = () => {
       if (!tooltip || !tooltip.parentNode) return;
 
       tooltip.remove();
@@ -259,40 +246,41 @@
       isLoading = false;
 
       // Remove from active
-      activeTooltips = activeTooltips.filter(function (t) {
-        return t.element !== element;
-      });
+      const index = activeTooltips.findIndex((t) => t.element === element);
+      if (index > -1) {
+        activeTooltips.splice(index, 1);
+      }
 
       // Remove aria
       element.removeAttribute("aria-describedby");
 
       // Trigger event
-      var event = new CustomEvent("ulf-hide", { bubbles: true });
+      const event = new CustomEvent("ulf-hide", { bubbles: true });
       element.dispatchEvent(event);
-    }
+    };
 
     // Event handlers
-    function handleShow() {
+    const handleShow = () => {
       clearTimeout(hideTimeout);
       // Show immediately if loading is requested, otherwise with delay
       if (options.showLoadingImmediately) {
         show(true);
       } else {
-        showTimeout = setTimeout(show, 100);
+        showTimeout = setTimeout(show, SHOW_DELAY);
       }
-    }
+    };
 
-    function handleHide() {
+    const handleHide = () => {
       clearTimeout(showTimeout);
-      hideTimeout = setTimeout(hide, 100);
-    }
+      hideTimeout = setTimeout(hide, HIDE_DELAY);
+    };
 
     // Setup events based on trigger
     if (options.trigger === "hover" || !options.trigger) {
       element.addEventListener("mouseenter", handleShow);
       element.addEventListener("mouseleave", handleHide);
     } else if (options.trigger === "click") {
-      element.addEventListener("click", function (e) {
+      element.addEventListener("click", (e) => {
         e.preventDefault();
         if (tooltip && tooltip.parentNode) {
           hide();
@@ -304,7 +292,7 @@
 
     // Click outside handler
     if (options.close_on_outside_click !== false) {
-      var outsideHandler = function (e) {
+      const outsideHandler = (e) => {
         if (
           tooltip &&
           tooltip.parentNode &&
@@ -318,14 +306,12 @@
     }
 
     // Store instance
-    var instance = {
-      show: show,
-      showLoading: function () {
-        show(true);
-      },
-      updateContent: updateContent,
-      hide: hide,
-      destroy: function () {
+    const instance = {
+      show,
+      showLoading: () => show(true),
+      updateContent,
+      hide,
+      destroy: () => {
         hide();
         element.removeEventListener("mouseenter", handleShow);
         element.removeEventListener("mouseleave", handleHide);
@@ -342,8 +328,8 @@
     }
 
     // Listen for WP ULike events
-    var likersHandler = function (e) {
-      var detail = e.detail || {};
+    const likersHandler = (e) => {
+      const detail = e.detail || {};
       if (detail.likersTemplate === "popover") {
         if (detail.template && detail.template.length) {
           options.title = detail.template;
@@ -364,19 +350,7 @@
   window.WordpressUlikeTooltip = {
     visible: activeTooltips,
     bodyClickInitialized: false,
-    defaults: defaults,
-    getInstanceById: function (id) {
-      return tooltipInstancesById[id];
-    },
+    defaults,
+    getInstanceById: (id) => tooltipInstancesById[id],
   };
-
-  // jQuery compatibility
-  if (typeof jQuery !== "undefined" && jQuery.fn) {
-    jQuery.fn.WordpressUlikeTooltip = function (options) {
-      return this.each(function () {
-        new WordpressUlikeTooltipPlugin(this, options);
-      });
-    };
-    jQuery.WordpressUlikeTooltip = window.WordpressUlikeTooltip;
-  }
 })(window, document);

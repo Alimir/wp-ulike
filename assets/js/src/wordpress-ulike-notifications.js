@@ -3,47 +3,48 @@
   "use strict";
 
   // Create the defaults once
-  var pluginName = "WordpressUlikeNotifications",
-    defaults = {
-      messageType: "success",
-      messageText: "Hello World!",
-      timeout: 8000,
-      messageElement: "wpulike-message",
-      notifContainer: "wpulike-notification"
-    };
+  const pluginName = "WordpressUlikeNotifications";
+  const defaults = {
+    messageType: "success",
+    messageText: "Hello World!",
+    timeout: 8000,
+    messageElement: "wpulike-message",
+    notifContainer: "wpulike-notification"
+  };
 
   /**
    * Helper function to fade out an element
    */
-  function fadeOut(element, duration, callback) {
+  const fadeOut = (element, duration, callback) => {
     // Ensure element has initial opacity
-    if (window.getComputedStyle(element).opacity === "") {
+    const computedStyle = window.getComputedStyle(element);
+    if (!computedStyle.opacity || computedStyle.opacity === "") {
       element.style.opacity = "1";
     }
     // Set transition and fade out
-    element.style.transition = "opacity " + duration + "ms";
+    element.style.transition = `opacity ${duration}ms`;
     // Use requestAnimationFrame to ensure smooth transition
-    requestAnimationFrame(function () {
+    requestAnimationFrame(() => {
       element.style.opacity = "0";
-      setTimeout(function () {
+      setTimeout(() => {
         if (callback) {
           callback();
         }
       }, duration);
     });
-  }
+  };
 
   /**
    * Helper function to dispatch custom events
    */
-  function triggerEvent(element, eventName, detail) {
-    var event = new CustomEvent(eventName, {
+  const triggerEvent = (element, eventName, detail) => {
+    const event = new CustomEvent(eventName, {
       bubbles: true,
       cancelable: true,
       detail: detail || {}
     });
     element.dispatchEvent(event);
-  }
+  };
 
   // The actual plugin constructor
   function Plugin(element, options) {
@@ -56,7 +57,7 @@
 
   // Plugin prototype methods
   Plugin.prototype = {
-    init: function () {
+    init() {
       // Create Message Wrapper
       this._message();
       // Create Notification Container
@@ -70,20 +71,20 @@
     /**
      * Create Message Wrapper
      */
-    _message: function () {
+    _message() {
       this.messageElement = document.createElement("div");
       this.messageElement.className =
-        this.settings.messageElement + " wpulike-" + this.settings.messageType;
+        `${this.settings.messageElement} wpulike-${this.settings.messageType}`;
       this.messageElement.textContent = this.settings.messageText;
     },
 
     /**
      * Create notification container
      */
-    _container: function () {
+    _container() {
       // Make notification container if not exist
-      var existingContainer = this.element.querySelector(
-        "." + this.settings.notifContainer
+      const existingContainer = this.element.querySelector(
+        `.${this.settings.notifContainer}`
       );
       if (!existingContainer) {
         this.notifContainer = document.createElement("div");
@@ -97,7 +98,7 @@
     /**
      * Append notice
      */
-    _append: function () {
+    _append() {
       // Append Notification
       this.notifContainer.appendChild(this.messageElement);
       triggerEvent(this.notifContainer, "WordpressUlikeNotificationAppend");
@@ -106,35 +107,30 @@
     /**
      * Disappear notice
      */
-    _remove: function () {
-      var self = this;
-      // Remove Message On Click
-      this.messageElement.addEventListener("click", function () {
-        fadeOut(this, 300, function () {
-          this.remove();
-          var remainingMessages = self.element.querySelectorAll(
-            "." + self.settings.messageElement
+    _remove() {
+      const self = this;
+      const removeMessage = (messageEl) => {
+        fadeOut(messageEl, 300, () => {
+          messageEl.remove();
+          const remainingMessages = self.element.querySelectorAll(
+            `.${self.settings.messageElement}`
           );
           if (remainingMessages.length === 0) {
             self.notifContainer.remove();
           }
           triggerEvent(self.element, "WordpressUlikeRemoveNotification");
-        }.bind(this));
+        });
+      };
+
+      // Remove Message On Click
+      this.messageElement.addEventListener("click", function () {
+        removeMessage(this);
       });
 
       // Remove Message With Timeout
       if (self.settings.timeout) {
-        setTimeout(function () {
-          fadeOut(self.messageElement, 300, function () {
-            self.messageElement.remove();
-            var remainingMessages = self.element.querySelectorAll(
-              "." + self.settings.messageElement
-            );
-            if (remainingMessages.length === 0) {
-              self.notifContainer.remove();
-            }
-            triggerEvent(self.element, "WordpressUlikeRemoveNotification");
-          });
+        setTimeout(() => {
+          removeMessage(self.messageElement);
         }, self.settings.timeout);
       }
     }
@@ -142,13 +138,4 @@
 
   // Expose plugin to window for global access
   window[pluginName] = Plugin;
-
-  // jQuery compatibility layer (if jQuery is available)
-  if (typeof jQuery !== "undefined" && jQuery.fn) {
-    jQuery.fn[pluginName] = function (options) {
-      return this.each(function () {
-        new Plugin(this, options);
-      });
-    };
-  }
 })(window, document);
