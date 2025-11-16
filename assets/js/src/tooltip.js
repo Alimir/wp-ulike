@@ -555,4 +555,15 @@
     defaults,
     getInstanceById: (id) => tooltipInstancesById[id],
   };
+  
+  // Expose as jQuery plugin for backward compatibility (if jQuery is available)
+  // This allows users' existing jQuery code to continue working
+  // Example: $('.element').WordpressUlikeTooltip({...})
+  if (typeof jQuery !== 'undefined' && jQuery && jQuery.fn) {
+    jQuery.fn.WordpressUlikeTooltip = function (options) {
+      return this.each(function () {
+        new WordpressUlikeTooltipPlugin(this, options);
+      });
+    };
+  }
 })(window, document);

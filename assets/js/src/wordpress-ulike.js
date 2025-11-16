@@ -54,14 +54,38 @@
     return value;
   };
 
-  // Helper function to trigger custom events
-  const triggerEvent = (element, eventName, detail) => {
+  // Helper function to trigger custom events (works with both jQuery and vanilla JS)
+  const triggerEvent = (element, eventName, data) => {
+    // Create CustomEvent for vanilla JS listeners
     const event = new CustomEvent(eventName, {
       bubbles: true,
       cancelable: true,
-      detail: detail || {}
+      detail: data
     });
+    
+    // Dispatch the event
     element.dispatchEvent(event);
+    
+    // jQuery can listen to CustomEvents, but we need to make data accessible
+    // jQuery wraps CustomEvents and makes detail available via event.originalEvent.detail
+    // However, jQuery's .on() handler receives the event object, and users can access:
+    // - event.originalEvent.detail (for CustomEvent data)
+    // - Or we can make it work like jQuery's trigger by setting a property
+    // 
+    // For maximum compatibility, if jQuery is available, also trigger a jQuery event
+    // This ensures users' existing jQuery listeners continue to work
+    if (typeof jQuery !== 'undefined' && jQuery && jQuery.fn && jQuery.fn.on) {
+      // Create a jQuery event that mimics the old behavior
+      // jQuery's trigger passes data as second parameter to handlers
+      const $element = jQuery(element);
+      if (Array.isArray(data)) {
+        // For arrays, pass as array (matches old behavior)
+        $element.trigger(eventName, data);
+      } else {
+        // For single values, pass directly (matches old behavior)
+        $element.trigger(eventName, data);
+      }
+    }
   };
 
   // Safe Array.from polyfill for older browsers (if needed)
@@ -219,7 +243,7 @@
         });
       }
       // Manipulations
-      triggerEvent(document, "WordpressUlikeLoading", { element: this.element });
+      triggerEvent(document, "WordpressUlikeLoading", this.element);
       // Add progress class
       if (this.generalElement) {
         forEachElement(this.generalElement, (el) => {
@@ -260,7 +284,7 @@
             });
           }
           // Add new trigger when process finished
-          triggerEvent(document, "WordpressUlikeUpdated", { element: this.element });
+          triggerEvent(document, "WordpressUlikeUpdated", this.element);
         }
       );
     },
@@ -432,7 +456,7 @@
       });
 
       const buttonEl = getSingleElement(this.buttonElement);
-      triggerEvent(document, "WordpressUlikeCounterUpdated", { buttonElement: buttonEl });
+      triggerEvent(document, "WordpressUlikeCounterUpdated", [buttonEl]);
     },
 
     /**
@@ -644,12 +668,13 @@
       }
 
       // Trigger event for other systems that might be listening
-      triggerEvent(document, "WordpressUlikeLikersMarkupUpdated", {
-        likersElement: this.likersElement,
-        likersTemplate: this.settings.likersTemplate,
-        template: data && typeof data === 'object' ? data.template : data,
-        element: this.element,
-      });
+      // Match old jQuery format: [likersElement, likersTemplate, template]
+      const template = data && typeof data === 'object' ? data.template : data;
+      triggerEvent(document, "WordpressUlikeLikersMarkupUpdated", [
+        this.likersElement,
+        this.settings.likersTemplate,
+        template
+      ]);
     },
 
     /**
@@ -764,4 +789,21 @@
 
   // Expose plugin to window for global access
   window[pluginName] = Plugin;
+  
+  // Expose as jQuery plugin for backward compatibility (if jQuery is available)
+  // This allows users' existing jQuery code to continue working
+  // Example: $('.wpulike').WordpressUlike()
+  if (typeof jQuery !== 'undefined' && jQuery && jQuery.fn) {
+    jQuery.fn[pluginName] = function (options) {
+      return this.each(function () {
+        // Check if already initialized (using data attribute as marker)
+        if (!this.hasAttribute || !this.hasAttribute("data-ulike-initialized")) {
+          new Plugin(this, options);
+          if (this.setAttribute) {
+            this.setAttribute("data-ulike-initialized", "true");
+          }
+        }
+      });
+    };
+  }
 })(window, document);
