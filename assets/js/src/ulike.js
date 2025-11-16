@@ -62,16 +62,16 @@
       cancelable: true,
       detail: data
     });
-    
+
     // Dispatch the event
     element.dispatchEvent(event);
-    
+
     // jQuery can listen to CustomEvents, but we need to make data accessible
     // jQuery wraps CustomEvents and makes detail available via event.originalEvent.detail
     // However, jQuery's .on() handler receives the event object, and users can access:
     // - event.originalEvent.detail (for CustomEvent data)
     // - Or we can make it work like jQuery's trigger by setting a property
-    // 
+    //
     // For maximum compatibility, if jQuery is available, also trigger a jQuery event
     // This ensures users' existing jQuery listeners continue to work
     if (typeof jQuery !== 'undefined' && jQuery && jQuery.fn && jQuery.fn.on) {
@@ -196,7 +196,7 @@
         };
         this.generalElement.addEventListener("mouseenter", mouseenterHandler);
       }
-      
+
       // Note: Tooltip data requests are now handled via dataFetcher callback
       // No need for event listeners - cleaner approach!
     },
@@ -321,7 +321,7 @@
               appendedElements.push(clonedElement);
             }
           });
-          
+
           // Remove all cloned elements after timeout
           if (this.settings.appendTimeout && appendedElements.length > 0) {
             setTimeout(() => {
@@ -473,7 +473,7 @@
       if (generalEl) {
         generalEl.classList.add("wp_ulike_is_getting_likers_list");
       }
-      
+
       // Start ajax process
       this._ajax(
         {
@@ -513,7 +513,7 @@
           : "";
       const buttonSelector = `.wp_${this.settings.type.toLowerCase()}${factorMethod}_btn_${this.settings.ID}`;
       const allSameButtons = document.querySelectorAll(buttonSelector);
-      
+
       // Get all wrapper elements (.wpulike) that contain these buttons
       const wrapperElements = [];
       forEachElement(allSameButtons, (btn) => {
@@ -522,7 +522,7 @@
           wrapperElements.push(wrapper);
         }
       });
-      
+
       // If no wrappers found, use current element
       return wrapperElements.length > 0 ? wrapperElements : [this.element];
     },
@@ -551,7 +551,7 @@
         if (this.settings.likersTemplate === "popover") {
           if (typeof WordpressUlikeTooltipPlugin !== "undefined") {
             const tooltipId = `${this.settings.type.toLowerCase()}-${this.settings.ID}`;
-            
+
             // Check if tooltip instance exists
             let tooltipInstance =
               window.WordpressUlikeTooltip &&
@@ -564,13 +564,13 @@
             if (!tooltipInstance) {
               // Get all wrapper elements that should have tooltips
               const allTooltipElements = this._getAllTooltipElements();
-              
+
               // Pass elements to tooltip plugin - it handles both single and multiple elements
               // If single element, pass directly; if multiple, pass as array/NodeList
-              const elementsToPass = allTooltipElements.length === 1 
+              const elementsToPass = allTooltipElements.length === 1
                 ? allTooltipElements[0]  // Single element - pass directly
                 : allTooltipElements;     // Multiple elements - pass as array
-              
+
               new WordpressUlikeTooltipPlugin(elementsToPass, {
                 id: tooltipId,
                 position: "top",
@@ -610,14 +610,14 @@
       if (this.settings.likersTemplate === "popover") {
         this.likersElement = this.element;
         const tooltipId = `${this.settings.type.toLowerCase()}-${this.settings.ID}`;
-        
+
         // Handle both object format {template: "..."} and direct template string
         const template = data && typeof data === 'object' ? data.template : data;
         const templateContent = template || "";
-        
+
         // Get all wrapper elements that should have tooltips
         const allTooltipElements = this._getAllTooltipElements();
-        
+
         // Update tooltip content for all sibling elements
         // We need to update each element's tooltip instance
         forEachElement(allTooltipElements, (wrapperEl) => {
@@ -633,7 +633,7 @@
           wrapperEl.dispatchEvent(updateEvent);
           document.dispatchEvent(updateEvent);
         });
-        
+
         // Also try to update via getInstanceById as fallback (updates the last created instance)
         const tooltipInstance =
           window.WordpressUlikeTooltip &&
@@ -789,7 +789,7 @@
 
   // Expose plugin to window for global access
   window[pluginName] = Plugin;
-  
+
   // Expose as jQuery plugin for backward compatibility (if jQuery is available)
   // This allows users' existing jQuery code to continue working
   // Example: $('.wpulike').WordpressUlike()

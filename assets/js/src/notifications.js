@@ -235,7 +235,7 @@
 
   // Expose plugin to window for global access
   window[pluginName] = Plugin;
-  
+
   // Expose as jQuery plugin for backward compatibility (if jQuery is available)
   // This allows users' existing jQuery code to continue working
   // Example: $(document.body).WordpressUlikeNotifications({...})

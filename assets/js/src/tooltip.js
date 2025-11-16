@@ -49,7 +49,7 @@
     const tooltip = document.createElement("div");
     tooltip.className = `ulf-tooltip ${className || ""}`;
     tooltip.setAttribute("role", "tooltip");
-    
+
     // Ensure content is never empty to prevent glitch
     const contentHTML = isLoading ? createSpinnerHTML() : (content || "&nbsp;");
     tooltip.innerHTML = `<div class="ulf-arrow"></div><div class="ulf-content">${contentHTML}</div>`;
@@ -60,7 +60,7 @@
   const positionTooltip = (tooltip, reference, placement) => {
     // Force a reflow to ensure tooltip has proper dimensions
     void tooltip.offsetHeight;
-    
+
     const refRect = getOffset(reference);
     const tooltipRect = tooltip.getBoundingClientRect();
     const arrow = tooltip.querySelector(".ulf-arrow");
@@ -112,7 +112,7 @@
     if (arrow) {
       arrow.className = `ulf-arrow ulf-arrow-${pos.arrow}`;
     }
-    
+
     // Mark as positioned to show arrow
     tooltip.setAttribute("data-positioned", "true");
   };
@@ -145,7 +145,7 @@
           options.title = hiddenContent.innerHTML.trim();
         }
       }
-      
+
       // Fallback to title attribute
       if (!options.title) {
         const titleAttr = element.getAttribute("title");
@@ -294,15 +294,15 @@
     const updateContent = (content) => {
       // Update options.title to keep it in sync
       options.title = content || "";
-      
+
       // Update hidden content element (for dynamic content)
       const hiddenContent = getTooltipContentElement();
       hiddenContent.innerHTML = content || "";
-      
+
       // Set state: 'ready' if has content, 'empty' if no content
       const hasContent = content && content.trim().length > 0;
       setTooltipState(hasContent ? 'ready' : 'empty');
-      
+
       // If content is empty, hide tooltip immediately (don't show empty tooltip)
       if (!hasContent) {
         if (tooltip && tooltip.parentNode) {
@@ -310,7 +310,7 @@
         }
         return;
       }
-      
+
       // If tooltip is visible, update it immediately
       if (tooltip && tooltip.parentNode) {
         const contentEl = tooltip.querySelector(".ulf-content");
@@ -369,12 +369,12 @@
     const handleShow = () => {
       clearTimeout(hideTimeout);
       isHovering = true;
-      
+
       const tooltipState = getTooltipState();
-      
+
       // Handle different states
       if (tooltipState === 'empty') return; // Don't show empty tooltip
-      
+
       if (tooltipState === 'ready') {
         const cachedContent = getCachedContent();
         if (cachedContent) {
@@ -385,12 +385,12 @@
         }
         return;
       }
-      
+
       if (tooltipState === 'loading') {
         show(true);
         return;
       }
-      
+
       // Not initialized - request data
       if (!tooltipState || tooltipState === '') {
         if (instance.requestData && instance.requestData()) {
@@ -401,7 +401,7 @@
         }
         return;
       }
-      
+
       // Fallback for static content
       if (options.showLoadingImmediately) {
         show(true);
@@ -478,7 +478,7 @@
     instance.setLoadingState = () => {
       setTooltipState('loading');
     };
-    
+
     // If tooltip is created with hover trigger, check state immediately
     // This handles the case when tooltip is created while user is already hovering
     if (!options.trigger || options.trigger === "hover") {
@@ -502,26 +502,26 @@
     // This method checks state and triggers event or calls dataFetcher callback if provided
     instance.requestData = () => {
       const currentState = getTooltipState();
-      
+
       // If already loaded (ready or empty), don't request again
       if (currentState === 'ready' || currentState === 'empty') {
         return false; // Data already available
       }
-      
+
       // If already loading, don't request again
       if (currentState === 'loading') {
         return false; // Already requesting
       }
-      
+
       // Set loading state
       setTooltipState('loading');
-      
+
       // If dataFetcher callback is provided, use it directly
       if (typeof options.dataFetcher === 'function') {
         options.dataFetcher(element, options.id);
         return true;
       }
-      
+
       // Fallback: trigger event for external handler (backward compatibility)
       setTimeout(() => {
         const event = new CustomEvent("tooltip-request-data", {
@@ -531,7 +531,7 @@
         element.dispatchEvent(event);
         document.dispatchEvent(event);
       }, 0);
-      
+
       return true;
     };
 
@@ -555,7 +555,7 @@
     defaults,
     getInstanceById: (id) => tooltipInstancesById[id],
   };
-  
+
   // Expose as jQuery plugin for backward compatibility (if jQuery is available)
   // This allows users' existing jQuery code to continue working
   // Example: $('.element').WordpressUlikeTooltip({...})
