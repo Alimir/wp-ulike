@@ -172,6 +172,9 @@
         };
         this.generalElement.addEventListener("mouseenter", mouseenterHandler);
       }
+      
+      // Note: Tooltip data requests are now handled via dataFetcher callback
+      // No need for event listeners - cleaner approach!
     },
 
     /**
@@ -420,6 +423,49 @@
     },
 
     /**
+     * Fetch likers data via AJAX (called by tooltip when data is requested)
+     */
+    _fetchLikersData() {
+      if (!this.settings.displayLikers) {
+        this._isFetchingLikers = false;
+        return;
+      }
+
+      // Add progress status class
+      const generalEl = getSingleElement(this.generalElement);
+      if (generalEl) {
+        generalEl.classList.add("wp_ulike_is_getting_likers_list");
+      }
+      
+      // Start ajax process
+      this._ajax(
+        {
+          action: "wp_ulike_get_likers",
+          id: this.settings.ID,
+          nonce: this.settings.nonce,
+          type: this.settings.type,
+          displayLikers: this.settings.displayLikers,
+          likersTemplate: this.settings.likersTemplate,
+        },
+        (response) => {
+          // Remove progress status class
+          if (generalEl) {
+            generalEl.classList.remove("wp_ulike_is_getting_likers_list");
+          }
+          // Reset fetching flag
+          this._isFetchingLikers = false;
+          // Update tooltip with data
+          if (response.success) {
+            this._updateLikersMarkup(response.data);
+          } else {
+            // Request failed - update tooltip with empty content
+            this._updateLikersMarkup("");
+          }
+        }
+      );
+    },
+
+    /**
      * init & update likers box
      */
     _updateLikers(event) {
@@ -438,69 +484,47 @@
           return;
         }
 
-        // Show tooltip with loading spinner immediately for popover style
+        // Handle popover tooltips - just ensure tooltip exists
+        // Tooltip will handle state checking and request data if needed
         if (this.settings.likersTemplate === "popover") {
           if (typeof WordpressUlikeTooltipPlugin !== "undefined") {
             const tooltipId = `${this.settings.type.toLowerCase()}-${this.settings.ID}`;
-            const tooltipInstance =
+            
+            // Check if tooltip instance exists
+            let tooltipInstance =
               window.WordpressUlikeTooltip &&
               window.WordpressUlikeTooltip.getInstanceById
                 ? window.WordpressUlikeTooltip.getInstanceById(tooltipId)
                 : null;
 
+            // Create tooltip instance if it doesn't exist
+            // Tooltip will handle state checking and data requests internally
             if (!tooltipInstance) {
-              // Create new tooltip instance
+              // Pass dataFetcher callback directly to tooltip - cleaner than event listener
               new WordpressUlikeTooltipPlugin(this.element, {
                 id: tooltipId,
-                title: "",
                 position: "top",
                 child: this.settings.generalSelector,
                 theme: "white",
                 size: "tiny",
                 trigger: "hover",
+                dataFetcher: (element, tooltipId) => {
+                  // Prevent multiple requests
+                  if (this._isFetchingLikers) {
+                    return;
+                  }
+                  this._isFetchingLikers = true;
+                  this._fetchLikersData();
+                }
               });
             }
-
-            // Show loading spinner immediately (use setTimeout to ensure instance is registered)
-            setTimeout(() => {
-              const instance =
-                window.WordpressUlikeTooltip &&
-                window.WordpressUlikeTooltip.getInstanceById
-                  ? window.WordpressUlikeTooltip.getInstanceById(tooltipId)
-                  : null;
-              if (instance && instance.showLoading) {
-                instance.showLoading();
-              }
-            }, 10);
+            // Tooltip will check state on hover and request data if needed
+            // Data fetching is handled via dataFetcher callback (no event listener needed)
           }
+        } else {
+          // For default template, fetch data directly
+          this._fetchLikersData();
         }
-
-        // Add progress status class
-        const generalEl = getSingleElement(this.generalElement);
-        if (generalEl) {
-          generalEl.classList.add("wp_ulike_is_getting_likers_list");
-        }
-        // Start ajax process
-        this._ajax(
-          {
-            action: "wp_ulike_get_likers",
-            id: this.settings.ID,
-            nonce: this.settings.nonce,
-            type: this.settings.type,
-            displayLikers: this.settings.displayLikers,
-            likersTemplate: this.settings.likersTemplate,
-          },
-          (response) => {
-            // Remove progress status class
-            if (generalEl) {
-              generalEl.classList.remove("wp_ulike_is_getting_likers_list");
-            }
-            // Change markup
-            if (response.success) {
-              this._updateLikersMarkup(response.data);
-            }
-          }
-        );
 
         if (event) {
           event.stopImmediatePropagation();
@@ -516,35 +540,34 @@
       if (this.settings.likersTemplate === "popover") {
         this.likersElement = this.element;
         const tooltipId = `${this.settings.type.toLowerCase()}-${this.settings.ID}`;
+        
+        // Handle both object format {template: "..."} and direct template string
+        const template = data && typeof data === 'object' ? data.template : data;
+        const templateContent = template || "";
+        
+        // Get tooltip instance
         const tooltipInstance =
           window.WordpressUlikeTooltip &&
           window.WordpressUlikeTooltip.getInstanceById
             ? window.WordpressUlikeTooltip.getInstanceById(tooltipId)
             : null;
 
-        // Check if we have content or if it's empty
-        const hasContent = data.template && data.template.trim().length > 0;
-
-        if (hasContent) {
-          // Update existing tooltip content
-          if (tooltipInstance && tooltipInstance.updateContent) {
-            tooltipInstance.updateContent(data.template);
-          } else if (typeof WordpressUlikeTooltipPlugin !== "undefined") {
-            // Create new if doesn't exist
-            new WordpressUlikeTooltipPlugin(this.element, {
-              id: tooltipId,
-              title: data.template,
-              position: "top",
-              child: this.settings.generalSelector,
-              theme: "white",
-              size: "tiny",
-              trigger: "hover",
-            });
-          }
-        } else {
-          // No content - hide tooltip if it exists
-          if (tooltipInstance && tooltipInstance.hide) {
-            tooltipInstance.hide();
+        // Simply update tooltip content - tooltip.js handles all state management
+        if (tooltipInstance && tooltipInstance.updateContent) {
+          tooltipInstance.updateContent(templateContent);
+        } else if (typeof WordpressUlikeTooltipPlugin !== "undefined") {
+          // Create new if doesn't exist
+          const newInstance = new WordpressUlikeTooltipPlugin(this.element, {
+            id: tooltipId,
+            position: "top",
+            child: this.settings.generalSelector,
+            theme: "white",
+            size: "tiny",
+            trigger: "hover",
+          });
+          // Update content after creation
+          if (newInstance && newInstance.updateContent) {
+            newInstance.updateContent(templateContent);
           }
         }
       } else {
@@ -570,10 +593,12 @@
         }
       }
 
+      // Trigger event for other systems that might be listening
       triggerEvent(document, "WordpressUlikeLikersMarkupUpdated", {
         likersElement: this.likersElement,
         likersTemplate: this.settings.likersTemplate,
-        template: data.template,
+        template: data && typeof data === 'object' ? data.template : data,
+        element: this.element,
       });
     },
 
