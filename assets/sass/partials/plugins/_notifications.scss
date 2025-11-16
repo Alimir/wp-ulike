@@ -31,10 +31,20 @@
         font-size: 0.9rem;
         font-weight: 500;
         line-height: normal;
+        transition: opacity 300ms ease-out, transform 300ms ease-out;
+        opacity: 1;
+        transform: translateY(0);
 
         &:hover {
             opacity: 0.9;
             cursor: pointer;
+        }
+
+        // Fade out animation class (no inline styles needed)
+        &.wpulike-message-fadeout {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
         }
 
         &:before {
