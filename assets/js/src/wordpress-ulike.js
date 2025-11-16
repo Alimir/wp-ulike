@@ -286,17 +286,27 @@
     _appendChild() {
       if (this.settings.append !== "" && this.buttonElement) {
         const appendedElement = document.querySelector(this.settings.append);
-        if (appendedElement && this.buttonElement) {
-          const button = getSingleElement(this.buttonElement);
-          if (button) {
-            button.appendChild(appendedElement);
-            if (this.settings.appendTimeout) {
-              setTimeout(() => {
-                if (appendedElement.parentNode) {
-                  appendedElement.remove();
-                }
-              }, this.settings.appendTimeout);
+        if (appendedElement) {
+          // Append to all buttons (clone for each if multiple buttons)
+          const appendedElements = [];
+          forEachElement(this.buttonElement, (button) => {
+            if (button) {
+              // Clone the element for each button (since an element can only have one parent)
+              const clonedElement = appendedElement.cloneNode(true);
+              button.appendChild(clonedElement);
+              appendedElements.push(clonedElement);
             }
+          });
+          
+          // Remove all cloned elements after timeout
+          if (this.settings.appendTimeout && appendedElements.length > 0) {
+            setTimeout(() => {
+              appendedElements.forEach((el) => {
+                if (el.parentNode) {
+                  el.remove();
+                }
+              });
+            }, this.settings.appendTimeout);
           }
         }
       }
@@ -346,8 +356,6 @@
         disable: "wp_ulike_click_is_disabled",
       };
 
-      const generalEl = getSingleElement(this.generalElement);
-
       // Remove status from sibling element
       if (this.siblingElement && this.siblingElement.length) {
         forEachElement(this.siblingElement, (el) => {
@@ -355,37 +363,42 @@
         });
       }
 
-      if (!generalEl) return;
+      // Update ALL general elements (not just the first one) when there are multiple same buttons
+      forEachElement(this.generalElement, (generalEl) => {
+        if (!generalEl) return;
 
-      switch (status) {
-        case 1:
-          generalEl.classList.add(classNameObj.active);
-          generalEl.classList.remove(classNameObj.start);
-          const firstChild = generalEl.firstElementChild;
-          if (firstChild) {
-            firstChild.classList.add(classNameObj.disable);
-          }
-          break;
+        switch (status) {
+          case 1:
+            generalEl.classList.add(classNameObj.active);
+            generalEl.classList.remove(classNameObj.start);
+            const firstChild = generalEl.firstElementChild;
+            if (firstChild) {
+              firstChild.classList.add(classNameObj.disable);
+            }
+            break;
 
-        case 2:
-          generalEl.classList.add(classNameObj.deactive);
-          generalEl.classList.remove(classNameObj.active);
-          break;
+          case 2:
+            generalEl.classList.add(classNameObj.deactive);
+            generalEl.classList.remove(classNameObj.active);
+            break;
 
-        case 3:
-          generalEl.classList.add(classNameObj.active);
-          generalEl.classList.remove(classNameObj.deactive);
-          break;
+          case 3:
+            generalEl.classList.add(classNameObj.active);
+            generalEl.classList.remove(classNameObj.deactive);
+            break;
 
-        case 0:
-        case 5:
-          generalEl.classList.add(classNameObj.disable);
-          if (this.siblingElement && this.siblingElement.length) {
-            forEachElement(this.siblingElement, (el) => {
-              el.classList.add(classNameObj.disable);
-            });
-          }
-          break;
+          case 0:
+          case 5:
+            generalEl.classList.add(classNameObj.disable);
+            break;
+        }
+      });
+
+      // Handle sibling disable for case 0 and 5
+      if ((status === 0 || status === 5) && this.siblingElement && this.siblingElement.length) {
+        forEachElement(this.siblingElement, (el) => {
+          el.classList.add(classNameObj.disable);
+        });
       }
     },
 
@@ -660,38 +673,41 @@
      * Control actions
      */
     _updateButton(btnText, status) {
-      const buttonEl = getSingleElement(this.buttonElement);
+      // Update ALL buttons (not just the first one) when there are multiple same buttons
+      forEachElement(this.buttonElement, (buttonEl) => {
+        if (!buttonEl) return;
 
-      if (!buttonEl) return;
+        if (buttonEl.classList.contains("wp_ulike_put_image")) {
+          if (status === 4) {
+            buttonEl.classList.add("image-unlike", "wp_ulike_btn_is_active");
+          } else {
+            buttonEl.classList.toggle("image-unlike");
+            buttonEl.classList.toggle("wp_ulike_btn_is_active");
+          }
+        } else if (
+          buttonEl.classList.contains("wp_ulike_put_text") &&
+          btnText !== null
+        ) {
+          const span = buttonEl.querySelector("span");
+          if (span) {
+            span.innerHTML = btnText;
+          }
+        }
+      });
 
-      if (buttonEl.classList.contains("wp_ulike_put_image")) {
-        if (status === 4) {
-          buttonEl.classList.add("image-unlike", "wp_ulike_btn_is_active");
-        } else {
-          buttonEl.classList.toggle("image-unlike");
-          buttonEl.classList.toggle("wp_ulike_btn_is_active");
-        }
-        if (this.siblingElement && this.siblingElement.length) {
-          forEachElement(this.siblingElement, (sibling) => {
-            const siblingBtn = sibling.querySelector(this.settings.buttonSelector);
-            if (siblingBtn) {
-              siblingBtn.classList.remove("image-unlike", "wp_ulike_btn_is_active");
-            }
-          });
-        }
-        if (this.siblingButton && this.siblingButton.length) {
-          forEachElement(this.siblingButton, (siblingBtn) => {
+      // Update sibling buttons (remove active state from siblings)
+      if (this.siblingElement && this.siblingElement.length) {
+        forEachElement(this.siblingElement, (sibling) => {
+          const siblingBtn = sibling.querySelector(this.settings.buttonSelector);
+          if (siblingBtn) {
             siblingBtn.classList.remove("image-unlike", "wp_ulike_btn_is_active");
-          });
-        }
-      } else if (
-        buttonEl.classList.contains("wp_ulike_put_text") &&
-        btnText !== null
-      ) {
-        const span = buttonEl.querySelector("span");
-        if (span) {
-          span.innerHTML = btnText;
-        }
+          }
+        });
+      }
+      if (this.siblingButton && this.siblingButton.length) {
+        forEachElement(this.siblingButton, (siblingBtn) => {
+          siblingBtn.classList.remove("image-unlike", "wp_ulike_btn_is_active");
+        });
       }
     },
 
