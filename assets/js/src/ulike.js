@@ -140,13 +140,15 @@
     this._name = pluginName;
 
     // Create main selectors
-    this.buttonElement = this.element.querySelector(this.settings.buttonSelector);
+    // Use querySelectorAll to find ALL buttons (for consistency with pro version)
+    this.buttonElement = this.element.querySelectorAll(this.settings.buttonSelector);
 
-    // read attributes
-    if (this.buttonElement) {
+    // read attributes from first button (for default settings)
+    const firstButton = this.buttonElement.length > 0 ? this.buttonElement[0] : null;
+    if (firstButton) {
       for (const attrName in attributesMap) {
         if (attributesMap.hasOwnProperty(attrName)) {
-          const value = getDataAttribute(this.buttonElement, attrName);
+          const value = getDataAttribute(firstButton, attrName);
           if (value !== undefined) {
             this.settings[attributesMap[attrName]] = value;
           }
@@ -155,15 +157,19 @@
     }
 
     // General element
-    this.generalElement = this.element.querySelector(this.settings.generalSelector);
+    // Use querySelectorAll to find ALL general elements (for consistency with pro version)
+    this.generalElement = this.element.querySelectorAll(this.settings.generalSelector);
 
     // Create counter element
-    if (this.generalElement) {
-      this.counterElement = this.generalElement.querySelectorAll(
-        this.settings.counterSelector
-      );
-    } else {
-      this.counterElement = [];
+    // Find ALL counter elements from ALL general elements
+    this.counterElement = [];
+    if (this.generalElement.length > 0) {
+      forEachElement(this.generalElement, (generalEl) => {
+        const counters = generalEl.querySelectorAll(this.settings.counterSelector);
+        forEachElement(counters, (counter) => {
+          this.counterElement.push(counter);
+        });
+      });
     }
 
     // Append dom counter element
@@ -184,17 +190,23 @@
   // Plugin prototype methods
   Plugin.prototype = {
     init() {
-      // Call _ajaxify function on click button
-      if (this.buttonElement) {
-        this.buttonElement.addEventListener("click", this._initLike.bind(this));
+      // Attach click listeners to ALL buttons (for consistency with pro version)
+      if (this.buttonElement && this.buttonElement.length > 0) {
+        forEachElement(this.buttonElement, (button) => {
+          if (button) {
+            button.addEventListener("click", this._initLike.bind(this));
+          }
+        });
       }
       // Call likers box generator (one-time event)
-      if (this.generalElement) {
+      // Attach to first general element (for likers box functionality)
+      const firstGeneralEl = this.generalElement.length > 0 ? this.generalElement[0] : null;
+      if (firstGeneralEl) {
         const mouseenterHandler = (event) => {
           this._updateLikers(event);
-          this.generalElement.removeEventListener("mouseenter", mouseenterHandler);
+          firstGeneralEl.removeEventListener("mouseenter", mouseenterHandler);
         };
-        this.generalElement.addEventListener("mouseenter", mouseenterHandler);
+        firstGeneralEl.addEventListener("mouseenter", mouseenterHandler);
       }
 
       // Note: Tooltip data requests are now handled via dataFetcher callback
@@ -232,6 +244,8 @@
       event.stopPropagation();
       // Update element if there's more than one button
       this._maybeUpdateElements(event);
+      // Store the clicked button before _updateSameButtons changes this.buttonElement
+      this.clickedButton = event.currentTarget;
       // Check for same buttons elements
       this._updateSameButtons();
       // Check for same likers elements
@@ -431,18 +445,29 @@
     },
 
     _setSbilingElement() {
-      const generalEl = getSingleElement(this.generalElement);
-      if (generalEl) {
-        this.siblingElement = getSiblings(generalEl);
+      // Find ALL general elements in the wrapper and filter out current one
+      // This ensures we find siblings correctly when we have multiple general elements
+      const currentGeneralEl = getSingleElement(this.generalElement);
+      if (currentGeneralEl) {
+        // Get parent wrapper (this.element is the .wpulike wrapper)
+        const allGeneralElements = this.element.querySelectorAll(this.settings.generalSelector);
+        // Filter out current general element to get siblings
+        this.siblingElement = Array.from(allGeneralElements).filter(el => el !== currentGeneralEl);
       } else {
         this.siblingElement = [];
       }
     },
 
     _setSbilingButtons() {
-      const buttonEl = getSingleElement(this.buttonElement);
-      if (buttonEl) {
-        this.siblingButton = getSiblings(buttonEl, this.settings.buttonSelector);
+      // Find ALL buttons in the wrapper and filter out current one
+      // This ensures we find siblings correctly when we have multiple buttons
+      // Use clickedButton if available (preserved before _updateSameButtons), otherwise use current buttonElement
+      const currentButtonEl = this.clickedButton || getSingleElement(this.buttonElement);
+      if (currentButtonEl) {
+        // Get all buttons in wrapper
+        const allButtons = this.element.querySelectorAll(this.settings.buttonSelector);
+        // Filter out current button to get siblings
+        this.siblingButton = Array.from(allButtons).filter(btn => btn !== currentButtonEl);
       } else {
         this.siblingButton = [];
       }
