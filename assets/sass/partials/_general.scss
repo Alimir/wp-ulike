@@ -10,8 +10,7 @@
         align-items: center;
     }
 
-    button.wp_ulike_btn,
-    button.wp_ulike_btn[type="button"] {
+    button.wp_ulike_btn{
         margin: 0;
         position: relative;
         display: inline-block;
@@ -37,7 +36,6 @@
 
         &::-moz-focus-inner {
             border: 0;
-            padding: 0;
         }
 
         &[disabled=disabled],
@@ -63,8 +61,7 @@
     }
 
     .wp_ulike_is_loading {
-        button.wp_ulike_btn,
-        .wp_ulike_btn[type="button"] {
+        button.wp_ulike_btn{
             background-image: url(../img/svg/loader.svg);
             background-repeat: no-repeat;
             background-position: center center;
