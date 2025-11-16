@@ -534,19 +534,13 @@
           if (typeof WordpressUlikeTooltipPlugin !== "undefined") {
             const tooltipId = `${this.settings.type.toLowerCase()}-${this.settings.ID}`;
 
-            let tooltipInstance =
-              window.WordpressUlikeTooltip &&
-              window.WordpressUlikeTooltip.getInstanceById
-                ? window.WordpressUlikeTooltip.getInstanceById(tooltipId)
-                : null;
+            // Create tooltip only for current element (not all siblings) to ensure correct hover behavior
+            const currentInstance = window.WordpressUlikeTooltip && window.WordpressUlikeTooltip.getInstanceByElement
+              ? window.WordpressUlikeTooltip.getInstanceByElement(this.element)
+              : null;
 
-            if (!tooltipInstance) {
-              const allTooltipElements = this._getAllTooltipElements();
-              const elementsToPass = allTooltipElements.length === 1
-                ? allTooltipElements[0]
-                : allTooltipElements;
-
-              new WordpressUlikeTooltipPlugin(elementsToPass, {
+            if (!currentInstance) {
+              new WordpressUlikeTooltipPlugin(this.element, {
                 id: tooltipId,
                 position: "top",
                 child: this.settings.generalSelector,
@@ -588,7 +582,9 @@
 
         const allTooltipElements = this._getAllTooltipElements();
 
+        // Update content for all siblings (existing instances and pre-populate for future instances)
         forEachElement(allTooltipElements, (wrapperEl) => {
+          // Update existing tooltip instances via events
           const updateEvent = new CustomEvent("tooltip-content-updated", {
             bubbles: true,
             detail: {
@@ -598,17 +594,20 @@
           });
           wrapperEl.dispatchEvent(updateEvent);
           document.dispatchEvent(updateEvent);
+          
+          // Pre-populate content for siblings that don't have tooltip instances yet
+          // This ensures when they're hovered, content is already available
+          let hiddenContent = wrapperEl.querySelector('[data-tooltip-content]');
+          if (!hiddenContent) {
+            hiddenContent = document.createElement("div");
+            hiddenContent.setAttribute('data-tooltip-content', '');
+            hiddenContent.setAttribute('data-tooltip-state', 'ready');
+            hiddenContent.style.display = 'none';
+            wrapperEl.appendChild(hiddenContent);
+          }
+          hiddenContent.innerHTML = templateContent;
+          hiddenContent.setAttribute('data-tooltip-state', 'ready');
         });
-
-        const tooltipInstance =
-          window.WordpressUlikeTooltip &&
-          window.WordpressUlikeTooltip.getInstanceById
-            ? window.WordpressUlikeTooltip.getInstanceById(tooltipId)
-            : null;
-
-        if (tooltipInstance && tooltipInstance.updateContent) {
-          tooltipInstance.updateContent(templateContent);
-        }
       } else {
         if (!this.likersElement) {
           const tempDiv = document.createElement("div");

@@ -554,6 +554,7 @@
     visible: activeTooltips,
     defaults,
     getInstanceById: (id) => tooltipInstancesById[id],
+    getInstanceByElement: (element) => tooltipInstances.get(element),
   };
 
   // Expose as jQuery plugin for backward compatibility (if jQuery is available)
