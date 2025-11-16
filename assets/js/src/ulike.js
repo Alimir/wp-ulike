@@ -299,21 +299,41 @@
      */
     _appendChild() {
       if (this.settings.append !== "" && this.buttonElement) {
-        const appendedElement = document.querySelector(this.settings.append);
-        if (appendedElement) {
+        let sourceElements = [];
+        
+        // Check if append is HTML content (starts with <) or a CSS selector
+        if (this.settings.append.trim().startsWith('<')) {
+          // Parse HTML content
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = this.settings.append;
+          // Collect all children by removing them from tempDiv
+          while (tempDiv.firstChild) {
+            sourceElements.push(tempDiv.removeChild(tempDiv.firstChild));
+          }
+        } else {
+          // Try to use as CSS selector
+          const appendedElement = document.querySelector(this.settings.append);
+          if (appendedElement) {
+            sourceElements.push(appendedElement);
+          }
+        }
+
+        if (sourceElements.length > 0) {
           const appendedElements = [];
           forEachElement(this.buttonElement, (button) => {
             if (button) {
-              const clonedElement = appendedElement.cloneNode(true);
-              button.appendChild(clonedElement);
-              appendedElements.push(clonedElement);
+              sourceElements.forEach((sourceElement) => {
+                const clonedElement = sourceElement.cloneNode(true);
+                button.appendChild(clonedElement);
+                appendedElements.push(clonedElement);
+              });
             }
           });
 
           if (this.settings.appendTimeout && appendedElements.length > 0) {
             setTimeout(() => {
               appendedElements.forEach((el) => {
-                if (el.parentNode) {
+                if (el && el.parentNode) {
                   el.remove();
                 }
               });
