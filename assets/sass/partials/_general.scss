@@ -10,7 +10,8 @@
         align-items: center;
     }
 
-    button.wp_ulike_btn {
+    button.wp_ulike_btn,
+    button.wp_ulike_btn[type="button"] {
         margin: 0;
         position: relative;
         display: inline-block;
@@ -23,6 +24,10 @@
         text-align: center;
         transition: none;
         cursor: pointer;
+        font-family: inherit;
+        line-height: inherit;
+        appearance: none;
+        -webkit-appearance: none;
 
         &:hover,
         &:active,
@@ -32,10 +37,13 @@
 
         &::-moz-focus-inner {
             border: 0;
+            padding: 0;
         }
 
         &[disabled=disabled],
         &:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
 
             &:hover,
             &:active,
@@ -55,10 +63,12 @@
     }
 
     .wp_ulike_is_loading {
-        .wp_ulike_btn {
+        button.wp_ulike_btn,
+        .wp_ulike_btn[type="button"] {
             background-image: url(../img/svg/loader.svg);
             background-repeat: no-repeat;
             background-position: center center;
+            background-size: auto;
 
             span {
                 visibility: hidden;

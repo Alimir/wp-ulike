@@ -4,7 +4,8 @@
 
 .wpulike-animated-heart {
 
-  button.wp_ulike_btn {
+  button.wp_ulike_btn,
+  button.wp_ulike_btn[type="button"] {
     position: relative;
     border-radius: 50em;
     background-color: #ffffff;
@@ -15,7 +16,7 @@
     height: 50px;
 
     &:hover,
-    &:focus {
+    &:focus{
       background-color: #ffffff;
       background-image: none;
     }
@@ -58,7 +59,8 @@
   }
 
   .wp_ulike_is_loading {
-    button.wp_ulike_btn {
+    button.wp_ulike_btn,
+    button.wp_ulike_btn[type="button"] {
       background-image: initial;
       padding: 0;
 
@@ -144,7 +146,8 @@
     }
   }
 
-  .count-box {
+  .count-box,
+  span.count-box {
     margin: 0 15px;
     color: #ff6f63;
     display: inline-block;
@@ -159,7 +162,8 @@
   .activity-comments,
   .activity-inner {
     .wpulike-animated-heart {
-      .wp_ulike_btn {
+      button.wp_ulike_btn,
+      .wp_ulike_btn[type="button"] {
         border-radius: 50em;
         background-color: #ffffff;
         padding: 0;
@@ -206,7 +210,8 @@
     }
 
     .wp_ulike_is_loading {
-      button.wp_ulike_btn {
+      button.wp_ulike_btn,
+      button.wp_ulike_btn[type="button"] {
         background-image: initial;
       }
     }

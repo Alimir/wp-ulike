@@ -7,10 +7,12 @@
     font-weight: 600;
     padding: 0 14px;
     font-size: 16px;
+    color: inherit;
   }
 
   .wp_ulike_is_loading {
-    button.wp_ulike_btn {
+    button.wp_ulike_btn,
+    button.wp_ulike_btn[type="button"] {
       background-image: initial;
       padding: 0;
 
@@ -22,7 +24,8 @@
     }
   }
 
-  button.wp_ulike_btn {
+  button.wp_ulike_btn,
+  button.wp_ulike_btn[type="button"] {
     width: 30px;
     height: 30px;
     overflow: hidden;
@@ -73,7 +76,8 @@
   .activity-comments,
   .activity-inner {
     .wpulike-robeen {
-      .wp_ulike_btn {
+      button.wp_ulike_btn,
+      .wp_ulike_btn[type="button"] {
         background: transparent;
         border: 0;
         width: 30px;
