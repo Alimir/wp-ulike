@@ -35,8 +35,15 @@
       background-color: transparent;
     }
 
+    &.wp_ulike_btn_is_active {
+      overflow: visible;
+    }
+  }
+
+  .wp_ulike_put_image {
     &:after {
       content: '';
+      display: block;
       background: url(../img/icons/twitter-heart.png) no-repeat;
       background-position: 0 0;
       transition: background-position 1s steps(28);
@@ -50,8 +57,6 @@
     }
 
     &.wp_ulike_btn_is_active {
-      overflow: visible;
-
       &:after {
         transition-duration: 1s;
         background-position: -2800px 0;
