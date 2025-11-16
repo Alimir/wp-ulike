@@ -117,14 +117,8 @@
     tooltip.setAttribute("data-positioned", "true");
   };
 
-  // Safe Array.from polyfill for older browsers (if needed)
-  const arrayFrom = (arrayLike) => {
-    if (Array.from) {
-      return Array.from(arrayLike);
-    }
-    // Fallback for very old browsers
-    return Array.prototype.slice.call(arrayLike);
-  };
+  // Helper: Convert array-like to array
+  const arrayFrom = Array.from || ((arr) => Array.prototype.slice.call(arr));
 
   // Main plugin
   function WordpressUlikeTooltipPlugin(element, options) {
@@ -321,23 +315,18 @@
       if (tooltip && tooltip.parentNode) {
         const contentEl = tooltip.querySelector(".ulf-content");
         if (contentEl) {
-          contentEl.innerHTML = content || "&nbsp;";
+          contentEl.innerHTML = content;
           isLoading = false;
-          // Reposition after content update (with delay for dimension calculation)
-          let reference = element;
-          if (options.child) {
-            const childEl = element.querySelector(options.child);
-            if (childEl) reference = childEl;
-          }
+          // Reposition after content update
+          const reference = options.child ? (element.querySelector(options.child) || element) : element;
           requestAnimationFrame(() => {
             if (tooltip && tooltip.parentNode) {
               positionTooltip(tooltip, reference, options.position || "top");
             }
           });
         }
-      } else if (isHovering && content && content.trim().length > 0) {
-        // Tooltip not visible but user is hovering and we have content - show it
-        // This handles the case when like happens while hovering and data becomes available
+      } else if (isHovering) {
+        // Tooltip not visible but user is hovering - show it
         show(false);
       }
     };
@@ -370,58 +359,50 @@
       element.dispatchEvent(event);
     };
 
+    // Helper: Get cached content from hidden element
+    const getCachedContent = () => {
+      const hiddenContent = element.querySelector('[data-tooltip-content]');
+      return hiddenContent ? hiddenContent.innerHTML.trim() : '';
+    };
+
     // Event handlers
     const handleShow = () => {
       clearTimeout(hideTimeout);
       isHovering = true;
       
-      // Check tooltip state (for dynamic content)
       const tooltipState = getTooltipState();
       
-      // If state is empty, don't show tooltip
-      if (tooltipState === 'empty') {
+      // Handle different states
+      if (tooltipState === 'empty') return; // Don't show empty tooltip
+      
+      if (tooltipState === 'ready') {
+        const cachedContent = getCachedContent();
+        if (cachedContent) {
+          options.title = cachedContent;
+          showTimeout = setTimeout(show, SHOW_DELAY);
+        } else {
+          setTooltipState('empty'); // Content disappeared - mark as empty
+        }
         return;
       }
       
-      // If state is ready, use cached content and show
-      if (tooltipState === 'ready') {
-        const hiddenContent = element.querySelector('[data-tooltip-content]');
-        if (hiddenContent) {
-          const cachedContent = hiddenContent.innerHTML.trim();
-          if (cachedContent) {
-            options.title = cachedContent;
-            // Show with cached content
-            showTimeout = setTimeout(show, SHOW_DELAY);
-            return;
-          } else {
-            // State says ready but content is empty - mark as empty
-            setTooltipState('empty');
-            return;
-          }
-        }
-      }
-      
-      // If loading, show loading state
       if (tooltipState === 'loading') {
         show(true);
         return;
       }
       
-      // If not initialized (null/undefined), request data and show loading
-      if (tooltipState === null || tooltipState === '') {
-        // Request data - this will set state to 'loading' and trigger event
+      // Not initialized - request data
+      if (!tooltipState || tooltipState === '') {
         if (instance.requestData && instance.requestData()) {
-          // Data request initiated - show loading immediately
           show(true);
         } else {
-          // If requestData returned false, something went wrong - show loading anyway
           setTooltipState('loading');
           show(true);
         }
         return;
       }
       
-      // Fallback: Show immediately if loading is requested, otherwise with delay
+      // Fallback for static content
       if (options.showLoadingImmediately) {
         show(true);
       } else {
@@ -472,23 +453,19 @@
       updateContent,
       hide,
       destroy: () => {
-        hide(); // This will clean up scroll handler
+        hide();
         element.removeEventListener("mouseenter", handleShow);
         element.removeEventListener("mouseleave", handleHide);
-        // Remove content update handler
         if (instance.contentUpdateHandler) {
-          element.removeEventListener("ulf-content-updated", instance.contentUpdateHandler);
+          element.removeEventListener("tooltip-content-updated", instance.contentUpdateHandler);
         }
-        // Ensure scroll handler is removed
         if (scrollHandler && scrollHandlerOptions) {
           window.removeEventListener("scroll", scrollHandler, scrollHandlerOptions);
           scrollHandler = null;
           scrollHandlerOptions = null;
         }
         tooltipInstances.delete(element);
-        if (options.id) {
-          delete tooltipInstancesById[options.id];
-        }
+        if (options.id) delete tooltipInstancesById[options.id];
       },
     };
 
@@ -504,26 +481,18 @@
     
     // If tooltip is created with hover trigger, check state immediately
     // This handles the case when tooltip is created while user is already hovering
-    if (options.trigger === "hover" || !options.trigger) {
-      // Use setTimeout to ensure event listeners are set up
+    if (!options.trigger || options.trigger === "hover") {
       setTimeout(() => {
-        // Check if we need to show tooltip immediately
         const currentState = getTooltipState();
-        if (currentState === null || currentState === '') {
-          // Not initialized - trigger handleShow which will request data
-          handleShow();
+        if (!currentState || currentState === '') {
+          handleShow(); // Will request data
         } else if (currentState === 'loading') {
-          // Already loading - show loading state
           show(true);
         } else if (currentState === 'ready') {
-          // Has content - show it
-          const hiddenContent = element.querySelector('[data-tooltip-content]');
-          if (hiddenContent) {
-            const cachedContent = hiddenContent.innerHTML.trim();
-            if (cachedContent) {
-              options.title = cachedContent;
-              showTimeout = setTimeout(show, SHOW_DELAY);
-            }
+          const cachedContent = getCachedContent();
+          if (cachedContent) {
+            options.title = cachedContent;
+            showTimeout = setTimeout(show, SHOW_DELAY);
           }
         }
       }, 0);
@@ -547,41 +516,30 @@
       // Set loading state
       setTooltipState('loading');
       
-      // If dataFetcher callback is provided, use it directly (cleaner approach)
-      if (options.dataFetcher && typeof options.dataFetcher === 'function') {
+      // If dataFetcher callback is provided, use it directly
+      if (typeof options.dataFetcher === 'function') {
         options.dataFetcher(element, options.id);
         return true;
       }
       
-      // Otherwise, trigger event for external handler (backward compatibility)
+      // Fallback: trigger event for external handler (backward compatibility)
       setTimeout(() => {
-        const requestEvent = new CustomEvent("tooltip-request-data", {
+        const event = new CustomEvent("tooltip-request-data", {
           bubbles: true,
-          cancelable: true,
-          detail: {
-            element: element,
-            tooltipId: options.id
-          }
+          detail: { element, tooltipId: options.id }
         });
-        // Dispatch on element and document to ensure it's caught
-        element.dispatchEvent(requestEvent);
-        // Also dispatch on document as fallback
-        if (!requestEvent.defaultPrevented) {
-          document.dispatchEvent(requestEvent);
-        }
+        element.dispatchEvent(event);
+        document.dispatchEvent(event);
       }, 0);
       
-      return true; // Data request initiated
+      return true;
     };
 
-    // Listen for content updates via custom event (for dynamic content)
-    // This keeps tooltip.js independent - any code can trigger this event
+    // Listen for content updates via custom event (optional, for external updates)
     const contentUpdateHandler = (e) => {
       const detail = e.detail || {};
-      // Only update if this event is for this element
       if (detail.element === element || (detail.target && element.contains(detail.target))) {
-        const content = detail.content || "";
-        updateContent(content);
+        updateContent(detail.content || "");
       }
     };
     element.addEventListener("tooltip-content-updated", contentUpdateHandler);
@@ -594,7 +552,6 @@
   window.WordpressUlikeTooltipPlugin = WordpressUlikeTooltipPlugin;
   window.WordpressUlikeTooltip = {
     visible: activeTooltips,
-    bodyClickInitialized: false,
     defaults,
     getInstanceById: (id) => tooltipInstancesById[id],
   };
