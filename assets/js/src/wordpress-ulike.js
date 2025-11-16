@@ -479,6 +479,31 @@
     },
 
     /**
+     * Get all sibling wrapper elements that should have tooltips
+     */
+    _getAllTooltipElements() {
+      // Find all buttons with the same ID
+      const factorMethod =
+        typeof this.settings.factor !== "undefined" && this.settings.factor
+          ? `_${this.settings.factor}`
+          : "";
+      const buttonSelector = `.wp_${this.settings.type.toLowerCase()}${factorMethod}_btn_${this.settings.ID}`;
+      const allSameButtons = document.querySelectorAll(buttonSelector);
+      
+      // Get all wrapper elements (.wpulike) that contain these buttons
+      const wrapperElements = [];
+      forEachElement(allSameButtons, (btn) => {
+        const wrapper = btn.closest('.wpulike');
+        if (wrapper && !wrapperElements.includes(wrapper)) {
+          wrapperElements.push(wrapper);
+        }
+      });
+      
+      // If no wrappers found, use current element
+      return wrapperElements.length > 0 ? wrapperElements : [this.element];
+    },
+
+    /**
      * init & update likers box
      */
     _updateLikers(event) {
@@ -510,11 +535,19 @@
                 ? window.WordpressUlikeTooltip.getInstanceById(tooltipId)
                 : null;
 
-            // Create tooltip instance if it doesn't exist
-            // Tooltip will handle state checking and data requests internally
+            // Create tooltip instances for all sibling elements if they don't exist
+            // The tooltip plugin handles multiple elements automatically
             if (!tooltipInstance) {
-              // Pass dataFetcher callback directly to tooltip - cleaner than event listener
-              new WordpressUlikeTooltipPlugin(this.element, {
+              // Get all wrapper elements that should have tooltips
+              const allTooltipElements = this._getAllTooltipElements();
+              
+              // Pass elements to tooltip plugin - it handles both single and multiple elements
+              // If single element, pass directly; if multiple, pass as array/NodeList
+              const elementsToPass = allTooltipElements.length === 1 
+                ? allTooltipElements[0]  // Single element - pass directly
+                : allTooltipElements;     // Multiple elements - pass as array
+              
+              new WordpressUlikeTooltipPlugin(elementsToPass, {
                 id: tooltipId,
                 position: "top",
                 child: this.settings.generalSelector,
@@ -558,30 +591,34 @@
         const template = data && typeof data === 'object' ? data.template : data;
         const templateContent = template || "";
         
-        // Get tooltip instance
+        // Get all wrapper elements that should have tooltips
+        const allTooltipElements = this._getAllTooltipElements();
+        
+        // Update tooltip content for all sibling elements
+        // We need to update each element's tooltip instance
+        forEachElement(allTooltipElements, (wrapperEl) => {
+          // Trigger custom event to update tooltip content for this element
+          // The tooltip plugin listens to this event
+          const updateEvent = new CustomEvent("tooltip-content-updated", {
+            bubbles: true,
+            detail: {
+              element: wrapperEl,
+              content: templateContent
+            }
+          });
+          wrapperEl.dispatchEvent(updateEvent);
+          document.dispatchEvent(updateEvent);
+        });
+        
+        // Also try to update via getInstanceById as fallback (updates the last created instance)
         const tooltipInstance =
           window.WordpressUlikeTooltip &&
           window.WordpressUlikeTooltip.getInstanceById
             ? window.WordpressUlikeTooltip.getInstanceById(tooltipId)
             : null;
 
-        // Simply update tooltip content - tooltip.js handles all state management
         if (tooltipInstance && tooltipInstance.updateContent) {
           tooltipInstance.updateContent(templateContent);
-        } else if (typeof WordpressUlikeTooltipPlugin !== "undefined") {
-          // Create new if doesn't exist
-          const newInstance = new WordpressUlikeTooltipPlugin(this.element, {
-            id: tooltipId,
-            position: "top",
-            child: this.settings.generalSelector,
-            theme: "white",
-            size: "tiny",
-            trigger: "hover",
-          });
-          // Update content after creation
-          if (newInstance && newInstance.updateContent) {
-            newInstance.updateContent(templateContent);
-          }
         }
       } else {
         // If the likers container is not exist, we've to add it.
