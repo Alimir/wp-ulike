@@ -36,17 +36,14 @@
 
   // Helper function to get data attribute value
   const getDataAttribute = (element, name) => {
-    // Try dataset first (converts kebab-case to camelCase)
     const camelName = name.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
     if (element.dataset && element.dataset[camelName] !== undefined) {
       return element.dataset[camelName];
     }
-    // Fallback to getAttribute
     const value = element.getAttribute(`data-${name}`);
     if (value === null) {
       return undefined;
     }
-    // Try to parse as boolean or number
     if (value === "true") return true;
     if (value === "false") return false;
     if (value === "" || value === "null") return null;
@@ -56,60 +53,38 @@
 
   // Helper function to trigger custom events (works with both jQuery and vanilla JS)
   const triggerEvent = (element, eventName, data) => {
-    // Create CustomEvent for vanilla JS listeners
     const event = new CustomEvent(eventName, {
       bubbles: true,
       cancelable: true,
       detail: data
     });
-
-    // Dispatch the event
     element.dispatchEvent(event);
 
-    // jQuery can listen to CustomEvents, but we need to make data accessible
-    // jQuery wraps CustomEvents and makes detail available via event.originalEvent.detail
-    // However, jQuery's .on() handler receives the event object, and users can access:
-    // - event.originalEvent.detail (for CustomEvent data)
-    // - Or we can make it work like jQuery's trigger by setting a property
-    //
-    // For maximum compatibility, if jQuery is available, also trigger a jQuery event
-    // This ensures users' existing jQuery listeners continue to work
     if (typeof jQuery !== 'undefined' && jQuery && jQuery.fn && jQuery.fn.on) {
-      // Create a jQuery event that mimics the old behavior
-      // jQuery's trigger passes data as second parameter to handlers
       const $element = jQuery(element);
-      if (Array.isArray(data)) {
-        // For arrays, pass as array (matches old behavior)
-        $element.trigger(eventName, data);
-      } else {
-        // For single values, pass directly (matches old behavior)
-        $element.trigger(eventName, data);
-      }
+      $element.trigger(eventName, data);
     }
   };
 
-  // Safe Array.from polyfill for older browsers (if needed)
+  // Safe Array.from polyfill for older browsers
   const arrayFrom = (arrayLike) => {
     if (Array.from) {
       return Array.from(arrayLike);
     }
-    // Fallback for very old browsers
     return Array.prototype.slice.call(arrayLike);
   };
 
-  // Helper function to handle multiple elements
+  // Helper function to handle multiple elements (like jQuery collection)
   const forEachElement = (elements, callback) => {
     if (!elements) return;
     if (elements.length === undefined) {
-      // Single element
       callback(elements, 0);
     } else {
-      // NodeList or Array
       arrayFrom(elements).forEach(callback);
     }
   };
 
-  // Helper function to get siblings
+  // Helper to get siblings (like jQuery .siblings())
   const getSiblings = (element, selector) => {
     const siblings = [];
     const parent = element.parentNode;
@@ -123,6 +98,22 @@
       }
     }
     return siblings;
+  };
+
+  // Helper to get all siblings from multiple elements (like jQuery collection.siblings())
+  const getAllSiblings = (elements, selector) => {
+    const allSiblings = [];
+    const seen = new Set();
+    forEachElement(elements, (el) => {
+      const siblings = getSiblings(el, selector);
+      siblings.forEach((sibling) => {
+        if (!seen.has(sibling)) {
+          seen.add(sibling);
+          allSiblings.push(sibling);
+        }
+      });
+    });
+    return allSiblings;
   };
 
   // Helper to get single element from array/NodeList
@@ -139,11 +130,10 @@
     this._defaults = defaults;
     this._name = pluginName;
 
-    // Create main selectors
-    // Use querySelectorAll to find ALL buttons (for consistency with pro version)
+    // Create main selectors (like jQuery .find())
     this.buttonElement = this.element.querySelectorAll(this.settings.buttonSelector);
 
-    // read attributes from first button (for default settings)
+    // read attributes from first button
     const firstButton = this.buttonElement.length > 0 ? this.buttonElement[0] : null;
     if (firstButton) {
       for (const attrName in attributesMap) {
@@ -156,12 +146,10 @@
       }
     }
 
-    // General element
-    // Use querySelectorAll to find ALL general elements (for consistency with pro version)
+    // General element (like jQuery .find())
     this.generalElement = this.element.querySelectorAll(this.settings.generalSelector);
 
-    // Create counter element
-    // Find ALL counter elements from ALL general elements
+    // Create counter element (like jQuery .find() on collection)
     this.counterElement = [];
     if (this.generalElement.length > 0) {
       forEachElement(this.generalElement, (generalEl) => {
@@ -173,7 +161,7 @@
     }
 
     // Append dom counter element
-    if (this.counterElement.length) {
+    if (this.counterElement.length > 0) {
       forEachElement(this.counterElement, (element) => {
         const counterValue = getDataAttribute(element, "ulike-counter-value");
         if (counterValue !== undefined) {
@@ -190,7 +178,7 @@
   // Plugin prototype methods
   Plugin.prototype = {
     init() {
-      // Attach click listeners to ALL buttons (for consistency with pro version)
+      // Attach click listeners to ALL buttons
       if (this.buttonElement && this.buttonElement.length > 0) {
         forEachElement(this.buttonElement, (button) => {
           if (button) {
@@ -199,7 +187,6 @@
         });
       }
       // Call likers box generator (one-time event)
-      // Attach to first general element (for likers box functionality)
       const firstGeneralEl = this.generalElement.length > 0 ? this.generalElement[0] : null;
       if (firstGeneralEl) {
         const mouseenterHandler = (event) => {
@@ -208,16 +195,12 @@
         };
         firstGeneralEl.addEventListener("mouseenter", mouseenterHandler);
       }
-
-      // Note: Tooltip data requests are now handled via dataFetcher callback
-      // No need for event listeners - cleaner approach!
     },
 
     /**
      * global AJAX callback
      */
     _ajax(args, callback) {
-      // Do Ajax & update default value
       const formData = new FormData();
       for (const key in args) {
         if (args.hasOwnProperty(key)) {
@@ -240,12 +223,9 @@
      * init ulike core process
      */
     _initLike(event) {
-      // Prevents further propagation of the current event in the capturing and bubbling phases
       event.stopPropagation();
       // Update element if there's more than one button
       this._maybeUpdateElements(event);
-      // Store the clicked button before _updateSameButtons changes this.buttonElement
-      this.clickedButton = event.currentTarget;
       // Check for same buttons elements
       this._updateSameButtons();
       // Check for same likers elements
@@ -305,13 +285,9 @@
 
     _maybeUpdateElements(event) {
       this.buttonElement = event.currentTarget;
-      this.generalElement = this.buttonElement.closest(
-        this.settings.generalSelector
-      );
+      this.generalElement = this.buttonElement.closest(this.settings.generalSelector);
       if (this.generalElement) {
-        this.counterElement = this.generalElement.querySelectorAll(
-          this.settings.counterSelector
-        );
+        this.counterElement = this.generalElement.querySelectorAll(this.settings.counterSelector);
       } else {
         this.counterElement = [];
       }
@@ -325,18 +301,15 @@
       if (this.settings.append !== "" && this.buttonElement) {
         const appendedElement = document.querySelector(this.settings.append);
         if (appendedElement) {
-          // Append to all buttons (clone for each if multiple buttons)
           const appendedElements = [];
           forEachElement(this.buttonElement, (button) => {
             if (button) {
-              // Clone the element for each button (since an element can only have one parent)
               const clonedElement = appendedElement.cloneNode(true);
               button.appendChild(clonedElement);
               appendedElements.push(clonedElement);
             }
           });
 
-          // Remove all cloned elements after timeout
           if (this.settings.appendTimeout && appendedElements.length > 0) {
             setTimeout(() => {
               appendedElements.forEach((el) => {
@@ -386,7 +359,6 @@
     },
 
     _updateGeneralClassNames(status) {
-      // Our base status class names
       const classNameObj = {
         start: "wp_ulike_is_not_liked",
         active: "wp_ulike_is_liked",
@@ -401,7 +373,7 @@
         });
       }
 
-      // Update ALL general elements (not just the first one) when there are multiple same buttons
+      // Update general element(s)
       forEachElement(this.generalElement, (generalEl) => {
         if (!generalEl) return;
 
@@ -445,34 +417,30 @@
     },
 
     _setSbilingElement() {
-      // Find ALL general elements in the wrapper and filter out current one
-      // This ensures we find siblings correctly when we have multiple general elements
-      const currentGeneralEl = getSingleElement(this.generalElement);
-      if (currentGeneralEl) {
-        // Get parent wrapper (this.element is the .wpulike wrapper)
-        const allGeneralElements = this.element.querySelectorAll(this.settings.generalSelector);
-        // Filter out current general element to get siblings
-        this.siblingElement = Array.from(allGeneralElements).filter(el => el !== currentGeneralEl);
+      // Like jQuery: this.generalElement.siblings()
+      // When generalElement is a collection, get siblings of ALL elements
+      if (this.generalElement.length !== undefined && this.generalElement.length > 1) {
+        this.siblingElement = getAllSiblings(this.generalElement);
       } else {
-        this.siblingElement = [];
+        const singleEl = getSingleElement(this.generalElement);
+        this.siblingElement = singleEl ? getSiblings(singleEl) : [];
       }
     },
 
     _setSbilingButtons() {
-      // Find ALL buttons in the wrapper and filter out current one
-      // This ensures we find siblings correctly when we have multiple buttons
-      // Use clickedButton if available (preserved before _updateSameButtons), otherwise use current buttonElement
-      const currentButtonEl = this.clickedButton || getSingleElement(this.buttonElement);
-      if (currentButtonEl) {
-        // Get all buttons in wrapper
-        const allButtons = this.element.querySelectorAll(this.settings.buttonSelector);
-        // Filter out current button to get siblings
-        this.siblingButton = Array.from(allButtons).filter(btn => btn !== currentButtonEl);
+      // Like jQuery: this.buttonElement.siblings(selector)
+      // When buttonElement is a collection, get siblings of ALL elements
+      if (this.buttonElement.length !== undefined && this.buttonElement.length > 1) {
+        this.siblingButton = getAllSiblings(this.buttonElement, this.settings.buttonSelector);
       } else {
-        this.siblingButton = [];
+        const singleEl = getSingleElement(this.buttonElement);
+        this.siblingButton = singleEl ? getSiblings(singleEl, this.settings.buttonSelector) : [];
       }
     },
 
+    /**
+     * Simple counter update (no up/down or isTotal handling)
+     */
     __updateCounter(counterValue) {
       // Update counter element
       forEachElement(this.counterElement, (element) => {
@@ -485,7 +453,7 @@
     },
 
     /**
-     * Fetch likers data via AJAX (called by tooltip when data is requested)
+     * Fetch likers data via AJAX
      */
     _fetchLikersData() {
       if (!this.settings.displayLikers) {
@@ -493,13 +461,11 @@
         return;
       }
 
-      // Add progress status class
       const generalEl = getSingleElement(this.generalElement);
       if (generalEl) {
         generalEl.classList.add("wp_ulike_is_getting_likers_list");
       }
 
-      // Start ajax process
       this._ajax(
         {
           action: "wp_ulike_get_likers",
@@ -510,17 +476,13 @@
           likersTemplate: this.settings.likersTemplate,
         },
         (response) => {
-          // Remove progress status class
           if (generalEl) {
             generalEl.classList.remove("wp_ulike_is_getting_likers_list");
           }
-          // Reset fetching flag
           this._isFetchingLikers = false;
-          // Update tooltip with data
           if (response.success) {
             this._updateLikersMarkup(response.data);
           } else {
-            // Request failed - update tooltip with empty content
             this._updateLikersMarkup("");
           }
         }
@@ -531,7 +493,6 @@
      * Get all sibling wrapper elements that should have tooltips
      */
     _getAllTooltipElements() {
-      // Find all buttons with the same ID
       const factorMethod =
         typeof this.settings.factor !== "undefined" && this.settings.factor
           ? `_${this.settings.factor}`
@@ -539,7 +500,6 @@
       const buttonSelector = `.wp_${this.settings.type.toLowerCase()}${factorMethod}_btn_${this.settings.ID}`;
       const allSameButtons = document.querySelectorAll(buttonSelector);
 
-      // Get all wrapper elements (.wpulike) that contain these buttons
       const wrapperElements = [];
       forEachElement(allSameButtons, (btn) => {
         const wrapper = btn.closest('.wpulike');
@@ -548,7 +508,6 @@
         }
       });
 
-      // If no wrappers found, use current element
       return wrapperElements.length > 0 ? wrapperElements : [this.element];
     },
 
@@ -556,7 +515,6 @@
      * init & update likers box
      */
     _updateLikers(event) {
-      // Make a request to generate or refresh the likers box
       if (this.settings.displayLikers) {
         // return on these conditions
         if (
@@ -571,30 +529,22 @@
           return;
         }
 
-        // Handle popover tooltips - just ensure tooltip exists
-        // Tooltip will handle state checking and request data if needed
+        // Handle popover tooltips
         if (this.settings.likersTemplate === "popover") {
           if (typeof WordpressUlikeTooltipPlugin !== "undefined") {
             const tooltipId = `${this.settings.type.toLowerCase()}-${this.settings.ID}`;
 
-            // Check if tooltip instance exists
             let tooltipInstance =
               window.WordpressUlikeTooltip &&
               window.WordpressUlikeTooltip.getInstanceById
                 ? window.WordpressUlikeTooltip.getInstanceById(tooltipId)
                 : null;
 
-            // Create tooltip instances for all sibling elements if they don't exist
-            // The tooltip plugin handles multiple elements automatically
             if (!tooltipInstance) {
-              // Get all wrapper elements that should have tooltips
               const allTooltipElements = this._getAllTooltipElements();
-
-              // Pass elements to tooltip plugin - it handles both single and multiple elements
-              // If single element, pass directly; if multiple, pass as array/NodeList
               const elementsToPass = allTooltipElements.length === 1
-                ? allTooltipElements[0]  // Single element - pass directly
-                : allTooltipElements;     // Multiple elements - pass as array
+                ? allTooltipElements[0]
+                : allTooltipElements;
 
               new WordpressUlikeTooltipPlugin(elementsToPass, {
                 id: tooltipId,
@@ -604,7 +554,6 @@
                 size: "tiny",
                 trigger: "hover",
                 dataFetcher: (element, tooltipId) => {
-                  // Prevent multiple requests
                   if (this._isFetchingLikers) {
                     return;
                   }
@@ -613,8 +562,6 @@
                 }
               });
             }
-            // Tooltip will check state on hover and request data if needed
-            // Data fetching is handled via dataFetcher callback (no event listener needed)
           }
         } else {
           // For default template, fetch data directly
@@ -636,18 +583,12 @@
         this.likersElement = this.element;
         const tooltipId = `${this.settings.type.toLowerCase()}-${this.settings.ID}`;
 
-        // Handle both object format {template: "..."} and direct template string
         const template = data && typeof data === 'object' ? data.template : data;
         const templateContent = template || "";
 
-        // Get all wrapper elements that should have tooltips
         const allTooltipElements = this._getAllTooltipElements();
 
-        // Update tooltip content for all sibling elements
-        // We need to update each element's tooltip instance
         forEachElement(allTooltipElements, (wrapperEl) => {
-          // Trigger custom event to update tooltip content for this element
-          // The tooltip plugin listens to this event
           const updateEvent = new CustomEvent("tooltip-content-updated", {
             bubbles: true,
             detail: {
@@ -659,7 +600,6 @@
           document.dispatchEvent(updateEvent);
         });
 
-        // Also try to update via getInstanceById as fallback (updates the last created instance)
         const tooltipInstance =
           window.WordpressUlikeTooltip &&
           window.WordpressUlikeTooltip.getInstanceById
@@ -670,7 +610,6 @@
           tooltipInstance.updateContent(templateContent);
         }
       } else {
-        // If the likers container is not exist, we've to add it.
         if (!this.likersElement) {
           const tempDiv = document.createElement("div");
           tempDiv.innerHTML = data.template;
@@ -680,7 +619,6 @@
             this.likersElement = newElement;
           }
         }
-        // Modify likers box innerHTML
         if (this.likersElement) {
           if (data.template) {
             this.likersElement.style.display = "";
@@ -692,8 +630,6 @@
         }
       }
 
-      // Trigger event for other systems that might be listening
-      // Match old jQuery format: [likersElement, likersTemplate, template]
       const template = data && typeof data === 'object' ? data.template : data;
       triggerEvent(document, "WordpressUlikeLikersMarkupUpdated", [
         this.likersElement,
@@ -713,10 +649,10 @@
           : "";
       const selector = `.wp_${this.settings.type.toLowerCase()}${factorMethod}_btn_${this.settings.ID}`;
       this.sameButtons = document.querySelectorAll(selector);
-      // Update general elements
+      // Update general elements (only when there are multiple same buttons)
       if (this.sameButtons.length > 1) {
         this.buttonElement = this.sameButtons;
-        // Get general elements for all buttons
+        // Get general elements for all buttons (like jQuery .closest() on collection)
         const generalElements = [];
         forEachElement(this.sameButtons, (btn) => {
           const genEl = btn.closest(this.settings.generalSelector);
@@ -725,7 +661,7 @@
           }
         });
         this.generalElement = generalElements.length === 1 ? generalElements[0] : generalElements;
-        // Get counter elements
+        // Get counter elements from all general elements (like jQuery .find() on collection)
         const counterElements = [];
         forEachElement(generalElements, (genEl) => {
           const counters = genEl.querySelectorAll(this.settings.counterSelector);
@@ -757,10 +693,9 @@
     },
 
     /**
-     * Control actions
+     * Control actions (simple version - no up/down factor handling)
      */
     _updateButton(btnText, status) {
-      // Update ALL buttons (not just the first one) when there are multiple same buttons
       forEachElement(this.buttonElement, (buttonEl) => {
         if (!buttonEl) return;
 
@@ -802,7 +737,6 @@
      * Send notification by 'WordpressUlikeNotifications' plugin
      */
     _sendNotification(messageType, messageText) {
-      // Display Notification
       if (typeof WordpressUlikeNotifications !== "undefined") {
         new WordpressUlikeNotifications(document.body, {
           messageType,
@@ -815,13 +749,10 @@
   // Expose plugin to window for global access
   window[pluginName] = Plugin;
 
-  // Expose as jQuery plugin for backward compatibility (if jQuery is available)
-  // This allows users' existing jQuery code to continue working
-  // Example: $('.wpulike').WordpressUlike()
+  // Expose as jQuery plugin for backward compatibility
   if (typeof jQuery !== 'undefined' && jQuery && jQuery.fn) {
     jQuery.fn[pluginName] = function (options) {
       return this.each(function () {
-        // Check if already initialized (using data attribute as marker)
         if (!this.hasAttribute || !this.hasAttribute("data-ulike-initialized")) {
           new Plugin(this, options);
           if (this.setAttribute) {
