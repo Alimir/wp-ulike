@@ -1,0 +1,68 @@
+.rtl {
+  .ulf-tooltip {
+    .ulf-arrow-bottom {
+      left: 50%;
+      margin-left: -($arrow-size / 2);
+    }
+
+    .ulf-arrow-top {
+      left: 50%;
+      margin-left: -($arrow-size / 2);
+    }
+
+    // In RTL, arrow-left and arrow-right should swap
+    .ulf-arrow-left {
+      left: auto;
+      right: -($arrow-size / 2) - 0.5px;
+      border-top-color: $tooltip-border-color;
+      border-right-color: $tooltip-border-color;
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+    }
+
+    .ulf-arrow-right {
+      right: auto;
+      left: -($arrow-size / 2) - 0.5px;
+      border-bottom-color: $tooltip-border-color;
+      border-left-color: $tooltip-border-color;
+      border-top-color: transparent;
+      border-right-color: transparent;
+    }
+
+    &.ulf-tiny {
+      .ulf-arrow-left {
+        right: -($arrow-size-tiny / 2) - 0.5px;
+        left: auto;
+      }
+
+      .ulf-arrow-right {
+        left: -($arrow-size-tiny / 2) - 0.5px;
+        right: auto;
+      }
+    }
+
+    .ulf-white-theme,
+    .ulf-light-theme {
+      .ulf-arrow-left {
+        border-top-color: $tooltip-border-color;
+        border-right-color: $tooltip-border-color;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+      }
+
+      .ulf-arrow-right {
+        border-bottom-color: $tooltip-border-color;
+        border-left-color: $tooltip-border-color;
+        border-top-color: transparent;
+        border-right-color: transparent;
+      }
+    }
+  }
+
+  .ulf-centered {
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+  }
+}
+
