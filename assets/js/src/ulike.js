@@ -544,7 +544,8 @@
           return;
         } else if (
           this.settings.likersTemplate === "default" &&
-          this.likersElement
+          this.likersElement &&
+          (this.likersElement.length === undefined || this.likersElement.length > 0)
         ) {
           return;
         }
@@ -629,7 +630,14 @@
           hiddenContent.setAttribute('data-tooltip-state', 'ready');
         });
       } else {
-        if (!this.likersElement) {
+        // Handle both single element and NodeList/array (from _updateSameLikers)
+        const hasLikersElement = this.likersElement && 
+          (this.likersElement.length === undefined 
+            ? true 
+            : this.likersElement.length > 0);
+        
+        if (!hasLikersElement && data && data.template) {
+          // If the likers container doesn't exist, create it
           const tempDiv = document.createElement("div");
           tempDiv.innerHTML = data.template;
           const newElement = tempDiv.firstElementChild;
@@ -638,14 +646,28 @@
             this.likersElement = newElement;
           }
         }
+        
+        // Update all likers elements (handles both single element and NodeList)
         if (this.likersElement) {
-          if (data.template) {
-            this.likersElement.style.display = "";
-            this.likersElement.innerHTML = data.template;
-          } else {
-            this.likersElement.style.display = "none";
-            this.likersElement.innerHTML = "";
-          }
+          const elementsToUpdate = this.likersElement.length !== undefined
+            ? arrayFrom(this.likersElement)
+            : [this.likersElement];
+          
+          // Handle data as object with template property, or as string/empty
+          const template = (data && typeof data === 'object' && data.template) 
+            ? data.template 
+            : (typeof data === 'string' ? data : '');
+          
+          forEachElement(elementsToUpdate, (likersEl) => {
+            if (!likersEl) return;
+            if (template) {
+              likersEl.style.display = "";
+              likersEl.innerHTML = template;
+            } else {
+              likersEl.style.display = "none";
+              likersEl.innerHTML = "";
+            }
+          });
         }
       }
 
