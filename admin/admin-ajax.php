@@ -155,7 +155,7 @@ function wp_ulike_localization_api(){
 		'Today\'s Engagement Overview'                             => esc_html__( 'Today\'s Engagement Overview', 'wp-ulike' ),
 		'Yesterday\'s Engagement Summary'                          => esc_html__( 'Yesterday\'s Engagement Summary', 'wp-ulike' ),
 		'Device Insights'                                          => esc_html__( 'Device Insights', 'wp-ulike' ),
-		'Track devices, systems and browsers'                        => esc_html__( 'Track devices, systems and browsers', 'wp-ulike' ),
+		'Track devices, systems and browsers'                      => esc_html__( 'Track devices, systems and browsers', 'wp-ulike' ),
 		'Engagement This Week'                                     => esc_html__( 'Engagement This Week', 'wp-ulike' ),
 		'Monthly Engagement Overview'                              => esc_html__( 'Monthly Engagement Overview', 'wp-ulike' ),
 		'Yearly Engagement Trends'                                 => esc_html__( 'Yearly Engagement Trends', 'wp-ulike' ),
