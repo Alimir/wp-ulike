@@ -14,6 +14,9 @@
     "email": "wpulike@gmail.com",
     "url": "https://wpulike.com"
   },
+  "scripts": {
+    "i18n": "wp i18n make-pot ./wp-ulike ./wp-ulike/languages/wp-ulike.pot --domain=wp-ulike --ignore-domain=admin/settings,build --main-file=wp-ulike.php --merge --headers='{\"report-msgid-bugs-to\":\"https://wpulike.com\",\"language-team\":\"WP ULike Team <info@wpulike.com>\"}'"
+  },
   "main": "Gruntfile.js",
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -43,11 +46,11 @@
     "grunt-sync": "^0.8.2",
     "grunt-terser": "^2.0.0",
     "grunt-wp-deploy": "^2.1.2",
-    "grunt-wp-i18n": ">=1.0.3",
+    "grunt-wp-i18n": ">=1.0.4",
     "http-server": "^0.12.3",
     "load-grunt-tasks": ">=5.1.0",
     "time-grunt": ">=1.4.0",
-    "uglify-js": "^3.12.2",
+    "uglify-js": "^3.19.3",
     "node-sass": "^9.0.0",
     "watchify": "^4.0.0"
   },
