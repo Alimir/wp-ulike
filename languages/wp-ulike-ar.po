@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-08-18 12:37:32+00:00\n"
+"POT-Creation-Date: 2025-11-17 20:07:21+00:00\n"
 "PO-Revision-Date: 2017-01-20 23:26:42+0000\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -60,11 +60,12 @@ msgid "Yesterday's Engagement Summary"
 msgstr ""
 
 #: admin/admin-ajax.php:157
-msgid "Device type"
-msgstr ""
+#, fuzzy
+msgid "Device Insights"
+msgstr "اليمين"
 
 #: admin/admin-ajax.php:158
-msgid "Explore the variety of user devices."
+msgid "Track devices, systems and browsers"
 msgstr ""
 
 #: admin/admin-ajax.php:159
@@ -175,17 +176,13 @@ msgid "for"
 msgstr ""
 
 #: admin/admin-ajax.php:185 admin/admin-hooks.php:490 admin/admin-hooks.php:565
-#: admin/classes/class-wp-ulike-admin-panel.php:124
-#: admin/classes/class-wp-ulike-admin-panel.php:141
 #: admin/classes/class-wp-ulike-admin-panel.php:749
 #: admin/classes/class-wp-ulike-admin-panel.php:779
 #: admin/classes/class-wp-ulike-widget.php:382
 msgid "Like"
 msgstr "اعجاب"
 
-#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:130
-#: admin/classes/class-wp-ulike-admin-panel.php:146
-#: admin/classes/class-wp-ulike-admin-panel.php:760
+#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:760
 #: admin/classes/class-wp-ulike-admin-panel.php:791
 msgid "Unlike"
 msgstr "الغاء اعجابي"
@@ -240,210 +237,230 @@ msgstr ""
 msgid "Status Filter"
 msgstr "وضعیة"
 
-#: admin/admin-ajax.php:198
+#: admin/admin-ajax.php:198 admin/classes/class-wp-ulike-admin-panel.php:371
+msgid "Content Types"
+msgstr "أنواع المحتوى"
+
+#: admin/admin-ajax.php:199
 #, fuzzy
 msgid "Post Types"
 msgstr "تصفية أنواع المنشورات"
 
-#: admin/admin-ajax.php:199
+#: admin/admin-ajax.php:200
+msgid "View By"
+msgstr ""
+
+#: admin/admin-ajax.php:201
+msgid "Device"
+msgstr ""
+
+#: admin/admin-ajax.php:202
+msgid "OS"
+msgstr ""
+
+#: admin/admin-ajax.php:203
+msgid "Browser"
+msgstr ""
+
+#: admin/admin-ajax.php:204
 msgid "Show Filters"
 msgstr ""
 
-#: admin/admin-ajax.php:200
+#: admin/admin-ajax.php:205
 #, fuzzy
 msgid "Hide Filters"
 msgstr "إخفاء اشعارات المدير"
 
-#: admin/admin-ajax.php:201
+#: admin/admin-ajax.php:206
 #, fuzzy
 msgid "Clear all"
 msgstr "إزالة"
 
-#: admin/admin-ajax.php:202
+#: admin/admin-ajax.php:207
 msgid "Apply"
 msgstr ""
 
-#: admin/admin-ajax.php:205
+#: admin/admin-ajax.php:210
 msgid "Dates"
 msgstr ""
 
-#: admin/admin-ajax.php:206
+#: admin/admin-ajax.php:211
 #, fuzzy
 msgid "Totals"
 msgstr "مجموع"
 
-#: admin/admin-ajax.php:207
+#: admin/admin-ajax.php:212
 #, fuzzy
 msgid "No data to display"
 msgstr "عرض تلقائي"
 
-#: admin/admin-ajax.php:208
+#: admin/admin-ajax.php:213
 #, fuzzy
 msgid "Daily Interactions"
 msgstr "التكامل"
 
-#: admin/admin-ajax.php:209
+#: admin/admin-ajax.php:214
 #, fuzzy
 msgid "Monthly Interactions"
 msgstr "التكامل"
 
-#: admin/admin-ajax.php:212
+#: admin/admin-ajax.php:217
 #, fuzzy
 msgid "Engaged Users"
 msgstr "فقط المستخدمين المسجلين"
 
-#: admin/admin-ajax.php:213
+#: admin/admin-ajax.php:218
 msgid "Published"
 msgstr ""
 
-#: admin/admin-ajax.php:214 admin/admin-ajax.php:216 admin/admin-ajax.php:245
+#: admin/admin-ajax.php:219 admin/admin-ajax.php:221 admin/admin-ajax.php:250
 #: admin/classes/class-wp-ulike-admin-panel.php:168
 #: admin/classes/class-wp-ulike-admin-panel.php:341
 #: admin/classes/class-wp-ulike-admin-panel.php:399
 msgid "Comments"
 msgstr "التعالیقات"
 
-#: admin/admin-ajax.php:215
+#: admin/admin-ajax.php:220
 #, fuzzy
 msgid "Engagement"
 msgstr "اسم المستخدم : "
 
-#: admin/admin-ajax.php:217
+#: admin/admin-ajax.php:222
 msgid "By"
 msgstr ""
 
-#: admin/admin-ajax.php:220
+#: admin/admin-ajax.php:225
 msgid "Date"
 msgstr ""
 
-#: admin/admin-ajax.php:221
+#: admin/admin-ajax.php:226
 #, fuzzy
 msgid "User"
 msgstr "اسم المستخدم : "
 
-#: admin/admin-ajax.php:222
+#: admin/admin-ajax.php:227
 msgid "IP"
 msgstr "عنوان IP"
 
-#: admin/admin-ajax.php:223
+#: admin/admin-ajax.php:228
 msgid "Status"
 msgstr "وضعیة"
 
-#: admin/admin-ajax.php:224
+#: admin/admin-ajax.php:229
 msgid "Comment Author"
 msgstr "کاتب التعلیق"
 
-#: admin/admin-ajax.php:225
+#: admin/admin-ajax.php:230
 #, fuzzy
 msgid "Comment Content"
 msgstr "نص التعليق"
 
-#: admin/admin-ajax.php:226
+#: admin/admin-ajax.php:231
 #, fuzzy
 msgid "Activity Title"
 msgstr "إحصائيات الأنشطة"
 
-#: admin/admin-ajax.php:227
+#: admin/admin-ajax.php:232
 msgid "Topic Title"
 msgstr "عنوان الموضوع"
 
-#: admin/admin-ajax.php:228
+#: admin/admin-ajax.php:233
 msgid "Post Title"
 msgstr "عنوان المنشور"
 
-#: admin/admin-ajax.php:229
+#: admin/admin-ajax.php:234
 #, fuzzy
 msgid "Category"
 msgstr "تصنیفات"
 
-#: admin/admin-ajax.php:230
+#: admin/admin-ajax.php:235
 msgid "Actions"
 msgstr "تطبیقات"
 
-#: admin/admin-ajax.php:231
+#: admin/admin-ajax.php:236
 msgid "Showing"
 msgstr ""
 
-#: admin/admin-ajax.php:232
+#: admin/admin-ajax.php:237
 #, fuzzy
 msgid "to"
 msgstr "الأعلى"
 
-#: admin/admin-ajax.php:233
-msgid "of"
-msgstr ""
-
-#: admin/admin-ajax.php:234
-#, fuzzy
-msgid "results"
-msgstr "نتائج البحث"
-
-#: admin/admin-ajax.php:235
-msgid "Back"
-msgstr ""
-
-#: admin/admin-ajax.php:236
-#, fuzzy
-msgid "Search"
-msgstr "يتم البحث..."
-
-#: admin/admin-ajax.php:237
-#, fuzzy
-msgid "Loading..."
-msgstr "جاري الحفظ..."
-
 #: admin/admin-ajax.php:238
-msgid "Download CSV"
+msgid "of"
 msgstr ""
 
 #: admin/admin-ajax.php:239
 #, fuzzy
-msgid "Delete Selected"
-msgstr "لايوجد ملف وسائط تمّ تحديده"
+msgid "results"
+msgstr "نتائج البحث"
 
 #: admin/admin-ajax.php:240
-msgid "Filter by type:"
+msgid "Back"
 msgstr ""
 
 #: admin/admin-ajax.php:241
+#, fuzzy
+msgid "Search"
+msgstr "يتم البحث..."
+
+#: admin/admin-ajax.php:242
+#, fuzzy
+msgid "Loading..."
+msgstr "جاري الحفظ..."
+
+#: admin/admin-ajax.php:243
+msgid "Download CSV"
+msgstr ""
+
+#: admin/admin-ajax.php:244
+#, fuzzy
+msgid "Delete Selected"
+msgstr "لايوجد ملف وسائط تمّ تحديده"
+
+#: admin/admin-ajax.php:245
+msgid "Filter by type:"
+msgstr ""
+
+#: admin/admin-ajax.php:246
 msgid "per page"
 msgstr ""
 
-#: admin/admin-ajax.php:244 admin/classes/class-wp-ulike-admin-panel.php:167
+#: admin/admin-ajax.php:249 admin/classes/class-wp-ulike-admin-panel.php:167
 #: admin/classes/class-wp-ulike-admin-panel.php:340
 #: admin/classes/class-wp-ulike-admin-panel.php:391
 msgid "Posts"
 msgstr "المقالات "
 
-#: admin/admin-ajax.php:246 admin/classes/class-wp-ulike-admin-panel.php:169
+#: admin/admin-ajax.php:251 admin/classes/class-wp-ulike-admin-panel.php:169
 #: admin/classes/class-wp-ulike-admin-panel.php:342
 #, fuzzy
 msgid "Activities"
 msgstr "إحصائيات الأنشطة"
 
-#: admin/admin-ajax.php:247 admin/classes/class-wp-ulike-admin-panel.php:170
+#: admin/admin-ajax.php:252 admin/classes/class-wp-ulike-admin-panel.php:170
 #: admin/classes/class-wp-ulike-admin-panel.php:343
 #, fuzzy
 msgid "Topics"
 msgstr "إحصائيات المواضيع"
 
-#: admin/admin-ajax.php:248
+#: admin/admin-ajax.php:253
 msgid "Engagers"
 msgstr ""
 
-#: admin/admin-ajax.php:251
+#: admin/admin-ajax.php:256
 msgid "Nothing to See Here!"
 msgstr ""
 
-#: admin/admin-ajax.php:252
+#: admin/admin-ajax.php:257
 msgid "No content available. Try refreshing or check back later."
 msgstr ""
 
-#: admin/admin-ajax.php:255
+#: admin/admin-ajax.php:260
 msgid "Unlock Your Website's True Potential!"
 msgstr ""
 
-#: admin/admin-ajax.php:256
+#: admin/admin-ajax.php:261
 msgid ""
 "Imagine knowing exactly what makes your content shine and how to connect "
 "with the fans who'll help you grow. Picture having the tools to make smarter "
@@ -451,80 +468,80 @@ msgid ""
 "Ready to uncover what's possible?"
 msgstr ""
 
-#: admin/admin-ajax.php:257
+#: admin/admin-ajax.php:262
 #, fuzzy
 msgid "Get Started"
 msgstr "بدء"
 
-#: admin/admin-ajax.php:258
+#: admin/admin-ajax.php:263
 msgid "Discover More"
 msgstr ""
 
-#: admin/admin-ajax.php:261
+#: admin/admin-ajax.php:266
 msgid "{{count}} {{interval}} ago"
 msgstr ""
 
-#: admin/admin-ajax.php:262
+#: admin/admin-ajax.php:267
 msgid "year"
 msgstr ""
 
-#: admin/admin-ajax.php:263
+#: admin/admin-ajax.php:268
 msgid "years"
 msgstr ""
 
-#: admin/admin-ajax.php:264
+#: admin/admin-ajax.php:269
 #, fuzzy
 msgid "month"
 msgstr "شهر"
 
-#: admin/admin-ajax.php:265
+#: admin/admin-ajax.php:270
 #, fuzzy
 msgid "months"
 msgstr "شهر"
 
-#: admin/admin-ajax.php:266
+#: admin/admin-ajax.php:271
 msgid "week"
 msgstr ""
 
-#: admin/admin-ajax.php:267
+#: admin/admin-ajax.php:272
 #, fuzzy
 msgid "weeks"
 msgstr "أسبوع"
 
-#: admin/admin-ajax.php:268
+#: admin/admin-ajax.php:273
 #, fuzzy
 msgid "day"
 msgstr "اليوم"
 
-#: admin/admin-ajax.php:269
+#: admin/admin-ajax.php:274
 msgid "days"
 msgstr ""
 
-#: admin/admin-ajax.php:270
+#: admin/admin-ajax.php:275
 msgid "hour"
 msgstr ""
 
-#: admin/admin-ajax.php:271
+#: admin/admin-ajax.php:276
 msgid "hours"
 msgstr ""
 
-#: admin/admin-ajax.php:272
+#: admin/admin-ajax.php:277
 msgid "minute"
 msgstr ""
 
-#: admin/admin-ajax.php:273
+#: admin/admin-ajax.php:278
 msgid "minutes"
 msgstr ""
 
-#: admin/admin-ajax.php:274
+#: admin/admin-ajax.php:279
 msgid "second"
 msgstr ""
 
-#: admin/admin-ajax.php:275
+#: admin/admin-ajax.php:280
 msgid "seconds"
 msgstr ""
 
-#: admin/admin-ajax.php:276
+#: admin/admin-ajax.php:281
 #, fuzzy
 msgid "just now"
 msgstr "ليس الآن"
@@ -678,92 +695,113 @@ msgid "General"
 msgstr "عام"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:108
-msgid "Enable Convertor"
-msgstr "تفعيل المحول"
+msgid "Compact Counter (1k, 1.2k)"
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:110
-msgid "Convert numbers of Likes with string (kilobyte) format."
+msgid ""
+"Show large like counts in a short format. Example: 1250 → 1.2k (applies at "
+"1,000+)."
 msgstr ""
-"من خلال تفعیل هذا الخيار، يمكنك عرض تنسيق الأرقام فوق 1000 بصورة سلسلة (KB)."
 
 #: admin/classes/class-wp-ulike-admin-panel.php:115
-msgid "Set your custom prefix/postfix on counter value"
+msgid "Add text before or after the counter value."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:116
-msgid "Filter Counter Value"
+msgid "Counter Prefix & Suffix"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:119
 msgid "Prefix"
 msgstr ""
 
+#: admin/classes/class-wp-ulike-admin-panel.php:124
+#, fuzzy
+msgid "Like Prefix"
+msgstr "نسخة البريميوم من WP ULike"
+
+#: admin/classes/class-wp-ulike-admin-panel.php:130
+#, fuzzy
+msgid "Unlike Prefix"
+msgstr "الغاء اعجابي"
+
 #: admin/classes/class-wp-ulike-admin-panel.php:136
 msgid "Suffix"
 msgstr ""
 
+#: admin/classes/class-wp-ulike-admin-panel.php:141
+msgid "Like Suffix"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:146
+#, fuzzy
+msgid "Unlike Suffix"
+msgstr "الغاء اعجابي"
+
 #: admin/classes/class-wp-ulike-admin-panel.php:155
-msgid "Enable Notifications"
+#, fuzzy
+msgid "In-app Notifications"
 msgstr "تفعيل الإشعارات"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:157
-msgid "Custom toast messages after each activity"
+msgid "Show a brief confirmation message after users like/unlike."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:162
 #, fuzzy
-msgid "Disable Toast Types"
-msgstr "عرض النوع"
+msgid "Disable Notifications On"
+msgstr "تفعيل الإشعارات"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:163
-#, fuzzy
-msgid "With this option, you can disable toasts messages on content types."
-msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل العرض التلقائي في هذه الصفحات."
+msgid "Choose where notifications should be hidden."
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:177
-msgid "Enable Anonymize IP"
-msgstr "تفعيل IP المجهول"
+#, fuzzy
+msgid "Anonymize IP Addresses"
+msgstr "إخفاء هوية عنوان IP الخاص بإلتزام GDPR "
 
 #: admin/classes/class-wp-ulike-admin-panel.php:178
 msgid ""
-"IP anonymization, also known as IP masking, is a method of replacing the "
-"original IP address with one that cannot be associated with or traced back "
-"to an individual user. This can be done by setting the last octet of IPV4 "
-"addresses or the last 80 bits of IPv6 addresses to zeros."
+"Mask part of each IP address so votes cannot be traced to individual users "
+"(last octet in IPv4, last 80 bits in IPv6)."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:183
-msgid "Disable IP logging"
-msgstr ""
+#, fuzzy
+msgid "Do Not Store IPs"
+msgstr "عدم تسجيل الاحداث"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:184
-msgid "Use this option to disable saving user IP in your database."
+msgid "Stop saving user IP addresses in your database."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:190
-msgid "Enable Cache Exist"
+msgid "Site Uses Caching"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:191
-msgid ""
-"Please enable this option, If you have any cache service on your website."
+msgid "Turn this on if your site uses a caching plugin or service."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:196
-msgid "Hide Admin Notices"
+#, fuzzy
+msgid "Hide Plugin Admin Notices"
 msgstr "إخفاء اشعارات المدير"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:197
-msgid "Enabling this option will completely disable all admin notices."
+msgid "Completely hide WP ULike admin notices for all users."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:202
-msgid "Disable Plugin Files"
-msgstr ""
+#, fuzzy
+msgid "Disable Assets On"
+msgstr "عرض النوع"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:203
-msgid "With this option, you can disable all plugin assets on these pages."
-msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل جميع مكونات الإضافة في هذه الصفحات."
+msgid "Prevent loading WP ULike CSS/JS on selected page types."
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:207
 #: admin/classes/class-wp-ulike-admin-panel.php:832
@@ -813,12 +851,11 @@ msgid "WooCommerce Pages"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:222
-#: admin/classes/class-wp-ulike-admin-panel.php:277
-msgid "Enable Admin Columns"
+msgid "Show Admin Columns"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:223
-msgid "Add counter stats column to the selected post types"
+msgid "Add a likes counter column to selected post types in the admin list."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:231
@@ -836,8 +873,8 @@ msgstr ""
 #. translators: %s: Link to options-discussion.php
 #: admin/classes/class-wp-ulike-admin-panel.php:239
 msgid ""
-"Choose which Blacklist you would prefer to use for voting buttons. The %s "
-"option can be found in the WordPress Discussion Settings page."
+"Choose which blacklist to use for voting. The %s setting is available on the "
+"WordPress Discussion Settings page."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:240
@@ -850,8 +887,7 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:247
 msgid ""
-"One IP address per line. When a vote contains any of these entries in its IP "
-"address, it will be rejected."
+"Enter one IP address per line. Votes from matching IPs will be rejected."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:264
@@ -859,11 +895,15 @@ msgid "Enable WPML Synchronization"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:265
-msgid "Synchronize likes of post types, which are translated with WPML plugin."
+msgid "Sync likes for translated post types when using the WPML plugin."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:277
+msgid "Show Admin Column"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:278
-msgid "Add counter stats column to the admin comments list."
+msgid "Add a likes counter column to the comments list."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:286
@@ -876,21 +916,21 @@ msgstr "Activity Meta"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:293
 #, fuzzy
-msgid "Enable Activity Comment"
+msgid "Enable Activity Comment Likes"
 msgstr "تعليق النشاط"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:294
-msgid "Add the possibility to like Buddypress comments in the activity stream"
+msgid "Allow liking BuddyPress comments in the activity stream."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:299
-msgid "Enable Activity Notification"
-msgstr "تفعيل إشعارات النشاط"
+#, fuzzy
+msgid "Add Activity Entries for Likes"
+msgstr "احداث الاعجابات في الانشطة"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:300
-msgid "Insert new likes in buddyPress activity page"
+msgid "Create a BuddyPress activity item when someone likes content."
 msgstr ""
-"من خلال تفعیل هذا الخیار، ستضاف احدث الاعجابات علی الانشطة فی بادي برس. "
 
 #: admin/classes/class-wp-ulike-admin-panel.php:310
 msgid "Post Activity Text"
@@ -908,22 +948,22 @@ msgid "Comment Activity Text"
 msgstr "النص لنشاطات التعالیق :"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:329
-msgid "Enable User Notification"
+#, fuzzy
+msgid "Enable User Notifications"
 msgstr "تفعيل الإشعارات للمستخدم"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:330
-msgid "Sends out notifications when you get a like from someone"
+msgid "Send a notification when your content receives a like."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:335
 #, fuzzy
-msgid "Disable Notification Types"
-msgstr "تفعيل الإشعارات"
+msgid "Disable User Notifications On"
+msgstr "تفعيل الإشعارات للمستخدم"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:336
-#, fuzzy
-msgid "With this option, you can disable user notification on content types."
-msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل العرض التلقائي في هذه الصفحات."
+msgid "Choose where user notifications are disabled."
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:349
 #: admin/classes/class-wp-ulike-admin-panel.php:406
@@ -942,10 +982,6 @@ msgstr "المكون الإضافي غير مثبَّته او غير نشطه"
 #: admin/classes/class-wp-ulike-widget.php:233
 msgid "bbPress"
 msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:371
-msgid "Content Types"
-msgstr "أنواع المحتوى"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:384
 msgid "Read More"
@@ -1144,9 +1180,7 @@ msgid "Enable Inline Custom CSS"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:649
-msgid ""
-"If you don't want to use \"custom.css\" file for any reason, by activating "
-"this option, the styles will be added to the page as inline."
+msgid "If you prefer not to load custom.css, output styles inline on the page."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:656
@@ -1182,12 +1216,13 @@ msgid "Select a Template"
 msgstr "اختر قالب"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:726
-msgid "Display online preview"
+msgid "Preview templates online"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:726
-msgid "Here"
-msgstr ""
+#, fuzzy
+msgid "Open preview"
+msgstr "فوق السطر"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:734
 msgid "Button Type"
@@ -1202,18 +1237,18 @@ msgid "Text"
 msgstr "نص"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:745
-msgid ""
-"Enter your custom button text in the fields above. You can also use HTML "
-"tags in these fields."
+msgid "Set custom button text. HTML is allowed."
 msgstr ""
-"ادخل نص المخصص للزر بالحقل أعلاه. وكذلك بإمكانك استخدام وسوم HTML في هذه "
-"الحقول."
 
 #: admin/classes/class-wp-ulike-admin-panel.php:746
-#: admin/classes/class-wp-ulike-admin-panel.php:754
-#: admin/classes/class-wp-ulike-admin-panel.php:765
 msgid "Button Text"
 msgstr "نص الزر"
+
+#: admin/classes/class-wp-ulike-admin-panel.php:754
+#: admin/classes/class-wp-ulike-admin-panel.php:765
+#, fuzzy
+msgid "Button Label"
+msgstr "صورة الزر"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:776
 #: admin/classes/class-wp-ulike-admin-panel.php:784
@@ -1222,7 +1257,8 @@ msgid "Button Image"
 msgstr "صورة الزر"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:809
-msgid "Automatic display"
+#, fuzzy
+msgid "Automatic Display"
 msgstr "عرض تلقائي"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:814
@@ -1242,24 +1278,27 @@ msgid "Top and Bottom"
 msgstr "أعلى وأسفل"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:826
-msgid "Automatic Display Restriction"
-msgstr "تقييد العرض التلقائي"
+#, fuzzy
+msgid "Hide Automatic Display On"
+msgstr "عرض تلقائي"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:827
-msgid "With this option, you can disable automatic display on these pages."
-msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل العرض التلقائي في هذه الصفحات."
+msgid "Hide the button on selected page types."
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:845
-msgid "Post Types Filter"
+#, fuzzy
+msgid "Post Type Exceptions"
 msgstr "تصفية أنواع المنشورات"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:846
-msgid "Select a post type"
+#, fuzzy
+msgid "Select post types"
 msgstr "تحديد مقالة لنسخها"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:847
-msgid "Make these post types an exception and display the button on them."
-msgstr "اجعل لأنواع المنشورات هذه إستثناء واعرض الزر فيها"
+msgid "Always show the button on these post types, even if disabled elsewhere."
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:857
 msgid "Control when the vote counter is shown next to the button."
@@ -1415,7 +1454,7 @@ msgid "Display Likers Box"
 msgstr "عرض صندوق Likers"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:949
-msgid "User List Arrange"
+msgid "Likers List Order"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:952
@@ -1432,7 +1471,7 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:967
 #, fuzzy
-msgid "Likers Box Display"
+msgid "Likers Box Layout"
 msgstr "عدد من قام بالضغط على زر الإعجاب"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:970
@@ -1446,15 +1485,18 @@ msgid "Popover"
 msgstr "غلاف"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:997
-msgid "Size of Gravatars"
-msgstr "مقیاس قراواتار"
+#, fuzzy
+msgid "Avatar Size"
+msgstr "حجم الصورة المصغرة او الصورة الرمزية:"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:1005
-msgid "Likers Count"
+#, fuzzy
+msgid "Likers to Show"
 msgstr "عدد من قام بالضغط على زر الإعجاب"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:1006
-msgid "The number of users to show in the users liked box"
+#, fuzzy
+msgid "Number of users displayed in the likers box"
 msgstr "حد الاقصی لإعرض عدد المستخدمين  فی الباکس   ؟!"
 
 #: admin/classes/class-wp-ulike-logs.php:166
@@ -2130,6 +2172,62 @@ msgstr ""
 "https://wpulike.com/?utm_source=wp-plugins&utm_campaign=author-"
 "uri&utm_medium=wp-dash"
 
+#~ msgid "Enable Convertor"
+#~ msgstr "تفعيل المحول"
+
+#~ msgid "Convert numbers of Likes with string (kilobyte) format."
+#~ msgstr ""
+#~ "من خلال تفعیل هذا الخيار، يمكنك عرض تنسيق الأرقام فوق 1000 بصورة سلسلة "
+#~ "(KB)."
+
+#, fuzzy
+#~ msgid "With this option, you can disable toasts messages on content types."
+#~ msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل العرض التلقائي في هذه الصفحات."
+
+#~ msgid "Enable Anonymize IP"
+#~ msgstr "تفعيل IP المجهول"
+
+#~ msgid "With this option, you can disable all plugin assets on these pages."
+#~ msgstr ""
+#~ "بإستخدام هذا الخيار، بإمكانك تعطيل جميع مكونات الإضافة في هذه الصفحات."
+
+#~ msgid "Enable Activity Notification"
+#~ msgstr "تفعيل إشعارات النشاط"
+
+#~ msgid "Insert new likes in buddyPress activity page"
+#~ msgstr ""
+#~ "من خلال تفعیل هذا الخیار، ستضاف احدث الاعجابات علی الانشطة فی بادي برس. "
+
+#, fuzzy
+#~ msgid ""
+#~ "With this option, you can disable user notification on content types."
+#~ msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل العرض التلقائي في هذه الصفحات."
+
+#~ msgid ""
+#~ "Enter your custom button text in the fields above. You can also use HTML "
+#~ "tags in these fields."
+#~ msgstr ""
+#~ "ادخل نص المخصص للزر بالحقل أعلاه. وكذلك بإمكانك استخدام وسوم HTML في هذه "
+#~ "الحقول."
+
+#~ msgid "Automatic Display Restriction"
+#~ msgstr "تقييد العرض التلقائي"
+
+#~ msgid "With this option, you can disable automatic display on these pages."
+#~ msgstr "بإستخدام هذا الخيار، بإمكانك تعطيل العرض التلقائي في هذه الصفحات."
+
+#~ msgid "Post Types Filter"
+#~ msgstr "تصفية أنواع المنشورات"
+
+#~ msgid "Make these post types an exception and display the button on them."
+#~ msgstr "اجعل لأنواع المنشورات هذه إستثناء واعرض الزر فيها"
+
+#~ msgid "Size of Gravatars"
+#~ msgstr "مقیاس قراواتار"
+
+#~ msgid "Likers Count"
+#~ msgstr "عدد من قام بالضغط على زر الإعجاب"
+
 #, fuzzy
 #~ msgid "Only Logged In Users"
 #~ msgstr "فقط المستخدمين المسجلين"
@@ -2170,9 +2268,6 @@ msgstr ""
 
 #~ msgid "Comment Likes Logs"
 #~ msgstr "احداث الاعجابات في التعالیق"
-
-#~ msgid "Activity Likes Logs"
-#~ msgstr "احداث الاعجابات في الانشطة"
 
 #~ msgid "Topics Likes Logs"
 #~ msgstr "سجلات مواضيع الإعجاب"
@@ -2354,9 +2449,6 @@ msgstr ""
 #~ "متبكره وقويه بإمكانها إداراة اكثر من 13 نوع من ترميز المخطط لإقامة اتصال "
 #~ "افضل بين صفحات الويب ومحركات البحث. بإمكانك الآن التحدث بلغة محرك البحث "
 #~ "وإخباره بنوع المحتوى الذي تروج له."
-
-#~ msgid "Anonymize the IP address for GDPR Compliance"
-#~ msgstr "إخفاء هوية عنوان IP الخاص بإلتزام GDPR "
 
 #~ msgid ""
 #~ "You are using two instances of WP ULike plugin at same time, please "
@@ -2820,9 +2912,6 @@ msgstr ""
 #~ msgstr ""
 #~ "من خلال تفعیل هذا الخیار، بامکانکم مشاهدة آوتار اعضاء العاملین اعجاب اسفل "
 #~ "زر الاعجاب ."
-
-#~ msgid "Do Not Log"
-#~ msgstr "عدم تسجيل الاحداث"
 
 #~ msgid "Logged By Cookie"
 #~ msgstr "تسجيل بواسطة كوكي"

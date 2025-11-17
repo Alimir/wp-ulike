@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-08-18 12:37:32+00:00\n"
+"POT-Creation-Date: 2025-11-17 20:07:21+00:00\n"
 "PO-Revision-Date: 2019-07-03 14:50:28+0000\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -57,11 +57,11 @@ msgid "Yesterday's Engagement Summary"
 msgstr ""
 
 #: admin/admin-ajax.php:157
-msgid "Device type"
+msgid "Device Insights"
 msgstr ""
 
 #: admin/admin-ajax.php:158
-msgid "Explore the variety of user devices."
+msgid "Track devices, systems and browsers"
 msgstr ""
 
 #: admin/admin-ajax.php:159
@@ -167,17 +167,13 @@ msgid "for"
 msgstr ""
 
 #: admin/admin-ajax.php:185 admin/admin-hooks.php:490 admin/admin-hooks.php:565
-#: admin/classes/class-wp-ulike-admin-panel.php:124
-#: admin/classes/class-wp-ulike-admin-panel.php:141
 #: admin/classes/class-wp-ulike-admin-panel.php:749
 #: admin/classes/class-wp-ulike-admin-panel.php:779
 #: admin/classes/class-wp-ulike-widget.php:382
 msgid "Like"
 msgstr "いいね"
 
-#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:130
-#: admin/classes/class-wp-ulike-admin-panel.php:146
-#: admin/classes/class-wp-ulike-admin-panel.php:760
+#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:760
 #: admin/classes/class-wp-ulike-admin-panel.php:791
 msgid "Unlike"
 msgstr "よくないね"
@@ -234,203 +230,223 @@ msgstr "年"
 msgid "Status Filter"
 msgstr "ステータス"
 
-#: admin/admin-ajax.php:198
+#: admin/admin-ajax.php:198 admin/classes/class-wp-ulike-admin-panel.php:371
+msgid "Content Types"
+msgstr ""
+
+#: admin/admin-ajax.php:199
 #, fuzzy
 msgid "Post Types"
 msgstr "投稿タイトル"
 
-#: admin/admin-ajax.php:199
-msgid "Show Filters"
-msgstr ""
-
 #: admin/admin-ajax.php:200
-msgid "Hide Filters"
+msgid "View By"
 msgstr ""
 
 #: admin/admin-ajax.php:201
-msgid "Clear all"
+msgid "Device"
 msgstr ""
 
 #: admin/admin-ajax.php:202
-msgid "Apply"
+msgid "OS"
+msgstr ""
+
+#: admin/admin-ajax.php:203
+msgid "Browser"
+msgstr ""
+
+#: admin/admin-ajax.php:204
+msgid "Show Filters"
 msgstr ""
 
 #: admin/admin-ajax.php:205
-msgid "Dates"
+msgid "Hide Filters"
 msgstr ""
 
 #: admin/admin-ajax.php:206
+msgid "Clear all"
+msgstr ""
+
+#: admin/admin-ajax.php:207
+msgid "Apply"
+msgstr ""
+
+#: admin/admin-ajax.php:210
+msgid "Dates"
+msgstr ""
+
+#: admin/admin-ajax.php:211
 #, fuzzy
 msgid "Totals"
 msgstr "合計"
 
-#: admin/admin-ajax.php:207
+#: admin/admin-ajax.php:212
 #, fuzzy
 msgid "No data to display"
 msgstr "自動表示"
 
-#: admin/admin-ajax.php:208
+#: admin/admin-ajax.php:213
 msgid "Daily Interactions"
 msgstr ""
 
-#: admin/admin-ajax.php:209
+#: admin/admin-ajax.php:214
 msgid "Monthly Interactions"
 msgstr ""
 
-#: admin/admin-ajax.php:212
+#: admin/admin-ajax.php:217
 #, fuzzy
 msgid "Engaged Users"
 msgstr "ユーザー名でログイン"
 
-#: admin/admin-ajax.php:213
+#: admin/admin-ajax.php:218
 msgid "Published"
 msgstr ""
 
-#: admin/admin-ajax.php:214 admin/admin-ajax.php:216 admin/admin-ajax.php:245
+#: admin/admin-ajax.php:219 admin/admin-ajax.php:221 admin/admin-ajax.php:250
 #: admin/classes/class-wp-ulike-admin-panel.php:168
 #: admin/classes/class-wp-ulike-admin-panel.php:341
 #: admin/classes/class-wp-ulike-admin-panel.php:399
 msgid "Comments"
 msgstr "コメント"
 
-#: admin/admin-ajax.php:215
+#: admin/admin-ajax.php:220
 #, fuzzy
 msgid "Engagement"
 msgstr "ユーザー名"
 
-#: admin/admin-ajax.php:217
+#: admin/admin-ajax.php:222
 msgid "By"
 msgstr ""
 
-#: admin/admin-ajax.php:220
+#: admin/admin-ajax.php:225
 msgid "Date"
 msgstr ""
 
-#: admin/admin-ajax.php:221
+#: admin/admin-ajax.php:226
 #, fuzzy
 msgid "User"
 msgstr "ユーザー名"
 
-#: admin/admin-ajax.php:222
+#: admin/admin-ajax.php:227
 msgid "IP"
 msgstr "IP"
 
-#: admin/admin-ajax.php:223
+#: admin/admin-ajax.php:228
 msgid "Status"
 msgstr "ステータス"
 
-#: admin/admin-ajax.php:224
+#: admin/admin-ajax.php:229
 msgid "Comment Author"
 msgstr "コメント投稿者"
 
-#: admin/admin-ajax.php:225
+#: admin/admin-ajax.php:230
 #, fuzzy
 msgid "Comment Content"
 msgstr "コメントテキスト"
 
-#: admin/admin-ajax.php:226
+#: admin/admin-ajax.php:231
 #, fuzzy
 msgid "Activity Title"
 msgstr "アクティビティ"
 
-#: admin/admin-ajax.php:227
+#: admin/admin-ajax.php:232
 msgid "Topic Title"
 msgstr "トピックタイトル"
 
-#: admin/admin-ajax.php:228
+#: admin/admin-ajax.php:233
 msgid "Post Title"
 msgstr "投稿タイトル"
 
-#: admin/admin-ajax.php:229
+#: admin/admin-ajax.php:234
 #, fuzzy
 msgid "Category"
 msgstr "カテゴリー"
 
-#: admin/admin-ajax.php:230
+#: admin/admin-ajax.php:235
 msgid "Actions"
 msgstr "アクション"
 
-#: admin/admin-ajax.php:231
+#: admin/admin-ajax.php:236
 msgid "Showing"
 msgstr ""
 
-#: admin/admin-ajax.php:232
+#: admin/admin-ajax.php:237
 msgid "to"
 msgstr ""
 
-#: admin/admin-ajax.php:233
+#: admin/admin-ajax.php:238
 msgid "of"
 msgstr ""
 
-#: admin/admin-ajax.php:234
+#: admin/admin-ajax.php:239
 #, fuzzy
 msgid "results"
 msgstr "検索結果"
 
-#: admin/admin-ajax.php:235
+#: admin/admin-ajax.php:240
 msgid "Back"
 msgstr ""
 
-#: admin/admin-ajax.php:236
+#: admin/admin-ajax.php:241
 #, fuzzy
 msgid "Search"
 msgstr "検索結果"
 
-#: admin/admin-ajax.php:237
+#: admin/admin-ajax.php:242
 msgid "Loading..."
 msgstr ""
 
-#: admin/admin-ajax.php:238
+#: admin/admin-ajax.php:243
 msgid "Download CSV"
 msgstr ""
 
-#: admin/admin-ajax.php:239
+#: admin/admin-ajax.php:244
 msgid "Delete Selected"
 msgstr ""
 
-#: admin/admin-ajax.php:240
+#: admin/admin-ajax.php:245
 msgid "Filter by type:"
 msgstr ""
 
-#: admin/admin-ajax.php:241
+#: admin/admin-ajax.php:246
 msgid "per page"
 msgstr ""
 
-#: admin/admin-ajax.php:244 admin/classes/class-wp-ulike-admin-panel.php:167
+#: admin/admin-ajax.php:249 admin/classes/class-wp-ulike-admin-panel.php:167
 #: admin/classes/class-wp-ulike-admin-panel.php:340
 #: admin/classes/class-wp-ulike-admin-panel.php:391
 msgid "Posts"
 msgstr "投稿"
 
-#: admin/admin-ajax.php:246 admin/classes/class-wp-ulike-admin-panel.php:169
+#: admin/admin-ajax.php:251 admin/classes/class-wp-ulike-admin-panel.php:169
 #: admin/classes/class-wp-ulike-admin-panel.php:342
 #, fuzzy
 msgid "Activities"
 msgstr "アクティビティ"
 
-#: admin/admin-ajax.php:247 admin/classes/class-wp-ulike-admin-panel.php:170
+#: admin/admin-ajax.php:252 admin/classes/class-wp-ulike-admin-panel.php:170
 #: admin/classes/class-wp-ulike-admin-panel.php:343
 #, fuzzy
 msgid "Topics"
 msgstr "トピック ID"
 
-#: admin/admin-ajax.php:248
+#: admin/admin-ajax.php:253
 msgid "Engagers"
 msgstr ""
 
-#: admin/admin-ajax.php:251
+#: admin/admin-ajax.php:256
 msgid "Nothing to See Here!"
 msgstr ""
 
-#: admin/admin-ajax.php:252
+#: admin/admin-ajax.php:257
 msgid "No content available. Try refreshing or check back later."
 msgstr ""
 
-#: admin/admin-ajax.php:255
+#: admin/admin-ajax.php:260
 msgid "Unlock Your Website's True Potential!"
 msgstr ""
 
-#: admin/admin-ajax.php:256
+#: admin/admin-ajax.php:261
 msgid ""
 "Imagine knowing exactly what makes your content shine and how to connect "
 "with the fans who'll help you grow. Picture having the tools to make smarter "
@@ -438,81 +454,81 @@ msgid ""
 "Ready to uncover what's possible?"
 msgstr ""
 
-#: admin/admin-ajax.php:257
+#: admin/admin-ajax.php:262
 #, fuzzy
 msgid "Get Started"
 msgstr "はじめに"
 
-#: admin/admin-ajax.php:258
+#: admin/admin-ajax.php:263
 msgid "Discover More"
 msgstr ""
 
-#: admin/admin-ajax.php:261
+#: admin/admin-ajax.php:266
 msgid "{{count}} {{interval}} ago"
 msgstr ""
 
-#: admin/admin-ajax.php:262
+#: admin/admin-ajax.php:267
 msgid "year"
 msgstr ""
 
-#: admin/admin-ajax.php:263
+#: admin/admin-ajax.php:268
 #, fuzzy
 msgid "years"
 msgstr "年"
 
-#: admin/admin-ajax.php:264
+#: admin/admin-ajax.php:269
 #, fuzzy
 msgid "month"
 msgstr "月"
 
-#: admin/admin-ajax.php:265
+#: admin/admin-ajax.php:270
 #, fuzzy
 msgid "months"
 msgstr "月"
 
-#: admin/admin-ajax.php:266
+#: admin/admin-ajax.php:271
 msgid "week"
 msgstr ""
 
-#: admin/admin-ajax.php:267
+#: admin/admin-ajax.php:272
 #, fuzzy
 msgid "weeks"
 msgstr "週"
 
-#: admin/admin-ajax.php:268
+#: admin/admin-ajax.php:273
 #, fuzzy
 msgid "day"
 msgstr "今日"
 
-#: admin/admin-ajax.php:269
+#: admin/admin-ajax.php:274
 msgid "days"
 msgstr ""
 
-#: admin/admin-ajax.php:270
+#: admin/admin-ajax.php:275
 msgid "hour"
 msgstr ""
 
-#: admin/admin-ajax.php:271
+#: admin/admin-ajax.php:276
 msgid "hours"
 msgstr ""
 
-#: admin/admin-ajax.php:272
+#: admin/admin-ajax.php:277
 msgid "minute"
 msgstr ""
 
-#: admin/admin-ajax.php:273
+#: admin/admin-ajax.php:278
 msgid "minutes"
 msgstr ""
 
-#: admin/admin-ajax.php:274
+#: admin/admin-ajax.php:279
 msgid "second"
 msgstr ""
 
-#: admin/admin-ajax.php:275
+#: admin/admin-ajax.php:280
 msgid "seconds"
 msgstr ""
 
-#: admin/admin-ajax.php:276
+#: admin/admin-ajax.php:281
 msgid "just now"
 msgstr ""
 
@@ -665,89 +681,107 @@ msgid "General"
 msgstr "一般"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:108
-msgid "Enable Convertor"
+msgid "Compact Counter (1k, 1.2k)"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:110
-msgid "Convert numbers of Likes with string (kilobyte) format."
-msgstr "いいね の数値を文字列 (キロバイト) 形式で変換します。"
+msgid ""
+"Show large like counts in a short format. Example: 1250 → 1.2k (applies at "
+"1,000+)."
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:115
-msgid "Set your custom prefix/postfix on counter value"
+msgid "Add text before or after the counter value."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:116
-msgid "Filter Counter Value"
+msgid "Counter Prefix & Suffix"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:119
 msgid "Prefix"
 msgstr ""
 
+#: admin/classes/class-wp-ulike-admin-panel.php:124
+msgid "Like Prefix"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:130
+#, fuzzy
+msgid "Unlike Prefix"
+msgstr "よくないね"
+
 #: admin/classes/class-wp-ulike-admin-panel.php:136
 msgid "Suffix"
 msgstr ""
 
+#: admin/classes/class-wp-ulike-admin-panel.php:141
+msgid "Like Suffix"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:146
+#, fuzzy
+msgid "Unlike Suffix"
+msgstr "よくないね"
+
 #: admin/classes/class-wp-ulike-admin-panel.php:155
-msgid "Enable Notifications"
+msgid "In-app Notifications"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:157
-msgid "Custom toast messages after each activity"
-msgstr "各アクティビティの後のカスタムトーストメッセージ"
+msgid "Show a brief confirmation message after users like/unlike."
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:162
-msgid "Disable Toast Types"
+msgid "Disable Notifications On"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:163
-msgid "With this option, you can disable toasts messages on content types."
+msgid "Choose where notifications should be hidden."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:177
-msgid "Enable Anonymize IP"
-msgstr ""
+#, fuzzy
+msgid "Anonymize IP Addresses"
+msgstr "GDPR遵守のためにIPアドレスを匿名化する"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:178
 msgid ""
-"IP anonymization, also known as IP masking, is a method of replacing the "
-"original IP address with one that cannot be associated with or traced back "
-"to an individual user. This can be done by setting the last octet of IPV4 "
-"addresses or the last 80 bits of IPv6 addresses to zeros."
+"Mask part of each IP address so votes cannot be traced to individual users "
+"(last octet in IPv4, last 80 bits in IPv6)."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:183
 #, fuzzy
-msgid "Disable IP logging"
-msgstr "プラグインファイルの無効化"
+msgid "Do Not Store IPs"
+msgstr "ログをとっていません"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:184
-msgid "Use this option to disable saving user IP in your database."
+msgid "Stop saving user IP addresses in your database."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:190
-msgid "Enable Cache Exist"
+msgid "Site Uses Caching"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:191
-msgid ""
-"Please enable this option, If you have any cache service on your website."
+msgid "Turn this on if your site uses a caching plugin or service."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:196
-msgid "Hide Admin Notices"
+msgid "Hide Plugin Admin Notices"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:197
-msgid "Enabling this option will completely disable all admin notices."
+msgid "Completely hide WP ULike admin notices for all users."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:202
-msgid "Disable Plugin Files"
-msgstr "プラグインファイルの無効化"
+msgid "Disable Assets On"
+msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:203
-msgid "With this option, you can disable all plugin assets on these pages."
+msgid "Prevent loading WP ULike CSS/JS on selected page types."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:207
@@ -798,12 +832,11 @@ msgid "WooCommerce Pages"
 msgstr "WooCommerce ページ"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:222
-#: admin/classes/class-wp-ulike-admin-panel.php:277
-msgid "Enable Admin Columns"
+msgid "Show Admin Columns"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:223
-msgid "Add counter stats column to the selected post types"
+msgid "Add a likes counter column to selected post types in the admin list."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:231
@@ -821,8 +854,8 @@ msgstr ""
 #. translators: %s: Link to options-discussion.php
 #: admin/classes/class-wp-ulike-admin-panel.php:239
 msgid ""
-"Choose which Blacklist you would prefer to use for voting buttons. The %s "
-"option can be found in the WordPress Discussion Settings page."
+"Choose which blacklist to use for voting. The %s setting is available on the "
+"WordPress Discussion Settings page."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:240
@@ -835,8 +868,7 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:247
 msgid ""
-"One IP address per line. When a vote contains any of these entries in its IP "
-"address, it will be rejected."
+"Enter one IP address per line. Votes from matching IPs will be rejected."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:264
@@ -844,11 +876,15 @@ msgid "Enable WPML Synchronization"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:265
-msgid "Synchronize likes of post types, which are translated with WPML plugin."
+msgid "Sync likes for translated post types when using the WPML plugin."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:277
+msgid "Show Admin Column"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:278
-msgid "Add counter stats column to the admin comments list."
+msgid "Add a likes counter column to the comments list."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:286
@@ -861,20 +897,22 @@ msgstr "アクティビティメタ"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:293
 #, fuzzy
-msgid "Enable Activity Comment"
+msgid "Enable Activity Comment Likes"
 msgstr "アクティビティコメント"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:294
-msgid "Add the possibility to like Buddypress comments in the activity stream"
+#, fuzzy
+msgid "Allow liking BuddyPress comments in the activity stream."
 msgstr ""
 "アクティビティストリーム内の Buddypress のコメントにいいねを追加します。"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:299
-msgid "Enable Activity Notification"
-msgstr ""
+#, fuzzy
+msgid "Add Activity Entries for Likes"
+msgstr "アクティビティのいいねログ"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:300
-msgid "Insert new likes in buddyPress activity page"
+msgid "Create a BuddyPress activity item when someone likes content."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:310
@@ -893,19 +931,20 @@ msgid "Comment Activity Text"
 msgstr "コメントアクティビティのテキスト"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:329
-msgid "Enable User Notification"
+msgid "Enable User Notifications"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:330
-msgid "Sends out notifications when you get a like from someone"
+#, fuzzy
+msgid "Send a notification when your content receives a like."
 msgstr "誰かからいいねを取得したときに通知を送信"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:335
-msgid "Disable Notification Types"
+msgid "Disable User Notifications On"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:336
-msgid "With this option, you can disable user notification on content types."
+msgid "Choose where user notifications are disabled."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:349
@@ -925,10 +964,6 @@ msgstr ""
 #: admin/classes/class-wp-ulike-widget.php:233
 msgid "bbPress"
 msgstr "bbPress"
-
-#: admin/classes/class-wp-ulike-admin-panel.php:371
-msgid "Content Types"
-msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:384
 msgid "Read More"
@@ -1124,9 +1159,7 @@ msgid "Enable Inline Custom CSS"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:649
-msgid ""
-"If you don't want to use \"custom.css\" file for any reason, by activating "
-"this option, the styles will be added to the page as inline."
+msgid "If you prefer not to load custom.css, output styles inline on the page."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:656
@@ -1162,12 +1195,13 @@ msgid "Select a Template"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:726
-msgid "Display online preview"
+msgid "Preview templates online"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:726
-msgid "Here"
-msgstr ""
+#, fuzzy
+msgid "Open preview"
+msgstr "レビュー"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:734
 msgid "Button Type"
@@ -1182,16 +1216,18 @@ msgid "Text"
 msgstr "テキスト"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:745
-msgid ""
-"Enter your custom button text in the fields above. You can also use HTML "
-"tags in these fields."
+msgid "Set custom button text. HTML is allowed."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:746
-#: admin/classes/class-wp-ulike-admin-panel.php:754
-#: admin/classes/class-wp-ulike-admin-panel.php:765
 msgid "Button Text"
 msgstr "ボタンのテキスト"
+
+#: admin/classes/class-wp-ulike-admin-panel.php:754
+#: admin/classes/class-wp-ulike-admin-panel.php:765
+#, fuzzy
+msgid "Button Label"
+msgstr "ボタンのタイプ"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:776
 #: admin/classes/class-wp-ulike-admin-panel.php:784
@@ -1200,7 +1236,8 @@ msgid "Button Image"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:809
-msgid "Automatic display"
+#, fuzzy
+msgid "Automatic Display"
 msgstr "自動表示"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:814
@@ -1220,23 +1257,25 @@ msgid "Top and Bottom"
 msgstr "最上・最下部"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:826
-msgid "Automatic Display Restriction"
-msgstr ""
+#, fuzzy
+msgid "Hide Automatic Display On"
+msgstr "自動表示"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:827
-msgid "With this option, you can disable automatic display on these pages."
+msgid "Hide the button on selected page types."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:845
-msgid "Post Types Filter"
-msgstr ""
+#, fuzzy
+msgid "Post Type Exceptions"
+msgstr "投稿タイトル"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:846
-msgid "Select a post type"
+msgid "Select post types"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:847
-msgid "Make these post types an exception and display the button on them."
+msgid "Always show the button on these post types, even if disabled elsewhere."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:857
@@ -1391,7 +1430,7 @@ msgid "Display Likers Box"
 msgstr "いいねした人欄を表示"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:949
-msgid "User List Arrange"
+msgid "Likers List Order"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:952
@@ -1408,7 +1447,7 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:967
 #, fuzzy
-msgid "Likers Box Display"
+msgid "Likers Box Layout"
 msgstr "いいねした人欄を表示"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:970
@@ -1421,15 +1460,18 @@ msgid "Popover"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:997
-msgid "Size of Gravatars"
-msgstr "Gravatars のサイズ"
+#, fuzzy
+msgid "Avatar Size"
+msgstr "サムネイル/アバターのサイズ:"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:1005
-msgid "Likers Count"
-msgstr ""
+#, fuzzy
+msgid "Likers to Show"
+msgstr "いいねした人欄を表示"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:1006
-msgid "The number of users to show in the users liked box"
+#, fuzzy
+msgid "Number of users displayed in the likers box"
 msgstr "ユーザーがいいねボックスに表示するユーザーの数"
 
 #: admin/classes/class-wp-ulike-logs.php:166
@@ -2091,6 +2133,22 @@ msgid ""
 "uri&utm_medium=wp-dash"
 msgstr ""
 
+#~ msgid "Convert numbers of Likes with string (kilobyte) format."
+#~ msgstr "いいね の数値を文字列 (キロバイト) 形式で変換します。"
+
+#~ msgid "Custom toast messages after each activity"
+#~ msgstr "各アクティビティの後のカスタムトーストメッセージ"
+
+#, fuzzy
+#~ msgid "Disable IP logging"
+#~ msgstr "プラグインファイルの無効化"
+
+#~ msgid "Disable Plugin Files"
+#~ msgstr "プラグインファイルの無効化"
+
+#~ msgid "Size of Gravatars"
+#~ msgstr "Gravatars のサイズ"
+
 #, fuzzy
 #~ msgid "Only Logged In Users"
 #~ msgstr "ユーザー名でログイン"
@@ -2126,9 +2184,6 @@ msgstr ""
 
 #~ msgid "Comment Likes Logs"
 #~ msgstr "コメントのいいねログ"
-
-#~ msgid "Activity Likes Logs"
-#~ msgstr "アクティビティのいいねログ"
 
 #~ msgid "Topics Likes Logs"
 #~ msgstr "トピックのいいねログ"
@@ -2341,9 +2396,6 @@ msgstr ""
 #~ "ている事に期待しています! &nbsp; もしそうなら、肯定的なレビューを残してく"
 #~ "れますか?それはプラグインをサポートし、他の人を助けるのに役立ちます!"
 
-#~ msgid "Anonymize the IP address for GDPR Compliance"
-#~ msgstr "GDPR遵守のためにIPアドレスを匿名化する"
-
 #~ msgid ""
 #~ "You are using two instances of WP ULike plugin at same time, please "
 #~ "deactive one of them."
@@ -2410,9 +2462,6 @@ msgstr ""
 #~ msgstr ""
 #~ "このオプションを有効にすると、ボタンの下部に気に入ったユーザーのアバターが"
 #~ "表示されます。"
-
-#~ msgid "Do Not Log"
-#~ msgstr "ログをとっていません"
 
 #~ msgid "Logged By Cookie"
 #~ msgstr "Cookie によって記録されました"
