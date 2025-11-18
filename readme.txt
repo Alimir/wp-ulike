@@ -6,7 +6,7 @@ Tags: marketing, performance, analytics, feedback, conversion
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 4.7.12
+Stable tag: 4.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,7 +94,7 @@ WP ULike runs smoothly on Apache, Nginx, LiteSpeed, Microsoft IIS, and other pop
 
 == Changelog ==
 
-= 4.7.12 =
+= 4.8.0 =
 * Improved: Removed jQuery dependency from front-end scripts. All JavaScript functionality has been rewritten in vanilla JavaScript for better performance, reduced file size, and faster page load times.
 * Improved: Admin panel settings descriptions for better clarity and user understanding.
 * Improved: Updated translation files for multiple languages.
