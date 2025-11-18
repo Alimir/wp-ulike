@@ -10,37 +10,49 @@ Stable tag: 4.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Monitor user engagement with Like/Dislike buttons on posts, comments, and forums, and gain insights through comprehensive stats.
+Add Like & Dislike buttons to your WordPress site and turn visitors into engaged fans. Track what your audience loves with built-in analytics.
 
 == Description ==
 
-Turn Visitors into Fans! **WP ULike** makes engagement effortless with **Like & Dislike buttons** for WordPress. Whether it’s blog posts, comments, WooCommerce products, BuddyPress activities, or forum topics, visitors can interact instantly.
-
-✔ **Easy to Use** – Set up in seconds with no coding required.
-✔ **Customizable** – Style buttons to match your website perfectly.
-✔ **Smart Insights** – See what your audience loves with built-in stats.
-✔ **Fast & Lightweight** – Optimized for speed and caching plugins.
-✔ **Safe & GDPR Ready** – No personal data stored, with IP anonymization.
+**Turn Visitors into Fans!** WP ULike helps you build a more engaging website by letting visitors show their appreciation with Like & Dislike buttons. See what content resonates with your audience through real-time statistics and insights.
 
 [youtube https://www.youtube.com/watch?v=nxQto2Yj_yc]
 
-### **Supercharge WP ULike with Pro Features:**
-🚀 **Advanced Stats** – Deep insights with filters and reports.
-🎨 **Premium Templates** – 25+ modern button styles.
-👤 **User Profiles** – Track likes and dislikes with personalized profiles.
-🔑 **Login/Registration Forms** – Simple, AJAX-powered with social login.
-📢 **Social Sharing** – One-click sharing for more exposure.
-⚡ **SEO-Boosting Schema** – Improve search rankings.
-📡 **Developer-Friendly** – REST API & Elementor widgets for full flexibility.
+**What You Get (Free Version):**
 
-WP ULike gives you **powerful engagement tools for free**, and **WP ULike Pro** helps you take it even further.
+✨ **Like & Dislike Buttons** – Add voting buttons to posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics
+📊 **Statistics Dashboard** – Track engagement with detailed analytics and see your most popular content
+🎨 **Customizable Templates** – Multiple button styles to match your website design
+⚡ **Fast & Lightweight** – Vanilla JavaScript (no jQuery), optimized for speed and performance
+🔒 **GDPR Ready** – IP anonymization, no personal data stored
+🌍 **Multilingual** – 20+ language translations included
+📱 **RTL Support** – Full right-to-left language support
+🔌 **Plugin Integrations** – Works seamlessly with WooCommerce, BuddyPress, bbPress, Elementor, myCRED, and more
+🎯 **Easy Setup** – No coding required, works out of the box
+📈 **Auto Display** – Automatically adds buttons to your content, or use shortcodes for manual placement
 
-🔹 **Join 80,000+ websites using WP ULike – [Download Now](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)**
+**Why Choose WP ULike?**
 
-= More Information =
+* **Trusted by 80,000+ websites** – Join a community of successful sites using WP ULike
+* **Zero Configuration** – Start engaging your audience in seconds
+* **Performance First** – Built for speed, works with all caching plugins
+* **Privacy Focused** – GDPR compliant, respects user privacy
+* **Always Improving** – Regular updates with new features and improvements
 
-* Check out our [Online Demo](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
-* Access our [Documentation](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) for tutorials and more.
+**WP ULike Pro – Take It to the Next Level**
+
+The free version gives you everything you need to start engaging your audience. WP ULike Pro extends your capabilities with professional-grade features:
+
+🚀 **Advanced Analytics** – Deep insights with filters, date ranges, and exportable reports
+🎨 **Premium Templates** – 25+ professionally designed button styles
+👤 **User Profiles** – Personalized profiles showing user likes and activity
+🔑 **Login/Registration Forms** – Beautiful, AJAX-powered forms with social login
+📢 **Social Sharing** – One-click sharing to boost your content reach
+⚡ **SEO Schema** – Structured data to improve search rankings
+📡 **REST API** – Full API access for custom integrations
+🎯 **Elementor Widgets** – Drag-and-drop widgets for Elementor page builder
+
+[See the full comparison](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) | [View Templates](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) | [Documentation](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)
 
 == Installation ==
 
@@ -75,22 +87,22 @@ For more guidance, visit our [Knowledge Base](https://docs.wpulike.com/?utm_sour
 == Frequently Asked Questions ==
 
 = Does WP ULike work with any theme? =
-Yes, it’s compatible with all WordPress themes that follow coding standards.
+Yes! WP ULike is compatible with all WordPress themes that follow coding standards. The buttons automatically adapt to your theme's styling.
 
 = Is WP ULike compatible with other plugins? =
-Absolutely! It integrates smoothly with Elementor, BuddyPress, bbPress, WooCommerce, GamiPress, myCRED, and more. If you face any issues, let us know!
+Absolutely! WP ULike integrates seamlessly with popular plugins including Elementor, BuddyPress, bbPress, WooCommerce, GamiPress, myCRED, and most caching plugins. If you encounter any compatibility issues, please let us know!
 
-= What’s the difference between WP ULike Free and Pro? =
-The Free version includes essential features, while WP ULike Pro unlocks advanced tools like up/down voting, premium templates, and an in-depth stats panel. [Learn more](https://wpulike.com/blog/wp-ulike-pro-version-vs-free/).
+= What's the difference between WP ULike Free and Pro? =
+The free version includes all essential features: like/dislike buttons, statistics dashboard, customizable templates, auto-display, shortcodes, and full plugin integrations. WP ULike Pro adds professional features like advanced analytics with filters, premium templates, user profiles, login/registration forms, social sharing, SEO schema, and REST API access. Both versions are fully functional—Pro simply extends your capabilities for more advanced use cases.
 
 = Can I use WP ULike on a multisite setup? =
-Yes, WP ULike works seamlessly across WordPress multisite networks.
+Yes! WP ULike works perfectly across WordPress multisite networks. Each site can have its own settings and statistics.
 
 = Is WP ULike secure? =
-Yes, developed by TechnoWich, WP ULike follows the latest security and coding standards, with over 80,000 active users and a high WordPress rating.
+Yes, absolutely. WP ULike is developed by TechnoWich following WordPress security best practices and coding standards. With over 80,000 active installations and a high WordPress.org rating, security is our top priority.
 
 = Which web servers does WP ULike support? =
-WP ULike runs smoothly on Apache, Nginx, LiteSpeed, Microsoft IIS, and other popular web servers.
+WP ULike runs smoothly on all popular web servers including Apache, Nginx, LiteSpeed, Microsoft IIS, and others. No special server configuration required.
 
 == Changelog ==
 
