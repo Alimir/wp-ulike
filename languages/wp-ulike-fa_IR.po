@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-11-17 20:07:21+00:00\n"
+"POT-Creation-Date: 2025-11-18 06:28:42+00:00\n"
 "PO-Revision-Date: 2025-10-16 09:29+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -166,14 +166,15 @@ msgid "for"
 msgstr "در"
 
 #: admin/admin-ajax.php:185 admin/admin-hooks.php:490 admin/admin-hooks.php:565
-#: admin/classes/class-wp-ulike-admin-panel.php:749
-#: admin/classes/class-wp-ulike-admin-panel.php:779
+#: admin/classes/class-wp-ulike-admin-panel.php:774
+#: admin/classes/class-wp-ulike-admin-panel.php:781
+#: admin/classes/class-wp-ulike-admin-panel.php:807
 #: admin/classes/class-wp-ulike-widget.php:382
 msgid "Like"
 msgstr "لایک"
 
-#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:760
-#: admin/classes/class-wp-ulike-admin-panel.php:791
+#: admin/admin-ajax.php:186 admin/classes/class-wp-ulike-admin-panel.php:786
+#: admin/classes/class-wp-ulike-admin-panel.php:820
 msgid "Unlike"
 msgstr "حذف لایک"
 
@@ -221,7 +222,7 @@ msgstr "پارسال"
 msgid "Status Filter"
 msgstr "فیلتر وضعیت"
 
-#: admin/admin-ajax.php:198 admin/classes/class-wp-ulike-admin-panel.php:371
+#: admin/admin-ajax.php:198 admin/classes/class-wp-ulike-admin-panel.php:375
 msgid "Content Types"
 msgstr "انواع محتوا"
 
@@ -290,9 +291,10 @@ msgid "Published"
 msgstr "منتشر شده"
 
 #: admin/admin-ajax.php:219 admin/admin-ajax.php:221 admin/admin-ajax.php:250
-#: admin/classes/class-wp-ulike-admin-panel.php:168
-#: admin/classes/class-wp-ulike-admin-panel.php:341
-#: admin/classes/class-wp-ulike-admin-panel.php:399
+#: admin/classes/class-wp-ulike-admin-panel.php:172
+#: admin/classes/class-wp-ulike-admin-panel.php:345
+#: admin/classes/class-wp-ulike-admin-panel.php:390
+#: admin/classes/class-wp-ulike-admin-panel.php:415
 msgid "Comments"
 msgstr "دیدگاه ها"
 
@@ -392,19 +394,20 @@ msgstr "فیلتر بر اساس نوع:"
 msgid "per page"
 msgstr "در هر صفحه"
 
-#: admin/admin-ajax.php:249 admin/classes/class-wp-ulike-admin-panel.php:167
-#: admin/classes/class-wp-ulike-admin-panel.php:340
-#: admin/classes/class-wp-ulike-admin-panel.php:391
+#: admin/admin-ajax.php:249 admin/classes/class-wp-ulike-admin-panel.php:171
+#: admin/classes/class-wp-ulike-admin-panel.php:344
+#: admin/classes/class-wp-ulike-admin-panel.php:388
+#: admin/classes/class-wp-ulike-admin-panel.php:407
 msgid "Posts"
 msgstr "نوشته ها"
 
-#: admin/admin-ajax.php:251 admin/classes/class-wp-ulike-admin-panel.php:169
-#: admin/classes/class-wp-ulike-admin-panel.php:342
+#: admin/admin-ajax.php:251 admin/classes/class-wp-ulike-admin-panel.php:173
+#: admin/classes/class-wp-ulike-admin-panel.php:346
 msgid "Activities"
 msgstr "فعالیت ها"
 
-#: admin/admin-ajax.php:252 admin/classes/class-wp-ulike-admin-panel.php:170
-#: admin/classes/class-wp-ulike-admin-panel.php:343
+#: admin/admin-ajax.php:252 admin/classes/class-wp-ulike-admin-panel.php:174
+#: admin/classes/class-wp-ulike-admin-panel.php:347
 msgid "Topics"
 msgstr "موضوع ها"
 
@@ -509,7 +512,7 @@ msgid "just now"
 msgstr "همین الان"
 
 #: admin/admin-functions.php:125
-#: admin/classes/class-wp-ulike-admin-panel.php:919
+#: admin/classes/class-wp-ulike-admin-panel.php:951
 #: includes/classes/class-wp-ulike-customizer.php:149
 msgid "Button"
 msgstr "دکمه"
@@ -574,12 +577,12 @@ msgstr ""
 "استفاده کنید."
 
 #: admin/admin-hooks.php:174 admin/admin-hooks.php:198
-#: admin/admin-hooks.php:221 admin/classes/class-wp-ulike-admin-panel.php:455
-#: admin/classes/class-wp-ulike-admin-panel.php:485
-#: admin/classes/class-wp-ulike-admin-panel.php:515
-#: admin/classes/class-wp-ulike-admin-panel.php:546
-#: admin/classes/class-wp-ulike-admin-panel.php:669
-#: admin/classes/class-wp-ulike-admin-panel.php:698
+#: admin/admin-hooks.php:221 admin/classes/class-wp-ulike-admin-panel.php:471
+#: admin/classes/class-wp-ulike-admin-panel.php:501
+#: admin/classes/class-wp-ulike-admin-panel.php:531
+#: admin/classes/class-wp-ulike-admin-panel.php:562
+#: admin/classes/class-wp-ulike-admin-panel.php:693
+#: admin/classes/class-wp-ulike-admin-panel.php:722
 msgid "Get More Information"
 msgstr "دریافت اطلاعات بیشتر"
 
@@ -707,162 +710,181 @@ msgstr "پیشوند"
 msgid "Like Prefix"
 msgstr "پیشوند"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:130
+#: admin/classes/class-wp-ulike-admin-panel.php:125
+msgid "Text shown before the like count (e.g., \"+\" displays as \"+125\")."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:131
 #, fuzzy
 msgid "Unlike Prefix"
 msgstr "حذف لایک"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:136
+#: admin/classes/class-wp-ulike-admin-panel.php:132
+msgid "Text shown before the unlike count (e.g., \"+\" displays as \"+125\")."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:138
 msgid "Suffix"
 msgstr "پسوند"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:141
+#: admin/classes/class-wp-ulike-admin-panel.php:143
 #, fuzzy
 msgid "Like Suffix"
 msgstr "پسوند"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:146
+#: admin/classes/class-wp-ulike-admin-panel.php:144
+msgid ""
+"Text shown after the like count (e.g., \" likes\" displays as \"125 likes\")."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:149
 #, fuzzy
 msgid "Unlike Suffix"
 msgstr "حذف لایک"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:155
+#: admin/classes/class-wp-ulike-admin-panel.php:150
+msgid ""
+"Text shown after the unlike count (e.g., \" likes\" displays as \"125 "
+"likes\")."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:159
 #, fuzzy
 msgid "In-app Notifications"
 msgstr "فعال کردن اعلان ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:157
+#: admin/classes/class-wp-ulike-admin-panel.php:161
 msgid "Show a brief confirmation message after users like/unlike."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:162
+#: admin/classes/class-wp-ulike-admin-panel.php:166
 #, fuzzy
 msgid "Disable Notifications On"
 msgstr "غیرفعال کردن انواع اعلان‌ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:163
+#: admin/classes/class-wp-ulike-admin-panel.php:167
 msgid "Choose where notifications should be hidden."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:177
+#: admin/classes/class-wp-ulike-admin-panel.php:181
 msgid "Anonymize IP Addresses"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:178
+#: admin/classes/class-wp-ulike-admin-panel.php:182
 msgid ""
 "Mask part of each IP address so votes cannot be traced to individual users "
 "(last octet in IPv4, last 80 bits in IPv6)."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:183
+#: admin/classes/class-wp-ulike-admin-panel.php:187
 #, fuzzy
 msgid "Do Not Store IPs"
 msgstr "وقایع نگاری نکن"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:184
+#: admin/classes/class-wp-ulike-admin-panel.php:188
 #, fuzzy
 msgid "Stop saving user IP addresses in your database."
 msgstr ""
 "از این گزینه برای غیرفعال کردن ذخیره آی‌پی کاربران در پایگاه داده خود استفاده "
 "کنید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:190
+#: admin/classes/class-wp-ulike-admin-panel.php:194
 msgid "Site Uses Caching"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:191
+#: admin/classes/class-wp-ulike-admin-panel.php:195
 msgid "Turn this on if your site uses a caching plugin or service."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:196
+#: admin/classes/class-wp-ulike-admin-panel.php:200
 #, fuzzy
 msgid "Hide Plugin Admin Notices"
 msgstr "مخفی کردن اعلان‌های مدیریت"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:197
+#: admin/classes/class-wp-ulike-admin-panel.php:201
 msgid "Completely hide WP ULike admin notices for all users."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:202
+#: admin/classes/class-wp-ulike-admin-panel.php:206
 #, fuzzy
 msgid "Disable Assets On"
 msgstr "غیرفعال کردن انواع اعلان ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:203
+#: admin/classes/class-wp-ulike-admin-panel.php:207
 msgid "Prevent loading WP ULike CSS/JS on selected page types."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:207
-#: admin/classes/class-wp-ulike-admin-panel.php:832
+#: admin/classes/class-wp-ulike-admin-panel.php:211
+#: admin/classes/class-wp-ulike-admin-panel.php:864
 msgid "Home"
 msgstr "خانه"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:208
-#: admin/classes/class-wp-ulike-admin-panel.php:833
+#: admin/classes/class-wp-ulike-admin-panel.php:212
+#: admin/classes/class-wp-ulike-admin-panel.php:865
 msgid "Singular"
 msgstr "تکی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:209
-#: admin/classes/class-wp-ulike-admin-panel.php:834
+#: admin/classes/class-wp-ulike-admin-panel.php:213
+#: admin/classes/class-wp-ulike-admin-panel.php:866
 msgid "Archives"
 msgstr "بایگانی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:210
-#: admin/classes/class-wp-ulike-admin-panel.php:835
+#: admin/classes/class-wp-ulike-admin-panel.php:214
+#: admin/classes/class-wp-ulike-admin-panel.php:867
 msgid "Categories"
 msgstr "دسته بندی ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:211
-#: admin/classes/class-wp-ulike-admin-panel.php:836
+#: admin/classes/class-wp-ulike-admin-panel.php:215
+#: admin/classes/class-wp-ulike-admin-panel.php:868
 msgid "Search Results"
 msgstr "نتایج جستجو"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:212
-#: admin/classes/class-wp-ulike-admin-panel.php:837
+#: admin/classes/class-wp-ulike-admin-panel.php:216
+#: admin/classes/class-wp-ulike-admin-panel.php:869
 msgid "Tags"
 msgstr "برچسب ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:213
-#: admin/classes/class-wp-ulike-admin-panel.php:838
+#: admin/classes/class-wp-ulike-admin-panel.php:217
+#: admin/classes/class-wp-ulike-admin-panel.php:870
 msgid "Author Page"
 msgstr "صفحه نویسنده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:214
+#: admin/classes/class-wp-ulike-admin-panel.php:218
 msgid "BuddyPress Pages"
 msgstr "صفحات بادی پرس"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:215
+#: admin/classes/class-wp-ulike-admin-panel.php:219
 msgid "bbPress Pages"
 msgstr "صفحات بی بی پرس"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:216
+#: admin/classes/class-wp-ulike-admin-panel.php:220
 msgid "WooCommerce Pages"
 msgstr "صفحات ووکامرس"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:222
+#: admin/classes/class-wp-ulike-admin-panel.php:226
 #, fuzzy
 msgid "Show Admin Columns"
 msgstr "فعال‌سازی ستون‌های مدیریت"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:223
+#: admin/classes/class-wp-ulike-admin-panel.php:227
 #, fuzzy
 msgid "Add a likes counter column to selected post types in the admin list."
 msgstr "افزودن ستون آمار شمارنده به انواع نوشتارهای انتخاب‌شده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:231
+#: admin/classes/class-wp-ulike-admin-panel.php:235
 msgid "Blacklist"
 msgstr "فهرست سیاه"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:233
+#: admin/classes/class-wp-ulike-admin-panel.php:237
 msgid "Use the WP Ulike Blacklist"
 msgstr "استفاده از فهرست سیاه وردپرس یولایک"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:234
+#: admin/classes/class-wp-ulike-admin-panel.php:238
 msgid "Use the WordPress Disallowed Comment Keys"
 msgstr "استفاده از کلیدهای دیدگاه پذیرفته نشده"
 
 #. translators: %s: Link to options-discussion.php
-#: admin/classes/class-wp-ulike-admin-panel.php:239
+#: admin/classes/class-wp-ulike-admin-panel.php:243
 #, fuzzy
 msgid ""
 "Choose which blacklist to use for voting. The %s setting is available on the "
@@ -871,15 +893,15 @@ msgstr ""
 "انتخاب کنید کدام فهرست سیاه را برای دکمه‌های رأی‌گیری می‌خواهید استفاده کنید. "
 "گزینه %s را می‌توانید در صفحه تنظیمات گفت‌وگوهای وردپرس پیدا کنید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:240
+#: admin/classes/class-wp-ulike-admin-panel.php:244
 msgid "Disallowed Comment Keys"
 msgstr "کلیدهای دیدگاه پذیرفته نشده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:246
+#: admin/classes/class-wp-ulike-admin-panel.php:250
 msgid "Blacklist Entries"
 msgstr "ورودی‌های فهرست سیاه"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:247
+#: admin/classes/class-wp-ulike-admin-panel.php:251
 #, fuzzy
 msgid ""
 "Enter one IP address per line. Votes from matching IPs will be rejected."
@@ -887,119 +909,153 @@ msgstr ""
 "هر خط یک آدرس آی‌پی. هنگامی که رأی شامل هر یک از این ورودی‌ها در آدرس آی‌پی خود "
 "باشد، رد خواهد شد."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:264
+#: admin/classes/class-wp-ulike-admin-panel.php:268
 msgid "Enable WPML Synchronization"
 msgstr "فعال کردن همگام سازی WPML"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:265
+#: admin/classes/class-wp-ulike-admin-panel.php:269
 #, fuzzy
 msgid "Sync likes for translated post types when using the WPML plugin."
 msgstr "همگام‌سازی تعاملات انواع نوشتارها که با افزونه WPML ترجمه شده‌اند."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:277
+#: admin/classes/class-wp-ulike-admin-panel.php:281
 #, fuzzy
 msgid "Show Admin Column"
 msgstr "فعال‌سازی ستون‌های مدیریت"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:278
+#: admin/classes/class-wp-ulike-admin-panel.php:282
 #, fuzzy
 msgid "Add a likes counter column to the comments list."
 msgstr "افزودن ستون آمار شمارنده به فهرست دیدگاه‌های پیشخوان."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:286
+#: admin/classes/class-wp-ulike-admin-panel.php:290
 msgid "Activity Content"
 msgstr "محتوای فعالیت"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:287
+#: admin/classes/class-wp-ulike-admin-panel.php:291
 msgid "Activity Meta"
 msgstr "اطلاعات متا فعالیت"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:293
+#: admin/classes/class-wp-ulike-admin-panel.php:297
 #, fuzzy
 msgid "Enable Activity Comment Likes"
 msgstr "فعال‌سازی دیدگاه فعالیت"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:294
+#: admin/classes/class-wp-ulike-admin-panel.php:298
 #, fuzzy
 msgid "Allow liking BuddyPress comments in the activity stream."
 msgstr ""
 "با فعال سازی این گزینه،‌ سیستم لایک در بخش دیدگاه های مربوط به بادی پرس فعال "
 "می شود"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:299
+#: admin/classes/class-wp-ulike-admin-panel.php:303
 #, fuzzy
 msgid "Add Activity Entries for Likes"
 msgstr "وقایع لایک در فعالیت ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:300
+#: admin/classes/class-wp-ulike-admin-panel.php:304
 msgid "Create a BuddyPress activity item when someone likes content."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:310
+#: admin/classes/class-wp-ulike-admin-panel.php:314
 msgid "Post Activity Text"
 msgstr "متن فعالیت پست"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:311
-#: admin/classes/class-wp-ulike-admin-panel.php:323
-#: admin/classes/class-wp-ulike-admin-panel.php:927
-#: admin/classes/class-wp-ulike-admin-panel.php:984
+#: admin/classes/class-wp-ulike-admin-panel.php:315
+#: admin/classes/class-wp-ulike-admin-panel.php:327
+#: admin/classes/class-wp-ulike-admin-panel.php:959
+#: admin/classes/class-wp-ulike-admin-panel.php:1019
 msgid "Allowed Variables:"
 msgstr "متغیرهای مجاز:"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:322
+#: admin/classes/class-wp-ulike-admin-panel.php:326
 msgid "Comment Activity Text"
 msgstr "متن فعالیت دیدگاه ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:329
+#: admin/classes/class-wp-ulike-admin-panel.php:333
 #, fuzzy
 msgid "Enable User Notifications"
 msgstr "اعلان کاربر را فعال کنید"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:330
+#: admin/classes/class-wp-ulike-admin-panel.php:334
 #, fuzzy
 msgid "Send a notification when your content receives a like."
 msgstr "هنگامی که از سوی کسی لایک دریافت می‌کنید، اعلان ارسال می‌کند"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:335
+#: admin/classes/class-wp-ulike-admin-panel.php:339
 #, fuzzy
 msgid "Disable User Notifications On"
 msgstr "اعلان کاربر را فعال کنید"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:336
+#: admin/classes/class-wp-ulike-admin-panel.php:340
 msgid "Choose where user notifications are disabled."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:349
-#: admin/classes/class-wp-ulike-admin-panel.php:406
+#: admin/classes/class-wp-ulike-admin-panel.php:353
+#: admin/classes/class-wp-ulike-admin-panel.php:392
+#: admin/classes/class-wp-ulike-admin-panel.php:422
 #: admin/classes/class-wp-ulike-widget.php:293
 #: admin/classes/class-wp-ulike-widget.php:583
 msgid "BuddyPress"
 msgstr "بادی پرس"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:349
-#: admin/classes/class-wp-ulike-admin-panel.php:362
+#: admin/classes/class-wp-ulike-admin-panel.php:353
+#: admin/classes/class-wp-ulike-admin-panel.php:366
 msgid "plugin is not installed or activated"
 msgstr "افزونه نصب یا فعال نشده است"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:362
-#: admin/classes/class-wp-ulike-admin-panel.php:413
+#: admin/classes/class-wp-ulike-admin-panel.php:366
+#: admin/classes/class-wp-ulike-admin-panel.php:394
+#: admin/classes/class-wp-ulike-admin-panel.php:429
 #: admin/classes/class-wp-ulike-widget.php:233
 msgid "bbPress"
 msgstr "بی بی پرس"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:384
+#: admin/classes/class-wp-ulike-admin-panel.php:387
+msgid ""
+"Customize how the like button appears and behaves for different types of "
+"content on your site. Each content type below has its own settings that you "
+"can configure independently."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:389
+msgid ""
+"Configure likes for blog posts, pages, and custom post types (including "
+"WooCommerce products). Control where the button appears, who can vote, and "
+"how votes are displayed."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:391
+msgid ""
+"Enable likes on comments throughout your site. Perfect for engaging "
+"discussions and highlighting popular comments."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:393
+msgid ""
+"Add likes to BuddyPress activities and activity comments. Optionally create "
+"activity updates and send notifications when content is liked."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:395
+msgid ""
+"Enable likes on forum topics and replies. Help community members identify "
+"helpful and popular forum content."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:399
 msgid "Read More"
 msgstr "بیشتر بخوانید"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:422
+#: admin/classes/class-wp-ulike-admin-panel.php:438
 msgid "Integrations"
 msgstr "ادغام ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:427
+#: admin/classes/class-wp-ulike-admin-panel.php:443
 msgid "Enable Old Meta Values"
 msgstr "فعال کردن مقادیر متا قدیمی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:428
+#: admin/classes/class-wp-ulike-admin-panel.php:444
 msgid ""
 "By activating this option, users who have upgraded to version +4 and deleted "
 "their old logs can add the number of old likes to the new figures."
@@ -1008,7 +1064,7 @@ msgstr ""
 "خود را حذف کرده اند، می توانند تعداد لایک های قدیمی را به ارقام جدید اضافه "
 "کنند."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:428
+#: admin/classes/class-wp-ulike-admin-panel.php:444
 msgid ""
 "Attention: If you have been using WP ULike +v4 from the beginning Or you "
 "haven't deleted any logs yet, do not enable this option."
@@ -1016,11 +1072,11 @@ msgstr ""
 "توجه: اگر از ابتدا از WP ULike +v4 استفاده کرده اید یا هنوز هیچ گزارشی را "
 "حذف نکرده اید، این گزینه را فعال نکنید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:433
+#: admin/classes/class-wp-ulike-admin-panel.php:449
 msgid "Enable Deprecated Options"
 msgstr "فعال کردن تنظیمات منسوخ شده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:434
+#: admin/classes/class-wp-ulike-admin-panel.php:450
 msgid ""
 "By activating this option, users who have upgraded to version +4.1 and lost "
 "their old options can restore and enable previous settings."
@@ -1028,7 +1084,7 @@ msgstr ""
 "با فعال کردن این گزینه، کاربرانی که به نسخه +4.1 ارتقا یافته اند و گزینه های "
 "قدیمی خود را گم کرده اند، می توانند تنظیمات قبلی را بازیابی و فعال کنند."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:434
+#: admin/classes/class-wp-ulike-admin-panel.php:450
 msgid ""
 "Attention: If you have been using WP ULike +v4.1 from the beginning, do not "
 "enable this option."
@@ -1036,15 +1092,15 @@ msgstr ""
 "توجه: اگر از ابتدا از WP ULike +v4.1 استفاده کرده اید، این گزینه را فعال "
 "نکنید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:442
+#: admin/classes/class-wp-ulike-admin-panel.php:458
 msgid "Profiles"
 msgstr "پروفایل‌ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:449
+#: admin/classes/class-wp-ulike-admin-panel.php:465
 msgid "How to Create Ultimate User Profiles with WP ULike?"
 msgstr "چگونه با WP ULike پروفایل های کاربری ایجاد کنیم؟"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:450
+#: admin/classes/class-wp-ulike-admin-panel.php:466
 msgid ""
 "The simplest way to create your own WordPress user profile page is by using "
 "the WP ULike Profile builder. This way, you can create professional profiles "
@@ -1056,15 +1112,15 @@ msgstr ""
 "استفاده از توابع پیشرفته، پروفایل های حرفه ای ایجاد کرده و در قسمت جلوی وب "
 "سایت خود نمایش دهید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:472
+#: admin/classes/class-wp-ulike-admin-panel.php:488
 msgid "Login & Signup"
 msgstr "ورود و ثبت نام"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:479
+#: admin/classes/class-wp-ulike-admin-panel.php:495
 msgid "How to make AJAX Based Login/Registration system?"
 msgstr "چگونه یک سیستم ورود/ثبت‌نام مبتنی بر AJAX ایجاد کنیم؟"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:480
+#: admin/classes/class-wp-ulike-admin-panel.php:496
 msgid ""
 "Transform your default WordPress login, registration, and reset password "
 "forms with the new WP ULike Pro features. In this section, we provide you "
@@ -1076,15 +1132,15 @@ msgstr ""
 "با استفاده از آنها می توانید فرم های مدرن و مبتنی بر ajax را در صفحات خود "
 "تنها با چند کلیک ساده ایجاد کنید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:502
+#: admin/classes/class-wp-ulike-admin-panel.php:518
 msgid "Social Logins"
 msgstr "ورود از طریق شبکه‌های اجتماعی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:509
+#: admin/classes/class-wp-ulike-admin-panel.php:525
 msgid "Social Logins Integration with Your WordPress Site"
 msgstr "ادغام ورود از طریق شبکه‌های اجتماعی با سایت وردپرس شما"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:510
+#: admin/classes/class-wp-ulike-admin-panel.php:526
 msgid ""
 "In the fast-evolving world of website development, staying ahead is crucial. "
 "WP ULike Pro's latest update introduces a potent social logins integration "
@@ -1100,15 +1156,15 @@ msgstr ""
 "بی‌نظیری را ارائه می‌دهد. در این مقاله، به ویژگی‌های پیشگامانه‌ای می‌پردازیم که "
 "تجربه کاربران وردپرس را متحول می‌کنند."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:533
+#: admin/classes/class-wp-ulike-admin-panel.php:549
 msgid "Share Buttons"
 msgstr "دکمه‌های اشتراک‌گذاری"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:540
+#: admin/classes/class-wp-ulike-admin-panel.php:556
 msgid "Easy Social Share Buttons for WordPress"
 msgstr "دکمه‌های اشتراک‌گذاری آسان شبکه‌های اجتماعی برای وردپرس"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:541
+#: admin/classes/class-wp-ulike-admin-panel.php:557
 msgid ""
 "WP ULike Share buttons enables your website users to share the content over "
 "Facebook, Twitter, Google, Linkedin, Whatsapp, Tumblr, Pinterest, Reddit and "
@@ -1121,101 +1177,138 @@ msgstr ""
 "روان‌ترین روش اشتراک‌گذاری اجتماعی است که با آیکون‌های برداری بهینه و زیبا "
 "ارائه می‌شود."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:565
+#: admin/classes/class-wp-ulike-admin-panel.php:581
 msgid "Translations"
 msgstr "ترجمه ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:574
+#: admin/classes/class-wp-ulike-admin-panel.php:590
 msgid "Strings"
 msgstr "رشته ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:580
+#: admin/classes/class-wp-ulike-admin-panel.php:596
 #: includes/classes/class-wp-ulike-setting-repo.php:35
 msgid "Your vote cannot be submitted at this time."
 msgstr "در حال حاضر امکان ثبت رأی شما وجود ندارد."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:581
+#: admin/classes/class-wp-ulike-admin-panel.php:597
 msgid "Validation Notice Message"
 msgstr "پیغام هشدار اعتبارسنجی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:586
+#: admin/classes/class-wp-ulike-admin-panel.php:598
+msgid "Message shown when a vote cannot be processed due to validation errors."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:603
 #: includes/classes/class-wp-ulike-setting-repo.php:44
 msgid "You have already registered a vote."
 msgstr "شما قبلاً رأی خود را ثبت کرده‌اید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:587
+#: admin/classes/class-wp-ulike-admin-panel.php:604
 msgid "Already Voted Message"
 msgstr "پیغام قبلاً رأی داده‌ شده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:592
+#: admin/classes/class-wp-ulike-admin-panel.php:605
+msgid "Message shown when a user tries to vote again after already voting."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:610
 #: includes/classes/class-wp-ulike-setting-repo.php:26
 msgid "You Should Login To Submit Your Like"
 msgstr "برای ثبت لایک خود باید وارد شوید"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:593
+#: admin/classes/class-wp-ulike-admin-panel.php:611
 msgid "Login Required Message"
 msgstr "پیغام نیاز به ورود"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:598
+#: admin/classes/class-wp-ulike-admin-panel.php:612
+msgid "Message shown to visitors who need to log in before they can vote."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:617
 #: includes/classes/class-wp-ulike-setting-repo.php:53
 msgid "Thanks! You Liked This."
 msgstr "متشکریم! شما این مورد را لایک کردید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:599
+#: admin/classes/class-wp-ulike-admin-panel.php:618
 msgid "Liked Notice Message"
 msgstr "پیغام تأیید لایک"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:604
+#: admin/classes/class-wp-ulike-admin-panel.php:619
+msgid "Confirmation message shown after a user successfully likes content."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:624
 #: includes/classes/class-wp-ulike-setting-repo.php:62
 msgid "Sorry! You unliked this."
 msgstr "متأسفیم! شما این مورد را از لایک خارج کردید."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:605
+#: admin/classes/class-wp-ulike-admin-panel.php:625
 msgid "Unliked Notice Message"
 msgstr "پیغام حذف لایک"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:610
+#: admin/classes/class-wp-ulike-admin-panel.php:626
+msgid "Confirmation message shown after a user removes their like."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:631
 #: includes/classes/class-wp-ulike-setting-repo.php:71
 msgid "Like Button"
 msgstr "دکمه لایک"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:611
+#: admin/classes/class-wp-ulike-admin-panel.php:632
 msgid "Like Button Aria Label"
 msgstr "برچسب ARIA دکمه لایک"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:621
+#: admin/classes/class-wp-ulike-admin-panel.php:633
+msgid ""
+"Accessibility label for screen readers. Helps visually impaired users "
+"understand what the button does."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:643
 msgid "Developer Tools"
 msgstr "ابزارهای توسعه‌دهنده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:627
+#: admin/classes/class-wp-ulike-admin-panel.php:649
 msgid "Scripts"
 msgstr "اسکریپت ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:636
+#: admin/classes/class-wp-ulike-admin-panel.php:658
 msgid "Custom CSS"
 msgstr "‫CSS سفارشی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:641
+#: admin/classes/class-wp-ulike-admin-panel.php:659
+msgid ""
+"Add custom CSS to style the like button and related elements. This CSS will "
+"be loaded on all pages."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:664
 msgid "Custom Spinner"
 msgstr "بارگذاری سفارشی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:648
+#: admin/classes/class-wp-ulike-admin-panel.php:665
+msgid ""
+"Upload a custom loading animation image that appears while processing votes."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:672
 msgid "Enable Inline Custom CSS"
 msgstr "فعال‌سازی CSS سفارشی درون‌خطی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:649
+#: admin/classes/class-wp-ulike-admin-panel.php:673
 msgid "If you prefer not to load custom.css, output styles inline on the page."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:656
+#: admin/classes/class-wp-ulike-admin-panel.php:680
 msgid "REST API"
 msgstr "تنظیمات Rest API"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:663
+#: admin/classes/class-wp-ulike-admin-panel.php:687
 msgid "How to Get Started with WP ULike REST API?"
 msgstr "چگونه با REST API وردپرس یولایک شروع کنیم؟"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:664
+#: admin/classes/class-wp-ulike-admin-panel.php:688
 msgid ""
 "Have you ever tried to get data from online sources like WP ULike logs and "
 "use them in your Application or website? the solution is Rest API!"
@@ -1224,15 +1317,15 @@ msgstr ""
 "ULike دریافت کنید و از آنها در برنامه یا وب سایت خود استفاده کنید؟ راه حل "
 "Rest API است!"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:685
+#: admin/classes/class-wp-ulike-admin-panel.php:709
 msgid "Optimization"
 msgstr "بهینه سازی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:692
+#: admin/classes/class-wp-ulike-admin-panel.php:716
 msgid "How to Optimize or Repair WP ULike Database Tables?"
 msgstr "چگونه جداول پایگاه داده وردپرس یولایک را بهینه‌سازی یا تعمیر کنیم؟"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:693
+#: admin/classes/class-wp-ulike-admin-panel.php:717
 msgid ""
 "Have you ever optimized your WP ULike database? Optimizing your database "
 "cleans up unwanted data which reduces database size and improves performance."
@@ -1241,126 +1334,167 @@ msgstr ""
 "پایگاه داده، داده‌های غیرضروری را پاک می‌کند، که باعث کاهش حجم پایگاه داده و "
 "بهبود عملکرد می‌شود."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:725
+#: admin/classes/class-wp-ulike-admin-panel.php:749
 msgid "Select a Template"
 msgstr "انتخاب یک قالب"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:726
+#: admin/classes/class-wp-ulike-admin-panel.php:750
 msgid "Preview templates online"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:726
+#: admin/classes/class-wp-ulike-admin-panel.php:750
 #, fuzzy
 msgid "Open preview"
 msgstr "نمای کلی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:734
+#: admin/classes/class-wp-ulike-admin-panel.php:758
 msgid "Button Type"
 msgstr "حالت دکمه"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:737
+#: admin/classes/class-wp-ulike-admin-panel.php:759
+msgid "Choose whether to display an image icon or text label on the button."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:762
 msgid "Image"
 msgstr "تصویر"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:738
+#: admin/classes/class-wp-ulike-admin-panel.php:763
 msgid "Text"
 msgstr "متن"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:745
+#: admin/classes/class-wp-ulike-admin-panel.php:770
 msgid "Set custom button text. HTML is allowed."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:746
+#: admin/classes/class-wp-ulike-admin-panel.php:771
 msgid "Button Text"
 msgstr "متن دکمه"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:754
-#: admin/classes/class-wp-ulike-admin-panel.php:765
+#: admin/classes/class-wp-ulike-admin-panel.php:779
+#: admin/classes/class-wp-ulike-admin-panel.php:791
 #, fuzzy
 msgid "Button Label"
 msgstr "تصویر دکمه"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:776
-#: admin/classes/class-wp-ulike-admin-panel.php:784
-#: admin/classes/class-wp-ulike-admin-panel.php:796
+#: admin/classes/class-wp-ulike-admin-panel.php:780
+msgid "Text displayed on the like button (e.g., \"Like\", \"👍\", \"Love\")."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:792
+msgid ""
+"Text displayed on the button after liking (e.g., \"Liked\", \"❤️\", "
+"\"Unlike\")."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:793
+#, fuzzy
+msgid "Liked"
+msgstr "لایک"
+
+#: admin/classes/class-wp-ulike-admin-panel.php:803
+#: admin/classes/class-wp-ulike-admin-panel.php:812
+#: admin/classes/class-wp-ulike-admin-panel.php:825
 msgid "Button Image"
 msgstr "تصویر دکمه"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:809
+#: admin/classes/class-wp-ulike-admin-panel.php:804
+msgid "Upload custom images for the like and unlike button states."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:813
+msgid "Upload an image icon for the like button state."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:826
+msgid "Upload an image icon for the unlike/liked button state."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:839
 #, fuzzy
 msgid "Automatic Display"
 msgstr "نمایش خودکار"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:814
+#: admin/classes/class-wp-ulike-admin-panel.php:840
+msgid ""
+"Automatically show the like button on your content without manually adding "
+"shortcodes."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:845
 msgid "Button Position"
 msgstr "موقعیت دکمه"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:817
+#: admin/classes/class-wp-ulike-admin-panel.php:846
+msgid "Choose where the like button appears relative to your content."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:849
 msgid "Top of Content"
 msgstr "بالای محتوا"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:818
+#: admin/classes/class-wp-ulike-admin-panel.php:850
 msgid "Bottom of Content"
 msgstr "پایین محتوا"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:819
+#: admin/classes/class-wp-ulike-admin-panel.php:851
 msgid "Top and Bottom"
 msgstr "بالا و پایین"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:826
+#: admin/classes/class-wp-ulike-admin-panel.php:858
 #, fuzzy
 msgid "Hide Automatic Display On"
 msgstr "نمایش خودکار"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:827
+#: admin/classes/class-wp-ulike-admin-panel.php:859
 #, fuzzy
 msgid "Hide the button on selected page types."
 msgstr "افزودن ستون آمار شمارنده به انواع نوشتارهای انتخاب‌شده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:845
+#: admin/classes/class-wp-ulike-admin-panel.php:877
 #, fuzzy
 msgid "Post Type Exceptions"
 msgstr "انواع نوشته ها"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:846
+#: admin/classes/class-wp-ulike-admin-panel.php:878
 #, fuzzy
 msgid "Select post types"
 msgstr "انتخاب یک نوع نوشته"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:847
+#: admin/classes/class-wp-ulike-admin-panel.php:879
 msgid "Always show the button on these post types, even if disabled elsewhere."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:857
+#: admin/classes/class-wp-ulike-admin-panel.php:889
 msgid "Control when the vote counter is shown next to the button."
 msgstr "کنترل زمان نمایش شمارنده رأی در کنار دکمه."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:858
+#: admin/classes/class-wp-ulike-admin-panel.php:890
 msgid "Counter Display"
 msgstr "نمایش شمارنده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:861
+#: admin/classes/class-wp-ulike-admin-panel.php:893
 msgid "Always Visible"
 msgstr "همیشه قابل مشاهده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:862
+#: admin/classes/class-wp-ulike-admin-panel.php:894
 msgid "Hidden"
 msgstr "مخفی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:863
-#: admin/classes/class-wp-ulike-admin-panel.php:909
+#: admin/classes/class-wp-ulike-admin-panel.php:895
+#: admin/classes/class-wp-ulike-admin-panel.php:941
 msgid "Restrict to Logged-in Users"
 msgstr "محدود کردن برای کاربران وارد شده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:869
+#: admin/classes/class-wp-ulike-admin-panel.php:901
 msgid "Hide Zero Counter"
 msgstr "پنهان کردن شمارنده صفر"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:870
+#: admin/classes/class-wp-ulike-admin-panel.php:902
 msgid "Hide the vote counter when no votes have been submitted."
 msgstr "پنهان کردن شمارنده رأی هنگامی که هیچ رأیی ثبت نشده است."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:876
+#: admin/classes/class-wp-ulike-admin-panel.php:908
 msgid ""
 "Select how votes are tracked. You can allow unlimited votes, or restrict "
 "users using cookies, their username/IP, or both to prevent duplicate or "
@@ -1370,27 +1504,27 @@ msgstr ""
 "رأی دهند، یا با استفاده از کوکی‌ها، نام کاربری/IP آن‌ها، یا هر دو، کاربران را "
 "محدود کنید تا از رأی‌های تکراری جلوگیری شود."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:877
+#: admin/classes/class-wp-ulike-admin-panel.php:909
 msgid "Logging Method"
 msgstr "روش وقایع نگاری"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:879
+#: admin/classes/class-wp-ulike-admin-panel.php:911
 msgid "No Limit"
 msgstr "بدون محدودیت"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:880
+#: admin/classes/class-wp-ulike-admin-panel.php:912
 msgid "Cookie"
 msgstr "کوکی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:881
+#: admin/classes/class-wp-ulike-admin-panel.php:913
 msgid "Username/IP"
 msgstr "نام کاربری/IP"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:882
+#: admin/classes/class-wp-ulike-admin-panel.php:914
 msgid "Username/IP + Cookie"
 msgstr "نام کاربری/IP + کوکی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:885
+#: admin/classes/class-wp-ulike-admin-panel.php:917
 msgid ""
 "\"No Limit\": There will be no restrictions and users can submit their "
 "points each time they refresh the page. In this option, it will not be "
@@ -1400,7 +1534,7 @@ msgstr ""
 "که صفحه را به روز می کنند امتیاز خود را ارسال کنند. در این گزینه امکان ارسال "
 "مجدد نقاط معکوس (un-like/un-dislike) وجود نخواهد داشت."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:885
+#: admin/classes/class-wp-ulike-admin-panel.php:917
 msgid ""
 "\"Cookie\": By saving users' cookies, it is possible to submit points only "
 "once per user and in case of re-clicking, the appropriate message will be "
@@ -1409,7 +1543,7 @@ msgstr ""
 "\"کوکی\": با ذخیره کوکی های کاربران، امکان ارسال امتیاز به ازای هر کاربر "
 "تنها یک بار وجود دارد و در صورت کلیک مجدد، پیام مناسب نمایش داده می شود."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:885
+#: admin/classes/class-wp-ulike-admin-panel.php:917
 msgid ""
 "Username/IP: By saving the username/IP of users, It supports the reverse "
 "feature  (un-like and un-dislike) and users can change their reactions and "
@@ -1419,7 +1553,7 @@ msgstr ""
 "dislike) پشتیبانی می کند و کاربران می توانند واکنش های خود را تغییر دهند و "
 "فقط مجاز به داشتن یک نوع نقطه خاص هستند."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:885
+#: admin/classes/class-wp-ulike-admin-panel.php:917
 msgid ""
 "Username/IP + Cookie: Same as username/IP description, However, if the user "
 "IP or username changes and the cookie is set, it does not allow the user to "
@@ -1429,24 +1563,26 @@ msgstr ""
 "کاربر تغییر کند و کوکی تنظیم شود، به کاربر اجازه نمی دهد که دوست نداشته "
 "باشد /."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:890
+#: admin/classes/class-wp-ulike-admin-panel.php:922
 msgid "Cookie Expiration"
 msgstr "انقضا کوکی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:891
-msgid "Specify how long, in seconds, cookie expires. Default value: 31536000"
+#: admin/classes/class-wp-ulike-admin-panel.php:923
+#, fuzzy
+msgid ""
+"Specify how long, in seconds, the cookie expires. Default: 31536000 (1 year)."
 msgstr ""
 "مدت زمان منقضی شدن کوکی در چند ثانیه را مشخص کنید. مقدار پیش فرض: 31536000"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:898
+#: admin/classes/class-wp-ulike-admin-panel.php:930
 msgid "Maximum Votes Allowed"
 msgstr "حداکثر تعداد رأی مجاز"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:899
+#: admin/classes/class-wp-ulike-admin-panel.php:931
 msgid "Sets a maximum number of votes each user can submit on an item."
 msgstr "تعیین حداکثر تعداد رأیی که هر کاربر می‌تواند برای یک مورد ثبت کند."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:910
+#: admin/classes/class-wp-ulike-admin-panel.php:942
 msgid ""
 "We recommend enabling this to prevent fake votes that can be generated by "
 "changing IP addresses."
@@ -1454,11 +1590,11 @@ msgstr ""
 "توصیه می‌کنیم این گزینه را فعال کنید تا از رأی‌های جعلی که می‌توان با تغییر "
 "آدرس IP ایجاد کرد، جلوگیری شود."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:915
+#: admin/classes/class-wp-ulike-admin-panel.php:947
 msgid "Logged-out Button Display"
 msgstr "نمایش دکمه برای کاربران خارج شده"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:916
+#: admin/classes/class-wp-ulike-admin-panel.php:948
 msgid ""
 "Choose how the vote button is shown to users who aren't logged in—either as "
 "a standard button or a template message prompting login."
@@ -1466,26 +1602,26 @@ msgstr ""
 "نحوه نمایش دکمه رأی را برای کاربرانی که وارد نشده‌اند انتخاب کنید—یا به صورت "
 "دکمه استاندارد، یا به شکل پیغام قالبی که کاربر را به ورود تشویق می‌کند."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:918
+#: admin/classes/class-wp-ulike-admin-panel.php:950
 msgid "Template"
 msgstr "قالب"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:933
+#: admin/classes/class-wp-ulike-admin-panel.php:965
 #: includes/classes/class-wp-ulike-setting-repo.php:191
 msgid "You need to login in order to like this post: "
 msgstr "برای لایک کردن این مطلب، باید وارد شوید: "
 
-#: admin/classes/class-wp-ulike-admin-panel.php:935
+#: admin/classes/class-wp-ulike-admin-panel.php:967
 #: includes/classes/class-wp-ulike-setting-repo.php:193
 msgid "click here"
 msgstr "اینجا کلیک کنید"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:937
-#: admin/classes/class-wp-ulike-admin-panel.php:983
+#: admin/classes/class-wp-ulike-admin-panel.php:969
+#: admin/classes/class-wp-ulike-admin-panel.php:1018
 msgid "Custom HTML Template"
 msgstr "قالب HTML سفارشی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:943
+#: admin/classes/class-wp-ulike-admin-panel.php:975
 msgid ""
 "Display a list of users who have voted, allowing you to see who engaged with "
 "each item."
@@ -1493,51 +1629,72 @@ msgstr ""
 "نمایش فهرستی از کاربرانی که رأی داده‌اند، تا بتوانید ببینید هر مورد با چه "
 "کاربرانی تعامل داشته است."
 
-#: admin/classes/class-wp-ulike-admin-panel.php:944
+#: admin/classes/class-wp-ulike-admin-panel.php:976
 msgid "Display Likers Box"
 msgstr "نمایش باکس مشارکت کنندگان"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:949
+#: admin/classes/class-wp-ulike-admin-panel.php:981
 msgid "Likers List Order"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:952
+#: admin/classes/class-wp-ulike-admin-panel.php:982
+msgid ""
+"Sort users in the likers box by newest first (descending) or oldest first "
+"(ascending)."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:985
 msgid "Ascending"
 msgstr "صعودی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:953
+#: admin/classes/class-wp-ulike-admin-panel.php:986
 msgid "Descending"
 msgstr "نزولی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:961
+#: admin/classes/class-wp-ulike-admin-panel.php:994
 msgid "Hide For Anonymous Users"
 msgstr "مخفی کردن برای کاربران ناشناس"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:967
+#: admin/classes/class-wp-ulike-admin-panel.php:995
+msgid "Hide the likers box from visitors who are not logged in."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:1001
 #, fuzzy
 msgid "Likers Box Layout"
 msgstr "نحوه نمایش باکس مشارکت کنندگان"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:970
+#: admin/classes/class-wp-ulike-admin-panel.php:1002
+msgid ""
+"Inline: Show avatars directly below the button. Popover: Show avatars in a "
+"popup when hovering over the counter."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:1005
 msgid "Inline"
 msgstr "درون خطی"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:971
+#: admin/classes/class-wp-ulike-admin-panel.php:1006
 #: includes/classes/class-wp-ulike-customizer.php:558
 msgid "Popover"
 msgstr "شناور"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:997
+#: admin/classes/class-wp-ulike-admin-panel.php:1032
 #, fuzzy
 msgid "Avatar Size"
 msgstr "اندازه تصویر کوچک/آواتار:"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1005
+#: admin/classes/class-wp-ulike-admin-panel.php:1033
+#, fuzzy
+msgid "Set the size of user avatars displayed in the likers box."
+msgstr "تعداد کاربرانی که باید در باکس مشارکت کنندگان نشان داده شوند"
+
+#: admin/classes/class-wp-ulike-admin-panel.php:1041
 #, fuzzy
 msgid "Likers to Show"
 msgstr "باکس مشارکت کنندگان"
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1006
+#: admin/classes/class-wp-ulike-admin-panel.php:1042
 #, fuzzy
 msgid "Number of users displayed in the likers box"
 msgstr "تعداد کاربرانی که باید در باکس مشارکت کنندگان نشان داده شوند"
