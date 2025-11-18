@@ -122,12 +122,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                         'id'      => 'like_prefix',
                                         'type'    => 'text',
                                         'title'   => esc_html__('Like Prefix','wp-ulike'),
+                                        'desc'    => esc_html__('Text shown before the like count (e.g., "+" displays as "+125").', 'wp-ulike'),
                                         'default' => '+'
                                     ),
                                     array(
                                         'id'      => 'unlike_prefix',
                                         'type'    => 'text',
                                         'title'   => esc_html__('Unlike Prefix','wp-ulike'),
+                                        'desc'    => esc_html__('Text shown before the unlike count (e.g., "+" displays as "+125").', 'wp-ulike'),
                                         'default' => '+'
                                     ),
                                 ), 'prefix' )
@@ -138,12 +140,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     array(
                                         'id'      => 'like_postfix',
                                         'type'    => 'text',
-                                        'title'   => esc_html__('Like Suffix','wp-ulike')
+                                        'title'   => esc_html__('Like Suffix','wp-ulike'),
+                                        'desc'    => esc_html__('Text shown after the like count (e.g., " likes" displays as "125 likes").', 'wp-ulike')
                                     ),
                                     array(
                                         'id'      => 'unlike_postfix',
                                         'type'    => 'text',
-                                        'title'   => esc_html__('Unlike Suffix','wp-ulike')
+                                        'title'   => esc_html__('Unlike Suffix','wp-ulike'),
+                                        'desc'    => esc_html__('Text shown after the unlike count (e.g., " likes" displays as "125 likes").', 'wp-ulike')
                                     ),
                                 ), 'postfix' )
                             ),
@@ -634,11 +638,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'mode'   => 'css',
                         ),
                         'title' => esc_html__('Custom CSS','wp-ulike'),
+                        'desc'  => esc_html__('Add custom CSS to style the like button and related elements. This CSS will be loaded on all pages.', 'wp-ulike'),
                     ),
                     array(
                         'id'           => 'custom_spinner',
                         'type'         => 'upload',
                         'title'        => esc_html__('Custom Spinner','wp-ulike'),
+                        'desc'         => esc_html__('Upload a custom loading animation image that appears while processing votes.', 'wp-ulike'),
                         'library'      => 'image',
                         'placeholder'  => 'http://'
                     ),
@@ -732,6 +738,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'         => 'button_type',
                     'type'       => 'button_set',
                     'title'      => esc_html__( 'Button Type', 'wp-ulike'),
+                    'desc'       => esc_html__('Choose whether to display an image icon or text label on the button.', 'wp-ulike'),
                     'default'    => 'image',
                     'options'    => array(
                         'image' => esc_html__('Image', 'wp-ulike'),
@@ -752,6 +759,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'id'      => 'like',
                                     'type'    => 'text',
                                     'title'   => esc_html__('Button Label','wp-ulike'),
+                                    'desc'    => esc_html__('Text displayed on the like button (e.g., "Like", "👍", "Love").', 'wp-ulike'),
                                     'default' => 'Like'
                                 ),
                             )
@@ -763,6 +771,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'id'      => 'unlike',
                                     'type'    => 'text',
                                     'title'   => esc_html__('Button Label','wp-ulike'),
+                                    'desc'    => esc_html__('Text displayed on the button after liking (e.g., "Liked", "❤️", "Unlike").', 'wp-ulike'),
                                     'default' => 'Liked'
                                 ),
                             )
@@ -774,6 +783,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'            => 'image_group',
                     'type'          => 'tabbed',
                     'title'         => esc_html__( 'Button Image', 'wp-ulike'),
+                    'desc'          => esc_html__( 'Upload custom images for the like and unlike button states.', 'wp-ulike'),
                     'tabs'          => array(
                         array(
                             'title'     => esc_html__('Like','wp-ulike'),
@@ -782,6 +792,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'id'           => 'like',
                                     'type'         => 'upload',
                                     'title'        => esc_html__('Button Image','wp-ulike'),
+                                    'desc'         => esc_html__('Upload an image icon for the like button state.', 'wp-ulike'),
                                     'library'      => 'image',
                                     'placeholder'  => 'http://'
                                 ),
@@ -794,6 +805,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'id'           => 'unlike',
                                     'type'         => 'upload',
                                     'title'        => esc_html__('Button Image','wp-ulike'),
+                                    'desc'         => esc_html__('Upload an image icon for the unlike/liked button state.', 'wp-ulike'),
                                     'library'      => 'image',
                                     'placeholder'  => 'http://'
                                 ),
@@ -807,11 +819,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'    => 'switcher',
                     'default' => true,
                     'title'   => esc_html__('Automatic Display', 'wp-ulike'),
+                    'desc'    => esc_html__('Automatically show the like button on your content without manually adding shortcodes.', 'wp-ulike'),
                 ),
                 'auto_display_position' => array(
                     'id'      => 'auto_display_position',
                     'type'    => 'radio',
                     'title'   => esc_html__( 'Button Position','wp-ulike' ),
+                    'desc'    => esc_html__('Choose where the like button appears relative to your content.', 'wp-ulike'),
                     'default' => 'bottom',
                     'options' => array(
                         'top'        => esc_html__('Top of Content', 'wp-ulike'),
@@ -888,7 +902,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'         => 'cookie_expires',
                     'type'       => 'number',
                     'title'      => esc_html__( 'Cookie Expiration', 'wp-ulike'),
-                    'desc'       => esc_html__('Specify how long, in seconds, cookie expires. Default value: 31536000', 'wp-ulike'),
+                    'desc'       => esc_html__('Specify how long, in seconds, the cookie expires. Default: 31536000 (1 year).', 'wp-ulike'),
                     'default'    => 31536000,
                     'dependency' => array( 'logging_method', 'any', 'by_cookie,by_user_ip_cookie' ),
                 ),
@@ -947,6 +961,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'         => 'likers_order',
                     'type'       => 'button_set',
                     'title'      => esc_html__( 'Likers List Order', 'wp-ulike'),
+                    'desc'       => esc_html__('Sort users in the likers box by newest first (descending) or oldest first (ascending).', 'wp-ulike'),
                     'default'    => 'desc',
                     'options'    => array(
                         'asc'  => esc_html__('Ascending', 'wp-ulike'),
@@ -959,12 +974,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'  => 'switcher',
                     'default' => false,
                     'title' => esc_html__('Hide For Anonymous Users', 'wp-ulike'),
+                    'desc'  => esc_html__('Hide the likers box from visitors who are not logged in.', 'wp-ulike'),
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),
                 ),
                 'likers_style' => array(
                     'id'         => 'likers_style',
                     'type'       => 'button_set',
                     'title'      => esc_html__( 'Likers Box Layout', 'wp-ulike'),
+                    'desc'       => esc_html__('Inline: Show avatars directly below the button. Popover: Show avatars in a popup when hovering over the counter.', 'wp-ulike'),
                     'default'    => 'popover',
                     'options'    => array(
                         'default' => esc_html__('Inline', 'wp-ulike'),
@@ -995,6 +1012,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'         => 'likers_gravatar_size',
                     'type'       => 'number',
                     'title'      => esc_html__( 'Avatar Size', 'wp-ulike'),
+                    'desc'       => esc_html__('Set the size of user avatars displayed in the likers box.', 'wp-ulike'),
                     'default'    => 64,
                     'unit'       => 'px',
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),
