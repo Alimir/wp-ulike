@@ -86,11 +86,20 @@ For more guidance, visit our [Knowledge Base](https://docs.wpulike.com/?utm_sour
 
 == Frequently Asked Questions ==
 
+= Do visitors need to register or login to like content? =
+No! Visitors can like content without registering or logging in. You can optionally require login in the settings if you prefer registered users only.
+
 = Does WP ULike work with any theme? =
 Yes! WP ULike is compatible with all WordPress themes that follow coding standards. The buttons automatically adapt to your theme's styling.
 
 = Is WP ULike compatible with other plugins? =
 Absolutely! WP ULike integrates seamlessly with popular plugins including Elementor, BuddyPress, bbPress, WooCommerce, GamiPress, myCRED, and most caching plugins. If you encounter any compatibility issues, please let us know!
+
+= Does WP ULike work with caching plugins? =
+Yes! WP ULike is fully compatible with all major caching plugins including WP Rocket, W3 Total Cache, WP Super Cache, LiteSpeed Cache, and others. The plugin is optimized for performance and works perfectly with cached content.
+
+= Can I customize the button appearance? =
+Yes! WP ULike offers multiple built-in templates and styles. You can customize colors, button text, and styling through the settings panel. For advanced customization, you can use custom CSS or the Pro version's premium templates.
 
 = What's the difference between WP ULike Free and Pro? =
 The free version includes all essential features: like/dislike buttons, statistics dashboard, customizable templates, auto-display, shortcodes, and full plugin integrations. WP ULike Pro adds professional features like advanced analytics with filters, premium templates, user profiles, login/registration forms, social sharing, SEO schema, and REST API access. Both versions are fully functional—Pro simply extends your capabilities for more advanced use cases.
@@ -100,9 +109,6 @@ Yes! WP ULike works perfectly across WordPress multisite networks. Each site can
 
 = Is WP ULike secure? =
 Yes, absolutely. WP ULike is developed by TechnoWich following WordPress security best practices and coding standards. With over 80,000 active installations and a high WordPress.org rating, security is our top priority.
-
-= Which web servers does WP ULike support? =
-WP ULike runs smoothly on all popular web servers including Apache, Nginx, LiteSpeed, Microsoft IIS, and others. No special server configuration required.
 
 == Changelog ==
 
