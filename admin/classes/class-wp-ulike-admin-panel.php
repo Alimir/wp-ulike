@@ -377,15 +377,27 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     array(
                         'type'    => 'submessage',
                         'style'   => 'info',
-                        'content' => 'Configure WP ULike behavior for each content type in WordPress:<br><br>
-                        <strong>Posts</strong> – Includes standard and custom post types, plus WooCommerce products<br>
-                        <strong>Comments</strong> – Covers comments across all post types<br>
-                        <strong>BuddyPress</strong> – Supports activities and comments, with user notifications<br>
-                        <strong>bbPress</strong> – Includes topics and replies<br><br>
-                        ' . sprintf(
-                            '<a href="%s" title="Documents" target="_blank">%s</a>',
-                            'https://docs.wpulike.com/article/14-content-types-settings',
-                            esc_html__( 'Read More', 'wp-ulike' )
+                        'content' => sprintf(
+                            '%s<br><br>
+                        <strong>%s</strong> – %s<br>
+                        <strong>%s</strong> – %s<br>
+                        <strong>%s</strong> – %s<br>
+                        <strong>%s</strong> – %s<br><br>
+                        %s',
+                            esc_html__( 'Customize how the like button appears and behaves for different types of content on your site. Each content type below has its own settings that you can configure independently.', 'wp-ulike' ),
+                            esc_html__( 'Posts', 'wp-ulike' ),
+                            esc_html__( 'Configure likes for blog posts, pages, and custom post types (including WooCommerce products). Control where the button appears, who can vote, and how votes are displayed.', 'wp-ulike' ),
+                            esc_html__( 'Comments', 'wp-ulike' ),
+                            esc_html__( 'Enable likes on comments throughout your site. Perfect for engaging discussions and highlighting popular comments.', 'wp-ulike' ),
+                            esc_html__( 'BuddyPress', 'wp-ulike' ),
+                            esc_html__( 'Add likes to BuddyPress activities and activity comments. Optionally create activity updates and send notifications when content is liked.', 'wp-ulike' ),
+                            esc_html__( 'bbPress', 'wp-ulike' ),
+                            esc_html__( 'Enable likes on forum topics and replies. Help community members identify helpful and popular forum content.', 'wp-ulike' ),
+                            sprintf(
+                                '<a href="%s" title="Documents" target="_blank">%s</a>',
+                                'https://docs.wpulike.com/article/14-content-types-settings',
+                                esc_html__( 'Read More', 'wp-ulike' )
+                            )
                         ),
                     ),
                     // Posts
@@ -582,37 +594,43 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'      => 'validate_notice',
                         'type'    => 'text',
                         'default' => esc_html__( 'Your vote cannot be submitted at this time.','wp-ulike'),
-                        'title'   => esc_html__( 'Validation Notice Message', 'wp-ulike')
+                        'title'   => esc_html__( 'Validation Notice Message', 'wp-ulike'),
+                        'desc'    => esc_html__( 'Message shown when a vote cannot be processed due to validation errors.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'already_registered_notice',
                         'type'    => 'text',
                         'default' => esc_html__( 'You have already registered a vote.','wp-ulike'),
-                        'title'   => esc_html__( 'Already Voted Message', 'wp-ulike')
+                        'title'   => esc_html__( 'Already Voted Message', 'wp-ulike'),
+                        'desc'    => esc_html__( 'Message shown when a user tries to vote again after already voting.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'login_required_notice',
                         'type'    => 'text',
                         'default' => esc_html__( 'You Should Login To Submit Your Like','wp-ulike'),
-                        'title'   => esc_html__( 'Login Required Message', 'wp-ulike')
+                        'title'   => esc_html__( 'Login Required Message', 'wp-ulike'),
+                        'desc'    => esc_html__( 'Message shown to visitors who need to log in before they can vote.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'like_notice',
                         'type'    => 'text',
                         'default' => esc_html__('Thanks! You Liked This.','wp-ulike'),
-                        'title'   => esc_html__( 'Liked Notice Message', 'wp-ulike')
+                        'title'   => esc_html__( 'Liked Notice Message', 'wp-ulike'),
+                        'desc'    => esc_html__( 'Confirmation message shown after a user successfully likes content.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'unlike_notice',
                         'type'    => 'text',
                         'default' => esc_html__('Sorry! You unliked this.','wp-ulike'),
-                        'title'   => esc_html__( 'Unliked Notice Message', 'wp-ulike')
+                        'title'   => esc_html__( 'Unliked Notice Message', 'wp-ulike'),
+                        'desc'    => esc_html__( 'Confirmation message shown after a user removes their like.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'like_button_aria_label',
                         'type'    => 'text',
                         'default' => esc_html__( 'Like Button','wp-ulike'),
-                        'title'   => esc_html__( 'Like Button Aria Label', 'wp-ulike')
+                        'title'   => esc_html__( 'Like Button Aria Label', 'wp-ulike'),
+                        'desc'    => esc_html__( 'Accessibility label for screen readers. Helps visually impaired users understand what the button does.', 'wp-ulike')
                     )
                 ) )
             ) );
@@ -760,7 +778,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'type'    => 'text',
                                     'title'   => esc_html__('Button Label','wp-ulike'),
                                     'desc'    => esc_html__('Text displayed on the like button (e.g., "Like", "👍", "Love").', 'wp-ulike'),
-                                    'default' => 'Like'
+                                    'default' => esc_html__('Like', 'wp-ulike')
                                 ),
                             )
                         ),
@@ -772,7 +790,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'type'    => 'text',
                                     'title'   => esc_html__('Button Label','wp-ulike'),
                                     'desc'    => esc_html__('Text displayed on the button after liking (e.g., "Liked", "❤️", "Unlike").', 'wp-ulike'),
-                                    'default' => 'Liked'
+                                    'default' => esc_html__('Liked', 'wp-ulike')
                                 ),
                             )
                         ),
