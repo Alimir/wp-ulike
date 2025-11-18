@@ -3,8 +3,7 @@
  */
 .wpulike-heart {
 
-    .wp_ulike_general_class,
-    div.wp_ulike_general_class {
+    .wp_ulike_general_class {
         box-shadow: 0 0 0 1px #bdbdbd inset;
         border-radius: .25em;
         padding: 5px;
@@ -17,8 +16,7 @@
         color: #757575;
     }
 
-    button.wp_ulike_btn,
-    button.wp_ulike_btn[type="button"] {
+    button.wp_ulike_btn {
         background: transparent;
         padding: 15px;
 
@@ -65,8 +63,7 @@
         }
     }
 
-    .count-box,
-    span.count-box {
+    .count-box {
         font-size: 14px;
         text-decoration: none;
         line-height: 28px;
@@ -86,8 +83,7 @@
     .activity-comments,
     .activity-inner {
         .wpulike-heart {
-            button.wp_ulike_btn,
-            .wp_ulike_btn[type="button"] {
+            button.wp_ulike_btn {
                 background-color: transparent;
                 border: 0;
                 font-size: initial;
@@ -103,16 +99,14 @@
                 }
             }
 
-            .wp_ulike_general_class,
-            div.wp_ulike_general_class {
+            .wp_ulike_general_class {
                 border-radius: 0;
                 padding: 0.1em 0.3em;
                 margin-bottom: 0;
             }
 
             .wp_ulike_is_loading {
-                button.wp_ulike_btn,
-                .wp_ulike_btn[type="button"] {
+                button.wp_ulike_btn {
                     background-image: url(../img/svg/loader.svg);
                     background-repeat: no-repeat;
                     background-position: center center;

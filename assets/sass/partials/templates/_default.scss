@@ -3,8 +3,7 @@
  */
 .wpulike-default {
 
-    button.wp_ulike_btn,
-    button.wp_ulike_btn[type="button"] {
+    button.wp_ulike_btn {
         color: #616161;
         background-color: #e0e0e0;
         min-height: 30px;
@@ -56,8 +55,7 @@
         }
     }
 
-    .count-box,
-    span.count-box {
+    .count-box {
         position: relative;
         border-radius: .25em;
         font-size: 13px;
@@ -98,8 +96,7 @@
     .activity-inner {
 
         .wpulike-default {
-            button.wp_ulike_btn,
-            button.wp_ulike_btn[type="button"] {
+            button.wp_ulike_btn {
                 border-radius: 0;
                 background-color: #ffffff;
                 box-shadow: 0 0 0 1px #bdbdbd inset;
@@ -108,8 +105,7 @@
             }
 
             .wp_ulike_is_loading {
-                button.wp_ulike_btn,
-                button.wp_ulike_btn[type="button"] {
+                button.wp_ulike_btn {
                     background-image: url(../img/svg/loader.svg);
                     background-repeat: no-repeat;
                     background-position: center center;
