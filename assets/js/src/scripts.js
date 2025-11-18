@@ -1,39 +1,83 @@
-(function ($) {
-  // Init ulike buttons
-  $(".wpulike").WordpressUlike();
+(function (window, document) {
+  "use strict";
+
+  // Safe Array.from polyfill for older browsers (if needed)
+  const arrayFrom = (arrayLike) => {
+    if (Array.from) {
+      return Array.from(arrayLike);
+    }
+    // Fallback for very old browsers
+    return Array.prototype.slice.call(arrayLike);
+  };
+
+  // Helper function to initialize ulike on elements
+  const initUlike = (elements) => {
+    if (!elements) return;
+
+    // Handle single element or NodeList
+    const elementArray = elements.length !== undefined
+      ? arrayFrom(elements)
+      : [elements];
+
+    elementArray.forEach((element) => {
+      if (element && typeof WordpressUlike !== "undefined") {
+        // Check if already initialized (using data attribute as marker)
+        if (!element.hasAttribute("data-ulike-initialized")) {
+          new WordpressUlike(element);
+          element.setAttribute("data-ulike-initialized", "true");
+        }
+      }
+    });
+  };
+
+  // Init ulike buttons on page load
+  const wpulikeElements = document.querySelectorAll(".wpulike");
+  initUlike(wpulikeElements);
 
   /**
-   * jquery detecting div of certain class has been added to DOM
+   * Detecting div of certain class has been added to DOM
    */
-  function WordpressUlikeOnElementInserted(
+  const WordpressUlikeOnElementInserted = (
     containerSelector,
     elementSelector,
     callback
-  ) {
-    var onMutationsObserved = function (mutations) {
-      mutations.forEach(function (mutation) {
+  ) => {
+    const onMutationsObserved = (mutations) => {
+      mutations.forEach((mutation) => {
         if (mutation.addedNodes.length) {
-          var elements = $(mutation.addedNodes).find(elementSelector);
-          for (var i = 0, len = elements.length; i < len; i++) {
-            callback(elements[i]);
-          }
+          mutation.addedNodes.forEach((node) => {
+            // Check if the added node itself matches
+            if (node.nodeType === 1 && node.matches && node.matches(elementSelector)) {
+              callback(node);
+            }
+            // Check for children that match
+            if (node.nodeType === 1 && node.querySelectorAll) {
+              const elements = node.querySelectorAll(elementSelector);
+              arrayFrom(elements).forEach((el) => callback(el));
+            }
+          });
         }
       });
     };
 
-    var target = $(containerSelector)[0];
-    var config = {
+    const target = document.querySelector(containerSelector);
+    if (!target) return;
+
+    const config = {
       childList: true,
       subtree: true,
     };
-    var MutationObserver =
+    const MutationObserver =
       window.MutationObserver || window.WebKitMutationObserver;
-    var observer = new MutationObserver(onMutationsObserved);
-    observer.observe(target, config);
-  }
+
+    if (MutationObserver) {
+      const observer = new MutationObserver(onMutationsObserved);
+      observer.observe(target, config);
+    }
+  };
 
   // On wp ulike element added
-  WordpressUlikeOnElementInserted("body", ".wpulike", function (element) {
-    $(element).WordpressUlike();
+  WordpressUlikeOnElementInserted("body", ".wpulike", (element) => {
+    initUlike(element);
   });
-})(jQuery);
+})(window, document);

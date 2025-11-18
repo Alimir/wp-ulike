@@ -190,8 +190,8 @@ module.exports = function (grunt) {
         },
         src: [
           "assets/js/src/tooltip.js",
-          "assets/js/src/wordpress-ulike-notifications.js",
-          "assets/js/src/wordpress-ulike.js",
+          "assets/js/src/notifications.js",
+          "assets/js/src/ulike.js",
           "assets/js/src/scripts.js",
         ],
         dest: "assets/js/wp-ulike.js",

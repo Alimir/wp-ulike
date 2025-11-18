@@ -10,8 +10,6 @@
     bottom: 20px;
 
     * {
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
         box-sizing: border-box;
     }
 
@@ -31,14 +29,25 @@
         font-size: 0.9rem;
         font-weight: 500;
         line-height: normal;
+        transition: opacity 300ms ease-out, transform 300ms ease-out;
+        opacity: 1;
+        transform: translateY(0);
 
         &:hover {
             opacity: 0.9;
             cursor: pointer;
         }
 
+        // Fade out animation class (no inline styles needed)
+        &.wpulike-message-fadeout {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+
         &:before {
             content: "";
+            display: block;
             background-position: center center;
             background-repeat: no-repeat;
             background-image: url(../img/svg/info.svg);

@@ -1,238 +1,300 @@
-/* Confirm tooltip */
+/* WP ULike Tooltip - Modern Social Media Style */
+
+// Variables
+$tooltip-border-color: #e2e8f0;
+$tooltip-border-width: 1px;
+$tooltip-border-radius: 0.25em;
+$tooltip-spacing: 13px;
+$arrow-size: 7px; // Size of rotated square
+$arrow-size-tiny: 6px;
+
+$color-white: #ffffff;
+$color-dark: #262626;
+$color-text-dark: #1a202c;
+$color-text-light: #262626;
+$color-spinner: #8e8e8e;
+$color-spinner-dark: #a8a8a8;
+
+// Animations
+@keyframes ulf-tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ulf-spinner-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Base Tooltip
 .ulf-tooltip {
-    max-width: 360px;
-    position: absolute;
-    z-index: 999999;
-    background: #444444;
-    border-radius: 5px;
-    padding: 10px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    top: 0;
-    left: 0;
+  position: absolute;
+  z-index: 9999;
+  max-width: 320px;
+  width: auto;
+  padding: 0;
+  margin: 0;
+  pointer-events: auto;
+  animation: ulf-tooltip-fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-/* Centers the tooltip on screens where it won't fit */
-.ulf-centered {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-}
-
+// Content
 .ulf-content {
-    margin: 5px 20px 5px 10px;
-    font-size: 1em;
-    line-height: 1.6em;
-    text-align: center;
-    color: #fff;
-    font-weight: 800;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: $color-text-light;
+  word-wrap: break-word;
+  overflow: visible;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 20px; // Prevent height jump between loading and content
 }
 
-/* Arrow */
+// Arrow Base - Using rotated square technique (like counter box)
 .ulf-arrow {
-    border: 15px solid rgba(232, 232, 232, 0);
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    margin-left: -15px;
+  position: absolute;
+  width: $arrow-size;
+  height: $arrow-size;
+  background: $color-white;
+  border: $tooltip-border-width solid transparent;
+  box-sizing: content-box;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0; // Hide until positioned
+  transition: opacity 0.1s ease;
 }
 
-/* Arrow - Top */
-.ulf-arrow-top {
-    border-bottom-color: #444444;
-    bottom: 100%;
-    left: 50%;
-    top: auto;
-    right: auto;
+// Show arrow when positioned
+.ulf-tooltip[data-positioned="true"] .ulf-arrow {
+  opacity: 1;
 }
 
-/* Arrow - Bottom */
+// Arrow Positions - Rotated squares with borders (like counter box)
+// Arrow bottom: when tooltip is above, arrow points down (at bottom of tooltip)
 .ulf-arrow-bottom {
-    border-top-color: #444444;
-    top: 100%;
-    left: 50%;
-    bottom: auto;
-    right: auto;
+  bottom: -($arrow-size / 2) - 0.5px;
+  left: 50%;
+  margin-left: -($arrow-size / 2);
+  transform: rotate(45deg);
+  border-bottom-color: $tooltip-border-color;
+  border-right-color: $tooltip-border-color;
 }
 
-/* Arrow - Left */
+// Arrow top: when tooltip is below, arrow points up (at top of tooltip)
+.ulf-arrow-top {
+  top: -($arrow-size / 2) - 0.5px;
+  left: 50%;
+  margin-left: -($arrow-size / 2);
+  transform: rotate(45deg);
+  border-top-color: $tooltip-border-color;
+  border-left-color: $tooltip-border-color;
+}
+
+// Arrow left: when tooltip is on right, arrow points left (at left of tooltip)
 .ulf-arrow-left {
-    border-right-color: #444444;
-    border-width: 15px;
-    left: -14px;
-    right: auto;
-    bottom: auto;
-    top: 50%;
-    margin-top: -15px;
+  left: -($arrow-size / 2) - 0.5px;
+  top: 50%;
+  margin-top: -($arrow-size / 2);
+  transform: rotate(45deg);
+  border-bottom-color: $tooltip-border-color;
+  border-left-color: $tooltip-border-color;
 }
 
-/* Arrow - Right */
+// Arrow right: when tooltip is on left, arrow points right (at right of tooltip)
 .ulf-arrow-right {
-    border-left-color: #444444;
-    right: -29px;
-    left: auto;
-    bottom: auto;
-    border-width: 15px;
-    top: 50%;
-    margin-top: -15px;
+  right: -($arrow-size / 2) - 0.5px;
+  top: 50%;
+  margin-top: -($arrow-size / 2);
+  transform: rotate(45deg);
+  border-top-color: $tooltip-border-color;
+  border-right-color: $tooltip-border-color;
 }
 
-/* Arrow - Hug Left */
-.ulf-arrow-hug-left {
-    left: 30px;
-    right: auto;
-}
-
-/* Arrow - Hug Right */
-.ulf-arrow-hug-right {
-    right: 30px;
-    left: auto;
-}
-
-/* Arrow - Get really close to the left because the button is small */
-.ulf-arrow-hug-left.ulf-arrow-super-hug {
-    left: 15px;
-    right: auto;
-}
-
-/* Arrow - Get really close to the right because the button is small  */
-.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    right: 1px;
-    left: auto;
-}
-
-/* Arrow - Get really close to the left because the button is small - need to adjust for border radius */
-.ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    top: -30px;
-}
-
-/* Arrow - Get really close to the left because the button is small - need to adjust for border radius */
-.ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    top: auto;
-    bottom: -30px;
-}
-
-.ulf-tiny .ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny .ulf-arrow-hug-right.ulf-arrow-super-hug {
-    bottom: -21px;
-}
-
-.ulf-black-theme .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-black-theme .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    top: -27px;
-}
-
-.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    bottom: -28px;
-}
-
-
-/* White theme */
+// White Theme (for likers popover)
 .ulf-white-theme {
-    background: #fff;
-    border: 2px solid #e4e4e4;
+  background: $color-white;
+  border: $tooltip-border-width solid $tooltip-border-color;
+  border-radius: $tooltip-border-radius;
+  overflow: visible;
+
+  .ulf-content {
+    color: $color-text-light;
+    padding: 8px 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .ulf-arrow-bottom {
+    background: $color-white;
+    border-bottom-color: $tooltip-border-color;
+    border-right-color: $tooltip-border-color;
+  }
+
+  .ulf-arrow-top {
+    background: $color-white;
+    border-top-color: $tooltip-border-color;
+    border-left-color: $tooltip-border-color;
+  }
+
+  .ulf-arrow-left {
+    background: $color-white;
+    border-bottom-color: $tooltip-border-color;
+    border-left-color: $tooltip-border-color;
+  }
+
+  .ulf-arrow-right {
+    background: $color-white;
+    border-top-color: $tooltip-border-color;
+    border-right-color: $tooltip-border-color;
+  }
+
+  .ulf-spinner-circle {
+    background-color: $color-spinner;
+  }
 }
 
-.ulf-white-theme .ulf-content {
-    color: #333;
+// Light Theme
+.ulf-light-theme {
+  background: $color-white;
+  border: $tooltip-border-width solid $tooltip-border-color;
+  border-radius: $tooltip-border-radius;
+  overflow: visible;
+
+  .ulf-content {
+    color: $color-text-dark;
+    padding: 8px 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .ulf-arrow-bottom {
+    background: $color-white;
+    border-bottom-color: $tooltip-border-color;
+    border-right-color: $tooltip-border-color;
+  }
+
+  .ulf-arrow-top {
+    background: $color-white;
+    border-top-color: $tooltip-border-color;
+    border-left-color: $tooltip-border-color;
+  }
+
+  .ulf-arrow-left {
+    background: $color-white;
+    border-bottom-color: $tooltip-border-color;
+    border-left-color: $tooltip-border-color;
+  }
+
+  .ulf-arrow-right {
+    background: $color-white;
+    border-top-color: $tooltip-border-color;
+    border-right-color: $tooltip-border-color;
+  }
+
+  .ulf-spinner-circle {
+    background-color: $color-spinner;
+  }
 }
 
-.ulf-white-theme .ulf-arrow-top {
-    border-bottom-color: #e4e4e4;
-}
-
-.ulf-white-theme .ulf-arrow-bottom {
-    border-top-color: #e4e4e4;
-}
-
-.ulf-white-theme .ulf-arrow-left {
-    border-right-color: #e4e4e4;
-}
-
-.ulf-white-theme .ulf-arrow-right {
-    border-left-color: #e4e4e4;
-}
-
-/* Large tooltip */
-.ulf-large {
-    font-size: 18px;
-}
-
-/* Medium tooltip */
-.ulf-medium {
-    font-size: 14px;
-}
-
-/* Small tooltip */
+// Sizes
 .ulf-small {
-    font-size: 12px;
-    padding: 5px;
+  .ulf-content {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
 }
 
-.ulf-small .ulf-content {
-    margin: 2px 8px;
-    line-height: 1.9em;
-}
-
-/* Tiny tooltip */
 .ulf-tiny {
-    padding: 2px 5px;
-    font-size: 10px;
+  max-width: 280px;
+
+  .ulf-content {
+    padding: 3px 5px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .ulf-arrow {
+    width: $arrow-size-tiny;
+    height: $arrow-size-tiny;
+  }
+
+  .ulf-arrow-bottom {
+    bottom: -($arrow-size-tiny / 2) - 0.5px;
+  }
+
+  .ulf-arrow-top {
+    top: -($arrow-size-tiny / 2) - 0.5px;
+  }
+
+  .ulf-arrow-left {
+    left: -($arrow-size-tiny / 2) - 0.5px;
+  }
+
+  .ulf-arrow-right {
+    right: -($arrow-size-tiny / 2) - 0.5px;
+  }
 }
 
-.ulf-tiny .ulf-content {
-    margin: 3px;
+.ulf-large {
+  max-width: 480px;
+
+  .ulf-content {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
 }
 
-.ulf-tiny .ulf-button {
-    margin: 0px 3px;
+// Loading Spinner
+.ulf-loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px; // Match white theme content padding
+  gap: 6px;
+  min-height: 20px; // Match content min-height
 }
 
-.ulf-tiny .ulf-arrow {
-    border-width: 10px;
-    margin-left: -10px;
+.ulf-spinner-circle {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: $color-spinner;
+  animation: ulf-spinner-bounce 1.2s infinite ease-in-out both;
+  flex-shrink: 0;
+
+  &:nth-child(1) {
+    animation-delay: -0.32s;
+  }
+
+  &:nth-child(2) {
+    animation-delay: -0.16s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0;
+  }
 }
 
-.ulf-tiny .ulf-arrow-left {
-    left: -10px;
-    margin-top: -10px;
-}
-
-.ulf-tiny .ulf-arrow-right {
-    right: -20px;
-    margin-top: -10px;
-}
-
-/**
-@todo: Rewrite arrows in JS since they are so complicated in CSS
- */
-.ulf-tiny .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug {
-    left: 11px;
-}
-
-.ulf-tiny .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug,
-.ulf-tiny .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    right: 1px;
-}
-
-.ulf-tiny.ulf-white-theme .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny.ulf-white-theme .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    top: -18px;
-}
-
-.ulf-tiny.ulf-white-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny.ulf-white-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    bottom: -21px;
-}
-
-.ulf-tiny.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
-    bottom: -18px;
+// Centered tooltip (fallback)
+.ulf-centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

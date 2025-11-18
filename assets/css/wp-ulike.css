@@ -25,27 +25,35 @@
     border: none;
     text-align: center;
     transition: none;
-    cursor: pointer; }
+    cursor: pointer;
+    font-family: inherit;
+    line-height: inherit;
+    appearance: none;
+    -webkit-appearance: none; }
     .wpulike button.wp_ulike_btn:hover, .wpulike button.wp_ulike_btn:active, .wpulike button.wp_ulike_btn:focus {
       outline: none; }
     .wpulike button.wp_ulike_btn::-moz-focus-inner {
       border: 0; }
-    .wpulike button.wp_ulike_btn[disabled=disabled]:hover, .wpulike button.wp_ulike_btn[disabled=disabled]:active, .wpulike button.wp_ulike_btn[disabled=disabled]:focus, .wpulike button.wp_ulike_btn:disabled:hover, .wpulike button.wp_ulike_btn:disabled:active, .wpulike button.wp_ulike_btn:disabled:focus {
-      outline: none;
-      background-color: initial; }
+    .wpulike button.wp_ulike_btn[disabled=disabled], .wpulike button.wp_ulike_btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6; }
+      .wpulike button.wp_ulike_btn[disabled=disabled]:hover, .wpulike button.wp_ulike_btn[disabled=disabled]:active, .wpulike button.wp_ulike_btn[disabled=disabled]:focus, .wpulike button.wp_ulike_btn:disabled:hover, .wpulike button.wp_ulike_btn:disabled:active, .wpulike button.wp_ulike_btn:disabled:focus {
+        outline: none;
+        background-color: initial; }
     .wpulike button.wp_ulike_btn.wp_ulike_put_text {
       font-size: 14px;
       font-weight: 600;
       line-height: 28px;
       padding: 0 10px;
       min-width: 50px; }
-  .wpulike .wp_ulike_is_loading .wp_ulike_btn {
+  .wpulike .wp_ulike_is_loading button.wp_ulike_btn {
     background-image: url(../img/svg/loader.svg);
     background-repeat: no-repeat;
-    background-position: center center; }
-    .wpulike .wp_ulike_is_loading .wp_ulike_btn span {
+    background-position: center center;
+    background-size: auto; }
+    .wpulike .wp_ulike_is_loading button.wp_ulike_btn span {
       visibility: hidden; }
-    .wpulike .wp_ulike_is_loading .wp_ulike_btn.wp_ulike_put_image::after {
+    .wpulike .wp_ulike_is_loading button.wp_ulike_btn.wp_ulike_put_image::after {
       content: none; }
   .wpulike.wpulike-hide-counter .count-box {
     display: none; }
@@ -56,7 +64,7 @@
 #buddypress #activity-stream .activity-comments .wpulike,
 #buddypress #activity-stream .activity-inner .wpulike {
   display: inline-block;
-  vertical-align: super; }
+  vertical-align: middle; }
 
 #buddypress #activity-stream .wp_ulike_likers_wrapper li,
 #buddypress #activity-stream .wp_ulike_likers_wrapper .wp-ulike-liker {
@@ -126,6 +134,7 @@
   text-align: center; }
   .wpulike-default .count-box:before {
     content: '';
+    display: block;
     position: absolute;
     border: 1px solid transparent;
     background: #FFFFFF;
@@ -208,9 +217,9 @@
   vertical-align: middle;
   padding: 0 5px; }
 
-#buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_btn,
-#buddypress #activity-stream .activity-comments .wpulike-heart .wp_ulike_btn,
-#buddypress #activity-stream .activity-inner .wpulike-heart .wp_ulike_btn {
+#buddypress #activity-stream .activity-meta .wpulike-heart button.wp_ulike_btn,
+#buddypress #activity-stream .activity-comments .wpulike-heart button.wp_ulike_btn,
+#buddypress #activity-stream .activity-inner .wpulike-heart button.wp_ulike_btn {
   background-color: transparent;
   border: 0;
   font-size: initial;
@@ -233,9 +242,9 @@
   padding: 0.1em 0.3em;
   margin-bottom: 0; }
 
-#buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_is_loading .wp_ulike_btn,
-#buddypress #activity-stream .activity-comments .wpulike-heart .wp_ulike_is_loading .wp_ulike_btn,
-#buddypress #activity-stream .activity-inner .wpulike-heart .wp_ulike_is_loading .wp_ulike_btn {
+#buddypress #activity-stream .activity-meta .wpulike-heart .wp_ulike_is_loading button.wp_ulike_btn,
+#buddypress #activity-stream .activity-comments .wpulike-heart .wp_ulike_is_loading button.wp_ulike_btn,
+#buddypress #activity-stream .activity-inner .wpulike-heart .wp_ulike_is_loading button.wp_ulike_btn {
   background-image: url(../img/svg/loader.svg);
   background-repeat: no-repeat;
   background-position: center center; }
@@ -246,7 +255,8 @@
 .wpulike-robeen .count-box {
   font-weight: 600;
   padding: 0 14px;
-  font-size: 16px; }
+  font-size: 16px;
+  color: inherit; }
 
 .wpulike-robeen .wp_ulike_is_loading button.wp_ulike_btn {
   background-image: initial;
@@ -263,27 +273,30 @@
   background: transparent; }
   .wpulike-robeen button.wp_ulike_btn:hover, .wpulike-robeen button.wp_ulike_btn:focus {
     background-color: transparent; }
-  .wpulike-robeen button.wp_ulike_btn:after {
-    content: '';
-    background: url(../img/icons/twitter-heart.png) no-repeat;
-    background-position: 0 0;
-    transition: background-position 1s steps(28);
-    transition-duration: 0s;
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%); }
   .wpulike-robeen button.wp_ulike_btn.wp_ulike_btn_is_active {
     overflow: visible; }
-    .wpulike-robeen button.wp_ulike_btn.wp_ulike_btn_is_active:after {
-      transition-duration: 1s;
-      background-position: -2800px 0; }
 
-#buddypress #activity-stream .activity-meta .wpulike-robeen .wp_ulike_btn,
-#buddypress #activity-stream .activity-comments .wpulike-robeen .wp_ulike_btn,
-#buddypress #activity-stream .activity-inner .wpulike-robeen .wp_ulike_btn {
+.wpulike-robeen .wp_ulike_put_image:after {
+  content: '';
+  display: block;
+  background: url(../img/icons/twitter-heart.png) no-repeat;
+  background-position: 0 0;
+  transition: background-position 1s steps(28);
+  transition-duration: 0s;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%); }
+
+.wpulike-robeen .wp_ulike_put_image.wp_ulike_btn_is_active:after {
+  transition-duration: 1s;
+  background-position: -2800px 0; }
+
+#buddypress #activity-stream .activity-meta .wpulike-robeen button.wp_ulike_btn,
+#buddypress #activity-stream .activity-comments .wpulike-robeen button.wp_ulike_btn,
+#buddypress #activity-stream .activity-inner .wpulike-robeen button.wp_ulike_btn {
   background: transparent;
   border: 0;
   width: 30px;
@@ -384,9 +397,9 @@
   display: inline-block;
   vertical-align: middle; }
 
-#buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn,
-#buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn,
-#buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn {
+#buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn,
+#buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn,
+#buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn {
   border-radius: 50em;
   background-color: #ffffff;
   padding: 0;
@@ -394,48 +407,48 @@
   border: 0;
   width: 50px;
   height: 50px; }
-  #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:focus,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:hover,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:focus,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:hover,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:focus {
+  #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn:focus,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn:hover,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn:focus,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn:hover,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn:focus {
     background-color: #ffffff;
     background-image: none; }
-  #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:focus, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:disabled:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:disabled:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:disabled:focus,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:hover,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:active,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:focus,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:disabled:hover,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:disabled:active,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:disabled:focus,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:hover,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:active,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn[disabled=disabled]:focus,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:disabled:hover,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:disabled:active,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:disabled:focus {
+  #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:focus, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn:disabled:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn:disabled:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn:disabled:focus,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:hover,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:active,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:focus,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn:disabled:hover,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn:disabled:active,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn:disabled:focus,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:hover,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:active,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn[disabled=disabled]:focus,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn:disabled:hover,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn:disabled:active,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn:disabled:focus {
     background-color: #ffffff; }
-  #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active {
+  #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active {
     background-color: #ff6f63; }
-    #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus,
-    #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover,
-    #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active,
-    #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus,
-    #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover,
-    #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:active,
-    #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus,
-    #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover,
-    #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active,
-    #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus,
-    #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover,
-    #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:active,
-    #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus {
+    #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:active, #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus,
+    #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover,
+    #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active,
+    #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus,
+    #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover,
+    #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:active,
+    #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus,
+    #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:hover,
+    #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:active,
+    #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active[disabled=disabled]:focus,
+    #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:hover,
+    #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:active,
+    #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active:disabled:focus {
       background-color: #ff6f63; }
-  #buddypress #activity-stream .activity-meta .wpulike-animated-heart .wp_ulike_btn:active,
-  #buddypress #activity-stream .activity-comments .wpulike-animated-heart .wp_ulike_btn:active,
-  #buddypress #activity-stream .activity-inner .wpulike-animated-heart .wp_ulike_btn:active {
+  #buddypress #activity-stream .activity-meta .wpulike-animated-heart button.wp_ulike_btn:active,
+  #buddypress #activity-stream .activity-comments .wpulike-animated-heart button.wp_ulike_btn:active,
+  #buddypress #activity-stream .activity-inner .wpulike-animated-heart button.wp_ulike_btn:active {
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25); }
 
 #buddypress #activity-stream .activity-meta .wp_ulike_is_loading button.wp_ulike_btn,
@@ -548,8 +561,6 @@
   right: 20px;
   bottom: 20px; }
   .wpulike-notification * {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box; }
   .wpulike-notification .wpulike-message {
     position: relative;
@@ -566,12 +577,20 @@
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08);
     font-size: 0.9rem;
     font-weight: 500;
-    line-height: normal; }
+    line-height: normal;
+    transition: opacity 300ms ease-out, transform 300ms ease-out;
+    opacity: 1;
+    transform: translateY(0); }
     .wpulike-notification .wpulike-message:hover {
       opacity: 0.9;
       cursor: pointer; }
+    .wpulike-notification .wpulike-message.wpulike-message-fadeout {
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none; }
     .wpulike-notification .wpulike-message:before {
       content: "";
+      display: block;
       background-position: center center;
       background-repeat: no-repeat;
       background-image: url(../img/svg/info.svg);
@@ -623,205 +642,207 @@
         background-size: 15px;
         width: 35px; } }
 
-/* Confirm tooltip */
-.ulf-tooltip {
-  max-width: 360px;
-  position: absolute;
-  z-index: 999999;
-  background: #444444;
-  border-radius: 5px;
-  padding: 10px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  top: 0;
-  left: 0; }
+/* WP ULike Tooltip - Modern Social Media Style */
+@keyframes ulf-tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96); }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1); } }
 
-/* Centers the tooltip on screens where it won't fit */
+@keyframes ulf-spinner-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4; }
+  40% {
+    transform: scale(1);
+    opacity: 1; } }
+
+.ulf-tooltip {
+  position: absolute;
+  z-index: 9999;
+  max-width: 320px;
+  width: auto;
+  padding: 0;
+  margin: 0;
+  pointer-events: auto;
+  animation: ulf-tooltip-fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  transition: opacity 0.2s ease, transform 0.2s ease; }
+
+.ulf-content {
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #262626;
+  word-wrap: break-word;
+  overflow: visible;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 20px; }
+
+.ulf-arrow {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #ffffff;
+  border: 1px solid transparent;
+  box-sizing: content-box;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.1s ease; }
+
+.ulf-tooltip[data-positioned="true"] .ulf-arrow {
+  opacity: 1; }
+
+.ulf-arrow-bottom {
+  bottom: -4px;
+  left: 50%;
+  margin-left: -3.5px;
+  transform: rotate(45deg);
+  border-bottom-color: #e2e8f0;
+  border-right-color: #e2e8f0; }
+
+.ulf-arrow-top {
+  top: -4px;
+  left: 50%;
+  margin-left: -3.5px;
+  transform: rotate(45deg);
+  border-top-color: #e2e8f0;
+  border-left-color: #e2e8f0; }
+
+.ulf-arrow-left {
+  left: -4px;
+  top: 50%;
+  margin-top: -3.5px;
+  transform: rotate(45deg);
+  border-bottom-color: #e2e8f0;
+  border-left-color: #e2e8f0; }
+
+.ulf-arrow-right {
+  right: -4px;
+  top: 50%;
+  margin-top: -3.5px;
+  transform: rotate(45deg);
+  border-top-color: #e2e8f0;
+  border-right-color: #e2e8f0; }
+
+.ulf-white-theme {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25em;
+  overflow: visible; }
+  .ulf-white-theme .ulf-content {
+    color: #262626;
+    padding: 8px 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em; }
+  .ulf-white-theme .ulf-arrow-bottom {
+    background: #ffffff;
+    border-bottom-color: #e2e8f0;
+    border-right-color: #e2e8f0; }
+  .ulf-white-theme .ulf-arrow-top {
+    background: #ffffff;
+    border-top-color: #e2e8f0;
+    border-left-color: #e2e8f0; }
+  .ulf-white-theme .ulf-arrow-left {
+    background: #ffffff;
+    border-bottom-color: #e2e8f0;
+    border-left-color: #e2e8f0; }
+  .ulf-white-theme .ulf-arrow-right {
+    background: #ffffff;
+    border-top-color: #e2e8f0;
+    border-right-color: #e2e8f0; }
+  .ulf-white-theme .ulf-spinner-circle {
+    background-color: #8e8e8e; }
+
+.ulf-light-theme {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25em;
+  overflow: visible; }
+  .ulf-light-theme .ulf-content {
+    color: #1a202c;
+    padding: 8px 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em; }
+  .ulf-light-theme .ulf-arrow-bottom {
+    background: #ffffff;
+    border-bottom-color: #e2e8f0;
+    border-right-color: #e2e8f0; }
+  .ulf-light-theme .ulf-arrow-top {
+    background: #ffffff;
+    border-top-color: #e2e8f0;
+    border-left-color: #e2e8f0; }
+  .ulf-light-theme .ulf-arrow-left {
+    background: #ffffff;
+    border-bottom-color: #e2e8f0;
+    border-left-color: #e2e8f0; }
+  .ulf-light-theme .ulf-arrow-right {
+    background: #ffffff;
+    border-top-color: #e2e8f0;
+    border-right-color: #e2e8f0; }
+  .ulf-light-theme .ulf-spinner-circle {
+    background-color: #8e8e8e; }
+
+.ulf-small .ulf-content {
+  padding: 6px 10px;
+  font-size: 13px; }
+
+.ulf-tiny {
+  max-width: 280px; }
+  .ulf-tiny .ulf-content {
+    padding: 3px 5px;
+    font-size: 13px;
+    line-height: 1.5; }
+  .ulf-tiny .ulf-arrow {
+    width: 6px;
+    height: 6px; }
+  .ulf-tiny .ulf-arrow-bottom {
+    bottom: -3.5px; }
+  .ulf-tiny .ulf-arrow-top {
+    top: -3.5px; }
+  .ulf-tiny .ulf-arrow-left {
+    left: -3.5px; }
+  .ulf-tiny .ulf-arrow-right {
+    right: -3.5px; }
+
+.ulf-large {
+  max-width: 480px; }
+  .ulf-large .ulf-content {
+    padding: 12px 16px;
+    font-size: 16px; }
+
+.ulf-loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  gap: 6px;
+  min-height: 20px; }
+
+.ulf-spinner-circle {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #8e8e8e;
+  animation: ulf-spinner-bounce 1.2s infinite ease-in-out both;
+  flex-shrink: 0; }
+  .ulf-spinner-circle:nth-child(1) {
+    animation-delay: -0.32s; }
+  .ulf-spinner-circle:nth-child(2) {
+    animation-delay: -0.16s; }
+  .ulf-spinner-circle:nth-child(3) {
+    animation-delay: 0; }
+
 .ulf-centered {
   position: fixed;
   top: 50%;
-  left: 50%; }
-
-.ulf-content {
-  margin: 5px 20px 5px 10px;
-  font-size: 1em;
-  line-height: 1.6em;
-  text-align: center;
-  color: #fff;
-  font-weight: 800; }
-
-/* Arrow */
-.ulf-arrow {
-  border: 15px solid rgba(232, 232, 232, 0);
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  margin-left: -15px; }
-
-/* Arrow - Top */
-.ulf-arrow-top {
-  border-bottom-color: #444444;
-  bottom: 100%;
   left: 50%;
-  top: auto;
-  right: auto; }
-
-/* Arrow - Bottom */
-.ulf-arrow-bottom {
-  border-top-color: #444444;
-  top: 100%;
-  left: 50%;
-  bottom: auto;
-  right: auto; }
-
-/* Arrow - Left */
-.ulf-arrow-left {
-  border-right-color: #444444;
-  border-width: 15px;
-  left: -14px;
-  right: auto;
-  bottom: auto;
-  top: 50%;
-  margin-top: -15px; }
-
-/* Arrow - Right */
-.ulf-arrow-right {
-  border-left-color: #444444;
-  right: -29px;
-  left: auto;
-  bottom: auto;
-  border-width: 15px;
-  top: 50%;
-  margin-top: -15px; }
-
-/* Arrow - Hug Left */
-.ulf-arrow-hug-left {
-  left: 30px;
-  right: auto; }
-
-/* Arrow - Hug Right */
-.ulf-arrow-hug-right {
-  right: 30px;
-  left: auto; }
-
-/* Arrow - Get really close to the left because the button is small */
-.ulf-arrow-hug-left.ulf-arrow-super-hug {
-  left: 15px;
-  right: auto; }
-
-/* Arrow - Get really close to the right because the button is small  */
-.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  right: 1px;
-  left: auto; }
-
-/* Arrow - Get really close to the left because the button is small - need to adjust for border radius */
-.ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  top: -30px; }
-
-/* Arrow - Get really close to the left because the button is small - need to adjust for border radius */
-.ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  top: auto;
-  bottom: -30px; }
-
-.ulf-tiny .ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny .ulf-arrow-hug-right.ulf-arrow-super-hug {
-  bottom: -21px; }
-
-.ulf-black-theme .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-black-theme .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  top: -27px; }
-
-.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  bottom: -28px; }
-
-/* White theme */
-.ulf-white-theme {
-  background: #fff;
-  border: 2px solid #e4e4e4; }
-
-.ulf-white-theme .ulf-content {
-  color: #333; }
-
-.ulf-white-theme .ulf-arrow-top {
-  border-bottom-color: #e4e4e4; }
-
-.ulf-white-theme .ulf-arrow-bottom {
-  border-top-color: #e4e4e4; }
-
-.ulf-white-theme .ulf-arrow-left {
-  border-right-color: #e4e4e4; }
-
-.ulf-white-theme .ulf-arrow-right {
-  border-left-color: #e4e4e4; }
-
-/* Large tooltip */
-.ulf-large {
-  font-size: 18px; }
-
-/* Medium tooltip */
-.ulf-medium {
-  font-size: 14px; }
-
-/* Small tooltip */
-.ulf-small {
-  font-size: 12px;
-  padding: 5px; }
-
-.ulf-small .ulf-content {
-  margin: 2px 8px;
-  line-height: 1.9em; }
-
-/* Tiny tooltip */
-.ulf-tiny {
-  padding: 2px 5px;
-  font-size: 10px; }
-
-.ulf-tiny .ulf-content {
-  margin: 3px; }
-
-.ulf-tiny .ulf-button {
-  margin: 0px 3px; }
-
-.ulf-tiny .ulf-arrow {
-  border-width: 10px;
-  margin-left: -10px; }
-
-.ulf-tiny .ulf-arrow-left {
-  left: -10px;
-  margin-top: -10px; }
-
-.ulf-tiny .ulf-arrow-right {
-  right: -20px;
-  margin-top: -10px; }
-
-/**
-@todo: Rewrite arrows in JS since they are so complicated in CSS
- */
-.ulf-tiny .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug {
-  left: 11px; }
-
-.ulf-tiny .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug,
-.ulf-tiny .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  right: 1px; }
-
-.ulf-tiny.ulf-white-theme .ulf-arrow-top.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny.ulf-white-theme .ulf-arrow-top.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  top: -18px; }
-
-.ulf-tiny.ulf-white-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny.ulf-white-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  bottom: -21px; }
-
-.ulf-tiny.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-left.ulf-arrow-super-hug,
-.ulf-tiny.ulf-black-theme .ulf-arrow-bottom.ulf-arrow-hug-right.ulf-arrow-super-hug {
-  bottom: -18px; }
+  transform: translate(-50%, -50%); }
 
 /*!>>>>>>>>>>>>>>>>>>>>>>> #RTL <<<<<<<<<<<<<<<<<<<<<<<<<<< */
 .rtl .wpulike-default .count-box {
@@ -867,3 +888,54 @@
     right: 10px; }
     .rtl .wpulike-notification .wpulike-message {
       padding: 9px 45px 9px 9px; } }
+
+.rtl .ulf-tooltip .ulf-arrow-bottom {
+  left: 50%;
+  margin-left: -3.5px; }
+
+.rtl .ulf-tooltip .ulf-arrow-top {
+  left: 50%;
+  margin-left: -3.5px; }
+
+.rtl .ulf-tooltip .ulf-arrow-left {
+  left: auto;
+  right: -4px;
+  border-top-color: #e2e8f0;
+  border-right-color: #e2e8f0;
+  border-bottom-color: transparent;
+  border-left-color: transparent; }
+
+.rtl .ulf-tooltip .ulf-arrow-right {
+  right: auto;
+  left: -4px;
+  border-bottom-color: #e2e8f0;
+  border-left-color: #e2e8f0;
+  border-top-color: transparent;
+  border-right-color: transparent; }
+
+.rtl .ulf-tooltip.ulf-tiny .ulf-arrow-left {
+  right: -3.5px;
+  left: auto; }
+
+.rtl .ulf-tooltip.ulf-tiny .ulf-arrow-right {
+  left: -3.5px;
+  right: auto; }
+
+.rtl .ulf-tooltip .ulf-white-theme .ulf-arrow-left,
+.rtl .ulf-tooltip .ulf-light-theme .ulf-arrow-left {
+  border-top-color: #e2e8f0;
+  border-right-color: #e2e8f0;
+  border-bottom-color: transparent;
+  border-left-color: transparent; }
+
+.rtl .ulf-tooltip .ulf-white-theme .ulf-arrow-right,
+.rtl .ulf-tooltip .ulf-light-theme .ulf-arrow-right {
+  border-bottom-color: #e2e8f0;
+  border-left-color: #e2e8f0;
+  border-top-color: transparent;
+  border-right-color: transparent; }
+
+.rtl .ulf-centered {
+  left: 50%;
+  right: auto;
+  transform: translate(-50%, -50%); }

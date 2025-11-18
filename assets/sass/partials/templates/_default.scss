@@ -10,7 +10,7 @@
         min-width: 50px;
 
         &:hover,
-        &:focus {
+        &:focus{
             color: #616161;
             background-color: #e0e0e0;
             text-decoration: none;
@@ -72,6 +72,7 @@
 
         &:before {
             content: '';
+            display: block;
             position: absolute;
             border: 1px solid transparent;
             background: #FFFFFF;
