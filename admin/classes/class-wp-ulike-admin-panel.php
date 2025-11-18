@@ -1031,7 +1031,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'       => 'number',
                     'title'      => esc_html__( 'Avatar Size', 'wp-ulike'),
                     'desc'       => esc_html__('Set the size of user avatars displayed in the likers box.', 'wp-ulike'),
-                    'default'    => 64,
+                    'default'    => 32,
                     'unit'       => 'px',
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),
                 ),
