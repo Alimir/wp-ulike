@@ -8,6 +8,11 @@
 	if ( ! defined('ABSPATH') ) {
 	    die();
 	}
+
+	// Dynamic values (update these as needed)
+	$installations_count = '80,000+';
+	$premium_templates_count = '25+';
+	$schema_types_count = '13+';
 ?>
 
 <div class="wrap wp-ulike-go-pro-page">
@@ -17,7 +22,7 @@
 		<div class="wp-ulike-pro-hero-content">
 			<div class="wp-ulike-pro-hero-badge">
 				<span class="dashicons dashicons-star-filled"></span>
-				<span><?php esc_html_e( 'Trusted by 80,000+ Websites', 'wp-ulike' ); ?></span>
+				<span><?php echo sprintf( esc_html__( 'Trusted by %s Websites', 'wp-ulike' ), esc_html( $installations_count ) ); ?></span>
 			</div>
 			<h1><?php esc_html_e( 'Unlock the Full Power of WP ULike', 'wp-ulike' ); ?></h1>
 			<p class="wp-ulike-pro-hero-subtitle"><?php esc_html_e( 'Transform your website engagement with professional-grade features designed to boost interaction, improve SEO, and provide deeper insights into your audience.', 'wp-ulike' ); ?></p>
@@ -79,7 +84,7 @@
 						<span class="dashicons dashicons-admin-appearance"></span>
 					</div>
 					<h3><?php esc_html_e( 'Premium Templates', 'wp-ulike' ); ?></h3>
-					<p><?php esc_html_e( 'Choose from 25+ professionally designed button templates to match your brand and elevate your site design.', 'wp-ulike' ); ?></p>
+					<p><?php echo sprintf( esc_html__( 'Choose from %s professionally designed button templates to match your brand and elevate your site design.', 'wp-ulike' ), esc_html( $premium_templates_count ) ); ?></p>
 				</div>
 
 				<div class="wp-ulike-pro-feature-card">
@@ -103,7 +108,7 @@
 						<span class="dashicons dashicons-search"></span>
 					</div>
 					<h3><?php esc_html_e( 'SEO Schema Generator', 'wp-ulike' ); ?></h3>
-					<p><?php esc_html_e( 'Improve search rankings with structured data markup. Support for 13+ schema types including aggregate ratings for Google rich snippets.', 'wp-ulike' ); ?></p>
+					<p><?php echo sprintf( esc_html__( 'Improve search rankings with structured data markup. Support for %s schema types including aggregate ratings for Google rich snippets.', 'wp-ulike' ), esc_html( $schema_types_count ) ); ?></p>
 				</div>
 
 				<div class="wp-ulike-pro-feature-card">
@@ -154,16 +159,16 @@
 		<div class="wp-ulike-pro-container">
 			<div class="wp-ulike-pro-benefits-grid">
 				<div class="wp-ulike-pro-benefit-item">
-					<div class="wp-ulike-pro-benefit-number">80,000+</div>
+					<div class="wp-ulike-pro-benefit-number"><?php echo esc_html( $installations_count ); ?></div>
 					<div class="wp-ulike-pro-benefit-label"><?php esc_html_e( 'Active Installations', 'wp-ulike' ); ?></div>
 				</div>
 				<div class="wp-ulike-pro-benefit-item">
-					<div class="wp-ulike-pro-benefit-number">25+</div>
+					<div class="wp-ulike-pro-benefit-number"><?php echo esc_html( $premium_templates_count ); ?></div>
 					<div class="wp-ulike-pro-benefit-label"><?php esc_html_e( 'Premium Templates', 'wp-ulike' ); ?></div>
 				</div>
 				<div class="wp-ulike-pro-benefit-item">
-					<div class="wp-ulike-pro-benefit-number">30</div>
-					<div class="wp-ulike-pro-benefit-label"><?php esc_html_e( 'Day Guarantee', 'wp-ulike' ); ?></div>
+					<div class="wp-ulike-pro-benefit-number"><?php echo esc_html( $schema_types_count ); ?></div>
+					<div class="wp-ulike-pro-benefit-label"><?php esc_html_e( 'Schema Types', 'wp-ulike' ); ?></div>
 				</div>
 				<div class="wp-ulike-pro-benefit-item">
 					<div class="wp-ulike-pro-benefit-number">24/7</div>
@@ -204,7 +209,7 @@
 						<span class="wp-ulike-pro-faq-toggle dashicons dashicons-arrow-down-alt2"></span>
 					</div>
 					<div class="wp-ulike-pro-faq-answer">
-						<p><?php esc_html_e( 'WP ULike Pro includes advanced analytics with date range filters and exportable reports, up/down voting support, user profile builder, 25+ premium templates, AJAX login and registration forms with social integration, SEO schema generator with 13+ schema types, REST API access, Elementor widgets, database optimization tools, local avatars, and priority support.', 'wp-ulike' ); ?></p>
+						<p><?php echo sprintf( esc_html__( 'WP ULike Pro includes advanced analytics with date range filters and exportable reports, up/down voting support, user profile builder, %s premium templates, AJAX login and registration forms with social integration, SEO schema generator with %s schema types, REST API access, Elementor widgets, database optimization tools, local avatars, and priority support.', 'wp-ulike' ), esc_html( $premium_templates_count ), esc_html( $schema_types_count ) ); ?></p>
 					</div>
 				</div>
 
