@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP ULike - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-11-18 06:28:42+00:00\n"
+"POT-Creation-Date: 2025-11-19 09:39:07+00:00\n"
 "PO-Revision-Date: 2025-10-16 09:29+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -165,7 +165,7 @@ msgstr "سایر کشورها"
 msgid "for"
 msgstr "در"
 
-#: admin/admin-ajax.php:185 admin/admin-hooks.php:490 admin/admin-hooks.php:565
+#: admin/admin-ajax.php:185 admin/admin-hooks.php:499 admin/admin-hooks.php:574
 #: admin/classes/class-wp-ulike-admin-panel.php:774
 #: admin/classes/class-wp-ulike-admin-panel.php:781
 #: admin/classes/class-wp-ulike-admin-panel.php:807
@@ -621,15 +621,19 @@ msgstr ""
 "موتورهای جستجو، امکان انتقال صحیح و شفاف ماهیت محتوای شما را فراهم می‌سازد. "
 "همین حالا ارتقا دهید و تجربه‌ای حرفه‌ای و بهینه در سئو داشته باشید!"
 
-#: admin/admin-hooks.php:257 admin/includes/templates/about.php:28
+#: admin/admin-hooks.php:264 admin/includes/templates/about.php:45
 msgid "Go Pro"
 msgstr "نسخه حرفه‌ای"
 
-#: admin/admin-hooks.php:643
+#: admin/admin-hooks.php:265
+msgid "Upgrade"
+msgstr ""
+
+#: admin/admin-hooks.php:652
 msgid "PHP Snippets"
 msgstr "اسنیپت های PHP"
 
-#: admin/admin-hooks.php:645
+#: admin/admin-hooks.php:654
 msgid ""
 "Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If "
 "you have lots of snippets, you may want to consider using Code Snippets "
@@ -639,11 +643,11 @@ msgstr ""
 "اگر قطعه های زیادی دارید، ممکن است بخواهید از افزونه Code Snippets استفاده "
 "کنید."
 
-#: admin/admin-hooks.php:654
+#: admin/admin-hooks.php:663
 msgid "Javascript Snippets"
 msgstr "اسنیپت های جاوا اسکریپت"
 
-#: admin/admin-hooks.php:656
+#: admin/admin-hooks.php:665
 msgid ""
 "This code will output immediately before the closing &lt;/body&gt; tag in "
 "the document source. (Scripts must not be property wrapped in &lt;script&gt; "
@@ -657,8 +661,7 @@ msgid "Statistics"
 msgstr "آماره"
 
 #: admin/classes/class-wp-ulike-admin-pages.php:35
-#: admin/includes/templates/about.php:24 admin/includes/templates/about.php:34
-#: includes/plugin.php:115
+#: admin/includes/templates/about.php:29 includes/plugin.php:115
 msgid "About"
 msgstr "درباره"
 
@@ -675,7 +678,7 @@ msgid "Explore Settings"
 msgstr "کاوش تنظیمات"
 
 #: admin/classes/class-wp-ulike-admin-panel.php:97
-#: admin/includes/templates/about.php:25
+#: admin/includes/templates/about.php:33
 msgid "Configuration"
 msgstr "پیکره بندی"
 
@@ -1867,98 +1870,498 @@ msgstr "فعال کردن تصویر کوچک/آواتار"
 msgid "Thumbnail/Avatar size:"
 msgstr "اندازه تصویر کوچک/آواتار:"
 
-#: admin/includes/templates/about.php:22
+#: admin/includes/templates/about.php:19
 msgid ""
-"A professional WordPress plugin that makes your website more attractive and "
-"user-friendly."
-msgstr "یک افزونه حرفه‌ای وردپرس که وب‌سایت شما را جذاب‌تر و کاربرپسندتر می‌کند."
+"Turn visitors into engaged fans. Add Like & Dislike buttons to your content "
+"and discover what your audience loves with real-time analytics."
+msgstr ""
 
-#: admin/includes/templates/about.php:26
+#: admin/includes/templates/about.php:37
 msgid "Customize"
 msgstr "شخصی سازی"
 
-#: admin/includes/templates/about.php:27
+#: admin/includes/templates/about.php:41
 msgid "Our Blog"
 msgstr "وبلاگ ما"
 
-#. Description of the plugin/theme
-msgid ""
-"Looking to increase user engagement on your WordPress site? WP ULike plugin "
-"lets you easily add voting buttons to your content. With customizable "
-"settings and detailed analytics, you can track user engagement, optimize "
-"your content, and build a loyal following."
+#: admin/includes/templates/about.php:58
+msgid "Transform Your Website Engagement"
 msgstr ""
-"به دنبال افزایش تعامل کاربران در وب‌سایت وردپرس خود هستید؟ افزونه وردپرس "
-"یولایک به شما امکان می‌دهد به‌راحتی دکمه‌های رأی‌گیری را به محتوای خود اضافه "
-"کنید. با تنظیمات قابل سفارشی‌سازی و تحلیل‌های دقیق، می‌توانید تعامل کاربران را "
-"ردیابی کرده، محتوای خود را بهینه کنید و یک دنبال‌کننده وفادار بسازید."
 
-#: admin/includes/templates/about.php:43
+#: admin/includes/templates/about.php:59
+msgid ""
+"WP ULike is a powerful WordPress engagement plugin that helps you understand "
+"your audience better. Add Like & Dislike buttons to posts, comments, "
+"WooCommerce products, BuddyPress activities, and bbPress topics. Track what "
+"content resonates with your visitors through detailed analytics and build a "
+"more engaging website."
+msgstr ""
+
+#: admin/includes/templates/about.php:68
+msgid "What Problems Does WP ULike Solve?"
+msgstr ""
+
+#: admin/includes/templates/about.php:69
+msgid "Discover how WP ULike addresses common challenges website owners face"
+msgstr ""
+
+#: admin/includes/templates/about.php:76
+#, fuzzy
+msgid "Low User Engagement"
+msgstr "میزان تعامل"
+
+#: admin/includes/templates/about.php:77
+msgid ""
+"Visitors can quickly show appreciation with one click, increasing "
+"interaction and time spent on your site."
+msgstr ""
+
+#: admin/includes/templates/about.php:84
+msgid "No Content Insights"
+msgstr ""
+
+#: admin/includes/templates/about.php:85
+msgid ""
+"Track which content performs best with detailed statistics and analytics to "
+"optimize your strategy."
+msgstr ""
+
+#: admin/includes/templates/about.php:92
+msgid "Limited User Feedback"
+msgstr ""
+
+#: admin/includes/templates/about.php:93
+msgid ""
+"Get instant feedback from your audience without requiring comments or "
+"complex forms."
+msgstr ""
+
+#: admin/includes/templates/about.php:100
+#, fuzzy
+msgid "Slow Website Performance"
+msgstr "عملکرد کلی"
+
+#: admin/includes/templates/about.php:101
+msgid ""
+"Built with vanilla JavaScript (no jQuery), optimized for speed and fully "
+"compatible with caching plugins."
+msgstr ""
+
+#: admin/includes/templates/about.php:108
+msgid "Privacy Concerns"
+msgstr ""
+
+#: admin/includes/templates/about.php:109
+msgid ""
+"GDPR compliant with IP anonymization. No personal data stored, respecting "
+"user privacy."
+msgstr ""
+
+#: admin/includes/templates/about.php:116
+#, fuzzy
+msgid "Limited Content Types"
+msgstr "انواع محتوا"
+
+#: admin/includes/templates/about.php:117
+msgid ""
+"Works with posts, comments, WooCommerce products, BuddyPress activities, "
+"bbPress topics, and more."
+msgstr ""
+
+#: admin/includes/templates/about.php:127
+msgid "Everything You Need to Boost Engagement"
+msgstr ""
+
+#: admin/includes/templates/about.php:128
+msgid ""
+"Powerful features designed to help you understand and engage your audience"
+msgstr ""
+
+#: admin/includes/templates/about.php:133
+msgid "Like & Dislike buttons for all content types"
+msgstr ""
+
+#: admin/includes/templates/about.php:137
+msgid "Real-time statistics and analytics dashboard"
+msgstr ""
+
+#: admin/includes/templates/about.php:141
+msgid "Multiple customizable button templates"
+msgstr ""
+
+#: admin/includes/templates/about.php:145
+msgid "Fast & lightweight (vanilla JavaScript, no jQuery)"
+msgstr ""
+
+#: admin/includes/templates/about.php:149
+msgid "GDPR ready with IP anonymization"
+msgstr ""
+
+#: admin/includes/templates/about.php:153
+msgid "Full RTL (right-to-left) language support"
+msgstr ""
+
+#: admin/includes/templates/about.php:157
+msgid "Seamless integration with WooCommerce, BuddyPress, bbPress, Elementor"
+msgstr ""
+
+#: admin/includes/templates/about.php:161
+msgid "Zero configuration required - works out of the box"
+msgstr ""
+
+#: admin/includes/templates/about.php:171
+msgid "Get Help & Resources"
+msgstr ""
+
+#: admin/includes/templates/about.php:172
+msgid "We're here to help you get the most out of WP ULike"
+msgstr ""
+
+#: admin/includes/templates/about.php:179
 msgid "Need Some Help?"
 msgstr "به کمک نیاز دارید؟"
 
-#: admin/includes/templates/about.php:44
+#: admin/includes/templates/about.php:180
 msgid "We would love to be of any assistance."
 msgstr "یک تیکت پشتیبانی برای ما باز کنید."
 
-#: admin/includes/templates/about.php:49
+#: admin/includes/templates/about.php:183
 msgid "Send Ticket"
 msgstr "ارسال تیکت"
 
-#: admin/includes/templates/about.php:61
+#: admin/includes/templates/about.php:191
 msgid "Documentation"
 msgstr "مستندات"
 
-#: admin/includes/templates/about.php:62
+#: admin/includes/templates/about.php:192
 msgid "Learn about any aspect of WP ULike Plugin."
 msgstr "با هر جنبه ای از افزونه وردپرس یولایک آشنا شوید."
 
-#: admin/includes/templates/about.php:67
+#: admin/includes/templates/about.php:195
 msgid "Start Reading"
 msgstr "شروع خواندن"
 
-#: admin/includes/templates/about.php:79
+#: admin/includes/templates/about.php:203
 msgid "Rate Us"
 msgstr "امتیاز به ما"
 
-#: admin/includes/templates/about.php:80
+#: admin/includes/templates/about.php:204
 msgid "By spreading the love, we can push WP ULike forward."
 msgstr "با گسترش عشق، می‌توانیم وردپرس یولایک را جلو ببریم."
 
-#: admin/includes/templates/about.php:85
+#: admin/includes/templates/about.php:207
 msgid "Submit Review"
 msgstr "ارسال نقد و بررسی"
 
-#: admin/includes/templates/go-pro.php:16
-msgid "WP ULike Premium"
-msgstr "یولایک پرمیوم"
+#: admin/includes/templates/go-pro.php:25
+msgid "Trusted by %s Websites"
+msgstr ""
 
-#: admin/includes/templates/go-pro.php:22
-msgid "Buy WP ULike Premium"
-msgstr "خرید یولایک پرمیوم"
+#: admin/includes/templates/go-pro.php:27
+msgid "Unlock the Full Power of WP ULike"
+msgstr ""
 
 #: admin/includes/templates/go-pro.php:28
-msgid "More information"
-msgstr "اطلاعات بیشتر"
-
-#: admin/includes/templates/go-pro.php:156
 msgid ""
-"Elementor is the #1 WordPress page builder. In the new version of the WP "
-"ULike PRO plugin we fully support this page builder and have a variety of "
-"widgets & controllers that make life much easier for you."
+"Transform your website engagement with professional-grade features designed "
+"to boost interaction, improve SEO, and provide deeper insights into your "
+"audience."
 msgstr ""
-"المنتور صفحه ساز شماره یک وردپرس است. در نسخه جدید افزونه یولایک پرو ما به "
-"طور کامل از این صفحه ساز پشتیبانی می کنیم و انواع ابزارک ها و کنترلرها را "
-"داریم که زندگی را برای شما بسیار آسان می کند."
 
-#: admin/includes/templates/go-pro.php:156
-msgid ""
-"Just drag your desired widget and drop it in your Elementor sections, "
-"customize as you go and enjoy your like and dislike buttons on your contents."
+#: admin/includes/templates/go-pro.php:32
+#, fuzzy
+msgid "Get WP ULike Pro"
+msgstr "یولایک پرمیوم"
+
+#: admin/includes/templates/go-pro.php:35
+msgid "View All Features"
 msgstr ""
-"کافیست ابزارک مورد نظر خود را بکشید و آن را در بخش های المنتور خود رها کنید، "
-"در حین رفتن آن را سفارشی کنید و از دکمه های لایک و دیسلایک در محتویات خود "
-"لذت ببرید."
+
+#: admin/includes/templates/go-pro.php:41
+#: admin/includes/templates/go-pro.php:193
+msgid "30-Day Money-Back Guarantee"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:45
+#: admin/includes/templates/go-pro.php:150
+#: admin/includes/templates/go-pro.php:175
+msgid "Priority Support"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:54
+msgid "Why Upgrade to Pro?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:55
+msgid ""
+"Discover powerful features that help you understand your audience better and "
+"drive more engagement."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:62
+msgid "Advanced Analytics"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:63
+msgid ""
+"Deep insights with date range filters, exportable reports, and comprehensive "
+"statistics to understand what content resonates with your audience."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:70
+msgid "Up & Down Voting"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:71
+msgid ""
+"Enable flexible voting options with upvote and downvote support to get more "
+"nuanced feedback from your community."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:78
+#, fuzzy
+msgid "User Profiles"
+msgstr "پروفایل‌ها"
+
+#: admin/includes/templates/go-pro.php:79
+msgid ""
+"Create personalized user profiles showcasing likes, activity, and engagement "
+"history with a versatile builder."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:86
+#: admin/includes/templates/go-pro.php:167
+#, fuzzy
+msgid "Premium Templates"
+msgstr "قالب دکمه"
+
+#: admin/includes/templates/go-pro.php:87
+msgid ""
+"Choose from %s professionally designed button templates to match your brand "
+"and elevate your site design."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:94
+msgid "AJAX Login & Registration"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:95
+msgid ""
+"Beautiful, seamless login and registration forms with social integration and "
+"two-factor authentication for enhanced security."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:102
+#, fuzzy
+msgid "Social Sharing"
+msgstr "ورود از طریق شبکه‌های اجتماعی"
+
+#: admin/includes/templates/go-pro.php:103
+msgid ""
+"Boost your content reach with one-click social sharing buttons integrated "
+"seamlessly with your like buttons."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:110
+msgid "SEO Schema Generator"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:111
+msgid ""
+"Improve search rankings with structured data markup. Support for %s schema "
+"types including aggregate ratings for Google rich snippets."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:118
+#, fuzzy
+msgid "REST API Access"
+msgstr "تنظیمات Rest API"
+
+#: admin/includes/templates/go-pro.php:119
+msgid ""
+"Full API access with diverse routes for custom integrations, mobile apps, "
+"and third-party services."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:126
+msgid "Elementor Widgets"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:127
+msgid ""
+"Drag-and-drop widgets for Elementor page builder. Customize every part of "
+"your like buttons with visual controls."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:134
+msgid "Advanced Customization"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:135
+msgid ""
+"Metabox options for individual content, database optimization tools, and "
+"granular control over every aspect of your engagement system."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:142
+msgid "Local Avatars"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:143
+msgid ""
+"Simple local avatar management for effortless user image handling without "
+"relying on external services."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:151
+msgid ""
+"Get comprehensive support services with faster response times and dedicated "
+"assistance for your needs."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:163
+msgid "Active Installations"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:171
+msgid "Schema Types"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:185
+msgid "Ready to Transform Your Website Engagement?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:186
+msgid ""
+"Join thousands of satisfied users who have upgraded to WP ULike Pro and are "
+"seeing real results."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:189
+#, fuzzy
+msgid "Get WP ULike Pro Now"
+msgstr "یولایک پرمیوم"
+
+#: admin/includes/templates/go-pro.php:202
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:203
+msgid "Everything you need to know about WP ULike Pro"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:208
+msgid "What's included in WP ULike Pro?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:212
+msgid ""
+"WP ULike Pro includes advanced analytics with date range filters and "
+"exportable reports, up/down voting support, user profile builder, %s premium "
+"templates, AJAX login and registration forms with social integration, SEO "
+"schema generator with %s schema types, REST API access, Elementor widgets, "
+"database optimization tools, local avatars, and priority support."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:218
+msgid "Will my existing buttons work after upgrading?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:222
+msgid ""
+"Absolutely! WP ULike Pro is an extension of the free version. After "
+"upgrading, you continue exactly where you left off without any "
+"interruptions. Your existing buttons, settings, and data remain intact and "
+"will work seamlessly with all Pro features enabled."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:228
+msgid "Do you offer a money-back guarantee?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:232
+msgid ""
+"Yes! We offer a 30-day money-back guarantee. If you're not completely "
+"satisfied with WP ULike Pro for any reason, simply contact us within 30 days "
+"of purchase for a full refund."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:238
+msgid "What happens if I don't renew my license?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:242
+msgid ""
+"Your existing installation will continue to work perfectly. However, you "
+"won't receive automatic updates, new premium templates, or priority support. "
+"You can renew your license at any time to regain access to all benefits, "
+"including the latest features and improvements."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:248
+msgid "Can I use my license on multiple websites?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:252
+msgid ""
+"License usage depends on your plan. Single-site licenses work on one domain, "
+"while multi-site licenses allow usage on multiple domains. You can manage "
+"and transfer your license between domains through your account dashboard at "
+"any time."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:258
+msgid "What kind of support do I get with Pro?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:262
+msgid ""
+"Pro users receive priority support with faster response times, dedicated "
+"assistance for setup and customization, access to exclusive documentation "
+"and tutorials, and direct communication with our development team for "
+"feature requests and bug reports."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:268
+msgid "Can I test Pro features before purchasing?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:272
+msgid ""
+"While we don't offer a trial version, our 30-day money-back guarantee allows "
+"you to try WP ULike Pro risk-free. If it doesn't meet your needs, you can "
+"get a full refund. You can also view our feature demos and documentation "
+"before purchasing."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:278
+msgid "How often do you release updates?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:282
+msgid ""
+"We release regular updates with new features, improvements, and security "
+"patches. Pro users receive automatic updates and get early access to new "
+"premium templates and features. We typically release major updates monthly "
+"with minor updates and bug fixes as needed."
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:292
+msgid "Still Have Questions?"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:293
+msgid "Our support team is here to help. Contact us anytime!"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:297
+msgid "Contact Support"
+msgstr ""
+
+#: admin/includes/templates/go-pro.php:301
+#, fuzzy
+msgid "Get Started Now"
+msgstr "شروع کن"
 
 #: includes/classes/class-wp-ulike-ajax-listener-base.php:69
 msgid "There was an error processing the request."
@@ -2364,6 +2767,18 @@ msgstr ""
 "https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-"
 "uri&utm_medium=wp-dash"
 
+#. Description of the plugin/theme
+msgid ""
+"Looking to increase user engagement on your WordPress site? WP ULike plugin "
+"lets you easily add voting buttons to your content. With customizable "
+"settings and detailed analytics, you can track user engagement, optimize "
+"your content, and build a loyal following."
+msgstr ""
+"به دنبال افزایش تعامل کاربران در وب‌سایت وردپرس خود هستید؟ افزونه وردپرس "
+"یولایک به شما امکان می‌دهد به‌راحتی دکمه‌های رأی‌گیری را به محتوای خود اضافه "
+"کنید. با تنظیمات قابل سفارشی‌سازی و تحلیل‌های دقیق، می‌توانید تعامل کاربران را "
+"ردیابی کرده، محتوای خود را بهینه کنید و یک دنبال‌کننده وفادار بسازید."
+
 #. Author URI of the plugin/theme
 msgid ""
 "https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-"
@@ -2371,6 +2786,36 @@ msgid ""
 msgstr ""
 "https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-"
 "uri&utm_medium=wp-dash"
+
+#~ msgid ""
+#~ "A professional WordPress plugin that makes your website more attractive "
+#~ "and user-friendly."
+#~ msgstr ""
+#~ "یک افزونه حرفه‌ای وردپرس که وب‌سایت شما را جذاب‌تر و کاربرپسندتر می‌کند."
+
+#~ msgid "Buy WP ULike Premium"
+#~ msgstr "خرید یولایک پرمیوم"
+
+#~ msgid "More information"
+#~ msgstr "اطلاعات بیشتر"
+
+#~ msgid ""
+#~ "Elementor is the #1 WordPress page builder. In the new version of the WP "
+#~ "ULike PRO plugin we fully support this page builder and have a variety of "
+#~ "widgets & controllers that make life much easier for you."
+#~ msgstr ""
+#~ "المنتور صفحه ساز شماره یک وردپرس است. در نسخه جدید افزونه یولایک پرو ما "
+#~ "به طور کامل از این صفحه ساز پشتیبانی می کنیم و انواع ابزارک ها و کنترلرها "
+#~ "را داریم که زندگی را برای شما بسیار آسان می کند."
+
+#~ msgid ""
+#~ "Just drag your desired widget and drop it in your Elementor sections, "
+#~ "customize as you go and enjoy your like and dislike buttons on your "
+#~ "contents."
+#~ msgstr ""
+#~ "کافیست ابزارک مورد نظر خود را بکشید و آن را در بخش های المنتور خود رها "
+#~ "کنید، در حین رفتن آن را سفارشی کنید و از دکمه های لایک و دیسلایک در "
+#~ "محتویات خود لذت ببرید."
 
 #~ msgid "Enable Convertor"
 #~ msgstr "فعال‌سازی مبدل"
