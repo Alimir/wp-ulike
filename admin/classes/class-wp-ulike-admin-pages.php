@@ -32,7 +32,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'load_screen' => false
 				),
 				'about'           => array(
-					'title'       => esc_html__( 'About', 'wp-ulike' ),
+					'title'       => sprintf( '<span class="wp-ulike-about-menu-link"><span class="dashicons dashicons-info"></span> %s</span>', esc_html__( 'About', 'wp-ulike' ) ),
 					'parent_slug' => 'wp-ulike-settings',
 					'capability'  => wp_ulike_get_user_access_capability('stats'),
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/about.php',

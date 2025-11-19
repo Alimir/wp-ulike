@@ -254,7 +254,16 @@ add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 function wp_ulike_go_pro_admin_menu( $submenus ){
 	if( is_array( $submenus ) && ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
 		$submenus['go_pro'] = array(
-			'title'       =>  sprintf( '<span class="wp-ulike-gopro-menu-link"><strong>%s</strong></span>', esc_html__( 'Go Pro', 'wp-ulike' )),
+			'title'       => sprintf( 
+				'<span class="wp-ulike-gopro-menu-link">
+					<span class="wp-ulike-gopro-icon">%s</span>
+					<span class="wp-ulike-gopro-text">%s</span>
+					<span class="wp-ulike-gopro-badge">%s</span>
+				</span>', 
+				'<span class="dashicons dashicons-star-filled"></span>',
+				esc_html__( 'Go Pro', 'wp-ulike' ),
+				esc_html__( 'Upgrade', 'wp-ulike' )
+			),
 			'parent_slug' => 'wp-ulike-settings',
  			'capability'  => 'manage_options',
 			'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/go-pro.php',
