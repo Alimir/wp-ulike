@@ -23,7 +23,7 @@
 
 
 // About Menu Link
-.wp-ulike-about-menu-link {
+.wp-ulike-menu-icon {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -32,7 +32,6 @@
     font-size: 18px;
     width: 18px;
     height: 18px;
-    color: #646970;
   }
 }
 
@@ -167,7 +166,7 @@
 // RTL Support
 [dir="rtl"] {
   // About Menu Link
-  .wp-ulike-about-menu-link {
+  .wp-ulike-menu-icon {
     .dashicons {
       margin-left: 6px;
       margin-right: 0;
