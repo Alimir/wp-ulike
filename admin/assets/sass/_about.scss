@@ -1,831 +1,597 @@
-.ulf-about {
-
-	/* Section backgrounds */
-	--about-background: #fff;
-	--about-subtle-background: #fff4f4;
-
-	/* Main text color */
-	--about-text: #00131c;
-	--about-text-light: #fff;
-
-	/* Accent colors: used in header, on special classes. */
-	--about-accent-1: #fff4f4;
-	/* Accent background */
-	--about-accent-2: #6C757D;
-	/* Heading subtitle */
-
-	/* Navigation colors. */
-	--about-nav-background: var(--about-background);
-	--about-nav-border: #ffb6a4;
-	--about-nav-color: var(--about-text);
-	--about-nav-current: #ff6d6f;
-
-	max-width: 1000px;
-	margin: 24px auto;
-	clear: both;
-
-	line-height: 1.4;
-	color: #00131c;
-	color: var(--about-text);
-
-	.alignleft {
-		float: left;
-	}
-
-	.alignright {
-		float: right;
-	}
-
-	.aligncenter {
-		text-align: center;
-	}
-
-	.is-vertically-aligned-top {
-		-ms-grid-row-align: start;
-		align-self: start;
-	}
-
-	.is-vertically-aligned-center {
-		-ms-grid-row-align: center;
-		align-self: center;
-	}
-
-	.is-vertically-aligned-bottom {
-		-ms-grid-row-align: end;
-		align-self: end;
-	}
-
-	.ulf-about-section {
-		clear: both;
-	}
-
-	.has-accent-background-color {
-		background-color: #fff4f4;
-		background-color: var(--about-accent-1);
-		color: #fff;
-		color: var(--about-text);
-	}
-
-	.has-accent-background-color a {
-		color: #fff;
-		color: var(--about-text);
-	}
-
-	.has-transparent-background-color {
-		background-color: transparent;
-	}
-
-	.has-accent-color {
-		color: #00131c;
-		color: var(--about-text);
-		font-weight: bold;
-	}
-
-	.has-border {
-		border: 3px solid currentColor;
-	}
-
-	.has-subtle-background-color {
-		background-color: #fde4bf;
-		background-color: var(--about-subtle-background);
-	}
-
-	.has-background-image {
-		background-size: contain;
-		background-repeat: no-repeat;
-		background-position: center;
-	}
-
-	/* 1.1 - Layout */
-
-	.ulf-about-section {
-		margin: 0;
-
-		.column {
-			padding: 32px;
-		}
-
-		&.ulf-box {
-			margin-top: 2em;
-			text-align: center;
-			grid-gap: 30px;
-
-			a {
-				text-decoration: none;
-			}
-
-			.column {
-				box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.05);
-				padding: 0;
-				display: flex;
-				justify-content: center;
-				flex-wrap: wrap;
-				background: #fff;
-			}
-
-			.column-header {
-				width: 100%;
-				padding: 30px 50px;
-				color: #6C757D;
-				color: var(--about-accent-2);
-
-				img {
-					max-width: 100px;
-					margin-bottom: 2em;
-				}
-
-				h2 {
-					color: #00131c;
-					color: var(--about-text);
-				}
-			}
-
-			.column-footer {
-				width: 100%;
-				background-color: #fbfbfb;
-				padding: 20px 0;
-			}
-
-			.wp-ulike-btn {
-
-				&.green {
-					background-color: #26c6da;
-				}
-
-				&.yellow {
-					background-color: #ffd200;
-				}
-
-				&.purple {
-					background-color: #be63f9;
-				}
-			}
-		}
-	}
-
-	.ulf-about-section .ulf-about-section+.ulf-about-section .column {
-		padding-top: 0;
-	}
-
-	.ulf-about-section+.ulf-about-section .is-section-header {
-		padding-bottom: 32px;
-	}
-
-	.ulf-about-section .column[class*="background-color"],
-	.ulf-about-section .column.has-border {
-		padding-top: 32px;
-	}
-
-	.ulf-about-section .column.is-edge-to-edge {
-		padding: 0;
-	}
-
-	.ulf-about-section .column p:first-of-type {
-		margin-top: 0;
-	}
-
-	.ulf-about-section .column p:last-of-type {
-		margin-bottom: 0;
-	}
-
-	.ulf-about-section .has-text-columns {
-		columns: 2;
-		column-gap: 64px;
-	}
-
-	.ulf-about-section .is-section-header {
-		margin-bottom: 0;
-		padding: 32px 32px 0;
-	}
-
-	.ulf-about-section .is-section-header p:last-child {
-		margin-bottom: 0;
-	}
-
-	/* Section header is alone in a container. */
-	.ulf-about-section .is-section-header:first-child:last-child {
-		padding: 0;
-	}
-
-	.ulf-about-section.is-feature {
-		padding: 32px;
-	}
-
-	.ulf-about-section.is-feature p {
-		margin: 0;
-	}
-
-	.ulf-about-section.is-feature p+p {
-		margin-top: 1rem;
-	}
-
-	.ulf-about-section.has-1-column {
-		margin-left: auto;
-		margin-right: auto;
-		max-width: 36em;
-	}
-
-	.ulf-about-section.has-2-columns,
-	.ulf-about-section.has-3-columns,
-	.ulf-about-section.has-4-columns,
-	.ulf-about-section.has-overlap-style {
-		display: -ms-grid;
-		display: grid;
-	}
-
-	.ulf-about-section.has-gutters {
-		gap: 16px;
-	}
-
-	.ulf-about-section.has-2-columns {
-		-ms-grid-columns: 1fr 1fr;
-		grid-template-columns: 1fr 1fr;
-	}
-
-	.ulf-about-section.has-2-columns.is-wider-right {
-		-ms-grid-columns: 1fr 2fr;
-		grid-template-columns: 1fr 2fr;
-	}
-
-	.ulf-about-section.has-2-columns.is-wider-left {
-		-ms-grid-columns: 2fr 1fr;
-		grid-template-columns: 2fr 1fr;
-	}
-
-	.ulf-about-section.has-2-columns .is-section-header {
-		-ms-grid-column: 1;
-		grid-column-start: 1;
-		-ms-grid-column-span: 2;
-		grid-column-end: span 2;
-	}
-
-	.ulf-about-section.has-2-columns .column:nth-of-type(2n+1) {
-		-ms-grid-column: 1;
-		grid-column-start: 1;
-	}
-
-	.ulf-about-section.has-2-columns .column:nth-of-type(2n) {
-		-ms-grid-column: 2;
-		grid-column-start: 2;
-	}
-
-	.ulf-about-section.has-3-columns {
-		grid-template-columns: repeat(3, 1fr);
-	}
-
-	.ulf-about-section.has-3-columns .is-section-header {
-		-ms-grid-column: 1;
-		grid-column-start: 1;
-		-ms-grid-column-span: 3;
-		grid-column-end: span 3;
-	}
-
-	.ulf-about-section.has-3-columns .column:nth-of-type(3n+1) {
-		-ms-grid-column: 1;
-		grid-column-start: 1;
-	}
-
-	.ulf-about-section.has-3-columns .column:nth-of-type(3n+2) {
-		-ms-grid-column: 2;
-		grid-column-start: 2;
-	}
-
-	.ulf-about-section.has-3-columns .column:nth-of-type(3n) {
-		-ms-grid-column: 3;
-		grid-column-start: 3;
-	}
-
-	.ulf-about-section.has-4-columns {
-		grid-template-columns: repeat(4, 1fr);
-	}
-
-	.ulf-about-section.has-4-columns .is-section-header {
-		-ms-grid-column: 1;
-		grid-column-start: 1;
-		-ms-grid-column-span: 4;
-		grid-column-end: span 4;
-	}
-
-	.ulf-about-section.has-4-columns .column:nth-of-type(4n+1) {
-		-ms-grid-column: 1;
-		grid-column-start: 1;
-	}
-
-	.ulf-about-section.has-4-columns .column:nth-of-type(4n+2) {
-		-ms-grid-column: 2;
-		grid-column-start: 2;
-	}
-
-	.ulf-about-section.has-4-columns .column:nth-of-type(4n+3) {
-		-ms-grid-column: 3;
-		grid-column-start: 3;
-	}
-
-	.ulf-about-section.has-4-columns .column:nth-of-type(4n) {
-		-ms-grid-column: 4;
-		grid-column-start: 4;
-	}
-
-	/* Any columns following a section header need to be expicitly put into the second row, for IE support. */
-	.ulf-about-section.has-2-columns .is-section-header~.column,
-	.ulf-about-section.has-3-columns .is-section-header~.column,
-	.ulf-about-section.has-4-columns .is-section-header~.column,
-	.ulf-about-section.has-overlap-style .is-section-header~.column {
-		-ms-grid-row: 2;
-		grid-row-start: 2;
-	}
-
-	.ulf-about-section.has-overlap-style {
-		grid-template-columns: repeat(7, 1fr);
-	}
-
-	.ulf-about-section.has-overlap-style .column {
-		-ms-grid-row: 1;
-		grid-row-start: 1;
-	}
-
-	.ulf-about-section.has-overlap-style .column:nth-of-type(2n+1) {
-		-ms-grid-column: 2;
-		grid-column-start: 2;
-		-ms-grid-column-span: 3;
-		grid-column-end: span 3;
-	}
-
-	.ulf-about-section.has-overlap-style .column:nth-of-type(2n) {
-		-ms-grid-column: 4;
-		grid-column-start: 4;
-		-ms-grid-column-span: 3;
-		grid-column-end: span 3;
-	}
-
-	.ulf-about-section.has-overlap-style .column.is-top-layer {
-		z-index: 1;
-	}
-
-	@media screen and (max-width: 782px) {
-
-		.ulf-about-section.has-2-columns.is-wider-right,
-		.ulf-about-section.has-2-columns.is-wider-left,
-		.ulf-about-section.has-3-columns {
-			display: block;
-			padding-bottom: 16px;
-		}
-
-		.ulf-about-section.has-2-columns.has-gutters .column,
-		.ulf-about-section.has-2-columns.has-gutters .column,
-		.ulf-about-section.has-3-columns.has-gutters .column {
-			margin-bottom: 16px;
-		}
-
-		.ulf-about-section.has-2-columns.has-gutters .column:last-child,
-		.ulf-about-section.has-2-columns.has-gutters .column:last-child,
-		.ulf-about-section.has-3-columns.has-gutters .column:last-child {
-			margin-bottom: 0;
-		}
-
-		.ulf-about-section.has-3-columns .column:nth-of-type(n) {
-			padding-top: 16px;
-			padding-bottom: 16px;
-		}
-
-		.ulf-about-section.has-4-columns {
-			grid-template-columns: repeat(2, 1fr);
-		}
-
-		.ulf-about-section.has-4-columns .column:nth-of-type(2n+1) {
-			-ms-grid-column: 1;
-			grid-column-start: 1;
-		}
-
-		.ulf-about-section.has-4-columns .column:nth-of-type(2n) {
-			-ms-grid-column: 2;
-			grid-column-start: 2;
-		}
-
-		.ulf-about-section.has-4-columns .column:nth-of-type(4n+3),
-		.ulf-about-section.has-4-columns .column:nth-of-type(4n) {
-			-ms-grid-row: 2;
-			grid-row-start: 2;
-		}
-
-		.ulf-about-section.has-4-columns .is-section-header {
-			-ms-grid-column-span: 2;
-			grid-column-end: span 2;
-		}
-
-		.ulf-about-section.has-4-columns .is-section-header~.column:nth-of-type(4n+3),
-		.ulf-about-section.has-4-columns .is-section-header~.column:nth-of-type(4n) {
-			-ms-grid-row: 3;
-			grid-row-start: 3;
-		}
-
-		.ulf-about-section.has-overlap-style {
-			-ms-grid-columns: 1fr;
-			grid-template-columns: 1fr;
-		}
-
-		/* At this size, the two columns fully overlap */
-		.ulf-about-section.has-overlap-style .column.column {
-			-ms-grid-column: 1;
-			grid-column-start: 1;
-			-ms-grid-column-span: 1;
-			grid-column-end: 2;
-			-ms-grid-row: 1;
-			grid-row-start: 1;
-			-ms-grid-row-span: 1;
-			grid-row-end: 2;
-		}
-	}
-
-	@media screen and (max-width: 600px) {
-		.ulf-about-section.has-2-columns {
-			display: block;
-			padding-bottom: 16px;
-		}
-
-		.ulf-about-section.has-2-columns.has-gutters .column {
-			margin-bottom: 16px;
-		}
-
-		.ulf-about-section.has-2-columns.has-gutters .column:last-child {
-			margin-bottom: 0;
-		}
-
-		.ulf-about-section.has-2-columns .column:nth-of-type(n) {
-			padding-top: 16px;
-			padding-bottom: 16px;
-		}
-	}
-
-	@media screen and (max-width: 480px) {
-		.ulf-about-section.is-feature .column {
-			padding: 0;
-		}
-
-		.ulf-about-section.has-4-columns {
-			display: block;
-			padding-bottom: 16px;
-		}
-
-		.ulf-about-section.has-4-columns.has-gutters .column {
-			margin-bottom: 16px;
-		}
-
-		.ulf-about-section.has-4-columns.has-gutters .column:last-child {
-			margin-bottom: 0;
-		}
-
-		.ulf-about-section.has-4-columns .column:nth-of-type(n) {
-			padding-top: 16px;
-			padding-bottom: 16px;
-		}
-	}
-
-
-	h1 {
-		margin: 0 0 1em;
-		padding: 0;
-		font-weight: 600;
-		color: inherit;
-	}
-
-	h1,
-	h2,
-	h3.is-larger-heading {
-		margin-top: 0;
-		margin-bottom: 0.5em;
-		font-size: 2.9em;
-		line-height: 1.2;
-		font-weight: 400;
-	}
-
-	h3,
-	h1.is-smaller-heading,
-	h2.is-smaller-heading {
-		margin-top: 0;
-		font-size: 1.5em;
-		font-weight: 700;
-	}
-
-	p {
-		font-size: inherit;
-		line-height: inherit;
-	}
-
-	.ulf-about-section a {
-		color: #0a5b89;
-		color: var(--about-accent-1);
-		text-decoration: underline;
-	}
-
-	.ulf-about-section a:hover,
-	.ulf-about-section a:active,
-	.ulf-about-section a:focus {
-		color: #0a5b89;
-		color: var(--about-accent-1);
-		text-decoration: none;
-	}
-
-	.wp-credits-list a {
-		text-decoration: none;
-	}
-
-	.wp-credits-list a:hover,
-	.wp-credits-list a:active,
-	.wp-credits-list a:focus {
-		text-decoration: underline;
-	}
-
-	ul {
-		list-style: disc;
-		margin-left: 16px;
-	}
-
-	img {
-		margin: 0;
-		max-width: 100%;
-		vertical-align: middle;
-	}
-
-	.ulf-about-image {
-		margin: 0;
-	}
-
-	.ulf-about-image img {
-		max-width: 100%;
-		width: 100%;
-		height: auto;
-	}
-
-	.ulf-about-image figcaption {
-		margin-top: 0.5em;
-		text-align: center;
-	}
-
-	.ulf-about-image .wp-video {
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	.ulf-about-image-comparison {
-		position: relative;
-		display: inline-block;
-		max-width: 100%;
-	}
-
-	.ulf-about-image-comparison img {
-		user-select: none;
-		width: auto;
-		max-width: none;
-		max-height: 100%;
-	}
-
-	.ulf-about-image-comparison>img {
-		max-width: 100%;
-	}
-
-	.ulf-about-image-comparison-resize {
-		position: absolute !important;
-		/* Needed to override inline style on ResizableBox */
-		top: 0;
-		bottom: 0;
-		left: 0;
-		width: 50%;
-		max-width: 100%;
-	}
-
-	.ulf-about-image-comparison.no-js .ulf-about-image-comparison-resize {
-		overflow: hidden;
-		border-right: 2px solid #007cba;
-		border-right: 2px solid var(--about-wp-admin-theme-color);
-	}
-
-	.ulf-about-image-comparison-resize .components-resizable-box__side-handle::before {
-		width: 4px;
-		right: calc(50% - 2px);
-		transition: none;
-		animation: none;
-		opacity: 1;
-	}
-
-	.ulf-about-image+h3 {
-		margin-top: 1.5em;
-	}
-
-	hr {
-		margin: 0;
-		height: 32px;
-		border: none;
-	}
-
-	hr.is-small {
-		height: 8px;
-	}
-
-	hr.is-large {
-		height: 64px;
-		margin: 16px auto;
-	}
-
-	div.updated,
-	div.error,
-	.notice {
+/**
+ *  About Page - Modern Minimalist Design
+ */
+
+.wp-ulike-about-page {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 20px 40px;
+	box-sizing: border-box;
+
+	// Hide all WordPress admin notices
+	.notice, .error, .updated, .warning, .info,
+	.notice-error, .notice-warning, .notice-info, .notice-success, .is-dismissible,
+	.notice.is-dismissible, .error.is-dismissible, .updated.is-dismissible,
+	.warning.is-dismissible, .info.is-dismissible,
+	.notice-error.is-dismissible, .notice-warning.is-dismissible,
+	.notice-info.is-dismissible, .notice-success.is-dismissible {
 		display: none !important;
 	}
 
-	.ulf-about-section {
-		font-size: 1.2em;
+	.wrap > .notice, .wrap > .error, .wrap > .updated, .wrap > .warning, .wrap > .info {
+		display: none !important;
 	}
 
-	.ulf-about-section.is-feature {
-		font-size: 1.6em;
+	// Container
+	.wp-ulike-about-container {
+		max-width: 1200px;
+		margin: 0 auto;
 	}
 
-	@media screen and (max-width: 480px) {
-		.ulf-about-section.is-feature {
-			font-size: 1.4em;
-		}
-
-		h1,
-		h2,
-		h3.is-larger-heading {
-			font-size: 2em;
-		}
-	}
-
-	/* 1.3 - Header */
-
-	.ulf-about-header {
-		margin-bottom: 32px;
-		padding-top: 3em;
-		background-color: #fff4f4;
-		background-color: var(--about-accent-1);
-		color: #fff;
-		color: var(--about-text);
-	}
-
-	.ulf-about-header-image {
-		margin: 0 32px 3em;
-		position: relative;
-
-		img {
-			position: absolute;
-			left: 0;
-			top: 0;
-		}
-	}
-
-	.ulf-about-header-title {
-		padding: 1em 0;
-		margin: 0 32px;
+	// Section Header (reusable)
+	.wp-ulike-about-section-header {
 		text-align: center;
+		margin-bottom: 40px;
+
+		h2 {
+			font-size: 32px;
+			font-weight: 600;
+			color: #1d2327;
+			margin: 0 0 12px;
+		}
+
+		p {
+			font-size: 16px;
+			color: #646970;
+			line-height: 1.6;
+			margin: 0;
+		}
 	}
 
-	.ulf-about-header-title p {
-		margin: 0;
-		padding: 0;
-		font-size: 6em;
-		line-height: 1;
-		font-weight: 900;
-		text-transform: uppercase;
-	}
-
-	.ulf-about-header-text {
-		max-width: 25em;
-		margin: 0 auto 4em;
-		padding: 0 16px;
-		font-size: 1.5em;
-		line-height: 1.4;
-		color: #fde4bf;
-		color: var(--about-accent-2);
-		text-align: center;
-	}
-
-	.ulf-about-header-navigation {
-		clear: both;
-		padding-top: 0;
+	// Hero Section
+	.wp-ulike-about-hero {
 		background: #fff;
-		background: var(--about-nav-background);
-		color: #00131c;
-		color: var(--about-nav-color);
-		border-bottom: 3px solid #fcc36f;
-		border-bottom: 3px solid var(--about-nav-border);
-	}
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 60px 40px;
+		margin: 20px 0 40px;
+		text-align: center;
 
-	.ulf-about-header-navigation .nav-tab {
-		position: relative;
-		margin-left: 0;
-		padding: 24px 32px;
-		font-size: 1.4em;
-		line-height: 1;
-		border-width: 0 0 3px;
-		border-style: solid;
-		border-color: transparent;
-		background: transparent;
-		color: inherit;
+		.wp-ulike-about-hero-content {
+			max-width: 800px;
+			margin: 0 auto;
 
-		&.go-pro img {
-			position: absolute;
-			right: -30px;
-			bottom: -3px;
+			h1 {
+				font-size: 42px;
+				font-weight: 700;
+				color: #1d2327;
+				margin: 0 0 20px;
+				line-height: 1.2;
+			}
+
+			.wp-ulike-about-hero-subtitle {
+				font-size: 18px;
+				color: #646970;
+				line-height: 1.7;
+				margin: 0;
+			}
 		}
 	}
 
-	.ulf-about-header-navigation .nav-tab:hover,
-	.ulf-about-header-navigation .nav-tab:active {
-		background-color: #ff6d6f;
-		background-color: var(--about-nav-current);
-		color: #fff;
-		color: var(--about-text-light);
-	}
+	// Navigation Tabs
+	.wp-ulike-about-nav {
+		background: #f6f7f7;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		margin: 0 0 40px;
+		padding: 0;
 
-	.ulf-about-header-navigation .nav-tab-active {
-		margin-bottom: -3px;
-		color: #ff6d6f;
-		color: var(--about-nav-current);
-		border-width: 0 0 6px;
-		border-color: #ff6d6f;
-		border-color: var(--about-nav-current);
-	}
+		.wp-ulike-about-nav-tabs {
+			display: flex;
+			gap: 0;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+		}
 
-	.ulf-about-header-navigation .nav-tab-active:hover,
-	.ulf-about-header-navigation .nav-tab-active:active {
-		background-color: #ff6d6f;
-		background-color: var(--about-nav-current);
-		color: #fff;
-		color: var(--about-text-light);
-		border-color: #ff6d6f;
-		border-color: var(--about-nav-current);
-	}
+		.wp-ulike-about-nav-tab {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 16px 24px;
+			font-size: 14px;
+			font-weight: 500;
+			color: #646970;
+			text-decoration: none;
+			border-bottom: 3px solid transparent;
+			transition: all 0.2s ease;
+			box-sizing: border-box;
 
-	@media screen and (max-width: 960px) {
-		.ulf-about-header-title p {
-			font-size: 4.8em;
+			.dashicons {
+				font-size: 18px;
+				width: 18px;
+				height: 18px;
+			}
+
+			&:hover {
+				background: #fff;
+				color: #1d2327;
+			}
+
+			&.wp-ulike-about-nav-tab-active {
+				color: #2271b1;
+				border-bottom-color: #2271b1;
+				background: #fff;
+			}
+
+			&.wp-ulike-about-nav-tab-pro {
+				color: #2271b1;
+				font-weight: 600;
+
+				&:hover {
+					background: #2271b1;
+					color: #fff;
+					border-bottom-color: #2271b1;
+				}
+			}
 		}
 	}
 
-	@media screen and (max-width: 782px) {
-		.ulf-about-header-text {
-			font-size: 1.4em;
-		}
-
-		.ulf-about-header-container {
-			display: block;
-		}
-
-		.ulf-about-header-title,
-		.ulf-about-header-image {
-			margin-left: 16px;
-			margin-right: 16px;
-		}
-
-		.ulf-about-header-navigation .nav-tab {
-			margin-top: 0;
-			margin-right: 0;
-			padding: 24px 16px;
-		}
+	// Intro Section (replaces old about section)
+	.wp-ulike-about-intro-section {
+		margin: 40px 0 60px;
 	}
 
-	@media screen and (max-width: 480px) {
-		.ulf-about-header {
-			background-image: none;
-		}
+	.wp-ulike-about-intro-card {
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 60px 40px;
+		text-align: center;
+		max-width: 900px;
+		margin: 0 auto;
 
-		.ulf-about-header-title p {
-			font-size: 2.4em;
-		}
+		.wp-ulike-about-intro-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 80px;
+			height: 80px;
+			background: #f0f9ff;
+			border-radius: 0;
+			margin-bottom: 24px;
 
-		.ulf-about-header-text {
-			margin-bottom: 1em;
-		}
-
-		.ulf-about-header-navigation .nav-tab {
-			float: none;
-			display: block;
-			margin-bottom: 0;
-			padding: 16px 16px;
-			border-left-width: 6px;
-			border-bottom: none;
-
-			&.go-pro img {
-				display: none;
+			.dashicons {
+				font-size: 40px;
+				width: 40px;
+				height: 40px;
+				color: #2271b1;
 			}
 		}
 
-		.ulf-about-header-navigation .nav-tab-active {
-			border-bottom: none;
-			border-left-width: 6px;
+		h2 {
+			font-size: 36px;
+			font-weight: 700;
+			color: #1d2327;
+			margin: 0 0 20px;
+			line-height: 1.2;
+		}
+
+		p {
+			font-size: 16px;
+			color: #646970;
+			line-height: 1.7;
+			margin: 0;
+		}
+	}
+
+	// Problems Solved Section
+	.wp-ulike-about-problems-section {
+		margin: 60px 0;
+	}
+
+	.wp-ulike-about-problems-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 24px;
+		margin-top: 40px;
+	}
+
+	.wp-ulike-about-problem-card {
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 32px;
+		transition: all 0.2s ease;
+
+		&:hover {
+			border-color: #2271b1;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		}
+
+		.wp-ulike-about-problem-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 56px;
+			height: 56px;
+			background: #f0f9ff;
+			border-radius: 0;
+			margin-bottom: 20px;
+
+			.dashicons {
+				font-size: 28px;
+				width: 28px;
+				height: 28px;
+				color: #2271b1;
+			}
+		}
+
+		h3 {
+			font-size: 20px;
+			font-weight: 600;
+			color: #1d2327;
+			margin: 0 0 12px;
+		}
+
+		p {
+			font-size: 14px;
+			color: #646970;
+			line-height: 1.6;
+			margin: 0;
+		}
+	}
+
+	// Key Features Section (redesigned)
+	.wp-ulike-about-features-section {
+		background: #f6f7f7;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 60px 40px;
+		margin: 40px 0;
+	}
+
+	.wp-ulike-about-features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 16px;
+		margin-top: 40px;
+	}
+
+	.wp-ulike-about-feature-card {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 20px 24px;
+		transition: all 0.2s ease;
+
+		&:hover {
+			border-color: #2271b1;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		}
+
+		.dashicons {
+			font-size: 24px;
+			width: 24px;
+			height: 24px;
+			color: #2271b1;
+			flex-shrink: 0;
+		}
+
+		span:not(.dashicons) {
+			font-size: 14px;
+			color: #1d2327;
+			line-height: 1.5;
+		}
+	}
+
+	// Quick Links Section
+	.wp-ulike-about-links-section {
+		margin: 60px 0;
+	}
+
+	.wp-ulike-about-links-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 24px;
+		margin-top: 40px;
+	}
+
+	.wp-ulike-about-link-card {
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 40px 32px;
+		text-align: center;
+		transition: all 0.2s ease;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		&:hover {
+			border-color: #2271b1;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		}
+
+		.wp-ulike-about-link-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 64px;
+			height: 64px;
+			background: #f0f9ff;
+			border-radius: 0;
+			margin-bottom: 24px;
+
+			.dashicons {
+				font-size: 32px;
+				width: 32px;
+				height: 32px;
+				color: #2271b1;
+			}
+		}
+
+		h3 {
+			font-size: 22px;
+			font-weight: 600;
+			color: #1d2327;
+			margin: 0 0 12px;
+		}
+
+		p {
+			font-size: 14px;
+			color: #646970;
+			line-height: 1.6;
+			margin: 0 0 24px;
+			flex: 1;
+		}
+	}
+
+	// Buttons
+	.wp-ulike-about-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		padding: 12px 24px;
+		font-size: 14px;
+		font-weight: 500;
+		border-radius: 0;
+		border: none;
+		cursor: pointer;
+		text-decoration: none;
+		transition: all 0.2s ease;
+		box-sizing: border-box;
+		max-width: 100%;
+		word-wrap: break-word;
+
+		.dashicons {
+			font-size: 18px;
+			width: 18px;
+			height: 18px;
+			flex-shrink: 0;
+		}
+
+		span:not(.dashicons) {
+			white-space: nowrap;
+		}
+
+		&.wp-ulike-about-btn-primary {
+			background: #2271b1;
+			color: #fff;
+
+			&:hover {
+				background: #135e96;
+				color: #fff;
+			}
+		}
+
+		&.wp-ulike-about-btn-secondary {
+			background: #f6f7f7;
+			color: #646970;
+			border: 1px solid #dcdcde;
+
+			&:hover {
+				background: #f0f0f1;
+				color: #1d2327;
+			}
+		}
+	}
+
+	// RTL Support
+	[dir="rtl"] & {
+		.wp-ulike-about-hero,
+		.wp-ulike-about-intro-card,
+		.wp-ulike-about-section-header {
+			text-align: center;
+		}
+
+		.wp-ulike-about-nav-tab .dashicons {
+			margin-left: 8px;
+			margin-right: 0;
+		}
+
+		.wp-ulike-about-btn .dashicons {
+			order: 2;
+			margin-left: 8px;
+			margin-right: 0;
+		}
+
+		.wp-ulike-about-btn span:not(.dashicons) {
+			order: 1;
+		}
+
+		.wp-ulike-about-feature-card .dashicons {
+			margin-left: 12px;
+			margin-right: 0;
+		}
+
+		.wp-ulike-about-problem-card,
+		.wp-ulike-about-link-card {
+			text-align: center;
+		}
+	}
+
+	// Mobile Responsive
+	@media screen and (max-width: 782px) {
+		padding: 0 10px 30px;
+		box-sizing: border-box;
+		overflow-x: hidden;
+
+		.wp-ulike-about-hero {
+			padding: 40px 20px;
+
+			.wp-ulike-about-hero-content h1 {
+				font-size: 28px;
+			}
+
+			.wp-ulike-about-hero-content .wp-ulike-about-hero-subtitle {
+				font-size: 16px;
+			}
+		}
+
+		.wp-ulike-about-nav {
+			.wp-ulike-about-nav-tabs {
+				flex-direction: column;
+			}
+
+			.wp-ulike-about-nav-tab {
+				width: 100%;
+				justify-content: center;
+				border-bottom: 1px solid #dcdcde;
+				border-left: 3px solid transparent;
+				border-right: none;
+
+				&.wp-ulike-about-nav-tab-active {
+					border-bottom: 1px solid #dcdcde;
+					border-left-color: #2271b1;
+				}
+			}
+		}
+
+		[dir="rtl"] & .wp-ulike-about-nav-tab {
+			border-left: none;
+			border-right: 3px solid transparent;
+
+			&.wp-ulike-about-nav-tab-active {
+				border-right-color: #2271b1;
+			}
+		}
+
+		.wp-ulike-about-section-header h2 {
+			font-size: 24px;
+		}
+
+		.wp-ulike-about-section-header p {
+			font-size: 14px;
+		}
+
+		.wp-ulike-about-intro-card {
+			padding: 40px 20px;
+
+			.wp-ulike-about-intro-icon {
+				width: 64px;
+				height: 64px;
+
+				.dashicons {
+					font-size: 32px;
+					width: 32px;
+					height: 32px;
+				}
+			}
+
+			h2 {
+				font-size: 28px;
+			}
+
+			p {
+				font-size: 14px;
+			}
+		}
+
+		.wp-ulike-about-problems-grid,
+		.wp-ulike-about-features-grid,
+		.wp-ulike-about-links-grid {
+			grid-template-columns: 1fr;
+			gap: 20px;
+		}
+
+		.wp-ulike-about-problem-card {
+			padding: 24px;
+		}
+
+		.wp-ulike-about-features-section {
+			padding: 40px 20px;
+		}
+
+		.wp-ulike-about-feature-card {
+			padding: 16px 20px;
+		}
+
+		.wp-ulike-about-link-card {
+			padding: 32px 24px;
+		}
+
+		.wp-ulike-about-btn {
+			width: 100%;
+			max-width: 100%;
+		}
+	}
+
+	// Small Mobile Devices
+	@media screen and (max-width: 480px) {
+		.wp-ulike-about-hero {
+			padding: 30px 15px;
+
+			.wp-ulike-about-hero-content h1 {
+				font-size: 24px;
+			}
+
+			.wp-ulike-about-hero-content .wp-ulike-about-hero-subtitle {
+				font-size: 14px;
+			}
+		}
+
+		.wp-ulike-about-section-header h2 {
+			font-size: 20px;
+		}
+
+		.wp-ulike-about-intro-card {
+			padding: 30px 15px;
+
+			h2 {
+				font-size: 24px;
+			}
+		}
+
+		.wp-ulike-about-problem-card,
+		.wp-ulike-about-link-card {
+			padding: 24px 20px;
+		}
+
+		.wp-ulike-about-features-section {
+			padding: 30px 15px;
+		}
+
+		.wp-ulike-about-feature-card {
+			padding: 14px 16px;
 		}
 	}
 }
 
-.wp-ulike_page_wp-ulike-about,
-.wp-ulike-pro_page_wp-ulike-about {
-	background: white;
-
-	#wpcontent {
-		background: white;
-		padding: 0 24px;
+// Hide notices in admin body when about page is present
+body:has(.wp-ulike-about-page) {
+	#wpbody-content > .notice, #wpbody-content > .error, #wpbody-content > .updated,
+	#wpbody-content > .warning, #wpbody-content > .info,
+	#wpbody-content > .notice-error, #wpbody-content > .notice-warning,
+	#wpbody-content > .notice-info, #wpbody-content > .notice-success,
+	#wpbody-content > .is-dismissible,
+	.wrap:not(.wp-ulike-about-page) > .notice,
+	.wrap:not(.wp-ulike-about-page) > .error,
+	.wrap:not(.wp-ulike-about-page) > .updated {
+		display: none !important;
 	}
-
 }

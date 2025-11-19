@@ -1,33 +1,697 @@
-
 /**
- *  Go Pro Page
+ *  Go Pro Page - Modern Minimalist Design
  */
 
 .wp-ulike-go-pro-page {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 20px 40px;
 
-	.has-1-columns, .has-2-columns, .has-3-columns, .has-4-columns{
-		max-width: 1400px;
-		margin-left: 0;
-		margin-right: 0;
+	// Hide all WordPress admin notices from other plugins
+	.notice,
+	.error,
+	.updated,
+	.warning,
+	.info,
+	.notice-error,
+	.notice-warning,
+	.notice-info,
+	.notice-success,
+	.is-dismissible,
+	.notice.is-dismissible,
+	.error.is-dismissible,
+	.updated.is-dismissible,
+	.warning.is-dismissible,
+	.info.is-dismissible,
+	.notice-error.is-dismissible,
+	.notice-warning.is-dismissible,
+	.notice-info.is-dismissible,
+	.notice-success.is-dismissible {
+		display: none !important;
 	}
 
-	h1{
-		margin-bottom: 1em;
+	// Hide notices in wrap container
+	.wrap > .notice,
+	.wrap > .error,
+	.wrap > .updated,
+	.wrap > .warning,
+	.wrap > .info {
+		display: none !important;
 	}
 
-	h2{
-		text-align: left;
+	// Hide notices that might appear before the wrap
+	& ~ .notice,
+	& ~ .error,
+	& ~ .updated {
+		display: none !important;
+	}
+}
+
+// Hide notices in admin body when go-pro page is present
+body:has(.wp-ulike-go-pro-page) {
+	#wpbody-content > .notice,
+	#wpbody-content > .error,
+	#wpbody-content > .updated,
+	#wpbody-content > .warning,
+	#wpbody-content > .info,
+	#wpbody-content > .notice-error,
+	#wpbody-content > .notice-warning,
+	#wpbody-content > .notice-info,
+	#wpbody-content > .notice-success,
+	#wpbody-content > .is-dismissible,
+	.wrap:not(.wp-ulike-go-pro-page) > .notice,
+	.wrap:not(.wp-ulike-go-pro-page) > .error,
+	.wrap:not(.wp-ulike-go-pro-page) > .updated {
+		display: none !important;
+	}
+}
+
+// Additional targeting for notices outside wrap
+.wp-ulike-go-pro-page {
+
+	// Container
+	.wp-ulike-pro-container {
+		max-width: 1200px;
+		margin: 0 auto;
 	}
 
-	.is-section-header{
-		padding-top: 20px;
-		margin-left: 20px;
-		margin-right: 20px;
+	// Section Titles
+	.wp-ulike-pro-section-title {
+		font-size: 32px;
+		font-weight: 600;
+		color: #1d2327;
+		margin: 0 0 12px;
+		text-align: center;
 	}
 
-	.wp-ulike-btn{
-		margin-top: 5px;
-		margin-right: 15px;
+	.wp-ulike-pro-section-description {
+		font-size: 16px;
+		color: #646970;
+		text-align: center;
+		margin: 0 0 40px;
+		line-height: 1.6;
 	}
 
+	// Hero Section
+	.wp-ulike-pro-hero {
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 60px 40px;
+		margin: 20px 0 40px;
+		text-align: center;
+
+		.wp-ulike-pro-hero-content {
+			max-width: 800px;
+			margin: 0 auto;
+
+			.wp-ulike-pro-hero-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				padding: 8px 16px;
+				background: #f0f9ff;
+				border: 1px solid #bae6fd;
+				border-radius: 0;
+				margin-bottom: 24px;
+				font-size: 14px;
+				font-weight: 500;
+				color: #0369a1;
+
+				.dashicons {
+					font-size: 18px;
+					width: 18px;
+					height: 18px;
+					color: #f59e0b;
+				}
+			}
+
+			h1 {
+				font-size: 42px;
+				font-weight: 700;
+				color: #1d2327;
+				margin: 0 0 20px;
+				line-height: 1.2;
+			}
+
+			.wp-ulike-pro-hero-subtitle {
+				font-size: 18px;
+				color: #646970;
+				line-height: 1.7;
+				margin: 0 0 32px;
+			}
+
+			.wp-ulike-pro-hero-actions {
+				display: flex;
+				gap: 16px;
+				justify-content: center;
+				flex-wrap: wrap;
+				margin-bottom: 32px;
+				width: 100%;
+				box-sizing: border-box;
+			}
+
+			.wp-ulike-pro-hero-trust {
+				display: flex;
+				gap: 32px;
+				justify-content: center;
+				flex-wrap: wrap;
+				padding-top: 32px;
+				border-top: 1px solid #f0f0f1;
+
+				.wp-ulike-pro-trust-item {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+					font-size: 14px;
+					color: #646970;
+
+					.dashicons {
+						font-size: 20px;
+						width: 20px;
+						height: 20px;
+						color: #28a745;
+					}
+				}
+			}
+		}
+	}
+
+	// Buttons
+	.wp-ulike-pro-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		padding: 12px 24px;
+		font-size: 14px;
+		font-weight: 500;
+		border-radius: 0;
+		border: none;
+		cursor: pointer;
+		text-decoration: none;
+		transition: all 0.2s ease;
+		box-sizing: border-box;
+		max-width: 100%;
+		word-wrap: break-word;
+
+		.dashicons {
+			font-size: 18px;
+			width: 18px;
+			height: 18px;
+			flex-shrink: 0;
+		}
+
+		span:not(.dashicons) {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&.wp-ulike-pro-btn-primary {
+			background: #2271b1;
+			color: #fff;
+
+			&:hover {
+				background: #135e96;
+				color: #fff;
+			}
+		}
+
+		&.wp-ulike-pro-btn-secondary {
+			background: #f6f7f7;
+			color: #646970;
+			border: 1px solid #dcdcde;
+
+			&:hover {
+				background: #f0f0f1;
+				color: #1d2327;
+			}
+		}
+
+		&.wp-ulike-pro-btn-large {
+			padding: 16px 32px;
+			font-size: 16px;
+		}
+	}
+
+	// Features Section
+	.wp-ulike-pro-features-section {
+		margin: 60px 0;
+	}
+
+	.wp-ulike-pro-features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 24px;
+		margin-top: 40px;
+	}
+
+	.wp-ulike-pro-feature-card {
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 32px;
+		transition: all 0.2s ease;
+
+		&:hover {
+			border-color: #2271b1;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		}
+
+		.wp-ulike-pro-feature-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 56px;
+			height: 56px;
+			background: #f0f9ff;
+			border-radius: 0;
+			margin-bottom: 20px;
+
+			.dashicons {
+				font-size: 28px;
+				width: 28px;
+				height: 28px;
+				color: #2271b1;
+			}
+		}
+
+		h3 {
+			font-size: 20px;
+			font-weight: 600;
+			color: #1d2327;
+			margin: 0 0 12px;
+		}
+
+		p {
+			font-size: 14px;
+			color: #646970;
+			line-height: 1.6;
+			margin: 0;
+		}
+	}
+
+	// Benefits Section
+	.wp-ulike-pro-benefits-section {
+		background: #f6f7f7;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 60px 40px;
+		margin: 40px 0;
+	}
+
+	.wp-ulike-pro-benefits-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 40px;
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+
+	.wp-ulike-pro-benefit-item {
+		text-align: center;
+
+		.wp-ulike-pro-benefit-number {
+			font-size: 48px;
+			font-weight: 700;
+			color: #2271b1;
+			line-height: 1;
+			margin-bottom: 12px;
+		}
+
+		.wp-ulike-pro-benefit-label {
+			font-size: 14px;
+			color: #646970;
+			font-weight: 500;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			white-space: nowrap;
+			line-height: 1.4;
+		}
+	}
+
+	// CTA Section
+	.wp-ulike-pro-cta-section {
+		margin: 60px 0;
+	}
+
+	.wp-ulike-pro-cta-card {
+		background: #2271b1;
+		border-radius: 0;
+		padding: 60px 40px;
+		text-align: center;
+		color: #fff;
+
+		h2 {
+			font-size: 36px;
+			font-weight: 700;
+			margin: 0 0 16px;
+			color: #fff;
+		}
+
+		p {
+			font-size: 18px;
+			margin: 0 0 32px;
+			opacity: 0.95;
+			line-height: 1.6;
+		}
+
+		.wp-ulike-pro-btn {
+			background: #fff;
+			color: #2271b1;
+
+			&:hover {
+				background: #f6f7f7;
+				color: #135e96;
+			}
+		}
+
+		.wp-ulike-pro-cta-guarantee {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			margin-top: 24px;
+			font-size: 14px;
+			color: rgba(255, 255, 255, 0.9);
+
+			.dashicons {
+				font-size: 20px;
+				width: 20px;
+				height: 20px;
+			}
+		}
+	}
+
+	// FAQ Section
+	.wp-ulike-pro-faq-section {
+		margin: 60px 0 40px;
+	}
+
+	.wp-ulike-pro-faq-list {
+		max-width: 800px;
+		margin: 40px auto 0;
+	}
+
+	.wp-ulike-pro-faq-item {
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		margin-bottom: 16px;
+		overflow: hidden;
+		transition: all 0.2s ease;
+
+		&:hover {
+			border-color: #2271b1;
+		}
+
+		&.wp-ulike-pro-faq-active {
+			border-color: #2271b1;
+
+			.wp-ulike-pro-faq-question {
+				background: #f0f9ff;
+
+				.wp-ulike-pro-faq-toggle {
+					transform: rotate(180deg);
+				}
+			}
+
+			.wp-ulike-pro-faq-answer {
+				max-height: 500px;
+				padding: 20px 24px;
+			}
+		}
+
+		.wp-ulike-pro-faq-question {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 20px 24px;
+			cursor: pointer;
+			transition: background 0.2s ease;
+
+			&:hover {
+				background: #f9f9f9;
+			}
+
+			h3 {
+				font-size: 18px;
+				font-weight: 600;
+				color: #1d2327;
+				margin: 0;
+				flex: 1;
+			}
+
+			.wp-ulike-pro-faq-toggle {
+				font-size: 20px;
+				width: 20px;
+				height: 20px;
+				color: #646970;
+				transition: transform 0.3s ease;
+				flex-shrink: 0;
+				margin-left: 16px;
+			}
+		}
+
+		.wp-ulike-pro-faq-answer {
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.3s ease, padding 0.3s ease;
+			padding: 0 24px;
+
+			p {
+				font-size: 14px;
+				color: #646970;
+				line-height: 1.7;
+				margin: 0;
+			}
+		}
+	}
+
+	// Final CTA
+	.wp-ulike-pro-final-cta {
+		background: #f6f7f7;
+		border: 1px solid #dcdcde;
+		border-radius: 0;
+		padding: 60px 40px;
+		margin: 40px 0;
+		text-align: center;
+
+		h2 {
+			font-size: 32px;
+			font-weight: 600;
+			color: #1d2327;
+			margin: 0 0 12px;
+		}
+
+		p {
+			font-size: 16px;
+			color: #646970;
+			margin: 0 0 32px;
+		}
+
+		.wp-ulike-pro-final-cta-actions {
+			display: flex;
+			gap: 16px;
+			justify-content: center;
+			flex-wrap: wrap;
+			width: 100%;
+			box-sizing: border-box;
+		}
+	}
+
+	// RTL Support
+	[dir="rtl"] & {
+		.wp-ulike-pro-hero-actions,
+		.wp-ulike-pro-cta-card,
+		.wp-ulike-pro-final-cta {
+			text-align: center;
+		}
+
+		.wp-ulike-pro-btn {
+			.dashicons {
+				order: 2;
+			}
+
+			span:not(.dashicons) {
+				order: 1;
+			}
+		}
+
+		.wp-ulike-pro-faq-question {
+			.wp-ulike-pro-faq-toggle {
+				margin-left: 0;
+				margin-right: 16px;
+			}
+		}
+	}
+
+	// Mobile Responsive
+	@media screen and (max-width: 782px) {
+		padding: 0 10px 30px;
+		box-sizing: border-box;
+		overflow-x: hidden;
+
+		.wp-ulike-pro-hero {
+			padding: 40px 20px;
+
+			.wp-ulike-pro-hero-content {
+				h1 {
+					font-size: 28px;
+				}
+
+				.wp-ulike-pro-hero-subtitle {
+					font-size: 16px;
+				}
+
+				.wp-ulike-pro-hero-actions {
+					flex-direction: column;
+					gap: 12px;
+					width: 100%;
+
+					.wp-ulike-pro-btn {
+						width: 100%;
+						max-width: 100%;
+						box-sizing: border-box;
+					}
+				}
+
+				.wp-ulike-pro-hero-trust {
+					flex-direction: column;
+					gap: 16px;
+					align-items: center;
+				}
+			}
+		}
+
+		.wp-ulike-pro-section-title {
+			font-size: 24px;
+		}
+
+		.wp-ulike-pro-section-description {
+			font-size: 14px;
+		}
+
+		.wp-ulike-pro-features-grid {
+			grid-template-columns: 1fr;
+			gap: 20px;
+		}
+
+		.wp-ulike-pro-feature-card {
+			padding: 24px;
+		}
+
+		.wp-ulike-pro-benefits-section {
+			padding: 40px 20px;
+		}
+
+		.wp-ulike-pro-benefits-grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 32px;
+		}
+
+		.wp-ulike-pro-benefit-item {
+			.wp-ulike-pro-benefit-number {
+				font-size: 36px;
+			}
+		}
+
+		.wp-ulike-pro-cta-card {
+			padding: 40px 20px;
+			box-sizing: border-box;
+
+			h2 {
+				font-size: 24px;
+			}
+
+			p {
+				font-size: 16px;
+			}
+
+			.wp-ulike-pro-btn {
+				width: 100%;
+				max-width: 100%;
+				box-sizing: border-box;
+			}
+		}
+
+		.wp-ulike-pro-faq-item {
+			.wp-ulike-pro-faq-question {
+				padding: 16px 20px;
+
+				h3 {
+					font-size: 16px;
+				}
+			}
+
+			.wp-ulike-pro-faq-answer {
+				padding: 0 20px;
+
+				&.wp-ulike-pro-faq-active {
+					padding: 16px 20px;
+				}
+			}
+		}
+
+		.wp-ulike-pro-final-cta {
+			padding: 40px 20px;
+
+			h2 {
+				font-size: 24px;
+			}
+
+			.wp-ulike-pro-final-cta-actions {
+				flex-direction: column;
+				gap: 12px;
+				width: 100%;
+
+				.wp-ulike-pro-btn {
+					width: 100%;
+					max-width: 100%;
+					box-sizing: border-box;
+				}
+			}
+		}
+	}
+
+	// Small Mobile Devices
+	@media screen and (max-width: 480px) {
+		.wp-ulike-pro-hero {
+			padding: 30px 15px;
+
+			.wp-ulike-pro-hero-content {
+				h1 {
+					font-size: 24px;
+				}
+
+				.wp-ulike-pro-hero-subtitle {
+					font-size: 14px;
+				}
+			}
+		}
+
+		.wp-ulike-pro-section-title {
+			font-size: 20px;
+		}
+
+		.wp-ulike-pro-feature-card,
+		.wp-ulike-pro-faq-item {
+			padding: 20px;
+		}
+
+		.wp-ulike-pro-benefits-grid {
+			grid-template-columns: 1fr;
+			gap: 24px;
+		}
+
+		.wp-ulike-pro-cta-card,
+		.wp-ulike-pro-final-cta {
+			padding: 30px 15px;
+
+			h2 {
+				font-size: 20px;
+			}
+		}
+	}
 }
