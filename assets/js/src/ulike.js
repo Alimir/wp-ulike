@@ -313,7 +313,7 @@
     _appendChild() {
       if (this.settings.append !== "" && this.buttonElement) {
         let sourceElements = [];
-        
+
         // Check if append is HTML content (starts with <) or a CSS selector
         if (this.settings.append.trim().startsWith('<')) {
           // Parse HTML content
@@ -582,9 +582,6 @@
                 size: "tiny",
                 trigger: "hover",
                 dataFetcher: (element, tooltipId) => {
-                  if (!this.settings.displayLikers) {
-                    return;
-                  }
                   if (this._isFetchingLikers) {
                     return;
                   }
@@ -631,7 +628,7 @@
           });
           wrapperEl.dispatchEvent(updateEvent);
           document.dispatchEvent(updateEvent);
-          
+
           // Pre-populate content for siblings that don't have tooltip instances yet
           // This ensures when they're hovered, content is already available
           let hiddenContent = wrapperEl.querySelector('[data-tooltip-content]');
@@ -647,11 +644,11 @@
         });
       } else {
         // Handle both single element and NodeList/array (from _updateSameLikers)
-        const hasLikersElement = this.likersElement && 
-          (this.likersElement.length === undefined 
-            ? true 
+        const hasLikersElement = this.likersElement &&
+          (this.likersElement.length === undefined
+            ? true
             : this.likersElement.length > 0);
-        
+
         if (!hasLikersElement && data && data.template) {
           // If the likers container doesn't exist, create it
           const tempDiv = document.createElement("div");
@@ -662,18 +659,18 @@
             this.likersElement = newElement;
           }
         }
-        
+
         // Update all likers elements (handles both single element and NodeList)
         if (this.likersElement) {
           const elementsToUpdate = this.likersElement.length !== undefined
             ? arrayFrom(this.likersElement)
             : [this.likersElement];
-          
+
           // Handle data as object with template property, or as string/empty
-          const template = (data && typeof data === 'object' && data.template) 
-            ? data.template 
+          const template = (data && typeof data === 'object' && data.template)
+            ? data.template
             : (typeof data === 'string' ? data : '');
-          
+
           forEachElement(elementsToUpdate, (likersEl) => {
             if (!likersEl) return;
             if (template) {
