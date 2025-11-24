@@ -123,10 +123,21 @@
       : elements;
   };
 
+  // Helper to normalize boolean values in settings
+  const normalizeBooleanValues = (settings, defaults) => {
+    for (const key in defaults) {
+      if (typeof defaults[key] === 'boolean' && settings[key] != null) {
+        settings[key] = settings[key] != 0 && settings[key] !== "0" && settings[key] !== false;
+      }
+    }
+  };
+
   // The actual plugin constructor
   function Plugin(element, options) {
     this.element = element;
     this.settings = Object.assign({}, defaults, options);
+    // Normalize boolean values automatically
+    normalizeBooleanValues(this.settings, defaults);
     this._defaults = defaults;
     this._name = pluginName;
 
@@ -144,6 +155,8 @@
           }
         }
       }
+      // Normalize boolean values after reading attributes
+      normalizeBooleanValues(this.settings, defaults);
     }
 
     // General element (like jQuery .find())
@@ -569,6 +582,9 @@
                 size: "tiny",
                 trigger: "hover",
                 dataFetcher: (element, tooltipId) => {
+                  if (!this.settings.displayLikers) {
+                    return;
+                  }
                   if (this._isFetchingLikers) {
                     return;
                   }
