@@ -31,6 +31,13 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 				return null; // Pro not installed, allow free version to run
 			}
 
+			// Get and clean license key
+			$license_key = get_option( 'wp_ulike_pro_license_key', '' );
+			if ( empty( $license_key ) ) {
+				// No license key entered - allow it (user hasn't activated yet)
+				return true;
+			}
+
 			// Check license status using cached API data (no force request for performance)
 			$license_data = WP_Ulike_Pro_API::get_license_data( false );
 
@@ -41,83 +48,15 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 				WP_Ulike_Pro_API::STATUS_MISSING,
 			];
 
-			// Get and clean license key
-			$license_key = get_option( 'wp_ulike_pro_license_key', '' );
-			if ( empty( $license_key ) ) {
-				// No license key - check API status only
-				return self::check_license_status( $license_data, $invalid_statuses );
-			}
-
 			$license_key_clean = trim( $license_key );
 
-			// STEP 1: Validate format first - whitelist valid formats immediately
-			if ( self::is_valid_license_format( $license_key_clean ) ) {
-				// Valid format - check API status only (don't check for nulled patterns)
-				return self::check_license_status( $license_data, $invalid_statuses );
-			}
-
-			// STEP 2: Invalid format - check for nulled patterns
+			// Check for nulled/cracked patterns first
 			if ( self::is_nulled_license( $license_key_clean ) ) {
-				return false; // Nulled license detected
+				return false; // Nulled license detected - stop immediately
 			}
 
-			// STEP 3: Check API status for invalid formats
-			return self::check_license_status( $license_data, $invalid_statuses, true );
-		}
-
-		/**
-		 * Check if license key matches valid format patterns.
-		 * Valid formats: UUID (with/without dashes), long hex strings (30-40 chars)
-		 *
-		 * @param string $license_key Cleaned license key
-		 * @return bool True if valid format, false otherwise
-		 */
-		private static function is_valid_license_format( $license_key ) {
-			if ( empty( $license_key ) ) {
-				return false;
-			}
-
-			// Must contain only hex characters (0-9, a-f) and dashes
-			if ( ! preg_match( '/^[0-9a-f-]+$/i', $license_key ) ) {
-				return false;
-			}
-
-			// Remove dashes to count hex characters
-			$hex_only = str_replace( '-', '', $license_key );
-			$hex_length = strlen( $hex_only );
-
-			// Valid length range: 30-40 hex characters
-			if ( $hex_length < 30 || $hex_length > 40 ) {
-				return false;
-			}
-
-			// Check specific valid patterns
-			$valid_patterns = [
-				// Standard UUID: 8-4-4-4-12
-				'/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i',
-				// UUID with flexible last segment: 8-4-4-4-10-14
-				'/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{10,14}$/i',
-				// UUID without dashes: exactly 32 hex chars
-				'/^[0-9a-f]{32}$/i',
-				// Long hex string without dashes: 30-40 hex chars
-				'/^[0-9a-f]{30,40}$/i',
-			];
-
-			foreach ( $valid_patterns as $pattern ) {
-				if ( preg_match( $pattern, $license_key ) ) {
-					return true;
-				}
-			}
-
-			// Hex with dashes but flexible format: 30-40 hex chars, reasonable dash count
-			if ( $hex_length >= 30 && $hex_length <= 40 && preg_match( '/-/', $license_key ) ) {
-				$dash_count = substr_count( $license_key, '-' );
-				if ( $dash_count <= 5 ) {
-					return true; // Flexible format with reasonable dash count
-				}
-			}
-
-			return false;
+			// Not nulled - check API status (API is the final arbiter)
+			return self::check_license_status( $license_data, $invalid_statuses );
 		}
 
 		/**
@@ -132,6 +71,33 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			}
 
 			$license_key_lower = strtolower( $license_key );
+			$key_length = strlen( $license_key );
+
+			// Check for invalid format/length first
+			// Valid licenses are typically 25-40 hex characters (with or without dashes)
+			// Be lenient with total length (15-60 chars) to account for dashes and variations
+			if ( $key_length < 15 || $key_length > 60 ) {
+				// Too short or too long - likely invalid/nulled
+				return true;
+			}
+
+			// Remove dashes to count actual hex characters
+			$hex_only = str_replace( '-', '', $license_key );
+			$hex_length = strlen( $hex_only );
+
+			// Valid hex length should be 25-40 characters (supports standard and shorter variants)
+			// Standard UUID: 32 chars, Short variants: 25-31 chars, Long: 33-40 chars
+			if ( $hex_length < 25 || $hex_length > 40 ) {
+				// Invalid hex length - likely nulled
+				return true;
+			}
+
+			// Check for non-hex characters (valid licenses should only contain 0-9, a-f, and dashes)
+			// This catches obvious invalid formats like "ABC123XYZ" or "license-key-123"
+			if ( ! preg_match( '/^[0-9a-f-]+$/i', $license_key ) ) {
+				// Contains invalid characters (non-hex) - likely nulled
+				return true;
+			}
 
 			// Check for nulled keywords (case-insensitive via lowercase conversion)
 			$nulled_keywords = [
@@ -205,15 +171,9 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 		 *
 		 * @param array|\WP_Error $license_data License data from API
 		 * @param array $invalid_statuses Array of invalid status constants
-		 * @param bool $is_nulled Whether nulled pattern was detected
 		 * @return bool True if valid, false if invalid
 		 */
-		private static function check_license_status( $license_data, $invalid_statuses, $is_nulled = false ) {
-			// If nulled pattern detected, always return false
-			if ( $is_nulled ) {
-				return false;
-			}
-
+		private static function check_license_status( $license_data, $invalid_statuses ) {
 			// Handle API errors
 			if ( is_wp_error( $license_data ) || empty( $license_data ) ) {
 				// Network issue - allow it (don't block on connection problems)
