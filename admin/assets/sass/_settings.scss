@@ -21,12 +21,9 @@
         backdrop-filter: blur(12px) saturate(180%);
         -webkit-backdrop-filter: blur(12px) saturate(180%);
 
-        // Soft neumorphic border
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        border-left: 0;
-        border-right: 0;
-        margin-left: 0;
-        margin-right: 0;
+        // Standard full border - subtle on all sides
+        // Left accent bar (via :before) will overlay the left border
+        border: 1px solid rgba(226, 232, 240, 0.6);  // slate-200 with opacity
 
         // Unique gradient left accent (Tailwind blue-500)
         &:before {
@@ -145,7 +142,7 @@
         margin: 0 0 5px 0;
         color: rgb(15, 23, 42);  // slate-900
         letter-spacing: -0.01em;
-        background: linear-gradient(135deg, 
+        background: linear-gradient(135deg,
             rgb(15, 23, 42) 0%,   // slate-900
             rgb(51, 65, 85) 100%  // slate-700
         );
@@ -286,7 +283,7 @@
         }
 
         .wp-ulike-notice-title {
-            background: linear-gradient(135deg, 
+            background: linear-gradient(135deg,
                 rgb(248, 250, 252) 0%,  // slate-50
                 rgb(203, 213, 225) 100% // slate-300
             );

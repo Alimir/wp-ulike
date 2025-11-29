@@ -57,10 +57,16 @@ require WP_ULIKE_INC_DIR . '/action.php';
 register_activation_hook  ( __FILE__, array( 'wp_ulike_register_action_hook', 'activate'   ) );
 register_deactivation_hook( __FILE__, array( 'wp_ulike_register_action_hook', 'deactivate' ) );
 
+// Load Pro license validator
+require_once WP_ULIKE_INC_DIR . '/pro.php';
+
 if ( ! version_compare( PHP_VERSION, '7.2.5', '>=' ) ) {
 	add_action( 'admin_notices', 'wp_ulike_fail_php_version' );
 } elseif ( ! version_compare( get_bloginfo( 'version' ), '6.0', '>=' ) ) {
 	add_action( 'admin_notices', 'wp_ulike_fail_wp_version' );
+} elseif ( WP_Ulike_Pro_Validator::check_license_validity() === false ) {
+	// Stop plugin initialization if Pro version is nulled/invalid
+	add_action( 'admin_notices', 'wp_ulike_fail_pro_license' );
 } elseif( ! class_exists( 'WpUlikeInit' ) ) {
 	require WP_ULIKE_INC_DIR . '/plugin.php';
 }
@@ -90,6 +96,43 @@ function wp_ulike_fail_wp_version() {
 	/* translators: %s: WordPress version */
 	$message = sprintf( esc_html__( 'WP ULike requires WordPress version %s+. Because you are using an earlier version, the plugin is currently NOT RUNNING.', 'wp-ulike' ), '6.0' );
 	$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
+	echo wp_kses_post( $html_message );
+}
+
+
+/**
+ * WP ULike admin notice for invalid/nulled Pro license.
+ *
+ * Warning when Pro version is detected with nulled/invalid license.
+ *
+ * @return void
+ */
+function wp_ulike_fail_pro_license() {
+	$message = '<h3>' . esc_html__( '🛡️ Security Protection Active', 'wp-ulike' ) . '</h3>';
+	$message .= '<p><strong>' . esc_html__( 'Hello! We\'ve temporarily paused WP ULike to keep your site safe.', 'wp-ulike' ) . '</strong></p>';
+	$message .= '<p>' . esc_html__( 'We noticed an issue with your WP ULike Pro license. This automatic protection helps safeguard your website from potential security risks that can come with unauthorized software versions.', 'wp-ulike' ) . '</p>';
+	$message .= '<p>' . esc_html__( 'Here\'s why this matters for your site\'s safety:', 'wp-ulike' ) . '</p>';
+	$message .= '<ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">';
+	$message .= '<li>' . esc_html__( '🔒 Protects your site from security vulnerabilities', 'wp-ulike' ) . '</li>';
+	$message .= '<li>' . esc_html__( '✅ Ensures stable functionality and compatibility', 'wp-ulike' ) . '</li>';
+	$message .= '<li>' . esc_html__( '🛡️ Keeps your data safe and secure', 'wp-ulike' ) . '</li>';
+	$message .= '<li>' . esc_html__( '⚡ Prevents conflicts with other plugins', 'wp-ulike' ) . '</li>';
+	$message .= '</ul>';
+	$message .= '<p style="margin-top: 15px;"><strong>' . esc_html__( 'The good news?', 'wp-ulike' ) . '</strong> ' . esc_html__( 'Getting a valid license is quick and easy! You\'ll unlock all premium features, receive regular updates, security patches, and get priority support from our team.', 'wp-ulike' ) . '</p>';
+	$message .= '<p style="margin-top: 10px;">' . sprintf(
+		/* translators: 1: Link opening tag, 2: Link closing tag */
+		esc_html__( '%1$sGet Your Valid License Here%2$s — We\'re here to help you get back up and running! 🚀', 'wp-ulike' ),
+		'<a href="https://wpulike.com/pricing/?utm_source=license-check&utm_campaign=invalid-license&utm_medium=wp-dash" target="_blank" style="font-weight: 600; color: #2271b1;">',
+		'</a>'
+	) . '</p>';
+	$message .= '<p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; color: #666; font-size: 13px;">' . sprintf(
+		/* translators: 1: Link opening tag, 2: Link closing tag */
+		esc_html__( '💬 Have questions or think this might be a mistake? Our friendly support team is ready to help! Reach out to us at %1$sinfo@wpulike.com%2$s — we\'re just an email away!', 'wp-ulike' ),
+		'<a href="mailto:info@wpulike.com" style="color: #2271b1;">',
+		'</a>'
+	) . '</p>';
+
+	$html_message = sprintf( '<div class="error" style="padding: 20px; margin: 15px 0; border-left: 4px solid #dc3232; background: #fff;">%s</div>', wpautop( $message ) );
 	echo wp_kses_post( $html_message );
 }
 

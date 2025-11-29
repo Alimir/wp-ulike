@@ -144,21 +144,21 @@ function wp_ulike_notice_manager(){
 		$milestone_text = '';
 		$emoji = '';
 		if( $count_logs >= 1000 ){
-			$milestone_text = esc_html__( 'Incredible milestone reached!', 'wp-ulike' );
+			$milestone_text = esc_html__( 'Wow! You\'ve hit an amazing milestone!', 'wp-ulike' );
 			$emoji = '🚀';
 		} elseif( $count_logs >= 500 ){
-			$milestone_text = esc_html__( 'Amazing engagement!', 'wp-ulike' );
+			$milestone_text = esc_html__( 'Fantastic! Your community is really engaged!', 'wp-ulike' );
 			$emoji = '🎉';
 		} else {
-			$milestone_text = esc_html__( 'Great progress!', 'wp-ulike' );
+			$milestone_text = esc_html__( 'Awesome! You\'re building something great!', 'wp-ulike' );
 			$emoji = '✨';
 		}
 
 		$notice_list[ 'wp_ulike_leave_review' ] = new wp_ulike_notices([
 			'id'          => 'wp_ulike_leave_review',
-			'title'       => esc_html__( 'Your Community is Thriving! ⭐', 'wp-ulike' ),
+			'title'       => esc_html__( 'Your Community Loves WP ULike! ⭐', 'wp-ulike' ),
 			'description' => sprintf(
-				'<strong>%s %s</strong> ' . esc_html__( 'You\'ve received %s likes! Your users are loving WP ULike. Help us reach more WordPress users by sharing your experience. A quick 5-star review takes just 30 seconds and makes a huge difference!', 'wp-ulike' ),
+				'<strong>%s %s</strong> ' . esc_html__( 'You\'ve received %s likes from your community — that\'s incredible! Your users are clearly enjoying the engagement. If WP ULike has helped your site, would you mind sharing your experience? A quick 5-star review helps other WordPress users discover us and takes less than a minute. Thank you for being part of our community! 🙏', 'wp-ulike' ),
 				$milestone_text,
 				$emoji,
 				'<span style="font-weight: 700; color: inherit;">' . number_format_i18n( $count_logs ) . '</span>'
@@ -167,7 +167,7 @@ function wp_ulike_notice_manager(){
 			'has_close'   => true,
 			'buttons'     => array(
 				array(
-					'label'      => esc_html__( '⭐ Leave a 5-Star Review', 'wp-ulike' ),
+					'label'      => esc_html__( '⭐ Share My Experience', 'wp-ulike' ),
 					'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5',
 					'color_name' => 'success'
 				),
@@ -180,7 +180,7 @@ function wp_ulike_notice_manager(){
 				array(
 					'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
 					'type'       => 'skip',
-					'color_name' => 'error',
+					'color_name' => 'info',
 					'expiration' => YEAR_IN_SECONDS * 10
 				)
 			),
@@ -191,30 +191,111 @@ function wp_ulike_notice_manager(){
 		]);
 	}
 
+	// Show discount notice for Pro users with invalid/expired/disabled licenses
+	// Only show if user has entered a license key (don't show for users who haven't activated yet)
+	if( defined( 'WP_ULIKE_PRO_VERSION' ) && class_exists( 'WP_Ulike_Pro_Validator' ) && class_exists( 'WP_Ulike_Pro_API' ) ){
+		// Check if user has entered a license key
+		$license_key = get_option( 'wp_ulike_pro_license_key', '' );
+
+		// Only show notice if license key exists (user has tried to activate)
+		if( ! empty( $license_key ) ){
+			// Get license status using the validator class
+			$license_status = WP_Ulike_Pro_Validator::get_license_status();
+
+			// Show notice for users with invalid, expired, disabled, deactivated, or missing licenses
+			$invalid_license_statuses = [
+				WP_Ulike_Pro_API::STATUS_INVALID,
+				WP_Ulike_Pro_API::STATUS_EXPIRED,
+				WP_Ulike_Pro_API::STATUS_DISABLED,
+				WP_Ulike_Pro_API::STATUS_DEACTIVATED,
+				WP_Ulike_Pro_API::STATUS_SITE_INACTIVE,
+				WP_Ulike_Pro_API::STATUS_MISSING,
+				WP_Ulike_Pro_API::STATUS_HTTP_ERROR,
+			];
+
+			// Show notice if license status is invalid, expired, or nulled
+			if( $license_status !== false && $license_status !== null && in_array( $license_status, $invalid_license_statuses, true ) ){
+				// Get personalized message based on license status
+				$status_message = '';
+				$status_emoji = '🎁';
+
+				if( $license_status === WP_Ulike_Pro_API::STATUS_EXPIRED ){
+					$status_message = esc_html__( 'Your license has expired', 'wp-ulike' );
+					$status_emoji = '⏰';
+				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_DISABLED ){
+					$status_message = esc_html__( 'Your license has been disabled', 'wp-ulike' );
+					$status_emoji = '🔒';
+				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_INVALID || $license_status === WP_Ulike_Pro_API::STATUS_MISSING ){
+					$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
+					$status_emoji = '⚠️';
+				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_HTTP_ERROR ){
+					$status_message = esc_html__( 'Unable to verify your license', 'wp-ulike' );
+					$status_emoji = '🔌';
+				} else {
+					$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
+				}
+
+				$notice_list[ 'wp_ulike_pro_license_discount' ] = new wp_ulike_notices([
+					'id'          => 'wp_ulike_pro_license_discount',
+					'title'       => sprintf(
+						esc_html__( 'Special Offer: Save %s on WP ULike Pro! 🎁', 'wp-ulike' ),
+						'30%'
+					),
+					'description' => sprintf(
+						'<strong>%s %s</strong> ' . esc_html__( 'We noticed your license needs a quick update. Here\'s some great news — we have an exclusive %s discount just for you! Get all premium features, regular updates, security patches, and priority support. Use coupon code %s at checkout to save %s. This special offer won\'t last long! 🚀', 'wp-ulike' ),
+						$status_message,
+						$status_emoji,
+						'30%',
+						'<code style="background: #fff3cd; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 13px; letter-spacing: 0.5px;">GET30OFF</code>',
+						'30%'
+					),
+					'has_close'   => false,
+					'skin'        => 'default',
+					'buttons'     => array(
+						array(
+							'label'      => sprintf(
+								esc_html__( '🎉 Claim My %s Discount', 'wp-ulike' ),
+								'30%'
+							),
+							'link'       => 'https://wpulike.com/pricing/?utm_source=license-discount-notice&utm_campaign=30off&utm_medium=wp-dash&discount=30OFF',
+							'color_name' => 'warning'
+						),
+						array(
+							'label'      => esc_html__('Maybe Later', 'wp-ulike'),
+							'type'       => 'skip',
+							'color_name' => 'info',
+							'expiration' => WEEK_IN_SECONDS
+						)
+					)
+				]);
+			}
+		}
+	}
+
 	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
 		if( get_locale() === 'fa_IR' ){
 			$notice_list[ 'wp_ulike_persian_banner' ] = new wp_ulike_notices([
 				'id'          => 'wp_ulike_persian_banner',
-				'title'       => esc_html__( 'Great News for Persian WordPress Users! 🇮🇷', 'wp-ulike' ),
-				'description' => esc_html__( "Following requests from our Persian WordPress community, WP ULike Pro is now available in Iran! Access premium features, new articles, and dedicated support through our Persian website." , 'wp-ulike' ),
+				'title'       => 'سلام! خبر خوبی برای شما داریم! 🇮🇷',
+				'description' => 'سلام دوست عزیز! 😊 ما درخواست‌های شما را شنیدیم و خوشحالیم که بگوییم "یولایک پرو" حالا در ایران هم در دسترس شماست! می‌تونید از تمام قابلیت‌های حرفه‌ای، مقالات مفید به فارسی و پشتیبانی اختصاصی ما استفاده کنید. ما خیلی خوشحالیم که می‌تونیم بهتر بهتون کمک کنیم! 🎉',
 				'skin'        => 'default',
 				'has_close'   => true,
 				'buttons'     => array(
 					array(
-						'label'      => esc_html__( "Visit Persian Website", 'wp-ulike' ),
+						'label'      => '✨ بریم ببینیم',
 						'link'       => 'https://wpulike.ir/?utm_source=fa-IR-banner&utm_campaign=gopro&utm_medium=wp-dash',
 						'color_name' => 'default'
 					),
 					array(
-						'label'      => esc_html__('Maybe Later', 'wp-ulike'),
+						'label'      => 'بعداً یادم بنداز',
 						'type'       => 'skip',
 						'color_name' => 'info',
 						'expiration' => WEEK_IN_SECONDS * 2
 					),
 					array(
-						'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
+						'label'      => 'نه ممنون',
 						'type'       => 'skip',
-						'color_name' => 'error',
+						'color_name' => 'info',
 						'expiration' => YEAR_IN_SECONDS * 10
 					)
 				),
@@ -227,13 +308,13 @@ function wp_ulike_notice_manager(){
 		if( strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
 			$notice_list[ 'wp_ulike_pro_user_profiles' ] = new wp_ulike_notices([
 				'id'          => 'wp_ulike_pro_user_profiles',
-				'title'       => esc_html__( 'Build Instagram-Style Profiles That Users Love! 🎨', 'wp-ulike' ),
-				'description' => esc_html__( 'Create beautiful, modern user profiles with WP ULike Pro! Get Instagram-style layouts, smooth avatar uploads, engagement tools built right in, secure login system, and everything you need — all jQuery-free and mobile-first. Perfect for communities, courses, marketplaces, and more!', 'wp-ulike' ),
+				'title'       => esc_html__( 'Create Beautiful User Profiles Your Community Will Love! 🎨', 'wp-ulike' ),
+				'description' => esc_html__( 'Want to take your community engagement to the next level? With WP ULike Pro, you can build stunning Instagram-style user profiles that keep users coming back! Get modern layouts, smooth avatar uploads, engagement tools, secure login, and more — all optimized for mobile and built without jQuery. Perfect for communities, courses, marketplaces, and membership sites!', 'wp-ulike' ),
 				'skin'        => 'default',
 				'has_close'   => true,
 				'buttons'     => array(
 					array(
-						'label'      => esc_html__( "✨ Learn More", 'wp-ulike' ),
+						'label'      => esc_html__( "✨ Discover Profile Builder", 'wp-ulike' ),
 						'link'       => WP_ULIKE_PLUGIN_URI . 'blog/best-wordpress-profile-builder-plugin/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash',
 						'color_name' => 'default'
 					),
@@ -246,7 +327,7 @@ function wp_ulike_notice_manager(){
 					array(
 						'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
 						'type'       => 'skip',
-						'color_name' => 'error',
+						'color_name' => 'info',
 						'expiration' => YEAR_IN_SECONDS * 10
 					)
 				),
@@ -277,12 +358,12 @@ add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 function wp_ulike_go_pro_admin_menu( $submenus ){
 	if( is_array( $submenus ) && ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
 		$submenus['go_pro'] = array(
-			'title'       => sprintf( 
+			'title'       => sprintf(
 				'<span class="wp-ulike-gopro-menu-link">
 					<span class="wp-ulike-gopro-icon">%s</span>
 					<span class="wp-ulike-gopro-text">%s</span>
 					<span class="wp-ulike-gopro-badge">%s</span>
-				</span>', 
+				</span>',
 				'<span class="dashicons dashicons-star-filled"></span>',
 				esc_html__( 'Go Pro', 'wp-ulike' ),
 				esc_html__( 'Upgrade', 'wp-ulike' )
@@ -514,7 +595,7 @@ function wp_ulike_manage_posts_columns( $columns ) {
 	// Get settings list
 	$post_types = wp_ulike_get_option( 'enable_admin_posts_columns', array() );
 	// Get current post type
-	$current_post_type = isset( $_GET['post_type'] ) && $_GET['post_type'] === 'page' ? 'page' : get_post_type( wp_ulike_get_the_id() );
+	$current_post_type = isset( $_GET['post_type'] ) && sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) === 'page' ? 'page' : get_post_type( wp_ulike_get_the_id() );
 
 	if( ! empty( $post_types ) && false !== $current_post_type ){
 		if( in_array( $current_post_type, $post_types ) ){
