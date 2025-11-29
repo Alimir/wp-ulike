@@ -7,7 +7,6 @@
  *
  * @package    wp-ulike
  * @author     TechnoWich
- * @since      4.8.0
  */
 
 // If this file is called directly, abort.
@@ -141,8 +140,8 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			}
 
 			// Check for asterisks with suspicious affixes at end (com/net/org)
-			if ( preg_match( '/\*/', $license_key ) && 
-				 preg_match( '/\*.*(com|net|org)$/i', $license_key ) && 
+			if ( preg_match( '/\*/', $license_key ) &&
+				 preg_match( '/\*.*(com|net|org)$/i', $license_key ) &&
 				 strlen( $license_key ) > 20 ) {
 				return true;
 			}

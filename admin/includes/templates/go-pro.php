@@ -186,7 +186,7 @@
 				<p><?php esc_html_e( 'Join thousands of satisfied users who have upgraded to WP ULike Pro and are seeing real results.', 'wp-ulike' ); ?></p>
 				<a href="<?php echo esc_url( WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash' ); ?>" target="_blank" class="wp-ulike-pro-btn wp-ulike-pro-btn-primary wp-ulike-pro-btn-large">
 					<span class="dashicons dashicons-cart"></span>
-					<span><?php esc_html_e( 'Get WP ULike Pro Now', 'wp-ulike' ); ?></span>
+					<span><?php esc_html_e( 'Get WP ULike Pro', 'wp-ulike' ); ?></span>
 				</a>
 				<div class="wp-ulike-pro-cta-guarantee">
 					<span class="dashicons dashicons-shield"></span>
