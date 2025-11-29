@@ -63,24 +63,9 @@
 	}
 
 	.wp-ulike-go-pro-page {
-		h2{
-			text-align: right;
-		}
 		.wp-ulike-btn{
 			margin-left: 15px;
 			margin-right: 0;
-		}
-		.wp-ulike-simple-table{
-			> thead,
-			> tbody,
-			> tfoot {
-			  > tr {
-				> th,
-				> td {
-				  text-align: right;
-				}
-			  }
-			}
 		}
 	}
 

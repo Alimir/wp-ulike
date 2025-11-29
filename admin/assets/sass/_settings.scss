@@ -5,93 +5,299 @@
 .wp-ulike-settings-notice,
 .wp-ulike-notice-wrapper {
     position: relative;
-
+    isolation: isolate;
 
     &.wp-ulike-notice-control {
         display: flex;
         align-items: center;
-        padding: 15px 25px;
-        margin-top: 20px !important;
-        margin-bottom: 20px !important;
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+        padding: 12px 16px;
+        margin-top: 15px !important;
+        margin-bottom: 15px !important;
+        position: relative;
+        overflow: hidden;
+
+        // Glassmorphism effect with backdrop blur
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+
+        // Soft neumorphic border
+        border: 1px solid rgba(255, 255, 255, 0.6);
         border-left: 0;
         border-right: 0;
-        margin-top: 20px !important;
-        margin-bottom: 20px !important;
+        margin-left: 0;
+        margin-right: 0;
 
+        // Unique gradient left accent (Tailwind blue-500)
         &:before {
             content: '';
             position: absolute;
-            left: 6px;
+            left: 0;
             top: 0;
             bottom: 0;
-            width: 6px;
-            background-color: #2C87FF;
-            -webkit-transform: translateX(-6px);
-            -ms-transform: translateX(-6px);
-            transform: translateX(-6px);
-            box-shadow: 0 3px 6px rgba(44, 135, 255, 0.16);
+            width: 3px;
+            background: linear-gradient(180deg,
+                rgba(59, 130, 246, 1) 0%,  // blue-500
+                rgba(59, 130, 246, 0.9) 50%,
+                rgba(59, 130, 246, 1) 100%);
+            z-index: 1;
+        }
+
+        // Subtle pattern overlay for texture
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.015) 1px, transparent 0);
+            background-size: 20px 20px;
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        // Mobile responsiveness
+        @media screen and (max-width: 782px) {
+            padding: 16px 16px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        @media screen and (max-width: 480px) {
+            padding: 10px 14px !important;
         }
     }
 
-
     &.wp-ulike-notice-skin-success {
-        box-shadow: 0 3px 6px rgba(57, 216, 148, 0.16);
+        background: rgba(236, 253, 245, 0.85);  // emerald-50
+        border-color: rgba(16, 185, 129, 0.2);   // emerald-500
 
         &:before {
-            background-color: #39D894;
+            background: linear-gradient(180deg,
+                rgba(16, 185, 129, 1) 0%,   // emerald-500
+                rgba(5, 150, 105, 0.9) 50%, // emerald-600
+                rgba(16, 185, 129, 1) 100%);
         }
     }
 
     &.wp-ulike-notice-skin-info {
-        box-shadow: 0 3px 6px rgba(255, 166, 88, 0.16);
+        background: rgba(255, 247, 237, 0.85);  // orange-50
+        border-color: rgba(249, 115, 22, 0.2);   // orange-500
 
         &:before {
-            background-color: #FFA658;
+            background: linear-gradient(180deg,
+                rgba(249, 115, 22, 1) 0%,   // orange-500
+                rgba(234, 88, 12, 0.9) 50%, // orange-600
+                rgba(249, 115, 22, 1) 100%);
         }
     }
 
     &.wp-ulike-notice-skin-error {
-        box-shadow: 0 3px 6px rgba(255, 88, 88, 0.16);
+        background: rgba(254, 242, 242, 0.85);  // red-50
+        border-color: rgba(239, 68, 68, 0.2);    // red-500
 
         &:before {
-            background-color: #FF5858;
+            background: linear-gradient(180deg,
+                rgba(239, 68, 68, 1) 0%,   // red-500
+                rgba(220, 38, 38, 0.9) 50%, // red-600
+                rgba(239, 68, 68, 1) 100%);
         }
     }
 
     .wp-ulike-notice-image {
-        margin-right: 25px;
+        margin-right: 16px;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 2;
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        // Mobile responsiveness
+        @media screen and (max-width: 782px) {
+            margin-right: 14px;
+            margin-bottom: 0;
+        }
+
+        @media screen and (max-width: 480px) {
+            margin-right: 12px;
+            width: 70px;
+        }
+    }
+
+    .wp-ulike-notice-info {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+        z-index: 2;
     }
 
     .wp-ulike-notice-title {
         font-size: 1rem;
-        line-height: 1.2;
-        font-weight: 600;
-        margin: 0;
-        margin-bottom: 5px;
-        letter-spacing: 0;
+        line-height: 1.3;
+        font-weight: 700;
+        margin: 0 0 5px 0;
+        color: rgb(15, 23, 42);  // slate-900
+        letter-spacing: -0.01em;
+        background: linear-gradient(135deg, 
+            rgb(15, 23, 42) 0%,   // slate-900
+            rgb(51, 65, 85) 100%  // slate-700
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+
+        // Mobile responsiveness
+        @media screen and (max-width: 782px) {
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            line-height: 1.35;
+        }
+
+        @media screen and (max-width: 480px) {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
     }
 
     .wp-ulike-notice-description {
         font-size: 13px;
         line-height: 1.5;
-        color: #555;
+        color: rgb(71, 85, 105);  // slate-600
         font-weight: 400;
-        margin: 0;
+        margin: 0 0 12px 0;
+        letter-spacing: 0.01em;
+
+        // Enhanced typography for HTML elements
+        strong {
+            font-weight: 700;
+            color: rgb(15, 23, 42);  // slate-900
+            letter-spacing: -0.01em;
+        }
+
+        span {
+            display: inline;
+        }
+
+        // Mobile responsiveness
+        @media screen and (max-width: 782px) {
+            font-size: 13px;
+            margin-bottom: 14px;
+            line-height: 1.55;
+        }
+
+        @media screen and (max-width: 480px) {
+            font-size: 12.5px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        // Dark mode support (Tailwind slate colors)
+        .dark & {
+            color: rgb(203, 213, 225);  // slate-300
+
+            strong {
+                color: rgb(248, 250, 252);  // slate-50
+            }
+        }
     }
 
     .wp-ulike-notice-submit {
-        margin: 1.2em 0 0 -5px;
+        margin: 0;
         padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+        z-index: 2;
 
-        .wp-ulike-btn {
-            margin-bottom: 0;
-            margin: 0 5px;
+        // Mobile responsiveness
+        @media screen and (max-width: 782px) {
+            gap: 8px;
+            width: 100%;
+            margin-top: 2px;
+        }
+
+        @media screen and (max-width: 480px) {
+            gap: 6px;
         }
     }
 
     .wp-ulike-close-notice {
         text-decoration: none;
+        padding: 0;
+        margin: 0;
+
+        @media screen and (max-width: 782px) {
+            padding: 0 !important;
+        }
+    }
+
+    // RTL Support
+    [dir="rtl"] & {
+        &.wp-ulike-notice-control {
+            // Move accent bar to right side in RTL
+            &:before {
+                left: auto;
+                right: 0;
+            }
+        }
+
+        .wp-ulike-notice-image {
+            margin-right: 0;
+            margin-left: 16px;
+
+            @media screen and (max-width: 782px) {
+                margin-left: 14px;
+            }
+
+            @media screen and (max-width: 480px) {
+                margin-left: 12px;
+            }
+        }
+
+        .wp-ulike-notice-submit {
+            // Buttons maintain their order but spacing adjusts
+            gap: 8px;
+
+            @media screen and (max-width: 782px) {
+                gap: 8px;
+            }
+
+            @media screen and (max-width: 480px) {
+                gap: 6px;
+            }
+        }
+    }
+
+    // Dark mode support (Tailwind slate colors)
+    .dark &,
+    &.dark-mode {
+        &.wp-ulike-notice-control {
+            background: rgba(30, 41, 59, 0.85);  // slate-800
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .wp-ulike-notice-title {
+            background: linear-gradient(135deg, 
+                rgb(248, 250, 252) 0%,  // slate-50
+                rgb(203, 213, 225) 100% // slate-300
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .wp-ulike-notice-description {
+            color: rgb(203, 213, 225);  // slate-300
+        }
     }
 
 }

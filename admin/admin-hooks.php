@@ -129,26 +129,56 @@ function wp_ulike_notice_manager(){
 	$screen      = get_current_screen();
 	$notice_list = [];
 
-	if( $count_logs > 150 ){
-		$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_leave_a_review',
-			'title'       => esc_html__( 'Congratulations! You\'ve Earned Over a Hundred Likes', 'wp-ulike' ) . ' &#127775;',
-			'description' => esc_html__( "It's truly wonderful to witness your active engagement with the WP ULike plugin. We sincerely hope your experience has been nothing short of excellent! If that's the case, could we kindly ask for your valuable input in the form of a positive review? Your constructive feedback not only uplifts and fuels the plugin but also serves as a guiding light for those seeking its benefits. Let's unite in spreading the positive impact and help more individuals uncover the power of WP ULike!" , 'wp-ulike' ),
-			'skin'        => 'info',
+	// Show review notice after 100 likes or 7 days of usage (whichever comes first)
+	$plugin_install_time = get_option( 'wp_ulike_install_date' );
+	if( ! $plugin_install_time ){
+		// For existing installations without install date, set it to 30 days ago
+		// so we don't show notice immediately, but still allow it based on likes count
+		$plugin_install_time = time() - ( 30 * DAY_IN_SECONDS );
+		update_option( 'wp_ulike_install_date', $plugin_install_time );
+	}
+	$days_since_install = ( time() - $plugin_install_time ) / DAY_IN_SECONDS;
+
+	if( $count_logs > 100 || $days_since_install >= 7 ){
+		// Personalized message based on milestone
+		$milestone_text = '';
+		$emoji = '';
+		if( $count_logs >= 1000 ){
+			$milestone_text = esc_html__( 'Incredible milestone reached!', 'wp-ulike' );
+			$emoji = '🚀';
+		} elseif( $count_logs >= 500 ){
+			$milestone_text = esc_html__( 'Amazing engagement!', 'wp-ulike' );
+			$emoji = '🎉';
+		} else {
+			$milestone_text = esc_html__( 'Great progress!', 'wp-ulike' );
+			$emoji = '✨';
+		}
+
+		$notice_list[ 'wp_ulike_leave_review' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_leave_review',
+			'title'       => esc_html__( 'Your Community is Thriving! ⭐', 'wp-ulike' ),
+			'description' => sprintf(
+				'<strong>%s %s</strong> ' . esc_html__( 'You\'ve received %s likes! Your users are loving WP ULike. Help us reach more WordPress users by sharing your experience. A quick 5-star review takes just 30 seconds and makes a huge difference!', 'wp-ulike' ),
+				$milestone_text,
+				$emoji,
+				'<span style="font-weight: 700; color: inherit;">' . number_format_i18n( $count_logs ) . '</span>'
+			),
+			'skin'        => 'success',
 			'has_close'   => true,
 			'buttons'     => array(
 				array(
-					'label'      => esc_html__( "Sure, I'd love to!", 'wp-ulike' ),
-					'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5'
+					'label'      => esc_html__( '⭐ Leave a 5-Star Review', 'wp-ulike' ),
+					'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5',
+					'color_name' => 'success'
 				),
 				array(
-					'label'      => esc_html__('Not Now', 'wp-ulike'),
+					'label'      => esc_html__('Maybe Later', 'wp-ulike'),
 					'type'       => 'skip',
 					'color_name' => 'info',
 					'expiration' => WEEK_IN_SECONDS * 2
 				),
 				array(
-					'label'      => esc_html__('No thanks and never ask me again', 'wp-ulike'),
+					'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
 					'type'       => 'skip',
 					'color_name' => 'error',
 					'expiration' => YEAR_IN_SECONDS * 10
@@ -161,21 +191,28 @@ function wp_ulike_notice_manager(){
 		]);
 	}
 
-	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) && strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
+	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
 		if( get_locale() === 'fa_IR' ){
-			$notice_list[ 'wp_ulike_fa_IR_banner' ] = new wp_ulike_notices([
-				'id'          => 'wp_ulike_fa_IR_banner',
-				'title'       => esc_html__( 'Good news for Persian WordPress users. :)', 'wp-ulike' ),
-				'description' => esc_html__( "Following the request of our friends in Persian WordPress to access the premium version in Iran, we made the necessary arrangements and our new website has become available. From now on, you can use our new articles and premium service by visiting this website." , 'wp-ulike' ),
+			$notice_list[ 'wp_ulike_persian_banner' ] = new wp_ulike_notices([
+				'id'          => 'wp_ulike_persian_banner',
+				'title'       => esc_html__( 'Great News for Persian WordPress Users! 🇮🇷', 'wp-ulike' ),
+				'description' => esc_html__( "Following requests from our Persian WordPress community, WP ULike Pro is now available in Iran! Access premium features, new articles, and dedicated support through our Persian website." , 'wp-ulike' ),
 				'skin'        => 'default',
 				'has_close'   => true,
 				'buttons'     => array(
 					array(
-						'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-						'link'       => 'https://wpulike.ir/?utm_source=fa-IR-banner&utm_campaign=gopro&utm_medium=wp-dash'
+						'label'      => esc_html__( "Visit Persian Website", 'wp-ulike' ),
+						'link'       => 'https://wpulike.ir/?utm_source=fa-IR-banner&utm_campaign=gopro&utm_medium=wp-dash',
+						'color_name' => 'default'
 					),
 					array(
-						'label'      => esc_html__('No thanks and never ask me again', 'wp-ulike'),
+						'label'      => esc_html__('Maybe Later', 'wp-ulike'),
+						'type'       => 'skip',
+						'color_name' => 'info',
+						'expiration' => WEEK_IN_SECONDS * 2
+					),
+					array(
+						'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
 						'type'       => 'skip',
 						'color_name' => 'error',
 						'expiration' => YEAR_IN_SECONDS * 10
@@ -187,52 +224,38 @@ function wp_ulike_notice_manager(){
 				)
 			]);
 		}
-		$notice_list[ 'wp_ulike_pro_user_profiles_banner' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_pro_user_profiles_banner',
-			'title'       => esc_html__( 'Unlock the Power of WP ULike: Crafting Ultimate User Profiles', 'wp-ulike' ),
-			'description' => esc_html__( "Discover the seamless path to curating captivating WordPress user profiles with the WP ULike Profile Builder. This revolutionary tool empowers you to sculpt professional profiles effortlessly, showcasing them on your website's front-end sans the hassle of coding or intricate maneuvers. Unleash the potential and redefine user engagement today!" , 'wp-ulike' ),
-			'skin'        => 'default',
-			'has_close'   => true,
-			'buttons'     => array(
-				array(
-					'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
+		if( strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
+			$notice_list[ 'wp_ulike_pro_user_profiles' ] = new wp_ulike_notices([
+				'id'          => 'wp_ulike_pro_user_profiles',
+				'title'       => esc_html__( 'Build Instagram-Style Profiles That Users Love! 🎨', 'wp-ulike' ),
+				'description' => esc_html__( 'Create beautiful, modern user profiles with WP ULike Pro! Get Instagram-style layouts, smooth avatar uploads, engagement tools built right in, secure login system, and everything you need — all jQuery-free and mobile-first. Perfect for communities, courses, marketplaces, and more!', 'wp-ulike' ),
+				'skin'        => 'default',
+				'has_close'   => true,
+				'buttons'     => array(
+					array(
+						'label'      => esc_html__( "✨ Learn More", 'wp-ulike' ),
+						'link'       => WP_ULIKE_PLUGIN_URI . 'blog/best-wordpress-profile-builder-plugin/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash',
+						'color_name' => 'default'
+					),
+					array(
+						'label'      => esc_html__('Maybe Later', 'wp-ulike'),
+						'type'       => 'skip',
+						'color_name' => 'info',
+						'expiration' => WEEK_IN_SECONDS * 2
+					),
+					array(
+						'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
+						'type'       => 'skip',
+						'color_name' => 'error',
+						'expiration' => YEAR_IN_SECONDS * 10
+					)
 				),
-				array(
-					'label'      => esc_html__('No thanks and never ask me again', 'wp-ulike'),
-					'type'       => 'skip',
-					'color_name' => 'error',
-					'expiration' => YEAR_IN_SECONDS * 10
+				'image'     => array(
+					'width' => '100',
+					'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
 				)
-			),
-			'image'     => array(
-				'width' => '100',
-				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
-			)
-		]);
-		$notice_list[ 'wp_ulike_seo_tools_banner' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_seo_tools_banner',
-			'title'       => esc_html__( 'Elevate Your SEO with Schema Rich Snippets', 'wp-ulike' ),
-			'description' => esc_html__( "Empower your website's SEO potential through Schema Rich Snippets in WP ULike Pro. With the inclusion of +13 Schema Markups, your site gains the ability to establish robust connections with search engines. Fluent communication in search engine language allows you to precisely convey your content's nature. Upgrade now for a refined SEO experience!" , 'wp-ulike' ),
-			'skin'        => 'default',
-			'has_close'   => true,
-			'buttons'     => array(
-				array(
-					'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-					'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-rich-snippets-generator/?utm_source=seo-tools-banner&utm_campaign=gopro&utm_medium=wp-dash'
-				),
-				array(
-					'label'      => esc_html__('No thanks and never ask me again', 'wp-ulike'),
-					'type'       => 'skip',
-					'color_name' => 'error',
-					'expiration' => YEAR_IN_SECONDS * 10
-				)
-			),
-			'image'     => array(
-				'width' => '100',
-				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/seo.svg'
-			)
-		]);
+			]);
+		}
 	}
 
     $notice_list = apply_filters( 'wp_ulike_admin_notices_instances', $notice_list );
