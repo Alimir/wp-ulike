@@ -441,15 +441,15 @@ if( ! function_exists('wp_ulike_is_valid_nonce') ){
         $nonce = '';
 
         if ( $query_arg && isset( $_REQUEST[ $query_arg ] ) ) {
-            $nonce = $_REQUEST[ $query_arg ];
+            $nonce = sanitize_text_field( wp_unslash( $_REQUEST[ $query_arg ] ) );
         } elseif ( isset( $_REQUEST['_ajax_nonce'] ) ) {
-            $nonce = $_REQUEST['_ajax_nonce'];
+            $nonce = sanitize_text_field( wp_unslash( $_REQUEST['_ajax_nonce'] ) );
         } elseif ( isset( $_REQUEST['_wpnonce'] ) ) {
-            $nonce = $_REQUEST['_wpnonce'];
+            $nonce = sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) );
         } elseif ( isset( $_SERVER['HTTP_X_WP_NONCE'] ) ) {
-            $nonce = $_SERVER['HTTP_X_WP_NONCE'];
+            $nonce = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_WP_NONCE'] ) );
         } elseif ( isset( $_SERVER['HTTP_X_CSRF_TOKEN'] ) ) {
-            $nonce = $_SERVER['HTTP_X_CSRF_TOKEN'];
+            $nonce = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_CSRF_TOKEN'] ) );
         }
 
         return wp_verify_nonce( $nonce, $action );

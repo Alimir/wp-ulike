@@ -126,9 +126,10 @@ function wp_ulike_fail_pro_license() {
 		'</a>'
 	) . '</p>';
 	$message .= '<p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; color: #666; font-size: 13px;">' . sprintf(
-		/* translators: 1: Link opening tag, 2: Link closing tag */
-		esc_html__( '💬 Have questions or think this might be a mistake? Our friendly support team is ready to help! Reach out to us at %1$sinfo@wpulike.com%2$s — we\'re just an email away!', 'wp-ulike' ),
+		/* translators: 1: Link opening tag, 2: Email address (not translatable), 3: Link closing tag */
+		esc_html__( '💬 Have questions or think this might be a mistake? Our friendly support team is ready to help! Reach out to us at %1$s%2$s%3$s — we\'re just an email away!', 'wp-ulike' ),
 		'<a href="mailto:info@wpulike.com" style="color: #2271b1;">',
+		'info@wpulike.com',
 		'</a>'
 	) . '</p>';
 

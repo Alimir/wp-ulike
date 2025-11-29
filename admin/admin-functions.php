@@ -74,8 +74,15 @@ function wp_ulike_widget_button_callback( $atts = array() ){
         'extra_classes' => '', // custom css class names for this element
     );
 
-    $result = $parsed_args = wp_parse_args( $atts, $default_atts );
-	extract( $result );
+    $parsed_args = wp_parse_args( $atts, $default_atts );
+	$label = isset( $parsed_args['label'] ) ? $parsed_args['label'] : '';
+	$color_name = isset( $parsed_args['color_name'] ) ? $parsed_args['color_name'] : 'default';
+	$link = isset( $parsed_args['link'] ) ? $parsed_args['link'] : '';
+	$target = isset( $parsed_args['target'] ) ? $parsed_args['target'] : '_self';
+	$nofollow = isset( $parsed_args['nofollow'] ) ? $parsed_args['nofollow'] : false;
+	$btn_attrs = isset( $parsed_args['btn_attrs'] ) ? $parsed_args['btn_attrs'] : '';
+	$custom_styles = isset( $parsed_args['custom_styles'] ) ? $parsed_args['custom_styles'] : array();
+	$extra_classes = isset( $parsed_args['extra_classes'] ) ? $parsed_args['extra_classes'] : '';
 
     // --------------------------------------------
     $btn_css_classes = array( 'wp-ulike-btn' );
