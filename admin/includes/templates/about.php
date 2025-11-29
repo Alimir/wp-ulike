@@ -113,7 +113,7 @@
 					<div class="wp-ulike-about-problem-icon">
 						<span class="dashicons dashicons-admin-site-alt3"></span>
 					</div>
-					<h3><?php esc_html_e('Limited Content Types', 'wp-ulike'); ?></h3>
+					<h3><?php esc_html_e('Content Types', 'wp-ulike'); ?></h3>
 					<p><?php esc_html_e('Works with posts, comments, WooCommerce products, BuddyPress activities, bbPress topics, and more.', 'wp-ulike'); ?></p>
 				</div>
 			</div>

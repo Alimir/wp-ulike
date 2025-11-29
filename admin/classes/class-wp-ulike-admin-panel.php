@@ -122,14 +122,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                         'id'      => 'like_prefix',
                                         'type'    => 'text',
                                         'title'   => esc_html__('Like Prefix','wp-ulike'),
-                                        'desc'    => esc_html__('Text shown before the like count (e.g., "+" displays as "+125").', 'wp-ulike'),
+                                        'desc'    => esc_html__('Text shown before the count (e.g., "+" displays as "+125").', 'wp-ulike'),
                                         'default' => '+'
                                     ),
                                     array(
                                         'id'      => 'unlike_prefix',
                                         'type'    => 'text',
                                         'title'   => esc_html__('Unlike Prefix','wp-ulike'),
-                                        'desc'    => esc_html__('Text shown before the unlike count (e.g., "+" displays as "+125").', 'wp-ulike'),
+                                        'desc'    => esc_html__('Text shown before the count (e.g., "+" displays as "+125").', 'wp-ulike'),
                                         'default' => '+'
                                     ),
                                 ), 'prefix' )
@@ -141,13 +141,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                         'id'      => 'like_postfix',
                                         'type'    => 'text',
                                         'title'   => esc_html__('Like Suffix','wp-ulike'),
-                                        'desc'    => esc_html__('Text shown after the like count (e.g., " likes" displays as "125 likes").', 'wp-ulike')
+                                        'desc'    => esc_html__('Text shown after the count (e.g., " likes" displays as "125 likes").', 'wp-ulike')
                                     ),
                                     array(
                                         'id'      => 'unlike_postfix',
                                         'type'    => 'text',
                                         'title'   => esc_html__('Unlike Suffix','wp-ulike'),
-                                        'desc'    => esc_html__('Text shown after the unlike count (e.g., " likes" displays as "125 likes").', 'wp-ulike')
+                                        'desc'    => esc_html__('Text shown after the count (e.g., " likes" displays as "125 likes").', 'wp-ulike')
                                     ),
                                 ), 'postfix' )
                             ),
@@ -164,7 +164,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'          => 'filter_toast_types',
                         'type'        => 'select',
                         'title'       => esc_html__( 'Disable Notifications On','wp-ulike' ),
-                        'desc'        => esc_html__('Choose where notifications should be hidden.', 'wp-ulike'),
+                        'desc'        => esc_html__('Choose where notifications are disabled.', 'wp-ulike'),
                         'chosen'      => true,
                         'multiple'    => true,
                         'options'     => array(
@@ -224,7 +224,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'          => 'enable_admin_posts_columns',
                         'type'        => 'select',
                         'title'       => esc_html__( 'Show Admin Columns','wp-ulike' ),
-                        'desc'        => esc_html__('Add a likes counter column to selected post types in the admin list.', 'wp-ulike'),
+                        'desc'        => esc_html__('Add a likes counter column to the admin list.', 'wp-ulike'),
                         'chosen'      => true,
                         'multiple'    => true,
                         'options'     => 'post_types'
@@ -278,8 +278,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $get_content_fields['comments']['enable_admin_columns'] = array(
                 'id'         => 'enable_admin_columns',
                 'type'       => 'switcher',
-                'title'      => esc_html__('Show Admin Column', 'wp-ulike'),
-                'desc'       => esc_html__('Add a likes counter column to the comments list.', 'wp-ulike')
+                'title'      => esc_html__('Show Admin Columns', 'wp-ulike'),
+                'desc'       => esc_html__('Add a likes counter column to the admin list.', 'wp-ulike')
             );
 
             // Generate buddypress fields
@@ -336,8 +336,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $get_content_fields['buddypress']['filter_user_notification_types'] = array(
                 'id'          => 'filter_user_notification_types',
                 'type'        => 'select',
-                'title'       => esc_html__( 'Disable User Notifications On','wp-ulike' ),
-                'desc'        => esc_html__('Choose where user notifications are disabled.', 'wp-ulike'),
+                        'title'       => esc_html__( 'Disable Notifications On','wp-ulike' ),
+                'desc'        => esc_html__('Choose where notifications are disabled.', 'wp-ulike'),
                 'chosen'      => true,
                 'multiple'    => true,
                 'options'     => array(
@@ -810,7 +810,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'id'           => 'like',
                                     'type'         => 'upload',
                                     'title'        => esc_html__('Button Image','wp-ulike'),
-                                    'desc'         => esc_html__('Upload an image icon for the like button state.', 'wp-ulike'),
+                                    'desc'         => esc_html__('Upload an image icon for the button state.', 'wp-ulike'),
                                     'library'      => 'image',
                                     'placeholder'  => 'http://'
                                 ),
@@ -823,7 +823,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'id'           => 'unlike',
                                     'type'         => 'upload',
                                     'title'        => esc_html__('Button Image','wp-ulike'),
-                                    'desc'         => esc_html__('Upload an image icon for the unlike/liked button state.', 'wp-ulike'),
+                                    'desc'         => esc_html__('Upload an image icon for the button state.', 'wp-ulike'),
                                     'library'      => 'image',
                                     'placeholder'  => 'http://'
                                 ),

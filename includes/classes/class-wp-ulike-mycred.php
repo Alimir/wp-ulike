@@ -235,7 +235,7 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 
 		?>
 <div class="hook-instance">
-    <h3><?php esc_html_e( 'Points for Liking content', 'wp-ulike' ); ?></h3>
+    <h3><?php esc_html_e( 'Points for liking content', 'wp-ulike' ); ?></h3>
     <div class="row">
         <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
             <div class="form-group">
