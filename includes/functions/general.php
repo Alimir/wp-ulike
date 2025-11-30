@@ -643,7 +643,20 @@ if( ! function_exists('wp_ulike_release_lock') ){
             fclose( $fp );
 
             $lock_file = wp_ulike_lock_file( $item_type, $item_id );
-            wp_delete_file( $lock_file );
+
+            // Use WordPress filesystem API for better compatibility
+            global $wp_filesystem;
+            if ( empty( $wp_filesystem ) ) {
+                require_once ABSPATH . '/wp-admin/includes/file.php';
+                WP_Filesystem();
+            }
+
+            if ( $wp_filesystem && $wp_filesystem->exists( $lock_file ) ) {
+                $wp_filesystem->delete( $lock_file );
+            } elseif ( file_exists( $lock_file ) ) {
+                // Fallback to native PHP if filesystem API fails
+                @unlink( $lock_file );
+            }
 
             return true;
         }
