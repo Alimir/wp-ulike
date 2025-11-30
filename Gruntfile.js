@@ -575,7 +575,7 @@ module.exports = function (grunt) {
   grunt.registerTask("syncversion", ["shell:updateVersion"]);
   grunt.registerTask("bump", ["shell:bumpVersion"]);
 
-  grunt.registerTask("i18n", ["makepot", "potomo"]);
+  grunt.registerTask("i18n", ["makepot"]);
 
   // compress the product in one pack
   grunt.registerTask("pack", ["shell:zipBuild"]);
