@@ -66,7 +66,7 @@ if ( ! version_compare( PHP_VERSION, '7.2.5', '>=' ) ) {
 	add_action( 'admin_notices', 'wp_ulike_fail_wp_version' );
 } else {
 	// Show notice if Pro version has invalid license, but still allow plugin to run
-	if ( WP_Ulike_Pro_Validator::check_license_validity() !== false ) {
+	if ( WP_Ulike_Pro_Validator::check_license_validity() === false ) {
 		add_action( 'admin_notices', array( 'WP_Ulike_Pro_Validator', 'fail_pro_license_notice' ) );
 	}
 
