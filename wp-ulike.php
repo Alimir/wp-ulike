@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 			);
 define( 'WP_ULIKE_VERSION'      , '4.8.1' 					 		    	);
-define( 'WP_ULIKE_DB_VERSION'   , '2.3' 					 	 			);
+define( 'WP_ULIKE_DB_VERSION'   , '2.4' 					 	 			);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 			);
 define( 'WP_ULIKE_NAME'         , 'WP ULike'	    						);
 
