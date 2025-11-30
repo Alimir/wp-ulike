@@ -112,6 +112,7 @@ class wp_ulike_activator {
 			KEY `user_id` (`user_id`),
 			KEY `date_time` (`date_time`),
 			KEY `status` (`status`),
+			KEY `fingerprint` (`fingerprint`),
 			KEY `post_id_user_id` (`post_id`, `user_id`),
 			KEY `post_id_status` (`post_id`, `status`),
 			KEY `post_id_fingerprint` (`post_id`, `fingerprint`),
@@ -135,6 +136,7 @@ class wp_ulike_activator {
 			KEY `user_id` (`user_id`),
 			KEY `date_time` (`date_time`),
 			KEY `status` (`status`),
+			KEY `fingerprint` (`fingerprint`),
 			KEY `comment_id_user_id` (`comment_id`, `user_id`),
 			KEY `comment_id_status` (`comment_id`, `status`),
 			KEY `comment_id_fingerprint` (`comment_id`, `fingerprint`),
@@ -182,6 +184,7 @@ class wp_ulike_activator {
 			KEY `user_id` (`user_id`),
 			KEY `date_time` (`date_time`),
 			KEY `status` (`status`),
+			KEY `fingerprint` (`fingerprint`),
 			KEY `topic_id_user_id` (`topic_id`, `user_id`),
 			KEY `topic_id_status` (`topic_id`, `status`),
 			KEY `topic_id_fingerprint` (`topic_id`, `fingerprint`),
@@ -213,10 +216,47 @@ class wp_ulike_activator {
 	}
 
 	/**
+	 * Check if a column exists on a table
+	 *
+	 * @param string $table_name
+	 * @param string $column_name
+	 * @return bool
+	 */
+	protected function column_exists( $table_name, $column_name ) {
+		$table_escaped = esc_sql( $table_name );
+		$column_escaped = esc_sql( $column_name );
+		$result = $this->database->get_var( $this->database->prepare(
+			"SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND COLUMN_NAME = %s",
+			DB_NAME,
+			$table_escaped,
+			$column_escaped
+		) );
+		return (int) $result > 0;
+	}
+
+	/**
+	 * Execute a database query with error handling
+	 *
+	 * @param string $query
+	 * @return bool
+	 */
+	protected function execute_query( $query ) {
+		$result = $this->database->query( $query );
+		if ( false === $result ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'WP ULike: Database query failed - ' . $this->database->last_error . ' | Query: ' . $query );
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Upgrade database to version 2.1.
 	 *
 	 * @since 2.1.0
-	 * @return void
+	 * @return bool
 	 */
 	public function upgrade_0() {
 		// Extract array to variables
@@ -225,48 +265,51 @@ class wp_ulike_activator {
 		$activities = isset( $this->tables['activities'] ) ? $this->tables['activities'] : '';
 		$forums = isset( $this->tables['forums'] ) ? $this->tables['forums'] : '';
 
+		$success = true;
+
 		// Posts upgrades.
 		$posts_escaped = esc_sql( $posts );
-		$this->database->query( "
-			ALTER TABLE `{$posts_escaped}`
-			ADD INDEX( `post_id`, `date_time`, `user_id`, `status`),
-			CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
-			CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
-		" );
+		// Note: Indexes are NOT added during upgrade to avoid locking large tables.
+		// Indexes will be created automatically for new installations via install_tables().
+		$query = "ALTER TABLE `{$posts_escaped}` CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL";
+		if ( ! $this->execute_query( $query ) ) {
+			$success = false;
+		}
+
 		// Comments upgrades.
 		$comments_escaped = esc_sql( $comments );
-		$this->database->query( "
-			ALTER TABLE `{$comments_escaped}`
-			ADD INDEX( `comment_id`, `date_time`, `user_id`, `status`),
-			CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
-			CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
-		" );
+		$query = "ALTER TABLE `{$comments_escaped}` CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL";
+		if ( ! $this->execute_query( $query ) ) {
+			$success = false;
+		}
+
 		// BuddyPress upgrades.
 		$activities_escaped = esc_sql( $activities );
-		$this->database->query( "
-			ALTER TABLE `{$activities_escaped}`
-			ADD INDEX( `activity_id`, `date_time`, `user_id`, `status`),
-			CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
-			CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
-		" );
+		$query = "ALTER TABLE `{$activities_escaped}` CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL";
+		if ( ! $this->execute_query( $query ) ) {
+			$success = false;
+		}
+
 		// bbPress upgrades.
 		$forums_escaped = esc_sql( $forums );
-		$this->database->query( "
-			ALTER TABLE `{$forums_escaped}`
-			ADD INDEX( `topic_id`, `date_time`, `user_id`, `status`),
-			CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL,
-			CHANGE `ip` `ip` VARCHAR(100) NOT NULL;
-		" );
+		$query = "ALTER TABLE `{$forums_escaped}` CHANGE `user_id` `user_id` VARCHAR(100) NOT NULL, CHANGE `ip` `ip` VARCHAR(100) NOT NULL";
+		if ( ! $this->execute_query( $query ) ) {
+			$success = false;
+		}
 
-		// Update db version
-		update_option( 'wp_ulike_dbVersion', '2.1' );
+		// Update db version only if all queries succeeded
+		if ( $success ) {
+			update_option( 'wp_ulike_dbVersion', '2.1' );
+		}
+
+		return $success;
 	}
 
 	/**
 	 * Upgrade database to version 2.2.
 	 *
 	 * @since 2.2.0
-	 * @return void
+	 * @return bool
 	 */
 	public function upgrade_1() {
 		// Extract array to variables.
@@ -274,19 +317,24 @@ class wp_ulike_activator {
 
 		// Meta table upgrades.
 		$meta_escaped = esc_sql( $meta );
-		$this->database->query( "
-			ALTER TABLE `{$meta_escaped}`
-			CHANGE `item_id` `item_id` VARCHAR(100) NOT NULL;
-		" );
+		// Only change column if it's not already VARCHAR(100)
+		if ( $this->column_exists( $meta, 'item_id' ) ) {
+			$query = "ALTER TABLE `{$meta_escaped}` CHANGE `item_id` `item_id` VARCHAR(100) NOT NULL";
+			if ( ! $this->execute_query( $query ) ) {
+				return false;
+			}
+		}
+
 		// Update db version.
 		update_option( 'wp_ulike_dbVersion', '2.2' );
+		return true;
 	}
 
 	/**
 	 * Upgrade database to version 2.3.
 	 *
 	 * @since 2.3.0
-	 * @return void
+	 * @return bool
 	 */
 	public function upgrade_2() {
 		// Extract array to variables.
@@ -297,20 +345,24 @@ class wp_ulike_activator {
 
 		// Meta table upgrades.
 		$meta_escaped = esc_sql( $meta );
-		$this->database->query( "
-			ALTER TABLE `{$meta_escaped}`
-			CHANGE `item_id` `item_id` bigint(20) unsigned NOT NULL;
-		" );
+		// Only change column if it exists and is not already bigint(20) unsigned
+		if ( $this->column_exists( $meta, 'item_id' ) ) {
+			$query = "ALTER TABLE `{$meta_escaped}` CHANGE `item_id` `item_id` bigint(20) unsigned NOT NULL";
+			if ( ! $this->execute_query( $query ) ) {
+				return false;
+			}
+		}
 
 		// Update db version.
 		update_option( 'wp_ulike_dbVersion', '2.3' );
+		return true;
 	}
 
 	/**
 	 * Upgrade database to version 2.4.
 	 *
 	 * @since 2.4.0
-	 * @return void
+	 * @return bool
 	 */
 	public function upgrade_3() {
 		// Extract table names.
@@ -319,37 +371,54 @@ class wp_ulike_activator {
 		$activities = isset( $this->tables['activities'] ) ? $this->tables['activities'] : '';
 		$forums     = isset( $this->tables['forums'] ) ? $this->tables['forums'] : '';
 
+		$success = true;
+
 		// Add 'fingerprint' column to posts table.
 		$posts_escaped = esc_sql( $posts );
-		$this->database->query( "
-			ALTER TABLE `{$posts_escaped}`
-			ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`;
-		" );
+		if ( ! $this->column_exists( $posts, 'fingerprint' ) ) {
+			$query = "ALTER TABLE `{$posts_escaped}` ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`";
+			if ( ! $this->execute_query( $query ) ) {
+				$success = false;
+			}
+		}
 
 		// Add 'fingerprint' column to comments table.
 		$comments_escaped = esc_sql( $comments );
-		$this->database->query( "
-			ALTER TABLE `{$comments_escaped}`
-			ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`;
-		" );
+		if ( ! $this->column_exists( $comments, 'fingerprint' ) ) {
+			$query = "ALTER TABLE `{$comments_escaped}` ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`";
+			if ( ! $this->execute_query( $query ) ) {
+				$success = false;
+			}
+		}
 
 		// Add 'fingerprint' column to activities table.
 		$activities_escaped = esc_sql( $activities );
-		$this->database->query( "
-			ALTER TABLE `{$activities_escaped}`
-			ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`,
-			ADD INDEX (`fingerprint`);
-		" );
+		if ( ! $this->column_exists( $activities, 'fingerprint' ) ) {
+			$query = "ALTER TABLE `{$activities_escaped}` ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`";
+			if ( ! $this->execute_query( $query ) ) {
+				$success = false;
+			}
+		}
 
 		// Add 'fingerprint' column to forums table.
 		$forums_escaped = esc_sql( $forums );
-		$this->database->query( "
-			ALTER TABLE `{$forums_escaped}`
-			ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`;
-		" );
+		if ( ! $this->column_exists( $forums, 'fingerprint' ) ) {
+			$query = "ALTER TABLE `{$forums_escaped}` ADD COLUMN `fingerprint` VARCHAR(64) DEFAULT NULL AFTER `user_id`";
+			if ( ! $this->execute_query( $query ) ) {
+				$success = false;
+			}
+		}
 
-		// Update db version.
-		update_option( 'wp_ulike_dbVersion', '2.4' );
+		// Note: Indexes are NOT added during upgrade to avoid locking large tables.
+		// Indexes will be created automatically for new installations via install_tables().
+		// For existing installations, indexes can be added manually if needed during low-traffic periods.
+
+		// Update db version only if all queries succeeded
+		if ( $success ) {
+			update_option( 'wp_ulike_dbVersion', '2.4' );
+		}
+
+		return $success;
 	}
 
 	/**
