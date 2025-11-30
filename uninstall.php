@@ -109,10 +109,11 @@ class wp_ulike_uninstall {
 		global $wpdb;
 
 		// Delete all plugin metadata.
-		$wpdb->query( "DELETE from $wpdb->options WHERE option_name LIKE '_transient_wp-ulike%'" );
-		$wpdb->query( "DELETE from $wpdb->options WHERE option_name LIKE '_transient_timeout_wp-ulike%'" );
-		$wpdb->query( "DELETE from $wpdb->options WHERE option_name LIKE '_transient_wp_ulike%'" );
-		$wpdb->query( "DELETE from $wpdb->options WHERE option_name LIKE '_transient_timeout_wp_ulike%'" );
+		$options_table = $wpdb->options;
+		$wpdb->query( $wpdb->prepare( "DELETE from `{$options_table}` WHERE option_name LIKE %s", '_transient_wp-ulike%' ) );
+		$wpdb->query( $wpdb->prepare( "DELETE from `{$options_table}` WHERE option_name LIKE %s", '_transient_timeout_wp-ulike%' ) );
+		$wpdb->query( $wpdb->prepare( "DELETE from `{$options_table}` WHERE option_name LIKE %s", '_transient_wp_ulike%' ) );
+		$wpdb->query( $wpdb->prepare( "DELETE from `{$options_table}` WHERE option_name LIKE %s", '_transient_timeout_wp_ulike%' ) );
 	}
 
 	/**

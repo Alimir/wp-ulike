@@ -643,7 +643,14 @@ if( ! function_exists('wp_ulike_release_lock') ){
             fclose( $fp );
 
             $lock_file = wp_ulike_lock_file( $item_type, $item_id );
-            wp_delete_file( $lock_file );
+            
+            // Use WordPress core function for file deletion (available since WP 4.2.0)
+            if ( function_exists( 'wp_delete_file' ) ) {
+                wp_delete_file( $lock_file );
+            } elseif ( file_exists( $lock_file ) ) {
+                // Fallback for older WordPress versions (though plugin requires 6.0+)
+                @unlink( $lock_file );
+            }
 
             return true;
         }

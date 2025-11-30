@@ -245,9 +245,13 @@ if( ! function_exists( 'wp_ulike_update_meta_cache' ) ){
 		}
 
 		// Get meta info.
-		$id_list   = join( ',', $non_cached_ids );
+		$non_cached_ids = array_map( 'absint', $non_cached_ids );
+		$placeholders = implode( ',', array_fill( 0, count( $non_cached_ids ), '%d' ) );
 		$id_column = 'meta_id';
-		$meta_list = $wpdb->get_results( "SELECT $column, meta_group, meta_key, meta_value FROM $table WHERE $column IN ($id_list) AND meta_group = '$meta_group' ORDER BY $id_column ASC", ARRAY_A );
+		$column_escaped = esc_sql( $column );
+		$table_escaped = esc_sql( $table );
+		$id_column_escaped = esc_sql( $id_column );
+		$meta_list = $wpdb->get_results( $wpdb->prepare( "SELECT `{$column_escaped}`, meta_group, meta_key, meta_value FROM `{$table_escaped}` WHERE `{$column_escaped}` IN ({$placeholders}) AND meta_group = %s ORDER BY `{$id_column_escaped}` ASC", array_merge( $non_cached_ids, array( $meta_group ) ) ), ARRAY_A );
 
 		if ( ! empty( $meta_list ) ) {
 			foreach ( $meta_list as $metarow ) {
@@ -474,9 +478,14 @@ if( ! function_exists( 'wp_ulike_delete_meta_data' ) ){
 
 		do_action( "wp_ulike_delete_{$meta_group}_meta", $meta_ids, $object_id, $meta_key, $_meta_value );
 
-		$query = "DELETE FROM $table WHERE $id_column IN( " . implode( ',', $meta_ids ) . ' )';
-
-		$count = $wpdb->query( $query );
+		if ( ! empty( $meta_ids ) ) {
+			$meta_ids = array_map( 'absint', $meta_ids );
+			$placeholders = implode( ',', array_fill( 0, count( $meta_ids ), '%d' ) );
+			$query = $wpdb->prepare( "DELETE FROM `{$table}` WHERE `{$id_column}` IN( {$placeholders} )", $meta_ids );
+			$count = $wpdb->query( $query );
+		} else {
+			$count = 0;
+		}
 
 		if ( ! $count ) {
 			return false;
@@ -516,7 +525,9 @@ if( ! function_exists('wp_ulike_delete_vote_data') ){
 
 		// delete table values
 		$settings = new wp_ulike_setting_type( $type );
-		$wpdb->query( $wpdb->prepare( "DELETE from {$wpdb->prefix}{$settings->getTableName()} WHERE {$settings->getColumnName()} = %d", $ID ) );
+		$table_name = esc_sql( $wpdb->prefix . $settings->getTableName() );
+		$column_name = esc_sql( $settings->getColumnName() );
+		$wpdb->query( $wpdb->prepare( "DELETE from `{$table_name}` WHERE `{$column_name}` = %d", $ID ) );
 
 		// Fires after the post item has been deleted.
 		do_action( 'wp_ulike_delete_vote_data', $ID, $type, $settings );

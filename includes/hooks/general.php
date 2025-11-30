@@ -180,8 +180,10 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		if( wp_ulike_setting_repo::restrictLikersBox( $args['type'] ) || empty( $get_settings ) || empty( $args['ID'] ) ) {
 			return;
 		}
-		// Extract settings array
-		extract( $get_settings );
+		// Extract settings array - assign explicitly per WordPress coding standards
+		$table = isset( $get_settings['table'] ) ? $get_settings['table'] : '';
+		$column = isset( $get_settings['column'] ) ? $get_settings['column'] : '';
+		$setting = isset( $get_settings['setting'] ) ? $get_settings['setting'] : '';
 
 		if( $args['disable_pophover'] || $args['likers_style'] == 'default' ){
 			echo sprintf(
@@ -256,7 +258,6 @@ if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 
 		$php_snippets = wp_ulike_setting_repo::getPhpSnippets();
 
-
 		if( empty( $php_snippets ) ){
 			return;
 		}
@@ -265,7 +266,9 @@ if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 			try {
 				eval( $php_snippets ); // phpcs:ignore
 			} catch( \ParseError $e ) { // phpcs:ignore
-				error_log( $e->getMessage() );
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					error_log( 'WP ULike PHP Snippet Error: ' . $e->getMessage() );
+				}
 			}
 		} else {
 			eval( $php_snippets ); // phpcs:ignore

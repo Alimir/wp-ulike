@@ -37,11 +37,15 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 */
 		public function get_results(){
 			$table = esc_sql( $this->wpdb->prefix . $this->table );
-			$paged = ( $this->page - 1 ) * $this->per_page;
-			$orderBy   = $this->sort['field'];
-			$orderType = $this->sort['type'];
+			$paged = absint( ( $this->page - 1 ) * $this->per_page );
+			$per_page = absint( $this->per_page );
+			
+			// Whitelist allowed order fields
+			$allowed_fields = array( 'id', 'date_time', 'user_id', 'ip', 'status' );
+			$orderBy = in_array( $this->sort['field'], $allowed_fields, true ) ? esc_sql( $this->sort['field'] ) : 'id';
+			$orderType = strtoupper( $this->sort['type'] ) === 'ASC' ? 'ASC' : 'DESC';
 
-			return $this->wpdb->get_results( "SELECT * FROM {$table} ORDER BY {$orderBy} {$orderType} LIMIT {$paged}, {$this->per_page}" );
+			return $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM `{$table}` ORDER BY `{$orderBy}` {$orderType} LIMIT %d, %d", $paged, $per_page ) );
 		}
 
 		/**
@@ -51,12 +55,14 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 */
 		public function get_row( $item_ID ){
 			$table = esc_sql( $this->wpdb->prefix . $this->table );
+			$item_ID = absint( $item_ID );
 
-			return $this->wpdb->get_row( "
+			return $this->wpdb->get_row( $this->wpdb->prepare( "
 				SELECT *
-				FROM `$table`
-				WHERE `id` = $item_ID"
-			);
+				FROM `{$table}`
+				WHERE `id` = %d",
+				$item_ID
+			) );
 		}
 
 		/**
@@ -66,14 +72,13 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 */
 		public function get_all_rows(){
 			$table = esc_sql( $this->wpdb->prefix . $this->table );
-			$orderBy   = $this->sort['field'];
-			$orderType = $this->sort['type'];
+			
+			// Whitelist allowed order fields
+			$allowed_fields = array( 'id', 'date_time', 'user_id', 'ip', 'status' );
+			$orderBy = in_array( $this->sort['field'], $allowed_fields, true ) ? esc_sql( $this->sort['field'] ) : 'id';
+			$orderType = strtoupper( $this->sort['type'] ) === 'ASC' ? 'ASC' : 'DESC';
 
-			return $this->wpdb->get_results( "
-				SELECT *
-				FROM `$table`
-				ORDER BY $orderBy $orderType"
-			);
+			return $this->wpdb->get_results( "SELECT * FROM `{$table}` ORDER BY `{$orderBy}` {$orderType}" );
 		}
 
 		/**
@@ -88,12 +93,13 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 
 			foreach ($items as $key => $item) {
 				if( ! empty( $item['id'] ) ){
-					$selectedIds[] = $item['id'];
+					$selectedIds[] = absint( $item['id'] );
 				}
 			}
 			if( ! empty( $selectedIds ) ){
-				$selectedIds = implode( ',', array_map( 'absint', $selectedIds ) );
-				$this->wpdb->query( "DELETE FROM $table WHERE ID IN($selectedIds)" );
+				$placeholders = implode( ',', array_fill( 0, count( $selectedIds ), '%d' ) );
+				$query = "DELETE FROM `{$table}` WHERE ID IN({$placeholders})";
+				$this->wpdb->query( $this->wpdb->prepare( $query, $selectedIds ) );
 			}
 		}
 
@@ -104,12 +110,13 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return integer|false
 		 */
 		public function delete_row( $item_id ){
-			$table   = esc_sql( $this->wpdb->prefix . $this->table );
+			$table   = $this->wpdb->prefix . $this->table;
+			$item_id = absint( $item_id );
 
 			return $this->wpdb->delete(
 				$table,
-				[ 'ID' => esc_sql( $item_id ) ],
-				['%d'],
+				array( 'ID' => $item_id ),
+				array( '%d' )
 			);
 		}
 
@@ -120,7 +127,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 */
 		private function get_total_records(){
 			$table  = esc_sql( $this->wpdb->prefix . $this->table );
-			return $this->wpdb->get_var( "SELECT COUNT(*) FROM `$table`" );
+			return $this->wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
 		}
 
 		/**
@@ -181,13 +188,13 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 
 						$output[$key]->category = $cats;
 
-						$output[$key]->post_title   = sprintf( "<a href='%s'> %s </a>" , get_permalink($row->post_id), $title );
+						$output[$key]->post_title   = sprintf( "<a href='%s'> %s </a>" , esc_url( get_permalink($row->post_id) ), esc_html( $title ) );
 					}
 				}
 				if( isset( $row->topic_id ) ){
 					$topic_title = function_exists('bbp_get_forum_title') ? bbp_get_forum_title( $row->topic_id ) : get_the_title( $row->topic_id );
 					if( !empty( $topic_title ) ){
-						$output[$key]->topic_title = sprintf( "<a href='%s'> %s </a>" , get_permalink($row->topic_id), $topic_title );
+						$output[$key]->topic_title = sprintf( "<a href='%s'> %s </a>" , esc_url( get_permalink($row->topic_id) ), esc_html( $topic_title ) );
 					}
 				}
 				if( isset( $row->activity_id ) ){
@@ -205,12 +212,12 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 						$activity_title = ! empty( $activity_obj->content ) ? $activity_obj->content : $activity_obj->action;
 					}
 
- 					$output[$key]->activity_title = sprintf( "<a href='%s'> %s </a>" , $activity_link, wp_strip_all_tags( $activity_title ) );
+ 					$output[$key]->activity_title = sprintf( "<a href='%s'> %s </a>" , esc_url( $activity_link ), esc_html( wp_strip_all_tags( $activity_title ) ) );
 				}
 				if( isset( $row->comment_id ) ){
 					if( NULL != ( $comment = get_comment( $row->comment_id ) ) ){
-						$output[$key]->comment_author  = $comment->comment_author;
-						$output[$key]->comment_content = sprintf( "<a href='%s'> %s </a>" , esc_url( get_comment_link( $comment ) ), wp_strip_all_tags( $comment->comment_content ) );
+						$output[$key]->comment_author  = esc_html( $comment->comment_author );
+						$output[$key]->comment_content = sprintf( "<a href='%s'> %s </a>" , esc_url( get_comment_link( $comment ) ), esc_html( wp_strip_all_tags( $comment->comment_content ) ) );
 					} else {
 						$output[$key]->comment_author  = $output[$key]->comment_content = esc_html__( 'Not Found!', 'wp-ulike' );
 					}

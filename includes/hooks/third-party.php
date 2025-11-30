@@ -355,20 +355,20 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 				preg_match('/action_([0-9]+)/', $action, $user_ID);
 			//Get user info
 			$user_ID     = isset( $user_ID[1] ) ? $user_ID[1] : $secondary_item_id;
-			$action_type = esc_html__( 'posts' , 'wp-ulike' );
+			$action_type = esc_html__( 'Posts' , 'wp-ulike' );
 			$custom_link = '';
 
 			// Check the the ulike types
 			switch ( $type[1] ) {
 				case 'commentliked':
 					$custom_link = get_comment_link( $item_id );
-					$action_type = esc_html__( 'comments' , 'wp-ulike' );
+					$action_type = esc_html__( 'Comments' , 'wp-ulike' );
 					break;
 
 				case 'activityliked':
 					if( function_exists('bp_activity_get_permalink') ){
 						$custom_link = bp_activity_get_permalink( $item_id );
-						$action_type = esc_html__( 'activities' , 'wp-ulike' );
+						$action_type = esc_html__( 'Activities' , 'wp-ulike' );
 					}
 					break;
 
@@ -376,10 +376,10 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 					if( function_exists('bbp_get_topic_permalink') ){
 						if( 'topic' === get_post_type( $item_id) ){
 							$custom_link = bbp_get_topic_permalink( $item_id );
-							$action_type = esc_html__( 'topics' , 'wp-ulike' );
+							$action_type = esc_html__( 'Topics' , 'wp-ulike' );
 						} else {
 							$custom_link = bbp_get_reply_url( $item_id );
-							$action_type = esc_html__( 'replies' , 'wp-ulike' );
+							$action_type = esc_html__( 'Replies' , 'wp-ulike' );
 						}
 					}
 					break;

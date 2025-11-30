@@ -123,10 +123,21 @@
       : elements;
   };
 
+  // Helper to normalize boolean values in settings
+  const normalizeBooleanValues = (settings, defaults) => {
+    for (const key in defaults) {
+      if (typeof defaults[key] === 'boolean' && settings[key] != null) {
+        settings[key] = settings[key] != 0 && settings[key] !== "0" && settings[key] !== false;
+      }
+    }
+  };
+
   // The actual plugin constructor
   function Plugin(element, options) {
     this.element = element;
     this.settings = Object.assign({}, defaults, options);
+    // Normalize boolean values automatically
+    normalizeBooleanValues(this.settings, defaults);
     this._defaults = defaults;
     this._name = pluginName;
 
@@ -144,6 +155,8 @@
           }
         }
       }
+      // Normalize boolean values after reading attributes
+      normalizeBooleanValues(this.settings, defaults);
     }
 
     // General element (like jQuery .find())
@@ -300,7 +313,7 @@
     _appendChild() {
       if (this.settings.append !== "" && this.buttonElement) {
         let sourceElements = [];
-        
+
         // Check if append is HTML content (starts with <) or a CSS selector
         if (this.settings.append.trim().startsWith('<')) {
           // Parse HTML content
@@ -615,7 +628,7 @@
           });
           wrapperEl.dispatchEvent(updateEvent);
           document.dispatchEvent(updateEvent);
-          
+
           // Pre-populate content for siblings that don't have tooltip instances yet
           // This ensures when they're hovered, content is already available
           let hiddenContent = wrapperEl.querySelector('[data-tooltip-content]');
@@ -631,11 +644,11 @@
         });
       } else {
         // Handle both single element and NodeList/array (from _updateSameLikers)
-        const hasLikersElement = this.likersElement && 
-          (this.likersElement.length === undefined 
-            ? true 
+        const hasLikersElement = this.likersElement &&
+          (this.likersElement.length === undefined
+            ? true
             : this.likersElement.length > 0);
-        
+
         if (!hasLikersElement && data && data.template) {
           // If the likers container doesn't exist, create it
           const tempDiv = document.createElement("div");
@@ -646,18 +659,18 @@
             this.likersElement = newElement;
           }
         }
-        
+
         // Update all likers elements (handles both single element and NodeList)
         if (this.likersElement) {
           const elementsToUpdate = this.likersElement.length !== undefined
             ? arrayFrom(this.likersElement)
             : [this.likersElement];
-          
+
           // Handle data as object with template property, or as string/empty
-          const template = (data && typeof data === 'object' && data.template) 
-            ? data.template 
+          const template = (data && typeof data === 'object' && data.template)
+            ? data.template
             : (typeof data === 'string' ? data : '');
-          
+
           forEachElement(elementsToUpdate, (likersEl) => {
             if (!likersEl) return;
             if (template) {

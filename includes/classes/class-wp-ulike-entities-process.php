@@ -323,6 +323,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return void
 		 */
 		private static function getDecodedCookieData( $cookie_key ) {
+			$cookie_key = sanitize_key( $cookie_key );
 			$cookie_data = isset( $_COOKIE[ $cookie_key ] ) ? json_decode( wp_unslash( $_COOKIE[ $cookie_key ] ), true ) : array();
 			return is_array( $cookie_data ) ? $cookie_data : array();
 		}
@@ -384,7 +385,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				if( wp_ulike_setting_repo::isIpLoggingOff() ){
 					$ip = '0.0.0.0';
 				} else {
-					if ( strpos( $ip, "." ) == true ) {
+					if ( strpos( $ip, "." ) !== false ) {
 						$ip = preg_replace('~[0-9]+$~', '0', $ip );
 					} else {
 						$ip = preg_replace('~[0-9]*:[0-9]+$~', '0000:0000', $ip );
@@ -571,23 +572,31 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			if( ( ! $this->prevStatus || ! $this->isDistinct() ) ){
 				if( strpos( $this->currentStatus, 'un') === false  ){
 					// update all logs period
-					$this->wpdb->query( "
-						UPDATE `{$this->wpdb->prefix}ulike_meta`
+					$meta_table = $this->wpdb->prefix . 'ulike_meta';
+					$this->wpdb->query( $this->wpdb->prepare( "
+						UPDATE `{$meta_table}`
 						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_period_all'
-					" );
+						WHERE `meta_group` = %s AND `meta_key` = %s",
+						'statistics',
+						'count_logs_period_all'
+					) );
 					// update new votes
-					$this->wpdb->query( "
-						UPDATE `{$this->wpdb->prefix}ulike_meta`
+					$this->wpdb->query( $this->wpdb->prepare( "
+						UPDATE `{$meta_table}`
 						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = 'statistics' AND `meta_key` = 'calculate_new_votes'
-					" );
-					$table = $this->typeSettings->getTableName();
-					$this->wpdb->query( "
-						UPDATE `{$this->wpdb->prefix}ulike_meta`
+						WHERE `meta_group` = %s AND `meta_key` = %s",
+						'statistics',
+						'calculate_new_votes'
+					) );
+					$table = esc_sql( $this->typeSettings->getTableName() );
+					$meta_key = 'count_logs_for_' . $table . '_table_in_all_daterange';
+					$this->wpdb->query( $this->wpdb->prepare( "
+						UPDATE `{$meta_table}`
 						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = 'statistics' AND `meta_key` = 'count_logs_for_{$table}_table_in_all_daterange'
-					" );
+						WHERE `meta_group` = %s AND `meta_key` = %s",
+						'statistics',
+						$meta_key
+					) );
 				}
 
 				// Save daily stats

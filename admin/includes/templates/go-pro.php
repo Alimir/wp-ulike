@@ -75,7 +75,7 @@
 					<div class="wp-ulike-pro-feature-icon">
 						<span class="dashicons dashicons-admin-users"></span>
 					</div>
-					<h3><?php esc_html_e( 'User Profiles', 'wp-ulike' ); ?></h3>
+					<h3><?php esc_html_e( 'Profiles', 'wp-ulike' ); ?></h3>
 					<p><?php esc_html_e( 'Create personalized user profiles showcasing likes, activity, and engagement history with a versatile builder.', 'wp-ulike' ); ?></p>
 				</div>
 
@@ -115,7 +115,7 @@
 					<div class="wp-ulike-pro-feature-icon">
 						<span class="dashicons dashicons-admin-tools"></span>
 					</div>
-					<h3><?php esc_html_e( 'REST API Access', 'wp-ulike' ); ?></h3>
+					<h3><?php esc_html_e( 'REST API', 'wp-ulike' ); ?></h3>
 					<p><?php esc_html_e( 'Full API access with diverse routes for custom integrations, mobile apps, and third-party services.', 'wp-ulike' ); ?></p>
 				</div>
 
@@ -182,11 +182,11 @@
 	<div class="wp-ulike-pro-cta-section">
 		<div class="wp-ulike-pro-container">
 			<div class="wp-ulike-pro-cta-card">
-				<h2><?php esc_html_e( 'Ready to Transform Your Website Engagement?', 'wp-ulike' ); ?></h2>
+				<h2><?php esc_html_e( 'Transform Your Website Engagement', 'wp-ulike' ); ?></h2>
 				<p><?php esc_html_e( 'Join thousands of satisfied users who have upgraded to WP ULike Pro and are seeing real results.', 'wp-ulike' ); ?></p>
 				<a href="<?php echo esc_url( WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash' ); ?>" target="_blank" class="wp-ulike-pro-btn wp-ulike-pro-btn-primary wp-ulike-pro-btn-large">
 					<span class="dashicons dashicons-cart"></span>
-					<span><?php esc_html_e( 'Get WP ULike Pro Now', 'wp-ulike' ); ?></span>
+					<span><?php esc_html_e( 'Get WP ULike Pro', 'wp-ulike' ); ?></span>
 				</a>
 				<div class="wp-ulike-pro-cta-guarantee">
 					<span class="dashicons dashicons-shield"></span>
@@ -298,7 +298,7 @@
 				</a>
 				<a href="<?php echo esc_url( WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=go-pro-page&utm_campaign=gopro&utm_medium=wp-dash' ); ?>" target="_blank" class="wp-ulike-pro-btn wp-ulike-pro-btn-primary">
 					<span class="dashicons dashicons-cart"></span>
-					<span><?php esc_html_e( 'Get Started Now', 'wp-ulike' ); ?></span>
+					<span><?php esc_html_e( 'Get Started', 'wp-ulike' ); ?></span>
 				</a>
 			</div>
 		</div>

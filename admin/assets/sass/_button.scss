@@ -1,59 +1,145 @@
 .wp-ulike-btn {
     font-weight: 600;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    line-height: 100%;
+    line-height: 1.4;
     border: none;
     cursor: pointer;
-    overflow: hidden;
     text-decoration: none;
     z-index: 1;
-    padding: 0.45rem 0.75rem !important;
-    background: #f7f7f7;
-    border-radius: 3px;
-    background-color: #2C87FF;
+    padding: 0.45rem 0.9rem !important;
+    background-color: rgb(59, 130, 246);  // Tailwind blue-500
     white-space: nowrap;
     color: #fff;
+    font-size: 12.5px;
+    border-radius: 6px;
 
     &:hover {
         color: white;
-        background-color: darken(#2C87FF, 10%);
+        background-color: rgb(37, 99, 235);  // Tailwind blue-600
     }
 
     &:focus {
         outline: none;
-        box-shadow: none;
         color: white;
     }
 
+    // Mobile responsiveness
+    @media screen and (max-width: 782px) {
+        font-size: 12px;
+        padding: 0.4rem 0.8rem !important;
+    }
+
+    @media screen and (max-width: 480px) {
+        font-size: 11.5px;
+        padding: 6px 10px !important;
+        white-space: normal;
+    }
+
     .wp-ulike-text {
-        font-weight: 400;
+        font-weight: 500;
         font-size: 0.8rem;
-        line-height: 0.9rem;
-        letter-spacing: 0;
+        line-height: 1.3;
+        letter-spacing: 0.01em;
     }
 
     &.wp-ulike-btn-success {
-        background-color: #39D894;
+        background-color: rgb(16, 185, 129);  // Tailwind emerald-500
 
         &:hover {
-            background-color: darken(#39D894, 10%);
+            background-color: rgb(5, 150, 105);  // Tailwind emerald-600
         }
     }
 
     &.wp-ulike-btn-info {
-        background-color: #FFA658;
+        background-color: rgb(234, 179, 8);  // Tailwind yellow-500
 
         &:hover {
-            background-color: darken(#FFA658, 10%);
+            background-color: rgb(202, 138, 4);  // Tailwind yellow-600
         }
     }
 
     &.wp-ulike-btn-error {
-        background-color: #FF5858;
+        background-color: rgb(239, 68, 68);  // Tailwind red-500
 
         &:hover {
-            background-color: darken(#FF5858, 10%);
+            background-color: rgb(220, 38, 38);  // Tailwind red-600
+        }
+    }
+
+    &.wp-ulike-notice-cta-btn {
+        font-size: 12.5px;
+        padding: 7px 14px !important;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        position: relative;
+        overflow: hidden;
+
+        // Subtle shine effect on hover
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        &:hover::before {
+            left: 100%;
+        }
+
+        // RTL support for shine effect
+        [dir="rtl"] & {
+            &::before {
+                left: auto;
+                right: -100%;
+            }
+
+            &:hover::before {
+                right: 100%;
+            }
+        }
+
+        // Mobile responsiveness
+        @media screen and (max-width: 782px) {
+            font-size: 12px;
+            padding: 7px 12px !important;
+        }
+
+        @media screen and (max-width: 480px) {
+            font-size: 11.5px;
+            padding: 6px 10px !important;
+        }
+    }
+
+    &.wp-ulike-btn-is-loading {
+        opacity: 0.7;
+        cursor: wait;
+        pointer-events: none;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     }
 

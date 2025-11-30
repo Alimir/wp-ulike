@@ -40,7 +40,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 10px;
+  padding: 7px;
   margin: -4px -8px;
   border-radius: 0;
   background: linear-gradient(135deg, #2271b1 0%, #135e96 100%);
@@ -91,8 +91,8 @@
 
   .wp-ulike-gopro-text {
     z-index: 1;
-    font-size: 12px;
-    letter-spacing: 0.2px;
+    font-size: 11px;
+    letter-spacing: 0.1px;
     white-space: nowrap;
     flex-shrink: 0;
   }
@@ -175,6 +175,10 @@
 
   // Go Pro Menu Link
   .wp-ulike-gopro-menu-link {
+    white-space: normal;
+    flex-wrap: wrap;
+    max-width: 100%;
+
     &::before {
       left: auto;
       right: -100%;
@@ -186,16 +190,19 @@
         right: 100%;
       }
     }
+
+    .wp-ulike-gopro-text {
+      white-space: normal;
+      word-wrap: break-word;
+    }
   }
 
   #adminmenu {
-    li {
-      a {
-        .wp-ulike-gopro-menu-link {
-          margin: 0 -8px;
-          padding: 0 10px;
-        }
-      }
+    a .wp-ulike-gopro-menu-link {
+      margin: -4px 0 -4px -8px;
+      max-width: calc(100% + 8px);
+      box-sizing: border-box;
+      overflow: hidden;
     }
   }
 }

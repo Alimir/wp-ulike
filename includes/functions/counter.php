@@ -82,14 +82,22 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			if( empty( $table_info ) ){
 				return new WP_Error( 'broke', esc_html__( "Table info is empty.", 'wp-ulike' ) );
 			}
-			extract( $table_info );
 
+			$table = isset( $table_info['table'] ) ? $table_info['table'] : '';
+			$column = isset( $table_info['column'] ) ? $table_info['column'] : '';
+			$is_distinct = isset( $table_info['is_distinct'] ) ? $table_info['is_distinct'] : false;
 
-			$status_condition = $status !== 'all' ? "`status` = '$status'" : "`status` NOT LIKE 'un%'";
+			// Sanitize status value
+			$allowed_statuses = array( 'like', 'dislike', 'unlike', 'undislike', 'all' );
+			$status = in_array( $status, $allowed_statuses, true ) ? $status : 'all';
+
+			$status_condition = $status !== 'all' ? $wpdb->prepare( "`status` = %s", $status ) : "`status` NOT LIKE 'un%'";
 			$count_type       = $is_distinct ? "DISTINCT `user_id`" : "*";
+			$table_escaped = esc_sql( $wpdb->prefix . $table );
+			$column_escaped = esc_sql( $column );
 
 			$counter_value  = $wpdb->get_var( $wpdb->prepare(
-				"SELECT COUNT({$count_type}) FROM `{$wpdb->prefix}{$table}` WHERE {$status_condition} AND `{$column}` = %d {$period_limit}",
+				"SELECT COUNT({$count_type}) FROM `{$table_escaped}` WHERE {$status_condition} AND `{$column_escaped}` = %d {$period_limit}",
 				$ID
 			) );
 
