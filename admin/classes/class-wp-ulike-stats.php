@@ -228,7 +228,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$parsed_args = wp_parse_args( $args, $defaults );
 
 			// Extract variables
-			extract( $parsed_args );
+			$table = isset( $parsed_args['table'] ) ? $parsed_args['table'] : 'ulike';
+			$date = isset( $parsed_args['date'] ) ? $parsed_args['date'] : 'all';
 
 			$cache_key = sanitize_key( sprintf( 'count_logs_for_%s_table_in_%s_daterange', $table, is_array($date) ? implode('_', $date) : $date ) );
 
