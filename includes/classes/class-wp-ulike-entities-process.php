@@ -385,7 +385,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				if( wp_ulike_setting_repo::isIpLoggingOff() ){
 					$ip = '0.0.0.0';
 				} else {
-					if ( strpos( $ip, "." ) == true ) {
+					if ( strpos( $ip, "." ) !== false ) {
 						$ip = preg_replace('~[0-9]+$~', '0', $ip );
 					} else {
 						$ip = preg_replace('~[0-9]*:[0-9]+$~', '0000:0000', $ip );
