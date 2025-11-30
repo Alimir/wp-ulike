@@ -355,7 +355,7 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			);
 
 			$message = '<h3>' . esc_html__( 'Important Update Notice', 'wp-ulike' ) . '</h3>';
-			$message .= '<p>' . esc_html__( 'We noticed you\'re using a version of WP ULike Pro that may have been obtained from outside our official channels. Unfortunately, versions from these sources sometimes contain modified or injected code that could affect your site\'s performance and security. To keep your site safe, we\'ve paused this version—but don\'t worry, getting everything working again is straightforward!', 'wp-ulike' ) . '</p>';
+			$message .= '<p>' . esc_html__( 'We noticed you\'re using a version of WP ULike Pro that may have been obtained from outside our official channels. Unfortunately, versions from these sources sometimes contain modified or injected code that could affect your site\'s performance and security. We strongly recommend updating to the official version to keep your site safe.', 'wp-ulike' ) . '</p>';
 			$message .= '<p>' . esc_html__( 'Here\'s what to do: Clear your current license key using the button below, uninstall the current Pro version, then download and install the latest version from your account after purchasing. Once you install it, just enter your new license key in the settings.', 'wp-ulike' ) . '</p>';
 			$message .= '<p style="margin-top: 10px;">';
 			$message .= '<a href="' . esc_url( $clear_license_url ) . '" class="button button-primary" style="margin-right: 10px; font-weight: 600;">' . esc_html__( 'Clear License Key', 'wp-ulike' ) . '</a>';
@@ -365,7 +365,7 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			$message .= esc_html__( 'We\'re currently offering a special price for users upgrading to the latest version. Questions? We\'re here to help—just reach out at', 'wp-ulike' ) . ' <a href="mailto:info@wpulike.com" style="color: #2271b1; font-weight: 600;">info@wpulike.com</a>';
 			$message .= '</p>';
 
-			$html_message = sprintf( '<div class="notice notice-warning is-dismissible" style="padding: 20px; margin: 15px 0; border-left: 4px solid #f0b849; background: #fff;">%s</div>', wpautop( $message ) );
+			$html_message = sprintf( '<div class="notice notice-warning" style="padding: 20px; margin: 15px 0; border-left: 4px solid #f0b849; background: #fff;">%s</div>', wpautop( $message ) );
 			echo wp_kses_post( $html_message );
 		}
 	}

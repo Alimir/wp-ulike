@@ -64,11 +64,15 @@ if ( ! version_compare( PHP_VERSION, '7.2.5', '>=' ) ) {
 	add_action( 'admin_notices', 'wp_ulike_fail_php_version' );
 } elseif ( ! version_compare( get_bloginfo( 'version' ), '6.0', '>=' ) ) {
 	add_action( 'admin_notices', 'wp_ulike_fail_wp_version' );
-} elseif ( WP_Ulike_Pro_Validator::check_license_validity() === false ) {
-	// Stop plugin initialization if Pro version is nulled/invalid
-	add_action( 'admin_notices', array( 'WP_Ulike_Pro_Validator', 'fail_pro_license_notice' ) );
-} elseif( ! class_exists( 'WpUlikeInit' ) ) {
-	require WP_ULIKE_INC_DIR . '/plugin.php';
+} else {
+	// Show notice if Pro version has invalid license, but still allow plugin to run
+	if ( WP_Ulike_Pro_Validator::check_license_validity() !== false ) {
+		add_action( 'admin_notices', array( 'WP_Ulike_Pro_Validator', 'fail_pro_license_notice' ) );
+	}
+
+	if( ! class_exists( 'WpUlikeInit' ) ) {
+		require WP_ULIKE_INC_DIR . '/plugin.php';
+	}
 }
 
 /**
