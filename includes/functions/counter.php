@@ -85,7 +85,6 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 
 			$table = isset( $table_info['table'] ) ? $table_info['table'] : '';
 			$column = isset( $table_info['column'] ) ? $table_info['column'] : '';
-			$is_distinct = isset( $table_info['is_distinct'] ) ? $table_info['is_distinct'] : false;
 
 			// Sanitize status value
 			$allowed_statuses = array( 'like', 'dislike', 'unlike', 'undislike', 'all' );
