@@ -1,4 +1,11 @@
-/* 'WordpressUlikeNotifications' plugin : https://github.com/alimir/wp-ulike */
+/**
+ * WP ULike Notifications Plugin
+ * 
+ * @fileoverview Toast notification system for user feedback
+ * @requires ES7 (ES2016) compatible browser
+ * @author WP ULike Team
+ * @see https://github.com/alimir/wp-ulike
+ */
 (function (window, document, undefined) {
   "use strict";
 
@@ -38,7 +45,7 @@
    * No inline styles - all handled by CSS
    * Optimized: use requestAnimationFrame for better timing
    */
-  const fadeOut = (element, callback) => {
+  const fadeOut = (element, callback, instance) => {
     if (!element) return;
 
     // Use requestAnimationFrame to sync with CSS transition
@@ -46,11 +53,13 @@
       element.classList.add(defaults.fadeOutClass);
 
       // Remove element after transition completes
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
+        if (instance) instance.fadeTimeoutId = null;
         if (callback) {
           callback();
         }
       }, FADE_OUT_DURATION);
+      if (instance) instance.fadeTimeoutId = timeoutId;
     });
   };
 
@@ -90,6 +99,7 @@
     this._defaults = defaults;
     this._name = pluginName;
     this.timeoutId = null;
+    this.fadeTimeoutId = null; // Track fade timeout
     this.isRemoving = false;
     // Cache className to avoid template literal on each access
     this._messageClassName = null;
@@ -184,16 +194,20 @@
       if (this.isRemoving || !this.messageElement) return;
       this.isRemoving = true;
 
-      // Clear timeout if still pending
+      // Clear timeouts if still pending
       if (this.timeoutId) {
         clearTimeout(this.timeoutId);
         this.timeoutId = null;
+      }
+      if (this.fadeTimeoutId) {
+        clearTimeout(this.fadeTimeoutId);
+        this.fadeTimeoutId = null;
       }
 
       // Remove message with fade out
       fadeOut(this.messageElement, () => {
         this._cleanup();
-      });
+      }, this);
     },
 
     /**
