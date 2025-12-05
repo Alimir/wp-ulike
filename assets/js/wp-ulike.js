@@ -1,4 +1,4 @@
-/*! WP ULike - v4.8.1
+/*! WP ULike - v4.8.2
  *  https://wpulike.com
  *  TechnoWich 2025;
  */
@@ -8,8 +8,12 @@
 
 
 /**
- * WP ULike Tooltip - Lightweight modern tooltip solution
- * Pure vanilla JavaScript, no dependencies
+ * WP ULike Tooltip Plugin
+ * 
+ * @fileoverview Lightweight tooltip solution with dynamic content loading
+ * @requires ES7 (ES2016) compatible browser
+ * @author WP ULike Team
+ * @see https://github.com/alimir/wp-ulike
  */
 (function (window, document, undefined) {
   "use strict";
@@ -177,6 +181,7 @@
     let isLoading = false;
     let scrollHandler = null;
     let scrollHandlerOptions = null;
+    let outsideHandler = null; // Store for cleanup
     let isHovering = false; // Track if user is currently hovering
 
     const show = (showLoading) => {
@@ -442,7 +447,7 @@
 
     // Click outside handler
     if (options.close_on_outside_click !== false) {
-      const outsideHandler = (e) => {
+      outsideHandler = (e) => {
         if (
           tooltip &&
           tooltip.parentNode &&
@@ -472,6 +477,18 @@
           window.removeEventListener("scroll", scrollHandler, scrollHandlerOptions);
           scrollHandler = null;
           scrollHandlerOptions = null;
+        }
+        if (outsideHandler) {
+          document.removeEventListener("mousedown", outsideHandler);
+          outsideHandler = null;
+        }
+        if (showTimeout) {
+          clearTimeout(showTimeout);
+          showTimeout = null;
+        }
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+          hideTimeout = null;
         }
         tooltipInstances.delete(element);
         if (options.id) delete tooltipInstancesById[options.id];
@@ -582,7 +599,14 @@
 /* ================== assets/js/src/notifications.js =================== */
 
 
-/* 'WordpressUlikeNotifications' plugin : https://github.com/alimir/wp-ulike */
+/**
+ * WP ULike Notifications Plugin
+ * 
+ * @fileoverview Toast notification system for user feedback
+ * @requires ES7 (ES2016) compatible browser
+ * @author WP ULike Team
+ * @see https://github.com/alimir/wp-ulike
+ */
 (function (window, document, undefined) {
   "use strict";
 
@@ -622,7 +646,7 @@
    * No inline styles - all handled by CSS
    * Optimized: use requestAnimationFrame for better timing
    */
-  const fadeOut = (element, callback) => {
+  const fadeOut = (element, callback, instance) => {
     if (!element) return;
 
     // Use requestAnimationFrame to sync with CSS transition
@@ -630,11 +654,13 @@
       element.classList.add(defaults.fadeOutClass);
 
       // Remove element after transition completes
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
+        if (instance) instance.fadeTimeoutId = null;
         if (callback) {
           callback();
         }
       }, FADE_OUT_DURATION);
+      if (instance) instance.fadeTimeoutId = timeoutId;
     });
   };
 
@@ -674,6 +700,7 @@
     this._defaults = defaults;
     this._name = pluginName;
     this.timeoutId = null;
+    this.fadeTimeoutId = null; // Track fade timeout
     this.isRemoving = false;
     // Cache className to avoid template literal on each access
     this._messageClassName = null;
@@ -768,16 +795,20 @@
       if (this.isRemoving || !this.messageElement) return;
       this.isRemoving = true;
 
-      // Clear timeout if still pending
+      // Clear timeouts if still pending
       if (this.timeoutId) {
         clearTimeout(this.timeoutId);
         this.timeoutId = null;
+      }
+      if (this.fadeTimeoutId) {
+        clearTimeout(this.fadeTimeoutId);
+        this.fadeTimeoutId = null;
       }
 
       // Remove message with fade out
       fadeOut(this.messageElement, () => {
         this._cleanup();
-      });
+      }, this);
     },
 
     /**
@@ -836,6 +867,14 @@
 /* ================== assets/js/src/ulike.js =================== */
 
 
+/**
+ * WP ULike - Main Plugin
+ * 
+ * @fileoverview Core like/unlike functionality with AJAX support
+ * @requires ES7 (ES2016) compatible browser
+ * @author WP ULike Team
+ * @see https://github.com/alimir/wp-ulike
+ */
 (function (window, document, undefined) {
   "use strict";
 
@@ -978,6 +1017,11 @@
     normalizeBooleanValues(this.settings, defaults);
     this._defaults = defaults;
     this._name = pluginName;
+    // Store handlers and timeouts for cleanup
+    this._boundHandlers = [];
+    this._timeouts = [];
+    // Initialize fetching flag
+    this._isFetchingLikers = false;
 
     // Create main selectors (like jQuery .find())
     this.buttonElement = this.element.querySelectorAll(this.settings.buttonSelector);
@@ -1031,9 +1075,11 @@
     init() {
       // Attach click listeners to ALL buttons
       if (this.buttonElement && this.buttonElement.length > 0) {
+        const boundHandler = this._initLike.bind(this);
+        this._boundHandlers.push({ element: this.buttonElement, event: 'click', handler: boundHandler });
         forEachElement(this.buttonElement, (button) => {
           if (button) {
-            button.addEventListener("click", this._initLike.bind(this));
+            button.addEventListener("click", boundHandler);
           }
         });
       }
@@ -1043,7 +1089,11 @@
         const mouseenterHandler = (event) => {
           this._updateLikers(event);
           firstGeneralEl.removeEventListener("mouseenter", mouseenterHandler);
+          // Remove from tracking since it removes itself
+          const index = this._boundHandlers.findIndex(h => h.handler === mouseenterHandler);
+          if (index > -1) this._boundHandlers.splice(index, 1);
         };
+        this._boundHandlers.push({ element: firstGeneralEl, event: 'mouseenter', handler: mouseenterHandler });
         firstGeneralEl.addEventListener("mouseenter", mouseenterHandler);
       }
     },
@@ -1182,13 +1232,14 @@
           });
 
           if (this.settings.appendTimeout && appendedElements.length > 0) {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
               appendedElements.forEach((el) => {
                 if (el && el.parentNode) {
                   el.remove();
                 }
               });
             }, this.settings.appendTimeout);
+            this._timeouts.push(timeoutId);
           }
         }
       }
@@ -1325,12 +1376,20 @@
 
     /**
      * Fetch likers data via AJAX
+     * Prevents duplicate requests
      */
     _fetchLikersData() {
       if (!this.settings.displayLikers) {
         this._isFetchingLikers = false;
         return;
       }
+
+      // Prevent duplicate requests
+      if (this._isFetchingLikers) {
+        return;
+      }
+
+      this._isFetchingLikers = true;
 
       const generalEl = getSingleElement(this.generalElement);
       if (generalEl) {
@@ -1420,10 +1479,8 @@
                 size: "tiny",
                 trigger: "hover",
                 dataFetcher: (element, tooltipId) => {
-                  if (this._isFetchingLikers) {
-                    return;
-                  }
-                  this._isFetchingLikers = true;
+                  // Don't set flag here - let _fetchLikersData handle it
+                  // This prevents the flag from blocking the AJAX request
                   this._fetchLikersData();
                 }
               });
@@ -1636,6 +1693,32 @@
         });
       }
     },
+
+    /**
+     * Cleanup method to prevent memory leaks
+     */
+    destroy() {
+      // Remove all event listeners
+      this._boundHandlers.forEach(({ element, event, handler }) => {
+        if (element && element.length !== undefined) {
+          forEachElement(element, (el) => {
+            if (el) el.removeEventListener(event, handler);
+          });
+        } else if (element) {
+          element.removeEventListener(event, handler);
+        }
+      });
+      this._boundHandlers = [];
+
+      // Clear all timeouts
+      this._timeouts.forEach((timeoutId) => {
+        clearTimeout(timeoutId);
+      });
+      this._timeouts = [];
+
+      // Reset flags
+      this._isFetchingLikers = false;
+    },
   };
 
   // Expose plugin to window for global access
@@ -1660,6 +1743,14 @@
 /* ================== assets/js/src/scripts.js =================== */
 
 
+/**
+ * WP ULike Scripts - Initialization
+ * 
+ * @fileoverview Auto-initializes WP ULike plugin on page load and dynamic content
+ * @requires ES7 (ES2016) compatible browser
+ * @author WP ULike Team
+ * @see https://github.com/alimir/wp-ulike
+ */
 (function (window, document) {
   "use strict";
 

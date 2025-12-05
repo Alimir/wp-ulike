@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 4.8.1
+Tested up to: 6.9
+Stable tag: 4.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -180,6 +180,10 @@ Yes! WP ULike works perfectly across WordPress multisite networks. Each site in 
 Security is our top priority, and we take it seriously. WP ULike is developed by TechnoWich following WordPress security best practices and coding standards. We regularly audit our code, stay updated with security best practices, and respond quickly to any security concerns. With over 80,000 active installations and a high WordPress.org rating, you can trust that your site and your visitors' data are in good hands.
 
 == Changelog ==
+
+= 4.8.2 =
+* Improved: Fixed memory leaks and optimized JavaScript performance.
+* Fixed: Various minor bug fixes and improvements.
 
 = 4.8.1 =
 * Improved: Refactored codebase for better maintainability and improved user experience.

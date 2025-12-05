@@ -1,3 +1,11 @@
+/**
+ * WP ULike Scripts - Initialization
+ * 
+ * @fileoverview Auto-initializes WP ULike plugin on page load and dynamic content
+ * @requires ES7 (ES2016) compatible browser
+ * @author WP ULike Team
+ * @see https://github.com/alimir/wp-ulike
+ */
 (function (window, document) {
   "use strict";
 

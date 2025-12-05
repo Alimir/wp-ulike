@@ -1,6 +1,10 @@
 /**
- * WP ULike Tooltip - Lightweight modern tooltip solution
- * Pure vanilla JavaScript, no dependencies
+ * WP ULike Tooltip Plugin
+ * 
+ * @fileoverview Lightweight tooltip solution with dynamic content loading
+ * @requires ES7 (ES2016) compatible browser
+ * @author WP ULike Team
+ * @see https://github.com/alimir/wp-ulike
  */
 (function (window, document, undefined) {
   "use strict";
@@ -168,6 +172,7 @@
     let isLoading = false;
     let scrollHandler = null;
     let scrollHandlerOptions = null;
+    let outsideHandler = null; // Store for cleanup
     let isHovering = false; // Track if user is currently hovering
 
     const show = (showLoading) => {
@@ -433,7 +438,7 @@
 
     // Click outside handler
     if (options.close_on_outside_click !== false) {
-      const outsideHandler = (e) => {
+      outsideHandler = (e) => {
         if (
           tooltip &&
           tooltip.parentNode &&
@@ -463,6 +468,18 @@
           window.removeEventListener("scroll", scrollHandler, scrollHandlerOptions);
           scrollHandler = null;
           scrollHandlerOptions = null;
+        }
+        if (outsideHandler) {
+          document.removeEventListener("mousedown", outsideHandler);
+          outsideHandler = null;
+        }
+        if (showTimeout) {
+          clearTimeout(showTimeout);
+          showTimeout = null;
+        }
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+          hideTimeout = null;
         }
         tooltipInstances.delete(element);
         if (options.id) delete tooltipInstancesById[options.id];

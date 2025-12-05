@@ -1,3 +1,11 @@
+/**
+ * WP ULike - Main Plugin
+ * 
+ * @fileoverview Core like/unlike functionality with AJAX support
+ * @requires ES7 (ES2016) compatible browser
+ * @author WP ULike Team
+ * @see https://github.com/alimir/wp-ulike
+ */
 (function (window, document, undefined) {
   "use strict";
 
@@ -140,6 +148,11 @@
     normalizeBooleanValues(this.settings, defaults);
     this._defaults = defaults;
     this._name = pluginName;
+    // Store handlers and timeouts for cleanup
+    this._boundHandlers = [];
+    this._timeouts = [];
+    // Initialize fetching flag
+    this._isFetchingLikers = false;
 
     // Create main selectors (like jQuery .find())
     this.buttonElement = this.element.querySelectorAll(this.settings.buttonSelector);
@@ -193,9 +206,11 @@
     init() {
       // Attach click listeners to ALL buttons
       if (this.buttonElement && this.buttonElement.length > 0) {
+        const boundHandler = this._initLike.bind(this);
+        this._boundHandlers.push({ element: this.buttonElement, event: 'click', handler: boundHandler });
         forEachElement(this.buttonElement, (button) => {
           if (button) {
-            button.addEventListener("click", this._initLike.bind(this));
+            button.addEventListener("click", boundHandler);
           }
         });
       }
@@ -205,7 +220,11 @@
         const mouseenterHandler = (event) => {
           this._updateLikers(event);
           firstGeneralEl.removeEventListener("mouseenter", mouseenterHandler);
+          // Remove from tracking since it removes itself
+          const index = this._boundHandlers.findIndex(h => h.handler === mouseenterHandler);
+          if (index > -1) this._boundHandlers.splice(index, 1);
         };
+        this._boundHandlers.push({ element: firstGeneralEl, event: 'mouseenter', handler: mouseenterHandler });
         firstGeneralEl.addEventListener("mouseenter", mouseenterHandler);
       }
     },
@@ -344,13 +363,14 @@
           });
 
           if (this.settings.appendTimeout && appendedElements.length > 0) {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
               appendedElements.forEach((el) => {
                 if (el && el.parentNode) {
                   el.remove();
                 }
               });
             }, this.settings.appendTimeout);
+            this._timeouts.push(timeoutId);
           }
         }
       }
@@ -487,12 +507,20 @@
 
     /**
      * Fetch likers data via AJAX
+     * Prevents duplicate requests
      */
     _fetchLikersData() {
       if (!this.settings.displayLikers) {
         this._isFetchingLikers = false;
         return;
       }
+
+      // Prevent duplicate requests
+      if (this._isFetchingLikers) {
+        return;
+      }
+
+      this._isFetchingLikers = true;
 
       const generalEl = getSingleElement(this.generalElement);
       if (generalEl) {
@@ -582,10 +610,8 @@
                 size: "tiny",
                 trigger: "hover",
                 dataFetcher: (element, tooltipId) => {
-                  if (this._isFetchingLikers) {
-                    return;
-                  }
-                  this._isFetchingLikers = true;
+                  // Don't set flag here - let _fetchLikersData handle it
+                  // This prevents the flag from blocking the AJAX request
                   this._fetchLikersData();
                 }
               });
@@ -797,6 +823,32 @@
           messageText,
         });
       }
+    },
+
+    /**
+     * Cleanup method to prevent memory leaks
+     */
+    destroy() {
+      // Remove all event listeners
+      this._boundHandlers.forEach(({ element, event, handler }) => {
+        if (element && element.length !== undefined) {
+          forEachElement(element, (el) => {
+            if (el) el.removeEventListener(event, handler);
+          });
+        } else if (element) {
+          element.removeEventListener(event, handler);
+        }
+      });
+      this._boundHandlers = [];
+
+      // Clear all timeouts
+      this._timeouts.forEach((timeoutId) => {
+        clearTimeout(timeoutId);
+      });
+      this._timeouts = [];
+
+      // Reset flags
+      this._isFetchingLikers = false;
     },
   };
 
