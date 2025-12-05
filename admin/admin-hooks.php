@@ -129,17 +129,8 @@ function wp_ulike_notice_manager(){
 	$screen      = get_current_screen();
 	$notice_list = [];
 
-	// Show review notice after 100 likes or 7 days of usage (whichever comes first)
-	$plugin_install_time = get_option( 'wp_ulike_install_date' );
-	if( ! $plugin_install_time ){
-		// For existing installations without install date, set it to 30 days ago
-		// so we don't show notice immediately, but still allow it based on likes count
-		$plugin_install_time = time() - ( 30 * DAY_IN_SECONDS );
-		update_option( 'wp_ulike_install_date', $plugin_install_time );
-	}
-	$days_since_install = ( time() - $plugin_install_time ) / DAY_IN_SECONDS;
-
-	if( $count_logs > 100 || $days_since_install >= 7 ){
+	// Show review notice after 100 likes (based on engagement)
+	if( $count_logs > 100 ){
 		// Personalized message based on milestone
 		$milestone_text = '';
 		$emoji = '';
@@ -154,8 +145,8 @@ function wp_ulike_notice_manager(){
 			$emoji = '✨';
 		}
 
-		$notice_list[ 'wp_ulike_leave_review' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_leave_review',
+		$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
+			'id'          => 'wp_ulike_leave_a_review',
 			'title'       => esc_html__( 'Your Community Loves WP ULike! ⭐', 'wp-ulike' ),
 			'description' => sprintf(
 				'<strong>%s %s</strong> ' . esc_html__( 'You\'ve received %s likes from your community — that\'s incredible! Your users are clearly enjoying the engagement. If WP ULike has helped your site, would you mind sharing your experience? A quick 5-star review helps other WordPress users discover us and takes less than a minute. Thank you for being part of our community! 🙏', 'wp-ulike' ),

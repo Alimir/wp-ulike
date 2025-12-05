@@ -116,6 +116,106 @@ Show a list of users who liked the content.
 
 ## 💻 Developer Functions
 
+> **Note:** All functions are prefixed with `wp_ulike_` and should be checked for existence before use in themes/plugins for compatibility.
+
+### Core Functions Reference
+
+#### Counter Functions
+- `wp_ulike_get_counter_value($ID, $type, $status, $is_distinct, $date_range)` - Get counter value
+  - **Parameters:** `$ID` (int) - Item ID, `$type` (string) - Content type, `$status` (string) - Vote status, `$is_distinct` (bool) - Distinct count, `$date_range` (string|array) - Date filter
+  - **Returns:** (int) Counter value
+- `wp_ulike_update_meta_counter_value($ID, $value, $type, $status, $is_distinct, $prev_value)` - Update counter meta
+  - **Parameters:** `$ID` (int), `$value` (int), `$type` (string), `$status` (string), `$is_distinct` (bool), `$prev_value` (string) - Previous value
+  - **Returns:** (int|bool) Meta ID or false
+
+#### Query Functions
+- `wp_ulike_get_popular_items_info($args)` - Get popular items with counters
+  - **Parameters:** `$args` (array) - Options: type, rel_type, status, user_id, order, is_popular, period, offset, limit
+  - **Returns:** (array|null) Array of objects with item_ID and counter, or null
+- `wp_ulike_get_popular_items_ids($args)` - Get popular item IDs only
+  - **Parameters:** Same as above
+  - **Returns:** (array) Array of item IDs
+- `wp_ulike_get_popular_items_total_number($args)` - Get total popular items count
+  - **Parameters:** `$args` (array) - Options: type, status, period, user_id, rel_type
+  - **Returns:** (int|null) Total count or null
+- `wp_ulike_get_likers_list_per_post($table, $column, $item_ID, $limit)` - Get likers list
+  - **Parameters:** `$table` (string) - Table name, `$column` (string) - Column name, `$item_ID` (int), `$limit` (int) - Max users
+  - **Returns:** (array) Array of user IDs
+- `wp_ulike_get_best_likers_info($limit, $period, $offset, $status)` - Get best likers
+  - **Parameters:** `$limit` (int), `$period` (string), `$offset` (int), `$status` (string|array) - Vote status(es)
+  - **Returns:** (array) Array of user objects with vote counts
+- `wp_ulike_get_top_enagers_total_number($period, $status)` - Get top engagers count
+  - **Parameters:** `$period` (string|array), `$status` (string|array)
+  - **Returns:** (int) Total number of unique engagers
+- `wp_ulike_get_user_item_history($args)` - Get user voting history
+  - **Parameters:** `$args` (array) - Options: item_id, item_type, current_user, settings, is_user_logged_in
+  - **Returns:** (array) Array of item_id => status pairs
+- `wp_ulike_get_user_latest_activity($item_id, $user_id, $type)` - Get user latest activity
+  - **Parameters:** `$item_id` (int), `$user_id` (int), `$type` (string) - Content type
+  - **Returns:** (array|null) Array with date_time and status, or null
+- `wp_ulike_get_user_item_count_per_day($args)` - Get daily user activity count
+  - **Parameters:** `$args` (array) - Options: item_id, current_user, settings
+  - **Returns:** (int) Count of votes today
+- `wp_ulike_get_user_data($user_ID, $args)` - Get comprehensive user data
+  - **Parameters:** `$user_ID` (int), `$args` (array) - Options: type, period, order, status, page, per_page
+  - **Returns:** (array|null) Array of user activity objects
+- `wp_ulike_get_users($args)` - Get users with voting data
+  - **Parameters:** `$args` (array) - Options: type, period, order, status, page, per_page
+  - **Returns:** (array|null) Array of user objects with vote statistics
+#### Meta Data Functions
+- `wp_ulike_add_meta_data($object_id, $meta_group, $meta_key, $meta_value, $unique)` - Add meta
+  - **Parameters:** `$object_id` (int), `$meta_group` (string) - post/comment/activity/topic/user/statistics, `$meta_key` (string), `$meta_value` (mixed), `$unique` (bool)
+  - **Returns:** (int|false) Meta ID or false
+- `wp_ulike_update_meta_data($object_id, $meta_group, $meta_key, $meta_value, $prev_value)` - Update meta
+  - **Parameters:** `$object_id` (int), `$meta_group` (string), `$meta_key` (string), `$meta_value` (mixed), `$prev_value` (mixed) - Previous value
+  - **Returns:** (int|bool) Meta ID if new, true if updated, false on failure
+- `wp_ulike_get_meta_data($object_id, $meta_group, $meta_key, $single)` - Get meta
+  - **Parameters:** `$object_id` (int), `$meta_group` (string), `$meta_key` (string), `$single` (bool) - Return single value
+  - **Returns:** (mixed) Meta value(s)
+- `wp_ulike_delete_meta_data($meta_group, $object_id, $meta_key, $meta_value, $delete_all)` - Delete meta
+  - **Parameters:** `$meta_group` (string), `$object_id` (int), `$meta_key` (string), `$meta_value` (mixed), `$delete_all` (bool)
+  - **Returns:** (bool) True on success
+
+#### Utility Functions
+- `wp_ulike_get_the_id($post_id)` - Get post ID (WPML compatible)
+  - **Parameters:** `$post_id` (int) - Optional post ID
+  - **Returns:** (int) Post ID
+- `wp_ulike_get_rating_value($post_ID, $is_decimal)` - Get rating value
+  - **Parameters:** `$post_ID` (int), `$is_decimal` (bool) - Include decimals
+  - **Returns:** (string|float) Rating value (1-5)
+- `wp_ulike_is_user_liked($item_ID, $user_ID, $type)` - Check if user liked item
+  - **Parameters:** `$item_ID` (int), `$user_ID` (int), `$type` (string) - Content type
+  - **Returns:** (int) Count of likes (0 if not liked)
+
+#### Content Type Functions
+- `wp_ulike($type, $args)` - Display post like button
+  - **Parameters:** `$type` (string) - 'get' or 'put', `$args` (array) - Options: id, wrapper_class, etc.
+  - **Returns:** (string|void) HTML output or echoes
+- `wp_ulike_comments($type, $args)` - Display comment like button
+  - **Parameters:** Same as above
+  - **Returns:** (string|void) HTML output or echoes
+- `wp_ulike_buddypress($type, $args)` - Display activity like button
+  - **Parameters:** Same as above
+  - **Returns:** (string|void) HTML output or echoes
+- `wp_ulike_bbpress($type, $args)` - Display topic like button
+  - **Parameters:** Same as above
+  - **Returns:** (string|void) HTML output or echoes
+- `wp_ulike_get_post_likes($post_ID, $status)` - Get post likes count
+  - **Parameters:** `$post_ID` (int), `$status` (string) - Vote status
+  - **Returns:** (int) Like count
+- `wp_ulike_get_comment_likes($comment_ID, $status)` - Get comment likes count
+  - **Parameters:** `$comment_ID` (int), `$status` (string)
+  - **Returns:** (int) Like count
+- `wp_ulike_get_most_liked_posts($numberposts, $post_type, $method, $period, $status, $is_normal, $offset, $user_id)` - Get most liked posts
+  - **Parameters:** `$numberposts` (int), `$post_type` (string|array), `$method` (string), `$period` (string), `$status` (string), `$is_normal` (bool), `$offset` (int), `$user_id` (string)
+  - **Returns:** (array|false) Array of WP_Post objects or false
+- `wp_ulike_get_most_liked_comments($numbercomments, $post_type, $period, $status, $offset, $user_id)` - Get most liked comments
+  - **Parameters:** `$numbercomments` (int), `$post_type` (string), `$period` (string), `$status` (string), `$offset` (int), `$user_id` (string)
+  - **Returns:** (array|false) Array of WP_Comment objects or false
+- `wp_ulike_get_most_liked_activities($number, $period, $status, $offset, $user_id)` - Get most liked activities
+  - **Parameters:** `$number` (int), `$period` (string), `$status` (string), `$offset` (int), `$user_id` (string)
+  - **Returns:** (array|false) Array of activity objects or false
+
 ### Get Like Count
 
 ```php
@@ -138,6 +238,18 @@ $count = wp_ulike_get_counter_value($item_id, 'post', 'like', true);
 ```php
 // Check if user liked an item
 $is_liked = wp_ulike_is_user_liked($item_id, $user_id, 'likeThis');
+// Returns count (0 if not liked, >0 if liked)
+
+// Check user voting status from history
+$args = array(
+    'item_id'           => $item_id,
+    'item_type'         => 'post',
+    'current_user'      => get_current_user_id(),
+    'settings'          => $settings,
+    'is_user_logged_in' => is_user_logged_in()
+);
+$history = wp_ulike_get_user_item_history($args);
+$user_status = isset($history[$item_id]) ? $history[$item_id] : false;
 ```
 
 ### Get Popular Items
@@ -153,8 +265,126 @@ $args = array(
 );
 $popular = wp_ulike_get_popular_items_info($args);
 
+// Get popular item IDs only
+$popular_ids = wp_ulike_get_popular_items_ids($args);
+
+// Get total number of popular items
+$total = wp_ulike_get_popular_items_total_number($args);
+
 // Legacy function
 $wp_query = wp_ulike_get_most_liked_posts(10, array('post'), 'post', 'all', 'like');
+```
+
+### Get User Data & History
+
+```php
+// Get user item history (all items user has liked)
+$args = array(
+    'item_id'           => 123,
+    'item_type'         => 'post',
+    'current_user'      => get_current_user_id(),
+    'settings'          => $settings,
+    'is_user_logged_in' => true
+);
+$history = wp_ulike_get_user_item_history($args);
+
+// Check if user liked an item
+$is_liked = wp_ulike_is_user_liked($item_id, $user_id, 'likeThis');
+
+// Get user latest activity
+$latest = wp_ulike_get_user_latest_activity($item_id, $user_id, 'post');
+
+// Get user item count per day
+$daily_count = wp_ulike_get_user_item_count_per_day($args);
+
+// Get user data
+$user_data = wp_ulike_get_user_data($user_id, array(
+    'period' => 'all',
+    'status' => array('like', 'dislike')
+));
+```
+
+### Get Likers List
+
+```php
+// Get likers list for an item
+$likers = wp_ulike_get_likers_list_per_post($table_name, $column_name, $item_id, $limit);
+
+// Get best likers (most active users)
+$best_likers = wp_ulike_get_best_likers_info($limit, $period, $offset, $status);
+
+// Get top engagers total number
+$total_engagers = wp_ulike_get_top_enagers_total_number($period, $status);
+```
+
+### Utility Functions
+
+```php
+// Get counter value info (with error handling)
+$counter_info = wp_ulike_get_counter_value_info($item_id, 'post', 'like', true, $date_range);
+
+// Format number (with K, M suffixes)
+$formatted = wp_ulike_format_number(1234, 'like');
+
+// Get button text
+$button_text = wp_ulike_get_button_text('like', 'posts_group');
+
+// Get post ID (with WPML support)
+$post_id = wp_ulike_get_the_id($post_id);
+
+// Check if WPML is active
+$is_wpml = wp_ulike_is_wpml_active();
+
+// Get rating value
+$rating = wp_ulike_get_rating_value($post_id, true);
+
+```
+
+### Meta Data Functions
+
+```php
+// Add meta data
+wp_ulike_add_meta_data($object_id, $meta_group, $meta_key, $meta_value, $unique);
+
+// Update meta data
+wp_ulike_update_meta_data($object_id, $meta_group, $meta_key, $meta_value, $prev_value);
+
+// Get meta data
+$meta_value = wp_ulike_get_meta_data($object_id, $meta_group, $meta_key, $single);
+
+// Delete meta data
+wp_ulike_delete_meta_data($meta_group, $object_id, $meta_key, $meta_value, $delete_all);
+
+// Update meta counter value
+wp_ulike_update_meta_counter_value($ID, $value, $type, $status, $is_distinct, $prev_value);
+
+// Get meta counter value
+$counter = wp_ulike_meta_counter_value($ID, $type, $status, $is_distinct);
+
+// Delete vote data
+wp_ulike_delete_vote_data($ID, $type);
+```
+
+### Content Type Functions
+
+```php
+// Display like button for posts
+wp_ulike('put', array('id' => 123));
+
+// Display like button for comments
+wp_ulike_comments('put', array('id' => 456));
+
+// Display like button for BuddyPress activities
+wp_ulike_buddypress('put', array('id' => 789));
+
+// Display like button for bbPress topics
+wp_ulike_bbpress('put', array('id' => 101));
+
+// Get most liked comments
+$comments = wp_ulike_get_most_liked_comments(10, 'post', 'all', 'like');
+
+// Get most liked activities
+$activities = wp_ulike_get_most_liked_activities(10, 'all', 'like');
 ```
 
 ---
@@ -162,6 +392,27 @@ $wp_query = wp_ulike_get_most_liked_posts(10, array('post'), 'post', 'all', 'lik
 ## 🎨 Customization Hooks
 
 ### Data & Process Actions
+
+**Before Like/Dislike Process:**
+```php
+add_action('wp_ulike_before_process', 'my_before_process_action', 10, 1);
+function my_before_process_action($data) {
+    // $data contains: id, type, nonce, factor, template, displayLikers, likersTemplate, client_address
+    // Fired before the like/dislike process begins
+    // Use this to validate, log, or modify data before processing
+}
+```
+
+**After Like/Dislike Process:**
+```php
+add_action('wp_ulike_after_process', 'my_after_process_action', 10, 6);
+function my_after_process_action($id, $key, $user_id, $status, $has_log, $slug) {
+    // Fired after the like/dislike process completes
+    // $id = item ID, $key = item key, $user_id = user ID, $status = like/unlike status
+    // $has_log = whether previous log exists, $slug = content type (post/comment/activity/topic)
+    // Example: Send notifications, update external systems, etc.
+}
+```
 
 **After Like/Dislike Data is Inserted:**
 ```php
@@ -181,6 +432,82 @@ add_action('wp_ulike_data_updated', 'my_custom_action_on_update', 10, 1);
 function my_custom_action_on_update($args) {
     // $args contains: item_id, table, related_column, type, user_id, status, ip
     // Example: Track status changes, update analytics, etc.
+}
+```
+
+**When Counter Value is Generated:**
+```php
+add_action('wp_ulike_counter_value_generated', 'my_counter_action');
+function my_counter_action() {
+    // Fired when counter value is calculated
+}
+```
+
+**When Vote Data is Deleted:**
+```php
+add_action('wp_ulike_delete_vote_data', 'my_delete_action', 10, 3);
+function my_delete_action($ID, $type, $settings) {
+    // Fired when vote data is deleted
+    // $ID = item ID, $type = content type, $settings = settings object
+}
+```
+
+**Plugin Loaded:**
+```php
+add_action('wp_ulike_loaded', 'my_plugin_loaded_action');
+function my_plugin_loaded_action() {
+    // Fired when plugin is fully loaded
+}
+```
+
+
+**Inline Likers Box Display:**
+```php
+add_action('wp_ulike_inline_display_likers_box', 'my_inline_likers', 10, 2);
+function my_inline_likers($args, $get_settings) {
+    // Customize inline likers box display
+}
+```
+
+**Meta Data Actions (Dynamic):**
+```php
+// These actions are fired for each meta group (post, comment, activity, topic, user, statistics)
+// Replace {meta_group} with: post, comment, activity, topic, user, or statistics
+
+// Before meta is added
+add_action('wp_ulike_add_{meta_group}_meta', 'my_add_meta', 10, 4);
+function my_add_meta($object_id, $meta_key, $meta_value, $unique) {
+    // Fired before meta is added
+}
+
+// After meta is added
+add_action('wp_ulike_added_{meta_group}_meta', 'my_added_meta', 10, 3);
+function my_added_meta($mid, $object_id, $meta_key) {
+    // Fired after meta is added
+}
+
+// Before meta is updated
+add_action('wp_ulike_update_{meta_group}_meta', 'my_update_meta', 10, 3);
+function my_update_meta($meta_id, $object_id, $meta_key) {
+    // Fired before meta is updated
+}
+
+// After meta is updated
+add_action('wp_ulike_updated_{meta_group}_meta', 'my_updated_meta', 10, 3);
+function my_updated_meta($meta_id, $object_id, $meta_key) {
+    // Fired after meta is updated
+}
+
+// Before meta is deleted
+add_action('wp_ulike_delete_{meta_group}_meta', 'my_delete_meta', 10, 3);
+function my_delete_meta($meta_ids, $object_id, $meta_key) {
+    // Fired before meta is deleted
+}
+
+// After meta is deleted
+add_action('wp_ulike_deleted_{meta_group}_meta', 'my_deleted_meta', 10, 3);
+function my_deleted_meta($meta_ids, $object_id, $meta_key) {
+    // Fired after meta is deleted
 }
 ```
 
@@ -268,6 +595,198 @@ function modify_content_output($output, $content) {
 }
 ```
 
+**Customize Comment Text Output:**
+```php
+add_filter('wp_ulike_comment_text', 'modify_comment_text', 10, 3);
+function modify_comment_text($output, $content, $comment) {
+    // Modify comment text with like button
+    return $output;
+}
+```
+
+**Customize Format Number:**
+```php
+add_filter('wp_ulike_format_number', 'custom_format_number', 10, 3);
+function custom_format_number($value, $number, $status) {
+    // Customize number formatting (e.g., 1K, 1M)
+    return $value;
+}
+```
+
+**Customize Likers Box Shortcode:**
+```php
+add_filter('wp_ulike_likers_box_shortcode', 'custom_likers_shortcode', 10, 3);
+function custom_likers_shortcode($output, $id, $type) {
+    // Customize likers box shortcode output
+    return $output;
+}
+```
+
+**Customize Listener Data:**
+```php
+add_filter('wp_ulike_listener_data', 'modify_listener_data', 10, 1);
+function modify_listener_data($data) {
+    // Modify AJAX listener data before processing
+    return $data;
+}
+```
+
+**Customize Get The ID:**
+```php
+add_filter('wp_ulike_get_the_id', 'modify_get_id', 10, 1);
+function modify_get_id($post_id) {
+    // Modify post ID retrieval (useful for WPML, etc.)
+    return $post_id;
+}
+```
+
+**Customize Cookie Settings:**
+```php
+// Enable/disable cookie setting
+add_filter('wp_ulike_set_cookie_enabled', 'control_cookie_setting', 10, 4);
+function control_cookie_setting($enabled, $name, $value, $expire) {
+    // Return false to prevent cookie from being set
+    return $enabled;
+}
+
+// Modify cookie httponly flag
+add_filter('wp_ulike_cookie_httponly', 'modify_cookie_httponly', 10, 4);
+function modify_cookie_httponly($httponly, $name, $value, $expire) {
+    return $httponly;
+}
+```
+
+**Customize Auto Display Filter List:**
+```php
+add_filter('wp_ulike_auto_diplay_filter_list', 'add_auto_display_filters', 10, 1);
+function add_auto_display_filters($defaults) {
+    // Add custom conditions for auto display
+    $defaults['is_custom_page'] = is_page('custom-page');
+    return $defaults;
+}
+```
+
+**Customize Supported Post Types:**
+```php
+add_filter('wp_ulike_supported_post_types_for_top_posts_list', 'add_post_types', 10, 1);
+function add_post_types($post_types) {
+    // Add custom post types to popular posts list
+    $post_types[] = 'custom_post_type';
+    return $post_types;
+}
+```
+
+**Customize Top Posts Query:**
+```php
+add_filter('wp_ulike_get_top_posts_query', 'modify_top_posts_query', 10, 1);
+function modify_top_posts_query($args) {
+    // Modify WP_Query arguments for top posts
+    return $args;
+}
+```
+
+**Customize Top Comments Query:**
+```php
+add_filter('wp_ulike_get_top_comments_query', 'modify_top_comments_query', 10, 1);
+function modify_top_comments_query($args) {
+    // Modify WP_Comment_Query arguments for top comments
+    return $args;
+}
+```
+
+**Customize Comments Add Attributes:**
+```php
+add_filter('wp_ulike_comments_add_attr', 'add_comment_attributes');
+function add_comment_attributes($attributes) {
+    return 'data-custom="value"';
+}
+```
+
+**Customize Activities Add Attributes:**
+```php
+add_filter('wp_ulike_activities_add_attr', 'add_activity_attributes');
+function add_activity_attributes($attributes) {
+    return 'data-custom="value"';
+}
+```
+
+**Customize Topics Add Attributes:**
+```php
+add_filter('wp_ulike_topics_add_attr', 'add_topic_attributes');
+function add_topic_attributes($attributes) {
+    return 'data-custom="value"';
+}
+```
+
+
+
+**Rich Snippets/Microdata Filters:**
+```php
+// Posts microdata
+add_filter('wp_ulike_posts_microdata', 'custom_posts_microdata');
+function custom_posts_microdata($microdata) {
+    return '<script type="application/ld+json">{"@type": "Article"}</script>';
+}
+
+// Comments microdata
+add_filter('wp_ulike_comments_microdata', 'custom_comments_microdata');
+
+// Activities microdata
+add_filter('wp_ulike_activities_microdata', 'custom_activities_microdata');
+
+// Topics microdata
+add_filter('wp_ulike_topics_microdata', 'custom_topics_microdata');
+```
+
+**Posts Add Attributes:**
+```php
+add_filter('wp_ulike_posts_add_attr', 'add_custom_attributes');
+function add_custom_attributes($attributes) {
+    return 'data-custom="value"';
+}
+```
+
+**Rating Value Filter:**
+```php
+add_filter('wp_ulike_rating_value', 'customize_rating', 10, 2);
+function customize_rating($rating_value, $post_ID) {
+    // Customize rating calculation
+    return $rating_value;
+}
+```
+
+**Meta Data Filters (Dynamic):**
+```php
+// These filters are available for each meta group
+// Replace {meta_group} with: post, comment, activity, topic, user, or statistics
+
+// Override meta add operation
+add_filter('wp_ulike_add_{meta_group}_metadata', 'override_add_meta', 10, 5);
+function override_add_meta($check, $object_id, $meta_key, $meta_value, $unique) {
+    // Return non-null to override default behavior
+    return $check;
+}
+
+// Override meta update operation
+add_filter('wp_ulike_update_{meta_group}_metadata', 'override_update_meta', 10, 4);
+function override_update_meta($check, $object_id, $meta_key, $meta_value, $prev_value) {
+    return $check;
+}
+
+// Override meta delete operation
+add_filter('wp_ulike_delete_{meta_group}_metadata', 'override_delete_meta', 10, 4);
+function override_delete_meta($check, $object_id, $meta_key, $meta_value, $delete_all) {
+    return $check;
+}
+
+// Default meta value
+add_filter('wp_ulike_default_{meta_group}_metadata', 'default_meta_value', 10, 5);
+function default_meta_value($value, $object_id, $meta_key, $single, $meta_group) {
+    // Return default value if meta doesn't exist
+    return $value;
+}
+```
+
 ### Permission & Validation Filters
 
 **Check User Permission:**
@@ -282,11 +801,8 @@ function custom_permission_check($status, $args, $settings) {
 
 **Validate Blacklist:**
 ```php
-add_filter('wp_ulike_validate_blacklist', 'custom_blacklist_check', 10, 3);
-function custom_blacklist_check($isValid, $target, $args) {
-    // Custom blacklist validation logic
-    return $isValid;
-}
+// Note: This filter is referenced but implemented via wp_ulike_blacklist_validator class
+// Use the permission status filter for custom validation
 ```
 
 **Get User Current Status:**
@@ -392,39 +908,12 @@ function custom_user_ip($ip) {
 }
 ```
 
-**Modify Database IP:**
-```php
-add_filter('wp_ulike_database_user_ip', 'modify_db_ip', 10, 1);
-function modify_db_ip($ip) {
-    // Modify IP before saving to database
-    return $ip;
-}
-```
-
-**Modify Client Identifier:**
-```php
-add_filter('wp_ulike_generate_client_identifier', 'custom_client_id', 10, 2);
-function custom_client_id($identifier, $user_ip) {
-    // Customize client identifier generation
-    return $identifier;
-}
-```
-
 **Modify Auto Display Settings:**
 ```php
 add_filter('wp_ulike_enable_auto_display', 'control_auto_display', 10, 2);
 function control_auto_display($auto_display, $type) {
     // Control auto display per content type
     return $auto_display;
-}
-```
-
-**Modify Post Settings by Type:**
-```php
-add_filter('wp_ulike_get_post_settings_by_type', 'custom_post_settings', 10, 2);
-function custom_post_settings($settings, $post_ID) {
-    // Modify settings for specific post types
-    return $settings;
 }
 ```
 
@@ -627,7 +1116,7 @@ document.addEventListener('WordpressUlikeUpdated', function(event) {
     const likeElement = event.detail;
     const itemId = likeElement.getAttribute('data-ulike-id');
     const itemType = likeElement.getAttribute('data-ulike-type');
-    
+
     // Send to analytics
     if (typeof gtag !== 'undefined') {
         gtag('event', 'like', {
@@ -643,7 +1132,7 @@ document.addEventListener('WordpressUlikeUpdated', function(event) {
 ```javascript
 document.addEventListener('WordpressUlikeNotificationAppend', function(event) {
     const notification = event.detail.messageElement;
-    
+
     // Add custom styling or behavior
     notification.addEventListener('click', function() {
         // Custom click handler
