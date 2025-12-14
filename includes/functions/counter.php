@@ -86,10 +86,6 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			$table = isset( $table_info['table'] ) ? $table_info['table'] : '';
 			$column = isset( $table_info['column'] ) ? $table_info['column'] : '';
 
-			// Sanitize status value
-			$allowed_statuses = array( 'like', 'dislike', 'unlike', 'undislike', 'all' );
-			$status = in_array( $status, $allowed_statuses, true ) ? $status : 'all';
-
 			$status_condition = $status !== 'all' ? $wpdb->prepare( "`status` = %s", $status ) : "`status` NOT LIKE 'un%'";
 			$count_type       = $is_distinct ? "DISTINCT `user_id`" : "*";
 			$table_escaped = esc_sql( $wpdb->prefix . $table );
