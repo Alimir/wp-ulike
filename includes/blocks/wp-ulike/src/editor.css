@@ -1,0 +1,14 @@
+/**
+ * WP ULike Block Editor Styles
+ */
+
+.wp-block-wp-ulike-button {
+	padding: 1em 0;
+}
+
+.wp-block-wp-ulike-button .components-placeholder {
+	min-height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

@@ -1,0 +1,44 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wp-ulike/button",
+	"title": "WP ULike Button",
+	"category": "widgets",
+	"icon": "heart",
+	"description": "Add WP ULike voting buttons to your content with customizable templates and settings.",
+	"keywords": [ "like", "ulike", "vote", "rating", "heart", "button" ],
+	"textdomain": "wp-ulike",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css",
+	"attributes": {
+		"for": {
+			"type": "string",
+			"default": "post"
+		},
+		"itemId": {
+			"type": "string",
+			"default": ""
+		},
+		"useCurrentPostId": {
+			"type": "boolean",
+			"default": true
+		},
+		"template": {
+			"type": "string",
+			"default": ""
+		},
+		"buttonType": {
+			"type": "string",
+			"default": ""
+		},
+		"wrapperClass": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": true
+	}
+}
