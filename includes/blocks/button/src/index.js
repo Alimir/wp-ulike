@@ -85,9 +85,9 @@ registerBlockType( metadata.name, {
 		return (
 			<>
 				<InspectorControls>
-					<PanelBody title={ __( 'WP ULike Settings', 'wp-ulike' ) } initialOpen={ true }>
+					<PanelBody title={ __( 'Settings', 'wp-ulike' ) } initialOpen={ true }>
 						<SelectControl
-							label={ __( 'Content Type', 'wp-ulike' ) }
+							label={ __( 'Content Types', 'wp-ulike' ) }
 							value={ forType }
 							options={ [
 								{ label: __( 'Post', 'wp-ulike' ), value: 'post' },
@@ -116,9 +116,9 @@ registerBlockType( metadata.name, {
 							/>
 						) }
 
-						<div className="wp-ulike-template-selector">
+						<div className="wp-ulike-template-selector" style={ { marginBottom: '15px'} }>
 							<label className="components-base-control__label" style={ { marginBottom: '8px', display: 'block' } }>
-								{ __( 'Template', 'wp-ulike' ) }
+								{ __( 'Select a Template', 'wp-ulike' ) }
 							</label>
 							<div style={ {
 								display: 'grid',
@@ -204,9 +204,6 @@ registerBlockType( metadata.name, {
 									);
 								} ) }
 							</div>
-							<p className="components-base-control__help" style={ { marginTop: '4px', marginBottom: '10px', color: '#757575', fontSize: '12px' } }>
-								{ __( 'Choose a template style for the like button.', 'wp-ulike' ) }
-							</p>
 						</div>
 
 						{ template && supportsText !== false && (
