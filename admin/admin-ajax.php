@@ -180,6 +180,7 @@ function wp_ulike_localization_api(){
 		'User(s)'                                                  => esc_html__( 'User(s)', 'wp-ulike' ),
 		'Other Countries'                                          => esc_html__( 'Other Countries', 'wp-ulike' ),
 		'for'                                                      => esc_html__( 'for', 'wp-ulike' ),
+		'Growth'                                                   => esc_html__( 'Growth', 'wp-ulike' ),
 
 		// Filters
 		'Like'                   => esc_html__( 'Like', 'wp-ulike' ),
@@ -220,6 +221,7 @@ function wp_ulike_localization_api(){
 		'Engagement'    => esc_html__( 'Engagement', 'wp-ulike' ),
 		'Comments'      => esc_html__( 'Comments', 'wp-ulike' ),
 		'By'            => esc_html__( 'By', 'wp-ulike' ),
+		'Views'         => esc_html__( 'Views', 'wp-ulike' ),
 
 		// History
 		'Date'            => esc_html__( 'Date', 'wp-ulike' ),
@@ -244,6 +246,7 @@ function wp_ulike_localization_api(){
 		'Delete Selected' => esc_html__( 'Delete Selected', 'wp-ulike' ),
 		'Filter by type:' => esc_html__( 'Filter by type:', 'wp-ulike' ),
 		'per page'        => esc_html__( 'per page', 'wp-ulike' ),
+		'View all'        => esc_html__( 'View all', 'wp-ulike' ),
 
 		// Types
 		'Posts'      => esc_html__('Posts', 'wp-ulike'),
