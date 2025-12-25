@@ -4,7 +4,7 @@
 
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, TextControl, ToggleControl, Spinner } from '@wordpress/components';
+import { PanelBody, SelectControl, TextControl, ToggleControl, Spinner, ButtonGroup, Button, Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
 import { useEffect, useState } from '@wordpress/element';
@@ -12,7 +12,6 @@ import apiFetch from '@wordpress/api-fetch';
 
 import metadata from '../block.json';
 import './editor.css';
-import './style.css';
 
 registerBlockType( metadata.name, {
 	...metadata,
@@ -28,6 +27,7 @@ registerBlockType( metadata.name, {
 		} = attributes;
 
 		const [ templates, setTemplates ] = useState( [] );
+		const [ defaultTemplateName, setDefaultTemplateName ] = useState( __( 'Use Settings Default', 'wp-ulike' ) );
 		const [ loading, setLoading ] = useState( true );
 
 		// Fetch templates from REST API
@@ -38,7 +38,13 @@ registerBlockType( metadata.name, {
 					const response = await apiFetch( {
 						path: '/wp-ulike/v1/templates'
 					} );
-					if ( response && Array.isArray( response ) ) {
+					if ( response && response.templates && Array.isArray( response.templates ) ) {
+						setTemplates( response.templates );
+						if ( response.default_template_name ) {
+							setDefaultTemplateName( response.default_template_name );
+						}
+					} else if ( response && Array.isArray( response ) ) {
+						// Backward compatibility
 						setTemplates( response );
 					}
 				} catch ( error ) {
@@ -53,24 +59,21 @@ registerBlockType( metadata.name, {
 			fetchTemplates();
 		}, [] );
 
-		// Build template options for SelectControl
-		const templateOptions = [
-			{ label: __( 'Default Template', 'wp-ulike' ), value: '' }
+		// Build template options (including default "empty" option)
+		const allTemplates = [
+			{ key: '', name: defaultTemplateName, symbol: '', is_text_support: true }
 		];
 
 		if ( templates.length > 0 ) {
 			templates.forEach( ( tmpl ) => {
-				templateOptions.push( {
-					label: tmpl.name,
-					value: tmpl.key,
-					image: tmpl.symbol
-				} );
+				allTemplates.push( tmpl );
 			} );
 		}
 
 		// Filter button type options based on selected template
-		const selectedTemplate = templates.find( ( t ) => t.key === template );
-		const supportsText = selectedTemplate ? selectedTemplate.is_text_support : true;
+		// Find selected template (including default)
+		const selectedTemplate = allTemplates.find( ( t ) => t.key === template );
+		const supportsText = selectedTemplate ? ( selectedTemplate.is_text_support !== false ) : true;
 		const buttonTypeOptions = [
 			{ label: __( 'Default', 'wp-ulike' ), value: '' },
 			{ label: __( 'Image', 'wp-ulike' ), value: 'image' }
@@ -114,13 +117,98 @@ registerBlockType( metadata.name, {
 							/>
 						) }
 
-						<SelectControl
-							label={ __( 'Template', 'wp-ulike' ) }
-							value={ template }
-							options={ templateOptions }
-							onChange={ ( value ) => setAttributes( { template: value } ) }
-							help={ __( 'Choose a template style for the like button.', 'wp-ulike' ) }
-						/>
+						<div className="wp-ulike-template-selector">
+							<label className="components-base-control__label" style={ { marginBottom: '8px', display: 'block' } }>
+								{ __( 'Template', 'wp-ulike' ) }
+							</label>
+							<div style={ {
+								display: 'grid',
+								gridTemplateColumns: 'repeat(auto-fill, minmax(85px, 1fr))',
+								gap: '6px',
+								marginBottom: '8px'
+							} }>
+								{ allTemplates.map( ( tmpl ) => {
+									const isSelected = template === tmpl.key;
+									return (
+										<button
+											key={ tmpl.key || 'default' }
+											type="button"
+											onClick={ () => setAttributes( { template: tmpl.key } ) }
+											className={ `wp-ulike-template-option ${ isSelected ? 'is-selected' : '' }` }
+											style={ {
+												display: 'flex',
+												flexDirection: 'column',
+												alignItems: 'center',
+												justifyContent: 'center',
+												padding: '10px 8px',
+												border: `1.5px solid ${ isSelected ? '#0073aa' : '#ddd' }`,
+												borderRadius: '3px',
+												background: '#fff',
+												cursor: 'pointer',
+												transition: 'border-color 0.15s ease'
+											} }
+											onMouseEnter={ ( e ) => {
+												if ( ! isSelected ) {
+													e.currentTarget.style.borderColor = '#bbb';
+												}
+											} }
+											onMouseLeave={ ( e ) => {
+												if ( ! isSelected ) {
+													e.currentTarget.style.borderColor = '#ddd';
+												}
+											} }
+											title={ tmpl.name }
+										>
+											<div style={ {
+												width: '50px',
+												height: '50px',
+												marginBottom: '6px',
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'center'
+											} }>
+												{ tmpl.symbol ? (
+													<img
+														src={ tmpl.symbol }
+														alt={ tmpl.name }
+														style={ {
+															width: '50px',
+															height: '50px',
+															objectFit: 'contain',
+															filter: isSelected ? 'brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%)' : 'none',
+															transition: 'filter 0.15s ease'
+														} }
+													/>
+												) : (
+													<Icon
+														icon="admin-settings"
+														size={ 32 }
+														style={ {
+															filter: isSelected ? 'brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%)' : 'none',
+															transition: 'filter 0.15s ease',
+															color: '#646970'
+														} }
+													/>
+												) }
+											</div>
+											<span style={ {
+												fontSize: '10px',
+												textAlign: 'center',
+												color: isSelected ? '#0073aa' : '#666',
+												fontWeight: '400',
+												lineHeight: '1.3',
+												wordBreak: 'break-word'
+											} }>
+												{ tmpl.name }
+											</span>
+										</button>
+									);
+								} ) }
+							</div>
+							<p className="components-base-control__help" style={ { marginTop: '4px', marginBottom: '10px', color: '#757575', fontSize: '12px' } }>
+								{ __( 'Choose a template style for the like button.', 'wp-ulike' ) }
+							</p>
+						</div>
 
 						{ template && supportsText !== false && (
 							<SelectControl
@@ -146,9 +234,9 @@ registerBlockType( metadata.name, {
 						block="wp-ulike/button"
 						attributes={ attributes }
 						LoadingResponsePlaceholder={ () => (
-							<div style={ { 
-								padding: '20px', 
-								textAlign: 'center', 
+							<div style={ {
+								padding: '20px',
+								textAlign: 'center',
 								display: 'flex',
 								alignItems: 'center',
 								justifyContent: 'center',
@@ -162,9 +250,9 @@ registerBlockType( metadata.name, {
 							</div>
 						) }
 						ErrorResponsePlaceholder={ () => (
-							<div style={ { 
-								padding: '20px', 
-								textAlign: 'center', 
+							<div style={ {
+								padding: '20px',
+								textAlign: 'center',
 								color: '#cc1818',
 								fontSize: '13px'
 							} }>
