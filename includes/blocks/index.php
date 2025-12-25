@@ -295,18 +295,20 @@ add_action( 'wp_enqueue_scripts', 'wp_ulike_block_frontend_assets' );
 function wp_ulike_block_render_callback( $attributes, $content = '', $block_instance = null, $render_file = '', $block_name = '' ) {
 	$wrapper_class = '';
 	
-	// Get className from attributes (WordPress automatically includes it when className support is enabled)
-	if ( isset( $attributes['className'] ) && ! empty( $attributes['className'] ) ) {
-		$wrapper_class = $attributes['className'];
-	}
-	// Fallback: try to get from block instance if available (WordPress 5.9+)
-	elseif ( $block_instance instanceof WP_Block && ! empty( $block_instance->parsed_block['attrs']['className'] ) ) {
-		$wrapper_class = $block_instance->parsed_block['attrs']['className'];
+	// Get className from block instance (WordPress 5.9+ standard way)
+	// For frontend rendering, className is available via block_instance->parsed_block['attrs']['className']
+	// For ServerSideRender, className may be in attributes or block instance
+	if ( $block_instance instanceof WP_Block ) {
+		$block_name = $block_instance->name;
+		// Try parsed_block first (most reliable for frontend)
+		if ( ! empty( $block_instance->parsed_block['attrs']['className'] ) ) {
+			$wrapper_class = $block_instance->parsed_block['attrs']['className'];
+		}
 	}
 	
-	// Get block name from instance if not provided
-	if ( empty( $block_name ) && $block_instance instanceof WP_Block ) {
-		$block_name = $block_instance->name;
+	// Fallback: check attributes array (for ServerSideRender compatibility)
+	if ( empty( $wrapper_class ) && isset( $attributes['className'] ) && ! empty( $attributes['className'] ) ) {
+		$wrapper_class = $attributes['className'];
 	}
 	
 	// If render_file not provided, try to determine from block name
