@@ -12,3 +12,22 @@
 	align-items: center;
 	justify-content: center;
 }
+
+/* Improve loading state visibility */
+.wp-block-wp-ulike-button .wp-block-wp-ulike-button > div > div {
+	transition: opacity 0.2s ease-in-out;
+}
+
+/* Fade in animation for loaded content */
+.wp-block-wp-ulike-button[data-loading="false"] > div > div {
+	animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}

@@ -4,7 +4,7 @@
 
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, SelectControl, TextControl, ToggleControl, Spinner } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
 import { useEffect, useState } from '@wordpress/element';
@@ -146,8 +146,29 @@ registerBlockType( metadata.name, {
 						block="wp-ulike/button"
 						attributes={ attributes }
 						LoadingResponsePlaceholder={ () => (
-							<div style={ { padding: '20px', textAlign: 'center', color: '#666' } }>
-								{ __( 'Loading...', 'wp-ulike' ) }
+							<div style={ { 
+								padding: '20px', 
+								textAlign: 'center', 
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								gap: '8px',
+								minHeight: '60px'
+							} }>
+								<Spinner />
+								<span style={ { color: '#757575', fontSize: '13px' } }>
+									{ __( 'Loading preview...', 'wp-ulike' ) }
+								</span>
+							</div>
+						) }
+						ErrorResponsePlaceholder={ () => (
+							<div style={ { 
+								padding: '20px', 
+								textAlign: 'center', 
+								color: '#cc1818',
+								fontSize: '13px'
+							} }>
+								{ __( 'Error loading WP ULike button preview.', 'wp-ulike' ) }
 							</div>
 						) }
 					/>
