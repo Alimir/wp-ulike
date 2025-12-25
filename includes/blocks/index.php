@@ -61,8 +61,9 @@ function wp_ulike_register_blocks() {
 		$render_file = $block_dir . '/render.php';
 		if ( file_exists( $render_file ) ) {
 			// Use a callback that includes the block-specific render file
-			$block_args['render_callback'] = function( $attributes, $content ) use ( $render_file, $block_name ) {
-				return wp_ulike_block_render_callback( $attributes, $content, $render_file, $block_name );
+			// WordPress 5.9+ passes WP_Block instance as third parameter
+			$block_args['render_callback'] = function( $attributes, $content, $block_instance = null ) use ( $render_file, $block_name ) {
+				return wp_ulike_block_render_callback( $attributes, $content, $block_instance, $render_file, $block_name );
 			};
 		}
 
@@ -286,11 +287,28 @@ add_action( 'wp_enqueue_scripts', 'wp_ulike_block_frontend_assets' );
  *
  * @param array $attributes Block attributes
  * @param string $content Block content
- * @param string $render_file Path to the render.php file for this block
- * @param string $block_name The block name (e.g., 'wp-ulike/button')
+ * @param WP_Block|null $block_instance The block instance (WordPress 5.9+)
+ * @param string $render_file Path to the render.php file for this block (optional, auto-detected if not provided)
+ * @param string $block_name The block name (optional, auto-detected if not provided)
  * @return string Rendered block HTML
  */
-function wp_ulike_block_render_callback( $attributes, $content = '', $render_file = '', $block_name = '' ) {
+function wp_ulike_block_render_callback( $attributes, $content = '', $block_instance = null, $render_file = '', $block_name = '' ) {
+	$wrapper_class = '';
+	
+	// Get className from attributes (WordPress automatically includes it when className support is enabled)
+	if ( isset( $attributes['className'] ) && ! empty( $attributes['className'] ) ) {
+		$wrapper_class = $attributes['className'];
+	}
+	// Fallback: try to get from block instance if available (WordPress 5.9+)
+	elseif ( $block_instance instanceof WP_Block && ! empty( $block_instance->parsed_block['attrs']['className'] ) ) {
+		$wrapper_class = $block_instance->parsed_block['attrs']['className'];
+	}
+	
+	// Get block name from instance if not provided
+	if ( empty( $block_name ) && $block_instance instanceof WP_Block ) {
+		$block_name = $block_instance->name;
+	}
+	
 	// If render_file not provided, try to determine from block name
 	if ( empty( $render_file ) && ! empty( $block_name ) ) {
 		// Extract block slug from block name (e.g., 'wp-ulike/button' -> 'button')
@@ -315,7 +333,7 @@ function wp_ulike_block_render_callback( $attributes, $content = '', $render_fil
 		'useCurrentPostId' => isset( $attributes['useCurrentPostId'] ) ? $attributes['useCurrentPostId'] : true,
 		'template'      => isset( $attributes['template'] ) ? $attributes['template'] : '',
 		'buttonType'    => isset( $attributes['buttonType'] ) ? $attributes['buttonType'] : '',
-		'wrapperClass'  => isset( $attributes['wrapperClass'] ) ? $attributes['wrapperClass'] : '',
+		'wrapperClass'  => $wrapper_class, // Use WordPress built-in className from Advanced section
 	);
 
 	// Extract attributes for render.php

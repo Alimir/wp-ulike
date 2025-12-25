@@ -22,8 +22,7 @@ registerBlockType( metadata.name, {
 			itemId,
 			useCurrentPostId,
 			template,
-			buttonType,
-			wrapperClass
+			buttonType
 		} = attributes;
 
 		const [ templates, setTemplates ] = useState( [] );
@@ -219,13 +218,6 @@ registerBlockType( metadata.name, {
 								help={ __( 'Choose whether to display an image icon or text label.', 'wp-ulike' ) }
 							/>
 						) }
-
-						<TextControl
-							label={ __( 'Wrapper Class', 'wp-ulike' ) }
-							value={ wrapperClass }
-							onChange={ ( value ) => setAttributes( { wrapperClass: value } ) }
-							help={ __( 'Add custom CSS classes to the wrapper element.', 'wp-ulike' ) }
-						/>
 					</PanelBody>
 				</InspectorControls>
 

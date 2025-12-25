@@ -31,14 +31,11 @@
 		"buttonType": {
 			"type": "string",
 			"default": ""
-		},
-		"wrapperClass": {
-			"type": "string",
-			"default": ""
 		}
 	},
 	"supports": {
 		"html": false,
-		"align": true
+		"align": true,
+		"className": true
 	}
 }
