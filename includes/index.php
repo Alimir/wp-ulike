@@ -28,3 +28,6 @@ include_once( 'functions/queries.php' );
 include_once( 'hooks/general.php' );
 include_once( 'hooks/shortcodes.php' );
 include_once( 'hooks/third-party.php' );
+
+// Blocks
+include_once( 'blocks/index.php' );
