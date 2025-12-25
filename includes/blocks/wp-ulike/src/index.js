@@ -146,8 +146,8 @@ registerBlockType( metadata.name, {
 						block="wp-ulike/button"
 						attributes={ attributes }
 						LoadingResponsePlaceholder={ () => (
-							<div style={ { padding: '20px', textAlign: 'center' } }>
-								{ __( 'Loading WP ULike button...', 'wp-ulike' ) }
+							<div style={ { padding: '20px', textAlign: 'center', color: '#666' } }>
+								{ __( 'Loading...', 'wp-ulike' ) }
 							</div>
 						) }
 					/>

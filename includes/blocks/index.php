@@ -10,6 +10,21 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
+ * Register custom block category for WP ULike blocks
+ */
+function wp_ulike_block_category( $categories, $editor_context ) {
+	$custom_category = array(
+		'slug'  => 'wp-ulike',
+		'title' => esc_html__( 'WP ULike', 'wp-ulike' ),
+		'icon'  => 'heart',
+	);
+	
+	array_unshift( $categories, $custom_category );
+	return $categories;
+}
+add_filter( 'block_categories_all', 'wp_ulike_block_category', 10, 2 );
+
+/**
  * Register WP ULike Gutenberg Blocks
  */
 function wp_ulike_register_blocks() {

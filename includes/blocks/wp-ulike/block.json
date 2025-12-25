@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "wp-ulike/button",
 	"title": "WP ULike Button",
-	"category": "widgets",
+	"category": "wp-ulike",
 	"icon": "heart",
 	"description": "Add WP ULike voting buttons to your content with customizable templates and settings.",
 	"keywords": [ "like", "ulike", "vote", "rating", "heart", "button" ],
