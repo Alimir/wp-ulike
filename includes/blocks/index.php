@@ -15,8 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 function wp_ulike_block_category( $categories, $editor_context ) {
 	$custom_category = array(
 		'slug'  => 'wp-ulike',
-		'title' => esc_html__( 'WP ULike', 'wp-ulike' ),
-		'icon'  => 'heart',
+		'title' => esc_html__( 'WP ULike', 'wp-ulike' )
 	);
 
 	array_unshift( $categories, $custom_category );
