@@ -4,7 +4,8 @@
 
 import { registerBlockType, getBlockType } from '@wordpress/blocks';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, TextControl, ToggleControl, Spinner, ButtonGroup, Button, Icon } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
+import { PanelBody, SelectControl, TextControl, ToggleControl, Spinner, ButtonGroup, Button, Icon, Notice } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
 import { useEffect, useState } from '@wordpress/element';
@@ -17,7 +18,7 @@ import './editor.css';
 if ( ! getBlockType( metadata.name ) ) {
 	registerBlockType( metadata.name, {
 		...metadata,
-		edit: ( { attributes, setAttributes, isSelected } ) => {
+		edit: ( { attributes, setAttributes, isSelected, clientId } ) => {
 		const blockProps = useBlockProps();
 		const {
 			for: forType,
@@ -31,12 +32,29 @@ if ( ! getBlockType( metadata.name ) ) {
 		const [ defaultTemplateName, setDefaultTemplateName ] = useState( __( 'Use Settings Default', 'wp-ulike' ) );
 		const [ loading, setLoading ] = useState( true );
 
-		// Ensure 'for' attribute is always 'post' (Gutenberg blocks only work in post editors)
-		useEffect( () => {
-			if ( forType !== 'post' ) {
-				setAttributes( { for: 'post' } );
-			}
-		}, [ forType, setAttributes ] );
+		// Check if block is inside a comment-template block (check parent hierarchy)
+		const isInCommentTemplate = useSelect(
+			( select ) => {
+				if ( ! clientId ) {
+					return false;
+				}
+
+				const { getBlockParents, getBlockName } = select( 'core/block-editor' );
+				const parents = getBlockParents( clientId );
+
+				return parents.some(
+					( parentId ) => getBlockName( parentId ) === 'core/comment-template'
+				);
+			},
+			[ clientId ]
+		);
+
+
+		// Item type options (only Post and Comment)
+		const itemTypeOptions = [
+			{ label: __( 'Post', 'wp-ulike' ), value: 'post' },
+			{ label: __( 'Comment', 'wp-ulike' ), value: 'comment' }
+		];
 
 		// Fetch templates from REST API (only once)
 		useEffect( () => {
@@ -100,25 +118,52 @@ if ( ! getBlockType( metadata.name ) ) {
 			<>
 				<InspectorControls>
 					<PanelBody title={ __( 'Settings', 'wp-ulike' ) } initialOpen={ true }>
-						<ToggleControl
-							label={ __( 'Use Current Post ID', 'wp-ulike' ) }
-							checked={ useCurrentPostId }
-							onChange={ ( value ) => setAttributes( { useCurrentPostId: value } ) }
-							help={ __( 'Automatically use the current post/page ID. Disable to set a custom ID.', 'wp-ulike' ) }
+						{ forType === 'comment' && ! isInCommentTemplate && (
+							<div style={ { marginBottom: '20px' } }>
+								<Notice
+									status="info"
+									isDismissible={ false }
+									className="wp-ulike-comment-context-notice"
+								>
+									{ __( 'Comment buttons work best when placed inside a Comment Template block. They will automatically use the current comment ID.', 'wp-ulike' ) }
+								</Notice>
+							</div>
+						) }
+
+						<SelectControl
+							label={ __( 'Item Type', 'wp-ulike' ) }
+							value={ forType }
+							options={ itemTypeOptions }
+							onChange={ ( value ) => setAttributes( { for: value } ) }
+							help={ __( 'Select the type of content to add interactive like/dislike buttons to.', 'wp-ulike' ) }
+							__next40pxDefaultSize={ true }
 							__nextHasNoMarginBottom={ true }
 						/>
 
-						{ ! useCurrentPostId && (
-							<TextControl
-								label={ __( 'Custom Post ID', 'wp-ulike' ) }
-								value={ itemId }
-								onChange={ ( value ) => setAttributes( { itemId: value } ) }
-								help={ __( 'Enter a specific post ID to like. Leave empty to use the current post ID.', 'wp-ulike' ) }
-								type="number"
-								__next40pxDefaultSize={ true }
-								__nextHasNoMarginBottom={ true }
-							/>
-						) }
+						<ToggleControl
+							label={ __( 'Use Current Item ID', 'wp-ulike' ) }
+							checked={ useCurrentPostId }
+							onChange={ ( value ) => setAttributes( { useCurrentPostId: value } ) }
+							help={ useCurrentPostId 
+								? __( 'Automatically uses the current post or comment ID. You can optionally add a custom ID below to combine with it.', 'wp-ulike' )
+								: __( 'Disable to use a custom item ID instead of the current one.', 'wp-ulike' )
+							}
+							__nextHasNoMarginBottom={ true }
+						/>
+
+						<TextControl
+							label={ __( 'Custom Item ID', 'wp-ulike' ) }
+							value={ itemId }
+							onChange={ ( value ) => setAttributes( { itemId: value } ) }
+							help={ useCurrentPostId 
+								? __( 'Optional: Enter a number to combine with the current item ID. Example: If current ID is 42 and you enter 100, the final ID will be 42100. Useful for creating multiple interactive buttons on the same post. Note: Custom combined IDs will not appear in statistics/insights.', 'wp-ulike' )
+								: __( 'Enter a specific item ID to use. Leave empty to automatically detect the current item ID. Note: Custom IDs will not appear in statistics/insights.', 'wp-ulike' )
+							}
+							type="number"
+							placeholder={ useCurrentPostId ? __( 'Leave empty or enter number to combine', 'wp-ulike' ) : __( 'Enter item ID', 'wp-ulike' ) }
+							__next40pxDefaultSize={ true }
+							__nextHasNoMarginBottom={ true }
+						/>
 
 						<div className="wp-ulike-template-selector" style={ { marginBottom: '15px'} }>
 							<label className="components-base-control__label" style={ { marginBottom: '8px', display: 'block' } }>

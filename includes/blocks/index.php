@@ -85,9 +85,9 @@ function wp_ulike_register_blocks() {
 		$render_file = $block_dir . '/render.php';
 
 		if ( file_exists( $render_file ) ) {
-			$block_args['render_callback'] = function( $attributes, $content, $block_instance = null ) use ( $render_file, $block_name ) {
-				return wp_ulike_block_render_callback( $attributes, $content, $block_instance, $render_file, $block_name );
-			};
+		$block_args['render_callback'] = function( $attributes, $content, $block = null ) use ( $render_file, $block_name ) {
+			return wp_ulike_block_render_callback( $attributes, $content, $block, $render_file, $block_name );
+		};
 		}
 
 		register_block_type( $block_dir, $block_args );
@@ -241,7 +241,7 @@ function wp_ulike_block_enqueue_frontend_scripts() {
  */
 function wp_ulike_block_assets() {
 	// Only load in editor iframe, not frontend (frontend handled by class-wp-ulike-frontend-assets)
-	$is_editor = is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST );
+	$is_editor = is_admin() || WpUlikeInit::is_rest();
 
 	if ( $is_editor ) {
 		wp_ulike_block_enqueue_frontend_styles();
@@ -324,13 +324,13 @@ add_action( 'wp_enqueue_scripts', 'wp_ulike_block_frontend_assets' );
 /**
  * Block render callback
  */
-function wp_ulike_block_render_callback( $attributes, $content = '', $block_instance = null, $render_file = '', $block_name = '' ) {
+function wp_ulike_block_render_callback( $attributes, $content = '', $block = null, $render_file = '', $block_name = '' ) {
 	$wrapper_class = '';
 
-	if ( $block_instance instanceof WP_Block ) {
-		$block_name = $block_instance->name;
-		if ( ! empty( $block_instance->parsed_block['attrs']['className'] ) ) {
-			$wrapper_class = $block_instance->parsed_block['attrs']['className'];
+	if ( $block instanceof WP_Block ) {
+		$block_name = $block->name;
+		if ( ! empty( $block->parsed_block['attrs']['className'] ) ) {
+			$wrapper_class = $block->parsed_block['attrs']['className'];
 		}
 	}
 
@@ -358,6 +358,7 @@ function wp_ulike_block_render_callback( $attributes, $content = '', $block_inst
 		'template'      => isset( $attributes['template'] ) ? $attributes['template'] : '',
 		'buttonType'    => isset( $attributes['buttonType'] ) ? $attributes['buttonType'] : '',
 		'wrapperClass'  => $wrapper_class,
+		'block' => $block, // Pass block for context access (WordPress standard parameter name)
 	);
 
 	// Extract attributes for render.php

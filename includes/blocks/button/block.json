@@ -1,6 +1,6 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "wp-ulike/button",
 	"title": "WP ULike Button",
 	"category": "wp-ulike",
@@ -36,5 +36,6 @@
 		"html": false,
 		"align": true,
 		"className": true
-	}
+	},
+	"usesContext": [ "postId", "commentId" ]
 }
