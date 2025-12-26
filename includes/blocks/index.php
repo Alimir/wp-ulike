@@ -57,11 +57,8 @@ function wp_ulike_register_blocks() {
 		$block_data = json_decode( file_get_contents( $block_json ), true );
 		$block_name = isset( $block_data['name'] ) ? $block_data['name'] : '';
 
-		// Check if render.php exists - use generic callback that handles different blocks
 		$render_file = $block_dir . '/render.php';
 		if ( file_exists( $render_file ) ) {
-			// Use a callback that includes the block-specific render file
-			// WordPress 5.9+ passes WP_Block instance as third parameter
 			$block_args['render_callback'] = function( $attributes, $content, $block_instance = null ) use ( $render_file, $block_name ) {
 				return wp_ulike_block_render_callback( $attributes, $content, $block_instance, $render_file, $block_name );
 			};
@@ -74,110 +71,89 @@ function wp_ulike_register_blocks() {
 add_action( 'init', 'wp_ulike_register_blocks' );
 
 /**
- * Enqueue WP ULike frontend styles (for block editor preview and frontend)
- * Always loads free version CSS, and Pro CSS if Pro version exists
+ * Enqueue WP ULike frontend styles
+ * Only enqueues if not already enqueued by class-wp-ulike-frontend-assets
  */
 function wp_ulike_block_enqueue_frontend_styles() {
-	// Always enqueue free version CSS first (Pro depends on it)
-	if ( ! wp_style_is( WP_ULIKE_SLUG, 'enqueued' ) && ! wp_style_is( WP_ULIKE_SLUG, 'registered' ) ) {
-		// Determine which CSS file to use (minified in production, regular in dev)
-		$css_file = WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css';
-		if ( file_exists( WP_ULIKE_ASSETS_DIR . '/css/wp-ulike.min.css' ) && ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
-			$css_file = WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css';
-		}
+	// Check if already enqueued by main class
+	if ( wp_style_is( WP_ULIKE_SLUG, 'enqueued' ) || wp_style_is( WP_ULIKE_SLUG, 'registered' ) ) {
+		return;
+	}
 
-		wp_enqueue_style( WP_ULIKE_SLUG, $css_file, array(), WP_ULIKE_VERSION );
-
-		// Load custom CSS if needed
-		if ( function_exists( 'wp_ulike_get_custom_style' ) ) {
-			$custom_css = wp_ulike_get_custom_style();
-			if ( ! empty( $custom_css ) ) {
-				wp_add_inline_style( WP_ULIKE_SLUG, $custom_css );
-			}
-		}
+	// Use existing class method to load styles
+	if ( class_exists( 'wp_ulike_frontend_assets' ) ) {
+		$assets = new wp_ulike_frontend_assets();
+		$assets->load_styles();
 	}
 
 	// Enqueue Pro version CSS if Pro exists
 	if ( defined( 'WP_ULIKE_PRO_VERSION' ) && defined( 'WP_ULIKE_PRO_PUBLIC_URL' ) && defined( 'WP_ULIKE_PRO_DOMAIN' ) ) {
 		if ( ! wp_style_is( WP_ULIKE_PRO_DOMAIN, 'enqueued' ) && ! wp_style_is( WP_ULIKE_PRO_DOMAIN, 'registered' ) ) {
-			// Determine which CSS file to use (minified in production, regular in dev)
-			$pro_css_file = WP_ULIKE_PRO_PUBLIC_URL . '/assets/css/wp-ulike-pro.css';
-			if ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
-				$pro_css_file = WP_ULIKE_PRO_PUBLIC_URL . '/assets/css/wp-ulike-pro.min.css';
-			}
-
-			// Pro CSS depends on free version CSS
-			wp_enqueue_style( WP_ULIKE_PRO_DOMAIN, $pro_css_file, array( WP_ULIKE_SLUG ), WP_ULIKE_PRO_VERSION );
+			wp_enqueue_style( WP_ULIKE_PRO_DOMAIN, WP_ULIKE_PRO_PUBLIC_URL . '/assets/css/wp-ulike-pro.min.css', array( WP_ULIKE_SLUG ), WP_ULIKE_PRO_VERSION );
 		}
 	}
 }
 
 /**
- * Enqueue WP ULike frontend JavaScript (for block editor preview and frontend)
- * Loads Pro JS if Pro exists, otherwise loads free JS
+ * Enqueue WP ULike frontend JavaScript
+ * Only enqueues if not already enqueued by class-wp-ulike-frontend-assets
  */
 function wp_ulike_block_enqueue_frontend_scripts() {
-	// Enqueue Pro version JavaScript if Pro exists (Pro replaces free JS)
-	if ( defined( 'WP_ULIKE_PRO_VERSION' ) && defined( 'WP_ULIKE_PRO_PUBLIC_URL' ) && defined( 'WP_ULIKE_PRO_DOMAIN' ) ) {
-		// Only load Pro JS if version is >= 1.5.3 (older versions don't handle this properly)
-		if ( version_compare( WP_ULIKE_PRO_VERSION, '1.5.3', '>=' ) ) {
-			if ( ! wp_script_is( WP_ULIKE_PRO_DOMAIN, 'enqueued' ) && ! wp_script_is( WP_ULIKE_PRO_DOMAIN, 'registered' ) ) {
-				// Determine which JS file to use (minified in production, regular in dev)
-				$pro_js_file = WP_ULIKE_PRO_PUBLIC_URL . '/assets/js/wp-ulike-pro.js';
-				if ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
-					$pro_js_file = WP_ULIKE_PRO_PUBLIC_URL . '/assets/js/wp-ulike-pro.min.js';
-				}
+	// Check if already enqueued by main class
+	if ( wp_script_is( 'wp_ulike', 'enqueued' ) || wp_script_is( 'wp_ulike', 'registered' ) ) {
+		return;
+	}
 
-				wp_enqueue_script( WP_ULIKE_PRO_DOMAIN, $pro_js_file, array(), WP_ULIKE_PRO_VERSION, true );
+	wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array(), WP_ULIKE_VERSION, true );
 
-				// Localize Pro script (similar to how Pro class does it)
-				if ( function_exists( 'wp_ulike_get_option' ) ) {
-					// Get view tracking enabled types
-					$view_tracking_enabled = wp_ulike_get_option( 'view_tracking_enabled_types', array( 'post' ) );
-					if ( empty( $view_tracking_enabled ) || ! is_array( $view_tracking_enabled ) ) {
-						$view_tracking_enabled = array( 'post' );
+	wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
+		'ajax_url'      => admin_url( 'admin-ajax.php' ),
+		'notifications' => true
+	) );
+
+	// Ensure initialization runs in iframe - trigger after script loads
+	wp_add_inline_script( 'wp_ulike', '
+		(function() {
+			function ensureUlikeInit() {
+				if (typeof WordpressUlike !== "undefined" && document.body) {
+					var elements = document.querySelectorAll(".wpulike:not([data-ulike-initialized])");
+					if (elements.length > 0) {
+						elements.forEach(function(el) {
+							try {
+								new WordpressUlike(el);
+								el.setAttribute("data-ulike-initialized", "true");
+							} catch(e) {}
+						});
 					}
-
-					$localize_args = array(
-						'AjaxUrl' => admin_url( 'admin-ajax.php' ),
-						'Nonce'   => wp_create_nonce( WP_ULIKE_PRO_DOMAIN ),
-						'TabSide' => wp_ulike_get_option( 'user_profiles_appearance|tabs_side', 'top' ),
-						'ViewTracking' => array(
-							'enabledTypes' => $view_tracking_enabled
-						)
-					);
-
-					wp_localize_script( WP_ULIKE_PRO_DOMAIN, 'UlikeProCommonConfig', $localize_args );
 				}
 			}
-			// Pro JS handles everything, so return early
-			return;
-		}
-	}
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", ensureUlikeInit);
+			} else {
+				setTimeout(ensureUlikeInit, 100);
+			}
+			setInterval(ensureUlikeInit, 500);
+		})();
+	', 'after' );
+}
 
-	// Load free version JavaScript if Pro doesn't exist or is older version
-	if ( ! wp_script_is( 'wp_ulike', 'enqueued' ) && ! wp_script_is( 'wp_ulike', 'registered' ) ) {
-		// Determine which JS file to use (minified in production, regular in dev)
-		$js_file = WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js';
-		if ( file_exists( WP_ULIKE_ASSETS_DIR . '/js/wp-ulike.min.js' ) && ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
-			$js_file = WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js';
-		}
+/**
+ * Enqueue block assets for editor iframe (WordPress 6.3+)
+ * Only loads if not already loaded by class-wp-ulike-frontend-assets
+ */
+function wp_ulike_block_assets() {
+	// Only load in editor iframe, not frontend (frontend handled by class-wp-ulike-frontend-assets)
+	$is_editor = is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST );
 
-		wp_enqueue_script( 'wp_ulike', $js_file, array(), WP_ULIKE_VERSION, true );
-
-		// Localize script
-		if ( function_exists( 'wp_ulike_get_option' ) ) {
-			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
-				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'notifications' => wp_ulike_get_option( 'enable_toast_notice' )
-			) );
-		}
+	if ( $is_editor ) {
+		wp_ulike_block_enqueue_frontend_styles();
+		wp_ulike_block_enqueue_frontend_scripts();
 	}
 }
+add_action( 'enqueue_block_assets', 'wp_ulike_block_assets' );
 
 /**
  * Enqueue block editor assets
- * Automatically enqueues assets for all registered blocks
  */
 function wp_ulike_block_editor_assets() {
 	$blocks_dir = WP_ULIKE_INC_DIR . '/blocks';
@@ -185,14 +161,6 @@ function wp_ulike_block_editor_assets() {
 	if ( ! is_dir( $blocks_dir ) ) {
 		return;
 	}
-
-	// This hook only fires in block editor context, so no additional check needed
-
-	// Enqueue WP ULike frontend styles and scripts for block preview
-	wp_ulike_block_enqueue_frontend_styles();
-	wp_ulike_block_enqueue_frontend_scripts();
-
-	// Scan blocks directory and enqueue assets for each block
 	$block_dirs = glob( $blocks_dir . '/*', GLOB_ONLYDIR );
 
 	foreach ( $block_dirs as $block_dir ) {
@@ -202,17 +170,14 @@ function wp_ulike_block_editor_assets() {
 			continue;
 		}
 
-		// Get block name for unique script/style handles
 		$block_data = json_decode( file_get_contents( $block_json ), true );
 		$block_name = isset( $block_data['name'] ) ? $block_data['name'] : '';
-		$block_slug = str_replace( array( 'wp-ulike/', '/' ), array( '', '-' ), $block_name );
-		$block_slug = sanitize_key( $block_slug );
+		$block_slug = sanitize_key( str_replace( array( 'wp-ulike/', '/' ), array( '', '-' ), $block_name ) );
 
 		$asset_file = $block_dir . '/build/index.asset.php';
 		$js_file    = $block_dir . '/build/index.js';
 
 		if ( file_exists( $asset_file ) && file_exists( $js_file ) ) {
-			// Use asset file if it exists (generated by @wordpress/scripts)
 			$asset = require $asset_file;
 			$script_handle = 'wp-ulike-block-' . $block_slug . '-editor';
 			$block_url = WP_ULIKE_INC_URL . '/blocks/' . basename( $block_dir );
@@ -225,7 +190,6 @@ function wp_ulike_block_editor_assets() {
 				true
 			);
 
-			// Enqueue editor CSS from build directory if it exists
 			$editor_css = $block_dir . '/build/index.css';
 			if ( file_exists( $editor_css ) ) {
 				wp_enqueue_style(
@@ -237,22 +201,23 @@ function wp_ulike_block_editor_assets() {
 			}
 		}
 	}
-	// Styles are also handled by block.json referencing build/index.css
 }
 add_action( 'enqueue_block_editor_assets', 'wp_ulike_block_editor_assets' );
 
 /**
- * Enqueue frontend assets when any WP ULike block is used
+ * Enqueue frontend assets when block is used (fallback if main class doesn't load)
  */
 function wp_ulike_block_frontend_assets() {
-	// Get all registered WP ULike blocks and check if any are used on the page
-	$blocks_dir = WP_ULIKE_INC_DIR . '/blocks';
+	// Only load if main class hasn't already loaded assets
+	if ( wp_script_is( 'wp_ulike', 'enqueued' ) || ( defined( 'WP_ULIKE_PRO_DOMAIN' ) && wp_script_is( WP_ULIKE_PRO_DOMAIN, 'enqueued' ) ) ) {
+		return;
+	}
 
+	$blocks_dir = WP_ULIKE_INC_DIR . '/blocks';
 	if ( ! is_dir( $blocks_dir ) ) {
 		return;
 	}
 
-	// Scan for all blocks
 	$block_dirs = glob( $blocks_dir . '/*', GLOB_ONLYDIR );
 	$block_names = array();
 
@@ -266,59 +231,38 @@ function wp_ulike_block_frontend_assets() {
 		}
 	}
 
-	// Check if any WP ULike block is used on the page
-	$has_wp_ulike_block = false;
 	foreach ( $block_names as $block_name ) {
 		if ( has_block( $block_name ) ) {
-			$has_wp_ulike_block = true;
+			wp_ulike_block_enqueue_frontend_styles();
+			wp_ulike_block_enqueue_frontend_scripts();
 			break;
 		}
-	}
-
-	if ( $has_wp_ulike_block ) {
-		wp_ulike_block_enqueue_frontend_styles();
-		wp_ulike_block_enqueue_frontend_scripts();
 	}
 }
 add_action( 'wp_enqueue_scripts', 'wp_ulike_block_frontend_assets' );
 
 /**
- * Block render callback (generic - works for all blocks)
- *
- * @param array $attributes Block attributes
- * @param string $content Block content
- * @param WP_Block|null $block_instance The block instance (WordPress 5.9+)
- * @param string $render_file Path to the render.php file for this block (optional, auto-detected if not provided)
- * @param string $block_name The block name (optional, auto-detected if not provided)
- * @return string Rendered block HTML
+ * Block render callback
  */
 function wp_ulike_block_render_callback( $attributes, $content = '', $block_instance = null, $render_file = '', $block_name = '' ) {
 	$wrapper_class = '';
-	
-	// Get className from block instance (WordPress 5.9+ standard way)
-	// For frontend rendering, className is available via block_instance->parsed_block['attrs']['className']
-	// For ServerSideRender, className may be in attributes or block instance
+
 	if ( $block_instance instanceof WP_Block ) {
 		$block_name = $block_instance->name;
-		// Try parsed_block first (most reliable for frontend)
 		if ( ! empty( $block_instance->parsed_block['attrs']['className'] ) ) {
 			$wrapper_class = $block_instance->parsed_block['attrs']['className'];
 		}
 	}
-	
-	// Fallback: check attributes array (for ServerSideRender compatibility)
+
 	if ( empty( $wrapper_class ) && isset( $attributes['className'] ) && ! empty( $attributes['className'] ) ) {
 		$wrapper_class = $attributes['className'];
 	}
-	
-	// If render_file not provided, try to determine from block name
+
 	if ( empty( $render_file ) && ! empty( $block_name ) ) {
-		// Extract block slug from block name (e.g., 'wp-ulike/button' -> 'button')
 		$block_slug = str_replace( 'wp-ulike/', '', $block_name );
 		$render_file = WP_ULIKE_INC_DIR . '/blocks/' . $block_slug . '/render.php';
 	}
 
-	// Final fallback to the button block (for backward compatibility)
 	if ( empty( $render_file ) || ! file_exists( $render_file ) ) {
 		$render_file = WP_ULIKE_INC_DIR . '/blocks/button/render.php';
 	}
@@ -327,15 +271,13 @@ function wp_ulike_block_render_callback( $attributes, $content = '', $block_inst
 		return '';
 	}
 
-	// Map camelCase attributes to the format expected by render.php
-	// Each block's render.php can expect different attributes
 	$render_attributes = array(
 		'for'           => isset( $attributes['for'] ) ? $attributes['for'] : 'post',
 		'itemId'        => isset( $attributes['itemId'] ) ? $attributes['itemId'] : '',
 		'useCurrentPostId' => isset( $attributes['useCurrentPostId'] ) ? $attributes['useCurrentPostId'] : true,
 		'template'      => isset( $attributes['template'] ) ? $attributes['template'] : '',
 		'buttonType'    => isset( $attributes['buttonType'] ) ? $attributes['buttonType'] : '',
-		'wrapperClass'  => $wrapper_class, // Use WordPress built-in className from Advanced section
+		'wrapperClass'  => $wrapper_class,
 	);
 
 	// Extract attributes for render.php

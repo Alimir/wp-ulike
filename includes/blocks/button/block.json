@@ -10,7 +10,6 @@
 	"textdomain": "wp-ulike",
 	"editorScript": "file:./build/index.js",
 	"editorStyle": "file:./build/index.css",
-	"style": "file:./build/style-index.css",
 	"attributes": {
 		"for": {
 			"type": "string",
