@@ -152,7 +152,7 @@ That's literally it. Once activated, Like buttons appear on your posts immediate
 
 3. **Top Trends & Insights** – Discover your top-performing content with visual breakdowns. Make data-driven decisions.
 
-4. **Elementor Widgets / Customizer Panel** – Drag and drop widgets for Elementor pages, or fine-tune every aspect with flexible options.
+4. **User Profiles** – Instagram-inspired user profiles that turn engaged visitors into community members. [PRO]
 
 == Frequently Asked Questions ==
 
