@@ -59,15 +59,15 @@ if ( ! getBlockType( metadata.name ) ) {
 		// Fetch templates from REST API (only once)
 		useEffect( () => {
 			let isMounted = true;
-			
+
 			const fetchTemplates = async () => {
 				try {
 					const response = await apiFetch( {
 						path: '/wp-ulike/v1/templates'
 					} );
-					
+
 					if ( ! isMounted ) return;
-					
+
 					if ( response && response.templates && Array.isArray( response.templates ) ) {
 						setTemplates( response.templates );
 						if ( response.default_template_name ) {
@@ -89,7 +89,7 @@ if ( ! getBlockType( metadata.name ) ) {
 			};
 
 			fetchTemplates();
-			
+
 			return () => {
 				isMounted = false;
 			};
@@ -144,7 +144,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							label={ __( 'Use Current Item ID', 'wp-ulike' ) }
 							checked={ useCurrentPostId }
 							onChange={ ( value ) => setAttributes( { useCurrentPostId: value } ) }
-							help={ useCurrentPostId 
+							help={ useCurrentPostId
 								? __( 'Automatically uses the current post or comment ID. You can optionally add a custom ID below to combine with it.', 'wp-ulike' )
 								: __( 'Disable to use a custom item ID instead of the current one.', 'wp-ulike' )
 							}
@@ -155,7 +155,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							label={ __( 'Custom Item ID', 'wp-ulike' ) }
 							value={ itemId }
 							onChange={ ( value ) => setAttributes( { itemId: value } ) }
-							help={ useCurrentPostId 
+							help={ useCurrentPostId
 								? __( 'Optional: Enter a number to combine with the current item ID. Example: If current ID is 42 and you enter 100, the final ID will be 42100. Useful for creating multiple interactive buttons on the same post. Note: Custom combined IDs will not appear in statistics/insights.', 'wp-ulike' )
 								: __( 'Enter a specific item ID to use. Leave empty to automatically detect the current item ID. Note: Custom IDs will not appear in statistics/insights.', 'wp-ulike' )
 							}
