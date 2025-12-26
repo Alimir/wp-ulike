@@ -2,7 +2,7 @@
  * WP ULike Block - Main Editor Script
  */
 
-import { registerBlockType } from '@wordpress/blocks';
+import { registerBlockType, getBlockType } from '@wordpress/blocks';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl, ToggleControl, Spinner, ButtonGroup, Button, Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -13,9 +13,11 @@ import apiFetch from '@wordpress/api-fetch';
 import metadata from '../block.json';
 import './editor.css';
 
-registerBlockType( metadata.name, {
-	...metadata,
-	edit: ( { attributes, setAttributes, isSelected } ) => {
+// Check if block is already registered to prevent duplicate registration
+if ( ! getBlockType( metadata.name ) ) {
+	registerBlockType( metadata.name, {
+		...metadata,
+		edit: ( { attributes, setAttributes, isSelected } ) => {
 		const blockProps = useBlockProps();
 		const {
 			for: forType,
@@ -97,6 +99,8 @@ registerBlockType( metadata.name, {
 							] }
 							onChange={ ( value ) => setAttributes( { for: value } ) }
 							help={ __( 'Select the type of content this button will like.', 'wp-ulike' ) }
+							__next40pxDefaultSize={ true }
+							__nextHasNoMarginBottom={ true }
 						/>
 
 						<ToggleControl
@@ -104,6 +108,7 @@ registerBlockType( metadata.name, {
 							checked={ useCurrentPostId }
 							onChange={ ( value ) => setAttributes( { useCurrentPostId: value } ) }
 							help={ __( 'Automatically use the current post/page ID. Disable to set a custom ID.', 'wp-ulike' ) }
+							__nextHasNoMarginBottom={ true }
 						/>
 
 						{ ! useCurrentPostId && (
@@ -113,6 +118,8 @@ registerBlockType( metadata.name, {
 								onChange={ ( value ) => setAttributes( { itemId: value } ) }
 								help={ __( 'Enter a specific post, comment, or item ID to like.', 'wp-ulike' ) }
 								type="number"
+								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom={ true }
 							/>
 						) }
 
@@ -213,6 +220,8 @@ registerBlockType( metadata.name, {
 								options={ buttonTypeOptions }
 								onChange={ ( value ) => setAttributes( { buttonType: value } ) }
 								help={ __( 'Choose whether to display an image icon or text label.', 'wp-ulike' ) }
+								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom={ true }
 							/>
 						) }
 					</PanelBody>
@@ -258,4 +267,5 @@ registerBlockType( metadata.name, {
 		// Save is handled server-side via render.php
 		return null;
 	}
-} );
+	} );
+}
