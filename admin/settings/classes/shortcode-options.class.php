@@ -254,9 +254,11 @@ if ( ! class_exists( 'ULF_Shortcoder' ) ) {
     // Once editor setup for gutenberg and media buttons
     public static function once_editor_setup() {
 
-      if ( function_exists( 'register_block_type' ) ) {
-        add_action( 'enqueue_block_editor_assets', array( 'ULF_Shortcoder', 'add_guteberg_blocks' ) );
-      }
+      // Disabled: Gutenberg blocks registration (using modern block implementation instead)
+      // The old block registration was causing iframe issues and conflicts with new blocks
+      // if ( function_exists( 'register_block_type' ) ) {
+      //   add_action( 'enqueue_block_editor_assets', array( 'ULF_Shortcoder', 'add_guteberg_blocks' ) );
+      // }
 
       if ( ulf_wp_editor_api() ) {
         add_action( 'media_buttons', array( 'ULF_Shortcoder', 'add_media_buttons' ) );
