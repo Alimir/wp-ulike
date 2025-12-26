@@ -1,4 +1,4 @@
-=== WP ULike - Turn Visitors into Engaged Fans ===
+=== WP ULike - Engagement Analytics & Interactive Buttons to Understand Your Audience ===
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
@@ -10,106 +10,113 @@ Stable tag: 4.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Add Like buttons to your content and discover what your audience loves with real-time analytics. Turn visitors into engaged fans.
+Like & Dislike buttons with real-time analytics. Track engagement and understand what your audience loves across posts, products, and comments.
 
 == Description ==
 
-**Turn Visitors into Engaged Fans!**
+**Know What Your Audience Actually Wants**
 
-We built WP ULike because we know how frustrating it can be when visitors browse your site but don't engage. You create amazing content, but how do you know what resonates? That's where we come in.
+You're creating great content, but you're flying blind. Sound familiar? You don't know which posts hit, which products people love, or what's actually resonating with your visitors. Comments are great, but most people don't comment. They just consume and move on.
 
-WP ULike helps you understand your audience by making engagement effortless. With one simple click, visitors can show their appreciation, and you get valuable insights into what content drives real engagement. It's not just about likes—it's about building a community that tells you what they want more of.
+[WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) fixes that. Get instant feedback on what your audience loves. No registration, no friction, no barriers. Just one click tells you exactly what's working.
+
+**Here's How It Works:**
+
+Activate the plugin, and Like buttons automatically appear on your posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Zero setup. Zero configuration. It just works.
+
+Every interaction gets tracked in real-time. You'll see which content gets the most love, when people engage, and how engagement trends over time. No more guessing—you'll know exactly what your audience wants more of.
+
+The analytics dashboard shows you the full picture: your top-performing content, voting statistics, engagement trends, and detailed logs. It's like having a focus group that never stops giving you feedback.
+
+And here's what we're proud of: it's all privacy-safe. GDPR compliant with IP anonymization. We don't store personal data—just the engagement metrics that help you make better decisions.
+
+**The Three Things That Matter:**
+
+**Instant Engagement** – Interactive buttons that work everywhere. No barriers, no registration required (though you can restrict to logged-in users if needed). Just pure, simple engagement.
+
+**Real Insights** – A dashboard that shows you what's actually working. Not vanity metrics—real data about what content drives engagement.
+
+**Privacy First** – Built with privacy in mind from day one. We respect your visitors because that's the right thing to do.
 
 [youtube https://www.youtube.com/watch?v=nxQto2Yj_yc]
 
-**Who Is This For?**
+**Who Actually Uses This?**
 
-Whether you're running a blog, an online store, a community forum, or a content site, WP ULike helps you:
+We've been doing this for years, and we've seen who gets the most value:
 
-* **Content Creators & Bloggers** – Discover which posts your readers love most and create more of what works
-* **WooCommerce Store Owners** – See which products get the most appreciation and understand customer preferences
-* **Community Managers** – Track engagement across BuddyPress activities and bbPress topics to foster better discussions
-* **Business Owners** – Get instant feedback on your content without waiting for comments or complex surveys
-* **Marketers** – Make data-driven decisions about your content strategy with real engagement metrics
+**Bloggers and content creators** – Stop writing in the dark. See which posts actually resonate.
 
-**What Problems Does WP ULike Solve?**
+**WooCommerce store owners** – Understand customer preferences. See which products get appreciation, not just views.
 
-We've talked to thousands of website owners, and here are the challenges we help you overcome:
+**Community managers** – Track engagement across BuddyPress and bbPress forums to foster better discussions.
 
-**Low User Engagement** – Visitors can quickly show appreciation with one click, increasing interaction and time spent on your site. No barriers, no friction—just instant engagement.
+**Business owners** – Get instant feedback without waiting for comments or running surveys.
 
-**No Content Insights** – Track which content performs best with detailed statistics and analytics. Stop guessing what works and start knowing what your audience loves.
+**Marketers** – Make decisions based on data, not hunches. Get real engagement metrics.
 
-**Limited User Feedback** – Get instant feedback from your audience without requiring comments or complex forms. Sometimes a simple like says everything.
+**The Problems We Actually Solve**
 
-**Slow Website Performance** – Built with vanilla JavaScript (no jQuery), optimized for speed and fully compatible with caching plugins. Your site stays fast, your users stay happy.
+**Low engagement?** We fix that. Interactive buttons with zero friction. No registration required—visitors just click and go.
 
-**Privacy Concerns** – GDPR compliant with IP anonymization. No personal data stored, respecting user privacy while still providing valuable insights.
+**Flying blind on what works?** Not anymore. See exactly which posts, products, or activities perform best. Real statistics, real-time data.
 
-**Content Type Limitations** – Works seamlessly with posts, comments, WooCommerce products, BuddyPress activities, bbPress topics, and more. One plugin, unlimited possibilities.
+**Privacy concerns?** We get it. GDPR compliant with IP anonymization. No personal data stored—just the metrics you need.
 
-**Everything You Need to Succeed (Free Version)**
+**Worried about speed?** Don't be. Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin.
 
-The free version of WP ULike gives you everything you need to start building engagement today. We believe in providing real value, not just a teaser:
+**Need it to work everywhere?** It does. Posts, comments, WooCommerce products, BuddyPress activities, bbPress topics—one plugin handles it all.
 
-✨ **Like Buttons** – Add Like buttons to posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Your visitors can engage with any content type you have.
+**What You Get (Free Version)**
 
-📊 **Real-Time Statistics Dashboard** – Track engagement with detailed analytics and see your most popular content. Know what's working and what's not, in real-time.
+We believe in giving you real value, not a teaser. The free version includes everything you need to build engagement and understand your audience:
 
-🎨 **Customizable Templates** – Multiple button styles to match your website design perfectly. Make it yours without writing a single line of code.
+**Like Buttons Everywhere** – Auto-display on posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Or drop them anywhere with the `[wp_ulike]` shortcode. Your choice.
 
-⚡ **Fast & Lightweight** – Vanilla JavaScript (no jQuery), optimized for speed and performance. Your site stays fast, your users stay engaged.
+**Analytics That Matter** – A real-time dashboard showing your most popular content, voting statistics, engagement trends, and detailed logs. This isn't fluff—it's actionable data.
 
-🔒 **GDPR Ready** – IP anonymization, no personal data stored. We respect privacy because we know it matters to you and your visitors.
+**Templates You Can Customize** – Multiple button styles that actually look good. Match your site's design, customize colors and text, all through the settings panel. No coding required.
 
-📱 **Full RTL Support** – Complete right-to-left language support for Arabic, Hebrew, and other RTL languages. Everyone deserves a great experience.
+**Built for Speed** – Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin. Your site won't slow down.
 
-🔌 **Seamless Integrations** – Works beautifully with WooCommerce, BuddyPress, bbPress, Elementor, myCRED, and more. It just works, no matter your setup.
+**Accessibility & RTL Support** – Full RTL support for Arabic, Hebrew, and other right-to-left languages. We built this right.
 
-🎯 **Zero Configuration** – No coding required, works out of the box. Install, activate, and start engaging your audience in seconds.
+**The Extras:** Gutenberg block support, shortcodes, auto-display options, and seamless integrations with WooCommerce, BuddyPress, bbPress, Elementor, myCRED, and more. It just works.
 
-📈 **Auto Display & Shortcodes** – Automatically adds buttons to your content, or use shortcodes for manual placement. You're in complete control.
+**Why 80,000+ Sites Use This**
 
-**Why 80,000+ Websites Trust WP ULike**
+We're not a faceless corporation. We're a team that actually cares about your success.
 
-We're not just another plugin—we're a team that cares about your success:
+Every feature we build comes from real user feedback. You ask, we listen, we build. That's how we've grown from a simple idea to powering over 80,000 websites.
 
-* **We Listen** – Every feature we build comes from real user feedback. Your challenges become our priorities.
-* **We Perform** – Built for speed, tested with all major caching plugins. Your site's performance is our performance.
-* **We Protect** – Security and privacy aren't afterthoughts—they're built into everything we do.
-* **We Improve** – Regular updates with new features and improvements. We're always making it better.
+We test everything with major caching plugins because your site's performance matters. We built this to be fast, and we keep it that way.
 
-**WP ULike Pro – When You're Ready to Go Further**
+Security and privacy aren't afterthoughts—they're built into everything we do. We follow WordPress best practices because your site's security matters.
 
-The free version gives you everything you need to build engagement and understand your audience. It's complete, powerful, and ready to use right now.
+And we keep improving. Regular updates, new features, bug fixes. We're in this for the long haul, and we're committed to making this better every single day.
 
-When you're ready to take your engagement to the next level, WP ULike Pro extends your capabilities with professional-grade features designed for growing businesses and serious content creators:
+**WP ULike Pro – When You're Ready to Scale**
 
-👍 **Dislike Buttons** – Add Dislike buttons alongside Like buttons to get more nuanced feedback from your audience. Understand what content doesn't resonate, not just what does.
+The free version gets you started. It's complete, powerful, and ready to use right now. But when you're ready to take engagement to the next level, Pro adds the features that serious businesses need:
 
-🚀 **Advanced Analytics** – Deep insights with filters, date ranges, and exportable reports. Make data-driven decisions with confidence.
+**Dislike Buttons** – Get the full picture. Sometimes you need to know what doesn't resonate, not just what does.
 
-🎨 **Premium Templates** – 25+ professionally designed button styles. Stand out with beautiful, unique designs.
+**View Tracking & Engagement Rates** – Track views and calculate real engagement rates (Likes + Dislikes / Views * 100). This is the metric that actually matters.
 
-👤 **User Profiles** – Personalized profiles showing user likes and activity. Build a community around engagement.
+**Advanced Analytics** – Deep insights with filters, date ranges, world map visualization, device analytics, and exportable reports. Export to CSV, PNG, or SVG for presentations and analysis.
 
-🔑 **Login/Registration Forms** – Beautiful, AJAX-powered forms with social login. Turn engaged visitors into registered members.
+**Premium Templates & User Profiles** – 25+ professionally designed button styles that actually stand out. Plus Instagram-inspired user profiles that turn engaged visitors into community members.
 
-📢 **Social Sharing** – One-click sharing to boost your content reach. Let your engaged audience become your marketing team.
+**Login/Registration & Social Sharing** – Beautiful AJAX-powered forms with social login integration. Turn engagement into registered users. One-click sharing to amplify your reach.
 
-⚡ **SEO Schema** – Structured data to improve search rankings. Get found by more people who love your content.
+**SEO Schema, REST API & Elementor Widgets** – Structured data for better search rankings. Full REST API for custom integrations. Drag-and-drop Elementor widgets for visual page building.
 
-📡 **REST API** – Full API access for custom integrations. Build exactly what you need.
-
-🎯 **Elementor Widgets** – Drag-and-drop widgets for Elementor page builder. Design engagement into your pages.
-
-Think of Pro as your growth partner—when you're ready to scale, we're ready to help.
+Think of Pro as your growth partner. When you're ready to scale, we're here to help you get there.
 
 [See the full comparison](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) | [View Templates](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) | [Documentation](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme)
 
 == Installation ==
 
-Getting started with WP ULike is quick and easy. Here's what you need to know:
+Getting started takes about two minutes. Here's what you need:
 
 = Minimum Requirements =
 
@@ -127,57 +134,48 @@ For the best experience and performance, we recommend:
 
 = Installation =
 
-Installing WP ULike takes just a couple of minutes:
+**Installation Steps:**
 
-1. **Via WordPress Admin** (Easiest): Go to Plugins → Add New, search for "WP ULike", and click Install Now. Then click Activate.
+1. **WordPress Admin** (Recommended): Go to Plugins → Add New, search for "WP ULike", click Install Now, then Activate.
 
-2. **Manual Installation**: Download the plugin, unzip it, and upload the folder to your `wp-content/plugins/` directory. Then activate it through the Plugins menu in WordPress.
+2. **Manual Installation**: Download, unzip, upload to `wp-content/plugins/`, then activate through your Plugins menu.
 
-That's it! Once activated, WP ULike will automatically start working. The buttons will appear on your posts, and you can customize everything from the settings panel.
+That's literally it. Once activated, Like buttons appear on your posts immediately. No configuration needed. If you want to customize templates, colors, or settings, head to **WP ULike → Settings** in your WordPress admin.
 
-**Need Help?** We've got you covered. Visit our [Knowledge Base](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) for detailed guides, or reach out to our support team if you run into any issues. We're here to help!
+**Stuck?** We've got you. Check our [Knowledge Base](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) for detailed guides, or reach out to support. We actually respond.
 
 == Screenshots ==
 
-1. **Like Button Templates** – Choose from multiple beautiful button templates that match your site's design. Customize colors, styles, and text to make engagement buttons that feel native to your brand.
+1. **Like & Dislike Button Templates** – Multiple beautiful templates. Customize colors, styles, and text to match your brand.
 
-2. **Metrics Dashboard (Stats Panel)** – See your engagement at a glance with a powerful analytics dashboard. Track voting statistics, engagement trends, and understand what content resonates with your audience.
+2. **Engagement Metrics Dashboard** – Powerful analytics dashboard. Track voting statistics, engagement trends, and understand what resonates.
 
-3. **Top Trends & Insights (Stats Panel)** – Discover your top-performing content with visual breakdowns and engagement insights. Make data-driven decisions about what to create next.
+3. **Top Trends & Insights** – Discover your top-performing content with visual breakdowns. Make data-driven decisions.
 
-4. **Engagement Logs (Stats Panel)** – Keep track of every interaction with comprehensive logs. See who's engaging, when they're engaging, and what they're engaging with.
-
-5. **Elementor Widgets** – Drag and drop engagement widgets directly into your Elementor pages. Build beautiful, engaging pages without touching code.
-
-6. **Customizer Panel** – Fine-tune every aspect of your voting buttons with flexible customization options. Make it yours, your way.
+4. **Elementor Widgets / Customizer Panel** – Drag and drop widgets for Elementor pages, or fine-tune every aspect with flexible options.
 
 == Frequently Asked Questions ==
 
 = Do visitors need to register or login to like content? =
-Not at all! We designed WP ULike to remove barriers to engagement. Visitors can like content immediately without any registration or login required. This means more engagement, more insights, and happier visitors. Of course, if you prefer to require login (maybe you want to build a registered community), you can easily enable that option in the settings. The choice is yours.
+Nope. One click, instant engagement. No registration required. If you want to build a registered community, you can require login in settings—but it's optional.
 
 = Does WP ULike work with any theme? =
-Yes! We built WP ULike to work seamlessly with any WordPress theme that follows coding standards. The buttons automatically adapt to your theme's styling, so they'll look great whether you're using a free theme from the repository or a premium theme from your favorite developer. If you ever notice any styling issues, just let us know—we're here to help.
+Yes. It adapts to your theme automatically. Works with any WordPress theme that follows coding standards. If you run into styling issues, let us know and we'll help.
 
-= Is WP ULike compatible with other plugins? =
-Absolutely! We know you're probably using other plugins, and we made sure WP ULike plays nicely with the most popular ones. It integrates seamlessly with Elementor, BuddyPress, bbPress, WooCommerce, GamiPress, myCRED, and most caching plugins. If you're using something we haven't tested yet and run into any issues, please reach out. We love making things work together.
-
-= Does WP ULike work with caching plugins? =
-Yes, and this was really important to us! We built WP ULike to be fully compatible with all major caching plugins including WP Rocket, W3 Total Cache, WP Super Cache, LiteSpeed Cache, and others. Your site's performance matters, so we optimized the plugin to work perfectly with cached content. You get engagement features without sacrificing speed.
+= Is WP ULike compatible with other plugins and caching? =
+Absolutely. We've tested it with WooCommerce, BuddyPress, bbPress, Elementor, GamiPress, myCRED, and all major caching plugins (WP Rocket, W3 Total Cache, WP Super Cache, LiteSpeed Cache, and more). Your site will stay fast.
 
 = Can I customize the button appearance? =
-Of course! We want you to make it yours. WP ULike offers multiple built-in templates and styles, and you can customize colors, button text, and styling through the settings panel—no coding required. If you want to go further, you can use custom CSS to match your exact brand. And if you're looking for professionally designed, unique button styles, the Pro version includes 25+ premium templates that are ready to use.
+Yes. Multiple built-in templates and styles. Customize colors, text, and styling through the settings panel—no coding needed. Pro version includes 25+ premium templates if you want something more unique.
 
 = What's the difference between WP ULike Free and Pro? =
-Great question! The free version is complete and powerful—it includes everything you need: Like buttons, a real-time statistics dashboard, customizable templates, auto-display, shortcodes, and full plugin integrations. You can build engagement and understand your audience with the free version, no limitations.
-
-WP ULike Pro is for when you're ready to take things further. It adds professional features like advanced analytics with filters and date ranges, premium templates, user profiles, login/registration forms, social sharing, SEO schema, and REST API access. Think of it this way: Free gets you everything you need to succeed. Pro helps you scale and grow even faster.
+Free gives you everything you need: Like buttons (auto-display + shortcodes), real-time analytics dashboard, customizable templates, Gutenberg block support, and full integrations with WooCommerce, BuddyPress, bbPress, Elementor, and myCRED. Pro adds the growth features: Dislike buttons, advanced analytics with filters and date ranges, view tracking with engagement rates, 25+ premium templates, user profiles, login/registration forms, social sharing, SEO schema, REST API, and Elementor widgets.
 
 = Can I use WP ULike on a multisite setup? =
-Yes! WP ULike works perfectly across WordPress multisite networks. Each site in your network can have its own settings and statistics, so you can manage engagement across all your sites while keeping everything organized. Perfect for agencies, networks, or anyone managing multiple WordPress sites.
+Yes. Works perfectly across WordPress multisite networks. Each site gets its own settings and statistics.
 
 = Is WP ULike secure? =
-Security is our top priority, and we take it seriously. WP ULike is developed by TechnoWich following WordPress security best practices and coding standards. We regularly audit our code, stay updated with security best practices, and respond quickly to any security concerns. With over 80,000 active installations and a high WordPress.org rating, you can trust that your site and your visitors' data are in good hands.
+Yes. We follow WordPress security best practices, regularly audit our code, and have over 80,000 active installations with a high WordPress.org rating. Security isn't optional for us—it's built in.
 
 == Changelog ==
 
