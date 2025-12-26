@@ -6,7 +6,7 @@ Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 4.8.2
+Stable tag: 4.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ Add Like buttons to your content and discover what your audience loves with real
 
 We built WP ULike because we know how frustrating it can be when visitors browse your site but don't engage. You create amazing content, but how do you know what resonates? That's where we come in.
 
-WP ULike helps you understand your audience by making engagement effortless. With one simple click, visitors can show their appreciation, and you get valuable insights into what content drives real engagement. It's not just about likes—it's about building a community that tells you what they want more of. (Want Dislike buttons too? That's available in Pro!)
+WP ULike helps you understand your audience by making engagement effortless. With one simple click, visitors can show their appreciation, and you get valuable insights into what content drives real engagement. It's not just about likes—it's about building a community that tells you what they want more of.
 
 [youtube https://www.youtube.com/watch?v=nxQto2Yj_yc]
 
@@ -180,6 +180,16 @@ Yes! WP ULike works perfectly across WordPress multisite networks. Each site in 
 Security is our top priority, and we take it seriously. WP ULike is developed by TechnoWich following WordPress security best practices and coding standards. We regularly audit our code, stay updated with security best practices, and respond quickly to any security concerns. With over 80,000 active installations and a high WordPress.org rating, you can trust that your site and your visitors' data are in good hands.
 
 == Changelog ==
+
+= 4.8.3 =
+* Added: Gutenberg block support for adding WP ULike buttons directly in the block editor with customizable templates and settings.
+* Added: Introduced view tracking service for all content types with engagement rate calculation (Likes + Dislikes / Views * 100) and intelligent tracking using Intersection Observer API with batched requests. [PRO]
+* Added: Added Growth column to WorldMap country statistics table for tracking country performance trends. [PRO]
+* Added: Added comprehensive GDPR tools section with user search and bulk log removal functionality for compliance with data protection regulations. [PRO]
+* Added: Introduced advanced bulk actions feature with various filters (post type, taxonomy, category, search, and item ID) for efficient content management. [PRO]
+* Added: Redesigned user profile pages with Instagram-inspired layout, featuring improved visual hierarchy and modern aesthetics. [PRO]
+* Added: Custom stylish avatar uploader with real-time preview and enhanced user experience. [PRO]
+* Fixed: Various minor bug fixes and improvements.
 
 = 4.8.2 =
 * Improved: Fixed memory leaks and optimized JavaScript performance.
