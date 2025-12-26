@@ -152,7 +152,7 @@ That's literally it. Once activated, Like buttons appear on your posts immediate
 
 3. **Top Trends & Insights** – Discover your top-performing content with visual breakdowns. Make data-driven decisions.
 
-4. **User Profiles** – Instagram-inspired user profiles that turn engaged visitors into community members. [PRO]
+4. **Gutenberg Block** – Add WP ULike buttons directly in the block editor with customizable templates and settings.
 
 == Frequently Asked Questions ==
 
