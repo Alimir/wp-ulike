@@ -31,45 +31,50 @@ if ( ! getBlockType( metadata.name ) ) {
 		const [ defaultTemplateName, setDefaultTemplateName ] = useState( __( 'Use Settings Default', 'wp-ulike' ) );
 		const [ loading, setLoading ] = useState( true );
 
-		// Fetch templates from REST API
+		// Fetch templates from REST API (only once)
 		useEffect( () => {
+			let isMounted = true;
+			
 			const fetchTemplates = async () => {
 				try {
-					// Use WordPress REST API
 					const response = await apiFetch( {
 						path: '/wp-ulike/v1/templates'
 					} );
+					
+					if ( ! isMounted ) return;
+					
 					if ( response && response.templates && Array.isArray( response.templates ) ) {
 						setTemplates( response.templates );
 						if ( response.default_template_name ) {
 							setDefaultTemplateName( response.default_template_name );
 						}
 					} else if ( response && Array.isArray( response ) ) {
-						// Backward compatibility
 						setTemplates( response );
 					}
 				} catch ( error ) {
-					console.error( 'Error fetching templates:', error );
-					// Set empty array on error
-					setTemplates( [] );
+					if ( isMounted ) {
+						console.error( 'Error fetching templates:', error );
+						setTemplates( [] );
+					}
 				} finally {
-					setLoading( false );
+					if ( isMounted ) {
+						setLoading( false );
+					}
 				}
 			};
 
 			fetchTemplates();
+			
+			return () => {
+				isMounted = false;
+			};
 		}, [] );
 
-		// Build template options (including default "empty" option)
+		// Build template options (memoized)
 		const allTemplates = [
-			{ key: '', name: defaultTemplateName, symbol: '', is_text_support: true }
+			{ key: '', name: defaultTemplateName, symbol: '', is_text_support: true },
+			...templates
 		];
-
-		if ( templates.length > 0 ) {
-			templates.forEach( ( tmpl ) => {
-				allTemplates.push( tmpl );
-			} );
-		}
 
 		// Filter button type options based on selected template
 		// Find selected template (including default)
