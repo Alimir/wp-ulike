@@ -31,6 +31,13 @@ if ( ! getBlockType( metadata.name ) ) {
 		const [ defaultTemplateName, setDefaultTemplateName ] = useState( __( 'Use Settings Default', 'wp-ulike' ) );
 		const [ loading, setLoading ] = useState( true );
 
+		// Ensure 'for' attribute is always 'post' (Gutenberg blocks only work in post editors)
+		useEffect( () => {
+			if ( forType !== 'post' ) {
+				setAttributes( { for: 'post' } );
+			}
+		}, [ forType, setAttributes ] );
+
 		// Fetch templates from REST API (only once)
 		useEffect( () => {
 			let isMounted = true;
@@ -93,21 +100,6 @@ if ( ! getBlockType( metadata.name ) ) {
 			<>
 				<InspectorControls>
 					<PanelBody title={ __( 'Settings', 'wp-ulike' ) } initialOpen={ true }>
-						<SelectControl
-							label={ __( 'Content Types', 'wp-ulike' ) }
-							value={ forType }
-							options={ [
-								{ label: __( 'Post', 'wp-ulike' ), value: 'post' },
-								{ label: __( 'Comment', 'wp-ulike' ), value: 'comment' },
-								{ label: __( 'Activity (BuddyPress)', 'wp-ulike' ), value: 'activity' },
-								{ label: __( 'Topic (bbPress)', 'wp-ulike' ), value: 'topic' }
-							] }
-							onChange={ ( value ) => setAttributes( { for: value } ) }
-							help={ __( 'Select the type of content this button will like.', 'wp-ulike' ) }
-							__next40pxDefaultSize={ true }
-							__nextHasNoMarginBottom={ true }
-						/>
-
 						<ToggleControl
 							label={ __( 'Use Current Post ID', 'wp-ulike' ) }
 							checked={ useCurrentPostId }
@@ -118,10 +110,10 @@ if ( ! getBlockType( metadata.name ) ) {
 
 						{ ! useCurrentPostId && (
 							<TextControl
-								label={ __( 'Custom Item ID', 'wp-ulike' ) }
+								label={ __( 'Custom Post ID', 'wp-ulike' ) }
 								value={ itemId }
 								onChange={ ( value ) => setAttributes( { itemId: value } ) }
-								help={ __( 'Enter a specific post, comment, or item ID to like.', 'wp-ulike' ) }
+								help={ __( 'Enter a specific post ID to like. Leave empty to use the current post ID.', 'wp-ulike' ) }
 								type="number"
 								__next40pxDefaultSize={ true }
 								__nextHasNoMarginBottom={ true }
