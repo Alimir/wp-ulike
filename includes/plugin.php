@@ -228,7 +228,7 @@ class WpUlikeInit {
    * @return bool
    */
   public static function is_rest() {
-    return defined( 'REST_REQUEST' );
+    return defined( 'REST_REQUEST' ) && REST_REQUEST;
   }
 
   /**
