@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike 4.8.3\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2025-12-26 16:08:54+00:00\n"
+"POT-Creation-Date: 2025-12-28 12:04:33+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -425,18 +425,60 @@ msgid "Engagers"
 msgstr ""
 
 #: admin/admin-ajax.php:259
-msgid "Nothing to See Here!"
+msgid "Something Went Wrong"
 msgstr ""
 
 #: admin/admin-ajax.php:260
-msgid "No content available. Try refreshing or check back later."
+msgid ""
+"We encountered an error while loading the data. Please try refreshing the "
+"page or contact support if the problem persists."
+msgstr ""
+
+#: admin/admin-ajax.php:261
+msgid "Page Not Found"
+msgstr ""
+
+#: admin/admin-ajax.php:262
+msgid ""
+"The page you are looking for does not exist. It may have been moved or "
+"deleted."
 msgstr ""
 
 #: admin/admin-ajax.php:263
-msgid "Unlock Your Website's True Potential!"
+msgid "No Data Available"
 msgstr ""
 
 #: admin/admin-ajax.php:264
+msgid ""
+"There is no data to display at the moment. This could mean there are no "
+"records in the database yet, or the data is still being processed."
+msgstr ""
+
+#: admin/admin-ajax.php:265
+msgid "Go to Home"
+msgstr ""
+
+#: admin/admin-ajax.php:266
+msgid "Refresh Page"
+msgstr ""
+
+#: admin/admin-ajax.php:267
+msgid "If this problem continues, please contact support."
+msgstr ""
+
+#: admin/admin-ajax.php:268
+msgid "Data will appear here once it becomes available."
+msgstr ""
+
+#: admin/admin-ajax.php:269
+msgid "Check the URL or return to the homepage."
+msgstr ""
+
+#: admin/admin-ajax.php:272
+msgid "Unlock Your Website's True Potential!"
+msgstr ""
+
+#: admin/admin-ajax.php:273
 msgid ""
 "Imagine knowing exactly what makes your content shine and how to connect "
 "with the fans who'll help you grow. Picture having the tools to make "
@@ -444,75 +486,75 @@ msgid ""
 "level. Ready to uncover what's possible?"
 msgstr ""
 
-#: admin/admin-ajax.php:265 admin/includes/templates/go-pro.php:301
+#: admin/admin-ajax.php:274 admin/includes/templates/go-pro.php:301
 msgid "Get Started"
 msgstr ""
 
-#: admin/admin-ajax.php:266
+#: admin/admin-ajax.php:275
 msgid "Discover More"
 msgstr ""
 
-#: admin/admin-ajax.php:269
+#: admin/admin-ajax.php:278
 msgid "{{count}} {{interval}} ago"
 msgstr ""
 
-#: admin/admin-ajax.php:270
+#: admin/admin-ajax.php:279
 msgid "year"
 msgstr ""
 
-#: admin/admin-ajax.php:271
+#: admin/admin-ajax.php:280
 msgid "years"
 msgstr ""
 
-#: admin/admin-ajax.php:272
+#: admin/admin-ajax.php:281
 msgid "month"
 msgstr ""
 
-#: admin/admin-ajax.php:273
+#: admin/admin-ajax.php:282
 msgid "months"
 msgstr ""
 
-#: admin/admin-ajax.php:274
+#: admin/admin-ajax.php:283
 msgid "week"
 msgstr ""
 
-#: admin/admin-ajax.php:275
+#: admin/admin-ajax.php:284
 msgid "weeks"
 msgstr ""
 
-#: admin/admin-ajax.php:276
+#: admin/admin-ajax.php:285
 msgid "day"
 msgstr ""
 
-#: admin/admin-ajax.php:277
+#: admin/admin-ajax.php:286
 msgid "days"
 msgstr ""
 
-#: admin/admin-ajax.php:278
+#: admin/admin-ajax.php:287
 msgid "hour"
 msgstr ""
 
-#: admin/admin-ajax.php:279
+#: admin/admin-ajax.php:288
 msgid "hours"
 msgstr ""
 
-#: admin/admin-ajax.php:280
+#: admin/admin-ajax.php:289
 msgid "minute"
 msgstr ""
 
-#: admin/admin-ajax.php:281
+#: admin/admin-ajax.php:290
 msgid "minutes"
 msgstr ""
 
-#: admin/admin-ajax.php:282
+#: admin/admin-ajax.php:291
 msgid "second"
 msgstr ""
 
-#: admin/admin-ajax.php:283
+#: admin/admin-ajax.php:292
 msgid "seconds"
 msgstr ""
 
-#: admin/admin-ajax.php:284
+#: admin/admin-ajax.php:293
 msgid "just now"
 msgstr ""
 
@@ -936,7 +978,7 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:392
 #: admin/classes/class-wp-ulike-admin-panel.php:422
 #: admin/classes/class-wp-ulike-widget.php:293
-#: admin/classes/class-wp-ulike-widget.php:583
+#: admin/classes/class-wp-ulike-widget.php:577
 msgid "BuddyPress"
 msgstr ""
 
@@ -1583,7 +1625,7 @@ msgid "Number of users displayed in the likers box"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-logs.php:173
-#: admin/classes/class-wp-ulike-stats.php:273
+#: admin/classes/class-wp-ulike-stats.php:303
 msgid "Guest User"
 msgstr ""
 
@@ -1645,109 +1687,109 @@ msgstr ""
 msgid "%s is Not Activated!"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:518
+#: admin/classes/class-wp-ulike-widget.php:512
 msgid "Most Liked"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:533
+#: admin/classes/class-wp-ulike-widget.php:527
 msgid "Title:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:538
+#: admin/classes/class-wp-ulike-widget.php:532
 msgid "Type:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:540
+#: admin/classes/class-wp-ulike-widget.php:534
 msgid "Most Liked Posts"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:541
+#: admin/classes/class-wp-ulike-widget.php:535
 msgid "Most Liked Comments"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:542
+#: admin/classes/class-wp-ulike-widget.php:536
 msgid "Most Liked Activities"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:543
+#: admin/classes/class-wp-ulike-widget.php:537
 msgid "Most Liked Topics"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:544
+#: admin/classes/class-wp-ulike-widget.php:538
 msgid "Most Liked Users"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:545
+#: admin/classes/class-wp-ulike-widget.php:539
 msgid "Last Posts Liked By User"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:550
+#: admin/classes/class-wp-ulike-widget.php:544
 msgid "Number of items to show:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:555
+#: admin/classes/class-wp-ulike-widget.php:549
 msgid "Period:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:557
+#: admin/classes/class-wp-ulike-widget.php:551
 msgid "All The Times"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:558
+#: admin/classes/class-wp-ulike-widget.php:552
 msgid "Year"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:559
+#: admin/classes/class-wp-ulike-widget.php:553
 msgid "Month"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:560
+#: admin/classes/class-wp-ulike-widget.php:554
 msgid "Week"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:561
+#: admin/classes/class-wp-ulike-widget.php:555
 msgid "Yesterday"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:562
+#: admin/classes/class-wp-ulike-widget.php:556
 msgid "Today"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:567
+#: admin/classes/class-wp-ulike-widget.php:561
 msgid "Style:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:569
+#: admin/classes/class-wp-ulike-widget.php:563
 #: includes/functions/templates.php:23
 msgid "Simple"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:570
+#: admin/classes/class-wp-ulike-widget.php:564
 #: includes/functions/templates.php:29
 msgid "Heart"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:575
+#: admin/classes/class-wp-ulike-widget.php:569
 msgid "Title Trim (Length):"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:581
+#: admin/classes/class-wp-ulike-widget.php:575
 msgid "Profile URL:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:584
+#: admin/classes/class-wp-ulike-widget.php:578
 msgid "UltimateMember"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:590
+#: admin/classes/class-wp-ulike-widget.php:584
 msgid "Activate Like Counter"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:595
+#: admin/classes/class-wp-ulike-widget.php:589
 msgid "Activate Thumbnail/Avatar"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-widget.php:599
+#: admin/classes/class-wp-ulike-widget.php:593
 msgid "Thumbnail/Avatar size:"
 msgstr ""
 
