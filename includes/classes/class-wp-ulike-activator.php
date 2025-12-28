@@ -99,7 +99,8 @@ class wp_ulike_activator {
 		$meta = isset( $this->tables['meta'] ) ? $this->tables['meta'] : '';
 
 		// Posts table
-		maybe_create_table( $posts, "CREATE TABLE `{$posts}` (
+		if ( ! $this->table_exists( $posts ) ) {
+			maybe_create_table( $posts, "CREATE TABLE `{$posts}` (
 			`id` bigint(20) NOT NULL AUTO_INCREMENT,
 			`post_id` bigint(20) NOT NULL,
 			`date_time` datetime NOT NULL,
@@ -121,9 +122,11 @@ class wp_ulike_activator {
 			KEY `status_date_time` (`status`, `date_time`),
 			KEY `post_id_date_time_user_id_status` (`post_id`, `date_time`, `user_id`, `status`)
 		) $charset_collate AUTO_INCREMENT=1;" );
+		}
 
 		// Comments table
-		maybe_create_table( $comments, "CREATE TABLE `{$comments}` (
+		if ( ! $this->table_exists( $comments ) ) {
+			maybe_create_table( $comments, "CREATE TABLE `{$comments}` (
 			`id` bigint(20) NOT NULL AUTO_INCREMENT,
 			`comment_id` bigint(20) NOT NULL,
 			`date_time` datetime NOT NULL,
@@ -145,9 +148,11 @@ class wp_ulike_activator {
 			KEY `status_date_time` (`status`, `date_time`),
 			KEY `comment_id_date_time_user_id_status` (`comment_id`, `date_time`, `user_id`, `status`)
 		) $charset_collate AUTO_INCREMENT=1;" );
+		}
 
 		// Activities table
-		maybe_create_table( $activities, "CREATE TABLE `{$activities}` (
+		if ( ! $this->table_exists( $activities ) ) {
+			maybe_create_table( $activities, "CREATE TABLE `{$activities}` (
 			`id` bigint(20) NOT NULL AUTO_INCREMENT,
 			`activity_id` bigint(20) NOT NULL,
 			`date_time` datetime NOT NULL,
@@ -169,9 +174,11 @@ class wp_ulike_activator {
 			KEY `status_date_time` (`status`, `date_time`),
 			KEY `activity_id_date_time_user_id_status` (`activity_id`, `date_time`, `user_id`, `status`)
 		) $charset_collate AUTO_INCREMENT=1;" );
+		}
 
 		// Forums table
-		maybe_create_table( $forums, "CREATE TABLE `{$forums}` (
+		if ( ! $this->table_exists( $forums ) ) {
+			maybe_create_table( $forums, "CREATE TABLE `{$forums}` (
 			`id` bigint(20) NOT NULL AUTO_INCREMENT,
 			`topic_id` bigint(20) NOT NULL,
 			`date_time` datetime NOT NULL,
@@ -193,10 +200,11 @@ class wp_ulike_activator {
 			KEY `status_date_time` (`status`, `date_time`),
 			KEY `topic_id_date_time_user_id_status` (`topic_id`, `date_time`, `user_id`, `status`)
 		) $charset_collate AUTO_INCREMENT=1;" );
-
+		}
 
 		// Meta values table
-		maybe_create_table( $meta, "CREATE TABLE `{$meta}` (
+		if ( ! $this->table_exists( $meta ) ) {
+			maybe_create_table( $meta, "CREATE TABLE `{$meta}` (
 			`meta_id` bigint(20) unsigned NOT NULL auto_increment,
 			`item_id` bigint(20) unsigned NOT NULL default '0',
 			`meta_group` varchar(100) default NULL,
@@ -208,11 +216,29 @@ class wp_ulike_activator {
 			KEY `item_id_meta_group` (`item_id`, `meta_group`),
 			KEY `meta_group_meta_key_item_id` (`meta_group`, `meta_key`, `item_id`)
 		) $charset_collate AUTO_INCREMENT=1;" );
+		}
 
 		// Update db version.
 		if ( false === get_option( 'wp_ulike_dbVersion' ) ) {
 			update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
 		}
+
+		return true;
+	}
+
+	/**
+	 * Check if a table exists in the database
+	 *
+	 * @param string $table_name
+	 * @return bool
+	 */
+	protected function table_exists( $table_name ) {
+		// Use SHOW TABLES LIKE (WordPress standard approach - faster and more reliable)
+		$result = $this->database->get_var( $this->database->prepare(
+			'SHOW TABLES LIKE %s',
+			$table_name
+		) );
+		return $result === $table_name;
 	}
 
 	/**

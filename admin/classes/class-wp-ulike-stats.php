@@ -167,37 +167,67 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @since 2.0
 		 * @return String
 		 */
-		public function select_data( $table ){
+	public function select_data( $table ){
 
-			$data_limit = apply_filters( 'wp_ulike_stats_data_limit', 30 );
+		$data_limit = apply_filters( 'wp_ulike_stats_data_limit', 30 );
+		
+		// Ensure data_limit is a positive integer for safety
+		$data_limit = max( 1, absint( $data_limit ) );
 
-			// Fetch the most recent date_time from the table
-			$latest_date = $this->wpdb->get_var( "
-				SELECT MAX(date_time) FROM `{$this->wpdb->prefix}{$table}`
-			");
+		// Fetch the most recent date_time from the table
+		// MAX() query uses the date_time index efficiently (reverse index scan)
+		$table_escaped = esc_sql( $this->wpdb->prefix . $table );
+		$latest_date = $this->wpdb->get_var( "
+			SELECT MAX(date_time) FROM `{$table_escaped}`
+		" );
 
-			// Prepare the main query with the fetched latest date
-			$query  = $this->wpdb->prepare( "
-				SELECT DATE(date_time) AS labels,
-				count(date_time) AS counts
-				FROM `{$this->wpdb->prefix}{$table}`
-				WHERE DATEDIFF(%s, date_time) <= 30
-				GROUP BY labels
-				ORDER BY labels ASC
-				LIMIT %d",
-				$latest_date,
-				$data_limit
-			);
-
-			$result = $this->wpdb->get_results( $query );
-
-			if( empty( $result ) ) {
-				$result = new stdClass();
-				$result->labels = $result->counts = NULL;
-			}
-
+		// If no data exists, return empty result
+		if( empty( $latest_date ) ) {
+			$result = new stdClass();
+			$result->labels = $result->counts = NULL;
 			return $result;
 		}
+
+		// Calculate start date in PHP for maximum index optimization
+		// Use $data_limit for date range to match the data limit filter
+		// This ensures MySQL gets a constant value to compare against (most index-friendly)
+		$latest_timestamp = strtotime( $latest_date );
+		
+		// Safety check: ensure timestamp is valid
+		if( false === $latest_timestamp ) {
+			$result = new stdClass();
+			$result->labels = $result->counts = NULL;
+			return $result;
+		}
+		
+		// DAY_IN_SECONDS is a WordPress core constant (defined since WP 3.5)
+		$start_date = date( 'Y-m-d H:i:s', $latest_timestamp - ( $data_limit * DAY_IN_SECONDS ) );
+
+		// Use index-friendly date range query with pre-calculated dates
+		// Direct comparison allows MySQL to use date_time index efficiently
+		// No LIMIT needed since date range naturally limits results to $data_limit days
+		// (GROUP BY DATE() returns at most one row per day)
+		$query = $this->wpdb->prepare( "
+			SELECT DATE(date_time) AS labels,
+			count(date_time) AS counts
+			FROM `{$table_escaped}`
+			WHERE date_time >= %s
+			AND date_time <= %s
+			GROUP BY labels
+			ORDER BY labels ASC",
+			$start_date,
+			$latest_date
+		);
+
+		$result = $this->wpdb->get_results( $query );
+
+		if( empty( $result ) ) {
+			$result = new stdClass();
+			$result->labels = $result->counts = NULL;
+		}
+
+		return $result;
+	}
 
 		/**
 		 * Count all logs from the tables

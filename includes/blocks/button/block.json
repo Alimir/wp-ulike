@@ -1,0 +1,41 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "wp-ulike/button",
+	"title": "WP ULike Button",
+	"category": "wp-ulike",
+	"icon": "heart",
+	"description": "Add like/dislike buttons to your posts with customizable styles and templates.",
+	"keywords": [ "like", "rating", "vote", "engagement", "feedback", "button" ],
+	"textdomain": "wp-ulike",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"attributes": {
+		"for": {
+			"type": "string",
+			"default": "post"
+		},
+		"itemId": {
+			"type": "string",
+			"default": ""
+		},
+		"useCurrentPostId": {
+			"type": "boolean",
+			"default": true
+		},
+		"template": {
+			"type": "string",
+			"default": ""
+		},
+		"buttonType": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": true,
+		"className": true
+	},
+	"usesContext": [ "postId", "commentId" ]
+}

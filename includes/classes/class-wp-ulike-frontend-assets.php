@@ -73,8 +73,8 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 	     * @return void
 	     */
 	  	public function load_scripts() {
-			// Return if pro assets exist
-			if( defined( 'WP_ULIKE_PRO_VERSION' ) && version_compare( WP_ULIKE_PRO_VERSION, '1.5.3' ) > 0 ){
+			// Return if pro assets exist (Pro >= 1.5.3 includes free scripts, so don't load free version)
+			if( defined( 'WP_ULIKE_PRO_VERSION' ) && version_compare( WP_ULIKE_PRO_VERSION, '1.5.3', '>=' ) ){
 				return;
 			}
 

@@ -20,7 +20,7 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	function wp_ulike_generate_templates_list(){
 		$default = array(
 			'wpulike-default' => array(
-				'name'            => esc_html__('Default', 'wp-ulike'),
+				'name'            => esc_html__('Simple', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_default_template',
 				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg',
 				'is_text_support' => true

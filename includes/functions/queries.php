@@ -507,14 +507,23 @@ if( ! function_exists( 'wp_ulike_get_user_item_count_per_day' ) ) {
 		$table_name  = $wpdb->prefix . $parsed_args['settings']->getTableName();
 		$column_name = $parsed_args['settings']->getColumnName();
 
+		// Use index-friendly date range query instead of DATE() function
+		// Pre-calculate today's date range for maximum index optimization
+		$today = current_time( 'Y-m-d' );
+		$today_start = $today . ' 00:00:00';
+		$today_end = $today . ' 23:59:59';
+
 		$query = $wpdb->prepare( "
 			SELECT COUNT(*)
 			FROM `$table_name`
 			WHERE `$column_name` = %s
 			AND `user_id` = %d
-			AND DATE(date_time) = CURDATE()",
+			AND date_time >= %s
+			AND date_time <= %s",
 			$parsed_args['item_id'],
-			$parsed_args['current_user']
+			$parsed_args['current_user'],
+			$today_start,
+			$today_end
 		);
 
 		$count_votes = $wpdb->get_var( $query );

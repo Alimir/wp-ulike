@@ -275,56 +275,131 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 		global $wpdb;
         $period_limit = '';
 
+        // Early return for NULL, empty, false, or 'all' - no date filtering needed
+        if( empty( $date_range ) || $date_range === 'all' ){
+            return '';
+        }
+
+        // Handle array-based date ranges
         if( is_array( $date_range ) ){
+            // Interval-based range (e.g., last 30 days)
             if( isset( $date_range['interval_value'] ) ){
-                // Interval time
-				$unit = empty( $date_range['interval_unit'] ) ? 'DAY' : esc_sql( $date_range['interval_unit'] );
+                $allowed_units = array( 'MICROSECOND', 'SECOND', 'MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR' );
+                $unit = empty( $date_range['interval_unit'] ) ? 'DAY' : strtoupper( $date_range['interval_unit'] );
+                $unit = in_array( $unit, $allowed_units, true ) ? esc_sql( $unit ) : 'DAY';
+                $interval_value = absint( $date_range['interval_value'] );
+
                 $period_limit = $wpdb->prepare(
                     " AND date_time >= DATE_ADD( NOW(), INTERVAL - %d {$unit})",
-                    $date_range['interval_value']
+                    $interval_value
                 );
-            } elseif( isset( $date_range['start'] ) ){
-                // Start/End time
+            }
+            // Start/End date range
+            elseif( isset( $date_range['start'] ) ){
+                $start_date = $date_range['start'] . ' 00:00:00';
+
+                // Single date or date range
                 if( $date_range['start'] === $date_range['end'] ){
-                    $period_limit = $wpdb->prepare( ' AND DATE(`date_time`) = %s', $date_range['start'] );
+                    $end_date = $date_range['start'] . ' 23:59:59';
                 } else {
-                    $period_limit = $wpdb->prepare(
-                        ' AND DATE(`date_time`) >= %s AND DATE(`date_time`) <= %s',
-                        $date_range['start'],
-                        $date_range['end']
-                    );
+                    $end_timestamp = strtotime( $date_range['end'] );
+                    $end_date = ( false === $end_timestamp )
+                        ? $date_range['end'] . ' 23:59:59'
+                        : date( 'Y-m-d 23:59:59', $end_timestamp );
                 }
+
+                $period_limit = $wpdb->prepare(
+                    ' AND date_time >= %s AND date_time <= %s',
+                    $start_date,
+                    $end_date
+                );
             }
-        } elseif( !empty( $date_range )) {
-            switch ($date_range) {
-                case "today":
-                    $period_limit = " AND DATE(date_time) = DATE(NOW())";
-                    break;
-                case "yesterday":
-                    $period_limit = " AND DATE(date_time) = DATE(subdate(current_date, 1))";
-                    break;
-                case "day_before_yesterday":
-                    $period_limit = " AND DATE(date_time) = DATE(subdate(current_date, 2))";
-                    break;
-                case "week":
-                    $period_limit = " AND WEEK(DATE(date_time), 1) = WEEK(DATE(NOW()), 1) AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()))";
-                    break;
-                case "last_week":
-                    $period_limit = " AND WEEK(DATE(date_time), 1) = ( WEEK(DATE(NOW()), 1) - 1 ) AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()))";
-                    break;
-                case "month":
-                    $period_limit = " AND MONTH(DATE(date_time)) = MONTH(DATE(NOW())) AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()))";
-                    break;
-                case "last_month":
-                    $period_limit = " AND MONTH(DATE(date_time)) = MONTH(DATE(NOW()) - INTERVAL 1 MONTH) AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()) - INTERVAL 1 MONTH)";
-                    break;
-                case "year":
-                    $period_limit = " AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()))";
-                    break;
-                case "last_year":
-                    $period_limit = " AND YEAR(DATE(date_time)) = YEAR(DATE(NOW()) - INTERVAL 1 YEAR)";
-                    break;
-            }
+
+            return apply_filters( 'wp_ulike_period_limit_sql', $period_limit, $date_range );
+        }
+
+        // Handle string-based date ranges (pre-calculated for index optimization)
+        switch ( $date_range ) {
+            case "today":
+                $today = current_time( 'Y-m-d' );
+                $period_limit = $wpdb->prepare(
+                    " AND date_time >= %s AND date_time <= %s",
+                    $today . ' 00:00:00',
+                    $today . ' 23:59:59'
+                );
+                break;
+
+            case "yesterday":
+                $yesterday = date( 'Y-m-d', current_time( 'timestamp' ) - DAY_IN_SECONDS );
+                $period_limit = $wpdb->prepare(
+                    " AND date_time >= %s AND date_time <= %s",
+                    $yesterday . ' 00:00:00',
+                    $yesterday . ' 23:59:59'
+                );
+                break;
+
+            case "day_before_yesterday":
+                $day_before = date( 'Y-m-d', current_time( 'timestamp' ) - ( 2 * DAY_IN_SECONDS ) );
+                $period_limit = $wpdb->prepare(
+                    " AND date_time >= %s AND date_time <= %s",
+                    $day_before . ' 00:00:00',
+                    $day_before . ' 23:59:59'
+                );
+                break;
+            case "week":
+            case "last_week":
+                // Respect WordPress start_of_week setting (0=Sunday, 1=Monday, etc.)
+                $start_of_week = (int) get_option( 'start_of_week', 1 );
+                $today_timestamp = current_time( 'timestamp' );
+                $day_of_week = (int) date( 'w', $today_timestamp );
+                $days_to_subtract = ( $day_of_week - $start_of_week + 7 ) % 7;
+
+                // Add 7 days for last_week
+                $days_offset = ( $date_range === 'last_week' ) ? 7 : 0;
+                $week_start = date( 'Y-m-d', $today_timestamp - ( ( $days_to_subtract + $days_offset ) * DAY_IN_SECONDS ) );
+                $week_end = date( 'Y-m-d', strtotime( $week_start . ' +6 days' ) );
+
+                $period_limit = $wpdb->prepare(
+                    " AND date_time >= %s AND date_time <= %s",
+                    $week_start . ' 00:00:00',
+                    $week_end . ' 23:59:59'
+                );
+                break;
+            case "month":
+                $period_limit = $wpdb->prepare(
+                    " AND date_time >= %s AND date_time <= %s",
+                    current_time( 'Y-m-01 00:00:00' ),
+                    current_time( 'Y-m-t 23:59:59' )
+                );
+                break;
+
+            case "last_month":
+                $current_timestamp = current_time( 'timestamp' );
+                $last_month_start = date( 'Y-m-01 00:00:00', strtotime( 'first day of last month', $current_timestamp ) );
+                $last_month_end = date( 'Y-m-t 23:59:59', strtotime( 'last day of last month', $current_timestamp ) );
+                $period_limit = $wpdb->prepare(
+                    " AND date_time >= %s AND date_time <= %s",
+                    $last_month_start,
+                    $last_month_end
+                );
+                break;
+
+            case "year":
+                $period_limit = $wpdb->prepare(
+                    " AND date_time >= %s AND date_time <= %s",
+                    current_time( 'Y-01-01 00:00:00' ),
+                    current_time( 'Y-12-31 23:59:59' )
+                );
+                break;
+
+            case "last_year":
+                $last_year = date( 'Y', strtotime( '-1 year', current_time( 'timestamp' ) ) );
+                $period_limit = $wpdb->prepare(
+                    " AND date_time >= %s AND date_time <= %s",
+                    $last_year . '-01-01 00:00:00',
+                    $last_year . '-12-31 23:59:59'
+                );
+                break;
         }
 
         return apply_filters( 'wp_ulike_period_limit_sql', $period_limit, $date_range );
