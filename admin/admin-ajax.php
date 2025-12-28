@@ -255,9 +255,18 @@ function wp_ulike_localization_api(){
 		'Topics'     => esc_html__('Topics', 'wp-ulike'),
 		'Engagers'   => esc_html__('Engagers', 'wp-ulike'),
 
-		// 404
-		'Nothing to See Here!'                                      => esc_html__( 'Nothing to See Here!', 'wp-ulike' ),
-		'No content available. Try refreshing or check back later.' => esc_html__( 'No content available. Try refreshing or check back later.', 'wp-ulike' ),
+		// Not found
+		'Something Went Wrong'	=> esc_html__( 'Something Went Wrong', 'wp-ulike' ),
+		'We encountered an error while loading the data. Please try refreshing the page or contact support if the problem persists.' => esc_html__( 'We encountered an error while loading the data. Please try refreshing the page or contact support if the problem persists.', 'wp-ulike' ),
+		'Page Not Found'	=> esc_html__( 'Page Not Found', 'wp-ulike' ),
+		'The page you are looking for does not exist. It may have been moved or deleted.' => esc_html__( 'The page you are looking for does not exist. It may have been moved or deleted.', 'wp-ulike' ),
+		'No Data Available'	=> esc_html__( 'No Data Available', 'wp-ulike' ),
+		'There is no data to display at the moment. This could mean there are no records in the database yet, or the data is still being processed.' => esc_html__( 'There is no data to display at the moment. This could mean there are no records in the database yet, or the data is still being processed.', 'wp-ulike' ),
+		'Go to Home'	=> esc_html__( 'Go to Home', 'wp-ulike' ),
+		'Refresh Page'	=> esc_html__( 'Refresh Page', 'wp-ulike' ),
+		'If this problem continues, please contact support.'	=> esc_html__( 'If this problem continues, please contact support.', 'wp-ulike' ),
+		'Data will appear here once it becomes available.'	=> esc_html__( 'Data will appear here once it becomes available.', 'wp-ulike' ),
+		'Check the URL or return to the homepage.'	=> esc_html__( 'Check the URL or return to the homepage.', 'wp-ulike' ),
 
 		// Banners
 		'Unlock Your Website\'s True Potential!' => esc_html__( 'Unlock Your Website\'s True Potential!', 'wp-ulike'),
