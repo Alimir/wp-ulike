@@ -187,6 +187,8 @@ Yes. We follow WordPress security best practices, regularly audit our code, and 
 * Added: Introduced advanced bulk actions feature with various filters (post type, taxonomy, category, search, and item ID) for efficient content management. [PRO]
 * Added: Redesigned user profile pages with Instagram-inspired layout, featuring improved visual hierarchy and modern aesthetics. [PRO]
 * Added: Custom stylish avatar uploader with real-time preview and enhanced user experience. [PRO]
+* Improved: Enhanced analytics dashboard UI and functionality with improved visualizations and user experience.
+* Improved: Optimized database query performance by implementing index-friendly date range queries, eliminating slow query issues and improving response times for statistics and analytics.
 * Fixed: Various minor bug fixes and improvements.
 
 = 4.8.2 =
