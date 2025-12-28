@@ -14,15 +14,15 @@ Like & Dislike buttons with real-time analytics. Track engagement and understand
 
 == Description ==
 
-**Know What Your Audience Actually Wants**
+= THE #1 WORDPRESS ENGAGEMENT ANALYTICS PLUGIN, TURN VISITORS INTO INSIGHTS INSTANTLY =
 
 You're creating great content, but you're flying blind. Sound familiar? You don't know which posts hit, which products people love, or what's actually resonating with your visitors. Comments are great, but most people don't comment. They just consume and move on.
 
 [WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) fixes that. Get instant feedback on what your audience loves. No registration, no friction, no barriers. Just one click tells you exactly what's working.
 
-**Here's How It Works:**
+= Here's How It Works =
 
-Activate the plugin, and Like buttons automatically appear on your posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Zero setup. Zero configuration. It just works.
+Activate the plugin, and Like buttons automatically appear on your posts, comments, WooCommerce products, BuddyPress (BuddyBoss) activities, and bbPress topics. Zero setup. Zero configuration. It just works.
 
 Every interaction gets tracked in real-time. You'll see which content gets the most love, when people engage, and how engagement trends over time. No more guessing—you'll know exactly what your audience wants more of.
 
@@ -30,31 +30,31 @@ The analytics dashboard shows you the full picture: your top-performing content,
 
 And here's what we're proud of: it's all privacy-safe. GDPR compliant with IP anonymization. We don't store personal data—just the engagement metrics that help you make better decisions.
 
-**The Three Things That Matter:**
+= The Three Things That Matter =
 
-**Instant Engagement** – Interactive buttons that work everywhere. No barriers, no registration required (though you can restrict to logged-in users if needed). Just pure, simple engagement.
+**Instant Engagement:** Interactive buttons that work everywhere. No barriers, no registration required (though you can restrict to logged-in users if needed). Just pure, simple engagement.
 
-**Real Insights** – A dashboard that shows you what's actually working. Not vanity metrics—real data about what content drives engagement.
+**Real Insights:** A dashboard that shows you what's actually working. Not vanity metrics—real data about what content drives engagement.
 
-**Privacy First** – Built with privacy in mind from day one. We respect your visitors because that's the right thing to do.
+**Privacy First:** Built with privacy in mind from day one. We respect your visitors because that's the right thing to do.
 
 [youtube https://www.youtube.com/watch?v=nxQto2Yj_yc]
 
-**Who Actually Uses This?**
+= Who Actually Uses This? =
 
 We've been doing this for years, and we've seen who gets the most value:
 
-**Bloggers and content creators** – Stop writing in the dark. See which posts actually resonate.
+**Bloggers and content creators:** Stop writing in the dark. See which posts actually resonate.
 
-**WooCommerce store owners** – Understand customer preferences. See which products get appreciation, not just views.
+**WooCommerce store owners:** Understand customer preferences. See which products get appreciation, not just views.
 
-**Community managers** – Track engagement across BuddyPress and bbPress forums to foster better discussions.
+**Community managers:** Track engagement across BuddyPress and bbPress forums to foster better discussions.
 
-**Business owners** – Get instant feedback without waiting for comments or running surveys.
+**Business owners:** Get instant feedback without waiting for comments or running surveys.
 
-**Marketers** – Make decisions based on data, not hunches. Get real engagement metrics.
+**Marketers:** Make decisions based on data, not hunches. Get real engagement metrics.
 
-**The Problems We Actually Solve**
+= The Problems We Actually Solve =
 
 **Low engagement?** We fix that. Interactive buttons with zero friction. No registration required—visitors just click and go.
 
@@ -66,23 +66,23 @@ We've been doing this for years, and we've seen who gets the most value:
 
 **Need it to work everywhere?** It does. Posts, comments, WooCommerce products, BuddyPress activities, bbPress topics—one plugin handles it all.
 
-**What You Get (Free Version)**
+= What You Get (Free Version) =
 
 We believe in giving you real value, not a teaser. The free version includes everything you need to build engagement and understand your audience:
 
-**Like Buttons Everywhere** – Auto-display on posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Or drop them anywhere with the `[wp_ulike]` shortcode. Your choice.
+**Like Buttons Everywhere:** Auto-display on posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Or drop them anywhere with the `[wp_ulike]` shortcode. Your choice.
 
-**Analytics That Matter** – A real-time dashboard showing your most popular content, voting statistics, engagement trends, and detailed logs. This isn't fluff—it's actionable data.
+**Analytics That Matter:** A real-time dashboard showing your most popular content, voting statistics, engagement trends, and detailed logs. This isn't fluff—it's actionable data.
 
-**Templates You Can Customize** – Multiple button styles that actually look good. Match your site's design, customize colors and text, all through the settings panel. No coding required.
+**Templates You Can Customize:** Multiple button styles that actually look good. Match your site's design, customize colors and text, all through the settings panel. No coding required.
 
-**Built for Speed** – Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin. Your site won't slow down.
+**Built for Speed:** Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin. Your site won't slow down.
 
-**Accessibility & RTL Support** – Full RTL support for Arabic, Hebrew, and other right-to-left languages. We built this right.
+**Accessibility & RTL Support:** Full RTL support for Arabic, Hebrew, and other right-to-left languages. We built this right.
 
 **The Extras:** Gutenberg block support, shortcodes, auto-display options, and seamless integrations with WooCommerce, BuddyPress, bbPress, Elementor, myCRED, and more. It just works.
 
-**Why 80,000+ Sites Use This**
+= Why 80,000+ Sites Use This =
 
 We're not a faceless corporation. We're a team that actually cares about your success.
 
@@ -94,21 +94,21 @@ Security and privacy aren't afterthoughts—they're built into everything we do.
 
 And we keep improving. Regular updates, new features, bug fixes. We're in this for the long haul, and we're committed to making this better every single day.
 
-**WP ULike Pro – When You're Ready to Scale**
+= WP ULike Pro: When You're Ready to Scale =
 
 The free version gets you started. It's complete, powerful, and ready to use right now. But when you're ready to take engagement to the next level, Pro adds the features that serious businesses need:
 
-**Dislike Buttons** – Get the full picture. Sometimes you need to know what doesn't resonate, not just what does.
+**Dislike Buttons:** Get the full picture. Sometimes you need to know what doesn't resonate, not just what does.
 
-**View Tracking & Engagement Rates** – Track views and calculate real engagement rates (Likes + Dislikes / Views * 100). This is the metric that actually matters.
+**View Tracking & Engagement Rates:** Track views and calculate real engagement rates (Likes + Dislikes / Views * 100). This is the metric that actually matters.
 
-**Advanced Analytics** – Deep insights with filters, date ranges, world map visualization, device analytics, and exportable reports. Export to CSV, PNG, or SVG for presentations and analysis.
+**Advanced Analytics:** Deep insights with filters, date ranges, world map visualization, device analytics, and exportable reports. Export to CSV, PNG, or SVG for presentations and analysis.
 
-**Premium Templates & User Profiles** – 25+ professionally designed button styles that actually stand out. Plus Instagram-inspired user profiles that turn engaged visitors into community members.
+**Premium Templates & User Profiles:** 25+ professionally designed button styles that actually stand out. Plus Instagram-inspired user profiles that turn engaged visitors into community members.
 
-**Login/Registration & Social Sharing** – Beautiful AJAX-powered forms with social login integration. Turn engagement into registered users. One-click sharing to amplify your reach.
+**Login/Registration & Social Sharing:** Beautiful AJAX-powered forms with social login integration. Turn engagement into registered users. One-click sharing to amplify your reach.
 
-**SEO Schema, REST API & Elementor Widgets** – Structured data for better search rankings. Full REST API for custom integrations. Drag-and-drop Elementor widgets for visual page building.
+**SEO Schema, REST API & Elementor Widgets:** Structured data for better search rankings. Full REST API for custom integrations. Drag-and-drop Elementor widgets for visual page building.
 
 Think of Pro as your growth partner. When you're ready to scale, we're here to help you get there.
 
@@ -146,13 +146,13 @@ That's literally it. Once activated, Like buttons appear on your posts immediate
 
 == Screenshots ==
 
-1. **Like & Dislike Button Templates** – Multiple beautiful templates. Customize colors, styles, and text to match your brand.
+1. **Like & Dislike Button Templates:** Multiple beautiful templates. Customize colors, styles, and text to match your brand.
 
-2. **Engagement Metrics Dashboard** – Powerful analytics dashboard. Track voting statistics, engagement trends, and understand what resonates.
+2. **Engagement Metrics Dashboard:** Powerful analytics dashboard. Track voting statistics, engagement trends, and understand what resonates.
 
-3. **Top Trends & Insights** – Discover your top-performing content with visual breakdowns. Make data-driven decisions.
+3. **Top Trends & Insights:** Discover your top-performing content with visual breakdowns. Make data-driven decisions.
 
-4. **Gutenberg Block** – Add WP ULike buttons directly in the block editor with customizable templates and settings.
+4. **Gutenberg Block:** Add WP ULike buttons directly in the block editor with customizable templates and settings.
 
 == Frequently Asked Questions ==
 
