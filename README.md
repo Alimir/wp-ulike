@@ -1044,23 +1044,32 @@ function wp_ulike_custom_template_content( array $wp_ulike_template ) {
     // Extract template variables for easier access
     extract( $wp_ulike_template );
     
-    // Available variables:
+    // Available variables (extracted from $wp_ulike_template array):
     // $ID - Item ID
-    // $type - Content type (post, comment, activity, topic)
+    // $type - Content type (post, comment, activity, topic) - same as $slug
+    // $slug - Content type slug (post, comment, activity, topic)
     // $style - Template style name
-    // $button_type - Button type (image or text)
-    // $wrapper_class - Additional CSS classes
-    // $general_class - General wrapper class
-    // $button_class - Button CSS class
-    // $button_text - Button text
-    // $up_vote_inner_text - Up vote button inner HTML
+    // $button_type - Button type: 'image' or 'text'
+    // $wrapper_class - Additional CSS classes for wrapper
+    // $general_class - General wrapper class (includes status classes like wp_ulike_is_liked)
+    // $button_class - Button CSS class (includes status classes)
+    // $button_text - Button text (for text mode)
+    // $up_vote_inner_text - Up vote button inner HTML (icon/image)
     // $down_vote_inner_text - Down vote button inner HTML (if enabled)
-    // $display_likers - Whether to display likers
+    // $display_likers - Whether to display likers (true/false)
+    // $display_counters - Whether counters are visible (true/false)
     // $likers_style - Likers display style
-    // $attributes - Additional HTML attributes
-    // $counter_value - Current counter value
-    // $is_liked - Whether current user liked the item
-    // $is_unliked - Whether current user unliked the item
+    // $disable_pophover - Disable popover (true/false)
+    // $attributes - Additional HTML attributes string
+    // $counter - Counter HTML (formatted with count-box span)
+    // $total_likes - Raw counter value (integer, empty string if hidden at zero)
+    // $formatted_total_likes - Formatted counter value (string with K/M suffixes)
+    // $status - Method ID (0=restricted, 1=not_liked, 2=liked, 3=unliked, 4=already_liked, 5=already_unliked)
+    // $user_status - Previous user status (like, unlike, dislike, etc.)
+    // $setting - Settings identifier
+    //
+    // Note: To check if user liked, use $status == 2 or $status == 4, or check $general_class for 'wp_ulike_is_liked'
+    //       To check if user unliked, use $status == 3 or $status == 5, or check $general_class for 'wp_ulike_is_unliked'
     ?>
     
     <!-- Custom HTML Structure - You have full control here! -->
@@ -1095,13 +1104,17 @@ function wp_ulike_custom_template_content( array $wp_ulike_template ) {
             </button>
             
             <!-- Counter Display - Optional, position it anywhere -->
-            <span class="custom-counter" data-counter="<?php echo esc_attr( $ID ); ?>">
-                <?php echo esc_html( $counter_value ); ?>
+            <?php if ( $display_counters ) : ?>
+            <span class="custom-counter wp_ulike_counter_up" data-ulike-counter-value="<?php echo esc_attr( $formatted_total_likes ); ?>" data-counter="<?php echo esc_attr( $ID ); ?>">
+                <?php echo esc_html( $formatted_total_likes ); ?>
             </span>
+            <?php endif; ?>
             
-            <!-- Additional custom content -->
-            <?php if ( $is_liked ) : ?>
+            <!-- Additional custom content - Check user status -->
+            <?php if ( in_array( $status, array( 2, 4 ) ) ) : // 2=liked, 4=already_liked ?>
                 <span class="liked-indicator">✓ Liked</span>
+            <?php elseif ( in_array( $status, array( 3, 5 ) ) ) : // 3=unliked, 5=already_unliked ?>
+                <span class="unliked-indicator">✗ Unliked</span>
             <?php endif; ?>
         </div>
         
@@ -1165,11 +1178,17 @@ function wp_ulike_horizontal_template( array $wp_ulike_template ) {
                 data-ulike-id="<?php echo esc_attr( $ID ); ?>"
                 data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
                 data-ulike-type="<?php echo esc_attr( $type ); ?>"
-                data-ulike-template="<?php echo esc_attr( $style ); ?>">
+                data-ulike-template="<?php echo esc_attr( $style ); ?>"
+                data-ulike-display-likers="<?php echo esc_attr( $display_likers ); ?>"
+                data-ulike-likers-style="<?php echo esc_attr( $likers_style ); ?>">
                 <?php echo $up_vote_inner_text; ?>
                 <span>Like</span>
             </button>
-            <span class="like-count"><?php echo esc_html( $counter_value ); ?></span>
+            <?php if ( $display_counters ) : ?>
+            <span class="like-count wp_ulike_counter_up" data-ulike-counter-value="<?php echo esc_attr( $formatted_total_likes ); ?>">
+                <?php echo esc_html( $formatted_total_likes ); ?>
+            </span>
+            <?php endif; ?>
         </div>
         
         <!-- Add dislike button if enabled -->
