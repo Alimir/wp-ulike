@@ -1,4 +1,4 @@
-/*! WP ULike - v4.8.3
+/*! WP ULike - v4.8.3.1
  *  https://wpulike.com
  *  TechnoWich 2025;
  */
