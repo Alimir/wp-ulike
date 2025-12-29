@@ -6,7 +6,7 @@ Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 4.8.3
+Stable tag: 4.8.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -178,6 +178,9 @@ Yes. Works perfectly across WordPress multisite networks. Each site gets its own
 Yes. We follow WordPress security best practices, regularly audit our code, and have over 80,000 active installations with a high WordPress.org rating. Security isn't optional for us—it's built in.
 
 == Changelog ==
+
+= 4.8.3.1 =
+* Fixed: Gutenberg block assets not being included in build process, preventing blocks from displaying correctly.
 
 = 4.8.3 =
 * Added: Gutenberg block support for adding WP ULike buttons directly in the block editor with customizable templates and settings.
