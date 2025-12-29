@@ -56,6 +56,8 @@ After activation, go to **WP ULike → Settings** and enable "Auto Display" for 
 echo do_shortcode('[wp_ulike for="post" id="123"]');
 ```
 
+**💡 Need Custom HTML Structure?** You can create fully customizable templates with complete control over HTML structure and button positioning. See the [Custom Templates section](#-custom-templates---full-html-control) in Developer Functions or jump to [Template & Query Filters](#template--query-filters) for complete examples.
+
 ---
 
 ## 📚 Shortcodes
@@ -117,6 +119,46 @@ Show a list of users who liked the content.
 ## 💻 Developer Functions
 
 > **Note:** All functions are prefixed with `wp_ulike_` and should be checked for existence before use in themes/plugins for compatibility.
+
+### 🎨 Custom Templates - Full HTML Control
+
+**Need complete control over button HTML structure and positioning?** Create custom templates with full control over the HTML output. This allows you to place like/dislike buttons anywhere in your code with any HTML structure you need.
+
+**Quick Example:**
+```php
+// Register custom template
+add_filter('wp_ulike_add_templates_list', 'my_custom_template', 10, 1);
+function my_custom_template($templates) {
+    $templates['my-template'] = array(
+        'name'            => 'My Custom Template',
+        'callback'        => 'my_template_callback',
+        'is_text_support' => true
+    );
+    return $templates;
+}
+
+// Custom template with full HTML control
+function my_template_callback($args) {
+    extract($args);
+    ob_start();
+    ?>
+    <div class="my-custom-wrapper">
+        <button class="my-like-btn" 
+                data-ulike-id="<?php echo $ID; ?>"
+                data-ulike-type="<?php echo $type; ?>"
+                data-ulike-nonce="<?php echo wp_create_nonce($type . $ID); ?>">
+            <?php echo $up_vote_inner_text; ?>
+        </button>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+
+// Use anywhere in your HTML
+echo do_shortcode('[wp_ulike for="post" style="my-template"]');
+```
+
+**See the complete guide in the [Custom Templates section](#template--query-filters) below for detailed examples including horizontal layouts, custom positioning, and advanced styling.**
 
 ### Core Functions Reference
 
@@ -947,6 +989,10 @@ function custom_bp_template($content, $custom_link, $total_items, $item_id) {
 ### Template & Query Filters
 
 **Add Custom Templates:**
+
+You can create fully customizable templates with complete control over HTML structure, CSS classes, and button placement. This allows you to integrate like/dislike buttons anywhere in your HTML code.
+
+**Basic Template Registration:**
 ```php
 add_filter('wp_ulike_add_templates_list', 'add_custom_template', 10, 1);
 function add_custom_template($templates) {
@@ -957,6 +1003,217 @@ function add_custom_template($templates) {
         'is_text_support' => true
     );
     return $templates;
+}
+```
+
+**Complete Custom Template Example:**
+
+This example shows how to create a fully customizable template where you have complete control over the HTML structure, allowing you to place buttons anywhere in your code:
+
+```php
+/**
+ * Register custom template
+ *
+ * @param array $templates
+ * @return array
+ */
+function wp_ulike_register_custom_template( $templates ) {
+    $templates['wpulike-custom-template'] = array(
+        'name'            => __('Custom Template', 'wp-ulike'),
+        'callback'        => 'wp_ulike_custom_template_content',
+        'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg',
+        'is_text_support' => true
+    );
+    return $templates;
+}
+add_filter( 'wp_ulike_add_templates_list', 'wp_ulike_register_custom_template', 10, 1 );
+
+/**
+ * Custom template content with full HTML control
+ *
+ * @param array $wp_ulike_template Template arguments array
+ * @return string HTML output
+ */
+function wp_ulike_custom_template_content( array $wp_ulike_template ) {
+    // Start output buffering
+    ob_start();
+    
+    // Fire before template hook
+    do_action( 'wp_ulike_before_template', $wp_ulike_template );
+    
+    // Extract template variables for easier access
+    extract( $wp_ulike_template );
+    
+    // Available variables:
+    // $ID - Item ID
+    // $type - Content type (post, comment, activity, topic)
+    // $style - Template style name
+    // $button_type - Button type (image or text)
+    // $wrapper_class - Additional CSS classes
+    // $general_class - General wrapper class
+    // $button_class - Button CSS class
+    // $button_text - Button text
+    // $up_vote_inner_text - Up vote button inner HTML
+    // $down_vote_inner_text - Down vote button inner HTML (if enabled)
+    // $display_likers - Whether to display likers
+    // $likers_style - Likers display style
+    // $attributes - Additional HTML attributes
+    // $counter_value - Current counter value
+    // $is_liked - Whether current user liked the item
+    // $is_unliked - Whether current user unliked the item
+    ?>
+    
+    <!-- Custom HTML Structure - You have full control here! -->
+    <div class="wpulike wpulike-custom-template <?php echo esc_attr( $wrapper_class ); ?>" <?php echo $attributes; ?>>
+        
+        <!-- Custom wrapper with your own classes -->
+        <div class="<?php echo esc_attr( $general_class ); ?> custom-like-wrapper">
+            
+            <!-- Like Button - Fully customizable -->
+            <button type="button"
+                aria-label="<?php echo esc_attr( wp_ulike_get_option( 'like_button_aria_label', __( 'Like Button', 'wp-ulike' ) ) ); ?>"
+                data-ulike-id="<?php echo esc_attr( $ID ); ?>"
+                data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
+                data-ulike-type="<?php echo esc_attr( $type ); ?>"
+                data-ulike-template="<?php echo esc_attr( $style ); ?>"
+                data-ulike-display-likers="<?php echo esc_attr( $display_likers ); ?>"
+                data-ulike-likers-style="<?php echo esc_attr( $likers_style ); ?>"
+                class="<?php echo esc_attr( $button_class ); ?> custom-like-btn">
+                
+                <?php
+                    // Display up vote icon/text
+                    echo $up_vote_inner_text;
+                    
+                    // Fire inside button hook for additional content
+                    do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
+                    
+                    // Display button text if text mode
+                    if ( $button_type == 'text' ) {
+                        echo '<span class="button-text">' . esc_html( $button_text ) . '</span>';
+                    }
+                ?>
+            </button>
+            
+            <!-- Counter Display - Optional, position it anywhere -->
+            <span class="custom-counter" data-counter="<?php echo esc_attr( $ID ); ?>">
+                <?php echo esc_html( $counter_value ); ?>
+            </span>
+            
+            <!-- Additional custom content -->
+            <?php if ( $is_liked ) : ?>
+                <span class="liked-indicator">✓ Liked</span>
+            <?php endif; ?>
+        </div>
+        
+        <?php
+        // Fire inside template hook for additional content
+        do_action( 'wp_ulike_inside_template', $wp_ulike_template );
+        ?>
+    </div>
+    
+    <?php
+    // Fire after template hook
+    do_action( 'wp_ulike_after_template', $wp_ulike_template );
+    
+    // Return buffered content
+    return ob_get_clean();
+}
+```
+
+**Usage in Your HTML/PHP Templates:**
+
+Once registered, you can use your custom template anywhere:
+
+```php
+// In your theme template files
+echo do_shortcode('[wp_ulike for="post" style="wpulike-custom-template"]');
+
+// Or using PHP function
+wp_ulike('put', array(
+    'id'    => get_the_ID(),
+    'style' => 'wpulike-custom-template',
+    'wrapper_class' => 'my-custom-class'
+));
+
+// In custom HTML structure
+?>
+<div class="my-custom-layout">
+    <h2>Post Title</h2>
+    <div class="post-content">...</div>
+    
+    <!-- Place your custom like button anywhere -->
+    <?php echo do_shortcode('[wp_ulike for="post" style="wpulike-custom-template"]'); ?>
+    
+    <div class="post-footer">...</div>
+</div>
+<?php
+```
+
+**Advanced: Multiple Button Layouts**
+
+You can create templates with side-by-side buttons, vertical layouts, or any custom arrangement:
+
+```php
+function wp_ulike_horizontal_template( array $wp_ulike_template ) {
+    ob_start();
+    extract( $wp_ulike_template );
+    ?>
+    <div class="wpulike-horizontal-layout <?php echo esc_attr( $wrapper_class ); ?>">
+        <div class="like-section">
+            <button type="button"
+                class="<?php echo esc_attr( $button_class ); ?> like-btn"
+                data-ulike-id="<?php echo esc_attr( $ID ); ?>"
+                data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
+                data-ulike-type="<?php echo esc_attr( $type ); ?>"
+                data-ulike-template="<?php echo esc_attr( $style ); ?>">
+                <?php echo $up_vote_inner_text; ?>
+                <span>Like</span>
+            </button>
+            <span class="like-count"><?php echo esc_html( $counter_value ); ?></span>
+        </div>
+        
+        <!-- Add dislike button if enabled -->
+        <?php if ( wp_ulike_get_option( 'enable_down_vote' ) ) : ?>
+        <div class="dislike-section">
+            <button type="button" class="dislike-btn">
+                <!-- Dislike button HTML -->
+            </button>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+```
+
+**CSS Styling:**
+
+Add custom CSS to style your template:
+
+```css
+.wpulike-custom-template .custom-like-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wpulike-custom-template .custom-like-btn {
+    padding: 10px 20px;
+    border: 2px solid #0073aa;
+    background: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.wpulike-custom-template .custom-like-btn:hover {
+    background: #0073aa;
+    color: white;
+}
+
+.wpulike-custom-template .custom-counter {
+    font-weight: bold;
+    font-size: 16px;
 }
 ```
 
