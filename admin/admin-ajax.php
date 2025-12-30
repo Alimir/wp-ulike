@@ -298,3 +298,118 @@ add_action('wp_ajax_wp_ulike_localization','wp_ulike_localization_api');
 add_action('wp_ajax_nopriv_wp_ulike_localization', 'wp_ulike_localization_api');
 // @endif
 
+/**
+ * Settings schema api
+ *
+ * @return void
+ */
+function wp_ulike_schema_api(){
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	// Get settings API instance
+	global $wp_ulike_settings_api;
+	if ( ! isset( $wp_ulike_settings_api ) && class_exists( 'wp_ulike_settings_api' ) ) {
+		$wp_ulike_settings_api = new wp_ulike_settings_api();
+	}
+
+	if ( isset( $wp_ulike_settings_api ) && method_exists( $wp_ulike_settings_api, 'get_schema' ) ) {
+		$schema = $wp_ulike_settings_api->get_schema();
+		wp_send_json_success( $schema );
+	} else {
+		wp_send_json_error( esc_html__( 'Error: Settings API not available.', 'wp-ulike' ) );
+	}
+}
+add_action('wp_ajax_wp_ulike_schema_api','wp_ulike_schema_api');
+// @if DEV
+add_action('wp_ajax_nopriv_wp_ulike_schema_api', 'wp_ulike_schema_api');
+// @endif
+
+/**
+ * Settings values api
+ *
+ * @return void
+ */
+function wp_ulike_settings_api(){
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	// Get settings API instance
+	global $wp_ulike_settings_api;
+	if ( ! isset( $wp_ulike_settings_api ) && class_exists( 'wp_ulike_settings_api' ) ) {
+		$wp_ulike_settings_api = new wp_ulike_settings_api();
+	}
+
+	if ( isset( $wp_ulike_settings_api ) && method_exists( $wp_ulike_settings_api, 'get_settings' ) ) {
+		$values = $wp_ulike_settings_api->get_settings( null );
+		wp_send_json_success( $values );
+	} else {
+		wp_send_json_error( esc_html__( 'Error: Settings API not available.', 'wp-ulike' ) );
+	}
+}
+add_action('wp_ajax_wp_ulike_settings_api','wp_ulike_settings_api');
+// @if DEV
+add_action('wp_ajax_nopriv_wp_ulike_settings_api', 'wp_ulike_settings_api');
+// @endif
+
+/**
+ * Save settings api
+ *
+ * @return void
+ */
+function wp_ulike_save_settings_api(){
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	// Get JSON data from request body
+	$json = file_get_contents( 'php://input' );
+	$values = json_decode( $json, true );
+
+	if ( ! is_array( $values ) ) {
+		wp_send_json_error( esc_html__( 'Error: Invalid request data. Expected an object with setting values.', 'wp-ulike' ) );
+	}
+
+	// Get settings API instance
+	global $wp_ulike_settings_api;
+	if ( ! isset( $wp_ulike_settings_api ) && class_exists( 'wp_ulike_settings_api' ) ) {
+		$wp_ulike_settings_api = new wp_ulike_settings_api();
+	}
+
+	if ( isset( $wp_ulike_settings_api ) && method_exists( $wp_ulike_settings_api, 'save_settings' ) ) {
+		$result = $wp_ulike_settings_api->save_settings( $values );
+		
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
+		} else {
+			wp_send_json_success( $result );
+		}
+	} else {
+		wp_send_json_error( esc_html__( 'Error: Settings API not available.', 'wp-ulike' ) );
+	}
+}
+add_action('wp_ajax_wp_ulike_save_settings_api','wp_ulike_save_settings_api');
+// @if DEV
+add_action('wp_ajax_nopriv_wp_ulike_save_settings_api', 'wp_ulike_save_settings_api');
+// @endif
+

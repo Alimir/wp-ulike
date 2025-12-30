@@ -12,6 +12,9 @@ if ( ! defined( 'WPINC' ) ) {
 // include settings panel core
 require_once( WP_ULIKE_ADMIN_DIR . '/settings/classes/setup.class.php');
 
+// Load REST API for Optiwich integration
+require_once WP_ULIKE_ADMIN_DIR . '/classes/class-wp-ulike-settings-api.php';
+
 // Register customizer options
 new wp_ulike_customizer();
 

@@ -13,62 +13,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
     class wp_ulike_admin_panel{
 
         protected $option_domain = 'wp_ulike_settings';
+        protected $sections_cache = null;
 
 		/**
 		 * __construct
 		 */
 		function __construct() {
-            add_action( 'ulf_loaded', array( $this, 'register_panel' ) );
             add_action( 'wp_ulike_settings_loaded', array( $this, 'register_sections' ) );
-            add_action( 'wp_ulike_settings_loaded', array( $this, 'register_pages' ) );
-
-            add_action( 'ulf_'.$this->option_domain.'_saved', array( $this, 'options_saved' ) );
-        }
-
-        public function options_saved(){
-            // Update custom css
-            wp_ulike_save_custom_css();
-        }
-
-        /**
-         * Register setting panel
-         *
-         * @return void
-         */
-        public function register_panel(){
-            // Create options
-            ULF::createOptions( $this->option_domain, array(
-                'framework_title'    => apply_filters( 'wp_ulike_plugin_name', esc_html__( 'WP ULike', 'wp-ulike' ) ),
-                'menu_title'         => apply_filters( 'wp_ulike_plugin_name', esc_html__( 'WP ULike', 'wp-ulike' ) ),
-                'sub_menu_title'     => esc_html__( 'Settings', 'wp-ulike' ),
-                'menu_slug'          => 'wp-ulike-settings',
-                'menu_capability'    => 'manage_options',
-                'menu_icon'          => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjUgMjUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI1IDI1OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggY2xhc3M9InN0MCIgZD0iTTIzLjksNy4xTDIzLjksNy4xYy0xLjUtMS41LTMuOS0xLjUtNS40LDBsLTEuNSwxLjVsMS40LDEuNGwxLjUtMS41YzAuNC0wLjQsMC44LTAuNiwxLjMtMC42YzAuNSwwLDEuMSwwLjIsMS40LDAuNmMwLjcsMC44LDAuNywyLTAuMSwyLjdsLTEsMWMtMC41LDAuNS0xLjIsMC41LTEuNiwwYy0wLjktMC45LTUuMS01LjEtNS4xLTUuMWMtMC43LTAuNy0xLjctMS4xLTIuNy0xLjFsMCwwYy0xLDAtMiwwLjQtMi43LDEuMUM5LDcuNCw4LjgsNy43LDguNiw4LjFMOC41LDguM2wxLjYsMS42bDAuMS0wLjVjMC4yLTEsMS4yLTEuNywyLjMtMS41YzAuNCwwLjEsMC43LDAuMiwxLDAuNWw1LjksNS45TDE2LjYsMTdMMTIuNywxM2wwLDBjLTAuMS0wLjEtMC40LTAuNC0yLjEtMi4xbC00LTRDNSw1LjQsMi42LDUuNCwxLjEsNi45Yy0xLjUsMS41LTEuNSwzLjksMCw1LjRsNiw2YzAuMywwLjMsMC44LDAuNSwxLjIsMC41bDAsMGMwLjUsMCwwLjktMC4yLDEuMi0wLjVsMi41LTIuNWwtMS40LTEuNGwtMi40LDIuNGwtNS45LTUuOWMtMC43LTAuOC0wLjctMiwwLjEtMi43YzAuNy0wLjcsMS45LTAuNywyLjYsMGw0LDRjMC4xLDAuMSwwLjEsMC4yLDAuMiwwLjJsNiw2YzAuMywwLjMsMC44LDAuNSwxLjMsMC41YzAsMCwwLDAsMCwwYzAuNSwwLDAuOS0wLjIsMS4yLTAuNWw2LTZDMjUuNCwxMSwyNS40LDguNiwyMy45LDcuMXoiLz48L3N2Zz4=',
-                'menu_position'      => 313,
-                'show_bar_menu'      => false,
-                'show_sub_menu'      => true,
-                'show_search'        => true,
-                'show_reset_all'     => true,
-                'show_reset_section' => true,
-                'show_footer'        => true,
-                'show_all_options'   => true,
-                'show_form_warning'  => true,
-                'sticky_header'      => true,
-                'save_defaults'      => true,
-                'ajax_save'          => true,
-                'footer_after'       => '',
-                'footer_text'        => sprintf(
-                    '<a href="%s" title="Documents" target="_blank">%s</a>',
-                    'https://docs.wpulike.com/category/8-settings/',
-                    esc_html__( 'Explore Settings', 'wp-ulike' )
-                ),
-                'enqueue_webfont'    => true,
-                'async_webfont'      => false,
-                'output_css'         => true,
-                'theme'              => 'light wp-ulike-settings-panel'
-            ) );
-
-            do_action( 'wp_ulike_settings_loaded' );
+            // Register pages directly - no longer need to wait for hook
+            $this->register_pages();
         }
 
         /**
@@ -82,23 +35,30 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
         /**
          * Register setting sections
+         * Returns array structure for API consumption
          *
-         * @return void
+         * @return array Sections structure
          */
         public function register_sections(){
+            // Return cached sections if available
+            if ( $this->sections_cache !== null ) {
+                return $this->sections_cache;
+            }
 
             do_action( 'wp_ulike_panel_sections_started' );
+
+            $sections = array();
 
             /**
              * Configuration Section
              */
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'id'    => 'configuration',
                 'title' => esc_html__( 'Configuration','wp-ulike'),
-                'icon'  => 'fa fa-home',
-            ) );
+            );
+
             // General
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'General','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_general', array(
@@ -252,7 +212,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'dependency' => array( 'blacklist_integration', 'any', 'default' )
                     )
                 ) )
-            ) );
+            );
 
             // Get all content options
             $get_content_options = apply_filters( 'wp_ulike_panel_content_options', $this->get_content_options() );
@@ -370,7 +330,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             }
 
             // Content Groups
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Content Types','wp-ulike'),
                 'fields' => array(
@@ -431,9 +391,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     )
                     // End
                 )
-            ) );
+            );
+
             // Integrations
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Integrations','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_integrations', array(
@@ -450,10 +411,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'  => sprintf( '%s<br><strong>* %s</strong>', esc_html__('By activating this option, users who have upgraded to version +4.1 and lost their old options can restore and enable previous settings.', 'wp-ulike'), esc_html__('Attention: If you have been using WP ULike +v4.1 from the beginning, do not enable this option.', 'wp-ulike') )
                     )
                 ) )
-            ) );
+            );
 
             // Profiles
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Profiles','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_profiles', array(
@@ -480,10 +441,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         )
                     )
                 ) )
-            ) );
+            );
 
             // Login & Signup
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Login & Signup','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_forms', array(
@@ -510,10 +471,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         )
                     )
                 ) )
-            ) );
+            );
 
             // Social login integration
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Social Logins','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_social_logins', array(
@@ -540,11 +501,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         )
                     )
                 ) )
-            ) );
-
+            );
 
             // Share buttons
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Share Buttons','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_share_buttons', array(
@@ -571,22 +531,17 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         )
                     )
                 ) )
-            ) );
-
-            /**
-             * Customization Section
-             */
-            ULF::createSection( $this->option_domain, array(
-                'id'    => 'translations',
-                'title' => esc_html__( 'Translations','wp-ulike'),
-                'icon'  => 'fa fa-language',
-            ) );
-
+            );
 
             /**
              * Translations Section
              */
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
+                'id'    => 'translations',
+                'title' => esc_html__( 'Translations','wp-ulike'),
+            );
+
+            $sections[] = array(
                 'title'  => esc_html__( 'Strings','wp-ulike'),
                 'parent' => 'translations',
                 'fields' => apply_filters( 'wp_ulike_panel_translations', array(
@@ -633,18 +588,17 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'    => esc_html__( 'Accessibility label for screen readers. Helps visually impaired users understand what the button does.', 'wp-ulike')
                     )
                 ) )
-            ) );
+            );
 
             /**
              * Customization Section
              */
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'id'    => 'customization',
                 'title' => esc_html__( 'Developer Tools','wp-ulike'),
-                'icon'  => 'fa fa-code',
-            ) );
+            );
 
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'customization',
                 'title'  => esc_html__( 'Scripts','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_customization', array(
@@ -673,9 +627,9 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'  => esc_html__('If you prefer not to load custom.css, output styles inline on the page.', 'wp-ulike')
                     )
                 ) )
-            ) );
+            );
 
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'customization',
                 'title'  => esc_html__( 'REST API','wp-ulike' ),
                 'fields' => apply_filters( 'wp_ulike_panel_rest_api', array(
@@ -702,9 +656,9 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         )
                     )
                 ) )
-            ) );
+            );
 
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => 'customization',
                 'title'  => esc_html__( 'Optimization','wp-ulike' ),
                 'fields' => apply_filters( 'wp_ulike_panel_optimization', array(
@@ -731,9 +685,31 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         )
                     )
                 ) )
-            ) );
+            );
+
+            /**
+             * Backup & Restore Section
+             */
+            $sections[] = array(
+                'id'    => 'backup',
+                'title' => esc_html__( 'Backup & Restore', 'wp-ulike' ),
+                'fields' => array(
+                    array(
+                        'id'    => 'backup_restore',
+                        'type'  => 'backup',
+                        'title' => esc_html__( 'Backup & Restore Settings', 'wp-ulike' ),
+                        'desc'  => esc_html__( 'Import settings from a JSON file or export your current settings for backup purposes.', 'wp-ulike' ),
+                    ),
+                ),
+            );
+
 
             do_action( 'wp_ulike_panel_sections_ended' );
+
+            // Cache sections
+            $this->sections_cache = $sections;
+
+            return $sections;
         }
 
         /**
@@ -1063,6 +1039,149 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             }
 
             return $output;
+        }
+
+        /**
+         * Get Optiwich schema structure
+         * Converts sections to pages structure for React consumption
+         *
+         * @return array Schema structure with pages and sections
+         */
+        public function get_optiwich_schema() {
+            $sections = $this->register_sections();
+            $pages = array();
+            $pages_map = array();
+
+            // Helper: Process fields that may need special handling (callbacks, fields without IDs)
+            // Callbacks are rendered and converted to content fields
+            // Fields without IDs get auto-generated IDs
+            $process_callbacks = function( $fields ) {
+                if ( ! is_array( $fields ) ) {
+                    return array();
+                }
+                
+                $processed = array_map( function( $field ) use ( &$process_callbacks ) {
+                    // If it's a callback field, render it and convert to content
+                    if ( isset( $field['type'] ) && $field['type'] === 'callback' && isset( $field['function'] ) ) {
+                        // Security: Whitelist allowed callback functions to prevent arbitrary code execution
+                        $allowed_callbacks = apply_filters( 'wp_ulike_allowed_callback_functions', array(
+                            'wp_ulike_get_notice_render',
+                            // Add other trusted callback functions here
+                        ) );
+                        
+                        // Only execute whitelisted callback functions
+                        if ( ! in_array( $field['function'], $allowed_callbacks, true ) || ! function_exists( $field['function'] ) ) {
+                            // Skip this field if callback is not whitelisted or doesn't exist
+                            return null;
+                        }
+                        
+                        $args = isset( $field['args'] ) && is_array( $field['args'] ) ? $field['args'] : array();
+                        
+                        // Use output buffering to capture callback output (handles both echo and return)
+                        ob_start();
+                        $returned = call_user_func( $field['function'], $args );
+                        $output = ob_get_clean();
+                        
+                        // Use output if callback echoed, otherwise use returned value
+                        $rendered = ! empty( $output ) ? $output : ( is_string( $returned ) ? $returned : '' );
+
+                        // Convert to content field with rendered HTML
+                        // Generate an ID if not present (callback fields often don't have IDs)
+                        $field_id = isset( $field['id'] ) ? $field['id'] : 'callback_' . md5( serialize( array( $field['function'], $args ) ) );
+
+                        return array(
+                            'id'      => $field_id,
+                            'type'    => 'content',
+                            'content' => $rendered, // HTML will be properly JSON-encoded by wp_send_json
+                        );
+                    }
+
+                    // Ensure all fields have an ID (required by React FieldBase interface)
+                    // Generate ID for fields that don't have one (like submessage, content fields)
+                    if ( ! isset( $field['id'] ) || empty( $field['id'] ) ) {
+                        $field_type = isset( $field['type'] ) ? $field['type'] : 'field';
+                        $field_content = isset( $field['content'] ) ? $field['content'] : '';
+                        $field['id'] = $field_type . '_' . md5( serialize( array( $field_type, $field_content ) ) );
+                    }
+                    
+                    return $field;
+                }, $fields );
+                
+                // Filter out null values (from skipped callback fields)
+                return array_values( array_filter( $processed, function( $field ) {
+                    return $field !== null;
+                } ) );
+            };
+
+            // First pass: create top-level pages
+            foreach ( $sections as $section ) {
+                if ( isset( $section['id'] ) && ! isset( $section['parent'] ) ) {
+                    $page = array(
+                        'id'       => $section['id'],
+                        'title'    => isset( $section['title'] ) ? $section['title'] : '',
+                        'sections' => array(),
+                    );
+                    $pages[] = $page;
+                    $pages_map[ $section['id'] ] = &$pages[ count( $pages ) - 1 ];
+                }
+            }
+
+            // Second pass: process sections and convert to pages/sections
+            foreach ( $sections as $section ) {
+                // Child page (has parent)
+                if ( isset( $section['parent'] ) ) {
+                    $child_page = array(
+                        'id'       => isset( $section['id'] ) ? $section['id'] : sanitize_title( isset( $section['title'] ) ? $section['title'] : '' ),
+                        'title'    => isset( $section['title'] ) ? $section['title'] : '',
+                        'parent'   => $section['parent'],
+                        'sections' => array(),
+                    );
+
+                    // Convert fieldsets to sections (keep original fieldset ID with _group suffix)
+                    if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
+                        foreach ( $section['fields'] as $field ) {
+                            if ( isset( $field['type'] ) && $field['type'] === 'fieldset' && isset( $field['fields'] ) && isset( $field['id'] ) ) {
+                                // Process callbacks in fieldset fields before including them
+                                $processed_fields = $process_callbacks( $field['fields'] );
+                                $child_page['sections'][] = array(
+                                    'id'     => $field['id'], // Keep original ID (e.g., 'posts_group')
+                                    'title'  => isset( $field['title'] ) ? $field['title'] : '',
+                                    'fields' => array_values( $processed_fields ),
+                                );
+                            }
+                        }
+
+                        // If no fieldsets found, create single section from direct fields
+                        if ( empty( $child_page['sections'] ) ) {
+                            $processed_fields = $process_callbacks( $section['fields'] );
+                            if ( ! empty( $processed_fields ) ) {
+                                $child_page['sections'][] = array(
+                                    'id'     => isset( $section['id'] ) ? $section['id'] : 'section',
+                                    'title'  => isset( $section['title'] ) ? $section['title'] : '',
+                                    'fields' => array_values( $processed_fields ),
+                                );
+                            }
+                        }
+                    }
+
+                    $pages[] = $child_page;
+
+                } elseif ( isset( $section['id'] ) && isset( $section['fields'] ) ) {
+                    // Top-level page with direct fields (no parent)
+                    if ( isset( $pages_map[ $section['id'] ] ) ) {
+                        $processed_fields = $process_callbacks( $section['fields'] );
+                        if ( ! empty( $processed_fields ) ) {
+                            $pages_map[ $section['id'] ]['sections'][] = array(
+                                'id'     => $section['id'],
+                                'title'  => isset( $section['title'] ) ? $section['title'] : '',
+                                'fields' => array_values( $processed_fields ),
+                            );
+                        }
+                    }
+                }
+            }
+
+            return array( 'pages' => apply_filters( 'wp_ulike_optiwich_pages', $pages ) );
         }
 
     }

@@ -30,6 +30,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 			// general assets
 			$this->load_styles();
 			$this->load_statistics_app();
+			$this->load_optiwich_app();
 		}
 
 
@@ -92,6 +93,50 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 				// Pass the app config to the frontend
 				wp_localize_script( 'wp_ulike_admin_react', 'StatsAppConfig', array(
 					'nonce' => wp_create_nonce( WP_ULIKE_SLUG )
+				));
+			}
+		}
+
+		/**
+		 * Load Optiwich settings app
+		 *
+		 * @return void
+		 */
+		function load_optiwich_app(){
+			// only load on settings menu page
+			if ( strpos( $this->hook, WP_ULIKE_SLUG ) !== false && preg_match("/(settings)/i", $this->hook )  ) {
+				// Enqueue WordPress media library (required for upload fields)
+				wp_enqueue_media();
+
+				// Enqueue Optiwich CSS
+				wp_enqueue_style(
+					'wp-ulike-optiwich',
+					WP_ULIKE_ADMIN_URL . '/includes/optiwich/style.css',
+					array(),
+					WP_ULIKE_VERSION
+				);
+
+				// Enqueue Optiwich JS
+				wp_enqueue_script(
+					'wp-ulike-optiwich',
+					WP_ULIKE_ADMIN_URL . '/includes/optiwich/optiwich.umd.js',
+					array(),
+					WP_ULIKE_VERSION,
+					true
+				);
+
+				// Pass the app config to the frontend
+				wp_localize_script( 'wp-ulike-optiwich', 'OptiwichConfig', array(
+					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( WP_ULIKE_SLUG ),
+					'title'   => WP_ULIKE_NAME,
+					'logo'    => WP_ULIKE_ASSETS_URL . '/img/wp-ulike-logo.svg',
+					'slug'    => WP_ULIKE_SLUG,
+					'actions' => array(
+						'schema'  => 'wp_ulike_schema_api',
+						'settings' => 'wp_ulike_settings_api',
+						'save'    => 'wp_ulike_save_settings_api'
+					)
 				));
 			}
 		}
