@@ -38,24 +38,6 @@ function wp_ulike_copyright( $text ) {
 add_filter( 'admin_footer_text', 'wp_ulike_copyright' );
 
 
-/**
- * Filters a screen option value before it is set.
- *
- * @param string $status
- * @param string $option The option name.
- * @param string $value The number of rows to use.
- * @return string
- */
-function wp_ulike_logs_per_page_set_option( $status, $option, $value ) {
-
-	if ( 'wp_ulike_logs_per_page' == $option ) {
-		return $value;
-	}
-
-	return $status;
-}
-add_filter( 'set-screen-option', 'wp_ulike_logs_per_page_set_option', 10, 3 );
-
  /**
   * The Filter is used at the very end of the get_avatar() function
   *

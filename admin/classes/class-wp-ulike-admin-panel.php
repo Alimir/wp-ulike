@@ -635,35 +635,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             );
 
-            $sections[] = array(
-                'parent' => 'customization',
-                'title'  => esc_html__( 'Optimization','wp-ulike' ),
-                'fields' => apply_filters( 'wp_ulike_panel_optimization', array(
-                    array(
-                        'type'     => 'callback',
-                        'function' => 'wp_ulike_get_notice_render',
-                        'args'     => array(
-                            'id'          => 'wp_ulike_pro_optimization_banner',
-                            'title'       => esc_html__( 'How to Optimize or Repair WP ULike Database Tables?', 'wp-ulike' ),
-                            'description' => esc_html__( "Have you ever optimized your WP ULike database? Optimizing your database cleans up unwanted data which reduces database size and improves performance." , 'wp-ulike' ),
-                            'skin'        => 'default',
-                            'has_close'   => false,
-                            'buttons'     => array(
-                                array(
-                                    'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-                                    'color_name' => 'default',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/database-optimization/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
-                                )
-                            ),
-                            'image'     => array(
-                                'width' => '120',
-                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/database.svg'
-                            )
-                        )
-                    )
-                ) )
-            );
-
             /**
              * Backup & Restore Section
              */
