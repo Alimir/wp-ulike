@@ -33,6 +33,21 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         protected $schema_cache = null;
 
         /**
+         * Field types that are informational only (not form fields)
+         */
+        const INFORMATIONAL_FIELD_TYPES = array( 'submessage', 'content', 'heading', 'subheading', 'callback' );
+
+        /**
+         * Field types that contain nested fields
+         */
+        const NESTED_FIELD_TYPES = array( 'group', 'repeater', 'fieldset' );
+
+        /**
+         * Field properties to preserve when converting callbacks to content
+         */
+        const PRESERVE_PROPERTIES = array( 'dependency', 'title', 'desc', 'help', 'class', 'attributes' );
+
+        /**
          * Constructor
          */
         public function __construct() {
@@ -103,7 +118,22 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 do_action( 'wp_ulike_settings_loaded' );
             }
 
-            // Get schema from admin panel
+            // Get schema using local method
+            $schema = $this->get_optiwich_schema();
+
+            // Schema is already processed (callbacks rendered, IDs generated) by get_optiwich_schema()
+            // No need to clean fields anymore - all fields are supported
+            return $schema;
+        }
+
+        /**
+         * Get Optiwich schema structure
+         * Converts sections to pages structure for React consumption
+         *
+         * @return array Schema structure with pages and sections
+         */
+        public function get_optiwich_schema() {
+            // Get sections from admin panel
             global $wp_ulike_admin_panel;
             
             // If admin panel doesn't exist, try to create it
@@ -111,15 +141,17 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 $wp_ulike_admin_panel = new wp_ulike_admin_panel();
             }
             
-            if ( isset( $wp_ulike_admin_panel ) && method_exists( $wp_ulike_admin_panel, 'get_optiwich_schema' ) ) {
-                $schema = $wp_ulike_admin_panel->get_optiwich_schema();
+            // Get sections from admin panel
+            if ( isset( $wp_ulike_admin_panel ) && method_exists( $wp_ulike_admin_panel, 'register_sections' ) ) {
+                $sections = $wp_ulike_admin_panel->register_sections();
             } else {
-                $schema = array( 'pages' => array() );
+                $sections = array();
             }
 
-            // Schema is already processed (callbacks rendered, IDs generated) by get_optiwich_schema()
-            // No need to clean fields anymore - all fields are supported
-            return $schema;
+            // Build pages structure from sections
+            $pages = $this->build_pages_structure( $sections );
+            
+            return array( 'pages' => apply_filters( 'wp_ulike_optiwich_pages', $pages ) );
         }
         
         /**
@@ -456,6 +488,310 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 // For other types (null, objects, etc.), return as-is
                 return $values;
             }
+        }
+
+        /**
+         * Build pages structure from sections (single-pass optimization)
+         * Converts sections to pages structure for React consumption
+         *
+         * @param array $sections Sections array from register_sections()
+         * @return array Pages structure
+         */
+        public function build_pages_structure( $sections ) {
+            $pages = array();
+            $pages_map = array();
+
+            // Single pass: build pages and process sections simultaneously
+            foreach ( $sections as $section ) {
+                // Top-level page (has id, no parent)
+                if ( isset( $section['id'] ) && ! isset( $section['parent'] ) ) {
+                    $page = $this->create_page( $section );
+                    $pages[] = $page;
+                    // Store reference to last element for adding fields later
+                    $pages_map[ $section['id'] ] = &$pages[ count( $pages ) - 1 ];
+                    
+                    // If this top-level page has fields, add them immediately
+                    if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
+                        $processed_fields = $this->process_field_callbacks( $section['fields'] );
+                        if ( ! empty( $processed_fields ) ) {
+                            $pages_map[ $section['id'] ]['sections'][] = array(
+                                'id'     => 'section',
+                                'title'  => $section['title'] ?? '',
+                                'fields' => array_values( $processed_fields ),
+                            );
+                        }
+                    }
+                }
+                // Child page (has parent)
+                elseif ( isset( $section['parent'] ) ) {
+                    $pages[] = $this->build_child_page( $section );
+                }
+            }
+
+            return $pages;
+        }
+
+        /**
+         * Create a page structure from section
+         *
+         * @param array $section Section data
+         * @return array Page structure
+         */
+        protected function create_page( $section ) {
+            return array(
+                'id'       => $section['id'] ?? '',
+                'title'    => $section['title'] ?? '',
+                'sections' => array(),
+            );
+        }
+
+        /**
+         * Build child page with sections from fieldsets
+         *
+         * @param array $section Section data with parent
+         * @return array Child page structure
+         */
+        protected function build_child_page( $section ) {
+            $child_page = array(
+                'id'       => $section['id'] ?? sanitize_title( $section['title'] ?? '' ),
+                'title'    => $section['title'] ?? '',
+                'parent'   => $section['parent'],
+                'sections' => array(),
+            );
+
+            if ( ! isset( $section['fields'] ) || ! is_array( $section['fields'] ) ) {
+                return $child_page;
+            }
+
+            // Extract section fieldsets and regular fields
+            $extracted = $this->extract_section_fieldsets( $section['fields'] );
+            
+            // Add extracted fieldset sections
+            foreach ( $extracted['fieldset_sections'] as $fieldset_section ) {
+                $child_page['sections'][] = $fieldset_section;
+            }
+
+            // Add regular fields section if needed
+            if ( $extracted['should_create_regular_section'] && ! empty( $extracted['regular_fields'] ) ) {
+                $processed_fields = $this->process_field_callbacks( $extracted['regular_fields'] );
+                if ( ! empty( $processed_fields ) ) {
+                    $child_page['sections'][] = array(
+                        'id'     => $section['id'] ?? 'section',
+                        'title'  => $section['title'] ?? '',
+                        'fields' => array_values( $processed_fields ),
+                    );
+                }
+            }
+
+            return $child_page;
+        }
+
+        /**
+         * Extract fieldsets marked as sections from fields array
+         *
+         * @param array $fields Fields array
+         * @return array Array with 'fieldset_sections', 'regular_fields', and 'should_create_regular_section'
+         */
+        protected function extract_section_fieldsets( $fields ) {
+            $regular_fields = array();
+            $fieldset_sections = array();
+            $has_section_fieldsets = false;
+
+            foreach ( $fields as $field ) {
+                // Check if fieldset is marked to display as a section
+                if ( $this->is_fieldset_section( $field ) ) {
+                    $has_section_fieldsets = true;
+                    $processed_fields = $this->process_field_callbacks( $field['fields'] );
+                    $fieldset_sections[] = array(
+                        'id'     => $field['id'],
+                        'title'  => $field['title'] ?? '',
+                        'fields' => array_values( $processed_fields ),
+                    );
+                } else {
+                    // All other fields go to regular fields
+                    $regular_fields[] = $field;
+                }
+            }
+
+            // Determine if regular section should be created
+            $should_create_regular_section = false;
+            if ( ! $has_section_fieldsets ) {
+                // No section-fieldsets: always create regular fields section if fields exist
+                $should_create_regular_section = ! empty( $regular_fields );
+            } else {
+                // Section-fieldsets exist: only create regular section if there are form fields
+                $should_create_regular_section = $this->has_form_fields( $regular_fields );
+            }
+
+            return array(
+                'fieldset_sections'            => $fieldset_sections,
+                'regular_fields'               => $regular_fields,
+                'should_create_regular_section' => $should_create_regular_section,
+            );
+        }
+
+        /**
+         * Check if fieldset should be displayed as a section
+         *
+         * @param array $field Field data
+         * @return bool True if fieldset marked as section
+         */
+        protected function is_fieldset_section( $field ) {
+            return isset( $field['type'], $field['fields'], $field['id'] )
+                && $field['type'] === 'fieldset'
+                && isset( $field['display_as'] )
+                && $field['display_as'] === 'section';
+        }
+
+        /**
+         * Check if fields array contains actual form fields (not just informational)
+         *
+         * @param array $fields Fields array
+         * @return bool True if contains form fields
+         */
+        protected function has_form_fields( $fields ) {
+            foreach ( $fields as $field ) {
+                $field_type = $field['type'] ?? '';
+                // Skip only informational fields - fieldsets and other form fields count
+                if ( ! in_array( $field_type, self::INFORMATIONAL_FIELD_TYPES, true ) ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Process fields: convert callbacks to content, ensure IDs, handle nested structures
+         *
+         * @param array $fields Fields array
+         * @return array Processed fields array
+         */
+        protected function process_field_callbacks( $fields ) {
+            if ( ! is_array( $fields ) ) {
+                return array();
+            }
+
+            return array_map( array( $this, 'process_single_field' ), $fields );
+        }
+
+        /**
+         * Process a single field: handle callbacks, nested structures, and ID generation
+         *
+         * @param array $field Field data
+         * @return array Processed field data
+         */
+        protected function process_single_field( $field ) {
+            // Convert callback fields to content fields
+            if ( $this->is_callback_field( $field ) ) {
+                return $this->convert_callback_to_content( $field );
+            }
+
+            // Process nested field structures
+            $field = $this->process_nested_fields( $field );
+
+            // Ensure field has an ID
+            if ( empty( $field['id'] ?? '' ) ) {
+                $field['id'] = $this->generate_field_id( $field );
+            }
+
+            return $field;
+        }
+
+        /**
+         * Check if field is a callback field
+         *
+         * @param array $field Field data
+         * @return bool True if callback field
+         */
+        protected function is_callback_field( $field ) {
+            return isset( $field['type'], $field['function'] )
+                && $field['type'] === 'callback'
+                && function_exists( $field['function'] );
+        }
+
+        /**
+         * Convert callback field to content field
+         *
+         * @param array $field Callback field data
+         * @return array Content field data
+         */
+        protected function convert_callback_to_content( $field ) {
+            $args = $field['args'] ?? array();
+            if ( ! is_array( $args ) ) {
+                $args = array();
+            }
+
+            // Use output buffering to capture callback output (handles both echo and return)
+            ob_start();
+            try {
+                $returned = call_user_func( $field['function'], $args );
+                $output = ob_get_clean();
+            } catch ( Exception $e ) {
+                ob_end_clean();
+                $output = '';
+                $returned = '';
+            }
+
+            // Use output if callback echoed, otherwise use returned value
+            $rendered = ! empty( $output ) ? $output : ( is_string( $returned ) ? $returned : '' );
+
+            // Generate ID if not present
+            $field_id = $field['id'] ?? 'callback_' . md5( serialize( array( $field['function'], $args ) ) );
+
+            // Build converted field
+            $converted_field = array(
+                'id'      => $field_id,
+                'type'    => 'content',
+                'content' => $rendered,
+            );
+
+            // Preserve important field properties
+            foreach ( self::PRESERVE_PROPERTIES as $prop ) {
+                if ( isset( $field[ $prop ] ) ) {
+                    $converted_field[ $prop ] = $field[ $prop ];
+                }
+            }
+
+            return $converted_field;
+        }
+
+        /**
+         * Process nested field structures (groups, fieldsets, tabbed fields)
+         *
+         * @param array $field Field data
+         * @return array Field with processed nested structures
+         */
+        protected function process_nested_fields( $field ) {
+            $field_type = $field['type'] ?? '';
+
+            // Process nested fields in groups, repeaters, fieldsets
+            if ( in_array( $field_type, self::NESTED_FIELD_TYPES, true ) && isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
+                $field['fields'] = $this->process_field_callbacks( $field['fields'] );
+            }
+
+            // Process tabbed fields (nested tabs with fields)
+            if ( $field_type === 'tabbed' && isset( $field['tabs'] ) && is_array( $field['tabs'] ) ) {
+                foreach ( $field['tabs'] as $tab_key => $tab ) {
+                    if ( isset( $tab['fields'] ) && is_array( $tab['fields'] ) ) {
+                        $field['tabs'][ $tab_key ]['fields'] = $this->process_field_callbacks( $tab['fields'] );
+                    }
+                }
+            }
+
+            return $field;
+        }
+
+        /**
+         * Generate field ID for fields without one
+         *
+         * @param array $field Field data
+         * @return string Generated field ID
+         */
+        protected function generate_field_id( $field ) {
+            $field_type = $field['type'] ?? 'field';
+            $field_content = $field['content'] ?? '';
+            // Use simpler ID generation (md5 of type + content hash)
+            return $field_type . '_' . md5( serialize( array( $field_type, $field_content ) ) );
         }
 
     }

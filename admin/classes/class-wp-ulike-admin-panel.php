@@ -19,7 +19,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 		 * __construct
 		 */
 		function __construct() {
-            add_action( 'wp_ulike_settings_loaded', array( $this, 'register_sections' ) );
             // Register pages directly - no longer need to wait for hook
             $this->register_pages();
         }
@@ -242,155 +241,133 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'desc'       => esc_html__('Add a likes counter column to the admin list.', 'wp-ulike')
             );
 
-            // Generate buddypress fields
-            $get_content_fields['buddypress'] = $get_content_options;
-            unset( $get_content_fields['buddypress']['auto_display_filter'] );
-            unset( $get_content_fields['buddypress']['auto_display_filter_post_types'] );
-            $get_content_fields['buddypress']['auto_display_position']['options'] = array(
-                'content' => esc_html__('Activity Content', 'wp-ulike'),
-                'meta'    => esc_html__('Activity Meta', 'wp-ulike')
-            );
-            $get_content_fields['buddypress']['auto_display_position']['default'] = 'content';
-            $get_content_fields['buddypress']['enable_comments'] = array(
-                'id'         => 'enable_comments',
-                'type'       => 'switcher',
-                'title'      => esc_html__('Enable Activity Comment Likes', 'wp-ulike'),
-                'desc'       => esc_html__('Allow liking BuddyPress comments in the activity stream.', 'wp-ulike')
-            );
-            $get_content_fields['buddypress']['enable_add_bp_activity'] = array(
-                'id'         => 'enable_add_bp_activity',
-                'type'       => 'switcher',
-                'title'      => esc_html__('Add Activity Entries for Likes', 'wp-ulike'),
-                'desc'       => esc_html__('Create a BuddyPress activity item when someone likes content.', 'wp-ulike'),
-            );
-            $get_content_fields['buddypress']['posts_notification_template'] = array(
-                'id'       => 'posts_notification_template',
-                'type'     => 'code_editor',
-                'settings' => array(
-                    'theme' => 'shadowfox',
-                    'mode'  => 'htmlmixed',
-                ),
-                'default'  => '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)',
-                'title'    => esc_html__('Post Activity Text', 'wp-ulike'),
-                'desc'     => esc_html__('Allowed Variables:', 'wp-ulike') . ' <code>%POST_LIKER%</code> , <code>%POST_PERMALINK%</code> , <code>%POST_COUNT%</code> , <code>%POST_TITLE%</code>',
-                'dependency'=> array( 'enable_add_bp_activity', '==', 'true' ),
-            );
-            $get_content_fields['buddypress']['comments_notification_template'] = array(
-                'id'       => 'comments_notification_template',
-                'type'     => 'code_editor',
-                'settings' => array(
-                    'theme' => 'shadowfox',
-                    'mode'  => 'htmlmixed',
-                ),
-                'default'  => '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)',
-                'title'    => esc_html__('Comment Activity Text', 'wp-ulike'),
-                'desc'     => esc_html__('Allowed Variables:', 'wp-ulike') . ' <code>%COMMENT_LIKER%</code> , <code>%COMMENT_AUTHOR%</code> , <code>%COMMENT_COUNT%</code>, <code>%COMMENT_PERMALINK%</code>',
-                'dependency'=> array( 'enable_add_bp_activity', '==', 'true' ),
-            );
-            $get_content_fields['buddypress']['enable_add_notification'] = array(
-                'id'         => 'enable_add_notification',
-                'type'       => 'switcher',
-                'title'      => esc_html__('Enable User Notifications', 'wp-ulike'),
-                'desc'       => esc_html__('Send a notification when your content receives a like.', 'wp-ulike'),
-            );
-            $get_content_fields['buddypress']['filter_user_notification_types'] = array(
-                'id'          => 'filter_user_notification_types',
-                'type'        => 'select',
-                        'title'       => esc_html__( 'Disable Notifications On','wp-ulike' ),
-                'desc'        => esc_html__('Choose where notifications are disabled.', 'wp-ulike'),
-                'chosen'      => true,
-                'multiple'    => true,
-                'options'     => array(
-                    'post'     => esc_html__('Posts', 'wp-ulike'),
-                    'comment'  => esc_html__('Comments', 'wp-ulike'),
-                    'activity' => esc_html__('Activities', 'wp-ulike'),
-                    'topic'    => esc_html__('Topics', 'wp-ulike')
-                ),
-                'dependency'=> array( 'enable_add_notification', '==', 'true' ),
-            );
-            $buddypress_options = array( array(
-                'type'    => 'content',
-                'content' => sprintf( '<strong>%s</strong> %s', esc_html__( 'BuddyPress', 'wp-ulike' ), esc_html__( 'plugin is not installed or activated', 'wp-ulike' ) ),
-            ) );
-            if( function_exists('is_buddypress') ){
+            // Generate buddypress fields (only if plugin is active)
+            $buddypress_options = array();
+            if ( function_exists('is_buddypress') ) {
+                $get_content_fields['buddypress'] = $get_content_options;
+                unset( $get_content_fields['buddypress']['auto_display_filter'] );
+                unset( $get_content_fields['buddypress']['auto_display_filter_post_types'] );
+                $get_content_fields['buddypress']['auto_display_position']['options'] = array(
+                    'content' => esc_html__('Activity Content', 'wp-ulike'),
+                    'meta'    => esc_html__('Activity Meta', 'wp-ulike')
+                );
+                $get_content_fields['buddypress']['auto_display_position']['default'] = 'content';
+                $get_content_fields['buddypress']['enable_comments'] = array(
+                    'id'         => 'enable_comments',
+                    'type'       => 'switcher',
+                    'title'      => esc_html__('Enable Activity Comment Likes', 'wp-ulike'),
+                    'desc'       => esc_html__('Allow liking BuddyPress comments in the activity stream.', 'wp-ulike')
+                );
+                $get_content_fields['buddypress']['enable_add_bp_activity'] = array(
+                    'id'         => 'enable_add_bp_activity',
+                    'type'       => 'switcher',
+                    'title'      => esc_html__('Add Activity Entries for Likes', 'wp-ulike'),
+                    'desc'       => esc_html__('Create a BuddyPress activity item when someone likes content.', 'wp-ulike'),
+                );
+                $get_content_fields['buddypress']['posts_notification_template'] = array(
+                    'id'       => 'posts_notification_template',
+                    'type'     => 'code_editor',
+                    'settings' => array(
+                        'theme' => 'shadowfox',
+                        'mode'  => 'htmlmixed',
+                    ),
+                    'default'  => '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)',
+                    'title'    => esc_html__('Post Activity Text', 'wp-ulike'),
+                    'desc'     => esc_html__('Allowed Variables:', 'wp-ulike') . ' <code>%POST_LIKER%</code> , <code>%POST_PERMALINK%</code> , <code>%POST_COUNT%</code> , <code>%POST_TITLE%</code>',
+                    'dependency'=> array( 'enable_add_bp_activity', '==', 'true' ),
+                );
+                $get_content_fields['buddypress']['comments_notification_template'] = array(
+                    'id'       => 'comments_notification_template',
+                    'type'     => 'code_editor',
+                    'settings' => array(
+                        'theme' => 'shadowfox',
+                        'mode'  => 'htmlmixed',
+                    ),
+                    'default'  => '<strong>%COMMENT_LIKER%</strong> liked <strong>%COMMENT_AUTHOR%</strong> comment. (So far, %COMMENT_AUTHOR% has <span class="badge">%COMMENT_COUNT%</span> likes for this comment)',
+                    'title'    => esc_html__('Comment Activity Text', 'wp-ulike'),
+                    'desc'     => esc_html__('Allowed Variables:', 'wp-ulike') . ' <code>%COMMENT_LIKER%</code> , <code>%COMMENT_AUTHOR%</code> , <code>%COMMENT_COUNT%</code>, <code>%COMMENT_PERMALINK%</code>',
+                    'dependency'=> array( 'enable_add_bp_activity', '==', 'true' ),
+                );
+                $get_content_fields['buddypress']['enable_add_notification'] = array(
+                    'id'         => 'enable_add_notification',
+                    'type'       => 'switcher',
+                    'title'      => esc_html__('Enable User Notifications', 'wp-ulike'),
+                    'desc'       => esc_html__('Send a notification when your content receives a like.', 'wp-ulike'),
+                );
+                $get_content_fields['buddypress']['filter_user_notification_types'] = array(
+                    'id'          => 'filter_user_notification_types',
+                    'type'        => 'select',
+                    'title'       => esc_html__( 'Disable Notifications On','wp-ulike' ),
+                    'desc'        => esc_html__('Choose where notifications are disabled.', 'wp-ulike'),
+                    'chosen'      => true,
+                    'multiple'    => true,
+                    'options'     => array(
+                        'post'     => esc_html__('Posts', 'wp-ulike'),
+                        'comment'  => esc_html__('Comments', 'wp-ulike'),
+                        'activity' => esc_html__('Activities', 'wp-ulike'),
+                        'topic'    => esc_html__('Topics', 'wp-ulike')
+                    ),
+                    'dependency'=> array( 'enable_add_notification', '==', 'true' ),
+                );
                 $buddypress_options = array_values( apply_filters( 'wp_ulike_panel_buddypress_type_options', $get_content_fields['buddypress'] ) );
             }
 
-            // Generate bbPress fields
-            $get_content_fields['bbpress'] = $get_content_options;
-            unset( $get_content_fields['bbpress']['auto_display_filter'] );
-            unset( $get_content_fields['bbpress']['auto_display_filter_post_types'] );
-
-            $bbPress_options = array( array(
-                'type'    => 'content',
-                'content' => sprintf( '<strong>%s</strong> %s', esc_html__( 'bbPress', 'wp-ulike' ), esc_html__( 'plugin is not installed or activated', 'wp-ulike' ) ),
-            ) );
-            if( function_exists('is_bbpress') ){
+            // Generate bbPress fields (only if plugin is active)
+            $bbPress_options = array();
+            if ( function_exists('is_bbpress') ) {
+                $get_content_fields['bbpress'] = $get_content_options;
+                unset( $get_content_fields['bbpress']['auto_display_filter'] );
+                unset( $get_content_fields['bbpress']['auto_display_filter_post_types'] );
                 $bbPress_options = array_values( apply_filters( 'wp_ulike_panel_bbpress_type_options', $get_content_fields['bbpress'] ) );
             }
 
             // Content Groups
+            $content_types_fields = array(
+                // Posts
+                array(
+                    'id'         => 'posts_group',
+                    'type'       => 'fieldset',
+                    'title'      => esc_html__('Posts'),
+                    'fields'     => array_values( apply_filters( 'wp_ulike_panel_post_type_options', $get_content_fields['posts'] ) ),
+                    'sanitize'   => 'wp_ulike_sanitize_multiple_select',
+                    'display_as' => 'section' // Mark as section menu
+                ),
+                // Comments
+                array(
+                    'id'         => 'comments_group',
+                    'type'       => 'fieldset',
+                    'title'      => esc_html__('Comments'),
+                    'fields'     => array_values( apply_filters( 'wp_ulike_panel_comment_type_options', $get_content_fields['comments'] ) ),
+                    'display_as' => 'section' // Mark as section menu
+                ),
+            );
+
+            // Only add BuddyPress if plugin is active
+            if ( function_exists('is_buddypress') ) {
+                $content_types_fields[] = array(
+                    'id'         => 'buddypress_group',
+                    'type'       => 'fieldset',
+                    'title'      => esc_html__('BuddyPress'),
+                    'fields'     => $buddypress_options,
+                    'display_as' => 'section' // Mark as section menu
+                );
+            }
+
+            // Only add bbPress if plugin is active
+            if ( function_exists('is_bbpress') ) {
+                $content_types_fields[] = array(
+                    'id'         => 'bbpress_group',
+                    'type'       => 'fieldset',
+                    'title'      => esc_html__('bbPress'),
+                    'fields'     => $bbPress_options,
+                    'display_as' => 'section' // Mark as section menu
+                );
+            }
+
             $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Content Types','wp-ulike'),
-                'fields' => array(
-                    array(
-                        'type'    => 'submessage',
-                        'style'   => 'info',
-                        'content' => sprintf(
-                            '%s<br><br>
-                        <strong>%s</strong> – %s<br>
-                        <strong>%s</strong> – %s<br>
-                        <strong>%s</strong> – %s<br>
-                        <strong>%s</strong> – %s<br><br>
-                        %s',
-                            esc_html__( 'Customize how the like button appears and behaves for different types of content on your site. Each content type below has its own settings that you can configure independently.', 'wp-ulike' ),
-                            esc_html__( 'Posts', 'wp-ulike' ),
-                            esc_html__( 'Configure likes for blog posts, pages, and custom post types (including WooCommerce products). Control where the button appears, who can vote, and how votes are displayed.', 'wp-ulike' ),
-                            esc_html__( 'Comments', 'wp-ulike' ),
-                            esc_html__( 'Enable likes on comments throughout your site. Perfect for engaging discussions and highlighting popular comments.', 'wp-ulike' ),
-                            esc_html__( 'BuddyPress', 'wp-ulike' ),
-                            esc_html__( 'Add likes to BuddyPress activities and activity comments. Optionally create activity updates and send notifications when content is liked.', 'wp-ulike' ),
-                            esc_html__( 'bbPress', 'wp-ulike' ),
-                            esc_html__( 'Enable likes on forum topics and replies. Help community members identify helpful and popular forum content.', 'wp-ulike' ),
-                            sprintf(
-                                '<a href="%s" title="Documents" target="_blank">%s</a>',
-                                'https://docs.wpulike.com/article/14-content-types-settings',
-                                esc_html__( 'Read More', 'wp-ulike' )
-                            )
-                        ),
-                    ),
-                    // Posts
-                    array(
-                        'id'       => 'posts_group',
-                        'type'     => 'fieldset',
-                        'title'    => esc_html__('Posts'),
-                        'fields'   => array_values( apply_filters( 'wp_ulike_panel_post_type_options', $get_content_fields['posts'] ) ),
-                        'sanitize' => 'wp_ulike_sanitize_multiple_select'
-                    ),
-                    // Comments
-                    array(
-                        'id'     => 'comments_group',
-                        'type'   => 'fieldset',
-                        'title'  => esc_html__('Comments'),
-                        'fields' => array_values( apply_filters( 'wp_ulike_panel_comment_type_options', $get_content_fields['comments'] ) )
-                    ),
-                    // BuddyPress
-                    array(
-                        'id'     => 'buddypress_group',
-                        'type'   => 'fieldset',
-                        'title'  => esc_html__('BuddyPress'),
-                        'fields' => $buddypress_options
-                    ),
-                    // Posts
-                    array(
-                        'id'     => 'bbpress_group',
-                        'type'   => 'fieldset',
-                        'title'  => esc_html__('bbPress'),
-                        'fields' => $bbPress_options
-                    )
-                    // End
-                )
+                'fields' => $content_types_fields
             );
 
             // Integrations
@@ -697,8 +674,16 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     array(
                         'id'    => 'backup_restore',
                         'type'  => 'backup',
-                        'title' => esc_html__( 'Backup & Restore Settings', 'wp-ulike' ),
                         'desc'  => esc_html__( 'Import settings from a JSON file or export your current settings for backup purposes.', 'wp-ulike' ),
+                        'importTitle' => esc_html__( 'Import Settings', 'wp-ulike' ),
+                        'importDesc' => esc_html__( 'Paste your exported settings JSON below and click Import to restore your configuration. The import should contain only setting values (not schema structure).', 'wp-ulike' ),
+                        'importPlaceholder' => esc_html__( 'Paste your JSON settings here...', 'wp-ulike' ),
+                        'importButtonText' => esc_html__( 'Import', 'wp-ulike' ),
+                        'importingText' => esc_html__( 'Importing...', 'wp-ulike' ),
+                        'exportTitle' => esc_html__( 'Export Settings', 'wp-ulike' ),
+                        'exportDesc' => esc_html__( 'Copy the JSON below or download it as a file to backup your current settings. The export contains only your setting values (not the schema structure).', 'wp-ulike' ),
+                        'exportButtonText' => esc_html__( 'Export & Download', 'wp-ulike' ),
+                        'importSuccessMessage' => esc_html__( 'Settings imported and saved successfully!', 'wp-ulike' ),
                     ),
                 ),
             );
@@ -1041,148 +1026,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             return $output;
         }
 
-        /**
-         * Get Optiwich schema structure
-         * Converts sections to pages structure for React consumption
-         *
-         * @return array Schema structure with pages and sections
-         */
-        public function get_optiwich_schema() {
-            $sections = $this->register_sections();
-            $pages = array();
-            $pages_map = array();
-
-            // Helper: Process fields that may need special handling (callbacks, fields without IDs)
-            // Callbacks are rendered and converted to content fields
-            // Fields without IDs get auto-generated IDs
-            $process_callbacks = function( $fields ) {
-                if ( ! is_array( $fields ) ) {
-                    return array();
-                }
-                
-                $processed = array_map( function( $field ) use ( &$process_callbacks ) {
-                    // If it's a callback field, render it and convert to content
-                    if ( isset( $field['type'] ) && $field['type'] === 'callback' && isset( $field['function'] ) ) {
-                        // Security: Whitelist allowed callback functions to prevent arbitrary code execution
-                        $allowed_callbacks = apply_filters( 'wp_ulike_allowed_callback_functions', array(
-                            'wp_ulike_get_notice_render',
-                            // Add other trusted callback functions here
-                        ) );
-                        
-                        // Only execute whitelisted callback functions
-                        if ( ! in_array( $field['function'], $allowed_callbacks, true ) || ! function_exists( $field['function'] ) ) {
-                            // Skip this field if callback is not whitelisted or doesn't exist
-                            return null;
-                        }
-                        
-                        $args = isset( $field['args'] ) && is_array( $field['args'] ) ? $field['args'] : array();
-                        
-                        // Use output buffering to capture callback output (handles both echo and return)
-                        ob_start();
-                        $returned = call_user_func( $field['function'], $args );
-                        $output = ob_get_clean();
-                        
-                        // Use output if callback echoed, otherwise use returned value
-                        $rendered = ! empty( $output ) ? $output : ( is_string( $returned ) ? $returned : '' );
-
-                        // Convert to content field with rendered HTML
-                        // Generate an ID if not present (callback fields often don't have IDs)
-                        $field_id = isset( $field['id'] ) ? $field['id'] : 'callback_' . md5( serialize( array( $field['function'], $args ) ) );
-
-                        return array(
-                            'id'      => $field_id,
-                            'type'    => 'content',
-                            'content' => $rendered, // HTML will be properly JSON-encoded by wp_send_json
-                        );
-                    }
-
-                    // Ensure all fields have an ID (required by React FieldBase interface)
-                    // Generate ID for fields that don't have one (like submessage, content fields)
-                    if ( ! isset( $field['id'] ) || empty( $field['id'] ) ) {
-                        $field_type = isset( $field['type'] ) ? $field['type'] : 'field';
-                        $field_content = isset( $field['content'] ) ? $field['content'] : '';
-                        $field['id'] = $field_type . '_' . md5( serialize( array( $field_type, $field_content ) ) );
-                    }
-                    
-                    return $field;
-                }, $fields );
-                
-                // Filter out null values (from skipped callback fields)
-                return array_values( array_filter( $processed, function( $field ) {
-                    return $field !== null;
-                } ) );
-            };
-
-            // First pass: create top-level pages
-            foreach ( $sections as $section ) {
-                if ( isset( $section['id'] ) && ! isset( $section['parent'] ) ) {
-                    $page = array(
-                        'id'       => $section['id'],
-                        'title'    => isset( $section['title'] ) ? $section['title'] : '',
-                        'sections' => array(),
-                    );
-                    $pages[] = $page;
-                    $pages_map[ $section['id'] ] = &$pages[ count( $pages ) - 1 ];
-                }
-            }
-
-            // Second pass: process sections and convert to pages/sections
-            foreach ( $sections as $section ) {
-                // Child page (has parent)
-                if ( isset( $section['parent'] ) ) {
-                    $child_page = array(
-                        'id'       => isset( $section['id'] ) ? $section['id'] : sanitize_title( isset( $section['title'] ) ? $section['title'] : '' ),
-                        'title'    => isset( $section['title'] ) ? $section['title'] : '',
-                        'parent'   => $section['parent'],
-                        'sections' => array(),
-                    );
-
-                    // Convert fieldsets to sections (keep original fieldset ID with _group suffix)
-                    if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
-                        foreach ( $section['fields'] as $field ) {
-                            if ( isset( $field['type'] ) && $field['type'] === 'fieldset' && isset( $field['fields'] ) && isset( $field['id'] ) ) {
-                                // Process callbacks in fieldset fields before including them
-                                $processed_fields = $process_callbacks( $field['fields'] );
-                                $child_page['sections'][] = array(
-                                    'id'     => $field['id'], // Keep original ID (e.g., 'posts_group')
-                                    'title'  => isset( $field['title'] ) ? $field['title'] : '',
-                                    'fields' => array_values( $processed_fields ),
-                                );
-                            }
-                        }
-
-                        // If no fieldsets found, create single section from direct fields
-                        if ( empty( $child_page['sections'] ) ) {
-                            $processed_fields = $process_callbacks( $section['fields'] );
-                            if ( ! empty( $processed_fields ) ) {
-                                $child_page['sections'][] = array(
-                                    'id'     => isset( $section['id'] ) ? $section['id'] : 'section',
-                                    'title'  => isset( $section['title'] ) ? $section['title'] : '',
-                                    'fields' => array_values( $processed_fields ),
-                                );
-                            }
-                        }
-                    }
-
-                    $pages[] = $child_page;
-
-                } elseif ( isset( $section['id'] ) && isset( $section['fields'] ) ) {
-                    // Top-level page with direct fields (no parent)
-                    if ( isset( $pages_map[ $section['id'] ] ) ) {
-                        $processed_fields = $process_callbacks( $section['fields'] );
-                        if ( ! empty( $processed_fields ) ) {
-                            $pages_map[ $section['id'] ]['sections'][] = array(
-                                'id'     => $section['id'],
-                                'title'  => isset( $section['title'] ) ? $section['title'] : '',
-                                'fields' => array_values( $processed_fields ),
-                            );
-                        }
-                    }
-                }
-            }
-
-            return array( 'pages' => apply_filters( 'wp_ulike_optiwich_pages', $pages ) );
-        }
 
     }
 }
