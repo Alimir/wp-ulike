@@ -394,120 +394,28 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Profiles','wp-ulike'),
-                'fields' => apply_filters( 'wp_ulike_panel_profiles', array(
-                    array(
-                        'type'     => 'callback',
-                        'function' => 'wp_ulike_get_notice_render',
-                        'args'     => array(
-                            'id'          => 'wp_ulike_pro_ultimate_user_profiles_banner',
-                            'title'       => esc_html__( 'How to Create Ultimate User Profiles with WP ULike?', 'wp-ulike' ),
-                            'description' => esc_html__( "The simplest way to create your own WordPress user profile page is by using the WP ULike Profile builder. This way, you can create professional profiles and display it on the front-end of your website without the need for coding knowledge or the use of advanced functions." , 'wp-ulike' ),
-                            'skin'        => 'default',
-                            'has_close'   => false,
-                            'buttons'     => array(
-                                array(
-                                    'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-                                    'color_name' => 'default',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
-                                )
-                            ),
-                            'image'     => array(
-                                'width' => '120',
-                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
-                            )
-                        )
-                    )
-                ) )
+                'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
             );
 
             // Login & Signup
             $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Login & Signup','wp-ulike'),
-                'fields' => apply_filters( 'wp_ulike_panel_forms', array(
-                    array(
-                        'type'     => 'callback',
-                        'function' => 'wp_ulike_get_notice_render',
-                        'args'     => array(
-                            'id'          => 'wp_ulike_pro_user_login_register_banner',
-                            'title'       => esc_html__( 'How to make AJAX Based Login/Registration system?', 'wp-ulike' ),
-                            'description' => esc_html__( "Transform your default WordPress login, registration, and reset password forms with the new WP ULike Pro features. In this section, we provide you with tools that you can use to make modern & ajax based forms on your pages with just a few simple clicks." , 'wp-ulike' ),
-                            'skin'        => 'default',
-                            'has_close'   => false,
-                            'buttons'     => array(
-                                array(
-                                    'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-                                    'color_name' => 'default',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-plugin/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
-                                )
-                            ),
-                            'image'     => array(
-                                'width' => '120',
-                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/login.svg'
-                            )
-                        )
-                    )
-                ) )
+                'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
             );
 
             // Social login integration
             $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Social Logins','wp-ulike'),
-                'fields' => apply_filters( 'wp_ulike_panel_social_logins', array(
-                    array(
-                        'type'     => 'callback',
-                        'function' => 'wp_ulike_get_notice_render',
-                        'args'     => array(
-                            'id'          => 'wp_ulike_pro_social_logins_banner',
-                            'title'       => esc_html__( 'Social Logins Integration with Your WordPress Site', 'wp-ulike' ),
-                            'description' => esc_html__( "In the fast-evolving world of website development, staying ahead is crucial. WP ULike Pro's latest update introduces a potent social logins integration that's set to redefine user interactions. With robust support for Google, Facebook, GitHub, and more, this plugin offers unparalleled convenience. In this article, we delve into the groundbreaking features that are reshaping WordPress user experiences." , 'wp-ulike' ),
-                            'skin'        => 'default',
-                            'has_close'   => false,
-                            'buttons'     => array(
-                                array(
-                                    'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-                                    'color_name' => 'default',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/social-login/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
-                                )
-                            ),
-                            'image'     => array(
-                                'width' => '120',
-                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/social.svg'
-                            )
-                        )
-                    )
-                ) )
+                'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
             );
 
             // Share buttons
             $sections[] = array(
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Share Buttons','wp-ulike'),
-                'fields' => apply_filters( 'wp_ulike_panel_share_buttons', array(
-                    array(
-                        'type'     => 'callback',
-                        'function' => 'wp_ulike_get_notice_render',
-                        'args'     => array(
-                            'id'          => 'wp_ulike_pro_share_buttons_banner',
-                            'title'       => esc_html__( 'Easy Social Share Buttons for WordPress', 'wp-ulike' ),
-                            'description' => esc_html__( "WP ULike Share buttons enables your website users to share the content over Facebook, Twitter, Google, Linkedin, Whatsapp, Tumblr, Pinterest, Reddit and over 23 more social sharing services. This is the Simplest and Smoothest Social Sharing service with optimized and great looking vector icons." , 'wp-ulike' ),
-                            'skin'        => 'default',
-                            'has_close'   => false,
-                            'buttons'     => array(
-                                array(
-                                    'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-                                    'color_name' => 'default',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-social-share-buttons/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
-                                )
-                            ),
-                            'image'     => array(
-                                'width' => '120',
-                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/share.svg'
-                            )
-                        )
-                    )
-                ) )
+                'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
             );
 
             /**
@@ -609,30 +517,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $sections[] = array(
                 'parent' => 'customization',
                 'title'  => esc_html__( 'REST API','wp-ulike' ),
-                'fields' => apply_filters( 'wp_ulike_panel_rest_api', array(
-                    array(
-                        'type'     => 'callback',
-                        'function' => 'wp_ulike_get_notice_render',
-                        'args'     => array(
-                            'id'          => 'wp_ulike_pro_rest_api_banner',
-                            'title'       => esc_html__( 'How to Get Started with WP ULike REST API?', 'wp-ulike' ),
-                            'description' => esc_html__( "Have you ever tried to get data from online sources like WP ULike logs and use them in your Application or website? the solution is Rest API!" , 'wp-ulike' ),
-                            'skin'        => 'default',
-                            'has_close'   => false,
-                            'buttons'     => array(
-                                array(
-                                    'label'      => esc_html__( "Get More Information", 'wp-ulike' ),
-                                    'color_name' => 'default',
-                                    'link'       => WP_ULIKE_PLUGIN_URI . 'blog/how-to-get-started-with-wp-ulike-rest-api/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash'
-                                )
-                            ),
-                            'image'     => array(
-                                'width' => '120',
-                                'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/api.svg'
-                            )
-                        )
-                    )
-                ) )
+                'fields' => apply_filters( 'wp_ulike_panel_rest_api', $this->get_pro_lock_field( 'rest_api' ) )
             );
 
             /**
@@ -995,6 +880,187 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             }
 
             return $output;
+        }
+
+        /**
+         * Get pro_lock field with minimal schema and field patterns
+         *
+         * @param string $section Section name (profiles, forms, social_logins, share_buttons, rest_api)
+         * @return array Pro lock field array
+         */
+        public function get_pro_lock_field( $section = 'profiles' ) {
+            $configs = array(
+                'profiles' => array(
+                    'id'          => 'wp_ulike_pro_profiles_lock',
+                    'title'       => esc_html__( 'User Profiles', 'wp-ulike' ),
+                    'description' => esc_html__( 'Create custom user profile pages where users can view and manage their information, activity, and preferences.', 'wp-ulike' ),
+                    'features'    => array(
+                        esc_html__( 'Custom profile pages with shortcodes', 'wp-ulike' ),
+                        esc_html__( 'Flexible permalink structure', 'wp-ulike' ),
+                        esc_html__( 'Profile appearance customization', 'wp-ulike' ),
+                        esc_html__( 'Badges and tabs system', 'wp-ulike' ),
+                        esc_html__( 'Avatar upload and management', 'wp-ulike' )
+                    ),
+                    'field_pattern' => array(
+                        array(
+                            'type'  => 'switcher',
+                            'title' => sprintf( esc_html__('Enable %s', 'wp-ulike'), esc_html__('User Profiles', 'wp-ulike') ),
+                            'desc'  => esc_html__('Create custom user profile pages where users can view and manage their information, activity, and preferences.', 'wp-ulike'),
+                        ),
+                        array(
+                            'type'  => 'select',
+                            'title' => sprintf( esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Profile', 'wp-ulike') ),
+                            'desc'  => esc_html__('Choose the page that contains the profile shortcode. This page will serve as the base URL for all user profiles.', 'wp-ulike'),
+                        ),
+                    ), // First 2 fields from profiles section
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                ),
+                'forms' => array(
+                    'id'          => 'wp_ulike_pro_forms_lock',
+                    'title'       => esc_html__( 'Login & Signup Forms', 'wp-ulike' ),
+                    'description' => esc_html__( 'Transform your default WordPress login, registration, and reset password forms with modern AJAX-based forms.', 'wp-ulike' ),
+                    'features'    => array(
+                        esc_html__( 'AJAX-based login/registration', 'wp-ulike' ),
+                        esc_html__( 'Custom login pages', 'wp-ulike' ),
+                        esc_html__( 'Email verification system', 'wp-ulike' ),
+                        esc_html__( '2-factor authentication', 'wp-ulike' ),
+                        esc_html__( 'Google reCAPTCHA integration', 'wp-ulike' )
+                    ),
+                    'field_pattern' => array(
+                        array(
+                            'type'  => 'select',
+                            'title' => sprintf( esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Login', 'wp-ulike') ),
+                            'desc'  => esc_html__('Choose the page that contains your login form shortcode. This page will be used for user authentication.', 'wp-ulike'),
+                        ),
+                        array(
+                            'type'  => 'text',
+                            'title' => esc_html__( 'Login Redirect URL', 'wp-ulike'),
+                            'desc'  => sprintf( esc_html__('URL where users are redirected after %s. Leave empty to redirect to the %s.', 'wp-ulike'), esc_html__('successful login', 'wp-ulike'), esc_html__('previous page', 'wp-ulike') ),
+                        ),
+                    ), // First 2 fields from forms section
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-plugin/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                ),
+                'social_logins' => array(
+                    'id'          => 'wp_ulike_pro_social_logins_lock',
+                    'title'       => esc_html__( 'Social Logins', 'wp-ulike' ),
+                    'description' => esc_html__( 'Allow users to log in or register using their social media accounts. Supports Google, Facebook, GitHub, and more.', 'wp-ulike' ),
+                    'features'    => array(
+                        esc_html__( '14+ social network integrations', 'wp-ulike' ),
+                        esc_html__( 'Auto-display on login forms', 'wp-ulike' ),
+                        esc_html__( 'Customizable button styles', 'wp-ulike' ),
+                        esc_html__( 'Flexible layout options', 'wp-ulike' ),
+                        esc_html__( 'Easy configuration', 'wp-ulike' )
+                    ),
+                    'field_pattern' => array(
+                        array(
+                            'type'  => 'switcher',
+                            'title' => esc_html__('Enable Social Logins', 'wp-ulike'),
+                            'desc'  => esc_html__('Allow users to log in or register using their social media accounts instead of creating a new account.', 'wp-ulike'),
+                        ),
+                        array(
+                            'type'  => 'group',
+                            'title' => esc_html__('Social networks', 'wp-ulike'),
+                            'desc'  => esc_html__('Configure social login networks. Add multiple networks and customize each one.', 'wp-ulike'),
+                        ),
+                    ), // First 2 fields from social_logins section (matches Pro exactly)
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/social-login/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                ),
+                'share_buttons' => array(
+                    'id'          => 'wp_ulike_pro_share_buttons_lock',
+                    'title'       => esc_html__( 'Social Share Buttons', 'wp-ulike' ),
+                    'description' => esc_html__( 'Enable your website users to share content over Facebook, Twitter, LinkedIn, WhatsApp, and 20+ more social networks.', 'wp-ulike' ),
+                    'features'    => array(
+                        esc_html__( '23+ social sharing services', 'wp-ulike' ),
+                        esc_html__( 'Auto-display options', 'wp-ulike' ),
+                        esc_html__( 'Customizable button styles', 'wp-ulike' ),
+                        esc_html__( 'Multiple share button sets', 'wp-ulike' ),
+                        esc_html__( 'Shortcode support', 'wp-ulike' )
+                    ),
+                    'field_pattern' => array(
+                        array(
+                            'type'  => 'group',
+                            'title' => esc_html__('Add Share Items', 'wp-ulike'),
+                            'desc'  => esc_html__('Create multiple share button sets. Each set can have its own configuration and be used via shortcode.', 'wp-ulike'),
+                            'fields' => array(
+                                array(
+                                    'id'    => 'slug',
+                                    'type'  => 'text',
+                                    'title' => esc_html__( 'Slug', 'wp-ulike') . ' *',
+                                    'desc'  => esc_html__('A unique identifier for this share button set. Used in the shortcode to display these buttons (e.g., slug="my_share").', 'wp-ulike'),
+                                ),
+                                array(
+                                    'id'      => 'view',
+                                    'type'    => 'button_set',
+                                    'title'   => esc_html__( 'Button Display Style', 'wp-ulike'),
+                                    'desc'    => esc_html__('Choose how buttons are displayed: with icon and text, icon only, or text only.', 'wp-ulike'),
+                                    'options' => array(
+                                        'icon_text' => esc_html__( 'Icon & Text', 'wp-ulike'),
+                                        'icon'      => esc_html__( 'Icon', 'wp-ulike'),
+                                        'text'      => esc_html__( 'Text', 'wp-ulike'),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ), // Share buttons uses group repeater style (matches Pro exactly - shows actual repeater)
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-social-share-buttons/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                ),
+                'rest_api' => array(
+                    'id'          => 'wp_ulike_pro_rest_api_lock',
+                    'title'       => esc_html__( 'REST API', 'wp-ulike' ),
+                    'description' => esc_html__( 'Expose WP ULike data through WordPress REST API endpoints, allowing external applications to access like counts, user votes, and statistics.', 'wp-ulike' ),
+                    'features'    => array(
+                        esc_html__( 'Full REST API access', 'wp-ulike' ),
+                        esc_html__( 'Custom API endpoints', 'wp-ulike' ),
+                        esc_html__( 'User login & token authentication', 'wp-ulike' ),
+                        esc_html__( 'Role-based permissions', 'wp-ulike' ),
+                        esc_html__( 'Auto user ID support', 'wp-ulike' )
+                    ),
+                    'field_pattern' => array(
+                        array(
+                            'type'  => 'switcher',
+                            'title' => esc_html__('Enable REST API', 'wp-ulike'),
+                            'desc'  => esc_html__('Expose WP ULike data through WordPress REST API endpoints, allowing external applications to access like counts, user votes, and statistics.', 'wp-ulike'),
+                        ),
+                        array(
+                            'type'  => 'button_set',
+                            'title' => esc_html__( 'Authentication Type', 'wp-ulike'),
+                            'desc'  => esc_html__('Choose how API requests are authenticated. User Login uses WordPress user credentials, Custom Keys uses API tokens.', 'wp-ulike'),
+                            'options' => array(
+                                'login' => esc_html__('User Login', 'wp-ulike'),
+                                'token' => esc_html__('Custom Keys', 'wp-ulike'),
+                            ),
+                        ),
+                    ), // First 2 fields from rest_api section
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/how-to-get-started-with-wp-ulike-rest-api/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                )
+            );
+
+            $config = isset( $configs[$section] ) ? $configs[$section] : $configs['profiles'];
+
+            return array(
+                array(
+                    'id'          => $config['id'],
+                    'type'        => 'pro_lock',
+                    'title'       => $config['title'],
+                    'desc'        => $config['description'],
+                    'preview'     => array(
+                        'title'       => $config['title'],
+                        'description' => $config['description'],
+                        'features'    => $config['features'],
+                    ),
+                    'fieldPattern' => $config['field_pattern'],
+                    'upgradeUrl'  => $config['upgrade_url'],
+                    'readMoreUrl' => $config['read_more_url'],
+                    'upgradeText' => esc_html__( 'Upgrade to Pro', 'wp-ulike' ),
+                    'readMoreText' => esc_html__( 'Read More', 'wp-ulike' ),
+                    'variant'     => 'default',
+                )
+            );
         }
 
 
