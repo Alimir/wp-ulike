@@ -902,14 +902,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $configs = array(
                 'profiles' => array(
                     'id'          => 'wp_ulike_pro_profiles_lock',
-                    'title'       => esc_html__( 'User Profiles', 'wp-ulike' ),
-                    'description' => esc_html__( 'Create custom user profile pages where users can view and manage their information, activity, and preferences.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Build Stronger Community Engagement', 'wp-ulike' ),
+                    'description' => esc_html__( 'Create Instagram-style user profiles that showcase user activity, likes, and engagement history. Transform anonymous visitors into recognized community members who return for more interactions.', 'wp-ulike' ),
                     'features'    => array(
-                        esc_html__( 'Custom profile pages with shortcodes', 'wp-ulike' ),
-                        esc_html__( 'Flexible permalink structure', 'wp-ulike' ),
-                        esc_html__( 'Profile appearance customization', 'wp-ulike' ),
-                        esc_html__( 'Badges and tabs system', 'wp-ulike' ),
-                        esc_html__( 'Avatar upload and management', 'wp-ulike' )
+                        esc_html__( 'Display user like history and engagement stats', 'wp-ulike' ),
+                        esc_html__( 'Customizable profile layouts and permalinks', 'wp-ulike' ),
+                        esc_html__( 'User badges and achievement systems', 'wp-ulike' ),
+                        esc_html__( 'Avatar management and profile customization', 'wp-ulike' ),
+                        esc_html__( 'Activity feeds showing user interactions', 'wp-ulike' )
                     ),
                     'field_pattern' => array(
                         array(
@@ -927,14 +927,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ),
                 'forms' => array(
                     'id'          => 'wp_ulike_pro_forms_lock',
-                    'title'       => esc_html__( 'Login & Signup Forms', 'wp-ulike' ),
-                    'description' => esc_html__( 'Transform your default WordPress login, registration, and reset password forms with modern AJAX-based forms.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Convert More Visitors Into Active Users', 'wp-ulike' ),
+                    'description' => esc_html__( 'Replace clunky WordPress login forms with seamless AJAX-powered authentication. Reduce bounce rates and turn casual browsers into engaged community members who can like, share, and interact.', 'wp-ulike' ),
                     'features'    => array(
-                        esc_html__( 'AJAX-based login/registration', 'wp-ulike' ),
-                        esc_html__( 'Custom login pages', 'wp-ulike' ),
-                        esc_html__( 'Email verification system', 'wp-ulike' ),
-                        esc_html__( '2-factor authentication', 'wp-ulike' ),
-                        esc_html__( 'Google reCAPTCHA integration', 'wp-ulike' )
+                        esc_html__( 'Zero-page-reload login and registration', 'wp-ulike' ),
+                        esc_html__( 'Custom branded login pages', 'wp-ulike' ),
+                        esc_html__( 'Email verification and security features', 'wp-ulike' ),
+                        esc_html__( 'Two-factor authentication support', 'wp-ulike' ),
+                        esc_html__( 'Spam protection with reCAPTCHA', 'wp-ulike' )
                     ),
                     'field_pattern' => array(
                         array(
@@ -952,14 +952,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ),
                 'social_logins' => array(
                     'id'          => 'wp_ulike_pro_social_logins_lock',
-                    'title'       => esc_html__( 'Social Logins', 'wp-ulike' ),
-                    'description' => esc_html__( 'Allow users to log in or register using their social media accounts. Supports Google, Facebook, GitHub, and more.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Remove Registration Friction & Boost Signups', 'wp-ulike' ),
+                    'description' => esc_html__( 'Eliminate password fatigue with one-click social authentication. Users sign up faster, reducing abandonment rates and increasing your engaged user base ready to like and interact.', 'wp-ulike' ),
                     'features'    => array(
-                        esc_html__( '14+ social network integrations', 'wp-ulike' ),
-                        esc_html__( 'Auto-display on login forms', 'wp-ulike' ),
-                        esc_html__( 'Customizable button styles', 'wp-ulike' ),
-                        esc_html__( 'Flexible layout options', 'wp-ulike' ),
-                        esc_html__( 'Easy configuration', 'wp-ulike' )
+                        esc_html__( '14+ social networks including Google, Facebook, GitHub', 'wp-ulike' ),
+                        esc_html__( 'Automatic integration with login forms', 'wp-ulike' ),
+                        esc_html__( 'Customizable button designs and layouts', 'wp-ulike' ),
+                        esc_html__( 'Flexible positioning and display options', 'wp-ulike' ),
+                        esc_html__( 'One-click setup and configuration', 'wp-ulike' )
                     ),
                     'field_pattern' => array(
                         array(
@@ -977,14 +977,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ),
                 'share_buttons' => array(
                     'id'          => 'wp_ulike_pro_share_buttons_lock',
-                    'title'       => esc_html__( 'Social Share Buttons', 'wp-ulike' ),
-                    'description' => esc_html__( 'Enable your website users to share content over Facebook, Twitter, LinkedIn, WhatsApp, and 20+ more social networks.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Turn Engagement Into Organic Traffic Growth', 'wp-ulike' ),
+                    'description' => esc_html__( 'Multiply your content reach by making every like button a potential share. When users engage with your content, they can instantly share it across 23+ social platforms, driving free organic traffic back to your site.', 'wp-ulike' ),
                     'features'    => array(
-                        esc_html__( '23+ social sharing services', 'wp-ulike' ),
-                        esc_html__( 'Auto-display options', 'wp-ulike' ),
-                        esc_html__( 'Customizable button styles', 'wp-ulike' ),
-                        esc_html__( 'Multiple share button sets', 'wp-ulike' ),
-                        esc_html__( 'Shortcode support', 'wp-ulike' )
+                        esc_html__( '23+ social networks including WhatsApp, Telegram, Reddit', 'wp-ulike' ),
+                        esc_html__( 'Auto-display alongside like buttons', 'wp-ulike' ),
+                        esc_html__( 'Customizable designs matching your brand', 'wp-ulike' ),
+                        esc_html__( 'Multiple button sets for different content types', 'wp-ulike' ),
+                        esc_html__( 'Shortcode placement anywhere on your site', 'wp-ulike' )
                     ),
                     'field_pattern' => array(
                         array(
@@ -997,14 +997,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ),
                 'rest_api' => array(
                     'id'          => 'wp_ulike_pro_rest_api_lock',
-                    'title'       => esc_html__( 'REST API', 'wp-ulike' ),
-                    'description' => esc_html__( 'Expose WP ULike data through WordPress REST API endpoints, allowing external applications to access like counts, user votes, and statistics.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Scale Engagement Data Across Your Ecosystem', 'wp-ulike' ),
+                    'description' => esc_html__( 'Integrate WP ULike engagement data with mobile apps, custom dashboards, analytics tools, and third-party services. Build powerful integrations that leverage your community\'s like and interaction data.', 'wp-ulike' ),
                     'features'    => array(
-                        esc_html__( 'Full REST API access', 'wp-ulike' ),
-                        esc_html__( 'Custom API endpoints', 'wp-ulike' ),
-                        esc_html__( 'User login & token authentication', 'wp-ulike' ),
-                        esc_html__( 'Role-based permissions', 'wp-ulike' ),
-                        esc_html__( 'Auto user ID support', 'wp-ulike' )
+                        esc_html__( 'Complete REST API for all engagement data', 'wp-ulike' ),
+                        esc_html__( 'Custom endpoints for like counts and statistics', 'wp-ulike' ),
+                        esc_html__( 'Secure authentication with user login or API tokens', 'wp-ulike' ),
+                        esc_html__( 'Role-based access control for data security', 'wp-ulike' ),
+                        esc_html__( 'Automatic user identification and tracking', 'wp-ulike' )
                     ),
                     'field_pattern' => array(
                         array(
