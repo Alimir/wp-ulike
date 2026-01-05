@@ -794,6 +794,149 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             return $field_type . '_' . md5( serialize( array( $field_type, $field_content ) ) );
         }
 
+        /**
+         * Get all translations for Optiwich
+         * Returns all translatable strings used in the React app
+         * Uses WordPress translation functions for .po/.pot file support
+         * Converts WordPress sprintf format (%s, %d) to i18next format ({variable}) for React compatibility
+         *
+         * @return array Translations array with keys and translated values (in i18next format)
+         */
+        public function get_translations() {
+            $translations = array(
+                // Generic Errors
+                'errors.generic' => esc_html__( 'An error occurred', 'wp-ulike' ),
+                'errors.generic_refresh' => esc_html__( 'An error occurred. Please try refreshing the page.', 'wp-ulike' ),
+                'errors.try_again' => esc_html__( 'Try Again', 'wp-ulike' ),
+                'errors.failed' => esc_html__( 'Failed to %s', 'wp-ulike' ),
+
+                // Actions
+                'actions.save' => esc_html__( 'Save Changes', 'wp-ulike' ),
+                'actions.saving' => esc_html__( 'Saving...', 'wp-ulike' ),
+                'actions.reset' => esc_html__( 'Reset to Defaults', 'wp-ulike' ),
+                'actions.resetting' => esc_html__( 'Resetting...', 'wp-ulike' ),
+                'actions.remove' => esc_html__( 'Remove', 'wp-ulike' ),
+                'actions.upload' => esc_html__( 'Upload', 'wp-ulike' ),
+                'actions.import' => esc_html__( 'Import', 'wp-ulike' ),
+                'actions.importing' => esc_html__( 'Importing...', 'wp-ulike' ),
+                'actions.export' => esc_html__( 'Export & Download', 'wp-ulike' ),
+                'actions.duplicate' => esc_html__( 'Duplicate', 'wp-ulike' ),
+                'actions.move' => esc_html__( 'Move %s', 'wp-ulike' ),
+                'actions.add' => esc_html__( 'Add %s', 'wp-ulike' ),
+                'actions.menu_toggle' => esc_html__( 'Toggle menu', 'wp-ulike' ),
+
+                // Media Library
+                'media.library_unavailable' => esc_html__( 'WordPress media library is not available. Please ensure wp_enqueue_media() is called.', 'wp-ulike' ),
+                'media.select' => esc_html__( 'Select %s', 'wp-ulike' ),
+                'media.use' => esc_html__( 'Use this %s', 'wp-ulike' ),
+                'media.no_url' => esc_html__( 'Selected %s has no URL', 'wp-ulike' ),
+                'media.no_selection' => esc_html__( 'No file selected', 'wp-ulike' ),
+                'media.preview' => esc_html__( 'Preview', 'wp-ulike' ),
+                'media.url_format_error' => esc_html__( 'Invalid URL format from media library', 'wp-ulike' ),
+
+                // Settings
+                'settings.success' => esc_html__( 'Settings %s successfully!', 'wp-ulike' ),
+                'settings.reset_success' => esc_html__( 'Settings have been reset to default values and saved successfully.', 'wp-ulike' ),
+                'settings.reset_confirm' => esc_html__( 'Are you sure you want to reset all settings to their default values? This action cannot be undone.', 'wp-ulike' ),
+                'settings.unsaved_warning' => esc_html__( 'You have unsaved changes. Are you sure you want to leave?', 'wp-ulike' ),
+                'settings.validation_before_save' => esc_html__( 'Please fix the following errors before saving:%s', 'wp-ulike' ),
+                'settings.import_save_failed' => esc_html__( 'Settings imported locally but failed to save to server. Please try saving again.', 'wp-ulike' ),
+
+                // Validation
+                'validation.invalid' => esc_html__( 'Invalid %s format', 'wp-ulike' ),
+                'validation.invalid_example' => esc_html__( 'Invalid %1$s format. Please enter a valid %1$s (e.g., %2$s)', 'wp-ulike' ),
+                'validation.url_protocol' => esc_html__( 'Invalid URL protocol. Only http, https, and data URLs are allowed.', 'wp-ulike' ),
+                'validation.text_maxlength' => esc_html__( 'Text must be no more than %d characters', 'wp-ulike' ),
+                'validation.number_min' => esc_html__( 'Value must be at least %d', 'wp-ulike' ),
+                'validation.number_max' => esc_html__( 'Value must be at most %d', 'wp-ulike' ),
+                'validation.upload_url_required' => esc_html__( 'Upload value must be a URL string', 'wp-ulike' ),
+                'validation.media_format' => esc_html__( 'Media value must be an object with a url property or a valid URL string', 'wp-ulike' ),
+
+                // Backup/Import
+                'backup.import_title' => esc_html__( 'Import Settings', 'wp-ulike' ),
+                'backup.import_desc' => esc_html__( 'Paste your exported settings JSON below and click Import to restore your configuration. The import should contain only setting values (not schema structure).', 'wp-ulike' ),
+                'backup.import_placeholder' => esc_html__( 'Paste your JSON settings here...', 'wp-ulike' ),
+                'backup.export_title' => esc_html__( 'Export Settings', 'wp-ulike' ),
+                'backup.export_desc' => esc_html__( 'Copy the JSON below or download it as a file to backup your current settings. The export contains only your setting values (not the schema structure).', 'wp-ulike' ),
+                'backup.json_invalid_syntax' => esc_html__( 'Invalid JSON format. Please check your JSON syntax.', 'wp-ulike' ),
+                'backup.json_invalid_object' => esc_html__( 'Invalid JSON format. Expected an object with setting values.', 'wp-ulike' ),
+                'backup.json_invalid_format' => esc_html__( 'Invalid format. Expected a JSON object with setting values only.', 'wp-ulike' ),
+                'backup.no_values' => esc_html__( 'No values found in the import data.', 'wp-ulike' ),
+                'backup.security_threat' => esc_html__( 'Security threat detected! The import contains potentially dangerous content:%s%sImport blocked for security reasons.', 'wp-ulike' ),
+                'backup.validation_failed' => esc_html__( 'Validation failed! The imported data contains invalid values:%s%sPlease fix these errors and try again.', 'wp-ulike' ),
+
+                // Code Editor
+                'code_editor.tip' => esc_html__( 'Tip: Select text and click a tag button to wrap it, or click to insert at cursor', 'wp-ulike' ),
+
+                // Select Field
+                'select.placeholder_multiple' => esc_html__( 'Select options...', 'wp-ulike' ),
+                'select.placeholder_single' => esc_html__( '-- Select --', 'wp-ulike' ),
+
+                // Field Errors
+                'field.no_options' => esc_html__( 'No options available for this field. Please check the schema definition.', 'wp-ulike' ),
+                'field.options_unresolved' => esc_html__( 'Options not available. The dynamic options "%s" could not be resolved. Please check that the PHP backend properly resolves dynamic options in the schema.', 'wp-ulike' ),
+
+                // Pro Lock
+                'pro.feature' => esc_html__( 'Pro Feature', 'wp-ulike' ),
+                'pro.description' => esc_html__( 'This feature is available in WP ULike Pro', 'wp-ulike' ),
+                'pro.upgrade' => esc_html__( 'Upgrade to Pro', 'wp-ulike' ),
+                'pro.read_more' => esc_html__( 'Read More', 'wp-ulike' ),
+                'pro.tag' => esc_html__( 'Pro', 'wp-ulike' ),
+
+                // Security
+                'security.sql_injection' => esc_html__( 'SQL Injection', 'wp-ulike' ),
+                'security.xss' => esc_html__( 'XSS', 'wp-ulike' ),
+                'security.command_injection' => esc_html__( 'Command Injection', 'wp-ulike' ),
+            );
+
+            // Convert WordPress sprintf format to i18next format
+            return $this->convert_sprintf_to_i18next( $translations );
+        }
+
+        /**
+         * Convert WordPress sprintf format (%s, %d, %1$s) to i18next format ({variable})
+         * This allows WordPress translations to work with i18next's named interpolation
+         * Standard practice: Server prepares data in the format the client expects
+         *
+         * @param array $translations Translations array in WordPress sprintf format
+         * @return array Converted translations array in i18next format
+         */
+        protected function convert_sprintf_to_i18next( $translations ) {
+            // Mapping of WordPress sprintf patterns to i18next variable names
+            $variable_mapping = array(
+                'errors.failed' => array( '%s' => '{action}' ),
+                'actions.move' => array( '%s' => '{direction}' ),
+                'actions.add' => array( '%s' => '{type}' ),
+                'media.select' => array( '%s' => '{type}' ),
+                'media.use' => array( '%s' => '{type}' ),
+                'media.no_url' => array( '%s' => '{type}' ),
+                'settings.success' => array( '%s' => '{action}' ),
+                'settings.validation_before_save' => array( '%s' => '{errorMessages}' ),
+                'validation.invalid' => array( '%s' => '{type}' ),
+                'validation.invalid_example' => array( '%1$s' => '{type}', '%2$s' => '{example}' ),
+                'validation.text_maxlength' => array( '%d' => '{maxlength}' ),
+                'validation.number_min' => array( '%d' => '{min}' ),
+                'validation.number_max' => array( '%d' => '{max}' ),
+                'backup.security_threat' => array( '%1$s' => '{threatList}', '%2$s' => '\n\n' ),
+                'backup.validation_failed' => array( '%1$s' => '{errorList}', '%2$s' => '\n\n' ),
+                'field.options_unresolved' => array( '%s' => '{options}' ),
+            );
+
+            foreach ( $translations as $key => $translation ) {
+                if ( isset( $variable_mapping[ $key ] ) ) {
+                    $mapping = $variable_mapping[ $key ];
+                    foreach ( $mapping as $sprintf_pattern => $i18next_var ) {
+                        // Use preg_quote to properly escape regex special characters
+                        // Only escape $ (for %1$s format), % is not a regex special character
+                        $pattern = preg_quote( $sprintf_pattern, '/' );
+                        $translations[ $key ] = preg_replace( '/' . $pattern . '/', $i18next_var, $translations[ $key ] );
+                    }
+                }
+            }
+
+            return $translations;
+        }
+
     }
 
     // Initialize the API - only if not already initialized

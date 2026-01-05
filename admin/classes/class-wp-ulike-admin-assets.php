@@ -125,6 +125,13 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					true
 				);
 
+				// Get translations from settings API
+				global $wp_ulike_settings_api;
+				$translations = array();
+				if ( isset( $wp_ulike_settings_api ) && method_exists( $wp_ulike_settings_api, 'get_translations' ) ) {
+					$translations = $wp_ulike_settings_api->get_translations();
+				}
+
 				// Pass the app config to the frontend
 				wp_localize_script( 'wp-ulike-optiwich', 'OptiwichConfig', array(
 					'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
@@ -137,7 +144,8 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 						'schema'  => 'wp_ulike_schema_api',
 						'settings' => 'wp_ulike_settings_api',
 						'save'    => 'wp_ulike_save_settings_api'
-					)
+					),
+					'translations' => $translations
 				));
 			}
 		}
