@@ -92,14 +92,14 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             // Build schema from admin panel
             $schema = $this->build_schema_from_panel();
-            
+
             // Apply default values from settings
             $values = $this->get_values();
             $schema = $this->apply_defaults_to_schema( $schema, $values );
-            
+
             // Resolve dynamic options
             $schema = $this->resolve_dynamic_options_in_schema( $schema );
-            
+
             // Decode HTML entities in titles and descriptions
             $schema = $this->decode_html_entities_in_schema( $schema );
 
@@ -135,12 +135,12 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         public function get_optiwich_schema() {
             // Get sections from admin panel
             global $wp_ulike_admin_panel;
-            
+
             // If admin panel doesn't exist, try to create it
             if ( ! isset( $wp_ulike_admin_panel ) && class_exists( 'wp_ulike_admin_panel' ) ) {
                 $wp_ulike_admin_panel = new wp_ulike_admin_panel();
             }
-            
+
             // Get sections from admin panel
             if ( isset( $wp_ulike_admin_panel ) && method_exists( $wp_ulike_admin_panel, 'register_sections' ) ) {
                 $sections = $wp_ulike_admin_panel->register_sections();
@@ -150,10 +150,10 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             // Build pages structure from sections
             $pages = $this->build_pages_structure( $sections );
-            
+
             return array( 'pages' => apply_filters( 'wp_ulike_optiwich_pages', $pages ) );
         }
-        
+
         /**
          * Apply default values from settings to schema
          */
@@ -174,7 +174,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             return $schema;
         }
-        
+
         /**
          * Apply default values to fields recursively
          */
@@ -185,7 +185,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 }
 
                 $field_path = $path ? $path . '.' . $field['id'] : $field['id'];
-                
+
                 // Get value from settings if exists, otherwise use default
                 $current_value = $this->get_value_at_path( $values, $field_path );
                 if ( $current_value !== null ) {
@@ -196,7 +196,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
                     $field['fields'] = $this->apply_defaults_to_fields( $field['fields'], $values, $field_path );
                 }
-                
+
                 if ( isset( $field['tabs'] ) && is_array( $field['tabs'] ) ) {
                     foreach ( $field['tabs'] as &$tab ) {
                         if ( isset( $tab['fields'] ) && is_array( $tab['fields'] ) ) {
@@ -208,7 +208,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             return $fields;
         }
-        
+
         /**
          * Get value at path (dot notation)
          */
@@ -225,7 +225,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             return $current;
         }
-        
+
         /**
          * Resolve dynamic options in schema
          */
@@ -246,7 +246,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             return $schema;
         }
-        
+
         /**
          * Resolve dynamic options in fields recursively
          */
@@ -266,7 +266,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
                     $field['fields'] = $this->resolve_dynamic_options_in_fields( $field['fields'] );
                 }
-                
+
                 if ( isset( $field['tabs'] ) && is_array( $field['tabs'] ) ) {
                     foreach ( $field['tabs'] as &$tab ) {
                         if ( isset( $tab['fields'] ) && is_array( $tab['fields'] ) ) {
@@ -293,13 +293,13 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( isset( $page['title'] ) ) {
                     $page['title'] = html_entity_decode( $page['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                 }
-                
+
                 if ( isset( $page['sections'] ) && is_array( $page['sections'] ) ) {
                     foreach ( $page['sections'] as &$section ) {
                         if ( isset( $section['title'] ) ) {
                             $section['title'] = html_entity_decode( $section['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                         }
-                        
+
                         if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
                             $section['fields'] = $this->decode_html_entities_in_fields( $section['fields'] );
                         }
@@ -309,7 +309,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             return $schema;
         }
-        
+
         /**
          * Decode HTML entities in fields recursively
          */
@@ -318,7 +318,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( isset( $field['title'] ) ) {
                     $field['title'] = html_entity_decode( $field['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                 }
-                
+
                 if ( isset( $field['desc'] ) ) {
                     // Don't decode desc as it may contain intentional HTML
                     // The React app will render it with dangerouslySetInnerHTML
@@ -328,13 +328,13 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
                     $field['fields'] = $this->decode_html_entities_in_fields( $field['fields'] );
                 }
-                
+
                 if ( isset( $field['tabs'] ) && is_array( $field['tabs'] ) ) {
                     foreach ( $field['tabs'] as &$tab ) {
                         if ( isset( $tab['title'] ) ) {
                             $tab['title'] = html_entity_decode( $tab['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                         }
-                        
+
                         if ( isset( $tab['fields'] ) && is_array( $tab['fields'] ) ) {
                             $tab['fields'] = $this->decode_html_entities_in_fields( $tab['fields'] );
                         }
@@ -347,7 +347,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
         /**
          * Resolve dynamic options (like 'post_types', 'roles', 'pages')
-         * 
+         *
          * @param string $option_key The dynamic option key
          * @return array Resolved options array or empty array if not resolvable
          */
@@ -462,7 +462,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
         /**
          * Recursively sanitize settings values to prevent XSS
-         * 
+         *
          * @param mixed $values Values to sanitize
          * @return mixed Sanitized values
          */
@@ -509,7 +509,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                     $pages[] = $page;
                     // Store reference to last element for adding fields later
                     $pages_map[ $section['id'] ] = &$pages[ count( $pages ) - 1 ];
-                    
+
                     // If this top-level page has fields, add them immediately
                     if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
                         $processed_fields = $this->process_field_callbacks( $section['fields'] );
@@ -552,8 +552,27 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
          * @return array Child page structure
          */
         protected function build_child_page( $section ) {
+            // Use explicit ID if provided, otherwise generate from title (fallback)
+            // Note: Explicit IDs should always be provided in admin panel for URL-friendly, stable identifiers
+            if ( ! isset( $section['id'] ) || empty( $section['id'] ) ) {
+                // Fallback: generate ID from title (may create non-ASCII IDs for non-English titles)
+                $generated_id = sanitize_title( $section['title'] ?? '' );
+                if ( empty( $generated_id ) ) {
+                    $generated_id = 'section';
+                }
+                // Log warning in development to encourage explicit IDs
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( sprintf( 
+                        '[WP ULike] Section "%s" is missing explicit "id" field. Generated ID: "%s". Please add explicit ASCII ID in admin panel.',
+                        $section['title'] ?? 'Unknown',
+                        $generated_id
+                    ) );
+                }
+                $section['id'] = $generated_id;
+            }
+            
             $child_page = array(
-                'id'       => $section['id'] ?? sanitize_title( $section['title'] ?? '' ),
+                'id'       => $section['id'],
                 'title'    => $section['title'] ?? '',
                 'parent'   => $section['parent'],
                 'sections' => array(),
@@ -565,7 +584,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             // Extract section fieldsets and regular fields
             $extracted = $this->extract_section_fieldsets( $section['fields'] );
-            
+
             // Add extracted fieldset sections
             foreach ( $extracted['fieldset_sections'] as $fieldset_section ) {
                 $child_page['sections'][] = $fieldset_section;

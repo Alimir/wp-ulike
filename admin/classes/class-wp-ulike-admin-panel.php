@@ -58,6 +58,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             // General
             $sections[] = array(
+                'id'     => 'general',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'General','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_general', array(
@@ -365,6 +366,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             }
 
             $sections[] = array(
+                'id'     => 'content-types',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Content Types','wp-ulike'),
                 'fields' => $content_types_fields
@@ -372,6 +374,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             // Integrations
             $sections[] = array(
+                'id'     => 'integrations',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Integrations','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_integrations', array(
@@ -392,6 +395,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             // Profiles
             $sections[] = array(
+                'id'     => 'profiles',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Profiles','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
@@ -399,6 +403,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             // Login & Signup
             $sections[] = array(
+                'id'     => 'login-signup',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Login & Signup','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
@@ -406,6 +411,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             // Social login integration
             $sections[] = array(
+                'id'     => 'social-logins',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Social Logins','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
@@ -413,6 +419,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             // Share buttons
             $sections[] = array(
+                'id'     => 'share-buttons',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Share Buttons','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
@@ -427,6 +434,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             );
 
             $sections[] = array(
+                'id'     => 'strings',
                 'title'  => esc_html__( 'Strings','wp-ulike'),
                 'parent' => 'translations',
                 'fields' => apply_filters( 'wp_ulike_panel_translations', array(
@@ -484,6 +492,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             );
 
             $sections[] = array(
+                'id'     => 'scripts',
                 'parent' => 'customization',
                 'title'  => esc_html__( 'Scripts','wp-ulike'),
                 'fields' => apply_filters( 'wp_ulike_panel_customization', array(
@@ -515,6 +524,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             );
 
             $sections[] = array(
+                'id'     => 'rest-api',
                 'parent' => 'customization',
                 'title'  => esc_html__( 'REST API','wp-ulike' ),
                 'fields' => apply_filters( 'wp_ulike_panel_rest_api', $this->get_pro_lock_field( 'rest_api' ) )
