@@ -278,38 +278,6 @@ function wp_ulike_notice_manager(){
 				)
 			]);
 		}
-		if( strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
-			$notice_list[ 'wp_ulike_pro_user_profiles' ] = new wp_ulike_notices([
-				'id'          => 'wp_ulike_pro_user_profiles',
-				'title'       => esc_html__( 'Create Beautiful User Profiles Your Community Will Love! 🎨', 'wp-ulike' ),
-				'description' => esc_html__( 'Want to take your community engagement to the next level? With WP ULike Pro, you can build stunning Instagram-style user profiles that keep users coming back! Get modern layouts, smooth avatar uploads, engagement tools, secure login, and more — all optimized for mobile and built without jQuery. Perfect for communities, courses, marketplaces, and membership sites!', 'wp-ulike' ),
-				'skin'        => 'default',
-				'has_close'   => true,
-				'buttons'     => array(
-					array(
-						'label'      => esc_html__( "✨ Discover Profile Builder", 'wp-ulike' ),
-						'link'       => WP_ULIKE_PLUGIN_URI . 'blog/best-wordpress-profile-builder-plugin/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash',
-						'color_name' => 'default'
-					),
-					array(
-						'label'      => esc_html__('Maybe Later', 'wp-ulike'),
-						'type'       => 'skip',
-						'color_name' => 'info',
-						'expiration' => WEEK_IN_SECONDS * 2
-					),
-					array(
-						'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
-						'type'       => 'skip',
-						'color_name' => 'info',
-						'expiration' => YEAR_IN_SECONDS * 10
-					)
-				),
-				'image'     => array(
-					'width' => '100',
-					'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
-				)
-			]);
-		}
 	}
 
     $notice_list = apply_filters( 'wp_ulike_admin_notices_instances', $notice_list );
