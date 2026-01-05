@@ -920,11 +920,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         array(
                             'type'  => 'select',
                             'title' => sprintf( esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Profile', 'wp-ulike') ),
-                            'desc'  => esc_html__('Choose the page that contains the profile shortcode. This page will serve as the base URL for all user profiles.', 'wp-ulike'),
                         ),
                     ), // First 2 fields from profiles section
-                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=profiles-section',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=profiles-section',
                 ),
                 'forms' => array(
                     'id'          => 'wp_ulike_pro_forms_lock',
@@ -946,11 +945,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         array(
                             'type'  => 'text',
                             'title' => esc_html__( 'Login Redirect URL', 'wp-ulike'),
-                            'desc'  => sprintf( esc_html__('URL where users are redirected after %s. Leave empty to redirect to the %s.', 'wp-ulike'), esc_html__('successful login', 'wp-ulike'), esc_html__('previous page', 'wp-ulike') ),
                         ),
                     ), // First 2 fields from forms section
-                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-plugin/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=forms-section',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-plugin/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=forms-section',
                 ),
                 'social_logins' => array(
                     'id'          => 'wp_ulike_pro_social_logins_lock',
@@ -972,11 +970,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         array(
                             'type'  => 'group',
                             'title' => esc_html__('Social networks', 'wp-ulike'),
-                            'desc'  => esc_html__('Configure social login networks. Add multiple networks and customize each one.', 'wp-ulike'),
                         ),
                     ), // First 2 fields from social_logins section (matches Pro exactly)
-                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/social-login/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=social-logins-section',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/social-login/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=social-logins-section',
                 ),
                 'share_buttons' => array(
                     'id'          => 'wp_ulike_pro_share_buttons_lock',
@@ -993,30 +990,10 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         array(
                             'type'  => 'group',
                             'title' => esc_html__('Add Share Items', 'wp-ulike'),
-                            'desc'  => esc_html__('Create multiple share button sets. Each set can have its own configuration and be used via shortcode.', 'wp-ulike'),
-                            'fields' => array(
-                                array(
-                                    'id'    => 'slug',
-                                    'type'  => 'text',
-                                    'title' => esc_html__( 'Slug', 'wp-ulike') . ' *',
-                                    'desc'  => esc_html__('A unique identifier for this share button set. Used in the shortcode to display these buttons (e.g., slug="my_share").', 'wp-ulike'),
-                                ),
-                                array(
-                                    'id'      => 'view',
-                                    'type'    => 'button_set',
-                                    'title'   => esc_html__( 'Button Display Style', 'wp-ulike'),
-                                    'desc'    => esc_html__('Choose how buttons are displayed: with icon and text, icon only, or text only.', 'wp-ulike'),
-                                    'options' => array(
-                                        'icon_text' => esc_html__( 'Icon & Text', 'wp-ulike'),
-                                        'icon'      => esc_html__( 'Icon', 'wp-ulike'),
-                                        'text'      => esc_html__( 'Text', 'wp-ulike'),
-                                    ),
-                                ),
-                            ),
                         ),
                     ), // Share buttons uses group repeater style (matches Pro exactly - shows actual repeater)
-                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-social-share-buttons/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=share-buttons-section',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-social-share-buttons/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=share-buttons-section',
                 ),
                 'rest_api' => array(
                     'id'          => 'wp_ulike_pro_rest_api_lock',
@@ -1038,15 +1015,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         array(
                             'type'  => 'button_set',
                             'title' => esc_html__( 'Authentication Type', 'wp-ulike'),
-                            'desc'  => esc_html__('Choose how API requests are authenticated. User Login uses WordPress user credentials, Custom Keys uses API tokens.', 'wp-ulike'),
                             'options' => array(
                                 'login' => esc_html__('User Login', 'wp-ulike'),
                                 'token' => esc_html__('Custom Keys', 'wp-ulike'),
                             ),
                         ),
                     ), // First 2 fields from rest_api section
-                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/how-to-get-started-with-wp-ulike-rest-api/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash',
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=rest-api-section',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/how-to-get-started-with-wp-ulike-rest-api/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=rest-api-section',
                 )
             );
 
