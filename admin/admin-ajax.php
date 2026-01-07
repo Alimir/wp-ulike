@@ -413,3 +413,145 @@ add_action('wp_ajax_wp_ulike_save_settings_api','wp_ulike_save_settings_api');
 add_action('wp_ajax_nopriv_wp_ulike_save_settings_api', 'wp_ulike_save_settings_api');
 // @endif
 
+/**
+ * Customizer schema api
+ *
+ * @return void
+ */
+function wp_ulike_customizer_schema_api(){
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	// Get customizer API instance
+	global $wp_ulike_customizer_api;
+	if ( ! isset( $wp_ulike_customizer_api ) && class_exists( 'wp_ulike_customizer_api' ) ) {
+		$wp_ulike_customizer_api = new wp_ulike_customizer_api();
+	}
+
+	if ( isset( $wp_ulike_customizer_api ) && method_exists( $wp_ulike_customizer_api, 'get_schema' ) ) {
+		$schema = $wp_ulike_customizer_api->get_schema();
+		wp_send_json_success( $schema );
+	} else {
+		wp_send_json_error( esc_html__( 'Error: Customizer API not available.', 'wp-ulike' ) );
+	}
+}
+add_action('wp_ajax_wp_ulike_customizer_schema_api','wp_ulike_customizer_schema_api');
+// @if DEV
+add_action('wp_ajax_nopriv_wp_ulike_customizer_schema_api', 'wp_ulike_customizer_schema_api');
+// @endif
+
+/**
+ * Customizer values api
+ *
+ * @return void
+ */
+function wp_ulike_customizer_values_api(){
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	// Get customizer API instance
+	global $wp_ulike_customizer_api;
+	if ( ! isset( $wp_ulike_customizer_api ) && class_exists( 'wp_ulike_customizer_api' ) ) {
+		$wp_ulike_customizer_api = new wp_ulike_customizer_api();
+	}
+
+	if ( isset( $wp_ulike_customizer_api ) && method_exists( $wp_ulike_customizer_api, 'get_values' ) ) {
+		$values = $wp_ulike_customizer_api->get_values( null );
+		wp_send_json_success( $values );
+	} else {
+		wp_send_json_error( esc_html__( 'Error: Customizer API not available.', 'wp-ulike' ) );
+	}
+}
+add_action('wp_ajax_wp_ulike_customizer_values_api','wp_ulike_customizer_values_api');
+// @if DEV
+add_action('wp_ajax_nopriv_wp_ulike_customizer_values_api', 'wp_ulike_customizer_values_api');
+// @endif
+
+/**
+ * Save customizer api
+ *
+ * @return void
+ */
+function wp_ulike_save_customizer_api(){
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	// Get JSON data from request body
+	$json = file_get_contents( 'php://input' );
+	$values = json_decode( $json, true );
+
+	if ( ! is_array( $values ) ) {
+		wp_send_json_error( esc_html__( 'Error: Invalid request data. Expected an object with customizer values.', 'wp-ulike' ) );
+	}
+
+	// Get customizer API instance
+	global $wp_ulike_customizer_api;
+	if ( ! isset( $wp_ulike_customizer_api ) && class_exists( 'wp_ulike_customizer_api' ) ) {
+		$wp_ulike_customizer_api = new wp_ulike_customizer_api();
+	}
+
+	if ( isset( $wp_ulike_customizer_api ) && method_exists( $wp_ulike_customizer_api, 'save_values' ) ) {
+		$wp_ulike_customizer_api->save_values( $values );
+	} else {
+		wp_send_json_error( esc_html__( 'Error: Customizer API not available.', 'wp-ulike' ) );
+	}
+}
+add_action('wp_ajax_wp_ulike_save_customizer_api','wp_ulike_save_customizer_api');
+// @if DEV
+add_action('wp_ajax_nopriv_wp_ulike_save_customizer_api', 'wp_ulike_save_customizer_api');
+// @endif
+
+/**
+ * Customizer preview api
+ *
+ * @return void
+ */
+function wp_ulike_customizer_preview_api(){
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	// Get customizer API instance
+	global $wp_ulike_customizer_api;
+	if ( ! isset( $wp_ulike_customizer_api ) && class_exists( 'wp_ulike_customizer_api' ) ) {
+		$wp_ulike_customizer_api = new wp_ulike_customizer_api();
+	}
+
+	if ( isset( $wp_ulike_customizer_api ) && method_exists( $wp_ulike_customizer_api, 'get_preview' ) ) {
+		$wp_ulike_customizer_api->get_preview( null );
+	} else {
+		wp_send_json_error( esc_html__( 'Error: Customizer API not available.', 'wp-ulike' ) );
+	}
+}
+add_action('wp_ajax_wp_ulike_customizer_preview_api','wp_ulike_customizer_preview_api');
+// @if DEV
+add_action('wp_ajax_nopriv_wp_ulike_customizer_preview_api', 'wp_ulike_customizer_preview_api');
+// @endif
+

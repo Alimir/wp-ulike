@@ -103,8 +103,8 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 		 * @return void
 		 */
 		function load_optiwich_app(){
-			// only load on settings menu page
-			if ( strpos( $this->hook, WP_ULIKE_SLUG ) !== false && preg_match("/(settings)/i", $this->hook )  ) {
+			// only load on settings menu page or customizer
+			if ( strpos( $this->hook, WP_ULIKE_SLUG ) !== false && preg_match("/(settings|customize)/i", $this->hook )  ) {
 				// Enqueue WordPress media library (required for upload fields)
 				wp_enqueue_media();
 
@@ -143,7 +143,11 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					'actions' => array(
 						'schema'  => 'wp_ulike_schema_api',
 						'settings' => 'wp_ulike_settings_api',
-						'save'    => 'wp_ulike_save_settings_api'
+						'save'    => 'wp_ulike_save_settings_api',
+						'customizerSchema' => 'wp_ulike_customizer_schema_api',
+						'customizerValues' => 'wp_ulike_customizer_values_api',
+						'customizerSave' => 'wp_ulike_save_customizer_api',
+						'customizerPreview' => 'wp_ulike_customizer_preview_api'
 					),
 					'translations' => $translations
 				));

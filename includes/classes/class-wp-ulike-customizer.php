@@ -39,23 +39,26 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
 
             do_action( 'wp_ulike_customize_loaded' );
 
-            ULF::createSection( $this->option_domain, array(
+            $parent_section = array(
                 'id'    => WP_ULIKE_SLUG,   // Set a unique slug-like ID
                 'title' => esc_html__( 'WP ULike', 'wp-ulike' )
-            ) );
+            );
 
-            ULF::createSection( $this->option_domain, array(
+            // Expose section via filter for API access
+            apply_filters( 'wp_ulike_optiwich_customizer_section', $parent_section, $this->option_domain );
+
+            ULF::createSection( $this->option_domain, $parent_section );
+
+            $button_section = array(
                 'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
+                'id'     => 'button_templates',
                 'title'  => esc_html__( 'Button Templates', 'wp-ulike' ),
+                'template' => 'button',                              // Template ID for customizer preview
+                'icon'   => 'cursor-arrow-rays',                     // Icon for template selector
                 'fields' => array(
                     array(
                         'type'    => 'heading',
                         'content' => esc_html__( 'Template Wrapper', 'wp-ulike' ),
-                    ),
-                    array(
-                        'type'    => 'submessage',
-                        'style'   => 'info',
-                        'content' => esc_html__( 'In this section, you can customize the styles.', 'wp-ulike' ),
                     ),
                     array(
                         'id'               => 'template_typography',
@@ -147,11 +150,6 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'type'    => 'heading',
                         'content' => esc_html__( 'Button', 'wp-ulike' ),
-                    ),
-                    array(
-                        'type'    => 'submessage',
-                        'style'   => 'info',
-                        'content' => esc_html__( 'In this section, you can customize the styles. Please note that some buttons have different structures (such as SVG based) and therefore you should be more careful in setting them.', 'wp-ulike' ),
                     ),
                     array(
                         'id'            => 'button_group',
@@ -302,11 +300,6 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'content' => esc_html__( 'Counter', 'wp-ulike' ),
                     ),
                     array(
-                        'type'    => 'submessage',
-                        'style'   => 'info',
-                        'content' => esc_html__( 'In this section, you can customize the styles.', 'wp-ulike' ),
-                    ),
-                    array(
                         'id'            => 'counter_group',
                         'type'          => 'tabbed',
                         'tabs'          => array(
@@ -374,11 +367,19 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output'      => '.wpulike .wp_ulike_general_class .count-box',
                     )
                 )
-            ) );
+            );
 
-            ULF::createSection( $this->option_domain, array(
+            // Expose section via filter for API access
+            apply_filters( 'wp_ulike_optiwich_customizer_section', $button_section, $this->option_domain );
+
+            ULF::createSection( $this->option_domain, $button_section );
+
+            $toast_section = array(
                 'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
+                'id'     => 'toast_messages',
                 'title'  => esc_html__( 'Toast Messages', 'wp-ulike' ),
+                'template' => 'toast',                               // Template ID for customizer preview
+                'icon'   => 'bell',                                  // Icon for template selector
                 'fields' => array(
                     array(
                         'id'               => 'toast_typography',
@@ -547,40 +548,14 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         )
                     ),
                 )
-            ));
+            );
 
-            ULF::createSection( $this->option_domain, array(
-                'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
-                'title'  => esc_html__( 'Display Likers Box', 'wp-ulike' ),
-                'fields' => array(
-                    array(
-                        'type'    => 'heading',
-                        'content' => esc_html__( 'Popover', 'wp-ulike' ),
-                    ),
-                    array(
-                        'id'               => 'likers_popover_bg',
-                        'type'             => 'background',
-                        'output_important' => true,
-                        'title'            => esc_html__( 'Background', 'wp-ulike' ),
-                        'output'           => '.ulf-tooltip',
-                    ),
-                    array(
-                        'id'               => 'likers_popover_border',
-                        'type'             => 'border',
-                        'output_important' => true,
-                        'title'            => esc_html__( 'Border', 'wp-ulike' ),
-                        'output'           => '.ulf-tooltip',
-                    ),
-                    array(
-                        'id'               => 'likers_popover_arrow_color',
-                        'type'             => 'color',
-                        'output_important' => true,
-                        'title'            => esc_html__( 'Arrow Color', 'wp-ulike' ),
-                        'output'           => '.ulf-tooltip .ulf-arrow',
-                        'output_mode'      => 'border-top-color'
-                    ),
-                )
-            ));
+            // Expose section via filter for API access
+            apply_filters( 'wp_ulike_optiwich_customizer_section', $toast_section, $this->option_domain );
+
+            ULF::createSection( $this->option_domain, $toast_section );
+
+
 
             do_action( 'wp_ulike_customize_ended' );
 

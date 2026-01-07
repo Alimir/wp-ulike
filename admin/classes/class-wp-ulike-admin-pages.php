@@ -88,6 +88,13 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 		 */
 		private function get_default_submenus() {
 			return array(
+				'customize'  => array(
+					'title'       => esc_html__( 'Customize', 'wp-ulike' ),
+					'parent_slug' => 'wp-ulike-settings',
+					'capability'  => 'manage_options', // Same as settings, requires manage_options.
+					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/optiwich.php',
+					'menu_slug'   => 'wp-ulike-customize',
+				),
 				'statistics' => array(
 					'title'       => esc_html__( 'Statistics', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
