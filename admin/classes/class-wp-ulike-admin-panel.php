@@ -54,6 +54,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $sections[] = array(
                 'id'    => 'configuration',
                 'title' => esc_html__( 'Configuration','wp-ulike'),
+                'icon'  => 'cog-6-tooth',
             );
 
             // General
@@ -61,6 +62,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'id'     => 'general',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'General','wp-ulike'),
+                'icon'   => 'adjustments-horizontal',
                 'fields' => apply_filters( 'wp_ulike_panel_general', array(
                     array(
                         'id'      => 'enable_kilobyte_format',
@@ -369,6 +371,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'id'     => 'content-types',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Content Types','wp-ulike'),
+                'icon'   => 'squares-2x2',
                 'fields' => $content_types_fields
             );
 
@@ -377,6 +380,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'id'     => 'integrations',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Integrations','wp-ulike'),
+                'icon'   => 'puzzle-piece',
                 'fields' => apply_filters( 'wp_ulike_panel_integrations', array(
                     array(
                         'id'    => 'enable_meta_values',
@@ -398,6 +402,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'id'     => 'profiles',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Profiles','wp-ulike'),
+                'icon'   => 'user',
+                'is_pro' => true,
                 'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
             );
 
@@ -406,6 +412,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'id'     => 'login-signup',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Login & Signup','wp-ulike'),
+                'icon'   => 'key',
+                'is_pro' => true,
                 'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
             );
 
@@ -414,6 +422,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'id'     => 'social-logins',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Social Logins','wp-ulike'),
+                'icon'   => 'user-group',
+                'is_pro' => true,
                 'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
             );
 
@@ -422,6 +432,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'id'     => 'share-buttons',
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'Share Buttons','wp-ulike'),
+                'icon'   => 'share',
+                'is_pro' => true,
                 'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
             );
 
@@ -431,12 +443,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $sections[] = array(
                 'id'    => 'translations',
                 'title' => esc_html__( 'Translations','wp-ulike'),
+                'icon'  => 'language',
             );
 
             $sections[] = array(
                 'id'     => 'strings',
                 'title'  => esc_html__( 'Strings','wp-ulike'),
                 'parent' => 'translations',
+                'icon'   => 'document-text',
                 'fields' => apply_filters( 'wp_ulike_panel_translations', array(
                     array(
                         'id'      => 'validate_notice',
@@ -483,18 +497,30 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             );
 
+            // Emails
+            $sections[] = array(
+                'id'     => 'emails',
+                'parent' => 'translations',
+                'title'  => esc_html__( 'Emails','wp-ulike'),
+                'icon'   => 'envelope',
+                'is_pro' => true,
+                'fields' => apply_filters( 'wp_ulike_panel_emails', $this->get_pro_lock_field( 'emails' ) )
+            );
+
             /**
              * Customization Section
              */
             $sections[] = array(
                 'id'    => 'customization',
                 'title' => esc_html__( 'Developer Tools','wp-ulike'),
+                'icon'  => 'code-bracket',
             );
 
             $sections[] = array(
                 'id'     => 'scripts',
                 'parent' => 'customization',
                 'title'  => esc_html__( 'Scripts','wp-ulike'),
+                'icon'   => 'document-text',
                 'fields' => apply_filters( 'wp_ulike_panel_customization', array(
                     array(
                         'id'    => 'custom_css',
@@ -527,6 +553,8 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'id'     => 'rest-api',
                 'parent' => 'customization',
                 'title'  => esc_html__( 'REST API','wp-ulike' ),
+                'icon'   => 'server',
+                'is_pro' => true,
                 'fields' => apply_filters( 'wp_ulike_panel_rest_api', $this->get_pro_lock_field( 'rest_api' ) )
             );
 
@@ -536,6 +564,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $sections[] = array(
                 'id'    => 'backup',
                 'title' => esc_html__( 'Backup & Restore', 'wp-ulike' ),
+                'icon'  => 'arrow-down-tray',
                 'fields' => array(
                     array(
                         'id'    => 'backup_restore',
@@ -1023,6 +1052,30 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     ), // First 2 fields from rest_api section
                     'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=rest-api-section',
                     'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/how-to-get-started-with-wp-ulike-rest-api/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=rest-api-section',
+                ),
+                'emails' => array(
+                    'id'          => 'wp_ulike_pro_emails_lock',
+                    'title'       => esc_html__( 'Professional Email Communication System', 'wp-ulike' ),
+                    'description' => esc_html__( 'Customize all email templates sent by WP ULike Pro including welcome emails, password resets, account verification, and notifications. Create branded, professional communications that match your site\'s style and improve user engagement.', 'wp-ulike' ),
+                    'features'    => array(
+                        esc_html__( 'Customizable email templates for all user actions', 'wp-ulike' ),
+                        esc_html__( 'HTML email support with rich formatting', 'wp-ulike' ),
+                        esc_html__( 'Variable system for dynamic content', 'wp-ulike' ),
+                        esc_html__( 'Welcome, password reset, and verification emails', 'wp-ulike' ),
+                        esc_html__( 'Custom sender name and email address', 'wp-ulike' )
+                    ),
+                    'field_pattern' => array(
+                        array(
+                            'type'  => 'text',
+                            'title' => esc_html__( 'Subject Line', 'wp-ulike'),
+                        ),
+                        array(
+                            'type'  => 'text',
+                            'title' => esc_html__( 'Admin E-mail Address', 'wp-ulike'),
+                        ),
+                    ), // First 2 fields from emails section
+                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=emails-section',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=emails-section',
                 )
             );
 

@@ -514,11 +514,21 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                     if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
                         $processed_fields = $this->process_field_callbacks( $section['fields'] );
                         if ( ! empty( $processed_fields ) ) {
-                            $pages_map[ $section['id'] ]['sections'][] = array(
+                            $section_data = array(
                                 'id'     => 'section',
                                 'title'  => $section['title'] ?? '',
                                 'fields' => array_values( $processed_fields ),
                             );
+                            
+                            // Preserve icon and is_pro if present
+                            if ( isset( $section['icon'] ) ) {
+                                $section_data['icon'] = $section['icon'];
+                            }
+                            if ( isset( $section['is_pro'] ) ) {
+                                $section_data['is_pro'] = $section['is_pro'];
+                            }
+                            
+                            $pages_map[ $section['id'] ]['sections'][] = $section_data;
                         }
                     }
                 }
@@ -538,11 +548,18 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
          * @return array Page structure
          */
         protected function create_page( $section ) {
-            return array(
+            $page = array(
                 'id'       => $section['id'] ?? '',
                 'title'    => $section['title'] ?? '',
                 'sections' => array(),
             );
+            
+            // Preserve icon if present
+            if ( isset( $section['icon'] ) ) {
+                $page['icon'] = $section['icon'];
+            }
+            
+            return $page;
         }
 
         /**
@@ -577,6 +594,16 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'parent'   => $section['parent'],
                 'sections' => array(),
             );
+            
+            // Preserve icon if present
+            if ( isset( $section['icon'] ) ) {
+                $child_page['icon'] = $section['icon'];
+            }
+            
+            // Preserve is_pro if present
+            if ( isset( $section['is_pro'] ) ) {
+                $child_page['is_pro'] = $section['is_pro'];
+            }
 
             if ( ! isset( $section['fields'] ) || ! is_array( $section['fields'] ) ) {
                 return $child_page;
@@ -594,11 +621,21 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             if ( $extracted['should_create_regular_section'] && ! empty( $extracted['regular_fields'] ) ) {
                 $processed_fields = $this->process_field_callbacks( $extracted['regular_fields'] );
                 if ( ! empty( $processed_fields ) ) {
-                    $child_page['sections'][] = array(
+                    $section_data = array(
                         'id'     => $section['id'] ?? 'section',
                         'title'  => $section['title'] ?? '',
                         'fields' => array_values( $processed_fields ),
                     );
+                    
+                    // Preserve icon and is_pro if present
+                    if ( isset( $section['icon'] ) ) {
+                        $section_data['icon'] = $section['icon'];
+                    }
+                    if ( isset( $section['is_pro'] ) ) {
+                        $section_data['is_pro'] = $section['is_pro'];
+                    }
+                    
+                    $child_page['sections'][] = $section_data;
                 }
             }
 
@@ -621,11 +658,21 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( $this->is_fieldset_section( $field ) ) {
                     $has_section_fieldsets = true;
                     $processed_fields = $this->process_field_callbacks( $field['fields'] );
-                    $fieldset_sections[] = array(
+                    $fieldset_section = array(
                         'id'     => $field['id'],
                         'title'  => $field['title'] ?? '',
                         'fields' => array_values( $processed_fields ),
                     );
+                    
+                    // Preserve icon and is_pro if present
+                    if ( isset( $field['icon'] ) ) {
+                        $fieldset_section['icon'] = $field['icon'];
+                    }
+                    if ( isset( $field['is_pro'] ) ) {
+                        $fieldset_section['is_pro'] = $field['is_pro'];
+                    }
+                    
+                    $fieldset_sections[] = $fieldset_section;
                 } else {
                     // All other fields go to regular fields
                     $regular_fields[] = $field;
