@@ -415,7 +415,8 @@ function wp_ulike_get_templates_for_block() {
 				'key'             => $key,
 				'name'            => isset( $args['name'] ) ? $args['name'] : ucfirst( str_replace( array( 'wpulike-', 'wp-ulike-' ), '', $key ) ),
 				'symbol'          => isset( $args['symbol'] ) ? $args['symbol'] : '',
-				'is_text_support' => isset( $args['is_text_support'] ) ? $args['is_text_support'] : false
+				'is_text_support' => isset( $args['is_text_support'] ) ? $args['is_text_support'] : false,
+				'is_locked'       => isset( $args['is_locked'] ) ? $args['is_locked'] : false
 			);
 		}
 	}
