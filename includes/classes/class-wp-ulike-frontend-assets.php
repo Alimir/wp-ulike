@@ -56,8 +56,7 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 		// Check user preference for CSS delivery method
 		$user_prefers_inline = wp_ulike_is_true( wp_ulike_get_option( 'enable_inline_custom_css', false ) );
 		$directory_not_writable = wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) );
-		error_log($user_prefers_inline);
-		error_log($directory_not_writable);
+		
 		// Use inline CSS if user prefers it OR directory is not writable (fallback)
 		if( $user_prefers_inline || $directory_not_writable ){
 			//add your custom style from setting panel (now includes customizer CSS).

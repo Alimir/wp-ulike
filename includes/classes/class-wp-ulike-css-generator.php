@@ -749,8 +749,8 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 return '';
             }
 
-            // Whitelist of valid CSS properties
-            $valid_properties = array(
+            // Base CSS properties - extensible via filter
+            $base_properties = array(
                 'width', 'height', 'min-width', 'min-height', 'max-width', 'max-height',
                 'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
                 'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
@@ -761,8 +761,20 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 'background', 'background-color', 'background-image', 'background-repeat',
                 'background-position', 'background-size', 'background-attachment',
                 'display', 'position', 'top', 'right', 'bottom', 'left', 'z-index',
-                'opacity', 'transform', 'transition'
+                'opacity', 'transform', 'transition', 'box-shadow', 'text-shadow',
+                'border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius',
+                'flex', 'flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-content',
+                'grid', 'grid-template-columns', 'grid-template-rows', 'grid-gap', 'gap'
             );
+
+            /**
+             * Filter valid CSS properties for customizer output
+             * Allows themes and plugins to extend supported CSS properties
+             * 
+             * @param array $base_properties Base CSS properties
+             * @return array Extended CSS properties
+             */
+            $valid_properties = apply_filters( 'wp_ulike_css_valid_properties', $base_properties );
 
             $property_lower = strtolower( $property );
             if ( in_array( $property_lower, $valid_properties, true ) ) {

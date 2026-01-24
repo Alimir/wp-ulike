@@ -614,6 +614,8 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             // Add extracted fieldset sections
             foreach ( $extracted['fieldset_sections'] as $fieldset_section ) {
+                // Mark sections derived from fieldsets as grouping sections
+                $fieldset_section['is_grouping_section'] = true;
                 $child_page['sections'][] = $fieldset_section;
             }
 
