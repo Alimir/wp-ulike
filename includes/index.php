@@ -18,13 +18,9 @@ require_once WP_ULIKE_ADMIN_DIR . '/classes/class-wp-ulike-settings-api.php';
 // Load Customizer API for Optiwich integration
 require_once WP_ULIKE_ADMIN_DIR . '/classes/class-wp-ulike-customizer-api.php';
 
-// Initialize Customizer API early so it can collect sections via filter
-if ( ! isset( $GLOBALS['wp_ulike_customizer_api'] ) && class_exists( 'wp_ulike_customizer_api' ) ) {
-    $GLOBALS['wp_ulike_customizer_api'] = new wp_ulike_customizer_api();
-}
+// Load CSS Generator for customizer styles (auto-initializes on load)
+require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-css-generator.php';
 
-// Register customizer options
-new wp_ulike_customizer();
 
 // Functions
 include_once( 'functions/utilities.php' );

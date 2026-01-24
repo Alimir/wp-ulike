@@ -713,3 +713,30 @@ function wp_ulike_panel_customization_section( $options ) {
 	return $options;
 }
 add_filter( 'wp_ulike_panel_customization', 'wp_ulike_panel_customization_section', 10, 1 );
+
+/**
+ * Stores css content in custom css file when settings or customizer are saved
+ * Always tries to generate the file regardless of user preference (for debugging/inspection)
+ * User preference only controls the delivery method (file vs inline)
+ *
+ * @param array $values The saved values (not used but available)
+ * @return boolean Returns true if the file is created and updated successfully, false on failure
+ */
+function wp_ulike_save_custom_css( $values = null ){
+    $css_string = wp_ulike_get_custom_style();
+    $css_string = wp_ulike_minify_css( $css_string );
+
+    if ( ! empty( $css_string ) && wp_ulike_put_contents_dir( $css_string, 'custom.css' ) ) {
+        // File created successfully - directory is writable
+        update_option( 'wp_ulike_use_inline_custom_css' , 0 ); 
+        return true;
+    } else {
+        // File creation failed - directory not writable, must use inline fallback
+        update_option( 'wp_ulike_use_inline_custom_css' , 1 ); 
+        return false;
+    }
+}
+// Hook to save CSS file when settings are saved
+add_action( 'wp_ulike_settings_saved', 'wp_ulike_save_custom_css', 15, 1 );
+// Hook to save CSS file when customizer is saved  
+add_action( 'wp_ulike_customizer_saved', 'wp_ulike_save_custom_css', 15, 1 );

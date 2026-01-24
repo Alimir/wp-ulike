@@ -38,33 +38,11 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         const NESTED_FIELD_TYPES = array( 'group', 'repeater', 'fieldset', 'tabbed' );
 
         /**
-         * Collected sections storage
-         */
-        private static $collected_sections = array();
-
-        /**
          * Constructor
          */
         public function __construct() {
             // Admin-ajax handlers are registered in admin-ajax.php
             // This class provides the methods that admin-ajax.php calls
-            
-            // Hook early to collect sections as they're registered
-            add_filter( 'wp_ulike_optiwich_customizer_section', array( $this, 'collect_section' ), 10, 2 );
-        }
-
-        /**
-         * Collect section via filter hook
-         *
-         * @param array $section Section data
-         * @param string $option_domain Option domain
-         * @return array Section data (unchanged)
-         */
-        public function collect_section( $section, $option_domain ) {
-            if ( $option_domain === $this->option_domain ) {
-                self::$collected_sections[] = $section;
-            }
-            return $section;
         }
 
         /**
@@ -137,16 +115,11 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         }
 
         /**
-         * Build schema from ULF customizer sections
+         * Build schema from customizer sections
          */
         protected function build_schema_from_customizer() {
-            // Ensure customizer is loaded
-            if ( ! did_action( 'wp_ulike_customize_loaded' ) ) {
-                do_action( 'wp_ulike_customize_loaded' );
-            }
-
-            // Get sections from ULF customizer
-            $sections = $this->get_ulf_customizer_sections();
+            // Get sections from customizer class directly
+            $sections = $this->get_customizer_sections();
 
             // Build pages structure from sections
             $pages = $this->build_pages_structure( $sections );
@@ -155,12 +128,12 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         }
 
         /**
-         * Get ULF customizer sections
-         * Extracts sections from ULF framework's customizer structure
+         * Get customizer sections
+         * Gets sections directly from customizer class
          *
          * @return array Sections array
          */
-        protected function get_ulf_customizer_sections() {
+        protected function get_customizer_sections() {
             // Use static cache
             static $cached_sections = null;
 
@@ -168,65 +141,24 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 return $cached_sections;
             }
 
-            // Ensure API class instance exists and filter hook is active
-            // This ensures sections will be collected when customizer registers them
-            global $wp_ulike_customizer_api;
-            if ( ! isset( $wp_ulike_customizer_api ) && class_exists( 'wp_ulike_customizer_api' ) ) {
-                $wp_ulike_customizer_api = new wp_ulike_customizer_api();
-            }
-
-            // If sections were already collected (from normal WordPress load), use them
-            if ( ! empty( self::$collected_sections ) && did_action( 'wp_ulike_customize_loaded' ) ) {
-                $cached_sections = self::$collected_sections;
-                return $cached_sections;
-            }
-
-            // Clear collected sections before triggering registration
-            self::$collected_sections = array();
-
             // Ensure customizer class is loaded
             if ( ! class_exists( 'wp_ulike_customizer' ) ) {
-                // Customizer class should be loaded via includes/index.php
-                // If not, return empty array
                 $cached_sections = array();
                 return $cached_sections;
             }
 
-            // Ensure customizer is loaded and sections are registered
-            // Trigger customizer registration if not already done
-            if ( ! did_action( 'wp_ulike_customize_loaded' ) ) {
-                // ULF framework should be loaded first
-                if ( ! did_action( 'ulf_loaded' ) ) {
-                    do_action( 'ulf_loaded' );
-                } else {
-                    // If ulf_loaded already fired, we need to manually trigger register_panel
-                    // by calling ulf_loaded again (WordPress allows multiple calls)
-                    // This ensures register_panel runs with our filter hook active
-                    do_action( 'ulf_loaded' );
-                }
-            } else {
-                // If wp_ulike_customize_loaded already fired but we don't have sections,
-                // it means sections were registered before our filter hook was active
-                // Try to trigger registration again
-                do_action( 'ulf_loaded' );
-            }
-
-            // Wait for customizer to finish registering sections
-            if ( ! did_action( 'wp_ulike_customize_ended' ) ) {
-                do_action( 'wp_ulike_customize_ended' );
-            }
-
-            // Use collected sections
-            $cached_sections = is_array( self::$collected_sections ) ? self::$collected_sections : array();
+            // Get sections directly from customizer class
+            $customizer = new wp_ulike_customizer();
+            $cached_sections = $customizer->register_sections();
 
             return $cached_sections;
         }
 
         /**
          * Build pages structure from customizer sections
-         * Converts ULF customizer sections to pages structure for React consumption
+         * Converts customizer sections to pages structure for React consumption
          *
-         * @param array $sections Sections array from ULF
+         * @param array $sections Sections array from customizer
          * @return array Pages structure
          */
         public function build_pages_structure( $sections ) {
@@ -698,7 +630,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WP ULike Customizer Preview</title>
     <base href="' . esc_url( site_url() ) . '/">';
-            
+
             // Include WP ULike CSS if available
             if ( ! empty( $css_url ) ) {
                 // Convert relative URL to absolute if needed
@@ -707,7 +639,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 }
                 $html .= '<link rel="stylesheet" href="' . esc_url( $css_url ) . '" id="wp-ulike-styles">';
             }
-            
+
             $html .= '<style id="optiwich-preview-base-styles">
         * {
             box-sizing: border-box;
@@ -733,9 +665,9 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         }
     </style>
 </head>
-<body>
+<body' . ( is_rtl() ? ' dir="rtl" class="rtl"' : '' ) . '>
     ' . $preview_html;
-            
+
             // Include WP ULike JS if available
             if ( ! empty( $js_url ) ) {
                 // Convert relative URL to absolute if needed
@@ -744,7 +676,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 }
                 $html .= '<script src="' . esc_url( $js_url ) . '" id="wp-ulike-scripts"></script>';
             }
-            
+
             // Add wp_ulike_params for JS functionality
             $wp_ulike_params = array(
                 'ajax_url'      => admin_url( 'admin-ajax.php' ),
@@ -753,7 +685,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             $html .= '<script>
                 window.wp_ulike_params = ' . wp_json_encode( $wp_ulike_params ) . ';
             </script>';
-            
+
             $html .= '</body>
 </html>';
 
@@ -796,7 +728,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                             'post_status' => 'publish',
                             'fields' => 'ids'
                         ) );
-                        
+
                         if ( ! empty( $sample_post_id ) ) {
                             echo wp_ulike( 'put', array( 'id' => $sample_post_id[0] ) );
                         } else {
@@ -812,28 +744,28 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 case 'toast':
                     // Render all 4 toast notification types with exact WP ULike HTML structure
                     // Ensure no inline styles that conflict with customizer styles
-                    echo '<div class="wpulike-notification" style="position: relative; min-height: 200px; padding: 20px; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 10px;">';
-                    
+                    echo '<div class="wpulike-notification" style="position: relative; min-height: 200px; padding: 20px; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; align-items: center;">';
+
                     // Info message (default)
                     echo '<div class="wpulike-message">';
                     echo '<strong>Info:</strong> Please wait...';
                     echo '</div>';
-                    
+
                     // Success message
                     echo '<div class="wpulike-message wpulike-success">';
                     echo '<strong>Success!</strong> You liked this post.';
                     echo '</div>';
-                    
+
                     // Error message
                     echo '<div class="wpulike-message wpulike-error">';
                     echo '<strong>Error!</strong> Something went wrong.';
                     echo '</div>';
-                    
+
                     // Warning message
                     echo '<div class="wpulike-message wpulike-warning">';
                     echo '<strong>Warning!</strong> Please check your settings.';
                     echo '</div>';
-                    
+
                     echo '</div>';
                     break;
 
@@ -846,22 +778,22 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                             'post_status' => 'publish',
                             'fields' => 'ids'
                         ) );
-                        
+
                         // Get settings for likers template
                         $setting_key = 'posts_group';
                         $table_name = 'ulike';
                         $column_name = 'post_id';
                         $item_id = ! empty( $sample_post_id ) ? $sample_post_id[0] : 1;
-                        
+
                         // Get options to determine template structure
                         $options = wp_ulike_get_option( $setting_key );
                         $counter = ! empty( $options['likers_count'] ) ? absint( $options['likers_count'] ) : 10;
                         $template = ! empty( $options['likers_template'] ) ? wp_kses_post( $options['likers_template'] ) : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>';
                         $avatar_size = ! empty( $options['likers_gravatar_size'] ) ? absint( $options['likers_gravatar_size'] ) : 64;
-                        
+
                         // Try to get actual likers
                         $get_users = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $item_id, NULL );
-                        
+
                         // If no likers, create dummy data for preview
                         if ( empty( $get_users ) ) {
                             // Create dummy user IDs for preview
@@ -889,21 +821,21 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                             }
                             $get_users = $dummy_users;
                         }
-                        
+
                         // Render likers template with data (real or dummy)
                         echo '<div style="position: relative; padding: 40px; display: flex; align-items: center; justify-content: center; min-height: 200px;">';
-                        
+
                         if ( ! empty( $get_users ) ) {
                             // Build template manually to ensure it renders
                             $inner_template = wp_ulike_get_template_between( $template, "%START_WHILE%", "%END_WHILE%" );
                             $users_list = '';
-                            
+
                             foreach ( array_slice( $get_users, 0, $counter ) as $user_id ) {
                                 $user_info = get_user_by( 'id', $user_id );
                                 if ( ! $user_info ) {
                                     continue;
                                 }
-                                
+
                                 $out_template = $inner_template;
                                 if ( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
                                     $USER_AVATAR = get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
@@ -915,7 +847,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                                 }
                                 $users_list .= $out_template;
                             }
-                            
+
                             if ( ! empty( $users_list ) ) {
                                 echo wp_ulike_put_template_between( $template, $users_list, "%START_WHILE%", "%END_WHILE%" );
                             } else {
@@ -942,7 +874,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                             echo '</div>';
                             echo '</div>';
                         }
-                        
+
                         echo '</div>';
                     } else {
                         // Fallback if function doesn't exist
@@ -994,7 +926,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         }
     }
 
-    // Initialize the API - only if not already initialized
+    // Initialize the API - required for AJAX handlers in admin-ajax.php
     if ( ! isset( $GLOBALS['wp_ulike_customizer_api'] ) ) {
         $GLOBALS['wp_ulike_customizer_api'] = new wp_ulike_customizer_api();
     }

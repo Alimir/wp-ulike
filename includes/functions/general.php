@@ -435,17 +435,48 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_customizer_css' ) ){
+	/**
+	 * Get CSS from the customizer CSS generator
+	 *
+	 * @return string Generated CSS from customizer
+	 */
+	function wp_ulike_get_customizer_css() {
+		// Only generate CSS if customizer class exists
+		if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
+			return '';
+		}
+
+		// Get CSS generator instance
+		global $wp_ulike_css_generator;
+		if ( ! isset( $wp_ulike_css_generator ) ) {
+			$wp_ulike_css_generator = new wp_ulike_css_generator();
+		}
+
+		// Generate CSS (uses cache internally)
+		$customizer_css = $wp_ulike_css_generator->generate_css();
+
+		return $customizer_css;
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	/**
-	 * Get custom css styles
+	 * Get custom css styles including customizer-generated CSS
 	 *
-	 * @return void
+	 * @return string Combined CSS styles
 	 */
 	function wp_ulike_get_custom_style(){
 
 		$return_style = '';
 
-		// Display deprecated styles
+		// Add customizer-generated CSS first (highest priority)
+		$customizer_css = wp_ulike_get_customizer_css();
+		if( ! empty( $customizer_css ) ) {
+			$return_style .= $customizer_css;
+		}
+
+		// Display deprecated styles (for backward compatibility)
 		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) && wp_ulike_get_option( 'enable_deprecated_options' ) ) {
 			//get custom options
 			$customstyle   = get_option( 'wp_ulike_customize' );
@@ -496,7 +527,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$return_style .= '.wpulike .wp_ulike_is_loading button.wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn {background-image: url('.esc_url($custom_spinner).') !important;}';
 		}
 
-		// Custom Styles
+		// Custom Styles from settings (lowest priority)
 		if( '' != ( $custom_css = wp_ulike_get_option( 'custom_css' ) ) ) {
 			$return_style .= $custom_css;
 		}

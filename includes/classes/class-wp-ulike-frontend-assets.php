@@ -53,17 +53,18 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 			wp_enqueue_style( WP_ULIKE_SLUG, WP_ULIKE_ASSETS_URL . '/css/wp-ulike.css', array(), WP_ULIKE_VERSION );
 			// @endif
 
-			// load custom.css if the directory is writable. else use inline css fallback - Make sure the auxin-elements is installed
-			if( ! wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) ) &&
-			! wp_ulike_is_true( wp_ulike_get_option( 'enable_inline_custom_css', false ) ) ){
-				$uploads   = wp_get_upload_dir();
-				$css_file  = $uploads['baseurl'] . '/' . WP_ULIKE_SLUG . '/custom.css';
-
-				wp_enqueue_style( WP_ULIKE_SLUG . '-custom', $css_file, array( WP_ULIKE_SLUG ), WP_ULIKE_VERSION );
-			} else {
-				//add your custom style from setting panel.
-				wp_add_inline_style( WP_ULIKE_SLUG, wp_ulike_get_custom_style() );
-			}
+		// Check user preference for CSS delivery method
+		$user_prefers_inline = wp_ulike_is_true( wp_ulike_get_option( 'enable_inline_custom_css', false ) );
+		$directory_not_writable = wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) );
+		error_log($user_prefers_inline);
+		error_log($directory_not_writable);
+		// Use inline CSS if user prefers it OR directory is not writable (fallback)
+		if( $user_prefers_inline || $directory_not_writable ){
+			//add your custom style from setting panel (now includes customizer CSS).
+			wp_add_inline_style( WP_ULIKE_SLUG, wp_ulike_get_custom_style() );
+		} else {
+			wp_enqueue_style( WP_ULIKE_SLUG . '-custom', WP_ULIKE_CUSTOM_URL . '/custom.css', array( WP_ULIKE_SLUG ), WP_ULIKE_VERSION );
+		}
 
 	  	}
 
@@ -97,6 +98,7 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 				'notifications' => wp_ulike_get_option( 'enable_toast_notice' )
 			));
 	  	}
+
 
 	}
 

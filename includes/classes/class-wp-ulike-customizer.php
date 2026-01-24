@@ -13,31 +13,30 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
     class wp_ulike_customizer{
 
         protected $option_domain = 'wp_ulike_customize';
+        protected $sections_cache = null;
 
 		/**
 		 * __construct
 		 */
 		function __construct() {
-            add_action( 'ulf_loaded', array( $this, 'register_panel' ) );
+            // No framework dependencies - just initialize
         }
 
         /**
-         * Register setting panel
+         * Register customizer sections
+         * Returns array structure for API consumption
          *
-         * @return void
+         * @return array Sections structure
          */
-        public function register_panel(){
-            // Create customize options
-            ULF::createCustomizeOptions( $this->option_domain, array(
-                'database'        => 'option',
-                'transport'       => 'refresh',
-                'save_defaults'   => true,
-                'enqueue_webfont' => true,
-                'async_webfont'   => false,
-                'output_css'      => true,
-            ) );
+        public function register_sections(){
+            // Return cached sections if available
+            if ( $this->sections_cache !== null ) {
+                return $this->sections_cache;
+            }
 
-            do_action( 'wp_ulike_customize_loaded' );
+            do_action( 'wp_ulike_customize_started' );
+
+            $sections = array();
 
             $parent_section = array(
                 'id'    => WP_ULIKE_SLUG,   // Set a unique slug-like ID
@@ -47,9 +46,9 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
             // Expose section via filter for API access
             apply_filters( 'wp_ulike_optiwich_customizer_section', $parent_section, $this->option_domain );
 
-            ULF::createSection( $this->option_domain, $parent_section );
+            $sections[] = $parent_section;
 
-            $button_section = array(
+            $sections[] = array(
                 'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
                 'id'     => 'button_templates',
                 'title'  => esc_html__( 'Button Templates', 'wp-ulike' ),
@@ -369,12 +368,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                 )
             );
 
-            // Expose section via filter for API access
-            apply_filters( 'wp_ulike_optiwich_customizer_section', $button_section, $this->option_domain );
-
-            ULF::createSection( $this->option_domain, $button_section );
-
-            $toast_section = array(
+            $sections[] = array(
                 'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
                 'id'     => 'toast_messages',
                 'title'  => esc_html__( 'Toast Messages', 'wp-ulike' ),
@@ -550,15 +544,12 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                 )
             );
 
-            // Expose section via filter for API access
-            apply_filters( 'wp_ulike_optiwich_customizer_section', $toast_section, $this->option_domain );
-
-            ULF::createSection( $this->option_domain, $toast_section );
-
-
-
             do_action( 'wp_ulike_customize_ended' );
 
+            // Cache sections
+            $this->sections_cache = $sections;
+
+            return $sections;
         }
 
     }
