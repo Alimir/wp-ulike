@@ -9,8 +9,8 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
-// Register admin panel
-new wp_ulike_admin_panel();
+// Register admin pages
+new wp_ulike_admin_pages();
 
 // Include assets
 new wp_ulike_admin_assets();

@@ -19,17 +19,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 		 * __construct
 		 */
 		function __construct() {
-            // Register pages directly - no longer need to wait for hook
-            $this->register_pages();
-        }
-
-        /**
-         * Register admin page
-         *
-         * @return void
-         */
-        public function register_pages(){
-            new wp_ulike_admin_pages();
+            // No framework dependencies - just initialize
         }
 
         /**
@@ -544,7 +534,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'    => 'enable_inline_custom_css',
                         'type'  => 'switcher',
                         'title' => esc_html__('Enable Inline Custom CSS', 'wp-ulike'),
-                        'desc'  => esc_html__('If you prefer not to load custom.css, output styles inline on the page.', 'wp-ulike')
+                        'desc'  => esc_html__('Output styles inline on the page instead of loading custom.css file. The CSS file will still be generated for debugging and inspection purposes.', 'wp-ulike')
                     )
                 ) )
             );
@@ -606,7 +596,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'    => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', esc_html__( 'Preview templates online','wp-ulike'),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',esc_html__( 'Open preview','wp-ulike') ),
                     'options' => $this->get_templates_option_array(),
                     'default' => 'wpulike-default',
-                    'class'   => 'wp-ulike-visual-select',
                 ),
                 'button_type' => array(
                     'id'         => 'button_type',
@@ -905,6 +894,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
         /**
          * Get templates option array
+         * Returns structured data with symbol and is_locked flag for React app
          *
          * @return array
          */
@@ -914,7 +904,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             if( !empty( $options ) ){
                 foreach ($options as $key => $args) {
-                    $output[$key] = $args['symbol'];
+                    // Return structured data: symbol URL and is_locked flag
+                    // React app can use is_locked, PHP field renderer can use symbol
+                    $output[$key] = array(
+                        'symbol'    => isset( $args['symbol'] ) ? $args['symbol'] : '',
+                        'is_locked' => isset( $args['is_locked'] ) ? $args['is_locked'] : false
+                    );
                 }
             }
 
@@ -952,7 +947,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         ),
                     ), // First 2 fields from profiles section
                     'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=profiles-section',
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-profile-builder/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=profiles-section',
+                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/best-wordpress-profile-builder-plugin/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=profiles-section',
                 ),
                 'forms' => array(
                     'id'          => 'wp_ulike_pro_forms_lock',
