@@ -36,32 +36,41 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 	/**
 	 * Get options list values
+	 * WordPress automatically caches get_option() per request
 	 *
 	 * @param string $option
 	 * @param array|string $default
 	 * @return array|string|null
 	 */
 	function wp_ulike_get_option( $option = '', $default = null ) {
-	  $global_settings = get_option( 'wp_ulike_settings' );
+		// WordPress automatically caches get_option() per request
+		// No need for custom static caching - WordPress handles it
+		$settings = get_option( 'wp_ulike_settings' );
 
-	  if( strpos( $option, '|' ) && is_array( $global_settings ) ){
-		$option_name  = explode( "|", $option );
-		$option_stack = array();
-		foreach ($option_name as $key => $value) {
-			if( isset( $global_settings[$value] ) ){
-				$option_stack = $global_settings[$value];
-				continue;
-			}
-			if( isset( $option_stack[$value] ) ){
-				$option_stack = $option_stack[$value];
-			} else {
-				return $default;
-			}
+		// Return all settings if no option specified
+		// If settings don't exist (false) or are empty, return default
+		if ( empty( $option ) ) {
+			return ( $settings !== false && ! empty( $settings ) ) ? $settings : $default;
 		}
-		return $option_stack;
-	  }
 
-	  return ( isset( $global_settings[$option] ) ) ? $global_settings[$option] : $default;
+		// Handle nested options with pipe separator (e.g., "posts_group|template")
+		if ( strpos( $option, '|' ) && is_array( $settings ) ) {
+			$option_path = explode( "|", $option );
+			$value = $settings;
+			
+			foreach ( $option_path as $key ) {
+				if ( isset( $value[ $key ] ) ) {
+					$value = $value[ $key ];
+				} else {
+					return $default;
+				}
+			}
+			
+			return $value;
+		}
+
+		// Simple option lookup
+		return isset( $settings[ $option ] ) ? $settings[ $option ] : $default;
 	}
 }
 
@@ -442,15 +451,12 @@ if( ! function_exists( 'wp_ulike_get_customizer_css' ) ){
 	 * @return string Generated CSS from customizer
 	 */
 	function wp_ulike_get_customizer_css() {
-		// Only generate CSS if customizer class exists
 		if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
 			return '';
 		}
 
 		$css_generator = new wp_ulike_css_generator();
-		$customizer_css = $css_generator->generate_css();
-
-		return $customizer_css;
+		return $css_generator->generate_css();
 	}
 }
 
