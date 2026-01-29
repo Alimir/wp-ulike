@@ -546,6 +546,9 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
 
             do_action( 'wp_ulike_customize_ended' );
 
+            // Allow pro version and other extensions to add/modify sections
+            $sections = apply_filters( 'wp_ulike_customizer_sections', $sections );
+
             // Cache sections
             $this->sections_cache = $sections;
 

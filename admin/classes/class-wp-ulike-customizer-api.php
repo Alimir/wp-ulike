@@ -77,39 +77,20 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         /**
          * Get plugin assets URLs (CSS/JS)
          *
-         * @return array Assets URLs
+         * @return array Assets URLs (arrays of URLs)
          */
         protected function get_plugin_assets() {
             $assets = array(
-                'css' => '',
-                'js' => ''
+                'css' => array(),
+                'js' => array()
             );
 
-            // Try to get WP ULike front-end CSS/JS URLs
-            if ( function_exists( 'wp_ulike_get_frontend_assets' ) ) {
-                $plugin_assets = wp_ulike_get_frontend_assets();
-                $assets['css'] = isset( $plugin_assets['css'] ) ? $plugin_assets['css'] : '';
-                $assets['js'] = isset( $plugin_assets['js'] ) ? $plugin_assets['js'] : '';
-            } else {
-                // Fallback: use WP_ULIKE_ASSETS_URL constant
-                if ( defined( 'WP_ULIKE_ASSETS_URL' ) ) {
-                    $assets['css'] = WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css';
-                    $assets['js'] = WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js';
-                } else {
-                    // Last resort: try to construct from plugin URL
-                    $plugin_url = plugins_url( '', WP_ULIKE_PLUGIN_DIR . '/wp-ulike.php' );
-                    $assets['css'] = $plugin_url . '/assets/css/wp-ulike.min.css';
-                    $assets['js'] = $plugin_url . '/assets/js/wp-ulike.min.js';
-                }
-            }
+            // Add minified CSS/JS (always use minified versions)
+            $assets['css'][] = WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css';
+            $assets['js'][] = WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js';
 
-            // Convert relative URLs to absolute
-            if ( ! empty( $assets['css'] ) && strpos( $assets['css'], 'http' ) !== 0 ) {
-                $assets['css'] = site_url( $assets['css'] );
-            }
-            if ( ! empty( $assets['js'] ) && strpos( $assets['js'], 'http' ) !== 0 ) {
-                $assets['js'] = site_url( $assets['js'] );
-            }
+            // Allow pro version and other extensions to add their assets
+            $assets = apply_filters( 'wp_ulike_customizer_assets', $assets );
 
             return $assets;
         }
@@ -195,6 +176,14 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                         'parent'   => $parent_section_id,
                         'sections' => array(),
                     );
+
+                    // Add template and icon to page level (for template selector)
+                    if ( isset( $section['template'] ) ) {
+                        $page['template'] = $section['template'];
+                    }
+                    if ( isset( $section['icon'] ) ) {
+                        $page['icon'] = $section['icon'];
+                    }
 
                     // Process fields in this section
                     if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
@@ -607,6 +596,9 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             // Get template type from request
             $template_type = isset( $_REQUEST['template'] ) ? sanitize_text_field( $_REQUEST['template'] ) : 'button';
 
+            // Add preview parameter to detect preview mode in pro version
+            $_GET['preview'] = true;
+
             // Get current customizer values
             $customizer_values = $this->get_customizer_values();
 
@@ -618,8 +610,16 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
             // Get WP ULike front-end assets URLs using the same method as schema
             $plugin_assets = $this->get_plugin_assets();
-            $css_url = isset( $plugin_assets['css'] ) ? $plugin_assets['css'] : '';
-            $js_url = isset( $plugin_assets['js'] ) ? $plugin_assets['js'] : '';
+            $css_urls = isset( $plugin_assets['css'] ) ? $plugin_assets['css'] : '';
+            $js_urls = isset( $plugin_assets['js'] ) ? $plugin_assets['js'] : '';
+
+            // Normalize to arrays
+            if ( ! is_array( $css_urls ) && ! empty( $css_urls ) ) {
+                $css_urls = array( $css_urls );
+            }
+            if ( ! is_array( $js_urls ) && ! empty( $js_urls ) ) {
+                $js_urls = array( $js_urls );
+            }
 
             // Build full HTML with styles and WP ULike assets
             // Use absolute URLs and ensure proper isolation
@@ -631,13 +631,17 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
     <title>WP ULike Customizer Preview</title>
     <base href="' . esc_url( site_url() ) . '/">';
 
-            // Include WP ULike CSS if available
-            if ( ! empty( $css_url ) ) {
-                // Convert relative URL to absolute if needed
-                if ( strpos( $css_url, 'http' ) !== 0 ) {
-                    $css_url = site_url( $css_url );
+            // Include WP ULike CSS files if available
+            if ( ! empty( $css_urls ) && is_array( $css_urls ) ) {
+                foreach ( $css_urls as $css_url ) {
+                    if ( ! empty( $css_url ) ) {
+                        // Convert relative URL to absolute if needed
+                        if ( strpos( $css_url, 'http' ) !== 0 ) {
+                            $css_url = site_url( $css_url );
+                        }
+                        $html .= '<link rel="stylesheet" href="' . esc_url( $css_url ) . '">';
+                    }
                 }
-                $html .= '<link rel="stylesheet" href="' . esc_url( $css_url ) . '" id="wp-ulike-styles">';
             }
 
             $html .= '<style id="optiwich-preview-base-styles">
@@ -668,13 +672,17 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 <body' . ( is_rtl() ? ' dir="rtl" class="rtl"' : '' ) . '>
     ' . $preview_html;
 
-            // Include WP ULike JS if available
-            if ( ! empty( $js_url ) ) {
-                // Convert relative URL to absolute if needed
-                if ( strpos( $js_url, 'http' ) !== 0 ) {
-                    $js_url = site_url( $js_url );
+            // Include WP ULike JS files if available
+            if ( ! empty( $js_urls ) && is_array( $js_urls ) ) {
+                foreach ( $js_urls as $js_url ) {
+                    if ( ! empty( $js_url ) ) {
+                        // Convert relative URL to absolute if needed
+                        if ( strpos( $js_url, 'http' ) !== 0 ) {
+                            $js_url = site_url( $js_url );
+                        }
+                        $html .= '<script src="' . esc_url( $js_url ) . '"></script>';
+                    }
                 }
-                $html .= '<script src="' . esc_url( $js_url ) . '" id="wp-ulike-scripts"></script>';
             }
 
             // Add wp_ulike_params for JS functionality
@@ -685,6 +693,15 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             $html .= '<script>
                 window.wp_ulike_params = ' . wp_json_encode( $wp_ulike_params ) . ';
             </script>';
+
+            // Add localized scripts from assets
+            if ( isset( $plugin_assets['localized_scripts'] ) && is_array( $plugin_assets['localized_scripts'] ) ) {
+                foreach ( $plugin_assets['localized_scripts'] as $var_name => $var_data ) {
+                    $html .= '<script>
+                        window.' . esc_js( $var_name ) . ' = ' . wp_json_encode( $var_data ) . ';
+                    </script>';
+                }
+            }
 
             $html .= '</body>
 </html>';
@@ -714,6 +731,14 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
          * @return string Rendered HTML
          */
         protected function render_template_preview( $template_type ) {
+            // Allow extensions to handle their own template previews
+            $preview_html = apply_filters( 'wp_ulike_customizer_template_preview', '', $template_type );
+
+            // If filter returned content, use it
+            if ( ! empty( $preview_html ) ) {
+                return $preview_html;
+            }
+
             // Render WP ULike template based on type
             ob_start();
 
@@ -767,121 +792,6 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                     echo '</div>';
 
                     echo '</div>';
-                    break;
-
-                case 'likers':
-                    // Render likers list using actual WP ULike function with dummy data for preview
-                    if ( function_exists( 'wp_ulike_get_likers_template' ) ) {
-                        // Get a sample post ID for preview
-                        $sample_post_id = get_posts( array(
-                            'numberposts' => 1,
-                            'post_status' => 'publish',
-                            'fields' => 'ids'
-                        ) );
-
-                        // Get settings for likers template
-                        $setting_key = 'posts_group';
-                        $table_name = 'ulike';
-                        $column_name = 'post_id';
-                        $item_id = ! empty( $sample_post_id ) ? $sample_post_id[0] : 1;
-
-                        // Get options to determine template structure
-                        $options = wp_ulike_get_option( $setting_key );
-                        $counter = ! empty( $options['likers_count'] ) ? absint( $options['likers_count'] ) : 10;
-                        $template = ! empty( $options['likers_template'] ) ? wp_kses_post( $options['likers_template'] ) : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>';
-                        $avatar_size = ! empty( $options['likers_gravatar_size'] ) ? absint( $options['likers_gravatar_size'] ) : 64;
-
-                        // Try to get actual likers
-                        $get_users = wp_ulike_get_likers_list_per_post( $table_name, $column_name, $item_id, NULL );
-
-                        // If no likers, create dummy data for preview
-                        if ( empty( $get_users ) ) {
-                            // Create dummy user IDs for preview
-                            $dummy_users = array();
-                            $dummy_count = min( $counter, 5 ); // Show max 5 dummy users
-                            for ( $i = 1; $i <= $dummy_count; $i++ ) {
-                                // Try to get real users first
-                                $users = get_users( array( 'number' => $dummy_count, 'offset' => $i - 1 ) );
-                                if ( ! empty( $users ) && isset( $users[ $i - 1 ] ) ) {
-                                    $dummy_users[] = $users[ $i - 1 ]->ID;
-                                } else {
-                                    // Fallback: use admin user or create dummy IDs
-                                    $admin_user = get_user_by( 'login', 'admin' );
-                                    if ( $admin_user ) {
-                                        $dummy_users[] = $admin_user->ID;
-                                    }
-                                }
-                            }
-                            // If still no users, use admin or first available user
-                            if ( empty( $dummy_users ) ) {
-                                $all_users = get_users( array( 'number' => 1 ) );
-                                if ( ! empty( $all_users ) ) {
-                                    $dummy_users = array( $all_users[0]->ID );
-                                }
-                            }
-                            $get_users = $dummy_users;
-                        }
-
-                        // Render likers template with data (real or dummy)
-                        echo '<div style="position: relative; padding: 40px; display: flex; align-items: center; justify-content: center; min-height: 200px;">';
-
-                        if ( ! empty( $get_users ) ) {
-                            // Build template manually to ensure it renders
-                            $inner_template = wp_ulike_get_template_between( $template, "%START_WHILE%", "%END_WHILE%" );
-                            $users_list = '';
-
-                            foreach ( array_slice( $get_users, 0, $counter ) as $user_id ) {
-                                $user_info = get_user_by( 'id', $user_id );
-                                if ( ! $user_info ) {
-                                    continue;
-                                }
-
-                                $out_template = $inner_template;
-                                if ( strpos( $out_template, '%USER_AVATAR%' ) !== false ) {
-                                    $USER_AVATAR = get_avatar( $user_info->user_email, $avatar_size, '' , 'avatar' );
-                                    $out_template = str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
-                                }
-                                if ( strpos( $out_template, '%USER_NAME%' ) !== false ) {
-                                    $USER_NAME = esc_attr( $user_info->display_name );
-                                    $out_template = str_replace( "%USER_NAME%", $USER_NAME, $out_template );
-                                }
-                                $users_list .= $out_template;
-                            }
-
-                            if ( ! empty( $users_list ) ) {
-                                echo wp_ulike_put_template_between( $template, $users_list, "%START_WHILE%", "%END_WHILE%" );
-                            } else {
-                                // Fallback structure
-                                echo '<div class="ulf-tooltip" style="position: relative; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 16px; min-width: 250px; max-width: 300px;">';
-                                echo '<div class="ulf-arrow" style="position: absolute; bottom: 100%; left: 20px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid #ddd;"></div>';
-                                echo '<div class="ulf-tooltip-content">';
-                                echo '<h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #333;">People who liked this</h4>';
-                                echo '<div class="wp-ulike-likers-list">';
-                                echo '<span class="wp-ulike-liker"><a href="#" title="Sample User">' . get_avatar( 'sample@example.com', $avatar_size ) . '</a></span>';
-                                echo '</div>';
-                                echo '</div>';
-                                echo '</div>';
-                            }
-                        } else {
-                            // Fallback structure
-                            echo '<div class="ulf-tooltip" style="position: relative; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 16px; min-width: 250px; max-width: 300px;">';
-                            echo '<div class="ulf-arrow" style="position: absolute; bottom: 100%; left: 20px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid #ddd;"></div>';
-                            echo '<div class="ulf-tooltip-content">';
-                            echo '<h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #333;">People who liked this</h4>';
-                            echo '<div class="wp-ulike-likers-list">';
-                            echo '<span class="wp-ulike-liker"><a href="#" title="Sample User">' . get_avatar( 'sample@example.com', $avatar_size ) . '</a></span>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '</div>';
-                        }
-
-                        echo '</div>';
-                    } else {
-                        // Fallback if function doesn't exist
-                        echo '<div style="position: relative; padding: 40px; display: flex; align-items: center; justify-content: center; min-height: 200px;">';
-                        echo '<p style="color: #666;">Likers template function not available</p>';
-                        echo '</div>';
-                    }
                     break;
 
                 default:
