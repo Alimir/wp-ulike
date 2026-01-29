@@ -1052,17 +1052,13 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'actions.import' => esc_html__( 'Import', 'wp-ulike' ),
                 'actions.importing' => esc_html__( 'Importing...', 'wp-ulike' ),
                 'actions.export' => esc_html__( 'Export & Download', 'wp-ulike' ),
-                'actions.duplicate' => esc_html__( 'Duplicate', 'wp-ulike' ),
-                'actions.move' => esc_html__( 'Move %s', 'wp-ulike' ),
                 'actions.add' => esc_html__( 'Add %s', 'wp-ulike' ),
-                'actions.menu_toggle' => esc_html__( 'Toggle menu', 'wp-ulike' ),
 
                 // Media Library
                 'media.select' => esc_html__( 'Select %s', 'wp-ulike' ),
                 'media.use' => esc_html__( 'Use this %s', 'wp-ulike' ),
                 'media.no_url' => esc_html__( 'Selected %s has no URL', 'wp-ulike' ),
                 'media.no_selection' => esc_html__( 'No file selected', 'wp-ulike' ),
-                'media.preview' => esc_html__( 'Preview', 'wp-ulike' ),
                 'media.url_format_error' => esc_html__( 'Invalid URL format from media library', 'wp-ulike' ),
 
                 // Settings
@@ -1124,11 +1120,8 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'security.command_injection' => esc_html__( 'Command Injection', 'wp-ulike' ),
 
                 // Common UI
-                'ui.dismiss' => esc_html__( 'Dismiss', 'wp-ulike' ),
                 'ui.retry' => esc_html__( 'Retry', 'wp-ulike' ),
                 'ui.live_preview' => esc_html__( 'Live Preview', 'wp-ulike' ),
-                'ui.refresh_preview' => esc_html__( 'Refresh Preview', 'wp-ulike' ),
-                'ui.customizer_preview' => esc_html__( 'Customizer Preview', 'wp-ulike' ),
                 'ui.failed_to_load_preview' => esc_html__( 'Failed to load preview', 'wp-ulike' ),
 
                 // Customizer
@@ -1137,10 +1130,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'customizer.select_section' => esc_html__( 'Select a template section to customize', 'wp-ulike' ),
                 'customizer.options' => esc_html__( 'Options', 'wp-ulike' ),
 
-                // Preview Devices
-                'preview.desktop' => esc_html__( 'Desktop', 'wp-ulike' ),
-                'preview.tablet' => esc_html__( 'Tablet', 'wp-ulike' ),
-                'preview.mobile' => esc_html__( 'Mobile', 'wp-ulike' ),
 
                 // Common Field Labels (used across multiple field types)
                 'field.width' => esc_html__( 'Width', 'wp-ulike' ),
@@ -1179,12 +1168,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'general.new' => esc_html__( 'New', 'wp-ulike' ),
                 'general.item' => esc_html__( 'Item', 'wp-ulike' ),
 
-                // Color Field
-                'color.unset' => esc_html__( 'Unset', 'wp-ulike' ),
-
-                // Link Button
-                'link.link_values' => esc_html__( 'Link values', 'wp-ulike' ),
-                'link.unlink_values' => esc_html__( 'Unlink values', 'wp-ulike' ),
             );
 
             // Convert WordPress sprintf format to i18next format
@@ -1203,7 +1186,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             // Mapping of WordPress sprintf patterns to i18next variable names
             $variable_mapping = array(
                 'errors.failed' => array( '%s' => '{action}' ),
-                'actions.move' => array( '%s' => '{direction}' ),
                 'actions.add' => array( '%s' => '{type}' ),
                 'media.select' => array( '%s' => '{type}' ),
                 'media.use' => array( '%s' => '{type}' ),
