@@ -23,9 +23,9 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         protected $option_domain = 'wp_ulike_customize';
 
         /**
-         * Schema cache
+         * Schema cache (static for request-level caching)
          */
-        protected $schema_cache = null;
+        protected static $schema_cache = null;
 
         /**
          * Field types that are informational only (not form fields)
@@ -50,9 +50,9 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
          * Returns schema structure extracted from ULF customizer sections
          */
         public function get_schema( $request = null ) {
-            // Return cached schema if available
-            if ( $this->schema_cache !== null ) {
-                return $this->schema_cache;
+            // Return cached schema if available (static cache for request-level sharing)
+            if ( self::$schema_cache !== null ) {
+                return self::$schema_cache;
             }
 
             // Build schema from ULF customizer sections
@@ -68,8 +68,8 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             // Add assets URLs to schema
             $schema['assets'] = $this->get_plugin_assets();
 
-            // Cache the schema
-            $this->schema_cache = $schema;
+            // Cache the schema (static for request-level sharing)
+            self::$schema_cache = $schema;
 
             return apply_filters( 'wp_ulike_optiwich_customizer_schema', $schema );
         }
@@ -546,11 +546,11 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             // Apply filter before saving
             $values = apply_filters( 'wp_ulike_optiwich_save_customizer_values', $values );
 
-            // Save as serialized array in option
-            update_option( $this->option_domain, $values );
+            // Save as serialized array in option (autoload = 'no' to prevent loading on every page)
+            update_option( $this->option_domain, $values, 'no' );
 
             // Clear schema cache
-            $this->schema_cache = null;
+            self::$schema_cache = null;
 
             // Trigger saved action
             do_action( 'wp_ulike_customizer_saved', $values );
@@ -815,7 +815,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
          * Clear schema cache
          */
         public function clear_schema_cache() {
-            $this->schema_cache = null;
+            self::$schema_cache = null;
         }
     }
 }

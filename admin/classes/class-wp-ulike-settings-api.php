@@ -24,9 +24,9 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
 
         /**
-         * Schema cache
+         * Schema cache (static for request-level caching)
          */
-        protected $schema_cache = null;
+        protected static $schema_cache = null;
 
         /**
          * Field types that are informational only (not form fields)
@@ -54,7 +54,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
          * Clear schema cache
          */
         public function clear_schema_cache() {
-            $this->schema_cache = null;
+            self::$schema_cache = null;
         }
 
         /**
@@ -68,9 +68,9 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
          * Get schema with defaults and dynamic options
          */
         public function get_schema( $request = null ) {
-            // Return cached schema if available
-            if ( $this->schema_cache !== null ) {
-                return $this->schema_cache;
+            // Return cached schema if available (static cache for request-level sharing)
+            if ( self::$schema_cache !== null ) {
+                return self::$schema_cache;
             }
 
             // Build schema from admin panel
@@ -86,8 +86,8 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             // Decode HTML entities in titles and descriptions
             $schema = $this->decode_html_entities_in_schema( $schema );
 
-            // Cache the schema
-            $this->schema_cache = $schema;
+            // Cache the schema (static for request-level sharing)
+            self::$schema_cache = $schema;
 
             return apply_filters( 'wp_ulike_optiwich_schema', $schema );
         }
@@ -609,11 +609,11 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             // Apply filter before saving
             $values = apply_filters( 'wp_ulike_optiwich_save_values', $values );
 
-            // Save as serialized array in option
-            update_option( $this->option_domain, $values );
+            // Save as serialized array in option (autoload = 'no' to prevent loading on every page)
+            update_option( $this->option_domain, $values, 'no' );
 
             // Clear schema cache
-            $this->schema_cache = null;
+            self::$schema_cache = null;
 
             // Trigger saved action
             do_action( 'wp_ulike_settings_saved', $values );
