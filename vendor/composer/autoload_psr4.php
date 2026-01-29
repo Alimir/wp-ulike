@@ -8,5 +8,4 @@ $baseDir = dirname($vendorDir);
 return array(
     'Vectorface\\Whip\\' => array($vendorDir . '/vectorface/whip/src'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
-    'DeviceDetector\\' => array($vendorDir . '/matomo/device-detector'),
 );
