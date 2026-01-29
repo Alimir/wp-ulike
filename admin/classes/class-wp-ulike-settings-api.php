@@ -252,11 +252,11 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                         if ( isset( $field['settings'] ) && is_array( $field['settings'] ) ) {
                             $query_args = $field['settings'];
                         }
-                        
+
                         // Resolve options using get_select_options method
                         // This handles both built-in types and custom callable functions
                         $resolved = self::get_select_options( $field['options'], '', $query_args );
-                        
+
                         if ( ! empty( $resolved ) ) {
                             // Convert from react-select format back to key-value pairs
                             $options_array = array();
@@ -267,7 +267,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                         } else {
                             // If resolution failed, log for debugging but don't break
                             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                error_log( sprintf( 
+                                error_log( sprintf(
                                     '[WP ULike] Failed to resolve select options for field "%s" with type "%s". Check if the function exists and is callable.',
                                     $field['id'] ?? 'unknown',
                                     $field['options']
@@ -683,7 +683,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                                 'title'  => $section['title'] ?? '',
                                 'fields' => array_values( $processed_fields ),
                             );
-                            
+
                             // Preserve icon and is_pro if present
                             if ( isset( $section['icon'] ) ) {
                                 $section_data['icon'] = $section['icon'];
@@ -691,7 +691,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                             if ( isset( $section['is_pro'] ) ) {
                                 $section_data['is_pro'] = $section['is_pro'];
                             }
-                            
+
                             $pages_map[ $section['id'] ]['sections'][] = $section_data;
                         }
                     }
@@ -717,12 +717,12 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'title'    => $section['title'] ?? '',
                 'sections' => array(),
             );
-            
+
             // Preserve icon if present
             if ( isset( $section['icon'] ) ) {
                 $page['icon'] = $section['icon'];
             }
-            
+
             return $page;
         }
 
@@ -743,7 +743,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 }
                 // Log warning in development to encourage explicit IDs
                 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                    error_log( sprintf( 
+                    error_log( sprintf(
                         '[WP ULike] Section "%s" is missing explicit "id" field. Generated ID: "%s". Please add explicit ASCII ID in admin panel.',
                         $section['title'] ?? 'Unknown',
                         $generated_id
@@ -751,19 +751,19 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 }
                 $section['id'] = $generated_id;
             }
-            
+
             $child_page = array(
                 'id'       => $section['id'],
                 'title'    => $section['title'] ?? '',
                 'parent'   => $section['parent'],
                 'sections' => array(),
             );
-            
+
             // Preserve icon if present
             if ( isset( $section['icon'] ) ) {
                 $child_page['icon'] = $section['icon'];
             }
-            
+
             // Preserve is_pro if present
             if ( isset( $section['is_pro'] ) ) {
                 $child_page['is_pro'] = $section['is_pro'];
@@ -792,7 +792,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                         'title'  => $section['title'] ?? '',
                         'fields' => array_values( $processed_fields ),
                     );
-                    
+
                     // Preserve icon and is_pro if present
                     if ( isset( $section['icon'] ) ) {
                         $section_data['icon'] = $section['icon'];
@@ -800,7 +800,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                     if ( isset( $section['is_pro'] ) ) {
                         $section_data['is_pro'] = $section['is_pro'];
                     }
-                    
+
                     $child_page['sections'][] = $section_data;
                 }
             }
@@ -829,7 +829,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                         'title'  => $field['title'] ?? '',
                         'fields' => array_values( $processed_fields ),
                     );
-                    
+
                     // Preserve icon and is_pro if present
                     if ( isset( $field['icon'] ) ) {
                         $fieldset_section['icon'] = $field['icon'];
@@ -837,7 +837,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                     if ( isset( $field['is_pro'] ) ) {
                         $fieldset_section['is_pro'] = $field['is_pro'];
                     }
-                    
+
                     $fieldset_sections[] = $fieldset_section;
                 } else {
                     // All other fields go to regular fields
@@ -1058,7 +1058,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'actions.menu_toggle' => esc_html__( 'Toggle menu', 'wp-ulike' ),
 
                 // Media Library
-                'media.library_unavailable' => esc_html__( 'WordPress media library is not available. Please ensure wp_enqueue_media() is called.', 'wp-ulike' ),
                 'media.select' => esc_html__( 'Select %s', 'wp-ulike' ),
                 'media.use' => esc_html__( 'Use this %s', 'wp-ulike' ),
                 'media.no_url' => esc_html__( 'Selected %s has no URL', 'wp-ulike' ),
@@ -1099,6 +1098,10 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
                 // Code Editor
                 'code_editor.tip' => esc_html__( 'Tip: Select text and click a tag button to wrap it, or click to insert at cursor', 'wp-ulike' ),
+                'code_editor.visual' => esc_html__( 'Visual', 'wp-ulike' ),
+                'code_editor.text' => esc_html__( 'Text', 'wp-ulike' ),
+                'code_editor.preview' => esc_html__( 'Preview', 'wp-ulike' ),
+                'code_editor.no_content' => esc_html__( 'No content to preview', 'wp-ulike' ),
 
                 // Select Field
                 'select.placeholder_multiple' => esc_html__( 'Select options...', 'wp-ulike' ),
@@ -1119,6 +1122,69 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'security.sql_injection' => esc_html__( 'SQL Injection', 'wp-ulike' ),
                 'security.xss' => esc_html__( 'XSS', 'wp-ulike' ),
                 'security.command_injection' => esc_html__( 'Command Injection', 'wp-ulike' ),
+
+                // Common UI
+                'ui.dismiss' => esc_html__( 'Dismiss', 'wp-ulike' ),
+                'ui.retry' => esc_html__( 'Retry', 'wp-ulike' ),
+                'ui.live_preview' => esc_html__( 'Live Preview', 'wp-ulike' ),
+                'ui.refresh_preview' => esc_html__( 'Refresh Preview', 'wp-ulike' ),
+                'ui.customizer_preview' => esc_html__( 'Customizer Preview', 'wp-ulike' ),
+                'ui.failed_to_load_preview' => esc_html__( 'Failed to load preview', 'wp-ulike' ),
+
+                // Customizer
+                'customizer.templates' => esc_html__( 'Templates', 'wp-ulike' ),
+                'customizer.no_preview_templates' => esc_html__( 'No preview templates available', 'wp-ulike' ),
+                'customizer.select_section' => esc_html__( 'Select a template section to customize', 'wp-ulike' ),
+                'customizer.options' => esc_html__( 'Options', 'wp-ulike' ),
+
+                // Preview Devices
+                'preview.desktop' => esc_html__( 'Desktop', 'wp-ulike' ),
+                'preview.tablet' => esc_html__( 'Tablet', 'wp-ulike' ),
+                'preview.mobile' => esc_html__( 'Mobile', 'wp-ulike' ),
+
+                // Common Field Labels (used across multiple field types)
+                'field.width' => esc_html__( 'Width', 'wp-ulike' ),
+                'field.height' => esc_html__( 'Height', 'wp-ulike' ),
+                'field.color' => esc_html__( 'Color', 'wp-ulike' ),
+                'field.style' => esc_html__( 'Style', 'wp-ulike' ),
+
+                // Field Labels - Typography
+                'field.typography.font_family' => esc_html__( 'Font Family', 'wp-ulike' ),
+                'field.typography.font_size' => esc_html__( 'Font Size', 'wp-ulike' ),
+                'field.typography.font_weight' => esc_html__( 'Font Weight', 'wp-ulike' ),
+                'field.typography.line_height' => esc_html__( 'Line Height', 'wp-ulike' ),
+                'field.typography.letter_spacing' => esc_html__( 'Letter Spacing', 'wp-ulike' ),
+                'field.typography.text_align' => esc_html__( 'Text Align', 'wp-ulike' ),
+                'field.typography.text_transform' => esc_html__( 'Text Transform', 'wp-ulike' ),
+                'field.typography.text_decoration' => esc_html__( 'Text Decoration', 'wp-ulike' ),
+
+                // Field Labels - Spacing
+                'field.spacing.top' => esc_html__( 'Top', 'wp-ulike' ),
+                'field.spacing.right' => esc_html__( 'Right', 'wp-ulike' ),
+                'field.spacing.bottom' => esc_html__( 'Bottom', 'wp-ulike' ),
+                'field.spacing.left' => esc_html__( 'Left', 'wp-ulike' ),
+
+                // Field Labels - Background
+                'field.background.color' => esc_html__( 'Background Color', 'wp-ulike' ),
+                'field.background.image' => esc_html__( 'Background Image', 'wp-ulike' ),
+                'field.background.repeat' => esc_html__( 'Repeat', 'wp-ulike' ),
+                'field.background.position' => esc_html__( 'Position', 'wp-ulike' ),
+                'field.background.size' => esc_html__( 'Size', 'wp-ulike' ),
+                'field.background.attachment' => esc_html__( 'Attachment', 'wp-ulike' ),
+
+                // General Labels
+                'general.options' => esc_html__( 'Options', 'wp-ulike' ),
+                'general.general' => esc_html__( 'General', 'wp-ulike' ),
+                'general.settings' => esc_html__( 'Settings', 'wp-ulike' ),
+                'general.new' => esc_html__( 'New', 'wp-ulike' ),
+                'general.item' => esc_html__( 'Item', 'wp-ulike' ),
+
+                // Color Field
+                'color.unset' => esc_html__( 'Unset', 'wp-ulike' ),
+
+                // Link Button
+                'link.link_values' => esc_html__( 'Link values', 'wp-ulike' ),
+                'link.unlink_values' => esc_html__( 'Unlink values', 'wp-ulike' ),
             );
 
             // Convert WordPress sprintf format to i18next format
