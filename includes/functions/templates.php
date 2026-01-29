@@ -12,12 +12,18 @@ if ( ! defined( 'WPINC' ) ) {
 if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	/**
 	 * Generate templates list
+	 * Performance optimization: Cache result to avoid regenerating for each button
 	 *
 	 * @author       	Alimir
 	 * @since           2.8
 	 * @return			Array
 	 */
 	function wp_ulike_generate_templates_list(){
+		// Performance optimization: Cache template list - it never changes during a request
+		static $cached_templates = null;
+		if ( $cached_templates !== null ) {
+			return $cached_templates;
+		}
 		$default = array(
 			'wpulike-default' => array(
 				'name'            => esc_html__('Simple', 'wp-ulike'),
@@ -50,7 +56,8 @@ if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 		$default = array_merge( $default, $pro_templates );
 
 		// Apply filter to allow Pro version to override/add templates
-		return apply_filters( 'wp_ulike_add_templates_list', $default );
+		$cached_templates = apply_filters( 'wp_ulike_add_templates_list', $default );
+		return $cached_templates;
 	}
 }
 

@@ -381,36 +381,3 @@ function wp_ulike_add_cors_http_header() {
 }
 add_action('init', 'wp_ulike_add_cors_http_header');
 // @endif
-
-// @if DEV
-// function replace_core_jquery_version() {
-//     wp_deregister_script( 'jquery' );
-//     // Change the URL if you want to load a local copy of jQuery from your own server.
-//     wp_register_script( 'jquery', "https://code.jquery.com/jquery-3.5.1.min.js", array(), false );
-// }
-// add_action( 'wp_enqueue_scripts', 'replace_core_jquery_version' );
-
-// function wp_ulike_pro_custom_pre_archive( $query ) {
-
-//     /* only proceed on the front end */
-//     if( is_admin() ) {
-// 	    return;
-//     }
-
-//     /* only on the person post archive for the main query */
-//     if ( ( is_category() || is_tag() || is_archive() ) && $query->is_main_query() ) {
-// 		$post__in = wp_ulike_get_popular_items_ids(array(
-// 			'rel_type' => $query->get('post_type'),
-// 			'status'   => 'like',
-// 			"order"    => $query->get('order'),
-// 			"offset"   => $query->get('paged'),
-// 			"limit"    => $query->get('posts_per_page')
-// 		));
-
-// 		$query->set( 'post__in', $post__in );
-// 		$query->set( 'orderby', 'post__in' );
-//     }
-
-// }
-// add_action( 'pre_get_posts', 'wp_ulike_pro_custom_pre_archive' );
-// @endif
