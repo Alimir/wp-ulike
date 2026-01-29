@@ -154,9 +154,9 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 }
             }
 
-            // If no parent found, create a default parent
+            // If no parent found, use default parent ID
             if ( ! $parent_section_id ) {
-                $parent_section_id = 'wp_ulike';
+                $parent_section_id = WP_ULIKE_SLUG;
             }
 
             // Create parent page
@@ -305,8 +305,8 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             // Use output if callback echoed, otherwise use returned value
             $rendered = ! empty( $output ) ? $output : ( is_string( $returned ) ? $returned : '' );
 
-            // Generate ID if not present
-            $field_id = $field['id'] ?? 'callback_' . md5( serialize( array( $field['function'], $args ) ) );
+            // Generate ID if not present (use wp_json_encode for safer serialization)
+            $field_id = $field['id'] ?? 'callback_' . md5( wp_json_encode( array( $field['function'], $args ) ) );
 
             // Build converted field
             $converted_field = array(
@@ -361,7 +361,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         protected function generate_field_id( $field ) {
             $field_type = $field['type'] ?? 'field';
             $field_content = $field['content'] ?? $field['title'] ?? '';
-            return $field_type . '_' . md5( serialize( array( $field_type, $field_content ) ) );
+            return $field_type . '_' . md5( wp_json_encode( array( $field_type, $field_content ) ) );
         }
 
         /**
@@ -593,17 +593,16 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
          * Returns rendered WP ULike templates with current customizer styles
          */
         public function get_preview( $request = null ) {
-            // Get template type from request
-            $template_type = isset( $_REQUEST['template'] ) ? sanitize_text_field( $_REQUEST['template'] ) : 'button';
+            // Get template type from request (prefer GET, fallback to POST)
+            $template_type = 'button';
+            if ( isset( $_GET['template'] ) ) {
+                $template_type = sanitize_text_field( wp_unslash( $_GET['template'] ) );
+            } elseif ( isset( $_POST['template'] ) ) {
+                $template_type = sanitize_text_field( wp_unslash( $_POST['template'] ) );
+            }
 
             // Add preview parameter to detect preview mode in pro version
             $_GET['preview'] = true;
-
-            // Get current customizer values
-            $customizer_values = $this->get_customizer_values();
-
-            // Generate CSS from customizer values
-            $css = $this->generate_css_from_values( $customizer_values );
 
             // Render template preview
             $preview_html = $this->render_template_preview( $template_type );
@@ -622,29 +621,102 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             }
 
             // Build full HTML with styles and WP ULike assets
-            // Use absolute URLs and ensure proper isolation
+            $html = $this->build_preview_html( $preview_html, $css_urls, $js_urls, $plugin_assets );
+
+            wp_send_json_success( array(
+                'html' => $html,
+            ) );
+        }
+
+        /**
+         * Build preview HTML document
+         *
+         * @param string $preview_html Preview content HTML
+         * @param array  $css_urls CSS file URLs
+         * @param array  $js_urls JS file URLs
+         * @param array  $plugin_assets Plugin assets array
+         * @return string Complete HTML document
+         */
+        protected function build_preview_html( $preview_html, $css_urls, $js_urls, $plugin_assets ) {
             $html = '<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WP ULike Customizer Preview</title>
+    <title>' . esc_html__( 'WP ULike Customizer Preview', 'wp-ulike' ) . '</title>
     <base href="' . esc_url( site_url() ) . '/">';
 
-            // Include WP ULike CSS files if available
+            // Include CSS files
             if ( ! empty( $css_urls ) && is_array( $css_urls ) ) {
                 foreach ( $css_urls as $css_url ) {
                     if ( ! empty( $css_url ) ) {
-                        // Convert relative URL to absolute if needed
-                        if ( strpos( $css_url, 'http' ) !== 0 ) {
-                            $css_url = site_url( $css_url );
-                        }
+                        $css_url = $this->normalize_url( $css_url );
                         $html .= '<link rel="stylesheet" href="' . esc_url( $css_url ) . '">';
                     }
                 }
             }
 
-            $html .= '<style id="optiwich-preview-base-styles">
+            // Add base styles
+            $html .= $this->get_preview_base_styles();
+
+            $html .= '</head>
+<body' . ( is_rtl() ? ' dir="rtl" class="rtl"' : '' ) . '>
+    ' . $preview_html;
+
+            // Include JS files
+            if ( ! empty( $js_urls ) && is_array( $js_urls ) ) {
+                foreach ( $js_urls as $js_url ) {
+                    if ( ! empty( $js_url ) ) {
+                        $js_url = $this->normalize_url( $js_url );
+                        $html .= '<script src="' . esc_url( $js_url ) . '"></script>';
+                    }
+                }
+            }
+
+            // Add wp_ulike_params for JS functionality
+            $wp_ulike_params = array(
+                'ajax_url'      => admin_url( 'admin-ajax.php' ),
+                'notifications' => wp_ulike_get_option( 'enable_toast_notice' ) ? true : false,
+            );
+            $html .= '<script>
+                window.wp_ulike_params = ' . wp_json_encode( $wp_ulike_params ) . ';
+            </script>';
+
+            // Add localized scripts from assets
+            if ( isset( $plugin_assets['localized_scripts'] ) && is_array( $plugin_assets['localized_scripts'] ) ) {
+                foreach ( $plugin_assets['localized_scripts'] as $var_name => $var_data ) {
+                    $html .= '<script>
+                        window.' . esc_js( $var_name ) . ' = ' . wp_json_encode( $var_data ) . ';
+                    </script>';
+                }
+            }
+
+            $html .= '</body>
+</html>';
+
+            return $html;
+        }
+
+        /**
+         * Normalize URL (convert relative to absolute if needed)
+         *
+         * @param string $url URL to normalize
+         * @return string Normalized URL
+         */
+        protected function normalize_url( $url ) {
+            if ( ! empty( $url ) && strpos( $url, 'http' ) !== 0 ) {
+                return site_url( $url );
+            }
+            return $url;
+        }
+
+        /**
+         * Get base styles for preview iframe
+         *
+         * @return string CSS styles
+         */
+        protected function get_preview_base_styles() {
+            return '<style id="optiwich-preview-base-styles">
         * {
             box-sizing: border-box;
         }
@@ -664,64 +736,16 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             align-items: center;
             justify-content: center;
         }
+        .wp-ulike-preview-not-found {
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+            font-size: 1rem;
+        }
         #optiwich-customizer-styles {
             display: block !important;
         }
-    </style>
-</head>
-<body' . ( is_rtl() ? ' dir="rtl" class="rtl"' : '' ) . '>
-    ' . $preview_html;
-
-            // Include WP ULike JS files if available
-            if ( ! empty( $js_urls ) && is_array( $js_urls ) ) {
-                foreach ( $js_urls as $js_url ) {
-                    if ( ! empty( $js_url ) ) {
-                        // Convert relative URL to absolute if needed
-                        if ( strpos( $js_url, 'http' ) !== 0 ) {
-                            $js_url = site_url( $js_url );
-                        }
-                        $html .= '<script src="' . esc_url( $js_url ) . '"></script>';
-                    }
-                }
-            }
-
-            // Add wp_ulike_params for JS functionality
-            $wp_ulike_params = array(
-                'ajax_url'      => admin_url( 'admin-ajax.php' ),
-                'notifications' => wp_ulike_get_option( 'enable_toast_notice' ) ? true : false
-            );
-            $html .= '<script>
-                window.wp_ulike_params = ' . wp_json_encode( $wp_ulike_params ) . ';
-            </script>';
-
-            // Add localized scripts from assets
-            if ( isset( $plugin_assets['localized_scripts'] ) && is_array( $plugin_assets['localized_scripts'] ) ) {
-                foreach ( $plugin_assets['localized_scripts'] as $var_name => $var_data ) {
-                    $html .= '<script>
-                        window.' . esc_js( $var_name ) . ' = ' . wp_json_encode( $var_data ) . ';
-                    </script>';
-                }
-            }
-
-            $html .= '</body>
-</html>';
-
-            wp_send_json_success( array(
-                'html' => $html,
-            ) );
-        }
-
-        /**
-         * Generate CSS from customizer values
-         * This should match the CSS generation logic used on front-end
-         *
-         * @param array $values Customizer values
-         * @return string Generated CSS
-         */
-        protected function generate_css_from_values( $values ) {
-            // This is a placeholder - actual CSS generation should match front-end logic
-            // For now, return empty string - React app will generate CSS client-side
-            return '';
+    </style>';
         }
 
         /**
@@ -739,93 +763,52 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 return $preview_html;
             }
 
-            // Render WP ULike template based on type
             ob_start();
 
             switch ( $template_type ) {
                 case 'button':
-                    // Render button template using WP ULike functions if available
-                    if ( function_exists( 'wp_ulike' ) ) {
-                        // Use wp_ulike function to render actual button
-                        // Get a sample post ID for preview
-                        $sample_post_id = get_posts( array(
-                            'numberposts' => 1,
-                            'post_status' => 'publish',
-                            'fields' => 'ids'
-                        ) );
-
-                        if ( ! empty( $sample_post_id ) ) {
-                            echo wp_ulike( 'put', array( 'id' => $sample_post_id[0] ) );
-                        } else {
-                            // Fallback: render basic button structure
-                            $this->render_button_preview();
-                        }
-                    } else {
-                        // Fallback: render basic button structure
-                        $this->render_button_preview();
-                    }
+                    // Use shortcode for button preview
+                    echo do_shortcode( '[wp_ulike id="1"]' );
                     break;
 
                 case 'toast':
-                    // Render all 4 toast notification types with exact WP ULike HTML structure
-                    // Ensure no inline styles that conflict with customizer styles
-                    echo '<div class="wpulike-notification" style="position: relative; min-height: 200px; padding: 20px; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; align-items: center;">';
-
-                    // Info message (default)
-                    echo '<div class="wpulike-message">';
-                    echo '<strong>Info:</strong> Please wait...';
-                    echo '</div>';
-
-                    // Success message
-                    echo '<div class="wpulike-message wpulike-success">';
-                    echo '<strong>Success!</strong> You liked this post.';
-                    echo '</div>';
-
-                    // Error message
-                    echo '<div class="wpulike-message wpulike-error">';
-                    echo '<strong>Error!</strong> Something went wrong.';
-                    echo '</div>';
-
-                    // Warning message
-                    echo '<div class="wpulike-message wpulike-warning">';
-                    echo '<strong>Warning!</strong> Please check your settings.';
-                    echo '</div>';
-
-                    echo '</div>';
+                    // Render toast notification types
+                    $this->render_toast_preview();
                     break;
 
                 default:
-                    // Default: render button preview
-                    $this->render_button_preview();
+                    // Template not found
+                    echo '<p class="wp-ulike-preview-not-found">' . esc_html__( 'Template preview not found.', 'wp-ulike' ) . '</p>';
             }
 
             return ob_get_clean();
         }
 
         /**
-         * Render button preview (fallback)
+         * Render toast notification preview
          *
          * @return void
          */
-        protected function render_button_preview() {
-            echo '<div class="wpulike">';
-            echo '<div class="wp_ulike_general_class">';
-            echo '<button class="wp_ulike_btn wp_ulike_put_text">Like</button>';
-            echo '<span class="count-box">42</span>';
-            echo '</div>';
-            echo '</div>';
-            echo '<div class="wpulike" style="margin-top: 20px;">';
-            echo '<div class="wp_ulike_general_class wp_ulike_is_already_liked">';
-            echo '<button class="wp_ulike_btn wp_ulike_put_text wp_ulike_btn_is_active">Liked</button>';
-            echo '<span class="count-box">43</span>';
-            echo '</div>';
-            echo '</div>';
-            echo '<div class="wpulike" style="margin-top: 20px;">';
-            echo '<div class="wp_ulike_general_class">';
-            echo '<button class="wp_ulike_btn wp_ulike_put_image"></button>';
-            echo '<span class="count-box">42</span>';
-            echo '</div>';
-            echo '</div>';
+        protected function render_toast_preview() {
+            $notification_classes = array(
+                'wpulike-notification',
+            );
+            ?>
+            <div class="<?php echo esc_attr( implode( ' ', $notification_classes ) ); ?>">
+                <div class="wpulike-message">
+                    <strong><?php esc_html_e( 'Info:', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please wait...', 'wp-ulike' ); ?>
+                </div>
+                <div class="wpulike-message wpulike-success">
+                    <strong><?php esc_html_e( 'Success!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'You liked this post.', 'wp-ulike' ); ?>
+                </div>
+                <div class="wpulike-message wpulike-error">
+                    <strong><?php esc_html_e( 'Error!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Something went wrong.', 'wp-ulike' ); ?>
+                </div>
+                <div class="wpulike-message wpulike-warning">
+                    <strong><?php esc_html_e( 'Warning!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please check your settings.', 'wp-ulike' ); ?>
+                </div>
+            </div>
+            <?php
         }
 
         /**
