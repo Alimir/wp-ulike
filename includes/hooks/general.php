@@ -239,7 +239,7 @@ if( ! function_exists( 'wp_ulike_deprecated_csf_class' ) ){
 	 */
 	function wp_ulike_deprecated_csf_class(){
 		// include _deprecated settings panel
-		require_once( WP_ULIKE_ADMIN_DIR . '/settings/_deprecated/deprecated.class.php');
+		require_once( WP_ULIKE_ADMIN_DIR . '/includes/deprecated.class.php');
 	}
 	add_action( 'plugins_loaded', 'wp_ulike_deprecated_csf_class' );
 }

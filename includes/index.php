@@ -9,19 +9,6 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
-// include settings panel core
-require_once( WP_ULIKE_ADMIN_DIR . '/settings/classes/setup.class.php');
-
-// Load REST API for Optiwich integration
-require_once WP_ULIKE_ADMIN_DIR . '/classes/class-wp-ulike-settings-api.php';
-
-// Load Customizer API for Optiwich integration
-require_once WP_ULIKE_ADMIN_DIR . '/classes/class-wp-ulike-customizer-api.php';
-
-// Load CSS Generator for customizer styles (auto-initializes on load)
-require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-css-generator.php';
-
-
 // Functions
 include_once( 'functions/utilities.php' );
 include_once( 'functions/general.php' );

@@ -179,7 +179,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 		}
 
 		$defaults = apply_filters( 'wp_ulike_auto_diplay_filter_list' , array(
-				'is_home'        => is_front_page() && is_home(),
+				'is_home'        => is_front_page() || is_home(),
 				'is_single'      => is_singular(),
 				'is_archive'     => is_archive(),
 				'is_category'    => is_category(),
@@ -447,14 +447,8 @@ if( ! function_exists( 'wp_ulike_get_customizer_css' ) ){
 			return '';
 		}
 
-		// Get CSS generator instance
-		global $wp_ulike_css_generator;
-		if ( ! isset( $wp_ulike_css_generator ) ) {
-			$wp_ulike_css_generator = new wp_ulike_css_generator();
-		}
-
-		// Generate CSS (uses cache internally)
-		$customizer_css = $wp_ulike_css_generator->generate_css();
+		$css_generator = new wp_ulike_css_generator();
+		$customizer_css = $css_generator->generate_css();
 
 		return $customizer_css;
 	}
@@ -674,7 +668,7 @@ if( ! function_exists('wp_ulike_release_lock') ){
             fclose( $fp );
 
             $lock_file = wp_ulike_lock_file( $item_type, $item_id );
-            
+
             // Use WordPress core function for file deletion (available since WP 4.2.0)
             if ( function_exists( 'wp_delete_file' ) ) {
                 wp_delete_file( $lock_file );

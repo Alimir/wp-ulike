@@ -728,15 +728,33 @@ function wp_ulike_save_custom_css( $values = null ){
 
     if ( ! empty( $css_string ) && wp_ulike_put_contents_dir( $css_string, 'custom.css' ) ) {
         // File created successfully - directory is writable
-        update_option( 'wp_ulike_use_inline_custom_css' , 0 ); 
+        update_option( 'wp_ulike_use_inline_custom_css' , 0 );
         return true;
     } else {
         // File creation failed - directory not writable, must use inline fallback
-        update_option( 'wp_ulike_use_inline_custom_css' , 1 ); 
+        update_option( 'wp_ulike_use_inline_custom_css' , 1 );
         return false;
     }
 }
 // Hook to save CSS file when settings are saved
 add_action( 'wp_ulike_settings_saved', 'wp_ulike_save_custom_css', 15, 1 );
-// Hook to save CSS file when customizer is saved  
+// Hook to save CSS file when customizer is saved
 add_action( 'wp_ulike_customizer_saved', 'wp_ulike_save_custom_css', 15, 1 );
+
+/**
+ * Clear CSS generator cache when customizer is saved
+ * This ensures cache is cleared AFTER new values are saved
+ *
+ * @param array $new_values Optional. New customizer values
+ * @return void
+ */
+function wp_ulike_clear_css_generator_cache( $new_values = null ) {
+	if ( class_exists( 'wp_ulike_css_generator' ) ) {
+		$css_generator = new wp_ulike_css_generator();
+		if ( method_exists( $css_generator, 'clear_cache' ) ) {
+			$css_generator->clear_cache( $new_values );
+		}
+	}
+}
+// Hook to clear CSS cache when customizer is saved
+add_action( 'wp_ulike_customizer_saved', 'wp_ulike_clear_css_generator_cache', 10, 1 );

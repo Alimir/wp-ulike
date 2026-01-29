@@ -22,10 +22,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
          */
         protected $option_domain = 'wp_ulike_settings';
 
-        /**
-         * Admin panel instance
-         */
-        protected $admin_panel = null;
 
         /**
          * Schema cache
@@ -51,20 +47,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
          * Constructor
          */
         public function __construct() {
-            // Capture admin panel instance when it's available
-            add_action( 'wp_ulike_settings_loaded', array( $this, 'capture_admin_panel' ), 1 );
-            // Also try to capture on init in case settings_loaded fires before this class
-            add_action( 'init', array( $this, 'capture_admin_panel' ), 20 );
-        }
-
-        /**
-         * Capture admin panel instance
-         */
-        public function capture_admin_panel() {
-            global $wp_ulike_admin_panel;
-            if ( isset( $wp_ulike_admin_panel ) && is_object( $wp_ulike_admin_panel ) ) {
-                $this->admin_panel = $wp_ulike_admin_panel;
-            }
+            // No initialization needed - admin panel is created on-demand in get_optiwich_schema()
         }
 
         /**
@@ -97,8 +80,8 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             $values = $this->get_values();
             $schema = $this->apply_defaults_to_schema( $schema, $values );
 
-            // Resolve dynamic options
-            $schema = $this->resolve_dynamic_options_in_schema( $schema );
+            // Resolve non-AJAX select field options (for fields without ajax: true)
+            $schema = $this->resolve_static_select_options( $schema );
 
             // Decode HTML entities in titles and descriptions
             $schema = $this->decode_html_entities_in_schema( $schema );
@@ -227,9 +210,13 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         }
 
         /**
-         * Resolve dynamic options in schema
+         * Resolve all select field options (both AJAX and non-AJAX fields with string options)
+         * All options are resolved in schema to avoid AJAX requests
+         *
+         * @param array $schema Schema structure
+         * @return array Schema with resolved options
          */
-        protected function resolve_dynamic_options_in_schema( $schema ) {
+        protected function resolve_static_select_options( $schema ) {
             if ( ! isset( $schema['pages'] ) || ! is_array( $schema['pages'] ) ) {
                 return $schema;
             }
@@ -238,7 +225,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( isset( $page['sections'] ) && is_array( $page['sections'] ) ) {
                     foreach ( $page['sections'] as &$section ) {
                         if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
-                            $section['fields'] = $this->resolve_dynamic_options_in_fields( $section['fields'] );
+                            $section['fields'] = $this->resolve_static_select_options_in_fields( $section['fields'] );
                         }
                     }
                 }
@@ -248,29 +235,57 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         }
 
         /**
-         * Resolve dynamic options in fields recursively
+         * Resolve select options in fields recursively
+         * Resolves ALL select fields with string options (regardless of ajax setting)
+         * Supports both built-in types ('pages', 'post_types', 'roles') and custom callable functions
+         *
+         * @param array $fields Fields array
+         * @return array Fields with resolved options
          */
-        protected function resolve_dynamic_options_in_fields( $fields ) {
+        protected function resolve_static_select_options_in_fields( $fields ) {
             foreach ( $fields as &$field ) {
-                // Resolve dynamic options for select, radio, button_set, checkbox
-                if ( in_array( $field['type'], array( 'select', 'radio', 'button_set', 'checkbox' ) ) ) {
+                // Resolve for ALL select fields with string options
+                if ( isset( $field['type'] ) && $field['type'] === 'select' ) {
                     if ( isset( $field['options'] ) && is_string( $field['options'] ) ) {
-                        $resolved = $this->resolve_dynamic_options( $field['options'] );
+                        // Get query_args from field settings if available
+                        $query_args = array();
+                        if ( isset( $field['settings'] ) && is_array( $field['settings'] ) ) {
+                            $query_args = $field['settings'];
+                        }
+                        
+                        // Resolve options using get_select_options method
+                        // This handles both built-in types and custom callable functions
+                        $resolved = self::get_select_options( $field['options'], '', $query_args );
+                        
                         if ( ! empty( $resolved ) ) {
-                            $field['options'] = $resolved;
+                            // Convert from react-select format back to key-value pairs
+                            $options_array = array();
+                            foreach ( $resolved as $option ) {
+                                $options_array[ $option['value'] ] = $option['label'];
+                            }
+                            $field['options'] = $options_array;
+                        } else {
+                            // If resolution failed, log for debugging but don't break
+                            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                error_log( sprintf( 
+                                    '[WP ULike] Failed to resolve select options for field "%s" with type "%s". Check if the function exists and is callable.',
+                                    $field['id'] ?? 'unknown',
+                                    $field['options']
+                                ) );
+                            }
                         }
                     }
                 }
 
                 // Handle nested fields
                 if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
-                    $field['fields'] = $this->resolve_dynamic_options_in_fields( $field['fields'] );
+                    $field['fields'] = $this->resolve_static_select_options_in_fields( $field['fields'] );
                 }
 
                 if ( isset( $field['tabs'] ) && is_array( $field['tabs'] ) ) {
                     foreach ( $field['tabs'] as &$tab ) {
                         if ( isset( $tab['fields'] ) && is_array( $tab['fields'] ) ) {
-                            $tab['fields'] = $this->resolve_dynamic_options_in_fields( $tab['fields'] );
+                            $tab['fields'] = $this->resolve_static_select_options_in_fields( $tab['fields'] );
                         }
                     }
                 }
@@ -278,8 +293,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             return $fields;
         }
-
-
 
         /**
          * Decode HTML entities in schema (titles, descriptions, etc.)
@@ -346,59 +359,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         }
 
         /**
-         * Resolve dynamic options (like 'post_types', 'roles', 'pages')
-         *
-         * @param string $option_key The dynamic option key
-         * @return array Resolved options array or empty array if not resolvable
-         */
-        protected function resolve_dynamic_options( $option_key ) {
-            $options = array();
-
-            switch ( $option_key ) {
-                case 'post_types':
-                    // Get all registered post types
-                    $post_types = get_post_types( array( 'public' => true ), 'objects' );
-                    foreach ( $post_types as $post_type ) {
-                        $options[ $post_type->name ] = $post_type->label;
-                    }
-                    // Also include non-public post types that might be used
-                    $all_post_types = get_post_types( array(), 'objects' );
-                    foreach ( $all_post_types as $post_type ) {
-                        if ( ! isset( $options[ $post_type->name ] ) ) {
-                            $options[ $post_type->name ] = $post_type->label;
-                        }
-                    }
-                    break;
-
-                case 'roles':
-                    // Get all WordPress user roles
-                    global $wp_roles;
-                    if ( ! isset( $wp_roles ) ) {
-                        $wp_roles = new WP_Roles();
-                    }
-                    foreach ( $wp_roles->get_names() as $role_key => $role_name ) {
-                        $options[ $role_key ] = translate_user_role( $role_name );
-                    }
-                    break;
-
-                case 'pages':
-                    // Get all WordPress pages
-                    $pages = get_pages( array( 'number' => 1000 ) );
-                    foreach ( $pages as $page ) {
-                        $options[ $page->ID ] = $page->post_title;
-                    }
-                    break;
-
-                default:
-                    // Allow other plugins to provide dynamic options
-                    $options = apply_filters( 'wp_ulike_resolve_dynamic_options_' . $option_key, array(), $option_key );
-                    break;
-            }
-
-            return $options;
-        }
-
-        /**
          * Get current option values
          */
         protected function get_values() {
@@ -411,6 +371,210 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
             // Apply filter for value transformation
             return apply_filters( 'wp_ulike_optiwich_values', $values );
+        }
+
+        /**
+         * Get select field options
+         * Handles data types like 'pages', 'post_types', 'roles' and custom callable functions
+         *
+         * @param string $type Option type (e.g., 'pages', 'post_types', 'roles', or callable function name)
+         * @param string $term Search term (optional)
+         * @param array  $query_args Additional query arguments (optional)
+         * @return array Options array in react-select format (value/label)
+         */
+        public static function get_select_options( $type, $term = '', $query_args = array() ) {
+            $options = array();
+            $array_search = false;
+
+            // Normalize type name
+            if ( in_array( $type, array( 'page', 'pages' ) ) ) {
+                $post_type = 'page';
+            } else if ( in_array( $type, array( 'post', 'posts' ) ) ) {
+                $post_type = 'post';
+            } else if ( in_array( $type, array( 'category', 'categories' ) ) ) {
+                $taxonomy = 'category';
+            } else if ( in_array( $type, array( 'tag', 'tags' ) ) ) {
+                $taxonomy = 'post_tag';
+            } else if ( in_array( $type, array( 'menu', 'menus' ) ) ) {
+                $taxonomy = 'nav_menu';
+            }
+
+            // Handle different option types
+            switch( $type ) {
+                case 'page':
+                case 'pages':
+                case 'post':
+                case 'posts':
+                    // Handle posts/pages
+                    // Check if specific IDs are requested (for loading selected values)
+                    if ( ! empty( $query_args['include'] ) && is_array( $query_args['include'] ) ) {
+                        $include_ids = array_map( 'intval', $query_args['include'] );
+                        $query = new WP_Query( array(
+                            'post_type'      => $post_type,
+                            'post_status'    => 'publish',
+                            'post__in'       => $include_ids,
+                            'orderby'        => 'post__in', // Preserve order
+                            'posts_per_page' => -1, // Get all requested
+                        ) );
+                    } else if ( ! empty( $term ) ) {
+                        $query = new WP_Query( wp_parse_args( $query_args, array(
+                            's'              => $term,
+                            'post_type'      => $post_type,
+                            'post_status'    => 'publish',
+                            'posts_per_page' => 25,
+                        ) ) );
+                    } else {
+                        $query = new WP_Query( wp_parse_args( $query_args, array(
+                            'post_type'   => $post_type,
+                            'post_status' => 'publish',
+                            'posts_per_page' => 100, // Limit initial load
+                        ) ) );
+                    }
+
+                    if ( ! is_wp_error( $query ) && ! empty( $query->posts ) ) {
+                        foreach ( $query->posts as $item ) {
+                            $options[ $item->ID ] = $item->post_title;
+                        }
+                    }
+                    break;
+
+                case 'category':
+                case 'categories':
+                case 'tag':
+                case 'tags':
+                case 'menu':
+                case 'menus':
+                    // Handle taxonomies
+                    // Check if specific IDs are requested (for loading selected values)
+                    if ( ! empty( $query_args['include'] ) && is_array( $query_args['include'] ) ) {
+                        $include_ids = array_map( 'intval', $query_args['include'] );
+                        $query = new WP_Term_Query( array(
+                            'taxonomy'   => $taxonomy,
+                            'hide_empty' => false,
+                            'include'    => $include_ids,
+                            'number'     => -1, // Get all requested
+                        ) );
+                    } else if ( ! empty( $term ) ) {
+                        $query = new WP_Term_Query( wp_parse_args( $query_args, array(
+                            'search'     => $term,
+                            'taxonomy'   => $taxonomy,
+                            'hide_empty' => false,
+                            'number'     => 25,
+                        ) ) );
+                    } else {
+                        $query = new WP_Term_Query( wp_parse_args( $query_args, array(
+                            'taxonomy'   => $taxonomy,
+                            'hide_empty' => false,
+                            'number'     => 100, // Limit initial load
+                        ) ) );
+                    }
+
+                    if ( ! is_wp_error( $query ) && ! empty( $query->terms ) ) {
+                        foreach ( $query->terms as $item ) {
+                            $options[ $item->term_id ] = $item->name;
+                        }
+                    }
+                    break;
+
+                case 'user':
+                case 'users':
+                    // Handle users
+                    // Check if specific IDs are requested (for loading selected values)
+                    if ( ! empty( $query_args['include'] ) && is_array( $query_args['include'] ) ) {
+                        $include_ids = array_map( 'intval', $query_args['include'] );
+                        $query = new WP_User_Query( array(
+                            'include' => $include_ids,
+                            'fields'  => array( 'display_name', 'ID' ),
+                            'number'  => -1, // Get all requested
+                        ) );
+                    } else if ( ! empty( $term ) ) {
+                        $query = new WP_User_Query( array(
+                            'search'  => '*' . $term . '*',
+                            'number'  => 25,
+                            'orderby' => 'display_name',
+                            'order'   => 'ASC',
+                            'fields'  => array( 'display_name', 'ID' )
+                        ) );
+                    } else {
+                        $query = new WP_User_Query( array(
+                            'number' => 100, // Limit initial load
+                            'fields' => array( 'display_name', 'ID' )
+                        ) );
+                    }
+
+                    if ( ! is_wp_error( $query ) && ! empty( $query->get_results() ) ) {
+                        foreach ( $query->get_results() as $item ) {
+                            $options[ $item->ID ] = $item->display_name;
+                        }
+                    }
+                    break;
+
+                case 'role':
+                case 'roles':
+                    // Handle user roles
+                    global $wp_roles;
+                    if ( ! isset( $wp_roles ) ) {
+                        $wp_roles = new WP_Roles();
+                    }
+                    foreach ( $wp_roles->get_names() as $role_key => $role_name ) {
+                        $options[ $role_key ] = translate_user_role( $role_name );
+                    }
+                    $array_search = true;
+                    break;
+
+                case 'post_type':
+                case 'post_types':
+                    // Handle post types
+                    $post_types = get_post_types( array( 'public' => true ), 'objects' );
+                    foreach ( $post_types as $post_type ) {
+                        $options[ $post_type->name ] = $post_type->label;
+                    }
+                    // Also include non-public post types that might be used
+                    $all_post_types = get_post_types( array(), 'objects' );
+                    foreach ( $all_post_types as $post_type ) {
+                        if ( ! isset( $options[ $post_type->name ] ) ) {
+                            $options[ $post_type->name ] = $post_type->label;
+                        }
+                    }
+                    $array_search = true;
+                    break;
+
+                default:
+                    // Handle custom callable functions (like wp_ulike_pro_search_attachments)
+                    if ( is_callable( $type ) ) {
+                        // If include is specified, pass it to the function
+                        if ( ! empty( $query_args['include'] ) && is_array( $query_args['include'] ) ) {
+                            $options = call_user_func( $type, $query_args );
+                        } else if ( ! empty( $term ) ) {
+                            $options = call_user_func( $type, $term, $query_args );
+                        } else {
+                            $options = call_user_func( $type, $query_args );
+                        }
+                    }
+                    break;
+            }
+
+            // Array search by "term" for array_search types
+            if ( ! empty( $term ) && ! empty( $options ) && ! empty( $array_search ) ) {
+                $filtered = array();
+                foreach ( $options as $key => $value ) {
+                    if ( stripos( $value, $term ) !== false ) {
+                        $filtered[ $key ] = $value;
+                    }
+                }
+                $options = $filtered;
+            }
+
+            // Convert to react-select format (value/label)
+            $formatted = array();
+            foreach ( $options as $option_key => $option_value ) {
+                $formatted[] = array(
+                    'value' => (string) $option_key,
+                    'label' => (string) $option_value
+                );
+            }
+
+            return $formatted;
         }
 
         /**
@@ -1005,11 +1169,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             return $translations;
         }
 
-    }
-
-    // Initialize the API - only if not already initialized
-    if ( ! isset( $GLOBALS['wp_ulike_settings_api'] ) ) {
-        $GLOBALS['wp_ulike_settings_api'] = new wp_ulike_settings_api();
     }
 }
 

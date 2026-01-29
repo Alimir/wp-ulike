@@ -818,10 +818,5 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             $this->schema_cache = null;
         }
     }
-
-    // Initialize the API - required for AJAX handlers in admin-ajax.php
-    if ( ! isset( $GLOBALS['wp_ulike_customizer_api'] ) ) {
-        $GLOBALS['wp_ulike_customizer_api'] = new wp_ulike_customizer_api();
-    }
 }
 

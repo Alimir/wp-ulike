@@ -36,9 +36,7 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
          * Constructor
          */
         public function __construct() {
-            // Clear cache when customizer is saved
-            // This ensures cache is cleared AFTER new values are saved
-            add_action( 'wp_ulike_customizer_saved', array( $this, 'clear_cache' ), 10, 1 );
+            // No initialization needed - hooks are registered in admin-hooks.php
         }
 
         /**
@@ -132,12 +130,12 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
             }
 
             try {
-                global $wp_ulike_customizer_api;
-                if ( ! isset( $wp_ulike_customizer_api ) ) {
-                    $wp_ulike_customizer_api = new wp_ulike_customizer_api();
+                if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
+                    return array();
                 }
-
-                $schema = $wp_ulike_customizer_api->get_schema();
+                
+                $customizer_api = new wp_ulike_customizer_api();
+                $schema = $customizer_api->get_schema();
                 
                 // Validate schema structure
                 if ( ! is_array( $schema ) || ! isset( $schema['pages'] ) ) {
@@ -184,9 +182,9 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                         continue;
                     }
 
-                    // Determine section path (for nested values)
-                    $section_id = isset( $section['id'] ) ? $section['id'] : 'section';
-                    $section_path = ( $section_id !== 'section' ) ? $section_id : '';
+                    // Customizer uses flattened structure (no section prefixes)
+                    // All fields are at root level for compatibility with old user data
+                    $section_path = '';
 
                     $this->process_fields( $section['fields'], $values, $section_path, $selector_map );
                 }
@@ -235,8 +233,8 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 // Get value from values array
                 $value = $this->get_nested_value( $values, $field_path );
 
-                // Skip if no value
-                if ( $value === null || $value === '' ) {
+                // Skip if no value (including false for disabled fields)
+                if ( $value === null || $value === '' || $value === false ) {
                     // Still process nested fields even if parent has no value
                     if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
                         $this->process_fields( $field['fields'], $values, $field_path, $selector_map );
@@ -306,7 +304,8 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
             $output_mode = isset( $field['output_mode'] ) ? $field['output_mode'] : '';
             $output_important = isset( $field['output_important'] ) && $field['output_important'];
 
-            if ( empty( $selector ) || $value === null || $value === '' ) {
+            // Skip if no selector or empty/false value
+            if ( empty( $selector ) || $value === null || $value === '' || $value === false ) {
                 return $outputs;
             }
 
@@ -360,7 +359,8 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 case 'slider':
                 case 'spinner':
                 case 'number':
-                    if ( $value !== '' && $value !== null ) {
+                    // Allow false (disabled), but skip CSS generation for false/empty values
+                    if ( $value !== '' && $value !== null && $value !== false ) {
                         $unit = isset( $field['unit'] ) ? $field['unit'] : '';
                         $property = $output_mode ? $output_mode : 'width';
                         $num_value = $value . $unit;
@@ -1010,11 +1010,6 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 wp_cache_delete( $this->values_hash_option, 'wp_ulike_customizer' );
             }
         }
-    }
-
-    // Initialize the CSS generator
-    if ( ! isset( $GLOBALS['wp_ulike_css_generator'] ) ) {
-        $GLOBALS['wp_ulike_css_generator'] = new wp_ulike_css_generator();
     }
 }
 
