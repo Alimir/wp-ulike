@@ -539,15 +539,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             );
 
-            $sections[] = array(
-                'id'     => 'rest-api',
-                'parent' => 'customization',
-                'title'  => esc_html__( 'REST API','wp-ulike' ),
-                'icon'   => 'server',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_rest_api', $this->get_pro_lock_field( 'rest_api' ) )
-            );
-
             /**
              * Backup & Restore Section
              */
@@ -1018,35 +1009,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     ), // Share buttons uses group repeater style (matches Pro exactly - shows actual repeater)
                     'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=share-buttons-section',
                     'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-social-share-buttons/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=share-buttons-section',
-                ),
-                'rest_api' => array(
-                    'id'          => 'wp_ulike_pro_rest_api_lock',
-                    'title'       => esc_html__( 'Scale Engagement Data Across Your Ecosystem', 'wp-ulike' ),
-                    'description' => esc_html__( 'Integrate WP ULike engagement data with mobile apps, custom dashboards, analytics tools, and third-party services. Build powerful integrations that leverage your community\'s like and interaction data.', 'wp-ulike' ),
-                    'features'    => array(
-                        esc_html__( 'Complete REST API for all engagement data', 'wp-ulike' ),
-                        esc_html__( 'Custom endpoints for like counts and statistics', 'wp-ulike' ),
-                        esc_html__( 'Secure authentication with user login or API tokens', 'wp-ulike' ),
-                        esc_html__( 'Role-based access control for data security', 'wp-ulike' ),
-                        esc_html__( 'Automatic user identification and tracking', 'wp-ulike' )
-                    ),
-                    'field_pattern' => array(
-                        array(
-                            'type'  => 'switcher',
-                            'title' => esc_html__('Enable REST API', 'wp-ulike'),
-                            'desc'  => esc_html__('Expose WP ULike data through WordPress REST API endpoints, allowing external applications to access like counts, user votes, and statistics.', 'wp-ulike'),
-                        ),
-                        array(
-                            'type'  => 'button_set',
-                            'title' => esc_html__( 'Authentication Type', 'wp-ulike'),
-                            'options' => array(
-                                'login' => esc_html__('User Login', 'wp-ulike'),
-                                'token' => esc_html__('Custom Keys', 'wp-ulike'),
-                            ),
-                        ),
-                    ), // First 2 fields from rest_api section
-                    'upgrade_url' => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=rest-api-section',
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/how-to-get-started-with-wp-ulike-rest-api/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=rest-api-section',
                 ),
                 'emails' => array(
                     'id'          => 'wp_ulike_pro_emails_lock',
