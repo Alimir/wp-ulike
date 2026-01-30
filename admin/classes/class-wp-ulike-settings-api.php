@@ -645,8 +645,12 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 // For code editors and textareas that may contain HTML, use wp_kses_post
                 // For simple text fields, you might want to use sanitize_text_field instead
                 return wp_kses_post( $values );
-            } elseif ( is_bool( $values ) || is_int( $values ) || is_float( $values ) ) {
-                // Keep boolean and numeric values as-is
+            } elseif ( is_bool( $values ) ) {
+                // Convert boolean to integer (WordPress convention: 1 for true, 0 for false)
+                // This ensures false values are saved as 0 instead of empty, making them visible in debug logs
+                return $values ? 1 : 0;
+            } elseif ( is_int( $values ) || is_float( $values ) ) {
+                // Keep numeric values as-is
                 return $values;
             } else {
                 // For other types (null, objects, etc.), return as-is

@@ -9,7 +9,9 @@ class wp_ulike_setting_repo {
 
 	protected static function getOption( $key, $default = NULL ){
 		$option = wp_ulike_get_option( $key );
-		return $option != '' ? $option : $default;
+		// Use !== null to properly handle 0, false, and empty string values
+		// Only return default if option is actually null (not set)
+		return $option !== null ? $option : $default;
 	}
 
 	protected static function getSettingKey( $type ){
