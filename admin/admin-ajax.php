@@ -268,6 +268,12 @@ function wp_ulike_localization_api(){
 		'Data will appear here once it becomes available.'	=> esc_html__( 'Data will appear here once it becomes available.', 'wp-ulike' ),
 		'Check the URL or return to the homepage.'	=> esc_html__( 'Check the URL or return to the homepage.', 'wp-ulike' ),
 
+		// License
+		'License Not Found!'	=> esc_html__( 'License Not Found!', 'wp-ulike' ),
+		'The license you provided is invalid or could not be found. Please verify your license key or purchase a new license to continue using the pro features.' => esc_html__( 'The license you provided is invalid or could not be found. Please verify your license key or purchase a new license to continue using the pro features.', 'wp-ulike' ),
+		'Get License'	=> esc_html__( 'Get License', 'wp-ulike' ),
+		'If you believe this is an error, please contact support or try refreshing the page.'	=> esc_html__( 'If you believe this is an error, please contact support or try refreshing the page.', 'wp-ulike' ),
+
 		// Banners
 		'Unlock Your Website\'s True Potential!' => esc_html__( 'Unlock Your Website\'s True Potential!', 'wp-ulike'),
 		'Imagine knowing exactly what makes your content shine and how to connect with the fans who\'ll help you grow. Picture having the tools to make smarter decisions, boost your engagement, and take your website to the next level. Ready to uncover what\'s possible?' => esc_html__( 'Imagine knowing exactly what makes your content shine and how to connect with the fans who\'ll help you grow. Picture having the tools to make smarter decisions, boost your engagement, and take your website to the next level. Ready to uncover what\'s possible?', 'wp-ulike'),
@@ -386,7 +392,7 @@ function wp_ulike_save_settings_api(){
 	if ( class_exists( 'wp_ulike_settings_api' ) ) {
 		$settings_api = new wp_ulike_settings_api();
 		$result = $settings_api->save_settings( $values );
-		
+
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( $result->get_error_message() );
 		} else {
