@@ -35,8 +35,7 @@
     .wpulike button.wp_ulike_btn::-moz-focus-inner {
       border: 0; }
     .wpulike button.wp_ulike_btn[disabled=disabled], .wpulike button.wp_ulike_btn:disabled {
-      cursor: not-allowed;
-      opacity: 0.6; }
+      cursor: not-allowed; }
       .wpulike button.wp_ulike_btn[disabled=disabled]:hover, .wpulike button.wp_ulike_btn[disabled=disabled]:active, .wpulike button.wp_ulike_btn[disabled=disabled]:focus, .wpulike button.wp_ulike_btn:disabled:hover, .wpulike button.wp_ulike_btn:disabled:active, .wpulike button.wp_ulike_btn:disabled:focus {
         outline: none;
         background-color: initial; }
