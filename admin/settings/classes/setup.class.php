@@ -74,9 +74,9 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
       add_action( 'init', array( 'ULF', 'setup' ) );
       add_action( 'switch_theme', array( 'ULF', 'setup' ) );
       add_action( 'admin_enqueue_scripts', array( 'ULF', 'add_admin_enqueue_scripts' ) );
-      add_action( 'wp_enqueue_scripts', array( 'ULF', 'add_typography_enqueue_styles' ), 80 );
-      add_action( 'wp_head', array( 'ULF', 'add_custom_css' ), 80 );
-      add_filter( 'admin_body_class', array( 'ULF', 'add_admin_body_class' ) );
+      // add_action( 'wp_enqueue_scripts', array( 'ULF', 'add_typography_enqueue_styles' ), 80 );
+      // add_action( 'wp_head', array( 'ULF', 'add_custom_css' ), 80 );
+      // add_filter( 'admin_body_class', array( 'ULF', 'add_admin_body_class' ) );
 
     }
 
@@ -87,43 +87,43 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
       // self::include_plugin_file( 'views/welcome.php' );
 
       // Setup admin option framework
-      $params = array();
-      if ( class_exists( 'ULF_Options' ) && ! empty( self::$args['admin_options'] ) ) {
-        foreach ( self::$args['admin_options'] as $key => $value ) {
-          if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
+      // $params = array();
+      // if ( class_exists( 'ULF_Options' ) && ! empty( self::$args['admin_options'] ) ) {
+      //   foreach ( self::$args['admin_options'] as $key => $value ) {
+      //     if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
 
-            $params['args']     = $value;
-            $params['sections'] = self::$args['sections'][$key];
-            self::$inited[$key] = true;
+      //       $params['args']     = $value;
+      //       $params['sections'] = self::$args['sections'][$key];
+      //       self::$inited[$key] = true;
 
-            ULF_Options::instance( $key, $params );
+      //       ULF_Options::instance( $key, $params );
 
-            if ( ! empty( $value['show_in_customizer'] ) ) {
-              $value['output_css'] = false;
-              $value['enqueue_webfont'] = false;
-              self::$args['customize_options'][$key] = $value;
-              self::$inited[$key] = null;
-            }
+      //       if ( ! empty( $value['show_in_customizer'] ) ) {
+      //         $value['output_css'] = false;
+      //         $value['enqueue_webfont'] = false;
+      //         self::$args['customize_options'][$key] = $value;
+      //         self::$inited[$key] = null;
+      //       }
 
-          }
-        }
-      }
+      //     }
+      //   }
+      // }
 
       // Setup customize option framework
-      $params = array();
-      if ( class_exists( 'ULF_Customize_Options' ) && ! empty( self::$args['customize_options'] ) ) {
-        foreach ( self::$args['customize_options'] as $key => $value ) {
-          if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
+      // $params = array();
+      // if ( class_exists( 'ULF_Customize_Options' ) && ! empty( self::$args['customize_options'] ) ) {
+      //   foreach ( self::$args['customize_options'] as $key => $value ) {
+      //     if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
 
-            $params['args']     = $value;
-            $params['sections'] = self::$args['sections'][$key];
-            self::$inited[$key] = true;
+      //       $params['args']     = $value;
+      //       $params['sections'] = self::$args['sections'][$key];
+      //       self::$inited[$key] = true;
 
-            ULF_Customize_Options::instance( $key, $params );
+      //       ULF_Customize_Options::instance( $key, $params );
 
-          }
-        }
-      }
+      //     }
+      //   }
+      // }
 
       // Setup metabox option framework
       $params = array();
@@ -142,67 +142,67 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
       }
 
       // Setup nav menu option framework
-      $params = array();
-      if ( class_exists( 'ULF_Nav_Menu_Options' ) && ! empty( self::$args['nav_menu_options'] ) ) {
-        foreach ( self::$args['nav_menu_options'] as $key => $value ) {
-          if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
+      // $params = array();
+      // if ( class_exists( 'ULF_Nav_Menu_Options' ) && ! empty( self::$args['nav_menu_options'] ) ) {
+      //   foreach ( self::$args['nav_menu_options'] as $key => $value ) {
+      //     if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
 
-            $params['args']     = $value;
-            $params['sections'] = self::$args['sections'][$key];
-            self::$inited[$key] = true;
+      //       $params['args']     = $value;
+      //       $params['sections'] = self::$args['sections'][$key];
+      //       self::$inited[$key] = true;
 
-            ULF_Nav_Menu_Options::instance( $key, $params );
+      //       ULF_Nav_Menu_Options::instance( $key, $params );
 
-          }
-        }
-      }
+      //     }
+      //   }
+      // }
 
       // Setup profile option framework
-      $params = array();
-      if ( class_exists( 'ULF_Profile_Options' ) && ! empty( self::$args['profile_options'] ) ) {
-        foreach ( self::$args['profile_options'] as $key => $value ) {
-          if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
+      // $params = array();
+      // if ( class_exists( 'ULF_Profile_Options' ) && ! empty( self::$args['profile_options'] ) ) {
+      //   foreach ( self::$args['profile_options'] as $key => $value ) {
+      //     if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
 
-            $params['args']     = $value;
-            $params['sections'] = self::$args['sections'][$key];
-            self::$inited[$key] = true;
+      //       $params['args']     = $value;
+      //       $params['sections'] = self::$args['sections'][$key];
+      //       self::$inited[$key] = true;
 
-            ULF_Profile_Options::instance( $key, $params );
+      //       ULF_Profile_Options::instance( $key, $params );
 
-          }
-        }
-      }
+      //     }
+      //   }
+      // }
 
       // Setup taxonomy option framework
-      $params = array();
-      if ( class_exists( 'ULF_Taxonomy_Options' ) && ! empty( self::$args['taxonomy_options'] ) ) {
-        $taxonomy = ( isset( $_GET['taxonomy'] ) ) ? sanitize_text_field( wp_unslash( $_GET['taxonomy'] ) ) : '';
-        foreach ( self::$args['taxonomy_options'] as $key => $value ) {
-          if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
+      // $params = array();
+      // if ( class_exists( 'ULF_Taxonomy_Options' ) && ! empty( self::$args['taxonomy_options'] ) ) {
+      //   $taxonomy = ( isset( $_GET['taxonomy'] ) ) ? sanitize_text_field( wp_unslash( $_GET['taxonomy'] ) ) : '';
+      //   foreach ( self::$args['taxonomy_options'] as $key => $value ) {
+      //     if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
 
-            $params['args']     = $value;
-            $params['sections'] = self::$args['sections'][$key];
-            self::$inited[$key] = true;
+      //       $params['args']     = $value;
+      //       $params['sections'] = self::$args['sections'][$key];
+      //       self::$inited[$key] = true;
 
-            ULF_Taxonomy_Options::instance( $key, $params );
+      //       ULF_Taxonomy_Options::instance( $key, $params );
 
-          }
-        }
-      }
+      //     }
+      //   }
+      // }
 
       // Setup widget option framework
-      if ( class_exists( 'ULF_Widget' ) && class_exists( 'WP_Widget_Factory' ) && ! empty( self::$args['widget_options'] ) ) {
-        $wp_widget_factory = new WP_Widget_Factory();
-        global $wp_widget_factory;
-        foreach ( self::$args['widget_options'] as $key => $value ) {
-          if ( ! isset( self::$inited[$key] ) ) {
+      // if ( class_exists( 'ULF_Widget' ) && class_exists( 'WP_Widget_Factory' ) && ! empty( self::$args['widget_options'] ) ) {
+      //   $wp_widget_factory = new WP_Widget_Factory();
+      //   global $wp_widget_factory;
+      //   foreach ( self::$args['widget_options'] as $key => $value ) {
+      //     if ( ! isset( self::$inited[$key] ) ) {
 
-            self::$inited[$key] = true;
-            $wp_widget_factory->register( ULF_Widget::instance( $key, $value ) );
+      //       self::$inited[$key] = true;
+      //       $wp_widget_factory->register( ULF_Widget::instance( $key, $value ) );
 
-          }
-        }
-      }
+      //     }
+      //   }
+      // }
 
       // Setup comment option framework
       $params = array();
@@ -221,31 +221,31 @@ if ( ! class_exists( 'ULF_Setup' ) ) {
       }
 
       // Setup shortcode option framework
-      $params = array();
-      if ( class_exists( 'ULF_Shortcoder' ) && ! empty( self::$args['shortcode_options'] ) ) {
-        foreach ( self::$args['shortcode_options'] as $key => $value ) {
-          if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
+      // $params = array();
+      // if ( class_exists( 'ULF_Shortcoder' ) && ! empty( self::$args['shortcode_options'] ) ) {
+      //   foreach ( self::$args['shortcode_options'] as $key => $value ) {
+      //     if ( ! empty( self::$args['sections'][$key] ) && ! isset( self::$inited[$key] ) ) {
 
-            $params['args']     = $value;
-            $params['sections'] = self::$args['sections'][$key];
-            self::$inited[$key] = true;
+      //       $params['args']     = $value;
+      //       $params['sections'] = self::$args['sections'][$key];
+      //       self::$inited[$key] = true;
 
-            ULF_Shortcoder::instance( $key, $params );
+      //       ULF_Shortcoder::instance( $key, $params );
 
-          }
-        }
+      //     }
+      //   }
 
-        // Once editor setup for gutenberg and media buttons
-        if ( class_exists( 'ULF_Shortcoder' ) && ! empty( self::$shortcode_instances ) ) {
-          foreach ( self::$shortcode_instances as $instance ) {
-            if ( ! empty( $instance['show_in_editor'] ) ) {
-              ULF_Shortcoder::once_editor_setup();
-              break;
-            }
-          }
-        }
+      //   // Once editor setup for gutenberg and media buttons
+      //   if ( class_exists( 'ULF_Shortcoder' ) && ! empty( self::$shortcode_instances ) ) {
+      //     foreach ( self::$shortcode_instances as $instance ) {
+      //       if ( ! empty( $instance['show_in_editor'] ) ) {
+      //         ULF_Shortcoder::once_editor_setup();
+      //         break;
+      //       }
+      //     }
+      //   }
 
-      }
+      // }
 
       do_action( 'ulf_loaded' );
 
