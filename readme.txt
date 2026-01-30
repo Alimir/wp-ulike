@@ -154,6 +154,8 @@ That's literally it. Once activated, Like buttons appear on your posts immediate
 
 4. **Gutenberg Block:** Add WP ULike buttons directly in the block editor with customizable templates and settings.
 
+5. **Live Preview Customizer:** Built-in customizer panel with real-time preview. Design your buttons instantly—adjust colors, borders, spacing, typography, and see changes update live as you customize.
+
 == Frequently Asked Questions ==
 
 = Do visitors need to register or login to like content? =
@@ -183,7 +185,7 @@ Yes. We follow WordPress security best practices, regularly audit our code, and 
 * Added: Brand new settings panel that's actually beautiful to use. Everything is organized, easy to find, and makes configuring your like buttons a breeze instead of a chore.
 * Added: Built-in customizer panel with live preview—see every style change instantly. No more guessing how your buttons will look. Adjust colors, spacing, borders, typography, and watch it update in real-time.
 * Added: Completely redesigned analytics panel that makes understanding your engagement data actually enjoyable. Better charts, clearer insights, and navigation that just makes sense.
-* Improved: 60% faster. That's not a typo. Pages load faster, stats load faster, everything just feels snappier. Your visitors will notice the difference.
+* Improved: 90% faster. That's not a typo. Pages load faster, stats load faster, everything just feels snappier. Your visitors will notice the difference.
 * Fixed: Squashed bugs and tightened up stability across the board.
 
 = 4.8.3.1 =
