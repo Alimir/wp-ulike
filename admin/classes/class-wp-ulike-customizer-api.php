@@ -82,17 +82,64 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         protected function get_plugin_assets() {
             $assets = array(
                 'css' => array(),
-                'js' => array()
+                'js' => array(),
+                'localized_scripts' => array()
             );
 
-            // Add minified CSS/JS (always use minified versions)
-            $assets['css'][] = WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css';
-            $assets['js'][] = WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js';
+            // Add minified CSS/JS (always use minified versions) - Free plugin assets
+            $assets['css'][] = array(
+                'url' => WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css',
+                'source' => 'free'
+            );
+            $assets['js'][] = array(
+                'url' => WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js',
+                'source' => 'free'
+            );
+
+            // Add free plugin localized script
+            $assets['localized_scripts']['wp_ulike_params'] = array(
+                'data' => array(
+                    'ajax_url'      => admin_url( 'admin-ajax.php' ),
+                    'notifications' => wp_ulike_get_option( 'enable_toast_notice' )
+                ),
+                'source' => 'free'
+            );
 
             // Allow pro version and other extensions to add their assets
             $assets = apply_filters( 'wp_ulike_customizer_assets', $assets );
 
             return $assets;
+        }
+
+        /**
+         * Extract URLs from asset structure
+         * Supports both old format (string URLs) and new format (array with 'url' and 'source')
+         *
+         * @param array|string $assets Asset URLs or asset objects
+         * @return array Array of URL strings
+         */
+        protected function extract_asset_urls( $assets ) {
+            if ( empty( $assets ) ) {
+                return array();
+            }
+
+            // Normalize to array
+            if ( ! is_array( $assets ) ) {
+                $assets = array( $assets );
+            }
+
+            $urls = array();
+            foreach ( $assets as $asset ) {
+                if ( is_array( $asset ) && isset( $asset['url'] ) ) {
+                    // New format: array with 'url' and 'source'
+                    $urls[] = $asset['url'];
+                } elseif ( is_string( $asset ) ) {
+                    // Old format: direct URL string
+                    $urls[] = $asset;
+                }
+            }
+
+            return $urls;
         }
 
         /**
@@ -609,16 +656,14 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
             // Get WP ULike front-end assets URLs using the same method as schema
             $plugin_assets = $this->get_plugin_assets();
-            $css_urls = isset( $plugin_assets['css'] ) ? $plugin_assets['css'] : '';
-            $js_urls = isset( $plugin_assets['js'] ) ? $plugin_assets['js'] : '';
+            
+            // Extract URLs from asset structure (support both old string format and new array format)
+            $css_urls = isset( $plugin_assets['css'] ) ? $plugin_assets['css'] : array();
+            $js_urls = isset( $plugin_assets['js'] ) ? $plugin_assets['js'] : array();
 
-            // Normalize to arrays
-            if ( ! is_array( $css_urls ) && ! empty( $css_urls ) ) {
-                $css_urls = array( $css_urls );
-            }
-            if ( ! is_array( $js_urls ) && ! empty( $js_urls ) ) {
-                $js_urls = array( $js_urls );
-            }
+            // Normalize to arrays and extract URLs
+            $css_urls = $this->extract_asset_urls( $css_urls );
+            $js_urls = $this->extract_asset_urls( $js_urls );
 
             // Build full HTML with styles and WP ULike assets
             $html = $this->build_preview_html( $preview_html, $css_urls, $js_urls, $plugin_assets );
@@ -673,18 +718,11 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 }
             }
 
-            // Add wp_ulike_params for JS functionality
-            $wp_ulike_params = array(
-                'ajax_url'      => admin_url( 'admin-ajax.php' ),
-                'notifications' => wp_ulike_get_option( 'enable_toast_notice' ) ? true : false,
-            );
-            $html .= '<script>
-                window.wp_ulike_params = ' . wp_json_encode( $wp_ulike_params ) . ';
-            </script>';
-
             // Add localized scripts from assets
             if ( isset( $plugin_assets['localized_scripts'] ) && is_array( $plugin_assets['localized_scripts'] ) ) {
-                foreach ( $plugin_assets['localized_scripts'] as $var_name => $var_data ) {
+                foreach ( $plugin_assets['localized_scripts'] as $var_name => $script_data ) {
+                    // Support both old format (direct array) and new format (with 'data' and 'source')
+                    $var_data = isset( $script_data['data'] ) ? $script_data['data'] : $script_data;
                     $html .= '<script>
                         window.' . esc_js( $var_name ) . ' = ' . wp_json_encode( $var_data ) . ';
                     </script>';
