@@ -6,7 +6,7 @@ Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 4.8.3.1
+Stable tag: 5.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,7 +74,7 @@ We believe in giving you real value, not a teaser. The free version includes eve
 
 **Analytics That Matter:** A real-time dashboard showing your most popular content, voting statistics, engagement trends, and detailed logs. This isn't fluff—it's actionable data.
 
-**Templates You Can Customize:** Multiple button styles that actually look good. Match your site's design, customize colors and text, all through the settings panel. No coding required.
+**Live Preview Customizer:** Design your buttons in real-time with our built-in customizer panel. See every change instantly as you adjust colors, borders, spacing, typography, and more. No more guessing how your buttons will look—watch them update in real-time. It's like having a design studio built right into the plugin. Multiple button styles included, all customizable. No coding required.
 
 **Built for Speed:** Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin. Your site won't slow down.
 
@@ -178,6 +178,13 @@ Yes. Works perfectly across WordPress multisite networks. Each site gets its own
 Yes. We follow WordPress security best practices, regularly audit our code, and have over 80,000 active installations with a high WordPress.org rating. Security isn't optional for us—it's built in.
 
 == Changelog ==
+
+= 5.0.0 =
+* Added: Brand new settings panel that's actually beautiful to use. Everything is organized, easy to find, and makes configuring your like buttons a breeze instead of a chore.
+* Added: Built-in customizer panel with live preview—see every style change instantly. No more guessing how your buttons will look. Adjust colors, spacing, borders, typography, and watch it update in real-time.
+* Added: Completely redesigned analytics panel that makes understanding your engagement data actually enjoyable. Better charts, clearer insights, and navigation that just makes sense.
+* Improved: 60% faster. That's not a typo. Pages load faster, stats load faster, everything just feels snappier. Your visitors will notice the difference.
+* Fixed: Squashed bugs and tightened up stability across the board.
 
 = 4.8.3.1 =
 * Fixed: Gutenberg block assets not being included in build process, preventing blocks from displaying correctly.
