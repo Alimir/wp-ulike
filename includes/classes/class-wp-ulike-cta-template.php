@@ -16,16 +16,37 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		protected $settings;
 		protected $method_id;
 		protected $args;
+		protected $cached_method;
+		protected $cached_counter_visible;
 
 		/**
 		 * Constructor
 		 */
 		function __construct( $args ){
 			$this->args = $args;
-			$this->settings = new wp_ulike_setting_type( $this->args['slug'] );
+			
+			static $cached_settings = array();
+			$slug = $this->args['slug'];
+			if ( ! isset( $cached_settings[ $slug ] ) ) {
+				$cached_settings[ $slug ] = new wp_ulike_setting_type( $slug );
+			}
+			$this->settings = $cached_settings[ $slug ];
+			
+			static $cached_methods = array();
+			if ( ! isset( $cached_methods[ $slug ] ) ) {
+				$cached_methods[ $slug ] = wp_ulike_setting_repo::getMethod( $slug );
+			}
+			$this->cached_method = $cached_methods[ $slug ];
+			
+			static $cached_counter_visible = array();
+			if ( ! isset( $cached_counter_visible[ $slug ] ) ) {
+				$cached_counter_visible[ $slug ] = wp_ulike_setting_repo::isCounterBoxVisible( $slug );
+			}
+			$this->cached_counter_visible = $cached_counter_visible[ $slug ];
+			
 			parent::__construct(array(
 				'item_type'   => $this->args['slug'],
-				'item_method' => wp_ulike_setting_repo::getMethod( $this->args['slug'] )
+				'item_method' => $this->cached_method
 			));
 		}
 
@@ -52,7 +73,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 				'type'                 => $this->args['slug'],
 				'current_user'         => $this->getCurrentUser(),
 				'prev_status'          => $this->getPrevStatus(),
-				'current_finger_print' => $this->getCurrentFingerPrint(),
+				'current_finger_print' => '',
 				'method'               => 'lookup'
 			), $this->settings ) ){
 				// If has prev status
@@ -63,7 +84,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 				}
 
 			} else {
-				switch( wp_ulike_setting_repo::getMethod( $this->args['slug'] ) ){
+				switch( $this->cached_method ){
 					case 'do_not_log':
 						$method_id = $this->getPrevStatus() ? 4 : 1;
 						break;
@@ -130,7 +151,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 			$this->args['is_distinct'] = $this->isDistinct();
 
 			$formatted_value = '';
-			if( wp_ulike_setting_repo::isCounterBoxVisible( $this->args['slug'] ) ){
+			if( $this->cached_counter_visible ){
 				$formatted_value = wp_ulike_format_number( $total_likes, wp_ulike_maybe_convert_status( $this->getPrevStatus(), 'up' ) );
 			}
 
@@ -138,7 +159,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					"ID"                    => esc_attr( $this->args['id'] ),
 					"wrapper_class"         => esc_attr( $this->args['wrapper_class'] ),
 					"slug"                  => esc_attr( $this->args['slug'] ),
-					"counter"               => wp_ulike_setting_repo::isCounterBoxVisible( $this->args['slug'] ) ?  wp_ulike_kses( $formatted_val ) : '',
+					"counter"               => $this->cached_counter_visible ?  wp_ulike_kses( $formatted_val ) : '',
 					"total_likes"           => esc_attr( $total_likes ),
 					"formatted_total_likes" => esc_attr( $formatted_value ),
 					"type"                  => esc_attr( $this->args['slug'] ),
@@ -151,7 +172,7 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 					"style"                 => esc_html( $this->args['style'] ),
 					"button_type"           => esc_html( $this->args['button_type'] ),
 					"display_likers"        => esc_attr( $this->args['display_likers'] ),
-					"display_counters"      => wp_ulike_setting_repo::isCounterBoxVisible( $this->args['slug'] ),
+					"display_counters"      => $this->cached_counter_visible,
 					"disable_pophover"      => esc_attr( $this->args['disable_pophover'] ),
 					"likers_style"          => esc_attr( $this->args['likers_style'] ),
 					"button_text"           => $button_text,

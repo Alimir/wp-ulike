@@ -18,7 +18,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		protected $isUserLoggedIn;
 		protected $prevStatus;
 		protected $currentIP;
-		protected $currentFingerPrint;
+		protected $currentFingerPrint = null; // Lazy load - only generate when needed
 		protected $currentUser;
 		protected $typeSettings;
 		protected $itemType;
@@ -57,16 +57,24 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return void
 		 */
 		protected function setCurrentIP( $user_ip ){
-			$this->currentIP = $user_ip === NULL ? wp_ulike_get_user_ip() : $user_ip;
+			if ( $user_ip === NULL ) {
+				static $cached_ip = null;
+				if ( $cached_ip === null ) {
+					$cached_ip = wp_ulike_get_user_ip();
+				}
+				$this->currentIP = $cached_ip;
+			} else {
+				$this->currentIP = $user_ip;
+			}
 		}
 
 		/**
-		 * Set current user IP
+		 * Set current user fingerprint
 		 *
 		 * @return void
 		 */
 		protected function setCurrentFingerPrint(){
-			$this->currentFingerPrint = wp_ulike_generate_fingerprint();
+			$this->currentFingerPrint = null;
 		}
 
 		/**
@@ -88,12 +96,16 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
-		 * Set current user IP
+		 * Set type settings
 		 *
 		 * @return void
 		 */
 		protected function setTypeSettings(){
-			$this->typeSettings = new wp_ulike_setting_type( $this->itemType );
+			static $cached_type_settings = array();
+			if ( ! isset( $cached_type_settings[ $this->itemType ] ) ) {
+				$cached_type_settings[ $this->itemType ] = new wp_ulike_setting_type( $this->itemType );
+			}
+			$this->typeSettings = $cached_type_settings[ $this->itemType ];
 		}
 
 		/**
@@ -102,7 +114,15 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return void
 		 */
 		protected function setIsUserLoggedIn( $user_id ){
-			$this->isUserLoggedIn = $user_id === NULL ? is_user_logged_in() : true;
+			if ( $user_id === NULL ) {
+				static $cached_is_logged_in = null;
+				if ( $cached_is_logged_in === null ) {
+					$cached_is_logged_in = is_user_logged_in();
+				}
+				$this->isUserLoggedIn = $cached_is_logged_in;
+			} else {
+				$this->isUserLoggedIn = true;
+			}
 		}
 
 		/**
@@ -124,6 +144,9 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return string
 		 */
 		public function getCurrentFingerPrint(){
+			if ( $this->currentFingerPrint === null ) {
+				$this->currentFingerPrint = wp_ulike_generate_fingerprint();
+			}
 			return $this->currentFingerPrint;
 		}
 
@@ -188,16 +211,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 
 		/**
 		 * Set user previous status
+		 * Note: wp_ulike_get_user_item_history already uses WordPress meta cache internally
 		 *
 		 * @param string $item_id
 		 * @return void
 		 */
 		public function setPrevStatus( $item_id ){
-			// delete cache to get fresh data
-			// if( wp_ulike_is_cache_exist() ){
-			// 	wp_cache_delete( $this->currentUser, 'wp_ulike_user_meta' );
-			// }
-
 			$args = array(
 				"item_id"           => $item_id,
 				"item_type"         => $this->itemType,
@@ -220,25 +239,46 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return boolean
 		 */
 		public static function hasPermission( $args, $settings ){
-			// Default status
 			$status = true;
 
-			// Check bot status first
-			if ( wp_ulike_is_bot_request() ) {
+			static $cached_is_bot = null;
+			if ( $cached_is_bot === null ) {
+				$cached_is_bot = wp_ulike_is_bot_request();
+			}
+			if ( $cached_is_bot ) {
 				return false;
 			}
 
-			// Check for logging method
-			$method = wp_ulike_setting_repo::getMethod( $args['type'] );
+			static $cached_methods = array();
+			if ( ! isset( $cached_methods[ $args['type'] ] ) ) {
+				$cached_methods[ $args['type'] ] = wp_ulike_setting_repo::getMethod( $args['type'] );
+			}
+			$method = $cached_methods[ $args['type'] ];
 
 			// check cookie existense
 			$has_cookie   = false;
 
 			if ( in_array( $method, array( 'by_cookie', 'by_user_ip_cookie' ) ) ) {
-				$cookie_key   = sanitize_key( 'wp_ulike_' . md5( $args['type'] . '_logs' ) );
-				$cookie_data  = self::getDecodedCookieData( $cookie_key );
-				$user_hash    = md5( $args['current_user'] );
-				$current_time = current_time( 'timestamp' );
+				$cookie_key = sanitize_key( 'wp_ulike_' . md5( $args['type'] . '_logs' ) );
+
+				static $cached_cookie_data = array();
+				if ( ! isset( $cached_cookie_data[ $cookie_key ] ) ) {
+					$cached_cookie_data[ $cookie_key ] = self::getDecodedCookieData( $cookie_key );
+				}
+				$cookie_data = &$cached_cookie_data[ $cookie_key ];
+
+				// Cache user hash per user (not globally) to handle multiple users correctly
+				static $cached_user_hashes = array();
+				if ( ! isset( $cached_user_hashes[ $args['current_user'] ] ) ) {
+					$cached_user_hashes[ $args['current_user'] ] = md5( $args['current_user'] );
+				}
+				$user_hash = $cached_user_hashes[ $args['current_user'] ];
+
+				static $cached_current_time = null;
+				if ( $cached_current_time === null ) {
+					$cached_current_time = current_time( 'timestamp' );
+				}
+				$current_time = $cached_current_time;
 
 				if ( isset( $cookie_data[ $user_hash ][ $args['item_id'] ] ) ) {
 					if ( is_numeric( $cookie_data[ $user_hash ][ $args['item_id'] ] ) && $current_time >= $cookie_data[ $user_hash ][ $args['item_id'] ] ) {
@@ -291,9 +331,10 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 
 			// Fingerprint check for guests or requests without cookies
 			if ( $args['method'] === 'process' && in_array( $method, ['do_not_log', 'by_cookie'] ) ) {
+				$current_finger_print = empty( $args['current_finger_print'] ) ? wp_ulike_generate_fingerprint() : $args['current_finger_print'];
 
 				$fingerprint_count = wp_ulike_count_current_fingerprint(
-					$args['current_finger_print'],
+					$current_finger_print,
 					$args['item_id'],
 					$args['type']
 				);
@@ -324,8 +365,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 */
 		private static function getDecodedCookieData( $cookie_key ) {
 			$cookie_key = sanitize_key( $cookie_key );
-			$cookie_data = isset( $_COOKIE[ $cookie_key ] ) ? json_decode( wp_unslash( $_COOKIE[ $cookie_key ] ), true ) : array();
-			return is_array( $cookie_data ) ? $cookie_data : array();
+			static $cached_decoded_cookies = array();
+			if ( ! isset( $cached_decoded_cookies[ $cookie_key ] ) ) {
+				$cookie_data = isset( $_COOKIE[ $cookie_key ] ) ? json_decode( wp_unslash( $_COOKIE[ $cookie_key ] ), true ) : array();
+				$cached_decoded_cookies[ $cookie_key ] = is_array( $cookie_data ) ? $cookie_data : array();
+			}
+			return $cached_decoded_cookies[ $cookie_key ];
 		}
 
 		/**
