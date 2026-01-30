@@ -66,7 +66,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Typography', 'wp-ulike' ),
                         'output'           => '.wpulike .wp_ulike_general_class, .wpulike .wp_ulike_put_text, .wpulike .wp_ulike_general_class .count-box',
-                        'units'            => array('px', 'em', 'rem', '%')
+                        'units'            => array('px', 'em', 'rem')
                     ),
                     array(
                         'id'            => 'template_group',
@@ -87,7 +87,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                 )
                             ),
@@ -127,7 +127,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class.wp_ulike_is_already_liked, .wpulike .wp_ulike_general_class.wp_ulike_is_liked',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                 )
                             ),
@@ -181,7 +181,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class .wp_ulike_btn',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'button_image_dimensions',
@@ -257,7 +257,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class .wp_ulike_btn.wp_ulike_btn_is_active',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'active_like_image',
@@ -336,7 +336,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class .count-box',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                 )
                             ),
@@ -361,7 +361,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class.wp_ulike_is_already_liked .count-box, .wpulike .wp_ulike_general_class.wp_ulike_is_liked .count-box',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                 )
                             ),
@@ -399,7 +399,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Typography', 'wp-ulike' ),
                         'output'           => '.wpulike-notification .wpulike-message',
-                        'units'            => array('px', 'em', 'rem', '%')
+                        'units'            => array('px', 'em', 'rem')
                     ),
                     array(
                         'id'            => 'toast_group',
@@ -426,7 +426,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike-notification .wpulike-message',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'info_icon_size',
@@ -466,7 +466,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike-notification .wpulike-message.wpulike-success',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'success_icon_size',
@@ -506,7 +506,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike-notification .wpulike-message.wpulike-error',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'error_icon_size',
@@ -546,7 +546,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike-notification .wpulike-message.wpulike-warning',
-                                        'units'  => array('px', 'em', 'rem', '%')
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'warning_icon_size',
