@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike 5.0.0\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2026-01-30 07:52:37+00:00\n"
+"POT-Creation-Date: 2026-01-30 13:21:41+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -473,10 +473,31 @@ msgid "Check the URL or return to the homepage."
 msgstr ""
 
 #: admin/admin-ajax.php:272
-msgid "Unlock Your Website's True Potential!"
+msgid "License Not Found!"
 msgstr ""
 
 #: admin/admin-ajax.php:273
+msgid ""
+"The license you provided is invalid or could not be found. Please verify "
+"your license key or purchase a new license to continue using the pro "
+"features."
+msgstr ""
+
+#: admin/admin-ajax.php:274
+msgid "Get License"
+msgstr ""
+
+#: admin/admin-ajax.php:275
+msgid ""
+"If you believe this is an error, please contact support or try refreshing "
+"the page."
+msgstr ""
+
+#: admin/admin-ajax.php:278
+msgid "Unlock Your Website's True Potential!"
+msgstr ""
+
+#: admin/admin-ajax.php:279
 msgid ""
 "Imagine knowing exactly what makes your content shine and how to connect "
 "with the fans who'll help you grow. Picture having the tools to make "
@@ -484,92 +505,92 @@ msgid ""
 "level. Ready to uncover what's possible?"
 msgstr ""
 
-#: admin/admin-ajax.php:274 admin/includes/templates/go-pro.php:301
+#: admin/admin-ajax.php:280 admin/includes/templates/go-pro.php:301
 msgid "Get Started"
 msgstr ""
 
-#: admin/admin-ajax.php:275
+#: admin/admin-ajax.php:281
 msgid "Discover More"
 msgstr ""
 
-#: admin/admin-ajax.php:278
+#: admin/admin-ajax.php:284
 msgid "{{count}} {{interval}} ago"
 msgstr ""
 
-#: admin/admin-ajax.php:279
+#: admin/admin-ajax.php:285
 msgid "year"
 msgstr ""
 
-#: admin/admin-ajax.php:280
+#: admin/admin-ajax.php:286
 msgid "years"
 msgstr ""
 
-#: admin/admin-ajax.php:281
+#: admin/admin-ajax.php:287
 msgid "month"
 msgstr ""
 
-#: admin/admin-ajax.php:282
+#: admin/admin-ajax.php:288
 msgid "months"
 msgstr ""
 
-#: admin/admin-ajax.php:283
+#: admin/admin-ajax.php:289
 msgid "week"
 msgstr ""
 
-#: admin/admin-ajax.php:284
+#: admin/admin-ajax.php:290
 msgid "weeks"
 msgstr ""
 
-#: admin/admin-ajax.php:285
+#: admin/admin-ajax.php:291
 msgid "day"
 msgstr ""
 
-#: admin/admin-ajax.php:286
+#: admin/admin-ajax.php:292
 msgid "days"
 msgstr ""
 
-#: admin/admin-ajax.php:287
+#: admin/admin-ajax.php:293
 msgid "hour"
 msgstr ""
 
-#: admin/admin-ajax.php:288
+#: admin/admin-ajax.php:294
 msgid "hours"
 msgstr ""
 
-#: admin/admin-ajax.php:289
+#: admin/admin-ajax.php:295
 msgid "minute"
 msgstr ""
 
-#: admin/admin-ajax.php:290
+#: admin/admin-ajax.php:296
 msgid "minutes"
 msgstr ""
 
-#: admin/admin-ajax.php:291
+#: admin/admin-ajax.php:297
 msgid "second"
 msgstr ""
 
-#: admin/admin-ajax.php:292
+#: admin/admin-ajax.php:298
 msgid "seconds"
 msgstr ""
 
-#: admin/admin-ajax.php:293
+#: admin/admin-ajax.php:299
 msgid "just now"
 msgstr ""
 
-#: admin/admin-ajax.php:323 admin/admin-ajax.php:353 admin/admin-ajax.php:396
+#: admin/admin-ajax.php:329 admin/admin-ajax.php:359 admin/admin-ajax.php:402
 msgid "Error: Settings API not available."
 msgstr ""
 
-#: admin/admin-ajax.php:382
+#: admin/admin-ajax.php:388
 msgid "Error: Invalid request data. Expected an object with setting values."
 msgstr ""
 
-#: admin/admin-ajax.php:427 admin/admin-ajax.php:457 admin/admin-ajax.php:494
-#: admin/admin-ajax.php:523
+#: admin/admin-ajax.php:433 admin/admin-ajax.php:463 admin/admin-ajax.php:500
+#: admin/admin-ajax.php:529
 msgid "Error: Customizer API not available."
 msgstr ""
 
-#: admin/admin-ajax.php:486
+#: admin/admin-ajax.php:492
 msgid "Error: Invalid request data. Expected an object with customizer values."
 msgstr ""
 
