@@ -134,7 +134,6 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 
 				// Pass the app config to the frontend
 				wp_localize_script( 'wp-ulike-optiwich', 'OptiwichConfig', array(
-					'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 					'nonce'     => wp_create_nonce( WP_ULIKE_SLUG ),
 					'title'     => WP_ULIKE_NAME,
 					'logo'      => WP_ULIKE_ASSETS_URL . '/img/wp-ulike-logo.svg',
