@@ -1081,135 +1081,233 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         public function get_translations() {
             $translations = array(
                 // Generic Errors
-                'errors.generic' => esc_html__( 'An error occurred', 'wp-ulike' ),
-                'errors.generic_refresh' => esc_html__( 'An error occurred. Please try refreshing the page.', 'wp-ulike' ),
-                'errors.try_again' => esc_html__( 'Try Again', 'wp-ulike' ),
-                'errors.failed' => esc_html__( 'Failed to %s', 'wp-ulike' ),
+                /* translators: Generic error message shown when something goes wrong */
+                'errors.generic' => esc_html__( 'Something went wrong', 'wp-ulike' ),
+                /* translators: Error message with suggestion to refresh the page */
+                'errors.generic_refresh' => esc_html__( 'Something went wrong. Please try refreshing the page.', 'wp-ulike' ),
+                /* translators: Error message when a request fails. %s will be replaced with the action that failed */
+                'errors.failed' => esc_html__( 'Unable to complete request', 'wp-ulike' ),
+                /* translators: Error message when server connection is forbidden */
+                'errors.admin_ajax_forbidden' => esc_html__( 'Unable to connect to server. Please contact your administrator.', 'wp-ulike' ),
+                /* translators: Error message when server endpoint is not found */
+                'errors.admin_ajax_not_found' => esc_html__( 'Server endpoint not found. Please check your configuration.', 'wp-ulike' ),
+                /* translators: Generic server error message */
+                'errors.server_error' => esc_html__( 'Server error. Please try again later.', 'wp-ulike' ),
+                /* translators: Network connection error message */
+                'errors.network_error' => esc_html__( 'Unable to connect to server. Please check your internet connection and try again.', 'wp-ulike' ),
+                /* translators: CORS (Cross-Origin Resource Sharing) error message */
+                'errors.cors_error' => esc_html__( 'Connection blocked. Please contact your administrator.', 'wp-ulike' ),
+                /* translators: Request timeout error message */
+                'errors.timeout' => esc_html__( 'Request timed out. Please try again.', 'wp-ulike' ),
+                /* translators: Error when settings configuration cannot be loaded */
+                'errors.no_schema' => esc_html__( 'Unable to load settings. Configuration data is missing.', 'wp-ulike' ),
 
                 // Actions
+                /* translators: Button text to save changes */
                 'actions.save' => esc_html__( 'Save Changes', 'wp-ulike' ),
+                /* translators: Loading state text while saving */
                 'actions.saving' => esc_html__( 'Saving...', 'wp-ulike' ),
+                /* translators: Button text to reset settings to default values */
                 'actions.reset' => esc_html__( 'Reset to Defaults', 'wp-ulike' ),
+                /* translators: Loading state text while resetting */
                 'actions.resetting' => esc_html__( 'Resetting...', 'wp-ulike' ),
+                /* translators: Button text to remove an item */
                 'actions.remove' => esc_html__( 'Remove', 'wp-ulike' ),
+                /* translators: Button text to upload a file */
                 'actions.upload' => esc_html__( 'Upload', 'wp-ulike' ),
+                /* translators: Button text to import settings */
                 'actions.import' => esc_html__( 'Import', 'wp-ulike' ),
+                /* translators: Loading state text while importing */
                 'actions.importing' => esc_html__( 'Importing...', 'wp-ulike' ),
-                'actions.export' => esc_html__( 'Export & Download', 'wp-ulike' ),
+                /* translators: Button text to export and download settings */
+                'actions.export' => esc_html__( 'Export and Download', 'wp-ulike' ),
+                /* translators: Button text to add an item. %s will be replaced with the item type */
                 'actions.add' => esc_html__( 'Add %s', 'wp-ulike' ),
 
                 // Media Library
+                /* translators: Button text to select media. %s will be replaced with media type (e.g., "image", "video") */
                 'media.select' => esc_html__( 'Select %s', 'wp-ulike' ),
+                /* translators: Button text to use selected media. %s will be replaced with media type */
                 'media.use' => esc_html__( 'Use this %s', 'wp-ulike' ),
+                /* translators: Error when selected media has no URL. %s will be replaced with media type */
                 'media.no_url' => esc_html__( 'Selected %s has no URL', 'wp-ulike' ),
+                /* translators: Message when no file is selected */
                 'media.no_selection' => esc_html__( 'No file selected', 'wp-ulike' ),
+                /* translators: Error message for invalid URL format from media library */
                 'media.url_format_error' => esc_html__( 'Invalid URL format from media library', 'wp-ulike' ),
 
                 // Settings
-                'settings.success' => esc_html__( 'Settings %s successfully!', 'wp-ulike' ),
-                'settings.reset_success' => esc_html__( 'Settings have been reset to default values and saved successfully.', 'wp-ulike' ),
-                'settings.reset_confirm' => esc_html__( 'Are you sure you want to reset all settings to their default values? This action cannot be undone.', 'wp-ulike' ),
+                /* translators: Success message after settings action. %s will be replaced with the action (e.g., "saved", "reset") */
+                'settings.success' => esc_html__( 'Settings %s successfully.', 'wp-ulike' ),
+                /* translators: Success message after resetting settings to defaults */
+                'settings.reset_success' => esc_html__( 'Settings reset to defaults.', 'wp-ulike' ),
+                /* translators: Confirmation dialog text before resetting all settings */
+                'settings.reset_confirm' => esc_html__( 'Reset all settings to defaults? This cannot be undone.', 'wp-ulike' ),
+                /* translators: Warning message when user tries to leave with unsaved changes */
                 'settings.unsaved_warning' => esc_html__( 'You have unsaved changes. Are you sure you want to leave?', 'wp-ulike' ),
+                /* translators: Error message listing validation errors before saving. %s will be replaced with error list */
                 'settings.validation_before_save' => esc_html__( 'Please fix the following errors before saving:%s', 'wp-ulike' ),
+                /* translators: Error when settings are imported locally but failed to save to server */
                 'settings.import_save_failed' => esc_html__( 'Settings imported locally but failed to save to server. Please try saving again.', 'wp-ulike' ),
 
                 // Validation
+                /* translators: Validation error for invalid format. %s will be replaced with field type, and optionally an example will be appended */
                 'validation.invalid' => esc_html__( 'Invalid %s format', 'wp-ulike' ),
-                'validation.invalid_example' => esc_html__( 'Invalid %1$s format. Please enter a valid %1$s (e.g., %2$s)', 'wp-ulike' ),
+                /* translators: Error message for invalid URL protocol */
                 'validation.url_protocol' => esc_html__( 'Invalid URL protocol. Only http, https, and data URLs are allowed.', 'wp-ulike' ),
+                /* translators: Validation error for text exceeding maximum length. %d will be replaced with maximum length */
                 'validation.text_maxlength' => esc_html__( 'Text must be no more than %d characters', 'wp-ulike' ),
+                /* translators: Validation error for number below minimum. %d will be replaced with minimum value */
                 'validation.number_min' => esc_html__( 'Value must be at least %d', 'wp-ulike' ),
+                /* translators: Validation error for number above maximum. %d will be replaced with maximum value */
                 'validation.number_max' => esc_html__( 'Value must be at most %d', 'wp-ulike' ),
+                /* translators: Validation error when upload field requires a URL string */
                 'validation.upload_url_required' => esc_html__( 'Upload value must be a URL string', 'wp-ulike' ),
+                /* translators: Validation error for media field format */
                 'validation.media_format' => esc_html__( 'Media value must be an object with a url property or a valid URL string', 'wp-ulike' ),
 
                 // Backup/Import
+                /* translators: Title for import settings section */
                 'backup.import_title' => esc_html__( 'Import Settings', 'wp-ulike' ),
+                /* translators: Description text for import settings feature */
                 'backup.import_desc' => esc_html__( 'Paste your exported settings JSON below and click Import to restore your configuration. The import should contain only setting values (not schema structure).', 'wp-ulike' ),
+                /* translators: Placeholder text for import JSON textarea */
                 'backup.import_placeholder' => esc_html__( 'Paste your JSON settings here...', 'wp-ulike' ),
+                /* translators: Title for export settings section */
                 'backup.export_title' => esc_html__( 'Export Settings', 'wp-ulike' ),
+                /* translators: Description text for export settings feature */
                 'backup.export_desc' => esc_html__( 'Copy the JSON below or download it as a file to backup your current settings. The export contains only your setting values (not the schema structure).', 'wp-ulike' ),
-                'backup.json_invalid_syntax' => esc_html__( 'Invalid JSON format. Please check your JSON syntax.', 'wp-ulike' ),
-                'backup.json_invalid_object' => esc_html__( 'Invalid JSON format. Expected an object with setting values.', 'wp-ulike' ),
-                'backup.json_invalid_format' => esc_html__( 'Invalid format. Expected a JSON object with setting values only.', 'wp-ulike' ),
+                /* translators: Error message for invalid JSON format */
+                'backup.json_invalid' => esc_html__( 'Invalid JSON format. Please check your JSON syntax.', 'wp-ulike' ),
+                /* translators: Error when no values found in imported data */
                 'backup.no_values' => esc_html__( 'No values found in the import data.', 'wp-ulike' ),
-                'backup.security_threat' => esc_html__( 'Security threat detected! The import contains potentially dangerous content:%s%sImport blocked for security reasons.', 'wp-ulike' ),
-                'backup.validation_failed' => esc_html__( 'Validation failed! The imported data contains invalid values:%s%sPlease fix these errors and try again.', 'wp-ulike' ),
+                /* translators: Security warning when dangerous content detected. %1$s will be replaced with threat list, %2$s with line breaks */
+                'backup.security_threat' => esc_html__( 'Security threat detected. The import contains potentially dangerous content:%1$s%2$sImport blocked for security reasons.', 'wp-ulike' ),
+                /* translators: Validation error when imported data has invalid values. %1$s will be replaced with error list, %2$s with line breaks */
+                'backup.validation_failed' => esc_html__( 'Validation failed. The imported data contains invalid values:%1$s%2$sPlease fix these errors and try again.', 'wp-ulike' ),
 
                 // Code Editor
-                'code_editor.tip' => esc_html__( 'Tip: Select text and click a tag button to wrap it, or click to insert at cursor', 'wp-ulike' ),
+                /* translators: Tip text for code editor usage */
+                'code_editor.tip' => esc_html__( 'Tip: Select text to wrap it, or click to insert at cursor position', 'wp-ulike' ),
+                /* translators: Tab label for visual editor mode */
                 'code_editor.visual' => esc_html__( 'Visual', 'wp-ulike' ),
+                /* translators: Tab label for text editor mode */
                 'code_editor.text' => esc_html__( 'Text', 'wp-ulike' ),
+                /* translators: Tab label for preview mode */
                 'code_editor.preview' => esc_html__( 'Preview', 'wp-ulike' ),
+                /* translators: Message when there is no content to preview */
                 'code_editor.no_content' => esc_html__( 'No content to preview', 'wp-ulike' ),
 
                 // Select Field
+                /* translators: Placeholder text for multi-select dropdown */
                 'select.placeholder_multiple' => esc_html__( 'Select options...', 'wp-ulike' ),
-                'select.placeholder_single' => esc_html__( '-- Select --', 'wp-ulike' ),
+                /* translators: Placeholder text for single-select dropdown */
+                'select.placeholder_single' => esc_html__( 'Select an option', 'wp-ulike' ),
 
                 // Field Errors
+                /* translators: Error when no options are available for a field */
                 'field.no_options' => esc_html__( 'No options available for this field. Please check the schema definition.', 'wp-ulike' ),
-                'field.options_unresolved' => esc_html__( 'Options not available. The dynamic options "%s" could not be resolved. Please check that the PHP backend properly resolves dynamic options in the schema.', 'wp-ulike' ),
+                /* translators: Error when dynamic options cannot be resolved. Simplified message for users */
+                'field.options_unresolved' => esc_html__( 'Options not available. Please check your configuration.', 'wp-ulike' ),
 
                 // Pro Lock
+                /* translators: Label for pro feature */
                 'pro.feature' => esc_html__( 'Pro Feature', 'wp-ulike' ),
+                /* translators: Description text for pro feature */
                 'pro.description' => esc_html__( 'This feature is available in WP ULike Pro', 'wp-ulike' ),
+                /* translators: Button text to upgrade to pro version */
                 'pro.upgrade' => esc_html__( 'Upgrade to Pro', 'wp-ulike' ),
+                /* translators: Link text to read more about pro feature */
                 'pro.read_more' => esc_html__( 'Read More', 'wp-ulike' ),
+                /* translators: Tag label for pro features */
                 'pro.tag' => esc_html__( 'Pro', 'wp-ulike' ),
 
                 // Security
+                /* translators: Security threat type name - SQL Injection */
                 'security.sql_injection' => esc_html__( 'SQL Injection', 'wp-ulike' ),
+                /* translators: Security threat type name - XSS (Cross-Site Scripting) */
                 'security.xss' => esc_html__( 'XSS', 'wp-ulike' ),
+                /* translators: Security threat type name - Command Injection */
                 'security.command_injection' => esc_html__( 'Command Injection', 'wp-ulike' ),
 
                 // Common UI
+                /* translators: Button text to retry a failed action */
                 'ui.retry' => esc_html__( 'Retry', 'wp-ulike' ),
+                /* translators: Label for live preview feature */
                 'ui.live_preview' => esc_html__( 'Live Preview', 'wp-ulike' ),
+                /* translators: Error message when preview fails to load */
                 'ui.failed_to_load_preview' => esc_html__( 'Failed to load preview', 'wp-ulike' ),
 
                 // Customizer
+                /* translators: Label for templates section */
                 'customizer.templates' => esc_html__( 'Templates', 'wp-ulike' ),
+                /* translators: Message when no preview templates are available */
                 'customizer.no_preview_templates' => esc_html__( 'No preview templates available', 'wp-ulike' ),
+                /* translators: Instruction text for selecting a template section */
                 'customizer.select_section' => esc_html__( 'Select a template section to customize', 'wp-ulike' ),
-                'customizer.options' => esc_html__( 'Options', 'wp-ulike' ),
-
 
                 // Common Field Labels (used across multiple field types)
+                /* translators: Label for width field */
                 'field.width' => esc_html__( 'Width', 'wp-ulike' ),
+                /* translators: Label for height field */
                 'field.height' => esc_html__( 'Height', 'wp-ulike' ),
+                /* translators: Label for color field */
                 'field.color' => esc_html__( 'Color', 'wp-ulike' ),
+                /* translators: Label for style field */
                 'field.style' => esc_html__( 'Style', 'wp-ulike' ),
 
                 // Field Labels - Typography
+                /* translators: Label for font family field */
                 'field.typography.font_family' => esc_html__( 'Font Family', 'wp-ulike' ),
+                /* translators: Label for font size field */
                 'field.typography.font_size' => esc_html__( 'Font Size', 'wp-ulike' ),
+                /* translators: Label for font weight field */
                 'field.typography.font_weight' => esc_html__( 'Font Weight', 'wp-ulike' ),
+                /* translators: Label for line height field */
                 'field.typography.line_height' => esc_html__( 'Line Height', 'wp-ulike' ),
+                /* translators: Label for letter spacing field */
                 'field.typography.letter_spacing' => esc_html__( 'Letter Spacing', 'wp-ulike' ),
+                /* translators: Label for text align field */
                 'field.typography.text_align' => esc_html__( 'Text Align', 'wp-ulike' ),
+                /* translators: Label for text transform field */
                 'field.typography.text_transform' => esc_html__( 'Text Transform', 'wp-ulike' ),
+                /* translators: Label for text decoration field */
                 'field.typography.text_decoration' => esc_html__( 'Text Decoration', 'wp-ulike' ),
 
                 // Field Labels - Spacing
+                /* translators: Label for top spacing */
                 'field.spacing.top' => esc_html__( 'Top', 'wp-ulike' ),
+                /* translators: Label for right spacing */
                 'field.spacing.right' => esc_html__( 'Right', 'wp-ulike' ),
+                /* translators: Label for bottom spacing */
                 'field.spacing.bottom' => esc_html__( 'Bottom', 'wp-ulike' ),
+                /* translators: Label for left spacing */
                 'field.spacing.left' => esc_html__( 'Left', 'wp-ulike' ),
 
                 // Field Labels - Background
+                /* translators: Label for background color field */
                 'field.background.color' => esc_html__( 'Background Color', 'wp-ulike' ),
+                /* translators: Label for background image field */
                 'field.background.image' => esc_html__( 'Background Image', 'wp-ulike' ),
+                /* translators: Label for background repeat field */
                 'field.background.repeat' => esc_html__( 'Repeat', 'wp-ulike' ),
+                /* translators: Label for background position field */
                 'field.background.position' => esc_html__( 'Position', 'wp-ulike' ),
+                /* translators: Label for background size field */
                 'field.background.size' => esc_html__( 'Size', 'wp-ulike' ),
+                /* translators: Label for background attachment field */
                 'field.background.attachment' => esc_html__( 'Attachment', 'wp-ulike' ),
 
                 // General Labels
+                /* translators: Generic label for options (used in multiple contexts) */
                 'general.options' => esc_html__( 'Options', 'wp-ulike' ),
+                /* translators: Generic label for general section */
                 'general.general' => esc_html__( 'General', 'wp-ulike' ),
+                /* translators: Generic label for settings */
                 'general.settings' => esc_html__( 'Settings', 'wp-ulike' ),
+                /* translators: Generic label for new item */
                 'general.new' => esc_html__( 'New', 'wp-ulike' ),
+                /* translators: Generic label for item */
                 'general.item' => esc_html__( 'Item', 'wp-ulike' ),
 
             );
@@ -1228,8 +1326,8 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
          */
         protected function convert_sprintf_to_i18next( $translations ) {
             // Mapping of WordPress sprintf patterns to i18next variable names
+            // Note: validation.invalid now uses optional {example} parameter appended in code
             $variable_mapping = array(
-                'errors.failed' => array( '%s' => '{action}' ),
                 'actions.add' => array( '%s' => '{type}' ),
                 'media.select' => array( '%s' => '{type}' ),
                 'media.use' => array( '%s' => '{type}' ),
@@ -1237,13 +1335,11 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'settings.success' => array( '%s' => '{action}' ),
                 'settings.validation_before_save' => array( '%s' => '{errorMessages}' ),
                 'validation.invalid' => array( '%s' => '{type}' ),
-                'validation.invalid_example' => array( '%1$s' => '{type}', '%2$s' => '{example}' ),
                 'validation.text_maxlength' => array( '%d' => '{maxlength}' ),
                 'validation.number_min' => array( '%d' => '{min}' ),
                 'validation.number_max' => array( '%d' => '{max}' ),
                 'backup.security_threat' => array( '%1$s' => '{threatList}', '%2$s' => '\n\n' ),
                 'backup.validation_failed' => array( '%1$s' => '{errorList}', '%2$s' => '\n\n' ),
-                'field.options_unresolved' => array( '%s' => '{options}' ),
             );
 
             foreach ( $translations as $key => $translation ) {
