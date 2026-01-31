@@ -57,7 +57,7 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 		if ( strpos( $option, '|' ) && is_array( $settings ) ) {
 			$option_path = explode( "|", $option );
 			$value = $settings;
-			
+
 			foreach ( $option_path as $key ) {
 				if ( isset( $value[ $key ] ) ) {
 					$value = $value[ $key ];
@@ -65,7 +65,7 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 					return $default;
 				}
 			}
-			
+
 			return $value;
 		}
 
@@ -707,6 +707,7 @@ if( ! function_exists('wp_ulike_lock_file') ){
 if( ! function_exists('wp_ulike_kses') ){
 	/**
 	 * Filters text content and strips out disallowed HTML.
+	 * Extends WordPress's safe CSS properties to support modern CSS like display: flex
 	 *
 	 * @param string $value
 	 * @return string
@@ -752,7 +753,46 @@ if( ! function_exists('wp_ulike_kses') ){
 		// Decode HTML entities (in case the input is encoded)
 		$value = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );
 
-		return wp_kses($value, $allowedtags);
+		// Temporarily extend safe_style_css filter to allow modern CSS properties
+		add_filter( 'safe_style_css', 'wp_ulike_extend_safe_css_properties', 10, 1 );
+
+		$sanitized = wp_kses( $value, $allowedtags );
+
+		// Remove filter to avoid affecting other parts of WordPress
+		remove_filter( 'safe_style_css', 'wp_ulike_extend_safe_css_properties', 10 );
+
+		return $sanitized;
+	}
+}
+
+if( ! function_exists('wp_ulike_extend_safe_css_properties') ){
+	/**
+	 * Extend WordPress's safe CSS properties to include only missing essential properties
+	 * WordPress already includes most CSS properties (flexbox, grid, box model, etc.)
+	 * This adds only the critical missing ones, primarily 'display' for display: flex
+	 *
+	 * Performance: This is very safe and fast:
+	 * - Filter add/remove is O(1) operation
+	 * - Array merge is fast (tiny array)
+	 * - Only runs during wp_kses() calls (already happening)
+	 * - Filter is scoped to only this function call
+	 *
+	 * @param array $styles WordPress's default safe CSS properties
+	 * @return array Extended list of safe CSS properties
+	 */
+	function wp_ulike_extend_safe_css_properties( $styles ) {
+		// Only add properties that WordPress doesn't already include by default
+		// The main one is 'display' which is critical for display: flex, display: grid, etc.
+		$additional_styles = array(
+			'display',           // Critical: needed for display: flex, display: grid, display: none, etc.
+			'overflow-x',         // Useful: directional overflow (WordPress has 'overflow' but not directional)
+			'overflow-y',         // Useful: directional overflow
+			'text-shadow',       // Useful: text shadow effects
+			'box-sizing',        // Useful: box-sizing: border-box
+			'visibility',        // Useful: visibility: hidden/visible
+		);
+
+		return array_merge( $styles, $additional_styles );
 	}
 }
 

@@ -644,7 +644,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 // Sanitize string values (allows HTML but escapes dangerous scripts)
                 // For code editors and textareas that may contain HTML, use wp_kses_post
                 // For simple text fields, you might want to use sanitize_text_field instead
-                return wp_kses_post( $values );
+                return wp_ulike_kses( $values );
             } elseif ( is_bool( $values ) ) {
                 // Convert boolean to integer (WordPress convention: 1 for true, 0 for false)
                 // This ensures false values are saved as 0 instead of empty, making them visible in debug logs
