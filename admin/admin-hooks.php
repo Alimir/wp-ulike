@@ -38,24 +38,6 @@ function wp_ulike_copyright( $text ) {
 add_filter( 'admin_footer_text', 'wp_ulike_copyright' );
 
 
-/**
- * Filters a screen option value before it is set.
- *
- * @param string $status
- * @param string $option The option name.
- * @param string $value The number of rows to use.
- * @return string
- */
-function wp_ulike_logs_per_page_set_option( $status, $option, $value ) {
-
-	if ( 'wp_ulike_logs_per_page' == $option ) {
-		return $value;
-	}
-
-	return $status;
-}
-add_filter( 'set-screen-option', 'wp_ulike_logs_per_page_set_option', 10, 3 );
-
  /**
   * The Filter is used at the very end of the get_avatar() function
   *
@@ -296,38 +278,6 @@ function wp_ulike_notice_manager(){
 				)
 			]);
 		}
-		if( strpos( $screen->base, WP_ULIKE_SLUG ) !== false ){
-			$notice_list[ 'wp_ulike_pro_user_profiles' ] = new wp_ulike_notices([
-				'id'          => 'wp_ulike_pro_user_profiles',
-				'title'       => esc_html__( 'Create Beautiful User Profiles Your Community Will Love! 🎨', 'wp-ulike' ),
-				'description' => esc_html__( 'Want to take your community engagement to the next level? With WP ULike Pro, you can build stunning Instagram-style user profiles that keep users coming back! Get modern layouts, smooth avatar uploads, engagement tools, secure login, and more — all optimized for mobile and built without jQuery. Perfect for communities, courses, marketplaces, and membership sites!', 'wp-ulike' ),
-				'skin'        => 'default',
-				'has_close'   => true,
-				'buttons'     => array(
-					array(
-						'label'      => esc_html__( "✨ Discover Profile Builder", 'wp-ulike' ),
-						'link'       => WP_ULIKE_PLUGIN_URI . 'blog/best-wordpress-profile-builder-plugin/?utm_source=settings-page-banner&utm_campaign=gopro&utm_medium=wp-dash',
-						'color_name' => 'default'
-					),
-					array(
-						'label'      => esc_html__('Maybe Later', 'wp-ulike'),
-						'type'       => 'skip',
-						'color_name' => 'info',
-						'expiration' => WEEK_IN_SECONDS * 2
-					),
-					array(
-						'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
-						'type'       => 'skip',
-						'color_name' => 'info',
-						'expiration' => YEAR_IN_SECONDS * 10
-					)
-				),
-				'image'     => array(
-					'width' => '100',
-					'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/profiles.svg'
-				)
-			]);
-		}
 	}
 
     $notice_list = apply_filters( 'wp_ulike_admin_notices_instances', $notice_list );
@@ -382,179 +332,6 @@ function wp_ulike_hide_admin_notifications( $notice_list ){
 	return wp_ulike_is_true( $hide_admin_notice ) && strpos( $screen->base, WP_ULIKE_SLUG ) === false ? array() : $notice_list;
 }
 add_filter( 'wp_ulike_admin_notices_instances', 'wp_ulike_hide_admin_notifications', 20, 1 );
-
-
-/**
- * Upgarde old option values
- *
- * @return void
- */
-function wp_ulike_upgrade_deprecated_options_value(){
-
-	$is_deprecated_enabled     = wp_ulike_get_option( 'enable_deprecated_options' );
-	$deprecated_options_status = get_option( 'wp_ulike_deprecated_options_status', false );
-
-	if( ! wp_ulike_is_true( $is_deprecated_enabled ) || $deprecated_options_status ){
-		return;
-	}
-
-	$get_general_options    = get_option( 'wp_ulike_general', array() );
-	$get_posts_options      = get_option( 'wp_ulike_posts', array() );
-	$get_comments_options   = get_option( 'wp_ulike_comments', array() );
-	$get_buddypress_options = get_option( 'wp_ulike_buddypress', array() );
-	$get_bbpress_options    = get_option( 'wp_ulike_bbpress', array() );
-	$get_customize_options  = get_option( 'wp_ulike_customize', array() );
-
-	$final_options_stack    = array();
-
-	// Update general options
-	if( !empty( $get_posts_options ) ){
-		$final_options_stack = array (
-			'enable_kilobyte_format'    => !empty($get_general_options['format_number']) ? $get_general_options['format_number'] : false,
-			'enable_toast_notice'       => !empty($get_general_options['notifications']) ? $get_general_options['notifications'] : true,
-			'enable_anonymise_ip'       => !empty($get_general_options['anonymise']) ? $get_general_options['anonymise'] : false,
-			'disable_admin_notice'      => !empty($get_general_options['hide_admin_notice']) ? $get_general_options['hide_admin_notice'] : true,
-			'enable_meta_values'        => !empty($get_general_options['enable_meta_values']) ? $get_general_options['enable_meta_values'] : false,
-			'already_registered_notice' => !empty($get_general_options['permission_text']) ? $get_general_options['permission_text'] : 'You have already registered a vote.',
-			'login_required_notice'     => !empty($get_general_options['login_text']) ? $get_general_options['permission_text'] : 'You Should Login To Submit Your Like',
-			'like_notice'               => !empty($get_general_options['like_notice']) ? $get_general_options['like_notice'] : 'Thanks! You liked This.',
-			'unlike_notice'             => !empty($get_general_options['unlike_notice']) ? $get_general_options['unlike_notice'] : 'Sorry! You unliked this.',
-			'dislike_notice'            => !empty($get_general_options['dislike_notice']) ? $get_general_options['dislike_notice'] : 'Sorry! You disliked this.',
-			'undislike_notice'          => !empty($get_general_options['undislike_notice']) ? $get_general_options['undislike_notice'] : 'Thanks! You undisliked This.',
-			'custom_css'                => !empty($get_customize_options['custom_css']) ? $get_customize_options['custom_css'] : '',
-			'enable_deprecated_options' => true,
-		);
-	}
-
-	// Update posts options
-	if( !empty( $get_posts_options ) ){
-		$final_options_stack['posts_group'] = array (
-			'template'    => !empty($get_posts_options['theme']) ? $get_posts_options['theme'] : 'wpulike-default',
-			'button_type' => !empty($get_general_options['button_type']) ? $get_general_options['button_type'] : 'image',
-			'text_group'  => array (
-				'like'      => !empty($get_general_options['button_text']) ? $get_general_options['button_text'] : 'Like',
-				'unlike'    => !empty($get_general_options['button_text_u']) ? $get_general_options['button_text_u'] : 'Liked',
-				'dislike'   => !empty($get_general_options['dislike_text']) ? $get_general_options['dislike_text'] : 'Dislike',
-				'undislike' => !empty($get_general_options['undislike_text']) ? $get_general_options['undislike_text'] : 'Disliked'
-			),
-			'image_group' => array (
-				'like'      => !empty($get_general_options['button_url']) ? $get_general_options['button_url'] : '',
-				'unlike'    => !empty($get_general_options['button_url_u']) ? $get_general_options['button_url_u'] : '',
-				'dislike'   => !empty($get_general_options['button_texbutton_urlt']) ? $get_general_options['button_url'] : '',
-				'undislike' => !empty($get_general_options['button_url_u']) ? $get_general_options['button_url_u'] : '',
-			),
-			'enable_auto_display'         => !empty($get_posts_options['auto_display']) ? $get_posts_options['auto_display'] : false,
-			'auto_display_position'       => !empty($get_posts_options['auto_display_position']) ? $get_posts_options['auto_display_position'] : 'bottom',
-			'auto_display_filter'         => !empty($get_posts_options['auto_display_filter']) ? wp_ulike_convert_old_options_array( $get_posts_options['auto_display_filter'] ) : '',
-			'logging_method'              => !empty($get_posts_options['logging_method']) ? $get_posts_options['logging_method'] : 'by_username',
-			'enable_only_logged_in_users' => !empty($get_posts_options['only_registered_users']) ? $get_posts_options['only_registered_users'] : false,
-			'logged_out_display_type'     => !empty($get_general_options['login_type']) ? $get_general_options['login_type'] : 'button',
-			'enable_likers_box'           => !empty($get_posts_options['users_liked_box']) ? $get_posts_options['users_liked_box'] : false,
-			'disable_likers_pophover'     => !empty($get_posts_options['disable_likers_pophover']) ? $get_posts_options['disable_likers_pophover'] : false,
-			'likers_gravatar_size'        => !empty($get_posts_options['users_liked_box_avatar_size']) ? $get_posts_options['users_liked_box_avatar_size'] : 64,
-			'likers_count'                => !empty($get_posts_options['number_of_users']) ? $get_posts_options['number_of_users'] : 10,
-			'likers_template'             => !empty($get_posts_options['likers_template']) ? $get_posts_options['likers_template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
-		);
-	}
-	// Update comments options
-	if( !empty( $get_comments_options ) ){
-		$final_options_stack['comments_group'] = array (
-			'template'    => !empty($get_comments_options['theme']) ? $get_comments_options['theme'] : 'wpulike-default',
-			'button_type' => !empty($get_general_options['button_type']) ? $get_general_options['button_type'] : 'image',
-			'text_group'  => array (
-				'like'      => !empty($get_general_options['button_text']) ? $get_general_options['button_text'] : 'Like',
-				'unlike'    => !empty($get_general_options['button_text_u']) ? $get_general_options['button_text_u'] : 'Liked',
-				'dislike'   => !empty($get_general_options['dislike_text']) ? $get_general_options['dislike_text'] : 'Dislike',
-				'undislike' => !empty($get_general_options['undislike_text']) ? $get_general_options['undislike_text'] : 'Disliked'
-			),
-			'image_group' => array (
-				'like'      => !empty($get_general_options['button_url']) ? $get_general_options['button_url'] : '',
-				'unlike'    => !empty($get_general_options['button_url_u']) ? $get_general_options['button_url_u'] : '',
-				'dislike'   => !empty($get_general_options['button_texbutton_urlt']) ? $get_general_options['button_url'] : '',
-				'undislike' => !empty($get_general_options['button_url_u']) ? $get_general_options['button_url_u'] : '',
-			),
-			'enable_auto_display'         => !empty($get_comments_options['auto_display']) ? $get_comments_options['auto_display'] : false,
-			'auto_display_position'       => !empty($get_comments_options['auto_display_position']) ? $get_comments_options['auto_display_position'] : 'bottom',
-			'logging_method'              => !empty($get_comments_options['logging_method']) ? $get_comments_options['logging_method'] : 'by_username',
-			'enable_only_logged_in_users' => !empty($get_comments_options['only_registered_users']) ? $get_comments_options['only_registered_users'] : false,
-			'logged_out_display_type'     => !empty($get_general_options['login_type']) ? $get_general_options['login_type'] : 'button',
-			'enable_likers_box'           => !empty($get_comments_options['users_liked_box']) ? $get_comments_options['users_liked_box'] : false,
-			'disable_likers_pophover'     => !empty($get_comments_options['disable_likers_pophover']) ? $get_comments_options['disable_likers_pophover'] : false,
-			'likers_gravatar_size'        => !empty($get_comments_options['users_liked_box_avatar_size']) ? $get_comments_options['users_liked_box_avatar_size'] : 64,
-			'likers_count'                => !empty($get_comments_options['number_of_users']) ? $get_comments_options['number_of_users'] : 10,
-			'likers_template'             => !empty($get_comments_options['likers_template']) ? $get_comments_options['likers_template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
-		);
-	}
-	// Update buddyPress options
-	if( !empty( $get_buddypress_options ) ){
-		$final_options_stack['buddypress_group'] = array (
-			'template'    => !empty($get_buddypress_options['theme']) ? $get_buddypress_options['theme'] : 'wpulike-default',
-			'button_type' => !empty($get_general_options['button_type']) ? $get_general_options['button_type'] : 'image',
-			'text_group'  => array (
-				'like'      => !empty($get_general_options['button_text']) ? $get_general_options['button_text'] : 'Like',
-				'unlike'    => !empty($get_general_options['button_text_u']) ? $get_general_options['button_text_u'] : 'Liked',
-				'dislike'   => !empty($get_general_options['dislike_text']) ? $get_general_options['dislike_text'] : 'Dislike',
-				'undislike' => !empty($get_general_options['undislike_text']) ? $get_general_options['undislike_text'] : 'Disliked'
-			),
-			'image_group' => array (
-				'like'      => !empty($get_general_options['button_url']) ? $get_general_options['button_url'] : '',
-				'unlike'    => !empty($get_general_options['button_url_u']) ? $get_general_options['button_url_u'] : '',
-				'dislike'   => !empty($get_general_options['button_texbutton_urlt']) ? $get_general_options['button_url'] : '',
-				'undislike' => !empty($get_general_options['button_url_u']) ? $get_general_options['button_url_u'] : '',
-			),
-			'enable_auto_display'            => !empty($get_buddypress_options['auto_display']) ? $get_buddypress_options['auto_display'] : false,
-			'auto_display_position'          => !empty($get_buddypress_options['auto_display_position']) ? $get_buddypress_options['auto_display_position'] : 'content',
-			'logging_method'                 => !empty($get_buddypress_options['logging_method']) ? $get_buddypress_options['logging_method'] : 'by_username',
-			'enable_only_logged_in_users'    => !empty($get_buddypress_options['only_registered_users']) ? $get_buddypress_options['only_registered_users'] : false,
-			'logged_out_display_type'        => !empty($get_general_options['login_type']) ? $get_general_options['login_type'] : 'button',
-			'enable_likers_box'              => !empty($get_buddypress_options['users_liked_box']) ? $get_buddypress_options['users_liked_box'] : false,
-			'disable_likers_pophover'        => !empty($get_buddypress_options['disable_likers_pophover']) ? $get_buddypress_options['disable_likers_pophover'] : false,
-			'likers_gravatar_size'           => !empty($get_buddypress_options['users_liked_box_avatar_size']) ? $get_buddypress_options['users_liked_box_avatar_size'] : 64,
-			'likers_count'                   => !empty($get_buddypress_options['number_of_users']) ? $get_buddypress_options['number_of_users'] : 10,
-			'likers_template'                => !empty($get_buddypress_options['likers_template']) ? $get_buddypress_options['likers_template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
-			'enable_comments'                => !empty($get_buddypress_options['activity_comment']) ? $get_buddypress_options['activity_comment'] : false,
-			'enable_add_bp_activity'         => !empty($get_buddypress_options['new_likes_activity']) ? $get_buddypress_options['new_likes_activity'] : false,
-			'posts_notification_template'    => !empty($get_buddypress_options['bp_post_activity_add_header']) ? $get_buddypress_options['bp_post_activity_add_header'] : '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)',
-			'comments_notification_template' => !empty($get_buddypress_options['bp_comment_activity_add_header']) ? $get_buddypress_options['bp_comment_activity_add_header'] : '<strong>%POST_LIKER%</strong> liked <a href="%POST_PERMALINK%" title="%POST_TITLE%">%POST_TITLE%</a>. (So far, This post has <span class="badge">%POST_COUNT%</span> likes)',
-			'enable_add_notification'        => !empty($get_buddypress_options['custom_notification']) ? $get_buddypress_options['custom_notification'] : false
-		);
-	}
-	// Update bbPress options
-	if( !empty( $get_bbpress_options ) ){
-		$final_options_stack['bbpress_group'] = array (
-			'template'    => !empty($get_bbpress_options['theme']) ? $get_bbpress_options['theme'] : 'wpulike-default',
-			'button_type' => !empty($get_general_options['button_type']) ? $get_general_options['button_type'] : 'image',
-			'text_group'  => array (
-				'like'      => !empty($get_general_options['button_text']) ? $get_general_options['button_text'] : 'Like',
-				'unlike'    => !empty($get_general_options['button_text_u']) ? $get_general_options['button_text_u'] : 'Liked',
-				'dislike'   => !empty($get_general_options['dislike_text']) ? $get_general_options['dislike_text'] : 'Dislike',
-				'undislike' => !empty($get_general_options['undislike_text']) ? $get_general_options['undislike_text'] : 'Disliked'
-			),
-			'image_group' => array (
-				'like'      => !empty($get_general_options['button_url']) ? $get_general_options['button_url'] : '',
-				'unlike'    => !empty($get_general_options['button_url_u']) ? $get_general_options['button_url_u'] : '',
-				'dislike'   => !empty($get_general_options['button_texbutton_urlt']) ? $get_general_options['button_url'] : '',
-				'undislike' => !empty($get_general_options['button_url_u']) ? $get_general_options['button_url_u'] : '',
-			),
-			'enable_auto_display'         => !empty($get_bbpress_options['auto_display']) ? $get_bbpress_options['auto_display'] : false,
-			'auto_display_position'       => !empty($get_bbpress_options['auto_display_position']) ? $get_bbpress_options['auto_display_position'] : 'bottom',
-			'logging_method'              => !empty($get_bbpress_options['logging_method']) ? $get_bbpress_options['logging_method'] : 'by_username',
-			'enable_only_logged_in_users' => !empty($get_bbpress_options['only_registered_users']) ? $get_bbpress_options['only_registered_users'] : false,
-			'logged_out_display_type'     => !empty($get_general_options['login_type']) ? $get_general_options['login_type'] : 'button',
-			'enable_likers_box'           => !empty($get_bbpress_options['users_liked_box']) ? $get_bbpress_options['users_liked_box'] : false,
-			'disable_likers_pophover'     => !empty($get_bbpress_options['disable_likers_pophover']) ? $get_bbpress_options['disable_likers_pophover'] : false,
-			'likers_gravatar_size'        => !empty($get_bbpress_options['users_liked_box_avatar_size']) ? $get_bbpress_options['users_liked_box_avatar_size'] : 64,
-			'likers_count'                => !empty($get_bbpress_options['number_of_users']) ? $get_bbpress_options['number_of_users'] : 10,
-			'likers_template'             => !empty($get_bbpress_options['likers_template']) ? $get_bbpress_options['likers_template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>'
-		);
-	}
-
-	// Update flag option
-	update_option( 'wp_ulike_deprecated_options_status', true );
-	// Update option values
-	update_option( 'wp_ulike_settings', $final_options_stack  );
-}
-// add_action( 'admin_init', 'wp_ulike_upgrade_deprecated_options_value' );
 
 
 /**
@@ -763,3 +540,48 @@ function wp_ulike_panel_customization_section( $options ) {
 	return $options;
 }
 add_filter( 'wp_ulike_panel_customization', 'wp_ulike_panel_customization_section', 10, 1 );
+
+/**
+ * Stores css content in custom css file when settings or customizer are saved
+ * Always tries to generate the file regardless of user preference (for debugging/inspection)
+ * User preference only controls the delivery method (file vs inline)
+ *
+ * @param array $values The saved values (not used but available)
+ * @return boolean Returns true if the file is created and updated successfully, false on failure
+ */
+function wp_ulike_save_custom_css( $values = null ){
+    $css_string = wp_ulike_get_custom_style();
+    $css_string = wp_ulike_minify_css( $css_string );
+
+    if ( ! empty( $css_string ) && wp_ulike_put_contents_dir( $css_string, 'custom.css' ) ) {
+        // File created successfully - directory is writable
+        update_option( 'wp_ulike_use_inline_custom_css' , 0 );
+        return true;
+    } else {
+        // File creation failed - directory not writable, must use inline fallback
+        update_option( 'wp_ulike_use_inline_custom_css' , 1 );
+        return false;
+    }
+}
+// Hook to save CSS file when settings are saved
+add_action( 'wp_ulike_settings_saved', 'wp_ulike_save_custom_css', 15, 1 );
+// Hook to save CSS file when customizer is saved
+add_action( 'wp_ulike_customizer_saved', 'wp_ulike_save_custom_css', 15, 1 );
+
+/**
+ * Clear CSS generator cache when customizer is saved
+ * This ensures cache is cleared AFTER new values are saved
+ *
+ * @param array $new_values Optional. New customizer values
+ * @return void
+ */
+function wp_ulike_clear_css_generator_cache( $new_values = null ) {
+	if ( class_exists( 'wp_ulike_css_generator' ) ) {
+		$css_generator = new wp_ulike_css_generator();
+		if ( method_exists( $css_generator, 'clear_cache' ) ) {
+			$css_generator->clear_cache( $new_values );
+		}
+	}
+}
+// Hook to clear CSS cache when customizer is saved
+add_action( 'wp_ulike_customizer_saved', 'wp_ulike_clear_css_generator_cache', 10, 1 );

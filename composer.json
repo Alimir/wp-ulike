@@ -13,8 +13,7 @@
         }
     ],
     "require": {
-        "vectorface/whip": "^0.4.0",
-        "matomo/device-detector": "^6.4"
+        "vectorface/whip": "^0.4.0"
     },
     "config": {
         "platform-check": false

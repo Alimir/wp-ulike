@@ -28,11 +28,11 @@
 					<span class="dashicons dashicons-info"></span>
 					<span><?php esc_html_e('About','wp-ulike'); ?></span>
 				</a>
-				<a class="wp-ulike-about-nav-tab" href="admin.php?page=wp-ulike-settings#tab=configuration" target="_blank">
+				<a class="wp-ulike-about-nav-tab" href="admin.php?page=wp-ulike-settings" target="_blank">
 					<span class="dashicons dashicons-admin-settings"></span>
 					<span><?php esc_html_e('Configuration','wp-ulike'); ?></span>
 				</a>
-				<a class="wp-ulike-about-nav-tab" href="<?php echo esc_url( self_admin_url( 'customize.php' ) ); ?>" target="_blank">
+				<a class="wp-ulike-about-nav-tab" href="admin.php?page=wp-ulike-customize" target="_blank">
 					<span class="dashicons dashicons-admin-appearance"></span>
 					<span><?php esc_html_e('Customize','wp-ulike'); ?></span>
 				</a>

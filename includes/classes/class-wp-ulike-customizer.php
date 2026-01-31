@@ -13,49 +13,51 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
     class wp_ulike_customizer{
 
         protected $option_domain = 'wp_ulike_customize';
+        protected $sections_cache = null;
 
 		/**
 		 * __construct
 		 */
 		function __construct() {
-            add_action( 'ulf_loaded', array( $this, 'register_panel' ) );
+            // No framework dependencies - just initialize
         }
 
         /**
-         * Register setting panel
+         * Register customizer sections
+         * Returns array structure for API consumption
          *
-         * @return void
+         * @return array Sections structure
          */
-        public function register_panel(){
-            // Create customize options
-            ULF::createCustomizeOptions( $this->option_domain, array(
-                'database'        => 'option',
-                'transport'       => 'refresh',
-                'save_defaults'   => true,
-                'enqueue_webfont' => true,
-                'async_webfont'   => false,
-                'output_css'      => true,
-            ) );
+        public function register_sections(){
+            // Return cached sections if available
+            if ( $this->sections_cache !== null ) {
+                return $this->sections_cache;
+            }
 
-            do_action( 'wp_ulike_customize_loaded' );
+            do_action( 'wp_ulike_customize_started' );
 
-            ULF::createSection( $this->option_domain, array(
+            $sections = array();
+
+            $parent_section = array(
                 'id'    => WP_ULIKE_SLUG,   // Set a unique slug-like ID
                 'title' => esc_html__( 'WP ULike', 'wp-ulike' )
-            ) );
+            );
 
-            ULF::createSection( $this->option_domain, array(
+            // Expose section via filter for API access
+            apply_filters( 'wp_ulike_optiwich_customizer_section', $parent_section, $this->option_domain );
+
+            $sections[] = $parent_section;
+
+            $sections[] = array(
                 'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
+                'id'     => 'button_templates',
                 'title'  => esc_html__( 'Button Templates', 'wp-ulike' ),
+                'template' => 'button',                              // Template ID for customizer preview
+                'icon'   => 'cursor-arrow-rays',                     // Icon for template selector
                 'fields' => array(
                     array(
                         'type'    => 'heading',
                         'content' => esc_html__( 'Template Wrapper', 'wp-ulike' ),
-                    ),
-                    array(
-                        'type'    => 'submessage',
-                        'style'   => 'info',
-                        'content' => esc_html__( 'In this section, you can customize the styles.', 'wp-ulike' ),
                     ),
                     array(
                         'id'               => 'template_typography',
@@ -64,6 +66,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Typography', 'wp-ulike' ),
                         'output'           => '.wpulike .wp_ulike_general_class, .wpulike .wp_ulike_put_text, .wpulike .wp_ulike_general_class .count-box',
+                        'units'            => array('px', 'em', 'rem')
                     ),
                     array(
                         'id'            => 'template_group',
@@ -84,6 +87,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                 )
                             ),
@@ -104,6 +108,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Border', 'wp-ulike' ),
                                         'output'           => '.wpulike .wp_ulike_general_class:hover',
+                                        'units'            => array('px', 'em', 'rem', '%')
                                     ),
                                 )
                             ),
@@ -122,6 +127,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class.wp_ulike_is_already_liked, .wpulike .wp_ulike_general_class.wp_ulike_is_liked',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                 )
                             ),
@@ -133,6 +139,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Padding', 'wp-ulike' ),
                         'output'           => '.wpulike .wp_ulike_general_class',
+                        'units'            => array('px', 'em', 'rem', '%')
                     ),
                     array(
                         'id'               => 'template_margin',
@@ -141,17 +148,13 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Margin', 'wp-ulike' ),
                         'output'           => '.wpulike .wp_ulike_general_class',
+                        'units'            => array('px', 'em', 'rem', '%')
                     ),
 
                     // Start button section
                     array(
                         'type'    => 'heading',
                         'content' => esc_html__( 'Button', 'wp-ulike' ),
-                    ),
-                    array(
-                        'type'    => 'submessage',
-                        'style'   => 'info',
-                        'content' => esc_html__( 'In this section, you can customize the styles. Please note that some buttons have different structures (such as SVG based) and therefore you should be more careful in setting them.', 'wp-ulike' ),
                     ),
                     array(
                         'id'            => 'button_group',
@@ -178,6 +181,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class .wp_ulike_btn',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'button_image_dimensions',
@@ -185,6 +189,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike .wp_ulike_general_class .wp_ulike_btn.wp_ulike_put_image::after',
+                                        'units'            => array('px', 'em', 'rem', '%')
                                     ),
                                     array(
                                         'id'               => 'normal_like_image',
@@ -219,6 +224,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Border', 'wp-ulike' ),
                                         'output'           => '.wpulike .wp_ulike_general_class .wp_ulike_btn:hover',
+                                        'units'            => array('px', 'em', 'rem', '%')
                                     ),
                                     array(
                                         'id'               => 'hover_like_image',
@@ -251,6 +257,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class .wp_ulike_btn.wp_ulike_btn_is_active',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'active_like_image',
@@ -269,6 +276,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Button Dimensions', 'wp-ulike' ),
                         'output'           => '.wpulike .wp_ulike_general_class .wp_ulike_btn',
+                        'units'            => array('px', 'em', 'rem', '%')
                     ),
                     array(
                         'id'               => 'button_padding',
@@ -276,6 +284,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Padding', 'wp-ulike' ),
                         'output'           => '.wpulike .wp_ulike_general_class .wp_ulike_btn',
+                        'units'            => array('px', 'em', 'rem', '%')
                     ),
                     array(
                         'id'               => 'button_margin',
@@ -284,6 +293,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Margin', 'wp-ulike' ),
                         'output'           => '.wpulike .wp_ulike_general_class .wp_ulike_btn',
+                        'units'            => array('px', 'em', 'rem', '%')
                     ),
                     array(
                         'id'         => 'button_align',
@@ -300,11 +310,6 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'type'    => 'heading',
                         'content' => esc_html__( 'Counter', 'wp-ulike' ),
-                    ),
-                    array(
-                        'type'    => 'submessage',
-                        'style'   => 'info',
-                        'content' => esc_html__( 'In this section, you can customize the styles.', 'wp-ulike' ),
                     ),
                     array(
                         'id'            => 'counter_group',
@@ -331,6 +336,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class .count-box',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                 )
                             ),
@@ -355,6 +361,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike .wp_ulike_general_class.wp_ulike_is_already_liked .count-box, .wpulike .wp_ulike_general_class.wp_ulike_is_liked .count-box',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                 )
                             ),
@@ -365,6 +372,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'type'   => 'spacing',
                         'title'  => esc_html__( 'Padding', 'wp-ulike' ),
                         'output' => '.wpulike .wp_ulike_general_class .count-box',
+                        'units'  => array('px', 'em', 'rem', '%')
                     ),
                     array(
                         'id'          => 'counter_margin',
@@ -372,13 +380,17 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_mode' => 'margin',
                         'title'       => esc_html__( 'Margin', 'wp-ulike' ),
                         'output'      => '.wpulike .wp_ulike_general_class .count-box',
+                        'units'       => array('px', 'em', 'rem', '%')
                     )
                 )
-            ) );
+            );
 
-            ULF::createSection( $this->option_domain, array(
+            $sections[] = array(
                 'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
+                'id'     => 'toast_messages',
                 'title'  => esc_html__( 'Toast Messages', 'wp-ulike' ),
+                'template' => 'toast',                               // Template ID for customizer preview
+                'icon'   => 'bell',                                  // Icon for template selector
                 'fields' => array(
                     array(
                         'id'               => 'toast_typography',
@@ -387,6 +399,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'output_important' => true,
                         'title'            => esc_html__( 'Typography', 'wp-ulike' ),
                         'output'           => '.wpulike-notification .wpulike-message',
+                        'units'            => array('px', 'em', 'rem')
                     ),
                     array(
                         'id'            => 'toast_group',
@@ -413,6 +426,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike-notification .wpulike-message',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'info_icon_size',
@@ -420,6 +434,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike-notification .wpulike-message::before',
+                                        'units'            => array('px', 'em', 'rem', '%')
                                     ),
                                     array(
                                         'id'               => 'info_icon_image',
@@ -451,6 +466,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike-notification .wpulike-message.wpulike-success',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'success_icon_size',
@@ -458,6 +474,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike-notification .wpulike-message.wpulike-success::before',
+                                        'units'            => array('px', 'em', 'rem', '%')
                                     ),
                                     array(
                                         'id'               => 'success_icon_image',
@@ -489,6 +506,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike-notification .wpulike-message.wpulike-error',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'error_icon_size',
@@ -496,6 +514,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike-notification .wpulike-message.wpulike-error::before',
+                                        'units'            => array('px', 'em', 'rem', '%')
                                     ),
                                     array(
                                         'id'               => 'error_icon_image',
@@ -527,6 +546,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike-notification .wpulike-message.wpulike-warning',
+                                        'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'warning_icon_size',
@@ -534,6 +554,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike-notification .wpulike-message.wpulike-warning::before',
+                                        'units'            => array('px', 'em', 'rem', '%')
                                     ),
                                     array(
                                         'id'               => 'warning_icon_image',
@@ -547,43 +568,17 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         )
                     ),
                 )
-            ));
-
-            ULF::createSection( $this->option_domain, array(
-                'parent' => WP_ULIKE_SLUG,                           // The slug id of the parent section
-                'title'  => esc_html__( 'Display Likers Box', 'wp-ulike' ),
-                'fields' => array(
-                    array(
-                        'type'    => 'heading',
-                        'content' => esc_html__( 'Popover', 'wp-ulike' ),
-                    ),
-                    array(
-                        'id'               => 'likers_popover_bg',
-                        'type'             => 'background',
-                        'output_important' => true,
-                        'title'            => esc_html__( 'Background', 'wp-ulike' ),
-                        'output'           => '.ulf-tooltip',
-                    ),
-                    array(
-                        'id'               => 'likers_popover_border',
-                        'type'             => 'border',
-                        'output_important' => true,
-                        'title'            => esc_html__( 'Border', 'wp-ulike' ),
-                        'output'           => '.ulf-tooltip',
-                    ),
-                    array(
-                        'id'               => 'likers_popover_arrow_color',
-                        'type'             => 'color',
-                        'output_important' => true,
-                        'title'            => esc_html__( 'Arrow Color', 'wp-ulike' ),
-                        'output'           => '.ulf-tooltip .ulf-arrow',
-                        'output_mode'      => 'border-top-color'
-                    ),
-                )
-            ));
+            );
 
             do_action( 'wp_ulike_customize_ended' );
 
+            // Allow pro version and other extensions to add/modify sections
+            $sections = apply_filters( 'wp_ulike_customizer_sections', $sections );
+
+            // Cache sections
+            $this->sections_cache = $sections;
+
+            return $sections;
         }
 
     }

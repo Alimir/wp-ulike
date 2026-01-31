@@ -9,12 +9,6 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
-// include settings panel core
-require_once( WP_ULIKE_ADMIN_DIR . '/settings/classes/setup.class.php');
-
-// Register customizer options
-new wp_ulike_customizer();
-
 // Functions
 include_once( 'functions/utilities.php' );
 include_once( 'functions/general.php' );

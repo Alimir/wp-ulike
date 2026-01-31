@@ -274,24 +274,6 @@ function wp_ulike_get_notice_render( $args = array() ){
 	$notice_instance->render();
 }
 
-/**
- * Stores css content in custom css file (#admin)
- *
- * @return boolean            Returns true if the file is created and updated successfully, false on failure
- */
-function wp_ulike_save_custom_css(){
-    $css_string = wp_ulike_get_custom_style();
-    $css_string = wp_ulike_minify_css( $css_string );
-
-    if ( ! empty( $css_string ) && wp_ulike_put_contents_dir( $css_string, 'custom.css' ) ) {
-        update_option( 'wp_ulike_use_inline_custom_css' , 0 ); // disable inline css output
-        return true;
-    // if the directory is not writable, try inline css fallback
-    } else {
-        update_option( 'wp_ulike_use_inline_custom_css' , 1 ); // save css rules as option to print as inline css
-        return false;
-    }
-}
 
 /**
  * Minify CSS

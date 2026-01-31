@@ -109,6 +109,7 @@ class WpUlikeInit {
     // a custom directory in uploads directory for storing custom files. Default uploads/{WP_ULIKE_SLUG}
     $uploads = wp_get_upload_dir();
     define( 'WP_ULIKE_CUSTOM_DIR' , $uploads['basedir'] . '/' . WP_ULIKE_SLUG );
+    define( 'WP_ULIKE_CUSTOM_URL' , $uploads['baseurl'] . '/' . WP_ULIKE_SLUG );
   }
 
   /**

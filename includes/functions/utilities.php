@@ -538,55 +538,41 @@ if( ! function_exists('wp_ulike_generate_fingerprint') ){
 	 *
 	 * This function uses a combination of the real IP address, user agent,
 	 * accept-language, and selected HTTP headers to generate a unique and consistent
-	 * fingerprint per device. It also parses the user agent using DeviceDetector
-	 * to extract client and OS information. If a bot is detected, the function returns false.
+	 * fingerprint per device.
 	 *
-	 * @return string|false The hashed fingerprint string, or false if the client is a bot.
+	 * @return string The hashed fingerprint string
 	 */
 	function wp_ulike_generate_fingerprint() {
-		// Get real IP address (never trust spoofed headers)
 		$ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-
-		// Basic request headers
-		$user_agent      = $_SERVER['HTTP_USER_AGENT'] ?? '';
+		$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 		$accept_language = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '';
 
 		if (empty($accept_language)) {
 			$accept_language = 'unknown-lang';
 		}
 
-		// Initialize DeviceDetector to parse the User-Agent
-		$dd = new \DeviceDetector\DeviceDetector($user_agent);
-		$dd->parse();
+		$parser = new WP_Ulike_User_Agent_Parser( $user_agent );
+		$parser->parse();
 
-		// Extract client and OS info
-		$client_info = $dd->getClient(); // ['name' => ..., 'version' => ...]
-		$os_info     = $dd->getOs();     // ['name' => ..., 'version' => ...]
+		$client_info = $parser->get_client();
+		$os_info = $parser->get_os();
 
-		$client_name    = $client_info['name'] ?? 'unknown-client';
-		$client_version = $client_info['version'] ?? '0.0';
-		$os_name        = $os_info['name'] ?? 'unknown-os';
-		$os_version     = $os_info['version'] ?? '0.0';
-
-		// Extra entropy from request headers (helps resist spoofing)
 		$header_signature = hash('sha256', json_encode([
 			$_SERVER['HTTP_ACCEPT_ENCODING'] ?? '',
 			$_SERVER['HTTP_CONNECTION'] ?? '',
 			$_SERVER['HTTP_CACHE_CONTROL'] ?? '',
 		]));
 
-		// Combine all parts into a unique source string
 		$fingerprint_source = implode('|', [
 			$ip,
-			$client_name,
-			$client_version,
-			$os_name,
-			$os_version,
+			$client_info['name'] ?? 'unknown-client',
+			$client_info['version'] ?? '0.0',
+			$os_info['name'] ?? 'unknown-os',
+			$os_info['version'] ?? '0.0',
 			$accept_language,
 			$header_signature
 		]);
 
-		// Return an md5 hash of the fingerprint source
 		return md5($fingerprint_source);
 	}
 }
@@ -598,9 +584,8 @@ if( ! function_exists('wp_ulike_is_bot_request') ){
 	 * @return bool
 	 */
 	function wp_ulike_is_bot_request(){
-		$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-		$device = new \DeviceDetector\DeviceDetector($user_agent);
-		$device->parse();
-		return $device->isBot();
+		$parser = new WP_Ulike_User_Agent_Parser();
+		$parser->parse();
+		return $parser->is_bot();
 	}
 }

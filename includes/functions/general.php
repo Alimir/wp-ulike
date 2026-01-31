@@ -36,32 +36,41 @@ if( ! function_exists( 'wp_ulike_get_setting' ) ){
 if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 	/**
 	 * Get options list values
+	 * WordPress automatically caches get_option() per request
 	 *
 	 * @param string $option
 	 * @param array|string $default
 	 * @return array|string|null
 	 */
 	function wp_ulike_get_option( $option = '', $default = null ) {
-	  $global_settings = get_option( 'wp_ulike_settings' );
+		// WordPress automatically caches get_option() per request
+		// No need for custom static caching - WordPress handles it
+		$settings = get_option( 'wp_ulike_settings' );
 
-	  if( strpos( $option, '|' ) && is_array( $global_settings ) ){
-		$option_name  = explode( "|", $option );
-		$option_stack = array();
-		foreach ($option_name as $key => $value) {
-			if( isset( $global_settings[$value] ) ){
-				$option_stack = $global_settings[$value];
-				continue;
-			}
-			if( isset( $option_stack[$value] ) ){
-				$option_stack = $option_stack[$value];
-			} else {
-				return $default;
-			}
+		// Return all settings if no option specified
+		// If settings don't exist (false) or are empty, return default
+		if ( empty( $option ) ) {
+			return ( $settings !== false && ! empty( $settings ) ) ? $settings : $default;
 		}
-		return $option_stack;
-	  }
 
-	  return ( isset( $global_settings[$option] ) ) ? $global_settings[$option] : $default;
+		// Handle nested options with pipe separator (e.g., "posts_group|template")
+		if ( strpos( $option, '|' ) && is_array( $settings ) ) {
+			$option_path = explode( "|", $option );
+			$value = $settings;
+
+			foreach ( $option_path as $key ) {
+				if ( isset( $value[ $key ] ) ) {
+					$value = $value[ $key ];
+				} else {
+					return $default;
+				}
+			}
+
+			return $value;
+		}
+
+		// Simple option lookup
+		return isset( $settings[ $option ] ) ? $settings[ $option ] : $default;
 	}
 }
 
@@ -179,7 +188,7 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 		}
 
 		$defaults = apply_filters( 'wp_ulike_auto_diplay_filter_list' , array(
-				'is_home'        => is_front_page() && is_home(),
+				'is_home'        => is_front_page() || is_home(),
 				'is_single'      => is_singular(),
 				'is_archive'     => is_archive(),
 				'is_category'    => is_category(),
@@ -435,17 +444,39 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_customizer_css' ) ){
+	/**
+	 * Get CSS from the customizer CSS generator
+	 *
+	 * @return string Generated CSS from customizer
+	 */
+	function wp_ulike_get_customizer_css() {
+		if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
+			return '';
+		}
+
+		$css_generator = new wp_ulike_css_generator();
+		return $css_generator->generate_css();
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	/**
-	 * Get custom css styles
+	 * Get custom css styles including customizer-generated CSS
 	 *
-	 * @return void
+	 * @return string Combined CSS styles
 	 */
 	function wp_ulike_get_custom_style(){
 
 		$return_style = '';
 
-		// Display deprecated styles
+		// Add customizer-generated CSS first (highest priority)
+		$customizer_css = wp_ulike_get_customizer_css();
+		if( ! empty( $customizer_css ) ) {
+			$return_style .= $customizer_css;
+		}
+
+		// Display deprecated styles (for backward compatibility)
 		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) && wp_ulike_get_option( 'enable_deprecated_options' ) ) {
 			//get custom options
 			$customstyle   = get_option( 'wp_ulike_customize' );
@@ -496,7 +527,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$return_style .= '.wpulike .wp_ulike_is_loading button.wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn {background-image: url('.esc_url($custom_spinner).') !important;}';
 		}
 
-		// Custom Styles
+		// Custom Styles from settings (lowest priority)
 		if( '' != ( $custom_css = wp_ulike_get_option( 'custom_css' ) ) ) {
 			$return_style .= $custom_css;
 		}
@@ -643,7 +674,7 @@ if( ! function_exists('wp_ulike_release_lock') ){
             fclose( $fp );
 
             $lock_file = wp_ulike_lock_file( $item_type, $item_id );
-            
+
             // Use WordPress core function for file deletion (available since WP 4.2.0)
             if ( function_exists( 'wp_delete_file' ) ) {
                 wp_delete_file( $lock_file );
@@ -676,11 +707,13 @@ if( ! function_exists('wp_ulike_lock_file') ){
 if( ! function_exists('wp_ulike_kses') ){
 	/**
 	 * Filters text content and strips out disallowed HTML.
+	 * Extends WordPress's safe CSS properties to support modern CSS like display: flex
 	 *
 	 * @param string $value
 	 * @return string
 	 */
 	function wp_ulike_kses( $value ) {
+		// Base allowed tags - essential for basic content
 		$allowedtags = array(
 			'a' => array(
 				'href'   => true,
@@ -713,7 +746,35 @@ if( ! function_exists('wp_ulike_kses') ){
 			'b'      => array(),
 			'strong' => array(),
 			'i'      => array(),
-			'em'     => array()
+			'em'     => array(),
+			// Additional tags for rich content (email templates, HTML templates)
+			'h1'     => array(),
+			'h2'     => array(),
+			'h3'     => array(),
+			'h4'     => array(),
+			'h5'     => array(),
+			'h6'     => array(),
+			'ul'     => array(),
+			'ol'     => array(),
+			'li'     => array(),
+			'br'     => array(),
+			'hr'     => array(),
+			'table'  => array(),
+			'thead'  => array(),
+			'tbody'  => array(),
+			'tfoot'  => array(),
+			'tr'     => array(),
+			'td'     => array(),
+			'th'     => array(),
+			'blockquote' => array(),
+			'code'   => array(),
+			'pre'    => array(),
+			'small'  => array(),
+			'sub'    => array(),
+			'sup'    => array(),
+			'del'    => array(),
+			'ins'    => array(),
+			'strike' => array(),
 		);
 
 		$allowedtags = array_map( 'wp_ulike_global_attributes', $allowedtags );
@@ -721,7 +782,46 @@ if( ! function_exists('wp_ulike_kses') ){
 		// Decode HTML entities (in case the input is encoded)
 		$value = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );
 
-		return wp_kses($value, $allowedtags);
+		// Temporarily extend safe_style_css filter to allow modern CSS properties
+		add_filter( 'safe_style_css', 'wp_ulike_extend_safe_css_properties', 10, 1 );
+
+		$sanitized = wp_kses( $value, $allowedtags );
+
+		// Remove filter to avoid affecting other parts of WordPress
+		remove_filter( 'safe_style_css', 'wp_ulike_extend_safe_css_properties', 10 );
+
+		return $sanitized;
+	}
+}
+
+if( ! function_exists('wp_ulike_extend_safe_css_properties') ){
+	/**
+	 * Extend WordPress's safe CSS properties to include only missing essential properties
+	 * WordPress already includes most CSS properties (flexbox, grid, box model, etc.)
+	 * This adds only the critical missing ones, primarily 'display' for display: flex
+	 *
+	 * Performance: This is very safe and fast:
+	 * - Filter add/remove is O(1) operation
+	 * - Array merge is fast (tiny array)
+	 * - Only runs during wp_kses() calls (already happening)
+	 * - Filter is scoped to only this function call
+	 *
+	 * @param array $styles WordPress's default safe CSS properties
+	 * @return array Extended list of safe CSS properties
+	 */
+	function wp_ulike_extend_safe_css_properties( $styles ) {
+		// Only add properties that WordPress doesn't already include by default
+		// The main one is 'display' which is critical for display: flex, display: grid, etc.
+		$additional_styles = array(
+			'display',           // Critical: needed for display: flex, display: grid, display: none, etc.
+			'overflow-x',         // Useful: directional overflow (WordPress has 'overflow' but not directional)
+			'overflow-y',         // Useful: directional overflow
+			'text-shadow',       // Useful: text shadow effects
+			'box-sizing',        // Useful: box-sizing: border-box
+			'visibility',        // Useful: visibility: hidden/visible
+		);
+
+		return array_merge( $styles, $additional_styles );
 	}
 }
 

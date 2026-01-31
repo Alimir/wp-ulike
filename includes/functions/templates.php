@@ -12,40 +12,193 @@ if ( ! defined( 'WPINC' ) ) {
 if( ! function_exists( 'wp_ulike_generate_templates_list' ) ){
 	/**
 	 * Generate templates list
+	 * Performance optimization: Cache result to avoid regenerating for each button
 	 *
 	 * @author       	Alimir
 	 * @since           2.8
 	 * @return			Array
 	 */
 	function wp_ulike_generate_templates_list(){
+		// Performance optimization: Cache template list - it never changes during a request
+		static $cached_templates = null;
+		if ( $cached_templates !== null ) {
+			return $cached_templates;
+		}
 		$default = array(
 			'wpulike-default' => array(
 				'name'            => esc_html__('Simple', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_default_template',
-				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/default.svg',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/simple.svg',
 				'is_text_support' => true
 			),
 			'wpulike-heart' => array(
 				'name'            => esc_html__('Heart', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_simple_heart_template',
-				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/heart.svg',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/heart.svg',
 				'is_text_support' => true
 			),
 			'wpulike-robeen' => array(
 				'name'            => esc_html__('Twitter Heart', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_robeen_template',
-				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/twitter.svg',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/twitter.svg',
 				'is_text_support' => false
 			),
 			'wpulike-animated-heart' => array(
 				'name'            => esc_html__('Animated Heart', 'wp-ulike'),
 				'callback'        => 'wp_ulike_set_animated_heart_template',
-				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/svg/animated-heart.svg',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/animated-heart.svg',
 				'is_text_support' => false
 			)
 		);
 
-		return apply_filters( 'wp_ulike_add_templates_list', $default );
+		// Add Pro templates as locked (only if Pro is not active)
+		$pro_templates = wp_ulike_get_pro_templates_list();
+		$default = array_merge( $default, $pro_templates );
+
+		// Apply filter to allow Pro version to override/add templates
+		$cached_templates = apply_filters( 'wp_ulike_add_templates_list', $default );
+		return $cached_templates;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_pro_templates_list' ) ){
+	/**
+	 * Get Pro templates list (locked templates for free version)
+	 * Returns empty array if Pro is active (Pro will handle templates)
+	 *
+	 * @author       	Alimir
+	 * @since           4.8.3
+	 * @return			Array
+	 */
+	function wp_ulike_get_pro_templates_list(){
+		// If Pro is active, return empty array - let Pro handle templates
+		if ( defined( 'WP_ULIKE_PRO_VERSION' ) && class_exists( 'WP_Ulike_Pro' ) ) {
+			return array();
+		}
+
+		// Return locked templates for free version
+		return array(
+			'wp-ulike-pro-default' => array(
+				'name'                  => esc_html__('Simple Up/Down Vote', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/simplePro.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-pro-book-heart' => array(
+				'name'                  => esc_html__('Book Heart', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/bookHeart.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-pro-checkmark' => array(
+				'name'                  => esc_html__('Check Mark', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/checkMark.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-pro-voters' => array(
+				'name'                  => esc_html__('Voter Thumb', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/voters.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-pro-check-like' => array(
+				'name'                  => esc_html__('Check Vote', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/checkVote.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-pro-broken-heart' => array(
+				'name'                  => esc_html__('Broken Heart', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/brokenHeart.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-positive-negative' => array(
+				'name'                  => esc_html__('Positive/Negative Circles', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/posNeg.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-feedback' => array(
+				'name'                  => esc_html__('FeedBack', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/feedback.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-rating-face' => array(
+				'name'                  => esc_html__('Rating Face', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/ratingFace.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-rating-boy' => array(
+				'name'                  => esc_html__('Rating Boy', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/ratingBoy.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-rating-girl' => array(
+				'name'                  => esc_html__('Rating Girl', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/ratingGirl.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-stack-votings' => array(
+				'name'            => esc_html__('Up/Down Votes', 'wp-ulike'),
+				'callback'        => 'wp_ulike_set_default_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/stackVotings.svg',
+				'is_locked'       => true
+			),
+			'wp-ulike-star-thumb' => array(
+				'name'            => esc_html__('Star Thumb', 'wp-ulike'),
+				'callback'        => 'wp_ulike_set_default_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/starThumb.svg',
+				'is_locked'       => true
+			),
+			'wp-ulike-arrow-votings' => array(
+				'name'            => esc_html__('Arrow Votings', 'wp-ulike'),
+				'callback'        => 'wp_ulike_set_default_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/arrowVotings.svg',
+				'is_locked'       => true
+			),
+			'wp-ulike-minimal-votings' => array(
+				'name'            => esc_html__('Minimal Votings', 'wp-ulike'),
+				'callback'        => 'wp_ulike_set_default_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/minimalVotings.svg',
+				'is_locked'       => true
+			),
+			'wp-ulike-badge-thumb' => array(
+				'name'                  => esc_html__('Badge Thumb', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/badgeThumb.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-fave-star' => array(
+				'name'            => esc_html__('Fave Star', 'wp-ulike'),
+				'callback'        => 'wp_ulike_set_default_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/faveStar.svg',
+				'is_locked'       => true
+			),
+			'wp-ulike-pin' => array(
+				'name'                  => esc_html__('Pin Button', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/pin.svg',
+				'is_locked'             => true
+			),
+			'wp-ulike-clapping' => array(
+				'name'            => esc_html__('Clapping Button', 'wp-ulike'),
+				'callback'        => 'wp_ulike_set_default_template',
+				'symbol'          => WP_ULIKE_ASSETS_URL . '/img/templates/clapping.svg',
+				'is_locked'       => true
+			),
+			'wp-ulike-smiley-switch' => array(
+				'name'                  => esc_html__('Smiley Switch button', 'wp-ulike'),
+				'callback'              => 'wp_ulike_set_default_template',
+				'symbol'                => WP_ULIKE_ASSETS_URL . '/img/templates/smileySwitch.svg',
+				'is_locked'             => true
+			)
+		);
 	}
 }
 
