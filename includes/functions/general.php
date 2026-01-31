@@ -713,6 +713,7 @@ if( ! function_exists('wp_ulike_kses') ){
 	 * @return string
 	 */
 	function wp_ulike_kses( $value ) {
+		// Base allowed tags - essential for basic content
 		$allowedtags = array(
 			'a' => array(
 				'href'   => true,
@@ -745,7 +746,35 @@ if( ! function_exists('wp_ulike_kses') ){
 			'b'      => array(),
 			'strong' => array(),
 			'i'      => array(),
-			'em'     => array()
+			'em'     => array(),
+			// Additional tags for rich content (email templates, HTML templates)
+			'h1'     => array(),
+			'h2'     => array(),
+			'h3'     => array(),
+			'h4'     => array(),
+			'h5'     => array(),
+			'h6'     => array(),
+			'ul'     => array(),
+			'ol'     => array(),
+			'li'     => array(),
+			'br'     => array(),
+			'hr'     => array(),
+			'table'  => array(),
+			'thead'  => array(),
+			'tbody'  => array(),
+			'tfoot'  => array(),
+			'tr'     => array(),
+			'td'     => array(),
+			'th'     => array(),
+			'blockquote' => array(),
+			'code'   => array(),
+			'pre'    => array(),
+			'small'  => array(),
+			'sub'    => array(),
+			'sup'    => array(),
+			'del'    => array(),
+			'ins'    => array(),
+			'strike' => array(),
 		);
 
 		$allowedtags = array_map( 'wp_ulike_global_attributes', $allowedtags );
