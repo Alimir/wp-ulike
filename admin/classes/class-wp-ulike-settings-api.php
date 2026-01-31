@@ -641,10 +641,15 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 }
                 return $sanitized;
             } elseif ( is_string( $values ) ) {
-                // Sanitize string values (allows HTML but escapes dangerous scripts)
-                // For code editors and textareas that may contain HTML, use wp_kses_post
-                // For simple text fields, you might want to use sanitize_text_field instead
-                return wp_ulike_kses( $values );
+                // Optimize: Only use HTML sanitization if string actually contains HTML
+                // This avoids slow wp_kses() processing for plain text fields
+                if ( $this->contains_html( $values ) ) {
+                    // String contains HTML - use wp_ulike_kses for safe HTML sanitization
+                    return wp_ulike_kses( $values );
+                } else {
+                    // Plain text - use faster sanitization
+                    return sanitize_text_field( $values );
+                }
             } elseif ( is_bool( $values ) ) {
                 // Convert boolean to integer (WordPress convention: 1 for true, 0 for false)
                 // This ensures false values are saved as 0 instead of empty, making them visible in debug logs
@@ -656,6 +661,41 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 // For other types (null, objects, etc.), return as-is
                 return $values;
             }
+        }
+
+        /**
+         * Check if a string contains HTML tags or HTML-like content
+         * Conservative detection to ensure security - when in doubt, use full HTML sanitization
+         * Uses multiple checks to catch HTML tags, entities, and common HTML patterns
+         *
+         * @param string $string String to check
+         * @return bool True if string contains HTML or HTML-like content
+         */
+        protected function contains_html( $string ) {
+            // Security: Be conservative - if ANY HTML-like content is detected, use full sanitization
+            // This ensures we never miss malicious content
+            
+            // Check 1: HTML tags (opening/closing tags)
+            if ( preg_match( '/<[a-z][\s\S]*>/i', $string ) === 1 ) {
+                return true;
+            }
+            
+            // Check 2: HTML entities (could be encoded HTML)
+            if ( preg_match( '/&[#\w]+;/i', $string ) === 1 ) {
+                return true;
+            }
+            
+            // Check 3: Common HTML patterns (style=, href=, src=, etc.)
+            if ( preg_match( '/\b(style|href|src|on\w+)\s*=/i', $string ) === 1 ) {
+                return true;
+            }
+            
+            // Check 4: URL protocols that might indicate HTML content
+            if ( preg_match( '/\b(javascript|data|vbscript):/i', $string ) === 1 ) {
+                return true;
+            }
+            
+            return false;
         }
 
         /**
