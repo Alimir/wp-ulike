@@ -89,6 +89,10 @@ class wp_ulike_setting_repo {
 	 */
 	public static function getButtonText( $typeName, $status ){
 		$text_group = self::getOption( self::getSettingKey( $typeName ) . '|text_group' );
+		// Ensure text_group is always an array to prevent array access errors
+		if ( ! is_array( $text_group ) ) {
+			$text_group = array();
+		}
 		$text_value = ! empty( $text_group[$status] ) ? $text_group[$status] : ucfirst( $status );
 		return apply_filters( 'wp_ulike_button_text', wp_ulike_kses( $text_value ), $status, self::getSettingKey( $typeName ) );
 	}
@@ -167,6 +171,10 @@ class wp_ulike_setting_repo {
 	public static function hasToast( $typeName ){
 		$enable_toast = self::getOption( 'enable_toast_notice', true );
 		$filter_toast = self::getOption( 'filter_toast_types', array() );
+		// Ensure filter_toast is always an array to prevent in_array() errors
+		if ( ! is_array( $filter_toast ) ) {
+			$filter_toast = array();
+		}
 		return $enable_toast && ! in_array( $typeName, $filter_toast );
 	}
 
@@ -178,6 +186,10 @@ class wp_ulike_setting_repo {
 	public static function hasNotification( $typeName ){
 		$enable_notice = self::getOption( 'buddypress_group|enable_add_notification', false );
 		$filter_notice = self::getOption( 'buddypress_group|filter_user_notification_types', array() );
+		// Ensure filter_notice is always an array to prevent in_array() errors
+		if ( ! is_array( $filter_notice ) ) {
+			$filter_notice = array();
+		}
 		return $enable_notice && ! in_array( $typeName, $filter_notice );
 	}
 
