@@ -100,7 +100,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             $assets['localized_scripts']['wp_ulike_params'] = array(
                 'data' => array(
                     'ajax_url'      => admin_url( 'admin-ajax.php' ),
-                    'notifications' => wp_ulike_get_option( 'enable_toast_notice' )
+                    'notifications' => wp_ulike_get_option( 'enable_toast_notice', true )
                 ),
                 'source' => 'free'
             );
@@ -656,7 +656,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
             // Get WP ULike front-end assets URLs using the same method as schema
             $plugin_assets = $this->get_plugin_assets();
-            
+
             // Extract URLs from asset structure (support both old string format and new array format)
             $css_urls = isset( $plugin_assets['css'] ) ? $plugin_assets['css'] : array();
             $js_urls = isset( $plugin_assets['js'] ) ? $plugin_assets['js'] : array();

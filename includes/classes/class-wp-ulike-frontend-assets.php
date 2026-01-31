@@ -94,7 +94,7 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 			//localize script
 			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
 				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'notifications' => wp_ulike_get_option( 'enable_toast_notice' )
+				'notifications' => wp_ulike_get_option( 'enable_toast_notice', true )
 			));
 	  	}
 
