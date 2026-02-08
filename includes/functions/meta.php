@@ -524,7 +524,7 @@ if( ! function_exists('wp_ulike_delete_vote_data') ){
 		wp_ulike_delete_meta_data( $type, $ID, 'likers_list' );
 
 		// delete table values
-		$settings = new wp_ulike_setting_type( $type );
+		$settings = wp_ulike_setting_type::get_instance( $type );
 		$table_name = esc_sql( $wpdb->prefix . $settings->getTableName() );
 		$column_name = esc_sql( $settings->getColumnName() );
 		$wpdb->query( $wpdb->prepare( "DELETE from `{$table_name}` WHERE `{$column_name}` = %d", $ID ) );

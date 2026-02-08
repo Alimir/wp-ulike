@@ -101,11 +101,8 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return void
 		 */
 		protected function setTypeSettings(){
-			static $cached_type_settings = array();
-			if ( ! isset( $cached_type_settings[ $this->itemType ] ) ) {
-				$cached_type_settings[ $this->itemType ] = new wp_ulike_setting_type( $this->itemType );
-			}
-			$this->typeSettings = $cached_type_settings[ $this->itemType ];
+			// Use singleton pattern to avoid creating duplicate objects
+			$this->typeSettings = wp_ulike_setting_type::get_instance( $this->itemType );
 		}
 
 		/**

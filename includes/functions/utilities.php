@@ -135,36 +135,42 @@ if( ! function_exists( 'wp_ulike_date_i18n' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_ip_in_range' ) ){
+	/**
+	 * Check if an IP address is within a CIDR range
+	 *
+	 * @param string $ip IP address to check
+	 * @param string $range CIDR range (e.g., '192.168.1.0/24' or '2001:db8::/32')
+	 * @return bool
+	 */
+	function wp_ulike_ip_in_range( $ip, $range ) {
+		return WP_Ulike_Ip_Detector::ip_in_range( $ip, $range );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_is_cloudflare_ip' ) ){
+	/**
+	 * Check if the current request is from Cloudflare
+	 *
+	 * @param string|null $ip IP address to check (optional, defaults to REMOTE_ADDR)
+	 * @return bool
+	 */
+	function wp_ulike_is_cloudflare_ip( $ip = null ) {
+		return WP_Ulike_Ip_Detector::is_cloudflare_ip( $ip );
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 	/**
-	 * Get user IP
+	 * Get user IP address
+	 *
+	 * Handles Cloudflare, proxy headers, and direct connections.
+	 * Uses WP_Ulike_Ip_Detector class for IP detection.
 	 *
 	 * @return string
 	 */
 	function wp_ulike_get_user_ip(){
-        $whitelist = [];
-        $isUsingCloudflare = !empty(filter_input(INPUT_SERVER, 'CF-Connecting-IP'));
-
-        if (apply_filters('wp_ulike_whip_whitelist_cloudflare', $isUsingCloudflare)) {
-            $cloudflareIps = wp_ulike_get_cloudflare_ips();
-            $whitelist[\Vectorface\Whip\Whip::CLOUDFLARE_HEADERS] = [\Vectorface\Whip\Whip::IPV4 => $cloudflareIps['v4']];
-            if (defined('AF_INET6')) {
-                $whitelist[\Vectorface\Whip\Whip::CLOUDFLARE_HEADERS][\Vectorface\Whip\Whip::IPV6] = $cloudflareIps['v6'];
-            }
-        }
-
-        $whitelist = apply_filters('wp_ulike_whip_whitelist', $whitelist);
-        $methods   = apply_filters('wp_ulike_whip_methods', \Vectorface\Whip\Whip::ALL_METHODS);
-
-        $whip = new \Vectorface\Whip\Whip($methods, $whitelist);
-
-		do_action( 'wp_ulike_whip_action', $whip );
-
-		if (false === ($clientAddress = $whip->getValidIpAddress())) {
-            $clientAddress = '127.0.0.1';
-        }
-
-		return apply_filters( 'wp_ulike_get_user_ip', $clientAddress );
+		return WP_Ulike_Ip_Detector::get_ip();
 	}
 }
 
@@ -176,7 +182,7 @@ if( ! function_exists( 'wp_ulike_validate_ip' ) ){
 	 * @return boolean
 	 */
 	function wp_ulike_validate_ip( $ip ) {
-		return filter_var( $ip, FILTER_VALIDATE_IP ) === false ? false : true;
+		return WP_Ulike_Ip_Detector::validate_ip( $ip );
 	}
 }
 
@@ -409,30 +415,13 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 
 if( ! function_exists('wp_ulike_get_cloudflare_ips') ){
 	/**
-	 * Get cloudflare ips
+	 * Get Cloudflare IP ranges
 	 *
-	 * @return array
+	 * @return array Array with 'v4' and 'v6' keys containing IP ranges
 	 */
-    function wp_ulike_get_cloudflare_ips(){
-        if (false === ($ipAddresses = get_transient('wp_ulike_cloudflare_ips'))) {
-            $ipAddresses = array_fill_keys(['v4', 'v6'], []);
-            foreach (array_keys($ipAddresses) as $version) {
-                $url = 'https://www.cloudflare.com/ips-'.$version;
-                $response = wp_remote_get($url, ['sslverify' => false]);
-                if (is_wp_error($response)) {
-                    continue;
-                }
-                if ('200' != ($statusCode = wp_remote_retrieve_response_code($response))) {
-                    continue;
-                }
-                $ipAddresses[$version] = array_filter(
-                    (array) preg_split('/\R/', wp_remote_retrieve_body($response))
-                );
-            }
-            set_transient('wp_ulike_cloudflare_ips', $ipAddresses, WEEK_IN_SECONDS);
-        }
-        return $ipAddresses;
-    }
+	function wp_ulike_get_cloudflare_ips(){
+		return WP_Ulike_Ip_Detector::get_cloudflare_ips();
+	}
 }
 
 if( ! function_exists('wp_ulike_site_is_https') ){

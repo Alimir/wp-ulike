@@ -37,6 +37,7 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 	/**
 	 * Get options list values
 	 * WordPress automatically caches get_option() per request
+	 * Additional static caching for parsed nested options to avoid repeated parsing
 	 *
 	 * @param string $option
 	 * @param array|string $default
@@ -44,13 +45,27 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 	 */
 	function wp_ulike_get_option( $option = '', $default = null ) {
 		// WordPress automatically caches get_option() per request
-		// No need for custom static caching - WordPress handles it
-		$settings = get_option( 'wp_ulike_settings' );
+		// Static cache for parsed nested options to avoid repeated parsing
+		static $parsed_options_cache = array();
 
 		// Return all settings if no option specified
-		// If settings don't exist (false) or are empty, return default
 		if ( empty( $option ) ) {
-			return ( $settings !== false && ! empty( $settings ) ) ? $settings : $default;
+			$settings = get_option( 'wp_ulike_settings' );
+			return ( $settings !== false && ! empty( $settings ) ) ? $settings : [];
+		}
+
+		// Check cache first for nested options (most common case)
+		if ( strpos( $option, '|' ) !== false ) {
+			if ( isset( $parsed_options_cache[ $option ] ) ) {
+				return $parsed_options_cache[ $option ];
+			}
+		}
+
+		$settings = get_option( 'wp_ulike_settings' );
+
+		// If settings don't exist (false) or are empty, return default
+		if ( $settings === false || empty( $settings ) ) {
+			return $default;
 		}
 
 		// Handle nested options with pipe separator (e.g., "posts_group|template")
@@ -62,15 +77,25 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 				if ( isset( $value[ $key ] ) ) {
 					$value = $value[ $key ];
 				} else {
+					$parsed_options_cache[ $option ] = $default;
 					return $default;
 				}
 			}
 
+			// Cache the parsed result
+			$parsed_options_cache[ $option ] = $value;
 			return $value;
 		}
 
 		// Simple option lookup
-		return isset( $settings[ $option ] ) ? $settings[ $option ] : $default;
+		$result = isset( $settings[ $option ] ) ? $settings[ $option ] : $default;
+
+		// Cache simple options too (though less benefit)
+		if ( ! isset( $parsed_options_cache[ $option ] ) ) {
+			$parsed_options_cache[ $option ] = $result;
+		}
+
+		return $result;
 	}
 }
 
@@ -378,8 +403,26 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
  			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
  			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
+			// CRITICAL OPTIMIZATION: Batch load all users at once to avoid N+1 queries
+			// Use get_users() to batch load instead of get_user_by() in a loop
+			$user_ids = array_map( 'absint', $get_users );
+			$user_ids = array_unique( $user_ids );
+
+			// Batch load all users in a single query
+			$users_data = get_users( array(
+				'include' => $user_ids,
+				'fields' => array( 'ID', 'user_email', 'display_name', 'user_login' )
+			) );
+
+			// Create lookup array for O(1) access
+			$users_cache = array();
+			foreach ( $users_data as $user_obj ) {
+				$users_cache[ $user_obj->ID ] = $user_obj;
+			}
+
 			foreach ( $get_users as $user ) {
-				$user_info	= get_user_by( 'id', $user );
+				$user_id = absint( $user );
+				$user_info = isset( $users_cache[ $user_id ] ) ? $users_cache[ $user_id ] : null;
 				// Check user existence
 				if( ! $user_info ){
 					continue;

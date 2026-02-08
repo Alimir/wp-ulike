@@ -274,7 +274,9 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			// Make a cachable query to get new like count from all tables
 			if( false === $counter_value ){
-				$query = sprintf( "SELECT COUNT(*) FROM %s WHERE 1=1", $this->wpdb->prefix . $table );
+				// CRITICAL FIX: Escape table name for security
+				$table_escaped = esc_sql( $this->wpdb->prefix . $table );
+				$query = "SELECT COUNT(*) FROM `{$table_escaped}` WHERE 1=1";
 				$query .= wp_ulike_get_period_limit_sql( $date );
 
 				$counter_value = $this->wpdb->get_var( $query );
