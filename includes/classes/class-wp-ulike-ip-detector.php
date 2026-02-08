@@ -1,10 +1,10 @@
 <?php
 /**
  * WP ULike IP Detector
- * 
+ *
  * Native PHP implementation for accurate client IP detection.
  * Handles Cloudflare, proxy headers, and direct connections.
- * 
+ *
  * @package WP_ULike
  * @since 5.0.0
  */
@@ -18,7 +18,7 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 
 	/**
 	 * IP Detector Class
-	 * 
+	 *
 	 * Replaces the deprecated Whip library with a native PHP implementation.
 	 * Provides accurate IP detection for Cloudflare, proxies, and direct connections.
 	 */
@@ -26,28 +26,28 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 
 		/**
 		 * Cached Cloudflare IP ranges
-		 * 
+		 *
 		 * @var array|null
 		 */
 		private static $cloudflare_ips = null;
 
 		/**
 		 * Cached user IP address
-		 * 
+		 *
 		 * @var string|null
 		 */
 		private static $cached_ip = null;
 
 		/**
 		 * Cached Cloudflare IP validation results
-		 * 
+		 *
 		 * @var array
 		 */
 		private static $cloudflare_ip_cache = array();
 
 		/**
 		 * Cached private IP validation results
-		 * 
+		 *
 		 * @var array
 		 */
 		private static $private_ip_cache = array();
@@ -112,19 +112,19 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 						$ips = array_map( 'trim', explode( ',', $header_value ) );
 						$header_value = ! empty( $ips[0] ) ? $ips[0] : '';
 					}
-					
+
 					// Validate IP and ensure it's not a private/local IP (unless from localhost)
 					if ( ! empty( $header_value ) && self::validate_ip( $header_value ) ) {
 						// Additional check: reject private IPs from proxy headers (potential spoofing)
 						// But allow if REMOTE_ADDR is also private (local development)
 						$remote_addr = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 						$is_remote_private = self::is_private_ip( $remote_addr );
-						
+
 						if ( self::is_private_ip( $header_value ) && ! $is_remote_private ) {
 							// Private IP in header but not from localhost - likely spoofed, skip
 							continue;
 						}
-						
+
 						$ip = $header_value;
 						break;
 					}

@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class wp_ulike_setting_type {
 
 	protected $typeSettings;
-	
+
 	/**
 	 * Static cache for setting type objects to avoid recreating them
 	 * @var array
