@@ -416,13 +416,23 @@ if( ! function_exists( 'wp_ulike_get_most_liked_activities' ) ) {
 			return false;
 		}
 
-		$activity_list = esc_sql( implode(',',$activity_ids) );
+		// CRITICAL FIX: esc_sql on implode doesn't work properly for IN clauses
+		// Use prepare with placeholders instead - safer and more efficient
+		// Also limit to prevent performance issues with huge lists
+		$activity_ids = array_slice( array_map( 'absint', $activity_ids ), 0, 1000 );
+		$placeholders = implode( ',', array_fill( 0, count( $activity_ids ), '%d' ) );
+		$table_name = esc_sql( $wpdb->$bp_prefix . 'bp_activity' );
 
-		return $wpdb->get_results( "
-			SELECT * FROM `{$wpdb->$bp_prefix}bp_activity`
-			WHERE `id` IN ({$activity_list})
-			ORDER BY FIELD(`id`, {$activity_list})
-		" );
+		// Preserve the popularity order from wp_ulike_get_popular_items_ids()
+		// by using FIELD() to maintain the order of IDs as they appear in the array
+		$field_placeholders = implode( ',', array_fill( 0, count( $activity_ids ), '%d' ) );
+		$prepare_values = array_merge( $activity_ids, $activity_ids );
+
+		return $wpdb->get_results( $wpdb->prepare( "
+			SELECT * FROM `{$table_name}`
+			WHERE `id` IN ({$placeholders})
+			ORDER BY FIELD(`id`, {$field_placeholders})
+		", $prepare_values ) );
 	}
 }
 // @if DEV
