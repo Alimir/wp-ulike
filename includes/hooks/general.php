@@ -22,25 +22,29 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 	 * @return string
 	 */
 	function wp_ulike_put_posts( $content ) {
+		// Early exit optimization: Check if auto-display is enabled before any processing
+		// This prevents unnecessary function calls and option lookups when disabled
+		if ( ! WpUlikeInit::is_frontend() || ! in_the_loop() || ! is_main_query() || ! wp_ulike_setting_repo::isAutoDisplayOn('post') ) {
+			return apply_filters( 'wp_ulike_the_content', $content, $content );
+		}
+
 		// Stack variable
 		$output = $content;
-		if ( WpUlikeInit::is_frontend() && in_the_loop() && is_main_query() && wp_ulike_setting_repo::isAutoDisplayOn('post') ) {
-			if(	is_wp_ulike( wp_ulike_setting_repo::getPostAutoDisplayFilters() ) ){
-				// Get button
-				$button = wp_ulike('put');
-				switch ( wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' ) ) {
-					case 'top':
-						$output = $button . $content;
-						break;
+		if(	is_wp_ulike( wp_ulike_setting_repo::getPostAutoDisplayFilters() ) ){
+			// Get button
+			$button = wp_ulike('put');
+			switch ( wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' ) ) {
+				case 'top':
+					$output = $button . $content;
+					break;
 
-					case 'top_bottom':
-						$output = $button . $content . $button;
-						break;
+				case 'top_bottom':
+					$output = $button . $content . $button;
+					break;
 
-					default:
-						$output = $content . $button;
-						break;
-				}
+				default:
+					$output = $content . $button;
+					break;
 			}
 		}
 
