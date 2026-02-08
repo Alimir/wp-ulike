@@ -403,8 +403,26 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
  			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
  			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
+			// CRITICAL OPTIMIZATION: Batch load all users at once to avoid N+1 queries
+			// Use get_users() to batch load instead of get_user_by() in a loop
+			$user_ids = array_map( 'absint', $get_users );
+			$user_ids = array_unique( $user_ids );
+
+			// Batch load all users in a single query
+			$users_data = get_users( array(
+				'include' => $user_ids,
+				'fields' => array( 'ID', 'user_email', 'display_name', 'user_login' )
+			) );
+
+			// Create lookup array for O(1) access
+			$users_cache = array();
+			foreach ( $users_data as $user_obj ) {
+				$users_cache[ $user_obj->ID ] = $user_obj;
+			}
+
 			foreach ( $get_users as $user ) {
-				$user_info	= get_user_by( 'id', $user );
+				$user_id = absint( $user );
+				$user_info = isset( $users_cache[ $user_id ] ) ? $users_cache[ $user_id ] : null;
 				// Check user existence
 				if( ! $user_info ){
 					continue;
