@@ -16,7 +16,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		/**
 		 * Constructor
 		 */
-		function __construct() {
+		public function __construct() {
 			parent::__construct(
 				'wp_ulike',
 				esc_html__('WP Ulike Widget', 'wp-ulike'),
@@ -48,13 +48,21 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			);
 			// Parse args
 			$settings = wp_parse_args( $args, $defaults );
-			// Extract settings
-			extract($settings);
+			// Assign settings to variables explicitly
+			$numberOf    = isset( $settings['numberOf'] ) ? $settings['numberOf'] : $defaults['numberOf'];
+			$period      = isset( $settings['period'] ) ? $settings['period'] : $defaults['period'];
+			$sizeOf      = isset( $settings['sizeOf'] ) ? $settings['sizeOf'] : $defaults['sizeOf'];
+			$trim        = isset( $settings['trim'] ) ? $settings['trim'] : $defaults['trim'];
+			$profile_url = isset( $settings['profile_url'] ) ? $settings['profile_url'] : $defaults['profile_url'];
+			$show_count  = isset( $settings['show_count'] ) ? $settings['show_count'] : $defaults['show_count'];
+			$show_thumb  = isset( $settings['show_thumb'] ) ? $settings['show_thumb'] : $defaults['show_thumb'];
+			$before_item = isset( $settings['before_item'] ) ? $settings['before_item'] : $defaults['before_item'];
+			$after_item  = isset( $settings['after_item'] ) ? $settings['after_item'] : $defaults['after_item'];
 
 			$posts = wp_ulike_get_most_liked_posts( $numberOf, '', 'post', $period );
 
 			if( empty( $posts ) ){
-				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
+				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
 				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', 'wp-ulike' ), $period_info, esc_html__( 'period', 'wp-ulike' ) );
 			}
 
@@ -74,8 +82,8 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					'%s %s<a href="%s">%s</a> %s %s',
 					$before_item,
 					$show_thumb ? $this->get_post_thumbnail( $post_id, $sizeOf ) : '',
-					$permalink,
-					wp_trim_words( $post_title, $trim, '...' ),
+					esc_url( $permalink ),
+					esc_html( wp_trim_words( $post_title, $trim, '...' ) ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $post_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -108,13 +116,21 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			);
 			// Parse args
 			$settings 		= wp_parse_args( $args, $defaults );
-			// Extract settings
-			extract($settings);
+			// Assign settings to variables explicitly
+			$numberOf    = isset( $settings['numberOf'] ) ? $settings['numberOf'] : $defaults['numberOf'];
+			$period      = isset( $settings['period'] ) ? $settings['period'] : $defaults['period'];
+			$sizeOf      = isset( $settings['sizeOf'] ) ? $settings['sizeOf'] : $defaults['sizeOf'];
+			$trim        = isset( $settings['trim'] ) ? $settings['trim'] : $defaults['trim'];
+			$profile_url = isset( $settings['profile_url'] ) ? $settings['profile_url'] : $defaults['profile_url'];
+			$show_count  = isset( $settings['show_count'] ) ? $settings['show_count'] : $defaults['show_count'];
+			$show_thumb  = isset( $settings['show_thumb'] ) ? $settings['show_thumb'] : $defaults['show_thumb'];
+			$before_item = isset( $settings['before_item'] ) ? $settings['before_item'] : $defaults['before_item'];
+			$after_item  = isset( $settings['after_item'] ) ? $settings['after_item'] : $defaults['after_item'];
 
 			 $comments = wp_ulike_get_most_liked_comments( $numberOf, '', $period );
 
 			if( empty( $comments ) ){
-				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
+				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
 				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', 'wp-ulike' ), $period_info, esc_html__( 'period', 'wp-ulike' ) );
 			}
 
@@ -128,10 +144,10 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					'%s %s <span class="comment-info"><span class="comment-author-link">%s</span> %s <a href="%s">%s</a></span> %s %s',
 					$before_item,
 					$show_thumb ? get_avatar( $comment->comment_author_email, $sizeOf ) : '',
-					$comment_author,
+					esc_html( $comment_author ),
 					esc_html__('on','wp-ulike'),
-					$comment_permalink,
-					wp_trim_words( $post_title, $trim, '...' ),
+					esc_url( $comment_permalink ),
+					esc_html( wp_trim_words( $post_title, $trim, '...' ) ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $comment_likes_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -163,8 +179,16 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			);
 			// Parse args
 			$settings = wp_parse_args( $args, $defaults );
-			// Extract settings
-			extract($settings);
+			// Assign settings to variables explicitly
+			$numberOf    = isset( $settings['numberOf'] ) ? $settings['numberOf'] : $defaults['numberOf'];
+			$period      = isset( $settings['period'] ) ? $settings['period'] : $defaults['period'];
+			$sizeOf      = isset( $settings['sizeOf'] ) ? $settings['sizeOf'] : $defaults['sizeOf'];
+			$trim        = isset( $settings['trim'] ) ? $settings['trim'] : $defaults['trim'];
+			$profile_url = isset( $settings['profile_url'] ) ? $settings['profile_url'] : $defaults['profile_url'];
+			$show_count  = isset( $settings['show_count'] ) ? $settings['show_count'] : $defaults['show_count'];
+			$show_thumb  = isset( $settings['show_thumb'] ) ? $settings['show_thumb'] : $defaults['show_thumb'];
+			$before_item = isset( $settings['before_item'] ) ? $settings['before_item'] : $defaults['before_item'];
+			$after_item  = isset( $settings['after_item'] ) ? $settings['after_item'] : $defaults['after_item'];
 
 			$currentUser = is_user_logged_in() ? get_current_user_id() : wp_ulike_generate_user_id( wp_ulike_get_user_ip() );
 			$getPosts    = NULL;
@@ -201,12 +225,12 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				ob_start();
 				foreach ( $getPosts as $post ) :
 					$post_id = wp_ulike_get_the_id( $post->ID );
-					echo $before_item;
+					echo wp_kses_post( $before_item );
 					?>
-					<a href="<?php echo get_the_permalink( $post_id ); ?>"><?php echo get_the_title( $post_id ); ?></a>
+					<a href="<?php echo esc_url( get_the_permalink( $post_id ) ); ?>"><?php echo esc_html( get_the_title( $post_id ) ); ?></a>
 				<?php
 					echo $show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $this->get_counter_value($post_id, 'post', 'like', $period ), 'like' ) . '</span>' : '';
-					echo $after_item;
+					echo wp_kses_post( $after_item );
 				endforeach;
 				$result = ob_get_clean();
 			} else {
@@ -247,13 +271,21 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			);
 			// Parse args
 			$settings 		= wp_parse_args( $args, $defaults );
-			// Extract settings
-			extract($settings);
+			// Assign settings to variables explicitly
+			$numberOf    = isset( $settings['numberOf'] ) ? $settings['numberOf'] : $defaults['numberOf'];
+			$period      = isset( $settings['period'] ) ? $settings['period'] : $defaults['period'];
+			$sizeOf      = isset( $settings['sizeOf'] ) ? $settings['sizeOf'] : $defaults['sizeOf'];
+			$trim        = isset( $settings['trim'] ) ? $settings['trim'] : $defaults['trim'];
+			$profile_url = isset( $settings['profile_url'] ) ? $settings['profile_url'] : $defaults['profile_url'];
+			$show_count  = isset( $settings['show_count'] ) ? $settings['show_count'] : $defaults['show_count'];
+			$show_thumb  = isset( $settings['show_thumb'] ) ? $settings['show_thumb'] : $defaults['show_thumb'];
+			$before_item = isset( $settings['before_item'] ) ? $settings['before_item'] : $defaults['before_item'];
+			$after_item  = isset( $settings['after_item'] ) ? $settings['after_item'] : $defaults['after_item'];
 
 			$posts = wp_ulike_get_most_liked_posts( $numberOf, array( 'topic', 'reply' ), 'topic', $period );
 
 			if( empty( $posts ) ){
-				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
+				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
 				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', 'wp-ulike' ), $period_info, esc_html__( 'period', 'wp-ulike' ) );
 			}
 
@@ -265,8 +297,8 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$result .= sprintf(
 					'%s <a href="%s">%s</a> %s %s',
 					$before_item,
-					$permalink,
-					wp_trim_words( $post_title, $trim, '...' ),
+					esc_url( $permalink ),
+					esc_html( wp_trim_words( $post_title, $trim, '...' ) ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $post_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
@@ -307,8 +339,16 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			);
 			// Parse args
 			$settings 		= wp_parse_args( $args, $defaults );
-			// Extract settings
-			extract($settings);
+			// Assign settings to variables explicitly
+			$numberOf    = isset( $settings['numberOf'] ) ? $settings['numberOf'] : $defaults['numberOf'];
+			$period      = isset( $settings['period'] ) ? $settings['period'] : $defaults['period'];
+			$sizeOf      = isset( $settings['sizeOf'] ) ? $settings['sizeOf'] : $defaults['sizeOf'];
+			$trim        = isset( $settings['trim'] ) ? $settings['trim'] : $defaults['trim'];
+			$profile_url = isset( $settings['profile_url'] ) ? $settings['profile_url'] : $defaults['profile_url'];
+			$show_count  = isset( $settings['show_count'] ) ? $settings['show_count'] : $defaults['show_count'];
+			$show_thumb  = isset( $settings['show_thumb'] ) ? $settings['show_thumb'] : $defaults['show_thumb'];
+			$before_item = isset( $settings['before_item'] ) ? $settings['before_item'] : $defaults['before_item'];
+			$after_item  = isset( $settings['after_item'] ) ? $settings['after_item'] : $defaults['after_item'];
 
 	        if ( is_multisite() ) {
 	            $bp_prefix = 'base_prefix';
@@ -319,7 +359,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			$activities = wp_ulike_get_most_liked_activities( $numberOf, $period );
 
 			if( empty( $activities ) ){
-				$period_info = is_array( $period ) ? implode( ' - ', $period ) : $period;
+				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
 				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', 'wp-ulike' ), $period_info, esc_html__( 'period', 'wp-ulike' ) );
 			}
 
@@ -337,7 +377,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					'%s <a href="%s">%s</a> %s %s',
 					$before_item,
 					esc_url( $activity_permalink ),
-					wp_trim_words( $activity_action, $trim, '...' ),
+					esc_html( wp_trim_words( $activity_action, $trim, '...' ) ),
 					$show_count ? '<span class="wp_counter_span">'.wp_ulike_format_number( $post_count, 'like' ).'</span>' : '',
 					$after_item
 				);
@@ -370,8 +410,16 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			);
 			// Parse args
 			$settings 		= wp_parse_args( $args, $defaults );
-			// Extract settings
-			extract($settings);
+			// Assign settings to variables explicitly
+			$numberOf    = isset( $settings['numberOf'] ) ? $settings['numberOf'] : $defaults['numberOf'];
+			$period      = isset( $settings['period'] ) ? $settings['period'] : $defaults['period'];
+			$sizeOf      = isset( $settings['sizeOf'] ) ? $settings['sizeOf'] : $defaults['sizeOf'];
+			$trim        = isset( $settings['trim'] ) ? $settings['trim'] : $defaults['trim'];
+			$profile_url = isset( $settings['profile_url'] ) ? $settings['profile_url'] : $defaults['profile_url'];
+			$show_count  = isset( $settings['show_count'] ) ? $settings['show_count'] : $defaults['show_count'];
+			$show_thumb  = isset( $settings['show_thumb'] ) ? $settings['show_thumb'] : $defaults['show_thumb'];
+			$before_item = isset( $settings['before_item'] ) ? $settings['before_item'] : $defaults['before_item'];
+			$after_item  = isset( $settings['after_item'] ) ? $settings['after_item'] : $defaults['after_item'];
 
 			$likers = wp_ulike_get_best_likers_info( $numberOf, $period );
 			foreach ($likers as $liker) {
@@ -379,7 +427,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$get_user_info      = get_userdata($get_user_id);
 				$get_likes_count    = $liker->SumUser;
 				$return_profile_url = '#';
-				$echo_likes_count   = $show_count ? ' ('.$get_likes_count . ' ' . esc_html__('Like','wp-ulike').')' : '';
+				$echo_likes_count   = $show_count ? ' (' . absint( $get_likes_count ) . ' ' . esc_html__('Like','wp-ulike').')' : '';
 
 				if( $profile_url == 'bp' && function_exists('bp_members_get_user_url') ) {
 					$return_profile_url = bp_members_get_user_url( $liker->user_id );
@@ -390,7 +438,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 				if( ! empty( $get_user_info ) ){
 					$result .= $before_item;
-					$result .= '<a href="'.$return_profile_url.'" class="user-tooltip" title="'.esc_attr( $get_user_info->display_name ) . $echo_likes_count.'">'.get_avatar( $get_user_info->user_email, $sizeOf, '' , 'avatar').'</a>';
+					$result .= '<a href="' . esc_url( $return_profile_url ) . '" class="user-tooltip" title="' . esc_attr( $get_user_info->display_name ) . esc_attr( $echo_likes_count ) . '">' . get_avatar( $get_user_info->user_email, $sizeOf, '' , 'avatar') . '</a>';
 					$result .= $after_item;
 				}
 			}
@@ -456,18 +504,33 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		 * @return			String
 		 */
 		public function widget( $args, $instance ) {
-			$title = apply_filters('widget_title', esc_html( $instance['title'] ) );
-			$type  = $instance['type'];
-			$style = $instance['style'];
+			// Set defaults and validate instance values
+			$defaults = array(
+				'title'       => '',
+				'type'        => 'post',
+				'style'       => 'simple',
+				'count'       => 10,
+				'period'      => 'all',
+				'size'        => 32,
+				'trim'        => 10,
+				'profile_url' => 'bp',
+				'show_count'  => false,
+				'show_thumb'  => false
+			);
+			$instance = wp_parse_args( (array) $instance, $defaults );
+
+			$title = apply_filters('widget_title', isset( $instance['title'] ) ? esc_html( $instance['title'] ) : '' );
+			$type  = isset( $instance['type'] ) ? sanitize_text_field( $instance['type'] ) : 'post';
+			$style = isset( $instance['style'] ) ? sanitize_text_field( $instance['style'] ) : 'simple';
 
 			$settings = array(
-				"numberOf"    => $instance['count'],
-				"period"      => $instance['period'],
-				"sizeOf"      => $instance['size'],
-				"trim"        => $instance['trim'],
-				"profile_url" => $instance['profile_url'],
-				"show_count"  => $instance['show_count'],
-				"show_thumb"  => $instance['show_thumb'],
+				"numberOf"    => isset( $instance['count'] ) ? absint( $instance['count'] ) : 10,
+				"period"      => isset( $instance['period'] ) ? sanitize_text_field( $instance['period'] ) : 'all',
+				"sizeOf"      => isset( $instance['size'] ) ? absint( $instance['size'] ) : 32,
+				"trim"        => isset( $instance['trim'] ) ? absint( $instance['trim'] ) : 10,
+				"profile_url" => isset( $instance['profile_url'] ) ? sanitize_text_field( $instance['profile_url'] ) : 'bp',
+				"show_count"  => isset( $instance['show_count'] ) ? (bool) $instance['show_count'] : false,
+				"show_thumb"  => isset( $instance['show_thumb'] ) ? (bool) $instance['show_thumb'] : false,
 				"before_item" => '<li>',
 				"after_item"  => '</li>'
 			);
@@ -478,7 +541,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
 			}
 
-			echo '<ul class="most_liked_'.$type.' wp_ulike_style_'.$style.'">';
+			echo '<ul class="most_liked_' . esc_attr( $type ) . ' wp_ulike_style_' . esc_attr( $style ) . '">';
 			if( $type == "post" ){
 				echo $this->most_liked_posts( $settings );
 			} elseif( $type == "comment" ){
@@ -567,7 +630,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			<p>
 				<label for="<?php echo $this->get_field_id( 'trim' ); ?>"><?php esc_html_e('Title Trim (Length):', 'wp-ulike'); ?></label>
-				<input id="<?php echo $this->get_field_name( 'trim' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'trim' ); ?>" value="<?php echo esc_attr( $instance['trim'] ); ?>"  step="1" min="1" size="3" type="number">
+				<input id="<?php echo $this->get_field_id( 'trim' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'trim' ); ?>" value="<?php echo esc_attr( $instance['trim'] ); ?>"  step="1" min="1" size="3" type="number">
 			</p>
 
 
@@ -609,16 +672,32 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function update( $new_instance, $old_instance ) {
 			$instance = $old_instance;
 
-			$instance['title']       = wp_strip_all_tags( $new_instance['title'] );
-			$instance['count']       = wp_strip_all_tags( $new_instance['count'] );
-			$instance['type']        = wp_strip_all_tags( $new_instance['type'] );
-			$instance['period']      = wp_strip_all_tags( $new_instance['period'] );
-			$instance['style']       = wp_strip_all_tags( $new_instance['style'] );
-			$instance['size']        = wp_strip_all_tags( $new_instance['size'] );
-			$instance['trim']        = wp_strip_all_tags( $new_instance['trim'] );
-			$instance['profile_url'] = wp_strip_all_tags( $new_instance['profile_url'] );
-			$instance['show_count']  = isset($new_instance['show_count']) ? true : false;
-			$instance['show_thumb']  = isset($new_instance['show_thumb']) ? true : false;
+			// Sanitize text fields
+			$instance['title']       = isset( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
+			$instance['type']        = isset( $new_instance['type'] ) ? sanitize_text_field( $new_instance['type'] ) : 'post';
+			$instance['period']      = isset( $new_instance['period'] ) ? sanitize_text_field( $new_instance['period'] ) : 'all';
+			$instance['style']       = isset( $new_instance['style'] ) ? sanitize_text_field( $new_instance['style'] ) : 'simple';
+			$instance['profile_url'] = isset( $new_instance['profile_url'] ) ? sanitize_text_field( $new_instance['profile_url'] ) : 'bp';
+
+			// Sanitize numeric fields
+			$instance['count'] = isset( $new_instance['count'] ) ? absint( $new_instance['count'] ) : 10;
+			$instance['size'] = isset( $new_instance['size'] ) ? absint( $new_instance['size'] ) : 32;
+			$instance['trim'] = isset( $new_instance['trim'] ) ? absint( $new_instance['trim'] ) : 10;
+
+			// Ensure minimum values
+			if ( $instance['count'] < 1 ) {
+				$instance['count'] = 1;
+			}
+			if ( $instance['size'] < 8 ) {
+				$instance['size'] = 8;
+			}
+			if ( $instance['trim'] < 1 ) {
+				$instance['trim'] = 1;
+			}
+
+			// Sanitize boolean fields
+			$instance['show_count']  = isset( $new_instance['show_count'] ) ? (bool) $new_instance['show_count'] : false;
+			$instance['show_thumb']  = isset( $new_instance['show_thumb'] ) ? (bool) $new_instance['show_thumb'] : false;
 
 			return $instance;
 		}
