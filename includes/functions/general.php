@@ -37,6 +37,7 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 	/**
 	 * Get options list values
 	 * WordPress automatically caches get_option() per request
+	 * Additional static caching for parsed nested options to avoid repeated parsing
 	 *
 	 * @param string $option
 	 * @param array|string $default
@@ -44,13 +45,27 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 	 */
 	function wp_ulike_get_option( $option = '', $default = null ) {
 		// WordPress automatically caches get_option() per request
-		// No need for custom static caching - WordPress handles it
-		$settings = get_option( 'wp_ulike_settings' );
+		// Static cache for parsed nested options to avoid repeated parsing
+		static $parsed_options_cache = array();
 
 		// Return all settings if no option specified
-		// If settings don't exist (false) or are empty, return default
 		if ( empty( $option ) ) {
-			return ( $settings !== false && ! empty( $settings ) ) ? $settings : $default;
+			$settings = get_option( 'wp_ulike_settings' );
+			return ( $settings !== false && ! empty( $settings ) ) ? $settings : [];
+		}
+
+		// Check cache first for nested options (most common case)
+		if ( strpos( $option, '|' ) !== false ) {
+			if ( isset( $parsed_options_cache[ $option ] ) ) {
+				return $parsed_options_cache[ $option ];
+			}
+		}
+
+		$settings = get_option( 'wp_ulike_settings' );
+
+		// If settings don't exist (false) or are empty, return default
+		if ( $settings === false || empty( $settings ) ) {
+			return $default;
 		}
 
 		// Handle nested options with pipe separator (e.g., "posts_group|template")
@@ -62,15 +77,25 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 				if ( isset( $value[ $key ] ) ) {
 					$value = $value[ $key ];
 				} else {
+					$parsed_options_cache[ $option ] = $default;
 					return $default;
 				}
 			}
 
+			// Cache the parsed result
+			$parsed_options_cache[ $option ] = $value;
 			return $value;
 		}
 
 		// Simple option lookup
-		return isset( $settings[ $option ] ) ? $settings[ $option ] : $default;
+		$result = isset( $settings[ $option ] ) ? $settings[ $option ] : $default;
+
+		// Cache simple options too (though less benefit)
+		if ( ! isset( $parsed_options_cache[ $option ] ) ) {
+			$parsed_options_cache[ $option ] = $result;
+		}
+
+		return $result;
 	}
 }
 
