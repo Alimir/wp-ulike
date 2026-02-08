@@ -231,17 +231,18 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_update_button_icon', 1 );
 }
 
-if( ! function_exists( 'wp_ulike_deprecated_csf_class' ) ){
+if( ! function_exists( 'wp_ulike_load_deprecated_classes' ) ){
 	/**
-	 * Require deprecated CSF class
+	 * Load deprecated classes for backward compatibility
 	 *
 	 * @return void
 	 */
-	function wp_ulike_deprecated_csf_class(){
-		// include _deprecated settings panel
+	function wp_ulike_load_deprecated_classes(){
+		// Include deprecated class - it will check if ULF exists before defining itself
 		require_once( WP_ULIKE_ADMIN_DIR . '/includes/deprecated.class.php');
 	}
-	add_action( 'plugins_loaded', 'wp_ulike_deprecated_csf_class' );
+	// Load on plugins_loaded with low priority to ensure real ULF loads first if available
+	add_action( 'plugins_loaded', 'wp_ulike_load_deprecated_classes', 999 );
 }
 
 
