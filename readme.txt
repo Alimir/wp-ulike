@@ -1,4 +1,4 @@
-=== WP ULike - Engagement Analytics & Interactive Buttons to Understand Your Audience ===
+=== WP ULike – Like & Dislike Buttons for Engagement and Feedback ===
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
@@ -6,37 +6,37 @@ Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Like & Dislike buttons with real-time analytics. Track engagement and understand what your audience loves across posts, products, and comments.
+Voting buttons that let your visitors give instant feedback. See what your audience loves with no registration, no friction, just one click.
 
 == Description ==
 
-= THE #1 WORDPRESS ENGAGEMENT ANALYTICS PLUGIN, TURN VISITORS INTO INSIGHTS INSTANTLY =
+= #1 Like & Dislike Buttons for WordPress – Get Instant Feedback and Engagement =
 
 You're creating great content, but you're flying blind. Sound familiar? You don't know which posts hit, which products people love, or what's actually resonating with your visitors. Comments are great, but most people don't comment. They just consume and move on.
 
-[WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) fixes that. Get instant feedback on what your audience loves. No registration, no friction, no barriers. Just one click tells you exactly what's working.
+[WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) fixes that. Voting buttons that let your visitors give instant feedback. No registration, no friction, no barriers. Just one click tells you exactly what's working.
 
 = Here's How It Works =
 
-Activate the plugin, and Like buttons automatically appear on your posts, comments, WooCommerce products, BuddyPress (BuddyBoss) activities, and bbPress topics. Zero setup. Zero configuration. It just works.
+Activate the plugin, and voting buttons automatically appear on your posts. Zero setup. Zero configuration. It just works.
 
-Every interaction gets tracked in real-time. You'll see which content gets the most love, when people engage, and how engagement trends over time. No more guessing—you'll know exactly what your audience wants more of.
+Your visitors click to vote. You see what resonates. That's it.
 
-The analytics dashboard shows you the full picture: your top-performing content, voting statistics, engagement trends, and detailed logs. It's like having a focus group that never stops giving you feedback.
+Every vote gets tracked so you can see which content your audience loves most. The dashboard shows your top-performing content and voting statistics—simple, actionable insights without the bloat.
 
-And here's what we're proud of: it's all privacy-safe. GDPR compliant with IP anonymization. We don't store personal data—just the engagement metrics that help you make better decisions.
+And here's what we're proud of: it's all privacy-safe. GDPR compliant with IP anonymization. We don't store personal data—just the voting metrics that help you make better decisions.
 
 = The Three Things That Matter =
 
-**Instant Engagement:** Interactive buttons that work everywhere. No barriers, no registration required (though you can restrict to logged-in users if needed). Just pure, simple engagement.
+**One-Click Voting:** Instant feedback buttons. No barriers, no registration required (though you can restrict to logged-in users if needed). Just pure, simple voting.
 
-**Real Insights:** A dashboard that shows you what's actually working. Not vanity metrics—real data about what content drives engagement.
+**Clear Insights:** A dashboard that shows you what's actually working. Not vanity metrics—real data about what content your audience loves.
 
-**Privacy First:** Built with privacy in mind from day one. We respect your visitors because that's the right thing to do.
+**Privacy First:** Built with privacy in mind from day one. GDPR compliant, IP anonymization. We respect your visitors because that's the right thing to do.
 
 [youtube https://www.youtube.com/watch?v=nxQto2Yj_yc]
 
@@ -44,59 +44,55 @@ And here's what we're proud of: it's all privacy-safe. GDPR compliant with IP an
 
 We've been doing this for years, and we've seen who gets the most value:
 
-**Bloggers and content creators:** Stop writing in the dark. See which posts actually resonate.
+**Bloggers and content creators:** Stop writing in the dark. See which posts actually resonate with your audience.
 
-**WooCommerce store owners:** Understand customer preferences. See which products get appreciation, not just views.
+**Store owners:** Understand what your customers love. See which products get appreciation, not just views.
 
-**Community managers:** Track engagement across BuddyPress and bbPress forums to foster better discussions.
+**Community managers:** Track what resonates in your forums and communities.
 
-**Business owners:** Get instant feedback without waiting for comments or running surveys.
-
-**Marketers:** Make decisions based on data, not hunches. Get real engagement metrics.
+**Anyone who wants feedback:** Get instant voting feedback without waiting for comments or running surveys.
 
 = The Problems We Actually Solve =
 
-**Low engagement?** We fix that. Interactive buttons with zero friction. No registration required—visitors just click and go.
+**Low engagement?** We fix that. Voting buttons with zero friction. No registration required—visitors just click and go.
 
-**Flying blind on what works?** Not anymore. See exactly which posts, products, or activities perform best. Real statistics, real-time data.
+**Flying blind on what works?** Not anymore. See exactly which content performs best. Real statistics, real-time data.
 
-**Privacy concerns?** We get it. GDPR compliant with IP anonymization. No personal data stored—just the metrics you need.
+**Privacy concerns?** We get it. GDPR compliant with IP anonymization. No personal data stored—just the voting metrics you need.
 
-**Worried about speed?** Don't be. Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin.
-
-**Need it to work everywhere?** It does. Posts, comments, WooCommerce products, BuddyPress activities, bbPress topics—one plugin handles it all.
+**Worried about speed?** Don't be. Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin. Built to be fast, not bloated.
 
 = What You Get (Free Version) =
 
-We believe in giving you real value, not a teaser. The free version includes everything you need to build engagement and understand your audience:
+We believe in giving you real value, not a teaser. The free version includes everything you need for instant voting and clear insights:
 
-**Like Buttons Everywhere:** Auto-display on posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Or drop them anywhere with the `[wp_ulike]` shortcode. Your choice.
+**Voting Buttons:** Auto-display on posts, or drop them anywhere with the `[wp_ulike]` shortcode. Works with WooCommerce, BuddyPress, and bbPress if you use them—but it's not required.
 
-**Analytics That Matter:** A real-time dashboard showing your most popular content, voting statistics, engagement trends, and detailed logs. This isn't fluff—it's actionable data.
+**Simple Dashboard:** See your most popular content and voting statistics. This isn't fluff—it's actionable data that helps you understand what resonates.
 
-**Live Preview Customizer:** Design your buttons in real-time with our built-in customizer panel. See every change instantly as you adjust colors, borders, spacing, typography, and more. No more guessing how your buttons will look—watch them update in real-time. It's like having a design studio built right into the plugin. Multiple button styles included, all customizable. No coding required.
+**Easy Customization:** Design your buttons with our built-in customizer. Adjust colors, spacing, and styles with a live preview. Multiple button styles included. No coding required.
 
 **Built for Speed:** Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin. Your site won't slow down.
 
 **Accessibility & RTL Support:** Full RTL support for Arabic, Hebrew, and other right-to-left languages. We built this right.
 
-**The Extras:** Gutenberg block support, shortcodes, auto-display options, and seamless integrations with WooCommerce, BuddyPress, bbPress, Elementor, myCRED, and more. It just works.
+**Gutenberg Block:** Add voting buttons directly in the block editor. Shortcodes available too. It just works.
 
 = Why 80,000+ Sites Use This =
 
 We're not a faceless corporation. We're a team that actually cares about your success.
 
-Every feature we build comes from real user feedback. You ask, we listen, we build. That's how we've grown from a simple idea to powering over 80,000 websites.
+We've stayed focused on one thing: making voting easy and insights clear. That focus is why we've grown from a simple idea to powering over 80,000 websites.
 
-We test everything with major caching plugins because your site's performance matters. We built this to be fast, and we keep it that way.
+We test everything with major caching plugins because your site's performance matters. We built this to be fast, and we keep it that way. No bloat, no unnecessary features—just what you need.
 
 Security and privacy aren't afterthoughts—they're built into everything we do. We follow WordPress best practices because your site's security matters.
 
-And we keep improving. Regular updates, new features, bug fixes. We're in this for the long haul, and we're committed to making this better every single day.
+And we keep improving. Regular updates, bug fixes, and thoughtful features. We're in this for the long haul, and we're committed to keeping WP ULike fast, focused, and reliable.
 
-= WP ULike Pro: When You're Ready to Scale =
+= WP ULike Pro: When You Need More =
 
-The free version gets you started. It's complete, powerful, and ready to use right now. But when you're ready to take engagement to the next level, Pro adds the features that serious businesses need:
+The free version gets you started. It's complete, powerful, and ready to use right now. Pro adds advanced features for when you need deeper insights:
 
 **Dislike Buttons:** Get the full picture. Sometimes you need to know what doesn't resonate, not just what does.
 
@@ -104,11 +100,13 @@ The free version gets you started. It's complete, powerful, and ready to use rig
 
 **Advanced Analytics:** Deep insights with filters, date ranges, world map visualization, device analytics, and exportable reports. Export to CSV, PNG, or SVG for presentations and analysis.
 
-**Premium Templates & User Profiles:** 25+ professionally designed button styles that actually stand out. Plus Instagram-inspired user profiles that turn engaged visitors into community members.
+**Premium Templates:** 25+ professionally designed button styles that actually stand out.
+
+**User Profiles:** Instagram-inspired user profiles that turn engaged visitors into community members.
 
 **Login/Registration & Social Sharing:** Beautiful AJAX-powered forms with social login integration. Turn engagement into registered users. One-click sharing to amplify your reach.
 
-**SEO Schema, REST API & Elementor Widgets:** Structured data for better search rankings. Full REST API for custom integrations. Drag-and-drop Elementor widgets for visual page building.
+**REST API & Elementor Widgets:** Full REST API for custom integrations. Drag-and-drop Elementor widgets for visual page building.
 
 Think of Pro as your growth partner. When you're ready to scale, we're here to help you get there.
 
@@ -165,13 +163,13 @@ Nope. One click, instant engagement. No registration required. If you want to bu
 Yes. It adapts to your theme automatically. Works with any WordPress theme that follows coding standards. If you run into styling issues, let us know and we'll help.
 
 = Is WP ULike compatible with other plugins and caching? =
-Absolutely. We've tested it with WooCommerce, BuddyPress, bbPress, Elementor, GamiPress, myCRED, and all major caching plugins (WP Rocket, W3 Total Cache, WP Super Cache, LiteSpeed Cache, and more). Your site will stay fast.
+Absolutely. We've tested it with all major caching plugins (WP Rocket, W3 Total Cache, WP Super Cache, LiteSpeed Cache, and more). It also works seamlessly with WooCommerce, BuddyPress, bbPress, Elementor, GamiPress, and myCRED if you use them. Your site will stay fast.
 
 = Can I customize the button appearance? =
 Yes. Multiple built-in templates and styles. Customize colors, text, and styling through the settings panel—no coding needed. Pro version includes 25+ premium templates if you want something more unique.
 
 = What's the difference between WP ULike Free and Pro? =
-Free gives you everything you need: Like buttons (auto-display + shortcodes), real-time analytics dashboard, customizable templates, Gutenberg block support, and full integrations with WooCommerce, BuddyPress, bbPress, Elementor, and myCRED. Pro adds the growth features: Dislike buttons, advanced analytics with filters and date ranges, view tracking with engagement rates, 25+ premium templates, user profiles, login/registration forms, social sharing, SEO schema, REST API, and Elementor widgets.
+Free gives you everything you need: voting buttons (auto-display + shortcodes), real-time dashboard, customizable templates, and Gutenberg block support. Pro adds advanced features: dislike buttons, advanced analytics with filters and date ranges, view tracking with engagement rates, 25+ premium templates, user profiles, login/registration forms, social sharing, REST API, and Elementor widgets.
 
 = Can I use WP ULike on a multisite setup? =
 Yes. Works perfectly across WordPress multisite networks. Each site gets its own settings and statistics.
@@ -180,6 +178,12 @@ Yes. Works perfectly across WordPress multisite networks. Each site gets its own
 Yes. We follow WordPress security best practices, regularly audit our code, and have over 80,000 active installations with a high WordPress.org rating. Security isn't optional for us—it's built in.
 
 == Changelog ==
+
+= 5.0.1 =
+* Improved: Performance optimizations across page loading, statistics display, and data processing for faster response times.
+* Improved: Enhanced security and reliability improvements for widgets and statistics functionality.
+* Improved: Optimized user experience when viewing likers lists and activity data.
+* Removed: Composer dependency replaced with native WordPress solution for improved compatibility and reduced plugin footprint.
 
 = 5.0.0 =
 * Added: Brand new settings panel that's actually beautiful to use. Everything is organized, easy to find, and makes configuring your like buttons a breeze instead of a chore.
