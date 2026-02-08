@@ -462,7 +462,7 @@ if( ! function_exists( 'wp_ulike_get_user_latest_activity' ) ) {
 	function wp_ulike_get_user_latest_activity( $item_id, $user_id, $type ) {
 		global $wpdb;
 
-		$settings    = new wp_ulike_setting_type( $type );
+		$settings    = wp_ulike_setting_type::get_instance( $type );
 		$table_name  = $wpdb->prefix . $settings->getTableName();
 		$column_name = $settings->getColumnName();
 
@@ -954,7 +954,7 @@ if( ! function_exists('wp_ulike_count_current_fingerprint') ){
 
 		// Try to get from cache
 		$existing_count = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
-		$settings       = new wp_ulike_setting_type( $type );
+		$settings       = wp_ulike_setting_type::get_instance( $type );
 
 		if ( false === $existing_count ) {
 			$table = $wpdb->prefix . $settings->getTableName();

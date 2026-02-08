@@ -15,7 +15,7 @@ class wp_ulike_setting_repo {
 	}
 
 	protected static function getSettingKey( $type ){
-		$settings = new wp_ulike_setting_type( $type );
+		$settings = wp_ulike_setting_type::get_instance( $type );
 		return $settings->getSettingKey();
 	}
 

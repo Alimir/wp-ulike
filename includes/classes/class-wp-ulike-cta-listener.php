@@ -64,7 +64,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 			// Validate inputs
 			$this->validates();
 			// get settings info
-			$this->settings_type = new wp_ulike_setting_type( $this->data['type'] );
+			$this->settings_type = wp_ulike_setting_type::get_instance( $this->data['type'] );
 
 			if( empty( $this->settings_type->getType() ) ){
 				throw new \Exception( esc_html__( 'Invalid item type.', 'wp-ulike' ) );

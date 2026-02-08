@@ -25,12 +25,9 @@ if ( ! class_exists( 'wp_ulike_cta_template' ) ) {
 		function __construct( $args ){
 			$this->args = $args;
 			
-			static $cached_settings = array();
+			// Use singleton pattern instead of manual caching
 			$slug = $this->args['slug'];
-			if ( ! isset( $cached_settings[ $slug ] ) ) {
-				$cached_settings[ $slug ] = new wp_ulike_setting_type( $slug );
-			}
-			$this->settings = $cached_settings[ $slug ];
+			$this->settings = wp_ulike_setting_type::get_instance( $slug );
 			
 			static $cached_methods = array();
 			if ( ! isset( $cached_methods[ $slug ] ) ) {
