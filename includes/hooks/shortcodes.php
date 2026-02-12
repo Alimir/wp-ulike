@@ -203,7 +203,7 @@ if( ! function_exists( 'wp_ulike_likers_box_shortcode' ) ){
         }
 
         if( ! empty( $args['template']  ) ){
-            $args['template'] = html_entity_decode( $args['template']  );
+            $args['template'] = wp_ulike_kses( $args['template'] );
         }
 
         $output = sprintf( '<div class="wp_ulike_manual_likers_wrapper wp_%s_likers_%d">%s</div>', esc_attr( $args['type'] ), esc_attr( $args['id'] ),
