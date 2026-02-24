@@ -20,6 +20,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 		{
 			$this->purgeEnduranceCache();
 			$this->purgeHummingbirdCache();
+			$this->purgeKinstaCache();
 			$this->purgeLitespeedCache();
 			$this->purgeSiteGroundCache();
 			$this->purgeSwiftPerformanceCache();
@@ -39,6 +40,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 			if (!empty($post_ids)) {
 				$this->purgeEnduranceCache($post_ids, $reffer_url);
 				$this->purgeHummingbirdCache($post_ids, $reffer_url);
+				$this->purgeKinstaCache($post_ids, $reffer_url);
 				$this->purgeLitespeedCache($post_ids, $reffer_url);
 				$this->purgeSiteGroundCache($post_ids, $reffer_url);
 				$this->purgeSwiftPerformanceCache($post_ids, $reffer_url);
@@ -50,6 +52,32 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 				$this->purgeCacheEnablerCache($post_ids, $reffer_url);
 				$this->purgeFlyingPressCache($post_ids, $reffer_url);
 				$this->purgeNitropackCache($post_ids, $reffer_url);
+			}
+		}
+
+		/**
+		 * Kinsta cache (MU plugin). Selective purge by post or full purge.
+		 * @see https://kinsta.com/
+		 */
+		protected function purgeKinstaCache($post_ids = [], $reffer_url = NULL)
+		{
+			global $kinsta_muplugin;
+
+			if ( ! isset( $kinsta_muplugin->kinsta_cache_purge ) || ! is_callable( array( $kinsta_muplugin->kinsta_cache_purge, 'initiate_purge' ) ) ) {
+				return;
+			}
+
+			if ( empty( $post_ids ) ) {
+				if ( is_callable( array( $kinsta_muplugin->kinsta_cache_purge, 'purge_complete_caches' ) ) ) {
+					$kinsta_muplugin->kinsta_cache_purge->purge_complete_caches( true );
+				}
+				return;
+			}
+
+			foreach ( $post_ids as $post_id ) {
+				if ( get_post_type( $post_id ) ) {
+					$kinsta_muplugin->kinsta_cache_purge->initiate_purge( $post_id );
+				}
 			}
 		}
 
