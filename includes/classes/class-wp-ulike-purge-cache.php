@@ -20,6 +20,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 		{
 			$this->purgeEnduranceCache();
 			$this->purgeHummingbirdCache();
+			$this->purgeKinstaCache();
 			$this->purgeLitespeedCache();
 			$this->purgeSiteGroundCache();
 			$this->purgeSwiftPerformanceCache();
@@ -39,6 +40,7 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 			if (!empty($post_ids)) {
 				$this->purgeEnduranceCache($post_ids, $reffer_url);
 				$this->purgeHummingbirdCache($post_ids, $reffer_url);
+				$this->purgeKinstaCache($post_ids, $reffer_url);
 				$this->purgeLitespeedCache($post_ids, $reffer_url);
 				$this->purgeSiteGroundCache($post_ids, $reffer_url);
 				$this->purgeSwiftPerformanceCache($post_ids, $reffer_url);
@@ -50,6 +52,58 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 				$this->purgeCacheEnablerCache($post_ids, $reffer_url);
 				$this->purgeFlyingPressCache($post_ids, $reffer_url);
 				$this->purgeNitropackCache($post_ids, $reffer_url);
+			}
+		}
+
+		/**
+		 * Kinsta cache purge. Only runs when Kinsta MU plugin is present; uses kinsta_cache_purge->initiate_purge( $post_id ).
+		 * Also purges referrer URL via GET {url}/kinsta-clear-cache/ when it differs from the post.
+		 *
+		 * @param array       $post_ids   Post IDs to purge.
+		 * @param string|null $reffer_url Referrer URL to purge when different from post.
+		 * @see https://kinsta.com/
+		 */
+		protected function purgeKinstaCache( $post_ids = [], $reffer_url = null ) {
+			global $kinsta_muplugin;
+
+			if ( ! did_action( 'init' ) || ! isset( $kinsta_muplugin ) || ! class_exists( '\Kinsta\KMP' ) || ! $kinsta_muplugin instanceof \Kinsta\KMP ) {
+				return;
+			}
+
+			$purge = isset( $kinsta_muplugin->kinsta_cache_purge ) ? $kinsta_muplugin->kinsta_cache_purge : null;
+			if ( ! $purge || ! is_callable( array( $purge, 'initiate_purge' ) ) ) {
+				return;
+			}
+
+			if ( empty( $post_ids ) ) {
+				if ( is_callable( array( $purge, 'purge_complete_caches' ) ) ) {
+					$purge->purge_complete_caches( true );
+				}
+				return;
+			}
+
+			$purged_permalinks = array();
+			foreach ( (array) $post_ids as $post_id ) {
+				$post_id = (int) $post_id;
+				if ( $post_id <= 0 || ! get_post_type( $post_id ) ) {
+					continue;
+				}
+				$purge->initiate_purge( $post_id );
+				$permalink = get_permalink( $post_id );
+				if ( $permalink ) {
+					$purged_permalinks[] = untrailingslashit( preg_replace( '#\?.*$#', '', $permalink ) );
+				}
+			}
+
+			if ( ! empty( $reffer_url ) && is_string( $reffer_url ) ) {
+				$reffer_url = esc_url_raw( $reffer_url );
+				if ( $reffer_url ) {
+					$ref_normalized = untrailingslashit( preg_replace( '#\?.*$#', '', $reffer_url ) );
+					if ( ! in_array( $ref_normalized, $purged_permalinks, true ) ) {
+						$base = rtrim( preg_replace( '#\?.*$#', '', $reffer_url ), '/' );
+						wp_remote_get( $base . '/kinsta-clear-cache/', array( 'sslverify' => false, 'timeout' => 5 ) );
+					}
+				}
 			}
 		}
 
