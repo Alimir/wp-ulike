@@ -20,6 +20,7 @@ include_once( 'functions/queries.php' );
 
 // Hooks
 include_once( 'hooks/general.php' );
+include_once( 'hooks/privacy.php' );
 include_once( 'hooks/shortcodes.php' );
 include_once( 'hooks/third-party.php' );
 

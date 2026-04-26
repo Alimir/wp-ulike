@@ -810,3 +810,25 @@ if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
 	}
 	add_action('um_profile_content_wp-ulike-comments_default', 'wp_ulike_comments_um_profile_content');
 }
+
+/*******************************************************
+  WooCommerce (HPOS compatibility)
+*******************************************************/
+
+if ( ! function_exists( 'wp_ulike_declare_wc_feature_compatibility' ) ) {
+	/**
+	 * Declare compatibility with WooCommerce High-Performance Order Storage (HPOS).
+	 *
+	 * @return void
+	 */
+	function wp_ulike_declare_wc_feature_compatibility() {
+		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+				'custom_order_tables',
+				WP_ULIKE_DIR . 'wp-ulike.php',
+				true
+			);
+		}
+	}
+	add_action( 'before_woocommerce_init', 'wp_ulike_declare_wc_feature_compatibility' );
+}

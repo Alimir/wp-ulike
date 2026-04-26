@@ -504,7 +504,7 @@ module.exports = function (grunt) {
           exclude: [],
           src: "<%= meta.buildPath %>/",
           dest: "/home/wpulikec/www/wp-content/plugins/<%= meta.project %>/",
-          host: "wpulikec@frault2.hostarmada.net",
+          host: "wpulikec@frault5.hostarmada.net",
           port: "19199",
         },
       },
