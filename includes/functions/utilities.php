@@ -578,3 +578,28 @@ if( ! function_exists('wp_ulike_is_bot_request') ){
 		return $parser->is_bot();
 	}
 }
+
+if ( ! function_exists( 'wp_ulike_read_php_input_capped' ) ) {
+	/**
+	 * Read php://input up to a maximum size (avoids loading huge bodies into memory).
+	 *
+	 * @param int $max_bytes Maximum allowed body length in bytes.
+	 * @return string|\WP_Error Body string, or WP_Error if unreadable or over limit.
+	 */
+	function wp_ulike_read_php_input_capped( $max_bytes ) {
+		$max_bytes = (int) $max_bytes;
+		if ( $max_bytes <= 0 ) {
+			return '';
+		}
+
+		$chunk = file_get_contents( 'php://input', false, null, 0, $max_bytes + 1 );
+		if ( false === $chunk ) {
+			return new WP_Error( 'wp_ulike_read_body', esc_html__( 'Could not read request body.', 'wp-ulike' ) );
+		}
+		if ( strlen( $chunk ) > $max_bytes ) {
+			return new WP_Error( 'wp_ulike_body_too_large', esc_html__( 'Request body is too large.', 'wp-ulike' ) );
+		}
+
+		return $chunk;
+	}
+}
