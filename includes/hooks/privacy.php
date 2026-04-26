@@ -16,10 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wp_ulike_privacy_log_tables() {
 	return array(
-		'ulike'            => __( 'Post like logs', 'wp-ulike' ),
-		'ulike_comments'   => __( 'Comment like logs', 'wp-ulike' ),
-		'ulike_activities' => __( 'Activity like logs', 'wp-ulike' ),
-		'ulike_forums'     => __( 'Forum topic like logs', 'wp-ulike' ),
+		'ulike'            => __( 'Posts', 'wp-ulike' ),
+		'ulike_comments'   => __( 'Comments', 'wp-ulike' ),
+		'ulike_activities' => __( 'Activities', 'wp-ulike' ),
+		'ulike_forums'     => __( 'Topics', 'wp-ulike' ),
 	);
 }
 
@@ -68,7 +68,7 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 	if ( ! empty( $rows ) ) {
 		foreach ( $rows as $row ) {
 			$src   = isset( $row['src'] ) ? $row['src'] : '';
-			$label = isset( $labels[ $src ] ) ? $labels[ $src ] : __( 'Vote log', 'wp-ulike' );
+			$label = isset( $labels[ $src ] ) ? $labels[ $src ] : __( 'Logs', 'wp-ulike' );
 			$data[] = array(
 				'group_id'    => 'wp-ulike',
 				'group_label' => __( 'WP ULike', 'wp-ulike' ),
