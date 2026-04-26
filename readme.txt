@@ -6,7 +6,7 @@ Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 5.0.2
+Stable tag: 5.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,7 +28,7 @@ Your visitors click to vote. You see what resonates. That's it.
 
 Every vote gets tracked so you can see which content your audience loves most. The dashboard shows your top-performing content and voting statistics—simple, actionable insights without the bloat.
 
-And here's what we're proud of: it's all privacy-safe. GDPR compliant with IP anonymization. We don't store personal data—just the voting metrics that help you make better decisions.
+And here's what we're proud of: it's privacy-conscious. Optional IP anonymization, WordPress privacy export/erase hooks for logged-in users, and configurable logging—so you stay in control of what you store.
 
 = The Three Things That Matter =
 
@@ -36,7 +36,7 @@ And here's what we're proud of: it's all privacy-safe. GDPR compliant with IP an
 
 **Clear Insights:** A dashboard that shows you what's actually working. Not vanity metrics—real data about what content your audience loves.
 
-**Privacy First:** Built with privacy in mind from day one. GDPR compliant, IP anonymization. We respect your visitors because that's the right thing to do.
+**Privacy First:** Built with privacy in mind from day one. Optional IP anonymization, tools that work with WordPress personal data export and erase, and clear choices for what gets logged.
 
 [youtube https://www.youtube.com/watch?v=nxQto2Yj_yc]
 
@@ -58,7 +58,7 @@ We've been doing this for years, and we've seen who gets the most value:
 
 **Flying blind on what works?** Not anymore. See exactly which content performs best. Real statistics, real-time data.
 
-**Privacy concerns?** We get it. GDPR compliant with IP anonymization. No personal data stored—just the voting metrics you need.
+**Privacy concerns?** We get it. Optional IP anonymization, privacy export/erase support for user-linked logs, and settings so you can align logging with your policy.
 
 **Worried about speed?** Don't be. Vanilla JavaScript (no jQuery), optimized for performance, compatible with every major caching plugin. Built to be fast, not bloated.
 
@@ -178,6 +178,13 @@ Yes. Works perfectly across WordPress multisite networks. Each site gets its own
 Yes. We follow WordPress security best practices, regularly audit our code, and have over 80,000 active installations with a high WordPress.org rating. Security isn't optional for us—it's built in.
 
 == Changelog ==
+
+= 5.0.3 =
+* Added: Support for WordPress Export Personal Data and Erase Personal Data tools for votes stored under a user account.
+* Added: Declared compatibility with WooCommerce’s newer order storage option, so shops using it see fewer “incompatible plugin” notices.
+* Improved: Like button block updated for current Gutenberg / block editor expectations.
+* Improved: Safer handling of unusually large saves in Settings and the button customizer (admin only).
+* Improved: Better compatibility with recent PHP versions when the plugin loads its code.
 
 = 5.0.2 =
 * Added: Kinsta purge cache support.
