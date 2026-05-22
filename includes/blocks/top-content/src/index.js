@@ -1,0 +1,629 @@
+/**
+ * WP ULike Top Content Block
+ */
+
+import { registerBlockType, getBlockType } from '@wordpress/blocks';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { useSelect } from '@wordpress/data';
+import {
+	PanelBody,
+	SelectControl,
+	RangeControl,
+	ToggleControl,
+	TextControl,
+	Notice,
+	Spinner,
+	FormTokenField,
+} from '@wordpress/components';
+import { __, sprintf } from '@wordpress/i18n';
+import ServerSideRender from '@wordpress/server-side-render';
+import { useMemo } from '@wordpress/element';
+
+import metadata from '../block.json';
+import './editor.scss';
+
+/** Build "Top Posts", "Top User(s)", etc. from existing strings. */
+const formatTopTypeLabel = ( type ) => {
+	const suffixes = {
+		post: __( 'Posts', 'wp-ulike' ),
+		comment: __( 'Comments', 'wp-ulike' ),
+		users: __( 'User(s)', 'wp-ulike' ),
+		activity: __( 'Activities', 'wp-ulike' ),
+		topic: __( 'Topics', 'wp-ulike' ),
+	};
+	if ( ! suffixes[ type ] ) {
+		return __( 'Top', 'wp-ulike' );
+	}
+	return sprintf( '%s %s', __( 'Top', 'wp-ulike' ), suffixes[ type ] );
+};
+
+const FALLBACK_CONTENT_TYPES = [
+	{ value: 'post', label: formatTopTypeLabel( 'post' ) },
+	{ value: 'comment', label: formatTopTypeLabel( 'comment' ) },
+	{ value: 'users', label: formatTopTypeLabel( 'users' ) },
+];
+
+const STATIC_SORT_OPTIONS = [
+	{ value: 'like', label: __( 'Like', 'wp-ulike' ), proOnly: false },
+	{ value: 'unlike', label: __( 'Unlike', 'wp-ulike' ), proOnly: false },
+	{ value: 'undislike', label: __( 'Undislike', 'wp-ulike' ), proOnly: false },
+	{ value: 'dislike', label: __( 'Dislike', 'wp-ulike' ), proOnly: true },
+];
+
+const STATIC_SORT_ORDERS = [
+	{ value: 'DESC', label: __( 'Descending', 'wp-ulike' ) },
+	{ value: 'ASC', label: __( 'Ascending', 'wp-ulike' ) },
+];
+
+const STATIC_PERIOD_PRESETS = [
+	{ value: 'all', label: __( 'All The Times', 'wp-ulike' ) },
+	{ value: 'year', label: __( 'This Year', 'wp-ulike' ) },
+	{ value: 'last_year', label: __( 'Last Year', 'wp-ulike' ) },
+	{ value: 'month', label: __( 'Month', 'wp-ulike' ) },
+	{ value: 'last_month', label: __( 'Last Month', 'wp-ulike' ) },
+	{ value: 'week', label: __( 'This Week', 'wp-ulike' ) },
+	{ value: 'last_week', label: __( 'Last Week', 'wp-ulike' ) },
+	{ value: 'today', label: __( 'Today', 'wp-ulike' ) },
+	{ value: 'yesterday', label: __( 'Yesterday', 'wp-ulike' ) },
+];
+
+const STATIC_INTERVAL_UNITS = [
+	{ value: 'DAY', label: __( 'day', 'wp-ulike' ) },
+	{ value: 'WEEK', label: __( 'week', 'wp-ulike' ) },
+	{ value: 'MONTH', label: __( 'month', 'wp-ulike' ) },
+	{ value: 'HOUR', label: __( 'hour', 'wp-ulike' ) },
+];
+
+const getEditorConfig = () => window.wpUlikeTopContentBlock || {};
+
+const getContentTypeOptions = () => {
+	const cfg = getEditorConfig();
+	if ( cfg.contentTypes?.length ) {
+		return cfg.contentTypes;
+	}
+	return [ ...FALLBACK_CONTENT_TYPES ];
+};
+
+const label = ( key, fallback ) => {
+	const i18n = getEditorConfig().i18n || {};
+	return i18n[ key ] || fallback;
+};
+
+/** Strip trailing colons from legacy plugin strings for cleaner UI labels. */
+const stripLabelColon = ( text ) => {
+	if ( ! text ) {
+		return text;
+	}
+	return String( text ).replace( /:+\s*$/, '' ).trim();
+};
+
+const uiLabel = ( key, fallback ) => stripLabelColon( label( key, fallback ) );
+
+/** "Last {{days}} Days" using the real day count (not a fixed preview number). */
+const formatLastDaysLabel = ( days ) => {
+	const count = Math.max( 1, parseInt( days, 10 ) || 1 );
+	return __( 'Last {{days}} Days', 'wp-ulike' ).replace( /\{\{days\}\}/g, String( count ) );
+};
+
+if ( ! getBlockType( metadata.name ) ) {
+	registerBlockType( metadata.name, {
+		...metadata,
+		edit: ( { attributes, setAttributes } ) => {
+			const blockProps = useBlockProps( {
+				className: 'wp-block-wp-ulike-top-content',
+			} );
+
+			const {
+				contentType,
+				sortBy,
+				sortOrder,
+				periodMode,
+				period,
+				intervalValue,
+				intervalUnit,
+				dateStart,
+				dateEnd,
+				postTypes,
+				taxonomy,
+				taxonomyTerms,
+				limit,
+				showCount,
+				showThumbnail,
+				showRank,
+				showHeading,
+				showEngagedUsers,
+				showViews,
+				titleTrim,
+				thumbnailSize,
+				heading,
+				profileUrl,
+			} = attributes;
+
+			const config = getEditorConfig();
+
+			const contentTypeOptions = useMemo( () => getContentTypeOptions(), [ config.contentTypes ] );
+
+			const sortOptions = useMemo( () => {
+				const source = config.sortOptions?.length ? config.sortOptions : STATIC_SORT_OPTIONS;
+				return source.map( ( item ) => ( {
+					label: item.proOnly && ! config.isPro
+						? `${ item.label } (${ label( 'proFeature', __( 'Pro Feature', 'wp-ulike' ) ) })`
+						: item.label,
+					value: item.value,
+					disabled: item.proOnly && ! config.isPro,
+				} ) );
+			}, [] );
+
+			const periodPresetOptions = useMemo( () => {
+				const source = config.periodPresets?.length ? config.periodPresets : STATIC_PERIOD_PRESETS;
+				return source.map( ( item ) => ( {
+					label: item.label,
+					value: item.value,
+				} ) );
+			}, [ config.periodPresets ] );
+
+			const periodSelectOptions = useMemo( () => {
+				return [
+					...periodPresetOptions.map( ( item ) => ( {
+						label: item.label,
+						value: `preset:${ item.value }`,
+					} ) ),
+					{
+						label: formatLastDaysLabel( intervalValue ),
+						value: 'mode:interval',
+					},
+					{
+						label: uiLabel( 'periodRange', __( 'Date Range', 'wp-ulike' ) ),
+						value: 'mode:range',
+					},
+				];
+			}, [ periodPresetOptions, intervalValue ] );
+
+			const periodSelectValue =
+				periodMode === 'preset' ? `preset:${ period }` : `mode:${ periodMode }`;
+
+			const onContentTypeChange = ( value ) => {
+				const next = { contentType: value };
+				if ( value !== 'post' && value !== 'comment' ) {
+					next.postTypes = [];
+					next.taxonomy = '';
+					next.taxonomyTerms = [];
+				}
+				setAttributes( next );
+			};
+
+			const onPeriodChange = ( value ) => {
+				if ( value.startsWith( 'preset:' ) ) {
+					setAttributes( {
+						periodMode: 'preset',
+						period: value.replace( 'preset:', '' ),
+					} );
+					return;
+				}
+				if ( value === 'mode:interval' ) {
+					setAttributes( { periodMode: 'interval' } );
+					return;
+				}
+				if ( value === 'mode:range' ) {
+					setAttributes( { periodMode: 'range' } );
+				}
+			};
+
+			const intervalUnitOptions = useMemo( () => {
+				const source = config.intervalUnits?.length ? config.intervalUnits : STATIC_INTERVAL_UNITS;
+				return source.map( ( item ) => ( {
+					label: item.label,
+					value: item.value,
+				} ) );
+			}, [] );
+
+			const postTypeSuggestions = useMemo(
+				() => ( config.postTypes || [] ).map( ( t ) => t.value ),
+				[]
+			);
+
+			const postTypeValue = useMemo(
+				() =>
+					( postTypes || [] ).map( ( slug ) => {
+						const found = ( config.postTypes || [] ).find( ( t ) => t.value === slug );
+						return found ? found.label : slug;
+					} ),
+				[ postTypes ]
+			);
+
+			const primaryPostType = postTypes?.length ? postTypes[ 0 ] : 'post';
+
+			const taxonomies = useSelect(
+				( select ) => {
+					const { getTaxonomies } = select( 'core' );
+					return getTaxonomies( { type: primaryPostType } ) || [];
+				},
+				[ primaryPostType ]
+			);
+
+			const taxonomyOptions = useMemo(
+				() =>
+					( taxonomies || [] )
+						.filter( ( tax ) => tax.visibility?.public !== false )
+						.map( ( tax ) => ( {
+							label: tax.name,
+							value: tax.slug,
+						} ) ),
+				[ taxonomies ]
+			);
+
+			const terms = useSelect(
+				( select ) => {
+					if ( ! taxonomy ) {
+						return [];
+					}
+					const { getEntityRecords } = select( 'core' );
+					return getEntityRecords( 'taxonomy', taxonomy, { per_page: 100 } ) || [];
+				},
+				[ taxonomy ]
+			);
+
+			const termSuggestions = useMemo(
+				() => ( terms || [] ).map( ( term ) => term.name ),
+				[ terms ]
+			);
+
+			const termValues = useMemo(
+				() =>
+					( taxonomyTerms || [] ).map( ( id ) => {
+						const term = ( terms || [] ).find( ( t ) => t.id === id );
+						return term ? term.name : String( id );
+					} ),
+				[ taxonomyTerms, terms ]
+			);
+
+			const showPostFilters = contentType === 'post' || contentType === 'comment';
+			const showProfileControl = contentType === 'users';
+			const showThumbnailControl = contentType !== 'activity' && contentType !== 'topic';
+			const showEngagementExtras = contentType !== 'users';
+
+			const onPostTypesChange = ( tokens ) => {
+				const slugs = tokens.map( ( token ) => {
+					const found = ( config.postTypes || [] ).find(
+						( t ) => t.label === token || t.value === token
+					);
+					return found ? found.value : token;
+				} );
+				setAttributes( { postTypes: slugs } );
+			};
+
+			const onTermsChange = ( tokens ) => {
+				const ids = tokens.map( ( token ) => {
+					const found = ( terms || [] ).find( ( t ) => t.name === token );
+					return found ? found.id : parseInt( token, 10 );
+				} ).filter( ( id ) => ! Number.isNaN( id ) );
+				setAttributes( { taxonomyTerms: ids } );
+			};
+
+			return (
+				<>
+					<InspectorControls>
+						<PanelBody
+							title={ uiLabel( 'contentPanel', __( 'Content Types', 'wp-ulike' ) ) }
+							initialOpen={ true }
+						>
+							<SelectControl
+								label={ uiLabel( 'contentType', __( 'Type:', 'wp-ulike' ) ) }
+								value={ contentType }
+								options={ contentTypeOptions }
+								onChange={ onContentTypeChange }
+								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							<SelectControl
+								label={ uiLabel( 'statusFilter', __( 'Status Filter', 'wp-ulike' ) ) }
+								value={ sortBy }
+								options={ sortOptions }
+								onChange={ ( value ) => setAttributes( { sortBy: value } ) }
+								help={
+									! config.isPro
+										? sprintf(
+											'%s %s',
+											label( 'upgradePro', __( 'Upgrade to Pro', 'wp-ulike' ) ),
+											__( 'Dislike', 'wp-ulike' )
+										)
+										: undefined
+								}
+								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							<SelectControl
+								label={ uiLabel( 'sortOrder', __( 'Likers List Order', 'wp-ulike' ) ) }
+								value={ sortOrder }
+								options={ ( config.sortOrders?.length ? config.sortOrders : STATIC_SORT_ORDERS ).map( ( item ) => ( {
+									label: item.label,
+									value: item.value,
+								} ) ) }
+								onChange={ ( value ) => setAttributes( { sortOrder: value } ) }
+								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							<RangeControl
+								label={ uiLabel( 'numberOf', __( 'Number of items to show:', 'wp-ulike' ) ) }
+								value={ limit }
+								onChange={ ( value ) => setAttributes( { limit: value } ) }
+								min={ 1 }
+								max={ 20 }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							{ showProfileControl && config.profileUrls?.length > 1 && (
+								<SelectControl
+									label={ uiLabel( 'profileUrl', __( 'Profile URL:', 'wp-ulike' ) ) }
+									value={ profileUrl }
+									options={ config.profileUrls.map( ( item ) => ( {
+										label: item.label,
+										value: item.value,
+									} ) ) }
+									onChange={ ( value ) => setAttributes( { profileUrl: value } ) }
+									__next40pxDefaultSize={ true }
+									__nextHasNoMarginBottom={ true }
+								/>
+							) }
+						</PanelBody>
+
+						<PanelBody
+							title={ uiLabel( 'period', __( 'Period:', 'wp-ulike' ) ) }
+							initialOpen={ false }
+						>
+							<SelectControl
+								label={ uiLabel( 'period', __( 'Period:', 'wp-ulike' ) ) }
+								value={ periodSelectValue }
+								options={ periodSelectOptions }
+								onChange={ onPeriodChange }
+								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							{ periodMode === 'interval' && (
+								<>
+									<RangeControl
+										label={ formatLastDaysLabel( intervalValue ) }
+										value={ intervalValue }
+										onChange={ ( value ) => setAttributes( { intervalValue: value } ) }
+										min={ 1 }
+										max={ 365 }
+										__nextHasNoMarginBottom={ true }
+									/>
+									<SelectControl
+										label={ uiLabel( 'periodUnit', __( 'day', 'wp-ulike' ) ) }
+										value={ intervalUnit }
+										options={ intervalUnitOptions }
+										onChange={ ( value ) => setAttributes( { intervalUnit: value } ) }
+										__next40pxDefaultSize={ true }
+										__nextHasNoMarginBottom={ true }
+									/>
+								</>
+							) }
+
+							{ periodMode === 'range' && (
+								<>
+									<TextControl
+										label={ uiLabel( 'dateStart', __( 'Date Range', 'wp-ulike' ) ) }
+										type="date"
+										value={ dateStart }
+										onChange={ ( value ) => setAttributes( { dateStart: value } ) }
+										__next40pxDefaultSize={ true }
+										__nextHasNoMarginBottom={ true }
+									/>
+									<TextControl
+										label={ uiLabel( 'dateEnd', __( 'Date Range', 'wp-ulike' ) ) }
+										type="date"
+										value={ dateEnd }
+										onChange={ ( value ) => setAttributes( { dateEnd: value } ) }
+										__next40pxDefaultSize={ true }
+										__nextHasNoMarginBottom={ true }
+									/>
+								</>
+							) }
+						</PanelBody>
+
+						{ showPostFilters && (
+							<PanelBody
+								title={ uiLabel( 'filtersPanel', __( 'Post Types', 'wp-ulike' ) ) }
+								initialOpen={ false }
+							>
+								<FormTokenField
+									label={ uiLabel( 'selectPostTypes', __( 'Select post types', 'wp-ulike' ) ) }
+									value={ postTypeValue }
+									suggestions={ postTypeSuggestions }
+									onChange={ onPostTypesChange }
+									__experimentalExpandOnFocus
+									__nextHasNoMarginBottom
+								/>
+								{ contentType === 'post' && taxonomyOptions.length > 0 && (
+									<>
+										<SelectControl
+											label={ uiLabel( 'taxonomy', __( 'Post Types', 'wp-ulike' ) ) }
+											value={ taxonomy }
+											options={ [
+												{
+													label: label( 'allPostTypes', __( 'Select...', 'wp-ulike' ) ),
+													value: '',
+												},
+												...taxonomyOptions,
+											] }
+											onChange={ ( value ) =>
+												setAttributes( {
+													taxonomy: value,
+													taxonomyTerms: [],
+												} )
+											}
+											__next40pxDefaultSize={ true }
+											__nextHasNoMarginBottom={ true }
+										/>
+										{ taxonomy && (
+											<FormTokenField
+												label={ uiLabel(
+													'taxonomyTerms',
+													__( 'Select options...', 'wp-ulike' )
+												) }
+												value={ termValues }
+												suggestions={ termSuggestions }
+												onChange={ onTermsChange }
+												__experimentalExpandOnFocus
+												__nextHasNoMarginBottom
+											/>
+										) }
+									</>
+								) }
+							</PanelBody>
+						) }
+
+						<PanelBody
+							title={ uiLabel( 'settingsPanel', __( 'Settings', 'wp-ulike' ) ) }
+							initialOpen={ false }
+						>
+							<ToggleControl
+								label={ uiLabel( 'showHeading', __( 'Title:', 'wp-ulike' ) ) }
+								checked={ showHeading }
+								onChange={ ( value ) => setAttributes( { showHeading: value } ) }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							{ showHeading && (
+								<TextControl
+									label={ uiLabel( 'customTitle', __( 'Title:', 'wp-ulike' ) ) }
+									value={ heading }
+									onChange={ ( value ) => setAttributes( { heading: value } ) }
+									placeholder={ formatTopTypeLabel( contentType ) }
+									__next40pxDefaultSize={ true }
+									__nextHasNoMarginBottom={ true }
+								/>
+							) }
+
+							<RangeControl
+								label={ uiLabel( 'titleTrim', __( 'Title Trim (Length):', 'wp-ulike' ) ) }
+								value={ titleTrim }
+								onChange={ ( value ) => setAttributes( { titleTrim: value } ) }
+								min={ 3 }
+								max={ 30 }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							<ToggleControl
+								label={ uiLabel( 'showRank', __( 'Position', 'wp-ulike' ) ) }
+								checked={ showRank }
+								onChange={ ( value ) => setAttributes( { showRank: value } ) }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							<ToggleControl
+								label={ uiLabel( 'showCount', __( 'Activate Like Counter', 'wp-ulike' ) ) }
+								checked={ showCount }
+								onChange={ ( value ) => setAttributes( { showCount: value } ) }
+								__nextHasNoMarginBottom={ true }
+							/>
+
+							{ showThumbnailControl && (
+								<>
+									<ToggleControl
+										label={ uiLabel(
+											'showThumb',
+											__( 'Activate Thumbnail/Avatar', 'wp-ulike' )
+										) }
+										checked={ showThumbnail }
+										onChange={ ( value ) => setAttributes( { showThumbnail: value } ) }
+										__nextHasNoMarginBottom={ true }
+									/>
+									{ showThumbnail && (
+										<RangeControl
+											label={ uiLabel(
+												'thumbSize',
+												__( 'Thumbnail/Avatar size:', 'wp-ulike' )
+											) }
+											value={ thumbnailSize }
+											onChange={ ( value ) =>
+												setAttributes( { thumbnailSize: value } )
+											}
+											min={ 24 }
+											max={ 96 }
+											__nextHasNoMarginBottom={ true }
+										/>
+									) }
+								</>
+							) }
+
+							{ showEngagementExtras && (
+								<>
+									<ToggleControl
+										label={ uiLabel(
+											'showEngagedUsers',
+											__( 'Engaged Users', 'wp-ulike' )
+										) }
+										checked={ showEngagedUsers }
+										onChange={ ( value ) =>
+											setAttributes( { showEngagedUsers: value } )
+										}
+										__nextHasNoMarginBottom={ true }
+									/>
+
+									{ config.hasProViews ? (
+										<ToggleControl
+											label={ uiLabel( 'showViews', __( 'Views', 'wp-ulike' ) ) }
+											checked={ showViews }
+											onChange={ ( value ) =>
+												setAttributes( { showViews: value } )
+											}
+											help={ sprintf(
+												'%s — %s',
+												label( 'proFeature', __( 'Pro Feature', 'wp-ulike' ) ),
+												__( 'Views', 'wp-ulike' )
+											) }
+											__nextHasNoMarginBottom={ true }
+										/>
+									) : (
+										<Notice status="info" isDismissible={ false }>
+											{ sprintf(
+												'%s — %s',
+												label( 'proFeature', __( 'Pro Feature', 'wp-ulike' ) ),
+												label( 'showViews', __( 'Views', 'wp-ulike' ) )
+											) }
+										</Notice>
+									) }
+								</>
+							) }
+						</PanelBody>
+					</InspectorControls>
+
+					<div { ...blockProps }>
+						{ ! config.isPro && sortBy === 'dislike' && (
+							<Notice status="warning" isDismissible={ false }>
+								{ sprintf(
+									'%s — %s',
+									label( 'proFeature', __( 'Pro Feature', 'wp-ulike' ) ),
+									label( 'upgradePro', __( 'Upgrade to Pro', 'wp-ulike' ) )
+								) }
+							</Notice>
+						) }
+
+						<ServerSideRender
+							block="wp-ulike/top-content"
+							attributes={ attributes }
+							LoadingResponsePlaceholder={ () => (
+								<div className="wp-ulike-top-content-editor-loading">
+									<Spinner />
+									<span>{ label( 'loading', __( 'Loading...', 'wp-ulike' ) ) }</span>
+								</div>
+							) }
+							ErrorResponsePlaceholder={ () => (
+								<p className="wp-ulike-top-content-editor-error">
+									{ label( 'noData', __( 'No data to display', 'wp-ulike' ) ) }
+								</p>
+							) }
+						/>
+					</div>
+				</>
+			);
+		},
+		save: () => null,
+	} );
+}

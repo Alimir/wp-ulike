@@ -281,13 +281,45 @@ function wp_ulike_block_editor_assets() {
 		$script_handle = 'wp-ulike-block-' . $block_slug . '-editor';
 		$block_url = WP_ULIKE_INC_URL . '/blocks/' . basename( $block_dir );
 
-		wp_enqueue_script(
-			$script_handle,
-			$block_url . '/build/index.js',
-			$asset['dependencies'],
-			$asset['version'] ? $asset['version'] : WP_ULIKE_VERSION,
-			true
-		);
+		// Top Content: script is registered via block.json — only attach config to that handle.
+		if ( 'wp-ulike/top-content' === $block_name ) {
+			if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
+				require_once $block_dir . '/class-top-content-renderer.php';
+			}
+
+			$block_script_handle = function_exists( 'generate_block_asset_handle' )
+				? generate_block_asset_handle( $block_name, 'editorScript' )
+				: $script_handle;
+
+			if ( wp_script_is( $block_script_handle, 'registered' ) ) {
+				wp_localize_script(
+					$block_script_handle,
+					'wpUlikeTopContentBlock',
+					WP_Ulike_Top_Content_Renderer::get_editor_config()
+				);
+			} else {
+				wp_enqueue_script(
+					$script_handle,
+					$block_url . '/build/index.js',
+					$asset['dependencies'],
+					$asset['version'] ? $asset['version'] : WP_ULIKE_VERSION,
+					true
+				);
+				wp_localize_script(
+					$script_handle,
+					'wpUlikeTopContentBlock',
+					WP_Ulike_Top_Content_Renderer::get_editor_config()
+				);
+			}
+		} else {
+			wp_enqueue_script(
+				$script_handle,
+				$block_url . '/build/index.js',
+				$asset['dependencies'],
+				$asset['version'] ? $asset['version'] : WP_ULIKE_VERSION,
+				true
+			);
+		}
 
 		$editor_css = $block_dir . '/build/index.css';
 		if ( file_exists( $editor_css ) ) {
@@ -300,7 +332,7 @@ function wp_ulike_block_editor_assets() {
 		}
 	}
 }
-add_action( 'enqueue_block_editor_assets', 'wp_ulike_block_editor_assets' );
+add_action( 'enqueue_block_editor_assets', 'wp_ulike_block_editor_assets', 20 );
 
 /**
  * Enqueue frontend assets when block is used (fallback if main class doesn't load)
@@ -351,15 +383,28 @@ function wp_ulike_block_render_callback( $attributes, $content = '', $block = nu
 		return '';
 	}
 
-	$render_attributes = array(
-		'for'           => isset( $attributes['for'] ) ? $attributes['for'] : 'post',
-		'itemId'        => isset( $attributes['itemId'] ) ? $attributes['itemId'] : '',
-		'useCurrentPostId' => isset( $attributes['useCurrentPostId'] ) ? $attributes['useCurrentPostId'] : true,
-		'template'      => isset( $attributes['template'] ) ? $attributes['template'] : '',
-		'buttonType'    => isset( $attributes['buttonType'] ) ? $attributes['buttonType'] : '',
-		'wrapperClass'  => $wrapper_class,
-		'block' => $block, // Pass block for context access (WordPress standard parameter name)
+	$render_attributes = array_merge(
+		is_array( $attributes ) ? $attributes : array(),
+		array(
+			'wrapperClass' => $wrapper_class,
+			'block'        => $block,
+			// Legacy button block keys (camelCase defaults).
+			'for'              => isset( $attributes['for'] ) ? $attributes['for'] : 'post',
+			'itemId'           => isset( $attributes['itemId'] ) ? $attributes['itemId'] : '',
+			'useCurrentPostId' => isset( $attributes['useCurrentPostId'] ) ? $attributes['useCurrentPostId'] : true,
+			'template'         => isset( $attributes['template'] ) ? $attributes['template'] : '',
+			'buttonType'       => isset( $attributes['buttonType'] ) ? $attributes['buttonType'] : '',
+		)
 	);
+
+	// Top Content block: pass attributes array for renderer.
+	if ( 'wp-ulike/top-content' === $block_name ) {
+		$render_attributes = array(
+			'attributes'    => is_array( $attributes ) ? $attributes : array(),
+			'wrapperClass'  => $wrapper_class,
+			'block'         => $block,
+		);
+	}
 
 	// Extract attributes for render.php
 	extract( $render_attributes, EXTR_SKIP );

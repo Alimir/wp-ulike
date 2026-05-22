@@ -1,0 +1,205 @@
+/**
+ * WP ULike Top Content — minimal leaderboard (block theme / WP 2027)
+ */
+
+.wp-ulike-top-content {
+	--wp-ulike-top-line: color-mix(in srgb, currentColor 12%, transparent);
+	--wp-ulike-top-muted: color-mix(in srgb, currentColor 58%, transparent);
+
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
+	line-height: 1.5;
+	color: inherit;
+}
+
+.wp-ulike-top-content__heading {
+	margin: 0 0 0.875rem;
+	font-size: var(--wp--preset--font-size--medium, 1.05rem);
+	font-weight: 600;
+	letter-spacing: -0.02em;
+}
+
+.wp-ulike-top-content__empty {
+	margin: 0;
+	padding: 1rem 0;
+	color: var(--wp-ulike-top-muted);
+	font-size: 0.8125rem;
+	text-align: center;
+}
+
+.wp-ulike-top-content__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.wp-ulike-top-content__item {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem 0;
+	border-block-end: 1px solid var(--wp-ulike-top-line);
+
+	&:last-child {
+		border-block-end: none;
+		padding-block-end: 0;
+	}
+
+	&:first-child {
+		padding-block-start: 0;
+	}
+}
+
+.wp-ulike-top-content__rank {
+	flex: 0 0 1.5rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	color: var(--wp-ulike-top-muted);
+	text-align: center;
+}
+
+.wp-ulike-top-content__media {
+	flex: 0 0 auto;
+	line-height: 0;
+}
+
+.wp-ulike-top-content__thumb,
+.wp-ulike-top-content__avatar {
+	display: block;
+	border-radius: 0.25rem;
+	object-fit: cover;
+	background: color-mix(in srgb, currentColor 6%, transparent);
+}
+
+.wp-ulike-top-content--users .wp-ulike-top-content__avatar,
+.wp-ulike-top-content--comment .wp-ulike-top-content__avatar {
+	border-radius: 50%;
+}
+
+.wp-ulike-top-content__main {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.wp-ulike-top-content__link {
+	display: block;
+	text-decoration: none;
+	color: inherit;
+
+	&:hover .wp-ulike-top-content__title,
+	&:focus-visible .wp-ulike-top-content__title {
+		text-decoration: underline;
+		text-underline-offset: 0.12em;
+	}
+}
+
+.wp-ulike-top-content__title {
+	display: block;
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.wp-ulike-top-content__subtitle {
+	display: block;
+	margin-block-start: 0.15rem;
+	font-size: 0.75rem;
+	color: var(--wp-ulike-top-muted);
+}
+
+.wp-ulike-top-content__extras {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem 0.75rem;
+	margin-block-start: 0.4rem;
+}
+
+.wp-ulike-top-content__views {
+	font-size: 0.75rem;
+	color: var(--wp-ulike-top-muted);
+}
+
+.wp-ulike-top-content__likers {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.wp-ulike-top-content__likers-avatars {
+	display: inline-flex;
+	flex-direction: row-reverse;
+	align-items: center;
+}
+
+.wp-ulike-top-content__likers-avatars img {
+	display: block;
+	width: 1.375rem;
+	height: 1.375rem;
+	margin-inline-start: -0.35rem;
+	border-radius: 50%;
+	border: 1.5px solid Canvas;
+	border: 1.5px solid color-mix(in srgb, Canvas 92%, currentColor 8%);
+	object-fit: cover;
+}
+
+.wp-ulike-top-content__likers-avatars img:last-child {
+	margin-inline-start: 0;
+}
+
+.wp-ulike-top-content__likers-label {
+	font-size: 0.6875rem;
+	color: var(--wp-ulike-top-muted);
+}
+
+/* Counter column — vertically centered with row content */
+.wp-ulike-top-content__aside {
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+	min-width: 2.75rem;
+	text-align: end;
+}
+
+.wp-ulike-top-content__count-value {
+	font-size: 1.0625rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+}
+
+.wp-ulike-top-content__count-label {
+	margin-block-start: 0.1rem;
+	font-size: 0.625rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--wp-ulike-top-muted);
+}
+
+@media (max-width: 520px) {
+	.wp-ulike-top-content__item {
+		gap: 0.5rem;
+		padding: 0.625rem 0;
+	}
+
+	.wp-ulike-top-content__thumb,
+	.wp-ulike-top-content__avatar {
+		max-width: 2rem;
+		max-height: 2rem;
+	}
+
+	.wp-ulike-top-content__count-value {
+		font-size: 1rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-ulike-top-content__link:hover .wp-ulike-top-content__title {
+		text-decoration-thickness: 1px;
+	}
+}

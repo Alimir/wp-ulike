@@ -1,0 +1,132 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wp-ulike/top-content",
+	"title": "WP ULike Top Content",
+	"category": "wp-ulike",
+	"icon": "chart-bar",
+	"description": "Display top posts, comments, users, and more in a simple leaderboard list.",
+	"keywords": [ "popular", "top", "leaderboard", "likes", "stats", "ranking", "engagement" ],
+	"textdomain": "wp-ulike",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-style.css",
+	"attributes": {
+		"contentType": {
+			"type": "string",
+			"default": "post"
+		},
+		"sortBy": {
+			"type": "string",
+			"default": "like"
+		},
+		"sortOrder": {
+			"type": "string",
+			"default": "DESC"
+		},
+		"periodMode": {
+			"type": "string",
+			"default": "preset"
+		},
+		"period": {
+			"type": "string",
+			"default": "all"
+		},
+		"intervalValue": {
+			"type": "number",
+			"default": 30
+		},
+		"intervalUnit": {
+			"type": "string",
+			"default": "DAY"
+		},
+		"dateStart": {
+			"type": "string",
+			"default": ""
+		},
+		"dateEnd": {
+			"type": "string",
+			"default": ""
+		},
+		"postTypes": {
+			"type": "array",
+			"default": []
+		},
+		"taxonomy": {
+			"type": "string",
+			"default": ""
+		},
+		"taxonomyTerms": {
+			"type": "array",
+			"default": []
+		},
+		"limit": {
+			"type": "number",
+			"default": 5
+		},
+		"showCount": {
+			"type": "boolean",
+			"default": true
+		},
+		"showThumbnail": {
+			"type": "boolean",
+			"default": true
+		},
+		"showRank": {
+			"type": "boolean",
+			"default": true
+		},
+		"showHeading": {
+			"type": "boolean",
+			"default": true
+		},
+		"showEngagedUsers": {
+			"type": "boolean",
+			"default": false
+		},
+		"showViews": {
+			"type": "boolean",
+			"default": false
+		},
+		"titleTrim": {
+			"type": "number",
+			"default": 12
+		},
+		"thumbnailSize": {
+			"type": "number",
+			"default": 40
+		},
+		"heading": {
+			"type": "string",
+			"default": ""
+		},
+		"profileUrl": {
+			"type": "string",
+			"default": "wp"
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"className": true,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"color": {
+			"text": true,
+			"background": true,
+			"link": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true
+		}
+	},
+	"example": {
+		"attributes": {
+			"contentType": "post",
+			"limit": 5
+		}
+	}
+}
