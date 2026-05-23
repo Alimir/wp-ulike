@@ -116,11 +116,6 @@
 	margin-block-start: 0.4rem;
 }
 
-.wp-ulike-top-content__views {
-	font-size: 0.75rem;
-	color: var(--wp-ulike-top-muted);
-}
-
 .wp-ulike-top-content__likers {
 	display: inline-flex;
 	align-items: center;
@@ -129,28 +124,69 @@
 
 .wp-ulike-top-content__likers-avatars {
 	display: inline-flex;
-	flex-direction: row-reverse;
+	flex-direction: row;
 	align-items: center;
+	direction: ltr;
+}
+
+.wp-ulike-top-content__likers-avatars > * {
+	position: relative;
+	flex: 0 0 auto;
+}
+
+.wp-ulike-top-content__likers-avatars > * + * {
+	margin-inline-start: -0.4rem;
 }
 
 .wp-ulike-top-content__likers-avatars img {
 	display: block;
 	width: 1.375rem;
 	height: 1.375rem;
-	margin-inline-start: -0.35rem;
 	border-radius: 50%;
 	border: 1.5px solid Canvas;
 	border: 1.5px solid color-mix(in srgb, Canvas 92%, currentColor 8%);
 	object-fit: cover;
 }
 
-.wp-ulike-top-content__likers-avatars img:last-child {
-	margin-inline-start: 0;
+.wp-ulike-top-content__likers-avatars > *:nth-child(1) {
+	z-index: 1;
 }
 
-.wp-ulike-top-content__likers-label {
-	font-size: 0.6875rem;
+.wp-ulike-top-content__likers-avatars > *:nth-child(2) {
+	z-index: 2;
+}
+
+.wp-ulike-top-content__likers-avatars > *:nth-child(3) {
+	z-index: 3;
+}
+
+.wp-ulike-top-content__likers-avatars > *:nth-child(4) {
+	z-index: 4;
+}
+
+.wp-ulike-top-content__likers-more {
+	display: grid;
+	place-items: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 50%;
 	color: var(--wp-ulike-top-muted);
+	background: color-mix(in srgb, currentColor 10%, transparent);
+	border: 1.5px solid Canvas;
+	border: 1.5px solid color-mix(in srgb, Canvas 92%, currentColor 8%);
+	box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 4%, transparent);
+	user-select: none;
+	pointer-events: none;
+}
+
+.wp-ulike-top-content__likers-more-dots {
+	display: block;
+	font-size: 0.4375rem;
+	font-weight: 800;
+	line-height: 1;
+	letter-spacing: 0.08em;
+	text-align: center;
+	white-space: nowrap;
 }
 
 /* Counter column — vertically centered with row content */

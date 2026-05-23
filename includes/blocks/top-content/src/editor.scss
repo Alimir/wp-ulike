@@ -1,5 +1,15 @@
 .wp-block-wp-ulike-top-content {
 	padding: 0.5rem 0;
+
+	// Preview uses real permalinks — disable link navigation in the editor only.
+	.wp-ulike-top-content__link {
+		cursor: default;
+		pointer-events: none;
+	}
+
+	.wp-ulike-top-content__link:hover .wp-ulike-top-content__title {
+		text-decoration: none;
+	}
 }
 
 .wp-ulike-top-content-editor-loading {

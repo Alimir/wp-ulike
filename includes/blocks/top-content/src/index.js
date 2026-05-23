@@ -11,7 +11,6 @@ import {
 	RangeControl,
 	ToggleControl,
 	TextControl,
-	Notice,
 	Spinner,
 	FormTokenField,
 } from '@wordpress/components';
@@ -44,10 +43,9 @@ const FALLBACK_CONTENT_TYPES = [
 ];
 
 const STATIC_SORT_OPTIONS = [
-	{ value: 'like', label: __( 'Like', 'wp-ulike' ), proOnly: false },
-	{ value: 'unlike', label: __( 'Unlike', 'wp-ulike' ), proOnly: false },
-	{ value: 'undislike', label: __( 'Undislike', 'wp-ulike' ), proOnly: false },
-	{ value: 'dislike', label: __( 'Dislike', 'wp-ulike' ), proOnly: true },
+	{ value: 'like', label: __( 'Like', 'wp-ulike' ) },
+	{ value: 'unlike', label: __( 'Unlike', 'wp-ulike' ) },
+	{ value: 'undislike', label: __( 'Undislike', 'wp-ulike' ) },
 ];
 
 const STATIC_SORT_ORDERS = [
@@ -111,6 +109,12 @@ if ( ! getBlockType( metadata.name ) ) {
 		edit: ( { attributes, setAttributes } ) => {
 			const blockProps = useBlockProps( {
 				className: 'wp-block-wp-ulike-top-content',
+				// ServerSideRender outputs real links; stop navigation inside the editor canvas.
+				onClickCapture: ( event ) => {
+					if ( event.target.closest( '.wp-ulike-top-content a[href]' ) ) {
+						event.preventDefault();
+					}
+				},
 			} );
 
 			const {
@@ -132,7 +136,6 @@ if ( ! getBlockType( metadata.name ) ) {
 				showRank,
 				showHeading,
 				showEngagedUsers,
-				showViews,
 				titleTrim,
 				thumbnailSize,
 				heading,
@@ -146,13 +149,10 @@ if ( ! getBlockType( metadata.name ) ) {
 			const sortOptions = useMemo( () => {
 				const source = config.sortOptions?.length ? config.sortOptions : STATIC_SORT_OPTIONS;
 				return source.map( ( item ) => ( {
-					label: item.proOnly && ! config.isPro
-						? `${ item.label } (${ label( 'proFeature', __( 'Pro Feature', 'wp-ulike' ) ) })`
-						: item.label,
+					label: item.label,
 					value: item.value,
-					disabled: item.proOnly && ! config.isPro,
 				} ) );
-			}, [] );
+			}, [ config.sortOptions ] );
 
 			const periodPresetOptions = useMemo( () => {
 				const source = config.periodPresets?.length ? config.periodPresets : STATIC_PERIOD_PRESETS;
@@ -321,15 +321,6 @@ if ( ! getBlockType( metadata.name ) ) {
 								value={ sortBy }
 								options={ sortOptions }
 								onChange={ ( value ) => setAttributes( { sortBy: value } ) }
-								help={
-									! config.isPro
-										? sprintf(
-											'%s %s',
-											label( 'upgradePro', __( 'Upgrade to Pro', 'wp-ulike' ) ),
-											__( 'Dislike', 'wp-ulike' )
-										)
-										: undefined
-								}
 								__next40pxDefaultSize={ true }
 								__nextHasNoMarginBottom={ true }
 							/>
@@ -510,7 +501,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							/>
 
 							<ToggleControl
-								label={ uiLabel( 'showRank', __( 'Position', 'wp-ulike' ) ) }
+								label={ uiLabel( 'showRank', __( 'Rank number', 'wp-ulike' ) ) }
 								checked={ showRank }
 								onChange={ ( value ) => setAttributes( { showRank: value } ) }
 								__nextHasNoMarginBottom={ true }
@@ -553,58 +544,22 @@ if ( ! getBlockType( metadata.name ) ) {
 							) }
 
 							{ showEngagementExtras && (
-								<>
-									<ToggleControl
-										label={ uiLabel(
-											'showEngagedUsers',
-											__( 'Engaged Users', 'wp-ulike' )
-										) }
-										checked={ showEngagedUsers }
-										onChange={ ( value ) =>
-											setAttributes( { showEngagedUsers: value } )
-										}
-										__nextHasNoMarginBottom={ true }
-									/>
-
-									{ config.hasProViews ? (
-										<ToggleControl
-											label={ uiLabel( 'showViews', __( 'Views', 'wp-ulike' ) ) }
-											checked={ showViews }
-											onChange={ ( value ) =>
-												setAttributes( { showViews: value } )
-											}
-											help={ sprintf(
-												'%s — %s',
-												label( 'proFeature', __( 'Pro Feature', 'wp-ulike' ) ),
-												__( 'Views', 'wp-ulike' )
-											) }
-											__nextHasNoMarginBottom={ true }
-										/>
-									) : (
-										<Notice status="info" isDismissible={ false }>
-											{ sprintf(
-												'%s — %s',
-												label( 'proFeature', __( 'Pro Feature', 'wp-ulike' ) ),
-												label( 'showViews', __( 'Views', 'wp-ulike' ) )
-											) }
-										</Notice>
+								<ToggleControl
+									label={ uiLabel(
+										'showEngagedUsers',
+										__( 'Engaged Users', 'wp-ulike' )
 									) }
-								</>
+									checked={ showEngagedUsers }
+									onChange={ ( value ) =>
+										setAttributes( { showEngagedUsers: value } )
+									}
+									__nextHasNoMarginBottom={ true }
+								/>
 							) }
 						</PanelBody>
 					</InspectorControls>
 
 					<div { ...blockProps }>
-						{ ! config.isPro && sortBy === 'dislike' && (
-							<Notice status="warning" isDismissible={ false }>
-								{ sprintf(
-									'%s — %s',
-									label( 'proFeature', __( 'Pro Feature', 'wp-ulike' ) ),
-									label( 'upgradePro', __( 'Upgrade to Pro', 'wp-ulike' ) )
-								) }
-							</Notice>
-						) }
-
 						<ServerSideRender
 							block="wp-ulike/top-content"
 							attributes={ attributes }

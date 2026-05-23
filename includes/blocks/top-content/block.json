@@ -84,10 +84,6 @@
 			"type": "boolean",
 			"default": false
 		},
-		"showViews": {
-			"type": "boolean",
-			"default": false
-		},
 		"titleTrim": {
 			"type": "number",
 			"default": 12
