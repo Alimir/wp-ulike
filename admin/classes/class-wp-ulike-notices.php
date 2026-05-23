@@ -77,7 +77,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
          * @param string $after
          * @return void | string
          */
-        private function get_title( $before = '<h3 class="wp-ulike-notice-title dark:text-white">', $after = '</h3>' ){
+        private function get_title( $before = '<h3 class="wp-ulike-notice-title">', $after = '</h3>' ){
 
             if ( empty( $this->args['title'] ) ) {
                 return;
@@ -105,7 +105,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
          * @param string $after
          * @return void | string
          */
-        private function get_description( $before = '<p class="wp-ulike-notice-description  dark:text-gray-100">', $after = '</p>' ){
+        private function get_description( $before = '<p class="wp-ulike-notice-description">', $after = '</p>' ){
 
             if ( strlen( $this->args['description'] ) == 0 ) {
                 return;
@@ -145,48 +145,32 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 $current_default_args = $default_args;
 
                 if( !empty( $btn_args['type']  ) && 'skip' === $btn_args['type'] ){
-                    $current_default_args['extra_classes'] .= ' wp-ulike-skip-notice';
+                    $current_default_args['extra_classes'] .= ' wp-ulike-skip-notice wp-ulike-btn-ghost';
+                    $current_default_args['link']           = '';
                 } else {
                     $current_default_args['extra_classes'] = 'wp-ulike-notice-cta-btn';
                 }
 
                 $btn_args = wp_parse_args( $btn_args, $current_default_args );
 
-                // Maye add custom expiration to the btn
+                // Maybe add custom expiration to the btn
                 if( $btn_args['expiration'] ){
-                    $btn_args['btn_attrs'] = 'data-expiration{'. $btn_args['expiration'] .'}';
+                    $btn_args['btn_attrs'] = 'data-expiration{' . $btn_args['expiration'] . '}';
                 }
                 unset( $btn_args['expiration'] );
 
-                $this->buttons .= wp_ulike_widget_button_callback( $btn_args );
-
-                if( !empty( $btn_args['ajax_request']['action'] ) ){
-                ob_start();
-?>
-                <script>
-                    jQuery('.<?php echo esc_js( $this->get_unique_class() ); ?> .wp-ulike-notice-cta-btn').on( 'click' , function(e) {
-                        e.preventDefault();
-                        var $currentTargetElement = jQuery(event.currentTarget).addClass('wp-ulike-btn-is-loading');
-                        jQuery.ajax({
-                            url : ajaxurl,
-                            type: 'post',
-                            data: {
-                                action : '<?php echo esc_js( $btn_args['ajax_request']['action'] ); ?>',
-                                nonce  : '<?php echo esc_js( wp_create_nonce( '_notice_nonce' ) ); ?>',
-                                id     : '<?php echo esc_js( $this->args['id'] ); ?>'
-                            }
-                        }).done(function( response ) {
-                            $currentTargetElement.removeClass('wp-ulike-btn-is-loading');
-                            jQuery(this).closest('.wp-ulike-notice-wrapper').fadeOut();
-                            if(response.success) {
-                                location.reload();
-                            }
-                        }.bind(this));
-                    });
-                </script>
-<?php
-                $this->buttons .= ob_get_clean();
+                if ( ! empty( $btn_args['ajax_request']['action'] ) ) {
+                    $btn_attrs = trim( (string) $btn_args['btn_attrs'], ';' );
+                    $ajax_attrs = sprintf(
+                        'data-ajax-action{%1$s};data-notice-id{%2$s};data-notice-nonce{%3$s}',
+                        $btn_args['ajax_request']['action'],
+                        $this->args['id'],
+                        wp_create_nonce( '_notice_nonce' )
+                    );
+                    $btn_args['btn_attrs'] = $btn_attrs ? $btn_attrs . ';' . $ajax_attrs : $ajax_attrs;
                 }
+
+                $this->buttons .= wp_ulike_widget_button_callback( $btn_args );
             }
 
             return $this->buttons;
@@ -211,29 +195,8 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             <a href="<?php echo esc_url( $this->get_nonce_url() ); ?>" class="notice-dismiss wp-ulike-skip-notice wp-ulike-close-notice">
                 <span class="screen-reader-text"><?php esc_html_e( 'Skip', 'wp-ulike' ); ?></span>
             </a>
-    <?php } ?>
-            <script>
-                jQuery('.<?php echo esc_js( $this->get_unique_class() ); ?> .wp-ulike-skip-notice').on( 'click' , function(e) {
-                    e.preventDefault();
-                    var expiration = this.getAttribute('data-expiration') || '<?php echo esc_js( $this->args['dismissible']['expiration'] ); ?>'
+    <?php }
 
-                    jQuery.ajax({
-                        url : ajaxurl,
-                        type: 'post',
-                        data: {
-                            action    : 'wp_ulike_dismissed_notice',
-                            id        : '<?php echo esc_js( $this->args['id'] ); ?>',
-                            nonce     : '<?php echo esc_js( wp_create_nonce( '_notice_nonce' ) ); ?>',
-                            expiration: expiration
-                        }
-                    }).done(function( response ) {
-                        if(response.success) {
-                            jQuery(this).closest('.wp-ulike-notice-wrapper').fadeOut();
-                        }
-                    }.bind(this));
-                });
-            </script>
-    <?php
             return ob_get_clean();
         }
 
@@ -358,10 +321,13 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             }
 
             echo sprintf(
-                '<div class="updated dark:bg-gray-800 dark:border-0 wp-ulike-message wp-ulike-notice-control wp-ulike-notice-wrapper %s %s" %s>%s <div class="wp-ulike-notice-info">%s %s <div class="wp-ulike-notice-submit submit">%s %s</div></div></div>',
-                $this->get_unique_class(),
-                $this->get_skin(),
+                '<div class="notice wp-ulike-notice wp-ulike-notice-control wp-ulike-notice-wrapper %1$s %2$s" %3$s data-notice-id="%4$s" data-dismiss-nonce="%5$s" data-dismiss-expiration="%6$s">%7$s<div class="wp-ulike-notice-info">%8$s%9$s<div class="wp-ulike-notice-submit">%10$s</div></div>%11$s</div>',
+                esc_attr( $this->get_unique_class() ),
+                esc_attr( $this->get_skin() ),
                 $this->get_custom_styles(),
+                esc_attr( $this->args['id'] ),
+                esc_attr( wp_create_nonce( '_notice_nonce' ) ),
+                esc_attr( is_array( $this->args['dismissible'] ) ? $this->args['dismissible']['expiration'] : '' ),
                 $this->get_image(),
                 $this->get_title(),
                 $this->get_description(),
