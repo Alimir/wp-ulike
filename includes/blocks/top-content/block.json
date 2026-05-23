@@ -94,7 +94,8 @@
 		},
 		"heading": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"role": "content"
 		},
 		"profileUrl": {
 			"type": "string",

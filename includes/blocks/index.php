@@ -251,7 +251,8 @@ function wp_ulike_block_assets() {
 add_action( 'enqueue_block_assets', 'wp_ulike_block_assets' );
 
 /**
- * Enqueue block editor assets
+ * Enqueue block editor assets (localization and translations).
+ * Scripts and styles are registered via block.json; avoid double-enqueue when possible.
  */
 function wp_ulike_block_editor_assets() {
 	$blocks_dir = WP_ULIKE_INC_DIR . '/blocks';
@@ -274,60 +275,53 @@ function wp_ulike_block_editor_assets() {
 			continue;
 		}
 
-		$asset = require $asset_file;
+		$asset      = require $asset_file;
 		$block_data = json_decode( file_get_contents( $block_json ), true );
 		$block_name = isset( $block_data['name'] ) ? $block_data['name'] : '';
 		$block_slug = sanitize_key( str_replace( array( 'wp-ulike/', '/' ), array( '', '-' ), $block_name ) );
 		$script_handle = 'wp-ulike-block-' . $block_slug . '-editor';
 		$block_url = WP_ULIKE_INC_URL . '/blocks/' . basename( $block_dir );
 
-		// Top List block: script is registered via block.json — only attach config to that handle.
+		$block_script_handle = function_exists( 'generate_block_asset_handle' )
+			? generate_block_asset_handle( $block_name, 'editorScript' )
+			: $script_handle;
+
+		$editor_style_handle = function_exists( 'generate_block_asset_handle' )
+			? generate_block_asset_handle( $block_name, 'editorStyle' )
+			: $script_handle;
+
+		if ( ! wp_script_is( $block_script_handle, 'registered' ) ) {
+			wp_enqueue_script(
+				$script_handle,
+				$block_url . '/build/index.js',
+				isset( $asset['dependencies'] ) ? $asset['dependencies'] : array(),
+				! empty( $asset['version'] ) ? $asset['version'] : WP_ULIKE_VERSION,
+				true
+			);
+			$block_script_handle = $script_handle;
+		}
+
 		if ( 'wp-ulike/top-content' === $block_name ) {
 			if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				require_once $block_dir . '/class-top-content-renderer.php';
 			}
 
-			$block_script_handle = function_exists( 'generate_block_asset_handle' )
-				? generate_block_asset_handle( $block_name, 'editorScript' )
-				: $script_handle;
-
-			if ( wp_script_is( $block_script_handle, 'registered' ) ) {
-				wp_localize_script(
-					$block_script_handle,
-					'wpUlikeTopContentBlock',
-					WP_Ulike_Top_Content_Renderer::get_editor_config()
-				);
-			} else {
-				wp_enqueue_script(
-					$script_handle,
-					$block_url . '/build/index.js',
-					$asset['dependencies'],
-					$asset['version'] ? $asset['version'] : WP_ULIKE_VERSION,
-					true
-				);
-				wp_localize_script(
-					$script_handle,
-					'wpUlikeTopContentBlock',
-					WP_Ulike_Top_Content_Renderer::get_editor_config()
-				);
-			}
-		} else {
-			wp_enqueue_script(
-				$script_handle,
-				$block_url . '/build/index.js',
-				$asset['dependencies'],
-				$asset['version'] ? $asset['version'] : WP_ULIKE_VERSION,
-				true
+			wp_localize_script(
+				$block_script_handle,
+				'wpUlikeTopContentBlock',
+				WP_Ulike_Top_Content_Renderer::get_editor_config()
 			);
 		}
 
+		wp_set_script_translations( $block_script_handle, 'wp-ulike', WP_ULIKE_DIR . 'languages' );
+
 		$editor_css = $block_dir . '/build/index.css';
-		if ( file_exists( $editor_css ) ) {
+		if ( file_exists( $editor_css ) && ! wp_style_is( $editor_style_handle, 'registered' ) ) {
 			wp_enqueue_style(
 				$script_handle,
 				$block_url . '/build/index.css',
 				array(),
-				$asset['version'] ? $asset['version'] : WP_ULIKE_VERSION
+				! empty( $asset['version'] ) ? $asset['version'] : WP_ULIKE_VERSION
 			);
 		}
 	}
@@ -420,7 +414,9 @@ function wp_ulike_register_rest_routes() {
 	register_rest_route( 'wp-ulike/v1', '/templates', array(
 		'methods'             => 'GET',
 		'callback'            => 'wp_ulike_get_templates_for_block',
-		'permission_callback' => '__return_true',
+		'permission_callback' => function () {
+			return current_user_can( 'edit_posts' );
+		},
 	) );
 }
 add_action( 'rest_api_init', 'wp_ulike_register_rest_routes' );
