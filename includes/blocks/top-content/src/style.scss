@@ -85,11 +85,17 @@
 	display: block;
 	text-decoration: none;
 	color: inherit;
+	border-radius: 0.125rem;
 
 	&:hover .wp-ulike-top-content__title,
 	&:focus-visible .wp-ulike-top-content__title {
 		text-decoration: underline;
 		text-underline-offset: 0.12em;
+	}
+
+	&:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
 	}
 }
 

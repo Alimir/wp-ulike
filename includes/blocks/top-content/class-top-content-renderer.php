@@ -90,8 +90,12 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			$args    = self::sanitize_attributes( $attributes );
 			$items   = self::get_items( $args );
 			$items   = apply_filters( 'wp_ulike_top_content_block_items', $items, $args );
-			$heading = $args['showHeading'] ? self::get_heading( $args ) : '';
-			$empty   = self::get_empty_message( $args );
+			$heading        = $args['showHeading'] ? self::get_heading( $args ) : '';
+			$empty          = self::get_empty_message( $args );
+			$heading_id     = $heading ? 'wp-ulike-top-content-heading-' . wp_unique_id() : '';
+			$section_a11y   = $heading_id
+				? 'aria-labelledby="' . esc_attr( $heading_id ) . '"'
+				: 'aria-label="' . esc_attr( self::get_top_type_label( $args['contentType'] ) ) . '"';
 
 			$classes = array(
 				'wp-ulike-top-content',
@@ -110,9 +114,9 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 
 			ob_start();
 			?>
-			<section <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+			<section <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php echo $section_a11y; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php if ( $heading ) : ?>
-					<h3 class="wp-ulike-top-content__heading"><?php echo esc_html( $heading ); ?></h3>
+					<h3 id="<?php echo esc_attr( $heading_id ); ?>" class="wp-ulike-top-content__heading"><?php echo esc_html( $heading ); ?></h3>
 				<?php endif; ?>
 				<?php if ( empty( $items ) ) : ?>
 					<p class="wp-ulike-top-content__empty" role="status"><?php echo esc_html( $empty ); ?></p>
@@ -296,6 +300,24 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		}
 
 		/**
+		 * @param string              $type Content type slug for wp_ulike_get_popular_items_info.
+		 * @param string|array        $rel_type Related type filter.
+		 * @param array               $args Sanitized block args.
+		 * @param int|null            $fetch_limit Optional override for candidate pool size.
+		 * @return array<string, mixed>
+		 */
+		private static function build_popular_query( $type, $rel_type, $args, $fetch_limit = null ) {
+			return array_merge(
+				self::get_popular_query_base( $args ),
+				array(
+					'type'     => $type,
+					'rel_type' => $rel_type,
+					'limit'    => null !== $fetch_limit ? (int) $fetch_limit : self::get_fetch_limit( $args ),
+				)
+			);
+		}
+
+		/**
 		 * Item ID => vote count from the same query used for ranking.
 		 *
 		 * @param array<string, mixed> $query_args Arguments for wp_ulike_get_popular_items_info().
@@ -382,16 +404,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		private static function get_post_items( $args ) {
 			$rel_type    = self::get_post_type_filter( $args );
 			$fetch_limit = self::get_fetch_limit( $args );
-			$counters    = self::get_popular_counters(
-				array_merge(
-					self::get_popular_query_base( $args ),
-					array(
-						'type'     => 'post',
-						'rel_type' => $rel_type,
-						'limit'    => $fetch_limit,
-					)
-				)
-			);
+			$counters    = self::get_popular_counters( self::build_popular_query( 'post', $rel_type, $args, $fetch_limit ) );
 
 			if ( empty( $counters ) ) {
 				return array();
@@ -459,16 +472,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		private static function get_comment_items( $args ) {
 			$rel_type    = self::get_post_type_filter( $args );
 			$fetch_limit = self::get_fetch_limit( $args );
-			$counters    = self::get_popular_counters(
-				array_merge(
-					self::get_popular_query_base( $args ),
-					array(
-						'type'     => 'comment',
-						'rel_type' => $rel_type,
-						'limit'    => $fetch_limit,
-					)
-				)
-			);
+			$counters    = self::get_popular_counters( self::build_popular_query( 'comment', $rel_type, $args, $fetch_limit ) );
 
 			if ( empty( $counters ) ) {
 				return array();
@@ -588,16 +592,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			}
 
 			$fetch_limit = self::get_fetch_limit( $args );
-			$counters    = self::get_popular_counters(
-				array_merge(
-					self::get_popular_query_base( $args ),
-					array(
-						'type'     => 'activity',
-						'rel_type' => '',
-						'limit'    => $fetch_limit,
-					)
-				)
-			);
+			$counters    = self::get_popular_counters( self::build_popular_query( 'activity', '', $args, $fetch_limit ) );
 
 			if ( empty( $counters ) ) {
 				return array();
@@ -663,16 +658,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			}
 
 			$fetch_limit = self::get_fetch_limit( $args );
-			$counters    = self::get_popular_counters(
-				array_merge(
-					self::get_popular_query_base( $args ),
-					array(
-						'type'     => 'topic',
-						'rel_type' => array( 'topic', 'reply' ),
-						'limit'    => $fetch_limit,
-					)
-				)
-			);
+			$counters    = self::get_popular_counters( self::build_popular_query( 'topic', array( 'topic', 'reply' ), $args, $fetch_limit ) );
 
 			if ( empty( $counters ) ) {
 				return array();
@@ -807,7 +793,11 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			}
 
 			$rank_html = $args['showRank']
-				? sprintf( '<span class="wp-ulike-top-content__rank" aria-hidden="true">%d</span>', (int) $rank )
+				? sprintf(
+					'<span class="wp-ulike-top-content__rank"><span class="screen-reader-text">%1$s </span>%2$d</span>',
+					esc_html__( 'Rank number', 'wp-ulike' ),
+					(int) $rank
+				)
 				: '';
 
 			$subtitle_html = ! empty( $item['subtitle'] )
@@ -824,8 +814,19 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				$subtitle_html
 			);
 
+			$link_aria = $item['title'];
+			if ( $args['showCount'] && isset( $item['count'] ) ) {
+				$link_aria = sprintf(
+					/* translators: 1: item title, 2: vote count, 3: vote type label (Like, Unlike, etc.). */
+					__( '%1$s — %2$s %3$s', 'wp-ulike' ),
+					$item['title'],
+					wp_ulike_format_number( $item['count'], $args['sortBy'] ),
+					$count_label
+				);
+			}
+
 			$title_html = $url
-				? sprintf( '<a class="wp-ulike-top-content__link" href="%s">%s</a>', esc_url( $url ), $title_inner )
+				? sprintf( '<a class="wp-ulike-top-content__link" href="%s" aria-label="%s">%s</a>', esc_url( $url ), esc_attr( $link_aria ), $title_inner )
 				: sprintf( '<span class="wp-ulike-top-content__link">%s</span>', $title_inner );
 
 			$extras    = array();
@@ -880,7 +881,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				return '';
 			}
 
-			$max_visible = 4;
+			$max_visible = 3;
 			$user_ids  = wp_ulike_get_likers_list_per_post( $config[0], $config[1], (int) $item['item_id'], $max_visible + 1 );
 
 			if ( empty( $user_ids ) ) {
@@ -916,7 +917,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				: '';
 
 			return sprintf(
-				'<span class="wp-ulike-top-content__likers"><span class="wp-ulike-top-content__likers-avatars">%s%s</span></span>',
+				'<span class="wp-ulike-top-content__likers" aria-label="%1$s"><span class="wp-ulike-top-content__likers-avatars">%2$s%3$s</span></span>',
+				esc_attr__( 'Engaged Users', 'wp-ulike' ),
 				$avatars,
 				$more_html
 			);
@@ -1175,16 +1177,16 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				'postTypes'      => self::get_post_type_options(),
 				'profileUrls'    => $profile_urls,
 				'i18n'           => array(
-					'contentPanel'         => esc_html__( 'Content Types', 'wp-ulike' ),
+					'contentPanel'         => esc_html__( 'Top', 'wp-ulike' ),
 					'contentType'          => esc_html__( 'Type:', 'wp-ulike' ),
 					'statusFilter'         => esc_html__( 'Status Filter', 'wp-ulike' ),
-					'sortOrder'            => esc_html__( 'Likers List Order', 'wp-ulike' ),
-					'filtersPanel'         => esc_html__( 'Post Types', 'wp-ulike' ),
+					'sortOrder'            => esc_html__( 'View By', 'wp-ulike' ),
+					'filtersPanel'         => esc_html__( 'Show Filters', 'wp-ulike' ),
 					'postTypes'            => esc_html__( 'Post Types', 'wp-ulike' ),
 					'selectPostTypes'      => esc_html__( 'Select post types', 'wp-ulike' ),
-					'taxonomy'             => esc_html__( 'Post Types', 'wp-ulike' ),
+					'taxonomy'             => esc_html__( 'Category', 'wp-ulike' ),
 					'taxonomyTerms'        => esc_html__( 'Select options...', 'wp-ulike' ),
-					'settingsPanel'        => esc_html__( 'Settings', 'wp-ulike' ),
+					'displayPanel'         => esc_html__( 'Settings', 'wp-ulike' ),
 					'numberOf'             => esc_html__( 'Number of items to show:', 'wp-ulike' ),
 					'titleTrim'            => esc_html__( 'Title Trim (Length):', 'wp-ulike' ),
 					'profileUrl'           => esc_html__( 'Profile URL:', 'wp-ulike' ),
@@ -1193,13 +1195,13 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 					'thumbSize'            => esc_html__( 'Thumbnail/Avatar size:', 'wp-ulike' ),
 					'showRank'             => esc_html__( 'Rank number', 'wp-ulike' ),
 					'showHeading'          => esc_html__( 'Title:', 'wp-ulike' ),
-					'customTitle'          => esc_html__( 'Title:', 'wp-ulike' ),
+					'customTitle'          => esc_html__( 'Customize', 'wp-ulike' ),
 					'showEngagedUsers'     => esc_html__( 'Engaged Users', 'wp-ulike' ),
 					'period'               => esc_html__( 'Period:', 'wp-ulike' ),
 					'periodInterval'       => esc_html__( 'Last {{days}} Days', 'wp-ulike' ),
 					'periodRange'          => esc_html__( 'Date Range', 'wp-ulike' ),
 					'periodUnit'           => esc_html__( 'day', 'wp-ulike' ),
-					'dateStart'            => esc_html__( 'Date Range', 'wp-ulike' ),
+					'dateStart'            => esc_html__( 'Dates', 'wp-ulike' ),
 					'dateEnd'              => esc_html__( 'Date Range', 'wp-ulike' ),
 					'loading'              => esc_html__( 'Loading...', 'wp-ulike' ),
 					'noData'               => esc_html__( 'No data to display', 'wp-ulike' ),

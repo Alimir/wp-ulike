@@ -304,7 +304,7 @@ if ( ! getBlockType( metadata.name ) ) {
 				<>
 					<InspectorControls>
 						<PanelBody
-							title={ uiLabel( 'contentPanel', __( 'Content Types', 'wp-ulike' ) ) }
+							title={ uiLabel( 'contentPanel', __( 'Top', 'wp-ulike' ) ) }
 							initialOpen={ true }
 						>
 							<SelectControl
@@ -326,7 +326,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							/>
 
 							<SelectControl
-								label={ uiLabel( 'sortOrder', __( 'Likers List Order', 'wp-ulike' ) ) }
+								label={ uiLabel( 'sortOrder', __( 'View By', 'wp-ulike' ) ) }
 								value={ sortOrder }
 								options={ ( config.sortOrders?.length ? config.sortOrders : STATIC_SORT_ORDERS ).map( ( item ) => ( {
 									label: item.label,
@@ -398,7 +398,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							{ periodMode === 'range' && (
 								<>
 									<TextControl
-										label={ uiLabel( 'dateStart', __( 'Date Range', 'wp-ulike' ) ) }
+										label={ uiLabel( 'dateStart', __( 'Dates', 'wp-ulike' ) ) }
 										type="date"
 										value={ dateStart }
 										onChange={ ( value ) => setAttributes( { dateStart: value } ) }
@@ -419,7 +419,7 @@ if ( ! getBlockType( metadata.name ) ) {
 
 						{ showPostFilters && (
 							<PanelBody
-								title={ uiLabel( 'filtersPanel', __( 'Post Types', 'wp-ulike' ) ) }
+								title={ uiLabel( 'filtersPanel', __( 'Show Filters', 'wp-ulike' ) ) }
 								initialOpen={ false }
 							>
 								<FormTokenField
@@ -433,7 +433,7 @@ if ( ! getBlockType( metadata.name ) ) {
 								{ contentType === 'post' && taxonomyOptions.length > 0 && (
 									<>
 										<SelectControl
-											label={ uiLabel( 'taxonomy', __( 'Post Types', 'wp-ulike' ) ) }
+											label={ uiLabel( 'taxonomy', __( 'Category', 'wp-ulike' ) ) }
 											value={ taxonomy }
 											options={ [
 												{
@@ -470,11 +470,12 @@ if ( ! getBlockType( metadata.name ) ) {
 						) }
 
 						<PanelBody
-							title={ uiLabel( 'settingsPanel', __( 'Settings', 'wp-ulike' ) ) }
+							title={ uiLabel( 'displayPanel', __( 'Settings', 'wp-ulike' ) ) }
 							initialOpen={ false }
 						>
 							<ToggleControl
 								label={ uiLabel( 'showHeading', __( 'Title:', 'wp-ulike' ) ) }
+								help={ __( 'Show a heading above the list.', 'wp-ulike' ) }
 								checked={ showHeading }
 								onChange={ ( value ) => setAttributes( { showHeading: value } ) }
 								__nextHasNoMarginBottom={ true }
@@ -482,7 +483,7 @@ if ( ! getBlockType( metadata.name ) ) {
 
 							{ showHeading && (
 								<TextControl
-									label={ uiLabel( 'customTitle', __( 'Title:', 'wp-ulike' ) ) }
+									label={ uiLabel( 'customTitle', __( 'Customize', 'wp-ulike' ) ) }
 									value={ heading }
 									onChange={ ( value ) => setAttributes( { heading: value } ) }
 									placeholder={ formatTopTypeLabel( contentType ) }
