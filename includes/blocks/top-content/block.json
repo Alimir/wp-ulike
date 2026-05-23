@@ -122,7 +122,12 @@
 	"example": {
 		"attributes": {
 			"contentType": "post",
-			"limit": 5
+			"limit": 5,
+			"showHeading": true,
+			"showCount": true,
+			"showRank": true,
+			"periodMode": "preset",
+			"period": "all"
 		}
 	}
 }

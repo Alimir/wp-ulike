@@ -16,7 +16,7 @@ import {
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useEffect } from '@wordpress/element';
 
 import metadata from '../block.json';
 import './editor.scss';
@@ -45,8 +45,20 @@ const FALLBACK_CONTENT_TYPES = [
 const STATIC_SORT_OPTIONS = [
 	{ value: 'like', label: __( 'Like', 'wp-ulike' ) },
 	{ value: 'unlike', label: __( 'Unlike', 'wp-ulike' ) },
+];
+
+const PRO_SORT_OPTIONS = [
+	{ value: 'dislike', label: __( 'Dislike', 'wp-ulike' ) },
 	{ value: 'undislike', label: __( 'Undislike', 'wp-ulike' ) },
 ];
+
+const getSortOptionsList = () => {
+	const cfg = getEditorConfig();
+	if ( cfg.sortOptions?.length ) {
+		return cfg.sortOptions;
+	}
+	return cfg.hasPro ? [ ...STATIC_SORT_OPTIONS, ...PRO_SORT_OPTIONS ] : STATIC_SORT_OPTIONS;
+};
 
 const STATIC_SORT_ORDERS = [
 	{ value: 'DESC', label: __( 'Descending', 'wp-ulike' ) },
@@ -147,12 +159,18 @@ if ( ! getBlockType( metadata.name ) ) {
 			const contentTypeOptions = useMemo( () => getContentTypeOptions(), [ config.contentTypes ] );
 
 			const sortOptions = useMemo( () => {
-				const source = config.sortOptions?.length ? config.sortOptions : STATIC_SORT_OPTIONS;
-				return source.map( ( item ) => ( {
+				return getSortOptionsList().map( ( item ) => ( {
 					label: item.label,
 					value: item.value,
 				} ) );
-			}, [ config.sortOptions ] );
+			}, [ config.sortOptions, config.hasPro ] );
+
+			useEffect( () => {
+				const allowed = sortOptions.map( ( item ) => item.value );
+				if ( sortBy && ! allowed.includes( sortBy ) ) {
+					setAttributes( { sortBy: 'like' } );
+				}
+			}, [ sortBy, sortOptions ] );
 
 			const periodPresetOptions = useMemo( () => {
 				const source = config.periodPresets?.length ? config.periodPresets : STATIC_PERIOD_PRESETS;
@@ -279,6 +297,7 @@ if ( ! getBlockType( metadata.name ) ) {
 
 			const showPostFilters = contentType === 'post' || contentType === 'comment';
 			const showProfileControl = contentType === 'users';
+			const showSortOrderControl = contentType !== 'users';
 			const showThumbnailControl = contentType !== 'activity' && contentType !== 'topic';
 			const showEngagementExtras = contentType !== 'users';
 
@@ -325,17 +344,19 @@ if ( ! getBlockType( metadata.name ) ) {
 								__nextHasNoMarginBottom={ true }
 							/>
 
-							<SelectControl
-								label={ uiLabel( 'sortOrder', __( 'View By', 'wp-ulike' ) ) }
-								value={ sortOrder }
-								options={ ( config.sortOrders?.length ? config.sortOrders : STATIC_SORT_ORDERS ).map( ( item ) => ( {
-									label: item.label,
-									value: item.value,
-								} ) ) }
-								onChange={ ( value ) => setAttributes( { sortOrder: value } ) }
-								__next40pxDefaultSize={ true }
-								__nextHasNoMarginBottom={ true }
-							/>
+							{ showSortOrderControl && (
+								<SelectControl
+									label={ uiLabel( 'sortOrder', __( 'View By', 'wp-ulike' ) ) }
+									value={ sortOrder }
+									options={ ( config.sortOrders?.length ? config.sortOrders : STATIC_SORT_ORDERS ).map( ( item ) => ( {
+										label: item.label,
+										value: item.value,
+									} ) ) }
+									onChange={ ( value ) => setAttributes( { sortOrder: value } ) }
+									__next40pxDefaultSize={ true }
+									__nextHasNoMarginBottom={ true }
+								/>
+							) }
 
 							<RangeControl
 								label={ uiLabel( 'numberOf', __( 'Number of items to show:', 'wp-ulike' ) ) }

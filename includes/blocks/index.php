@@ -281,7 +281,7 @@ function wp_ulike_block_editor_assets() {
 		$script_handle = 'wp-ulike-block-' . $block_slug . '-editor';
 		$block_url = WP_ULIKE_INC_URL . '/blocks/' . basename( $block_dir );
 
-		// Top Content: script is registered via block.json — only attach config to that handle.
+		// Top List block: script is registered via block.json — only attach config to that handle.
 		if ( 'wp-ulike/top-content' === $block_name ) {
 			if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				require_once $block_dir . '/class-top-content-renderer.php';
@@ -342,14 +342,13 @@ function wp_ulike_block_frontend_assets() {
 		return;
 	}
 
-	$block_names = wp_ulike_get_block_names();
-	foreach ( $block_names as $block_name ) {
-		if ( has_block( $block_name ) ) {
-			wp_ulike_block_enqueue_frontend_styles();
-			wp_ulike_block_enqueue_frontend_scripts();
-			break;
-		}
+	// Top List is server-rendered with block styles only; skip global vote JS/CSS.
+	if ( ! has_block( 'wp-ulike/button' ) ) {
+		return;
 	}
+
+	wp_ulike_block_enqueue_frontend_styles();
+	wp_ulike_block_enqueue_frontend_scripts();
 }
 add_action( 'wp_enqueue_scripts', 'wp_ulike_block_frontend_assets' );
 
@@ -397,7 +396,7 @@ function wp_ulike_block_render_callback( $attributes, $content = '', $block = nu
 		)
 	);
 
-	// Top Content block: pass attributes array for renderer.
+	// Top List block: pass attributes array for renderer.
 	if ( 'wp-ulike/top-content' === $block_name ) {
 		$render_attributes = array(
 			'attributes'    => is_array( $attributes ) ? $attributes : array(),

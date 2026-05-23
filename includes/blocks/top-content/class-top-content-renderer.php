@@ -56,6 +56,50 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		}
 
 		/**
+		 * Whether WP ULike Pro is active.
+		 *
+		 * @return bool
+		 */
+		public static function is_pro_active() {
+			return defined( 'WP_ULIKE_PRO_VERSION' );
+		}
+
+		/**
+		 * Vote status slugs allowed for queries (Pro adds dislike / undislike).
+		 *
+		 * @return string[]
+		 */
+		private static function get_allowed_statuses() {
+			$statuses = array( 'like', 'unlike' );
+
+			if ( self::is_pro_active() ) {
+				$statuses[] = 'dislike';
+				$statuses[] = 'undislike';
+			}
+
+			return $statuses;
+		}
+
+		/**
+		 * Status filter options for the block editor.
+		 *
+		 * @return array<int, array{value: string, label: string}>
+		 */
+		private static function get_sort_options() {
+			$options = array(
+				array( 'value' => 'like', 'label' => esc_html__( 'Like', 'wp-ulike' ) ),
+				array( 'value' => 'unlike', 'label' => esc_html__( 'Unlike', 'wp-ulike' ) ),
+			);
+
+			if ( self::is_pro_active() ) {
+				$options[] = array( 'value' => 'dislike', 'label' => esc_html__( 'Dislike', 'wp-ulike' ) );
+				$options[] = array( 'value' => 'undislike', 'label' => esc_html__( 'Undislike', 'wp-ulike' ) );
+			}
+
+			return apply_filters( 'wp_ulike_top_content_block_sort_options', $options );
+		}
+
+		/**
 		 * Default heading label per content type (Top + type name).
 		 *
 		 * @param string $content_type Content type slug.
@@ -148,7 +192,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				$content_type = 'post';
 			}
 
-			$allowed_status = array( 'like', 'unlike', 'undislike' );
+			$allowed_status = self::get_allowed_statuses();
 
 			$sort_by = isset( $attributes['sortBy'] ) ? sanitize_key( $attributes['sortBy'] ) : 'like';
 			if ( ! in_array( $sort_by, $allowed_status, true ) ) {
@@ -757,7 +801,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			$posts = get_posts(
 				array(
 					'fields'         => 'ids',
-					'posts_per_page' => -1,
+					'posts_per_page' => 500,
 					'post_type'      => self::get_post_type_filter( $args ) ? self::get_post_type_filter( $args ) : 'any',
 					'post_status'    => 'publish',
 					'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
@@ -881,7 +925,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				return '';
 			}
 
-			$max_visible = 3;
+			$max_visible = 4;
 			$user_ids  = wp_ulike_get_likers_list_per_post( $config[0], $config[1], (int) $item['item_id'], $max_visible + 1 );
 
 			if ( empty( $user_ids ) ) {
@@ -1144,14 +1188,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				$content_types[] = array( 'value' => 'topic', 'label' => self::get_top_type_label( 'topic' ) );
 			}
 
-			$sort_options = apply_filters(
-				'wp_ulike_top_content_block_sort_options',
-				array(
-					array( 'value' => 'like', 'label' => esc_html__( 'Like', 'wp-ulike' ) ),
-					array( 'value' => 'unlike', 'label' => esc_html__( 'Unlike', 'wp-ulike' ) ),
-					array( 'value' => 'undislike', 'label' => esc_html__( 'Undislike', 'wp-ulike' ) ),
-				)
-			);
+			$sort_options = self::get_sort_options();
 
 			$profile_urls = array(
 				array( 'value' => 'wp', 'label' => esc_html__( 'Profile', 'wp-ulike' ) ),
@@ -1164,6 +1201,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			}
 
 			return array(
+				'hasPro'         => self::is_pro_active(),
 				'hasBuddyPress'  => self::is_buddypress_active(),
 				'hasBbPress'     => self::is_bbpress_active(),
 				'contentTypes'   => $content_types,
