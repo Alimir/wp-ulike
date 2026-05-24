@@ -1,146 +1,141 @@
 .wp-ulike-btn {
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    line-height: 1.4;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    z-index: 1;
-    padding: 0.45rem 0.9rem !important;
-    background-color: rgb(59, 130, 246);  // Tailwind blue-500
-    white-space: nowrap;
-    color: #fff;
-    font-size: 12.5px;
-    border-radius: 6px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	min-height: 30px;
+	padding: 0 12px !important;
+	margin: 0;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	background-color: var(--wp-admin-theme-color, #3858e9);
+	color: #fff !important;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.4;
+	text-decoration: none !important;
+	box-shadow: none;
+	cursor: pointer;
+	white-space: nowrap;
+	vertical-align: middle;
 
-    &:hover {
-        color: white;
-        background-color: rgb(37, 99, 235);  // Tailwind blue-600
-    }
+	&,
+	&:link,
+	&:visited,
+	&:hover,
+	&:focus,
+	&:active {
+		text-decoration: none !important;
+		box-shadow: none;
+	}
 
-    &:focus {
-        outline: none;
-        color: white;
-    }
+	&:hover,
+	&:focus {
+		background-color: var(--wp-admin-theme-color-darker-10, #2145e6);
+		color: #fff !important;
+		border-color: transparent;
+	}
 
-    // Mobile responsiveness
-    @media screen and (max-width: 782px) {
-        font-size: 12px;
-        padding: 0.4rem 0.8rem !important;
-    }
+	&:focus-visible {
+		outline: 2px solid transparent;
+		box-shadow: 0 0 0 1px #fff, 0 0 0 3px var(--wp-admin-theme-color, #3858e9);
+	}
 
-    @media screen and (max-width: 480px) {
-        font-size: 11.5px;
-        padding: 6px 10px !important;
-        white-space: normal;
-    }
+	.wp-ulike-text {
+		font-size: inherit;
+		font-weight: inherit;
+		line-height: inherit;
+		color: inherit;
+	}
 
-    .wp-ulike-text {
-        font-weight: 500;
-        font-size: 0.8rem;
-        line-height: 1.3;
-        letter-spacing: 0.01em;
-    }
+	&.wp-ulike-btn-success {
+		background-color: #00a32a;
+		border-color: #00a32a;
 
-    &.wp-ulike-btn-success {
-        background-color: rgb(16, 185, 129);  // Tailwind emerald-500
+		&:hover,
+		&:focus {
+			background-color: #008a20;
+			border-color: #008a20;
+		}
+	}
 
-        &:hover {
-            background-color: rgb(5, 150, 105);  // Tailwind emerald-600
-        }
-    }
+	&.wp-ulike-btn-info,
+	&.wp-ulike-btn-warning {
+		background-color: #dba617;
+		border-color: #dba617;
+		color: #1d2327 !important;
 
-    &.wp-ulike-btn-info {
-        background-color: rgb(234, 179, 8);  // Tailwind yellow-500
+		&:hover,
+		&:focus {
+			background-color: #c89a14;
+			border-color: #c89a14;
+			color: #1d2327 !important;
+		}
+	}
 
-        &:hover {
-            background-color: rgb(202, 138, 4);  // Tailwind yellow-600
-        }
-    }
+	&.wp-ulike-btn-error {
+		background-color: #d63638;
+		border-color: #d63638;
 
-    &.wp-ulike-btn-error {
-        background-color: rgb(239, 68, 68);  // Tailwind red-500
+		&:hover,
+		&:focus {
+			background-color: #b32d2e;
+			border-color: #b32d2e;
+		}
+	}
 
-        &:hover {
-            background-color: rgb(220, 38, 38);  // Tailwind red-600
-        }
-    }
+	&.wp-ulike-notice-cta-btn {
+		font-weight: 600;
+	}
 
-    &.wp-ulike-notice-cta-btn {
-        font-size: 12.5px;
-        padding: 7px 14px !important;
-        font-weight: 700;
-        letter-spacing: 0.02em;
-        position: relative;
-        overflow: hidden;
+	&.wp-ulike-btn-ghost,
+	&.wp-ulike-skip-notice {
+		background: transparent;
+		border-color: #c3c4c7;
+		color: #1d2327 !important;
+		box-shadow: none;
 
-        // Subtle shine effect on hover
-        &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg,
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent);
-            transition: left 0.5s ease;
-        }
+		&:hover,
+		&:focus {
+			background: #f6f7f7;
+			border-color: #8c8f94;
+			color: #1d2327 !important;
+		}
+	}
 
-        &:hover::before {
-            left: 100%;
-        }
+	&.wp-ulike-btn-is-loading {
+		opacity: 0.75;
+		cursor: wait;
+		pointer-events: none;
 
-        // RTL support for shine effect
-        [dir="rtl"] & {
-            &::before {
-                left: auto;
-                right: -100%;
-            }
+		.wp-ulike-text {
+			visibility: hidden;
+		}
 
-            &:hover::before {
-                right: 100%;
-            }
-        }
+		&::after {
+			content: '';
+			position: absolute;
+			width: 14px;
+			height: 14px;
+			border: 2px solid transparent;
+			border-top-color: currentColor;
+			border-radius: 50%;
+			animation: wp-ulike-spin 0.8s linear infinite;
+		}
+	}
 
-        // Mobile responsiveness
-        @media screen and (max-width: 782px) {
-            font-size: 12px;
-            padding: 7px 12px !important;
-        }
+	@media screen and (max-width: 782px) {
+		font-size: 12px;
+		min-height: 28px;
+		padding: 0 10px !important;
+	}
+}
 
-        @media screen and (max-width: 480px) {
-            font-size: 11.5px;
-            padding: 6px 10px !important;
-        }
-    }
-
-    &.wp-ulike-btn-is-loading {
-        opacity: 0.7;
-        cursor: wait;
-        pointer-events: none;
-
-        &::after {
-            content: '';
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            margin: auto;
-            border: 2px solid transparent;
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    }
-
+@keyframes wp-ulike-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }

@@ -10,17 +10,15 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
-/**
- * Block attributes
- * Variables are extracted from $attributes array in the render callback
- */
-// Set defaults if not provided
-$for           = isset( $for ) ? $for : 'post';
-$itemId        = isset( $itemId ) ? $itemId : '';
-$useCurrentPostId = isset( $useCurrentPostId ) ? (bool) $useCurrentPostId : true;
-$template      = isset( $template ) ? $template : '';
-$buttonType    = isset( $buttonType ) ? $buttonType : '';
-$wrapperClass  = isset( $wrapperClass ) ? $wrapperClass : '';
+$context = isset( $context ) && is_array( $context ) ? $context : array();
+
+$for              = isset( $context['for'] ) ? $context['for'] : 'post';
+$itemId           = isset( $context['itemId'] ) ? $context['itemId'] : '';
+$useCurrentPostId = isset( $context['useCurrentPostId'] ) ? (bool) $context['useCurrentPostId'] : true;
+$template         = isset( $context['template'] ) ? $context['template'] : '';
+$buttonType       = isset( $context['buttonType'] ) ? $context['buttonType'] : '';
+$wrapperClass     = isset( $context['wrapperClass'] ) ? $context['wrapperClass'] : '';
+$block            = isset( $context['block'] ) ? $context['block'] : null;
 
 // Map to shortcode parameter names
 $item_id = $itemId;

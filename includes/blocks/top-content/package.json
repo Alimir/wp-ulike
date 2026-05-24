@@ -1,0 +1,15 @@
+{
+	"name": "@wp-ulike/top-content-block",
+	"version": "1.0.0",
+	"description": "WP ULike Top Content Gutenberg Block",
+	"author": "TechnoWich",
+	"license": "GPL-2.0-or-later",
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start",
+		"lint:js": "wp-scripts lint-js"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.0.0"
+	}
+}

@@ -1,7 +1,7 @@
 {
   "name": "wp-ulike",
   "title": "WP ULike",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "description": "Looking to increase user engagement on your WordPress site? WP ULike plugin lets you easily add voting buttons to your content. With customizable settings and detailed analytics, you can track user engagement, optimize your content, and build a loyal following.",
   "homepage": "https://wpulike.com",
   "repository": {
@@ -15,7 +15,11 @@
     "url": "https://wpulike.com"
   },
   "scripts": {
-    "i18n": "wp i18n make-pot ./wp-ulike ./wp-ulike/languages/wp-ulike.pot --domain=wp-ulike --ignore-domain=admin/settings,build --main-file=wp-ulike.php --merge --headers='{\"report-msgid-bugs-to\":\"https://wpulike.com\",\"language-team\":\"WP ULike Team <info@wpulike.com>\"}'"
+    "i18n:pot": "wp i18n make-pot . languages/wp-ulike.pot --domain=wp-ulike --exclude=node_modules,admin/settings --headers='{\"Report-Msgid-Bugs-To\":\"https://wpulike.com\"}'",
+    "i18n:json": "wp i18n make-json languages --no-purge",
+    "i18n:json:installed": "wp i18n make-json ../../languages/plugins --no-purge",
+    "build:blocks": "npm run build --prefix includes/blocks/button && npm run build --prefix includes/blocks/top-content",
+    "build:blocks:i18n": "npm run build:blocks && npm run i18n:json"
   },
   "main": "Gruntfile.js",
   "devDependencies": {

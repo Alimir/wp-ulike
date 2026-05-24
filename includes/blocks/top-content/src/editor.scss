@@ -1,0 +1,31 @@
+.wp-block-wp-ulike-top-content {
+	padding: 0.5rem 0;
+
+	// Preview uses real permalinks — disable link navigation in the editor only.
+	.wp-ulike-top-content__link {
+		cursor: default;
+		pointer-events: none;
+	}
+
+	.wp-ulike-top-content__link:hover .wp-ulike-top-content__title {
+		text-decoration: none;
+	}
+}
+
+.wp-ulike-top-content-editor-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 5rem;
+	color: #757575;
+	font-size: 0.8125rem;
+}
+
+.wp-ulike-top-content-editor-error {
+	margin: 0;
+	padding: 1rem;
+	text-align: center;
+	color: #b32d2e;
+	font-size: 0.8125rem;
+}

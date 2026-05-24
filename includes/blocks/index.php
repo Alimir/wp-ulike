@@ -201,15 +201,17 @@ function wp_ulike_block_enqueue_frontend_scripts() {
 
 			// Match Pro's exact localization logic
 			if ( function_exists( 'wp_ulike_get_option' ) && class_exists( 'WP_Ulike_Pro' ) ) {
-				$localize_args = array(
-					'AjaxUrl' => admin_url( 'admin-ajax.php' ),
-					'Nonce'   => wp_create_nonce( WP_ULIKE_PRO_DOMAIN ),
-					'ViewTracking' => array(
-						'enabledTypes' => false
+				wp_ulike_add_inline_script_data(
+					WP_ULIKE_PRO_DOMAIN,
+					'UlikeProCommonConfig',
+					array(
+						'AjaxUrl' => admin_url( 'admin-ajax.php' ),
+						'Nonce'   => wp_create_nonce( WP_ULIKE_PRO_DOMAIN ),
+						'ViewTracking' => array(
+							'enabledTypes' => false,
+						),
 					)
 				);
-
-				wp_localize_script( WP_ULIKE_PRO_DOMAIN, 'UlikeProCommonConfig', $localize_args );
 			}
 
 			// Add initialization script for Pro
@@ -251,7 +253,8 @@ function wp_ulike_block_assets() {
 add_action( 'enqueue_block_assets', 'wp_ulike_block_assets' );
 
 /**
- * Enqueue block editor assets
+ * Enqueue block editor assets (Top List dynamic config only).
+ * Scripts, styles, and translations are registered via block.json (textdomain + wp-i18n).
  */
 function wp_ulike_block_editor_assets() {
 	$blocks_dir = WP_ULIKE_INC_DIR . '/blocks';
@@ -274,33 +277,56 @@ function wp_ulike_block_editor_assets() {
 			continue;
 		}
 
-		$asset = require $asset_file;
+		$asset      = require $asset_file;
 		$block_data = json_decode( file_get_contents( $block_json ), true );
 		$block_name = isset( $block_data['name'] ) ? $block_data['name'] : '';
 		$block_slug = sanitize_key( str_replace( array( 'wp-ulike/', '/' ), array( '', '-' ), $block_name ) );
 		$script_handle = 'wp-ulike-block-' . $block_slug . '-editor';
 		$block_url = WP_ULIKE_INC_URL . '/blocks/' . basename( $block_dir );
 
-		wp_enqueue_script(
-			$script_handle,
-			$block_url . '/build/index.js',
-			$asset['dependencies'],
-			$asset['version'] ? $asset['version'] : WP_ULIKE_VERSION,
-			true
-		);
+		$block_script_handle = function_exists( 'generate_block_asset_handle' )
+			? generate_block_asset_handle( $block_name, 'editorScript' )
+			: $script_handle;
+
+		$editor_style_handle = function_exists( 'generate_block_asset_handle' )
+			? generate_block_asset_handle( $block_name, 'editorStyle' )
+			: $script_handle;
+
+		if ( ! wp_script_is( $block_script_handle, 'registered' ) ) {
+			wp_enqueue_script(
+				$script_handle,
+				$block_url . '/build/index.js',
+				isset( $asset['dependencies'] ) ? $asset['dependencies'] : array(),
+				! empty( $asset['version'] ) ? $asset['version'] : WP_ULIKE_VERSION,
+				true
+			);
+			$block_script_handle = $script_handle;
+		}
+
+		if ( 'wp-ulike/top-content' === $block_name ) {
+			if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
+				require_once $block_dir . '/class-top-content-renderer.php';
+			}
+
+			wp_ulike_add_inline_script_data(
+				$block_script_handle,
+				'wpUlikeTopContentBlock',
+				WP_Ulike_Top_Content_Renderer::get_editor_config()
+			);
+		}
 
 		$editor_css = $block_dir . '/build/index.css';
-		if ( file_exists( $editor_css ) ) {
+		if ( file_exists( $editor_css ) && ! wp_style_is( $editor_style_handle, 'registered' ) ) {
 			wp_enqueue_style(
 				$script_handle,
 				$block_url . '/build/index.css',
 				array(),
-				$asset['version'] ? $asset['version'] : WP_ULIKE_VERSION
+				! empty( $asset['version'] ) ? $asset['version'] : WP_ULIKE_VERSION
 			);
 		}
 	}
 }
-add_action( 'enqueue_block_editor_assets', 'wp_ulike_block_editor_assets' );
+add_action( 'enqueue_block_editor_assets', 'wp_ulike_block_editor_assets', 20 );
 
 /**
  * Enqueue frontend assets when block is used (fallback if main class doesn't load)
@@ -310,14 +336,13 @@ function wp_ulike_block_frontend_assets() {
 		return;
 	}
 
-	$block_names = wp_ulike_get_block_names();
-	foreach ( $block_names as $block_name ) {
-		if ( has_block( $block_name ) ) {
-			wp_ulike_block_enqueue_frontend_styles();
-			wp_ulike_block_enqueue_frontend_scripts();
-			break;
-		}
+	// Top List is server-rendered with block styles only; skip global vote JS/CSS.
+	if ( ! has_block( 'wp-ulike/button' ) ) {
+		return;
 	}
+
+	wp_ulike_block_enqueue_frontend_styles();
+	wp_ulike_block_enqueue_frontend_scripts();
 }
 add_action( 'wp_enqueue_scripts', 'wp_ulike_block_frontend_assets' );
 
@@ -351,20 +376,26 @@ function wp_ulike_block_render_callback( $attributes, $content = '', $block = nu
 		return '';
 	}
 
-	$render_attributes = array(
-		'for'           => isset( $attributes['for'] ) ? $attributes['for'] : 'post',
-		'itemId'        => isset( $attributes['itemId'] ) ? $attributes['itemId'] : '',
-		'useCurrentPostId' => isset( $attributes['useCurrentPostId'] ) ? $attributes['useCurrentPostId'] : true,
-		'template'      => isset( $attributes['template'] ) ? $attributes['template'] : '',
-		'buttonType'    => isset( $attributes['buttonType'] ) ? $attributes['buttonType'] : '',
-		'wrapperClass'  => $wrapper_class,
-		'block' => $block, // Pass block for context access (WordPress standard parameter name)
-	);
-
-	// Extract attributes for render.php
-	extract( $render_attributes, EXTR_SKIP );
+	if ( 'wp-ulike/top-content' === $block_name ) {
+		$render_context = array(
+			'attributes'   => is_array( $attributes ) ? $attributes : array(),
+			'wrapperClass' => $wrapper_class,
+			'block'        => $block,
+		);
+	} else {
+		$render_context = array(
+			'for'              => isset( $attributes['for'] ) ? $attributes['for'] : 'post',
+			'itemId'           => isset( $attributes['itemId'] ) ? $attributes['itemId'] : '',
+			'useCurrentPostId' => isset( $attributes['useCurrentPostId'] ) ? $attributes['useCurrentPostId'] : true,
+			'template'         => isset( $attributes['template'] ) ? $attributes['template'] : '',
+			'buttonType'       => isset( $attributes['buttonType'] ) ? $attributes['buttonType'] : '',
+			'wrapperClass'     => $wrapper_class,
+			'block'            => $block,
+		);
+	}
 
 	ob_start();
+	$context = $render_context;
 	include $render_file;
 	return ob_get_clean();
 }
@@ -376,7 +407,9 @@ function wp_ulike_register_rest_routes() {
 	register_rest_route( 'wp-ulike/v1', '/templates', array(
 		'methods'             => 'GET',
 		'callback'            => 'wp_ulike_get_templates_for_block',
-		'permission_callback' => '__return_true',
+		'permission_callback' => function () {
+			return current_user_can( 'edit_posts' );
+		},
 	) );
 }
 add_action( 'rest_api_init', 'wp_ulike_register_rest_routes' );

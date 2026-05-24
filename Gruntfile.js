@@ -533,6 +533,7 @@ module.exports = function (grunt) {
             "readme.md",
             ".jshintrc",
             "/build",
+            "/bin",
             ".*",
             ".ds_store",
             "composer.lock",
