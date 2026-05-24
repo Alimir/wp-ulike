@@ -136,7 +136,7 @@ function wp_ulike_notice_manager(){
 				$emoji,
 				'<span style="font-weight: 700; color: inherit;">' . number_format_i18n( $count_logs ) . '</span>'
 			),
-			'skin'        => 'success',
+			'skin'        => 'info',
 			'has_close'   => true,
 			'buttons'     => array(
 				array(
