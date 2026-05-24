@@ -12,7 +12,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 require_once dirname( __FILE__ ) . '/class-top-content-renderer.php';
 
-$attributes    = isset( $attributes ) && is_array( $attributes ) ? $attributes : array();
-$wrapper_class = isset( $wrapperClass ) ? $wrapperClass : '';
+$context = isset( $context ) && is_array( $context ) ? $context : array();
+
+$attributes    = isset( $context['attributes'] ) && is_array( $context['attributes'] ) ? $context['attributes'] : array();
+$wrapper_class = isset( $context['wrapperClass'] ) ? $context['wrapperClass'] : '';
 
 echo WP_Ulike_Top_Content_Renderer::render( $attributes, $wrapper_class ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

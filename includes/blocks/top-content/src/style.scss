@@ -229,6 +229,21 @@
 	color: var(--wp-ulike-top-muted);
 }
 
+.wp-ulike-top-content__count-stack {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+	align-items: flex-end;
+	gap: 0.5rem 0.875rem;
+}
+
+.wp-ulike-top-content__count-row {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	flex: 0 0 auto;
+}
+
 @media (max-width: 520px) {
 	.wp-ulike-top-content__item {
 		gap: 0.5rem;

@@ -34,9 +34,6 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			'last_year',
 		);
 
-		/** @var string[] */
-		private static $interval_units = array( 'HOUR', 'DAY', 'WEEK', 'MONTH' );
-
 		/**
 		 * Whether bbPress is installed.
 		 *
@@ -65,16 +62,48 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		}
 
 		/**
-		 * Vote status slugs allowed for queries (Pro adds dislike / undislike).
+		 * Normalize block sortBy attribute (string legacy value or array).
+		 *
+		 * @param mixed $raw Raw attribute value.
+		 * @return string[]
+		 */
+		private static function sanitize_sort_by( $raw ) {
+			$allowed = self::get_allowed_statuses();
+
+			if ( is_string( $raw ) && '' !== $raw ) {
+				$raw = array( $raw );
+			}
+
+			if ( ! is_array( $raw ) ) {
+				$raw = array( 'like' );
+			}
+
+			$sort_by = array();
+
+			foreach ( $raw as $status ) {
+				$status = sanitize_key( $status );
+				if ( in_array( $status, $allowed, true ) && ! in_array( $status, $sort_by, true ) ) {
+					$sort_by[] = $status;
+				}
+			}
+
+			if ( empty( $sort_by ) ) {
+				$sort_by[] = 'like';
+			}
+
+			return $sort_by;
+		}
+
+		/**
+		 * Vote types for this block: Like (free) and Dislike (Pro).
 		 *
 		 * @return string[]
 		 */
 		private static function get_allowed_statuses() {
-			$statuses = array( 'like', 'unlike' );
+			$statuses = array( 'like' );
 
 			if ( self::is_pro_active() ) {
 				$statuses[] = 'dislike';
-				$statuses[] = 'undislike';
 			}
 
 			return $statuses;
@@ -88,12 +117,10 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		private static function get_sort_options() {
 			$options = array(
 				array( 'value' => 'like', 'label' => esc_html__( 'Like', 'wp-ulike' ) ),
-				array( 'value' => 'unlike', 'label' => esc_html__( 'Unlike', 'wp-ulike' ) ),
 			);
 
 			if ( self::is_pro_active() ) {
 				$options[] = array( 'value' => 'dislike', 'label' => esc_html__( 'Dislike', 'wp-ulike' ) );
-				$options[] = array( 'value' => 'undislike', 'label' => esc_html__( 'Undislike', 'wp-ulike' ) );
 			}
 
 			return apply_filters( 'wp_ulike_top_content_block_sort_options', $options );
@@ -192,12 +219,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				$content_type = 'post';
 			}
 
-			$allowed_status = self::get_allowed_statuses();
-
-			$sort_by = isset( $attributes['sortBy'] ) ? sanitize_key( $attributes['sortBy'] ) : 'like';
-			if ( ! in_array( $sort_by, $allowed_status, true ) ) {
-				$sort_by = 'like';
-			}
+			$sort_by = self::sanitize_sort_by( isset( $attributes['sortBy'] ) ? $attributes['sortBy'] : array( 'like' ) );
 
 			$sort_order = isset( $attributes['sortOrder'] ) ? strtoupper( sanitize_key( $attributes['sortOrder'] ) ) : 'DESC';
 			if ( ! in_array( $sort_order, array( 'ASC', 'DESC' ), true ) ) {
@@ -214,8 +236,9 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				$period_preset = 'all';
 			}
 
-			$interval_unit = isset( $attributes['intervalUnit'] ) ? strtoupper( sanitize_key( $attributes['intervalUnit'] ) ) : 'DAY';
-			if ( ! in_array( $interval_unit, self::$interval_units, true ) ) {
+			$interval_unit   = isset( $attributes['intervalUnit'] ) ? strtoupper( sanitize_key( $attributes['intervalUnit'] ) ) : 'DAY';
+			$allowed_intervals = array_column( self::get_interval_units(), 'value' );
+			if ( ! in_array( $interval_unit, $allowed_intervals, true ) ) {
 				$interval_unit = 'DAY';
 			}
 
@@ -335,6 +358,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 * @return array<string, mixed>
 		 */
 		private static function get_popular_query_base( $args ) {
+			// Multiple statuses: rank by combined votes (likes + dislikes) for that item, then View By ASC/DESC.
 			return array(
 				'status' => $args['sortBy'],
 				'period' => $args['period'],
@@ -351,27 +375,39 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 * @return array<string, mixed>
 		 */
 		private static function build_popular_query( $type, $rel_type, $args, $fetch_limit = null ) {
-			return array_merge(
+			// Same shape as wp_ulike_pro_get_posts_query() / Stats V2 top_posts() defaults.
+			$query_args = array_merge(
 				self::get_popular_query_base( $args ),
 				array(
-					'type'     => $type,
-					'rel_type' => $rel_type,
-					'limit'    => null !== $fetch_limit ? (int) $fetch_limit : self::get_fetch_limit( $args ),
+					'type'       => $type,
+					'rel_type'   => $rel_type,
+					'is_popular' => true,
+					'limit'      => null !== $fetch_limit ? (int) $fetch_limit : self::get_fetch_limit( $args ),
 				)
 			);
+
+			/**
+			 * Filter popular-query arguments before wp_ulike_get_popular_items_info().
+			 *
+			 * @param array<string, mixed> $query_args Arguments for the popular items query.
+			 * @param string               $type       Content type slug (post, comment, etc.).
+			 * @param array                $args       Sanitized block attributes.
+			 */
+			return apply_filters( 'wp_ulike_top_content_popular_query_args', $query_args, $type, $args );
 		}
 
 		/**
-		 * Item ID => vote count from the same query used for ranking.
+		 * Item ID => vote count from wp_ulike_get_popular_items_info().
 		 *
 		 * @param array<string, mixed> $query_args Arguments for wp_ulike_get_popular_items_info().
 		 * @return array<int, int>
 		 */
-		private static function get_popular_counters( $query_args ) {
+		private static function query_popular_counters( $query_args ) {
 			if ( ! function_exists( 'wp_ulike_get_popular_items_info' ) ) {
 				return array();
 			}
 
+			$query_args = self::prepare_popular_query_args( $query_args );
 			$query_args['offset'] = 0;
 			$info                 = wp_ulike_get_popular_items_info( $query_args );
 
@@ -389,21 +425,175 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		}
 
 		/**
-		 * Counter for display: prefer ranking-query value, then live lookup.
+		 * Ranking map for one or more statuses (multi-status sums per item; core meta query uses MAX otherwise).
 		 *
-		 * @param int                 $item_id      Item ID.
-		 * @param string              $type         Button type.
-		 * @param array               $args         Sanitized args.
-		 * @param array<int, int>     $counter_map  ID => count from popular query.
-		 * @param bool                $is_distinct  Distinct setting.
-		 * @return int
+		 * @param array<string, mixed> $query_args Query arguments.
+		 * @return array<int, int>
 		 */
-		private static function resolve_item_count( $item_id, $type, $args, $counter_map, $is_distinct ) {
-			if ( isset( $counter_map[ $item_id ] ) ) {
-				return (int) $counter_map[ $item_id ];
+		private static function get_popular_counters( $query_args ) {
+			$statuses = isset( $query_args['status'] ) ? $query_args['status'] : 'like';
+			if ( ! is_array( $statuses ) ) {
+				$statuses = array( $statuses );
 			}
 
-			return wp_ulike_get_counter_value( $item_id, $type, $args['sortBy'], $is_distinct, $args['period'] );
+			if ( count( $statuses ) <= 1 ) {
+				$query_args['status'] = $statuses[0];
+				return self::query_popular_counters( $query_args );
+			}
+
+			$merged     = array();
+			$pool_limit = max( (int) ( $query_args['limit'] ?? 10 ) * 3, 50 );
+
+			foreach ( $statuses as $status ) {
+				$single_args           = $query_args;
+				$single_args['status'] = $status;
+				$single_args['limit']  = $pool_limit;
+
+				foreach ( self::query_popular_counters( $single_args ) as $item_id => $count ) {
+					if ( ! isset( $merged[ $item_id ] ) ) {
+						$merged[ $item_id ] = 0;
+					}
+					$merged[ $item_id ] += $count;
+				}
+			}
+
+			$order = strtoupper( $query_args['order'] ?? 'DESC' );
+			if ( 'ASC' === $order ) {
+				asort( $merged, SORT_NUMERIC );
+			} else {
+				arsort( $merged, SORT_NUMERIC );
+			}
+
+			$limit = (int) ( $query_args['limit'] ?? 0 );
+			if ( $limit > 0 ) {
+				$merged = array_slice( $merged, 0, $limit, true );
+			}
+
+			return $merged;
+		}
+
+		/**
+		 * Date range for wp_ulike_get_counter_value() when rendering list counters.
+		 *
+		 * Matches wp-ulike-pro frontend/templates (post.php, Elementor widgets): no period arg for
+		 * all-time so core reads meta counters — same as the public like button.
+		 *
+		 * WP ULike Pro Stats (class-stats-v2.php) passes $settings['period'] including "all", which
+		 * forces a log recount in core; that is intended for period-filtered dashboards, not for
+		 * matching button totals on the frontend.
+		 *
+		 * Pro metabox "counter quantity" is added automatically via the wp_ulike_counter_value filter.
+		 *
+		 * @param string|array $period Resolved block period.
+		 * @return string|array|null
+		 */
+		private static function get_counter_date_range_for_display( $period ) {
+			if ( empty( $period ) || 'all' === $period ) {
+				return null;
+			}
+
+			return $period;
+		}
+
+		/**
+		 * Single status count (like / dislike) for one list item.
+		 *
+		 * Same API as wp-ulike-pro stats-v2 top_posts() and public templates; see
+		 * wp_ulike_pro_update_counter_value for Pro quantity adjustments on post/comment.
+		 *
+		 * @param int          $item_id     Item ID.
+		 * @param string       $type        Counter type slug.
+		 * @param string       $status      like|dislike.
+		 * @param bool         $is_distinct Distinct setting.
+		 * @param string|array $period      Resolved block period.
+		 * @return int
+		 */
+		private static function get_item_status_count( $item_id, $type, $status, $is_distinct, $period ) {
+			return (int) wp_ulike_get_counter_value(
+				$item_id,
+				$type,
+				$status,
+				$is_distinct,
+				self::get_counter_date_range_for_display( $period )
+			);
+		}
+
+		/**
+		 * wp_ulike_get_popular_items_info() with period "all" uses the meta table (fast path).
+		 * Dislike rankings are often missing there; a date range forces the vote-log query instead.
+		 *
+		 * @param array<string, mixed> $query_args Query arguments.
+		 * @return array<string, mixed>
+		 */
+		private static function prepare_popular_query_args( $query_args ) {
+			$status = isset( $query_args['status'] ) ? $query_args['status'] : 'like';
+			if ( is_array( $status ) || 'dislike' !== $status ) {
+				return $query_args;
+			}
+
+			$period = isset( $query_args['period'] ) ? $query_args['period'] : 'all';
+			if ( ! empty( $period ) && 'all' !== $period ) {
+				return $query_args;
+			}
+
+			// Cannot pass "all" — core maps that to empty period_limit and reads ulike_meta, not vote logs.
+			$query_args['period'] = array(
+				'start' => '1970-01-01',
+				'end'   => gmdate( 'Y-m-d', time() + DAY_IN_SECONDS ),
+			);
+
+			return $query_args;
+		}
+
+		/**
+		 * Accurate per-status counts + list rules (matches like button via wp_ulike_get_counter_value).
+		 *
+		 * @param int    $item_id     Item ID.
+		 * @param string $type        Counter type slug.
+		 * @param array  $args        Sanitized args.
+		 * @param bool   $is_distinct Distinct setting.
+		 * @return array{count: int, status_counts: array<string, int>}|null Null when item should be skipped.
+		 */
+		private static function build_item_vote_data( $item_id, $type, $args, $is_distinct ) {
+			$item_id = (int) $item_id;
+			if ( $item_id <= 0 ) {
+				return null;
+			}
+
+			$status_counts = array();
+			foreach ( $args['sortBy'] as $status ) {
+				$status_counts[ $status ] = self::get_item_status_count(
+					$item_id,
+					$type,
+					$status,
+					$is_distinct,
+					$args['period']
+				);
+			}
+
+			$total = 0;
+			foreach ( $args['sortBy'] as $status ) {
+				$total += (int) ( $status_counts[ $status ] ?? 0 );
+			}
+
+			if ( $total <= 0 ) {
+				return null;
+			}
+
+			return array(
+				'count'         => $total,
+				'status_counts' => $status_counts,
+			);
+		}
+
+		/**
+		 * @param string[] $statuses Status slugs.
+		 * @return string
+		 */
+		private static function get_status_labels_text( $statuses ) {
+			$labels = array_map( array( __CLASS__, 'get_status_label' ), $statuses );
+
+			return implode( ', ', $labels );
 		}
 
 		/**
@@ -487,22 +677,23 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 					break;
 				}
 
-				$post_id = (int) $post->ID;
-				$count   = self::resolve_item_count( $post_id, 'post', $args, $counters, $is_distinct );
+				$post_id   = (int) $post->ID;
+				$vote_data = self::build_item_vote_data( $post_id, 'post', $args, $is_distinct );
 
-				if ( $count <= 0 ) {
+				if ( null === $vote_data ) {
 					continue;
 				}
 
 				$display_id = wp_ulike_get_the_id( $post_id );
 
 				$items[] = array(
-					'item_id'   => $post_id,
-					'title'     => wp_trim_words( self::get_post_title_for_item( $post ), $args['titleTrim'], '…' ),
-					'subtitle'  => '',
-					'url'       => get_permalink( $display_id ),
-					'count'     => $count,
-					'thumbnail' => $args['showThumbnail'] ? self::get_post_thumbnail_html( $display_id, $args['thumbnailSize'] ) : '',
+					'item_id'       => $post_id,
+					'title'         => wp_trim_words( self::get_post_title_for_item( $post ), $args['titleTrim'], '…' ),
+					'subtitle'      => '',
+					'url'           => get_permalink( $display_id ),
+					'count'         => $vote_data['count'],
+					'status_counts' => $vote_data['status_counts'],
+					'thumbnail'     => $args['showThumbnail'] ? self::get_post_thumbnail_html( $display_id, $args['thumbnailSize'] ) : '',
 				);
 			}
 
@@ -553,23 +744,24 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 
 				$comment_id = (int) $comment->comment_ID;
-				$count      = self::resolve_item_count( $comment_id, 'comment', $args, $counters, $is_distinct );
+				$vote_data  = self::build_item_vote_data( $comment_id, 'comment', $args, $is_distinct );
 
-				if ( $count <= 0 ) {
+				if ( null === $vote_data ) {
 					continue;
 				}
 
 				$items[] = array(
-					'item_id'   => $comment_id,
-					'title'     => wp_trim_words( get_the_title( $comment->comment_post_ID ), $args['titleTrim'], '…' ),
-					'subtitle'  => sprintf(
+					'item_id'       => $comment_id,
+					'title'         => wp_trim_words( get_the_title( $comment->comment_post_ID ), $args['titleTrim'], '…' ),
+					'subtitle'      => sprintf(
 						'%s %s',
 						esc_html( stripslashes( $comment->comment_author ) ),
 						esc_html__( 'on', 'wp-ulike' )
 					),
-					'url'       => get_comment_link( $comment_id ),
-					'count'     => $count,
-					'thumbnail' => $args['showThumbnail'] ? get_avatar( $comment->comment_author_email, $args['thumbnailSize'], '', '', array( 'class' => 'wp-ulike-top-content__avatar' ) ) : '',
+					'url'           => get_comment_link( $comment_id ),
+					'count'         => $vote_data['count'],
+					'status_counts' => $vote_data['status_counts'],
+					'thumbnail'     => $args['showThumbnail'] ? get_avatar( $comment->comment_author_email, $args['thumbnailSize'], '', '', array( 'class' => 'wp-ulike-top-content__avatar' ) ) : '',
 				);
 			}
 
@@ -585,9 +777,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				return array();
 			}
 
-			// API expects an array of statuses; a string breaks the query builder.
-			$status = array( $args['sortBy'] );
-			$likers = wp_ulike_get_best_likers_info( $args['limit'], $args['period'], 0, $status );
+			$likers = wp_ulike_get_best_likers_info( $args['limit'], $args['period'], 0, $args['sortBy'] );
 
 			if ( empty( $likers ) || ! is_array( $likers ) ) {
 				return array();
@@ -603,11 +793,20 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 					continue;
 				}
 
-				$count_key = $args['sortBy'] . 'Count';
-				if ( isset( $liker->$count_key ) ) {
-					$count = absint( $liker->$count_key );
-				} else {
-					$count = isset( $liker->SumUser ) ? absint( $liker->SumUser ) : 0;
+				$status_counts = array();
+				$count         = 0;
+
+				foreach ( $args['sortBy'] as $status ) {
+					$count_key = $status . 'Count';
+					$value     = isset( $liker->$count_key ) ? absint( $liker->$count_key ) : 0;
+					if ( $value > 0 ) {
+						$status_counts[ $status ] = $value;
+						$count                   += $value;
+					}
+				}
+
+				if ( $count <= 0 && isset( $liker->SumUser ) ) {
+					$count = absint( $liker->SumUser );
 				}
 
 				if ( $count <= 0 ) {
@@ -615,7 +814,9 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 
 				$items[] = array(
+					'item_id'   => $user_id,
 					'title'     => $userdata->display_name,
+					'status_counts' => $status_counts,
 					'subtitle'  => '',
 					'url'       => self::get_user_profile_url( $user_id, $args['profileUrl'] ),
 					'count'     => $count,
@@ -673,19 +874,20 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 
 				$activity_id = (int) $activity->id;
-				$count       = self::resolve_item_count( $activity_id, 'activity', $args, $counters, $is_distinct );
+				$vote_data   = self::build_item_vote_data( $activity_id, 'activity', $args, $is_distinct );
 
-				if ( $count <= 0 ) {
+				if ( null === $vote_data ) {
 					continue;
 				}
 
 				$items[] = array(
-					'item_id'   => $activity_id,
-					'title'     => wp_trim_words( wp_strip_all_tags( $activity_action ), $args['titleTrim'], '…' ),
-					'subtitle'  => '',
-					'url'       => function_exists( 'bp_activity_get_permalink' ) ? bp_activity_get_permalink( $activity_id ) : '',
-					'count'     => $count,
-					'thumbnail' => '',
+					'item_id'       => $activity_id,
+					'title'         => wp_trim_words( wp_strip_all_tags( $activity_action ), $args['titleTrim'], '…' ),
+					'subtitle'      => '',
+					'url'           => function_exists( 'bp_activity_get_permalink' ) ? bp_activity_get_permalink( $activity_id ) : '',
+					'count'         => $vote_data['count'],
+					'status_counts' => $vote_data['status_counts'],
+					'thumbnail'     => '',
 				);
 			}
 
@@ -735,10 +937,10 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 					continue;
 				}
 
-				$post_id = (int) $post->ID;
-				$count   = self::resolve_item_count( $post_id, 'topic', $args, $counters, $is_distinct );
+				$post_id   = (int) $post->ID;
+				$vote_data = self::build_item_vote_data( $post_id, 'topic', $args, $is_distinct );
 
-				if ( $count <= 0 ) {
+				if ( null === $vote_data ) {
 					continue;
 				}
 
@@ -759,12 +961,13 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 
 				$items[] = array(
-					'item_id'   => $post_id,
-					'title'     => wp_trim_words( $post_title, $args['titleTrim'], '…' ),
-					'subtitle'  => '',
-					'url'       => $permalink,
-					'count'     => $count,
-					'thumbnail' => '',
+					'item_id'       => $post_id,
+					'title'         => wp_trim_words( $post_title, $args['titleTrim'], '…' ),
+					'subtitle'      => '',
+					'url'           => $permalink,
+					'count'         => $vote_data['count'],
+					'status_counts' => $vote_data['status_counts'],
+					'thumbnail'     => '',
 				);
 			}
 
@@ -798,11 +1001,12 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 * @return int[]
 		 */
 		private static function get_taxonomy_post_ids( $args ) {
-			$posts = get_posts(
+			$post_types = self::get_post_type_filter( $args );
+			$posts      = get_posts(
 				array(
 					'fields'         => 'ids',
 					'posts_per_page' => 500,
-					'post_type'      => self::get_post_type_filter( $args ) ? self::get_post_type_filter( $args ) : 'any',
+					'post_type'      => $post_types ? $post_types : 'any',
 					'post_status'    => 'publish',
 					'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 						array(
@@ -824,16 +1028,10 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 * @return string
 		 */
 		private static function render_item( $item, $rank, $args ) {
-			$count_label = self::get_status_label( $args['sortBy'] );
-			$aside_html  = '';
+			$aside_html = '';
 
 			if ( $args['showCount'] && isset( $item['count'] ) ) {
-				$aside_html = sprintf(
-					'<div class="wp-ulike-top-content__aside" aria-label="%1$s"><span class="wp-ulike-top-content__count-value">%2$s</span><span class="wp-ulike-top-content__count-label">%3$s</span></div>',
-					esc_attr( $count_label ),
-					esc_html( wp_ulike_format_number( $item['count'], $args['sortBy'] ) ),
-					esc_html( $count_label )
-				);
+				$aside_html = self::render_item_counts( $item, $args );
 			}
 
 			$rank_html = $args['showRank']
@@ -860,12 +1058,13 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 
 			$link_aria = $item['title'];
 			if ( $args['showCount'] && isset( $item['count'] ) ) {
-				$link_aria = sprintf(
+				$primary_status = $args['sortBy'][0];
+				$link_aria      = sprintf(
 					/* translators: 1: item title, 2: vote count, 3: vote type label (Like, Unlike, etc.). */
 					__( '%1$s — %2$s %3$s', 'wp-ulike' ),
 					$item['title'],
-					wp_ulike_format_number( $item['count'], $args['sortBy'] ),
-					$count_label
+					wp_ulike_format_number( $item['count'], $primary_status ),
+					self::get_status_labels_text( $args['sortBy'] )
 				);
 			}
 
@@ -908,6 +1107,68 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			);
 
 			return isset( $map[ $content_type ] ) ? $map[ $content_type ] : null;
+		}
+
+		/**
+		 * Counter column markup (single or per-status rows).
+		 *
+		 * @param array<string, mixed> $item Item.
+		 * @param array                $args Args.
+		 * @return string
+		 */
+		private static function render_item_counts( $item, $args ) {
+			$statuses        = $args['sortBy'];
+			$aria_label      = self::get_status_labels_text( $statuses );
+			$primary_status  = $statuses[0];
+			$status_counts   = ! empty( $item['status_counts'] ) && is_array( $item['status_counts'] )
+				? $item['status_counts']
+				: array();
+
+			if ( count( $statuses ) > 1 ) {
+				$rows         = '';
+				$shown_labels = array();
+
+				foreach ( $statuses as $status ) {
+					$value = isset( $status_counts[ $status ] ) ? (int) $status_counts[ $status ] : 0;
+					if ( $value <= 0 ) {
+						continue;
+					}
+
+					$label          = self::get_status_label( $status );
+					$shown_labels[] = $label;
+					$rows          .= sprintf(
+						'<div class="wp-ulike-top-content__count-row"><span class="wp-ulike-top-content__count-value">%1$s</span><span class="wp-ulike-top-content__count-label">%2$s</span></div>',
+						esc_html( wp_ulike_format_number( $value, $status ) ),
+						esc_html( $label )
+					);
+				}
+
+				if ( '' !== $rows ) {
+					return sprintf(
+						'<div class="wp-ulike-top-content__aside" aria-label="%1$s"><div class="wp-ulike-top-content__count-stack">%2$s</div></div>',
+						esc_attr( implode( ', ', $shown_labels ) ),
+						$rows
+					);
+				}
+
+				return '';
+			}
+
+			$count_label = 1 === count( $statuses )
+				? self::get_status_label( $primary_status )
+				: $aria_label;
+
+			$single_value = (int) ( $status_counts[ $primary_status ] ?? $item['count'] ?? 0 );
+			if ( $single_value <= 0 ) {
+				return '';
+			}
+
+			return sprintf(
+				'<div class="wp-ulike-top-content__aside" aria-label="%1$s"><span class="wp-ulike-top-content__count-value">%2$s</span><span class="wp-ulike-top-content__count-label">%3$s</span></div>',
+				esc_attr( $count_label ),
+				esc_html( wp_ulike_format_number( $single_value, $primary_status ) ),
+				esc_html( $count_label )
+			);
 		}
 
 		/**
@@ -1019,10 +1280,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 */
 		private static function get_status_label( $status ) {
 			$labels = array(
-				'like'      => esc_html__( 'Like', 'wp-ulike' ),
-				'dislike'   => esc_html__( 'Dislike', 'wp-ulike' ),
-				'unlike'    => esc_html__( 'Unlike', 'wp-ulike' ),
-				'undislike' => esc_html__( 'Undislike', 'wp-ulike' ),
+				'like'    => esc_html__( 'Like', 'wp-ulike' ),
+				'dislike' => esc_html__( 'Dislike', 'wp-ulike' ),
 			);
 
 			return isset( $labels[ $status ] ) ? $labels[ $status ] : $labels['like'];
@@ -1039,8 +1298,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 
 			$heading = self::get_top_type_label( $args['contentType'] );
 
-			if ( 'like' !== $args['sortBy'] ) {
-				$heading .= ' (' . self::get_status_label( $args['sortBy'] ) . ')';
+			if ( ! ( 1 === count( $args['sortBy'] ) && 'like' === $args['sortBy'][0] ) ) {
+				$heading .= ' (' . self::get_status_labels_text( $args['sortBy'] ) . ')';
 			}
 
 			return $heading;
@@ -1130,6 +1389,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				array( 'value' => 'last_week', 'label' => esc_html__( 'Last Week', 'wp-ulike' ) ),
 				array( 'value' => 'today', 'label' => esc_html__( 'Today', 'wp-ulike' ) ),
 				array( 'value' => 'yesterday', 'label' => esc_html__( 'Yesterday', 'wp-ulike' ) ),
+				array( 'value' => 'day_before_yesterday', 'label' => esc_html__( 'Day Before Yesterday', 'wp-ulike' ) ),
 			);
 		}
 
@@ -1214,37 +1474,6 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				'intervalUnits'  => self::get_interval_units(),
 				'postTypes'      => self::get_post_type_options(),
 				'profileUrls'    => $profile_urls,
-				'i18n'           => array(
-					'contentPanel'         => esc_html__( 'Top', 'wp-ulike' ),
-					'contentType'          => esc_html__( 'Type:', 'wp-ulike' ),
-					'statusFilter'         => esc_html__( 'Status Filter', 'wp-ulike' ),
-					'sortOrder'            => esc_html__( 'View By', 'wp-ulike' ),
-					'filtersPanel'         => esc_html__( 'Show Filters', 'wp-ulike' ),
-					'postTypes'            => esc_html__( 'Post Types', 'wp-ulike' ),
-					'selectPostTypes'      => esc_html__( 'Select post types', 'wp-ulike' ),
-					'taxonomy'             => esc_html__( 'Category', 'wp-ulike' ),
-					'taxonomyTerms'        => esc_html__( 'Select options...', 'wp-ulike' ),
-					'displayPanel'         => esc_html__( 'Settings', 'wp-ulike' ),
-					'numberOf'             => esc_html__( 'Number of items to show:', 'wp-ulike' ),
-					'titleTrim'            => esc_html__( 'Title Trim (Length):', 'wp-ulike' ),
-					'profileUrl'           => esc_html__( 'Profile URL:', 'wp-ulike' ),
-					'showCount'            => esc_html__( 'Activate Like Counter', 'wp-ulike' ),
-					'showThumb'            => esc_html__( 'Activate Thumbnail/Avatar', 'wp-ulike' ),
-					'thumbSize'            => esc_html__( 'Thumbnail/Avatar size:', 'wp-ulike' ),
-					'showRank'             => esc_html__( 'Rank number', 'wp-ulike' ),
-					'showHeading'          => esc_html__( 'Title:', 'wp-ulike' ),
-					'customTitle'          => esc_html__( 'Customize', 'wp-ulike' ),
-					'showEngagedUsers'     => esc_html__( 'Engaged Users', 'wp-ulike' ),
-					'period'               => esc_html__( 'Period:', 'wp-ulike' ),
-					'periodInterval'       => esc_html__( 'Last {{days}} Days', 'wp-ulike' ),
-					'periodRange'          => esc_html__( 'Date Range', 'wp-ulike' ),
-					'periodUnit'           => esc_html__( 'day', 'wp-ulike' ),
-					'dateStart'            => esc_html__( 'Dates', 'wp-ulike' ),
-					'dateEnd'              => esc_html__( 'Date Range', 'wp-ulike' ),
-					'loading'              => esc_html__( 'Loading...', 'wp-ulike' ),
-					'noData'               => esc_html__( 'No data to display', 'wp-ulike' ),
-					'allPostTypes'         => esc_html__( 'Select...', 'wp-ulike' ),
-				),
 			);
 		}
 	}

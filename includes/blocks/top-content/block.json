@@ -17,8 +17,8 @@
 			"default": "post"
 		},
 		"sortBy": {
-			"type": "string",
-			"default": "like"
+			"type": "array",
+			"default": [ "like" ]
 		},
 		"sortOrder": {
 			"type": "string",

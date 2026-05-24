@@ -15,7 +15,7 @@ import {
 	FormTokenField,
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
-import ServerSideRender from '@wordpress/server-side-render';
+import { ServerSideRender } from '@wordpress/server-side-render';
 import { useMemo, useEffect } from '@wordpress/element';
 
 import metadata from '../block.json';
@@ -44,13 +44,21 @@ const FALLBACK_CONTENT_TYPES = [
 
 const STATIC_SORT_OPTIONS = [
 	{ value: 'like', label: __( 'Like', 'wp-ulike' ) },
-	{ value: 'unlike', label: __( 'Unlike', 'wp-ulike' ) },
 ];
 
 const PRO_SORT_OPTIONS = [
 	{ value: 'dislike', label: __( 'Dislike', 'wp-ulike' ) },
-	{ value: 'undislike', label: __( 'Undislike', 'wp-ulike' ) },
 ];
+
+const normalizeSortBy = ( value ) => {
+	if ( Array.isArray( value ) ) {
+		return value;
+	}
+	if ( typeof value === 'string' && value ) {
+		return [ value ];
+	}
+	return [ 'like' ];
+};
 
 const getSortOptionsList = () => {
 	const cfg = getEditorConfig();
@@ -75,6 +83,7 @@ const STATIC_PERIOD_PRESETS = [
 	{ value: 'last_week', label: __( 'Last Week', 'wp-ulike' ) },
 	{ value: 'today', label: __( 'Today', 'wp-ulike' ) },
 	{ value: 'yesterday', label: __( 'Yesterday', 'wp-ulike' ) },
+	{ value: 'day_before_yesterday', label: __( 'Day Before Yesterday', 'wp-ulike' ) },
 ];
 
 const STATIC_INTERVAL_UNITS = [
@@ -94,11 +103,6 @@ const getContentTypeOptions = () => {
 	return [ ...FALLBACK_CONTENT_TYPES ];
 };
 
-const label = ( key, fallback ) => {
-	const i18n = getEditorConfig().i18n || {};
-	return i18n[ key ] || fallback;
-};
-
 /** Strip trailing colons from legacy plugin strings for cleaner UI labels. */
 const stripLabelColon = ( text ) => {
 	if ( ! text ) {
@@ -107,7 +111,7 @@ const stripLabelColon = ( text ) => {
 	return String( text ).replace( /:+\s*$/, '' ).trim();
 };
 
-const uiLabel = ( key, fallback ) => stripLabelColon( label( key, fallback ) );
+const uiLabel = ( text ) => stripLabelColon( text );
 
 /** "Last {{days}} Days" using the real day count (not a fixed preview number). */
 const formatLastDaysLabel = ( days ) => {
@@ -165,12 +169,52 @@ if ( ! getBlockType( metadata.name ) ) {
 				} ) );
 			}, [ config.sortOptions, config.hasPro ] );
 
+			const sortByList = useMemo( () => normalizeSortBy( sortBy ), [ sortBy ] );
+
 			useEffect( () => {
 				const allowed = sortOptions.map( ( item ) => item.value );
-				if ( sortBy && ! allowed.includes( sortBy ) ) {
-					setAttributes( { sortBy: 'like' } );
+				const next = sortByList.filter( ( status ) => allowed.includes( status ) );
+
+				if ( 0 === next.length ) {
+					setAttributes( { sortBy: [ 'like' ] } );
+					return;
 				}
-			}, [ sortBy, sortOptions ] );
+
+				if (
+					! Array.isArray( sortBy ) ||
+					next.length !== sortByList.length ||
+					next.some( ( status, index ) => status !== sortByList[ index ] )
+				) {
+					setAttributes( { sortBy: next } );
+				}
+			}, [ sortBy, sortByList, sortOptions ] );
+
+			const sortByTokens = useMemo(
+				() =>
+					sortByList.map( ( slug ) => {
+						const found = sortOptions.find( ( item ) => item.value === slug );
+						return found ? found.label : slug;
+					} ),
+				[ sortByList, sortOptions ]
+			);
+
+			const sortBySuggestions = useMemo(
+				() => sortOptions.map( ( item ) => item.label ),
+				[ sortOptions ]
+			);
+
+			const onSortByChange = ( tokens ) => {
+				const slugs = tokens
+					.map( ( token ) => {
+						const found = sortOptions.find(
+							( item ) => item.label === token || item.value === token
+						);
+						return found ? found.value : token;
+					} )
+					.filter( ( slug ) => sortOptions.some( ( item ) => item.value === slug ) );
+
+				setAttributes( { sortBy: slugs.length ? slugs : [ 'like' ] } );
+			};
 
 			const periodPresetOptions = useMemo( () => {
 				const source = config.periodPresets?.length ? config.periodPresets : STATIC_PERIOD_PRESETS;
@@ -191,7 +235,7 @@ if ( ! getBlockType( metadata.name ) ) {
 						value: 'mode:interval',
 					},
 					{
-						label: uiLabel( 'periodRange', __( 'Date Range', 'wp-ulike' ) ),
+						label: uiLabel( __( 'Date Range', 'wp-ulike' ) ),
 						value: 'mode:range',
 					},
 				];
@@ -323,11 +367,11 @@ if ( ! getBlockType( metadata.name ) ) {
 				<>
 					<InspectorControls>
 						<PanelBody
-							title={ uiLabel( 'contentPanel', __( 'Top', 'wp-ulike' ) ) }
+							title={ uiLabel( __( 'Top', 'wp-ulike' ) ) }
 							initialOpen={ true }
 						>
 							<SelectControl
-								label={ uiLabel( 'contentType', __( 'Type:', 'wp-ulike' ) ) }
+								label={ uiLabel( __( 'Type:', 'wp-ulike' ) ) }
 								value={ contentType }
 								options={ contentTypeOptions }
 								onChange={ onContentTypeChange }
@@ -335,18 +379,18 @@ if ( ! getBlockType( metadata.name ) ) {
 								__nextHasNoMarginBottom={ true }
 							/>
 
-							<SelectControl
-								label={ uiLabel( 'statusFilter', __( 'Status Filter', 'wp-ulike' ) ) }
-								value={ sortBy }
-								options={ sortOptions }
-								onChange={ ( value ) => setAttributes( { sortBy: value } ) }
-								__next40pxDefaultSize={ true }
-								__nextHasNoMarginBottom={ true }
+							<FormTokenField
+								label={ uiLabel( __( 'Status Filter', 'wp-ulike' ) ) }
+								value={ sortByTokens }
+								suggestions={ sortBySuggestions }
+								onChange={ onSortByChange }
+								__experimentalExpandOnFocus
+								__nextHasNoMarginBottom
 							/>
 
 							{ showSortOrderControl && (
 								<SelectControl
-									label={ uiLabel( 'sortOrder', __( 'View By', 'wp-ulike' ) ) }
+									label={ uiLabel( __( 'View By', 'wp-ulike' ) ) }
 									value={ sortOrder }
 									options={ ( config.sortOrders?.length ? config.sortOrders : STATIC_SORT_ORDERS ).map( ( item ) => ( {
 										label: item.label,
@@ -359,7 +403,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							) }
 
 							<RangeControl
-								label={ uiLabel( 'numberOf', __( 'Number of items to show:', 'wp-ulike' ) ) }
+								label={ uiLabel( __( 'Number of items to show:', 'wp-ulike' ) ) }
 								value={ limit }
 								onChange={ ( value ) => setAttributes( { limit: value } ) }
 								min={ 1 }
@@ -369,7 +413,7 @@ if ( ! getBlockType( metadata.name ) ) {
 
 							{ showProfileControl && config.profileUrls?.length > 1 && (
 								<SelectControl
-									label={ uiLabel( 'profileUrl', __( 'Profile URL:', 'wp-ulike' ) ) }
+									label={ uiLabel( __( 'Profile URL:', 'wp-ulike' ) ) }
 									value={ profileUrl }
 									options={ config.profileUrls.map( ( item ) => ( {
 										label: item.label,
@@ -383,11 +427,11 @@ if ( ! getBlockType( metadata.name ) ) {
 						</PanelBody>
 
 						<PanelBody
-							title={ uiLabel( 'period', __( 'Period:', 'wp-ulike' ) ) }
+							title={ uiLabel( __( 'Period:', 'wp-ulike' ) ) }
 							initialOpen={ false }
 						>
 							<SelectControl
-								label={ uiLabel( 'period', __( 'Period:', 'wp-ulike' ) ) }
+								label={ uiLabel( __( 'Period:', 'wp-ulike' ) ) }
 								value={ periodSelectValue }
 								options={ periodSelectOptions }
 								onChange={ onPeriodChange }
@@ -406,7 +450,7 @@ if ( ! getBlockType( metadata.name ) ) {
 										__nextHasNoMarginBottom={ true }
 									/>
 									<SelectControl
-										label={ uiLabel( 'periodUnit', __( 'day', 'wp-ulike' ) ) }
+										label={ uiLabel( __( 'day', 'wp-ulike' ) ) }
 										value={ intervalUnit }
 										options={ intervalUnitOptions }
 										onChange={ ( value ) => setAttributes( { intervalUnit: value } ) }
@@ -419,7 +463,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							{ periodMode === 'range' && (
 								<>
 									<TextControl
-										label={ uiLabel( 'dateStart', __( 'Dates', 'wp-ulike' ) ) }
+										label={ uiLabel( __( 'Dates', 'wp-ulike' ) ) }
 										type="date"
 										value={ dateStart }
 										onChange={ ( value ) => setAttributes( { dateStart: value } ) }
@@ -427,7 +471,7 @@ if ( ! getBlockType( metadata.name ) ) {
 										__nextHasNoMarginBottom={ true }
 									/>
 									<TextControl
-										label={ uiLabel( 'dateEnd', __( 'Date Range', 'wp-ulike' ) ) }
+										label={ uiLabel( __( 'Date Range', 'wp-ulike' ) ) }
 										type="date"
 										value={ dateEnd }
 										onChange={ ( value ) => setAttributes( { dateEnd: value } ) }
@@ -440,11 +484,11 @@ if ( ! getBlockType( metadata.name ) ) {
 
 						{ showPostFilters && (
 							<PanelBody
-								title={ uiLabel( 'filtersPanel', __( 'Show Filters', 'wp-ulike' ) ) }
+								title={ uiLabel( __( 'Show Filters', 'wp-ulike' ) ) }
 								initialOpen={ false }
 							>
 								<FormTokenField
-									label={ uiLabel( 'selectPostTypes', __( 'Select post types', 'wp-ulike' ) ) }
+									label={ uiLabel( __( 'Select post types', 'wp-ulike' ) ) }
 									value={ postTypeValue }
 									suggestions={ postTypeSuggestions }
 									onChange={ onPostTypesChange }
@@ -454,11 +498,11 @@ if ( ! getBlockType( metadata.name ) ) {
 								{ contentType === 'post' && taxonomyOptions.length > 0 && (
 									<>
 										<SelectControl
-											label={ uiLabel( 'taxonomy', __( 'Category', 'wp-ulike' ) ) }
+											label={ uiLabel( __( 'Category', 'wp-ulike' ) ) }
 											value={ taxonomy }
 											options={ [
 												{
-													label: label( 'allPostTypes', __( 'Select...', 'wp-ulike' ) ),
+													label: __( 'Select...', 'wp-ulike' ),
 													value: '',
 												},
 												...taxonomyOptions,
@@ -474,10 +518,7 @@ if ( ! getBlockType( metadata.name ) ) {
 										/>
 										{ taxonomy && (
 											<FormTokenField
-												label={ uiLabel(
-													'taxonomyTerms',
-													__( 'Select options...', 'wp-ulike' )
-												) }
+												label={ uiLabel( __( 'Select options...', 'wp-ulike' ) ) }
 												value={ termValues }
 												suggestions={ termSuggestions }
 												onChange={ onTermsChange }
@@ -491,11 +532,11 @@ if ( ! getBlockType( metadata.name ) ) {
 						) }
 
 						<PanelBody
-							title={ uiLabel( 'displayPanel', __( 'Settings', 'wp-ulike' ) ) }
+							title={ uiLabel( __( 'Settings', 'wp-ulike' ) ) }
 							initialOpen={ false }
 						>
 							<ToggleControl
-								label={ uiLabel( 'showHeading', __( 'Title:', 'wp-ulike' ) ) }
+								label={ uiLabel( __( 'Title:', 'wp-ulike' ) ) }
 								help={ __( 'Show a heading above the list.', 'wp-ulike' ) }
 								checked={ showHeading }
 								onChange={ ( value ) => setAttributes( { showHeading: value } ) }
@@ -504,7 +545,7 @@ if ( ! getBlockType( metadata.name ) ) {
 
 							{ showHeading && (
 								<TextControl
-									label={ uiLabel( 'customTitle', __( 'Customize', 'wp-ulike' ) ) }
+									label={ uiLabel( __( 'Customize', 'wp-ulike' ) ) }
 									value={ heading }
 									onChange={ ( value ) => setAttributes( { heading: value } ) }
 									placeholder={ formatTopTypeLabel( contentType ) }
@@ -514,7 +555,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							) }
 
 							<RangeControl
-								label={ uiLabel( 'titleTrim', __( 'Title Trim (Length):', 'wp-ulike' ) ) }
+								label={ uiLabel( __( 'Title Trim (Length):', 'wp-ulike' ) ) }
 								value={ titleTrim }
 								onChange={ ( value ) => setAttributes( { titleTrim: value } ) }
 								min={ 3 }
@@ -523,14 +564,14 @@ if ( ! getBlockType( metadata.name ) ) {
 							/>
 
 							<ToggleControl
-								label={ uiLabel( 'showRank', __( 'Rank number', 'wp-ulike' ) ) }
+								label={ uiLabel( __( 'Rank number', 'wp-ulike' ) ) }
 								checked={ showRank }
 								onChange={ ( value ) => setAttributes( { showRank: value } ) }
 								__nextHasNoMarginBottom={ true }
 							/>
 
 							<ToggleControl
-								label={ uiLabel( 'showCount', __( 'Activate Like Counter', 'wp-ulike' ) ) }
+								label={ uiLabel( __( 'Activate Like Counter', 'wp-ulike' ) ) }
 								checked={ showCount }
 								onChange={ ( value ) => setAttributes( { showCount: value } ) }
 								__nextHasNoMarginBottom={ true }
@@ -539,20 +580,14 @@ if ( ! getBlockType( metadata.name ) ) {
 							{ showThumbnailControl && (
 								<>
 									<ToggleControl
-										label={ uiLabel(
-											'showThumb',
-											__( 'Activate Thumbnail/Avatar', 'wp-ulike' )
-										) }
+										label={ uiLabel( __( 'Activate Thumbnail/Avatar', 'wp-ulike' ) ) }
 										checked={ showThumbnail }
 										onChange={ ( value ) => setAttributes( { showThumbnail: value } ) }
 										__nextHasNoMarginBottom={ true }
 									/>
 									{ showThumbnail && (
 										<RangeControl
-											label={ uiLabel(
-												'thumbSize',
-												__( 'Thumbnail/Avatar size:', 'wp-ulike' )
-											) }
+											label={ uiLabel( __( 'Thumbnail/Avatar size:', 'wp-ulike' ) ) }
 											value={ thumbnailSize }
 											onChange={ ( value ) =>
 												setAttributes( { thumbnailSize: value } )
@@ -567,10 +602,7 @@ if ( ! getBlockType( metadata.name ) ) {
 
 							{ showEngagementExtras && (
 								<ToggleControl
-									label={ uiLabel(
-										'showEngagedUsers',
-										__( 'Engaged Users', 'wp-ulike' )
-									) }
+									label={ uiLabel( __( 'Engaged Users', 'wp-ulike' ) ) }
 									checked={ showEngagedUsers }
 									onChange={ ( value ) =>
 										setAttributes( { showEngagedUsers: value } )
@@ -588,12 +620,12 @@ if ( ! getBlockType( metadata.name ) ) {
 							LoadingResponsePlaceholder={ () => (
 								<div className="wp-ulike-top-content-editor-loading">
 									<Spinner />
-									<span>{ label( 'loading', __( 'Loading...', 'wp-ulike' ) ) }</span>
+									<span>{ __( 'Loading...', 'wp-ulike' ) }</span>
 								</div>
 							) }
 							ErrorResponsePlaceholder={ () => (
 								<p className="wp-ulike-top-content-editor-error">
-									{ label( 'noData', __( 'No data to display', 'wp-ulike' ) ) }
+									{ __( 'No data to display', 'wp-ulike' ) }
 								</p>
 							) }
 						/>

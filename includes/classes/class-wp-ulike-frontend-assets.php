@@ -82,20 +82,22 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 			/*
 			// @endif
 			//Add wp_ulike script file with special functions.
-			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array(), WP_ULIKE_VERSION, true );
+			wp_ulike_enqueue_script_with_defer( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js', array(), WP_ULIKE_VERSION );
 			// @if DEV
 			*/
 			// @endif
 			// @if DEV
-			//Add wp_ulike script file with special functions.
-			wp_enqueue_script( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array(), WP_ULIKE_VERSION, true );
+			wp_ulike_enqueue_script_with_defer( 'wp_ulike', WP_ULIKE_ASSETS_URL . '/js/wp-ulike.js', array(), WP_ULIKE_VERSION );
 			// @endif
 
-			//localize script
-			wp_localize_script( 'wp_ulike', 'wp_ulike_params', array(
-				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'notifications' => wp_ulike_get_option( 'enable_toast_notice', true )
-			));
+			wp_ulike_add_inline_script_data(
+				'wp_ulike',
+				'wp_ulike_params',
+				array(
+					'ajax_url'      => admin_url( 'admin-ajax.php' ),
+					'notifications' => wp_ulike_get_option( 'enable_toast_notice', true ),
+				)
+			);
 	  	}
 
 

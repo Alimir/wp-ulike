@@ -521,6 +521,70 @@ if( ! function_exists('wp_ulike_is_valid_nonce') ){
 
 }
 
+if( ! function_exists('wp_ulike_is_bot_request') ){
+	/**
+	 * Check if current request is a bot
+	 *
+	 * @return bool
+	 */
+	function wp_ulike_is_bot_request(){
+		$parser = new WP_Ulike_User_Agent_Parser();
+		$parser->parse();
+		return $parser->is_bot();
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_add_inline_script_data' ) ) {
+	/**
+	 * Attach a global JS object to a registered script handle.
+	 *
+	 * @param string $handle      Script handle.
+	 * @param string $object_name Global variable name.
+	 * @param mixed  $data        Data to encode as JSON.
+	 * @return void
+	 */
+	function wp_ulike_add_inline_script_data( $handle, $object_name, $data ) {
+		if ( ! wp_script_is( $handle, 'registered' ) && ! wp_script_is( $handle, 'enqueued' ) ) {
+			return;
+		}
+
+		wp_add_inline_script(
+			$handle,
+			'var ' . $object_name . ' = ' . wp_json_encode( $data ) . ';',
+			'before'
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_enqueue_script_with_defer' ) ) {
+	/**
+	 * Enqueue a frontend script with defer strategy when supported.
+	 *
+	 * @param string $handle Script handle.
+	 * @param string $src    Script URL.
+	 * @param array  $deps   Dependencies.
+	 * @param string $ver    Version.
+	 * @return void
+	 */
+	function wp_ulike_enqueue_script_with_defer( $handle, $src, $deps = array(), $ver = false ) {
+		if ( function_exists( 'wp_enqueue_script' ) && version_compare( get_bloginfo( 'version' ), '6.3', '>=' ) ) {
+			wp_enqueue_script(
+				$handle,
+				$src,
+				$deps,
+				$ver,
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+			return;
+		}
+
+		wp_enqueue_script( $handle, $src, $deps, $ver, true );
+	}
+}
+
 if( ! function_exists('wp_ulike_generate_fingerprint') ){
 	/**
 	 * Generate a secure fingerprint hash for the current user/device session.
@@ -563,19 +627,6 @@ if( ! function_exists('wp_ulike_generate_fingerprint') ){
 		]);
 
 		return md5($fingerprint_source);
-	}
-}
-
-if( ! function_exists('wp_ulike_is_bot_request') ){
-	/**
-	 * Check if current request is a bot
-	 *
-	 * @return bool
-	 */
-	function wp_ulike_is_bot_request(){
-		$parser = new WP_Ulike_User_Agent_Parser();
-		$parser->parse();
-		return $parser->is_bot();
 	}
 }
 

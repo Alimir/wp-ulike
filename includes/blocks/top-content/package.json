@@ -6,9 +6,10 @@
 	"license": "GPL-2.0-or-later",
 	"scripts": {
 		"build": "wp-scripts build",
-		"start": "wp-scripts start"
+		"start": "wp-scripts start",
+		"lint:js": "wp-scripts lint-js"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^26.0.0"
+		"@wordpress/scripts": "^30.0.0"
 	}
 }
