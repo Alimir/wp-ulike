@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
-Tested up to: 6.9
-Stable tag: 5.0.3
+Tested up to: 7.0
+Stable tag: 5.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,7 +76,7 @@ We believe in giving you real value, not a teaser. The free version includes eve
 
 **Accessibility & RTL Support:** Full RTL support for Arabic, Hebrew, and other right-to-left languages. We built this right.
 
-**Gutenberg Block:** Add voting buttons directly in the block editor. Shortcodes available too. It just works.
+**Gutenberg Blocks:** Add voting with the **ULike Button** block, or show ranked results with the **Top List** block (posts, comments, users, and more). Shortcodes available too.
 
 = Why 80,000+ Sites Use This =
 
@@ -178,6 +178,14 @@ Yes. Works perfectly across WordPress multisite networks. Each site gets its own
 Yes. We follow WordPress security best practices, regularly audit our code, and have over 80,000 active installations with a high WordPress.org rating. Security isn't optional for us—it's built in.
 
 == Changelog ==
+
+= 5.0.4 =
+* Added: **Top List** Gutenberg block — ranked leaderboard for most liked posts, comments, users, BuddyPress activities, and bbPress topics.
+* Added: Declared and verified compatibility with **WordPress 7.0** (Armstrong), including Block API v3 and the iframed block editor.
+* Improved: Deferred frontend script loading and safer block rendering.
+* Improved: Admin notices restyled for WordPress 7 — minimal layout, fixed button underlines, and clearer text contrast.
+* Improved: Admin notices now use vanilla JavaScript instead of inline jQuery.
+* Improved: Plugin config passed to scripts via inline JSON instead of `wp_localize_script`.
 
 = 5.0.3 =
 * Added: Support for WordPress Export Personal Data and Erase Personal Data tools for votes stored under a user account.
