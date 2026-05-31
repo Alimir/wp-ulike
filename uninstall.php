@@ -74,6 +74,7 @@ class wp_ulike_uninstall {
 			$this->delete_transients();
 			$this->delete_options();
 			$this->delete_files();
+			$this->delete_lock_files();
 		}
 	}
 
@@ -124,12 +125,30 @@ class wp_ulike_uninstall {
 	 */
 	public function delete_options() {
 
-		delete_option( 'wp_ulike_dbVersion' );
-		delete_option( 'widget_wp_ulike' );
-		delete_option( 'wp_ulike_settings' );
-		delete_option( 'wp_ulike_use_inline_custom_css' );
-		delete_option( 'wp_ulike_customize' );
+		global $wpdb;
 
+		$known_options = array(
+			'wp_ulike_dbVersion',
+			'widget_wp_ulike',
+			'wp_ulike_settings',
+			'wp_ulike_use_inline_custom_css',
+			'wp_ulike_customize',
+			'wp_ulike_customizer_css_cache',
+			'wp_ulike_customizer_values_hash',
+		);
+
+		foreach ( $known_options as $option_name ) {
+			delete_option( $option_name );
+		}
+
+		// Remove any remaining wp_ulike_* options (legacy/unknown), but keep Pro license options.
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM `{$wpdb->options}` WHERE option_name LIKE %s AND option_name NOT LIKE %s",
+				$wpdb->esc_like( 'wp_ulike_' ) . '%',
+				$wpdb->esc_like( 'wp_ulike_pro_' ) . '%'
+			)
+		);
 	}
 
 	/**
@@ -156,6 +175,29 @@ class wp_ulike_uninstall {
 		$wp_content = $wp_filesystem->wp_content_dir();
 
 		$wp_filesystem->delete( $wp_content . '/uploads/wp-ulike', true );
+	}
+
+	/**
+	 * Delete vote lock files from the system temp directory.
+	 *
+	 * @since 5.0.5
+	 * @access public
+	 * @return void
+	 */
+	public function delete_lock_files() {
+
+		$pattern = trailingslashit( get_temp_dir() ) . 'wp-ulike-*.lock';
+		$files   = glob( $pattern );
+
+		if ( ! is_array( $files ) ) {
+			return;
+		}
+
+		foreach ( $files as $file ) {
+			if ( is_file( $file ) ) {
+				wp_delete_file( $file );
+			}
+		}
 	}
 }
 
