@@ -103,7 +103,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'menu_slug'   => 'wp-ulike-statistics',
 				),
 				'overview'   => array(
-					'title'       => esc_html__( 'Overview', 'wp-ulike' ),
+					'title'       => esc_html__( 'Help & setup', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
 					'capability'  => 'manage_options',
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/about.php',

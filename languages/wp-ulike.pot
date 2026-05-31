@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike 5.0.5\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2026-05-31 14:57:16+00:00\n"
+"POT-Creation-Date: 2026-05-31 15:16:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -104,8 +104,7 @@ msgstr ""
 msgid "Showing data for"
 msgstr ""
 
-#: admin/admin-ajax.php:169 admin/classes/class-wp-ulike-admin-pages.php:106
-#: admin/includes/templates/about.php:25 includes/plugin.php:123
+#: admin/admin-ajax.php:169
 msgid "Overview"
 msgstr ""
 
@@ -166,7 +165,7 @@ msgstr ""
 msgid "Growth"
 msgstr ""
 
-#: admin/admin-ajax.php:186 admin/admin-hooks.php:444 admin/admin-hooks.php:519
+#: admin/admin-ajax.php:186 admin/admin-hooks.php:414 admin/admin-hooks.php:489
 #: admin/classes/class-wp-ulike-admin-panel.php:610
 #: admin/classes/class-wp-ulike-admin-panel.php:617
 #: admin/classes/class-wp-ulike-admin-panel.php:643
@@ -307,7 +306,7 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:332
 #: includes/blocks/top-content/class-top-content-renderer.php:138
 #: includes/classes/class-wp-ulike-overview.php:163
-#: includes/classes/class-wp-ulike-overview.php:517
+#: includes/classes/class-wp-ulike-overview.php:460
 #: includes/hooks/privacy.php:20 includes/hooks/third-party.php:365
 msgid "Comments"
 msgstr ""
@@ -421,7 +420,7 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:323
 #: includes/blocks/top-content/class-top-content-renderer.php:137
 #: includes/classes/class-wp-ulike-overview.php:157
-#: includes/classes/class-wp-ulike-overview.php:516
+#: includes/classes/class-wp-ulike-overview.php:459
 #: includes/hooks/privacy.php:19 includes/hooks/third-party.php:358
 msgid "Posts"
 msgstr ""
@@ -667,8 +666,7 @@ msgstr ""
 msgid "⭐ Share My Experience"
 msgstr ""
 
-#: admin/admin-hooks.php:148 admin/admin-hooks.php:234
-#: admin/admin-hooks.php:262
+#: admin/admin-hooks.php:148 admin/admin-hooks.php:238
 msgid "Maybe Later"
 msgstr ""
 
@@ -689,57 +687,45 @@ msgid "Your license needs attention"
 msgstr ""
 
 #: admin/admin-hooks.php:205
-msgid "We could not reach the license server"
+msgid "Unable to verify your license"
 msgstr ""
 
-#: admin/admin-hooks.php:217
-msgid "WP ULike Pro license check"
+#: admin/admin-hooks.php:215
+msgid "Special Offer: Save %s on WP ULike Pro! 🎁"
 msgstr ""
 
-#: admin/admin-hooks.php:222
+#: admin/admin-hooks.php:219
 msgid ""
-"Your site could not verify the license right now. This is often temporary. "
-"Please try again later or contact"
+"We noticed your license needs a quick update. Here's some great news — we "
+"have an exclusive %s discount just for you! Get all premium features, "
+"regular updates, security patches, and priority support. Use coupon code %s "
+"at checkout to save %s. This special offer won't last long! 🚀"
 msgstr ""
 
-#: admin/admin-hooks.php:229
-msgid "Pro settings"
+#: admin/admin-hooks.php:231
+msgid "🎉 Claim My %s Discount"
 msgstr ""
 
-#: admin/admin-hooks.php:246
-msgid "WP ULike Pro license needs attention"
-msgstr ""
-
-#: admin/admin-hooks.php:251
-msgid ""
-"Update or renew your license to keep receiving Pro updates and support. "
-"Need help? Email info@wpulike.com"
-msgstr ""
-
-#: admin/admin-hooks.php:257
-msgid "View pricing"
-msgstr ""
-
-#: admin/admin-hooks.php:337 admin/admin-hooks.php:338
+#: admin/admin-hooks.php:307 admin/admin-hooks.php:308
 msgid "Go Pro"
 msgstr ""
 
-#: admin/admin-hooks.php:597
+#: admin/admin-hooks.php:567
 msgid "PHP Snippets"
 msgstr ""
 
-#: admin/admin-hooks.php:599
+#: admin/admin-hooks.php:569
 msgid ""
 "Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If "
 "you have lots of snippets, you may want to consider using Code Snippets "
 "plugin."
 msgstr ""
 
-#: admin/admin-hooks.php:608
+#: admin/admin-hooks.php:578
 msgid "Javascript Snippets"
 msgstr ""
 
-#: admin/admin-hooks.php:610
+#: admin/admin-hooks.php:580
 msgid ""
 "This code will output immediately before the closing &lt;/body&gt; tag in "
 "the document source. (Scripts must not be property wrapped in "
@@ -754,6 +740,11 @@ msgstr ""
 #: admin/includes/templates/about.php:51
 #: includes/classes/class-wp-ulike-overview.php:104 includes/plugin.php:122
 msgid "Statistics"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-pages.php:106
+#: admin/includes/templates/about.php:25 includes/plugin.php:123
+msgid "Help & setup"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
@@ -2945,7 +2936,7 @@ msgid "Advanced analytics"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:64
-msgid "Richer reports, trends, and exports beyond the Overview snapshot."
+msgid "Richer reports, trends, and exports beyond the status snapshot on this page."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:68
@@ -3022,7 +3013,7 @@ msgid "Compatibility mode on"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:188
-#: includes/classes/class-wp-ulike-overview.php:567
+#: includes/classes/class-wp-ulike-overview.php:510
 msgid "Documentation"
 msgstr ""
 
@@ -3071,104 +3062,104 @@ msgstr ""
 msgid "Too many admin notices? Turn on “%s” in Settings → General."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:310
-#: includes/classes/class-wp-ulike-overview.php:331
+#: includes/classes/class-wp-ulike-overview.php:309
+#: includes/classes/class-wp-ulike-overview.php:330
 msgid "Permission denied."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:460
+#: includes/classes/class-wp-ulike-overview.php:403
 #. translators: 1: vote count, 2: statistics admin URL
 msgid ""
 "You have <strong>%1$s</strong> new votes since your last visit to "
 "Statistics. <a href=\"%2$s\">Open Statistics</a> for charts and filters."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:471
+#: includes/classes/class-wp-ulike-overview.php:414
 #. translators: 1: votes today, 2: statistics admin URL
 msgid ""
 "<strong>%1$s</strong> votes today on your site. Numbers below are a quick "
 "snapshot—<a href=\"%2$s\">Statistics</a> has the full breakdown."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:481
+#: includes/classes/class-wp-ulike-overview.php:424
 #. translators: %s: total vote count
 msgid ""
 "Buttons are active on posts and you have %s total votes stored. Use "
 "Statistics when you need date ranges and detailed reports."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:487
+#: includes/classes/class-wp-ulike-overview.php:430
 msgid ""
 "Like buttons are not on posts automatically yet. Turn on auto-display in "
 "Settings, or add the ULike block / shortcode where you want votes."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:490
+#: includes/classes/class-wp-ulike-overview.php:433
 msgid ""
 "Your setup looks ready. Configure buttons below or open Statistics when you "
 "start receiving votes."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:502
+#: includes/classes/class-wp-ulike-overview.php:445
 msgid "Engagement snapshot"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:503
+#: includes/classes/class-wp-ulike-overview.php:446
 msgid "Site setup"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:504
+#: includes/classes/class-wp-ulike-overview.php:447
 msgid "WP ULike Pro"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:545
+#: includes/classes/class-wp-ulike-overview.php:488
 msgid "PHP"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:553
+#: includes/classes/class-wp-ulike-overview.php:496
 msgid "Detected on site"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:560
+#: includes/classes/class-wp-ulike-overview.php:503
 msgid "Caching helper"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:561
+#: includes/classes/class-wp-ulike-overview.php:504
 msgid "On (Settings → General)"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:568
+#: includes/classes/class-wp-ulike-overview.php:511
 msgid "Setup & hooks"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:657
+#: includes/classes/class-wp-ulike-overview.php:600
 msgid "WP ULike database tables"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:674
+#: includes/classes/class-wp-ulike-overview.php:617
 msgid "WP ULike database tables are installed"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:682
+#: includes/classes/class-wp-ulike-overview.php:625
 msgid "All voting log tables required by WP ULike are present."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:690
+#: includes/classes/class-wp-ulike-overview.php:633
 msgid "WP ULike database tables are missing"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:698
+#: includes/classes/class-wp-ulike-overview.php:641
 msgid ""
 "Some WP ULike tables are missing. Deactivate and reactivate the plugin, or "
-"open Overview for details."
+"open Help & setup for details."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:703
-msgid "Open Overview"
+#: includes/classes/class-wp-ulike-overview.php:646
+msgid "Open Help & setup"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:733
-msgid "Invalid settings file. Expected a JSON export from WP ULike Overview."
+#: includes/classes/class-wp-ulike-overview.php:676
+msgid "Invalid settings file. Expected a JSON export from WP ULike Help & setup."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-voters-listener.php:41

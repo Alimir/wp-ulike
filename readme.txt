@@ -180,7 +180,7 @@ Yes. We follow WordPress security best practices, hardened AJAX voting, nonce ve
 == Changelog ==
 
 = 5.0.5 =
-* Added: **Overview** admin page — status snapshot, quick actions, help links, troubleshooting tips, and JSON settings backup/restore.
+* Added: **Help & setup** admin page — status snapshot, quick actions, help links, troubleshooting tips, and JSON settings backup/restore.
 * Added: Optional **deactivation feedback** on the Plugins screen.
 * Added: **Site Health** check for WP ULike database tables.
 * Improved: Pro license discount notice copy restored for existing translations.

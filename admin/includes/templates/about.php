@@ -22,7 +22,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 <div class="wrap wp-ulike-about">
 
 	<h1 class="wp-ulike-about__title">
-		<?php esc_html_e( 'Overview', 'wp-ulike' ); ?>
+		<?php esc_html_e( 'Help & setup', 'wp-ulike' ); ?>
 		<?php if ( $is_pro && ! empty( $data['pro_version'] ) ) : ?>
 			<span class="wp-ulike-about__badge wp-ulike-about__badge--pro"><?php echo esc_html( 'Pro ' . $data['pro_version'] ); ?></span>
 		<?php else : ?>

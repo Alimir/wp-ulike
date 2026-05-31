@@ -61,7 +61,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					array(
 						'icon'        => 'chart-line',
 						'title'       => esc_html__( 'Advanced analytics', 'wp-ulike' ),
-						'description' => esc_html__( 'Richer reports, trends, and exports beyond the Overview snapshot.', 'wp-ulike' ),
+						'description' => esc_html__( 'Richer reports, trends, and exports beyond the status snapshot on this page.', 'wp-ulike' ),
 					),
 					array(
 						'icon'        => 'admin-settings',
@@ -638,12 +638,12 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				),
 				'description' => sprintf(
 					'<p>%s</p>',
-					esc_html__( 'Some WP ULike tables are missing. Deactivate and reactivate the plugin, or open Overview for details.', 'wp-ulike' )
+					esc_html__( 'Some WP ULike tables are missing. Deactivate and reactivate the plugin, or open Help & setup for details.', 'wp-ulike' )
 				),
 				'actions'     => sprintf(
 					'<p><a href="%s">%s</a></p>',
 					esc_url( self::get_about_url() ),
-					esc_html__( 'Open Overview', 'wp-ulike' )
+					esc_html__( 'Open Help & setup', 'wp-ulike' )
 				),
 				'test'        => 'wp_ulike_database_tables',
 			);
@@ -673,7 +673,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function import_settings( $payload ) {
 			if ( empty( $payload['settings'] ) || ! is_array( $payload['settings'] ) ) {
-				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from WP ULike Overview.', 'wp-ulike' ) );
+				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from WP ULike Help & setup.', 'wp-ulike' ) );
 			}
 
 			update_option( 'wp_ulike_settings', $payload['settings'] );

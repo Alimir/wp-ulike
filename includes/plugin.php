@@ -120,7 +120,7 @@ class WpUlikeInit {
     if (  $plugin_file === WP_ULIKE_BASENAME ) {
       $settings = array('settings'  => '<a href="admin.php?page=wp-ulike-settings">' . esc_html__('Settings', 'wp-ulike') . '</a>');
       $stats    = array('stats'     => '<a href="admin.php?page=wp-ulike-statistics">' . esc_html__('Statistics', 'wp-ulike') . '</a>');
-      $about    = array('overview'  => '<a href="admin.php?page=wp-ulike-about">' . esc_html__( 'Overview', 'wp-ulike' ) . '</a>');
+      $about    = array('overview'  => '<a href="admin.php?page=wp-ulike-about">' . esc_html__( 'Help & setup', 'wp-ulike' ) . '</a>');
       // Merge on actions array
       $actions  = array_merge( $about, $actions );
       $actions  = array_merge( $stats, $actions );
