@@ -638,12 +638,12 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				),
 				'description' => sprintf(
 					'<p>%s</p>',
-					esc_html__( 'Some WP ULike tables are missing. Deactivate and reactivate the plugin, or open Help & setup for details.', 'wp-ulike' )
+					esc_html__( 'Some WP ULike tables are missing. Deactivate and reactivate the plugin, or open Help for details.', 'wp-ulike' )
 				),
 				'actions'     => sprintf(
 					'<p><a href="%s">%s</a></p>',
 					esc_url( self::get_about_url() ),
-					esc_html__( 'Open Help & setup', 'wp-ulike' )
+					esc_html__( 'Open Help', 'wp-ulike' )
 				),
 				'test'        => 'wp_ulike_database_tables',
 			);
@@ -673,7 +673,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function import_settings( $payload ) {
 			if ( empty( $payload['settings'] ) || ! is_array( $payload['settings'] ) ) {
-				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from WP ULike Help & setup.', 'wp-ulike' ) );
+				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from WP ULike → Help.', 'wp-ulike' ) );
 			}
 
 			update_option( 'wp_ulike_settings', $payload['settings'] );

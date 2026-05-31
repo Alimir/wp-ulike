@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP ULike 5.0.5\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
-"POT-Creation-Date: 2026-05-31 15:16:27+00:00\n"
+"POT-Creation-Date: 2026-05-31 15:22:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -744,7 +744,7 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:106
 #: admin/includes/templates/about.php:25 includes/plugin.php:123
-msgid "Help & setup"
+msgid "Help"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
@@ -3151,15 +3151,15 @@ msgstr ""
 #: includes/classes/class-wp-ulike-overview.php:641
 msgid ""
 "Some WP ULike tables are missing. Deactivate and reactivate the plugin, or "
-"open Help & setup for details."
+"open Help for details."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:646
-msgid "Open Help & setup"
+msgid "Open Help"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:676
-msgid "Invalid settings file. Expected a JSON export from WP ULike Help & setup."
+msgid "Invalid settings file. Expected a JSON export from WP ULike → Help."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-voters-listener.php:41
