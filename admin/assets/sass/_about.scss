@@ -1,597 +1,604 @@
 /**
- *  About Page - Modern Minimalist Design
+ * About screen — WordPress 7–aligned admin layout
  */
 
-.wp-ulike-about-page {
-	max-width: 1400px;
-	margin: 0 auto;
-	padding: 0 20px 40px;
-	box-sizing: border-box;
+.wp-ulike-about {
+	max-width: 1100px;
+	margin-top: 10px;
 
-	// Hide all WordPress admin notices
-	.notice, .error, .updated, .warning, .info,
-	.notice-error, .notice-warning, .notice-info, .notice-success, .is-dismissible,
-	.notice.is-dismissible, .error.is-dismissible, .updated.is-dismissible,
-	.warning.is-dismissible, .info.is-dismissible,
-	.notice-error.is-dismissible, .notice-warning.is-dismissible,
-	.notice-info.is-dismissible, .notice-success.is-dismissible {
-		display: none !important;
+	// Keep native import notices visible; hide unrelated plugin banners in wrap only.
+	> .notice {
+		display: block !important;
 	}
 
-	.wrap > .notice, .wrap > .error, .wrap > .updated, .wrap > .warning, .wrap > .info {
-		display: none !important;
-	}
-
-	// Container
-	.wp-ulike-about-container {
-		max-width: 1200px;
-		margin: 0 auto;
-	}
-
-	// Section Header (reusable)
-	.wp-ulike-about-section-header {
-		text-align: center;
-		margin-bottom: 40px;
-
-		h2 {
-			font-size: 32px;
-			font-weight: 600;
-			color: #1d2327;
-			margin: 0 0 12px;
-		}
-
-		p {
-			font-size: 16px;
-			color: #646970;
-			line-height: 1.6;
-			margin: 0;
-		}
-	}
-
-	// Hero Section
-	.wp-ulike-about-hero {
-		background: #fff;
-		border: 1px solid #dcdcde;
-		border-radius: 0;
-		padding: 60px 40px;
-		margin: 20px 0 40px;
-		text-align: center;
-
-		.wp-ulike-about-hero-content {
-			max-width: 800px;
-			margin: 0 auto;
-
-			h1 {
-				font-size: 42px;
-				font-weight: 700;
-				color: #1d2327;
-				margin: 0 0 20px;
-				line-height: 1.2;
-			}
-
-			.wp-ulike-about-hero-subtitle {
-				font-size: 18px;
-				color: #646970;
-				line-height: 1.7;
-				margin: 0;
-			}
-		}
-	}
-
-	// Navigation Tabs
-	.wp-ulike-about-nav {
-		background: #f6f7f7;
-		border: 1px solid #dcdcde;
-		border-radius: 0;
-		margin: 0 0 40px;
-		padding: 0;
-
-		.wp-ulike-about-nav-tabs {
-			display: flex;
-			gap: 0;
-			flex-wrap: wrap;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.wp-ulike-about-nav-tab {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			padding: 16px 24px;
-			font-size: 14px;
-			font-weight: 500;
-			color: #646970;
-			text-decoration: none;
-			border-bottom: 3px solid transparent;
-			transition: all 0.2s ease;
-			box-sizing: border-box;
-
-			.dashicons {
-				font-size: 18px;
-				width: 18px;
-				height: 18px;
-			}
-
-			&:hover {
-				background: #fff;
-				color: #1d2327;
-			}
-
-			&.wp-ulike-about-nav-tab-active {
-				color: #2271b1;
-				border-bottom-color: #2271b1;
-				background: #fff;
-			}
-
-			&.wp-ulike-about-nav-tab-pro {
-				color: #2271b1;
-				font-weight: 600;
-
-				&:hover {
-					background: #2271b1;
-					color: #fff;
-					border-bottom-color: #2271b1;
-				}
-			}
-		}
-	}
-
-	// Intro Section (replaces old about section)
-	.wp-ulike-about-intro-section {
-		margin: 40px 0 60px;
-	}
-
-	.wp-ulike-about-intro-card {
-		background: #fff;
-		border: 1px solid #dcdcde;
-		border-radius: 0;
-		padding: 60px 40px;
-		text-align: center;
-		max-width: 900px;
-		margin: 0 auto;
-
-		.wp-ulike-about-intro-icon {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			width: 80px;
-			height: 80px;
-			background: #f0f9ff;
-			border-radius: 0;
-			margin-bottom: 24px;
-
-			.dashicons {
-				font-size: 40px;
-				width: 40px;
-				height: 40px;
-				color: #2271b1;
-			}
-		}
-
-		h2 {
-			font-size: 36px;
-			font-weight: 700;
-			color: #1d2327;
-			margin: 0 0 20px;
-			line-height: 1.2;
-		}
-
-		p {
-			font-size: 16px;
-			color: #646970;
-			line-height: 1.7;
-			margin: 0;
-		}
-	}
-
-	// Problems Solved Section
-	.wp-ulike-about-problems-section {
-		margin: 60px 0;
-	}
-
-	.wp-ulike-about-problems-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 24px;
-		margin-top: 40px;
-	}
-
-	.wp-ulike-about-problem-card {
-		background: #fff;
-		border: 1px solid #dcdcde;
-		border-radius: 0;
-		padding: 32px;
-		transition: all 0.2s ease;
-
-		&:hover {
-			border-color: #2271b1;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-		}
-
-		.wp-ulike-about-problem-icon {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			width: 56px;
-			height: 56px;
-			background: #f0f9ff;
-			border-radius: 0;
-			margin-bottom: 20px;
-
-			.dashicons {
-				font-size: 28px;
-				width: 28px;
-				height: 28px;
-				color: #2271b1;
-			}
-		}
-
-		h3 {
-			font-size: 20px;
-			font-weight: 600;
-			color: #1d2327;
-			margin: 0 0 12px;
-		}
-
-		p {
-			font-size: 14px;
-			color: #646970;
-			line-height: 1.6;
-			margin: 0;
-		}
-	}
-
-	// Key Features Section (redesigned)
-	.wp-ulike-about-features-section {
-		background: #f6f7f7;
-		border: 1px solid #dcdcde;
-		border-radius: 0;
-		padding: 60px 40px;
-		margin: 40px 0;
-	}
-
-	.wp-ulike-about-features-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 16px;
-		margin-top: 40px;
-	}
-
-	.wp-ulike-about-feature-card {
+	&__title {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
-		gap: 12px;
-		background: #fff;
-		border: 1px solid #dcdcde;
-		border-radius: 0;
-		padding: 20px 24px;
-		transition: all 0.2s ease;
+		gap: 10px;
+		font-size: 23px;
+		font-weight: 400;
+		line-height: 1.3;
+		margin: 0 0 8px;
+		padding: 0;
+	}
 
-		&:hover {
-			border-color: #2271b1;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-		}
+	&__lead {
+		font-size: 14px;
+		color: #646970;
+		max-width: 640px;
+		margin: 0 0 20px;
+		line-height: 1.6;
+	}
 
-		.dashicons {
-			font-size: 24px;
-			width: 24px;
-			height: 24px;
-			color: #2271b1;
-			flex-shrink: 0;
-		}
+	&__badge {
+		display: inline-block;
+		padding: 2px 8px;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1.5;
+		border-radius: 2px;
+		background: #f0f0f1;
+		color: #50575e;
+		vertical-align: middle;
 
-		span:not(.dashicons) {
-			font-size: 14px;
-			color: #1d2327;
-			line-height: 1.5;
+		&--pro {
+			background: #fcf9e8;
+			color: #6e4e00;
 		}
 	}
 
-	// Quick Links Section
-	.wp-ulike-about-links-section {
-		margin: 60px 0;
-	}
-
-	.wp-ulike-about-links-grid {
+	&__layout {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 24px;
-		margin-top: 40px;
+		grid-template-columns: minmax(0, 1fr) 280px;
+		gap: 20px;
+		align-items: start;
+
+		@media (max-width: 960px) {
+			grid-template-columns: 1fr;
+		}
 	}
 
-	.wp-ulike-about-link-card {
-		background: #fff;
-		border: 1px solid #dcdcde;
-		border-radius: 0;
-		padding: 40px 32px;
-		text-align: center;
-		transition: all 0.2s ease;
+	&__main {
 		display: flex;
 		flex-direction: column;
+		gap: 16px;
+		min-width: 0;
+	}
+
+	&__aside {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+}
+
+.wp-ulike-about-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	padding: 16px 20px;
+	margin: 0;
+
+	&__header {
+		display: flex;
 		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 12px;
+	}
 
-		&:hover {
-			border-color: #2271b1;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	&__title {
+		margin: 0 0 12px;
+		padding: 0;
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 1.4;
+		color: #1d2327;
+	}
+
+	&__header &__title {
+		margin-bottom: 0;
+	}
+
+	&__link {
+		font-size: 13px;
+		text-decoration: none;
+	}
+
+	&__hint {
+		margin: 12px 0 0;
+		font-size: 13px;
+		color: #646970;
+		line-height: 1.5;
+
+		&--warn {
+			color: #8a2424;
 		}
+	}
 
-		.wp-ulike-about-link-icon {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			width: 64px;
-			height: 64px;
-			background: #f0f9ff;
-			border-radius: 0;
-			margin-bottom: 24px;
+	&__body {
+		margin-top: 12px;
+	}
 
-			.dashicons {
-				font-size: 32px;
-				width: 32px;
-				height: 32px;
-				color: #2271b1;
-			}
-		}
+	&--pro {
+		border-color: #dba617;
+		background: #fffdf5;
+	}
 
-		h3 {
-			font-size: 22px;
-			font-weight: 600;
-			color: #1d2327;
-			margin: 0 0 12px;
-		}
+	&--upsell {
+		border-color: #c3c4c7;
+		background: linear-gradient(180deg, #fff 0%, #f6f7f7 100%);
+	}
+
+	&--muted {
+		background: #f6f7f7;
+		box-shadow: none;
 
 		p {
-			font-size: 14px;
+			margin: 0;
+			font-size: 13px;
 			color: #646970;
-			line-height: 1.6;
-			margin: 0 0 24px;
-			flex: 1;
+			line-height: 1.55;
 		}
 	}
 
-	// Buttons
-	.wp-ulike-about-btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-		padding: 12px 24px;
-		font-size: 14px;
-		font-weight: 500;
-		border-radius: 0;
-		border: none;
-		cursor: pointer;
-		text-decoration: none;
-		transition: all 0.2s ease;
-		box-sizing: border-box;
-		max-width: 100%;
-		word-wrap: break-word;
+	&--details {
+		summary {
+			cursor: pointer;
+			list-style: none;
+			margin-bottom: 0;
 
-		.dashicons {
-			font-size: 18px;
-			width: 18px;
-			height: 18px;
-			flex-shrink: 0;
-		}
+			&::-webkit-details-marker {
+				display: none;
+			}
 
-		span:not(.dashicons) {
-			white-space: nowrap;
-		}
-
-		&.wp-ulike-about-btn-primary {
-			background: #2271b1;
-			color: #fff;
-
-			&:hover {
-				background: #135e96;
-				color: #fff;
+			&::before {
+				content: '▸';
+				display: inline-block;
+				margin-right: 6px;
+				transition: transform 0.15s ease;
 			}
 		}
 
-		&.wp-ulike-about-btn-secondary {
-			background: #f6f7f7;
-			color: #646970;
-			border: 1px solid #dcdcde;
-
-			&:hover {
-				background: #f0f0f1;
-				color: #1d2327;
-			}
-		}
-	}
-
-	// RTL Support
-	[dir="rtl"] & {
-		.wp-ulike-about-hero,
-		.wp-ulike-about-intro-card,
-		.wp-ulike-about-section-header {
-			text-align: center;
-		}
-
-		.wp-ulike-about-nav-tab .dashicons {
-			margin-left: 8px;
-			margin-right: 0;
-		}
-
-		.wp-ulike-about-btn .dashicons {
-			order: 2;
-			margin-left: 8px;
-			margin-right: 0;
-		}
-
-		.wp-ulike-about-btn span:not(.dashicons) {
-			order: 1;
-		}
-
-		.wp-ulike-about-feature-card .dashicons {
-			margin-left: 12px;
-			margin-right: 0;
-		}
-
-		.wp-ulike-about-problem-card,
-		.wp-ulike-about-link-card {
-			text-align: center;
-		}
-	}
-
-	// Mobile Responsive
-	@media screen and (max-width: 782px) {
-		padding: 0 10px 30px;
-		box-sizing: border-box;
-		overflow-x: hidden;
-
-		.wp-ulike-about-hero {
-			padding: 40px 20px;
-
-			.wp-ulike-about-hero-content h1 {
-				font-size: 28px;
-			}
-
-			.wp-ulike-about-hero-content .wp-ulike-about-hero-subtitle {
-				font-size: 16px;
-			}
-		}
-
-		.wp-ulike-about-nav {
-			.wp-ulike-about-nav-tabs {
-				flex-direction: column;
-			}
-
-			.wp-ulike-about-nav-tab {
-				width: 100%;
-				justify-content: center;
-				border-bottom: 1px solid #dcdcde;
-				border-left: 3px solid transparent;
-				border-right: none;
-
-				&.wp-ulike-about-nav-tab-active {
-					border-bottom: 1px solid #dcdcde;
-					border-left-color: #2271b1;
-				}
-			}
-		}
-
-		[dir="rtl"] & .wp-ulike-about-nav-tab {
-			border-left: none;
-			border-right: 3px solid transparent;
-
-			&.wp-ulike-about-nav-tab-active {
-				border-right-color: #2271b1;
-			}
-		}
-
-		.wp-ulike-about-section-header h2 {
-			font-size: 24px;
-		}
-
-		.wp-ulike-about-section-header p {
-			font-size: 14px;
-		}
-
-		.wp-ulike-about-intro-card {
-			padding: 40px 20px;
-
-			.wp-ulike-about-intro-icon {
-				width: 64px;
-				height: 64px;
-
-				.dashicons {
-					font-size: 32px;
-					width: 32px;
-					height: 32px;
-				}
-			}
-
-			h2 {
-				font-size: 28px;
-			}
-
-			p {
-				font-size: 14px;
-			}
-		}
-
-		.wp-ulike-about-problems-grid,
-		.wp-ulike-about-features-grid,
-		.wp-ulike-about-links-grid {
-			grid-template-columns: 1fr;
-			gap: 20px;
-		}
-
-		.wp-ulike-about-problem-card {
-			padding: 24px;
-		}
-
-		.wp-ulike-about-features-section {
-			padding: 40px 20px;
-		}
-
-		.wp-ulike-about-feature-card {
-			padding: 16px 20px;
-		}
-
-		.wp-ulike-about-link-card {
-			padding: 32px 24px;
-		}
-
-		.wp-ulike-about-btn {
-			width: 100%;
-			max-width: 100%;
-		}
-	}
-
-	// Small Mobile Devices
-	@media screen and (max-width: 480px) {
-		.wp-ulike-about-hero {
-			padding: 30px 15px;
-
-			.wp-ulike-about-hero-content h1 {
-				font-size: 24px;
-			}
-
-			.wp-ulike-about-hero-content .wp-ulike-about-hero-subtitle {
-				font-size: 14px;
-			}
-		}
-
-		.wp-ulike-about-section-header h2 {
-			font-size: 20px;
-		}
-
-		.wp-ulike-about-intro-card {
-			padding: 30px 15px;
-
-			h2 {
-				font-size: 24px;
-			}
-		}
-
-		.wp-ulike-about-problem-card,
-		.wp-ulike-about-link-card {
-			padding: 24px 20px;
-		}
-
-		.wp-ulike-about-features-section {
-			padding: 30px 15px;
-		}
-
-		.wp-ulike-about-feature-card {
-			padding: 14px 16px;
+		&[open] summary::before {
+			transform: rotate(90deg);
 		}
 	}
 }
 
-// Hide notices in admin body when about page is present
-body:has(.wp-ulike-about-page) {
-	#wpbody-content > .notice, #wpbody-content > .error, #wpbody-content > .updated,
-	#wpbody-content > .warning, #wpbody-content > .info,
-	#wpbody-content > .notice-error, #wpbody-content > .notice-warning,
-	#wpbody-content > .notice-info, #wpbody-content > .notice-success,
-	#wpbody-content > .is-dismissible,
-	.wrap:not(.wp-ulike-about-page) > .notice,
-	.wrap:not(.wp-ulike-about-page) > .error,
-	.wrap:not(.wp-ulike-about-page) > .updated {
+.wp-ulike-about-upsell {
+	&__header {
+		margin-bottom: 16px;
+
+		.wp-ulike-about-card__title {
+			margin-bottom: 6px;
+		}
+	}
+
+	&__intro {
+		margin: 0;
+		font-size: 13px;
+		color: #50575e;
+		line-height: 1.6;
+	}
+
+	&__features {
+		margin: 0 0 16px;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 12px;
+
+		@media (max-width: 782px) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	&__feature {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		margin: 0;
+		padding: 12px;
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 2px;
+
+		.dashicons {
+			flex-shrink: 0;
+			width: 20px;
+			height: 20px;
+			font-size: 20px;
+			color: #2271b1;
+			margin-top: 1px;
+		}
+	}
+
+	&__feature-body {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		min-width: 0;
+	}
+
+	&__feature-title {
+		font-size: 13px;
+		line-height: 1.4;
+		color: #1d2327;
+	}
+
+	&__feature-desc {
+		font-size: 12px;
+		line-height: 1.5;
+		color: #646970;
+	}
+
+	&__footnote {
+		margin: 0 0 14px;
+		padding: 10px 12px;
+		font-size: 12px;
+		line-height: 1.55;
+		color: #646970;
+		background: #fff;
+		border-inline-start: 3px solid #c3c4c7;
+	}
+
+	&__actions {
+		margin: 0;
+	}
+}
+
+.wp-ulike-about-summary {
+	margin: 0 0 16px;
+	padding: 10px 12px;
+	font-size: 13px;
+	line-height: 1.6;
+	color: #1d2327;
+	background: #f6f7f7;
+	border-inline-start: 3px solid #2271b1;
+}
+
+.wp-ulike-about-status-group {
+	margin-bottom: 16px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	&__title {
+		margin: 0 0 8px;
+		padding: 0;
+		font-size: 12px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: #646970;
+	}
+}
+
+.wp-ulike-about-status {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 10px;
+
+	@media (max-width: 782px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	@media (max-width: 480px) {
+		grid-template-columns: 1fr;
+	}
+
+	&__item {
+		padding: 10px 12px;
+		border: 1px solid #dcdcde;
+		border-radius: 2px;
+		background: #f6f7f7;
+
+		&--good {
+			border-color: #b8e6bf;
+			background: #edfaef;
+		}
+
+		&--bad {
+			border-color: #f1aeb5;
+			background: #fcf0f1;
+		}
+	}
+
+	&__label {
+		display: block;
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		color: #646970;
+		margin-bottom: 4px;
+	}
+
+	&__value {
+		display: block;
+		font-size: 14px;
+		font-weight: 600;
+		color: #1d2327;
+	}
+
+	&__hint {
+		display: block;
+		margin-top: 4px;
+		font-size: 11px;
+		font-weight: 400;
+		color: #646970;
+		line-height: 1.4;
+	}
+}
+
+.wp-ulike-about-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+
+	&__btn {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center;
+		gap: 6px;
+		min-height: 32px;
+		line-height: 1.2 !important;
+		vertical-align: middle;
+		padding: 4px 12px !important;
+
+		.dashicons {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 18px;
+			height: 18px;
+			font-size: 18px;
+			line-height: 1;
+			margin: 0;
+			padding: 0;
+			flex: 0 0 18px;
+
+			&::before {
+				width: 18px;
+				height: 18px;
+				font-size: 18px;
+				line-height: 1;
+			}
+		}
+	}
+}
+
+.wp-ulike-about-modules {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	&__item {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+		padding: 12px 0;
+		border-bottom: 1px solid #dcdcde;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+
+		> .dashicons {
+			margin-top: 2px;
+			color: #2271b1;
+		}
+
+		.button {
+			flex-shrink: 0;
+			margin-left: auto;
+		}
+	}
+
+	&__body {
+		flex: 1;
+		min-width: 0;
+
+		strong {
+			display: block;
+			font-size: 14px;
+			margin-bottom: 4px;
+		}
+
+		p {
+			margin: 0;
+			font-size: 13px;
+			color: #646970;
+			line-height: 1.5;
+		}
+	}
+}
+
+.wp-ulike-about-help {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		margin: 0;
+		padding: 0;
+		border-bottom: 1px solid #f0f0f1;
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+
+	a {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		padding: 12px 0;
+		text-decoration: none;
+		color: #2271b1;
+
+		&:hover {
+			color: #135e96;
+
+			strong {
+				color: #135e96;
+			}
+		}
+
+		.dashicons {
+			margin-top: 2px;
+			color: #646970;
+		}
+	}
+
+	&__text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+
+		strong {
+			font-size: 14px;
+			color: #1d2327;
+		}
+
+		span {
+			font-size: 13px;
+			color: #646970;
+		}
+	}
+}
+
+.wp-ulike-about-meta {
+	margin: 0;
+
+	div {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 8px 0;
+		border-bottom: 1px solid #f0f0f1;
+		font-size: 13px;
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+
+	dt {
+		margin: 0;
+		color: #646970;
+		font-weight: 400;
+	}
+
+	dd {
+		margin: 0;
+		font-weight: 600;
+		color: #1d2327;
+		text-align: right;
+	}
+}
+
+.wp-ulike-about-troubleshoot__list {
+	margin: 0 0 4px;
+	padding-inline-start: 1.2em;
+	font-size: 13px;
+	color: #50575e;
+	line-height: 1.6;
+
+	li {
+		margin-bottom: 8px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		a {
+			white-space: nowrap;
+		}
+	}
+}
+
+.wp-ulike-about-transfer {
+	&__title {
+		margin: 0 0 8px;
+		padding: 0;
+		font-size: 13px;
+		font-weight: 600;
+		color: #1d2327;
+	}
+
+	&__intro {
+		margin: 0 0 10px;
+		font-size: 13px;
+		line-height: 1.6;
+		color: #50575e;
+	}
+
+	&__form {
+		margin-top: 8px;
+	}
+}
+
+.wp-ulike-about-tools {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 8px;
+
+	&__label {
+		margin: 0 0 8px;
+		font-size: 13px;
+		font-weight: 600;
+	}
+}
+
+hr.wp-ulike-about-card__body + hr,
+.wp-ulike-about-card__body hr {
+	border: none;
+	border-top: 1px solid #dcdcde;
+	margin: 16px 0;
+}
+
+// Hide unrelated admin notices on About only
+body:has(.wp-ulike-about) {
+	#wpbody-content > .notice,
+	#wpbody-content > .error,
+	#wpbody-content > .updated,
+	#wpbody-content > .warning,
+	#wpbody-content > .info,
+	#wpbody-content > .notice-error,
+	#wpbody-content > .notice-warning,
+	#wpbody-content > .notice-info,
+	#wpbody-content > .notice-success,
+	#wpbody-content > .is-dismissible {
 		display: none !important;
 	}
+
+	.wrap.wp-ulike-about > .notice {
+		display: block !important;
+	}
+}
+
+[dir='rtl'] .wp-ulike-about-meta dd,
+.rtl .wp-ulike-about-meta dd {
+	text-align: left;
+}
+
+[dir='rtl'] .wp-ulike-about-troubleshoot__list,
+.rtl .wp-ulike-about-troubleshoot__list {
+	padding-inline-start: 1.2em;
+	padding-inline-end: 0;
+}
+
+[dir='rtl'] .wp-ulike-about-card--details summary::before,
+.rtl .wp-ulike-about-card--details summary::before {
+	margin-inline-end: 6px;
+	margin-inline-start: 0;
 }

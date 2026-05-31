@@ -35,131 +35,24 @@
   }
 }
 
-// Go Pro Menu Link - Enhanced Design
-.wp-ulike-gopro-menu-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px;
-  margin: -4px -8px;
-  border-radius: 0;
-  background: linear-gradient(135deg, #2271b1 0%, #135e96 100%);
-  color: #fff !important;
+// Go Pro submenu — Elementor-style layout, brand accent.
+#adminmenu #toplevel_page_wp-ulike-settings a[href*="page=wp-ulike-go-pro"] {
   font-weight: 600;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  white-space: nowrap;
-  flex-wrap: nowrap;
-  box-sizing: border-box;
+  background-color: #ff6d6f;
+  color: #fff !important;
+  margin: 3px 10px 0;
+  padding: 4px 8px;
+  display: block;
+  text-align: center;
+  border-radius: 3px;
+  box-shadow: none;
+  transition: background-color 0.2s ease;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-  }
-
-  &:hover {
-    background: linear-gradient(135deg, #135e96 0%, #0a4b78 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(34, 113, 177, 0.4);
-
-    &::before {
-      left: 100%;
-    }
-  }
-
-  .wp-ulike-gopro-icon {
-    display: inline-flex;
-    align-items: center;
-    z-index: 1;
-    flex-shrink: 0;
-
-    .dashicons {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-      color: #ffd700;
-      animation: pulse-glow 2s ease-in-out infinite;
-    }
-  }
-
-  .wp-ulike-gopro-text {
-    z-index: 1;
-    font-size: 11px;
-    letter-spacing: 0.1px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .wp-ulike-gopro-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 5px;
-    margin: 0;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 3px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    z-index: 1;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    white-space: nowrap;
-    flex-shrink: 0;
-    line-height: 1.2;
-    position: relative;
-  }
-}
-
-// Pulse animation for star icon
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.1);
-  }
-}
-
-// Ensure proper styling in admin menu
-#adminmenu {
-  .wp-ulike-gopro-menu-link {
+  &:hover,
+  &:focus {
+    background-color: #e85a5c;
     color: #fff !important;
-    box-sizing: border-box;
-    overflow: hidden;
-
-    &:hover {
-      color: #fff !important;
-    }
-
-    // Ensure all children stay within bounds
-    > * {
-      position: relative;
-      z-index: 1;
-    }
-  }
-
-  // Prevent menu item from wrapping
-  a.wp-ulike-gopro-menu-link,
-  .wp-ulike-gopro-menu-link {
-    white-space: nowrap;
-  }
-
-  // Fix for menu item container
-  li {
-    .wp-ulike-gopro-menu-link {
-      display: inline-flex;
-      width: auto;
-      min-width: fit-content;
-    }
+    box-shadow: none;
   }
 }
 
@@ -173,37 +66,8 @@
     }
   }
 
-  // Go Pro Menu Link
-  .wp-ulike-gopro-menu-link {
-    white-space: normal;
-    flex-wrap: wrap;
-    max-width: 100%;
-
-    &::before {
-      left: auto;
-      right: -100%;
-    }
-
-    &:hover {
-      &::before {
-        left: auto;
-        right: 100%;
-      }
-    }
-
-    .wp-ulike-gopro-text {
-      white-space: normal;
-      word-wrap: break-word;
-    }
-  }
-
-  #adminmenu {
-    a .wp-ulike-gopro-menu-link {
-      margin: -4px 0 -4px -8px;
-      max-width: calc(100% + 8px);
-      box-sizing: border-box;
-      overflow: hidden;
-    }
+  #adminmenu #toplevel_page_wp-ulike-settings a[href*="page=wp-ulike-go-pro"] {
+    margin: 3px 10px 0;
   }
 }
 

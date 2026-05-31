@@ -1,0 +1,690 @@
+<?php
+/**
+ * Overview screen data, health checks, and settings import/export.
+ *
+ * @package WP_ULike
+ * @since   5.0.5
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
+
+	/**
+	 * Overview page and related admin helpers.
+	 */
+	class WP_Ulike_Overview {
+
+		/**
+		 * About admin screen URL.
+		 *
+		 * @return string
+		 */
+		public static function get_about_url() {
+			return admin_url( 'admin.php?page=wp-ulike-about' );
+		}
+
+		/**
+		 * Value-based Pro upsell copy for Overview (free only).
+		 *
+		 * @param array $health Health report.
+		 * @return array
+		 */
+		public static function get_pro_upsell_content( $health ) {
+			$today_votes = (int) ( $health['today_votes'] ?? 0 );
+			$log_count   = (int) ( $health['log_count'] ?? 0 );
+
+			if ( $today_votes > 0 ) {
+				$intro = sprintf(
+					/* translators: %s: votes logged today */
+					esc_html__( 'You logged %s votes today—nice momentum. Pro unlocks deeper reports and smarter placement when you want to go further.', 'wp-ulike' ),
+					number_format_i18n( $today_votes )
+				);
+			} elseif ( $log_count > 0 ) {
+				$intro = sprintf(
+					/* translators: %s: total stored votes */
+					esc_html__( 'With %s votes on your site, you are already getting value from the free plugin. Pro is optional—add it when you need advanced control.', 'wp-ulike' ),
+					number_format_i18n( $log_count )
+				);
+			} else {
+				$intro = esc_html__( 'Start with free likes and statistics. Pro adds advanced tools only when your site needs them.', 'wp-ulike' );
+			}
+
+			return array(
+				'headline'    => esc_html__( 'Need more than basic likes?', 'wp-ulike' ),
+				'intro'       => $intro,
+				'footnote'    => esc_html__( 'The free plugin stays complete for core likes, stats, and customization—upgrade only when it helps.', 'wp-ulike' ),
+				'cta_label'   => esc_html__( 'Explore Pro', 'wp-ulike' ),
+				'features'    => array(
+					array(
+						'icon'        => 'chart-line',
+						'title'       => esc_html__( 'Advanced analytics', 'wp-ulike' ),
+						'description' => esc_html__( 'Richer reports, trends, and exports beyond the status snapshot on this page.', 'wp-ulike' ),
+					),
+					array(
+						'icon'        => 'admin-settings',
+						'title'       => esc_html__( 'Display automation', 'wp-ulike' ),
+						'description' => esc_html__( 'Rules for where buttons appear—no manual shortcodes on every template.', 'wp-ulike' ),
+					),
+					array(
+						'icon'        => 'thumbs-down',
+						'title'       => esc_html__( 'Dislikes & engagement', 'wp-ulike' ),
+						'description' => esc_html__( 'Dislike buttons and engagement metrics for fuller feedback.', 'wp-ulike' ),
+					),
+				),
+			);
+		}
+
+		/**
+		 * View-model for the About admin template (free + Pro via filters).
+		 *
+		 * @return array
+		 */
+		public static function get_about_view_data() {
+			$health     = self::get_health_report();
+			$is_pro     = defined( 'WP_ULIKE_PRO_VERSION' );
+			$pro_label  = $is_pro && defined( 'WP_ULIKE_PRO_VERSION' ) ? WP_ULIKE_PRO_VERSION : '';
+
+			$quick_actions = array(
+				array(
+					'label'  => esc_html__( 'Settings', 'wp-ulike' ),
+					'url'    => admin_url( 'admin.php?page=wp-ulike-settings' ),
+					'icon'   => 'admin-settings',
+					'primary'=> false,
+				),
+				array(
+					'label'  => esc_html__( 'Customize buttons', 'wp-ulike' ),
+					'url'    => admin_url( 'admin.php?page=wp-ulike-customize' ),
+					'icon'   => 'admin-appearance',
+					'primary'=> false,
+				),
+				array(
+					'label'  => esc_html__( 'Statistics', 'wp-ulike' ),
+					'url'    => admin_url( 'admin.php?page=wp-ulike-statistics' ),
+					'icon'   => 'chart-bar',
+					'primary'=> false,
+				),
+			);
+
+			if ( ! empty( $health['preview_url'] ) ) {
+				$quick_actions[] = array(
+					'label'   => esc_html__( 'View on site', 'wp-ulike' ),
+					'url'     => $health['preview_url'],
+					'icon'    => 'visibility',
+					'primary' => true,
+					'external'=> true,
+				);
+			}
+
+			if ( $is_pro ) {
+				$quick_actions[] = array(
+					'label'   => esc_html__( 'Pro tools', 'wp-ulike' ),
+					'url'     => admin_url( 'admin.php?page=wp-ulike-pro-tools' ),
+					'icon'    => 'admin-tools',
+					'primary' => false,
+				);
+			}
+
+			$quick_actions = apply_filters( 'wp_ulike_about_quick_actions', $quick_actions, $health );
+
+			// Pro can inject optional module cards via filter; none by default.
+			$pro_modules = apply_filters( 'wp_ulike_about_pro_modules', array(), $health );
+
+			$status_rows = array(
+				array(
+					'group'  => 'engagement',
+					'label'  => esc_html__( 'Votes today', 'wp-ulike' ),
+					'value'  => number_format_i18n( (int) ( $health['today_votes'] ?? 0 ) ),
+					'state'  => ( (int) ( $health['today_votes'] ?? 0 ) ) > 0 ? 'good' : 'neutral',
+				),
+				array(
+					'group'  => 'engagement',
+					'label'  => esc_html__( 'New since last visit', 'wp-ulike' ),
+					'value'  => number_format_i18n( (int) ( $health['new_votes'] ?? 0 ) ),
+					'state'  => ( (int) ( $health['new_votes'] ?? 0 ) ) > 0 ? 'good' : 'neutral',
+				),
+				array(
+					'group'  => 'engagement',
+					'label'  => esc_html__( 'Total votes', 'wp-ulike' ),
+					'value'  => number_format_i18n( (int) ( $health['log_count'] ?? 0 ) ),
+					'state'  => ( (int) ( $health['log_count'] ?? 0 ) ) > 0 ? 'good' : 'neutral',
+					'hint'   => esc_html__( 'Snapshot only—open Statistics for charts.', 'wp-ulike' ),
+				),
+				array(
+					'group'  => 'setup',
+					'label'  => esc_html__( 'Posts', 'wp-ulike' ),
+					'value'  => ! empty( $health['auto_display'] ) ? esc_html__( 'Auto-display on', 'wp-ulike' ) : esc_html__( 'Off / manual', 'wp-ulike' ),
+					'state'  => ! empty( $health['auto_display'] ) ? 'good' : 'neutral',
+				),
+				array(
+					'group'  => 'setup',
+					'label'  => esc_html__( 'Comments', 'wp-ulike' ),
+					'value'  => ! empty( $health['comments_auto_display'] ) ? esc_html__( 'Auto-display on', 'wp-ulike' ) : esc_html__( 'Off', 'wp-ulike' ),
+					'state'  => ! empty( $health['comments_auto_display'] ) ? 'good' : 'neutral',
+				),
+				array(
+					'group'  => 'setup',
+					'label'  => esc_html__( 'Database', 'wp-ulike' ),
+					'value'  => ! empty( $health['tables_ok'] ) ? esc_html__( 'Ready', 'wp-ulike' ) : esc_html__( 'Needs attention', 'wp-ulike' ),
+					'state'  => ! empty( $health['tables_ok'] ) ? 'good' : 'bad',
+				),
+			);
+
+			if ( ! empty( $health['cache_enabled'] ) ) {
+				$status_rows[] = array(
+					'group'  => 'setup',
+					'label'  => esc_html__( 'Caching', 'wp-ulike' ),
+					'value'  => esc_html__( 'Compatibility mode on', 'wp-ulike' ),
+					'state'  => 'good',
+				);
+			}
+
+			$status_rows = apply_filters( 'wp_ulike_about_status_rows', $status_rows, $health );
+
+			$help_links = array(
+				array(
+					'title' => esc_html__( 'Documentation', 'wp-ulike' ),
+					'desc'  => esc_html__( 'Setup, shortcodes, and developer hooks.', 'wp-ulike' ),
+					'url'   => 'https://docs.wpulike.com/?utm_source=about-page&utm_medium=wp-dash',
+					'icon'  => 'book',
+				),
+				array(
+					'title' => esc_html__( 'Support', 'wp-ulike' ),
+					'desc'  => esc_html__( 'Get help from the WP ULike team.', 'wp-ulike' ),
+					'url'   => WP_ULIKE_PLUGIN_URI . 'support/?utm_source=about-page&utm_medium=wp-dash',
+					'icon'  => 'sos',
+				),
+				array(
+					'title' => esc_html__( 'Leave a review', 'wp-ulike' ),
+					'desc'  => esc_html__( 'Share feedback on WordPress.org.', 'wp-ulike' ),
+					'url'   => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5',
+					'icon'  => 'star-filled',
+				),
+			);
+
+			$help_links = apply_filters( 'wp_ulike_about_help_links', $help_links );
+
+			$upsell = ! $is_pro ? self::get_pro_upsell_content( $health ) : array();
+
+			$summary = apply_filters( 'wp_ulike_about_summary', self::get_overview_summary( $health ), $health );
+
+			return array(
+				'health'                 => $health,
+				'is_pro'                 => $is_pro,
+				'pro_version'            => $pro_label,
+				'summary'                => $summary,
+				'status_groups'          => self::get_status_group_labels(),
+				'quick_actions'          => $quick_actions,
+				'pro_modules'            => $pro_modules,
+				'status_rows'            => $status_rows,
+				'help_links'             => $help_links,
+				'troubleshooting'        => self::get_troubleshooting_tips( $health ),
+				'sidebar_meta'           => apply_filters( 'wp_ulike_about_sidebar_meta', self::get_default_sidebar_meta( $health ), $health ),
+				'wp_version'             => get_bloginfo( 'version' ),
+				'import_nonce'           => wp_create_nonce( 'wp_ulike_import_settings' ),
+				'export_url'             => wp_nonce_url( admin_url( 'admin-ajax.php?action=wp_ulike_export_settings' ), 'wp_ulike_export_settings' ),
+				'show_pro_upsell'        => apply_filters( 'wp_ulike_about_show_pro_upsell', ! $is_pro ),
+				'pro_upsell'             => $upsell,
+				'pricing_url'            => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=overview&utm_medium=wp-dash',
+			);
+		}
+
+		/**
+		 * Short troubleshooting tips for the Overview advanced panel.
+		 *
+		 * @param array $health Health report.
+		 * @return array<int, array<string, mixed>>
+		 */
+		public static function get_troubleshooting_tips( $health ) {
+			$settings_url = admin_url( 'admin.php?page=wp-ulike-settings' );
+
+			$tips = array(
+				array(
+					'text' => esc_html__( 'Likes usually show on single posts, not on the homepage or archives. Test on a post or change display in Settings.', 'wp-ulike' ),
+					'url'  => $settings_url,
+					'link' => esc_html__( 'Settings', 'wp-ulike' ),
+				),
+				array(
+					'text' => sprintf(
+						/* translators: %s: Automatic Display setting label */
+						esc_html__( 'No button on the page? Add [wp_ulike] or the ULike block, or enable “%s” under Settings → Posts.', 'wp-ulike' ),
+						esc_html__( 'Automatic Display', 'wp-ulike' )
+					),
+					'url'  => $settings_url,
+					'link' => esc_html__( 'Settings', 'wp-ulike' ),
+				),
+				array(
+					'text' => sprintf(
+						/* translators: %s: Site Uses Caching setting label */
+						esc_html__( 'Stale vote counts with a cache plugin? Enable “%s” in Settings → General, then purge cache.', 'wp-ulike' ),
+						esc_html__( 'Site Uses Caching', 'wp-ulike' )
+					),
+					'url'  => $settings_url,
+					'link' => esc_html__( 'Settings', 'wp-ulike' ),
+				),
+				array(
+					'text' => sprintf(
+						/* translators: %s: Hide Plugin Admin Notices setting label */
+						esc_html__( 'Too many admin notices? Turn on “%s” in Settings → General.', 'wp-ulike' ),
+						esc_html__( 'Hide Plugin Admin Notices', 'wp-ulike' )
+					),
+					'url'  => $settings_url,
+					'link' => esc_html__( 'Settings', 'wp-ulike' ),
+				),
+			);
+
+			if ( empty( $health['tables_ok'] ) ) {
+				$tips[] = array(
+					'text' => esc_html__( 'Database tables may be incomplete. Deactivate and reactivate WP ULike once.', 'wp-ulike' ),
+				);
+			}
+
+			return apply_filters( 'wp_ulike_overview_troubleshooting_tips', $tips, $health );
+		}
+
+		/**
+		 * Bootstrap hooks.
+		 *
+		 * @return void
+		 */
+		public static function init() {
+			if ( ! is_admin() ) {
+				return;
+			}
+
+			add_filter( 'site_status_tests', array( __CLASS__, 'register_site_health_tests' ) );
+			add_action( 'wp_ajax_wp_ulike_export_settings', array( __CLASS__, 'handle_export_settings' ) );
+			add_action( 'admin_post_wp_ulike_import_settings', array( __CLASS__, 'handle_import_settings' ) );
+		}
+
+		/**
+		 * AJAX: download settings JSON.
+		 *
+		 * @return void
+		 */
+		public static function handle_export_settings() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Permission denied.', 'wp-ulike' ) );
+			}
+
+			check_admin_referer( 'wp_ulike_export_settings' );
+
+			$filename = 'wp-ulike-settings-' . gmdate( 'Y-m-d' ) . '.json';
+
+			header( 'Content-Type: application/json; charset=utf-8' );
+			header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+
+			echo self::export_settings_json(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON export
+			exit;
+		}
+
+		/**
+		 * Import settings from uploaded JSON.
+		 *
+		 * @return void
+		 */
+		public static function handle_import_settings() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Permission denied.', 'wp-ulike' ) );
+			}
+
+			check_admin_referer( 'wp_ulike_import_settings' );
+
+			$redirect = admin_url( 'admin.php?page=wp-ulike-about' );
+
+			if ( empty( $_FILES['settings_file']['tmp_name'] ) ) {
+				wp_safe_redirect( add_query_arg( 'wp_ulike_import', 'error', $redirect ) );
+				exit;
+			}
+
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- user upload.
+			$raw = file_get_contents( $_FILES['settings_file']['tmp_name'] );
+			$payload = json_decode( $raw, true );
+
+			$result = self::import_settings( is_array( $payload ) ? $payload : array() );
+
+			wp_safe_redirect(
+				add_query_arg( 'wp_ulike_import', is_wp_error( $result ) ? 'error' : 'success', $redirect )
+			);
+			exit;
+		}
+
+		/**
+		 * Required database tables.
+		 *
+		 * @return array
+		 */
+		public static function get_required_tables() {
+			global $wpdb;
+
+			return array(
+				'posts'      => $wpdb->prefix . 'ulike',
+				'comments'   => $wpdb->prefix . 'ulike_comments',
+				'activities' => $wpdb->prefix . 'ulike_activities',
+				'forums'     => $wpdb->prefix . 'ulike_forums',
+				'meta'       => $wpdb->prefix . 'ulike_meta',
+			);
+		}
+
+		/**
+		 * Check whether a table exists.
+		 *
+		 * @param string $table_name Full table name.
+		 * @return bool
+		 */
+		public static function table_exists( $table_name ) {
+			global $wpdb;
+
+			$result = $wpdb->get_var(
+				$wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name )
+			);
+
+			return $result === $table_name;
+		}
+
+		/**
+		 * Plain-language Overview summary (may contain safe HTML links).
+		 *
+		 * @param array $health Health report.
+		 * @return string
+		 */
+		public static function get_overview_summary( $health ) {
+			$today     = (int) ( $health['today_votes'] ?? 0 );
+			$new       = (int) ( $health['new_votes'] ?? 0 );
+			$total     = (int) ( $health['log_count'] ?? 0 );
+			$stats_url = esc_url( $health['statistics_url'] ?? admin_url( 'admin.php?page=wp-ulike-statistics' ) );
+
+			if ( $new > 0 ) {
+				return wp_kses_post(
+					sprintf(
+						/* translators: 1: vote count, 2: statistics admin URL */
+						__( 'You have <strong>%1$s</strong> new votes since your last visit to Statistics. <a href="%2$s">Open Statistics</a> for charts and filters.', 'wp-ulike' ),
+						number_format_i18n( $new ),
+						$stats_url
+					)
+				);
+			}
+
+			if ( $today > 0 ) {
+				return wp_kses_post(
+					sprintf(
+						/* translators: 1: votes today, 2: statistics admin URL */
+						__( '<strong>%1$s</strong> votes today on your site. Numbers below are a quick snapshot—<a href="%2$s">Statistics</a> has the full breakdown.', 'wp-ulike' ),
+						number_format_i18n( $today ),
+						$stats_url
+					)
+				);
+			}
+
+			if ( ! empty( $health['auto_display'] ) && $total > 0 ) {
+				return sprintf(
+					/* translators: %s: total vote count */
+					esc_html__( 'Buttons are active on posts and you have %s total votes stored. Use Statistics when you need date ranges and detailed reports.', 'wp-ulike' ),
+					number_format_i18n( $total )
+				);
+			}
+
+			if ( empty( $health['auto_display'] ) ) {
+				return esc_html__( 'Like buttons are not on posts automatically yet. Turn on auto-display in Settings, or add the ULike block / shortcode where you want votes.', 'wp-ulike' );
+			}
+
+			return esc_html__( 'Your setup looks ready. Configure buttons below or open Statistics when you start receiving votes.', 'wp-ulike' );
+		}
+
+		/**
+		 * Status row group labels for the Overview grid.
+		 *
+		 * @return array<string, string>
+		 */
+		public static function get_status_group_labels() {
+			return apply_filters(
+				'wp_ulike_about_status_group_labels',
+				array(
+					'engagement' => esc_html__( 'Engagement snapshot', 'wp-ulike' ),
+					'setup'      => esc_html__( 'Site setup', 'wp-ulike' ),
+					'pro'        => esc_html__( 'WP ULike Pro', 'wp-ulike' ),
+				)
+			);
+		}
+
+		/**
+		 * Plugins / features detected on this site (for sidebar).
+		 *
+		 * @return array<int, string>
+		 */
+		public static function get_detected_integrations() {
+			$active = array(
+				esc_html__( 'Posts', 'wp-ulike' ),
+				esc_html__( 'Comments', 'wp-ulike' ),
+			);
+
+			if ( class_exists( 'WooCommerce' ) ) {
+				$active[] = 'WooCommerce';
+			}
+			if ( function_exists( 'buddypress' ) ) {
+				$active[] = 'BuddyPress';
+			}
+			if ( function_exists( 'is_bbpress' ) ) {
+				$active[] = 'bbPress';
+			}
+			if ( class_exists( 'Easy_Digital_Downloads' ) ) {
+				$active[] = 'EDD';
+			}
+
+			return apply_filters( 'wp_ulike_about_detected_integrations', $active );
+		}
+
+		/**
+		 * Default sidebar meta rows (before Pro filter).
+		 *
+		 * @param array $health Health report.
+		 * @return array<int, array<string, string>>
+		 */
+		public static function get_default_sidebar_meta( $health ) {
+			$meta = array(
+				array(
+					'label' => esc_html__( 'PHP', 'wp-ulike' ),
+					'value' => PHP_VERSION,
+				),
+			);
+
+			$integrations = self::get_detected_integrations();
+			if ( ! empty( $integrations ) ) {
+				$meta[] = array(
+					'label' => esc_html__( 'Detected on site', 'wp-ulike' ),
+					'value' => implode( ', ', $integrations ),
+				);
+			}
+
+			if ( ! empty( $health['cache_enabled'] ) ) {
+				$meta[] = array(
+					'label' => esc_html__( 'Caching helper', 'wp-ulike' ),
+					'value' => esc_html__( 'On (Settings → General)', 'wp-ulike' ),
+					'url'   => admin_url( 'admin.php?page=wp-ulike-settings' ),
+				);
+			}
+
+			$meta[] = array(
+				'label' => esc_html__( 'Documentation', 'wp-ulike' ),
+				'value' => esc_html__( 'Setup & hooks', 'wp-ulike' ),
+				'url'   => 'https://docs.wpulike.com/?utm_source=overview-sidebar&utm_medium=wp-dash',
+			);
+
+			return $meta;
+		}
+
+		/**
+		 * Group status rows for template rendering.
+		 *
+		 * @param array $rows Status rows.
+		 * @return array<string, array<int, array>>
+		 */
+		public static function group_status_rows( $rows ) {
+			$grouped = array();
+
+			foreach ( (array) $rows as $row ) {
+				$key = isset( $row['group'] ) ? $row['group'] : 'setup';
+				if ( ! isset( $grouped[ $key ] ) ) {
+					$grouped[ $key ] = array();
+				}
+				$grouped[ $key ][] = $row;
+			}
+
+			return $grouped;
+		}
+
+		/**
+		 * Run health diagnostics for the About page Quick Start section.
+		 *
+		 * @return array
+		 */
+		public static function get_health_report() {
+			$tables_ok  = true;
+			$missing    = array();
+
+			foreach ( self::get_required_tables() as $label => $table_name ) {
+				if ( ! self::table_exists( $table_name ) ) {
+					$tables_ok  = false;
+					$missing[]  = $label;
+				}
+			}
+
+			$auto_display = wp_ulike_setting_repo::isAutoDisplayOn( 'post' );
+			$sample_post  = get_posts(
+				array(
+					'post_type'      => 'post',
+					'post_status'    => 'publish',
+					'posts_per_page' => 1,
+					'orderby'        => 'date',
+					'order'          => 'DESC',
+				)
+			);
+			$preview_url  = ! empty( $sample_post[0] ) ? get_permalink( $sample_post[0]->ID ) : home_url( '/' );
+
+			$new_votes = 0;
+			if ( function_exists( 'wp_ulike_get_number_of_new_likes' ) ) {
+				$new_votes = (int) wp_ulike_get_number_of_new_likes();
+			}
+
+			$cache_enabled = false;
+			if ( function_exists( 'wp_ulike_get_option' ) ) {
+				$cache_enabled = wp_ulike_is_true( wp_ulike_get_option( 'cache_exist', false ) );
+			}
+
+			return array(
+				'tables_ok'              => $tables_ok,
+				'missing_tables'         => $missing,
+				'auto_display'           => $auto_display,
+				'comments_auto_display'  => wp_ulike_setting_repo::isAutoDisplayOn( 'comment' ),
+				'preview_url'            => $preview_url,
+				'plugin_version'         => WP_ULIKE_VERSION,
+				'db_version'             => get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION ),
+				'log_count'              => wp_ulike_count_all_logs(),
+				'today_votes'            => wp_ulike_count_all_logs( 'today' ),
+				'new_votes'              => $new_votes,
+				'cache_enabled'          => $cache_enabled,
+				'statistics_url'       => admin_url( 'admin.php?page=wp-ulike-statistics' ),
+			);
+		}
+
+		/**
+		 * Register Site Health tests.
+		 *
+		 * @param array $tests Tests.
+		 * @return array
+		 */
+		public static function register_site_health_tests( $tests ) {
+			$tests['direct']['wp_ulike_database_tables'] = array(
+				'label' => esc_html__( 'WP ULike database tables', 'wp-ulike' ),
+				'test'  => array( __CLASS__, 'site_health_tables_test' ),
+			);
+
+			return $tests;
+		}
+
+		/**
+		 * Site Health: tables test.
+		 *
+		 * @return array
+		 */
+		public static function site_health_tables_test() {
+			$report = self::get_health_report();
+
+			if ( $report['tables_ok'] ) {
+				return array(
+					'label'       => esc_html__( 'WP ULike database tables are installed', 'wp-ulike' ),
+					'status'      => 'good',
+					'badge'       => array(
+						'label' => esc_html__( 'WP ULike', 'wp-ulike' ),
+						'color' => 'blue',
+					),
+					'description' => sprintf(
+						'<p>%s</p>',
+						esc_html__( 'All voting log tables required by WP ULike are present.', 'wp-ulike' )
+					),
+					'actions'     => '',
+					'test'        => 'wp_ulike_database_tables',
+				);
+			}
+
+			return array(
+				'label'       => esc_html__( 'WP ULike database tables are missing', 'wp-ulike' ),
+				'status'      => 'critical',
+				'badge'       => array(
+					'label' => esc_html__( 'WP ULike', 'wp-ulike' ),
+					'color' => 'red',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					esc_html__( 'Some WP ULike tables are missing. Deactivate and reactivate the plugin, or open Help for details.', 'wp-ulike' )
+				),
+				'actions'     => sprintf(
+					'<p><a href="%s">%s</a></p>',
+					esc_url( self::get_about_url() ),
+					esc_html__( 'Open Help', 'wp-ulike' )
+				),
+				'test'        => 'wp_ulike_database_tables',
+			);
+		}
+
+		/**
+		 * Export plugin settings as JSON (settings API option blob).
+		 *
+		 * @return string
+		 */
+		public static function export_settings_json() {
+			$data = array(
+				'version'   => WP_ULIKE_VERSION,
+				'exported'  => gmdate( 'c' ),
+				'settings'  => get_option( 'wp_ulike_settings', array() ),
+				'customize' => get_option( 'wp_ulike_customize', array() ),
+			);
+
+			return wp_json_encode( $data, JSON_PRETTY_PRINT );
+		}
+
+		/**
+		 * Import settings from decoded JSON array.
+		 *
+		 * @param array $payload Import payload.
+		 * @return true|WP_Error
+		 */
+		public static function import_settings( $payload ) {
+			if ( empty( $payload['settings'] ) || ! is_array( $payload['settings'] ) ) {
+				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from WP ULike → Help.', 'wp-ulike' ) );
+			}
+
+			update_option( 'wp_ulike_settings', $payload['settings'] );
+
+			if ( ! empty( $payload['customize'] ) && is_array( $payload['customize'] ) ) {
+				update_option( 'wp_ulike_customize', $payload['customize'] );
+			}
+
+			return true;
+		}
+	}
+
+	WP_Ulike_Overview::init();
+}

@@ -6,7 +6,7 @@ Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.0.4
+Stable tag: 5.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,11 +78,11 @@ We believe in giving you real value, not a teaser. The free version includes eve
 
 **Gutenberg Blocks:** Add voting with the **ULike Button** block, or show ranked results with the **Top List** block (posts, comments, users, and more). Shortcodes available too.
 
-= Why 80,000+ Sites Use This =
+= Why Thousands of Sites Use This =
 
 We're not a faceless corporation. We're a team that actually cares about your success.
 
-We've stayed focused on one thing: making voting easy and insights clear. That focus is why we've grown from a simple idea to powering over 80,000 websites.
+We've stayed focused on one thing: making voting easy and insights clear. That focus has helped us grow into a widely used engagement plugin on WordPress.org.
 
 We test everything with major caching plugins because your site's performance matters. We built this to be fast, and we keep it that way. No bloat, no unnecessary features—just what you need.
 
@@ -175,9 +175,15 @@ Free gives you everything you need: voting buttons (auto-display + shortcodes), 
 Yes. Works perfectly across WordPress multisite networks. Each site gets its own settings and statistics.
 
 = Is WP ULike secure? =
-Yes. We follow WordPress security best practices, regularly audit our code, and have over 80,000 active installations with a high WordPress.org rating. Security isn't optional for us—it's built in.
+Yes. We follow WordPress security best practices, hardened AJAX voting, nonce verification, and optional IP anonymization. See our security practices at wpulike.com/security. Security is built in, not bolted on.
 
 == Changelog ==
+
+= 5.0.5 =
+* Added: **Help** admin page — status snapshot, quick actions, help links, troubleshooting tips, and JSON settings backup/restore.
+* Added: Optional **deactivation feedback** on the Plugins screen.
+* Added: **Site Health** check for WP ULike database tables.
+* Improved: Pro license discount notice copy restored for existing translations.
 
 = 5.0.4 =
 * Added: **Top List** Gutenberg block — ranked leaderboard for most liked posts, comments, users, BuddyPress activities, and bbPress topics.
@@ -205,122 +211,11 @@ Yes. We follow WordPress security best practices, regularly audit our code, and 
 * Removed: Composer dependency replaced with native WordPress solution for improved compatibility and reduced plugin footprint.
 
 = 5.0.0 =
-* Added: Brand new settings panel that's actually beautiful to use. Everything is organized, easy to find, and makes configuring your like buttons a breeze instead of a chore.
-* Added: Built-in customizer panel with live preview—see every style change instantly. No more guessing how your buttons will look. Adjust colors, spacing, borders, typography, and watch it update in real-time.
-* Added: Completely redesigned analytics panel that makes understanding your engagement data actually enjoyable. Better charts, clearer insights, and navigation that just makes sense.
-* Improved: 90% faster. That's not a typo. Pages load faster, stats load faster, everything just feels snappier. Your visitors will notice the difference.
-* Fixed: Squashed bugs and tightened up stability across the board.
-
-= 4.8.3.1 =
-* Fixed: Gutenberg block assets not being included in build process, preventing blocks from displaying correctly.
-
-= 4.8.3 =
-* Added: Gutenberg block support for adding WP ULike buttons directly in the block editor with customizable templates and settings.
-* Added: Introduced view tracking service for all content types with engagement rate calculation (Likes + Dislikes / Views * 100) and intelligent tracking using Intersection Observer API with batched requests. [PRO]
-* Added: Added Growth column to WorldMap country statistics table for tracking country performance trends. [PRO]
-* Added: Added comprehensive GDPR tools section with user search and bulk log removal functionality for compliance with data protection regulations. [PRO]
-* Added: Introduced advanced bulk actions feature with various filters (post type, taxonomy, category, search, and item ID) for efficient content management. [PRO]
-* Added: Redesigned user profile pages with Instagram-inspired layout, featuring improved visual hierarchy and modern aesthetics. [PRO]
-* Added: Custom stylish avatar uploader with real-time preview and enhanced user experience. [PRO]
-* Improved: Enhanced analytics dashboard UI and functionality with improved visualizations and user experience.
-* Improved: Optimized database query performance by implementing index-friendly date range queries, eliminating slow query issues and improving response times for statistics and analytics.
-* Fixed: Various minor bug fixes and improvements.
-
-= 4.8.2 =
-* Improved: Fixed memory leaks and optimized JavaScript performance.
-* Fixed: Various minor bug fixes and improvements.
-
-= 4.8.1 =
-* Improved: Refactored codebase for better maintainability and improved user experience.
-* Improved: Updated translation files for multiple languages.
-* Fixed: Various minor bug fixes and improvements.
-
-= 4.8.0 =
-* Improved: Removed jQuery dependency from front-end scripts. All JavaScript functionality has been rewritten in vanilla JavaScript for better performance, reduced file size, and faster page load times.
-* Improved: Admin panel settings descriptions for better clarity and user understanding.
-* Improved: Updated translation files for multiple languages.
-* Fixed: Tooltip syncing and sibling element issues.
-* Fixed: Various styling improvements and bug fixes.
-
-= 4.7.11 =
-* Improved: Admin panel settings descriptions for better clarity.
-* Improved: Removed several outdated admin functions.
-* Fixed: Correct MySQL time format is now used when inserting or updating datetime values in the database.
-* Fixed: Various minor bug fixes and stability improvements.
-
-= 4.7.10 =
-* Improved: Added additional fingerprint + cookie presence check for 'cookie' & 'no limit' logging methods to further reduce the chance of automated/bot submissions without valid cookies. This was not a security vulnerability, but a preventive hardening measure to improve vote integrity.
-
-= 4.7.9.1 =
-Fixed: Critical HTML sanitization issue.
-
-= 4.7.9 =
-* Added: Global engagement insights with world map and device type charts in the stats panel. [PRO]
-* Added: New action hooks to enhance data insertion and updates.
-* Improved: Internationalization (i18n) support for more accurate translations.
-* Improved: Optimized stats panel codebase for better performance and efficiency.
-* Fixed: Addressed a security vulnerability by implementing a sanitization method.
-* Fixed: Resolved various minor issues and applied performance enhancements.
-
-= 4.7.8 =
-* Improved: UI enhancements in the Stats Panel.
-* Fixed: Various small issues and optimizations.
-
-= 4.7.7 =
-* Added: Support for NitroPack cache plugin to enhance caching capabilities.
-* Fixed: Improved compatibility with the FlyingPress plugin.
-* Fixed: Resolved several minor issues for smoother functionality.
-
-= 4.7.6 =
-* Improved: WPML compatibility to better handle multilingual setups.
-* Fixed: Addressed several minor bugs to improve overall stability.
-
-= 4.7.5 =
-* Improved: Enhanced functionalities of the stats panel for better performance.
-* Improved: Addressed remaining security issues by properly escaping values.
-* Fixed: Resolved several minor bugs.
-
-= 4.7.4 =
-* Added: Added email verification support for newly registered users. [PRO]
-* Improved: Enhanced stats panel datepicker with a modern, stylish design, including support for preset date ranges. [PRO]
-* Improved: Optimized select fields for better compatibility with dark mode.
-* Improved: Improved sorting functionality on the logs page.
-* Fixed: Addressed several minor bugs and performance issues.
-
-= 4.7.3 =
-* Added: Dark mode support on the stats panel for a more comfortable viewing experience.
-* Added: New overview data sections to show monthly & daily performance, including CAGR calculations for more detailed trend analysis. [PRO]
-* Added: User roles engagement displayed through pie charts, offering insights into user interactions. [PRO]
-* Added: Option to download charts in CSV, PNG, or SVG formats, making it easier to export and share data. [PRO]
-* Improved: Replaced the stats charts library with a lighter and faster alternative, improving load times and performance.
-* Improved: General improvements in the stats code for better reliability and accuracy.
-* Fixed: Resolved all ESLint issues for cleaner code.
-
-= 4.7.2.1 =
-* Fixed: Resolved a minor bug in the stats panel that caused incorrect data display under certain conditions.
-
-= 4.7.2 =
-* Added: Launched an advanced, React-based statistics panel.
-* Improved: Removed deprecated menus and scripts.
-* Improved: Enhanced SQL queries for date ranges.
-* Fixed: Addressed various minor bugs.
-
-= 4.7.1 =
-* Added   : Compatibility with WordPress 6.5 for seamless integration.
-* Updated : Minimum PHP version requirement increased to 7.2 and WordPress to version 6.0.
-* Improved: Comprehensive security enhancement with sanitization and escaping across all methods.
-* Improved: Optimized queries for better performance.
-* Removed : Deprecated class contents for cleaner code.
-* Replaced: Some PHP methods with standard WordPress ones for better compatibility.
-* Enhanced: Admin logs pagination functionality for improved usability.
-* Fixed   : Minor bug fixes for a smoother experience.
-
-= 4.7.0 =
-* Fixed   : security vulnerabilities by implementing proper sanitization and escaping methods throughout the plugin codebase.
-* Improved: overall performance and reliability by optimizing SQL queries and utilizing WordPress API functions where applicable.
-* Updated : setting panel to enhance user experience and provide better customization options.
+* Added: Redesigned settings panel, live-preview customizer, and statistics dashboard.
+* Improved: Faster frontend and admin performance; removed jQuery from frontend scripts.
+* Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
 
-= 4.5.3 =
-Important: If page cache is enabled on your site, clear the cache immediately after updating.
+= 5.0.5 =
+If you use a full-page cache plugin, purge your site cache after updating.

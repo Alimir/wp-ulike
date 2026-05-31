@@ -1,214 +1,269 @@
 <?php
 /**
- * About page template
- * // @echo HEADER
+ * Overview — WordPress-native dashboard (free + Pro via filters).
+ *
+ * @package WP_ULike
  */
 
-	// no direct access allowed
-	if ( ! defined('ABSPATH') ) {
-	    die();
-	}
+if ( ! defined( 'ABSPATH' ) ) {
+	die();
+}
+
+$data = class_exists( 'WP_Ulike_Overview' ) ? WP_Ulike_Overview::get_about_view_data() : array();
+
+$import_flash   = isset( $_GET['wp_ulike_import'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_import'] ) ) : '';
+$is_pro         = ! empty( $data['is_pro'] );
+$health         = isset( $data['health'] ) ? $data['health'] : array();
+$status_groups  = class_exists( 'WP_Ulike_Overview' ) ? WP_Ulike_Overview::group_status_rows( $data['status_rows'] ?? array() ) : array();
+$group_labels   = $data['status_groups'] ?? array();
+$group_order    = array( 'engagement', 'setup', 'pro' );
 ?>
 
-<div class="wrap wp-ulike-about-page">
+<div class="wrap wp-ulike-about">
 
-	<!-- Hero Section -->
-	<div class="wp-ulike-about-hero">
-		<div class="wp-ulike-about-hero-content">
-			<h1><?php echo esc_html__( 'WP ULike', 'wp-ulike' ) . ' ' . WP_ULIKE_VERSION; ?></h1>
-			<p class="wp-ulike-about-hero-subtitle"><?php esc_html_e( 'Turn visitors into engaged fans. Add Like & Dislike buttons to your content and discover what your audience loves with real-time analytics.', 'wp-ulike' ); ?></p>
+	<h1 class="wp-ulike-about__title">
+		<?php esc_html_e( 'Help', 'wp-ulike' ); ?>
+		<?php if ( $is_pro && ! empty( $data['pro_version'] ) ) : ?>
+			<span class="wp-ulike-about__badge wp-ulike-about__badge--pro"><?php echo esc_html( 'Pro ' . $data['pro_version'] ); ?></span>
+		<?php else : ?>
+			<span class="wp-ulike-about__badge"><?php echo esc_html( WP_ULIKE_VERSION ); ?></span>
+		<?php endif; ?>
+	</h1>
+
+	<p class="wp-ulike-about__lead">
+		<?php esc_html_e( 'Like buttons and engagement stats for your WordPress site. Configure display, check status, and open the tools you need below.', 'wp-ulike' ); ?>
+	</p>
+
+	<?php if ( 'success' === $import_flash ) : ?>
+		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings imported and saved successfully!', 'wp-ulike' ); ?></p></div>
+	<?php elseif ( 'error' === $import_flash ) : ?>
+		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Invalid JSON format. Please check your JSON syntax.', 'wp-ulike' ); ?></p></div>
+	<?php endif; ?>
+
+	<div class="wp-ulike-about__layout">
+
+		<div class="wp-ulike-about__main">
+
+			<!-- Status -->
+			<div class="wp-ulike-about-card">
+				<div class="wp-ulike-about-card__header">
+					<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'At a glance', 'wp-ulike' ); ?></h2>
+					<a class="wp-ulike-about-card__link" href="<?php echo esc_url( $health['statistics_url'] ?? admin_url( 'admin.php?page=wp-ulike-statistics' ) ); ?>"><?php esc_html_e( 'Statistics', 'wp-ulike' ); ?></a>
+				</div>
+				<?php if ( ! empty( $data['summary'] ) ) : ?>
+					<p class="wp-ulike-about-summary"><?php echo wp_kses_post( $data['summary'] ); ?></p>
+				<?php endif; ?>
+				<?php foreach ( $group_order as $group_key ) : ?>
+					<?php if ( empty( $status_groups[ $group_key ] ) ) : ?>
+						<?php continue; ?>
+					<?php endif; ?>
+					<div class="wp-ulike-about-status-group">
+						<?php if ( ! empty( $group_labels[ $group_key ] ) ) : ?>
+							<h3 class="wp-ulike-about-status-group__title"><?php echo esc_html( $group_labels[ $group_key ] ); ?></h3>
+						<?php endif; ?>
+						<div class="wp-ulike-about-status" role="list">
+							<?php foreach ( $status_groups[ $group_key ] as $row ) : ?>
+								<?php $state = isset( $row['state'] ) ? $row['state'] : 'neutral'; ?>
+								<div class="wp-ulike-about-status__item wp-ulike-about-status__item--<?php echo esc_attr( $state ); ?>" role="listitem">
+									<span class="wp-ulike-about-status__label"><?php echo esc_html( $row['label'] ?? '' ); ?></span>
+									<span class="wp-ulike-about-status__value"><?php echo esc_html( $row['value'] ?? '' ); ?></span>
+									<?php if ( ! empty( $row['hint'] ) ) : ?>
+										<span class="wp-ulike-about-status__hint"><?php echo esc_html( $row['hint'] ); ?></span>
+									<?php endif; ?>
+								</div>
+							<?php endforeach; ?>
+						</div>
+					</div>
+				<?php endforeach; ?>
+				<?php if ( empty( $health['tables_ok'] ) ) : ?>
+					<p class="wp-ulike-about-card__hint wp-ulike-about-card__hint--warn">
+						<?php esc_html_e( 'Database tables may be incomplete. Deactivate and reactivate WP ULike once.', 'wp-ulike' ); ?>
+					</p>
+				<?php endif; ?>
+			</div>
+
+			<!-- Quick actions -->
+			<div class="wp-ulike-about-card">
+				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Quick actions', 'wp-ulike' ); ?></h2>
+				<div class="wp-ulike-about-actions">
+					<?php foreach ( (array) ( $data['quick_actions'] ?? array() ) as $action ) : ?>
+						<?php
+						$btn_class = ! empty( $action['primary'] ) ? 'button-primary' : 'button-secondary';
+						$external  = ! empty( $action['external'] );
+						$icon      = ! empty( $action['icon'] ) ? $action['icon'] : 'arrow-right-alt';
+						?>
+						<a
+							class="button <?php echo esc_attr( $btn_class ); ?> wp-ulike-about-actions__btn"
+							href="<?php echo esc_url( $action['url'] ?? '#' ); ?>"
+							<?php echo $external ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>
+						>
+							<span class="dashicons dashicons-<?php echo esc_attr( $icon ); ?>" aria-hidden="true"></span>
+							<?php echo esc_html( $action['label'] ?? '' ); ?>
+						</a>
+					<?php endforeach; ?>
+				</div>
+			</div>
+
+			<?php if ( ! empty( $data['pro_modules'] ) ) : ?>
+				<div class="wp-ulike-about-card wp-ulike-about-card--pro">
+					<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Pro tools', 'wp-ulike' ); ?></h2>
+					<ul class="wp-ulike-about-modules">
+						<?php foreach ( $data['pro_modules'] as $module ) : ?>
+							<li class="wp-ulike-about-modules__item">
+								<span class="dashicons dashicons-<?php echo esc_attr( $module['icon'] ?? 'admin-generic' ); ?>" aria-hidden="true"></span>
+								<div class="wp-ulike-about-modules__body">
+									<strong>
+										<?php echo esc_html( $module['title'] ?? '' ); ?>
+										<?php if ( ! empty( $module['badge'] ) ) : ?>
+											<span class="wp-ulike-about__badge wp-ulike-about__badge--pro"><?php echo esc_html( $module['badge'] ); ?></span>
+										<?php endif; ?>
+									</strong>
+									<?php if ( ! empty( $module['description'] ) ) : ?>
+										<p><?php echo esc_html( $module['description'] ); ?></p>
+									<?php endif; ?>
+								</div>
+								<?php if ( ! empty( $module['url'] ) ) : ?>
+									<a class="button button-secondary" href="<?php echo esc_url( $module['url'] ); ?>">
+										<?php esc_html_e( 'Open', 'wp-ulike' ); ?>
+									</a>
+								<?php endif; ?>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			<?php elseif ( ! empty( $data['show_pro_upsell'] ) && ! empty( $data['pro_upsell'] ) ) : ?>
+				<?php $upsell = $data['pro_upsell']; ?>
+				<div class="wp-ulike-about-card wp-ulike-about-card--upsell">
+					<div class="wp-ulike-about-upsell__header">
+						<h2 class="wp-ulike-about-card__title"><?php echo esc_html( $upsell['headline'] ?? '' ); ?></h2>
+						<?php if ( ! empty( $upsell['intro'] ) ) : ?>
+							<p class="wp-ulike-about-upsell__intro"><?php echo esc_html( $upsell['intro'] ); ?></p>
+						<?php endif; ?>
+					</div>
+					<?php if ( ! empty( $upsell['features'] ) && is_array( $upsell['features'] ) ) : ?>
+						<ul class="wp-ulike-about-upsell__features">
+							<?php foreach ( $upsell['features'] as $feature ) : ?>
+								<li class="wp-ulike-about-upsell__feature">
+									<span class="dashicons dashicons-<?php echo esc_attr( $feature['icon'] ?? 'yes-alt' ); ?>" aria-hidden="true"></span>
+									<span class="wp-ulike-about-upsell__feature-body">
+										<strong class="wp-ulike-about-upsell__feature-title"><?php echo esc_html( $feature['title'] ?? '' ); ?></strong>
+										<span class="wp-ulike-about-upsell__feature-desc"><?php echo esc_html( $feature['description'] ?? '' ); ?></span>
+									</span>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+					<?php if ( ! empty( $upsell['footnote'] ) ) : ?>
+						<p class="wp-ulike-about-upsell__footnote"><?php echo esc_html( $upsell['footnote'] ); ?></p>
+					<?php endif; ?>
+					<p class="wp-ulike-about-upsell__actions">
+						<a class="button button-primary" href="<?php echo esc_url( $data['pricing_url'] ?? WP_ULIKE_PLUGIN_URI . 'pricing/' ); ?>" target="_blank" rel="noopener noreferrer">
+							<?php echo esc_html( $upsell['cta_label'] ?? __( 'Explore Pro', 'wp-ulike' ) ); ?>
+						</a>
+					</p>
+				</div>
+			<?php endif; ?>
+
+			<!-- Help -->
+			<div class="wp-ulike-about-card">
+				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Help & resources', 'wp-ulike' ); ?></h2>
+				<ul class="wp-ulike-about-help">
+					<?php foreach ( (array) ( $data['help_links'] ?? array() ) as $link ) : ?>
+						<li>
+							<a href="<?php echo esc_url( $link['url'] ?? '#' ); ?>" target="_blank" rel="noopener noreferrer">
+								<span class="dashicons dashicons-<?php echo esc_attr( $link['icon'] ?? 'external' ); ?>" aria-hidden="true"></span>
+								<span class="wp-ulike-about-help__text">
+									<strong><?php echo esc_html( $link['title'] ?? '' ); ?></strong>
+									<?php if ( ! empty( $link['desc'] ) ) : ?>
+										<span><?php echo esc_html( $link['desc'] ); ?></span>
+									<?php endif; ?>
+								</span>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+
+			<!-- Advanced (collapsed) -->
+			<?php $troubleshooting = (array) ( $data['troubleshooting'] ?? array() ); ?>
+			<details class="wp-ulike-about-card wp-ulike-about-card--details">
+				<summary class="wp-ulike-about-card__title"><?php esc_html_e( 'Advanced & troubleshooting', 'wp-ulike' ); ?></summary>
+				<div class="wp-ulike-about-card__body">
+					<?php if ( ! empty( $troubleshooting ) ) : ?>
+						<ul class="wp-ulike-about-troubleshoot__list">
+							<?php foreach ( $troubleshooting as $item ) : ?>
+								<li>
+									<?php echo esc_html( $item['text'] ?? '' ); ?>
+									<?php if ( ! empty( $item['url'] ) && ! empty( $item['link'] ) ) : ?>
+										<a href="<?php echo esc_url( $item['url'] ); ?>"><?php echo esc_html( $item['link'] ); ?></a>
+									<?php endif; ?>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+
+					<hr />
+
+					<div class="wp-ulike-about-transfer">
+						<h3 class="wp-ulike-about-transfer__title"><?php esc_html_e( 'Backup & Restore', 'wp-ulike' ); ?></h3>
+						<p class="wp-ulike-about-transfer__intro"><?php esc_html_e( 'Import settings from a JSON file or export your current settings for backup purposes.', 'wp-ulike' ); ?></p>
+						<p class="wp-ulike-about-tools">
+							<a class="button button-secondary" href="<?php echo esc_url( $data['export_url'] ?? '#' ); ?>"><?php esc_html_e( 'Export Settings', 'wp-ulike' ); ?></a>
+						</p>
+						<form class="wp-ulike-about-tools wp-ulike-about-transfer__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
+							<input type="hidden" name="action" value="wp_ulike_import_settings" />
+							<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $data['import_nonce'] ?? '' ); ?>" />
+							<label class="screen-reader-text" for="wp-ulike-settings-file"><?php esc_html_e( 'Import Settings', 'wp-ulike' ); ?></label>
+							<input id="wp-ulike-settings-file" type="file" name="settings_file" accept="application/json,.json" required />
+							<button type="submit" class="button button-secondary"><?php esc_html_e( 'Import', 'wp-ulike' ); ?></button>
+						</form>
+					</div>
+				</div>
+			</details>
+
 		</div>
+
+		<aside class="wp-ulike-about__aside" aria-label="<?php esc_attr_e( 'Plugin information', 'wp-ulike' ); ?>">
+			<div class="wp-ulike-about-card">
+				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Plugin info', 'wp-ulike' ); ?></h2>
+				<dl class="wp-ulike-about-meta">
+					<div>
+						<dt><?php esc_html_e( 'Edition', 'wp-ulike' ); ?></dt>
+						<dd><?php echo $is_pro ? esc_html__( 'Pro', 'wp-ulike' ) : esc_html__( 'Free', 'wp-ulike' ); ?></dd>
+					</div>
+					<div>
+						<dt><?php esc_html_e( 'WP ULike', 'wp-ulike' ); ?></dt>
+						<dd><?php echo esc_html( WP_ULIKE_VERSION ); ?></dd>
+					</div>
+					<?php if ( $is_pro && ! empty( $data['pro_version'] ) ) : ?>
+						<div>
+							<dt><?php esc_html_e( 'Pro package', 'wp-ulike' ); ?></dt>
+							<dd><?php echo esc_html( $data['pro_version'] ); ?></dd>
+						</div>
+					<?php endif; ?>
+					<div>
+						<dt><?php esc_html_e( 'WordPress', 'wp-ulike' ); ?></dt>
+						<dd><?php echo esc_html( $data['wp_version'] ?? '' ); ?></dd>
+					</div>
+					<div>
+						<dt><?php esc_html_e( 'Database schema', 'wp-ulike' ); ?></dt>
+						<dd><?php echo esc_html( $health['db_version'] ?? WP_ULIKE_DB_VERSION ); ?></dd>
+					</div>
+					<?php foreach ( (array) ( $data['sidebar_meta'] ?? array() ) as $meta ) : ?>
+						<div>
+							<dt><?php echo esc_html( $meta['label'] ?? '' ); ?></dt>
+							<dd>
+								<?php if ( ! empty( $meta['url'] ) ) : ?>
+									<a href="<?php echo esc_url( $meta['url'] ); ?>"><?php echo esc_html( $meta['value'] ?? '' ); ?></a>
+								<?php else : ?>
+									<?php echo esc_html( $meta['value'] ?? '' ); ?>
+								<?php endif; ?>
+							</dd>
+						</div>
+					<?php endforeach; ?>
+				</dl>
+			</div>
+		</aside>
+
 	</div>
-
-	<!-- Navigation Tabs -->
-	<div class="wp-ulike-about-nav">
-		<div class="wp-ulike-about-container">
-			<nav class="wp-ulike-about-nav-tabs">
-				<a class="wp-ulike-about-nav-tab wp-ulike-about-nav-tab-active" href="admin.php?page=wp-ulike-about">
-					<span class="dashicons dashicons-info"></span>
-					<span><?php esc_html_e('About','wp-ulike'); ?></span>
-				</a>
-				<a class="wp-ulike-about-nav-tab" href="admin.php?page=wp-ulike-settings" target="_blank">
-					<span class="dashicons dashicons-admin-settings"></span>
-					<span><?php esc_html_e('Configuration','wp-ulike'); ?></span>
-				</a>
-				<a class="wp-ulike-about-nav-tab" href="admin.php?page=wp-ulike-customize" target="_blank">
-					<span class="dashicons dashicons-admin-appearance"></span>
-					<span><?php esc_html_e('Customize','wp-ulike'); ?></span>
-				</a>
-				<a class="wp-ulike-about-nav-tab" href="https://wpulike.com/blog/?utm_source=about-page&utm_campaign=blog-nav&utm_medium=wp-dash" target="_blank">
-					<span class="dashicons dashicons-admin-post"></span>
-					<span><?php esc_html_e('Our Blog','wp-ulike'); ?></span>
-				</a>
-				<a class="wp-ulike-about-nav-tab wp-ulike-about-nav-tab-pro" href="https://wpulike.com/pricing/?utm_source=about-page&utm_campaign=gopro-nav&utm_medium=wp-dash" target="_blank">
-					<span class="dashicons dashicons-star-filled"></span>
-					<span><?php esc_html_e('Go Pro','wp-ulike'); ?></span>
-				</a>
-			</nav>
-		</div>
-	</div>
-
-	<!-- About Section -->
-	<div class="wp-ulike-about-intro-section">
-		<div class="wp-ulike-about-container">
-			<div class="wp-ulike-about-intro-card">
-				<div class="wp-ulike-about-intro-icon">
-					<span class="dashicons dashicons-heart"></span>
-				</div>
-				<h2><?php esc_html_e('Transform Your Website Engagement', 'wp-ulike'); ?></h2>
-				<p><?php esc_html_e( 'WP ULike is a powerful WordPress engagement plugin that helps you understand your audience better. Add Like & Dislike buttons to posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Track what content resonates with your visitors through detailed analytics and build a more engaging website.', 'wp-ulike' ); ?></p>
-			</div>
-		</div>
-	</div>
-
-	<!-- Problems Solved Section -->
-	<div class="wp-ulike-about-problems-section">
-		<div class="wp-ulike-about-container">
-			<div class="wp-ulike-about-section-header">
-				<h2><?php esc_html_e('What Problems Does WP ULike Solve?', 'wp-ulike'); ?></h2>
-				<p><?php esc_html_e('Discover how WP ULike addresses common challenges website owners face', 'wp-ulike'); ?></p>
-			</div>
-			<div class="wp-ulike-about-problems-grid">
-				<div class="wp-ulike-about-problem-card">
-					<div class="wp-ulike-about-problem-icon">
-						<span class="dashicons dashicons-chart-line"></span>
-					</div>
-					<h3><?php esc_html_e('Low User Engagement', 'wp-ulike'); ?></h3>
-					<p><?php esc_html_e('Visitors can quickly show appreciation with one click, increasing interaction and time spent on your site.', 'wp-ulike'); ?></p>
-				</div>
-
-				<div class="wp-ulike-about-problem-card">
-					<div class="wp-ulike-about-problem-icon">
-						<span class="dashicons dashicons-visibility"></span>
-					</div>
-					<h3><?php esc_html_e('No Content Insights', 'wp-ulike'); ?></h3>
-					<p><?php esc_html_e('Track which content performs best with detailed statistics and analytics to optimize your strategy.', 'wp-ulike'); ?></p>
-				</div>
-
-				<div class="wp-ulike-about-problem-card">
-					<div class="wp-ulike-about-problem-icon">
-						<span class="dashicons dashicons-groups"></span>
-					</div>
-					<h3><?php esc_html_e('Limited User Feedback', 'wp-ulike'); ?></h3>
-					<p><?php esc_html_e('Get instant feedback from your audience without requiring comments or complex forms.', 'wp-ulike'); ?></p>
-				</div>
-
-				<div class="wp-ulike-about-problem-card">
-					<div class="wp-ulike-about-problem-icon">
-						<span class="dashicons dashicons-performance"></span>
-					</div>
-					<h3><?php esc_html_e('Slow Website Performance', 'wp-ulike'); ?></h3>
-					<p><?php esc_html_e('Built with vanilla JavaScript (no jQuery), optimized for speed and fully compatible with caching plugins.', 'wp-ulike'); ?></p>
-				</div>
-
-				<div class="wp-ulike-about-problem-card">
-					<div class="wp-ulike-about-problem-icon">
-						<span class="dashicons dashicons-privacy"></span>
-					</div>
-					<h3><?php esc_html_e('Privacy Concerns', 'wp-ulike'); ?></h3>
-					<p><?php esc_html_e('GDPR compliant with IP anonymization. No personal data stored, respecting user privacy.', 'wp-ulike'); ?></p>
-				</div>
-
-				<div class="wp-ulike-about-problem-card">
-					<div class="wp-ulike-about-problem-icon">
-						<span class="dashicons dashicons-admin-site-alt3"></span>
-					</div>
-					<h3><?php esc_html_e('Content Types', 'wp-ulike'); ?></h3>
-					<p><?php esc_html_e('Works with posts, comments, WooCommerce products, BuddyPress activities, bbPress topics, and more.', 'wp-ulike'); ?></p>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Key Features Section -->
-	<div class="wp-ulike-about-features-section">
-		<div class="wp-ulike-about-container">
-			<div class="wp-ulike-about-section-header">
-				<h2><?php esc_html_e('Everything You Need to Boost Engagement', 'wp-ulike'); ?></h2>
-				<p><?php esc_html_e('Powerful features designed to help you understand and engage your audience', 'wp-ulike'); ?></p>
-			</div>
-			<div class="wp-ulike-about-features-grid">
-				<div class="wp-ulike-about-feature-card">
-					<span class="dashicons dashicons-thumbs-up"></span>
-					<span><?php esc_html_e('Like & Dislike buttons for all content types', 'wp-ulike'); ?></span>
-				</div>
-				<div class="wp-ulike-about-feature-card">
-					<span class="dashicons dashicons-chart-bar"></span>
-					<span><?php esc_html_e('Real-time statistics and analytics dashboard', 'wp-ulike'); ?></span>
-				</div>
-				<div class="wp-ulike-about-feature-card">
-					<span class="dashicons dashicons-admin-appearance"></span>
-					<span><?php esc_html_e('Multiple customizable button templates', 'wp-ulike'); ?></span>
-				</div>
-				<div class="wp-ulike-about-feature-card">
-					<span class="dashicons dashicons-performance"></span>
-					<span><?php esc_html_e('Fast & lightweight (vanilla JavaScript, no jQuery)', 'wp-ulike'); ?></span>
-				</div>
-				<div class="wp-ulike-about-feature-card">
-					<span class="dashicons dashicons-shield"></span>
-					<span><?php esc_html_e('GDPR ready with IP anonymization', 'wp-ulike'); ?></span>
-				</div>
-				<div class="wp-ulike-about-feature-card">
-					<span class="dashicons dashicons-editor-rtl"></span>
-					<span><?php esc_html_e('Full RTL (right-to-left) language support', 'wp-ulike'); ?></span>
-				</div>
-				<div class="wp-ulike-about-feature-card">
-					<span class="dashicons dashicons-admin-plugins"></span>
-					<span><?php esc_html_e('Seamless integration with WooCommerce, BuddyPress, bbPress, Elementor', 'wp-ulike'); ?></span>
-				</div>
-				<div class="wp-ulike-about-feature-card">
-					<span class="dashicons dashicons-yes-alt"></span>
-					<span><?php esc_html_e('Zero configuration required - works out of the box', 'wp-ulike'); ?></span>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Quick Links Section -->
-	<div class="wp-ulike-about-links-section">
-		<div class="wp-ulike-about-container">
-			<div class="wp-ulike-about-section-header">
-				<h2><?php esc_html_e('Get Help & Resources', 'wp-ulike'); ?></h2>
-				<p><?php esc_html_e('We\'re here to help you get the most out of WP ULike', 'wp-ulike'); ?></p>
-			</div>
-			<div class="wp-ulike-about-links-grid">
-				<div class="wp-ulike-about-link-card">
-					<div class="wp-ulike-about-link-icon">
-						<span class="dashicons dashicons-sos"></span>
-					</div>
-					<h3><?php esc_html_e('Need Some Help?','wp-ulike'); ?></h3>
-					<p><?php esc_html_e('We would love to be of any assistance.','wp-ulike'); ?></p>
-					<a href="https://wpulike.com/support/?utm_source=about-page&utm_campaign=support-column&utm_medium=wp-dash" target="_blank" class="wp-ulike-about-btn wp-ulike-about-btn-primary">
-						<span class="dashicons dashicons-email"></span>
-						<span><?php esc_html_e( 'Send Ticket', 'wp-ulike' ); ?></span>
-					</a>
-				</div>
-
-				<div class="wp-ulike-about-link-card">
-					<div class="wp-ulike-about-link-icon">
-						<span class="dashicons dashicons-book"></span>
-					</div>
-					<h3><?php esc_html_e('Documentation','wp-ulike'); ?></h3>
-					<p><?php esc_html_e('Learn about any aspect of WP ULike Plugin.','wp-ulike'); ?></p>
-					<a href="https://docs.wpulike.com/?utm_source=about-page&utm_campaign=document-column&utm_medium=wp-dash" target="_blank" class="wp-ulike-about-btn wp-ulike-about-btn-secondary">
-						<span class="dashicons dashicons-arrow-right-alt"></span>
-						<span><?php esc_html_e( 'Start Reading', 'wp-ulike' ); ?></span>
-					</a>
-				</div>
-
-				<div class="wp-ulike-about-link-card">
-					<div class="wp-ulike-about-link-icon">
-						<span class="dashicons dashicons-star-filled"></span>
-					</div>
-					<h3><?php esc_html_e('Rate Us','wp-ulike'); ?></h3>
-					<p><?php esc_html_e('By spreading the love, we can push WP ULike forward.','wp-ulike'); ?></p>
-					<a href="https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5" target="_blank" class="wp-ulike-about-btn wp-ulike-about-btn-secondary">
-						<span class="dashicons dashicons-arrow-right-alt"></span>
-						<span><?php esc_html_e( 'Submit Review', 'wp-ulike' ); ?></span>
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
 </div>

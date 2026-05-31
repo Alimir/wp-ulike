@@ -18,6 +18,12 @@ new wp_ulike_admin_pages();
 // Include assets
 new wp_ulike_admin_assets();
 
+// Trust, onboarding, health checks
+require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-overview.php';
+
+// Deactivation feedback (Plugins screen)
+require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-deactivation-feedback.php';
+
 // include about menu functions
 require_once( WP_ULIKE_ADMIN_DIR . '/admin-functions.php');
 // include logs menu functions
