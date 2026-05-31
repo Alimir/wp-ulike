@@ -1,0 +1,122 @@
+/**
+ * Deactivation feedback modal — layout only; controls use wp-admin defaults.
+ */
+
+#wp-ulike-deactivate-feedback-dialog-wrapper {
+	display: none;
+}
+
+body.wp-ulike-deactivation-modal-open {
+	overflow: hidden;
+}
+
+.wp-ulike-deactivate-feedback-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+	box-sizing: border-box;
+	background: rgba(0, 0, 0, 0.35);
+
+	&__dialog {
+		width: 100%;
+		max-width: 520px;
+		background: #fff;
+		border: 1px solid #c3c4c7;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+		text-align: start;
+	}
+
+	&__footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding-block: 12px;
+		padding-inline: 20px;
+		border-top: 1px solid #dcdcde;
+		background: #f6f7f7;
+	}
+
+	&__primary,
+	&__secondary {
+		display: flex;
+		align-items: center;
+		flex: 0 0 auto;
+	}
+
+	&__footer .button[aria-busy='true'] {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+
+		.spinner {
+			float: none;
+			margin: 0;
+			flex: 0 0 auto;
+		}
+	}
+}
+
+.wp-ulike-deactivate-feedback {
+	padding-block: 20px 0;
+	padding-inline: 24px;
+
+	&__title {
+		margin: 0 0 6px;
+		font-size: 18px;
+		font-weight: 400;
+		line-height: 1.3;
+	}
+
+	&__lead {
+		margin: 0 0 12px;
+		font-size: 13px;
+		line-height: 1.55;
+		color: #646970;
+	}
+}
+
+.wp-ulike-deactivate-feedback-form fieldset {
+	margin: 0;
+	padding-block: 12px;
+	padding-inline: 16px;
+}
+
+.wp-ulike-deactivate-feedback-form fieldset p {
+	margin: 0 0 10px;
+}
+
+.wp-ulike-deactivate-feedback-form fieldset p:last-child {
+	margin-bottom: 0;
+}
+
+.wp-ulike-deactivate-feedback-details {
+	padding-inline-start: 2.25rem;
+	padding-inline-end: 0;
+	padding-bottom: 12px;
+}
+
+.wp-ulike-deactivate-feedback-details[hidden] {
+	display: none;
+}
+
+.wp-ulike-deactivate-feedback-modal .wp-ulike-deactivate-feedback {
+	padding-bottom: 20px;
+}
+
+// RTL (WordPress sets dir="rtl" on html and body.rtl in admin).
+[dir='rtl'] .wp-ulike-deactivate-feedback-modal__dialog,
+.rtl .wp-ulike-deactivate-feedback-modal__dialog {
+	text-align: right;
+}
+
+[dir='rtl'] .wp-ulike-deactivate-feedback-modal__footer .button[aria-busy='true'] .spinner,
+.rtl .wp-ulike-deactivate-feedback-modal__footer .button[aria-busy='true'] .spinner {
+	margin-inline-end: 0;
+	margin-inline-start: 0;
+}
