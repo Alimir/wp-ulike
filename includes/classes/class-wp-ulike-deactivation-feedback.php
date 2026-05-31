@@ -56,7 +56,7 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 		 * @return string
 		 */
 		public static function get_api_url() {
-			return 'http://localhost/wordpress/edd/api/audit/v1/deactivation-feedback';
+			return 'https://wpulike.com/api/audit/v1/deactivation-feedback';
 		}
 
 		/**

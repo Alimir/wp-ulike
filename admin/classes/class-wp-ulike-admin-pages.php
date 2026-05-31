@@ -91,24 +91,21 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 				'customize'  => array(
 					'title'       => esc_html__( 'Customize', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
-					'capability'  => 'manage_options', // Same as settings, requires manage_options.
+					'capability'  => 'manage_options',
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/optiwich.php',
 					'menu_slug'   => 'wp-ulike-customize',
 				),
 				'statistics' => array(
 					'title'       => esc_html__( 'Statistics', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
-					'capability'  => 'stats', // Store capability type, will be resolved in register_submenus().
+					'capability'  => 'stats',
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/statistics.php',
 					'menu_slug'   => 'wp-ulike-statistics',
 				),
-				'about'      => array(
-					'title'       => sprintf(
-						'<span class="wp-ulike-menu-icon"><span class="dashicons dashicons-info"></span> %s</span>',
-						esc_html__( 'About', 'wp-ulike' )
-					),
+				'overview'   => array(
+					'title'       => esc_html__( 'Overview', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
-					'capability'  => '', // Empty means always visible, no capability check needed.
+					'capability'  => 'manage_options',
 					'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/about.php',
 					'menu_slug'   => 'wp-ulike-about',
 				),
