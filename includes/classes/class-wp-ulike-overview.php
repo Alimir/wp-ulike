@@ -1,6 +1,6 @@
 <?php
 /**
- * Overview screen data, health checks, settings import/export, and admin notices.
+ * Overview screen data, health checks, and settings import/export.
  *
  * @package WP_ULike
  * @since   5.0.5
@@ -294,7 +294,6 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				return;
 			}
 
-			add_filter( 'wp_ulike_admin_notice_priority', array( __CLASS__, 'notice_priority' ) );
 			add_filter( 'site_status_tests', array( __CLASS__, 'register_site_health_tests' ) );
 			add_action( 'wp_ajax_wp_ulike_export_settings', array( __CLASS__, 'handle_export_settings' ) );
 			add_action( 'admin_post_wp_ulike_import_settings', array( __CLASS__, 'handle_import_settings' ) );
@@ -350,62 +349,6 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				add_query_arg( 'wp_ulike_import', is_wp_error( $result ) ? 'error' : 'success', $redirect )
 			);
 			exit;
-		}
-
-		/**
-		 * Notice display order (first match wins).
-		 *
-		 * @param array $priority Notice IDs.
-		 * @return array
-		 */
-		public static function notice_priority( $priority ) {
-			return array(
-				'wp_ulike_pro_license_discount',
-				'wp_ulike_leave_a_review',
-				'wp_ulike_persian_banner',
-			);
-		}
-
-		/**
-		 * Whether a dismissible notice is hidden.
-		 *
-		 * @param string $notice_id Notice ID.
-		 * @return bool
-		 */
-		public static function is_notice_dismissed( $notice_id ) {
-			return (bool) wp_ulike_get_transient( 'wp-ulike-notice-' . $notice_id );
-		}
-
-		/**
-		 * Render at most one admin notice by priority.
-		 *
-		 * @param array $notice_list Notice instances.
-		 * @return void
-		 */
-		public static function render_single_priority_notice( $notice_list ) {
-			if ( empty( $notice_list ) || ! is_array( $notice_list ) ) {
-				return;
-			}
-
-			$priority = apply_filters( 'wp_ulike_admin_notice_priority', array() );
-
-			foreach ( $priority as $notice_id ) {
-				if ( empty( $notice_list[ $notice_id ] ) || ! $notice_list[ $notice_id ] instanceof wp_ulike_notices ) {
-					continue;
-				}
-				if ( self::is_notice_dismissed( $notice_id ) ) {
-					continue;
-				}
-				$notice_list[ $notice_id ]->render();
-				return;
-			}
-
-			foreach ( $notice_list as $notice ) {
-				if ( $notice instanceof wp_ulike_notices ) {
-					$notice->render();
-					return;
-				}
-			}
 		}
 
 		/**
