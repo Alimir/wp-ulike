@@ -208,39 +208,41 @@ function wp_ulike_notice_manager(){
 					$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
 				}
 
-				$notice_list[ 'wp_ulike_pro_license_discount' ] = new wp_ulike_notices([
-					'id'          => 'wp_ulike_pro_license_discount',
-					'title'       => sprintf(
-						esc_html__( 'Special Offer: Save %s on WP ULike Pro! 🎁', 'wp-ulike' ),
-						'30%'
-					),
-					'description' => sprintf(
-						'<strong>%s %s</strong> ' . esc_html__( 'We noticed your license needs a quick update. Here\'s some great news — we have an exclusive %s discount just for you! Get all premium features, regular updates, security patches, and priority support. Use coupon code %s at checkout to save %s. This special offer won\'t last long! 🚀', 'wp-ulike' ),
-						$status_message,
-						$status_emoji,
-						'30%',
-						'<code style="background: #fff3cd; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 13px; letter-spacing: 0.5px;">GET30OFF</code>',
-						'30%'
-					),
-					'has_close'   => false,
-					'skin'        => 'default',
-					'buttons'     => array(
-						array(
-							'label'      => sprintf(
-								esc_html__( '🎉 Claim My %s Discount', 'wp-ulike' ),
-								'30%'
-							),
-							'link'       => 'https://wpulike.com/pricing/?utm_source=license-discount-notice&utm_campaign=30off&utm_medium=wp-dash&discount=30OFF',
-							'color_name' => 'warning'
+				$notice_list['wp_ulike_pro_license_discount'] = new wp_ulike_notices(
+					array(
+						'id'          => 'wp_ulike_pro_license_discount',
+						'title'       => sprintf(
+							esc_html__( 'Special Offer: Save %s on WP ULike Pro! 🎁', 'wp-ulike' ),
+							'30%'
 						),
-						array(
-							'label'      => esc_html__('Maybe Later', 'wp-ulike'),
-							'type'       => 'skip',
-							'color_name' => 'info',
-							'expiration' => WEEK_IN_SECONDS
-						)
+						'description' => sprintf(
+							'<strong>%s %s</strong> ' . esc_html__( 'We noticed your license needs a quick update. Here\'s some great news — we have an exclusive %s discount just for you! Get all premium features, regular updates, security patches, and priority support. Use coupon code %s at checkout to save %s. This special offer won\'t last long! 🚀', 'wp-ulike' ),
+							$status_message,
+							$status_emoji,
+							'30%',
+							'<code style="background: #fff3cd; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 13px; letter-spacing: 0.5px;">GET30OFF</code>',
+							'30%'
+						),
+						'has_close'   => false,
+						'skin'        => 'default',
+						'buttons'     => array(
+							array(
+								'label'      => sprintf(
+									esc_html__( '🎉 Claim My %s Discount', 'wp-ulike' ),
+									'30%'
+								),
+								'link'       => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=license-discount-notice&utm_campaign=30off&utm_medium=wp-dash&discount=30OFF',
+								'color_name' => 'warning',
+							),
+							array(
+								'label'      => esc_html__( 'Maybe Later', 'wp-ulike' ),
+								'type'       => 'skip',
+								'color_name' => 'info',
+								'expiration' => WEEK_IN_SECONDS,
+							),
+						),
 					)
-				]);
+				);
 			}
 		}
 	}
@@ -291,35 +293,76 @@ function wp_ulike_notice_manager(){
 add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 
 /**
- * This makes a new admin menu page to introduce premium version
+ * Register Go Pro submenu (free installs only).
  *
- * @param array $submenus
- * @return array
+ * @return void
  */
-function wp_ulike_go_pro_admin_menu( $submenus ){
-	if( is_array( $submenus ) && ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
-		$submenus['go_pro'] = array(
-			'title'       => sprintf(
-				'<span class="wp-ulike-gopro-menu-link">
-					<span class="wp-ulike-gopro-icon">%s</span>
-					<span class="wp-ulike-gopro-text">%s</span>
-					<span class="wp-ulike-gopro-badge">%s</span>
-				</span>',
-				'<span class="dashicons dashicons-star-filled"></span>',
-				esc_html__( 'Go Pro', 'wp-ulike' ),
-				esc_html__( 'Upgrade', 'wp-ulike' )
-			),
-			'parent_slug' => 'wp-ulike-settings',
- 			'capability'  => 'manage_options',
-			'path'        => WP_ULIKE_ADMIN_DIR . '/includes/templates/go-pro.php',
-			'menu_slug'   => 'wp-ulike-go-pro',
-			'load_screen' => false
-		);
+function wp_ulike_register_go_pro_submenu() {
+	if ( defined( 'WP_ULIKE_PRO_VERSION' ) ) {
+		return;
 	}
 
-	return $submenus;
+	add_submenu_page(
+		'wp-ulike-settings',
+		esc_html__( 'Go Pro', 'wp-ulike' ),
+		esc_html__( 'Go Pro', 'wp-ulike' ),
+		'manage_options',
+		'wp-ulike-go-pro',
+		'__return_null'
+	);
 }
-add_filter( 'wp_ulike_admin_pages', 'wp_ulike_go_pro_admin_menu', 10, 1 );
+add_action( 'admin_menu', 'wp_ulike_register_go_pro_submenu', 100 );
+
+/**
+ * Redirect Go Pro admin page to pricing (Elementor uses wp_redirect, not wp_safe_redirect).
+ *
+ * @return void
+ */
+function wp_ulike_go_pro_menu_redirect() {
+	if ( defined( 'WP_ULIKE_PRO_VERSION' ) ) {
+		return;
+	}
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( empty( $_GET['page'] ) || 'wp-ulike-go-pro' !== $_GET['page'] ) {
+		return;
+	}
+
+	wp_redirect( WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=wp-menu&utm_campaign=gopro&utm_medium=wp-dash' ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+	exit;
+}
+add_action( 'admin_init', 'wp_ulike_go_pro_menu_redirect' );
+
+/**
+ * Go Pro menu: open pricing in a new tab (same pattern as Elementor admin.js).
+ *
+ * @return void
+ */
+function wp_ulike_go_pro_submenu_scripts() {
+	if ( defined( 'WP_ULIKE_PRO_VERSION' ) ) {
+		return;
+	}
+
+	$pricing_url = WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=wp-menu&utm_campaign=gopro&utm_medium=wp-dash';
+	?>
+	<script>
+	(function () {
+		var pricingUrl = <?php echo wp_json_encode( $pricing_url ); ?>;
+		var links = document.querySelectorAll('#adminmenu a[href*="page=wp-ulike-go-pro"]');
+
+		links.forEach(function (link) {
+			link.setAttribute('target', '_blank');
+			link.setAttribute('rel', 'noopener noreferrer');
+			link.addEventListener('click', function (event) {
+				event.preventDefault();
+				window.open(pricingUrl, '_blank', 'noopener,noreferrer');
+			});
+		});
+	})();
+	</script>
+	<?php
+}
+add_action( 'admin_print_footer_scripts', 'wp_ulike_go_pro_submenu_scripts' );
 
 /**
  * Disable admin notices
