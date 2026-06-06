@@ -27,6 +27,25 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		}
 
 		/**
+		 * Settings screen URL with Optiwich tab slug.
+		 *
+		 * @param string $tab Section id (e.g. general, content-types).
+		 * @return string
+		 */
+		public static function get_settings_url( $tab = 'general' ) {
+			return admin_url(
+				'admin.php?' . http_build_query(
+					array(
+						'page'           => 'wp-ulike-settings',
+						'settings-page'  => sanitize_key( $tab ),
+					),
+					'',
+					'&'
+				)
+			);
+		}
+
+		/**
 		 * Value-based Pro upsell copy for Overview (free only).
 		 *
 		 * @param array $health Health report.
@@ -90,7 +109,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			$quick_actions = array(
 				array(
 					'label'  => esc_html__( 'Settings', 'wp-ulike' ),
-					'url'    => admin_url( 'admin.php?page=wp-ulike-settings' ),
+					'url'    => self::get_settings_url( 'content-types' ),
 					'icon'   => 'admin-settings',
 					'primary'=> false,
 				),
@@ -183,6 +202,24 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			$status_rows = apply_filters( 'wp_ulike_about_status_rows', $status_rows, $health );
 
+			// Supplementary setup hint last (free installs with no votes yet).
+			if ( empty( $health['is_pro'] ) && (int) ( $health['log_count'] ?? 0 ) === 0 ) {
+				$status_rows[] = array(
+					'group'  => 'setup',
+					'label'  => esc_html__( 'Quick check', 'wp-ulike' ),
+					'value'  => esc_html__( 'Test on a single post, not the homepage', 'wp-ulike' ),
+					'state'  => 'neutral',
+					'hint'   => ! empty( $health['post_template_name'] )
+						? sprintf(
+							/* translators: 1: template name, 2: button position */
+							esc_html__( 'Template: %1$s · Position: %2$s', 'wp-ulike' ),
+							$health['post_template_name'],
+							$health['post_button_position'] ?? ''
+						)
+						: '',
+				);
+			}
+
 			$help_links = array(
 				array(
 					'title' => esc_html__( 'Documentation', 'wp-ulike' ),
@@ -238,13 +275,19 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return array<int, array<string, mixed>>
 		 */
 		public static function get_troubleshooting_tips( $health ) {
-			$settings_url = admin_url( 'admin.php?page=wp-ulike-settings' );
+			$content_types_url = self::get_settings_url( 'content-types' );
+			$general_url       = self::get_settings_url( 'general' );
 
 			$tips = array(
 				array(
+					'text' => esc_html__( 'No votes yet? Open a published post (not the homepage) and click the like button once to confirm everything works.', 'wp-ulike' ),
+					'url'  => ! empty( $health['preview_url'] ) ? $health['preview_url'] : '',
+					'link' => esc_html__( 'View sample post', 'wp-ulike' ),
+				),
+				array(
 					'text' => esc_html__( 'Likes usually show on single posts, not on the homepage or archives. Test on a post or change display in Settings.', 'wp-ulike' ),
-					'url'  => $settings_url,
-					'link' => esc_html__( 'Settings', 'wp-ulike' ),
+					'url'  => $content_types_url,
+					'link' => esc_html__( 'Content Types', 'wp-ulike' ),
 				),
 				array(
 					'text' => sprintf(
@@ -252,8 +295,8 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 						esc_html__( 'No button on the page? Add [wp_ulike] or the ULike block, or enable “%s” under Settings → Posts.', 'wp-ulike' ),
 						esc_html__( 'Automatic Display', 'wp-ulike' )
 					),
-					'url'  => $settings_url,
-					'link' => esc_html__( 'Settings', 'wp-ulike' ),
+					'url'  => $content_types_url,
+					'link' => esc_html__( 'Content Types', 'wp-ulike' ),
 				),
 				array(
 					'text' => sprintf(
@@ -261,8 +304,8 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 						esc_html__( 'Stale vote counts with a cache plugin? Enable “%s” in Settings → General, then purge cache.', 'wp-ulike' ),
 						esc_html__( 'Site Uses Caching', 'wp-ulike' )
 					),
-					'url'  => $settings_url,
-					'link' => esc_html__( 'Settings', 'wp-ulike' ),
+					'url'  => $general_url,
+					'link' => esc_html__( 'General', 'wp-ulike' ),
 				),
 				array(
 					'text' => sprintf(
@@ -270,8 +313,8 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 						esc_html__( 'Too many admin notices? Turn on “%s” in Settings → General.', 'wp-ulike' ),
 						esc_html__( 'Hide Plugin Admin Notices', 'wp-ulike' )
 					),
-					'url'  => $settings_url,
-					'link' => esc_html__( 'Settings', 'wp-ulike' ),
+					'url'  => $general_url,
+					'link' => esc_html__( 'General', 'wp-ulike' ),
 				),
 			);
 
@@ -430,6 +473,30 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				return esc_html__( 'Like buttons are not on posts automatically yet. Turn on auto-display in Settings, or add the ULike block / shortcode where you want votes.', 'wp-ulike' );
 			}
 
+			if ( (int) ( $health['log_count'] ?? 0 ) === 0 ) {
+				$preview          = ! empty( $health['preview_url'] ) ? $health['preview_url'] : '';
+				$content_types_url = esc_url( self::get_settings_url( 'content-types' ) );
+
+				if ( $preview ) {
+					return wp_kses_post(
+						sprintf(
+							/* translators: 1: sample post URL, 2: Content Types settings URL */
+							__( 'No votes recorded yet. Test the button on a <a href="%1$s" target="_blank" rel="noopener noreferrer">single post</a> (not the homepage). Adjust display under <a href="%2$s">Settings → Content Types → Posts</a>.', 'wp-ulike' ),
+							esc_url( $preview ),
+							$content_types_url
+						)
+					);
+				}
+
+				return wp_kses_post(
+					sprintf(
+						/* translators: %s: Content Types settings URL */
+						__( 'No votes recorded yet. Buttons show on single posts by default, not on the homepage. Check display under <a href="%s">Settings → Content Types → Posts</a>.', 'wp-ulike' ),
+						$content_types_url
+					)
+				);
+			}
+
 			return esc_html__( 'Your setup looks ready. Configure buttons below or open Statistics when you start receiving votes.', 'wp-ulike' );
 		}
 
@@ -498,11 +565,18 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				);
 			}
 
+			if ( empty( $health['is_pro'] ) && ! empty( $health['active_theme'] ) ) {
+				$meta[] = array(
+					'label' => esc_html__( 'Active theme', 'wp-ulike' ),
+					'value' => $health['active_theme'],
+				);
+			}
+
 			if ( ! empty( $health['cache_enabled'] ) ) {
 				$meta[] = array(
 					'label' => esc_html__( 'Caching helper', 'wp-ulike' ),
 					'value' => esc_html__( 'On (Settings → General)', 'wp-ulike' ),
-					'url'   => admin_url( 'admin.php?page=wp-ulike-settings' ),
+					'url'   => self::get_settings_url( 'general' ),
 				);
 			}
 
@@ -533,6 +607,95 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			}
 
 			return $grouped;
+		}
+
+		/**
+		 * Label for posts logging method.
+		 *
+		 * @param string $method Raw method key.
+		 * @return string
+		 */
+		public static function format_logging_method_label( $method ) {
+			$labels = array(
+				'by_username'       => esc_html__( 'Username/IP (supports unlike)', 'wp-ulike' ),
+				'by_cookie'         => esc_html__( 'Cookie', 'wp-ulike' ),
+				'by_user_ip_cookie' => esc_html__( 'Username/IP + cookie', 'wp-ulike' ),
+				'do_not_log'        => esc_html__( 'No limit', 'wp-ulike' ),
+			);
+
+			return isset( $labels[ $method ] ) ? $labels[ $method ] : esc_html__( 'Username/IP (supports unlike)', 'wp-ulike' );
+		}
+
+		/**
+		 * Human-readable post button placement summary for Help.
+		 *
+		 * @return string
+		 */
+		public static function get_post_display_summary() {
+			if ( ! wp_ulike_setting_repo::isAutoDisplayOn( 'post' ) ) {
+				return esc_html__( 'Manual (shortcode or block)', 'wp-ulike' );
+			}
+
+			$parts   = array( esc_html__( 'Auto on posts', 'wp-ulike' ) );
+			$hidden  = wp_ulike_setting_repo::getPostAutoDisplayFilters();
+			$hide_map = array(
+				'home'     => esc_html__( 'homepage hidden', 'wp-ulike' ),
+				'single'   => esc_html__( 'singular views filtered', 'wp-ulike' ),
+				'archive'  => esc_html__( 'archives hidden', 'wp-ulike' ),
+				'category' => esc_html__( 'categories hidden', 'wp-ulike' ),
+				'search'   => esc_html__( 'search hidden', 'wp-ulike' ),
+				'tag'      => esc_html__( 'tags hidden', 'wp-ulike' ),
+				'author'   => esc_html__( 'author pages hidden', 'wp-ulike' ),
+			);
+
+			foreach ( (array) $hidden as $key ) {
+				if ( isset( $hide_map[ $key ] ) ) {
+					$parts[] = $hide_map[ $key ];
+				}
+			}
+
+			$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
+			if ( ! empty( $post_types ) && is_array( $post_types ) ) {
+				$parts[] = sprintf(
+					/* translators: %s: comma-separated post type slugs */
+					esc_html__( 'exceptions: %s', 'wp-ulike' ),
+					implode( ', ', array_map( 'sanitize_key', $post_types ) )
+				);
+			}
+
+			return implode( ' · ', $parts );
+		}
+
+		/**
+		 * Label for posts auto-display position setting.
+		 *
+		 * @return string
+		 */
+		public static function get_post_button_position_label() {
+			$position = wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' );
+			$labels   = array(
+				'top'        => esc_html__( 'Top of content', 'wp-ulike' ),
+				'bottom'     => esc_html__( 'Bottom of content', 'wp-ulike' ),
+				'top_bottom' => esc_html__( 'Top and bottom', 'wp-ulike' ),
+			);
+
+			return isset( $labels[ $position ] ) ? $labels[ $position ] : esc_html__( 'Bottom of content', 'wp-ulike' );
+		}
+
+		/**
+		 * Active post template display name.
+		 *
+		 * @return string
+		 */
+		public static function get_post_template_label() {
+			$key       = wp_ulike_get_option( 'posts_group|template', 'wpulike-default' );
+			$templates = function_exists( 'wp_ulike_generate_templates_list' ) ? wp_ulike_generate_templates_list() : array();
+
+			if ( isset( $templates[ $key ]['name'] ) ) {
+				return $templates[ $key ]['name'];
+			}
+
+			return $key;
 		}
 
 		/**
@@ -573,9 +736,12 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				$cache_enabled = wp_ulike_is_true( wp_ulike_get_option( 'cache_exist', false ) );
 			}
 
+			$theme = wp_get_theme();
+
 			return array(
 				'tables_ok'              => $tables_ok,
 				'missing_tables'         => $missing,
+				'is_pro'                 => defined( 'WP_ULIKE_PRO_VERSION' ),
 				'auto_display'           => $auto_display,
 				'comments_auto_display'  => wp_ulike_setting_repo::isAutoDisplayOn( 'comment' ),
 				'preview_url'            => $preview_url,
@@ -585,7 +751,15 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'today_votes'            => wp_ulike_count_all_logs( 'today' ),
 				'new_votes'              => $new_votes,
 				'cache_enabled'          => $cache_enabled,
-				'statistics_url'       => admin_url( 'admin.php?page=wp-ulike-statistics' ),
+				'statistics_url'         => admin_url( 'admin.php?page=wp-ulike-statistics' ),
+				'post_display_summary'   => self::get_post_display_summary(),
+				'post_template_name'     => self::get_post_template_label(),
+				'post_button_position'   => self::get_post_button_position_label(),
+				'logging_method'         => wp_ulike_setting_repo::getMethod( 'post' ),
+				'toast_notices'          => wp_ulike_is_true( wp_ulike_get_option( 'enable_toast_notice', true ) ),
+				'active_theme'           => $theme->get( 'Name' ),
+				'content_types_settings_url' => self::get_settings_url( 'content-types' ),
+				'general_settings_url'       => self::get_settings_url( 'general' ),
 			);
 		}
 
