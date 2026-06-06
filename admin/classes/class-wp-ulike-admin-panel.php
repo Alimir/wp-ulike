@@ -584,7 +584,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'      => 'template',
                     'type'    => 'image_select',
                     'title'   => esc_html__( 'Select a Template','wp-ulike'),
-                    'desc'    => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', esc_html__( 'Preview templates online','wp-ulike'),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',esc_html__( 'Open preview','wp-ulike') ),
+                    'desc'    => sprintf(
+                        '%s <a target="_blank" href="%s" title="Click">%s</a>. %s',
+                        esc_html__( 'Pick a style for your like button.', 'wp-ulike' ),
+                        WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',
+                        esc_html__( 'Preview online', 'wp-ulike' ),
+                        esc_html__( 'Locked styles are optional Pro extras—your selected template works out of the box.', 'wp-ulike' )
+                    ),
                     'options' => $this->get_templates_option_array(),
                     'default' => 'wpulike-default',
                 ),
@@ -895,11 +901,9 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             if( !empty( $options ) ){
                 foreach ($options as $key => $args) {
-                    // Return structured data: symbol URL and is_locked flag
-                    // React app can use is_locked, PHP field renderer can use symbol
                     $output[$key] = array(
                         'symbol'    => isset( $args['symbol'] ) ? $args['symbol'] : '',
-                        'is_locked' => isset( $args['is_locked'] ) ? $args['is_locked'] : false
+                        'is_locked' => ! empty( $args['is_locked'] ),
                     );
                 }
             }
