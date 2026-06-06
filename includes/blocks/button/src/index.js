@@ -181,12 +181,7 @@ if ( ! getBlockType( metadata.name ) ) {
 							<label className="components-base-control__label" style={ { marginBottom: '8px', display: 'block' } }>
 								{ __( 'Select a Template', 'wp-ulike' ) }
 							</label>
-							<div style={ {
-								display: 'grid',
-								gridTemplateColumns: 'repeat(auto-fill, minmax(85px, 1fr))',
-								gap: '6px',
-								marginBottom: '8px'
-							} }>
+							<div className="wp-ulike-template-grid">
 								{ allTemplates.map( ( tmpl ) => {
 									const isSelected = template === tmpl.key;
 									const isLocked = tmpl.is_locked === true || tmpl.is_locked === 'true' || tmpl.is_locked === 1;
@@ -201,45 +196,13 @@ if ( ! getBlockType( metadata.name ) ) {
 											} }
 											disabled={ isLocked }
 											className={ `wp-ulike-template-option ${ isSelected ? 'is-selected' : '' } ${ isLocked ? 'is-locked' : '' }` }
-											style={ {
-												display: 'flex',
-												flexDirection: 'column',
-												alignItems: 'center',
-												justifyContent: 'center',
-												padding: '10px 8px',
-												border: `1.5px solid ${ isSelected ? '#0073aa' : isLocked ? '#ccc' : '#ddd' }`,
-												borderRadius: '3px',
-												background: isLocked ? '#f5f5f5' : '#fff',
-												cursor: isLocked ? 'not-allowed' : 'pointer',
-												transition: 'border-color 0.15s ease',
-												opacity: isLocked ? 0.6 : 1,
-												position: 'relative'
-											} }
-											onMouseEnter={ ( e ) => {
-												if ( ! isSelected && ! isLocked ) {
-													e.currentTarget.style.borderColor = '#bbb';
-												}
-											} }
-											onMouseLeave={ ( e ) => {
-												if ( ! isSelected && ! isLocked ) {
-													e.currentTarget.style.borderColor = '#ddd';
-												}
-											} }
 											title={
 												isLocked
 													? `${ tmpl.name } (${ __( 'Pro Feature', 'wp-ulike' ) })`
 													: tmpl.name
 											}
 										>
-											<div style={ {
-												width: '50px',
-												height: '50px',
-												marginBottom: '6px',
-												display: 'flex',
-												alignItems: 'center',
-												justifyContent: 'center',
-												position: 'relative'
-											} }>
+											<div className="wp-ulike-template-option__preview">
 												{ tmpl.symbol ? (
 													<img
 														src={ tmpl.symbol }
@@ -248,45 +211,22 @@ if ( ! getBlockType( metadata.name ) ) {
 															width: '50px',
 															height: '50px',
 															objectFit: 'contain',
-															filter: isSelected ? 'brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%)' : isLocked ? 'grayscale(100%) opacity(0.5)' : 'none',
-															transition: 'filter 0.15s ease'
 														} }
 													/>
 												) : (
 													<Icon
 														icon="admin-settings"
 														size={ 32 }
-														style={ {
-															filter: isSelected ? 'brightness(40%) sepia(100%) hue-rotate(170deg) saturate(250%)' : isLocked ? 'grayscale(100%) opacity(0.5)' : 'none',
-															transition: 'filter 0.15s ease',
-															color: '#646970'
-														} }
+														style={ { color: '#646970' } }
 													/>
 												) }
 												{ isLocked && (
-													<Icon
-														icon="lock"
-														size={ 16 }
-														style={ {
-															position: 'absolute',
-															top: '2px',
-															right: '2px',
-															color: '#d63638',
-															background: '#fff',
-															borderRadius: '50%',
-															padding: '2px'
-														} }
-													/>
+													<span className="wp-ulike-template-option__lock" aria-hidden="true">
+														<Icon icon="lock" size={ 12 } />
+													</span>
 												) }
 											</div>
-											<span style={ {
-												fontSize: '10px',
-												textAlign: 'center',
-												color: isSelected ? '#0073aa' : isLocked ? '#999' : '#666',
-												fontWeight: '400',
-												lineHeight: '1.3',
-												wordBreak: 'break-word'
-											} }>
+											<span className="wp-ulike-template-option__label">
 												{ tmpl.name }
 											</span>
 										</button>
