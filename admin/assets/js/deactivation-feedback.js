@@ -117,6 +117,16 @@
 				}
 			}
 		} );
+
+		var hint = form.querySelector( '.wp-ulike-deactivate-feedback-context' );
+		if ( hint ) {
+			hint.hidden = reason !== 'not_working';
+		}
+
+		var reasonError = form.querySelector( '.wp-ulike-deactivate-feedback-reason-error' );
+		if ( reasonError && reason ) {
+			reasonError.hidden = true;
+		}
 	}
 
 	function setButtonBusy( button, busy ) {
@@ -198,9 +208,6 @@
 		var submitBtn = overlay.querySelector( '.wp-ulike-deactivate-feedback-submit' );
 		var skipBtn = overlay.querySelector( '.wp-ulike-deactivate-feedback-skip' );
 
-		if ( radios.length ) {
-			radios[0].checked = true;
-		}
 		syncDetailsFields( form );
 
 		radios.forEach( function ( radio ) {
@@ -211,7 +218,16 @@
 
 		submitBtn.addEventListener( 'click', function () {
 			var checked = form.querySelector( 'input[name="reason_key"]:checked' );
-			var reason = checked ? checked.value : 'other';
+			var reasonError = form.querySelector( '.wp-ulike-deactivate-feedback-reason-error' );
+
+			if ( ! checked ) {
+				if ( reasonError ) {
+					reasonError.hidden = false;
+				}
+				return;
+			}
+
+			var reason = checked.value;
 			var detailsInput = form.querySelector(
 				'.wp-ulike-deactivate-feedback-details:not([hidden]) input'
 			);

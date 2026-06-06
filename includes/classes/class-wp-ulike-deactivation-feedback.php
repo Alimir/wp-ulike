@@ -24,21 +24,22 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 		 * @return array<string, array<string, string>>
 		 */
 		public static function get_reasons() {
+			// Actionable reasons first; generic exit reasons last (reduces low-signal bias).
 			$reasons = array(
-				'no_longer_need' => array(
-					'title'       => __( 'I no longer need the plugin', 'wp-ulike' ),
-					'placeholder' => '',
+				'not_working'    => array(
+					'title'       => __( "I couldn't get the plugin to work", 'wp-ulike' ),
+					'placeholder' => __( 'What happened? e.g. button missing, vote fails, theme conflict', 'wp-ulike' ),
 				),
 				'found_better'   => array(
 					'title'       => __( 'I found a better plugin', 'wp-ulike' ),
 					'placeholder' => __( 'Which plugin?', 'wp-ulike' ),
 				),
-				'not_working'    => array(
-					'title'       => __( "I couldn't get the plugin to work", 'wp-ulike' ),
-					'placeholder' => '',
-				),
 				'temporary'      => array(
 					'title'       => __( "It's a temporary deactivation", 'wp-ulike' ),
+					'placeholder' => '',
+				),
+				'no_longer_need' => array(
+					'title'       => __( 'I no longer need the plugin', 'wp-ulike' ),
 					'placeholder' => '',
 				),
 				'other'          => array(
