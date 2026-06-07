@@ -616,14 +616,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return string
 		 */
 		public static function format_logging_method_label( $method ) {
-			$labels = array(
-				'by_username'       => esc_html__( 'Username/IP (supports unlike)', 'wp-ulike' ),
-				'by_cookie'         => esc_html__( 'Cookie', 'wp-ulike' ),
-				'by_user_ip_cookie' => esc_html__( 'Username/IP + cookie', 'wp-ulike' ),
-				'do_not_log'        => esc_html__( 'No limit', 'wp-ulike' ),
-			);
-
-			return isset( $labels[ $method ] ) ? $labels[ $method ] : esc_html__( 'Username/IP (supports unlike)', 'wp-ulike' );
+			return wp_ulike_get_logging_method_label( $method );
 		}
 
 		/**
@@ -672,14 +665,9 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return string
 		 */
 		public static function get_post_button_position_label() {
-			$position = wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' );
-			$labels   = array(
-				'top'        => esc_html__( 'Top of content', 'wp-ulike' ),
-				'bottom'     => esc_html__( 'Bottom of content', 'wp-ulike' ),
-				'top_bottom' => esc_html__( 'Top and bottom', 'wp-ulike' ),
+			return wp_ulike_get_post_auto_display_position_label(
+				wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' )
 			);
-
-			return isset( $labels[ $position ] ) ? $labels[ $position ] : esc_html__( 'Bottom of content', 'wp-ulike' );
 		}
 
 		/**

@@ -834,16 +834,16 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             ?>
             <div class="<?php echo esc_attr( implode( ' ', $notification_classes ) ); ?>">
                 <div class="wpulike-message">
-                    <strong><?php esc_html_e( 'Info:', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please wait...', 'wp-ulike' ); ?>
+                    <strong><?php esc_html_e( 'Info', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please wait...', 'wp-ulike' ); ?>
                 </div>
                 <div class="wpulike-message wpulike-success">
-                    <strong><?php esc_html_e( 'Success!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'You liked this post.', 'wp-ulike' ); ?>
+                    <strong><?php esc_html_e( 'Success', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'You liked this post.', 'wp-ulike' ); ?>
                 </div>
                 <div class="wpulike-message wpulike-error">
-                    <strong><?php esc_html_e( 'Error!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Something went wrong.', 'wp-ulike' ); ?>
+                    <strong><?php esc_html_e( 'Error', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Something went wrong', 'wp-ulike' ); ?>
                 </div>
                 <div class="wpulike-message wpulike-warning">
-                    <strong><?php esc_html_e( 'Warning!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please check your settings.', 'wp-ulike' ); ?>
+                    <strong><?php esc_html_e( 'Warning', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please check your settings.', 'wp-ulike' ); ?>
                 </div>
             </div>
             <?php

@@ -621,7 +621,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'style' ); ?>"><?php esc_html_e('Style:', 'wp-ulike'); ?></label>
+				<label for="<?php echo $this->get_field_id( 'style' ); ?>"><?php esc_html_e('Style', 'wp-ulike'); ?></label>
 				<select name="<?php echo $this->get_field_name( 'style' ); ?>" style="width:100%;">
 					<option value="simple" <?php selected( $instance['style'], "simple" ); ?>><?php esc_html_e('Simple', 'wp-ulike'); ?></option>
 					<option value="love" <?php selected( $instance['style'], "love" ); ?>><?php esc_html_e('Heart', 'wp-ulike'); ?></option>

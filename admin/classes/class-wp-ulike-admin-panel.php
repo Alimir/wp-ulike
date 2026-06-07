@@ -694,11 +694,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'title'   => esc_html__( 'Button Position','wp-ulike' ),
                     'desc'    => esc_html__('Choose where the like button appears relative to your content.', 'wp-ulike'),
                     'default' => 'bottom',
-                    'options' => array(
-                        'top'        => esc_html__('Top of Content', 'wp-ulike'),
-                        'bottom'     => esc_html__('Bottom of Content', 'wp-ulike'),
-                        'top_bottom' => esc_html__('Top and Bottom', 'wp-ulike')
-                    ),
+                    'options' => wp_ulike_get_post_auto_display_position_labels(),
                     'dependency' => array( 'enable_auto_display', '==', 'true' ),
                 ),
                 'auto_display_filter' => array(
@@ -756,12 +752,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'        => 'select',
                     'desc'        => esc_html__( 'Select how votes are tracked. You can allow unlimited votes, or restrict users using cookies, their username/IP, or both to prevent duplicate or repeated votes.','wp-ulike' ),
                     'title'       => esc_html__( 'Logging Method','wp-ulike'),
-                    'options'     => array(
-                        'do_not_log'        => esc_html__('No Limit', 'wp-ulike'),
-                        'by_cookie'         => esc_html__('Cookie', 'wp-ulike'),
-                        'by_username'       => esc_html__('Username/IP', 'wp-ulike'),
-                        'by_user_ip_cookie' => esc_html__('Username/IP + Cookie', 'wp-ulike')
-                    ),
+                    'options'     => wp_ulike_get_logging_method_labels(),
                     'default'     => 'by_username',
                     'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>', esc_html__( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', 'wp-ulike' ), esc_html__( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', 'wp-ulike' ), esc_html__( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', 'wp-ulike' ), esc_html__( 'Username/IP + Cookie: Same as username/IP description, However, if the user IP or username changes and the cookie is set, it does not allow the user to like /dislike.', 'wp-ulike' )  )
                 ),

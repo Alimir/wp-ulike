@@ -15,7 +15,7 @@
     "url": "https://wpulike.com"
   },
   "scripts": {
-    "i18n:pot": "wp i18n make-pot . languages/wp-ulike.pot --domain=wp-ulike --exclude=node_modules --headers='{\"Report-Msgid-Bugs-To\":\"https://wpulike.com\"}'",
+    "i18n:pot": "wp i18n make-pot . languages/wp-ulike.pot --domain=wp-ulike --exclude=node_modules,build --headers='{\"Report-Msgid-Bugs-To\":\"https://wpulike.com\"}'",
     "i18n:json": "wp i18n make-json languages --no-purge",
     "i18n:json:installed": "wp i18n make-json ../../languages/plugins --no-purge",
     "build:blocks": "npm run build --prefix includes/blocks/button && npm run build --prefix includes/blocks/top-content",

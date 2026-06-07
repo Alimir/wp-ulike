@@ -978,3 +978,62 @@ if( ! function_exists('wp_ulike_put_contents_dir') ){
 		return wp_ulike_put_contents( $content, $file_location, $chmode );
 	}
 }
+
+if ( ! function_exists( 'wp_ulike_get_logging_method_labels' ) ) {
+	/**
+	 * Translated labels for vote logging method options.
+	 *
+	 * @return array<string, string>
+	 */
+	function wp_ulike_get_logging_method_labels() {
+		return array(
+			'do_not_log'        => esc_html__( 'No Limit', 'wp-ulike' ),
+			'by_cookie'         => esc_html__( 'Cookie', 'wp-ulike' ),
+			'by_username'       => esc_html__( 'Username/IP', 'wp-ulike' ),
+			'by_user_ip_cookie' => esc_html__( 'Username/IP + Cookie', 'wp-ulike' ),
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_logging_method_label' ) ) {
+	/**
+	 * Single logging method label.
+	 *
+	 * @param string $method Logging method key.
+	 * @return string
+	 */
+	function wp_ulike_get_logging_method_label( $method ) {
+		$labels = wp_ulike_get_logging_method_labels();
+
+		return isset( $labels[ $method ] ) ? $labels[ $method ] : $labels['by_username'];
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_post_auto_display_position_labels' ) ) {
+	/**
+	 * Translated labels for post auto-display button position options.
+	 *
+	 * @return array<string, string>
+	 */
+	function wp_ulike_get_post_auto_display_position_labels() {
+		return array(
+			'top'        => esc_html__( 'Top of Content', 'wp-ulike' ),
+			'bottom'     => esc_html__( 'Bottom of Content', 'wp-ulike' ),
+			'top_bottom' => esc_html__( 'Top and Bottom', 'wp-ulike' ),
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_post_auto_display_position_label' ) ) {
+	/**
+	 * Single post auto-display position label.
+	 *
+	 * @param string $position Position key.
+	 * @return string
+	 */
+	function wp_ulike_get_post_auto_display_position_label( $position ) {
+		$labels = wp_ulike_get_post_auto_display_position_labels();
+
+		return isset( $labels[ $position ] ) ? $labels[ $position ] : $labels['bottom'];
+	}
+}
