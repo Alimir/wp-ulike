@@ -65,6 +65,15 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Get AJAX failure notice message
+	 *
+	 * @return string
+	 */
+	public static function getAjaxErrorNotice(){
+		return wp_ulike_kses( self::getOption( 'ajax_error_notice', esc_html__( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ) ) );
+	}
+
+	/**
 	 * Get aria label for like buttons
 	 *
 	 * @return string

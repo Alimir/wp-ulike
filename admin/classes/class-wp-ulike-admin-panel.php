@@ -478,6 +478,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'    => esc_html__( 'Confirmation message shown after a user removes their like.', 'wp-ulike')
                     ),
                     array(
+                        'id'      => 'ajax_error_notice',
+                        'type'    => 'text',
+                        'default' => esc_html__( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ),
+                        'title'   => esc_html__( 'Connection Error Message', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Message shown when a vote cannot be saved due to a network or server error.', 'wp-ulike' ),
+                    ),
+                    array(
                         'id'      => 'like_button_aria_label',
                         'type'    => 'text',
                         'default' => esc_html__( 'Like Button','wp-ulike'),

@@ -240,14 +240,41 @@
         }
       }
 
+      const self = this;
+
       fetch(wp_ulike_params.ajax_url, {
         method: "POST",
         body: formData,
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+          }
+          return response.json();
+        })
         .then(callback)
         .catch((error) => {
           console.error("WP Ulike AJAX error:", error);
+          if (self.generalElement) {
+            forEachElement(self.generalElement, (el) => {
+              el.classList.remove("wp_ulike_is_loading");
+              el.classList.remove("wp_ulike_is_getting_likers_list");
+            });
+          }
+          self._isFetchingLikers = false;
+          if (self.buttonElement) {
+            forEachElement(self.buttonElement, (btn) => {
+              btn.disabled = false;
+            });
+          }
+          if (
+            wp_ulike_params &&
+            wp_ulike_params.notifications &&
+            wp_ulike_params.ajax_error
+          ) {
+            self._sendNotification("error", wp_ulike_params.ajax_error);
+          }
+          triggerEvent(document, "WordpressUlikeUpdated", self.element);
         });
     },
 
