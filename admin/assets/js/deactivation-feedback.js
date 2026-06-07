@@ -37,22 +37,14 @@
 		return list.querySelector( '[data-slug="' + cfg.slug + '"]' );
 	}
 
-	function isDeactivateClick( target ) {
-		if ( ! target || ! target.closest ) {
-			return false;
-		}
-
+	function getDeactivateLink() {
 		var row = getPluginRow();
 		if ( ! row ) {
-			return false;
+			return null;
 		}
 
-		var inRow = target.closest( 'tr' );
-		if ( ! inRow || inRow !== row ) {
-			return false;
-		}
-
-		return !! target.closest( 'span.deactivate' ) || target.id === 'deactivate-' + cfg.slug;
+		// WordPress outputs plain text (no anchor) when deactivate is blocked by dependents.
+		return row.querySelector( 'span.deactivate a[href*="action=deactivate"]' );
 	}
 
 	function setBodyModalOpen( open ) {
@@ -117,6 +109,16 @@
 				}
 			}
 		} );
+
+		var hint = form.querySelector( '.wp-ulike-deactivate-feedback-context' );
+		if ( hint ) {
+			hint.hidden = reason !== 'not_working';
+		}
+
+		var reasonError = form.querySelector( '.wp-ulike-deactivate-feedback-reason-error' );
+		if ( reasonError && reason ) {
+			reasonError.hidden = true;
+		}
 	}
 
 	function setButtonBusy( button, busy ) {
@@ -138,20 +140,16 @@
 		}
 	}
 
-	function openModal( event ) {
+	function openModal( link ) {
 		var source = qs( '#wp-ulike-deactivate-feedback-dialog-wrapper .wp-ulike-deactivate-feedback' );
-		if ( ! source ) {
+		if ( ! source || ! link ) {
 			return;
 		}
 
-		event.preventDefault();
-
-		var link = event.currentTarget || event.target;
-		if ( link && link.closest ) {
-			link = link.closest( 'a' ) || link;
+		var pendingDeactivateUrl = link.getAttribute( 'href' ) || '';
+		if ( ! pendingDeactivateUrl ) {
+			return;
 		}
-
-		var pendingDeactivateUrl = link && link.getAttribute ? link.getAttribute( 'href' ) || '' : '';
 
 		closeModal();
 		deactivateUrl = pendingDeactivateUrl;
@@ -198,9 +196,6 @@
 		var submitBtn = overlay.querySelector( '.wp-ulike-deactivate-feedback-submit' );
 		var skipBtn = overlay.querySelector( '.wp-ulike-deactivate-feedback-skip' );
 
-		if ( radios.length ) {
-			radios[0].checked = true;
-		}
 		syncDetailsFields( form );
 
 		radios.forEach( function ( radio ) {
@@ -211,7 +206,16 @@
 
 		submitBtn.addEventListener( 'click', function () {
 			var checked = form.querySelector( 'input[name="reason_key"]:checked' );
-			var reason = checked ? checked.value : 'other';
+			var reasonError = form.querySelector( '.wp-ulike-deactivate-feedback-reason-error' );
+
+			if ( ! checked ) {
+				if ( reasonError ) {
+					reasonError.hidden = false;
+				}
+				return;
+			}
+
+			var reason = checked.value;
 			var detailsInput = form.querySelector(
 				'.wp-ulike-deactivate-feedback-details:not([hidden]) input'
 			);
@@ -245,25 +249,14 @@
 	}
 
 	function init() {
-		document.addEventListener( 'click', function ( event ) {
-			if ( ! isDeactivateClick( event.target ) ) {
-				return;
-			}
+		var link = getDeactivateLink();
+		if ( ! link ) {
+			return;
+		}
 
+		link.addEventListener( 'click', function ( event ) {
 			event.preventDefault();
-
-			var target = event.target;
-			var link = target.closest ? target.closest( 'a' ) : null;
-			if ( ! link && target.tagName === 'A' ) {
-				link = target;
-			}
-
-			openModal( {
-				preventDefault: function () {
-					event.preventDefault();
-				},
-				currentTarget: link || target,
-			} );
+			openModal( link );
 		} );
 	}
 

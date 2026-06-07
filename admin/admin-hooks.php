@@ -111,57 +111,40 @@ function wp_ulike_notice_manager(){
 	$screen      = get_current_screen();
 	$notice_list = [];
 
-	// Show review notice after 100 likes (based on engagement)
-	if( $count_logs > 100 ){
-		// Personalized message based on milestone
-		$milestone_text = '';
-		$emoji = '';
-		if( $count_logs >= 1000 ){
-			$milestone_text = esc_html__( 'Wow! You\'ve hit an amazing milestone!', 'wp-ulike' );
-			$emoji = '🚀';
-		} elseif( $count_logs >= 500 ){
-			$milestone_text = esc_html__( 'Fantastic! Your community is really engaged!', 'wp-ulike' );
-			$emoji = '🎉';
-		} else {
-			$milestone_text = esc_html__( 'Awesome! You\'re building something great!', 'wp-ulike' );
-			$emoji = '✨';
-		}
-
-		$notice_list[ 'wp_ulike_leave_a_review' ] = new wp_ulike_notices([
-			'id'          => 'wp_ulike_leave_a_review',
-			'title'       => esc_html__( 'Your Community Loves WP ULike! ⭐', 'wp-ulike' ),
-			'description' => sprintf(
-				'<strong>%s %s</strong> ' . esc_html__( 'You\'ve received %s likes from your community — that\'s incredible! Your users are clearly enjoying the engagement. If WP ULike has helped your site, would you mind sharing your experience? A quick 5-star review helps other WordPress users discover us and takes less than a minute. Thank you for being part of our community! 🙏', 'wp-ulike' ),
-				$milestone_text,
-				$emoji,
-				'<span style="font-weight: 700; color: inherit;">' . number_format_i18n( $count_logs ) . '</span>'
-			),
-			'skin'        => 'info',
-			'has_close'   => true,
-			'buttons'     => array(
-				array(
-					'label'      => esc_html__( '⭐ Share My Experience', 'wp-ulike' ),
-					'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5',
-					'color_name' => 'success'
+	// Show review notice once the site has meaningful engagement (likes only).
+	if ( $count_logs >= 25 ) {
+		$notice_list['wp_ulike_leave_a_review'] = new wp_ulike_notices(
+			array(
+				'id'          => 'wp_ulike_leave_a_review',
+				'title'       => esc_html__( 'Congrats!', 'wp-ulike' ),
+				'description' => sprintf(
+					/* translators: %s: total like count */
+					esc_html__( 'You\'ve logged %s likes with WP ULike so far. Nice work! If the plugin\'s been good to you, we\'d love a 5-star review on WordPress.org. It helps us keep improving and helps others discover WP ULike too.', 'wp-ulike' ),
+					'<strong>' . number_format_i18n( $count_logs ) . '</strong>'
 				),
-				array(
-					'label'      => esc_html__('Maybe Later', 'wp-ulike'),
-					'type'       => 'skip',
-					'color_name' => 'info',
-					'expiration' => WEEK_IN_SECONDS * 2
+				'skin'        => 'default',
+				'has_close'   => true,
+				'buttons'     => array(
+					array(
+						'label'      => esc_html__( 'Happy to help', 'wp-ulike' ),
+						'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/#new-post',
+						'color_name' => 'default',
+					),
+					array(
+						'label'      => esc_html__( 'Maybe later', 'wp-ulike' ),
+						'type'       => 'skip',
+						'color_name' => 'default',
+						'expiration' => WEEK_IN_SECONDS * 2,
+					),
+					array(
+						'label'      => esc_html__( 'Don\'t ask again', 'wp-ulike' ),
+						'type'       => 'skip',
+						'color_name' => 'default',
+						'expiration' => YEAR_IN_SECONDS * 10,
+					),
 				),
-				array(
-					'label'      => esc_html__('Don\'t Ask Again', 'wp-ulike'),
-					'type'       => 'skip',
-					'color_name' => 'info',
-					'expiration' => YEAR_IN_SECONDS * 10
-				)
-			),
-			'image'     => array(
-				'width' => '100',
-				'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/rating.svg'
 			)
-		]);
+		);
 	}
 
 	// Show discount notice for Pro users with invalid/expired/disabled licenses
@@ -188,38 +171,28 @@ function wp_ulike_notice_manager(){
 
 			// Show notice if license status is invalid, expired, or nulled
 			if( $license_status !== false && $license_status !== null && in_array( $license_status, $invalid_license_statuses, true ) ){
-				// Get personalized message based on license status
-				$status_message = '';
-				$status_emoji = '🎁';
+				$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
 
 				if( $license_status === WP_Ulike_Pro_API::STATUS_EXPIRED ){
 					$status_message = esc_html__( 'Your license has expired', 'wp-ulike' );
-					$status_emoji = '⏰';
 				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_DISABLED ){
 					$status_message = esc_html__( 'Your license has been disabled', 'wp-ulike' );
-					$status_emoji = '🔒';
 				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_INVALID || $license_status === WP_Ulike_Pro_API::STATUS_MISSING ){
 					$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
-					$status_emoji = '⚠️';
 				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_HTTP_ERROR ){
 					$status_message = esc_html__( 'Unable to verify your license', 'wp-ulike' );
-					$status_emoji = '🔌';
-				} else {
-					$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
 				}
 
 				$notice_list['wp_ulike_pro_license_discount'] = new wp_ulike_notices(
 					array(
 						'id'          => 'wp_ulike_pro_license_discount',
 						'title'       => sprintf(
-							esc_html__( 'Special Offer: Save %s on WP ULike Pro! 🎁', 'wp-ulike' ),
+							esc_html__( 'Special offer: save %s on WP ULike Pro', 'wp-ulike' ),
 							'30%'
 						),
 						'description' => sprintf(
-							'<strong>%s %s</strong> ' . esc_html__( 'We noticed your license needs a quick update. Here\'s some great news — we have an exclusive %s discount just for you! Get all premium features, regular updates, security patches, and priority support. Use coupon code %s at checkout to save %s. This special offer won\'t last long! 🚀', 'wp-ulike' ),
+							'<strong>%s</strong> ' . esc_html__( 'We noticed your license needs a quick update. Renew with code %s to save %s on premium features, updates, and support.', 'wp-ulike' ),
 							$status_message,
-							$status_emoji,
-							'30%',
 							'<code style="background: #fff3cd; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 13px; letter-spacing: 0.5px;">GET30OFF</code>',
 							'30%'
 						),
@@ -228,11 +201,11 @@ function wp_ulike_notice_manager(){
 						'buttons'     => array(
 							array(
 								'label'      => sprintf(
-									esc_html__( '🎉 Claim My %s Discount', 'wp-ulike' ),
+									esc_html__( 'Claim %s discount', 'wp-ulike' ),
 									'30%'
 								),
 								'link'       => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=license-discount-notice&utm_campaign=30off&utm_medium=wp-dash&discount=30OFF',
-								'color_name' => 'warning',
+								'color_name' => 'default',
 							),
 							array(
 								'label'      => esc_html__( 'Maybe Later', 'wp-ulike' ),
@@ -244,41 +217,6 @@ function wp_ulike_notice_manager(){
 					)
 				);
 			}
-		}
-	}
-
-	if( ! defined( 'WP_ULIKE_PRO_VERSION' ) ){
-		if( get_locale() === 'fa_IR' ){
-			$notice_list[ 'wp_ulike_persian_banner' ] = new wp_ulike_notices([
-				'id'          => 'wp_ulike_persian_banner',
-				'title'       => 'خبر خوب برای کاربران فارسی‌زبان وردپرس! 🇮🇷',
-				'description' => 'صدای شما را شنیدیم! با توجه به درخواست‌های شما، WP ULike Pro اکنون در ایران در دسترس است! به تمام ویژگی‌های حرفه‌ای، مقالات مفید به فارسی و پشتیبانی اختصاصی از طریق وب‌سایت فارسی ما دسترسی داشته باشید. ما هیجان‌زده‌ایم که بتوانیم بهتر به شما خدمت کنیم! 🎉',
-				'skin'        => 'default',
-				'has_close'   => true,
-				'buttons'     => array(
-					array(
-						'label'      => '✨ بازدید از وب‌سایت فارسی',
-						'link'       => 'https://wpulike.ir/?utm_source=fa-IR-banner&utm_campaign=gopro&utm_medium=wp-dash',
-						'color_name' => 'default'
-					),
-					array(
-						'label'      => 'شاید بعداً',
-						'type'       => 'skip',
-						'color_name' => 'info',
-						'expiration' => WEEK_IN_SECONDS * 2
-					),
-					array(
-						'label'      => 'دیگر نمایش نده',
-						'type'       => 'skip',
-						'color_name' => 'info',
-						'expiration' => YEAR_IN_SECONDS * 10
-					)
-				),
-				'image'     => array(
-					'width' => '100',
-					'src'   => WP_ULIKE_ASSETS_URL . '/img/svg/news.svg'
-				)
-			]);
 		}
 	}
 

@@ -143,7 +143,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 					<?php if ( ! empty( $upsell['features'] ) && is_array( $upsell['features'] ) ) : ?>
 						<ul class="wp-ulike-about-upsell__features">
 							<?php foreach ( $upsell['features'] as $feature ) : ?>
-								<li class="wp-ulike-about-upsell__feature">
+								<li class="wp-ulike-about-upsell__feature<?php echo ! empty( $feature['highlight'] ) ? ' wp-ulike-about-upsell__feature--highlight' : ''; ?>">
 									<span class="dashicons dashicons-<?php echo esc_attr( $feature['icon'] ?? 'yes-alt' ); ?>" aria-hidden="true"></span>
 									<span class="wp-ulike-about-upsell__feature-body">
 										<strong class="wp-ulike-about-upsell__feature-title"><?php echo esc_html( $feature['title'] ?? '' ); ?></strong>

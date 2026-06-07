@@ -6,7 +6,7 @@ Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.0.5
+Stable tag: 5.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -179,6 +179,12 @@ Yes. We follow WordPress security best practices, hardened AJAX voting, nonce ve
 
 == Changelog ==
 
+= 5.0.6 =
+* Removed: Legacy settings framework from the plugin — previously kept for WP ULike Pro post metaboxes.
+* Improved: Settings and Customizer panels now follow your WordPress admin color scheme (light, dark, and high-contrast).
+* Improved: Smoother voting and admin behavior under the hood.
+* Fixed: Several small issues for a more reliable experience.
+
 = 5.0.5 =
 * Added: **Help** screen under WP ULike — quick status, shortcuts, documentation links, troubleshooting, and settings backup/restore.
 * Added: Optional feedback when deactivating the plugin (Plugins screen).
@@ -217,6 +223,9 @@ Yes. We follow WordPress security best practices, hardened AJAX voting, nonce ve
 * Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
+
+= 5.0.6 =
+Safe update — your votes, settings, and data stay as they are. **WP ULike Pro below 2.1.4?** The old post schema box moves to **Tools → Schema Generator** in Pro 2.1.4+. Update Pro when you can; nothing breaks on the front end.
 
 = 5.0.5 =
 If you use a full-page cache plugin, purge your site cache after updating.

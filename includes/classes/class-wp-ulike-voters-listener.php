@@ -38,7 +38,7 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 			$this->settings_type = wp_ulike_setting_type::get_instance( $this->data['type'] );
 
 			if ( !$this->validates() ){
-				throw new \Exception( esc_html__( 'permission denied.', 'wp-ulike' ) );
+				throw new \Exception( esc_html__( 'Permission denied.', 'wp-ulike' ) );
 			}
 
 			if( empty( $this->settings_type->getType() ) ){

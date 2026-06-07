@@ -24,21 +24,22 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 		 * @return array<string, array<string, string>>
 		 */
 		public static function get_reasons() {
+			// Actionable reasons first; generic exit reasons last (reduces low-signal bias).
 			$reasons = array(
-				'no_longer_need' => array(
-					'title'       => __( 'I no longer need the plugin', 'wp-ulike' ),
-					'placeholder' => '',
+				'not_working'    => array(
+					'title'       => __( "I couldn't get the plugin to work", 'wp-ulike' ),
+					'placeholder' => __( 'What happened? e.g. button missing, vote fails, theme conflict', 'wp-ulike' ),
 				),
 				'found_better'   => array(
 					'title'       => __( 'I found a better plugin', 'wp-ulike' ),
 					'placeholder' => __( 'Which plugin?', 'wp-ulike' ),
 				),
-				'not_working'    => array(
-					'title'       => __( "I couldn't get the plugin to work", 'wp-ulike' ),
-					'placeholder' => '',
-				),
 				'temporary'      => array(
 					'title'       => __( "It's a temporary deactivation", 'wp-ulike' ),
+					'placeholder' => '',
+				),
+				'no_longer_need' => array(
+					'title'       => __( 'I no longer need the plugin', 'wp-ulike' ),
 					'placeholder' => '',
 				),
 				'other'          => array(
@@ -152,17 +153,63 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 		}
 
 		/**
+		 * Sanitize a version string for the feedback API.
+		 *
+		 * @param string $value Raw version.
+		 * @return string
+		 */
+		private static function sanitize_version( $value ) {
+			$value = sanitize_text_field( (string) $value );
+			if ( '' === $value ) {
+				return '';
+			}
+
+			if ( ! preg_match( '/^[\d.A-Za-z\-]+$/', $value ) ) {
+				return '';
+			}
+
+			return substr( $value, 0, 50 );
+		}
+
+		/**
+		 * Environment metadata sent with voluntary deactivation feedback.
+		 *
+		 * @return array<string, string>
+		 */
+		private static function get_environment_payload() {
+			global $wp_version;
+
+			return array(
+				'plugin_version' => self::sanitize_version( defined( 'WP_ULIKE_VERSION' ) ? WP_ULIKE_VERSION : '' ),
+				'wp_version'     => self::sanitize_version( isset( $wp_version ) ? $wp_version : get_bloginfo( 'version' ) ),
+				'php_version'    => self::sanitize_version( PHP_VERSION ),
+			);
+		}
+
+		/**
+		 * @param string $reason_key Reason.
+		 * @param string $details    Details.
+		 * @return array<string, string>
+		 */
+		private static function build_api_payload( $reason_key, $details ) {
+			return array_merge(
+				array(
+					'plugin_slug' => 'wp-ulike',
+					'site_url'    => home_url(),
+					'reason_key'  => $reason_key,
+					'details'     => $details,
+				),
+				self::get_environment_payload()
+			);
+		}
+
+		/**
 		 * @param string $reason_key Reason.
 		 * @param string $details    Details.
 		 * @return void
 		 */
 		private static function send_to_api( $reason_key, $details ) {
-			$body = array(
-				'plugin_slug' => 'wp-ulike',
-				'site_url'    => home_url(),
-				'reason_key'  => $reason_key,
-				'details'     => $details,
-			);
+			$body = self::build_api_payload( $reason_key, $details );
 
 			wp_remote_post(
 				self::get_api_url(),

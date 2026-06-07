@@ -3,7 +3,7 @@
  * WP ULike Customizer REST API
  *
  * Provides REST API endpoints for Optiwich Customizer integration
- * Extracts schema from ULF customizer sections without modifying source code
+ * Extracts schema from customizer sections for Optiwich integration
  *
  * @package WP_ULike
  * @since 4.6.0
@@ -47,7 +47,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
         /**
          * Get customizer schema
-         * Returns schema structure extracted from ULF customizer sections
+         * Returns schema structure extracted from customizer sections
          */
         public function get_schema( $request = null ) {
             // Return cached schema if available (static cache for request-level sharing)
@@ -55,7 +55,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 return self::$schema_cache;
             }
 
-            // Build schema from ULF customizer sections
+            // Build schema from customizer sections
             $schema = $this->build_schema_from_customizer();
 
             // Apply default values from saved customizer options
@@ -834,16 +834,16 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             ?>
             <div class="<?php echo esc_attr( implode( ' ', $notification_classes ) ); ?>">
                 <div class="wpulike-message">
-                    <strong><?php esc_html_e( 'Info:', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please wait...', 'wp-ulike' ); ?>
+                    <strong><?php esc_html_e( 'Info', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please wait...', 'wp-ulike' ); ?>
                 </div>
                 <div class="wpulike-message wpulike-success">
-                    <strong><?php esc_html_e( 'Success!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'You liked this post.', 'wp-ulike' ); ?>
+                    <strong><?php esc_html_e( 'Success', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'You liked this post.', 'wp-ulike' ); ?>
                 </div>
                 <div class="wpulike-message wpulike-error">
-                    <strong><?php esc_html_e( 'Error!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Something went wrong.', 'wp-ulike' ); ?>
+                    <strong><?php esc_html_e( 'Error', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Something went wrong', 'wp-ulike' ); ?>
                 </div>
                 <div class="wpulike-message wpulike-warning">
-                    <strong><?php esc_html_e( 'Warning!', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please check your settings.', 'wp-ulike' ); ?>
+                    <strong><?php esc_html_e( 'Warning', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please check your settings.', 'wp-ulike' ); ?>
                 </div>
             </div>
             <?php

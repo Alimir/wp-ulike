@@ -478,6 +478,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'    => esc_html__( 'Confirmation message shown after a user removes their like.', 'wp-ulike')
                     ),
                     array(
+                        'id'      => 'ajax_error_notice',
+                        'type'    => 'text',
+                        'default' => esc_html__( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ),
+                        'title'   => esc_html__( 'Connection Error Message', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Message shown when a vote cannot be saved due to a network or server error.', 'wp-ulike' ),
+                    ),
+                    array(
                         'id'      => 'like_button_aria_label',
                         'type'    => 'text',
                         'default' => esc_html__( 'Like Button','wp-ulike'),
@@ -584,7 +591,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'      => 'template',
                     'type'    => 'image_select',
                     'title'   => esc_html__( 'Select a Template','wp-ulike'),
-                    'desc'    => sprintf( '%s <a target="_blank" href="%s" title="Click">%s</a>', esc_html__( 'Preview templates online','wp-ulike'),  WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',esc_html__( 'Open preview','wp-ulike') ),
+                    'desc'    => sprintf(
+                        '%s <a target="_blank" href="%s" title="Click">%s</a>. %s',
+                        esc_html__( 'Pick a style for your like button.', 'wp-ulike' ),
+                        WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',
+                        esc_html__( 'Preview online', 'wp-ulike' ),
+                        esc_html__( 'Locked styles are optional Pro extras—your selected template works out of the box.', 'wp-ulike' )
+                    ),
                     'options' => $this->get_templates_option_array(),
                     'default' => 'wpulike-default',
                 ),
@@ -681,11 +694,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'title'   => esc_html__( 'Button Position','wp-ulike' ),
                     'desc'    => esc_html__('Choose where the like button appears relative to your content.', 'wp-ulike'),
                     'default' => 'bottom',
-                    'options' => array(
-                        'top'        => esc_html__('Top of Content', 'wp-ulike'),
-                        'bottom'     => esc_html__('Bottom of Content', 'wp-ulike'),
-                        'top_bottom' => esc_html__('Top and Bottom', 'wp-ulike')
-                    ),
+                    'options' => wp_ulike_get_post_auto_display_position_labels(),
                     'dependency' => array( 'enable_auto_display', '==', 'true' ),
                 ),
                 'auto_display_filter' => array(
@@ -743,12 +752,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'        => 'select',
                     'desc'        => esc_html__( 'Select how votes are tracked. You can allow unlimited votes, or restrict users using cookies, their username/IP, or both to prevent duplicate or repeated votes.','wp-ulike' ),
                     'title'       => esc_html__( 'Logging Method','wp-ulike'),
-                    'options'     => array(
-                        'do_not_log'        => esc_html__('No Limit', 'wp-ulike'),
-                        'by_cookie'         => esc_html__('Cookie', 'wp-ulike'),
-                        'by_username'       => esc_html__('Username/IP', 'wp-ulike'),
-                        'by_user_ip_cookie' => esc_html__('Username/IP + Cookie', 'wp-ulike')
-                    ),
+                    'options'     => wp_ulike_get_logging_method_labels(),
                     'default'     => 'by_username',
                     'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>', esc_html__( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', 'wp-ulike' ), esc_html__( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', 'wp-ulike' ), esc_html__( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', 'wp-ulike' ), esc_html__( 'Username/IP + Cookie: Same as username/IP description, However, if the user IP or username changes and the cookie is set, it does not allow the user to like /dislike.', 'wp-ulike' )  )
                 ),
@@ -895,11 +899,9 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             if( !empty( $options ) ){
                 foreach ($options as $key => $args) {
-                    // Return structured data: symbol URL and is_locked flag
-                    // React app can use is_locked, PHP field renderer can use symbol
                     $output[$key] = array(
                         'symbol'    => isset( $args['symbol'] ) ? $args['symbol'] : '',
-                        'is_locked' => isset( $args['is_locked'] ) ? $args['is_locked'] : false
+                        'is_locked' => ! empty( $args['is_locked'] ),
                     );
                 }
             }

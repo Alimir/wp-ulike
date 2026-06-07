@@ -40,8 +40,6 @@
 		var ctaButton = event.target.closest( '.wp-ulike-notice-cta-btn' );
 
 		if ( ctaButton ) {
-			event.preventDefault();
-
 			var ajaxAction = ctaButton.getAttribute( 'data-ajax-action' );
 			var noticeId = ctaButton.getAttribute( 'data-notice-id' );
 			var nonce = ctaButton.getAttribute( 'data-notice-nonce' );
@@ -49,6 +47,8 @@
 			if ( ! ajaxAction || ! noticeId || ! nonce ) {
 				return;
 			}
+
+			event.preventDefault();
 
 			ctaButton.classList.add( 'wp-ulike-btn-is-loading' );
 

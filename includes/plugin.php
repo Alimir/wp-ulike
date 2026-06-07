@@ -34,7 +34,8 @@ class WpUlikeInit {
     add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 
     $prefix = is_network_admin() ? 'network_admin_' : '';
-    add_filter( "{$prefix}plugin_action_links",  array( $this, 'add_links' ), 10, 5 );
+    add_filter( "{$prefix}plugin_action_links", array( $this, 'add_links' ), 10, 2 );
+    add_filter( "{$prefix}plugin_row_meta", array( $this, 'add_row_meta' ), 10, 2 );
   }
 
   /**
@@ -128,6 +129,27 @@ class WpUlikeInit {
     }
 
     return $actions;
+  }
+
+  /**
+   * Add documentation link under the plugin description on the Plugins screen.
+   *
+   * @param array  $links       Plugin row meta links.
+   * @param string $plugin_file Plugin basename.
+   * @return array
+   */
+  public function add_row_meta( $links, $plugin_file ) {
+    if ( WP_ULIKE_BASENAME !== $plugin_file ) {
+      return $links;
+    }
+
+    $links[] = sprintf(
+      '<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+      esc_url( 'https://docs.wpulike.com/' ),
+      esc_html__( 'Documentation', 'wp-ulike' )
+    );
+
+    return $links;
   }
 
 

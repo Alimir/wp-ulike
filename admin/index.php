@@ -9,9 +9,6 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
-// include settings panel core
-require_once( WP_ULIKE_ADMIN_DIR . '/settings/classes/setup.class.php');
-
 // Register admin pages
 new wp_ulike_admin_pages();
 
@@ -23,6 +20,9 @@ require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-overview.php';
 
 // Deactivation feedback (Plugins screen)
 require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-deactivation-feedback.php';
+
+// Welcome pointer after activation (admin menu)
+require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-activation-pointer.php';
 
 // include about menu functions
 require_once( WP_ULIKE_ADMIN_DIR . '/admin-functions.php');

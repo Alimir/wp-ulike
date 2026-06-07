@@ -214,6 +214,19 @@
 			color: #2271b1;
 			margin-top: 1px;
 		}
+
+		&--highlight {
+			border-color: #dba617;
+			background: #fffdf5;
+
+			.dashicons {
+				color: #996800;
+			}
+
+			.wp-ulike-about-upsell__feature-title {
+				color: #1d2327;
+			}
+		}
 	}
 
 	&__feature-body {

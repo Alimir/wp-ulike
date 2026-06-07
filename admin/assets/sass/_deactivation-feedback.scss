@@ -79,6 +79,16 @@ body.wp-ulike-deactivation-modal-open {
 		line-height: 1.55;
 		color: #646970;
 	}
+
+	&__note {
+		margin: 0 0 12px;
+		padding: 8px 12px;
+		font-size: 12px;
+		line-height: 1.5;
+		color: #1d2327;
+		background: #f0f6fc;
+		border-left: 3px solid #72aee6;
+	}
 }
 
 .wp-ulike-deactivate-feedback-form fieldset {
@@ -102,6 +112,34 @@ body.wp-ulike-deactivation-modal-open {
 }
 
 .wp-ulike-deactivate-feedback-details[hidden] {
+	display: none;
+}
+
+.wp-ulike-deactivate-feedback-reason-error {
+	margin: 0 0 10px !important;
+	padding: 8px 10px;
+	font-size: 12px;
+	line-height: 1.45;
+	color: #8a2424;
+	background: #fcf0f1;
+	border-left: 3px solid #d63638;
+}
+
+.wp-ulike-deactivate-feedback-reason-error[hidden] {
+	display: none;
+}
+
+.wp-ulike-deactivate-feedback-context {
+	margin: 0 0 10px !important;
+	padding: 8px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #50575e;
+	background: #f6f7f7;
+	border-left: 3px solid #c3c4c7;
+}
+
+.wp-ulike-deactivate-feedback-context[hidden] {
 	display: none;
 }
 

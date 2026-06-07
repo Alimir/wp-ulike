@@ -1,0 +1,111 @@
+/**
+ * Welcome pointer anchored to the WP ULike admin menu item.
+ */
+
+.wp-ulike-activation-pointer {
+	position: fixed;
+	z-index: 100001;
+	width: min( 320px, calc( 100vw - 24px ) );
+	box-sizing: border-box;
+	pointer-events: auto;
+}
+
+.wp-ulike-activation-pointer__panel {
+	position: relative;
+	margin: 0;
+	padding: 16px 18px 14px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 2px;
+	box-shadow: 0 3px 6px rgba( 0, 0, 0, 0.08 );
+	overflow: auto;
+}
+
+.wp-ulike-activation-pointer::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 8px solid transparent;
+	transform: translateY( -50% );
+}
+
+.wp-ulike-activation-pointer:not( .is-rtl )::before {
+	left: -16px;
+	border-right-color: #c3c4c7;
+}
+
+.wp-ulike-activation-pointer:not( .is-rtl )::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: -14px;
+	width: 0;
+	height: 0;
+	border: 7px solid transparent;
+	border-right-color: #fff;
+	transform: translateY( -50% );
+}
+
+.wp-ulike-activation-pointer.is-rtl::before {
+	right: -16px;
+	border-left-color: #c3c4c7;
+}
+
+.wp-ulike-activation-pointer.is-rtl::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: -14px;
+	width: 0;
+	height: 0;
+	border: 7px solid transparent;
+	border-left-color: #fff;
+	transform: translateY( -50% );
+}
+
+.wp-ulike-activation-pointer__close {
+	position: absolute;
+	top: 6px;
+	right: 8px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: #646970;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+[dir="rtl"] .wp-ulike-activation-pointer__close,
+.rtl .wp-ulike-activation-pointer__close {
+	right: auto;
+	left: 8px;
+}
+
+.wp-ulike-activation-pointer__title {
+	margin: 0 28px 8px 0;
+	padding: 0;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.wp-ulike-activation-pointer__lead,
+.wp-ulike-activation-pointer__links {
+	margin: 0 0 10px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #1d2327;
+}
+
+.wp-ulike-activation-pointer__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0;
+}
+
+#wp-ulike-activation-pointer-template {
+	display: none;
+}
