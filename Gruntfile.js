@@ -94,7 +94,7 @@ module.exports = function (grunt) {
           domainPath: "/languages",
           mainFile: "wp-ulike.php",
           potFilename: "wp-ulike.pot",
-          exclude: ["admin/settings/.*", "build/.*"],
+          exclude: ["build/.*"],
           processPot: function (pot, options) {
             pot.headers["report-msgid-bugs-to"] = "https://wpulike.com";
             pot.headers["language-team"] = "WP ULike Team <info@wpulike.com>";

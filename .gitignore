@@ -15,8 +15,6 @@ deploy\.sh
 
 dist/
 
-admin/settings/assets/scss/
-
 **/.DS_Store
 
 Gruntfile.js
