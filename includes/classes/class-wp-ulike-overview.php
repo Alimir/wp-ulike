@@ -58,42 +58,46 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			if ( $today_votes > 0 ) {
 				$intro = sprintf(
 					/* translators: %s: votes logged today */
-					esc_html__( 'You logged %s votes today—nice momentum. Pro unlocks deeper reports and smarter placement when you want to go further.', 'wp-ulike' ),
+					esc_html__( '%s votes today—great momentum. You already have likes and stats here; Pro adds richer dashboards, smart placement rules, and SEO markup when you want them.', 'wp-ulike' ),
 					number_format_i18n( $today_votes )
 				);
 			} elseif ( $log_count > 0 ) {
 				$intro = sprintf(
 					/* translators: %s: total stored votes */
-					esc_html__( 'With %s votes on your site, you are already getting value from the free plugin. Pro is optional—add it when you need advanced control.', 'wp-ulike' ),
+					esc_html__( '%s votes and counting. Free covers your day-to-day likes and statistics—Pro is the optional layer for automation, deep reports, and search visibility.', 'wp-ulike' ),
 					number_format_i18n( $log_count )
 				);
 			} else {
-				$intro = esc_html__( 'Start with free likes and statistics. Pro adds advanced tools only when your site needs them.', 'wp-ulike' );
+				$intro = esc_html__( 'Likes, stats, and button styles are ready to go. Pro is there when you want automation, a full analytics dashboard, or star ratings in search results.', 'wp-ulike' );
 			}
 
-			return array(
-				'headline'    => esc_html__( 'Need more than basic likes?', 'wp-ulike' ),
-				'intro'       => $intro,
-				'footnote'    => esc_html__( 'The free plugin stays complete for core likes, stats, and customization—upgrade only when it helps.', 'wp-ulike' ),
-				'cta_label'   => esc_html__( 'Explore Pro', 'wp-ulike' ),
-				'features'    => array(
+			$content = array(
+				'headline'  => esc_html__( 'WP ULike Pro', 'wp-ulike' ),
+				'intro'     => $intro,
+				'footnote'  => esc_html__( 'Free stays fully capable for likes, stats, and customization—Pro is an add-on for the extras below.', 'wp-ulike' ),
+				'cta_label' => esc_html__( 'See what Pro includes', 'wp-ulike' ),
+				'features'  => array(
 					array(
-						'icon'        => 'chart-line',
-						'title'       => esc_html__( 'Advanced analytics', 'wp-ulike' ),
-						'description' => esc_html__( 'Richer reports, trends, and exports beyond the status snapshot on this page.', 'wp-ulike' ),
+						'icon'        => 'chart-area',
+						'title'       => esc_html__( 'Pro Statistics', 'wp-ulike' ),
+						'description' => esc_html__( 'Interactive charts, world map, device breakdowns, and CSV exports—far beyond this page’s snapshot.', 'wp-ulike' ),
+						'highlight'   => true,
 					),
 					array(
-						'icon'        => 'admin-settings',
-						'title'       => esc_html__( 'Display automation', 'wp-ulike' ),
-						'description' => esc_html__( 'Rules for where buttons appear—no manual shortcodes on every template.', 'wp-ulike' ),
+						'icon'        => 'layout',
+						'title'       => esc_html__( 'Display Automation', 'wp-ulike' ),
+						'description' => esc_html__( 'Rule-based placement on posts, WooCommerce, EDD, and custom hooks—no shortcode hunting.', 'wp-ulike' ),
 					),
 					array(
-						'icon'        => 'thumbs-down',
-						'title'       => esc_html__( 'Dislikes & engagement', 'wp-ulike' ),
-						'description' => esc_html__( 'Dislike buttons and engagement metrics for fuller feedback.', 'wp-ulike' ),
+						'icon'        => 'star-filled',
+						'title'       => esc_html__( 'Schema star ratings', 'wp-ulike' ),
+						'description' => esc_html__( 'Turn like counts into star ratings in Google with built-in Schema.org and FAQ markup.', 'wp-ulike' ),
+						'highlight'   => true,
 					),
 				),
 			);
+
+			return apply_filters( 'wp_ulike_about_pro_upsell', $content, $health );
 		}
 
 		/**
