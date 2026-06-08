@@ -381,19 +381,32 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			$redirect = admin_url( 'admin.php?page=wp-ulike-about' );
 
-			if ( empty( $_FILES['settings_file']['tmp_name'] ) ) {
-				wp_safe_redirect( add_query_arg( 'wp_ulike_import', 'error', $redirect ) );
+			if (
+				empty( $_FILES['settings_file']['tmp_name'] )
+				|| ! is_uploaded_file( $_FILES['settings_file']['tmp_name'] )
+				|| ( isset( $_FILES['settings_file']['error'] ) && UPLOAD_ERR_OK !== (int) $_FILES['settings_file']['error'] )
+			) {
+				wp_safe_redirect( add_query_arg( 'wp_ulike_import', 'error_upload', $redirect ) );
 				exit;
 			}
 
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- user upload.
-			$raw = file_get_contents( $_FILES['settings_file']['tmp_name'] );
+			$raw     = file_get_contents( $_FILES['settings_file']['tmp_name'] );
 			$payload = json_decode( $raw, true );
 
-			$result = self::import_settings( is_array( $payload ) ? $payload : array() );
+			if ( JSON_ERROR_NONE !== json_last_error() || ! is_array( $payload ) ) {
+				wp_safe_redirect( add_query_arg( 'wp_ulike_import', 'error_json', $redirect ) );
+				exit;
+			}
+
+			$result = self::import_settings( $payload );
 
 			wp_safe_redirect(
-				add_query_arg( 'wp_ulike_import', is_wp_error( $result ) ? 'error' : 'success', $redirect )
+				add_query_arg(
+					'wp_ulike_import',
+					is_wp_error( $result ) ? 'error_payload' : 'success',
+					$redirect
+				)
 			);
 			exit;
 		}
@@ -857,11 +870,32 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return string
 		 */
 		public static function export_settings_json() {
+			$settings  = get_option( 'wp_ulike_settings', array() );
+			$customize = get_option( 'wp_ulike_customize', array() );
+
+			if ( class_exists( 'wp_ulike_settings_api' ) ) {
+				$settings_api = new wp_ulike_settings_api();
+				$settings     = $settings_api->get_settings();
+			}
+
+			if ( class_exists( 'wp_ulike_customizer_api' ) ) {
+				$customizer_api = new wp_ulike_customizer_api();
+				$customize      = $customizer_api->get_values();
+			}
+
+			if ( ! is_array( $settings ) ) {
+				$settings = array();
+			}
+
+			if ( ! is_array( $customize ) ) {
+				$customize = array();
+			}
+
 			$data = array(
 				'version'   => WP_ULIKE_VERSION,
 				'exported'  => gmdate( 'c' ),
-				'settings'  => get_option( 'wp_ulike_settings', array() ),
-				'customize' => get_option( 'wp_ulike_customize', array() ),
+				'settings'  => $settings,
+				'customize' => $customize,
 			);
 
 			return wp_json_encode( $data, JSON_PRETTY_PRINT );
@@ -874,7 +908,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return true|WP_Error
 		 */
 		public static function import_settings( $payload ) {
-			if ( empty( $payload['settings'] ) || ! is_array( $payload['settings'] ) ) {
+			if ( ! array_key_exists( 'settings', $payload ) || ! is_array( $payload['settings'] ) ) {
 				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from WP ULike → Help.', 'wp-ulike' ) );
 			}
 

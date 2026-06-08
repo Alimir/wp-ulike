@@ -36,8 +36,14 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 
 	<?php if ( 'success' === $import_flash ) : ?>
 		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings imported and saved successfully!', 'wp-ulike' ); ?></p></div>
-	<?php elseif ( 'error' === $import_flash ) : ?>
+	<?php elseif ( 'error_upload' === $import_flash ) : ?>
+		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'No settings file was uploaded. Choose a JSON file and try again.', 'wp-ulike' ); ?></p></div>
+	<?php elseif ( 'error_json' === $import_flash ) : ?>
 		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Invalid JSON format. Please check your JSON syntax.', 'wp-ulike' ); ?></p></div>
+	<?php elseif ( 'error_payload' === $import_flash ) : ?>
+		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'This file does not look like a WP ULike settings export. Use a file downloaded from Help → Export Settings.', 'wp-ulike' ); ?></p></div>
+	<?php elseif ( 'error' === $import_flash ) : ?>
+		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings import failed. Please try again.', 'wp-ulike' ); ?></p></div>
 	<?php endif; ?>
 
 	<div class="wp-ulike-about__layout">
