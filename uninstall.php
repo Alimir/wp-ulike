@@ -73,6 +73,7 @@ class wp_ulike_uninstall {
 			$this->drop_tables();
 			$this->delete_transients();
 			$this->delete_options();
+			$this->delete_user_meta();
 			$this->delete_files();
 			$this->delete_lock_files();
 		}
@@ -178,13 +179,41 @@ class wp_ulike_uninstall {
 	}
 
 	/**
-	 * Delete vote lock files from the system temp directory.
+	 * Delete activation pointer and other plugin user meta.
+	 *
+	 * @since 5.0.6
+	 * @access public
+	 * @return void
+	 */
+	public function delete_user_meta() {
+
+		global $wpdb;
+
+		$wpdb->delete(
+			$wpdb->usermeta,
+			array( 'meta_key' => 'wp_ulike_show_activation_pointer' ),
+			array( '%s' )
+		);
+	}
+
+	/**
+	 * Delete stale vote lock files from the system temp directory.
+	 *
+	 * Lock files use wp-ulike-{type}-{id}.lock (no blog ID). They are removed
+	 * after each vote; uninstall only cleans leftovers from crashed requests.
+	 *
+	 * On single-site installs the temp dir is site-specific enough to glob safely.
+	 * On multisite, the same temp dir may be shared — skip to avoid touching other sites.
 	 *
 	 * @since 5.0.5
 	 * @access public
 	 * @return void
 	 */
 	public function delete_lock_files() {
+
+		if ( is_multisite() ) {
+			return;
+		}
 
 		$pattern = trailingslashit( get_temp_dir() ) . 'wp-ulike-*.lock';
 		$files   = glob( $pattern );
