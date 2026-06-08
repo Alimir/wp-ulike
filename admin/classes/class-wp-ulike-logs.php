@@ -98,7 +98,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 			}
 			if( ! empty( $selectedIds ) ){
 				$placeholders = implode( ',', array_fill( 0, count( $selectedIds ), '%d' ) );
-				$query = "DELETE FROM `{$table}` WHERE ID IN({$placeholders})";
+				$query = "DELETE FROM `{$table}` WHERE `id` IN({$placeholders})";
 				$this->wpdb->query( $this->wpdb->prepare( $query, $selectedIds ) );
 			}
 		}
@@ -115,7 +115,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 
 			return $this->wpdb->delete(
 				$table,
-				array( 'ID' => $item_id ),
+				array( 'id' => $item_id ),
 				array( '%d' )
 			);
 		}

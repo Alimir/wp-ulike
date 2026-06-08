@@ -19,13 +19,18 @@ if ( ! defined( 'WPINC' ) ) {
  * @return			Void
  */
 function wp_ulike_ajax_notice_handler() {
-    // Store it in the options table
-	if ( ! isset( $_POST['id'] ) ||  ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), '_notice_nonce' ) ) {
-		wp_send_json_error(  esc_html__( 'Token Error.', 'wp-ulike' ) );
-	} else {
-		wp_ulike_set_transient( 'wp-ulike-notice-' . sanitize_text_field( wp_unslash( $_POST['id' ] ) ), 1, absint( $_POST['expiration'] ) );
-		wp_send_json_success( esc_html__( 'It\'s OK.', 'wp-ulike' ) );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( esc_html__( 'Permission denied.', 'wp-ulike' ) );
 	}
+
+	if ( ! isset( $_POST['id'] ) || ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), '_notice_nonce' ) ) {
+		wp_send_json_error( esc_html__( 'Token Error.', 'wp-ulike' ) );
+	}
+
+	$expiration = isset( $_POST['expiration'] ) ? absint( $_POST['expiration'] ) : YEAR_IN_SECONDS;
+
+	wp_ulike_set_transient( 'wp-ulike-notice-' . sanitize_text_field( wp_unslash( $_POST['id'] ) ), 1, $expiration );
+	wp_send_json_success( esc_html__( 'It\'s OK.', 'wp-ulike' ) );
 }
 add_action( 'wp_ajax_wp_ulike_dismissed_notice', 'wp_ulike_ajax_notice_handler' );
 

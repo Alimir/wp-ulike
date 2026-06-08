@@ -625,6 +625,16 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         }
 
         /**
+         * Sanitize settings values for import/restore operations.
+         *
+         * @param mixed $values Values to sanitize.
+         * @return mixed Sanitized values.
+         */
+        public function sanitize_import_values( $values ) {
+            return $this->sanitize_settings_values( $values );
+        }
+
+        /**
          * Recursively sanitize settings values to prevent XSS
          *
          * @param mixed $values Values to sanitize
