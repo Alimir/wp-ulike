@@ -691,20 +691,51 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		}
 
 		/**
-		 * Run health diagnostics for the About page Quick Start section.
+		 * Transient key for cached Help page health report.
 		 *
-		 * @return array
+		 * @return string
 		 */
-		public static function get_health_report() {
-			$tables_ok  = true;
-			$missing    = array();
+		private static function get_health_report_cache_key() {
+			return 'wp_ulike_health_report_v1';
+		}
+
+		/**
+		 * Lightweight database table check (Site Health and similar).
+		 *
+		 * @return array{tables_ok: bool, missing_tables: string[]}
+		 */
+		public static function get_tables_health() {
+			$tables_ok = true;
+			$missing   = array();
 
 			foreach ( self::get_required_tables() as $label => $table_name ) {
 				if ( ! self::table_exists( $table_name ) ) {
-					$tables_ok  = false;
-					$missing[]  = $label;
+					$tables_ok = false;
+					$missing[] = $label;
 				}
 			}
+
+			return array(
+				'tables_ok'      => $tables_ok,
+				'missing_tables' => $missing,
+			);
+		}
+
+		/**
+		 * Run health diagnostics for the About page Quick Start section.
+		 *
+		 * @param bool $force_refresh Bypass cached report.
+		 * @return array
+		 */
+		public static function get_health_report( $force_refresh = false ) {
+			if ( ! $force_refresh ) {
+				$cached = get_transient( self::get_health_report_cache_key() );
+				if ( is_array( $cached ) ) {
+					return $cached;
+				}
+			}
+
+			$tables_health = self::get_tables_health();
 
 			$auto_display = wp_ulike_setting_repo::isAutoDisplayOn( 'post' );
 			$sample_post  = get_posts(
@@ -714,9 +745,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					'posts_per_page' => 1,
 					'orderby'        => 'date',
 					'order'          => 'DESC',
+					'no_found_rows'  => true,
 				)
 			);
-			$preview_url  = ! empty( $sample_post[0] ) ? get_permalink( $sample_post[0]->ID ) : home_url( '/' );
+			$preview_url  = ! empty( $sample_post[0] ) ? get_permalink( $sample_post[0]->ID ) : '';
 
 			$new_votes = 0;
 			if ( function_exists( 'wp_ulike_get_number_of_new_likes' ) ) {
@@ -730,9 +762,9 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			$theme = wp_get_theme();
 
-			return array(
-				'tables_ok'              => $tables_ok,
-				'missing_tables'         => $missing,
+			$report = array(
+				'tables_ok'              => $tables_health['tables_ok'],
+				'missing_tables'         => $tables_health['missing_tables'],
 				'is_pro'                 => defined( 'WP_ULIKE_PRO_VERSION' ),
 				'auto_display'           => $auto_display,
 				'comments_auto_display'  => wp_ulike_setting_repo::isAutoDisplayOn( 'comment' ),
@@ -753,6 +785,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'content_types_settings_url' => self::get_settings_url( 'content-types' ),
 				'general_settings_url'       => self::get_settings_url( 'general' ),
 			);
+
+			set_transient( self::get_health_report_cache_key(), $report, 5 * MINUTE_IN_SECONDS );
+
+			return $report;
 		}
 
 		/**
@@ -776,7 +812,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return array
 		 */
 		public static function site_health_tables_test() {
-			$report = self::get_health_report();
+			$report = self::get_tables_health();
 
 			if ( $report['tables_ok'] ) {
 				return array(
@@ -842,11 +878,27 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from WP ULike → Help.', 'wp-ulike' ) );
 			}
 
-			update_option( 'wp_ulike_settings', $payload['settings'] );
+			$settings = $payload['settings'];
+
+			if ( class_exists( 'wp_ulike_settings_api' ) ) {
+				$settings_api = new wp_ulike_settings_api();
+				$settings     = $settings_api->sanitize_import_values( $settings );
+			}
+
+			update_option( 'wp_ulike_settings', $settings );
 
 			if ( ! empty( $payload['customize'] ) && is_array( $payload['customize'] ) ) {
-				update_option( 'wp_ulike_customize', $payload['customize'] );
+				$customize = $payload['customize'];
+
+				if ( class_exists( 'wp_ulike_customizer_api' ) ) {
+					$customizer_api = new wp_ulike_customizer_api();
+					$customize      = $customizer_api->sanitize_import_values( $customize );
+				}
+
+				update_option( 'wp_ulike_customize', $customize );
 			}
+
+			delete_transient( self::get_health_report_cache_key() );
 
 			return true;
 		}
