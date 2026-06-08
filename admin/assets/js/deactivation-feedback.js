@@ -143,12 +143,12 @@
 	function openModal( link ) {
 		var source = qs( '#wp-ulike-deactivate-feedback-dialog-wrapper .wp-ulike-deactivate-feedback' );
 		if ( ! source || ! link ) {
-			return;
+			return false;
 		}
 
 		var pendingDeactivateUrl = link.getAttribute( 'href' ) || '';
 		if ( ! pendingDeactivateUrl ) {
-			return;
+			return false;
 		}
 
 		closeModal();
@@ -246,6 +246,8 @@
 			}
 		};
 		document.addEventListener( 'keydown', onKeydown );
+
+		return true;
 	}
 
 	function init() {
@@ -256,7 +258,10 @@
 
 		link.addEventListener( 'click', function ( event ) {
 			event.preventDefault();
-			openModal( link );
+
+			if ( ! openModal( link ) ) {
+				window.location.href = link.getAttribute( 'href' ) || '';
+			}
 		} );
 	}
 

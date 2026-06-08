@@ -107,44 +107,47 @@ function wp_ulike_notice_manager(){
 		return;
 	}
 
-	$count_logs  = wp_ulike_count_all_logs();
-	$screen      = get_current_screen();
 	$notice_list = [];
 
 	// Show review notice once the site has meaningful engagement (likes only).
-	if ( $count_logs >= 25 ) {
-		$notice_list['wp_ulike_leave_a_review'] = new wp_ulike_notices(
-			array(
-				'id'          => 'wp_ulike_leave_a_review',
-				'title'       => esc_html__( 'Congrats!', 'wp-ulike' ),
-				'description' => sprintf(
-					/* translators: %s: total like count */
-					esc_html__( 'You\'ve logged %s likes with WP ULike so far. Nice work! If the plugin\'s been good to you, we\'d love a 5-star review on WordPress.org. It helps us keep improving and helps others discover WP ULike too.', 'wp-ulike' ),
-					'<strong>' . number_format_i18n( $count_logs ) . '</strong>'
-				),
-				'skin'        => 'default',
-				'has_close'   => true,
-				'buttons'     => array(
-					array(
-						'label'      => esc_html__( 'Happy to help', 'wp-ulike' ),
-						'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/#new-post',
-						'color_name' => 'default',
+	if ( ! wp_ulike_get_transient( 'wp-ulike-notice-wp_ulike_leave_a_review' ) ) {
+		$cached_count = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
+		$count_logs   = is_numeric( $cached_count ) ? absint( $cached_count ) : wp_ulike_count_all_logs();
+
+		if ( $count_logs >= 25 ) {
+			$notice_list['wp_ulike_leave_a_review'] = new wp_ulike_notices(
+				array(
+					'id'          => 'wp_ulike_leave_a_review',
+					'title'       => esc_html__( 'Congrats!', 'wp-ulike' ),
+					'description' => sprintf(
+						/* translators: %s: total like count */
+						esc_html__( 'You\'ve logged %s likes with WP ULike so far. Nice work! If the plugin\'s been good to you, we\'d love a 5-star review on WordPress.org. It helps us keep improving and helps others discover WP ULike too.', 'wp-ulike' ),
+						'<strong>' . number_format_i18n( $count_logs ) . '</strong>'
 					),
-					array(
-						'label'      => esc_html__( 'Maybe later', 'wp-ulike' ),
-						'type'       => 'skip',
-						'color_name' => 'default',
-						'expiration' => WEEK_IN_SECONDS * 2,
+					'skin'        => 'default',
+					'has_close'   => true,
+					'buttons'     => array(
+						array(
+							'label'      => esc_html__( 'Happy to help', 'wp-ulike' ),
+							'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/#new-post',
+							'color_name' => 'default',
+						),
+						array(
+							'label'      => esc_html__( 'Maybe later', 'wp-ulike' ),
+							'type'       => 'skip',
+							'color_name' => 'default',
+							'expiration' => WEEK_IN_SECONDS * 2,
+						),
+						array(
+							'label'      => esc_html__( 'Don\'t ask again', 'wp-ulike' ),
+							'type'       => 'skip',
+							'color_name' => 'default',
+							'expiration' => YEAR_IN_SECONDS * 10,
+						),
 					),
-					array(
-						'label'      => esc_html__( 'Don\'t ask again', 'wp-ulike' ),
-						'type'       => 'skip',
-						'color_name' => 'default',
-						'expiration' => YEAR_IN_SECONDS * 10,
-					),
-				),
-			)
-		);
+				)
+			);
+		}
 	}
 
 	// Show discount notice for Pro users with invalid/expired/disabled licenses
@@ -309,6 +312,11 @@ add_action( 'admin_print_footer_scripts', 'wp_ulike_go_pro_submenu_scripts' );
  */
 function wp_ulike_hide_admin_notifications( $notice_list ){
 	$screen = get_current_screen();
+
+	if ( ! $screen ) {
+		return $notice_list;
+	}
+
 	$hide_admin_notice = wp_ulike_get_option( 'disable_admin_notice', false );
 	return wp_ulike_is_true( $hide_admin_notice ) && strpos( $screen->base, WP_ULIKE_SLUG ) === false ? array() : $notice_list;
 }

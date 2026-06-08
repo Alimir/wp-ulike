@@ -608,6 +608,16 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         }
 
         /**
+         * Sanitize customizer values for import/restore operations.
+         *
+         * @param mixed $values Values to sanitize.
+         * @return mixed Sanitized values.
+         */
+        public function sanitize_import_values( $values ) {
+            return $this->sanitize_customizer_values( $values );
+        }
+
+        /**
          * Recursively sanitize customizer values to prevent XSS
          *
          * @param mixed $values Values to sanitize

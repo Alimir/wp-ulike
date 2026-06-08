@@ -92,15 +92,11 @@ function wp_ulike_widget_button_callback( $atts = array() ){
     $btn_other_attrs = '';
 
     if( $btn_attrs = trim( $btn_attrs, ';' ) ){
-        preg_match_all('/([\-|\w]+)(?!{})([\w]+)/s', $btn_attrs, $btn_attr_matches );
+        preg_match_all( '/([\w\-]+){([^}]+)}/', $btn_attrs, $btn_attr_matches, PREG_SET_ORDER );
 
-        if( ! empty( $btn_attr_matches[0] ) && is_array( $btn_attr_matches[0] ) ){
-            foreach( $btn_attr_matches[0] as $i => $attr_name_value ){
-                if( 0 == $i % 2 ){
-                    $btn_other_attrs .= sprintf(' %s', $attr_name_value);
-                } else {
-                    $btn_other_attrs .= sprintf('="%s"', esc_attr( trim( $attr_name_value ) ) );
-                }
+        if( ! empty( $btn_attr_matches ) && is_array( $btn_attr_matches ) ){
+            foreach( $btn_attr_matches as $match ){
+                $btn_other_attrs .= sprintf( ' %s="%s"', esc_attr( $match[1] ), esc_attr( trim( $match[2] ) ) );
             }
             $btn_other_attrs = trim( $btn_other_attrs );
         }
@@ -238,6 +234,10 @@ function wp_ulike_convert_old_options_array( $data ){
  */
 function wp_ulike_is_plugin_screen(){
     $screen = get_current_screen();
+
+	if ( ! $screen ) {
+		return false;
+	}
 
 	if( strpos( $screen->base, WP_ULIKE_SLUG ) === false ){
         if( defined( 'WP_ULIKE_PRO_DOMAIN' ) && in_array( $screen->base, array( 'post' ) ) ){
