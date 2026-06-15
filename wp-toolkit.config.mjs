@@ -28,6 +28,10 @@ export default {
 	devOnlyFiles: ['assets/js/wp-ulike.js', 'assets/css/wp-ulike.css'],
 
 	excludes: [
+		'assets/sass',
+		'admin/assets/sass',
+		'assets/js/src',
+		'admin/assets/js/src',
 		'wp-toolkit.config.mjs',
 		'includes/blocks/button/src',
 		'includes/blocks/top-content/src',
@@ -73,7 +77,9 @@ export default {
 			'package.json',
 			'node_modules',
 			'assets/js/src',
+			'admin/assets/js/src',
 			'assets/sass',
+			'admin/assets/sass',
 		],
 	},
 };
