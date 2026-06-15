@@ -585,6 +585,83 @@ if ( ! function_exists( 'wp_ulike_enqueue_script_with_defer' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_ulike_get_earliest_log_timestamp' ) ) {
+	/**
+	 * Earliest vote timestamp across WP ULike log tables (for legacy backfill).
+	 *
+	 * @return int|null Unix timestamp or null when unknown.
+	 */
+	function wp_ulike_get_earliest_log_timestamp() {
+		global $wpdb;
+
+		if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
+			return null;
+		}
+
+		$selects = array();
+
+		foreach ( WP_Ulike_Overview::get_required_tables() as $label => $table_name ) {
+			if ( 'meta' === $label ) {
+				continue;
+			}
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from plugin registry.
+			$selects[] = "SELECT MIN(`date_time`) AS dt FROM `{$table_name}`";
+		}
+
+		if ( empty( $selects ) ) {
+			return null;
+		}
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- subqueries use registered table names only.
+		$value = $wpdb->get_var(
+			'SELECT MIN(dt) FROM (' . implode( ' UNION ALL ', $selects ) . ') AS ulike_earliest WHERE dt IS NOT NULL'
+		);
+
+		if ( empty( $value ) ) {
+			return null;
+		}
+
+		$timestamp = strtotime( $value . ' UTC' );
+
+		return $timestamp ? (int) $timestamp : null;
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_maybe_backfill_first_activated_at' ) ) {
+	/**
+	 * Backfill first-activation timestamp for existing installs (runs once).
+	 *
+	 * @return void
+	 */
+	function wp_ulike_maybe_backfill_first_activated_at() {
+		if ( false !== get_option( 'wp_ulike_first_activated_at', false ) ) {
+			return;
+		}
+
+		$timestamp = wp_ulike_get_earliest_log_timestamp();
+
+		update_option( 'wp_ulike_first_activated_at', $timestamp ? (int) $timestamp : 0, false );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_days_since_activation' ) ) {
+	/**
+	 * Whole days since the plugin was first activated on this site.
+	 *
+	 * @return int|null Null when activation date is unknown.
+	 */
+	function wp_ulike_get_days_since_activation() {
+		$activated_at = get_option( 'wp_ulike_first_activated_at', false );
+
+		if ( ! $activated_at || ! is_numeric( $activated_at ) ) {
+			return null;
+		}
+
+		return max( 0, (int) floor( ( time() - (int) $activated_at ) / DAY_IN_SECONDS ) );
+	}
+}
+
 if( ! function_exists('wp_ulike_generate_fingerprint') ){
 	/**
 	 * Generate a secure fingerprint hash for the current user/device session.
