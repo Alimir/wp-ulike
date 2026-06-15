@@ -192,7 +192,7 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 		 * @return array<string, string>
 		 */
 		private static function build_api_payload( $reason_key, $details ) {
-			return array_merge(
+			$payload = array_merge(
 				array(
 					'plugin_slug' => 'wp-ulike',
 					'site_url'    => home_url(),
@@ -201,6 +201,14 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 				),
 				self::get_environment_payload()
 			);
+
+			$days = wp_ulike_get_days_since_activation();
+
+			if ( null !== $days ) {
+				$payload['days_since_activation'] = $days;
+			}
+
+			return $payload;
 		}
 
 		/**

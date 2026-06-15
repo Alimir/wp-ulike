@@ -44,6 +44,8 @@ class WpUlikeInit {
    * @return void
    */
   public function plugins_loaded(){
+    wp_ulike_maybe_backfill_first_activated_at();
+
     // Upgrade database
     if ( self::is_admin_backend() ) {
       $this->maybe_upgrade_database();

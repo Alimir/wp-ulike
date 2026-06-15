@@ -94,6 +94,10 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
       }
       wp_ulike_activator::get_instance()->activate();
 
+      if ( ! get_option( 'wp_ulike_first_activated_at', false ) ) {
+        update_option( 'wp_ulike_first_activated_at', time(), false );
+      }
+
       require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-activation-pointer.php';
       WP_Ulike_Activation_Pointer::flag_for_current_user();
 
