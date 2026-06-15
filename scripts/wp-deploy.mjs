@@ -1,6 +1,8 @@
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { stdin as input, stdout as output } from 'node:process';
+import { createInterface } from 'node:readline/promises';
 import { spawn } from 'node:child_process';
 import { paths, pkg, wpDeploy } from './config.mjs';
 import { requireEnv } from './load-env.mjs';
@@ -17,6 +19,7 @@ if (!existsSync(paths.buildPath)) {
 assertReleaseBuild(paths.buildPath, pkg);
 
 const dryRun = ['1', 'true', 'yes'].includes(String(process.env.WP_RELEASE_DRY_RUN || '').toLowerCase());
+const autoConfirm = ['1', 'true', 'yes'].includes(String(process.env.WP_RELEASE_YES || '').toLowerCase());
 const svnPassword = env.WP_SVN_PASSWORD || process.env.WP_SVN_PASSWORD || '';
 const releaseTagPath = `tags/${pkg.version}`;
 
@@ -200,7 +203,37 @@ function assertReadmeStableTag() {
 
 function assertReleaseTagIsAvailable() {
 	if (existsSync(releaseTagDir)) {
-		throw new Error(`Tag ${pkg.version} already exists in SVN. Bump the version before releasing.`);
+		throw new Error(
+			[
+				`Tag ${pkg.version} already exists on WordPress.org.`,
+				'Bump the version in package.json, wp-ulike.php, and readme.txt before releasing again.',
+				'If you only need to update trunk without a new tag, that is not supported by npm run release.',
+			].join('\n')
+		);
+	}
+}
+
+async function confirmRelease() {
+	if (dryRun || autoConfirm) {
+		return;
+	}
+
+	if (!process.stdin.isTTY) {
+		throw new Error(
+			'Release confirmation requires an interactive terminal. Set WP_RELEASE_YES=1 to skip this prompt in CI.'
+		);
+	}
+
+	const rl = createInterface({ input, output });
+	const answer = await rl.question(
+		`\nPublish wp-ulike ${pkg.version} to WordPress.org?\n` +
+			`This will update trunk and create tags/${pkg.version}.\n` +
+			'Type "yes" to continue: '
+	);
+	rl.close();
+
+	if (answer.trim().toLowerCase() !== 'yes') {
+		throw new Error('Release cancelled.');
 	}
 }
 
@@ -227,6 +260,8 @@ async function publishRelease() {
 		return;
 	}
 
+	await confirmRelease();
+
 	console.log(`Committing ${pkg.version} to WordPress.org...`);
 	await run('svn', svnArgs(['commit', '-m', commitMessage]), { cwd: repoDir });
 
@@ -237,6 +272,8 @@ async function publishRelease() {
 
 console.log('Preparing WordPress.org SVN working copy...');
 await checkoutFresh();
+assertReadmeStableTag();
+assertReleaseTagIsAvailable();
 
 console.log('Syncing production build into SVN trunk...');
 await syncReleaseDirectory(paths.buildPath, trunkDir);
@@ -246,6 +283,4 @@ if (existsSync(wpDeploy.assetsDir)) {
 	await syncReleaseDirectory(wpDeploy.assetsDir, assetsDir);
 }
 
-assertReadmeStableTag();
-assertReleaseTagIsAvailable();
 await publishRelease();
