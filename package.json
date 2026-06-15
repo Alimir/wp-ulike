@@ -15,24 +15,20 @@
     "url": "https://wpulike.com"
   },
   "scripts": {
-    "build:js": "node scripts/build-js.mjs",
-    "build:css": "node scripts/build-css.mjs",
-    "build:assets": "npm run build:js && npm run build:css",
-    "build": "node scripts/build.mjs",
-    "dev": "node scripts/dev.mjs",
-    "i18n": "node scripts/i18n.mjs",
-    "i18n:json": "node scripts/i18n-json.mjs",
-    "release": "npm run build && node scripts/wp-deploy.mjs",
-    "product": "npm run build && node scripts/deploy.mjs prod",
+    "build": "wp-toolkit build",
+    "build:js": "wp-toolkit build:js",
+    "build:css": "wp-toolkit build:css",
+    "build:assets": "wp-toolkit build:js && wp-toolkit build:css",
+    "dev": "wp-toolkit dev",
+    "i18n": "wp-toolkit i18n",
+    "i18n:json": "wp-toolkit i18n:json",
+    "release": "wp-toolkit release",
+    "product": "wp-toolkit product",
     "build:blocks": "npm run build --prefix includes/blocks/button && npm run build --prefix includes/blocks/top-content",
     "build:blocks:i18n": "npm run build:blocks && npm run i18n:json"
   },
   "devDependencies": {
-    "chokidar": "^4.0.3",
-    "lightningcss": "^1.29.3",
-    "preprocess": "^3.2.0",
-    "sass": "^1.89.2",
-    "terser": "^5.43.1"
+    "@alimir/wp-toolkit": "github:Alimir/wp-toolkit"
   },
   "bugs": {
     "url": "https://github.com/Alimir/wp-ulike/issues"
