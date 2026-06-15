@@ -3,7 +3,7 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       Looking to increase user engagement on your WordPress site? WP ULike plugin lets you easily add voting buttons to your content. With customizable settings and detailed analytics, you can track user engagement, optimize your content, and build a loyal following.
- * Version:           5.0.6
+ * Version:           5.0.7
  * Author:            TechnoWich
  * Author URI:        https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Requires PHP:      7.2.5
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 			);
-define( 'WP_ULIKE_VERSION'      , '5.0.6' 					 		    	);
+define( 'WP_ULIKE_VERSION'      , '5.0.7' 					 		    	);
 define( 'WP_ULIKE_DB_VERSION'   , '2.4' 					 	 			);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 			);
 define( 'WP_ULIKE_NAME'         , 'WP ULike'	    						);
