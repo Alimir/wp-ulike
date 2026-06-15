@@ -543,7 +543,7 @@
 	}
 
 	&__intro {
-		margin: 0 0 12px;
+		margin: 0;
 		font-size: 12px;
 		line-height: 1.55;
 		color: #646970;
@@ -552,7 +552,7 @@
 	&__actions {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 10px;
 
 		.button {
 			width: 100%;
@@ -562,7 +562,7 @@
 	}
 
 	&__import {
-		margin-top: 12px;
+		margin-top: 0;
 		padding-top: 12px;
 		border-top: 1px solid #dcdcde;
 

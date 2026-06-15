@@ -287,20 +287,20 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 
 			<div class="wp-ulike-about-card wp-ulike-about-card--muted wp-ulike-about-backup" id="wp-ulike-settings-backup">
 				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Settings backup', 'wp-ulike' ); ?></h2>
-				<p class="wp-ulike-about-backup__intro"><?php esc_html_e( 'Download your settings and customizer values as JSON.', 'wp-ulike' ); ?></p>
 				<div class="wp-ulike-about-backup__actions">
+					<p class="wp-ulike-about-backup__intro"><?php esc_html_e( 'Download your settings and customizer values as JSON.', 'wp-ulike' ); ?></p>
 					<a class="button button-secondary" href="<?php echo esc_url( $data['export_url'] ?? '#' ); ?>"><?php esc_html_e( 'Export', 'wp-ulike' ); ?></a>
+					<details class="wp-ulike-about-backup__import"<?php echo $import_open ? ' open' : ''; ?>>
+						<summary><?php esc_html_e( 'Import settings', 'wp-ulike' ); ?></summary>
+						<form class="wp-ulike-about-backup__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data" onsubmit='return window.confirm(<?php echo wp_json_encode( __( 'Import will replace your current WP ULike settings and customizer values. Continue?', 'wp-ulike' ) ); ?>);'>
+							<input type="hidden" name="action" value="wp_ulike_import_settings" />
+							<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $data['import_nonce'] ?? '' ); ?>" />
+							<label class="wp-ulike-about-backup__label" for="wp-ulike-settings-file"><?php esc_html_e( 'JSON file', 'wp-ulike' ); ?></label>
+							<input id="wp-ulike-settings-file" class="wp-ulike-about-backup__file" type="file" name="settings_file" accept="application/json,.json" required />
+							<button type="submit" class="button button-secondary"><?php esc_html_e( 'Import', 'wp-ulike' ); ?></button>
+						</form>
+					</details>
 				</div>
-				<details class="wp-ulike-about-backup__import"<?php echo $import_open ? ' open' : ''; ?>>
-					<summary><?php esc_html_e( 'Import settings', 'wp-ulike' ); ?></summary>
-					<form class="wp-ulike-about-backup__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data" onsubmit="return window.confirm( <?php echo wp_json_encode( __( 'Import will replace your current WP ULike settings and customizer values. Continue?', 'wp-ulike' ) ); ?> );">
-						<input type="hidden" name="action" value="wp_ulike_import_settings" />
-						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $data['import_nonce'] ?? '' ); ?>" />
-						<label class="wp-ulike-about-backup__label" for="wp-ulike-settings-file"><?php esc_html_e( 'JSON file', 'wp-ulike' ); ?></label>
-						<input id="wp-ulike-settings-file" class="wp-ulike-about-backup__file" type="file" name="settings_file" accept="application/json,.json" required />
-						<button type="submit" class="button button-secondary"><?php esc_html_e( 'Import', 'wp-ulike' ); ?></button>
-					</form>
-				</details>
 			</div>
 		</aside>
 
