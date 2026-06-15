@@ -595,7 +595,6 @@
   }
 })(window, document);
 
-
 /* ================== assets/js/src/notifications.js =================== */
 
 
@@ -862,7 +861,6 @@
     };
   }
 })(window, document);
-
 
 /* ================== assets/js/src/ulike.js =================== */
 
@@ -1765,7 +1763,6 @@
     };
   }
 })(window, document);
-
 
 /* ================== assets/js/src/scripts.js =================== */
 
