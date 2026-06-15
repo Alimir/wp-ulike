@@ -4,10 +4,18 @@
     line-height: normal;
     margin: 0;
     padding: 10px 0;
+    box-sizing: border-box;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: inherit;
+    }
 
     .wp_ulike_general_class {
         display: inline-flex;
         align-items: center;
+        max-width: 100%;
     }
 
     button.wp_ulike_btn{
@@ -27,6 +35,11 @@
         line-height: inherit;
         appearance: none;
         -webkit-appearance: none;
+        width: auto;
+        max-width: none;
+        text-transform: none;
+        letter-spacing: normal;
+        font-weight: inherit;
 
         &:hover,
         &:active,
@@ -115,6 +128,35 @@
                 float: none;
                 padding: 0;
                 margin: 0;
+            }
+        }
+    }
+}
+
+#bbpress-forums {
+
+    .bbp-reply-content,
+    .bbp-topic-content,
+    .bbp-forum-content {
+
+        .wpulike {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .wp_ulike_likers_wrapper {
+
+            li,
+            .wp-ulike-liker {
+                border: none;
+                padding: 0;
+
+                a,
+                img {
+                    float: none;
+                    padding: 0;
+                    margin: 0;
+                }
             }
         }
     }
