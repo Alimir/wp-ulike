@@ -359,7 +359,14 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			$message .= '<p>' . esc_html__( 'Here\'s what to do: Clear your current license key using the button below, uninstall the current Pro version, then download and install the latest version from your account after purchasing. Once you install it, just enter your new license key in the settings.', 'wp-ulike' ) . '</p>';
 			$message .= '<p style="margin-top: 10px;">';
 			$message .= '<a href="' . esc_url( $clear_license_url ) . '" class="button button-primary" style="margin-right: 10px; font-weight: 600;">' . esc_html__( 'Clear License Key', 'wp-ulike' ) . '</a>';
-			$message .= '<a href="' . esc_url( WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=license-check&utm_campaign=invalid-license&utm_medium=wp-dash' ) . '" target="_blank" rel="noopener noreferrer" class="button button-secondary" style="margin-right: 10px; font-weight: 600;">' . esc_html__( 'View Pricing', 'wp-ulike' ) . '</a>';
+			$message .= '<a href="' . esc_url( add_query_arg(
+				array(
+					'utm_source'   => 'license-check',
+					'utm_campaign' => 'invalid-license',
+					'utm_medium'   => 'wp-dash',
+				),
+				WP_ULIKE_PLUGIN_URI . 'pricing/'
+			) ) . '" target="_blank" rel="noopener noreferrer" class="button button-secondary" style="margin-right: 10px; font-weight: 600;">' . esc_html__( 'View Pricing', 'wp-ulike' ) . '</a>';
 			$message .= '</p>';
 			$message .= '<p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; color: #666; font-size: 13px;">';
 			$message .= esc_html__( 'We\'re currently offering a special price for users upgrading to the latest version. Questions? We\'re here to help—just reach out at', 'wp-ulike' ) . ' <a href="mailto:info@wpulike.com" style="color: #2271b1; font-weight: 600;">info@wpulike.com</a>';
