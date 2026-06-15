@@ -207,7 +207,15 @@ function wp_ulike_notice_manager(){
 									esc_html__( 'Claim %s discount', 'wp-ulike' ),
 									'30%'
 								),
-								'link'       => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=license-discount-notice&utm_campaign=30off&utm_medium=wp-dash&discount=30OFF',
+								'link'       => add_query_arg(
+									array(
+										'utm_source'   => 'license-discount-notice',
+										'utm_campaign' => '30off',
+										'utm_medium'   => 'wp-dash',
+										'discount'     => '30OFF',
+									),
+									WP_ULIKE_PLUGIN_URI . 'pricing/'
+								),
 								'color_name' => 'default',
 							),
 							array(
@@ -269,13 +277,20 @@ function wp_ulike_go_pro_menu_redirect() {
 		return;
 	}
 
-	wp_redirect( WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=wp-menu&utm_campaign=gopro&utm_medium=wp-dash' ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+	wp_redirect( add_query_arg(
+		array(
+			'utm_source'   => 'wp-menu',
+			'utm_campaign' => 'gopro',
+			'utm_medium'   => 'wp-dash',
+		),
+		WP_ULIKE_PLUGIN_URI . 'upgrade/'
+	) ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 	exit;
 }
 add_action( 'admin_init', 'wp_ulike_go_pro_menu_redirect' );
 
 /**
- * Go Pro menu: open pricing in a new tab (same pattern as Elementor admin.js).
+ * Go Pro menu: open upgrade page in a new tab (same pattern as Elementor admin.js).
  *
  * @return void
  */
@@ -284,11 +299,18 @@ function wp_ulike_go_pro_submenu_scripts() {
 		return;
 	}
 
-	$pricing_url = WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=wp-menu&utm_campaign=gopro&utm_medium=wp-dash';
+	$upgrade_url = add_query_arg(
+		array(
+			'utm_source'   => 'wp-menu',
+			'utm_campaign' => 'gopro',
+			'utm_medium'   => 'wp-dash',
+		),
+		WP_ULIKE_PLUGIN_URI . 'upgrade/'
+	);
 	?>
 	<script>
 	(function () {
-		var pricingUrl = <?php echo wp_json_encode( $pricing_url ); ?>;
+		var upgradeUrl = <?php echo wp_json_encode( $upgrade_url ); ?>;
 		var links = document.querySelectorAll('#adminmenu a[href*="page=wp-ulike-go-pro"]');
 
 		links.forEach(function (link) {
@@ -296,7 +318,7 @@ function wp_ulike_go_pro_submenu_scripts() {
 			link.setAttribute('rel', 'noopener noreferrer');
 			link.addEventListener('click', function (event) {
 				event.preventDefault();
-				window.open(pricingUrl, '_blank', 'noopener,noreferrer');
+				window.open(upgradeUrl, '_blank', 'noopener,noreferrer');
 			});
 		});
 	})();

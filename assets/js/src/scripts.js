@@ -1,6 +1,6 @@
 /**
  * WP ULike Scripts - Initialization
- * 
+ *
  * @fileoverview Auto-initializes WP ULike plugin on page load and dynamic content
  * @requires ES7 (ES2016) compatible browser
  * @author WP ULike Team
@@ -9,83 +9,106 @@
 (function (window, document) {
   "use strict";
 
-  // Safe Array.from polyfill for older browsers (if needed)
   const arrayFrom = (arrayLike) => {
     if (Array.from) {
       return Array.from(arrayLike);
     }
-    // Fallback for very old browsers
     return Array.prototype.slice.call(arrayLike);
   };
 
-  // Helper function to initialize ulike on elements
   const initUlike = (elements) => {
-    if (!elements) return;
+    if (!elements || typeof WordpressUlike === "undefined") {
+      return;
+    }
 
-    // Handle single element or NodeList
-    const elementArray = elements.length !== undefined
-      ? arrayFrom(elements)
-      : [elements];
+    const elementArray = elements.length !== undefined ? arrayFrom(elements) : [elements];
 
     elementArray.forEach((element) => {
-      if (element && typeof WordpressUlike !== "undefined") {
-        // Check if already initialized (using data attribute as marker)
-        if (!element.hasAttribute("data-ulike-initialized")) {
-          new WordpressUlike(element);
-          element.setAttribute("data-ulike-initialized", "true");
-        }
+      if (element && !element.hasAttribute("data-ulike-initialized")) {
+        new WordpressUlike(element);
+        element.setAttribute("data-ulike-initialized", "true");
       }
     });
   };
 
-  // Init ulike buttons on page load
-  const wpulikeElements = document.querySelectorAll(".wpulike");
-  initUlike(wpulikeElements);
+  const pendingElements = new Set();
+  let mutationFrameScheduled = false;
 
-  /**
-   * Detecting div of certain class has been added to DOM
-   */
-  const WordpressUlikeOnElementInserted = (
-    containerSelector,
-    elementSelector,
-    callback
-  ) => {
+  const flushPendingInits = () => {
+    mutationFrameScheduled = false;
+
+    if (!pendingElements.size) {
+      return;
+    }
+
+    const batch = arrayFrom(pendingElements);
+    pendingElements.clear();
+    initUlike(batch);
+  };
+
+  const queueInit = (element) => {
+    if (!element || element.nodeType !== 1 || !element.matches(".wpulike")) {
+      return;
+    }
+
+    pendingElements.add(element);
+
+    if (mutationFrameScheduled) {
+      return;
+    }
+
+    mutationFrameScheduled = true;
+    window.requestAnimationFrame(flushPendingInits);
+  };
+
+  const collectMatchingNodes = (node, elementSelector, callback) => {
+    if (node.nodeType !== 1) {
+      return;
+    }
+
+    if (node.matches && node.matches(elementSelector)) {
+      callback(node);
+    }
+
+    if (node.querySelectorAll) {
+      arrayFrom(node.querySelectorAll(elementSelector)).forEach(callback);
+    }
+  };
+
+  const WordpressUlikeOnElementInserted = (containerSelector, elementSelector, callback) => {
     const onMutationsObserved = (mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.addedNodes.length) {
-          mutation.addedNodes.forEach((node) => {
-            // Check if the added node itself matches
-            if (node.nodeType === 1 && node.matches && node.matches(elementSelector)) {
-              callback(node);
-            }
-            // Check for children that match
-            if (node.nodeType === 1 && node.querySelectorAll) {
-              const elements = node.querySelectorAll(elementSelector);
-              arrayFrom(elements).forEach((el) => callback(el));
-            }
-          });
+        if (!mutation.addedNodes.length) {
+          return;
         }
+
+        mutation.addedNodes.forEach((node) => {
+          collectMatchingNodes(node, elementSelector, callback);
+        });
       });
     };
 
     const target = document.querySelector(containerSelector);
-    if (!target) return;
+    if (!target) {
+      return null;
+    }
 
-    const config = {
+    const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+    if (!MutationObserver) {
+      return null;
+    }
+
+    const observer = new MutationObserver(onMutationsObserved);
+    observer.observe(target, {
       childList: true,
       subtree: true,
-    };
-    const MutationObserver =
-      window.MutationObserver || window.WebKitMutationObserver;
+    });
 
-    if (MutationObserver) {
-      const observer = new MutationObserver(onMutationsObserved);
-      observer.observe(target, config);
-    }
+    return observer;
   };
 
-  // On wp ulike element added
-  WordpressUlikeOnElementInserted("body", ".wpulike", (element) => {
-    initUlike(element);
-  });
+  initUlike(document.querySelectorAll(".wpulike"));
+
+  // Observe body so custom load-more, AJAX, and page-builder injections keep working.
+  WordpressUlikeOnElementInserted("body", ".wpulike", queueInit);
 })(window, document);
