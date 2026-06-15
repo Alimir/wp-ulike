@@ -107,6 +107,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function get_about_view_data() {
 			$health     = self::get_health_report();
+			$health     = self::apply_live_tables_health( $health );
 			$is_pro     = defined( 'WP_ULIKE_PRO_VERSION' );
 			$pro_label  = $is_pro && defined( 'WP_ULIKE_PRO_VERSION' ) ? WP_ULIKE_PRO_VERSION : '';
 
@@ -192,6 +193,13 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					'label'  => esc_html__( 'Database', 'wp-ulike' ),
 					'value'  => ! empty( $health['tables_ok'] ) ? esc_html__( 'Ready', 'wp-ulike' ) : esc_html__( 'Needs attention', 'wp-ulike' ),
 					'state'  => ! empty( $health['tables_ok'] ) ? 'good' : 'bad',
+					'hint'   => ! empty( $health['missing_tables'] )
+						? sprintf(
+							/* translators: %s: comma-separated table labels */
+							esc_html__( 'Missing: %s', 'wp-ulike' ),
+							esc_html( implode( ', ', (array) $health['missing_tables'] ) )
+						)
+						: '',
 				),
 			);
 
@@ -232,6 +240,18 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					'icon'  => 'book',
 				),
 				array(
+					'title' => esc_html__( 'Free vs Pro breakdown', 'wp-ulike' ),
+					'desc'  => esc_html__( 'Compare free and Pro features before you upgrade.', 'wp-ulike' ),
+					'url'   => add_query_arg(
+						array(
+							'utm_source' => 'about-page',
+							'utm_medium' => 'wp-dash',
+						),
+						WP_ULIKE_PLUGIN_URI . 'upgrade/'
+					),
+					'icon'  => 'star-filled',
+				),
+				array(
 					'title' => esc_html__( 'Support', 'wp-ulike' ),
 					'desc'  => esc_html__( 'Get help from the WP ULike team.', 'wp-ulike' ),
 					'url'   => WP_ULIKE_PLUGIN_URI . 'support/?utm_source=about-page&utm_medium=wp-dash',
@@ -268,7 +288,17 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'export_url'             => wp_nonce_url( admin_url( 'admin-ajax.php?action=wp_ulike_export_settings' ), 'wp_ulike_export_settings' ),
 				'show_pro_upsell'        => apply_filters( 'wp_ulike_about_show_pro_upsell', ! $is_pro ),
 				'pro_upsell'             => $upsell,
-				'pricing_url'            => WP_ULIKE_PLUGIN_URI . 'pricing/?utm_source=overview&utm_medium=wp-dash',
+				'upgrade_url'            => add_query_arg(
+					array(
+						'utm_source' => 'overview',
+						'utm_medium' => 'wp-dash',
+					),
+					WP_ULIKE_PLUGIN_URI . 'upgrade/'
+				),
+				'repair_tables_url'      => wp_nonce_url(
+					admin_url( 'admin-post.php?action=wp_ulike_repair_tables' ),
+					'wp_ulike_repair_tables'
+				),
 			);
 		}
 
@@ -324,7 +354,9 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			if ( empty( $health['tables_ok'] ) ) {
 				$tips[] = array(
-					'text' => esc_html__( 'Database tables may be incomplete. Deactivate and reactivate WP ULike once.', 'wp-ulike' ),
+					'text' => esc_html__( 'Database tables may be incomplete. Use “Repair database tables” on Help, or deactivate and reactivate WP ULike once.', 'wp-ulike' ),
+					'url'  => self::get_about_url(),
+					'link' => esc_html__( 'Open Help', 'wp-ulike' ),
 				);
 			}
 
@@ -344,6 +376,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			add_filter( 'site_status_tests', array( __CLASS__, 'register_site_health_tests' ) );
 			add_action( 'wp_ajax_wp_ulike_export_settings', array( __CLASS__, 'handle_export_settings' ) );
 			add_action( 'admin_post_wp_ulike_import_settings', array( __CLASS__, 'handle_import_settings' ) );
+			add_action( 'admin_post_wp_ulike_repair_tables', array( __CLASS__, 'handle_repair_tables' ) );
 		}
 
 		/**
@@ -412,9 +445,50 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		}
 
 		/**
-		 * Required database tables.
+		 * Repair missing database tables from Help.
 		 *
-		 * @return array
+		 * @return void
+		 */
+		public static function handle_repair_tables() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Permission denied.', 'wp-ulike' ) );
+			}
+
+			check_admin_referer( 'wp_ulike_repair_tables' );
+
+			$report = self::repair_database_tables();
+			$status = ! empty( $report['tables_ok'] ) ? 'success' : 'failed';
+
+			wp_safe_redirect(
+				add_query_arg(
+					'wp_ulike_repair',
+					$status,
+					self::get_about_url()
+				)
+			);
+			exit;
+		}
+
+		/**
+		 * Create any missing WP ULike database tables.
+		 *
+		 * @return array{tables_ok: bool, missing_tables: string[]}
+		 */
+		public static function repair_database_tables() {
+			if ( ! class_exists( 'wp_ulike_activator' ) ) {
+				require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-activator.php';
+			}
+
+			wp_ulike_activator::get_instance()->install_tables();
+			delete_transient( self::get_health_report_cache_key() );
+
+			return self::get_tables_health();
+		}
+
+		/**
+		 * Required database tables (health, repair, Site Health).
+		 *
+		 * @return array<string, string> Label => full table name.
 		 */
 		public static function get_required_tables() {
 			global $wpdb;
@@ -704,6 +778,21 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		}
 
 		/**
+		 * Merge a live table check into a health report (Help / Site Health must not use stale cache).
+		 *
+		 * @param array $health Health report.
+		 * @return array
+		 */
+		public static function apply_live_tables_health( $health ) {
+			$tables_health = self::get_tables_health();
+
+			$health['tables_ok']      = $tables_health['tables_ok'];
+			$health['missing_tables'] = $tables_health['missing_tables'];
+
+			return $health;
+		}
+
+		/**
 		 * Transient key for cached Help page health report.
 		 *
 		 * @return string
@@ -837,7 +926,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					),
 					'description' => sprintf(
 						'<p>%s</p>',
-						esc_html__( 'All voting log tables required by WP ULike are present.', 'wp-ulike' )
+						esc_html__( 'All database tables required by WP ULike are present.', 'wp-ulike' )
 					),
 					'actions'     => '',
 					'test'        => 'wp_ulike_database_tables',
@@ -909,7 +998,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function import_settings( $payload ) {
 			if ( ! array_key_exists( 'settings', $payload ) || ! is_array( $payload['settings'] ) ) {
-				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from WP ULike → Help.', 'wp-ulike' ) );
+				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from Help → Settings backup.', 'wp-ulike' ) );
 			}
 
 			$settings = $payload['settings'];

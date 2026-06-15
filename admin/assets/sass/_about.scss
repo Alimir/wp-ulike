@@ -537,6 +537,88 @@
 	}
 }
 
+.wp-ulike-about-backup {
+	.wp-ulike-about-card__title {
+		margin-bottom: 8px;
+	}
+
+	&__intro {
+		margin: 0 0 12px;
+		font-size: 12px;
+		line-height: 1.55;
+		color: #646970;
+	}
+
+	&__actions {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		.button {
+			width: 100%;
+			justify-content: center;
+			text-align: center;
+		}
+	}
+
+	&__import {
+		margin-top: 12px;
+		padding-top: 12px;
+		border-top: 1px solid #dcdcde;
+
+		summary {
+			cursor: pointer;
+			font-size: 13px;
+			font-weight: 600;
+			color: #2271b1;
+			list-style: none;
+
+			&::-webkit-details-marker {
+				display: none;
+			}
+
+			&::before {
+				content: '▸';
+				display: inline-block;
+				margin-inline-end: 6px;
+				transition: transform 0.15s ease;
+			}
+		}
+
+		&[open] summary::before {
+			transform: rotate(90deg);
+		}
+	}
+
+	&__form {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		margin-top: 10px;
+		padding-top: 0;
+		border-top: 0;
+	}
+
+	&__label {
+		margin: 0;
+		font-size: 12px;
+		font-weight: 600;
+		color: #50575e;
+	}
+
+	&__file {
+		width: 100%;
+		max-width: 100%;
+		font-size: 12px;
+	}
+
+	.button {
+		width: 100%;
+		justify-content: center;
+		text-align: center;
+	}
+}
+
 .wp-ulike-about-transfer {
 	&__title {
 		margin: 0 0 8px;
@@ -565,8 +647,20 @@
 	gap: 8px;
 	margin: 0 0 8px;
 
+	fieldset {
+		border: 0;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+		width: 100%;
+	}
+
 	&__label {
-		margin: 0 0 8px;
+		flex: 0 0 100%;
+		margin: 0 0 4px;
 		font-size: 13px;
 		font-weight: 600;
 	}
