@@ -22,15 +22,24 @@ function wp_ulike_copyright( $text ) {
 		return $text;
 	}
 
+	$url = add_query_arg(
+		array(
+			'utm_source'   => 'footer-link',
+			'utm_campaign' => 'wp-ulike',
+			'utm_medium'   => 'wp-dash',
+		),
+		WP_ULIKE_PLUGIN_URI
+	);
+
 	$link = sprintf(
-		'<a href="%s" title="%s" target="_blank">%s</a>',
-		esc_url( 'https://technowich.com/?utm_source=footer-link&utm_campaign=wp-ulike&utm_medium=wp-dash' ),
-		esc_attr__( 'TechnoWich', 'wp-ulike' ),
-		esc_html__( 'TechnoWich', 'wp-ulike' )
+		'<a href="%1$s" title="%2$s" target="_blank" rel="noopener noreferrer">%3$s</a>',
+		esc_url( $url ),
+		esc_attr( WP_ULIKE_NAME ),
+		esc_html( WP_ULIKE_NAME )
 	);
 
 	return sprintf(
-		'<span id="footer-thankyou">%s %s</span>',
+		'<span id="footer-thankyou">%1$s %2$s</span>',
 		esc_html__( 'Proudly Powered By', 'wp-ulike' ),
 		$link
 	);
