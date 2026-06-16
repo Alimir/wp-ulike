@@ -3,6 +3,7 @@ export default {
 	mainFile: 'wp-ulike.php',
 	textDomain: 'wp-ulike',
 
+	// Assets
 	jsSources: [
 		'assets/js/src/tooltip.js',
 		'assets/js/src/notifications.js',
@@ -25,6 +26,7 @@ export default {
 		minifySeparate: ['assets/css/wp-ulike.css'],
 	},
 
+	// Build output
 	devOnlyFiles: ['assets/js/wp-ulike.js', 'assets/css/wp-ulike.css'],
 
 	excludes: [
@@ -43,6 +45,7 @@ export default {
 		'includes/blocks/top-content/webpack.config.js',
 	],
 
+	// Production flags
 	preprocess: {
 		DEV: false,
 		TODO: false,
@@ -50,6 +53,7 @@ export default {
 		PRO: false,
 	},
 
+	// Deploy + WordPress.org release
 	deploy: {
 		prod: { envPrefix: 'DEPLOY_PROD' },
 	},
