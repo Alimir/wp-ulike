@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP ULike 5.0.7\n"
+"Project-Id-Version: WP ULike 5.0.7.1\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WP ULike Team <info@wpulike.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-15T11:20:32+00:00\n"
+"POT-Creation-Date: 2026-06-17T07:52:54+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
@@ -37,8 +37,6 @@ msgid "Looking to increase user engagement on your WordPress site? WP ULike plug
 msgstr ""
 
 #. Author of the plugin
-#: admin/admin-hooks.php:28
-#: admin/admin-hooks.php:29
 msgid "TechnoWich"
 msgstr ""
 
@@ -137,7 +135,7 @@ msgstr ""
 
 #. translators: Label for top spacing
 #: admin/admin-ajax.php:172
-#: admin/classes/class-wp-ulike-settings-api.php:1289
+#: admin/classes/class-wp-ulike-settings-api.php:1305
 msgid "Top"
 msgstr ""
 
@@ -207,8 +205,8 @@ msgid "Growth"
 msgstr ""
 
 #: admin/admin-ajax.php:191
-#: admin/admin-hooks.php:382
-#: admin/admin-hooks.php:457
+#: admin/admin-hooks.php:391
+#: admin/admin-hooks.php:466
 #: admin/classes/class-wp-ulike-admin-panel.php:623
 #: admin/classes/class-wp-ulike-admin-panel.php:630
 #: admin/classes/class-wp-ulike-admin-panel.php:656
@@ -486,7 +484,7 @@ msgstr ""
 #. translators: Generic error message shown when something goes wrong
 #: admin/admin-ajax.php:264
 #: admin/classes/class-wp-ulike-customizer-api.php:853
-#: admin/classes/class-wp-ulike-settings-api.php:1095
+#: admin/classes/class-wp-ulike-settings-api.php:1097
 msgid "Something went wrong"
 msgstr ""
 
@@ -657,82 +655,82 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-#: admin/admin-hooks.php:34
+#: admin/admin-hooks.php:43
 msgid "Proudly Powered By"
 msgstr ""
 
-#: admin/admin-hooks.php:121
+#: admin/admin-hooks.php:130
 msgid "Congrats!"
 msgstr ""
 
 #. translators: %s: total like count
-#: admin/admin-hooks.php:124
+#: admin/admin-hooks.php:133
 msgid "You've logged %s likes with WP ULike so far. Nice work! If the plugin's been good to you, we'd love a 5-star review on WordPress.org. It helps us keep improving and helps others discover WP ULike too."
 msgstr ""
 
-#: admin/admin-hooks.php:131
+#: admin/admin-hooks.php:140
 msgid "Happy to help"
 msgstr ""
 
-#: admin/admin-hooks.php:136
+#: admin/admin-hooks.php:145
 msgid "Maybe later"
 msgstr ""
 
-#: admin/admin-hooks.php:142
+#: admin/admin-hooks.php:151
 msgid "Don't ask again"
 msgstr ""
 
-#: admin/admin-hooks.php:177
-#: admin/admin-hooks.php:184
+#: admin/admin-hooks.php:186
+#: admin/admin-hooks.php:193
 msgid "Your license needs attention"
 msgstr ""
 
-#: admin/admin-hooks.php:180
+#: admin/admin-hooks.php:189
 msgid "Your license has expired"
 msgstr ""
 
-#: admin/admin-hooks.php:182
+#: admin/admin-hooks.php:191
 msgid "Your license has been disabled"
 msgstr ""
 
-#: admin/admin-hooks.php:186
+#: admin/admin-hooks.php:195
 msgid "Unable to verify your license"
 msgstr ""
 
-#: admin/admin-hooks.php:193
+#: admin/admin-hooks.php:202
 msgid "Special offer: save %s on WP ULike Pro"
 msgstr ""
 
-#: admin/admin-hooks.php:197
+#: admin/admin-hooks.php:206
 msgid "We noticed your license needs a quick update. Renew with code %s to save %s on premium features, updates, and support."
 msgstr ""
 
-#: admin/admin-hooks.php:207
+#: admin/admin-hooks.php:216
 msgid "Claim %s discount"
 msgstr ""
 
-#: admin/admin-hooks.php:222
+#: admin/admin-hooks.php:231
 msgid "Maybe Later"
 msgstr ""
 
-#: admin/admin-hooks.php:256
-#: admin/admin-hooks.php:257
+#: admin/admin-hooks.php:265
+#: admin/admin-hooks.php:266
 msgid "Go Pro"
 msgstr ""
 
-#: admin/admin-hooks.php:535
+#: admin/admin-hooks.php:544
 msgid "PHP Snippets"
 msgstr ""
 
-#: admin/admin-hooks.php:537
+#: admin/admin-hooks.php:546
 msgid "Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If you have lots of snippets, you may want to consider using Code Snippets plugin."
 msgstr ""
 
-#: admin/admin-hooks.php:546
+#: admin/admin-hooks.php:555
 msgid "Javascript Snippets"
 msgstr ""
 
-#: admin/admin-hooks.php:548
+#: admin/admin-hooks.php:557
 msgid "This code will output immediately before the closing &lt;/body&gt; tag in the document source. (Scripts must not be property wrapped in &lt;script&gt; tag.)"
 msgstr ""
 
@@ -759,7 +757,7 @@ msgstr ""
 
 #. translators: Generic label for settings
 #: admin/classes/class-wp-ulike-admin-pages.php:166
-#: admin/classes/class-wp-ulike-settings-api.php:1317
+#: admin/classes/class-wp-ulike-settings-api.php:1333
 #: includes/classes/class-wp-ulike-overview.php:116
 #: includes/plugin.php:124
 msgid "Settings"
@@ -771,7 +769,7 @@ msgstr ""
 
 #. translators: Generic label for general section
 #: admin/classes/class-wp-ulike-admin-panel.php:54
-#: admin/classes/class-wp-ulike-settings-api.php:1315
+#: admin/classes/class-wp-ulike-settings-api.php:1331
 #: includes/classes/class-wp-ulike-overview.php:342
 #: includes/classes/class-wp-ulike-overview.php:351
 msgid "General"
@@ -1217,44 +1215,44 @@ msgstr ""
 
 #. translators: Title for import settings section
 #: admin/classes/class-wp-ulike-admin-panel.php:561
-#: admin/classes/class-wp-ulike-settings-api.php:1181
+#: admin/classes/class-wp-ulike-settings-api.php:1191
 msgid "Import Settings"
 msgstr ""
 
 #. translators: Description text for import settings feature
 #: admin/classes/class-wp-ulike-admin-panel.php:562
-#: admin/classes/class-wp-ulike-settings-api.php:1183
+#: admin/classes/class-wp-ulike-settings-api.php:1193
 msgid "Paste your exported settings JSON below and click Import to restore your configuration. The import should contain only setting values (not schema structure)."
 msgstr ""
 
 #. translators: Placeholder text for import JSON textarea
 #: admin/classes/class-wp-ulike-admin-panel.php:563
-#: admin/classes/class-wp-ulike-settings-api.php:1185
+#: admin/classes/class-wp-ulike-settings-api.php:1195
 msgid "Paste your JSON settings here..."
 msgstr ""
 
 #. translators: Button text to import settings
 #: admin/classes/class-wp-ulike-admin-panel.php:564
-#: admin/classes/class-wp-ulike-settings-api.php:1129
+#: admin/classes/class-wp-ulike-settings-api.php:1135
 #: admin/includes/templates/about.php:300
 msgid "Import"
 msgstr ""
 
 #. translators: Loading state text while importing
 #: admin/classes/class-wp-ulike-admin-panel.php:565
-#: admin/classes/class-wp-ulike-settings-api.php:1131
+#: admin/classes/class-wp-ulike-settings-api.php:1137
 msgid "Importing..."
 msgstr ""
 
 #. translators: Title for export settings section
 #: admin/classes/class-wp-ulike-admin-panel.php:566
-#: admin/classes/class-wp-ulike-settings-api.php:1187
+#: admin/classes/class-wp-ulike-settings-api.php:1197
 msgid "Export Settings"
 msgstr ""
 
 #. translators: Description text for export settings feature
 #: admin/classes/class-wp-ulike-admin-panel.php:567
-#: admin/classes/class-wp-ulike-settings-api.php:1189
+#: admin/classes/class-wp-ulike-settings-api.php:1199
 msgid "Copy the JSON below or download it as a file to backup your current settings. The export contains only your setting values (not the schema structure)."
 msgstr ""
 
@@ -1297,7 +1295,7 @@ msgstr ""
 
 #. translators: Tab label for text editor mode
 #: admin/classes/class-wp-ulike-admin-panel.php:612
-#: admin/classes/class-wp-ulike-settings-api.php:1205
+#: admin/classes/class-wp-ulike-settings-api.php:1215
 msgid "Text"
 msgstr ""
 
@@ -1741,13 +1739,13 @@ msgstr ""
 
 #. translators: Button text to upgrade to pro version
 #: admin/classes/class-wp-ulike-admin-panel.php:1060
-#: admin/classes/class-wp-ulike-settings-api.php:1229
+#: admin/classes/class-wp-ulike-settings-api.php:1239
 msgid "Upgrade to Pro"
 msgstr ""
 
 #. translators: Link text to read more about pro feature
 #: admin/classes/class-wp-ulike-admin-panel.php:1061
-#: admin/classes/class-wp-ulike-settings-api.php:1231
+#: admin/classes/class-wp-ulike-settings-api.php:1241
 msgid "Read More"
 msgstr ""
 
@@ -1826,422 +1824,467 @@ msgid "Settings saved successfully."
 msgstr ""
 
 #. translators: Error message with suggestion to refresh the page
-#: admin/classes/class-wp-ulike-settings-api.php:1097
+#: admin/classes/class-wp-ulike-settings-api.php:1099
 msgid "Something went wrong. Please try refreshing the page."
 msgstr ""
 
-#. translators: Error message when a request fails. %s will be replaced with the action that failed
-#: admin/classes/class-wp-ulike-settings-api.php:1099
+#. translators: Error message when a request fails
+#: admin/classes/class-wp-ulike-settings-api.php:1101
 msgid "Unable to complete request"
 msgstr ""
 
 #. translators: Error message when server connection is forbidden
-#: admin/classes/class-wp-ulike-settings-api.php:1101
+#: admin/classes/class-wp-ulike-settings-api.php:1103
 msgid "Unable to connect to server. Please contact your administrator."
 msgstr ""
 
 #. translators: Error message when server endpoint is not found
-#: admin/classes/class-wp-ulike-settings-api.php:1103
+#: admin/classes/class-wp-ulike-settings-api.php:1105
 msgid "Server endpoint not found. Please check your configuration."
 msgstr ""
 
 #. translators: Generic server error message
-#: admin/classes/class-wp-ulike-settings-api.php:1105
+#: admin/classes/class-wp-ulike-settings-api.php:1107
 msgid "Server error. Please try again later."
 msgstr ""
 
 #. translators: Network connection error message
-#: admin/classes/class-wp-ulike-settings-api.php:1107
+#: admin/classes/class-wp-ulike-settings-api.php:1109
 msgid "Unable to connect to server. Please check your internet connection and try again."
 msgstr ""
 
 #. translators: CORS (Cross-Origin Resource Sharing) error message
-#: admin/classes/class-wp-ulike-settings-api.php:1109
+#: admin/classes/class-wp-ulike-settings-api.php:1111
 msgid "Connection blocked. Please contact your administrator."
 msgstr ""
 
 #. translators: Request timeout error message
-#: admin/classes/class-wp-ulike-settings-api.php:1111
+#: admin/classes/class-wp-ulike-settings-api.php:1113
 msgid "Request timed out. Please try again."
 msgstr ""
 
 #. translators: Error when settings configuration cannot be loaded
-#: admin/classes/class-wp-ulike-settings-api.php:1113
+#: admin/classes/class-wp-ulike-settings-api.php:1115
 msgid "Unable to load settings. Configuration data is missing."
 msgstr ""
 
 #. translators: Button text to save changes
-#: admin/classes/class-wp-ulike-settings-api.php:1117
+#: admin/classes/class-wp-ulike-settings-api.php:1119
 msgid "Save Changes"
 msgstr ""
 
+#. translators: Short button text to save changes (compact toolbar)
+#: admin/classes/class-wp-ulike-settings-api.php:1121
+msgid "Save"
+msgstr ""
+
 #. translators: Loading state text while saving
-#: admin/classes/class-wp-ulike-settings-api.php:1119
+#: admin/classes/class-wp-ulike-settings-api.php:1123
 msgid "Saving..."
 msgstr ""
 
 #. translators: Button text to reset settings to default values
-#: admin/classes/class-wp-ulike-settings-api.php:1121
+#: admin/classes/class-wp-ulike-settings-api.php:1125
 msgid "Reset to Defaults"
 msgstr ""
 
+#. translators: Short button text to reset settings (compact toolbar)
+#: admin/classes/class-wp-ulike-settings-api.php:1127
+msgid "Reset"
+msgstr ""
+
 #. translators: Loading state text while resetting
-#: admin/classes/class-wp-ulike-settings-api.php:1123
+#: admin/classes/class-wp-ulike-settings-api.php:1129
 msgid "Resetting..."
 msgstr ""
 
 #. translators: Button text to remove an item
-#: admin/classes/class-wp-ulike-settings-api.php:1125
+#: admin/classes/class-wp-ulike-settings-api.php:1131
 msgid "Remove"
 msgstr ""
 
 #. translators: Button text to upload a file
-#: admin/classes/class-wp-ulike-settings-api.php:1127
+#: admin/classes/class-wp-ulike-settings-api.php:1133
 msgid "Upload"
 msgstr ""
 
 #. translators: Button text to export and download settings
-#: admin/classes/class-wp-ulike-settings-api.php:1133
+#: admin/classes/class-wp-ulike-settings-api.php:1139
 msgid "Export and Download"
 msgstr ""
 
 #. translators: Button text to add an item. %s will be replaced with the item type
-#: admin/classes/class-wp-ulike-settings-api.php:1135
+#: admin/classes/class-wp-ulike-settings-api.php:1141
 msgid "Add %s"
 msgstr ""
 
 #. translators: Button text to select media. %s will be replaced with media type (e.g., "image", "video")
-#: admin/classes/class-wp-ulike-settings-api.php:1139
+#: admin/classes/class-wp-ulike-settings-api.php:1145
 msgid "Select %s"
 msgstr ""
 
 #. translators: Button text to use selected media. %s will be replaced with media type
-#: admin/classes/class-wp-ulike-settings-api.php:1141
+#: admin/classes/class-wp-ulike-settings-api.php:1147
 msgid "Use this %s"
 msgstr ""
 
 #. translators: Error when selected media has no URL. %s will be replaced with media type
-#: admin/classes/class-wp-ulike-settings-api.php:1143
+#: admin/classes/class-wp-ulike-settings-api.php:1149
 msgid "Selected %s has no URL"
 msgstr ""
 
 #. translators: Message when no file is selected
-#: admin/classes/class-wp-ulike-settings-api.php:1145
+#: admin/classes/class-wp-ulike-settings-api.php:1151
 msgid "No file selected"
 msgstr ""
 
 #. translators: Error message for invalid URL format from media library
-#: admin/classes/class-wp-ulike-settings-api.php:1147
+#: admin/classes/class-wp-ulike-settings-api.php:1153
 msgid "Invalid URL format from media library"
 msgstr ""
 
 #. translators: Success message after settings action. %s will be replaced with the action (e.g., "saved", "reset")
-#: admin/classes/class-wp-ulike-settings-api.php:1151
+#: admin/classes/class-wp-ulike-settings-api.php:1157
 msgid "Settings %s successfully."
 msgstr ""
 
 #. translators: Success message after resetting settings to defaults
-#: admin/classes/class-wp-ulike-settings-api.php:1153
+#: admin/classes/class-wp-ulike-settings-api.php:1159
 msgid "Settings reset to defaults."
 msgstr ""
 
 #. translators: Confirmation dialog text before resetting all settings
-#: admin/classes/class-wp-ulike-settings-api.php:1155
+#: admin/classes/class-wp-ulike-settings-api.php:1161
 msgid "Reset all settings to defaults? This cannot be undone."
 msgstr ""
 
 #. translators: Warning message when user tries to leave with unsaved changes
-#: admin/classes/class-wp-ulike-settings-api.php:1157
+#: admin/classes/class-wp-ulike-settings-api.php:1163
 msgid "You have unsaved changes. Are you sure you want to leave?"
 msgstr ""
 
+#. translators: Status message shown when settings have unsaved changes
+#: admin/classes/class-wp-ulike-settings-api.php:1165
+msgid "You have unsaved changes."
+msgstr ""
+
+#. translators: Hint shown in footer when there are no unsaved changes
+#: admin/classes/class-wp-ulike-settings-api.php:1167
+msgid "Save when you are done editing these settings."
+msgstr ""
+
 #. translators: Error message listing validation errors before saving. %s will be replaced with error list
-#: admin/classes/class-wp-ulike-settings-api.php:1159
-msgid "Please fix the following errors before saving:%s"
+#: admin/classes/class-wp-ulike-settings-api.php:1169
+msgid ""
+"Please fix the following errors before saving:\n"
+"%s"
 msgstr ""
 
 #. translators: Error when settings are imported locally but failed to save to server
-#: admin/classes/class-wp-ulike-settings-api.php:1161
+#: admin/classes/class-wp-ulike-settings-api.php:1171
 msgid "Settings imported locally but failed to save to server. Please try saving again."
 msgstr ""
 
-#. translators: Validation error for invalid format. %s will be replaced with field type, and optionally an example will be appended
-#: admin/classes/class-wp-ulike-settings-api.php:1165
-msgid "Invalid %s format"
+#. translators: 1: field type, 2: optional example suffix (e.g. ". (e.g., https://example.com)")
+#: admin/classes/class-wp-ulike-settings-api.php:1175
+msgid "Invalid %1$s format%2$s"
 msgstr ""
 
 #. translators: Error message for invalid URL protocol
-#: admin/classes/class-wp-ulike-settings-api.php:1167
+#: admin/classes/class-wp-ulike-settings-api.php:1177
 msgid "Invalid URL protocol. Only http, https, and data URLs are allowed."
 msgstr ""
 
 #. translators: Validation error for text exceeding maximum length. %d will be replaced with maximum length
-#: admin/classes/class-wp-ulike-settings-api.php:1169
+#: admin/classes/class-wp-ulike-settings-api.php:1179
 msgid "Text must be no more than %d characters"
 msgstr ""
 
 #. translators: Validation error for number below minimum. %d will be replaced with minimum value
-#: admin/classes/class-wp-ulike-settings-api.php:1171
+#: admin/classes/class-wp-ulike-settings-api.php:1181
 msgid "Value must be at least %d"
 msgstr ""
 
 #. translators: Validation error for number above maximum. %d will be replaced with maximum value
-#: admin/classes/class-wp-ulike-settings-api.php:1173
+#: admin/classes/class-wp-ulike-settings-api.php:1183
 msgid "Value must be at most %d"
 msgstr ""
 
 #. translators: Validation error when upload field requires a URL string
-#: admin/classes/class-wp-ulike-settings-api.php:1175
+#: admin/classes/class-wp-ulike-settings-api.php:1185
 msgid "Upload value must be a URL string"
 msgstr ""
 
 #. translators: Validation error for media field format
-#: admin/classes/class-wp-ulike-settings-api.php:1177
+#: admin/classes/class-wp-ulike-settings-api.php:1187
 msgid "Media value must be an object with a url property or a valid URL string"
 msgstr ""
 
 #. translators: Error message for invalid JSON format
-#: admin/classes/class-wp-ulike-settings-api.php:1191
+#: admin/classes/class-wp-ulike-settings-api.php:1201
 #: admin/includes/templates/about.php:44
 msgid "Invalid JSON format. Please check your JSON syntax."
 msgstr ""
 
 #. translators: Error when no values found in imported data
-#: admin/classes/class-wp-ulike-settings-api.php:1193
+#: admin/classes/class-wp-ulike-settings-api.php:1203
 msgid "No values found in the import data."
 msgstr ""
 
-#. translators: Security warning when dangerous content detected. %1$s will be replaced with threat list, %2$s with line breaks
-#: admin/classes/class-wp-ulike-settings-api.php:1195
-msgid "Security threat detected. The import contains potentially dangerous content:%1$s%2$sImport blocked for security reasons."
+#. translators: Security warning when dangerous content detected. %s will be replaced with threat list
+#: admin/classes/class-wp-ulike-settings-api.php:1205
+msgid ""
+"Security threat detected. The import contains potentially dangerous content:\n"
+"%s\n"
+"\n"
+"Import blocked for security reasons."
 msgstr ""
 
-#. translators: Validation error when imported data has invalid values. %1$s will be replaced with error list, %2$s with line breaks
-#: admin/classes/class-wp-ulike-settings-api.php:1197
-msgid "Validation failed. The imported data contains invalid values:%1$s%2$sPlease fix these errors and try again."
+#. translators: Validation error when imported data has invalid values. %s will be replaced with error list
+#: admin/classes/class-wp-ulike-settings-api.php:1207
+msgid ""
+"Validation failed. The imported data contains invalid values:\n"
+"%s\n"
+"\n"
+"Please fix these errors and try again."
 msgstr ""
 
 #. translators: Tip text for code editor usage
-#: admin/classes/class-wp-ulike-settings-api.php:1201
+#: admin/classes/class-wp-ulike-settings-api.php:1211
 msgid "Tip: Select text to wrap it, or click to insert at cursor position"
 msgstr ""
 
 #. translators: Tab label for visual editor mode
-#: admin/classes/class-wp-ulike-settings-api.php:1203
+#: admin/classes/class-wp-ulike-settings-api.php:1213
 msgid "Visual"
 msgstr ""
 
 #. translators: Tab label for preview mode
-#: admin/classes/class-wp-ulike-settings-api.php:1207
+#: admin/classes/class-wp-ulike-settings-api.php:1217
 msgid "Preview"
 msgstr ""
 
 #. translators: Message when there is no content to preview
-#: admin/classes/class-wp-ulike-settings-api.php:1209
+#: admin/classes/class-wp-ulike-settings-api.php:1219
 msgid "No content to preview"
 msgstr ""
 
 #. translators: Placeholder text for multi-select dropdown
-#: admin/classes/class-wp-ulike-settings-api.php:1213
+#: admin/classes/class-wp-ulike-settings-api.php:1223
 msgid "Select options..."
 msgstr ""
 
 #. translators: Placeholder text for single-select dropdown
-#: admin/classes/class-wp-ulike-settings-api.php:1215
+#: admin/classes/class-wp-ulike-settings-api.php:1225
 msgid "Select an option"
 msgstr ""
 
 #. translators: Error when no options are available for a field
-#: admin/classes/class-wp-ulike-settings-api.php:1219
+#: admin/classes/class-wp-ulike-settings-api.php:1229
 msgid "No options available for this field. Please check the schema definition."
 msgstr ""
 
 #. translators: Error when dynamic options cannot be resolved. Simplified message for users
-#: admin/classes/class-wp-ulike-settings-api.php:1221
+#: admin/classes/class-wp-ulike-settings-api.php:1231
 msgid "Options not available. Please check your configuration."
 msgstr ""
 
 #. translators: Label for pro feature
-#: admin/classes/class-wp-ulike-settings-api.php:1225
+#: admin/classes/class-wp-ulike-settings-api.php:1235
 msgid "Pro Feature"
 msgstr ""
 
 #. translators: Description text for pro feature
-#: admin/classes/class-wp-ulike-settings-api.php:1227
+#: admin/classes/class-wp-ulike-settings-api.php:1237
 msgid "This feature is available in WP ULike Pro"
 msgstr ""
 
 #. translators: Tag label for pro features
-#: admin/classes/class-wp-ulike-settings-api.php:1233
+#: admin/classes/class-wp-ulike-settings-api.php:1243
 #: admin/includes/templates/about.php:253
 msgid "Pro"
 msgstr ""
 
 #. translators: Security threat type name - SQL Injection
-#: admin/classes/class-wp-ulike-settings-api.php:1237
+#: admin/classes/class-wp-ulike-settings-api.php:1247
 msgid "SQL Injection"
 msgstr ""
 
 #. translators: Security threat type name - XSS (Cross-Site Scripting)
-#: admin/classes/class-wp-ulike-settings-api.php:1239
+#: admin/classes/class-wp-ulike-settings-api.php:1249
 msgid "XSS"
 msgstr ""
 
 #. translators: Security threat type name - Command Injection
-#: admin/classes/class-wp-ulike-settings-api.php:1241
+#: admin/classes/class-wp-ulike-settings-api.php:1251
 msgid "Command Injection"
 msgstr ""
 
 #. translators: Button text to retry a failed action
-#: admin/classes/class-wp-ulike-settings-api.php:1245
+#: admin/classes/class-wp-ulike-settings-api.php:1255
 msgid "Retry"
 msgstr ""
 
 #. translators: Label for live preview feature
-#: admin/classes/class-wp-ulike-settings-api.php:1247
+#: admin/classes/class-wp-ulike-settings-api.php:1257
 msgid "Live Preview"
 msgstr ""
 
 #. translators: Error message when preview fails to load
-#: admin/classes/class-wp-ulike-settings-api.php:1249
+#: admin/classes/class-wp-ulike-settings-api.php:1259
 msgid "Failed to load preview"
 msgstr ""
 
 #. translators: Label for templates section
-#: admin/classes/class-wp-ulike-settings-api.php:1253
+#: admin/classes/class-wp-ulike-settings-api.php:1263
 msgid "Templates"
 msgstr ""
 
+#. translators: Heading for template list sidebar
+#: admin/classes/class-wp-ulike-settings-api.php:1265
+msgid "List View"
+msgstr ""
+
+#. translators: Tab label for section settings panel
+#: admin/classes/class-wp-ulike-settings-api.php:1267
+msgid "Section"
+msgstr ""
+
+#. translators: Mobile back button label
+#: admin/classes/class-wp-ulike-settings-api.php:1269
+msgid "Back to preview"
+msgstr ""
+
 #. translators: Message when no preview templates are available
-#: admin/classes/class-wp-ulike-settings-api.php:1255
+#: admin/classes/class-wp-ulike-settings-api.php:1271
 msgid "No preview templates available"
 msgstr ""
 
 #. translators: Instruction text for selecting a template section
-#: admin/classes/class-wp-ulike-settings-api.php:1257
+#: admin/classes/class-wp-ulike-settings-api.php:1273
 msgid "Select a template section to customize"
 msgstr ""
 
 #. translators: Label for width field
-#: admin/classes/class-wp-ulike-settings-api.php:1261
+#: admin/classes/class-wp-ulike-settings-api.php:1277
 msgid "Width"
 msgstr ""
 
 #. translators: Label for height field
-#: admin/classes/class-wp-ulike-settings-api.php:1263
+#: admin/classes/class-wp-ulike-settings-api.php:1279
 msgid "Height"
 msgstr ""
 
 #. translators: Label for color field
-#: admin/classes/class-wp-ulike-settings-api.php:1265
+#: admin/classes/class-wp-ulike-settings-api.php:1281
 msgid "Color"
 msgstr ""
 
 #. translators: Label for style field
-#: admin/classes/class-wp-ulike-settings-api.php:1267
+#: admin/classes/class-wp-ulike-settings-api.php:1283
 #: admin/classes/class-wp-ulike-widget.php:624
 msgid "Style"
 msgstr ""
 
 #. translators: Label for font family field
-#: admin/classes/class-wp-ulike-settings-api.php:1271
+#: admin/classes/class-wp-ulike-settings-api.php:1287
 msgid "Font Family"
 msgstr ""
 
 #. translators: Label for font size field
-#: admin/classes/class-wp-ulike-settings-api.php:1273
+#: admin/classes/class-wp-ulike-settings-api.php:1289
 msgid "Font Size"
 msgstr ""
 
 #. translators: Label for font weight field
-#: admin/classes/class-wp-ulike-settings-api.php:1275
+#: admin/classes/class-wp-ulike-settings-api.php:1291
 msgid "Font Weight"
 msgstr ""
 
 #. translators: Label for line height field
-#: admin/classes/class-wp-ulike-settings-api.php:1277
+#: admin/classes/class-wp-ulike-settings-api.php:1293
 msgid "Line Height"
 msgstr ""
 
 #. translators: Label for letter spacing field
-#: admin/classes/class-wp-ulike-settings-api.php:1279
+#: admin/classes/class-wp-ulike-settings-api.php:1295
 msgid "Letter Spacing"
 msgstr ""
 
 #. translators: Label for text align field
-#: admin/classes/class-wp-ulike-settings-api.php:1281
+#: admin/classes/class-wp-ulike-settings-api.php:1297
 msgid "Text Align"
 msgstr ""
 
 #. translators: Label for text transform field
-#: admin/classes/class-wp-ulike-settings-api.php:1283
+#: admin/classes/class-wp-ulike-settings-api.php:1299
 msgid "Text Transform"
 msgstr ""
 
 #. translators: Label for text decoration field
-#: admin/classes/class-wp-ulike-settings-api.php:1285
+#: admin/classes/class-wp-ulike-settings-api.php:1301
 msgid "Text Decoration"
 msgstr ""
 
 #. translators: Label for right spacing
-#: admin/classes/class-wp-ulike-settings-api.php:1291
+#: admin/classes/class-wp-ulike-settings-api.php:1307
 #: includes/classes/class-wp-ulike-customizer.php:305
 msgid "Right"
 msgstr ""
 
 #. translators: Label for bottom spacing
-#: admin/classes/class-wp-ulike-settings-api.php:1293
+#: admin/classes/class-wp-ulike-settings-api.php:1309
 msgid "Bottom"
 msgstr ""
 
 #. translators: Label for left spacing
-#: admin/classes/class-wp-ulike-settings-api.php:1295
+#: admin/classes/class-wp-ulike-settings-api.php:1311
 #: includes/classes/class-wp-ulike-customizer.php:303
 msgid "Left"
 msgstr ""
 
 #. translators: Label for background color field
-#: admin/classes/class-wp-ulike-settings-api.php:1299
+#: admin/classes/class-wp-ulike-settings-api.php:1315
 msgid "Background Color"
 msgstr ""
 
 #. translators: Label for background image field
-#: admin/classes/class-wp-ulike-settings-api.php:1301
+#: admin/classes/class-wp-ulike-settings-api.php:1317
 msgid "Background Image"
 msgstr ""
 
 #. translators: Label for background repeat field
-#: admin/classes/class-wp-ulike-settings-api.php:1303
+#: admin/classes/class-wp-ulike-settings-api.php:1319
 msgid "Repeat"
 msgstr ""
 
 #. translators: Label for background position field
-#: admin/classes/class-wp-ulike-settings-api.php:1305
+#: admin/classes/class-wp-ulike-settings-api.php:1321
 msgid "Position"
 msgstr ""
 
 #. translators: Label for background size field
-#: admin/classes/class-wp-ulike-settings-api.php:1307
+#: admin/classes/class-wp-ulike-settings-api.php:1323
 msgid "Size"
 msgstr ""
 
 #. translators: Label for background attachment field
-#: admin/classes/class-wp-ulike-settings-api.php:1309
+#: admin/classes/class-wp-ulike-settings-api.php:1325
 msgid "Attachment"
 msgstr ""
 
 #. translators: Generic label for options (used in multiple contexts)
-#: admin/classes/class-wp-ulike-settings-api.php:1313
+#: admin/classes/class-wp-ulike-settings-api.php:1329
 msgid "Options"
 msgstr ""
 
 #. translators: Generic label for new item
-#: admin/classes/class-wp-ulike-settings-api.php:1319
+#: admin/classes/class-wp-ulike-settings-api.php:1335
 msgid "New"
 msgstr ""
 
 #. translators: Generic label for item
-#: admin/classes/class-wp-ulike-settings-api.php:1321
+#: admin/classes/class-wp-ulike-settings-api.php:1337
 msgid "Item"
 msgstr ""
 
