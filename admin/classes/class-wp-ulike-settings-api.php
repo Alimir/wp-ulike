@@ -684,27 +684,27 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         protected function contains_html( $string ) {
             // Security: Be conservative - if ANY HTML-like content is detected, use full sanitization
             // This ensures we never miss malicious content
-            
+
             // Check 1: HTML tags (opening/closing tags)
             if ( preg_match( '/<[a-z][\s\S]*>/i', $string ) === 1 ) {
                 return true;
             }
-            
+
             // Check 2: HTML entities (could be encoded HTML)
             if ( preg_match( '/&[#\w]+;/i', $string ) === 1 ) {
                 return true;
             }
-            
+
             // Check 3: Common HTML patterns (style=, href=, src=, etc.)
             if ( preg_match( '/\b(style|href|src|on\w+)\s*=/i', $string ) === 1 ) {
                 return true;
             }
-            
+
             // Check 4: URL protocols that might indicate HTML content
             if ( preg_match( '/\b(javascript|data|vbscript):/i', $string ) === 1 ) {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -1082,7 +1082,9 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
         /**
          * Get all translations for Optiwich
-         * Returns all translatable strings used in the React app
+         * Returns user-visible translatable strings for the React app.
+         * Accessibility-only labels (aria-label, sr-only, iframe title) are kept as
+         * English fallbacks in src/i18n.ts and are intentionally omitted here.
          * Uses WordPress translation functions for .po/.pot file support
          * Converts WordPress sprintf format (%s, %d) to i18next format ({variable}) for React compatibility
          *
@@ -1095,7 +1097,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'errors.generic' => esc_html__( 'Something went wrong', 'wp-ulike' ),
                 /* translators: Error message with suggestion to refresh the page */
                 'errors.generic_refresh' => esc_html__( 'Something went wrong. Please try refreshing the page.', 'wp-ulike' ),
-                /* translators: Error message when a request fails. %s will be replaced with the action that failed */
+                /* translators: Error message when a request fails */
                 'errors.failed' => esc_html__( 'Unable to complete request', 'wp-ulike' ),
                 /* translators: Error message when server connection is forbidden */
                 'errors.admin_ajax_forbidden' => esc_html__( 'Unable to connect to server. Please contact your administrator.', 'wp-ulike' ),
@@ -1115,10 +1117,14 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 // Actions
                 /* translators: Button text to save changes */
                 'actions.save' => esc_html__( 'Save Changes', 'wp-ulike' ),
+                /* translators: Short button text to save changes (compact toolbar) */
+                'actions.save_short' => esc_html__( 'Save', 'wp-ulike' ),
                 /* translators: Loading state text while saving */
                 'actions.saving' => esc_html__( 'Saving...', 'wp-ulike' ),
                 /* translators: Button text to reset settings to default values */
                 'actions.reset' => esc_html__( 'Reset to Defaults', 'wp-ulike' ),
+                /* translators: Short button text to reset settings (compact toolbar) */
+                'actions.reset_short' => esc_html__( 'Reset', 'wp-ulike' ),
                 /* translators: Loading state text while resetting */
                 'actions.resetting' => esc_html__( 'Resetting...', 'wp-ulike' ),
                 /* translators: Button text to remove an item */
@@ -1155,14 +1161,25 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'settings.reset_confirm' => esc_html__( 'Reset all settings to defaults? This cannot be undone.', 'wp-ulike' ),
                 /* translators: Warning message when user tries to leave with unsaved changes */
                 'settings.unsaved_warning' => esc_html__( 'You have unsaved changes. Are you sure you want to leave?', 'wp-ulike' ),
+                /* translators: Status message shown when settings have unsaved changes */
+                'settings.unsaved_changes' => esc_html__( 'You have unsaved changes.', 'wp-ulike' ),
+                /* translators: Hint shown in footer when there are no unsaved changes */
+                'settings.save_hint' => esc_html__( 'Save when you are done editing these settings.', 'wp-ulike' ),
+
+                // Settings — sidebar search (user-visible copy)
+                /* translators: Placeholder text in the settings sidebar search field */
+                'settings.search_placeholder' => esc_html__( 'Search settings...', 'wp-ulike' ),
+                /* translators: Message shown when settings search returns no matches */
+                'settings.search_no_results' => esc_html__( 'No settings found.', 'wp-ulike' ),
+
                 /* translators: Error message listing validation errors before saving. %s will be replaced with error list */
-                'settings.validation_before_save' => esc_html__( 'Please fix the following errors before saving:%s', 'wp-ulike' ),
+                'settings.validation_before_save' => esc_html__( "Please fix the following errors before saving:\n%s", 'wp-ulike' ),
                 /* translators: Error when settings are imported locally but failed to save to server */
                 'settings.import_save_failed' => esc_html__( 'Settings imported locally but failed to save to server. Please try saving again.', 'wp-ulike' ),
 
                 // Validation
-                /* translators: Validation error for invalid format. %s will be replaced with field type, and optionally an example will be appended */
-                'validation.invalid' => esc_html__( 'Invalid %s format', 'wp-ulike' ),
+                /* translators: 1: field type, 2: optional example suffix (e.g. ". (e.g., https://example.com)") */
+                'validation.invalid' => esc_html__( 'Invalid %1$s format%2$s', 'wp-ulike' ),
                 /* translators: Error message for invalid URL protocol */
                 'validation.url_protocol' => esc_html__( 'Invalid URL protocol. Only http, https, and data URLs are allowed.', 'wp-ulike' ),
                 /* translators: Validation error for text exceeding maximum length. %d will be replaced with maximum length */
@@ -1191,10 +1208,10 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'backup.json_invalid' => esc_html__( 'Invalid JSON format. Please check your JSON syntax.', 'wp-ulike' ),
                 /* translators: Error when no values found in imported data */
                 'backup.no_values' => esc_html__( 'No values found in the import data.', 'wp-ulike' ),
-                /* translators: Security warning when dangerous content detected. %1$s will be replaced with threat list, %2$s with line breaks */
-                'backup.security_threat' => esc_html__( 'Security threat detected. The import contains potentially dangerous content:%1$s%2$sImport blocked for security reasons.', 'wp-ulike' ),
-                /* translators: Validation error when imported data has invalid values. %1$s will be replaced with error list, %2$s with line breaks */
-                'backup.validation_failed' => esc_html__( 'Validation failed. The imported data contains invalid values:%1$s%2$sPlease fix these errors and try again.', 'wp-ulike' ),
+                /* translators: Security warning when dangerous content detected. %s will be replaced with threat list */
+                'backup.security_threat' => esc_html__( "Security threat detected. The import contains potentially dangerous content:\n%s\n\nImport blocked for security reasons.", 'wp-ulike' ),
+                /* translators: Validation error when imported data has invalid values. %s will be replaced with error list */
+                'backup.validation_failed' => esc_html__( "Validation failed. The imported data contains invalid values:\n%s\n\nPlease fix these errors and try again.", 'wp-ulike' ),
 
                 // Code Editor
                 /* translators: Tip text for code editor usage */
@@ -1248,9 +1265,15 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 /* translators: Error message when preview fails to load */
                 'ui.failed_to_load_preview' => esc_html__( 'Failed to load preview', 'wp-ulike' ),
 
-                // Customizer
+                // Customizer (user-visible copy only; aria/sr-only labels use React fallbacks)
                 /* translators: Label for templates section */
                 'customizer.templates' => esc_html__( 'Templates', 'wp-ulike' ),
+                /* translators: Heading for template list sidebar */
+                'customizer.list_view' => esc_html__( 'List View', 'wp-ulike' ),
+                /* translators: Tab label for section settings panel */
+                'customizer.section_settings' => esc_html__( 'Section', 'wp-ulike' ),
+                /* translators: Mobile back button label */
+                'customizer.back_to_preview' => esc_html__( 'Back to preview', 'wp-ulike' ),
                 /* translators: Message when no preview templates are available */
                 'customizer.no_preview_templates' => esc_html__( 'No preview templates available', 'wp-ulike' ),
                 /* translators: Instruction text for selecting a template section */
@@ -1344,12 +1367,12 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'media.no_url' => array( '%s' => '{type}' ),
                 'settings.success' => array( '%s' => '{action}' ),
                 'settings.validation_before_save' => array( '%s' => '{errorMessages}' ),
-                'validation.invalid' => array( '%s' => '{type}' ),
+                'validation.invalid' => array( '%1$s' => '{type}', '%2$s' => '{example}' ),
                 'validation.text_maxlength' => array( '%d' => '{maxlength}' ),
                 'validation.number_min' => array( '%d' => '{min}' ),
                 'validation.number_max' => array( '%d' => '{max}' ),
-                'backup.security_threat' => array( '%1$s' => '{threatList}', '%2$s' => '\n\n' ),
-                'backup.validation_failed' => array( '%1$s' => '{errorList}', '%2$s' => '\n\n' ),
+                'backup.security_threat' => array( '%s' => '{threatList}' ),
+                'backup.validation_failed' => array( '%s' => '{errorList}' ),
             );
 
             foreach ( $translations as $key => $translation ) {

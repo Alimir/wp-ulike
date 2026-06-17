@@ -1,7 +1,7 @@
 {
   "name": "wp-ulike",
   "title": "WP ULike",
-  "version": "5.0.7",
+  "version": "5.1.0",
   "description": "Looking to increase user engagement on your WordPress site? WP ULike plugin lets you easily add voting buttons to your content. With customizable settings and detailed analytics, you can track user engagement, optimize your content, and build a loyal following.",
   "homepage": "https://wpulike.com",
   "repository": {
@@ -15,54 +15,20 @@
     "url": "https://wpulike.com"
   },
   "scripts": {
-    "i18n:pot": "wp i18n make-pot . languages/wp-ulike.pot --domain=wp-ulike --exclude=node_modules,build --headers='{\"Report-Msgid-Bugs-To\":\"https://wpulike.com\"}'",
-    "i18n:json": "wp i18n make-json languages --no-purge",
-    "i18n:json:installed": "wp i18n make-json ../../languages/plugins --no-purge",
+    "build": "wp-toolkit build",
+    "build:js": "wp-toolkit build:js",
+    "build:css": "wp-toolkit build:css",
+    "build:assets": "wp-toolkit build:js && wp-toolkit build:css",
+    "dev": "wp-toolkit dev",
+    "i18n": "wp-toolkit i18n",
+    "i18n:json": "wp-toolkit i18n:json",
+    "release": "wp-toolkit release",
+    "product": "wp-toolkit product",
     "build:blocks": "npm run build --prefix includes/blocks/button && npm run build --prefix includes/blocks/top-content",
     "build:blocks:i18n": "npm run build:blocks && npm run i18n:json"
   },
-  "main": "Gruntfile.js",
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-runtime": "^6.26.0",
-    "babelify": "^10.0.0",
-    "browserify": "^17.0.0",
-    "browserify-hmr": ">=0.4.1",
-    "cross-env": "^7.0.3",
-    "grunt": "^1.4.0",
-    "grunt-concurrent": "^3.0.0",
-    "grunt-contrib-clean": ">=2.0.0",
-    "grunt-contrib-compass": "^1.1.1",
-    "grunt-contrib-concat": ">=1.0.1",
-    "grunt-contrib-copy": ">=1.0.0",
-    "grunt-contrib-cssmin": ">=3.0.0",
-    "grunt-contrib-jshint": "^3.0.0",
-    "grunt-contrib-uglify": "^5.0.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-potomo": "^3.5.0",
-    "grunt-preprocess": ">=5.1.0",
-    "grunt-rsync": ">=3.0.0",
-    "grunt-shell": ">=3.0.1",
-    "grunt-sass": "^3.1.0",
-    "grunt-sync": "^0.8.2",
-    "grunt-terser": "^2.0.0",
-    "grunt-wp-deploy": "^2.1.2",
-    "grunt-wp-i18n": ">=1.0.4",
-    "http-server": "^0.12.3",
-    "load-grunt-tasks": ">=5.1.0",
-    "time-grunt": ">=1.4.0",
-    "uglify-js": "^3.19.3",
-    "node-sass": "^9.0.0",
-    "watchify": "^4.0.0"
-  },
-  "dependencies": {
-    "grunt-phplint": "^0.1.0",
-    "grunt-sync": "^0.8.2",
-    "grunt-text-replace": "^0.4.0",
-    "preprocess": "^3.2.0"
+    "@alimir/wp-toolkit": "^1.1.3"
   },
   "bugs": {
     "url": "https://github.com/Alimir/wp-ulike/issues"

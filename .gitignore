@@ -1,7 +1,7 @@
 
 node_modules/
 
-package-lock\.json
+package-lock.json
 
 build/
 
@@ -17,4 +17,4 @@ dist/
 
 **/.DS_Store
 
-Gruntfile.js
+.env
