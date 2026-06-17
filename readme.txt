@@ -2,7 +2,7 @@
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: marketing, analytics, feedback, engagement, like
+Tags: like, engagement, feedback, voting, reactions
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 7.0
@@ -10,7 +10,7 @@ Stable tag: 5.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Add like buttons to WordPress in minutes. See what your audience loves. Visitors vote with one click, no account required.
+Add one-click reactions to WordPress. Stats, top lists, and privacy tools included. No signup required.
 
 == Description ==
 
