@@ -61,6 +61,7 @@ export default {
 			postBuild: [],
 		},
 		zipName: '{slug}.zip',
+		trimTrailingWhitespace: true
 	},
 
 	deploy: {

@@ -28,7 +28,7 @@
     "build:blocks:i18n": "npm run build:blocks && npm run i18n:json"
   },
   "devDependencies": {
-    "@alimir/wp-toolkit": "^2.0.0"
+    "@alimir/wp-toolkit": "^2.0.1"
   },
   "bugs": {
     "url": "https://github.com/Alimir/wp-ulike/issues"
