@@ -89,15 +89,17 @@ Works out of the box. [Documentation](https://docs.wpulike.com/?utm_source=wp-re
 
 == Screenshots ==
 
-1. **Button templates:** pick a style, match your brand, customize colors and text.
+1. **Settings panel:** pick a button style and set up voting for posts, comments, and more.
 
-2. **Statistics dashboard:** see what's getting votes and how your content performs over time.
+2. **Live customizer:** change colors, spacing, and typography with real-time preview.
 
-3. **Top trends:** spot your best-performing content at a glance.
+3. **Metrics dashboard:** see what's getting votes and how engagement trends over time.
 
-4. **Gutenberg block:** drop a like button into any page or post from the editor.
+4. **Insights dashboard:** spot your best-performing content at a glance.
 
-5. **Live customizer:** change colors, spacing, and typography with a real-time preview.
+5. **Gutenberg blocks:** drop like buttons and Top List leaderboards from the editor.
+
+6. **Display automation:** place buttons by rule on posts, products, and more.
 
 == Frequently Asked Questions ==
 
