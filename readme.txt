@@ -6,7 +6,7 @@ Tags: marketing, analytics, feedback, engagement, like
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.0.7
+Stable tag: 5.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,10 @@ Yes. Each site gets its own settings and stats.
 We follow WordPress security practices: nonces, hardened AJAX, optional IP anonymization. Details at wpulike.com/security.
 
 == Changelog ==
+
+= 5.1.0 =
+* Improved: Redesigned Settings and Customizer panels for better UX.
+* Fixed: Several small issues for a more reliable experience.
 
 = 5.0.7 =
 * Added: One-click **Repair database tables** on Help when tables are missing.
