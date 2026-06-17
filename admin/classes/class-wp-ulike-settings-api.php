@@ -684,27 +684,27 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
         protected function contains_html( $string ) {
             // Security: Be conservative - if ANY HTML-like content is detected, use full sanitization
             // This ensures we never miss malicious content
-            
+
             // Check 1: HTML tags (opening/closing tags)
             if ( preg_match( '/<[a-z][\s\S]*>/i', $string ) === 1 ) {
                 return true;
             }
-            
+
             // Check 2: HTML entities (could be encoded HTML)
             if ( preg_match( '/&[#\w]+;/i', $string ) === 1 ) {
                 return true;
             }
-            
+
             // Check 3: Common HTML patterns (style=, href=, src=, etc.)
             if ( preg_match( '/\b(style|href|src|on\w+)\s*=/i', $string ) === 1 ) {
                 return true;
             }
-            
+
             // Check 4: URL protocols that might indicate HTML content
             if ( preg_match( '/\b(javascript|data|vbscript):/i', $string ) === 1 ) {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -1165,6 +1165,13 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'settings.unsaved_changes' => esc_html__( 'You have unsaved changes.', 'wp-ulike' ),
                 /* translators: Hint shown in footer when there are no unsaved changes */
                 'settings.save_hint' => esc_html__( 'Save when you are done editing these settings.', 'wp-ulike' ),
+
+                // Settings — sidebar search (user-visible copy)
+                /* translators: Placeholder text in the settings sidebar search field */
+                'settings.search_placeholder' => esc_html__( 'Search settings...', 'wp-ulike' ),
+                /* translators: Message shown when settings search returns no matches */
+                'settings.search_no_results' => esc_html__( 'No settings found.', 'wp-ulike' ),
+
                 /* translators: Error message listing validation errors before saving. %s will be replaced with error list */
                 'settings.validation_before_save' => esc_html__( "Please fix the following errors before saving:\n%s", 'wp-ulike' ),
                 /* translators: Error when settings are imported locally but failed to save to server */
