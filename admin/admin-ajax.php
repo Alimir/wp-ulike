@@ -100,13 +100,13 @@ function wp_ulike_engagement_api() {
 	// @endif
 
 	$type = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
-    $data = wp_ulike_stats::get_instance()->get_engagement_api_data( $type );
+	$data = wp_ulike_stats::get_instance()->get_engagement_api_data( $type );
 
-    if ( null === $data ) {
-        wp_send_json_error( esc_html__( 'Invalid content type.', 'wp-ulike' ) );
-    }
+	if ( null === $data ) {
+		wp_send_json_error( esc_html__( 'Invalid content type.', 'wp-ulike' ) );
+	}
 
-    return wp_send_json( $data );
+	return wp_send_json( $data );
 }
 add_action( 'wp_ajax_wp_ulike_engagement_api', 'wp_ulike_engagement_api' );
 // @if DEV

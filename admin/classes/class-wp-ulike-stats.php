@@ -73,9 +73,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				'overview' => $this->get_overview(),
 				'meta'     => array_merge(
 					array(
-						'build'              => 'free',
-						'content_types'      => array_keys( $tables ),
-						'date_limit_default' => (int) apply_filters( 'wp_ulike_stats_data_limit', 30 ),
+						'build'         => 'free',
+						'content_types' => array_keys( $tables ),
 					),
 					$meta
 				),
@@ -97,59 +96,6 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Week-over-week metrics per content type (light overview grid).
-		 *
-		 * @return array
-		 */
-		public function get_metrics_summary() {
-			$tables  = $this->get_tables();
-			$metrics = $this->get_count_logs();
-			$grid    = array();
-
-			foreach ( array_keys( $tables ) as $type ) {
-				if ( ! isset( $metrics[ $type ] ) ) {
-					continue;
-				}
-				$grid[ $type ] = array(
-					'week'      => (int) ( $metrics[ $type ]['week'] ?? 0 ),
-					'last_week' => (int) ( $metrics[ $type ]['last_week'] ?? 0 ),
-				);
-			}
-
-			return $grid;
-		}
-
-		/**
-		 * Top items preview for the free overview (no filters, fixed limit).
-		 *
-		 * @return array
-		 */
-		public function get_overview_highlights() {
-			$tables = $this->get_tables();
-			$limit  = 5;
-			$out    = array();
-
-			if ( isset( $tables['posts'] ) ) {
-				$out['posts'] = array_slice( $this->normalize_top_items( $this->get_top( 'posts' ) ), 0, $limit );
-			}
-
-			if ( isset( $tables['comments'] ) ) {
-				$out['comments'] = array_slice(
-					$this->normalize_top_items( $this->get_top( 'comments' ), 'comments' ),
-					0,
-					$limit
-				);
-			}
-
-			$engagers = $this->display_top_likers();
-			if ( ! empty( $engagers ) ) {
-				$out['engagers'] = array_slice( $this->normalize_top_items( $engagers, 'engagers' ), 0, $limit );
-			}
-
-			return $out;
-		}
-
-		/**
 		 * Top content for a single type (free — no filters).
 		 *
 		 * @param string $type Content type key.
@@ -158,14 +104,6 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 */
 		public function get_tops_api_data( $type, $limit = 8 ) {
 			$limit = max( 1, min( 20, absint( $limit ) ) );
-
-			if ( 'engagers' === $type ) {
-				$items = $this->normalize_top_items( $this->display_top_likers(), 'engagers' );
-				return array(
-					'items' => array_slice( $items, 0, $limit ),
-					'total' => count( $items ),
-				);
-			}
 
 			$tables = $this->get_tables();
 			if ( ! isset( $tables[ $type ] ) ) {
@@ -226,14 +164,11 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				return null;
 			}
 
-			$table   = $tables[ $type ];
-			$charts  = $this->get_datasets();
-			$metrics = $this->get_count_logs();
+			$table = $tables[ $type ];
 
 			return array(
-				'type'    => $type,
-				'chart'   => isset( $charts[ $type ] ) ? $charts[ $type ] : array(),
-				'metrics' => isset( $metrics[ $type ] ) ? $metrics[ $type ] : array(),
+				'chart'   => $this->dataset( $table ),
+				'metrics' => $this->get_type_count_logs( $table ),
 			);
 		}
 
@@ -250,36 +185,19 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			);
 		}
 
-		// Get datasets for each table
-		private function get_datasets() {
-			$tables = $this->get_tables();
-			$datasets = array();
-
-			foreach ($tables as $type => $table) {
-				$datasets[$type] = $this->dataset($table);
-			}
-
-			return $datasets;
-		}
-
-		// Get count logs for each table with different time ranges
-		private function get_count_logs() {
-			$tables = $this->get_tables();
-			$count_logs = array();
-
-			foreach ($tables as $type => $table) {
-				$count_logs[$type] = array(
-					'week'       => $this->count_logs(array("table" => $table, "date" => 'week')),
-					'last_week'  => $this->count_logs(array("table" => $table, "date" => 'last_week')),
-					'month'      => $this->count_logs(array("table" => $table, "date" => 'month')),
-					'last_month' => $this->count_logs(array("table" => $table, "date" => 'last_month')),
-					'year'       => $this->count_logs(array("table" => $table, "date" => 'year')),
-					'last_year'  => $this->count_logs(array("table" => $table, "date" => 'last_year')),
-					'all'        => $this->count_logs(array("table" => $table, "date" => 'all'))
-				);
-			}
-
-			return $count_logs;
+		/**
+		 * Count logs for a single table across standard time ranges.
+		 *
+		 * @param string $table Log table name (without prefix).
+		 * @return array
+		 */
+		private function get_type_count_logs( $table ) {
+			return array(
+				'week'  => $this->count_logs( array( 'table' => $table, 'date' => 'week' ) ),
+				'month' => $this->count_logs( array( 'table' => $table, 'date' => 'month' ) ),
+				'year'  => $this->count_logs( array( 'table' => $table, 'date' => 'year' ) ),
+				'all'   => $this->count_logs( array( 'table' => $table, 'date' => 'all' ) ),
+			);
 		}
 
 		/**
@@ -435,41 +353,6 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			}
 
 	        return  empty( $counter_value ) ? 0 : absint( $counter_value );
-		}
-
-		/**
-		 * Display top likers in html format
-		 *
-		 * @return string
-		 */
-		public function display_top_likers(){
-			$top_likers = $this->get_top_likers();
-			$result     = [];
-
-			foreach ( $top_likers as $user ) {
-				$user_ID  = stripslashes( $user->user_id );
-				$userdata = get_userdata( $user_ID );
-				$username = empty( $userdata ) ? esc_html__('Guest User','wp-ulike') : esc_attr( $userdata->display_name );
-
-				$result[] = [
-					'permalink'   => get_edit_profile_url( $user_ID ),
-					'title'       => $username,
-					'likes_count' => absint($user->SumUser)
-				];
-			}
-
-			return $result;
-		}
-
-		/**
-		 * Top Likers Summary
-		 *
-		 * @author       	Alimir
-		 * @since           3.0
-		 * @return			Array
-		 */
-		public function get_top_likers(){
-			return wp_ulike_get_best_likers_info( 10, NULL );
 		}
 
 		/**
@@ -645,7 +528,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		public function get_peak_hours() {
 			$union_parts = array();
 
-			foreach ( $this->tables as $table ) {
+			foreach ( $this->get_tables() as $table ) {
 				$union_parts[] = sprintf(
 					"SELECT date_time FROM %s WHERE date_time >= NOW() - INTERVAL 30 DAY",
 					$this->wpdb->prefix . $table

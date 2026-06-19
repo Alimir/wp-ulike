@@ -1,6 +1,6 @@
 <?php
 /**
- * Stats bootstrap meta for the React admin panel.
+ * Stats bootstrap meta for the free React admin panel.
  * // @echo HEADER
  */
 
@@ -16,10 +16,10 @@ if ( ! class_exists( 'WP_Ulike_Stats_Meta' ) ) {
 	final class WP_Ulike_Stats_Meta {
 
 		/**
-		 * Combined stats meta for React admin bootstrap.
+		 * Site meta for the free React admin bootstrap.
 		 *
 		 * @param array $content_types Active stats content types.
-		 * @return array{voting_mode:string,dislikes_enabled:bool}
+		 * @return array{voting_mode:string}
 		 */
 		public static function get_site_stats_meta( $content_types = array() ) {
 			static $cache = array();
@@ -36,18 +36,8 @@ if ( ! class_exists( 'WP_Ulike_Stats_Meta' ) ) {
 				return $cache[ $cache_key ];
 			}
 
-			$dislikes_enabled = false;
-
-			foreach ( $types as $type ) {
-				if ( self::content_type_supports_dislikes( $type ) ) {
-					$dislikes_enabled = true;
-					break;
-				}
-			}
-
 			$cache[ $cache_key ] = array(
-				'voting_mode'      => self::get_site_voting_mode( $types ),
-				'dislikes_enabled' => $dislikes_enabled,
+				'voting_mode' => self::get_site_voting_mode( $types ),
 			);
 
 			return $cache[ $cache_key ];
@@ -78,47 +68,6 @@ if ( ! class_exists( 'WP_Ulike_Stats_Meta' ) ) {
 			}
 
 			return 'both';
-		}
-
-		/**
-		 * @param string $type posts|comments|activities|topics
-		 * @return bool
-		 */
-		private static function content_type_supports_dislikes( $type ) {
-			$template = self::get_content_type_template( $type );
-
-			if ( empty( $template ) ) {
-				return false;
-			}
-
-			$templates = wp_ulike_generate_templates_list();
-
-			if ( ! isset( $templates[ $template ] ) ) {
-				return false;
-			}
-
-			$template_data = $templates[ $template ];
-
-			return ! empty( $template_data['is_percentage_support'] ) || ! empty( $template_data['has_subtotal'] );
-		}
-
-		/**
-		 * @param string $type posts|comments|activities|topics
-		 * @return string
-		 */
-		private static function get_content_type_template( $type ) {
-			$map = array(
-				'posts'      => 'post',
-				'comments'   => 'comment',
-				'activities' => 'activity',
-				'topics'     => 'topic',
-			);
-
-			$setting_type = isset( $map[ $type ] ) ? $map[ $type ] : $type;
-			$setting_key  = wp_ulike_setting_type::get_instance( $setting_type )->getSettingKey();
-			$template     = wp_ulike_get_option( $setting_key . '|template', 'wpulike-default' );
-
-			return is_string( $template ) && $template ? $template : 'wpulike-default';
 		}
 
 		/**
