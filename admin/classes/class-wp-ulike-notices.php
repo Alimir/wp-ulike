@@ -134,6 +134,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 'color_name'    => 'default',
                 'link'          => '#',
                 'expiration'    => '',
+                'btn_attrs'     => '',
                 'ajax_request'  => array(
                     'action'  => ''
                 ),

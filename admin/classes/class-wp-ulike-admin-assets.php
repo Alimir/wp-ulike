@@ -84,9 +84,22 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 				return;
 			}
 
-			if ( ! wp_ulike_enqueue_stats_panel_assets() ) {
-				return;
-			}
+			$base_url = WP_ULIKE_ADMIN_URL . '/includes/statistics/';
+
+			wp_enqueue_style(
+				'wp_ulike_admin_react',
+				$base_url . 'stats.css',
+				array(),
+				WP_ULIKE_VERSION
+			);
+
+			wp_enqueue_script(
+				'wp_ulike_admin_react',
+				$base_url . 'stats.js',
+				array(),
+				WP_ULIKE_VERSION,
+				true
+			);
 
 			wp_ulike_add_inline_script_data(
 					'wp_ulike_admin_react',
