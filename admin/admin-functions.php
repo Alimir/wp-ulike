@@ -347,3 +347,15 @@ function wp_ulike_sanitize_multiple_select( $value ) {
 
     return $value;
 }
+
+if ( ! function_exists( 'wp_ulike_get_site_stats_meta' ) ) {
+	/**
+	 * Combined stats meta for the free React admin bootstrap API.
+	 *
+	 * @param array $content_types Active stats content types.
+	 * @return array
+	 */
+	function wp_ulike_get_site_stats_meta( $content_types = array() ) {
+		return WP_Ulike_Stats_Meta::get_site_stats_meta( $content_types );
+	}
+}

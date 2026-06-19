@@ -24,7 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				/* translators: 1: Help page URL, 2: Documentation URL. */
 				wp_kses_post( __( 'Need a hand? Visit <a href="%1$s">Help</a> in this menu or read the <a href="%2$s" target="_blank" rel="noopener noreferrer">documentation</a>.', 'wp-ulike' ) ),
 				esc_url( admin_url( 'admin.php?page=wp-ulike-about' ) ),
-				esc_url( 'https://docs.wpulike.com/' )
+				esc_url( add_query_arg(
+					array(
+						'utm_source'   => 'activation-pointer',
+						'utm_campaign' => 'plugin-uri',
+						'utm_medium'   => 'wp-dash',
+					),
+					'https://docs.wpulike.com/'
+				) )
 			);
 			?>
 		</p>

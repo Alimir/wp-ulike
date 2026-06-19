@@ -594,7 +594,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'desc'    => sprintf(
                         '%s <a target="_blank" href="%s" title="Click">%s</a>. %s',
                         esc_html__( 'Pick a style for your like button.', 'wp-ulike' ),
-                        WP_ULIKE_PLUGIN_URI . 'templates/?utm_source=settings-page&utm_campaign=plugin-uri&utm_medium=wp-dash',
+                        esc_url( add_query_arg(
+                            array(
+                                'utm_source'   => 'settings-page',
+                                'utm_campaign' => 'plugin-uri',
+                                'utm_medium'   => 'wp-dash',
+                            ),
+                            WP_ULIKE_PLUGIN_URI . 'templates/'
+                        ) ),
                         esc_html__( 'Preview online', 'wp-ulike' ),
                         esc_html__( 'Locked styles are optional Pro extras—your selected template works out of the box.', 'wp-ulike' )
                     ),
@@ -939,7 +946,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'title' => sprintf( esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Profile', 'wp-ulike') ),
                         ),
                     ), // First 2 fields from profiles section
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/best-wordpress-profile-builder-plugin/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=profiles-section',
+                    'read_more_url' => add_query_arg(
+                        array(
+                            'utm_source'   => 'settings-page',
+                            'utm_campaign' => 'gopro',
+                            'utm_medium'   => 'wp-dash',
+                            'utm_content'  => 'profiles-section',
+                        ),
+                        WP_ULIKE_PLUGIN_URI . 'blog/best-wordpress-profile-builder-plugin/'
+                    ),
                 ),
                 'forms' => array(
                     'id'          => 'wp_ulike_pro_forms_lock',
@@ -963,7 +978,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'title' => esc_html__( 'Login Redirect URL', 'wp-ulike'),
                         ),
                     ), // First 2 fields from forms section
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-plugin/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=forms-section',
+                    'read_more_url' => add_query_arg(
+                        array(
+                            'utm_source'   => 'settings-page',
+                            'utm_campaign' => 'gopro',
+                            'utm_medium'   => 'wp-dash',
+                            'utm_content'  => 'forms-section',
+                        ),
+                        WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ajax-login-registration-plugin/'
+                    ),
                 ),
                 'social_logins' => array(
                     'id'          => 'wp_ulike_pro_social_logins_lock',
@@ -987,7 +1010,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'title' => esc_html__('Social networks', 'wp-ulike'),
                         ),
                     ), // First 2 fields from social_logins section (matches Pro exactly)
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/social-login/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=social-logins-section',
+                    'read_more_url' => add_query_arg(
+                        array(
+                            'utm_source'   => 'settings-page',
+                            'utm_campaign' => 'gopro',
+                            'utm_medium'   => 'wp-dash',
+                            'utm_content'  => 'social-logins-section',
+                        ),
+                        WP_ULIKE_PLUGIN_URI . 'blog/social-login/'
+                    ),
                 ),
                 'share_buttons' => array(
                     'id'          => 'wp_ulike_pro_share_buttons_lock',
@@ -1006,7 +1037,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'title' => esc_html__('Add Share Items', 'wp-ulike'),
                         ),
                     ), // Share buttons uses group repeater style (matches Pro exactly - shows actual repeater)
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-social-share-buttons/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=share-buttons-section',
+                    'read_more_url' => add_query_arg(
+                        array(
+                            'utm_source'   => 'settings-page',
+                            'utm_campaign' => 'gopro',
+                            'utm_medium'   => 'wp-dash',
+                            'utm_content'  => 'share-buttons-section',
+                        ),
+                        WP_ULIKE_PLUGIN_URI . 'blog/wordpress-ultimate-social-share-buttons/'
+                    ),
                 ),
                 'emails' => array(
                     'id'          => 'wp_ulike_pro_emails_lock',
@@ -1029,7 +1068,15 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'title' => esc_html__( 'Admin E-mail Address', 'wp-ulike'),
                         ),
                     ), // First 2 fields from emails section
-                    'read_more_url' => WP_ULIKE_PLUGIN_URI . 'blog/?utm_source=settings-page&utm_campaign=gopro&utm_medium=wp-dash&utm_content=emails-section',
+                    'read_more_url' => add_query_arg(
+                        array(
+                            'utm_source'   => 'settings-page',
+                            'utm_campaign' => 'gopro',
+                            'utm_medium'   => 'wp-dash',
+                            'utm_content'  => 'emails-section',
+                        ),
+                        WP_ULIKE_PLUGIN_URI . 'blog/'
+                    ),
                 )
             );
 

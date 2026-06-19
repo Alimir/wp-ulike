@@ -193,7 +193,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 						<p class="wp-ulike-about-upsell__footnote"><?php echo esc_html( $upsell['footnote'] ); ?></p>
 					<?php endif; ?>
 					<p class="wp-ulike-about-upsell__actions">
-						<a class="button button-primary" href="<?php echo esc_url( $data['upgrade_url'] ?? WP_ULIKE_PLUGIN_URI . 'upgrade/' ); ?>" target="_blank" rel="noopener noreferrer">
+						<a class="button button-primary" href="<?php echo esc_url( $data['upgrade_url'] ?? add_query_arg( array( 'utm_source' => 'about-page', 'utm_campaign' => 'gopro', 'utm_medium' => 'wp-dash' ), WP_ULIKE_PLUGIN_URI . 'upgrade/' ) ); ?>" target="_blank" rel="noopener noreferrer">
 							<?php echo esc_html( $upsell['cta_label'] ?? __( 'Explore Pro', 'wp-ulike' ) ); ?>
 						</a>
 					</p>
