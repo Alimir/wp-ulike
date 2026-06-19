@@ -66,14 +66,175 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @return array
 		 */
 		public function get_all_data() {
+			$tables = $this->get_tables();
+			$meta   = wp_ulike_get_site_stats_meta( array_keys( $tables ) );
+
 			$output = array(
 				'overview' => $this->get_overview(),
-				'charts'   => $this->get_datasets(),
-				'items'    => $this->get_top_items(),
-				'metrics'  => $this->get_count_logs()
+				'meta'     => array_merge(
+					array(
+						'build'              => 'free',
+						'content_types'      => array_keys( $tables ),
+						'date_limit_default' => (int) apply_filters( 'wp_ulike_stats_data_limit', 30 ),
+					),
+					$meta
+				),
 			);
 
 			return $output;
+		}
+
+		/**
+		 * Overview page data — charts, items, metrics loaded separately.
+		 *
+		 * @return array
+		 */
+		public function get_overview_api_data() {
+			return array(
+				'overview'   => $this->get_overview(),
+				'peak_hours' => $this->get_peak_hours(),
+			);
+		}
+
+		/**
+		 * Week-over-week metrics per content type (light overview grid).
+		 *
+		 * @return array
+		 */
+		public function get_metrics_summary() {
+			$tables  = $this->get_tables();
+			$metrics = $this->get_count_logs();
+			$grid    = array();
+
+			foreach ( array_keys( $tables ) as $type ) {
+				if ( ! isset( $metrics[ $type ] ) ) {
+					continue;
+				}
+				$grid[ $type ] = array(
+					'week'      => (int) ( $metrics[ $type ]['week'] ?? 0 ),
+					'last_week' => (int) ( $metrics[ $type ]['last_week'] ?? 0 ),
+				);
+			}
+
+			return $grid;
+		}
+
+		/**
+		 * Top items preview for the free overview (no filters, fixed limit).
+		 *
+		 * @return array
+		 */
+		public function get_overview_highlights() {
+			$tables = $this->get_tables();
+			$limit  = 5;
+			$out    = array();
+
+			if ( isset( $tables['posts'] ) ) {
+				$out['posts'] = array_slice( $this->normalize_top_items( $this->get_top( 'posts' ) ), 0, $limit );
+			}
+
+			if ( isset( $tables['comments'] ) ) {
+				$out['comments'] = array_slice(
+					$this->normalize_top_items( $this->get_top( 'comments' ), 'comments' ),
+					0,
+					$limit
+				);
+			}
+
+			$engagers = $this->display_top_likers();
+			if ( ! empty( $engagers ) ) {
+				$out['engagers'] = array_slice( $this->normalize_top_items( $engagers, 'engagers' ), 0, $limit );
+			}
+
+			return $out;
+		}
+
+		/**
+		 * Top content for a single type (free — no filters).
+		 *
+		 * @param string $type Content type key.
+		 * @param int    $limit Max items.
+		 * @return array|null
+		 */
+		public function get_tops_api_data( $type, $limit = 8 ) {
+			$limit = max( 1, min( 20, absint( $limit ) ) );
+
+			if ( 'engagers' === $type ) {
+				$items = $this->normalize_top_items( $this->display_top_likers(), 'engagers' );
+				return array(
+					'items' => array_slice( $items, 0, $limit ),
+					'total' => count( $items ),
+				);
+			}
+
+			$tables = $this->get_tables();
+			if ( ! isset( $tables[ $type ] ) ) {
+				return null;
+			}
+
+			$items = $this->normalize_top_items( $this->get_top( $type ), $type );
+			return array(
+				'items' => array_slice( $items, 0, $limit ),
+				'total' => count( $items ),
+			);
+		}
+
+		/**
+		 * Normalize top rows for the React admin.
+		 *
+		 * @param array  $items Raw items.
+		 * @param string $type  Optional type hint.
+		 * @return array
+		 */
+		private function normalize_top_items( $items, $type = 'posts' ) {
+			if ( empty( $items ) || ! is_array( $items ) ) {
+				return array();
+			}
+
+			$normalized = array();
+
+			foreach ( $items as $item ) {
+				if ( ! is_array( $item ) ) {
+					continue;
+				}
+
+				$title = isset( $item['title'] ) ? $item['title'] : '';
+				if ( 'comments' === $type && empty( $title ) && ! empty( $item['author'] ) ) {
+					$title = $item['author'];
+				}
+
+				$normalized[] = array(
+					'title'       => $title,
+					'permalink'   => isset( $item['permalink'] ) ? $item['permalink'] : '',
+					'likes_count' => isset( $item['likes_count'] ) ? absint( $item['likes_count'] ) : 0,
+				);
+			}
+
+			return $normalized;
+		}
+
+		/**
+		 * Engagement data for a single content type.
+		 *
+		 * @param string $type Content type.
+		 * @return array|null
+		 */
+		public function get_engagement_api_data( $type ) {
+			$tables = $this->get_tables();
+
+			if ( ! isset( $tables[ $type ] ) ) {
+				return null;
+			}
+
+			$table   = $tables[ $type ];
+			$charts  = $this->get_datasets();
+			$metrics = $this->get_count_logs();
+
+			return array(
+				'type'    => $type,
+				'chart'   => isset( $charts[ $type ] ) ? $charts[ $type ] : array(),
+				'metrics' => isset( $metrics[ $type ] ) ? $metrics[ $type ] : array(),
+			);
 		}
 
 		/**
@@ -99,20 +260,6 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			}
 
 			return $datasets;
-		}
-
-		// Get top items for each type
-		private function get_top_items() {
-			$tables = $this->get_tables();
-			$top_items = array();
-
-			$top_items['posts']      = $this->get_top( 'posts' );
-			$top_items['comments']   = $this->get_top( 'comments' );
-			$top_items['activities'] = $this->get_top( 'activities' );
-			$top_items['topics']     = $this->get_top( 'topics' );
-			$top_items['engagers']   = $this->display_top_likers();
-
-			return $top_items;
 		}
 
 		// Get count logs for each table with different time ranges
@@ -488,6 +635,57 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			}
 
 			return $result;
+		}
+
+		/**
+		 * Hour-of-day engagement distribution (last 30 days).
+		 *
+		 * @return array
+		 */
+		public function get_peak_hours() {
+			$union_parts = array();
+
+			foreach ( $this->tables as $table ) {
+				$union_parts[] = sprintf(
+					"SELECT date_time FROM %s WHERE date_time >= NOW() - INTERVAL 30 DAY",
+					$this->wpdb->prefix . $table
+				);
+			}
+
+			if ( empty( $union_parts ) ) {
+				return array();
+			}
+
+			$query = sprintf(
+				"SELECT HOUR(date_time) AS hour_slot, COUNT(*) AS total_count
+				FROM ( %s ) AS combined
+				GROUP BY hour_slot
+				ORDER BY hour_slot ASC",
+				implode( ' UNION ALL ', $union_parts )
+			);
+
+			$results = $this->wpdb->get_results( $query );
+			$hours   = array_fill( 0, 24, 0 );
+
+			if ( ! empty( $results ) ) {
+				foreach ( $results as $row ) {
+					$slot = (int) $row->hour_slot;
+					if ( $slot >= 0 && $slot <= 23 ) {
+						$hours[ $slot ] = absint( $row->total_count );
+					}
+				}
+			}
+
+			$data = array();
+			for ( $h = 0; $h < 24; $h++ ) {
+				$data[] = array(
+					'hour'  => $h,
+					'label' => wp_date( 'g A', strtotime( sprintf( 'today %02d:00', $h ) ) ),
+					'count' => $hours[ $h ],
+				);
+			}
+
+			return $data;
 		}
 
 		/**
