@@ -244,8 +244,9 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					'desc'  => esc_html__( 'Compare free and Pro features before you upgrade.', 'wp-ulike' ),
 					'url'   => add_query_arg(
 						array(
-							'utm_source' => 'about-page',
-							'utm_medium' => 'wp-dash',
+							'utm_source'   => 'about-page',
+							'utm_campaign' => 'free-vs-pro',
+							'utm_medium'   => 'wp-dash',
 						),
 						WP_ULIKE_PLUGIN_URI . 'upgrade/'
 					),
@@ -254,7 +255,14 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				array(
 					'title' => esc_html__( 'Support', 'wp-ulike' ),
 					'desc'  => esc_html__( 'Get help from the WP ULike team.', 'wp-ulike' ),
-					'url'   => WP_ULIKE_PLUGIN_URI . 'support/?utm_source=about-page&utm_medium=wp-dash',
+					'url'   => add_query_arg(
+						array(
+							'utm_source'   => 'about-page',
+							'utm_campaign' => 'help-link',
+							'utm_medium'   => 'wp-dash',
+						),
+						WP_ULIKE_PLUGIN_URI . 'support/'
+					),
 					'icon'  => 'sos',
 				),
 				array(
@@ -290,8 +298,9 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'pro_upsell'             => $upsell,
 				'upgrade_url'            => add_query_arg(
 					array(
-						'utm_source' => 'overview',
-						'utm_medium' => 'wp-dash',
+						'utm_source'   => 'overview',
+						'utm_campaign' => 'gopro',
+						'utm_medium'   => 'wp-dash',
 					),
 					WP_ULIKE_PLUGIN_URI . 'upgrade/'
 				),

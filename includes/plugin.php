@@ -147,7 +147,14 @@ class WpUlikeInit {
 
     $links[] = sprintf(
       '<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-      esc_url( 'https://docs.wpulike.com/' ),
+      esc_url( add_query_arg(
+        array(
+          'utm_source'   => 'plugins-page',
+          'utm_campaign' => 'plugin-uri',
+          'utm_medium'   => 'wp-dash',
+        ),
+        'https://docs.wpulike.com/'
+      ) ),
       esc_html__( 'Documentation', 'wp-ulike' )
     );
 
