@@ -66,6 +66,7 @@ export default {
 
 	deploy: {
 		prod: { envPrefix: 'DEPLOY_PROD' },
+		kinsta: { envPrefix: 'DEPLOY_KINSTA' },
 	},
 
 	release: {
