@@ -6,7 +6,7 @@ Tags: like, engagement, feedback, voting, reactions
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.1.0
+Stable tag: 5.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,12 @@ Yes. Each site gets its own settings and stats.
 We follow WordPress security practices: nonces, hardened AJAX, optional IP anonymization. Details at wpulike.com/security.
 
 == Changelog ==
+
+= 5.1.1 =
+* Added: Redesigned **Statistics** screen — vote totals, engagement charts, top content, and an hourly activity view to see when your audience votes most.
+* Improved: Statistics load faster and feel snappier when switching between views.
+* Improved: More reliable vote counts across your site.
+* Fixed: Several minor admin issues.
 
 = 5.1.0 =
 * Improved: Redesigned Settings and Customizer panels for better UX.
