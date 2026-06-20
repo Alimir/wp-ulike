@@ -60,6 +60,39 @@ add_action('wp_ajax_nopriv_wp_ulike_stats_api', 'wp_ulike_stats_api');
 // @endif
 
 /**
+ * Save per-user stats dashboard preferences.
+ *
+ * @return void
+ */
+function wp_ulike_stats_save_user_prefs() {
+	// @if DEV
+	/*
+	// @endif
+	if( ! current_user_can( wp_ulike_get_user_access_capability('stats') ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	$raw  = isset( $_POST['prefs'] ) ? wp_unslash( $_POST['prefs'] ) : '';
+	$data = json_decode( $raw, true );
+
+	if ( ! is_array( $data ) ) {
+		wp_send_json_error( esc_html__( 'Invalid preferences payload.', 'wp-ulike' ) );
+	}
+
+	if ( ! class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
+		wp_send_json_error( esc_html__( 'Preferences storage is unavailable.', 'wp-ulike' ) );
+	}
+
+	WP_Ulike_Stats_User_Prefs::save_prefs( $data );
+
+	wp_send_json_success( WP_Ulike_Stats_User_Prefs::get_prefs() );
+}
+add_action( 'wp_ajax_wp_ulike_stats_save_user_prefs', 'wp_ulike_stats_save_user_prefs' );
+
+/**
  * Overview dashboard API (free).
  *
  * @return void
