@@ -631,9 +631,11 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
      * @param integer $limit
      * @param string $period
      * @param integer $offset
+     * @param array   $status
+     * @param string  $order    ASC|DESC — sort by total reactions in period.
      * @return object
      */
-	function wp_ulike_get_best_likers_info($limit, $period, $offset = 1, $status = ['like', 'dislike']) {
+	function wp_ulike_get_best_likers_info( $limit, $period, $offset = 1, $status = array( 'like', 'dislike' ), $order = 'DESC' ) {
 		global $wpdb;
 
 		$status = wp_ulike_normalize_vote_statuses( $status );
@@ -642,6 +644,8 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
 		if ( empty( $status_list ) ) {
 			return array();
 		}
+
+		$order = 'ASC' === strtoupper( (string) $order ) ? 'ASC' : 'DESC';
 
 		// Period limit SQL
 		$period_limit = wp_ulike_get_period_limit_sql($period);
@@ -693,7 +697,7 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
 				" . implode( ' UNION ALL ', $union_parts ) . "
 			) AS T
 			GROUP BY T.user_id
-			ORDER BY SumUser DESC
+			ORDER BY SumUser {$order}
 			{$limit_records}";
 
 		return $wpdb->get_results( $query );
