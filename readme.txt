@@ -44,7 +44,7 @@ Included with free:
 
 * Like buttons on posts via auto-display, `[wp_ulike]` shortcodes, or the **ULike Button** block
 * **Top List** block for ranked posts, comments, users, BuddyPress activities, and bbPress topics
-* **Statistics dashboard** with popular content and vote counts
+* **Statistics dashboard** with overview metrics, engagement reports, growth tips, top-countries preview, publish-timing insights, and vote logs
 * **Button customizer** with live preview, multiple templates, and RTL support
 * **Settings backup** (JSON export/import) and **Site Health** table check
 * **Privacy tools** for user-linked vote data and optional IP anonymization
@@ -130,9 +130,17 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 == Changelog ==
 
 = 5.1.1 =
-* Added: Redesigned **Statistics** screen — vote totals, engagement charts, top content, and an hourly activity view to see when your audience votes most.
-* Improved: Statistics load faster and feel snappier when switching between views.
-* Improved: More reliable vote counts across your site.
+* Added: **Redesigned Statistics dashboard** — open **WP ULike → Statistics** for a cleaner home screen with your key numbers up front.
+* Added: **Overview** — see total engagement, today’s activity, and how this week compares to last week.
+* Added: **Growth tips** — short suggestions based on your data (momentum, milestones, and helpful nudges as your site grows).
+* Added: **Engagement reports** — charts and top-content lists for posts, comments, and other content types you use.
+* Added: **When to publish** — peak hours and time windows so you can see when people vote most.
+* Added: **Top countries preview** — your top 3 countries with voter counts and growth, right on Overview.
+* Added: **Logs** — browse and manage vote history by content type.
+* Added: **Dashboard settings** — turn announcement popups on or off, pick light/dark mode, and adjust sidebar options.
+* Added: **Focus mode** — hide the WordPress admin chrome for a distraction-free stats view.
+* Improved: Faster, smoother navigation between Overview, reports, and logs.
+* Improved: Clearer empty states and more reliable vote counts.
 * Fixed: Several minor admin issues.
 
 = 5.1.0 =
@@ -189,6 +197,9 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 * Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
+
+= 5.1.1 =
+Open **WP ULike → Statistics** after updating to explore the redesigned dashboard. Your existing votes and settings are untouched — this update is all about a clearer, friendlier way to understand engagement.
 
 = 5.0.6 =
 Safe update — your votes, settings, and data stay as they are. **WP ULike Pro below 2.1.4?** The old post schema box moves to **Tools → Schema Generator** in Pro 2.1.4+. Update Pro when you can; nothing breaks on the front end.
