@@ -80,7 +80,11 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 
 
 		function load_statistics_app(){
-			if ( defined( 'WP_ULIKE_PRO_DOMAIN' ) || strpos( $this->hook, 'statistics' ) === false ) {
+			if (
+				defined( 'WP_ULIKE_PRO_DOMAIN' )
+				|| strpos( $this->hook, WP_ULIKE_SLUG ) === false
+				|| strpos( $this->hook, 'statistics' ) === false
+			) {
 				return;
 			}
 
