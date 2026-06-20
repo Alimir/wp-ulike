@@ -84,6 +84,8 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 				return;
 			}
 
+			wp_dequeue_script( 'svg-painter' );
+
 			$base_url = WP_ULIKE_ADMIN_URL . '/includes/statistics/';
 
 			wp_enqueue_style(

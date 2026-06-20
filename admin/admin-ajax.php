@@ -68,7 +68,12 @@ function wp_ulike_stats_save_user_prefs() {
 	// @if DEV
 	/*
 	// @endif
-	if( ! current_user_can( wp_ulike_get_user_access_capability('stats') ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
+	$nonce_valid = wp_ulike_is_valid_nonce( WP_ULIKE_SLUG );
+	if ( ! $nonce_valid && defined( 'WP_ULIKE_PRO_DOMAIN' ) ) {
+		$nonce_valid = wp_ulike_is_valid_nonce( WP_ULIKE_PRO_DOMAIN );
+	}
+
+	if ( ! current_user_can( wp_ulike_get_user_access_capability( 'stats' ) ) || ! $nonce_valid ) {
 		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
 	}
 	// @if DEV
