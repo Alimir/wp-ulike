@@ -10,7 +10,7 @@ Stable tag: 5.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Add one-click reactions to WordPress. Stats, top lists, and privacy tools included. No signup required.
+Add one-click reactions to WordPress. Built-in statistics, top lists, and privacy tools. No signup required.
 
 == Description ==
 
@@ -24,7 +24,15 @@ Optional IP anonymization, WordPress personal data export/erase, and flexible lo
 
 WP ULike supports posts out of the box and integrates with WooCommerce, BuddyPress, and bbPress. The frontend uses vanilla JavaScript (no jQuery) and works with major caching plugins.
 
-[youtube https://www.youtube.com/watch?v=nxQto2Yj_yc]
+= Statistics you'll actually use =
+
+Open **WP ULike → Statistics** for a clear view of what's working: totals, trends, and patterns without the clutter.
+
+**Free** includes Overview, growth tips, engagement reports, when-to-publish insights, and vote logs. Dark mode and focus mode are built in.
+
+**Pro** (optional) adds world maps, content intelligence, device and browser breakdowns, top members, engagement rates, and CSV exports when you want more depth.
+
+Free covers the essentials. Pro unlocks the full picture.
 
 = Built for =
 
@@ -44,7 +52,7 @@ Included with free:
 
 * Like buttons on posts via auto-display, `[wp_ulike]` shortcodes, or the **ULike Button** block
 * **Top List** block for ranked posts, comments, users, BuddyPress activities, and bbPress topics
-* **Statistics dashboard** with overview metrics, engagement reports, growth tips, top-countries preview, publish-timing insights, and vote logs
+* **Statistics dashboard** with Overview, growth tips, engagement reports, publish-timing insights, vote logs, dark mode, and focus mode
 * **Button customizer** with live preview, multiple templates, and RTL support
 * **Settings backup** (JSON export/import) and **Site Health** table check
 * **Privacy tools** for user-linked vote data and optional IP anonymization
@@ -56,7 +64,7 @@ Regular updates, WordPress coding standards, and security best practices (nonces
 Pro is optional. It extends the free plugin when you need more depth, design, or scale. Both plugins stay installed and active.
 
 * **Dislike buttons** and **25+ premium templates** for richer feedback and branded UI
-* **Advanced analytics** with filters, date ranges, maps, device insights, and CSV/PNG/SVG exports
+* **Advanced statistics** with world map, content intelligence, top members, device insights, engagement rates, and CSV exports
 * **View tracking & engagement rates** to measure votes against page views
 * **Schema.org markup** for star ratings and FAQ rich results
 * **Display automation & bulk actions** for posts, WooCommerce, EDD, and more
@@ -93,9 +101,9 @@ Works out of the box. [Documentation](https://docs.wpulike.com/?utm_source=wp-re
 
 2. **Live customizer:** change colors, spacing, and typography with real-time preview.
 
-3. **Metrics dashboard:** see what's getting votes and how engagement trends over time.
+3. **Statistics Overview:** totals, growth, and helpful tips on one screen.
 
-4. **Insights dashboard:** spot your best-performing content at a glance.
+4. **Engagement reports:** charts and top content for posts, comments, and more.
 
 5. **Gutenberg blocks:** drop like buttons and Top List leaderboards from the editor.
 
@@ -119,7 +127,7 @@ Yes. Use built-in templates and the live customizer. No code required. Pro adds 
 On single posts. Use blocks, shortcodes, or display options to place buttons elsewhere.
 
 = What's the difference between WP ULike Free and Pro? =
-Free includes the full voting experience: like buttons, dashboard, blocks, customizer, backup, and privacy tools, with no vote limits. Pro adds dislikes, advanced analytics, view tracking, premium templates, schema markup, display automation, profiles and login, Elementor widgets, REST API, advanced GDPR tools, email notifications, and priority support. Pro extends Free; both plugins stay active.
+Free includes the full voting experience: like buttons, statistics (Overview, reports, logs, and tips), blocks, customizer, backup, and privacy tools, with no vote limits. Pro adds dislikes, deeper analytics (maps, intelligence, devices, top members, engagement rates), view tracking, premium templates, schema markup, display automation, profiles and login, Elementor widgets, REST API, advanced GDPR tools, email notifications, and priority support. Pro extends Free; both plugins stay active.
 
 = Can I use WP ULike on a multisite setup? =
 Yes. Each site gets its own settings and stats.
@@ -130,15 +138,14 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 == Changelog ==
 
 = 5.1.1 =
-* Added: **Redesigned Statistics dashboard** — open **WP ULike → Statistics** for a cleaner home screen with your key numbers up front.
-* Added: **Overview** — see total engagement, today’s activity, and how this week compares to last week.
-* Added: **Growth tips** — short suggestions based on your data (momentum, milestones, and helpful nudges as your site grows).
-* Added: **Engagement reports** — charts and top-content lists for posts, comments, and other content types you use.
-* Added: **When to publish** — peak hours and time windows so you can see when people vote most.
-* Added: **Top countries preview** — your top 3 countries with voter counts and growth, right on Overview.
-* Added: **Logs** — browse and manage vote history by content type.
-* Added: **Dashboard settings** — turn announcement popups on or off, pick light/dark mode, and adjust sidebar options.
-* Added: **Focus mode** — hide the WordPress admin chrome for a distraction-free stats view.
+* Added: **Statistics dashboard**. Open **WP ULike → Statistics** for a home screen with your key numbers up front.
+* Added: **Overview**. See total engagement, today's activity, and how this week compares to last week.
+* Added: **Growth tips**. Short suggestions based on your data (momentum, milestones, and helpful nudges as your site grows).
+* Added: **Engagement reports**. Charts and top-content lists for posts, comments, and other content types you use.
+* Added: **When to publish**. Peak hours and time windows so you can see when people vote most.
+* Added: **Logs**. Browse and manage vote history by content type.
+* Added: **Dashboard settings**. Turn announcement popups on or off, pick light/dark mode, and adjust sidebar options.
+* Added: **Focus mode**. Hide the WordPress admin chrome for a distraction-free stats view.
 * Improved: Faster, smoother navigation between Overview, reports, and logs.
 * Improved: Clearer empty states and more reliable vote counts.
 * Fixed: Several minor admin issues.
@@ -154,23 +161,23 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 * Improved: Settings import on Help now asks for confirmation before overwriting.
 
 = 5.0.6 =
-* Removed: Legacy settings framework from the plugin — previously kept for WP ULike Pro post metaboxes.
+* Removed: Legacy settings framework from the plugin. It was previously kept for WP ULike Pro post metaboxes.
 * Improved: Settings and Customizer panels now follow your WordPress admin color scheme (light, dark, and high-contrast).
 * Improved: Smoother voting and admin behavior under the hood.
 * Fixed: Several small issues for a more reliable experience.
 
 = 5.0.5 =
-* Added: **Help** screen under WP ULike — quick status, shortcuts, documentation links, troubleshooting, and settings backup/restore.
+* Added: **Help** screen under WP ULike with quick status, shortcuts, documentation links, troubleshooting, and settings backup/restore.
 * Added: Optional feedback when deactivating the plugin (Plugins screen).
 * Added: **Site Health** test for WP ULike database tables.
 * Fixed: No longer redirects to the plugin screen right after activation.
 * Fixed: Minor admin and usability issues reported by users.
 
 = 5.0.4 =
-* Added: **Top List** Gutenberg block — ranked leaderboard for most liked posts, comments, users, BuddyPress activities, and bbPress topics.
+* Added: **Top List** Gutenberg block, a ranked leaderboard for most liked posts, comments, users, BuddyPress activities, and bbPress topics.
 * Added: Declared and verified compatibility with **WordPress 7.0** (Armstrong), including Block API v3 and the iframed block editor.
 * Improved: Deferred frontend script loading and safer block rendering.
-* Improved: Admin notices restyled for WordPress 7 — minimal layout, fixed button underlines, and clearer text contrast.
+* Improved: Admin notices restyled for WordPress 7 with a minimal layout, fixed button underlines, and clearer text contrast.
 * Improved: Admin notices now use vanilla JavaScript instead of inline jQuery.
 * Improved: Plugin config passed to scripts via inline JSON instead of `wp_localize_script`.
 
@@ -199,10 +206,10 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 == Upgrade Notice ==
 
 = 5.1.1 =
-Open **WP ULike → Statistics** after updating to explore the redesigned dashboard. Your existing votes and settings are untouched — this update is all about a clearer, friendlier way to understand engagement.
+Open **WP ULike → Statistics** for Overview, engagement reports, growth tips, publish-timing insights, and vote logs. Your existing votes and settings stay as they are.
 
 = 5.0.6 =
-Safe update — your votes, settings, and data stay as they are. **WP ULike Pro below 2.1.4?** The old post schema box moves to **Tools → Schema Generator** in Pro 2.1.4+. Update Pro when you can; nothing breaks on the front end.
+Safe update. Your votes, settings, and data stay as they are. **WP ULike Pro below 2.1.4?** The old post schema box moves to **Tools → Schema Generator** in Pro 2.1.4+. Update Pro when you can; nothing breaks on the front end.
 
 = 5.0.5 =
 If you use a full-page cache plugin, purge your site cache after updating.
