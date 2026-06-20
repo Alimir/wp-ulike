@@ -63,10 +63,8 @@ if ( ! class_exists( 'WP_Ulike_Stats_Meta' ) ) {
 				return 'logged_in_only';
 			}
 
-			if ( $requires_login === 0 ) {
-				return 'guest_only';
-			}
-
+			// All active types allow guest voting; logged-in members can still vote and
+			// appear in Top members — not guest-only voting.
 			return 'both';
 		}
 
