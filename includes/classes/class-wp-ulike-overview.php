@@ -58,7 +58,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			if ( $today_votes > 0 ) {
 				$intro = sprintf(
 					/* translators: %s: votes logged today */
-					esc_html__( '%s votes today—great momentum. You already have likes and stats here; Pro adds richer dashboards, smart placement rules, and SEO markup when you want them.', 'wp-ulike' ),
+					esc_html__( '%s votes today—great momentum. Free already covers your likes, Overview, and reports; Pro is optional when you want audience maps, automation, and SEO markup.', 'wp-ulike' ),
 					number_format_i18n( $today_votes )
 				);
 			} elseif ( $log_count > 0 ) {
@@ -68,7 +68,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					number_format_i18n( $log_count )
 				);
 			} else {
-				$intro = esc_html__( 'Likes, stats, and button styles are ready to go. Pro is there when you want automation, a full analytics dashboard, or star ratings in search results.', 'wp-ulike' );
+				$intro = esc_html__( 'Likes, stats, and button styles are ready to go. Open Statistics for Overview and growth tips—Pro is there when you want audience maps, placement rules, or star ratings in search.', 'wp-ulike' );
 			}
 
 			$content = array(
@@ -80,7 +80,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					array(
 						'icon'        => 'chart-area',
 						'title'       => esc_html__( 'Pro Statistics', 'wp-ulike' ),
-						'description' => esc_html__( 'Interactive charts, world map, device breakdowns, and CSV exports—far beyond this page’s snapshot.', 'wp-ulike' ),
+						'description' => esc_html__( 'World map, device breakdowns, top members, and CSV exports—deeper than the free Overview and reports.', 'wp-ulike' ),
 						'highlight'   => true,
 					),
 					array(
