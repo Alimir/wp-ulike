@@ -106,10 +106,14 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					'StatsAppConfig',
 					array(
 						'nonce'     => wp_create_nonce( WP_ULIKE_SLUG ),
+						'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 						'logo'      => WP_ULIKE_ASSETS_URL . '/img/logo.svg',
 						'title'     => esc_html__( 'Metrics Dashboard', 'wp-ulike' ),
 						'buildType' => 'free',
-						'loaderSvg' => $this->get_loader_svg()
+						'loaderSvg' => $this->get_loader_svg(),
+						'userPrefs' => class_exists( 'WP_Ulike_Stats_User_Prefs' )
+							? WP_Ulike_Stats_User_Prefs::get_app_config()
+							: array(),
 					)
 				);
 		}

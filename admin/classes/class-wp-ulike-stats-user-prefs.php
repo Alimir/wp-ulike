@@ -27,6 +27,7 @@ if ( ! class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
 			return array(
 				'show_modals'              => true,
 				'dismissed_notifications'  => array(),
+				'sidebar_pro_minimized'    => false,
 			);
 		}
 
@@ -87,6 +88,9 @@ if ( ! class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
 					? (bool) $prefs['show_modals']
 					: $defaults['show_modals'],
 				'dismissed_notifications' => $dismissed,
+				'sidebar_pro_minimized'   => array_key_exists( 'sidebar_pro_minimized', $prefs )
+					? (bool) $prefs['sidebar_pro_minimized']
+					: $defaults['sidebar_pro_minimized'],
 			);
 		}
 

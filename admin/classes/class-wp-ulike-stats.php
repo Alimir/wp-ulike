@@ -179,9 +179,11 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 */
 		private function get_overview() {
 			return array(
-				'total'                => $this->count_all_logs('all'),
-				'today'                => $this->count_all_logs('today'),
-				'yesterday'            => $this->count_all_logs('yesterday')
+				'total'     => $this->count_all_logs( 'all' ),
+				'today'     => $this->count_all_logs( 'today' ),
+				'yesterday' => $this->count_all_logs( 'yesterday' ),
+				'week'      => $this->count_all_logs( 'week' ),
+				'last_week' => $this->count_all_logs( 'last_week' ),
 			);
 		}
 
