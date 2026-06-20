@@ -252,6 +252,7 @@ add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 
 /**
  * Register Go Pro submenu (free installs only).
+ * Primary always-on upgrade path — in-dashboard upsells appear after 50 total engagements.
  *
  * @return void
  */

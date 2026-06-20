@@ -923,6 +923,11 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
          * @return array Pro lock field array
          */
         public function get_pro_lock_field( $section = 'profiles' ) {
+            // In-dashboard Pro preview only after enough engagement; "Go Pro" menu is always available.
+            if ( (int) wp_ulike_count_all_logs( 'all' ) < 25 ) {
+                return array();
+            }
+
             $configs = array(
                 'profiles' => array(
                     'id'          => 'wp_ulike_pro_profiles_lock',

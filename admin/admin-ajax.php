@@ -536,8 +536,6 @@ function wp_ulike_localization_api(){
 		'Help'           => esc_html__( 'Help', 'wp-ulike' ),
 		'Explore Pro'    => esc_html__( 'Explore Pro', 'wp-ulike' ),
 		'Explore Pro reports' => esc_html__( 'Explore Pro reports', 'wp-ulike' ),
-		'Pricing'        => esc_html__( 'Pricing', 'wp-ulike' ),
-		'See pricing'    => esc_html__( 'See pricing', 'wp-ulike' ),
 		'Go deeper with Pro' => esc_html__( 'Go deeper with Pro', 'wp-ulike' ),
 		'Preview advanced reports — upgrade when you need live data.' => esc_html__( 'Preview advanced reports — upgrade when you need live data.', 'wp-ulike' ),
 		"See who's engaging most" => esc_html__( "See who's engaging most", 'wp-ulike' ),
