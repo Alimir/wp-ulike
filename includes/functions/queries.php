@@ -637,9 +637,21 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
 		global $wpdb;
 
 		$status = wp_ulike_normalize_vote_statuses( $status );
+		$status_list = is_array( $status ) ? $status : array( $status );
+
+		if ( empty( $status_list ) ) {
+			return array();
+		}
 
 		// Period limit SQL
 		$period_limit = wp_ulike_get_period_limit_sql($period);
+
+		// Limit clause
+		$limit_records = '';
+		if ((int)$limit > 0) {
+			$offset = $offset > 0 ? (($offset - 1) * $limit) : 0;
+			$limit_records = $wpdb->prepare("LIMIT %d, %d", $offset, $limit);
+		}
 
 		// Prepare status filter
 		if (is_array($status)) {
@@ -652,86 +664,39 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
 			$status_type = $wpdb->prepare("status = %s", $status);
 		}
 
-		$allowed_statuses = array( 'like', 'dislike', 'unlike', 'undislike' );
-		$status_list      = is_array( $status ) ? $status : array( $status );
-		$status_list      = array_values( array_intersect( $status_list, $allowed_statuses ) );
-
-		if ( empty( $status_list ) ) {
-			return array();
+		$dynamic_sums = array();
+		foreach ( $status_list as $stat ) {
+			$stat_escaped   = esc_sql( $stat );
+			$dynamic_sums[] = "SUM(CASE WHEN T.status = '{$stat_escaped}' THEN T.CountUser ELSE 0 END) AS `{$stat_escaped}Count`";
 		}
+		$dynamic_sums_sql = implode( ', ', $dynamic_sums );
 
-		$users = array();
-
+		$union_parts = array();
 		foreach ( wp_ulike_get_log_table_names() as $table ) {
 			$table_escaped = esc_sql( $table );
-			$query         = "
-				SELECT CAST(t.user_id AS UNSIGNED) AS user_id,
-				       t.status AS status,
-				       COUNT(*) AS CountUser
-				FROM `{$table_escaped}` t
-				INNER JOIN {$wpdb->users} u ON u.ID = CAST(t.user_id AS UNSIGNED)
+			$union_parts[] = "
+				SELECT user_id, status, COUNT(*) AS CountUser
+				FROM `{$table_escaped}`
+				INNER JOIN {$wpdb->users}
+				ON {$wpdb->users}.ID = `{$table_escaped}`.user_id
 				WHERE {$status_type}
 				{$period_limit}
-				GROUP BY CAST(t.user_id AS UNSIGNED), t.status";
-
-			$rows = $wpdb->get_results( $query );
-
-			if ( empty( $rows ) ) {
-				continue;
-			}
-
-			foreach ( $rows as $row ) {
-				$user_id = (int) $row->user_id;
-				$stat    = $row->status;
-
-				if ( ! in_array( $stat, $status_list, true ) ) {
-					continue;
-				}
-
-				if ( ! isset( $users[ $user_id ] ) ) {
-					$users[ $user_id ] = array(
-						'user_id' => $user_id,
-						'SumUser' => 0,
-					);
-
-					foreach ( $status_list as $status_key ) {
-						$users[ $user_id ][ $status_key . 'Count' ] = 0;
-					}
-				}
-
-				$count_key = $stat . 'Count';
-				$count     = (int) $row->CountUser;
-
-				if ( isset( $users[ $user_id ][ $count_key ] ) ) {
-					$users[ $user_id ][ $count_key ] += $count;
-				}
-
-				$users[ $user_id ]['SumUser'] += $count;
-			}
+				GROUP BY user_id, status";
 		}
 
-		if ( empty( $users ) ) {
-			return array();
-		}
+		$query = "
+			SELECT
+				T.user_id,
+				{$dynamic_sums_sql},
+				SUM(T.CountUser) AS SumUser
+			FROM (
+				" . implode( ' UNION ALL ', $union_parts ) . "
+			) AS T
+			GROUP BY T.user_id
+			ORDER BY SumUser DESC
+			{$limit_records}";
 
-		usort(
-			$users,
-			function( $a, $b ) {
-				return $b['SumUser'] <=> $a['SumUser'];
-			}
-		);
-
-		if ( (int) $limit > 0 ) {
-			$offset = $offset > 0 ? ( (int) $offset - 1 ) * (int) $limit : 0;
-			$users  = array_slice( $users, $offset, (int) $limit );
-		}
-
-		return array_map(
-			function( $user ) {
-				return (object) $user;
-			},
-			$users
-		);
+		return $wpdb->get_results( $query );
 	}
 }
 
@@ -762,30 +727,26 @@ if( ! function_exists('wp_ulike_get_top_enagers_total_number') ){
 			$status_type = $wpdb->prepare( "status = %s", $status );
 		}
 
-		$users = array();
-
+		$union_parts = array();
 		foreach ( wp_ulike_get_log_table_names() as $table ) {
 			$table_escaped = esc_sql( $table );
-			$query         = "
-				SELECT CAST(t.user_id AS UNSIGNED) AS user_id
-				FROM `{$table_escaped}` t
-				INNER JOIN {$wpdb->users} u ON u.ID = CAST(t.user_id AS UNSIGNED)
+			$union_parts[] = "
+				SELECT user_id
+				FROM `{$table_escaped}`
+				INNER JOIN {$wpdb->users}
+				ON ( {$wpdb->users}.ID = `{$table_escaped}`.user_id )
 				WHERE {$status_type}
 				{$period_limit}
-				GROUP BY CAST(t.user_id AS UNSIGNED)";
-
-			$user_ids = $wpdb->get_col( $query );
-
-			if ( empty( $user_ids ) ) {
-				continue;
-			}
-
-			foreach ( $user_ids as $user_id ) {
-				$users[ (int) $user_id ] = true;
-			}
+				GROUP BY user_id";
 		}
 
-		return count( $users );
+		$query = "
+			SELECT COUNT(DISTINCT user_id) AS total_users
+			FROM (
+				" . implode( ' UNION ', $union_parts ) . "
+			) AS combined_users";
+
+		return (int) $wpdb->get_var( $query );
     }
 }
 
