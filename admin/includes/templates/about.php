@@ -33,7 +33,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 	</h1>
 
 	<p class="wp-ulike-about__lead">
-		<?php esc_html_e( 'Like buttons and engagement stats for your WordPress site. Configure display, check status, and open the tools you need below.', 'wp-ulike' ); ?>
+		<?php esc_html_e( 'Like buttons and engagement insights for your WordPress site. Open Statistics for charts and growth tips, or use the shortcuts below to configure display and check status.', 'wp-ulike' ); ?>
 	</p>
 
 	<?php if ( 'success' === $import_flash ) : ?>

@@ -273,8 +273,6 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 					$post_id = absint( $row->post_id );
 					$title = get_the_title( $post_id );
 					if( !empty( $title ) ){
-						$output[$key]->post_type = get_post_type( $post_id );
-
 						$post_categories = wp_get_post_categories( $post_id );
 						$cats = '';
 

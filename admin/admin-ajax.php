@@ -60,6 +60,44 @@ add_action('wp_ajax_nopriv_wp_ulike_stats_api', 'wp_ulike_stats_api');
 // @endif
 
 /**
+ * Save per-user stats dashboard preferences.
+ *
+ * @return void
+ */
+function wp_ulike_stats_save_user_prefs() {
+	// @if DEV
+	/*
+	// @endif
+	$nonce_valid = wp_ulike_is_valid_nonce( WP_ULIKE_SLUG );
+	if ( ! $nonce_valid && defined( 'WP_ULIKE_PRO_DOMAIN' ) ) {
+		$nonce_valid = wp_ulike_is_valid_nonce( WP_ULIKE_PRO_DOMAIN );
+	}
+
+	if ( ! current_user_can( wp_ulike_get_user_access_capability( 'stats' ) ) || ! $nonce_valid ) {
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	}
+	// @if DEV
+	*/
+	// @endif
+
+	$raw  = isset( $_POST['prefs'] ) ? wp_unslash( $_POST['prefs'] ) : '';
+	$data = json_decode( $raw, true );
+
+	if ( ! is_array( $data ) ) {
+		wp_send_json_error( esc_html__( 'Invalid preferences payload.', 'wp-ulike' ) );
+	}
+
+	if ( ! class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
+		wp_send_json_error( esc_html__( 'Preferences storage is unavailable.', 'wp-ulike' ) );
+	}
+
+	WP_Ulike_Stats_User_Prefs::save_prefs( $data );
+
+	wp_send_json_success( WP_Ulike_Stats_User_Prefs::get_prefs() );
+}
+add_action( 'wp_ajax_wp_ulike_stats_save_user_prefs', 'wp_ulike_stats_save_user_prefs' );
+
+/**
  * Overview dashboard API (free).
  *
  * @return void
@@ -100,13 +138,13 @@ function wp_ulike_engagement_api() {
 	// @endif
 
 	$type = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
-    $data = wp_ulike_stats::get_instance()->get_engagement_api_data( $type );
+	$data = wp_ulike_stats::get_instance()->get_engagement_api_data( $type );
 
-    if ( null === $data ) {
-        wp_send_json_error( esc_html__( 'Invalid content type.', 'wp-ulike' ) );
-    }
+	if ( null === $data ) {
+		wp_send_json_error( esc_html__( 'Invalid content type.', 'wp-ulike' ) );
+	}
 
-    return wp_send_json( $data );
+	return wp_send_json( $data );
 }
 add_action( 'wp_ajax_wp_ulike_engagement_api', 'wp_ulike_engagement_api' );
 // @if DEV
@@ -291,13 +329,10 @@ function wp_ulike_localization_api(){
 		// Engagement reports
 		'Trends'              => esc_html__( 'Trends', 'wp-ulike' ),
 		'Top content'         => esc_html__( 'Top content', 'wp-ulike' ),
-		'Trends & totals'     => esc_html__( 'Trends & totals', 'wp-ulike' ),
-		'Trends & top content' => esc_html__( 'Trends & top content', 'wp-ulike' ),
 		'positive'            => esc_html__( 'positive', 'wp-ulike' ),
 		'likes'               => esc_html__( 'likes', 'wp-ulike' ),
 		'Vote history · {{type}}' => esc_html__( 'Vote history · {{type}}', 'wp-ulike' ),
 		'Only {{ratio}}% positive this week — check Top content for items getting dislikes.' => esc_html__( 'Only {{ratio}}% positive this week — check Top content for items getting dislikes.', 'wp-ulike' ),
-		'Engagement up {{percent}}% this week — see what is driving it in Top content.' => esc_html__( 'Engagement up {{percent}}% this week — see what is driving it in Top content.', 'wp-ulike' ),
 		'Use Content intelligence to find the best publish times for your audience.' => esc_html__( 'Use Content intelligence to find the best publish times for your audience.', 'wp-ulike' ),
 		'{{likes}} likes this week — use Top content to find what resonates.' => esc_html__( '{{likes}} likes this week — use Top content to find what resonates.', 'wp-ulike' ),
 		'{{likes}} likes and {{dislikes}} dislikes — use Top content to find what resonates.' => esc_html__( '{{likes}} likes and {{dislikes}} dislikes — use Top content to find what resonates.', 'wp-ulike' ),
@@ -333,7 +368,10 @@ function wp_ulike_localization_api(){
 		'OS'             => esc_html__( 'OS', 'wp-ulike' ),
 		'Browser'        => esc_html__( 'Browser', 'wp-ulike' ),
 		'Post type'      => esc_html__( 'Post type', 'wp-ulike' ),
+		'Taxonomy'       => esc_html__( 'Taxonomy', 'wp-ulike' ),
 		'Sort by'        => esc_html__( 'Sort by', 'wp-ulike' ),
+		'Highest first'  => esc_html__( 'Highest first', 'wp-ulike' ),
+		'Lowest first'   => esc_html__( 'Lowest first', 'wp-ulike' ),
 		'Search'         => esc_html__( 'Search', 'wp-ulike' ),
 		'{{count}} selected' => esc_html__( '{{count}} selected', 'wp-ulike' ),
 
@@ -371,10 +409,7 @@ function wp_ulike_localization_api(){
 		'Unknown User'    => esc_html__( 'Unknown User', 'wp-ulike' ),
 
 		// Pagination & logs
-		'Showing'         => esc_html__( 'Showing', 'wp-ulike' ),
-		'to'              => esc_html__( 'to', 'wp-ulike' ),
-		'of'              => esc_html__( 'of', 'wp-ulike' ),
-		'results'         => esc_html__( 'results', 'wp-ulike' ),
+		'Showing {{from}} to {{to}} of {{total}} results' => esc_html__( 'Showing {{from}} to {{to}} of {{total}} results', 'wp-ulike' ),
 		'per page'        => esc_html__( 'per page', 'wp-ulike' ),
 		'Total records'   => esc_html__( 'Total records', 'wp-ulike' ),
 		'Delete Selected' => esc_html__( 'Delete Selected', 'wp-ulike' ),
@@ -385,7 +420,6 @@ function wp_ulike_localization_api(){
 
 		// Empty & error states
 		'No data for this period' => esc_html__( 'No data for this period', 'wp-ulike' ),
-		'No data to display'      => esc_html__( 'No data to display', 'wp-ulike' ),
 		'Try changing your filters or search.' => esc_html__( 'Try changing your filters or search.', 'wp-ulike' ),
 		'Unable to load data. Please try again.' => esc_html__( 'Unable to load data. Please try again.', 'wp-ulike' ),
 		'Something Went Wrong'    => esc_html__( 'Something Went Wrong', 'wp-ulike' ),
@@ -439,14 +473,11 @@ function wp_ulike_localization_api(){
 		'Peak'                => esc_html__( 'Peak', 'wp-ulike' ),
 		'Hourly pattern'      => esc_html__( 'Hourly pattern', 'wp-ulike' ),
 		'Full report'         => esc_html__( 'Full report', 'wp-ulike' ),
-		'Best times to publish' => esc_html__( 'Best times to publish', 'wp-ulike' ),
-		'Peak activity around {{time}}' => esc_html__( 'Peak activity around {{time}}', 'wp-ulike' ),
 		'{{day}} · {{time}}'  => esc_html__( '{{day}} · {{time}}', 'wp-ulike' ),
 		'{{share}}% of weekly activity' => esc_html__( '{{share}}% of weekly activity', 'wp-ulike' ),
 		'{{share}}% of all activity · {{range}}' => esc_html__( '{{share}}% of all activity · {{range}}', 'wp-ulike' ),
 		'{{count}} engagements in this slot' => esc_html__( '{{count}} engagements in this slot', 'wp-ulike' ),
 		'Activity heatmap'    => esc_html__( 'Activity heatmap', 'wp-ulike' ),
-		'Engagement by hour'  => esc_html__( 'Engagement by hour', 'wp-ulike' ),
 		'Engagement by day and hour' => esc_html__( 'Engagement by day and hour', 'wp-ulike' ),
 		'When your audience engages' => esc_html__( 'When your audience engages', 'wp-ulike' ),
 		'Time windows'        => esc_html__( 'Time windows', 'wp-ulike' ),
@@ -459,8 +490,6 @@ function wp_ulike_localization_api(){
 		'Shop spotlight'      => esc_html__( 'Shop spotlight', 'wp-ulike' ),
 		'Less'                => esc_html__( 'Less', 'wp-ulike' ),
 		'More'                => esc_html__( 'More', 'wp-ulike' ),
-		'No activity in this period' => esc_html__( 'No activity in this period', 'wp-ulike' ),
-		'No activity data for this period' => esc_html__( 'No activity data for this period', 'wp-ulike' ),
 		'Publish on {{day}} around {{time}} for maximum engagement.' => esc_html__( 'Publish on {{day}} around {{time}} for maximum engagement.', 'wp-ulike' ),
 		'Your audience is most active in the {{window}} window ({{range}}).' => esc_html__( 'Your audience is most active in the {{window}} window ({{range}}).', 'wp-ulike' ),
 		'{{share}}% of engagers use mobile — optimize for small screens.' => esc_html__( '{{share}}% of engagers use mobile — optimize for small screens.', 'wp-ulike' ),
@@ -475,7 +504,6 @@ function wp_ulike_localization_api(){
 		'Low conversion' => esc_html__( 'Low conversion', 'wp-ulike' ),
 		'Only {{rate}}% of viewers engage — improve button placement and CTAs.' => esc_html__( 'Only {{rate}}% of viewers engage — improve button placement and CTAs.', 'wp-ulike' ),
 		'Momentum' => esc_html__( 'Momentum', 'wp-ulike' ),
-		'Engagement is up {{percent}}% this week.' => esc_html__( 'Engagement is up {{percent}}% this week.', 'wp-ulike' ),
 		'Sentiment drop' => esc_html__( 'Sentiment drop', 'wp-ulike' ),
 		'Positive reactions fell to {{ratio}}% — review content getting dislikes.' => esc_html__( 'Positive reactions fell to {{ratio}}% — review content getting dislikes.', 'wp-ulike' ),
 
@@ -483,17 +511,22 @@ function wp_ulike_localization_api(){
 		'{{title}} leads with {{count}} likes in this period.' => esc_html__( '{{title}} leads with {{count}} likes in this period.', 'wp-ulike' ),
 		'{{title}} converts best at {{rate}}% — replicate this format.' => esc_html__( '{{title}} converts best at {{rate}}% — replicate this format.', 'wp-ulike' ),
 		'{{name}} is your most active user — consider a loyalty perk.' => esc_html__( '{{name}} is your most active user — consider a loyalty perk.', 'wp-ulike' ),
-		'No users found' => esc_html__( 'No users found', 'wp-ulike' ),
 
 		// Header & metrics
 		'Refresh data' => esc_html__( 'Refresh data', 'wp-ulike' ),
 		'Total engagements' => esc_html__( 'Total engagements', 'wp-ulike' ),
 		'Distinct people who engaged in this period.' => esc_html__( 'Distinct people who engaged in this period.', 'wp-ulike' ),
+		'Current period' => esc_html__( 'Current period', 'wp-ulike' ),
+		'Previous period' => esc_html__( 'Previous period', 'wp-ulike' ),
+		'Likes'          => esc_html__( 'Likes', 'wp-ulike' ),
+		'Interactions'   => esc_html__( 'Interactions', 'wp-ulike' ),
+		'Impressions'    => esc_html__( 'Impressions', 'wp-ulike' ),
 
 		// Notifications
 		'Dismiss'             => esc_html__( 'Dismiss', 'wp-ulike' ),
 		'New Notifications'   => esc_html__( 'New Notifications', 'wp-ulike' ),
 		'No new notifications' => esc_html__( 'No new notifications', 'wp-ulike' ),
+		'{{current}} of {{total}}' => esc_html__( '{{current}} of {{total}}', 'wp-ulike' ),
 
 		// License
 		'License Not Found!' => esc_html__( 'License Not Found!', 'wp-ulike' ),
@@ -503,18 +536,56 @@ function wp_ulike_localization_api(){
 		// Pro preview, sidebar & free shell
 		'Upgrade to Pro' => esc_html__( 'Upgrade to Pro', 'wp-ulike' ),
 		'Learn more'     => esc_html__( 'Learn more', 'wp-ulike' ),
-		'Get Pro'        => esc_html__( 'Get Pro', 'wp-ulike' ),
 		'Pro'            => esc_html__( 'Pro', 'wp-ulike' ),
 		'Settings'       => esc_html__( 'Settings', 'wp-ulike' ),
 		'Help'           => esc_html__( 'Help', 'wp-ulike' ),
-		'Intelligence, maps, and advanced filters.' => esc_html__( 'Intelligence, maps, and advanced filters.', 'wp-ulike' ),
-		'Unlock deeper insights' => esc_html__( 'Unlock deeper insights', 'wp-ulike' ),
-		'Preview Pro reports — upgrade anytime for live data.' => esc_html__( 'Preview Pro reports — upgrade anytime for live data.', 'wp-ulike' ),
-		'Pro reports'    => esc_html__( 'Pro reports', 'wp-ulike' ),
+		'Explore Pro'    => esc_html__( 'Explore Pro', 'wp-ulike' ),
+		'Explore Pro reports' => esc_html__( 'Explore Pro reports', 'wp-ulike' ),
+		'Go deeper with Pro' => esc_html__( 'Go deeper with Pro', 'wp-ulike' ),
+		'Preview advanced reports — upgrade when you need live data.' => esc_html__( 'Preview advanced reports — upgrade when you need live data.', 'wp-ulike' ),
+		"See who's engaging most" => esc_html__( "See who's engaging most", 'wp-ulike' ),
+		'{{count}} engagements so far — unlock audience maps, top fans, and publishing insights.' => esc_html__( '{{count}} engagements so far — unlock audience maps, top fans, and publishing insights.', 'wp-ulike' ),
+		'Minimize Pro promo' => esc_html__( 'Minimize Pro promo', 'wp-ulike' ),
+		'Find your best posting times and top-performing topics' => esc_html__( 'Find your best posting times and top-performing topics', 'wp-ulike' ),
+		'Learn which devices and browsers your voters use' => esc_html__( 'Learn which devices and browsers your voters use', 'wp-ulike' ),
+		'Sidebar Pro card' => esc_html__( 'Sidebar Pro card', 'wp-ulike' ),
+		'Minimized to “Explore Pro” in the sidebar.' => esc_html__( 'Minimized to “Explore Pro” in the sidebar.', 'wp-ulike' ),
+		'Full card visible in the sidebar.' => esc_html__( 'Full card visible in the sidebar.', 'wp-ulike' ),
+		'Show full card' => esc_html__( 'Show full card', 'wp-ulike' ),
+		'Milestone'      => esc_html__( 'Milestone', 'wp-ulike' ),
+		'You have passed {{count}} total engagements — {{remaining}} to go until {{next}}.' => esc_html__( 'You have passed {{count}} total engagements — {{remaining}} to go until {{next}}.', 'wp-ulike' ),
+		'Your community has reached {{count}} total engagements!' => esc_html__( 'Your community has reached {{count}} total engagements!', 'wp-ulike' ),
+		'Total'          => esc_html__( 'Total', 'wp-ulike' ),
+		'Engagement is up {{percent}}% compared to last week.' => esc_html__( 'Engagement is up {{percent}}% compared to last week.', 'wp-ulike' ),
+		'Engagement is down {{percent}}% compared to last week.' => esc_html__( 'Engagement is down {{percent}}% compared to last week.', 'wp-ulike' ),
+		'Getting started' => esc_html__( 'Getting started', 'wp-ulike' ),
+		'{{count}} engagements so far — {{remaining}} more to reach {{target}}.' => esc_html__( '{{count}} engagements so far — {{remaining}} more to reach {{target}}.', 'wp-ulike' ),
+		'{{count}} engagements today — keep it going.' => esc_html__( '{{count}} engagements today — keep it going.', 'wp-ulike' ),
+		'No engagements yet today — yesterday had {{count}}.' => esc_html__( 'No engagements yet today — yesterday had {{count}}.', 'wp-ulike' ),
+		'Engagement is up {{percent}}% compared to yesterday.' => esc_html__( 'Engagement is up {{percent}}% compared to yesterday.', 'wp-ulike' ),
+		'Engagement is down {{percent}}% compared to yesterday.' => esc_html__( 'Engagement is down {{percent}}% compared to yesterday.', 'wp-ulike' ),
+		'Around {{time}} gets the most engagement — schedule content then.' => esc_html__( 'Around {{time}} gets the most engagement — schedule content then.', 'wp-ulike' ),
+		'A quick look at where your audience engages from.' => esc_html__( 'A quick look at where your audience engages from.', 'wp-ulike' ),
+		'See full map in Pro' => esc_html__( 'See full map in Pro', 'wp-ulike' ),
+		'Explore'        => esc_html__( 'Explore', 'wp-ulike' ),
+		'Preferences for your stats dashboard experience.' => esc_html__( 'Preferences for your stats dashboard experience.', 'wp-ulike' ),
+		'Announcements'  => esc_html__( 'Announcements', 'wp-ulike' ),
+		'Show announcement modals' => esc_html__( 'Show announcement modals', 'wp-ulike' ),
+		'Display popup announcements when you open the stats dashboard. Multiple announcements are shown one at a time.' => esc_html__( 'Display popup announcements when you open the stats dashboard. Multiple announcements are shown one at a time.', 'wp-ulike' ),
+		'Dismissed announcements' => esc_html__( 'Dismissed announcements', 'wp-ulike' ),
+		'No dismissed announcements.' => esc_html__( 'No dismissed announcements.', 'wp-ulike' ),
+		'1 dismissed announcement stored for your account.' => esc_html__( '1 dismissed announcement stored for your account.', 'wp-ulike' ),
+		'{{count}} dismissed announcements stored for your account.' => esc_html__( '{{count}} dismissed announcements stored for your account.', 'wp-ulike' ),
+		'Clear dismissed' => esc_html__( 'Clear dismissed', 'wp-ulike' ),
+		'Dismissals were cleared. Popup announcements will appear again the next time you open the stats dashboard.' => esc_html__( 'Dismissals were cleared. Popup announcements will appear again the next time you open the stats dashboard.', 'wp-ulike' ),
+		'Plugin configuration' => esc_html__( 'Plugin configuration', 'wp-ulike' ),
+		'Open plugin settings' => esc_html__( 'Open plugin settings', 'wp-ulike' ),
+		'Help & documentation' => esc_html__( 'Help & documentation', 'wp-ulike' ),
+		'Appearance'     => esc_html__( 'Appearance', 'wp-ulike' ),
+		'Theme preference is stored locally in this browser, not in your WordPress user account.' => esc_html__( 'Theme preference is stored locally in this browser, not in your WordPress user account.', 'wp-ulike' ),
 		'Publishing schedule, category insights, and commerce analytics — available in Pro.' => esc_html__( 'Publishing schedule, category insights, and commerce analytics — available in Pro.', 'wp-ulike' ),
 		'See where your audience engages from with country breakdowns and trends.' => esc_html__( 'See where your audience engages from with country breakdowns and trends.', 'wp-ulike' ),
 		'Device, OS, and browser breakdowns for every vote.' => esc_html__( 'Device, OS, and browser breakdowns for every vote.', 'wp-ulike' ),
-		'Device, OS, and browser breakdowns.' => esc_html__( 'Device, OS, and browser breakdowns.', 'wp-ulike' ),
 		'Discover your most active members and reward loyal engagers.' => esc_html__( 'Discover your most active members and reward loyal engagers.', 'wp-ulike' ),
 		'See exactly who engaged with each piece of content.' => esc_html__( 'See exactly who engaged with each piece of content.', 'wp-ulike' ),
 		'Users who engaged with this content' => esc_html__( 'Users who engaged with this content', 'wp-ulike' ),
@@ -527,28 +598,12 @@ function wp_ulike_localization_api(){
 		'{{count}} engagers' => esc_html__( '{{count}} engagers', 'wp-ulike' ),
 		'No engagers'    => esc_html__( 'No engagers', 'wp-ulike' ),
 		'{{count}} total' => esc_html__( '{{count}} total', 'wp-ulike' ),
-		'Rank {{rank}}'  => esc_html__( 'Rank {{rank}}', 'wp-ulike' ),
-		'Engagement up {{percent}}% this week.' => esc_html__( 'Engagement up {{percent}}% this week.', 'wp-ulike' ),
 		'Totals and charts for {{type}}' => esc_html__( 'Totals and charts for {{type}}', 'wp-ulike' ),
 		'Trends and top content for {{type}}' => esc_html__( 'Trends and top content for {{type}}', 'wp-ulike' ),
-		'{{share}}% of engagers are in the United States — consider localized content.' => esc_html__( '{{share}}% of engagers are in the United States — consider localized content.', 'wp-ulike' ),
-		'Categories'     => esc_html__( 'Categories', 'wp-ulike' ),
 		'Morning'        => esc_html__( 'Morning', 'wp-ulike' ),
 		'Afternoon'      => esc_html__( 'Afternoon', 'wp-ulike' ),
 		'Evening'        => esc_html__( 'Evening', 'wp-ulike' ),
 		'Night'          => esc_html__( 'Night', 'wp-ulike' ),
-		'Monday'         => esc_html__( 'Monday', 'wp-ulike' ),
-		'Tuesday'        => esc_html__( 'Tuesday', 'wp-ulike' ),
-		'Wednesday'      => esc_html__( 'Wednesday', 'wp-ulike' ),
-		'Thursday'       => esc_html__( 'Thursday', 'wp-ulike' ),
-		'Friday'         => esc_html__( 'Friday', 'wp-ulike' ),
-		'Tutorials'      => esc_html__( 'Tutorials', 'wp-ulike' ),
-		'News'           => esc_html__( 'News', 'wp-ulike' ),
-		'Reviews'        => esc_html__( 'Reviews', 'wp-ulike' ),
-		'Guides'         => esc_html__( 'Guides', 'wp-ulike' ),
-		'Desktop'        => esc_html__( 'Desktop', 'wp-ulike' ),
-		'Mobile'         => esc_html__( 'Mobile', 'wp-ulike' ),
-		'Tablet'         => esc_html__( 'Tablet', 'wp-ulike' ),
 
 		// Time ago
 		'timeAgo'       => esc_html__( '{{count}} {{interval}} ago', 'wp-ulike' ),
