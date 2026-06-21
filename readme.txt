@@ -30,7 +30,7 @@ Open **WP ULike → Statistics** for a clear view of what's working: totals, tre
 
 **Free** includes Overview, growth tips, engagement reports, when-to-publish insights, and vote logs. Dark mode and focus mode are built in.
 
-**Pro** (optional) adds world maps, content intelligence, device and browser breakdowns, top members, engagement rates, and CSV exports when you want more depth.
+**Pro** (optional) adds world maps, content intelligence, **WooCommerce commerce intelligence** (engagement vs sales), device and browser breakdowns, top members, engagement rates, and CSV exports when you want more depth. Free includes a preview of the WooCommerce report.
 
 Free covers the essentials. Pro unlocks the full picture.
 
@@ -64,7 +64,7 @@ Regular updates, WordPress coding standards, and security best practices (nonces
 Pro is optional. It extends the free plugin when you need more depth, design, or scale. Both plugins stay installed and active.
 
 * **Dislike buttons** and **25+ premium templates** for richer feedback and branded UI
-* **Advanced statistics** with world map, content intelligence, top members, device insights, engagement rates, and CSV exports
+* **Advanced statistics** with world map, content intelligence, **WooCommerce commerce intelligence**, top members, device insights, engagement rates, and CSV exports
 * **View tracking & engagement rates** to measure votes against page views
 * **Schema.org markup** for star ratings and FAQ rich results
 * **Display automation & bulk actions** for posts, WooCommerce, EDD, and more
@@ -127,7 +127,7 @@ Yes. Use built-in templates and the live customizer. No code required. Pro adds 
 On single posts. Use blocks, shortcodes, or display options to place buttons elsewhere.
 
 = What's the difference between WP ULike Free and Pro? =
-Free includes the full voting experience: like buttons, statistics (Overview, reports, logs, and tips), blocks, customizer, backup, and privacy tools, with no vote limits. Pro adds dislikes, deeper analytics (maps, intelligence, devices, top members, engagement rates), view tracking, premium templates, schema markup, display automation, profiles and login, Elementor widgets, REST API, advanced GDPR tools, email notifications, and priority support. Pro extends Free; both plugins stay active.
+Free includes the full voting experience: like buttons, statistics (Overview, reports, logs, and tips), blocks, customizer, backup, and privacy tools, with no vote limits. Pro adds dislikes, deeper analytics (maps, content intelligence, WooCommerce commerce intelligence, devices, top members, engagement rates), view tracking, premium templates, schema markup, display automation, profiles and login, Elementor widgets, REST API, advanced GDPR tools, email notifications, and priority support. Pro extends Free; both plugins stay active.
 
 = Can I use WP ULike on a multisite setup? =
 Yes. Each site gets its own settings and stats.
@@ -143,6 +143,7 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 * Added: **Growth tips**. Short suggestions based on your data (momentum, milestones, and helpful nudges as your site grows).
 * Added: **Engagement reports**. Charts and top-content lists for posts, comments, and other content types you use.
 * Added: **When to publish**. Peak hours and time windows so you can see when people vote most.
+* Added: **WooCommerce report preview** in Statistics (Pro upsell) when WooCommerce is active.
 * Added: **Logs**. Browse and manage vote history by content type.
 * Added: **Dashboard settings**. Turn announcement popups on or off, pick light/dark mode, and adjust sidebar options.
 * Added: **Focus mode**. Hide the WordPress admin chrome for a distraction-free stats view.
@@ -204,9 +205,6 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 * Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
-
-= 5.1.1 =
-Open **WP ULike → Statistics** for Overview, engagement reports, growth tips, publish-timing insights, and vote logs. Your existing votes and settings stay as they are.
 
 = 5.0.6 =
 Safe update. Your votes, settings, and data stay as they are. **WP ULike Pro below 2.1.4?** The old post schema box moves to **Tools → Schema Generator** in Pro 2.1.4+. Update Pro when you can; nothing breaks on the front end.
