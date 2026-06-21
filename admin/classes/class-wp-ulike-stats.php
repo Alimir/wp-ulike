@@ -81,6 +81,12 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 					array(
 						'build'         => 'free',
 						'content_types' => array_keys( $tables ),
+						'woocommerce'   => array(
+							'active'           => class_exists( 'WooCommerce' ),
+							'report_available' => class_exists( 'WooCommerce' ),
+							'product_likes'    => false,
+							'review_likes'     => false,
+						),
 					),
 					$meta
 				),
