@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</p>
 		<p class="wp-ulike-activation-pointer__actions">
-			<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=wp-ulike-settings' ) ); ?>">
+			<a class="button button-primary" href="<?php echo esc_url( class_exists( 'WP_Ulike_Overview' ) ? WP_Ulike_Overview::get_settings_url( 'content-types' ) : admin_url( 'admin.php?page=wp-ulike-settings&settings-page=content-types' ) ); ?>">
 				<?php esc_html_e( 'Open Settings', 'wp-ulike' ); ?>
 			</a>
 			<button type="button" class="button button-secondary wp-ulike-activation-pointer__dismiss">

@@ -29,20 +29,21 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		/**
 		 * Settings screen URL with Optiwich tab slug.
 		 *
-		 * @param string $tab Section id (e.g. general, content-types).
+		 * @param string $tab     Section id (e.g. general, content-types).
+		 * @param string $section Optional nested section id (e.g. posts_group).
 		 * @return string
 		 */
-		public static function get_settings_url( $tab = 'general' ) {
-			return admin_url(
-				'admin.php?' . http_build_query(
-					array(
-						'page'           => 'wp-ulike-settings',
-						'settings-page'  => sanitize_key( $tab ),
-					),
-					'',
-					'&'
-				)
+		public static function get_settings_url( $tab = 'general', $section = '' ) {
+			$query = array(
+				'page'          => 'wp-ulike-settings',
+				'settings-page' => sanitize_key( $tab ),
 			);
+
+			if ( ! empty( $section ) ) {
+				$query['settings-section'] = sanitize_key( $section );
+			}
+
+			return admin_url( 'admin.php?' . http_build_query( $query, '', '&' ) );
 		}
 
 		/**

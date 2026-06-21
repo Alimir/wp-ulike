@@ -53,7 +53,29 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'parent' => 'configuration',
                 'title'  => esc_html__( 'General','wp-ulike'),
                 'icon'   => 'adjustments-horizontal',
-                'fields' => apply_filters( 'wp_ulike_panel_general', array(
+                'fields' => apply_filters( 'wp_ulike_panel_general', array_merge( array(
+                    array(
+                        'id'      => 'enable_toast_notice',
+                        'type'    => 'switcher',
+                        'title'   => esc_html__('In-app Notifications', 'wp-ulike'),
+                        'default' => true,
+                        'desc'    => esc_html__('Show a brief confirmation message after users like/unlike.', 'wp-ulike')
+                    ),
+                    array(
+                        'id'          => 'filter_toast_types',
+                        'type'        => 'select',
+                        'title'       => esc_html__( 'Disable Notifications On','wp-ulike' ),
+                        'desc'        => esc_html__('Choose where notifications are disabled.', 'wp-ulike'),
+                        'chosen'      => true,
+                        'multiple'    => true,
+                        'options'     => array(
+                            'post'     => esc_html__('Posts', 'wp-ulike'),
+                            'comment'  => esc_html__('Comments', 'wp-ulike'),
+                            'activity' => esc_html__('Activities', 'wp-ulike'),
+                            'topic'    => esc_html__('Topics', 'wp-ulike')
+                        ),
+                        'dependency'=> array( 'enable_toast_notice', '==', 'true' ),
+                    ),
                     array(
                         'id'      => 'enable_kilobyte_format',
                         'type'    => 'switcher',
@@ -106,28 +128,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         )
                     ),
                     array(
-                        'id'      => 'enable_toast_notice',
-                        'type'    => 'switcher',
-                        'title'   => esc_html__('In-app Notifications', 'wp-ulike'),
-                        'default' => true,
-                        'desc'    => esc_html__('Show a brief confirmation message after users like/unlike.', 'wp-ulike')
-                    ),
-                    array(
-                        'id'          => 'filter_toast_types',
-                        'type'        => 'select',
-                        'title'       => esc_html__( 'Disable Notifications On','wp-ulike' ),
-                        'desc'        => esc_html__('Choose where notifications are disabled.', 'wp-ulike'),
-                        'chosen'      => true,
-                        'multiple'    => true,
-                        'options'     => array(
-                            'post'     => esc_html__('Posts', 'wp-ulike'),
-                            'comment'  => esc_html__('Comments', 'wp-ulike'),
-                            'activity' => esc_html__('Activities', 'wp-ulike'),
-                            'topic'    => esc_html__('Topics', 'wp-ulike')
-                        ),
-                        'dependency'=> array( 'enable_toast_notice', '==', 'true' ),
-                    ),
-                    array(
                         'id'    => 'enable_anonymise_ip',
                         'type'  => 'switcher',
                         'title' => esc_html__('Anonymize IP Addresses', 'wp-ulike'),
@@ -145,12 +145,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'type'  => 'switcher',
                         'title' => esc_html__('Site Uses Caching', 'wp-ulike'),
                         'desc'  => esc_html__('Turn this on if your site uses a caching plugin or service.', 'wp-ulike')
-                    ),
-                    array(
-                        'id'    => 'disable_admin_notice',
-                        'type'  => 'switcher',
-                        'title' => esc_html__('Hide Plugin Admin Notices', 'wp-ulike'),
-                        'desc'  => esc_html__('Completely hide WP ULike admin notices for all users.', 'wp-ulike')
                     ),
                     array(
                         'id'          => 'disable_plugin_files',
@@ -171,6 +165,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             'bbpress'     => esc_html__('bbPress Pages', 'wp-ulike'),
                             'woocommerce' => esc_html__('WooCommerce Pages', 'wp-ulike')
                         )
+                    ),
+                    array(
+                        'id'    => 'disable_admin_notice',
+                        'type'  => 'switcher',
+                        'title' => esc_html__('Hide Plugin Admin Notices', 'wp-ulike'),
+                        'desc'  => esc_html__('Completely hide WP ULike admin notices for all users.', 'wp-ulike')
                     ),
                     array(
                         'id'          => 'enable_admin_posts_columns',
@@ -203,7 +203,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'       => esc_html__('Enter one IP address per line. Votes from matching IPs will be rejected.', 'wp-ulike'),
                         'dependency' => array( 'blacklist_integration', 'any', 'default' )
                     )
-                ) )
+                ), $this->get_legacy_integration_fields() ) )
             );
 
             // Get all content options
@@ -227,11 +227,17 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $get_content_fields['comments'] = $get_content_options;
             unset( $get_content_fields['comments']['auto_display_filter'] );
             unset( $get_content_fields['comments']['auto_display_filter_post_types'] );
-            $get_content_fields['comments']['enable_admin_columns'] = array(
-                'id'         => 'enable_admin_columns',
-                'type'       => 'switcher',
-                'title'      => esc_html__('Show Admin Columns', 'wp-ulike'),
-                'desc'       => esc_html__('Add a likes counter column to the admin list.', 'wp-ulike')
+            $get_content_fields['comments'] = wp_ulike_array_insert_after(
+                $get_content_fields['comments'],
+                'auto_display_position',
+                array(
+                    'enable_admin_columns' => array(
+                        'id'         => 'enable_admin_columns',
+                        'type'       => 'switcher',
+                        'title'      => esc_html__('Show Admin Columns', 'wp-ulike'),
+                        'desc'       => esc_html__('Add a likes counter column to the admin list.', 'wp-ulike')
+                    ),
+                )
             );
 
             // Generate buddypress fields (only if plugin is active)
@@ -363,28 +369,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'title'  => esc_html__( 'Content Types','wp-ulike'),
                 'icon'   => 'squares-2x2',
                 'fields' => $content_types_fields
-            );
-
-            // Integrations
-            $sections[] = array(
-                'id'     => 'integrations',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Integrations','wp-ulike'),
-                'icon'   => 'puzzle-piece',
-                'fields' => apply_filters( 'wp_ulike_panel_integrations', array(
-                    array(
-                        'id'    => 'enable_meta_values',
-                        'type'  => 'switcher',
-                        'title' => esc_html__('Enable Old Meta Values', 'wp-ulike'),
-                        'desc'  => sprintf( '%s<br><strong>* %s</strong>', esc_html__('By activating this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.', 'wp-ulike'), esc_html__('Attention: If you have been using WP ULike +v4 from the beginning Or you haven\'t deleted any logs yet, do not enable this option.', 'wp-ulike') )
-                    ),
-                   array(
-                        'id'    => 'enable_deprecated_options',
-                        'type'  => 'switcher',
-                        'title' => esc_html__('Enable Deprecated Options', 'wp-ulike'),
-                        'desc'  => sprintf( '%s<br><strong>* %s</strong>', esc_html__('By activating this option, users who have upgraded to version +4.1 and lost their old options can restore and enable previous settings.', 'wp-ulike'), esc_html__('Attention: If you have been using WP ULike +v4.1 from the beginning, do not enable this option.', 'wp-ulike') )
-                    )
-                ) )
             );
 
             // Profiles
@@ -546,33 +530,9 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) )
             );
 
-            /**
-             * Backup & Restore Section
-             */
-            $sections[] = array(
-                'id'    => 'backup',
-                'title' => esc_html__( 'Backup & Restore', 'wp-ulike' ),
-                'icon'  => 'arrow-down-tray',
-                'fields' => array(
-                    array(
-                        'id'    => 'backup_restore',
-                        'type'  => 'backup',
-                        'desc'  => esc_html__( 'Import settings from a JSON file or export your current settings for backup purposes.', 'wp-ulike' ),
-                        'importTitle' => esc_html__( 'Import Settings', 'wp-ulike' ),
-                        'importDesc' => esc_html__( 'Paste your exported settings JSON below and click Import to restore your configuration. The import should contain only setting values (not schema structure).', 'wp-ulike' ),
-                        'importPlaceholder' => esc_html__( 'Paste your JSON settings here...', 'wp-ulike' ),
-                        'importButtonText' => esc_html__( 'Import', 'wp-ulike' ),
-                        'importingText' => esc_html__( 'Importing...', 'wp-ulike' ),
-                        'exportTitle' => esc_html__( 'Export Settings', 'wp-ulike' ),
-                        'exportDesc' => esc_html__( 'Copy the JSON below or download it as a file to backup your current settings. The export contains only your setting values (not the schema structure).', 'wp-ulike' ),
-                        'exportButtonText' => esc_html__( 'Export & Download', 'wp-ulike' ),
-                        'importSuccessMessage' => esc_html__( 'Settings imported and saved successfully!', 'wp-ulike' ),
-                    ),
-                ),
-            );
-
-
             do_action( 'wp_ulike_panel_sections_ended' );
+
+            $sections = $this->sort_configuration_child_sections( $sections );
 
             // Cache sections
             $this->sections_cache = $sections;
@@ -607,6 +567,53 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     ),
                     'options' => $this->get_templates_option_array(),
                     'default' => 'wpulike-default',
+                ),
+                'enable_auto_display' => array(
+                    'id'      => 'enable_auto_display',
+                    'type'    => 'switcher',
+                    'default' => true,
+                    'title'   => esc_html__('Automatic Display', 'wp-ulike'),
+                    'desc'    => esc_html__('Automatically show the like button on your content without manually adding shortcodes.', 'wp-ulike'),
+                ),
+                'auto_display_position' => array(
+                    'id'      => 'auto_display_position',
+                    'type'    => 'radio',
+                    'title'   => esc_html__( 'Button Position','wp-ulike' ),
+                    'desc'    => esc_html__('Choose where the like button appears relative to your content.', 'wp-ulike'),
+                    'default' => 'bottom',
+                    'options' => wp_ulike_get_post_auto_display_position_labels(),
+                    'dependency' => array( 'enable_auto_display', '==', 'true' ),
+                ),
+                'auto_display_filter' => array(
+                    'id'          => 'auto_display_filter',
+                    'type'        => 'select',
+                    'title'       => esc_html__( 'Hide Automatic Display On','wp-ulike' ),
+                    'desc'        => esc_html__('Hide the button on selected page types.', 'wp-ulike'),
+                    'chosen'      => true,
+                    'multiple'    => true,
+                    'default'     => array( 'single', 'home' ),
+                    'options'     => array(
+                        'home'     => esc_html__('Home', 'wp-ulike'),
+                        'single'   => esc_html__('Singular', 'wp-ulike'),
+                        'archive'  => esc_html__('Archives', 'wp-ulike'),
+                        'category' => esc_html__('Categories', 'wp-ulike'),
+                        'search'   => esc_html__('Search Results', 'wp-ulike'),
+                        'tag'      => esc_html__('Tags', 'wp-ulike'),
+                        'author'   => esc_html__('Author Page', 'wp-ulike')
+                    ),
+                    'dependency' => array( 'enable_auto_display', '==', 'true' ),
+                ),
+                'auto_display_filter_post_types' => array(
+                    'id'          => 'auto_display_filter_post_types',
+                    'type'        => 'select',
+                    'title'       => esc_html__( 'Post Type Exceptions','wp-ulike' ),
+                    'placeholder' => esc_html__( 'Select post types','wp-ulike' ),
+                    'desc'        => esc_html__( 'Always show the button on these post types, even if disabled elsewhere.','wp-ulike' ),
+                    'chosen'      => true,
+                    'multiple'    => true,
+                    'default'     => array( 'post' ),
+                    'options'     => 'post_types',
+                    'dependency'  => array( 'auto_display_filter|enable_auto_display', 'any|==', 'single|true' ),
                 ),
                 'button_type' => array(
                     'id'         => 'button_type',
@@ -688,53 +695,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     ),
                     'dependency' => array( 'button_type|template', 'any|any', 'image|wpulike-default,wp-ulike-pro-default,wpulike-heart' ),
                 ),
-                'enable_auto_display' => array(
-                    'id'      => 'enable_auto_display',
-                    'type'    => 'switcher',
-                    'default' => true,
-                    'title'   => esc_html__('Automatic Display', 'wp-ulike'),
-                    'desc'    => esc_html__('Automatically show the like button on your content without manually adding shortcodes.', 'wp-ulike'),
-                ),
-                'auto_display_position' => array(
-                    'id'      => 'auto_display_position',
-                    'type'    => 'radio',
-                    'title'   => esc_html__( 'Button Position','wp-ulike' ),
-                    'desc'    => esc_html__('Choose where the like button appears relative to your content.', 'wp-ulike'),
-                    'default' => 'bottom',
-                    'options' => wp_ulike_get_post_auto_display_position_labels(),
-                    'dependency' => array( 'enable_auto_display', '==', 'true' ),
-                ),
-                'auto_display_filter' => array(
-                    'id'          => 'auto_display_filter',
-                    'type'        => 'select',
-                    'title'       => esc_html__( 'Hide Automatic Display On','wp-ulike' ),
-                    'desc'        => esc_html__('Hide the button on selected page types.', 'wp-ulike'),
-                    'chosen'      => true,
-                    'multiple'    => true,
-                    'default'     => array( 'single', 'home' ),
-                    'options'     => array(
-                        'home'     => esc_html__('Home', 'wp-ulike'),
-                        'single'   => esc_html__('Singular', 'wp-ulike'),
-                        'archive'  => esc_html__('Archives', 'wp-ulike'),
-                        'category' => esc_html__('Categories', 'wp-ulike'),
-                        'search'   => esc_html__('Search Results', 'wp-ulike'),
-                        'tag'      => esc_html__('Tags', 'wp-ulike'),
-                        'author'   => esc_html__('Author Page', 'wp-ulike')
-                    ),
-                    'dependency' => array( 'enable_auto_display', '==', 'true' ),
-                ),
-                'auto_display_filter_post_types' => array(
-                    'id'          => 'auto_display_filter_post_types',
-                    'type'        => 'select',
-                    'title'       => esc_html__( 'Post Type Exceptions','wp-ulike' ),
-                    'placeholder' => esc_html__( 'Select post types','wp-ulike' ),
-                    'desc'        => esc_html__( 'Always show the button on these post types, even if disabled elsewhere.','wp-ulike' ),
-                    'chosen'      => true,
-                    'multiple'    => true,
-                    'default'     => array( 'post' ),
-                    'options'     => 'post_types',
-                    'dependency'  => array( 'auto_display_filter|enable_auto_display', 'any|==', 'single|true' ),
-                ),
                 'counter_display_condition' => array(
                     'id'         => 'counter_display_condition',
                     'type'       => 'button_set',
@@ -753,33 +713,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'title'      => esc_html__('Hide Zero Counter', 'wp-ulike'),
                     'desc'       => esc_html__( 'Hide the vote counter when no votes have been submitted.','wp-ulike' ),
                     'dependency' => array( 'counter_display_condition', '!=', 'hidden' )
-                ),
-                'logging_method' => array(
-                    'id'          => 'logging_method',
-                    'type'        => 'select',
-                    'desc'        => esc_html__( 'Select how votes are tracked. You can allow unlimited votes, or restrict users using cookies, their username/IP, or both to prevent duplicate or repeated votes.','wp-ulike' ),
-                    'title'       => esc_html__( 'Logging Method','wp-ulike'),
-                    'options'     => wp_ulike_get_logging_method_labels(),
-                    'default'     => 'by_username',
-                    'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>', esc_html__( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', 'wp-ulike' ), esc_html__( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', 'wp-ulike' ), esc_html__( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', 'wp-ulike' ), esc_html__( 'Username/IP + Cookie: Same as username/IP description, However, if the user IP or username changes and the cookie is set, it does not allow the user to like /dislike.', 'wp-ulike' )  )
-                ),
-                'cookie_expires' => array(
-                    'id'         => 'cookie_expires',
-                    'type'       => 'number',
-                    'title'      => esc_html__( 'Cookie Expiration', 'wp-ulike'),
-                    'desc'       => esc_html__('Specify how long, in seconds, the cookie expires. Default: 31536000 (1 year).', 'wp-ulike'),
-                    'default'    => 31536000,
-                    'dependency' => array( 'logging_method', 'any', 'by_cookie,by_user_ip_cookie' ),
-                ),
-                'vote_limit_number' => array(
-                    'id'         => 'vote_limit_number',
-                    'type'       => 'spinner',
-                    'title'      => esc_html__( 'Maximum Votes Allowed', 'wp-ulike'),
-                    'desc'       => esc_html__('Sets a maximum number of votes each user can submit on an item.', 'wp-ulike'),
-                    'default'    => 10,
-                    'min'        => 1,
-                    'max'        => 1000,
-                    'dependency' => array( 'logging_method', '==', 'do_not_log' ),
                 ),
                 'enable_only_logged_in_users' => array(
                     'id'      => 'enable_only_logged_in_users',
@@ -815,6 +748,33 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     ),
                     'title'    => esc_html__('Custom HTML Template', 'wp-ulike'),
                     'dependency'=> array( 'logged_out_display_type|enable_only_logged_in_users', '==|==', 'alert|true' ),
+                ),
+                'logging_method' => array(
+                    'id'          => 'logging_method',
+                    'type'        => 'select',
+                    'desc'        => esc_html__( 'Select how votes are tracked. You can allow unlimited votes, or restrict users using cookies, their username/IP, or both to prevent duplicate or repeated votes.','wp-ulike' ),
+                    'title'       => esc_html__( 'Logging Method','wp-ulike'),
+                    'options'     => wp_ulike_get_logging_method_labels(),
+                    'default'     => 'by_username',
+                    'help'        => sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>', esc_html__( '"No Limit": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike).', 'wp-ulike' ), esc_html__( '"Cookie": By saving users\' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed.', 'wp-ulike' ), esc_html__( 'Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type.', 'wp-ulike' ), esc_html__( 'Username/IP + Cookie: Same as username/IP description, However, if the user IP or username changes and the cookie is set, it does not allow the user to like /dislike.', 'wp-ulike' )  )
+                ),
+                'cookie_expires' => array(
+                    'id'         => 'cookie_expires',
+                    'type'       => 'number',
+                    'title'      => esc_html__( 'Cookie Expiration', 'wp-ulike'),
+                    'desc'       => esc_html__('Specify how long, in seconds, the cookie expires. Default: 31536000 (1 year).', 'wp-ulike'),
+                    'default'    => 31536000,
+                    'dependency' => array( 'logging_method', 'any', 'by_cookie,by_user_ip_cookie' ),
+                ),
+                'vote_limit_number' => array(
+                    'id'         => 'vote_limit_number',
+                    'type'       => 'spinner',
+                    'title'      => esc_html__( 'Maximum Votes Allowed', 'wp-ulike'),
+                    'desc'       => esc_html__('Sets a maximum number of votes each user can submit on an item.', 'wp-ulike'),
+                    'default'    => 10,
+                    'min'        => 1,
+                    'max'        => 1000,
+                    'dependency' => array( 'logging_method', '==', 'do_not_log' ),
                 ),
                 'enable_likers_box' => array(
                     'id'    => 'enable_likers_box',
@@ -914,6 +874,103 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             }
 
             return $output;
+        }
+
+        /**
+         * Put Configuration sub-sections in onboarding-friendly order.
+         *
+         * @param array $sections
+         * @return array
+         */
+        protected function sort_configuration_child_sections( $sections ) {
+            $child_order = array(
+                'content-types',
+                'general',
+                'profiles',
+                'login-signup',
+                'social-logins',
+                'share-buttons',
+            );
+
+            $configuration_children = array();
+            $other_sections         = array();
+
+            foreach ( $sections as $section ) {
+                if ( isset( $section['parent'], $section['id'] ) && 'configuration' === $section['parent'] ) {
+                    $configuration_children[ $section['id'] ] = $section;
+                    continue;
+                }
+
+                $other_sections[] = $section;
+            }
+
+            $sorted_children = array();
+            foreach ( $child_order as $child_id ) {
+                if ( isset( $configuration_children[ $child_id ] ) ) {
+                    $sorted_children[] = $configuration_children[ $child_id ];
+                    unset( $configuration_children[ $child_id ] );
+                }
+            }
+
+            foreach ( $configuration_children as $child_section ) {
+                $sorted_children[] = $child_section;
+            }
+
+            $result = array();
+            foreach ( $other_sections as $section ) {
+                $result[] = $section;
+
+                if ( isset( $section['id'] ) && 'configuration' === $section['id'] && ! isset( $section['parent'] ) ) {
+                    $result = array_merge( $result, $sorted_children );
+                }
+            }
+
+            return $result;
+        }
+
+        /**
+         * Legacy integration options — shown only when already enabled so existing sites keep control.
+         *
+         * @return array
+         */
+        protected function get_legacy_integration_fields() {
+            $fields = array();
+
+            $legacy_options = array(
+                'enable_meta_values' => array(
+                    'id'    => 'enable_meta_values',
+                    'type'  => 'switcher',
+                    'title' => esc_html__('Enable Old Meta Values', 'wp-ulike'),
+                    'desc'  => sprintf( '%s<br><strong>* %s</strong>', esc_html__('By activating this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures.', 'wp-ulike'), esc_html__('Attention: If you have been using WP ULike +v4 from the beginning Or you haven\'t deleted any logs yet, do not enable this option.', 'wp-ulike') )
+                ),
+                'enable_deprecated_options' => array(
+                    'id'    => 'enable_deprecated_options',
+                    'type'  => 'switcher',
+                    'title' => esc_html__('Enable Deprecated Options', 'wp-ulike'),
+                    'desc'  => sprintf( '%s<br><strong>* %s</strong>', esc_html__('By activating this option, users who have upgraded to version +4.1 and lost their old options can restore and enable previous settings.', 'wp-ulike'), esc_html__('Attention: If you have been using WP ULike +v4.1 from the beginning, do not enable this option.', 'wp-ulike') )
+                ),
+            );
+
+            foreach ( $legacy_options as $option_key => $field ) {
+                if ( wp_ulike_is_true( wp_ulike_get_option( $option_key, false ) ) ) {
+                    $fields[] = $field;
+                }
+            }
+
+            if ( ! empty( $fields ) ) {
+                array_unshift( $fields, array(
+                    'type'    => 'heading',
+                    'content' => esc_html__( 'Integrations', 'wp-ulike' ),
+                ) );
+            }
+
+            /**
+             * Filter legacy integration fields appended to General.
+             * Previously used for the standalone Integrations section.
+             *
+             * @param array $fields
+             */
+            return apply_filters( 'wp_ulike_panel_integrations', $fields );
         }
 
         /**
