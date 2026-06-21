@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-21T08:56:28+00:00\n"
+"POT-Creation-Date: 2026-06-21T11:41:47+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
@@ -506,712 +506,744 @@ msgid "Content"
 msgstr ""
 
 #: admin/admin-ajax.php:391
-msgid "Date"
+msgid "Performance"
 msgstr ""
 
 #: admin/admin-ajax.php:392
-msgid "User"
+msgid "Published"
 msgstr ""
 
 #: admin/admin-ajax.php:393
-msgid "IP"
+msgid "Views"
 msgstr ""
 
 #: admin/admin-ajax.php:394
-msgid "Comment Author"
+msgid "Dislikes"
 msgstr ""
 
 #: admin/admin-ajax.php:395
-msgid "Comment Content"
+msgid "Date"
 msgstr ""
 
 #: admin/admin-ajax.php:396
-msgid "Activity Title"
+msgid "User"
 msgstr ""
 
 #: admin/admin-ajax.php:397
-msgid "Topic Title"
+msgid "IP"
 msgstr ""
 
 #: admin/admin-ajax.php:398
-msgid "Post Title"
+msgid "Comment Author"
 msgstr ""
 
 #: admin/admin-ajax.php:399
-msgid "Category"
+msgid "Comment Content"
 msgstr ""
 
 #: admin/admin-ajax.php:400
-msgid "Actions"
+msgid "Activity Title"
 msgstr ""
 
 #: admin/admin-ajax.php:401
-msgid "Name"
+msgid "Topic Title"
 msgstr ""
 
 #: admin/admin-ajax.php:402
-msgid "Share"
+msgid "Post Title"
 msgstr ""
 
 #: admin/admin-ajax.php:403
-msgid "Growth"
+msgid "Category"
 msgstr ""
 
 #: admin/admin-ajax.php:404
-msgid "Country"
+msgid "Actions"
 msgstr ""
 
 #: admin/admin-ajax.php:405
-msgid "Voters"
+msgid "Name"
 msgstr ""
 
 #: admin/admin-ajax.php:406
-msgid "User(s)"
+msgid "Share"
 msgstr ""
 
 #: admin/admin-ajax.php:407
-msgid "Engaged Users"
+msgid "Growth"
 msgstr ""
 
 #: admin/admin-ajax.php:408
-msgid "Unique users"
+msgid "Country"
 msgstr ""
 
 #: admin/admin-ajax.php:409
-msgid "Selected period"
+msgid "Voters"
 msgstr ""
 
 #: admin/admin-ajax.php:410
-msgid "Untitled"
+msgid "User(s)"
 msgstr ""
 
 #: admin/admin-ajax.php:411
-msgid "Unknown User"
+msgid "Engaged Users"
+msgstr ""
+
+#: admin/admin-ajax.php:412
+msgid "Unique users"
+msgstr ""
+
+#: admin/admin-ajax.php:413
+msgid "Selected period"
 msgstr ""
 
 #: admin/admin-ajax.php:414
-msgid "Showing {{from}} to {{to}} of {{total}} results"
+msgid "Untitled"
 msgstr ""
 
 #: admin/admin-ajax.php:415
-msgid "per page"
-msgstr ""
-
-#: admin/admin-ajax.php:416
-msgid "Total records"
-msgstr ""
-
-#: admin/admin-ajax.php:417
-msgid "Delete Selected"
+msgid "Unknown User"
 msgstr ""
 
 #: admin/admin-ajax.php:418
-msgid "Download CSV"
+msgid "Showing {{from}} to {{to}} of {{total}} results"
 msgstr ""
 
 #: admin/admin-ajax.php:419
-msgid "Failed to delete the log entry."
+msgid "per page"
 msgstr ""
 
 #: admin/admin-ajax.php:420
-msgid "An error occurred while deleting the log entry."
+msgid "Total records"
 msgstr ""
 
 #: admin/admin-ajax.php:421
-msgid "No logs found for this category"
+msgid "Delete Selected"
+msgstr ""
+
+#: admin/admin-ajax.php:422
+msgid "Download CSV"
+msgstr ""
+
+#: admin/admin-ajax.php:423
+msgid "Failed to delete the log entry."
 msgstr ""
 
 #: admin/admin-ajax.php:424
-msgid "No data for this period"
+msgid "An error occurred while deleting the log entry."
 msgstr ""
 
 #: admin/admin-ajax.php:425
-msgid "Try changing your filters or search."
-msgstr ""
-
-#: admin/admin-ajax.php:426
-msgid "Unable to load data. Please try again."
-msgstr ""
-
-#: admin/admin-ajax.php:427
-msgid "Something Went Wrong"
+msgid "No logs found for this category"
 msgstr ""
 
 #: admin/admin-ajax.php:428
-msgid "Unable to load data. Refresh the page or contact support."
+msgid "No data for this period"
 msgstr ""
 
 #: admin/admin-ajax.php:429
-msgid "Page Not Found"
+msgid "Try changing your filters or search."
 msgstr ""
 
 #: admin/admin-ajax.php:430
-msgid "This page does not exist or was moved."
+msgid "Unable to load data. Please try again."
 msgstr ""
 
 #: admin/admin-ajax.php:431
-msgid "No Data Available"
+msgid "Something Went Wrong"
 msgstr ""
 
 #: admin/admin-ajax.php:432
-msgid "No data yet. Records will appear here once engagement starts."
+msgid "Unable to load data. Refresh the page or contact support."
 msgstr ""
 
 #: admin/admin-ajax.php:433
-msgid "Go to Home"
+msgid "Page Not Found"
 msgstr ""
 
 #: admin/admin-ajax.php:434
-msgid "Refresh Page"
+msgid "This page does not exist or was moved."
+msgstr ""
+
+#: admin/admin-ajax.php:435
+msgid "No Data Available"
+msgstr ""
+
+#: admin/admin-ajax.php:436
+msgid "No data yet. Records will appear here once engagement starts."
 msgstr ""
 
 #: admin/admin-ajax.php:437
-msgid "User Engagement by Country"
+msgid "Go to Home"
 msgstr ""
 
 #: admin/admin-ajax.php:438
-msgid "Activity by country"
-msgstr ""
-
-#: admin/admin-ajax.php:439
-msgid "Top countries"
-msgstr ""
-
-#: admin/admin-ajax.php:440
-msgid "No country data yet"
+msgid "Refresh Page"
 msgstr ""
 
 #: admin/admin-ajax.php:441
-msgid "{{country}} is your top market with {{share}}% of engaged voters."
+msgid "User Engagement by Country"
+msgstr ""
+
+#: admin/admin-ajax.php:442
+msgid "Activity by country"
+msgstr ""
+
+#: admin/admin-ajax.php:443
+msgid "Top countries"
 msgstr ""
 
 #: admin/admin-ajax.php:444
-msgid "Performance snapshot"
+msgid "No country data yet"
 msgstr ""
 
 #: admin/admin-ajax.php:445
-msgid "Engagement rate"
-msgstr ""
-
-#: admin/admin-ajax.php:446
-msgid "Positive sentiment"
-msgstr ""
-
-#: admin/admin-ajax.php:447
-msgid "Total likes"
+msgid "{{country}} is your top market with {{share}}% of engaged voters."
 msgstr ""
 
 #: admin/admin-ajax.php:448
-msgid "Engagement trend"
+msgid "Performance snapshot"
 msgstr ""
 
 #: admin/admin-ajax.php:449
-msgid "Button impressions"
+msgid "Engagement rate"
 msgstr ""
 
 #: admin/admin-ajax.php:450
-msgid "Total views"
+msgid "Positive sentiment"
 msgstr ""
 
 #: admin/admin-ajax.php:451
-msgid "Reach"
+msgid "Total likes"
 msgstr ""
 
 #: admin/admin-ajax.php:452
-msgid "Daily activity"
+msgid "Engagement trend"
 msgstr ""
 
 #: admin/admin-ajax.php:453
-msgid "Likes this month"
+msgid "Button impressions"
 msgstr ""
 
 #: admin/admin-ajax.php:454
-msgid "Interactions this month"
+msgid "Total views"
 msgstr ""
 
 #: admin/admin-ajax.php:455
-msgid "Likes per view"
+msgid "Reach"
 msgstr ""
 
 #: admin/admin-ajax.php:456
-msgid "Likes + dislikes per view"
+msgid "Daily activity"
 msgstr ""
 
 #: admin/admin-ajax.php:457
-msgid "Like vs dislike ratio"
+msgid "Likes this month"
 msgstr ""
 
 #: admin/admin-ajax.php:458
-msgid "Like-only template"
+msgid "Interactions this month"
 msgstr ""
 
 #: admin/admin-ajax.php:459
-msgid "{{likes}} likes · {{dislikes}} dislikes"
+msgid "Likes per view"
 msgstr ""
 
 #: admin/admin-ajax.php:460
-msgid "All likes in this period."
+msgid "Likes + dislikes per view"
 msgstr ""
 
 #: admin/admin-ajax.php:461
-msgid "Daily counts for this period."
+msgid "Like vs dislike ratio"
 msgstr ""
 
 #: admin/admin-ajax.php:462
-msgid "Enable it in General settings to see engagement rate and button impressions."
+msgid "Like-only template"
 msgstr ""
 
 #: admin/admin-ajax.php:463
-msgid "Enable view tracking in General settings if you have not already to see engagement rate and button impressions."
+msgid "{{likes}} likes · {{dislikes}} dislikes"
 msgstr ""
 
 #: admin/admin-ajax.php:464
-msgid "Engagement as a share of page views."
+msgid "All likes in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:465
-msgid "Impressions will appear as visitors view pages with your like button."
+msgid "Daily counts for this period."
 msgstr ""
 
 #: admin/admin-ajax.php:466
-msgid "How page views convert to engagement."
+msgid "Enable it in General settings to see engagement rate and button impressions."
 msgstr ""
 
 #: admin/admin-ajax.php:467
-msgid "No button impressions in this period yet."
+msgid "Enable view tracking in General settings if you have not already to see engagement rate and button impressions."
 msgstr ""
 
 #: admin/admin-ajax.php:468
-msgid "Likes as a share of all reactions."
+msgid "Engagement as a share of page views."
 msgstr ""
 
 #: admin/admin-ajax.php:469
-msgid "How often your like button was shown. Compare with engagements."
+msgid "Impressions will appear as visitors view pages with your like button."
 msgstr ""
 
 #: admin/admin-ajax.php:470
-msgid "Reaction and voter metrics."
+msgid "How page views convert to engagement."
 msgstr ""
 
 #: admin/admin-ajax.php:471
-msgid "View tracking is off."
+msgid "No button impressions in this period yet."
+msgstr ""
+
+#: admin/admin-ajax.php:472
+msgid "Likes as a share of all reactions."
+msgstr ""
+
+#: admin/admin-ajax.php:473
+msgid "{{likes}} of {{total}} reactions"
 msgstr ""
 
 #: admin/admin-ajax.php:474
-msgid "When to publish"
+msgid "Change compared to the previous period."
 msgstr ""
 
 #: admin/admin-ajax.php:475
-msgid "When your audience is most likely to react."
+msgid "Trend"
 msgstr ""
 
 #: admin/admin-ajax.php:476
-msgid "Sweet spot"
+msgid "{{rate}}% engagement rate"
 msgstr ""
 
 #: admin/admin-ajax.php:477
-msgid "Peak"
+msgid "How often your like button was shown. Compare with engagements."
 msgstr ""
 
 #: admin/admin-ajax.php:478
-msgid "Hourly pattern"
+msgid "Reaction and voter metrics."
 msgstr ""
 
 #: admin/admin-ajax.php:479
-msgid "Full report"
-msgstr ""
-
-#: admin/admin-ajax.php:480
-msgid "{{day}} · {{time}}"
-msgstr ""
-
-#: admin/admin-ajax.php:481
-msgid "{{share}}% of weekly activity"
+msgid "View tracking is off."
 msgstr ""
 
 #: admin/admin-ajax.php:482
-msgid "{{share}}% of all activity · {{range}}"
+msgid "When to publish"
 msgstr ""
 
 #: admin/admin-ajax.php:483
-msgid "{{count}} engagements in this slot"
+msgid "When your audience is most likely to react."
 msgstr ""
 
 #: admin/admin-ajax.php:484
-msgid "Activity heatmap"
+msgid "Sweet spot"
 msgstr ""
 
 #: admin/admin-ajax.php:485
-msgid "Engagement by day and hour"
+msgid "Peak"
 msgstr ""
 
 #: admin/admin-ajax.php:486
-msgid "When your audience engages"
+msgid "Hourly pattern"
 msgstr ""
 
 #: admin/admin-ajax.php:487
-msgid "Time windows"
+msgid "Full report"
 msgstr ""
 
 #: admin/admin-ajax.php:488
-msgid "Best day"
+msgid "{{day}} · {{time}}"
 msgstr ""
 
 #: admin/admin-ajax.php:489
-msgid "Best days"
+msgid "{{share}}% of weekly activity"
 msgstr ""
 
 #: admin/admin-ajax.php:490
-msgid "Share of weekly activity"
+msgid "{{share}}% of all activity · {{range}}"
 msgstr ""
 
 #: admin/admin-ajax.php:491
-msgid "Best hour"
+msgid "{{count}} engagements in this slot"
 msgstr ""
 
 #: admin/admin-ajax.php:492
-msgid "Best hours to post"
+msgid "Activity heatmap"
 msgstr ""
 
 #: admin/admin-ajax.php:493
-msgid "Category performance"
+msgid "Engagement by day and hour"
 msgstr ""
 
 #: admin/admin-ajax.php:494
-msgid "Engagements"
+msgid "When your audience engages"
 msgstr ""
 
 #: admin/admin-ajax.php:495
-msgid "Hour"
+msgid "Time windows"
 msgstr ""
 
 #: admin/admin-ajax.php:496
-msgid "Top categories"
+msgid "Best day"
 msgstr ""
 
 #: admin/admin-ajax.php:497
-msgid "Shop spotlight"
+msgid "Best days"
 msgstr ""
 
 #: admin/admin-ajax.php:498
-msgid "Less"
+msgid "Share of weekly activity"
 msgstr ""
 
 #: admin/admin-ajax.php:499
-msgid "More"
+msgid "Best hour"
 msgstr ""
 
 #: admin/admin-ajax.php:500
-msgid "Publish on {{day}} around {{time}} for maximum engagement."
+msgid "Best hours to post"
 msgstr ""
 
 #: admin/admin-ajax.php:501
-msgid "Your audience is most active in the {{window}} window ({{range}})."
+msgid "Category performance"
 msgstr ""
 
 #: admin/admin-ajax.php:502
-msgid "{{share}}% of engagers use mobile — optimize for small screens."
+msgid "Engagements"
 msgstr ""
 
 #: admin/admin-ajax.php:503
-msgid "{{share}}% engage from desktop — long-form content may perform better."
+msgid "Hour"
+msgstr ""
+
+#: admin/admin-ajax.php:504
+msgid "Top categories"
+msgstr ""
+
+#: admin/admin-ajax.php:505
+msgid "Shop spotlight"
 msgstr ""
 
 #: admin/admin-ajax.php:506
-msgid "WooCommerce"
+msgid "Less"
 msgstr ""
 
 #: admin/admin-ajax.php:507
-msgid "WooCommerce report unavailable"
+msgid "More"
 msgstr ""
 
 #: admin/admin-ajax.php:508
-msgid "Enable likes on products or reviews, or wait for store orders, to unlock commerce intelligence."
+msgid "Publish on {{day}} around {{time}} for maximum engagement."
 msgstr ""
 
 #: admin/admin-ajax.php:509
-msgid "Store snapshot"
+msgid "Your audience is most active in the {{window}} window ({{range}})."
 msgstr ""
 
 #: admin/admin-ajax.php:510
-msgid "Engagement correlated with sales"
+msgid "{{share}}% of engagers use mobile — optimize for small screens."
 msgstr ""
 
 #: admin/admin-ajax.php:511
-msgid "Unique view: see whether shopper reactions align with orders and revenue."
-msgstr ""
-
-#: admin/admin-ajax.php:512
-msgid "Product likes"
-msgstr ""
-
-#: admin/admin-ajax.php:513
-msgid "Likes and dislikes on WooCommerce products."
+msgid "{{share}}% engage from desktop — long-form content may perform better."
 msgstr ""
 
 #: admin/admin-ajax.php:514
-msgid "Product engagement"
+msgid "WooCommerce"
 msgstr ""
 
 #: admin/admin-ajax.php:515
-msgid "Reactions on verified customer product reviews."
+msgid "WooCommerce report unavailable"
 msgstr ""
 
 #: admin/admin-ajax.php:516
-msgid "Review engagement"
+msgid "Enable likes on products or reviews, or wait for store orders, to unlock commerce intelligence."
 msgstr ""
 
 #: admin/admin-ajax.php:517
-msgid "Completed and processing orders."
+msgid "Store snapshot"
 msgstr ""
 
 #: admin/admin-ajax.php:518
-msgid "Orders"
+msgid "Engagement correlated with sales"
 msgstr ""
 
 #: admin/admin-ajax.php:519
-msgid "Net product revenue in this period."
+msgid "Unique view: see whether shopper reactions align with orders and revenue."
 msgstr ""
 
 #: admin/admin-ajax.php:520
-msgid "Revenue"
+msgid "Product likes"
 msgstr ""
 
 #: admin/admin-ajax.php:521
-msgid "Product units sold in this period."
+msgid "Likes and dislikes on WooCommerce products."
 msgstr ""
 
 #: admin/admin-ajax.php:522
-msgid "Units sold"
+msgid "Product engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:523
-msgid "Average revenue per order in this period."
+msgid "Reactions on verified customer product reviews."
 msgstr ""
 
 #: admin/admin-ajax.php:524
-msgid "Average order value"
+msgid "Review engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:525
-msgid "Average product and review reactions per order — a pre-purchase interest signal."
+msgid "Completed and processing orders."
 msgstr ""
 
 #: admin/admin-ajax.php:526
-msgid "Engagement per order"
+msgid "Orders"
 msgstr ""
 
 #: admin/admin-ajax.php:527
-msgid "Revenue generated per like or dislike — helps compare campaign ROI."
+msgid "Net product revenue in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:528
-msgid "Revenue per engagement"
+msgid "Revenue"
 msgstr ""
 
 #: admin/admin-ajax.php:529
-msgid "Engagement vs orders trend"
+msgid "Product units sold in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:530
-msgid "Daily product reactions compared with store orders"
+msgid "Units sold"
 msgstr ""
 
 #: admin/admin-ajax.php:531
-msgid "Look for days when engagement rises before orders — a sign your social proof is working."
+msgid "Average revenue per order in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:532
-msgid "Top products"
+msgid "Average order value"
 msgstr ""
 
 #: admin/admin-ajax.php:533
-msgid "Engagement and sales side by side"
+msgid "Average product and review reactions per order — a pre-purchase interest signal."
 msgstr ""
 
 #: admin/admin-ajax.php:534
-msgid "No product engagement yet"
+msgid "Engagement per order"
 msgstr ""
 
 #: admin/admin-ajax.php:535
-msgid "Product"
+msgid "Revenue generated per like or dislike — helps compare campaign ROI."
 msgstr ""
 
 #: admin/admin-ajax.php:536
-msgid "Match score"
+msgid "Revenue per engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:537
-msgid "Opportunities"
+msgid "Engagement vs orders trend"
 msgstr ""
 
 #: admin/admin-ajax.php:538
-msgid "Where engagement and sales diverge"
+msgid "Daily product reactions compared with store orders"
 msgstr ""
 
 #: admin/admin-ajax.php:539
-msgid "High interest, lower sales — optimize merchandising, pricing, or checkout."
+msgid "Look for days when engagement rises before orders — a sign your social proof is working."
 msgstr ""
 
 #: admin/admin-ajax.php:540
-msgid "Strong sellers with few likes — surface social proof with like buttons or badges."
+msgid "Top products"
 msgstr ""
 
 #: admin/admin-ajax.php:541
-msgid "engagements"
+msgid "Engagement and sales side by side"
 msgstr ""
 
 #: admin/admin-ajax.php:542
+msgid "No product engagement yet"
+msgstr ""
+
+#: admin/admin-ajax.php:543
+msgid "Product"
+msgstr ""
+
+#: admin/admin-ajax.php:544
+msgid "Match score"
+msgstr ""
+
+#: admin/admin-ajax.php:545
+msgid "Opportunities"
+msgstr ""
+
+#: admin/admin-ajax.php:546
+msgid "Where engagement and sales diverge"
+msgstr ""
+
+#: admin/admin-ajax.php:547
+msgid "High interest, lower sales — optimize merchandising, pricing, or checkout."
+msgstr ""
+
+#: admin/admin-ajax.php:548
+msgid "Strong sellers with few likes — surface social proof with like buttons or badges."
+msgstr ""
+
+#: admin/admin-ajax.php:549
+msgid "engagements"
+msgstr ""
+
+#: admin/admin-ajax.php:550
 #: admin/classes/class-wp-ulike-admin-panel.php:160
 #: admin/classes/class-wp-ulike-admin-panel.php:599
 msgid "Categories"
 msgstr ""
 
-#: admin/admin-ajax.php:543
+#: admin/admin-ajax.php:551
 msgid "Engagement and revenue by product category"
 msgstr ""
 
-#: admin/admin-ajax.php:544
+#: admin/admin-ajax.php:552
 msgid "Engagement vs sales intelligence"
 msgstr ""
 
-#: admin/admin-ajax.php:545
+#: admin/admin-ajax.php:553
 msgid "See how product likes and review reactions relate to orders and revenue — available in Pro."
 msgstr ""
 
-#: admin/admin-ajax.php:548
+#: admin/admin-ajax.php:556
 msgid "Actionable recommendations based on your data"
 msgstr ""
 
-#: admin/admin-ajax.php:549
+#: admin/admin-ajax.php:557
 msgid "Best time to publish"
 msgstr ""
 
-#: admin/admin-ajax.php:550
+#: admin/admin-ajax.php:558
 msgid "{{day}} around {{time}} gets the most engagement — schedule content then."
 msgstr ""
 
-#: admin/admin-ajax.php:551
+#: admin/admin-ajax.php:559
 msgid "Top category"
 msgstr ""
 
-#: admin/admin-ajax.php:552
+#: admin/admin-ajax.php:560
 msgid "{{category}} drives {{share}}% of engagement — create more on this topic."
 msgstr ""
 
-#: admin/admin-ajax.php:553
+#: admin/admin-ajax.php:561
 msgid "Low conversion"
 msgstr ""
 
-#: admin/admin-ajax.php:554
+#: admin/admin-ajax.php:562
 msgid "Only {{rate}}% of viewers engage — improve button placement and CTAs."
 msgstr ""
 
-#: admin/admin-ajax.php:555
+#: admin/admin-ajax.php:563
 msgid "Momentum"
 msgstr ""
 
-#: admin/admin-ajax.php:556
+#: admin/admin-ajax.php:564
 msgid "Sentiment drop"
 msgstr ""
 
-#: admin/admin-ajax.php:557
+#: admin/admin-ajax.php:565
 msgid "Positive reactions fell to {{ratio}}% — review content getting dislikes."
 msgstr ""
 
-#: admin/admin-ajax.php:560
+#: admin/admin-ajax.php:568
 msgid "{{title}} leads with {{count}} likes in this period."
 msgstr ""
 
-#: admin/admin-ajax.php:561
+#: admin/admin-ajax.php:569
 msgid "{{title}} converts best at {{rate}}% — replicate this format."
 msgstr ""
 
-#: admin/admin-ajax.php:562
+#: admin/admin-ajax.php:570
 msgid "{{name}} is your most active user — consider a loyalty perk."
 msgstr ""
 
-#: admin/admin-ajax.php:565
+#: admin/admin-ajax.php:573
 msgid "Refresh data"
 msgstr ""
 
-#: admin/admin-ajax.php:566
+#: admin/admin-ajax.php:574
 msgid "Total engagements"
 msgstr ""
 
-#: admin/admin-ajax.php:567
+#: admin/admin-ajax.php:575
 msgid "Distinct people who engaged in this period."
 msgstr ""
 
-#: admin/admin-ajax.php:568
+#: admin/admin-ajax.php:576
 msgid "Current period"
 msgstr ""
 
-#: admin/admin-ajax.php:569
+#: admin/admin-ajax.php:577
 msgid "Previous period"
 msgstr ""
 
-#: admin/admin-ajax.php:570
+#: admin/admin-ajax.php:578
 msgid "Likes"
 msgstr ""
 
-#: admin/admin-ajax.php:571
+#: admin/admin-ajax.php:579
 msgid "Interactions"
 msgstr ""
 
-#: admin/admin-ajax.php:572
+#: admin/admin-ajax.php:580
 msgid "Impressions"
 msgstr ""
 
-#: admin/admin-ajax.php:575
+#: admin/admin-ajax.php:583
 #: admin/includes/templates/activation-pointer-dialog.php:14
 msgid "Dismiss"
 msgstr ""
 
-#: admin/admin-ajax.php:576
+#: admin/admin-ajax.php:584
 msgid "New Notifications"
 msgstr ""
 
-#: admin/admin-ajax.php:577
+#: admin/admin-ajax.php:585
 msgid "No new notifications"
 msgstr ""
 
-#: admin/admin-ajax.php:578
+#: admin/admin-ajax.php:586
 msgid "{{current}} of {{total}}"
 msgstr ""
 
-#: admin/admin-ajax.php:581
+#: admin/admin-ajax.php:589
 msgid "License Not Found!"
 msgstr ""
 
-#: admin/admin-ajax.php:582
+#: admin/admin-ajax.php:590
 msgid "Your license is invalid or missing. Enter a valid key or purchase Pro to continue."
 msgstr ""
 
-#: admin/admin-ajax.php:583
+#: admin/admin-ajax.php:591
 msgid "Get License"
 msgstr ""
 
 #. translators: Button text to upgrade to pro version
-#: admin/admin-ajax.php:586
+#: admin/admin-ajax.php:594
 #: admin/classes/class-wp-ulike-admin-panel.php:1169
 #: admin/classes/class-wp-ulike-settings-api.php:1246
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: admin/admin-ajax.php:587
+#: admin/admin-ajax.php:595
 msgid "Learn more"
 msgstr ""
 
 #. translators: Tag label for pro features
-#: admin/admin-ajax.php:588
+#: admin/admin-ajax.php:596
 #: admin/classes/class-wp-ulike-settings-api.php:1250
 #: admin/includes/templates/about.php:253
 msgid "Pro"
 msgstr ""
 
 #. translators: Generic label for settings
-#: admin/admin-ajax.php:589
+#: admin/admin-ajax.php:597
 #: admin/classes/class-wp-ulike-admin-pages.php:167
 #: admin/classes/class-wp-ulike-settings-api.php:1340
 #: includes/classes/class-wp-ulike-overview.php:117
@@ -1219,362 +1251,362 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: admin/admin-ajax.php:590
+#: admin/admin-ajax.php:598
 #: admin/classes/class-wp-ulike-admin-pages.php:106
 #: admin/includes/templates/about.php:27
 #: includes/plugin.php:126
 msgid "Help"
 msgstr ""
 
-#: admin/admin-ajax.php:591
+#: admin/admin-ajax.php:599
 #: admin/includes/templates/about.php:197
 msgid "Explore Pro"
 msgstr ""
 
-#: admin/admin-ajax.php:592
+#: admin/admin-ajax.php:600
 msgid "Explore Pro reports"
 msgstr ""
 
-#: admin/admin-ajax.php:593
+#: admin/admin-ajax.php:601
 msgid "Go deeper with Pro"
 msgstr ""
 
-#: admin/admin-ajax.php:594
+#: admin/admin-ajax.php:602
 msgid "Preview advanced reports — upgrade when you need live data."
 msgstr ""
 
-#: admin/admin-ajax.php:595
+#: admin/admin-ajax.php:603
 msgid "See who's engaging most"
 msgstr ""
 
-#: admin/admin-ajax.php:596
+#: admin/admin-ajax.php:604
 msgid "{{count}} engagements so far — unlock audience maps, top fans, and publishing insights."
 msgstr ""
 
-#: admin/admin-ajax.php:597
+#: admin/admin-ajax.php:605
 msgid "Minimize Pro promo"
 msgstr ""
 
-#: admin/admin-ajax.php:598
+#: admin/admin-ajax.php:606
 msgid "Find your best posting times and top-performing topics"
 msgstr ""
 
-#: admin/admin-ajax.php:599
+#: admin/admin-ajax.php:607
 msgid "Learn which devices and browsers your voters use"
 msgstr ""
 
-#: admin/admin-ajax.php:600
+#: admin/admin-ajax.php:608
 msgid "Sidebar Pro card"
 msgstr ""
 
-#: admin/admin-ajax.php:601
+#: admin/admin-ajax.php:609
 msgid "Minimized to “Explore Pro” in the sidebar."
 msgstr ""
 
-#: admin/admin-ajax.php:602
+#: admin/admin-ajax.php:610
 msgid "Full card visible in the sidebar."
 msgstr ""
 
-#: admin/admin-ajax.php:603
+#: admin/admin-ajax.php:611
 msgid "Show full card"
 msgstr ""
 
-#: admin/admin-ajax.php:604
+#: admin/admin-ajax.php:612
 msgid "Milestone"
 msgstr ""
 
-#: admin/admin-ajax.php:605
+#: admin/admin-ajax.php:613
 msgid "You have passed {{count}} total engagements — {{remaining}} to go until {{next}}."
 msgstr ""
 
-#: admin/admin-ajax.php:606
+#: admin/admin-ajax.php:614
 msgid "Your community has reached {{count}} total engagements!"
 msgstr ""
 
-#: admin/admin-ajax.php:607
+#: admin/admin-ajax.php:615
 msgid "Total"
 msgstr ""
 
-#: admin/admin-ajax.php:608
+#: admin/admin-ajax.php:616
 msgid "Engagement is up {{percent}}% compared to last week."
 msgstr ""
 
-#: admin/admin-ajax.php:609
+#: admin/admin-ajax.php:617
 msgid "Engagement is down {{percent}}% compared to last week."
 msgstr ""
 
-#: admin/admin-ajax.php:610
+#: admin/admin-ajax.php:618
 msgid "Getting started"
 msgstr ""
 
-#: admin/admin-ajax.php:611
+#: admin/admin-ajax.php:619
 msgid "{{count}} engagements so far — {{remaining}} more to reach {{target}}."
 msgstr ""
 
-#: admin/admin-ajax.php:612
+#: admin/admin-ajax.php:620
 msgid "{{count}} engagements today — keep it going."
 msgstr ""
 
-#: admin/admin-ajax.php:613
+#: admin/admin-ajax.php:621
 msgid "No engagements yet today — yesterday had {{count}}."
 msgstr ""
 
-#: admin/admin-ajax.php:614
+#: admin/admin-ajax.php:622
 msgid "Engagement is up {{percent}}% compared to yesterday."
 msgstr ""
 
-#: admin/admin-ajax.php:615
+#: admin/admin-ajax.php:623
 msgid "Engagement is down {{percent}}% compared to yesterday."
 msgstr ""
 
-#: admin/admin-ajax.php:616
+#: admin/admin-ajax.php:624
 msgid "Around {{time}} gets the most engagement — schedule content then."
 msgstr ""
 
-#: admin/admin-ajax.php:617
+#: admin/admin-ajax.php:625
 msgid "A quick look at where your audience engages from."
 msgstr ""
 
-#: admin/admin-ajax.php:618
+#: admin/admin-ajax.php:626
 msgid "See full map in Pro"
 msgstr ""
 
-#: admin/admin-ajax.php:619
+#: admin/admin-ajax.php:627
 msgid "Explore"
 msgstr ""
 
-#: admin/admin-ajax.php:620
+#: admin/admin-ajax.php:628
 msgid "Preferences for your stats dashboard experience."
 msgstr ""
 
-#: admin/admin-ajax.php:621
+#: admin/admin-ajax.php:629
 msgid "Announcements"
 msgstr ""
 
-#: admin/admin-ajax.php:622
+#: admin/admin-ajax.php:630
 msgid "Show announcement modals"
 msgstr ""
 
-#: admin/admin-ajax.php:623
+#: admin/admin-ajax.php:631
 msgid "Display popup announcements when you open the stats dashboard. Multiple announcements are shown one at a time."
 msgstr ""
 
-#: admin/admin-ajax.php:624
+#: admin/admin-ajax.php:632
 msgid "Dismissed announcements"
 msgstr ""
 
-#: admin/admin-ajax.php:625
+#: admin/admin-ajax.php:633
 msgid "No dismissed announcements."
 msgstr ""
 
-#: admin/admin-ajax.php:626
-msgid "1 dismissed announcement stored for your account."
-msgstr ""
-
-#: admin/admin-ajax.php:627
-msgid "{{count}} dismissed announcements stored for your account."
-msgstr ""
-
-#: admin/admin-ajax.php:628
-msgid "Clear dismissed"
-msgstr ""
-
-#: admin/admin-ajax.php:629
-msgid "Dismissals were cleared. Popup announcements will appear again the next time you open the stats dashboard."
-msgstr ""
-
-#: admin/admin-ajax.php:630
-msgid "Plugin configuration"
-msgstr ""
-
-#: admin/admin-ajax.php:631
-msgid "Open plugin settings"
-msgstr ""
-
-#: admin/admin-ajax.php:632
-msgid "Help & documentation"
-msgstr ""
-
-#: admin/admin-ajax.php:633
-msgid "Appearance"
-msgstr ""
-
 #: admin/admin-ajax.php:634
-msgid "Theme preference is stored locally in this browser, not in your WordPress user account."
+msgid "{{count}} dismissed announcement(s) stored for your account."
 msgstr ""
 
 #: admin/admin-ajax.php:635
-msgid "Publishing schedule, category insights, and commerce analytics — available in Pro."
+msgid "Clear dismissed"
 msgstr ""
 
 #: admin/admin-ajax.php:636
-msgid "Publishing schedule and category insights — available in Pro."
+msgid "Dismissals were cleared. Popup announcements will appear again the next time you open the stats dashboard."
 msgstr ""
 
 #: admin/admin-ajax.php:637
-msgid "See where your audience engages from with country breakdowns and trends."
+msgid "Plugin configuration"
 msgstr ""
 
 #: admin/admin-ajax.php:638
-msgid "Device, OS, and browser breakdowns for every vote."
+msgid "Open plugin settings"
 msgstr ""
 
 #: admin/admin-ajax.php:639
-msgid "Discover your most active members and reward loyal engagers."
+msgid "Help & documentation"
 msgstr ""
 
 #: admin/admin-ajax.php:640
-msgid "See exactly who engaged with each piece of content."
+msgid "Appearance"
 msgstr ""
 
 #: admin/admin-ajax.php:641
-msgid "Users who engaged with this content"
+msgid "Theme preference is stored locally in this browser, not in your WordPress user account."
 msgstr ""
 
 #: admin/admin-ajax.php:642
-msgid "Member"
+msgid "Publishing schedule, category insights, and commerce analytics — available in Pro."
 msgstr ""
 
 #: admin/admin-ajax.php:643
-msgid "Last active"
+msgid "Publishing schedule and category insights — available in Pro."
 msgstr ""
 
 #: admin/admin-ajax.php:644
-msgid "Reactions"
+msgid "See where your audience engages from with country breakdowns and trends."
 msgstr ""
 
 #: admin/admin-ajax.php:645
-msgid "Back to engagement"
+msgid "Device, OS, and browser breakdowns for every vote."
 msgstr ""
 
 #: admin/admin-ajax.php:646
-msgid "{{count}} engaged users"
+msgid "Discover your most active members and reward loyal engagers."
 msgstr ""
 
 #: admin/admin-ajax.php:647
-msgid "{{count}} users engaged with {{title}}"
+msgid "See exactly who engaged with each piece of content."
 msgstr ""
 
 #: admin/admin-ajax.php:648
-msgid "{{count}} engagers"
+msgid "Users who engaged with this content"
 msgstr ""
 
 #: admin/admin-ajax.php:649
-msgid "No engagers"
+msgid "Member"
 msgstr ""
 
 #: admin/admin-ajax.php:650
-msgid "{{count}} total"
+msgid "Last active"
 msgstr ""
 
 #: admin/admin-ajax.php:651
-msgid "Totals and charts for {{type}}"
+msgid "Reactions"
 msgstr ""
 
 #: admin/admin-ajax.php:652
-msgid "Trends and top content for {{type}}"
+msgid "Back to engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:653
-msgid "Morning"
+msgid "{{count}} engaged users"
 msgstr ""
 
 #: admin/admin-ajax.php:654
-msgid "Afternoon"
+msgid "{{count}} users engaged with {{title}}"
 msgstr ""
 
 #: admin/admin-ajax.php:655
-msgid "Evening"
+msgid "{{count}} engager(s)"
 msgstr ""
 
 #: admin/admin-ajax.php:656
-msgid "Night"
+msgid "No engagers"
+msgstr ""
+
+#: admin/admin-ajax.php:657
+msgid "No engagers yet"
+msgstr ""
+
+#: admin/admin-ajax.php:658
+msgid "{{count}} total"
 msgstr ""
 
 #: admin/admin-ajax.php:659
-msgid "{{count}} {{interval}} ago"
+msgid "Totals and charts for {{type}}"
 msgstr ""
 
 #: admin/admin-ajax.php:660
-msgid "year"
+msgid "Trends and top content for {{type}}"
 msgstr ""
 
 #: admin/admin-ajax.php:661
-msgid "years"
+msgid "Morning"
 msgstr ""
 
 #: admin/admin-ajax.php:662
-msgid "month"
+msgid "Afternoon"
 msgstr ""
 
 #: admin/admin-ajax.php:663
-msgid "months"
+msgid "Evening"
 msgstr ""
 
 #: admin/admin-ajax.php:664
-msgid "week"
-msgstr ""
-
-#: admin/admin-ajax.php:665
-msgid "weeks"
-msgstr ""
-
-#: admin/admin-ajax.php:666
-msgid "day"
+msgid "Night"
 msgstr ""
 
 #: admin/admin-ajax.php:667
-msgid "days"
+msgid "{{count}} {{interval}} ago"
 msgstr ""
 
 #: admin/admin-ajax.php:668
-msgid "hour"
+msgid "year"
 msgstr ""
 
 #: admin/admin-ajax.php:669
-msgid "hours"
+msgid "years"
 msgstr ""
 
 #: admin/admin-ajax.php:670
-msgid "minute"
+msgid "month"
 msgstr ""
 
 #: admin/admin-ajax.php:671
-msgid "minutes"
+msgid "months"
 msgstr ""
 
 #: admin/admin-ajax.php:672
-msgid "second"
+msgid "week"
 msgstr ""
 
 #: admin/admin-ajax.php:673
-msgid "seconds"
+msgid "weeks"
 msgstr ""
 
 #: admin/admin-ajax.php:674
+msgid "day"
+msgstr ""
+
+#: admin/admin-ajax.php:675
+msgid "days"
+msgstr ""
+
+#: admin/admin-ajax.php:676
+msgid "hour"
+msgstr ""
+
+#: admin/admin-ajax.php:677
+msgid "hours"
+msgstr ""
+
+#: admin/admin-ajax.php:678
+msgid "minute"
+msgstr ""
+
+#: admin/admin-ajax.php:679
+msgid "minutes"
+msgstr ""
+
+#: admin/admin-ajax.php:680
+msgid "second"
+msgstr ""
+
+#: admin/admin-ajax.php:681
+msgid "seconds"
+msgstr ""
+
+#: admin/admin-ajax.php:682
 msgid "just now"
 msgstr ""
 
-#: admin/admin-ajax.php:704
-#: admin/admin-ajax.php:734
-#: admin/admin-ajax.php:780
+#: admin/admin-ajax.php:712
+#: admin/admin-ajax.php:742
+#: admin/admin-ajax.php:788
 msgid "Error: Settings API not available."
 msgstr ""
 
-#: admin/admin-ajax.php:766
+#: admin/admin-ajax.php:774
 #: admin/classes/class-wp-ulike-settings-api.php:593
 #: admin/classes/class-wp-ulike-settings-api.php:601
 msgid "Invalid request data. Expected an object with setting values."
 msgstr ""
 
-#: admin/admin-ajax.php:811
-#: admin/admin-ajax.php:841
-#: admin/admin-ajax.php:881
-#: admin/admin-ajax.php:910
+#: admin/admin-ajax.php:819
+#: admin/admin-ajax.php:849
+#: admin/admin-ajax.php:889
+#: admin/admin-ajax.php:918
 msgid "Error: Customizer API not available."
 msgstr ""
 
-#: admin/admin-ajax.php:873
+#: admin/admin-ajax.php:881
 #: admin/classes/class-wp-ulike-customizer-api.php:578
 #: admin/classes/class-wp-ulike-customizer-api.php:585
 msgid "Invalid request data. Expected an object with customizer values."
