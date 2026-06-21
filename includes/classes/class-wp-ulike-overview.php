@@ -309,6 +309,14 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					admin_url( 'admin-post.php?action=wp_ulike_repair_tables' ),
 					'wp_ulike_repair_tables'
 				),
+				'backup_intro'           => apply_filters(
+					'wp_ulike_backup_intro',
+					__( 'Download your settings and customizer values as JSON.', 'wp-ulike' )
+				),
+				'backup_import_confirm'  => apply_filters(
+					'wp_ulike_backup_import_confirm',
+					__( 'Import will replace your current WP ULike settings and customizer values. Continue?', 'wp-ulike' )
+				),
 			);
 		}
 
@@ -997,6 +1005,13 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'customize' => $customize,
 			);
 
+			/**
+			 * Extend the Help backup export payload.
+			 *
+			 * @param array $data Export payload (settings, customize, optional extensions).
+			 */
+			$data = apply_filters( 'wp_ulike_backup_export_payload', $data );
+
 			return wp_json_encode( $data, JSON_PRETTY_PRINT );
 		}
 
@@ -1031,7 +1046,26 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				update_option( 'wp_ulike_customize', $customize );
 			}
 
+			/**
+			 * Import extension data bundled with the backup payload.
+			 *
+			 * @param true|WP_Error $result  Import result. Return WP_Error to abort.
+			 * @param array         $payload Full decoded import payload.
+			 */
+			$extension_result = apply_filters( 'wp_ulike_backup_import_extensions', true, $payload );
+
+			if ( is_wp_error( $extension_result ) ) {
+				return $extension_result;
+			}
+
 			delete_transient( self::get_health_report_cache_key() );
+
+			/**
+			 * Fires after a successful Help backup import.
+			 *
+			 * @param array $payload Full decoded import payload.
+			 */
+			do_action( 'wp_ulike_backup_imported', $payload );
 
 			return true;
 		}
