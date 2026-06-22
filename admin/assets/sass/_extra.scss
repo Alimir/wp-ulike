@@ -22,6 +22,22 @@
  }
 
 
+// Admin menu icon — CSS mask inherits link color (default, hover, active).
+#adminmenu #toplevel_page_wp-ulike-settings .wp-menu-image {
+  background: none !important;
+
+  &::before {
+    content: '' !important;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font: normal 20px/1 dashicons !important;
+    background-color: currentColor;
+    -webkit-mask: url('../../../assets/img/menu-icon.svg') center / contain no-repeat;
+    mask: url('../../../assets/img/menu-icon.svg') center / contain no-repeat;
+  }
+}
+
 // About Menu Link
 .wp-ulike-menu-icon {
   display: inline-flex;

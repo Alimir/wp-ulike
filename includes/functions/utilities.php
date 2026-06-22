@@ -731,3 +731,84 @@ if ( ! function_exists( 'wp_ulike_read_php_input_capped' ) ) {
 		return $chunk;
 	}
 }
+
+if ( ! function_exists( 'wp_ulike_array_insert_after' ) ) {
+	/**
+	 * Insert items after a key or field id in a panel fields array.
+	 *
+	 * Supports associative content-option maps (needle = array key) and numeric
+	 * field lists (needle = field id property).
+	 *
+	 * @param array  $array  Source array.
+	 * @param string $needle Array key or field id to insert after.
+	 * @param array  $new    Items to insert (preserve their keys when associative).
+	 * @return array
+	 */
+	function wp_ulike_array_insert_after( array $array, $needle, array $new ) {
+		if ( empty( $new ) ) {
+			return $array;
+		}
+
+		if ( array_key_exists( $needle, $array ) ) {
+			$keys  = array_keys( $array );
+			$index = array_search( $needle, $keys, true );
+			$pos   = false === $index ? count( $array ) : (int) $index + 1;
+
+			return array_merge(
+				array_slice( $array, 0, $pos, true ),
+				$new,
+				array_slice( $array, $pos, null, true )
+			);
+		}
+
+		$is_list = wp_ulike_array_is_list( $array );
+
+		if ( $is_list ) {
+			$result   = array();
+			$inserted = false;
+
+			foreach ( $array as $item ) {
+				$result[] = $item;
+
+				if ( ! $inserted && is_array( $item ) && isset( $item['id'] ) && $item['id'] === $needle ) {
+					foreach ( $new as $new_item ) {
+						$result[] = $new_item;
+					}
+					$inserted = true;
+				}
+			}
+
+			return $inserted ? $result : array_merge( $array, array_values( $new ) );
+		}
+
+		$result   = array();
+		$inserted = false;
+
+		foreach ( $array as $key => $item ) {
+			$result[ $key ] = $item;
+
+			if ( ! $inserted && is_array( $item ) && isset( $item['id'] ) && $item['id'] === $needle ) {
+				$result   = array_merge( $result, $new );
+				$inserted = true;
+			}
+		}
+
+		return $inserted ? $result : array_merge( $array, $new );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_array_is_list' ) ) {
+	/**
+	 * Whether an array is a sequential list (0..n-1 keys).
+	 *
+	 * @param array $array Array to inspect.
+	 * @return bool
+	 */
+	function wp_ulike_array_is_list( array $array ) {
+		if ( array() === $array ) {
+			return true;
+		}
+
+		return array_keys( $array ) === range( 0, count( $array ) - 1 );
+	}
+}
