@@ -53,6 +53,16 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$get_tables = $this->tables;
 
 			foreach ( $get_tables as $type => $table) {
+				if ( 'activities' === $type && ! defined( 'BP_VERSION' ) ) {
+					unset( $get_tables[ $type ] );
+					continue;
+				}
+
+				if ( 'topics' === $type && ! function_exists( 'is_bbpress' ) ) {
+					unset( $get_tables[ $type ] );
+					continue;
+				}
+
 				// If this table has no data, then unset it and continue...
 				if( ! $this->count_logs( array ( "table" => $table ) ) ) {
 					unset( $get_tables[ $type ] );
@@ -478,9 +488,29 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			$result = array();
 			foreach ( $comments as $comment ) {
+				$author       = stripslashes( $comment->comment_author );
+				$post_title   = get_the_title( $comment->comment_post_ID );
+				$comment_text = wp_strip_all_tags( $comment->comment_content );
+				$excerpt      = wp_trim_words( $comment_text, 10, '…' );
+				$context      = sprintf(
+					/* translators: 1: comment author, 2: post title */
+					__( '%1$s on %2$s', 'wp-ulike' ),
+					$author,
+					$post_title ? $post_title : __( '(Untitled post)', 'wp-ulike' )
+				);
+
+				if ( empty( $excerpt ) ) {
+					$title = sprintf(
+						/* translators: %s: comment author and post context, e.g. "John on Hello World" */
+						__( 'Comment by %s', 'wp-ulike' ),
+						$context
+					);
+				} else {
+					$title = $excerpt . ' — ' . $context;
+				}
+
 				$result[] = array(
-					'author'      => stripslashes( $comment->comment_author ),
-					'title'       => get_the_title( $comment->comment_post_ID ),
+					'title'       => $title,
 					'permalink'   => get_comment_link( $comment->comment_ID ),
 					'likes_count' => isset( $counters[ $comment->comment_ID ] ) ? $counters[ (int) $comment->comment_ID ] : 0,
 				);
