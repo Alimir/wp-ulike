@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-21T11:41:47+00:00\n"
+"POT-Creation-Date: 2026-06-22T07:58:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
@@ -33,7 +33,7 @@ msgid "https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_me
 msgstr ""
 
 #. Description of the plugin
-msgid "Looking to increase user engagement on your WordPress site? WP ULike plugin lets you easily add voting buttons to your content. With customizable settings and detailed analytics, you can track user engagement, optimize your content, and build a loyal following."
+msgid "Add one-click like buttons to WordPress. Built-in statistics dashboard, top lists, and privacy tools. Setup in minutes."
 msgstr ""
 
 #. Author of the plugin
@@ -3366,7 +3366,7 @@ msgid "Thumbnail/Avatar size:"
 msgstr ""
 
 #: admin/includes/templates/about.php:36
-msgid "Like buttons and engagement insights for your WordPress site. Open Statistics for charts and growth tips, or use the shortcuts below to configure display and check status."
+msgid "Like buttons and a Statistics dashboard for your WordPress site. Open Statistics for charts and growth tips, or use the shortcuts below to configure display and check status."
 msgstr ""
 
 #: admin/includes/templates/about.php:40
@@ -3792,16 +3792,16 @@ msgstr ""
 
 #. translators: %s: votes logged today
 #: includes/classes/class-wp-ulike-overview.php:62
-msgid "%s votes today—great momentum. Free already covers your likes, Overview, and reports; Pro is optional when you want audience maps, automation, and SEO markup."
+msgid "%s votes today. Free already covers likes, Statistics, and button styles. Pro is optional when you want who liked each post, audience maps, or star ratings in search."
 msgstr ""
 
 #. translators: %s: total stored votes
 #: includes/classes/class-wp-ulike-overview.php:68
-msgid "%s votes and counting. Free covers your day-to-day likes and statistics—Pro is the optional layer for automation, deep reports, and search visibility."
+msgid "%s votes stored so far. Free covers day-to-day likes and the Statistics dashboard. Pro adds deeper reports, Display Automation presets, and SEO markup when you need them."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:72
-msgid "Likes, stats, and button styles are ready to go. Open Statistics for Overview and growth tips—Pro is there when you want audience maps, placement rules, or star ratings in search."
+msgid "Like buttons, Statistics, and the customizer are ready. Open Statistics for Overview and growth tips. Pro is there when you want names on each post, placement presets, or schema stars in search."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:76
@@ -3810,7 +3810,7 @@ msgid "WP ULike Pro"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:78
-msgid "Free stays fully capable for likes, stats, and customization—Pro is an add-on for the extras below."
+msgid "Free stays fully capable for likes, stats, and customization. Pro is an add-on for the extras below."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:79
@@ -3818,11 +3818,11 @@ msgid "See what Pro includes"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:83
-msgid "Pro Statistics"
+msgid "Deeper statistics"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:84
-msgid "World map, device breakdowns, top members, and CSV exports—deeper than the free Overview and reports."
+msgid "See who liked each post, top countries, engagement rates, store reports, and CSV export."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:89
@@ -3830,7 +3830,7 @@ msgid "Display Automation"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:90
-msgid "Rule-based placement on posts, WooCommerce, EDD, and custom hooks—no shortcode hunting."
+msgid "Quick Start presets and per-rule placement for posts, products, and custom hooks. Free auto-display settings stay as they are."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:94
@@ -3838,7 +3838,7 @@ msgid "Schema star ratings"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:95
-msgid "Turn like counts into star ratings in Google with built-in Schema.org and FAQ markup."
+msgid "Turn vote counts into star ratings in Google with built-in Schema.org and FAQ markup."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:123
