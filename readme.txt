@@ -6,7 +6,7 @@ Tags: like, engagement, feedback, voting, reactions
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.1.1
+Stable tag: 5.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,6 +130,9 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 No. The like button loads minimal code on your pages, and vote responses are lightweight and optimized for speed. Statistics load in WordPress admin only and use smart caching as your site grows.
 
 == Changelog ==
+
+= 5.1.2 =
+* Fixed: Minor issue with the new Statistics dashboard.
 
 = 5.1.1 =
 * Added: **Statistics dashboard**. Open **WP ULike → Statistics** for a home screen with your key numbers up front.
