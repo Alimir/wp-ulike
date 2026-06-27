@@ -40,22 +40,63 @@
 		return !!(data && (data.sync_complete || data.migration_status === 'done' || (data.progress && data.progress.complete)));
 	}
 
+	function formatProgressText(progress, complete) {
+		var imported = parseInt(progress.total_imported, 10) || 0;
+		var skipped = parseInt(progress.total_skipped, 10) || 0;
+		var percent = parseFloat(progress.percent_estimate);
+		var strings = wpUlikePulse.strings || {};
+		var text;
+
+		if (complete) {
+			if (skipped > 0) {
+				text = (strings.progressCompleteSkipped || '%1$s rows copied (%2$s skipped) · complete')
+					.replace('%1$s', imported.toLocaleString())
+					.replace('%2$s', skipped.toLocaleString());
+			} else {
+				text = (strings.progressComplete || '%1$s rows copied · complete')
+					.replace('%1$s', imported.toLocaleString());
+			}
+			return { text: text, percent: 100 };
+		}
+
+		if (skipped > 0) {
+			text = (strings.progressCopiedSkipped || '%1$s rows copied (%2$s skipped)')
+				.replace('%1$s', imported.toLocaleString())
+				.replace('%2$s', skipped.toLocaleString());
+		} else if (imported > 0) {
+			text = (strings.progressCopied || '%1$s rows copied')
+				.replace('%1$s', imported.toLocaleString());
+		} else {
+			text = strings.progressWaiting || 'Waiting to start…';
+		}
+
+		if (!isNaN(percent) && percent > 0 && percent < 100) {
+			text += (strings.progressEstimated || ' · ~%s%% estimated')
+				.replace('%s', percent.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 1 }));
+		}
+
+		return {
+			text: text,
+			percent: complete ? 100 : (isNaN(percent) ? 0 : Math.min(100, percent))
+		};
+	}
+
 	function updateUi(data) {
 		if (!data || !data.progress) {
 			return;
 		}
 
 		var progress = data.progress;
-		var total = parseInt(progress.total_legacy, 10) || 0;
-		var imported = parseInt(progress.total_imported, 10) || 0;
-		var percent = total > 0 ? Math.min(100, Math.round((imported / total) * 1000) / 10) : 100;
 		var complete = syncComplete(data);
 		var running = data.migration_status === 'running' && !complete;
 		var statusLabel = data.status_label || data.migration_status || 'idle';
+		var display = data.progress_label
+			? { text: data.progress_label, percent: complete ? 100 : (parseFloat(progress.percent_estimate) || 0) }
+			: formatProgressText(progress, complete);
 
 		$('#wp-ulike-pulse-sync-status').text(statusLabel);
-		$('#wp-ulike-pulse-progress-text').text(imported + ' of ' + total + ' rows (' + percent + '%)');
-		$('#wp-ulike-pulse-progress-bar').css('width', percent + '%');
+		$('#wp-ulike-pulse-progress-text').text(display.text);
+		$('#wp-ulike-pulse-progress-bar').css('width', Math.min(100, display.percent) + '%');
 
 		$('#wp-ulike-pulse-start').prop('disabled', running || complete);
 		$('#wp-ulike-pulse-pause').prop('disabled', !running);
@@ -168,7 +209,14 @@
 		}
 		post('enable').done(function (res) {
 			if (!res || !res.success) {
-				log(wpUlikePulse.strings.enableFailed);
+				var reason = res && res.data ? res.data.reason : '';
+				if (reason === 'verify_failed') {
+					log(wpUlikePulse.strings.enableVerifyFailed || wpUlikePulse.strings.enableFailed);
+				} else if (reason === 'sync_incomplete') {
+					log(wpUlikePulse.strings.enableSyncIncomplete || wpUlikePulse.strings.enableFailed);
+				} else {
+					log(wpUlikePulse.strings.enableFailed);
+				}
 				return;
 			}
 			window.location.reload();

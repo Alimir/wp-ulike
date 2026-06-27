@@ -4,6 +4,7 @@
  *
  * @var array  $progress
  * @var float  $percent
+ * @var string $progress_label
  * @var array  $cli_commands
  * @var string $sync_status
  * @var bool   $sync_complete
@@ -88,16 +89,7 @@ $show_migrate = ! $is_pulse;
 			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Progress', 'wp-ulike' ); ?></th>
-				<td id="wp-ulike-pulse-progress-text">
-					<?php
-					printf(
-						esc_html__( '%1$d of %2$d rows (%3$s%%)', 'wp-ulike' ),
-						(int) $progress['total_imported'],
-						(int) $progress['total_legacy'],
-						esc_html( (string) $percent )
-					);
-					?>
-				</td>
+				<td id="wp-ulike-pulse-progress-text"><?php echo esc_html( $progress_label ); ?></td>
 			</tr>
 		</tbody>
 	</table>
@@ -133,6 +125,9 @@ $show_migrate = ! $is_pulse;
 		<div style="padding:12px 0 0;">
 			<p class="description" style="margin-top:0;">
 				<?php esc_html_e( 'For developers or very large sites with SSH access. The buttons above are enough for most installations.', 'wp-ulike' ); ?>
+				<?php if ( 'WP-Cron' === WP_Ulike_Pulse_Sync_Scheduler::engine_label() ) : ?>
+					<?php esc_html_e( ' Background sync uses WP-Cron — on production sites, configure a real system cron hitting wp-cron.php or use WP-CLI batches so sync does not stall.', 'wp-ulike' ); ?>
+				<?php endif; ?>
 			</p>
 			<ul style="margin:0.75em 0 0;padding:0;list-style:none;font-size:12px;line-height:1.8;">
 				<?php foreach ( $cli_commands as $cli ) : ?>

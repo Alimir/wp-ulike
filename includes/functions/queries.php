@@ -79,7 +79,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		$period_limit          = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
 
 		// Check object cache value
-		$cache_key = sanitize_key( sprintf( 'items_%s', md5( serialize( $parsed_args ) ) ) );
+		$cache_key = wp_ulike_query_cache_key( 'items_' . md5( serialize( $parsed_args ) ) );
 		$results   = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 		if( false !== $results ){
 			return $results;
@@ -174,7 +174,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				);
 
 				if ( ! empty( $results ) ) {
-					wp_cache_add( $cache_key, $results, WP_ULIKE_SLUG, 300 );
+					wp_cache_set( $cache_key, $results, WP_ULIKE_SLUG, 300 );
 				}
 
 				return $results;
@@ -214,7 +214,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		$results = !empty( $query ) ? $wpdb->get_results( $query ): null;
 
 		if( ! empty( $results ) ){
-			wp_cache_add( $cache_key, $results, WP_ULIKE_SLUG, 300 );
+			wp_cache_set( $cache_key, $results, WP_ULIKE_SLUG, 300 );
 		}
 
 		return $results;
@@ -417,7 +417,7 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 
 		// If meta cache is empty, try object cache, then database
 		if( empty( $get_likers ) && $get_likers !== '0' ){
-			$cache_key = sanitize_key( sprintf( '%s_%s_%d_likers_list', $table_name, $column_name, $item_ID ) );
+			$cache_key = wp_ulike_query_cache_key( sprintf( '%s_%s_%d_likers_list', $table_name, $column_name, $item_ID ) );
 			$get_likers = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 			if( false === $get_likers ){
@@ -958,13 +958,12 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 	 */
 	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
 		if ( wp_ulike_use_pulse_queries() ) {
-			$cache_key   = 'get_rich_rating_value_' . $post_ID;
-			$cache_group = 'wp_ulike';
-			$rating      = wp_cache_get( $cache_key, $cache_group );
+			$cache_key = wp_ulike_query_cache_key( 'get_rich_rating_value_' . $post_ID );
+			$rating    = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 			if ( false === $rating ) {
 				$rating = WP_Ulike_Pulse_Query::get_rating_value( $post_ID, $is_decimal );
-				wp_cache_add( $cache_key, $rating, $cache_group, HOUR_IN_SECONDS );
+				wp_cache_set( $cache_key, $rating, WP_ULIKE_SLUG, HOUR_IN_SECONDS );
 			}
 
 			return apply_filters( 'wp_ulike_rating_value', $rating, $post_ID );
@@ -1058,7 +1057,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
             $period = implode( '-', $period );
         }
 
-        $cache_key = sanitize_key( sprintf( 'count_logs_period_%s', $period ) );
+        $cache_key = wp_ulike_query_cache_key( 'count_logs_period_' . $period );
 
         if( $period === 'all' ){
             $count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
@@ -1087,7 +1086,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 					: 0;
 			}
 
-            wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+            wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
         }
 
         if( $period === 'all' ){
@@ -1112,7 +1111,7 @@ if( ! function_exists('wp_ulike_count_current_fingerprint') ){
 	function wp_ulike_count_current_fingerprint( $current_fingerprint, $item_id, $type ) {
 		global $wpdb;
 		// Sanitize key & prepare cache key
-		$cache_key = 'fingerprint_' . md5( $type . '_' . $item_id . '_' . $current_fingerprint );
+		$cache_key = wp_ulike_query_cache_key( 'fingerprint_' . md5( $type . '_' . $item_id . '_' . $current_fingerprint ) );
 
 		// Try to get from cache
 		$existing_count = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
@@ -1132,7 +1131,7 @@ if( ! function_exists('wp_ulike_count_current_fingerprint') ){
 			}
 
 			// Store in cache to avoid repeated queries for same request
-			wp_cache_add( $cache_key, $existing_count, WP_ULIKE_SLUG, 10 ); // TTL = 10 seconds
+			wp_cache_set( $cache_key, $existing_count, WP_ULIKE_SLUG, 10 ); // TTL = 10 seconds
 		}
 
 		return (int) $existing_count;

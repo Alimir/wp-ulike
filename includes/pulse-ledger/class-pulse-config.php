@@ -151,6 +151,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 					),
 				)
 			);
+			wp_ulike_pulse_flush_cache();
 		}
 
 		/**
@@ -167,6 +168,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 					),
 				)
 			);
+			wp_ulike_pulse_flush_cache();
 		}
 
 		/**

@@ -83,14 +83,22 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 					'confirmDrop'   => esc_html__( 'Permanently delete old like tables? This cannot be undone. Make sure you have a database backup.', 'wp-ulike' ),
 					'redirectUrl'   => admin_url( 'admin.php?page=wp-ulike-settings' ),
 					'strings'       => array(
-						'started'      => esc_html__( 'Sync started. You can leave this page — it will continue in the background.', 'wp-ulike' ),
-						'syncComplete' => esc_html__( 'Copy complete. Click “Finish migration” below to start using Pulse for all reads.', 'wp-ulike' ),
-						'finished'     => esc_html__( 'All done. Pulse is now used for all reads.', 'wp-ulike' ),
-						'dropped'      => esc_html__( 'Old tables removed. Redirecting…', 'wp-ulike' ),
-						'dismissed'    => esc_html__( 'Done. Redirecting…', 'wp-ulike' ),
-						'dropFailed'   => esc_html__( 'Could not remove old tables. Please try again or use WP-CLI.', 'wp-ulike' ),
-						'enableFailed' => esc_html__( 'Could not finish migration yet. Please wait until sync reaches 100%.', 'wp-ulike' ),
-						'actionFailed' => esc_html__( 'Something went wrong. Please refresh the page and try again.', 'wp-ulike' ),
+						'started'                 => esc_html__( 'Sync started. You can leave this page — it will continue in the background.', 'wp-ulike' ),
+						'syncComplete'            => esc_html__( 'Copy complete. Click “Finish migration” below to start using Pulse for all reads.', 'wp-ulike' ),
+						'finished'                => esc_html__( 'All done. Pulse is now used for all reads.', 'wp-ulike' ),
+						'dropped'                 => esc_html__( 'Old tables removed. Redirecting…', 'wp-ulike' ),
+						'dismissed'               => esc_html__( 'Done. Redirecting…', 'wp-ulike' ),
+						'dropFailed'              => esc_html__( 'Could not remove old tables. Please try again or use WP-CLI.', 'wp-ulike' ),
+						'enableFailed'            => esc_html__( 'Could not finish migration yet. Please wait until the copy is complete.', 'wp-ulike' ),
+						'enableVerifyFailed'      => esc_html__( 'Copy finished but verification failed. Run “wp ulike pulse verify” for details, or contact support if failed rows are reported.', 'wp-ulike' ),
+						'enableSyncIncomplete'    => esc_html__( 'Copy is not finished yet. Wait until status shows Complete, or run “wp ulike pulse sync”.', 'wp-ulike' ),
+						'actionFailed'            => esc_html__( 'Something went wrong. Please refresh the page and try again.', 'wp-ulike' ),
+						'progressWaiting'         => esc_html__( 'Waiting to start…', 'wp-ulike' ),
+						'progressCopied'          => esc_html__( '%1$s rows copied', 'wp-ulike' ),
+						'progressCopiedSkipped'   => esc_html__( '%1$s rows copied (%2$s skipped)', 'wp-ulike' ),
+						'progressComplete'        => esc_html__( '%1$s rows copied · complete', 'wp-ulike' ),
+						'progressCompleteSkipped' => esc_html__( '%1$s rows copied (%2$s skipped) · complete', 'wp-ulike' ),
+						'progressEstimated'       => esc_html__( ' · ~%s%% estimated', 'wp-ulike' ),
 					),
 				)
 			);
@@ -168,9 +176,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			$legacy_tables = WP_Ulike_Pulse_Legacy_Cleanup::existing_legacy_tables();
 			$show_cleanup    = $is_pulse && ! empty( $legacy_tables );
 			$can_drop_legacy = $show_cleanup && WP_Ulike_Pulse_Legacy_Cleanup::can_drop_legacy();
-			$percent         = ! empty( $progress['total_legacy'] )
-				? min( 100, round( ( $progress['total_imported'] / $progress['total_legacy'] ) * 100, 1 ) )
-				: 100;
+			$percent         = $sync_complete ? 100 : (float) ( $progress['percent_estimate'] ?? 0 );
+			$progress_label  = WP_Ulike_Pulse_Sync::progress_label( $progress );
 
 			$cli_commands = self::cli_commands();
 
@@ -198,7 +205,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 				),
 				array(
 					'cmd'  => 'wp ulike pulse verify',
-					'desc' => __( 'Verify counts', 'wp-ulike' ),
+					'desc' => __( 'Verify migration (add --deep for COUNT scans)', 'wp-ulike' ),
 				),
 				array(
 					'cmd'  => 'wp ulike pulse enable',
@@ -226,6 +233,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 					'status_label'      => self::status_label( $sync_status, $sync_complete ),
 					'is_pulse'          => WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode(),
 					'progress'          => $progress,
+					'progress_label'    => WP_Ulike_Pulse_Sync::progress_label( $progress ),
 				)
 			);
 		}
@@ -257,9 +265,25 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 					break;
 
 				case 'enable':
+					if ( ! WP_Ulike_Pulse_Sync::is_sync_complete() ) {
+						wp_send_json_error(
+							array(
+								'message' => 'sync_incomplete',
+								'reason'  => 'sync_incomplete',
+							)
+						);
+					}
 					$verify = WP_Ulike_Pulse_Sync::verify();
 					if ( ! $verify['ok'] ) {
-						wp_send_json_error( $verify );
+						wp_send_json_error(
+							array_merge(
+								$verify,
+								array(
+									'message' => 'verify_failed',
+									'reason'  => 'verify_failed',
+								)
+							)
+						);
 					}
 					WP_Ulike_Pulse_Config::switch_to_pulse();
 					wp_send_json_success(

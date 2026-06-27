@@ -36,7 +36,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 		 * sync     Run one migration batch (or start background sync).
 		 * start    Start background migration.
 		 * pause    Pause migration.
-		 * verify   Compare legacy vs pulse counts.
+		 * verify   Compare legacy vs pulse counts (--deep for COUNT scans).
 		 * enable   Switch reads to pulse table (after migration).
 		 *
 		 * @param array $args       Positional args.
@@ -64,7 +64,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 					break;
 
 				case 'verify':
-					$result = WP_Ulike_Pulse_Sync::verify();
+					$deep   = isset( $assoc_args['deep'] );
+					$result = WP_Ulike_Pulse_Sync::verify( $deep );
 					if ( $result['ok'] ) {
 						WP_CLI::success( 'Verification passed.' );
 					} else {
@@ -73,6 +74,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 					break;
 
 				case 'enable':
+					if ( ! WP_Ulike_Pulse_Sync::is_sync_complete() ) {
+						WP_CLI::error( 'Sync is not complete yet. Run `wp ulike pulse status` and wait until all sources finish.' );
+					}
 					$verify = WP_Ulike_Pulse_Sync::verify();
 					if ( ! $verify['ok'] ) {
 						WP_CLI::warning( wp_json_encode( $verify['issues'] ) );
@@ -97,9 +101,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 
 				case 'status':
 				default:
+					$config   = WP_Ulike_Pulse_Config::get();
+					$progress = WP_Ulike_Pulse_Sync::get_progress();
 					WP_CLI::log( 'Mode: ' . WP_Ulike_Pulse_Config::mode() );
 					WP_CLI::log( 'Read: ' . WP_Ulike_Pulse_Config::read_mode() );
-					WP_CLI::log( wp_json_encode( WP_Ulike_Pulse_Sync::get_progress(), JSON_PRETTY_PRINT ) );
+					WP_CLI::log( 'Migration: ' . ( $config['migration']['status'] ?? 'idle' ) );
+					WP_CLI::log( 'Progress: ' . WP_Ulike_Pulse_Sync::progress_label( $progress ) );
+					WP_CLI::log( wp_json_encode( $progress, JSON_PRETTY_PRINT ) );
 					break;
 			}
 		}

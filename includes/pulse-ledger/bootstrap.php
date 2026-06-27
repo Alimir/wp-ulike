@@ -41,11 +41,74 @@ add_action( 'wp_ulike_data_updated', 'wp_ulike_pulse_bump_cache', 10, 1 );
 add_action( 'wp_ulike_delete_vote_data', 'wp_ulike_pulse_bump_cache', 10, 1 );
 
 /**
+ * Current query-cache generation (incremented on live writes and cutover).
+ *
+ * @return int
+ */
+function wp_ulike_pulse_cache_version() {
+	return (int) get_option( 'wp_ulike_pulse_cache_ver', 1 );
+}
+
+/**
+ * Build a versioned, mode-scoped object-cache key for vote query results.
+ *
+ * @param string $key Logical cache key.
+ * @return string
+ */
+function wp_ulike_query_cache_key( $key ) {
+	$key = sanitize_key( (string) $key );
+
+	$scope = wp_ulike_pulse_mode() . '_' . wp_ulike_pulse_read_mode();
+
+	if ( WP_Ulike_Pulse_Config::MODE_DUAL === wp_ulike_pulse_mode() ) {
+		$since = WP_Ulike_Pulse_Config::dual_since();
+		if ( $since ) {
+			$scope .= '_' . substr( md5( $since ), 0, 8 );
+		}
+	}
+
+	return 'pv' . wp_ulike_pulse_cache_version() . '_' . $scope . '_' . $key;
+}
+
+/**
+ * Whether cache bumps should be deferred (migration bulk import).
+ *
+ * @return bool
+ */
+function wp_ulike_pulse_defer_cache_bump() {
+	if ( class_exists( 'WP_Ulike_Pulse_Writer' ) && WP_Ulike_Pulse_Writer::is_migrating() ) {
+		return true;
+	}
+
+	return WP_Ulike_Pulse_Config::migration_running();
+}
+
+/**
+ * Invalidate query caches after a live vote change.
+ *
  * @return void
  */
 function wp_ulike_pulse_bump_cache() {
-	$version = (int) get_option( 'wp_ulike_pulse_cache_ver', 1 );
-	update_option( 'wp_ulike_pulse_cache_ver', $version + 1, false );
+	if ( wp_ulike_pulse_defer_cache_bump() ) {
+		return;
+	}
+
+	update_option( 'wp_ulike_pulse_cache_ver', wp_ulike_pulse_cache_version() + 1, false );
+	delete_transient( 'wp_ulike_global_avg_likes' );
+}
+
+/**
+ * Full cache invalidation on sync completion or storage mode cutover.
+ *
+ * @return void
+ */
+function wp_ulike_pulse_flush_cache() {
+	update_option( 'wp_ulike_pulse_cache_ver', wp_ulike_pulse_cache_version() + 1, false );
+	delete_transient( 'wp_ulike_global_avg_likes' );
+
+	if ( function_exists( 'wp_cache_flush_group' ) ) {
+		wp_cache_flush_group( WP_ULIKE_SLUG );
+	}
 }
 
 /**

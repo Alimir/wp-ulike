@@ -14,6 +14,20 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 	final class WP_Ulike_Pulse_Writer {
 
 		/**
+		 * True while bulk migration import is running (suppresses hooks + cache bumps).
+		 *
+		 * @var bool
+		 */
+		private static $migrating = false;
+
+		/**
+		 * @return bool
+		 */
+		public static function is_migrating() {
+			return self::$migrating;
+		}
+
+		/**
 		 * Insert append-only vote row.
 		 *
 		 * @param array<string,mixed> $payload Vote data.
@@ -33,7 +47,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			}
 
 			$id = (int) $wpdb->insert_id;
-			self::fire_inserted( $id, $payload, $row['legacy_status'] );
+			if ( ! self::$migrating ) {
+				self::fire_inserted( $id, $payload, $row['legacy_status'] );
+			}
 			return $id;
 		}
 
@@ -81,7 +97,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 					return false;
 				}
 
-				self::fire_updated( $existing_id, $payload, $row['legacy_status'] );
+				if ( ! self::$migrating ) {
+					self::fire_updated( $existing_id, $payload, $row['legacy_status'] );
+				}
 				return $existing_id;
 			}
 
@@ -119,10 +137,20 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			);
 
 			if ( $is_distinct ) {
-				return self::upsert( $payload );
+				self::$migrating = true;
+				try {
+					return self::upsert( $payload );
+				} finally {
+					self::$migrating = false;
+				}
 			}
 
-			return self::insert( $payload );
+			self::$migrating = true;
+			try {
+				return self::insert( $payload );
+			} finally {
+				self::$migrating = false;
+			}
 		}
 
 		/**

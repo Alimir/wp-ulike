@@ -342,7 +342,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$table = isset( $parsed_args['table'] ) ? $parsed_args['table'] : 'ulike';
 			$date = isset( $parsed_args['date'] ) ? $parsed_args['date'] : 'all';
 
-			$cache_key = sanitize_key( sprintf( 'count_logs_for_%s_table_in_%s_daterange', $table, is_array($date) ? implode('_', $date) : $date ) );
+			$cache_key = wp_ulike_query_cache_key( sprintf( 'count_logs_for_%s_table_in_%s_daterange', $table, is_array($date) ? implode('_', $date) : $date ) );
 
 			if( $date === 'all' ){
 				$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
@@ -364,7 +364,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 					$counter_value = $this->wpdb->get_var( $query );
 				}
-				wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+				wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 			}
 
 			if( $date === 'all' ){
@@ -645,7 +645,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				return array();
 			}
 
-			$cache_key = sanitize_key( 'stats_peak_hours_' . md5( implode( ',', array_values( $tables ) ) ) );
+			$cache_key = wp_ulike_query_cache_key( 'stats_peak_hours_' . md5( implode( ',', array_values( $tables ) ) ) );
 			$cached    = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 			if ( false !== $cached ) {
