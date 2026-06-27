@@ -386,6 +386,24 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function insertData( $item_id ){
+			if ( wp_ulike_writes_pulse() ) {
+				$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
+				$payload   = array(
+					'item_id'       => $item_id,
+					'item_type'     => $item_type,
+					'setting_type'  => $this->typeSettings->getType(),
+					'legacy_status' => $this->currentStatus,
+					'ip'            => $this->maybeAnonymiseIp( $this->currentIP ),
+					'user_id'       => $this->currentUser,
+					'fingerprint'   => $this->currentFingerPrint,
+					'is_distinct'   => $this->isDistinct(),
+				);
+
+				return $this->isDistinct()
+					? WP_Ulike_Pulse_Writer::upsert( $payload )
+					: WP_Ulike_Pulse_Writer::insert( $payload );
+			}
+
 			$table = $this->wpdb->prefix . $this->typeSettings->getTableName();
 			$data  = array(
 				$this->typeSettings->getColumnName() => $item_id,
@@ -445,6 +463,22 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function updateData( $item_id ){
+			if ( wp_ulike_writes_pulse() ) {
+				$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
+				return WP_Ulike_Pulse_Writer::upsert(
+					array(
+						'item_id'       => $item_id,
+						'item_type'     => $item_type,
+						'setting_type'  => $this->typeSettings->getType(),
+						'legacy_status' => $this->currentStatus,
+						'ip'            => $this->maybeAnonymiseIp( $this->currentIP ),
+						'user_id'       => $this->currentUser,
+						'fingerprint'   => $this->currentFingerPrint,
+						'is_distinct'   => true,
+					)
+				);
+			}
+
 			$table  = $this->wpdb->prefix . $this->typeSettings->getTableName();
 			$data   = array( 'status' => $this->currentStatus, 'date_time' => current_time( 'mysql', true ) ); // No need for esc_sql
 			$where  = array(
@@ -478,6 +512,11 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function deleteData( $item_id ){
+			if ( wp_ulike_writes_pulse() ) {
+				$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
+				return WP_Ulike_Pulse_Writer::delete( $item_id, $item_type, $this->currentUser );
+			}
+
 			return $this->wpdb->delete(
 				$this->wpdb->prefix . $this->typeSettings->getTableName(),
 				array( $this->typeSettings->getColumnName() => $item_id, 'user_id' => $this->currentUser )

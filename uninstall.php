@@ -95,7 +95,8 @@ class wp_ulike_uninstall {
 			{$wpdb->prefix}ulike_comments,
 			{$wpdb->prefix}ulike_activities,
 			{$wpdb->prefix}ulike_forums,
-			{$wpdb->prefix}ulike_meta"
+			{$wpdb->prefix}ulike_meta,
+			{$wpdb->prefix}ulike_pulse"
 		);
 
 	}

@@ -67,7 +67,93 @@ class wp_ulike_activator {
 	 * @since 1.0.0
 	 */
 	public function activate() {
-		$this->install_tables();
+		if ( false === get_option( 'wp_ulike_dbVersion', false ) ) {
+			$this->install_fresh_site();
+		} else {
+			$this->install_tables();
+			$this->ensure_pulse_schema( false );
+		}
+	}
+
+	/**
+	 * Fresh install — Pulse table + meta only (no legacy vote tables).
+	 *
+	 * @since 5.2.0
+	 * @return bool
+	 */
+	public function install_fresh_site() {
+		if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
+			require_once WP_ULIKE_INC_DIR . '/pulse-ledger/bootstrap.php';
+		}
+
+		if ( ! $this->install_meta_table() ) {
+			return false;
+		}
+
+		if ( ! WP_Ulike_Pulse_Schema::install() ) {
+			return false;
+		}
+
+		WP_Ulike_Pulse_Schema::bootstrap_mode( true );
+		update_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+
+		return true;
+	}
+
+	/**
+	 * Ensure Pulse Ledger schema and storage mode.
+	 *
+	 * @since 5.2.0
+	 * @param bool $is_fresh_install Whether this is a brand-new site.
+	 * @return bool
+	 */
+	public function ensure_pulse_schema( $is_fresh_install = false ) {
+		if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
+			require_once WP_ULIKE_INC_DIR . '/pulse-ledger/bootstrap.php';
+		}
+
+		if ( ! WP_Ulike_Pulse_Schema::install() ) {
+			return false;
+		}
+
+		WP_Ulike_Pulse_Schema::bootstrap_mode( $is_fresh_install );
+		return true;
+	}
+
+	/**
+	 * Install ulike_meta only.
+	 *
+	 * @return bool
+	 */
+	protected function install_meta_table() {
+		$max_index_length = 191;
+
+		$charset_collate = '';
+		if ( $this->database->has_cap( 'collation' ) ) {
+			$charset_collate = $this->database->get_charset_collate();
+		}
+
+		if ( ! function_exists( 'maybe_create_table' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		}
+
+		$meta = $this->tables['meta'];
+		if ( $this->table_exists( $meta ) ) {
+			return true;
+		}
+
+		return (bool) maybe_create_table( $meta, "CREATE TABLE `{$meta}` (
+			`meta_id` bigint(20) unsigned NOT NULL auto_increment,
+			`item_id` bigint(20) unsigned NOT NULL default '0',
+			`meta_group` varchar(100) default NULL,
+			`meta_key` varchar(255) default NULL,
+			`meta_value` longtext,
+			PRIMARY KEY  (`meta_id`),
+			KEY `item_id` (`item_id`),
+			KEY `meta_key` (`meta_key`($max_index_length)),
+			KEY `item_id_meta_group` (`item_id`, `meta_group`),
+			KEY `meta_group_meta_key_item_id` (`meta_group`, `meta_key`, `item_id`)
+		) $charset_collate AUTO_INCREMENT=1;" );
 	}
 
 	/**
@@ -217,6 +303,8 @@ class wp_ulike_activator {
 			KEY `meta_group_meta_key_item_id` (`meta_group`, `meta_key`, `item_id`)
 		) $charset_collate AUTO_INCREMENT=1;" );
 		}
+
+		$this->ensure_pulse_schema( false );
 
 		// Update db version.
 		if ( false === get_option( 'wp_ulike_dbVersion' ) ) {

@@ -170,6 +170,23 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			);
 
 		} else {
+			if ( class_exists( 'WP_Ulike_Pulse_Query' ) && ( ! empty( $period_limit ) || ! empty( $user_condition ) || 'legacy' !== wp_ulike_pulse_read_mode() ) ) {
+				$results = WP_Ulike_Pulse_Query::get_popular_items_from_logs(
+					$parsed_args,
+					$info_args,
+					$period_limit,
+					$user_condition,
+					$related_condition,
+					$limit_records
+				);
+
+				if ( ! empty( $results ) ) {
+					wp_cache_add( $cache_key, $results, WP_ULIKE_SLUG, 300 );
+				}
+
+				return $results;
+			}
+
 			// create query condition from status
 			if( is_array( $parsed_args['status'] ) ){
 				$status_values = array_map(function($status) use ($wpdb) {
@@ -512,22 +529,29 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 
 		if( empty($user_info) || ! isset( $user_info[$parsed_args['item_id']] ) ){
-			$table_name  = $wpdb->prefix . $parsed_args['settings']->getTableName();
-			$column_name = $parsed_args['settings']->getColumnName();
+			if ( class_exists( 'WP_Ulike_Pulse_Reader' ) && wp_ulike_writes_pulse() ) {
+				$user_status = WP_Ulike_Pulse_Reader::user_action(
+					$parsed_args['item_id'],
+					$parsed_args['current_user'],
+					$parsed_args['item_type']
+				);
+			} else {
+				$table_name  = $wpdb->prefix . $parsed_args['settings']->getTableName();
+				$column_name = $parsed_args['settings']->getColumnName();
 
-			$query  = $wpdb->prepare( "
-					SELECT `status`
-					FROM `{$table_name}`
-					WHERE `{$column_name}` = %s
-					AND `user_id` = %d
-					ORDER BY id DESC LIMIT 1
-				",
-				$parsed_args['item_id'],
-				$parsed_args['current_user']
-			);
+				$query  = $wpdb->prepare( "
+						SELECT `status`
+						FROM `{$table_name}`
+						WHERE `{$column_name}` = %s
+						AND `user_id` = %d
+						ORDER BY id DESC LIMIT 1
+					",
+					$parsed_args['item_id'],
+					$parsed_args['current_user']
+				);
 
-			// Get results
-			$user_status = $wpdb->get_var( $query );
+				$user_status = $wpdb->get_var( $query );
+			}
 
 			// Check user info value
 			$user_info = empty( $user_info ) ? array() : $user_info;
@@ -552,6 +576,27 @@ if( ! function_exists( 'wp_ulike_get_user_latest_activity' ) ) {
 	 * @return array|null
 	 */
 	function wp_ulike_get_user_latest_activity( $item_id, $user_id, $type ) {
+		if ( class_exists( 'WP_Ulike_Pulse_Query' ) && 'legacy' !== wp_ulike_pulse_read_mode() ) {
+			$row = WP_Ulike_Pulse_Query::get_user_latest_activity( $item_id, $user_id, $type );
+			if ( ! $row ) {
+				return null;
+			}
+			$result = array(
+				'date_time' => $row->date_time,
+				'status'    => isset( $row->status ) ? $row->status : '',
+			);
+			if ( ! empty( $result['date_time'] ) ) {
+				$result['date_time'] = wp_ulike_date_i18n( $result['date_time'] );
+			}
+			if ( class_exists( 'WP_Ulike_Pulse_Vote_Map' ) && in_array( $result['status'], array( 'like', 'dislike', 'active', 'removed' ), true ) ) {
+				if ( 'active' === $result['status'] || 'removed' === $result['status'] ) {
+					$key = isset( $row->engagement_key ) ? $row->engagement_key : WP_Ulike_Pulse_Vote_Map::KEY_LIKE;
+					$result['status'] = WP_Ulike_Pulse_Vote_Map::row_to_legacy( $key, $result['status'] );
+				}
+			}
+			return $result;
+		}
+
 		global $wpdb;
 
 		$settings    = wp_ulike_setting_type::get_instance( $type );
@@ -999,15 +1044,19 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 
         // Make a cachable query to get new like count from all tables
         if( false === $counter_value ){
-			$period_limit = wp_ulike_get_period_limit_sql( $period );
+			if ( class_exists( 'WP_Ulike_Pulse_Query' ) && 'legacy' !== wp_ulike_pulse_read_mode() ) {
+				$counter_value = WP_Ulike_Pulse_Query::count_logs_for_mode( $period );
+			} else {
+				$period_limit = wp_ulike_get_period_limit_sql( $period );
 
-            $counter_value = $wpdb->get_var( "
-			SELECT
-			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike` WHERE 1=1 {$period_limit} ) +
-			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_activities` WHERE 1=1 {$period_limit} ) +
-			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_comments` WHERE 1=1 {$period_limit} ) +
-			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_forums` WHERE 1=1 {$period_limit} )
-			" );
+				$counter_value = $wpdb->get_var( "
+				SELECT
+				( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike` WHERE 1=1 {$period_limit} ) +
+				( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_activities` WHERE 1=1 {$period_limit} ) +
+				( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_comments` WHERE 1=1 {$period_limit} ) +
+				( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_forums` WHERE 1=1 {$period_limit} )
+				" );
+			}
 
             wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
         }
@@ -1041,13 +1090,17 @@ if( ! function_exists('wp_ulike_count_current_fingerprint') ){
 		$settings       = wp_ulike_setting_type::get_instance( $type );
 
 		if ( false === $existing_count ) {
-			$table = $wpdb->prefix . $settings->getTableName();
+			if ( class_exists( 'WP_Ulike_Pulse_Query' ) && 'legacy' !== wp_ulike_pulse_read_mode() ) {
+				$existing_count = WP_Ulike_Pulse_Query::count_fingerprint_votes( $current_fingerprint, $item_id, $type );
+			} else {
+				$table = $wpdb->prefix . $settings->getTableName();
 
-			$existing_count = (int) $wpdb->get_var( $wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table} WHERE {$settings->getColumnName()} = %d AND fingerprint = %s",
-				$item_id,
-				$current_fingerprint
-			) );
+				$existing_count = (int) $wpdb->get_var( $wpdb->prepare(
+					"SELECT COUNT(*) FROM {$table} WHERE {$settings->getColumnName()} = %d AND fingerprint = %s",
+					$item_id,
+					$current_fingerprint
+				) );
+			}
 
 			// Store in cache to avoid repeated queries for same request
 			wp_cache_add( $cache_key, $existing_count, WP_ULIKE_SLUG, 10 ); // TTL = 10 seconds

@@ -9,6 +9,9 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
+// Pulse Ledger storage engine.
+require_once __DIR__ . '/pulse-ledger/bootstrap.php';
+
 // Functions
 include_once( 'functions/utilities.php' );
 include_once( 'functions/general.php' );

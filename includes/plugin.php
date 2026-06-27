@@ -45,15 +45,12 @@ class WpUlikeInit {
    */
   public function plugins_loaded(){
     wp_ulike_maybe_backfill_first_activated_at();
-
-    // Upgrade database
-    if ( self::is_admin_backend() ) {
-      $this->maybe_upgrade_database();
-    }
+    $this->maybe_upgrade_database();
   }
 
   private function maybe_upgrade_database(){
-    $current_version = get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
+    $stored_version  = get_option( 'wp_ulike_dbVersion', false );
+    $current_version = false === $stored_version ? '2.0' : $stored_version;
     $activator = wp_ulike_activator::get_instance();
 
     // Define upgrade path with version and method mapping
@@ -76,6 +73,14 @@ class WpUlikeInit {
         }
         // Update current version after successful upgrade
         $current_version = $version;
+      }
+    }
+
+    if ( version_compare( $current_version, '2.5', '<' ) ) {
+      if ( $activator->ensure_pulse_schema( false ) ) {
+        update_option( 'wp_ulike_dbVersion', '2.5' );
+      } elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        error_log( 'WP ULike: Pulse schema upgrade to 2.5 failed. Will retry on next request.' );
       }
     }
   }
