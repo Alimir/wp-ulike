@@ -165,7 +165,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			$is_running      = 'running' === $sync_status && ! $sync_complete;
 			$is_pulse        = WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode();
 			$status_label    = self::status_label( $sync_status, $sync_complete );
-			$legacy_tables   = class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ? WP_Ulike_Pulse_Legacy_Cleanup::existing_legacy_tables() : array();
+			$legacy_tables = WP_Ulike_Pulse_Legacy_Cleanup::existing_legacy_tables();
 			$show_cleanup    = $is_pulse && ! empty( $legacy_tables );
 			$can_drop_legacy = $show_cleanup && WP_Ulike_Pulse_Legacy_Cleanup::can_drop_legacy();
 			$percent         = ! empty( $progress['total_legacy'] )

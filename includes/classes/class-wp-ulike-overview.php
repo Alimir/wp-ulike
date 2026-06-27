@@ -509,21 +509,11 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return array<string, string> Label => full table name.
 		 */
 		public static function get_required_tables() {
-			if ( function_exists( 'wp_ulike_use_pulse_queries' )
-				&& wp_ulike_use_pulse_queries()
-				&& class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				return WP_Ulike_Pulse_Log_Bridge::get_storage_tables();
 			}
 
-			global $wpdb;
-
-			return array(
-				'posts'      => $wpdb->prefix . 'ulike',
-				'comments'   => $wpdb->prefix . 'ulike_comments',
-				'activities' => $wpdb->prefix . 'ulike_activities',
-				'forums'     => $wpdb->prefix . 'ulike_forums',
-				'meta'       => $wpdb->prefix . 'ulike_meta',
-			);
+			return WP_Ulike_Pulse_Registry::legacy_health_tables();
 		}
 
 		/**

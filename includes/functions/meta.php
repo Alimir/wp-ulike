@@ -514,8 +514,6 @@ if( ! function_exists('wp_ulike_delete_vote_data') ){
 	 * @return void
 	 */
 	function wp_ulike_delete_vote_data( $ID, $type ){
-		global $wpdb;
-
 		// delete meta values
 		wp_ulike_delete_meta_data( $type, $ID, 'count_distinct_dislike' );
 		wp_ulike_delete_meta_data( $type, $ID, 'count_distinct_like' );
@@ -526,13 +524,7 @@ if( ! function_exists('wp_ulike_delete_vote_data') ){
 		// delete table values
 		$settings = wp_ulike_setting_type::get_instance( $type );
 
-		if ( class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
-			WP_Ulike_Pulse_Writer::delete_item_votes( $ID, $type );
-		} else {
-			$table_name = esc_sql( $wpdb->prefix . $settings->getTableName() );
-			$column_name = esc_sql( $settings->getColumnName() );
-			$wpdb->query( $wpdb->prepare( "DELETE from `{$table_name}` WHERE `{$column_name}` = %d", $ID ) );
-		}
+		WP_Ulike_Pulse_Writer::delete_item_votes( $ID, $type );
 
 		// Fires after the post item has been deleted.
 		do_action( 'wp_ulike_delete_vote_data', $ID, $type, $settings );

@@ -29,12 +29,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		function __construct(){
 			global $wpdb;
 			$this->wpdb   = $wpdb;
-			$this->tables = array(
-				'posts'      => 'ulike',
-				'comments'   => 'ulike_comments',
-				'activities' => 'ulike_activities',
-				'topics'     => 'ulike_forums',
-			);
+			$this->tables = WP_Ulike_Pulse_Registry::stats_table_map();
 		}
 
 		/**
@@ -261,7 +256,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		// Ensure data_limit is a positive integer for safety
 		$data_limit = max( 1, absint( $data_limit ) );
 
-		if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+		if ( wp_ulike_use_pulse_queries() ) {
 			return WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $table, $data_limit );
 		}
 
@@ -360,7 +355,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			// Make a cachable query to get new like count from all tables
 			if( false === $counter_value ){
-				if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+				if ( wp_ulike_use_pulse_queries() ) {
 					$counter_value = WP_Ulike_Pulse_Query::count_logs_for_table( $table, $date );
 				} else {
 					$table_escaped = esc_sql( $this->wpdb->prefix . $table );
@@ -659,7 +654,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			$union_parts = array();
 
-			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				$results = WP_Ulike_Pulse_Log_Bridge::get_peak_hours_rows( array_values( $tables ) );
 			} else {
 				foreach ( $tables as $table ) {

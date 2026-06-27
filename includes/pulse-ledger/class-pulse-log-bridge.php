@@ -118,7 +118,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @return int
 		 */
 		public static function count_log_rows( $table_suffix ) {
-			if ( class_exists( 'WP_Ulike_Pulse_Query' ) && wp_ulike_use_pulse_queries() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				return WP_Ulike_Pulse_Query::count_logs_for_table( $table_suffix, 'all' );
 			}
 
@@ -398,9 +398,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			$per_page = max( 1, (int) $per_page );
 			$offset   = ( $page - 1 ) * $per_page;
 			$rows     = array();
-			$mode     = class_exists( 'WP_Ulike_Pulse_Query' )
-				? WP_Ulike_Pulse_Query::read_mode()
-				: WP_Ulike_Pulse_Config::READ_LEGACY;
+			$mode = WP_Ulike_Pulse_Query::read_mode();
 
 			foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $slug => $source ) {
 				$suffix = str_replace( $wpdb->prefix, '', $source['table'] );
@@ -472,9 +470,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 
 			$user_id = (string) $user_id;
 			$total   = 0;
-			$mode    = class_exists( 'WP_Ulike_Pulse_Query' )
-				? WP_Ulike_Pulse_Query::read_mode()
-				: WP_Ulike_Pulse_Config::READ_LEGACY;
+			$mode = WP_Ulike_Pulse_Query::read_mode();
 
 			if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
 				$result = $wpdb->delete(
@@ -517,9 +513,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			global $wpdb;
 
 			$selects = array();
-			$mode    = class_exists( 'WP_Ulike_Pulse_Query' )
-				? WP_Ulike_Pulse_Query::read_mode()
-				: WP_Ulike_Pulse_Config::READ_LEGACY;
+			$mode = WP_Ulike_Pulse_Query::read_mode();
 
 			if ( ( 'legacy' === $mode || 'merged' === $mode ) ) {
 				foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {

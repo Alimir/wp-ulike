@@ -107,60 +107,7 @@ if( ! function_exists( 'wp_ulike_get_table_info' ) ){
 	 * @return void
 	 */
 	function wp_ulike_get_table_info( $type = 'post' ){
-		global $wpdb;
-		$output = array();
-
-		switch ( $type ) {
-			case 'likeThisComment':
-			case 'comment':
-			case 'comments':
-				$output = array(
-					'table'                => 'ulike_comments',
-					'column'               => 'comment_id',
-					'related_table'        => 'comments',
-					'related_table_prefix' => $wpdb->comments,
-					'related_column'       => 'comment_ID'
-				);
-				break;
-
-			case 'likeThisActivity':
-			case 'buddypress':
-			case 'activity':
-			case 'activities':
-				$output = array(
-					'table'                => 'ulike_activities',
-					'column'               => 'activity_id',
-					'related_table'        => 'bp_activity',
-					'related_table_prefix' => is_multisite() ? $wpdb->base_prefix . 'bp_activity' : $wpdb->prefix . 'bp_activity',
-					'related_column'       => 'id'
-				);
-				break;
-
-			case 'likeThisTopic':
-			case 'bbpress':
-			case 'topic':
-			case 'topics':
-				$output = array(
-					'table'                => 'ulike_forums',
-					'column'               => 'topic_id',
-					'related_table'        => 'posts',
-					'related_table_prefix' => $wpdb->posts,
-					'related_column'       => 'ID'
-				);
-				break;
-
-			default:
-				$output = array(
-					'table'                => 'ulike',
-					'column'               => 'post_id',
-					'related_table'        => 'posts',
-					'related_table_prefix' => $wpdb->posts,
-					'related_column'       => 'ID'
-				);
-				break;
-		}
-
-		return $output;
+		return WP_Ulike_Pulse_Registry::table_info( $type );
 	}
 }
 
@@ -172,27 +119,7 @@ if( ! function_exists( 'wp_ulike_get_type_by_table' ) ){
 	 * @return void
 	 */
 	function wp_ulike_get_type_by_table( $table ){
-		$output = NULL;
-
-		switch ( $table ) {
-			case 'ulike_comments':
-				$output = 'comment';
-				break;
-
-			case 'ulike_activities':
-				$output = 'activity';
-				break;
-
-			case 'ulike_forums':
-				$output = 'topic';
-				break;
-
-			case 'ulike':
-				$output = 'post';
-				break;
-		}
-
-		return $output;
+		return WP_Ulike_Pulse_Registry::type_by_table_suffix( $table );
 	}
 }
 

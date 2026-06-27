@@ -1099,14 +1099,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 * @return array{0: string, 1: string, 2: string}|null
 		 */
 		private static function get_likers_table_config( $content_type ) {
-			$map = array(
-				'post'     => array( 'ulike', 'post_id', 'post' ),
-				'comment'  => array( 'ulike_comments', 'comment_id', 'comment' ),
-				'topic'    => array( 'ulike_forums', 'topic_id', 'topic' ),
-				'activity' => array( 'ulike_activities', 'activity_id', 'activity' ),
-			);
-
-			return isset( $map[ $content_type ] ) ? $map[ $content_type ] : null;
+			return WP_Ulike_Pulse_Registry::likers_list_config( $content_type );
 		}
 
 		/**

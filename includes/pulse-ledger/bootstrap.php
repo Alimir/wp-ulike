@@ -96,5 +96,5 @@ function wp_ulike_pulse_needs_migration() {
  * @return bool
  */
 function wp_ulike_use_pulse_queries() {
-	return class_exists( 'WP_Ulike_Pulse_Query' ) && WP_Ulike_Pulse_Query::available();
+	return WP_Ulike_Pulse_Query::available();
 }

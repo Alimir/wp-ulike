@@ -36,7 +36,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_results(){
-			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				return WP_Ulike_Pulse_Log_Bridge::get_log_rows(
 					$this->table,
 					$this->page,
@@ -63,7 +63,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_row( $item_ID ){
-			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				return WP_Ulike_Pulse_Log_Bridge::get_log_row( $this->table, $item_ID );
 			}
 
@@ -84,7 +84,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_all_rows(){
-			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				return WP_Ulike_Pulse_Log_Bridge::get_all_log_rows( $this->table, $this->sort );
 			}
 
@@ -105,7 +105,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return void
 		 */
 		public function delete_rows( $items ){
-			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				$selected_ids = array();
 				foreach ( $items as $item ) {
 					if ( ! empty( $item['id'] ) ) {
@@ -140,7 +140,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return integer|false
 		 */
 		public function delete_row( $item_id ){
-			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				return WP_Ulike_Pulse_Log_Bridge::delete_log_row( $this->table, $item_id );
 			}
 
@@ -160,7 +160,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return string
 		 */
 		private function get_total_records(){
-			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				return WP_Ulike_Pulse_Log_Bridge::count_log_rows( $this->table );
 			}
 

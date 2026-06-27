@@ -38,7 +38,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @return bool
 		 */
 		public static function available() {
-			return class_exists( 'WP_Ulike_Pulse_Config' );
+			return true;
 		}
 
 		/**
@@ -308,10 +308,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @return bool
 		 */
 		public static function is_user_liked( $item_id, $user_id, $type = 'likeThis' ) {
-			if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
-				return false;
-			}
-
 			$action = WP_Ulike_Pulse_Reader::user_action( $item_id, $user_id, $type );
 			return 'like' === $action;
 		}

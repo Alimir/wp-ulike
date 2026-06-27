@@ -60,59 +60,7 @@ class wp_ulike_setting_type {
 	}
 
 	protected function setTypeSettings( $type ){
-		switch ( $type ) {
-			case 'likeThisComment':
-			case 'comment':
-			case 'comments':
-				$this->typeSettings = array(
-					'setting'  => 'comments_group',
-					'table'    => 'ulike_comments',
-					'column'   => 'comment_id',
-					'key'      => '_commentliked',
-					'slug'     => 'comment',
-					'cookie'   => 'comment-liked-'
-				);
-				break;
-
-			case 'likeThisActivity':
-			case 'buddypress':
-			case 'activity':
-			case 'activities':
-				$this->typeSettings = array(
-					'setting'  => 'buddypress_group',
-					'table'    => 'ulike_activities',
-					'column'   => 'activity_id',
-					'key'      => '_activityliked',
-					'slug'     => 'activity',
-					'cookie'   => 'activity-liked-',
-				);
-				break;
-
-			case 'likeThisTopic':
-			case 'bbpress':
-			case 'topic':
-			case 'topics':
-				$this->typeSettings = array(
-					'setting'  => 'bbpress_group',
-					'table'    => 'ulike_forums',
-					'column'   => 'topic_id',
-					'key'      => '_topicliked',
-					'slug'     => 'topic',
-					'cookie'   => 'topic-liked-'
-				);
-				break;
-
-			default:
-				$this->typeSettings = array(
-					'setting'  => 'posts_group',
-					'table'    => 'ulike',
-					'column'   => 'post_id',
-					'key'      => '_liked',
-					'slug'     => 'post',
-					'cookie'   => 'liked-'
-				);
-				break;
-		}
+		$this->typeSettings = WP_Ulike_Pulse_Registry::setting_profile( $type );
 	}
 
 	public function getType(){

@@ -592,9 +592,7 @@ if ( ! function_exists( 'wp_ulike_get_earliest_log_timestamp' ) ) {
 	 * @return int|null Unix timestamp or null when unknown.
 	 */
 	function wp_ulike_get_earliest_log_timestamp() {
-		if ( function_exists( 'wp_ulike_use_pulse_queries' )
-			&& wp_ulike_use_pulse_queries()
-			&& class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
+		if ( wp_ulike_use_pulse_queries() ) {
 			return WP_Ulike_Pulse_Log_Bridge::get_earliest_log_timestamp();
 		}
 

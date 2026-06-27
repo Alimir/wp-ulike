@@ -207,7 +207,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 				return true;
 			}
 
-			if ( self::MODE_PULSE === $mode && class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
+			if ( self::MODE_PULSE === $mode ) {
 				return WP_Ulike_Pulse_Legacy_Cleanup::legacy_tables_exist();
 			}
 
