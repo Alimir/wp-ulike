@@ -70,12 +70,36 @@ class wp_ulike_uninstall {
 		* and to ensure only the site owner can perform this action.
 		*/
 		if ( defined( 'WP_ULIKE_REMOVE_ALL_DATA' ) && true === WP_ULIKE_REMOVE_ALL_DATA ) {
+			$this->clear_scheduled_tasks();
 			$this->drop_tables();
 			$this->delete_transients();
 			$this->delete_options();
 			$this->delete_user_meta();
+			$this->delete_counter_meta();
 			$this->delete_files();
 			$this->delete_lock_files();
+		}
+	}
+
+	/**
+	 * Unschedule WP-Cron and Action Scheduler jobs registered by the plugin.
+	 *
+	 * @since 5.2.0
+	 * @access public
+	 * @return void
+	 */
+	public function clear_scheduled_tasks() {
+		$pulse_hook      = 'wp_ulike_pulse_sync_batch';
+		$pulse_group     = 'wp_ulike_pulse';
+		$migration_hook  = 'wp_ulike_engagement_migration_batch';
+		$migration_group = 'wp_ulike_engagement_migration';
+
+		wp_clear_scheduled_hook( $pulse_hook );
+		wp_clear_scheduled_hook( $migration_hook );
+
+		if ( function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( $pulse_hook, array(), $pulse_group );
+			as_unschedule_all_actions( $migration_hook, array(), $migration_group );
 		}
 	}
 
@@ -96,7 +120,8 @@ class wp_ulike_uninstall {
 			{$wpdb->prefix}ulike_activities,
 			{$wpdb->prefix}ulike_forums,
 			{$wpdb->prefix}ulike_meta,
-			{$wpdb->prefix}ulike_pulse"
+			{$wpdb->prefix}ulike_pulse,
+			{$wpdb->prefix}ulike_engagements"
 		);
 
 	}
@@ -129,26 +154,14 @@ class wp_ulike_uninstall {
 
 		global $wpdb;
 
-		$known_options = array(
-			'wp_ulike_dbVersion',
-			'widget_wp_ulike',
-			'wp_ulike_settings',
-			'wp_ulike_use_inline_custom_css',
-			'wp_ulike_customize',
-			'wp_ulike_customizer_css_cache',
-			'wp_ulike_customizer_values_hash',
-		);
+		delete_option( 'widget_wp_ulike' );
 
-		foreach ( $known_options as $option_name ) {
-			delete_option( $option_name );
-		}
-
-		// Remove any remaining wp_ulike_* options (legacy/unknown), but keep Pro license options.
+		// Remove all wp_ulike_* options (free, Pro, pulse, legacy, unknown).
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM `{$wpdb->options}` WHERE option_name LIKE %s AND option_name NOT LIKE %s",
-				$wpdb->esc_like( 'wp_ulike_' ) . '%',
-				$wpdb->esc_like( 'wp_ulike_pro_' ) . '%'
+				"DELETE FROM `{$wpdb->options}` WHERE option_name LIKE %s",
+				$wpdb->esc_like( 'wp_ulike_' ) . '%'
 			)
 		);
 	}
@@ -190,9 +203,44 @@ class wp_ulike_uninstall {
 
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM `{$wpdb->usermeta}` WHERE meta_key LIKE %s AND meta_key NOT LIKE %s",
+				$wpdb->esc_like( 'wp_ulike_' ) . '%',
+				$wpdb->esc_like( 'wp_ulike_pro_' ) . '%'
+			)
+		);
+	}
+
+	/**
+	 * Delete legacy counter meta stored on WordPress posts and comments.
+	 *
+	 * BuddyPress activity counters live in BP meta tables and are not removed here.
+	 *
+	 * @since 5.2.0
+	 * @access public
+	 * @return void
+	 */
+	public function delete_counter_meta() {
+
+		global $wpdb;
+
+		$post_meta_keys = array( '_liked', '_topicliked' );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM `{$wpdb->postmeta}` WHERE meta_key IN ( %s, %s )",
+				$post_meta_keys[0],
+				$post_meta_keys[1]
+			)
+		);
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->delete(
-			$wpdb->usermeta,
-			array( 'meta_key' => 'wp_ulike_show_activation_pointer' ),
+			$wpdb->commentmeta,
+			array( 'meta_key' => '_commentliked' ),
 			array( '%s' )
 		);
 	}

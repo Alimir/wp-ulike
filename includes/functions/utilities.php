@@ -592,6 +592,12 @@ if ( ! function_exists( 'wp_ulike_get_earliest_log_timestamp' ) ) {
 	 * @return int|null Unix timestamp or null when unknown.
 	 */
 	function wp_ulike_get_earliest_log_timestamp() {
+		if ( function_exists( 'wp_ulike_use_pulse_queries' )
+			&& wp_ulike_use_pulse_queries()
+			&& class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
+			return WP_Ulike_Pulse_Log_Bridge::get_earliest_log_timestamp();
+		}
+
 		global $wpdb;
 
 		if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
@@ -601,7 +607,7 @@ if ( ! function_exists( 'wp_ulike_get_earliest_log_timestamp' ) ) {
 		$selects = array();
 
 		foreach ( WP_Ulike_Overview::get_required_tables() as $label => $table_name ) {
-			if ( 'meta' === $label ) {
+			if ( 'meta' === $label || 'pulse' === $label ) {
 				continue;
 			}
 

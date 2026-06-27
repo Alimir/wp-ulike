@@ -36,6 +36,15 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_results(){
+			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_log_rows(
+					$this->table,
+					$this->page,
+					$this->per_page,
+					$this->sort
+				);
+			}
+
 			$table = esc_sql( $this->wpdb->prefix . $this->table );
 			$paged = absint( ( $this->page - 1 ) * $this->per_page );
 			$per_page = absint( $this->per_page );
@@ -54,6 +63,10 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_row( $item_ID ){
+			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_log_row( $this->table, $item_ID );
+			}
+
 			$table = esc_sql( $this->wpdb->prefix . $this->table );
 			$item_ID = absint( $item_ID );
 
@@ -71,6 +84,10 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_all_rows(){
+			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_all_log_rows( $this->table, $this->sort );
+			}
+
 			$table = esc_sql( $this->wpdb->prefix . $this->table );
 			
 			// Whitelist allowed order fields
@@ -88,6 +105,19 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return void
 		 */
 		public function delete_rows( $items ){
+			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+				$selected_ids = array();
+				foreach ( $items as $item ) {
+					if ( ! empty( $item['id'] ) ) {
+						$selected_ids[] = absint( $item['id'] );
+					}
+				}
+				if ( ! empty( $selected_ids ) ) {
+					WP_Ulike_Pulse_Log_Bridge::delete_log_rows( $this->table, $selected_ids );
+				}
+				return;
+			}
+
 			$table = esc_sql( $this->wpdb->prefix . $this->table );
 			$selectedIds = array();
 
@@ -110,6 +140,10 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return integer|false
 		 */
 		public function delete_row( $item_id ){
+			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::delete_log_row( $this->table, $item_id );
+			}
+
 			$table   = $this->wpdb->prefix . $this->table;
 			$item_id = absint( $item_id );
 
@@ -126,6 +160,10 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return string
 		 */
 		private function get_total_records(){
+			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::count_log_rows( $this->table );
+			}
+
 			$table  = esc_sql( $this->wpdb->prefix . $this->table );
 			return $this->wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
 		}

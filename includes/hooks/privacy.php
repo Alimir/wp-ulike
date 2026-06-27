@@ -41,29 +41,34 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 	}
 
 	$uid    = (string) (int) $user->ID;
-	global $wpdb;
-
 	$per_page = 100;
-	$offset   = ( $page - 1 ) * $per_page;
 	$data     = array();
 	$labels   = wp_ulike_privacy_log_tables();
-	$p        = $wpdb->prefix;
 
-	// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Fixed table names from plugin schema.
-	$union = "(SELECT 'ulike' AS src, id, date_time, status, ip FROM `{$p}ulike` WHERE user_id = %s)
-		UNION ALL
-		(SELECT 'ulike_comments' AS src, id, date_time, status, ip FROM `{$p}ulike_comments` WHERE user_id = %s)
-		UNION ALL
-		(SELECT 'ulike_activities' AS src, id, date_time, status, ip FROM `{$p}ulike_activities` WHERE user_id = %s)
-		UNION ALL
-		(SELECT 'ulike_forums' AS src, id, date_time, status, ip FROM `{$p}ulike_forums` WHERE user_id = %s)";
+	if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+		$rows = WP_Ulike_Pulse_Log_Bridge::get_privacy_rows( $uid, $page, $per_page );
+	} else {
+		global $wpdb;
 
-	$sql  = "SELECT * FROM ( {$union} ) AS combined ORDER BY date_time DESC, src ASC, id DESC LIMIT %d OFFSET %d";
-	$rows = $wpdb->get_results(
-		$wpdb->prepare( $sql, $uid, $uid, $uid, $uid, $per_page, $offset ),
-		ARRAY_A
-	);
-	// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$offset = ( $page - 1 ) * $per_page;
+		$p      = $wpdb->prefix;
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Fixed table names from plugin schema.
+		$union = "(SELECT 'ulike' AS src, id, date_time, status, ip FROM `{$p}ulike` WHERE user_id = %s)
+			UNION ALL
+			(SELECT 'ulike_comments' AS src, id, date_time, status, ip FROM `{$p}ulike_comments` WHERE user_id = %s)
+			UNION ALL
+			(SELECT 'ulike_activities' AS src, id, date_time, status, ip FROM `{$p}ulike_activities` WHERE user_id = %s)
+			UNION ALL
+			(SELECT 'ulike_forums' AS src, id, date_time, status, ip FROM `{$p}ulike_forums` WHERE user_id = %s)";
+
+		$sql  = "SELECT * FROM ( {$union} ) AS combined ORDER BY date_time DESC, src ASC, id DESC LIMIT %d OFFSET %d";
+		$rows = $wpdb->get_results(
+			$wpdb->prepare( $sql, $uid, $uid, $uid, $uid, $per_page, $offset ),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	}
 
 	if ( ! empty( $rows ) ) {
 		foreach ( $rows as $row ) {
@@ -116,15 +121,20 @@ function wp_ulike_privacy_eraser( $email_address, $page = 1 ) {
 	}
 
 	$uid    = (string) (int) $user->ID;
-	global $wpdb;
 	$total  = 0;
 
-	foreach ( array_keys( wp_ulike_privacy_log_tables() ) as $suffix ) {
-		$table = $wpdb->prefix . $suffix;
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from fixed list.
-		$result = $wpdb->query( $wpdb->prepare( "DELETE FROM `{$table}` WHERE user_id = %s", $uid ) );
-		if ( false !== $result ) {
-			$total += (int) $result;
+	if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+		$total = WP_Ulike_Pulse_Log_Bridge::erase_user_logs( $uid );
+	} else {
+		global $wpdb;
+
+		foreach ( array_keys( wp_ulike_privacy_log_tables() ) as $suffix ) {
+			$table = $wpdb->prefix . $suffix;
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from fixed list.
+			$result = $wpdb->query( $wpdb->prepare( "DELETE FROM `{$table}` WHERE user_id = %s", $uid ) );
+			if ( false !== $result ) {
+				$total += (int) $result;
+			}
 		}
 	}
 

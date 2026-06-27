@@ -82,6 +82,19 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 					WP_CLI::success( 'Pulse mode enabled (reads + writes on pulse table).' );
 					break;
 
+				case 'drop-legacy':
+					$result = WP_Ulike_Pulse_Legacy_Cleanup::drop_legacy_tables();
+					if ( empty( $result['ok'] ) ) {
+						WP_CLI::error( 'Could not drop legacy tables: ' . ( $result['message'] ?? 'unknown' ) );
+					}
+					WP_CLI::success( 'Dropped: ' . implode( ', ', $result['dropped'] ) );
+					break;
+
+				case 'dismiss':
+					WP_Ulike_Pulse_Config::mark_admin_dismissed();
+					WP_CLI::success( 'Pulse Storage admin menu hidden.' );
+					break;
+
 				case 'status':
 				default:
 					WP_CLI::log( 'Mode: ' . WP_Ulike_Pulse_Config::mode() );

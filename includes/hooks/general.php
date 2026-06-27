@@ -326,6 +326,22 @@ if( ! function_exists( 'wp_ulike_delete_post_votes' ) ){
 		}
 
 		// delete comments if exist
+		if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			$comment_ids = get_comments(
+				array(
+					'post_id' => $ID,
+					'fields'  => 'ids',
+					'number'  => 0,
+				)
+			);
+			if ( ! empty( $comment_ids ) ) {
+				foreach ( $comment_ids as $comment_id ) {
+					wp_ulike_delete_vote_data( $comment_id, 'comment' );
+				}
+			}
+			return;
+		}
+
 		$comments = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT

@@ -52,7 +52,59 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 				return self::reset_counts();
 			}
 
-			return wp_parse_args( $stored, self::default_progress() );
+			$progress = wp_parse_args( $stored, self::default_progress() );
+
+			return self::finalize_if_complete( $progress );
+		}
+
+		/**
+		 * Whether every legacy row has been copied (or there was nothing to copy).
+		 *
+		 * @param array<string,mixed>|null $progress Optional progress snapshot.
+		 * @return bool
+		 */
+		public static function is_sync_complete( $progress = null ) {
+			if ( null === $progress ) {
+				$stored = get_option( self::OPTION_PROGRESS, array() );
+				$progress = is_array( $stored ) && ! empty( $stored['sources'] )
+					? wp_parse_args( $stored, self::default_progress() )
+					: self::default_progress();
+			}
+
+			if ( ! empty( $progress['complete'] ) ) {
+				return true;
+			}
+
+			return self::is_complete( $progress );
+		}
+
+		/**
+		 * Mark migration done when all sources are finished but status was left on running.
+		 *
+		 * @param array<string,mixed> $progress Progress.
+		 * @return array<string,mixed>
+		 */
+		public static function finalize_if_complete( array $progress ) {
+			if ( ! self::is_complete( $progress ) ) {
+				return $progress;
+			}
+
+			$progress['complete'] = true;
+
+			if ( WP_Ulike_Pulse_Config::migration_running() ) {
+				WP_Ulike_Pulse_Config::update(
+					array(
+						'migration' => array(
+							'status' => 'done',
+						),
+					)
+				);
+				WP_Ulike_Pulse_Sync_Scheduler::unschedule();
+			}
+
+			self::save_progress( $progress );
+
+			return $progress;
 		}
 
 		/**
@@ -79,6 +131,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 		 * @return void
 		 */
 		public static function start() {
+			if ( self::is_sync_complete() ) {
+				return;
+			}
+
 			self::reset_counts();
 			WP_Ulike_Pulse_Config::update(
 				array(
@@ -195,9 +251,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 			}
 
 			return array(
-				'processed' => $processed,
-				'done'      => ! empty( $progress['complete'] ),
-				'progress'  => $progress,
+				'processed'          => $processed,
+				'done'               => ! empty( $progress['complete'] ),
+				'progress'           => $progress,
+				'migration_status'   => WP_Ulike_Pulse_Config::get()['migration']['status'] ?? 'idle',
 			);
 		}
 

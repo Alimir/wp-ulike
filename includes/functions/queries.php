@@ -47,6 +47,10 @@ if ( ! function_exists( 'wp_ulike_get_log_table_names' ) ) {
 	 * @return string[]
 	 */
 	function wp_ulike_get_log_table_names() {
+		if ( class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
+			return WP_Ulike_Pulse_Registry::log_table_names();
+		}
+
 		global $wpdb;
 
 		return array(
@@ -170,7 +174,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			);
 
 		} else {
-			if ( class_exists( 'WP_Ulike_Pulse_Query' ) && ( ! empty( $period_limit ) || ! empty( $user_condition ) || 'legacy' !== wp_ulike_pulse_read_mode() ) ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				$results = WP_Ulike_Pulse_Query::get_popular_items_from_logs(
 					$parsed_args,
 					$info_args,
@@ -351,6 +355,16 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			);
 
 		} else {
+			if ( wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Query::count_popular_items_total(
+					$parsed_args,
+					$info_args,
+					$period_limit,
+					$user_condition,
+					$related_condition
+				);
+			}
+
 			// create query condition from status
 			$status_type  = '';
 			if( is_array( $parsed_args['status'] ) ){
@@ -418,27 +432,32 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 			$get_likers = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
 			if( false === $get_likers ){
-				// Calculate max cache size based on limit parameter
-				// Formula: max(limit * 10, 100, 1000) - ensures reasonable cache size
 				$base_limit = is_null( $limit ) ? 100 : $limit;
 				$max_likers = min( max( $base_limit * 10, 100 ), 1000 );
 
-				$table_escaped = esc_sql( $wpdb->prefix . $table_name );
-				$column_escaped = esc_sql( $column_name );
+				if ( wp_ulike_use_pulse_queries() ) {
+					$user_ids = WP_Ulike_Pulse_Query::rebuild_likers_list(
+						$wpdb->prefix . $table_name,
+						$column_name,
+						$item_ID,
+						$max_likers
+					);
+				} else {
+					$table_escaped = esc_sql( $wpdb->prefix . $table_name );
+					$column_escaped = esc_sql( $column_name );
 
-				// Get distinct user IDs - JOIN ensures only valid users (not guests) are included
-				$user_ids = $wpdb->get_col( $wpdb->prepare(
-					"SELECT DISTINCT t.`user_id`
-					FROM `{$table_escaped}` t
-					INNER JOIN {$wpdb->users} u ON u.ID = t.`user_id`
-					WHERE t.`status` IN ('like', 'dislike')
-					AND t.`{$column_escaped}` = %d
-					LIMIT %d",
-					$item_ID,
-					$max_likers
-				) );
+					$user_ids = $wpdb->get_col( $wpdb->prepare(
+						"SELECT DISTINCT t.`user_id`
+						FROM `{$table_escaped}` t
+						INNER JOIN {$wpdb->users} u ON u.ID = t.`user_id`
+						WHERE t.`status` IN ('like', 'dislike')
+						AND t.`{$column_escaped}` = %d
+						LIMIT %d",
+						$item_ID,
+						$max_likers
+					) );
+				}
 
-				// Convert to comma-separated string for caching
 				$get_likers = ! empty( $user_ids ) ? implode( ',', $user_ids ) : '';
 
 				// Cache for 5 minutes
@@ -486,8 +505,11 @@ if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
 	 * @return bool
 	 */
 	function wp_ulike_is_user_liked( $item_ID, $user_ID,  $type = 'likeThis' ) {
+		if ( wp_ulike_use_pulse_queries() ) {
+			return WP_Ulike_Pulse_Query::is_user_liked( $item_ID, $user_ID, $type );
+		}
+
 		global $wpdb;
-		// Get ULike settings
 		$get_settings = wp_ulike_get_post_settings_by_type( $type );
 		$table_name = $wpdb->prefix . $get_settings['table'];
 
@@ -529,7 +551,7 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 
 		if( empty($user_info) || ! isset( $user_info[$parsed_args['item_id']] ) ){
-			if ( class_exists( 'WP_Ulike_Pulse_Reader' ) && wp_ulike_writes_pulse() ) {
+			if ( class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 				$user_status = WP_Ulike_Pulse_Reader::user_action(
 					$parsed_args['item_id'],
 					$parsed_args['current_user'],
@@ -576,7 +598,7 @@ if( ! function_exists( 'wp_ulike_get_user_latest_activity' ) ) {
 	 * @return array|null
 	 */
 	function wp_ulike_get_user_latest_activity( $item_id, $user_id, $type ) {
-		if ( class_exists( 'WP_Ulike_Pulse_Query' ) && 'legacy' !== wp_ulike_pulse_read_mode() ) {
+		if ( wp_ulike_use_pulse_queries() ) {
 			$row = WP_Ulike_Pulse_Query::get_user_latest_activity( $item_id, $user_id, $type );
 			if ( ! $row ) {
 				return null;
@@ -632,6 +654,10 @@ if( ! function_exists( 'wp_ulike_get_user_item_count_per_day' ) ) {
 	 * @return array
 	 */
 	function wp_ulike_get_user_item_count_per_day( $args ) {
+		if ( wp_ulike_use_pulse_queries() ) {
+			return WP_Ulike_Pulse_Query::count_user_votes_today( $args );
+		}
+
 		global $wpdb;
 
 		$defaults = array(
@@ -681,6 +707,11 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
      * @return object
      */
 	function wp_ulike_get_best_likers_info( $limit, $period, $offset = 1, $status = array( 'like', 'dislike' ), $order = 'DESC' ) {
+		if ( wp_ulike_use_pulse_queries() ) {
+			$results = WP_Ulike_Pulse_Query::get_best_likers( $limit, $period, $offset, $status, $order );
+			return is_array( $results ) ? $results : array();
+		}
+
 		global $wpdb;
 
 		$status = wp_ulike_normalize_vote_statuses( $status );
@@ -758,6 +789,10 @@ if( ! function_exists('wp_ulike_get_top_enagers_total_number') ){
 	 * @return integer
 	 */
     function wp_ulike_get_top_enagers_total_number( $period, $status = [ 'like', 'dislike' ] ){
+		if ( wp_ulike_use_pulse_queries() ) {
+			return WP_Ulike_Pulse_Query::count_unique_engagers( $period, $status );
+		}
+
         global $wpdb;
 
 		$status = wp_ulike_normalize_vote_statuses( $status );
@@ -808,6 +843,10 @@ if( ! function_exists('wp_ulike_get_user_data') ){
 	 * @return object|null
 	 */
 	function wp_ulike_get_user_data( $user_ID, $args = array() ){
+		if ( wp_ulike_use_pulse_queries() ) {
+			return WP_Ulike_Pulse_Query::get_user_data( $user_ID, $args );
+		}
+
 		global $wpdb;
 
 		$defaults = array(
@@ -870,6 +909,10 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 	 * @return array|null Array of user objects with activity data
 	 */
 	function wp_ulike_get_users( $args = array() ){
+		if ( wp_ulike_use_pulse_queries() ) {
+			return WP_Ulike_Pulse_Query::get_users( $args );
+		}
+
 		global $wpdb;
 
 		$defaults = array(
@@ -943,6 +986,19 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
+		if ( wp_ulike_use_pulse_queries() ) {
+			$cache_key   = 'get_rich_rating_value_' . $post_ID;
+			$cache_group = 'wp_ulike';
+			$rating      = wp_cache_get( $cache_key, $cache_group );
+
+			if ( false === $rating ) {
+				$rating = WP_Ulike_Pulse_Query::get_rating_value( $post_ID, $is_decimal );
+				wp_cache_add( $cache_key, $rating, $cache_group, HOUR_IN_SECONDS );
+			}
+
+			return apply_filters( 'wp_ulike_rating_value', $rating, $post_ID );
+		}
+
 		global $wpdb;
 		$cache_key = 'get_rich_rating_value_' . $post_ID;
 		$cache_group = 'wp_ulike';
@@ -1044,7 +1100,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 
         // Make a cachable query to get new like count from all tables
         if( false === $counter_value ){
-			if ( class_exists( 'WP_Ulike_Pulse_Query' ) && 'legacy' !== wp_ulike_pulse_read_mode() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				$counter_value = WP_Ulike_Pulse_Query::count_logs_for_mode( $period );
 			} else {
 				$period_limit = wp_ulike_get_period_limit_sql( $period );
@@ -1090,7 +1146,7 @@ if( ! function_exists('wp_ulike_count_current_fingerprint') ){
 		$settings       = wp_ulike_setting_type::get_instance( $type );
 
 		if ( false === $existing_count ) {
-			if ( class_exists( 'WP_Ulike_Pulse_Query' ) && 'legacy' !== wp_ulike_pulse_read_mode() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				$existing_count = WP_Ulike_Pulse_Query::count_fingerprint_votes( $current_fingerprint, $item_id, $type );
 			} else {
 				$table = $wpdb->prefix . $settings->getTableName();

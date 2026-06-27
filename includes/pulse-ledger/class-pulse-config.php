@@ -35,6 +35,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 			return array(
 				'mode'       => self::MODE_LEGACY,
 				'dual_since' => '',
+				'admin_ui'   => array(
+					'dismissed' => false,
+				),
 				'migration'  => array(
 					'status'  => 'idle',
 					'sources' => array(),
@@ -186,6 +189,51 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 			}
 
 			return 'done' !== self::get()['migration']['status'];
+		}
+
+		/**
+		 * Whether the Pulse Storage admin submenu should appear.
+		 *
+		 * @return bool
+		 */
+		public static function should_show_admin_menu() {
+			if ( self::is_admin_dismissed() ) {
+				return false;
+			}
+
+			$mode = self::mode();
+
+			if ( self::MODE_DUAL === $mode || self::needs_migration_ui() ) {
+				return true;
+			}
+
+			if ( self::MODE_PULSE === $mode && class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
+				return WP_Ulike_Pulse_Legacy_Cleanup::legacy_tables_exist();
+			}
+
+			return false;
+		}
+
+		/**
+		 * @return bool
+		 */
+		public static function is_admin_dismissed() {
+			return ! empty( self::get()['admin_ui']['dismissed'] );
+		}
+
+		/**
+		 * Hide Pulse Storage menu after migration cleanup or explicit dismiss.
+		 *
+		 * @return void
+		 */
+		public static function mark_admin_dismissed() {
+			self::update(
+				array(
+					'admin_ui' => array(
+						'dismissed' => true,
+					),
+				)
+			);
 		}
 	}
 }

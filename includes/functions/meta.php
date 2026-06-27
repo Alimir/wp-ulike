@@ -525,9 +525,14 @@ if( ! function_exists('wp_ulike_delete_vote_data') ){
 
 		// delete table values
 		$settings = wp_ulike_setting_type::get_instance( $type );
-		$table_name = esc_sql( $wpdb->prefix . $settings->getTableName() );
-		$column_name = esc_sql( $settings->getColumnName() );
-		$wpdb->query( $wpdb->prepare( "DELETE from `{$table_name}` WHERE `{$column_name}` = %d", $ID ) );
+
+		if ( class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
+			WP_Ulike_Pulse_Writer::delete_item_votes( $ID, $type );
+		} else {
+			$table_name = esc_sql( $wpdb->prefix . $settings->getTableName() );
+			$column_name = esc_sql( $settings->getColumnName() );
+			$wpdb->query( $wpdb->prepare( "DELETE from `{$table_name}` WHERE `{$column_name}` = %d", $ID ) );
+		}
 
 		// Fires after the post item has been deleted.
 		do_action( 'wp_ulike_delete_vote_data', $ID, $type, $settings );

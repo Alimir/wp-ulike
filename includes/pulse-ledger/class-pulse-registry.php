@@ -113,6 +113,35 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 		}
 
 		/**
+		 * Prefixed legacy vote log tables (single source for cross-table queries).
+		 *
+		 * @return string[]
+		 */
+		public static function log_table_names() {
+			$names = array();
+			foreach ( self::legacy_sources() as $source ) {
+				$names[] = $source['table'];
+			}
+			return $names;
+		}
+
+		/**
+		 * Legacy table suffix (without prefix) for a setting slug.
+		 *
+		 * @param string $type Setting slug or item type.
+		 * @return string|null
+		 */
+		public static function legacy_table_suffix( $type ) {
+			$source = self::legacy_source_for_type( $type );
+			if ( ! $source ) {
+				return null;
+			}
+
+			global $wpdb;
+			return str_replace( $wpdb->prefix, '', $source['table'] );
+		}
+
+		/**
 		 * @param string $type Setting slug or item type.
 		 * @return string[]
 		 */

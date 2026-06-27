@@ -91,7 +91,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			$table_escaped = esc_sql( $wpdb->prefix . $table );
 			$column_escaped = esc_sql( $column );
 
-			if ( class_exists( 'WP_Ulike_Pulse_Query' ) && 'legacy' !== wp_ulike_pulse_read_mode() ) {
+			if ( wp_ulike_use_pulse_queries() ) {
 				$counter_value = WP_Ulike_Pulse_Query::count_item_votes( $ID, $type, $status, $is_distinct, $date_range );
 			} else {
 				$counter_value  = $wpdb->get_var( $wpdb->prepare(

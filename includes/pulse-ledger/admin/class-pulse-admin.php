@@ -14,6 +14,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 	final class WP_Ulike_Pulse_Admin {
 
 		/**
+		 * Admin hook suffix from add_submenu_page().
+		 *
+		 * @var string
+		 */
+		private static $page_hook = '';
+
+		/**
 		 * @return void
 		 */
 		public static function init() {
@@ -28,8 +35,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 * @return void
 		 */
 		public static function register_menu() {
-			add_submenu_page(
-				'wp-ulike-stats',
+			if ( ! WP_Ulike_Pulse_Config::should_show_admin_menu() ) {
+				return;
+			}
+
+			self::$page_hook = add_submenu_page(
+				'wp-ulike-settings',
 				esc_html__( 'Pulse Storage', 'wp-ulike' ),
 				esc_html__( 'Pulse Storage', 'wp-ulike' ),
 				'manage_options',
@@ -43,7 +54,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 * @return void
 		 */
 		public static function enqueue_assets( $hook ) {
-			if ( 'wp-ulike_page_wp-ulike-pulse' !== $hook ) {
+			if ( self::$page_hook && self::$page_hook !== $hook ) {
+				return;
+			}
+
+			if ( ! self::$page_hook && false === strpos( $hook, 'wp-ulike-pulse' ) ) {
 				return;
 			}
 
@@ -61,15 +76,55 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 				array(
 					'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
 					'nonce'         => wp_create_nonce( 'wp_ulike_pulse_admin' ),
-					'isRunning'     => WP_Ulike_Pulse_Config::migration_running(),
-					'confirmEnable' => esc_html__( 'Switch to Pulse for all reads? Only do this after sync reaches 100%.', 'wp-ulike' ),
+					'isRunning'     => self::should_run_browser_batches(),
+					'syncComplete'  => WP_Ulike_Pulse_Sync::is_sync_complete(),
+					'isPulse'       => WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode(),
+					'confirmEnable' => esc_html__( 'Switch to Pulse for all reads? Your old tables are kept — nothing is deleted.', 'wp-ulike' ),
+					'confirmDrop'   => esc_html__( 'Permanently delete old like tables? This cannot be undone. Make sure you have a database backup.', 'wp-ulike' ),
+					'redirectUrl'   => admin_url( 'admin.php?page=wp-ulike-settings' ),
 					'strings'       => array(
 						'started'      => esc_html__( 'Sync started. You can leave this page — it will continue in the background.', 'wp-ulike' ),
-						'finished'     => esc_html__( 'Migration complete. Pulse is now used for all reads.', 'wp-ulike' ),
+						'syncComplete' => esc_html__( 'Copy complete. Click “Finish migration” below to start using Pulse for all reads.', 'wp-ulike' ),
+						'finished'     => esc_html__( 'All done. Pulse is now used for all reads.', 'wp-ulike' ),
+						'dropped'      => esc_html__( 'Old tables removed. Redirecting…', 'wp-ulike' ),
+						'dismissed'    => esc_html__( 'Done. Redirecting…', 'wp-ulike' ),
+						'dropFailed'   => esc_html__( 'Could not remove old tables. Please try again or use WP-CLI.', 'wp-ulike' ),
 						'enableFailed' => esc_html__( 'Could not finish migration yet. Please wait until sync reaches 100%.', 'wp-ulike' ),
+						'actionFailed' => esc_html__( 'Something went wrong. Please refresh the page and try again.', 'wp-ulike' ),
 					),
 				)
 			);
+		}
+
+		/**
+		 * Whether the browser should actively run sync batches on page load.
+		 *
+		 * @return bool
+		 */
+		private static function should_run_browser_batches() {
+			return WP_Ulike_Pulse_Config::migration_running() && ! WP_Ulike_Pulse_Sync::is_sync_complete();
+		}
+
+		/**
+		 * Human-readable migration status for the admin UI.
+		 *
+		 * @param string $status Raw status slug.
+		 * @param bool   $sync_complete Whether copy finished.
+		 * @return string
+		 */
+		public static function status_label( $status, $sync_complete ) {
+			if ( $sync_complete ) {
+				return esc_html__( 'Complete', 'wp-ulike' );
+			}
+
+			switch ( $status ) {
+				case 'running':
+					return esc_html__( 'Copying…', 'wp-ulike' );
+				case 'paused':
+					return esc_html__( 'Paused', 'wp-ulike' );
+				default:
+					return esc_html__( 'Not started', 'wp-ulike' );
+			}
 		}
 
 		/**
@@ -98,9 +153,22 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 				return;
 			}
 
-			$config   = WP_Ulike_Pulse_Config::get();
-			$progress = WP_Ulike_Pulse_Sync::get_progress();
-			$percent  = ! empty( $progress['total_legacy'] )
+			if ( ! WP_Ulike_Pulse_Config::should_show_admin_menu() ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=wp-ulike-settings' ) );
+				exit;
+			}
+
+			$progress        = WP_Ulike_Pulse_Sync::get_progress();
+			$config          = WP_Ulike_Pulse_Config::get();
+			$sync_status     = $config['migration']['status'] ?? 'idle';
+			$sync_complete   = WP_Ulike_Pulse_Sync::is_sync_complete( $progress ) || 'done' === $sync_status;
+			$is_running      = 'running' === $sync_status && ! $sync_complete;
+			$is_pulse        = WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode();
+			$status_label    = self::status_label( $sync_status, $sync_complete );
+			$legacy_tables   = class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ? WP_Ulike_Pulse_Legacy_Cleanup::existing_legacy_tables() : array();
+			$show_cleanup    = $is_pulse && ! empty( $legacy_tables );
+			$can_drop_legacy = $show_cleanup && WP_Ulike_Pulse_Legacy_Cleanup::can_drop_legacy();
+			$percent         = ! empty( $progress['total_legacy'] )
 				? min( 100, round( ( $progress['total_imported'] / $progress['total_legacy'] ) * 100, 1 ) )
 				: 100;
 
@@ -144,13 +212,20 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 */
 		public static function ajax_status() {
 			self::verify_ajax();
-			$config = WP_Ulike_Pulse_Config::get();
+			$progress      = WP_Ulike_Pulse_Sync::get_progress();
+			$config        = WP_Ulike_Pulse_Config::get();
+			$sync_status   = $config['migration']['status'] ?? 'idle';
+			$sync_complete = WP_Ulike_Pulse_Sync::is_sync_complete( $progress );
+
 			wp_send_json_success(
 				array(
 					'mode'              => WP_Ulike_Pulse_Config::mode(),
 					'read'              => WP_Ulike_Pulse_Config::read_mode(),
-					'migration_status'  => $config['migration']['status'] ?? 'idle',
-					'progress'          => WP_Ulike_Pulse_Sync::get_progress(),
+					'migration_status'  => $sync_status,
+					'sync_complete'     => $sync_complete,
+					'status_label'      => self::status_label( $sync_status, $sync_complete ),
+					'is_pulse'          => WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode(),
+					'progress'          => $progress,
 				)
 			);
 		}
@@ -165,6 +240,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 
 			switch ( $action ) {
 				case 'start':
+					if ( WP_Ulike_Pulse_Sync::is_sync_complete() ) {
+						wp_send_json_error( array( 'message' => 'already_complete' ) );
+					}
 					WP_Ulike_Pulse_Sync::start();
 					wp_send_json_success( array( 'message' => 'started' ) );
 					break;
@@ -184,7 +262,34 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 						wp_send_json_error( $verify );
 					}
 					WP_Ulike_Pulse_Config::switch_to_pulse();
-					wp_send_json_success( array( 'message' => 'pulse_enabled' ) );
+					wp_send_json_success(
+						array(
+							'message'       => 'pulse_enabled',
+							'show_cleanup'  => WP_Ulike_Pulse_Legacy_Cleanup::legacy_tables_exist(),
+						)
+					);
+					break;
+
+				case 'dismiss':
+					WP_Ulike_Pulse_Config::mark_admin_dismissed();
+					wp_send_json_success(
+						array(
+							'redirect' => admin_url( 'admin.php?page=wp-ulike-settings' ),
+						)
+					);
+					break;
+
+				case 'drop_legacy':
+					$result = WP_Ulike_Pulse_Legacy_Cleanup::drop_legacy_tables();
+					if ( empty( $result['ok'] ) ) {
+						wp_send_json_error( $result );
+					}
+					wp_send_json_success(
+						array(
+							'redirect' => admin_url( 'admin.php?page=wp-ulike-settings' ),
+							'dropped'  => $result['dropped'],
+						)
+					);
 					break;
 
 				default:

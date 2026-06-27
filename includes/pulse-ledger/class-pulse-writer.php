@@ -165,6 +165,43 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 		}
 
 		/**
+		 * Delete all vote rows for an item (post/comment cleanup).
+		 *
+		 * @param int    $item_id       Item ID.
+		 * @param string $setting_type  wp_ulike_setting_type slug.
+		 * @return void
+		 */
+		public static function delete_item_votes( $item_id, $setting_type ) {
+			global $wpdb;
+
+			$item_id   = absint( $item_id );
+			$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $setting_type );
+
+			if ( WP_Ulike_Pulse_Schema::table_exists() ) {
+				$wpdb->delete(
+					self::table(),
+					array(
+						'item_id'   => $item_id,
+						'item_type' => $item_type,
+					),
+					array( '%d', '%s' )
+				);
+			}
+
+			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( $setting_type );
+			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				$table  = esc_sql( $source['table'] );
+				$column = esc_sql( $source['column'] );
+				$wpdb->query(
+					$wpdb->prepare(
+						"DELETE FROM `{$table}` WHERE `{$column}` = %d",
+						$item_id
+					)
+				);
+			}
+		}
+
+		/**
 		 * @param array<string,mixed> $payload Raw payload.
 		 * @param bool                $distinct Distinct logging mode.
 		 * @return array<string,mixed>|null

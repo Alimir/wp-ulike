@@ -261,6 +261,10 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		// Ensure data_limit is a positive integer for safety
 		$data_limit = max( 1, absint( $data_limit ) );
 
+		if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+			return WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $table, $data_limit );
+		}
+
 		// Fetch the most recent date_time from the table
 		// MAX() query uses the date_time index efficiently (reverse index scan)
 		$table_escaped = esc_sql( $this->wpdb->prefix . $table );
@@ -356,12 +360,15 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			// Make a cachable query to get new like count from all tables
 			if( false === $counter_value ){
-				// CRITICAL FIX: Escape table name for security
-				$table_escaped = esc_sql( $this->wpdb->prefix . $table );
-				$query = "SELECT COUNT(*) FROM `{$table_escaped}` WHERE 1=1";
-				$query .= wp_ulike_get_period_limit_sql( $date );
+				if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+					$counter_value = WP_Ulike_Pulse_Query::count_logs_for_table( $table, $date );
+				} else {
+					$table_escaped = esc_sql( $this->wpdb->prefix . $table );
+					$query = "SELECT COUNT(*) FROM `{$table_escaped}` WHERE 1=1";
+					$query .= wp_ulike_get_period_limit_sql( $date );
 
-				$counter_value = $this->wpdb->get_var( $query );
+					$counter_value = $this->wpdb->get_var( $query );
+				}
 				wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 			}
 
@@ -652,20 +659,24 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			$union_parts = array();
 
-			foreach ( $tables as $table ) {
-				$table_escaped = esc_sql( $this->wpdb->prefix . $table );
-				$union_parts[] = "SELECT date_time FROM `{$table_escaped}` WHERE date_time >= NOW() - INTERVAL 30 DAY";
+			if ( function_exists( 'wp_ulike_use_pulse_queries' ) && wp_ulike_use_pulse_queries() ) {
+				$results = WP_Ulike_Pulse_Log_Bridge::get_peak_hours_rows( array_values( $tables ) );
+			} else {
+				foreach ( $tables as $table ) {
+					$table_escaped = esc_sql( $this->wpdb->prefix . $table );
+					$union_parts[] = "SELECT date_time FROM `{$table_escaped}` WHERE date_time >= NOW() - INTERVAL 30 DAY";
+				}
+
+				$query = sprintf(
+					"SELECT HOUR(date_time) AS hour_slot, COUNT(*) AS total_count
+					FROM ( %s ) AS combined
+					GROUP BY hour_slot
+					ORDER BY hour_slot ASC",
+					implode( ' UNION ALL ', $union_parts )
+				);
+
+				$results = $this->wpdb->get_results( $query );
 			}
-
-			$query = sprintf(
-				"SELECT HOUR(date_time) AS hour_slot, COUNT(*) AS total_count
-				FROM ( %s ) AS combined
-				GROUP BY hour_slot
-				ORDER BY hour_slot ASC",
-				implode( ' UNION ALL ', $union_parts )
-			);
-
-			$results = $this->wpdb->get_results( $query );
 			$hours   = array_fill( 0, 24, 0 );
 
 			if ( ! empty( $results ) ) {

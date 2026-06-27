@@ -18,6 +18,8 @@ require_once __DIR__ . '/class-pulse-reader.php';
 require_once __DIR__ . '/class-pulse-query.php';
 require_once __DIR__ . '/class-pulse-sync.php';
 require_once __DIR__ . '/class-pulse-sync-scheduler.php';
+require_once __DIR__ . '/class-pulse-legacy-cleanup.php';
+require_once __DIR__ . '/class-pulse-log-bridge.php';
 require_once __DIR__ . '/class-pulse-cli.php';
 
 if ( is_admin() && file_exists( __DIR__ . '/admin/class-pulse-admin.php' ) ) {
@@ -86,4 +88,13 @@ function wp_ulike_pulse_authoritative() {
  */
 function wp_ulike_pulse_needs_migration() {
 	return WP_Ulike_Pulse_Config::needs_migration_ui();
+}
+
+/**
+ * Route vote read queries through Pulse Ledger when loaded.
+ *
+ * @return bool
+ */
+function wp_ulike_use_pulse_queries() {
+	return class_exists( 'WP_Ulike_Pulse_Query' ) && WP_Ulike_Pulse_Query::available();
 }
