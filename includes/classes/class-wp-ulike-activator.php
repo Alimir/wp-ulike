@@ -29,10 +29,6 @@ class wp_ulike_activator {
 			return false;
 		}
 
-		if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
-			require_once WP_ULIKE_INC_DIR . '/pulse-ledger/bootstrap.php';
-		}
-
 		if ( ! WP_Ulike_Pulse_Schema::install() ) {
 			return false;
 		}

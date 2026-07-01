@@ -493,10 +493,6 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return array{tables_ok: bool, missing_tables: string[]}
 		 */
 		public static function repair_database_tables() {
-			if ( ! class_exists( 'wp_ulike_activator' ) ) {
-				require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-activator.php';
-			}
-
 			wp_ulike_activator::get_instance()->install_tables();
 			delete_transient( self::get_health_report_cache_key() );
 

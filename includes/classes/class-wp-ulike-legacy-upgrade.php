@@ -19,10 +19,6 @@ if ( ! class_exists( 'WP_Ulike_Legacy_Upgrade' ) ) {
 		 * @return bool
 		 */
 		public static function run() {
-			if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
-				require_once WP_ULIKE_INC_DIR . '/pulse-ledger/class-pulse-registry.php';
-			}
-
 			if ( ! self::has_legacy_tables() ) {
 				return true;
 			}

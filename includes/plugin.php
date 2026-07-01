@@ -59,10 +59,6 @@ class WpUlikeInit {
     $target = WP_ULIKE_DB_VERSION;
 
     if ( version_compare( $stored, '2.4', '<' ) ) {
-      if ( ! class_exists( 'WP_Ulike_Legacy_Upgrade' ) ) {
-        require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-legacy-upgrade.php';
-      }
-
       if ( false === WP_Ulike_Legacy_Upgrade::run() ) {
         if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
           error_log( sprintf( 'WP ULike: Legacy database upgrade failed. Current version: %s', $stored ) );
@@ -85,7 +81,6 @@ class WpUlikeInit {
       }
 
       update_option( 'wp_ulike_dbVersion', $target );
-      delete_option( 'wp_ulike_pulse_db_version' );
     }
 
     if ( ! WP_Ulike_Meta_Schema::table_exists() || ! WP_Ulike_Pulse_Schema::table_exists() ) {

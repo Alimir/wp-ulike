@@ -15,14 +15,10 @@ new wp_ulike_admin_pages();
 // Include assets
 new wp_ulike_admin_assets();
 
-// Trust, onboarding, health checks
-require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-overview.php';
-
-// Deactivation feedback (Plugins screen)
-require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-deactivation-feedback.php';
-
-// Welcome pointer after activation (admin menu)
-require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-activation-pointer.php';
+// Trust, onboarding, health checks (autoload + file-level init hooks).
+WP_Ulike_Overview::class;
+WP_Ulike_Deactivation_Feedback::class;
+WP_Ulike_Activation_Pointer::class;
 
 // include about menu functions
 require_once( WP_ULIKE_ADMIN_DIR . '/admin-functions.php');
