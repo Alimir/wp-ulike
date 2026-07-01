@@ -89,17 +89,13 @@ class wp_ulike_uninstall {
 	 * @return void
 	 */
 	public function clear_scheduled_tasks() {
-		$pulse_hook      = 'wp_ulike_pulse_sync_batch';
-		$pulse_group     = 'wp_ulike_pulse';
-		$migration_hook  = 'wp_ulike_engagement_migration_batch';
-		$migration_group = 'wp_ulike_engagement_migration';
+		$pulse_hook  = 'wp_ulike_pulse_sync_batch';
+		$pulse_group = 'wp_ulike_pulse';
 
 		wp_clear_scheduled_hook( $pulse_hook );
-		wp_clear_scheduled_hook( $migration_hook );
 
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
 			as_unschedule_all_actions( $pulse_hook, array(), $pulse_group );
-			as_unschedule_all_actions( $migration_hook, array(), $migration_group );
 		}
 	}
 
@@ -120,8 +116,7 @@ class wp_ulike_uninstall {
 			{$wpdb->prefix}ulike_activities,
 			{$wpdb->prefix}ulike_forums,
 			{$wpdb->prefix}ulike_meta,
-			{$wpdb->prefix}ulike_pulse,
-			{$wpdb->prefix}ulike_engagements"
+			{$wpdb->prefix}ulike_pulse"
 		);
 
 	}

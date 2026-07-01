@@ -1,12 +1,6 @@
 <?php
 /**
- * Pulse Ledger — table schema and installation.
- *
- * Optimized single-table design (CTO review vs original proposal):
- * - Fewer redundant indexes (removed overlapping vote/identity keys).
- * - idx_rankings covers period leaderboards with item_id suffix for sort stability.
- * - idx_item_active is the primary item counter / EXISTS lookup path.
- * - dedupe_token UNIQUE enforces one slot per voter+item in distinct mode.
+ * Pulse Ledger — ulike_pulse table schema only.
  *
  * @package WP_Ulike
  */
@@ -21,15 +15,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 
 		const TABLE_SUFFIX = 'ulike_pulse';
 
-		const DB_VERSION     = '1.0';
-		const VERSION_OPTION = 'wp_ulike_pulse_db_version';
-
 		const BATCH_SIZE_DEFAULT = 500;
 		const BATCH_SIZE_MIN     = 50;
 		const BATCH_SIZE_MAX     = 2000;
 
 		/**
-		 * @return string Full table name.
+		 * @return string Full pulse table name.
 		 */
 		public static function table() {
 			global $wpdb;
@@ -47,7 +38,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 		 * @return string CREATE TABLE SQL.
 		 */
 		public static function ddl() {
-			$table = self::table();
+			$table   = self::table();
 			$collate = '';
 
 			global $wpdb;
@@ -84,7 +75,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 		}
 
 		/**
-		 * Create or verify pulse table.
+		 * Create ulike_pulse when missing.
 		 *
 		 * @return bool
 		 */
@@ -107,29 +98,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 				return false;
 			}
 
-			update_option( self::VERSION_OPTION, self::DB_VERSION, false );
 			return (bool) $created;
 		}
 
 		/**
-		 * Create table on any request when missing (idempotent self-heal).
-		 *
-		 * @return void
-		 */
-		public static function ensure_installed() {
-			if ( self::table_exists() ) {
-				return;
-			}
-
-			if ( ! class_exists( 'wp_ulike_activator' ) ) {
-				require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-activator.php';
-			}
-
-			wp_ulike_activator::get_instance()->ensure_pulse_schema( false );
-		}
-
-		/**
-		 * Bootstrap storage mode after schema exists.
+		 * Bootstrap storage mode after pulse table exists.
 		 *
 		 * @param bool $is_fresh_install No prior wp_ulike_dbVersion.
 		 * @return void

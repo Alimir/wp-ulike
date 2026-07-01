@@ -49,39 +49,47 @@ class WpUlikeInit {
   }
 
   private function maybe_upgrade_database(){
-    $stored_version  = get_option( 'wp_ulike_dbVersion', false );
-    $current_version = false === $stored_version ? '2.0' : $stored_version;
-    $activator = wp_ulike_activator::get_instance();
+    $stored = get_option( 'wp_ulike_dbVersion', false );
 
-    // Define upgrade path with version and method mapping
-    $upgrades = array(
-      '2.1' => 'upgrade_0',
-      '2.2' => 'upgrade_1',
-      '2.3' => 'upgrade_2',
-      '2.4' => 'upgrade_3',
-    );
-
-    // Execute upgrades sequentially, stopping on failure
-    foreach ( $upgrades as $version => $method ) {
-      if ( version_compare( $current_version, $version, '<' ) ) {
-        $result = $activator->$method();
-        if ( false === $result ) {
-          if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-            error_log( sprintf( 'WP ULike: Database upgrade to version %s failed. Current version: %s', $version, $current_version ) );
-          }
-          break; // Stop on failure to prevent partial upgrades
-        }
-        // Update current version after successful upgrade
-        $current_version = $version;
-      }
+    // Fresh installs set wp_ulike_dbVersion during activation.
+    if ( false === $stored ) {
+      return;
     }
 
-    if ( version_compare( $current_version, '2.5', '<' ) ) {
-      if ( $activator->ensure_pulse_schema( false ) ) {
-        update_option( 'wp_ulike_dbVersion', '2.5' );
-      } elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-        error_log( 'WP ULike: Pulse schema upgrade to 2.5 failed. Will retry on next request.' );
+    $target = WP_ULIKE_DB_VERSION;
+
+    if ( version_compare( $stored, '2.4', '<' ) ) {
+      if ( ! class_exists( 'WP_Ulike_Legacy_Upgrade' ) ) {
+        require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-legacy-upgrade.php';
       }
+
+      if ( false === WP_Ulike_Legacy_Upgrade::run() ) {
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+          error_log( sprintf( 'WP ULike: Legacy database upgrade failed. Current version: %s', $stored ) );
+        }
+        return;
+      }
+
+      $stored = '2.4';
+      update_option( 'wp_ulike_dbVersion', $stored );
+    }
+
+    if ( version_compare( $stored, $target, '<' ) ) {
+      $activator = wp_ulike_activator::get_instance();
+
+      if ( false === $activator->install_tables( false, false ) ) {
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+          error_log( sprintf( 'WP ULike: Storage upgrade to %s failed. Current version: %s', $target, $stored ) );
+        }
+        return;
+      }
+
+      update_option( 'wp_ulike_dbVersion', $target );
+      delete_option( 'wp_ulike_pulse_db_version' );
+    }
+
+    if ( ! WP_Ulike_Meta_Schema::table_exists() || ! WP_Ulike_Pulse_Schema::table_exists() ) {
+      wp_ulike_activator::get_instance()->install_tables( false, false );
     }
   }
 
