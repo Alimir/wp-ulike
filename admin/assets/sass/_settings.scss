@@ -37,6 +37,11 @@
 		background: #fffbf0;
 	}
 
+	&.wp-ulike-notice-skin-upgrade {
+		border-left-color: #2271b1;
+		background: #f0f6fc;
+	}
+
 	&.wp-ulike-notice-skin-error {
 		border-left-color: #d63638;
 		background: #fcf0f1;
@@ -140,6 +145,10 @@
 
 		&.wp-ulike-notice-skin-info {
 			border-right-color: #dba617;
+		}
+
+		&.wp-ulike-notice-skin-upgrade {
+			border-right-color: #2271b1;
 		}
 
 		&.wp-ulike-notice-skin-error {

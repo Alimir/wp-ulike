@@ -58,6 +58,44 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 
 		<div class="wp-ulike-about__main">
 
+			<?php $storage_upgrade = $data['storage_upgrade'] ?? null; ?>
+			<?php if ( ! empty( $storage_upgrade ) ) : ?>
+				<?php
+				$task_modifier = 'cleanup' === ( $storage_upgrade['phase'] ?? '' )
+					? ' wp-ulike-about-card--task-cleanup'
+					: ' wp-ulike-about-card--task-optional';
+				?>
+				<div class="wp-ulike-about-card<?php echo esc_attr( $task_modifier ); ?>" role="region" aria-label="<?php echo esc_attr( $storage_upgrade['title'] ?? '' ); ?>">
+					<div class="wp-ulike-about-task__header">
+						<h2 class="wp-ulike-about-card__title"><?php echo esc_html( $storage_upgrade['title'] ?? '' ); ?></h2>
+					</div>
+					<?php if ( ! empty( $storage_upgrade['intro'] ) ) : ?>
+						<p class="wp-ulike-about-task__intro"><?php echo esc_html( $storage_upgrade['intro'] ); ?></p>
+					<?php endif; ?>
+					<?php if ( ! empty( $storage_upgrade['reassurance'] ) && is_array( $storage_upgrade['reassurance'] ) ) : ?>
+						<ul class="wp-ulike-about-task__reassurance">
+							<?php foreach ( $storage_upgrade['reassurance'] as $point ) : ?>
+								<li><?php echo esc_html( $point ); ?></li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+					<div class="wp-ulike-about-status wp-ulike-about-task__status" role="list">
+						<div class="wp-ulike-about-status__item wp-ulike-about-status__item--<?php echo esc_attr( $storage_upgrade['state'] ?? 'neutral' ); ?>" role="listitem">
+							<span class="wp-ulike-about-status__label"><?php esc_html_e( 'Status', 'wp-ulike' ); ?></span>
+							<span class="wp-ulike-about-status__value"><?php echo esc_html( $storage_upgrade['status'] ?? '' ); ?></span>
+							<?php if ( ! empty( $storage_upgrade['progress'] ) ) : ?>
+								<span class="wp-ulike-about-status__hint"><?php echo esc_html( $storage_upgrade['progress'] ); ?></span>
+							<?php endif; ?>
+						</div>
+					</div>
+					<p class="wp-ulike-about-task__actions">
+						<a class="button button-primary" href="<?php echo esc_url( $storage_upgrade['url'] ?? '#' ); ?>">
+							<?php echo esc_html( $storage_upgrade['cta_label'] ?? __( 'Open migration', 'wp-ulike' ) ); ?>
+						</a>
+					</p>
+				</div>
+			<?php endif; ?>
+
 			<!-- Status -->
 			<div class="wp-ulike-about-card">
 				<div class="wp-ulike-about-card__header">

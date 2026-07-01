@@ -36,7 +36,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 				'mode'       => self::MODE_LEGACY,
 				'dual_since' => '',
 				'admin_ui'   => array(
-					'dismissed' => false,
+					'dismissed'        => false,
+					'notice_dismissed' => false,
 				),
 				'migration'  => array(
 					'status'  => 'idle',
@@ -194,11 +195,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 		}
 
 		/**
-		 * Whether the Pulse Storage admin submenu should appear.
+		 * Whether storage-upgrade admin UI (Help card, task page) should appear.
 		 *
 		 * @return bool
 		 */
-		public static function should_show_admin_menu() {
+		public static function should_show_storage_upgrade_ui() {
 			if ( self::is_admin_dismissed() ) {
 				return false;
 			}
@@ -219,12 +220,34 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 		/**
 		 * @return bool
 		 */
+		public static function is_notice_dismissed() {
+			return ! empty( self::get()['admin_ui']['notice_dismissed'] );
+		}
+
+		/**
+		 * Hide the global admin notice only (Help card and task page stay available).
+		 *
+		 * @return void
+		 */
+		public static function mark_notice_dismissed() {
+			self::update(
+				array(
+					'admin_ui' => array(
+						'notice_dismissed' => true,
+					),
+				)
+			);
+		}
+
+		/**
+		 * @return bool
+		 */
 		public static function is_admin_dismissed() {
 			return ! empty( self::get()['admin_ui']['dismissed'] );
 		}
 
 		/**
-		 * Hide Pulse Storage menu after migration cleanup or explicit dismiss.
+		 * Hide storage-upgrade admin UI after cleanup or explicit dismiss.
 		 *
 		 * @return void
 		 */

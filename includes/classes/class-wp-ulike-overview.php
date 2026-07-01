@@ -213,6 +213,21 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				);
 			}
 
+			if ( class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
+				$storage_upgrade = WP_Ulike_Pulse_Admin::get_help_card_data();
+				if ( ! empty( $storage_upgrade ) && 'migrate' === ( $storage_upgrade['phase'] ?? '' ) ) {
+					$status_rows[] = array(
+						'group'  => 'setup',
+						'label'  => esc_html__( 'Like storage', 'wp-ulike' ),
+						'value'  => $storage_upgrade['status'] ?? '',
+						'state'  => $storage_upgrade['state'] ?? 'neutral',
+						'hint'   => $storage_upgrade['progress'] ?? '',
+					);
+				}
+			} else {
+				$storage_upgrade = null;
+			}
+
 			$status_rows = apply_filters( 'wp_ulike_about_status_rows', $status_rows, $health );
 
 			// Supplementary setup hint last (free installs with no votes yet).
@@ -280,6 +295,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			$summary = apply_filters( 'wp_ulike_about_summary', self::get_overview_summary( $health ), $health );
 
+			if ( ! isset( $storage_upgrade ) ) {
+				$storage_upgrade = class_exists( 'WP_Ulike_Pulse_Admin' ) ? WP_Ulike_Pulse_Admin::get_help_card_data() : null;
+			}
+
 			return array(
 				'health'                 => $health,
 				'is_pro'                 => $is_pro,
@@ -289,6 +308,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'quick_actions'          => $quick_actions,
 				'pro_modules'            => $pro_modules,
 				'status_rows'            => $status_rows,
+				'storage_upgrade'        => $storage_upgrade,
 				'help_links'             => $help_links,
 				'troubleshooting'        => self::get_troubleshooting_tips( $health ),
 				'sidebar_meta'           => apply_filters( 'wp_ulike_about_sidebar_meta', self::get_default_sidebar_meta( $health ), $health ),

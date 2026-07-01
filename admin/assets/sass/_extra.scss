@@ -259,3 +259,28 @@
     }
   }
 }
+
+// Help + storage upgrade: hide stacked admin notices (all plugins) above page content.
+body:has(.wp-ulike-about),
+body:has(.wp-ulike-pulse-upgrade) {
+  #wpbody-content {
+    .notice,
+    .updated,
+    .error,
+    .warning,
+    .info,
+    .is-dismissible,
+    .wp-ulike-notice {
+      display: none !important;
+    }
+  }
+}
+
+// Keep import/repair flash messages inside the Help template.
+body:has(.wp-ulike-about) .wrap.wp-ulike-about {
+  .notice,
+  .updated,
+  .error {
+    display: block !important;
+  }
+}

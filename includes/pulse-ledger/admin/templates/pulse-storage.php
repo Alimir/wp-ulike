@@ -1,6 +1,6 @@
 <?php
 /**
- * Pulse Storage admin template.
+ * Storage upgrade admin template.
  *
  * @var array  $progress
  * @var float  $percent
@@ -14,24 +14,25 @@
  * @var bool   $show_cleanup
  * @var bool   $can_drop_legacy
  * @var array  $legacy_tables
+ * @var string $page_title
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$can_enable  = ! $is_pulse;
-$show_start  = ! $sync_complete && ! $is_pulse;
+$can_enable   = ! $is_pulse;
+$show_start   = ! $sync_complete && ! $is_pulse;
 $show_migrate = ! $is_pulse;
 ?>
-<div class="wrap">
-	<h1><?php esc_html_e( 'Pulse Storage', 'wp-ulike' ); ?></h1>
+<div class="wrap wp-ulike-pulse-upgrade">
+	<h1><?php echo esc_html( $page_title ); ?></h1>
 
 	<?php if ( $show_cleanup ) : ?>
-	<p><?php esc_html_e( 'Migration is complete. Pulse is now your active storage. You can optionally remove the old like tables to free disk space.', 'wp-ulike' ); ?></p>
+	<p><?php esc_html_e( 'The upgrade is complete. Your likes now use the faster storage. You can optionally remove the old like tables to free disk space.', 'wp-ulike' ); ?></p>
 
 	<div class="notice notice-success inline" style="max-width:560px;margin-top:1.5em;padding:12px;">
-		<p style="margin:0;"><?php esc_html_e( 'Pulse is active. All likes are read from the new storage.', 'wp-ulike' ); ?></p>
+		<p style="margin:0;"><?php esc_html_e( 'Faster storage is active. All likes are read from the new table.', 'wp-ulike' ); ?></p>
 	</div>
 
 	<?php if ( $can_drop_legacy ) : ?>
@@ -65,14 +66,18 @@ $show_migrate = ! $is_pulse;
 	</p>
 	<?php endif; ?>
 
+	<p class="description" style="max-width:560px;margin-top:0.5em;">
+		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php esc_html_e( '← Back to Help', 'wp-ulike' ); ?></a>
+	</p>
+
 	<?php else : ?>
-	<p><?php esc_html_e( 'Pulse stores likes in a single, faster table. Your site keeps working while old data is copied over — safely and in the background. Nothing is deleted.', 'wp-ulike' ); ?></p>
+	<p><?php esc_html_e( 'Likes are stored in a single, faster table. Your site keeps working while old data is copied over — safely and in the background. Nothing is deleted, and you can leave this page at any time.', 'wp-ulike' ); ?></p>
 
 	<?php if ( $sync_complete && ! $is_pulse ) : ?>
 	<div class="notice notice-success inline" id="wp-ulike-pulse-next-step" style="max-width:560px;margin-top:1.5em;padding:12px;">
 		<p style="margin:0;">
 			<strong><?php esc_html_e( 'Copy complete.', 'wp-ulike' ); ?></strong>
-			<?php esc_html_e( 'One last step: click “Finish migration” to use Pulse for all reads. Your old tables stay in place.', 'wp-ulike' ); ?>
+			<?php esc_html_e( 'One last step: click “Finish upgrade” to use the faster storage for all reads. Your old tables stay in place.', 'wp-ulike' ); ?>
 		</p>
 	</div>
 	<?php elseif ( $is_running ) : ?>
@@ -101,7 +106,7 @@ $show_migrate = ! $is_pulse;
 	<p class="submit" style="margin-top:1.5em;">
 		<?php if ( $show_start ) : ?>
 		<button type="button" class="button button-primary" id="wp-ulike-pulse-start" <?php disabled( $is_running ); ?>>
-			<?php esc_html_e( 'Start sync', 'wp-ulike' ); ?>
+			<?php esc_html_e( 'Start copy', 'wp-ulike' ); ?>
 		</button>
 		<?php endif; ?>
 		<button type="button" class="button" id="wp-ulike-pulse-pause" <?php disabled( ! $is_running ); ?><?php echo $show_start ? '' : ' style="display:none;"'; ?>>
@@ -109,9 +114,12 @@ $show_migrate = ! $is_pulse;
 		</button>
 		<?php if ( $can_enable ) : ?>
 		<button type="button" class="button<?php echo $sync_complete ? ' button-primary' : ''; ?>" id="wp-ulike-pulse-enable" <?php disabled( ! $sync_complete ); ?>>
-			<?php esc_html_e( 'Finish migration', 'wp-ulike' ); ?>
+			<?php esc_html_e( 'Finish upgrade', 'wp-ulike' ); ?>
 		</button>
 		<?php endif; ?>
+	</p>
+	<p class="description" style="max-width:560px;margin-top:0.5em;">
+		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php esc_html_e( '← Back to Help', 'wp-ulike' ); ?></a>
 	</p>
 	<?php endif; ?>
 

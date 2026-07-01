@@ -96,7 +96,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 
 				case 'dismiss':
 					WP_Ulike_Pulse_Config::mark_admin_dismissed();
-					WP_CLI::success( 'Pulse Storage admin menu hidden.' );
+					WP_CLI::success( 'Storage upgrade admin UI hidden.' );
 					break;
 
 				case 'status':
