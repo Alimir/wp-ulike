@@ -250,20 +250,15 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @return String
 		 */
 	public function select_data( $table ) {
-		$data_limit = max( 1, absint( apply_filters( 'wp_ulike_stats_data_limit', 30 ) ) );
-		$cache_key  = wp_ulike_query_cache_key(
-			sprintf( 'stats_chart_%s_%d', sanitize_key( $table ), $data_limit )
+		$data_limit  = max( 1, absint( apply_filters( 'wp_ulike_stats_data_limit', 30 ) ) );
+		$logical_key = sprintf( 'stats_chart_%s_%d', sanitize_key( $table ), $data_limit );
+
+		return WP_Ulike_Query_Cache::remember(
+			$logical_key,
+			static function () use ( $table, $data_limit ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $table, $data_limit );
+			}
 		);
-		$cached     = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
-
-		if ( false !== $cached ) {
-			return $cached;
-		}
-
-		$result = WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $table, $data_limit );
-		wp_cache_set( $cache_key, $result, WP_ULIKE_SLUG, 300 );
-
-		return $result;
 	}
 
 		/**
@@ -295,30 +290,33 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$parsed_args = wp_parse_args( $args, $defaults );
 
 			// Extract variables
-			$table = isset( $parsed_args['table'] ) ? $parsed_args['table'] : 'ulike';
-			$date = isset( $parsed_args['date'] ) ? $parsed_args['date'] : 'all';
+			$table       = isset( $parsed_args['table'] ) ? $parsed_args['table'] : 'ulike';
+			$date        = isset( $parsed_args['date'] ) ? $parsed_args['date'] : 'all';
+			$logical_key = sprintf(
+				'count_logs_for_%s_table_in_%s_daterange',
+				$table,
+				is_array( $date ) ? implode( '_', $date ) : $date
+			);
 
-			$cache_key = wp_ulike_query_cache_key( sprintf( 'count_logs_for_%s_table_in_%s_daterange', $table, is_array($date) ? implode('_', $date) : $date ) );
-
-			if( $date === 'all' ){
-				$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
-				if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
-					return absint($count_all_logs);
+			if ( 'all' === $date ) {
+				$count_all_logs = WP_Ulike_Query_Cache::get_statistics_meta( $logical_key );
+				if ( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ) {
+					return absint( $count_all_logs );
 				}
 			}
 
-			$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+			$counter_value = WP_Ulike_Query_Cache::remember(
+				$logical_key,
+				static function () use ( $table, $date ) {
+					return WP_Ulike_Pulse_Query::count_logs_for_table( $table, $date );
+				}
+			);
 
-			if ( false === $counter_value ) {
-				$counter_value = WP_Ulike_Pulse_Query::count_logs_for_table( $table, $date );
-				wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+			if ( 'all' === $date ) {
+				WP_Ulike_Query_Cache::set_statistics_meta( $logical_key, $counter_value );
 			}
 
-			if( $date === 'all' ){
-				wp_ulike_update_meta_data( 1, 'statistics', $cache_key, $counter_value );
-			}
-
-	        return  empty( $counter_value ) ? 0 : absint( $counter_value );
+			return empty( $counter_value ) ? 0 : absint( $counter_value );
 		}
 
 		/**
@@ -592,8 +590,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				return array();
 			}
 
-			$cache_key = wp_ulike_query_cache_key( 'stats_peak_hours_' . md5( implode( ',', array_values( $tables ) ) ) );
-			$cached    = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+			$logical_key = 'stats_peak_hours_' . md5( implode( ',', array_values( $tables ) ) );
+			$cached      = WP_Ulike_Query_Cache::get( $logical_key );
 
 			if ( false !== $cached ) {
 				return $cached;
@@ -620,7 +618,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				);
 			}
 
-			wp_cache_set( $cache_key, $data, WP_ULIKE_SLUG, 15 * MINUTE_IN_SECONDS );
+			WP_Ulike_Query_Cache::set( $logical_key, $data, WP_Ulike_Query_Cache::TTL_PEAK_HOURS );
 
 			return $data;
 		}

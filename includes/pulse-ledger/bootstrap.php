@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/class-pulse-vote-map.php';
 require_once __DIR__ . '/class-pulse-registry.php';
 require_once __DIR__ . '/class-pulse-config.php';
+require_once __DIR__ . '/class-wp-ulike-query-cache.php';
 require_once __DIR__ . '/class-pulse-schema.php';
 require_once __DIR__ . '/class-pulse-writer.php';
 require_once __DIR__ . '/class-pulse-reader.php';
@@ -33,9 +34,9 @@ if ( is_admin() && class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 	WP_Ulike_Pulse_Admin::init();
 }
 
-add_action( 'wp_ulike_data_inserted', 'wp_ulike_pulse_bump_cache', 10, 1 );
-add_action( 'wp_ulike_data_updated', 'wp_ulike_pulse_bump_cache', 10, 1 );
-add_action( 'wp_ulike_delete_vote_data', 'wp_ulike_pulse_bump_cache', 10, 1 );
+add_action( 'wp_ulike_data_inserted', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 1 );
+add_action( 'wp_ulike_data_updated', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 1 );
+add_action( 'wp_ulike_delete_vote_data', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 1 );
 
 /**
  * Current query-cache generation (incremented on live writes and cutover).
@@ -43,7 +44,7 @@ add_action( 'wp_ulike_delete_vote_data', 'wp_ulike_pulse_bump_cache', 10, 1 );
  * @return int
  */
 function wp_ulike_pulse_cache_version() {
-	return (int) get_option( 'wp_ulike_pulse_cache_ver', 1 );
+	return WP_Ulike_Query_Cache::version();
 }
 
 /**
@@ -53,18 +54,7 @@ function wp_ulike_pulse_cache_version() {
  * @return string
  */
 function wp_ulike_query_cache_key( $key ) {
-	$key = sanitize_key( (string) $key );
-
-	$scope = wp_ulike_pulse_mode() . '_' . wp_ulike_pulse_read_mode();
-
-	if ( WP_Ulike_Pulse_Config::MODE_DUAL === wp_ulike_pulse_mode() ) {
-		$since = WP_Ulike_Pulse_Config::dual_since();
-		if ( $since ) {
-			$scope .= '_' . substr( md5( $since ), 0, 8 );
-		}
-	}
-
-	return 'pv' . wp_ulike_pulse_cache_version() . '_' . $scope . '_' . $key;
+	return WP_Ulike_Query_Cache::key( $key );
 }
 
 /**
@@ -73,11 +63,7 @@ function wp_ulike_query_cache_key( $key ) {
  * @return bool
  */
 function wp_ulike_pulse_defer_cache_bump() {
-	if ( class_exists( 'WP_Ulike_Pulse_Writer' ) && WP_Ulike_Pulse_Writer::is_migrating() ) {
-		return true;
-	}
-
-	return WP_Ulike_Pulse_Config::migration_running();
+	return WP_Ulike_Query_Cache::should_defer_bump();
 }
 
 /**
@@ -86,12 +72,7 @@ function wp_ulike_pulse_defer_cache_bump() {
  * @return void
  */
 function wp_ulike_pulse_bump_cache() {
-	if ( wp_ulike_pulse_defer_cache_bump() ) {
-		return;
-	}
-
-	update_option( 'wp_ulike_pulse_cache_ver', wp_ulike_pulse_cache_version() + 1, false );
-	delete_transient( 'wp_ulike_global_avg_likes' );
+	WP_Ulike_Query_Cache::bump();
 }
 
 /**
@@ -100,12 +81,7 @@ function wp_ulike_pulse_bump_cache() {
  * @return void
  */
 function wp_ulike_pulse_flush_cache() {
-	update_option( 'wp_ulike_pulse_cache_ver', wp_ulike_pulse_cache_version() + 1, false );
-	delete_transient( 'wp_ulike_global_avg_likes' );
-
-	if ( function_exists( 'wp_cache_flush_group' ) ) {
-		wp_cache_flush_group( WP_ULIKE_SLUG );
-	}
+	WP_Ulike_Query_Cache::flush();
 }
 
 /**
