@@ -36,8 +36,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 				'mode'       => self::MODE_LEGACY,
 				'dual_since' => '',
 				'admin_ui'   => array(
-					'dismissed'        => false,
-					'notice_dismissed' => false,
+					'dismissed' => false,
 				),
 				'migration'  => array(
 					'status'  => 'idle',
@@ -215,28 +214,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 			}
 
 			return false;
-		}
-
-		/**
-		 * @return bool
-		 */
-		public static function is_notice_dismissed() {
-			return ! empty( self::get()['admin_ui']['notice_dismissed'] );
-		}
-
-		/**
-		 * Hide the global admin notice only (Help card and task page stay available).
-		 *
-		 * @return void
-		 */
-		public static function mark_notice_dismissed() {
-			self::update(
-				array(
-					'admin_ui' => array(
-						'notice_dismissed' => true,
-					),
-				)
-			);
 		}
 
 		/**

@@ -462,55 +462,34 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 
 			if ( $complete ) {
 				$parts = array(
-					sprintf(
-						/* translators: %s: number of rows copied */
-						__( '%s rows copied', 'wp-ulike' ),
-						number_format_i18n( $imported )
-					),
+					sprintf( '%s rows copied', number_format_i18n( $imported ) ),
 				);
 
 				if ( $skipped > 0 ) {
-					$parts[] = sprintf(
-						/* translators: %s: number of skipped rows */
-						__( '%s skipped', 'wp-ulike' ),
-						number_format_i18n( $skipped )
-					);
+					$parts[] = sprintf( '%s skipped', number_format_i18n( $skipped ) );
 				}
 
 				if ( $failed > 0 ) {
-					$parts[] = sprintf(
-						/* translators: %s: number of rows that could not be imported */
-						__( '%s failed', 'wp-ulike' ),
-						number_format_i18n( $failed )
-					);
+					$parts[] = sprintf( '%s failed', number_format_i18n( $failed ) );
 				}
 
-				return implode( ', ', $parts ) . ' · ' . __( 'complete', 'wp-ulike' );
+				return implode( ', ', $parts ) . ' · complete';
 			}
 
 			if ( $skipped > 0 ) {
 				$label = sprintf(
-					/* translators: 1: imported rows, 2: skipped rows */
-					__( '%1$s rows copied (%2$s skipped)', 'wp-ulike' ),
+					'%1$s rows copied (%2$s skipped)',
 					number_format_i18n( $imported ),
 					number_format_i18n( $skipped )
 				);
 			} elseif ( $processed > 0 || $imported > 0 ) {
-				$label = sprintf(
-					/* translators: %s: number of rows copied */
-					__( '%s rows copied', 'wp-ulike' ),
-					number_format_i18n( $imported )
-				);
+				$label = sprintf( '%s rows copied', number_format_i18n( $imported ) );
 			} else {
-				$label = __( 'Waiting to start…', 'wp-ulike' );
+				$label = 'Waiting to start…';
 			}
 
 			if ( $percent > 0 && $percent < 100 ) {
-				$label .= sprintf(
-					/* translators: %s: estimated completion percentage */
-					__( ' · ~%s%% estimated', 'wp-ulike' ),
-					number_format_i18n( $percent, 1 )
-				);
+				$label .= sprintf( ' · ~%s%% estimated', number_format_i18n( $percent, 1 ) );
 			}
 
 			return $label;

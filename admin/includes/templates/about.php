@@ -90,7 +90,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 					</div>
 					<p class="wp-ulike-about-task__actions">
 						<a class="button button-primary" href="<?php echo esc_url( $storage_upgrade['url'] ?? '#' ); ?>">
-							<?php echo esc_html( $storage_upgrade['cta_label'] ?? __( 'Open migration', 'wp-ulike' ) ); ?>
+							<?php echo esc_html( $storage_upgrade['cta_label'] ?? 'Get started' ); ?>
 						</a>
 					</p>
 				</div>

@@ -30,8 +30,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 			add_action( 'wp_ajax_wp_ulike_pulse_sync_status', array( __CLASS__, 'ajax_status' ) );
 			add_action( 'wp_ajax_wp_ulike_pulse_sync_action', array( __CLASS__, 'ajax_action' ) );
-			add_action( 'admin_notices', array( __CLASS__, 'migration_notice' ) );
-			add_action( 'admin_post_wp_ulike_dismiss_storage_upgrade', array( __CLASS__, 'handle_dismiss_request' ) );
+			add_action( 'admin_notices', array( __CLASS__, 'storage_upgrade_notice' ) );
 		}
 
 		/**
@@ -40,7 +39,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 * @return string
 		 */
 		public static function get_page_title() {
-			return __( 'Copy likes to faster storage', 'wp-ulike' );
+			return 'Copy likes to faster storage';
 		}
 
 		/**
@@ -48,16 +47,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 */
 		public static function get_page_url() {
 			return admin_url( 'admin.php?page=' . self::PAGE_SLUG );
-		}
-
-		/**
-		 * @return string
-		 */
-		public static function get_dismiss_url() {
-			return wp_nonce_url(
-				admin_url( 'admin-post.php?action=wp_ulike_dismiss_storage_upgrade' ),
-				'wp_ulike_dismiss_storage_upgrade'
-			);
 		}
 
 		/**
@@ -93,9 +82,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 * @return bool
 		 */
 		public static function should_show_notice() {
-			return current_user_can( 'manage_options' )
-				&& wp_ulike_pulse_needs_migration()
-				&& ! WP_Ulike_Pulse_Config::is_notice_dismissed();
+			return current_user_can( 'manage_options' ) && wp_ulike_pulse_needs_migration();
 		}
 
 		/**
@@ -118,27 +105,27 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 
 			if ( $is_pulse ) {
 				return array(
-					'phase'         => 'cleanup',
-					'title'         => __( 'Optional cleanup', 'wp-ulike' ),
-					'intro'         => __( 'Your likes already use the faster storage. You can optionally remove the old like tables to free disk space — only if you want to.', 'wp-ulike' ),
-					'reassurance'   => array(
-						__( 'Nothing else is required for WP ULike to work.', 'wp-ulike' ),
-						__( 'Old tables are kept until you explicitly remove them.', 'wp-ulike' ),
-						__( 'Make a database backup before deleting anything.', 'wp-ulike' ),
+					'phase'       => 'cleanup',
+					'title'       => 'Free up disk space',
+					'intro'       => 'Your likes already use the faster storage. Remove the old like tables when you are ready to reclaim disk space.',
+					'reassurance' => array(
+						'WP ULike is fully working with the new storage.',
+						'Old tables stay until you remove them.',
+						'Back up your database before deleting anything.',
 					),
-					'status'        => __( 'Upgrade complete', 'wp-ulike' ),
-					'progress'      => '',
-					'state'         => 'good',
-					'cta_label'     => __( 'Review cleanup options', 'wp-ulike' ),
-					'url'           => self::get_page_url(),
+					'status'      => 'Upgrade complete',
+					'progress'    => '',
+					'state'       => 'good',
+					'cta_label'   => 'Review cleanup',
+					'url'         => self::get_page_url(),
 				);
 			}
 
-			$cta_label = __( 'Open migration', 'wp-ulike' );
+			$cta_label = 'Get started';
 			if ( 'running' === $sync_status && ! $sync_complete ) {
-				$cta_label = __( 'Continue migration', 'wp-ulike' );
+				$cta_label = 'Continue';
 			} elseif ( $sync_complete ) {
-				$cta_label = __( 'Finish upgrade', 'wp-ulike' );
+				$cta_label = 'Finish upgrade';
 			}
 
 			$state = 'neutral';
@@ -153,11 +140,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			return array(
 				'phase'       => 'migrate',
 				'title'       => self::get_page_title(),
-				'intro'       => __( 'WP ULike can copy your existing likes into a faster table. Your like buttons and counts keep working exactly as they do now.', 'wp-ulike' ),
+				'intro'       => 'We recommend copying your existing likes to a faster table — especially on busy sites. Your like buttons and counts keep working exactly as they do now.',
 				'reassurance' => array(
-					__( 'Nothing is deleted — old data stays until you choose otherwise.', 'wp-ulike' ),
-					__( 'The copy runs in the background; your site stays online.', 'wp-ulike' ),
-					__( 'You can skip this entirely with no impact on likes.', 'wp-ulike' ),
+					'Nothing is deleted — old data stays until you choose otherwise.',
+					'The copy runs in the background; your site stays online.',
+					'Like buttons and counts are unchanged throughout.',
 				),
 				'status'      => $status_label,
 				'progress'    => $progress_label,
@@ -197,26 +184,26 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 					'isRunning'     => self::should_run_browser_batches(),
 					'syncComplete'  => WP_Ulike_Pulse_Sync::is_sync_complete(),
 					'isPulse'       => WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode(),
-					'confirmEnable' => esc_html__( 'Switch to the faster storage for all reads? Your old tables are kept — nothing is deleted.', 'wp-ulike' ),
-					'confirmDrop'   => esc_html__( 'Permanently delete old like tables? This cannot be undone. Make sure you have a database backup.', 'wp-ulike' ),
+					'confirmEnable' => 'Switch to the faster storage for all reads? Your old tables are kept — nothing is deleted.',
+					'confirmDrop'   => 'Permanently delete old like tables? This cannot be undone. Make sure you have a database backup.',
 					'redirectUrl'   => self::get_help_url(),
 					'strings'       => array(
-						'started'                 => esc_html__( 'Copy started. You can leave this page — it will continue in the background.', 'wp-ulike' ),
-						'syncComplete'            => esc_html__( 'Copy complete. Click “Finish upgrade” below to start using the faster storage for all reads.', 'wp-ulike' ),
-						'finished'                => esc_html__( 'All done. Your likes now use the faster storage.', 'wp-ulike' ),
-						'dropped'                 => esc_html__( 'Old tables removed. Redirecting…', 'wp-ulike' ),
-						'dismissed'               => esc_html__( 'Done. Redirecting…', 'wp-ulike' ),
-						'dropFailed'              => esc_html__( 'Could not remove old tables. Please try again or use WP-CLI.', 'wp-ulike' ),
-						'enableFailed'            => esc_html__( 'Could not finish the upgrade yet. Please wait until the copy is complete.', 'wp-ulike' ),
-						'enableVerifyFailed'      => esc_html__( 'Copy finished but verification failed. Run “wp ulike pulse verify” for details, or contact support if failed rows are reported.', 'wp-ulike' ),
-						'enableSyncIncomplete'    => esc_html__( 'Copy is not finished yet. Wait until status shows Complete, or run “wp ulike pulse sync”.', 'wp-ulike' ),
-						'actionFailed'            => esc_html__( 'Something went wrong. Please refresh the page and try again.', 'wp-ulike' ),
-						'progressWaiting'         => esc_html__( 'Waiting to start…', 'wp-ulike' ),
-						'progressCopied'          => esc_html__( '%1$s rows copied', 'wp-ulike' ),
-						'progressCopiedSkipped'   => esc_html__( '%1$s rows copied (%2$s skipped)', 'wp-ulike' ),
-						'progressComplete'        => esc_html__( '%1$s rows copied · complete', 'wp-ulike' ),
-						'progressCompleteSkipped' => esc_html__( '%1$s rows copied (%2$s skipped) · complete', 'wp-ulike' ),
-						'progressEstimated'       => esc_html__( ' · ~%s%% estimated', 'wp-ulike' ),
+						'started'                 => 'Copy started. You can leave this page — it will continue in the background.',
+						'syncComplete'            => 'Copy complete. Click “Finish upgrade” below to start using the faster storage for all reads.',
+						'finished'                => 'All done. Your likes now use the faster storage.',
+						'dropped'                 => 'Old tables removed. Redirecting…',
+						'dismissed'               => 'Done. Redirecting…',
+						'dropFailed'              => 'Could not remove old tables. Please try again or use WP-CLI.',
+						'enableFailed'            => 'Could not finish the upgrade yet. Please wait until the copy is complete.',
+						'enableVerifyFailed'      => 'Copy finished but verification failed. Run “wp ulike pulse verify” for details, or contact support if failed rows are reported.',
+						'enableSyncIncomplete'    => 'Copy is not finished yet. Wait until status shows Complete, or run “wp ulike pulse sync”.',
+						'actionFailed'            => 'Something went wrong. Please refresh the page and try again.',
+						'progressWaiting'         => 'Waiting to start…',
+						'progressCopied'          => '%1$s rows copied',
+						'progressCopiedSkipped'   => '%1$s rows copied (%2$s skipped)',
+						'progressComplete'        => '%1$s rows copied · complete',
+						'progressCompleteSkipped' => '%1$s rows copied (%2$s skipped) · complete',
+						'progressEstimated'       => ' · ~%s%% estimated',
 					),
 				)
 			);
@@ -232,7 +219,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		}
 
 		/**
-		 * Human-readable migration status for the admin UI.
+		 * Human-readable copy status for the admin UI.
 		 *
 		 * @param string $status Raw status slug.
 		 * @param bool   $sync_complete Whether copy finished.
@@ -240,65 +227,45 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 */
 		public static function status_label( $status, $sync_complete ) {
 			if ( $sync_complete ) {
-				return esc_html__( 'Complete', 'wp-ulike' );
+				return 'Complete';
 			}
 
 			switch ( $status ) {
 				case 'running':
-					return esc_html__( 'Copying…', 'wp-ulike' );
+					return 'Copying…';
 				case 'paused':
-					return esc_html__( 'Paused', 'wp-ulike' );
+					return 'Paused';
 				default:
-					return esc_html__( 'Not started', 'wp-ulike' );
+					return 'Not started';
 			}
 		}
 
 		/**
 		 * @return void
 		 */
-		public static function migration_notice() {
+		public static function storage_upgrade_notice() {
 			if ( ! self::should_show_notice() ) {
 				return;
 			}
 
-			$url         = self::get_page_url();
-			$dismiss_url = self::get_dismiss_url();
+			$url = self::get_page_url();
 			?>
 			<div class="notice wp-ulike-notice wp-ulike-notice-control wp-ulike-notice-wrapper wp-ulike-notice-id-wp_ulike_storage_upgrade wp-ulike-notice-skin-upgrade">
 				<div class="wp-ulike-notice-info">
 					<h3 class="wp-ulike-notice-title">
-						<?php esc_html_e( 'WP ULike: optional storage upgrade available', 'wp-ulike' ); ?>
+						<?php echo esc_html( 'WP ULike: faster like storage is ready' ); ?>
 					</h3>
 					<p class="wp-ulike-notice-description">
-						<?php esc_html_e( 'You can copy your existing likes to a faster table for better performance on large sites. Your like buttons and counts keep working as usual — nothing is deleted.', 'wp-ulike' ); ?>
+						<?php echo esc_html( 'Copy your existing likes to a faster table for better performance on busy sites. Your like buttons and counts keep working — nothing is deleted.' ); ?>
 					</p>
 					<div class="wp-ulike-notice-submit">
 						<a class="wp-ulike-btn wp-ulike-btn-default wp-ulike-notice-btn wp-ulike-notice-cta-btn" href="<?php echo esc_url( $url ); ?>">
-							<span class="wp-ulike-text"><?php esc_html_e( 'View upgrade', 'wp-ulike' ); ?></span>
-						</a>
-						<a class="wp-ulike-btn wp-ulike-btn-default wp-ulike-notice-btn wp-ulike-btn-ghost" href="<?php echo esc_url( $dismiss_url ); ?>">
-							<span class="wp-ulike-text"><?php esc_html_e( 'Not now', 'wp-ulike' ); ?></span>
+							<span class="wp-ulike-text"><?php echo esc_html( 'Begin upgrade' ); ?></span>
 						</a>
 					</div>
 				</div>
 			</div>
 			<?php
-		}
-
-		/**
-		 * @return void
-		 */
-		public static function handle_dismiss_request() {
-			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( esc_html__( 'You do not have permission to dismiss this notice.', 'wp-ulike' ) );
-			}
-
-			check_admin_referer( 'wp_ulike_dismiss_storage_upgrade' );
-
-			WP_Ulike_Pulse_Config::mark_notice_dismissed();
-
-			wp_safe_redirect( wp_get_referer() ? wp_get_referer() : self::get_help_url() );
-			exit;
 		}
 
 		/**
@@ -342,23 +309,23 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			return array(
 				array(
 					'cmd'  => 'wp ulike pulse status',
-					'desc' => __( 'Check progress', 'wp-ulike' ),
+					'desc' => 'Check progress',
 				),
 				array(
 					'cmd'  => 'wp ulike pulse start',
-					'desc' => __( 'Start sync', 'wp-ulike' ),
+					'desc' => 'Start sync',
 				),
 				array(
 					'cmd'  => 'wp ulike pulse sync',
-					'desc' => __( 'Run one batch', 'wp-ulike' ),
+					'desc' => 'Run one batch',
 				),
 				array(
 					'cmd'  => 'wp ulike pulse verify',
-					'desc' => __( 'Verify migration (add --deep for COUNT scans)', 'wp-ulike' ),
+					'desc' => 'Verify the copy (add --deep for COUNT scans)',
 				),
 				array(
 					'cmd'  => 'wp ulike pulse enable',
-					'desc' => __( 'Finish upgrade', 'wp-ulike' ),
+					'desc' => 'Finish upgrade',
 				),
 			);
 		}

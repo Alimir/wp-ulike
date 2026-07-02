@@ -2,6 +2,8 @@
 /**
  * Storage upgrade admin template.
  *
+ * Upgrade-only UI — strings are English-only (not in translation catalog).
+ *
  * @var array  $progress
  * @var float  $percent
  * @var string $progress_label
@@ -29,16 +31,16 @@ $show_migrate = ! $is_pulse;
 	<h1><?php echo esc_html( $page_title ); ?></h1>
 
 	<?php if ( $show_cleanup ) : ?>
-	<p><?php esc_html_e( 'The upgrade is complete. Your likes now use the faster storage. You can optionally remove the old like tables to free disk space.', 'wp-ulike' ); ?></p>
+	<p><?php echo esc_html( 'The upgrade is complete. Your likes now use the faster storage. Remove the old like tables when you want to free disk space.' ); ?></p>
 
 	<div class="notice notice-success inline" style="max-width:560px;margin-top:1.5em;padding:12px;">
-		<p style="margin:0;"><?php esc_html_e( 'Faster storage is active. All likes are read from the new table.', 'wp-ulike' ); ?></p>
+		<p style="margin:0;"><?php echo esc_html( 'Faster storage is active. All likes are read from the new table.' ); ?></p>
 	</div>
 
 	<?php if ( $can_drop_legacy ) : ?>
 	<div class="notice notice-warning inline" style="max-width:560px;margin-top:1em;padding:12px;">
 		<p style="margin:0;">
-			<?php esc_html_e( 'Old tables are still on your server. Removing them is optional and permanent — make a database backup first.', 'wp-ulike' ); ?>
+			<?php echo esc_html( 'Old tables are still on your server. Removing them is permanent — back up your database first.' ); ?>
 		</p>
 		<ul style="margin:0.5em 0 0 1.2em;font-size:12px;">
 			<?php foreach ( $legacy_tables as $table_name ) : ?>
@@ -49,51 +51,51 @@ $show_migrate = ! $is_pulse;
 
 	<p class="submit" style="margin-top:1.5em;">
 		<button type="button" class="button button-primary" id="wp-ulike-pulse-drop-legacy">
-			<?php esc_html_e( 'Remove old tables', 'wp-ulike' ); ?>
+			<?php echo esc_html( 'Remove old tables' ); ?>
 		</button>
 		<button type="button" class="button" id="wp-ulike-pulse-dismiss">
-			<?php esc_html_e( 'Keep old tables & close', 'wp-ulike' ); ?>
+			<?php echo esc_html( 'Keep old tables & close' ); ?>
 		</button>
 	</p>
 	<?php else : ?>
 	<p class="description" style="max-width:560px;margin-top:1em;">
-		<?php esc_html_e( 'Old tables were detected but could not be verified for safe removal yet. You can close this page — nothing else is required.', 'wp-ulike' ); ?>
+		<?php echo esc_html( 'Old tables were detected but could not be verified for safe removal yet. You can close this page — nothing else is required.' ); ?>
 	</p>
 	<p class="submit" style="margin-top:1.5em;">
 		<button type="button" class="button button-primary" id="wp-ulike-pulse-dismiss">
-			<?php esc_html_e( 'Close', 'wp-ulike' ); ?>
+			<?php echo esc_html( 'Close' ); ?>
 		</button>
 	</p>
 	<?php endif; ?>
 
 	<p class="description" style="max-width:560px;margin-top:0.5em;">
-		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php esc_html_e( '← Back to Help', 'wp-ulike' ); ?></a>
+		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php echo esc_html( '← Back to Help' ); ?></a>
 	</p>
 
 	<?php else : ?>
-	<p><?php esc_html_e( 'Likes are stored in a single, faster table. Your site keeps working while old data is copied over — safely and in the background. Nothing is deleted, and you can leave this page at any time.', 'wp-ulike' ); ?></p>
+	<p><?php echo esc_html( 'Likes are stored in a single, faster table. Your site keeps working while old data is copied over — safely and in the background. Nothing is deleted, and you can leave this page at any time.' ); ?></p>
 
 	<?php if ( $sync_complete && ! $is_pulse ) : ?>
 	<div class="notice notice-success inline" id="wp-ulike-pulse-next-step" style="max-width:560px;margin-top:1.5em;padding:12px;">
 		<p style="margin:0;">
-			<strong><?php esc_html_e( 'Copy complete.', 'wp-ulike' ); ?></strong>
-			<?php esc_html_e( 'One last step: click “Finish upgrade” to use the faster storage for all reads. Your old tables stay in place.', 'wp-ulike' ); ?>
+			<strong><?php echo esc_html( 'Copy complete.' ); ?></strong>
+			<?php echo esc_html( 'One last step: click “Finish upgrade” to use the faster storage for all reads. Your old tables stay in place.' ); ?>
 		</p>
 	</div>
 	<?php elseif ( $is_running ) : ?>
 	<div class="notice notice-info inline" style="max-width:560px;margin-top:1.5em;padding:12px;">
-		<p style="margin:0;"><?php esc_html_e( 'Copy in progress. You can leave this page — sync continues in the background.', 'wp-ulike' ); ?></p>
+		<p style="margin:0;"><?php echo esc_html( 'Copy in progress. You can leave this page — sync continues in the background.' ); ?></p>
 	</div>
 	<?php endif; ?>
 
 	<table class="widefat striped" style="max-width:560px;margin-top:1.5em;">
 		<tbody>
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Status', 'wp-ulike' ); ?></th>
+				<th scope="row"><?php echo esc_html( 'Status' ); ?></th>
 				<td><span id="wp-ulike-pulse-sync-status"><?php echo esc_html( $status_label ); ?></span></td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Progress', 'wp-ulike' ); ?></th>
+				<th scope="row"><?php echo esc_html( 'Progress' ); ?></th>
 				<td id="wp-ulike-pulse-progress-text"><?php echo esc_html( $progress_label ); ?></td>
 			</tr>
 		</tbody>
@@ -106,20 +108,20 @@ $show_migrate = ! $is_pulse;
 	<p class="submit" style="margin-top:1.5em;">
 		<?php if ( $show_start ) : ?>
 		<button type="button" class="button button-primary" id="wp-ulike-pulse-start" <?php disabled( $is_running ); ?>>
-			<?php esc_html_e( 'Start copy', 'wp-ulike' ); ?>
+			<?php echo esc_html( 'Start copy' ); ?>
 		</button>
 		<?php endif; ?>
 		<button type="button" class="button" id="wp-ulike-pulse-pause" <?php disabled( ! $is_running ); ?><?php echo $show_start ? '' : ' style="display:none;"'; ?>>
-			<?php esc_html_e( 'Pause', 'wp-ulike' ); ?>
+			<?php echo esc_html( 'Pause' ); ?>
 		</button>
 		<?php if ( $can_enable ) : ?>
 		<button type="button" class="button<?php echo $sync_complete ? ' button-primary' : ''; ?>" id="wp-ulike-pulse-enable" <?php disabled( ! $sync_complete ); ?>>
-			<?php esc_html_e( 'Finish upgrade', 'wp-ulike' ); ?>
+			<?php echo esc_html( 'Finish upgrade' ); ?>
 		</button>
 		<?php endif; ?>
 	</p>
 	<p class="description" style="max-width:560px;margin-top:0.5em;">
-		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php esc_html_e( '← Back to Help', 'wp-ulike' ); ?></a>
+		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php echo esc_html( '← Back to Help' ); ?></a>
 	</p>
 	<?php endif; ?>
 
@@ -128,13 +130,13 @@ $show_migrate = ! $is_pulse;
 	<?php if ( $show_migrate ) : ?>
 	<details class="wp-ulike-pulse-cli" style="max-width:560px;margin-top:2em;">
 		<summary style="cursor:pointer;color:#646970;font-size:13px;">
-			<?php esc_html_e( 'Advanced: WP-CLI commands (optional)', 'wp-ulike' ); ?>
+			<?php echo esc_html( 'Advanced: WP-CLI commands' ); ?>
 		</summary>
 		<div style="padding:12px 0 0;">
 			<p class="description" style="margin-top:0;">
-				<?php esc_html_e( 'For developers or very large sites with SSH access. The buttons above are enough for most installations.', 'wp-ulike' ); ?>
+				<?php echo esc_html( 'For developers or very large sites with SSH access. The buttons above are enough for most installations.' ); ?>
 				<?php if ( 'WP-Cron' === WP_Ulike_Pulse_Sync_Scheduler::engine_label() ) : ?>
-					<?php esc_html_e( ' Background sync uses WP-Cron — on production sites, configure a real system cron hitting wp-cron.php or use WP-CLI batches so sync does not stall.', 'wp-ulike' ); ?>
+					<?php echo esc_html( ' Background sync uses WP-Cron — on production sites, configure a real system cron hitting wp-cron.php or use WP-CLI batches so sync does not stall.' ); ?>
 				<?php endif; ?>
 			</p>
 			<ul style="margin:0.75em 0 0;padding:0;list-style:none;font-size:12px;line-height:1.8;">
