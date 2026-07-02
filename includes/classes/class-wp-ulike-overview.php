@@ -329,6 +329,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					admin_url( 'admin-post.php?action=wp_ulike_repair_tables' ),
 					'wp_ulike_repair_tables'
 				),
+				'flush_stats_cache_url'  => wp_nonce_url(
+					admin_url( 'admin-post.php?action=wp_ulike_flush_stats_cache' ),
+					'wp_ulike_flush_stats_cache'
+				),
 				'backup_intro'           => apply_filters(
 					'wp_ulike_backup_intro',
 					__( 'Download your settings and customizer values as JSON.', 'wp-ulike' )
@@ -501,6 +505,31 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				add_query_arg(
 					'wp_ulike_repair',
 					$status,
+					self::get_about_url()
+				)
+			);
+			exit;
+		}
+
+		/**
+		 * Clear versioned statistics caches from Help.
+		 *
+		 * @return void
+		 */
+		public static function handle_flush_stats_cache() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Permission denied.', 'wp-ulike' ) );
+			}
+
+			check_admin_referer( 'wp_ulike_flush_stats_cache' );
+
+			WP_Ulike_Query_Cache::flush_stats();
+			delete_transient( self::get_health_report_cache_key() );
+
+			wp_safe_redirect(
+				add_query_arg(
+					'wp_ulike_stats_cache',
+					'flushed',
 					self::get_about_url()
 				)
 			);

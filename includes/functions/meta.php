@@ -522,11 +522,10 @@ if( ! function_exists('wp_ulike_delete_vote_data') ){
 		wp_ulike_delete_meta_data( $type, $ID, 'likers_list' );
 
 		// delete table values
-		$settings = wp_ulike_setting_type::get_instance( $type );
-
-		WP_Ulike_Pulse_Writer::delete_item_votes( $ID, $type );
+		$settings      = wp_ulike_setting_type::get_instance( $type );
+		$deleted_count = WP_Ulike_Pulse_Writer::delete_item_votes( $ID, $type );
 
 		// Fires after the post item has been deleted.
-		do_action( 'wp_ulike_delete_vote_data', $ID, $type, $settings );
+		do_action( 'wp_ulike_delete_vote_data', $ID, $type, $settings, $deleted_count );
 	}
 }

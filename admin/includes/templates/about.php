@@ -13,6 +13,7 @@ $data = class_exists( 'WP_Ulike_Overview' ) ? WP_Ulike_Overview::get_about_view_
 
 $import_flash   = isset( $_GET['wp_ulike_import'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_import'] ) ) : '';
 $repair_flash   = isset( $_GET['wp_ulike_repair'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_repair'] ) ) : '';
+$stats_flash    = isset( $_GET['wp_ulike_stats_cache'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_stats_cache'] ) ) : '';
 $import_open = in_array( $import_flash, array( 'error_upload', 'error_json', 'error_payload', 'error' ), true );
 $is_pro         = ! empty( $data['is_pro'] );
 $health         = isset( $data['health'] ) ? $data['health'] : array();
@@ -52,6 +53,10 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Database tables repaired successfully.', 'wp-ulike' ); ?></p></div>
 	<?php elseif ( 'failed' === $repair_flash ) : ?>
 		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Some database tables could not be created. Please contact your host or try deactivating and reactivating the plugin.', 'wp-ulike' ); ?></p></div>
+	<?php endif; ?>
+
+	<?php if ( 'flushed' === $stats_flash ) : ?>
+		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Statistics cache refreshed. Totals and charts will rebuild on the next view.', 'wp-ulike' ); ?></p></div>
 	<?php endif; ?>
 
 	<div class="wp-ulike-about__layout">
@@ -153,6 +158,13 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 							</p>
 						<?php endif; ?>
 					</div>
+				<?php endif; ?>
+				<?php if ( ! empty( $data['flush_stats_cache_url'] ) ) : ?>
+					<p>
+						<a class="button button-secondary" href="<?php echo esc_url( $data['flush_stats_cache_url'] ); ?>">
+							<?php esc_html_e( 'Refresh statistics cache', 'wp-ulike' ); ?>
+						</a>
+					</p>
 				<?php endif; ?>
 			</div>
 

@@ -162,52 +162,20 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			);
 
 		} else {
-			if ( wp_ulike_use_pulse_queries() ) {
-				$results = WP_Ulike_Pulse_Query::get_popular_items_from_logs(
-					$parsed_args,
-					$info_args,
-					$period_limit,
-					$user_condition,
-					$related_condition,
-					$limit_records
-				);
+			$results = WP_Ulike_Pulse_Query::get_popular_items_from_logs(
+				$parsed_args,
+				$info_args,
+				$period_limit,
+				$user_condition,
+				$related_condition,
+				$limit_records
+			);
 
-				if ( ! empty( $results ) ) {
-					WP_Ulike_Query_Cache::set( $logical_key, $results );
-				}
-
-				return $results;
+			if ( ! empty( $results ) ) {
+				WP_Ulike_Query_Cache::set( $logical_key, $results );
 			}
 
-			// create query condition from status
-			if( is_array( $parsed_args['status'] ) ){
-				$status_values = array_map(function($status) use ($wpdb) {
-					return $wpdb->prepare('%s', $status);
-				}, $parsed_args['status']);
-
-				$status_type = "t.status IN (" . implode(',', $status_values) . ")";
-			} else {
-				$status_type = $wpdb->prepare( "t.status = %s", $parsed_args['status'] );
-			}
-
-			// CRITICAL FIX: Escape all table/column names for security and performance
-			$table_name = esc_sql( $wpdb->prefix . $info_args['table'] );
-			$column_escaped = esc_sql( $info_args['column'] );
-			$related_table_escaped = esc_sql( $info_args['related_table_prefix'] );
-			$related_column_escaped = esc_sql( $info_args['related_column'] );
-			$order_by_escaped = esc_sql( $order_by );
-			$order_escaped = strtoupper( $parsed_args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
-
-			// generate query string - all identifiers properly escaped
-			$query  = "
-				SELECT COUNT(t.`{$column_escaped}`) AS counter,
-				t.`{$column_escaped}` AS item_ID
-				FROM `{$table_name}` t
-				INNER JOIN `{$related_table_escaped}` r ON t.`{$column_escaped}` = r.`{$related_column_escaped}` {$related_condition}
-				WHERE {$status_type} {$user_condition} {$period_limit}
-				GROUP BY item_ID
-				ORDER BY `{$order_by_escaped}` {$order_escaped} {$limit_records}";
-
+			return $results;
 		}
 
 		$results = !empty( $query ) ? $wpdb->get_results( $query ): null;
@@ -343,40 +311,13 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			);
 
 		} else {
-			if ( wp_ulike_use_pulse_queries() ) {
-				return WP_Ulike_Pulse_Query::count_popular_items_total(
-					$parsed_args,
-					$info_args,
-					$period_limit,
-					$user_condition,
-					$related_condition
-				);
-			}
-
-			// create query condition from status
-			$status_type  = '';
-			if( is_array( $parsed_args['status'] ) ){
-				$status_values = array_map(function($status) use ($wpdb) {
-					return $wpdb->prepare('%s', $status);
-				}, $parsed_args['status']);
-
-				$status_type = "t.status IN (" . implode(',', $status_values) . ")";
-			} else {
-				$status_type = $wpdb->prepare( "t.status = %s", $parsed_args['status'] );
-			}
-
-			// generate query string
-			$column = esc_sql( $info_args['column'] );
-			$table_name = $wpdb->prefix . esc_sql( $info_args['table'] );
-			$related_table = esc_sql( $info_args['related_table_prefix'] );
-			$related_column = esc_sql( $info_args['related_column'] );
-
-			$query  = "
-				SELECT COUNT(DISTINCT t.`{$column}`)
-				FROM `{$table_name}` t
-				INNER JOIN `{$related_table}` r ON t.`{$column}` = r.`{$related_column}` {$related_condition}
-				WHERE {$status_type} {$user_condition}
-				{$period_limit}";
+			return WP_Ulike_Pulse_Query::count_popular_items_total(
+				$parsed_args,
+				$info_args,
+				$period_limit,
+				$user_condition,
+				$related_condition
+			);
 		}
 
 		return !empty( $query ) ? (int) $wpdb->get_var( $query ): null;
@@ -423,28 +364,12 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 				$base_limit = is_null( $limit ) ? 100 : $limit;
 				$max_likers = min( max( $base_limit * 10, 100 ), 1000 );
 
-				if ( wp_ulike_use_pulse_queries() ) {
-					$user_ids = WP_Ulike_Pulse_Query::rebuild_likers_list(
-						$wpdb->prefix . $table_name,
-						$column_name,
-						$item_ID,
-						$max_likers
-					);
-				} else {
-					$table_escaped = esc_sql( $wpdb->prefix . $table_name );
-					$column_escaped = esc_sql( $column_name );
-
-					$user_ids = $wpdb->get_col( $wpdb->prepare(
-						"SELECT DISTINCT t.`user_id`
-						FROM `{$table_escaped}` t
-						INNER JOIN {$wpdb->users} u ON u.ID = t.`user_id`
-						WHERE t.`status` IN ('like', 'dislike')
-						AND t.`{$column_escaped}` = %d
-						LIMIT %d",
-						$item_ID,
-						$max_likers
-					) );
-				}
+				$user_ids = WP_Ulike_Pulse_Query::rebuild_likers_list(
+					$wpdb->prefix . $table_name,
+					$column_name,
+					$item_ID,
+					$max_likers
+				);
 
 				$get_likers = ! empty( $user_ids ) ? implode( ',', $user_ids ) : '';
 
@@ -492,25 +417,7 @@ if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
 	 * @return bool
 	 */
 	function wp_ulike_is_user_liked( $item_ID, $user_ID,  $type = 'likeThis' ) {
-		if ( wp_ulike_use_pulse_queries() ) {
-			return WP_Ulike_Pulse_Query::is_user_liked( $item_ID, $user_ID, $type );
-		}
-
-		global $wpdb;
-		$get_settings = wp_ulike_get_post_settings_by_type( $type );
-		$table_name = $wpdb->prefix . $get_settings['table'];
-
-		$query  =  $wpdb->prepare( "
-			SELECT COUNT(*)
-			FROM `{$table_name}`
-			WHERE `{$get_settings['column']}` = %s
-			AND `status` = 'like'
-			And `user_id` = %d",
-			$item_ID,
-			$user_ID
-		);
-
-		return $wpdb->get_var( $query );
+		return WP_Ulike_Pulse_Query::is_user_liked( $item_ID, $user_ID, $type );
 	}
 }
 
@@ -567,48 +474,25 @@ if( ! function_exists( 'wp_ulike_get_user_latest_activity' ) ) {
 	 * @return array|null
 	 */
 	function wp_ulike_get_user_latest_activity( $item_id, $user_id, $type ) {
-		if ( wp_ulike_use_pulse_queries() ) {
-			$row = WP_Ulike_Pulse_Query::get_user_latest_activity( $item_id, $user_id, $type );
-			if ( ! $row ) {
-				return null;
-			}
-			$result = array(
-				'date_time' => $row->date_time,
-				'status'    => isset( $row->status ) ? $row->status : '',
-			);
-			if ( ! empty( $result['date_time'] ) ) {
-				$result['date_time'] = wp_ulike_date_i18n( $result['date_time'] );
-			}
-			if ( in_array( $result['status'], array( 'like', 'dislike', 'active', 'removed' ), true ) ) {
-				if ( 'active' === $result['status'] || 'removed' === $result['status'] ) {
-					$key = isset( $row->engagement_key ) ? $row->engagement_key : WP_Ulike_Pulse_Vote_Map::KEY_LIKE;
-					$result['status'] = WP_Ulike_Pulse_Vote_Map::row_to_legacy( $key, $result['status'] );
-				}
-			}
-			return $result;
+		$row = WP_Ulike_Pulse_Query::get_user_latest_activity( $item_id, $user_id, $type );
+		if ( ! $row ) {
+			return null;
 		}
 
-		global $wpdb;
-
-		$settings    = wp_ulike_setting_type::get_instance( $type );
-		$table_name  = $wpdb->prefix . $settings->getTableName();
-		$column_name = $settings->getColumnName();
-
-		$query  = $wpdb->prepare( "
-				SELECT `date_time`, `status`
-				FROM `{$table_name}`
-				WHERE `{$column_name}` = %s
-				AND `user_id` = %d
-				ORDER BY id DESC LIMIT 1
-			",
-			$item_id,
-			$user_id
+		$result = array(
+			'date_time' => $row->date_time,
+			'status'    => isset( $row->status ) ? $row->status : '',
 		);
 
-		$result = $wpdb->get_row( $query, ARRAY_A );
-
-		if( ! empty( $result['date_time'] ) ){
+		if ( ! empty( $result['date_time'] ) ) {
 			$result['date_time'] = wp_ulike_date_i18n( $result['date_time'] );
+		}
+
+		if ( in_array( $result['status'], array( 'like', 'dislike', 'active', 'removed' ), true ) ) {
+			if ( 'active' === $result['status'] || 'removed' === $result['status'] ) {
+				$key = isset( $row->engagement_key ) ? $row->engagement_key : WP_Ulike_Pulse_Vote_Map::KEY_LIKE;
+				$result['status'] = WP_Ulike_Pulse_Vote_Map::row_to_legacy( $key, $result['status'] );
+			}
 		}
 
 		return $result;
@@ -623,44 +507,7 @@ if( ! function_exists( 'wp_ulike_get_user_item_count_per_day' ) ) {
 	 * @return array
 	 */
 	function wp_ulike_get_user_item_count_per_day( $args ) {
-		if ( wp_ulike_use_pulse_queries() ) {
-			return WP_Ulike_Pulse_Query::count_user_votes_today( $args );
-		}
-
-		global $wpdb;
-
-		$defaults = array(
-			"item_id"      => '',
-			"current_user" => '',
-			"settings"     => ''
-		);
-		$parsed_args = wp_parse_args( $args, $defaults );
-
-		$table_name  = $wpdb->prefix . $parsed_args['settings']->getTableName();
-		$column_name = $parsed_args['settings']->getColumnName();
-
-		// Use index-friendly date range query instead of DATE() function
-		// Pre-calculate today's date range for maximum index optimization
-		$today = current_time( 'Y-m-d' );
-		$today_start = $today . ' 00:00:00';
-		$today_end = $today . ' 23:59:59';
-
-		$query = $wpdb->prepare( "
-			SELECT COUNT(*)
-			FROM `$table_name`
-			WHERE `$column_name` = %s
-			AND `user_id` = %d
-			AND date_time >= %s
-			AND date_time <= %s",
-			$parsed_args['item_id'],
-			$parsed_args['current_user'],
-			$today_start,
-			$today_end
-		);
-
-		$count_votes = $wpdb->get_var( $query );
-
-		return $count_votes ? $count_votes : 0;
+		return WP_Ulike_Pulse_Query::count_user_votes_today( $args );
 	}
 }
 
@@ -676,76 +523,8 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
      * @return object
      */
 	function wp_ulike_get_best_likers_info( $limit, $period, $offset = 1, $status = array( 'like', 'dislike' ), $order = 'DESC' ) {
-		if ( wp_ulike_use_pulse_queries() ) {
-			$results = WP_Ulike_Pulse_Query::get_best_likers( $limit, $period, $offset, $status, $order );
-			return is_array( $results ) ? $results : array();
-		}
-
-		global $wpdb;
-
-		$status = wp_ulike_normalize_vote_statuses( $status );
-		$status_list = is_array( $status ) ? $status : array( $status );
-
-		if ( empty( $status_list ) ) {
-			return array();
-		}
-
-		$order = 'ASC' === strtoupper( (string) $order ) ? 'ASC' : 'DESC';
-
-		// Period limit SQL
-		$period_limit = wp_ulike_get_period_limit_sql($period);
-
-		// Limit clause
-		$limit_records = '';
-		if ((int)$limit > 0) {
-			$offset = $offset > 0 ? (($offset - 1) * $limit) : 0;
-			$limit_records = $wpdb->prepare("LIMIT %d, %d", $offset, $limit);
-		}
-
-		// Prepare status filter
-		if (is_array($status)) {
-			$status_values = array_map(function($status) use ($wpdb) {
-				return $wpdb->prepare('%s', $status);
-			}, $status);
-
-			$status_type = "status IN (" . implode(',', $status_values) . ")";
-		} else {
-			$status_type = $wpdb->prepare("status = %s", $status);
-		}
-
-		$dynamic_sums = array();
-		foreach ( $status_list as $stat ) {
-			$stat_escaped   = esc_sql( $stat );
-			$dynamic_sums[] = "SUM(CASE WHEN T.status = '{$stat_escaped}' THEN T.CountUser ELSE 0 END) AS `{$stat_escaped}Count`";
-		}
-		$dynamic_sums_sql = implode( ', ', $dynamic_sums );
-
-		$union_parts = array();
-		foreach ( wp_ulike_get_log_table_names() as $table ) {
-			$table_escaped = esc_sql( $table );
-			$union_parts[] = "
-				SELECT user_id, status, COUNT(*) AS CountUser
-				FROM `{$table_escaped}`
-				INNER JOIN {$wpdb->users}
-				ON {$wpdb->users}.ID = `{$table_escaped}`.user_id
-				WHERE {$status_type}
-				{$period_limit}
-				GROUP BY user_id, status";
-		}
-
-		$query = "
-			SELECT
-				T.user_id,
-				{$dynamic_sums_sql},
-				SUM(T.CountUser) AS SumUser
-			FROM (
-				" . implode( ' UNION ALL ', $union_parts ) . "
-			) AS T
-			GROUP BY T.user_id
-			ORDER BY SumUser {$order}
-			{$limit_records}";
-
-		return $wpdb->get_results( $query );
+		$results = WP_Ulike_Pulse_Query::get_best_likers( $limit, $period, $offset, $status, $order );
+		return is_array( $results ) ? $results : array();
 	}
 }
 
@@ -758,48 +537,7 @@ if( ! function_exists('wp_ulike_get_top_enagers_total_number') ){
 	 * @return integer
 	 */
     function wp_ulike_get_top_enagers_total_number( $period, $status = [ 'like', 'dislike' ] ){
-		if ( wp_ulike_use_pulse_queries() ) {
-			return WP_Ulike_Pulse_Query::count_unique_engagers( $period, $status );
-		}
-
-        global $wpdb;
-
-		$status = wp_ulike_normalize_vote_statuses( $status );
-
-        // Period limit SQL
-        $period_limit = wp_ulike_get_period_limit_sql( $period );
-
-		$status_type = '';
-		if( is_array( $status ) ){
-			$status_values = array_map(function($status) use ($wpdb) {
-				return $wpdb->prepare('%s', $status);
-			}, $status);
-
-			$status_type = "status IN (" . implode(',', $status_values) . ")";
-		} else {
-			$status_type = $wpdb->prepare( "status = %s", $status );
-		}
-
-		$union_parts = array();
-		foreach ( wp_ulike_get_log_table_names() as $table ) {
-			$table_escaped = esc_sql( $table );
-			$union_parts[] = "
-				SELECT user_id
-				FROM `{$table_escaped}`
-				INNER JOIN {$wpdb->users}
-				ON ( {$wpdb->users}.ID = `{$table_escaped}`.user_id )
-				WHERE {$status_type}
-				{$period_limit}
-				GROUP BY user_id";
-		}
-
-		$query = "
-			SELECT COUNT(DISTINCT user_id) AS total_users
-			FROM (
-				" . implode( ' UNION ', $union_parts ) . "
-			) AS combined_users";
-
-		return (int) $wpdb->get_var( $query );
+		return WP_Ulike_Pulse_Query::count_unique_engagers( $period, $status );
     }
 }
 
@@ -812,52 +550,7 @@ if( ! function_exists('wp_ulike_get_user_data') ){
 	 * @return object|null
 	 */
 	function wp_ulike_get_user_data( $user_ID, $args = array() ){
-		if ( wp_ulike_use_pulse_queries() ) {
-			return WP_Ulike_Pulse_Query::get_user_data( $user_ID, $args );
-		}
-
-		global $wpdb;
-
-		$defaults = array(
-			'type'     => 'post',
-			'period'   => 'all',
-			'order'    => 'DESC',
-			'status'   => 'like',
-			'page'     => 1,
-			'per_page' => 10
-		);
-		$parsed_args  = wp_parse_args( $args, $defaults );
-		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
-		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
-
-		$status_type  = '';
-		if( is_array( $parsed_args['status'] ) ){
-			$status_values = array_map(function($status) use ($wpdb) {
-				return $wpdb->prepare('%s', $status);
-			}, $parsed_args['status']);
-
-			$status_type = "`status` IN (" . implode(',', $status_values) . ")";
-		} else {
-			$status_type = $wpdb->prepare( "`status` = %s", $parsed_args['status'] );
-		}
-
-		$table_name = $wpdb->prefix . $parsed_args['table'];
-
-		// generate query string
-		$query  = $wpdb->prepare( "
-			SELECT `{$parsed_args['column']}` AS itemID, max(`date_time`) AS datetime, max(`status`) AS lastStatus
-			FROM `{$table_name}`
-			WHERE `user_id` = %d
-			AND {$status_type} {$period_limit}
-			GROUP BY itemID
-			ORDER BY datetime
-			{$parsed_args['order']} LIMIT %d, %d",
-			$user_ID,
-			( $parsed_args['page'] - 1 ) * $parsed_args['per_page'],
-			$parsed_args['per_page']
-		);
-
-		return $wpdb->get_results(  $query );
+		return WP_Ulike_Pulse_Query::get_user_data( $user_ID, $args );
 	}
 
 }
@@ -878,65 +571,7 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 	 * @return array|null Array of user objects with activity data
 	 */
 	function wp_ulike_get_users( $args = array() ){
-		if ( wp_ulike_use_pulse_queries() ) {
-			return WP_Ulike_Pulse_Query::get_users( $args );
-		}
-
-		global $wpdb;
-
-		$defaults = array(
-			'type'     => 'post',
-			'period'   => 'all',
-			'order'    => 'DESC',
-			'status'   => 'like',
-			'page'     => 1,
-			'per_page' => 10
-		);
-		$parsed_args  = wp_parse_args( $args, $defaults );
-		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
-		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
-
-		// Build status condition
-		$status_type = '';
-		if( is_array( $parsed_args['status'] ) ){
-			$status_values = array_map(function($status) use ($wpdb) {
-				return $wpdb->prepare('%s', $status);
-			}, $parsed_args['status']);
-			$status_type = "`status` IN (" . implode(',', $status_values) . ")";
-		} else {
-			$status_type = $wpdb->prepare( "`status` = %s", $parsed_args['status'] );
-		}
-
-		// Escape dynamic table/column names (user input)
-		$table_name = esc_sql( $wpdb->prefix . $parsed_args['table'] );
-		$column_name = esc_sql( $parsed_args['column'] );
-		$order_escaped = strtoupper( $parsed_args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
-
-		// Limit GROUP_CONCAT to prevent truncation and memory issues with large datasets
-		$group_concat_limit = 500;
-
-		// Calculate pagination
-		$offset = ( $parsed_args['page'] - 1 ) * $parsed_args['per_page'];
-		$limit = absint( $parsed_args['per_page'] );
-
-		$query = "
-			SELECT t.user_id AS userID,
-			       COUNT(t.user_id) AS score,
-			       MAX(t.date_time) AS datetime,
-			       MAX(t.status) AS lastStatus,
-			       SUBSTRING_INDEX(
-			           GROUP_CONCAT(DISTINCT t.`{$column_name}` ORDER BY t.`{$column_name}` DESC SEPARATOR ','),
-			           ',',
-			           {$group_concat_limit}
-			       ) AS itemsList
-			FROM `{$table_name}` t
-			INNER JOIN {$wpdb->users} u ON u.ID = t.user_id
-			WHERE {$status_type} {$period_limit}
-			GROUP BY t.user_id
-			ORDER BY score {$order_escaped}
-			LIMIT %d, %d";
-
-		return $wpdb->get_results( $wpdb->prepare( $query, $offset, $limit ) );
+		return WP_Ulike_Pulse_Query::get_users( $args );
 	}
 }
 
@@ -985,26 +620,10 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
             }
         }
 
-        $counter_value = WP_Ulike_Query_Cache::remember(
+        $counter_value = WP_Ulike_Query_Cache::remember_stats(
             $logical_key,
             static function () use ( $period ) {
-                global $wpdb;
-
-                if ( wp_ulike_use_pulse_queries() ) {
-                    return WP_Ulike_Pulse_Query::count_logs_for_mode( $period );
-                }
-
-                $period_limit = wp_ulike_get_period_limit_sql( $period );
-                $parts        = array();
-
-                foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
-                    $table   = esc_sql( $source['table'] );
-                    $parts[] = "( SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit} )";
-                }
-
-                return ! empty( $parts )
-                    ? $wpdb->get_var( 'SELECT ' . implode( ' + ', $parts ) )
-                    : 0;
+                return WP_Ulike_Pulse_Query::count_logs_for_mode( $period );
             }
         );
 
@@ -1028,24 +647,12 @@ if( ! function_exists('wp_ulike_count_current_fingerprint') ){
 	 * @return integer
 	 */
 	function wp_ulike_count_current_fingerprint( $current_fingerprint, $item_id, $type ) {
-		global $wpdb;
-		$settings    = wp_ulike_setting_type::get_instance( $type );
 		$logical_key = 'fingerprint_' . md5( $type . '_' . $item_id . '_' . $current_fingerprint );
 
 		return (int) WP_Ulike_Query_Cache::remember(
 			$logical_key,
-			static function () use ( $current_fingerprint, $item_id, $type, $wpdb, $settings ) {
-				if ( wp_ulike_use_pulse_queries() ) {
-					return WP_Ulike_Pulse_Query::count_fingerprint_votes( $current_fingerprint, $item_id, $type );
-				}
-
-				$table = $wpdb->prefix . $settings->getTableName();
-
-				return (int) $wpdb->get_var( $wpdb->prepare(
-					"SELECT COUNT(*) FROM {$table} WHERE {$settings->getColumnName()} = %d AND fingerprint = %s",
-					$item_id,
-					$current_fingerprint
-				) );
+			static function () use ( $current_fingerprint, $item_id, $type ) {
+				return WP_Ulike_Pulse_Query::count_fingerprint_votes( $current_fingerprint, $item_id, $type );
 			},
 			WP_Ulike_Query_Cache::TTL_FINGERPRINT
 		);

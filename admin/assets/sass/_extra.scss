@@ -260,27 +260,19 @@
   }
 }
 
-// Help + storage upgrade: hide stacked admin notices (all plugins) above page content.
+// Help + storage upgrade: hide stacked admin notices above page content only.
+// Direct-child selector keeps in-page flash notices inside .wrap.wp-ulike-about / .wp-ulike-pulse-upgrade visible.
 body:has(.wp-ulike-about),
 body:has(.wp-ulike-pulse-upgrade) {
   #wpbody-content {
-    .notice,
-    .updated,
-    .error,
-    .warning,
-    .info,
-    .is-dismissible,
-    .wp-ulike-notice {
+    > .notice,
+    > .updated,
+    > .error,
+    > .warning,
+    > .info,
+    > .is-dismissible,
+    > .wp-ulike-notice {
       display: none !important;
     }
-  }
-}
-
-// Keep import/repair flash messages inside the Help template.
-body:has(.wp-ulike-about) .wrap.wp-ulike-about {
-  .notice,
-  .updated,
-  .error {
-    display: block !important;
   }
 }
