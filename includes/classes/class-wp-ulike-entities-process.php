@@ -643,61 +643,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
-		 * Update stats meta data
-		 *
-		 * @param integer $item_id
-		 * @return void
-		 */
-		public function updateStatsMetaData( $item_id ){
-			// Update total stats
-			if( ( ! $this->prevStatus || ! $this->isDistinct() ) ){
-				if( strpos( $this->currentStatus, 'un') === false  ){
-					// update all logs period
-					$meta_table = $this->wpdb->prefix . 'ulike_meta';
-					$this->wpdb->query( $this->wpdb->prepare( "
-						UPDATE `{$meta_table}`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = %s AND `meta_key` = %s",
-						'statistics',
-						'count_logs_period_all'
-					) );
-					// update new votes
-					$this->wpdb->query( $this->wpdb->prepare( "
-						UPDATE `{$meta_table}`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = %s AND `meta_key` = %s",
-						'statistics',
-						'calculate_new_votes'
-					) );
-					$table = esc_sql( $this->typeSettings->getTableName() );
-					$meta_key = 'count_logs_for_' . $table . '_table_in_all_daterange';
-					$this->wpdb->query( $this->wpdb->prepare( "
-						UPDATE `{$meta_table}`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = %s AND `meta_key` = %s",
-						'statistics',
-						$meta_key
-					) );
-				}
-
-				// Save daily stats
-				// $current_time  = current_time( 'Ymd' );
-				// $current_key   = sanitize_key( $this->itemType . '_' . $this->currentStatus );
-				// $current_count = wp_ulike_get_meta_data( $current_time, 'statistics', $current_key, true );
-
-				// if( empty( $current_count ) ){
-				// 	wp_ulike_update_meta_data( $current_time, 'statistics', $current_key, 1 );
-				// } else {
-				// 	$this->wpdb->query( "
-				// 		UPDATE `{$this->wpdb->prefix}ulike_meta`
-				// 		SET `meta_value` = (`meta_value` + 1)
-				// 		WHERE `meta_group` = 'statistics' AND `meta_key` = '{$current_key}' AND `item_id` = {$current_time}
-				// 	" );
-				// }
-			}
-		}
-
-		/**
 		 * Update meta data
 		 *
 		 * @param integer $item_id
@@ -710,8 +655,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$this->updateUserMetaStatus( $item_id );
 			// Update likers list
 			$this->updateLikerMetaList( $item_id );
-			// Update stats meta data
-			$this->updateStatsMetaData( $item_id );
 		}
 
 	}

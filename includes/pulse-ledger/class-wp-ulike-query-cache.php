@@ -22,7 +22,6 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 		const TTL_DEFAULT     = 300;
 		const TTL_PEAK_HOURS  = 900;
 		const TTL_FINGERPRINT = 10;
-		const TTL_RATING      = HOUR_IN_SECONDS;
 
 		/**
 		 * @return string
@@ -121,7 +120,6 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 			}
 
 			update_option( self::VERSION_OPTION, self::version() + 1, false );
-			delete_transient( 'wp_ulike_global_avg_likes' );
 		}
 
 		/**
@@ -131,7 +129,6 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 		 */
 		public static function flush() {
 			update_option( self::VERSION_OPTION, self::version() + 1, false );
-			delete_transient( 'wp_ulike_global_avg_likes' );
 
 			if ( function_exists( 'wp_cache_flush_group' ) ) {
 				wp_cache_flush_group( self::group() );

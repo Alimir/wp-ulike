@@ -478,94 +478,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		}
 
 		/**
-		 * @param int  $post_id     Post ID.
-		 * @param bool $is_decimal  Decimal rating.
-		 * @return string|float
-		 */
-		public static function get_rating_value( $post_id, $is_decimal = true ) {
-			$count = self::count_item_votes( $post_id, 'post', 'like', false, null );
-			$avg   = get_transient( 'wp_ulike_global_avg_likes' );
-
-			if ( false === $avg ) {
-				global $wpdb;
-				$mode = self::read_mode();
-
-				if ( 'pulse' === $mode ) {
-					$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-					$avg   = $wpdb->get_var(
-						$wpdb->prepare(
-							"SELECT AVG(item_count) FROM (
-								SELECT COUNT(*) AS item_count FROM `{$table}`
-								WHERE item_type = %s AND engagement_kind = %s
-								GROUP BY item_id
-							) AS counted",
-							WP_Ulike_Pulse_Registry::ITEM_POST,
-							WP_Ulike_Pulse_Registry::KIND_VOTE
-						)
-					);
-				} else {
-					$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( 'post' );
-					if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-						$table = esc_sql( $source['table'] );
-						$col   = esc_sql( $source['column'] );
-						$avg   = $wpdb->get_var(
-							"SELECT AVG(post_count) FROM (
-								SELECT COUNT(*) AS post_count FROM `{$table}` GROUP BY `{$col}`
-							) AS counted"
-						);
-					} else {
-						$avg = 0;
-					}
-				}
-
-				set_transient( 'wp_ulike_global_avg_likes', $avg, HOUR_IN_SECONDS );
-			}
-
-			$post_date = get_post_field( 'post_date', $post_id );
-			$date      = $post_date ? strtotime( $post_date ) : 0;
-			$count     = (int) $count;
-			$avg       = (float) $avg;
-
-			if ( 0 === $count || 0.0 === $avg ) {
-				return 5;
-			}
-
-			$decimal = 0;
-			if ( $is_decimal ) {
-				list( , $decimal ) = explode( '.', number_format( ( $count * 100 / ( $avg * 2 ) ), 1 ) );
-				$decimal = (int) $decimal;
-			}
-
-			if ( $date > strtotime( '-1 month' ) ) {
-				if ( $count < $avg ) {
-					$rating_value = 4 + ( $is_decimal ? (float) ( '0.' . $decimal ) : 0 );
-				} else {
-					$rating_value = 5;
-				}
-			} elseif ( ( $date <= strtotime( '-1 month' ) ) && ( $date > strtotime( '-6 month' ) ) ) {
-				if ( $count < $avg ) {
-					$rating_value = 4 + ( $is_decimal ? (float) ( '0.' . $decimal ) : 0 );
-				} elseif ( ( $count >= $avg ) && ( $count < ( $avg * 3 / 2 ) ) ) {
-					$rating_value = 4 + ( $is_decimal ? (float) ( '0.' . $decimal ) : 0 );
-				} else {
-					$rating_value = 5;
-				}
-			} elseif ( $count < ( $avg / 2 ) ) {
-				$rating_value = 1 + ( $is_decimal ? (float) ( '0.' . $decimal ) : 0 );
-			} elseif ( ( $count >= ( $avg / 2 ) ) && ( $count < $avg ) ) {
-				$rating_value = 2 + ( $is_decimal ? (float) ( '0.' . $decimal ) : 0 );
-			} elseif ( ( $count >= $avg ) && ( $count < ( $avg * 3 / 2 ) ) ) {
-				$rating_value = 3 + ( $is_decimal ? (float) ( '0.' . $decimal ) : 0 );
-			} elseif ( ( $count >= ( $avg * 3 / 2 ) ) && ( $count < ( $avg * 2 ) ) ) {
-				$rating_value = 4 + ( $is_decimal ? (float) ( '0.' . $decimal ) : 0 );
-			} else {
-				$rating_value = 5;
-			}
-
-			return $rating_value;
-		}
-
-		/**
 		 * @param int          $limit  Limit.
 		 * @param string       $period Period.
 		 * @param int          $offset Offset page.
@@ -691,19 +603,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			$pulse_users = self::fetch_pulse_likers( $item_id, $type, $limit );
 			return array_values( array_unique( array_merge( (array) $users, (array) $pulse_users ) ) );
-		}
-
-		/**
-		 * @param int $post_id Post ID.
-		 * @return array{sum:float,count:int,average:float}
-		 */
-		public static function get_post_rating_stats( $post_id ) {
-			$count = self::count_item_votes( $post_id, 'post', 'like', false, null );
-			return array(
-				'sum'     => (float) $count,
-				'count'   => (int) $count,
-				'average' => (float) self::get_rating_value( $post_id, true ),
-			);
 		}
 
 		/* ---------- Internal SQL helpers ---------- */

@@ -948,96 +948,18 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 	/**
 	 * Calculate rating value by user logs & date_time
 	 *
+	 * @deprecated 5.2.0 No longer supported.
+	 *
 	 * @author       	Alimir
 	 * @param           Integer $post_ID
 	 * @param           Boolean $is_decimal
 	 * @since           2.7
-	 * @return          String
+	 * @return          null
 	 */
-	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
-		if ( wp_ulike_use_pulse_queries() ) {
-			$logical_key = 'get_rich_rating_value_' . $post_ID;
-			$rating      = WP_Ulike_Query_Cache::remember(
-				$logical_key,
-				static function () use ( $post_ID, $is_decimal ) {
-					return WP_Ulike_Pulse_Query::get_rating_value( $post_ID, $is_decimal );
-				},
-				WP_Ulike_Query_Cache::TTL_RATING
-			);
+	function wp_ulike_get_rating_value( $post_ID, $is_decimal = true ) {
+		_deprecated_function( __FUNCTION__, '5.2.0' );
 
-			return apply_filters( 'wp_ulike_rating_value', $rating, $post_ID );
-		}
-
-		global $wpdb;
-		$cache_key = 'get_rich_rating_value_' . $post_ID;
-		$cache_group = 'wp_ulike';
-
-		if (false === ($rating_value = wp_cache_get($cache_key, $cache_group))) {
-			// CRITICAL OPTIMIZATION: The original query calculated AVG of ALL posts on every call
-			// This was extremely inefficient. We now:
-			// 1. Get the current post's like count directly
-			// 2. Use a cached/transient value for global average (calculated less frequently)
-			// 3. Only calculate global average if cache is empty
-
-			$table_escaped = esc_sql( $wpdb->prefix . 'ulike' );
-			$post_id_escaped = absint( $post_ID );
-
-			// Get current post's like count (fast, indexed query)
-			$count = $wpdb->get_var( $wpdb->prepare(
-				"SELECT COUNT(*) FROM `{$table_escaped}` WHERE post_id = %d",
-				$post_id_escaped
-			) );
-
-			// Get global average from cache/transient (calculated once, reused many times)
-			$avg = get_transient( 'wp_ulike_global_avg_likes' );
-			if ( false === $avg ) {
-				// Calculate global average only when cache is empty (expensive operation)
-				// This query is expensive but only runs when transient expires
-				$avg = $wpdb->get_var( "
-					SELECT AVG(post_count)
-					FROM (
-						SELECT COUNT(*) AS post_count
-						FROM `{$table_escaped}`
-						GROUP BY post_id
-					) AS counted
-				" );
-				// Cache for 1 hour (global average doesn't change frequently)
-				set_transient( 'wp_ulike_global_avg_likes', $avg, HOUR_IN_SECONDS );
-			}
-
-			// Get post date (cached by WordPress)
-			$post_date = get_post_field( 'post_date', $post_ID );
-			$date = $post_date ? strtotime( $post_date ) : 0;
-
-			// if there is no log data, set $rating_value = 5
-			if( $count == 0 || $avg == 0 ){
-				$rating_value = 5;
-			} else {
-				$decimal = 0;
-				if( $is_decimal ){
-					list( $whole, $decimal ) = explode( '.', number_format( ( $count*100 / ( $avg * 2 ) ), 1 ) );
-					$decimal = (int)$decimal;
-				}
-				if( $date > strtotime('-1 month')) {
-					if($count < $avg) $rating_value = 4 + ".$decimal";
-					else $rating_value = 5;
-				} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
-					if($count < $avg) $rating_value = 3 + ".$decimal";
-					else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 4 + ".$decimal";
-					else $rating_value = 5;
-				} else {
-					if($count < ($avg/2)) $rating_value = 1 + ".$decimal";
-					else if(($count >= ($avg/2)) && ($count < $avg)) $rating_value = 2 + ".$decimal";
-					else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 3 + ".$decimal";
-					else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) $rating_value = 4 + ".$decimal";
-					else $rating_value = 5;
-				}
-			}
-
-			wp_cache_add($cache_key, $rating_value, $cache_group, HOUR_IN_SECONDS);
-		}
-
-		return apply_filters( 'wp_ulike_rating_value', $rating_value, $post_ID );
+		return apply_filters( 'wp_ulike_rating_value', null, $post_ID );
 	}
 }
 

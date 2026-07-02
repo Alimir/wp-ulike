@@ -120,8 +120,7 @@ function wp_ulike_notice_manager(){
 
 	// Show review notice once the site has meaningful engagement (likes only).
 	if ( ! wp_ulike_get_transient( 'wp-ulike-notice-wp_ulike_leave_a_review' ) ) {
-		$cached_count = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
-		$count_logs   = is_numeric( $cached_count ) ? absint( $cached_count ) : wp_ulike_count_all_logs();
+		$count_logs = wp_ulike_count_all_logs();
 
 		if ( $count_logs >= 25 ) {
 			$notice_list['wp_ulike_leave_a_review'] = new wp_ulike_notices(
