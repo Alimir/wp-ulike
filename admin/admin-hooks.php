@@ -68,7 +68,7 @@ function wp_ulike_on_logout_hook() {
 		return;
 	}
 	// Refresh new votes
-	wp_ulike_update_meta_data( 1, 'statistics', 'calculate_new_votes', 0 );
+	WP_Ulike_Query_Cache::reset_admin_new_votes();
 }
 add_action('wp_logout', 'wp_ulike_on_logout_hook');
 

@@ -16,8 +16,9 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 	final class WP_Ulike_Query_Cache {
 
 		const VERSION_OPTION = 'wp_ulike_pulse_cache_ver';
-		const STATS_ITEM_ID    = 1;
-		const STATS_META_GROUP = 'statistics';
+		const STATS_ITEM_ID        = 1;
+		const STATS_META_GROUP     = 'statistics';
+		const ADMIN_NEW_VOTES_KEY  = 'calculate_new_votes';
 
 		const TTL_DEFAULT     = 300;
 		const TTL_PEAK_HOURS  = 900;
@@ -152,6 +153,35 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 		 */
 		public static function set_statistics_meta( $logical_key, $value ) {
 			return wp_ulike_update_meta_data( self::STATS_ITEM_ID, self::STATS_META_GROUP, self::key( $logical_key ), $value );
+		}
+
+		/**
+		 * Admin menu badge: votes since last statistics visit (fixed key, not versioned).
+		 *
+		 * @return void
+		 */
+		public static function increment_admin_new_votes() {
+			if ( ! apply_filters( 'wp_ulike_display_admin_new_likes', true ) ) {
+				return;
+			}
+
+			if ( self::should_defer_bump() ) {
+				return;
+			}
+
+			$current = wp_ulike_get_meta_data( self::STATS_ITEM_ID, self::STATS_META_GROUP, self::ADMIN_NEW_VOTES_KEY, true );
+			if ( ! is_numeric( $current ) ) {
+				$current = 0;
+			}
+
+			wp_ulike_update_meta_data( self::STATS_ITEM_ID, self::STATS_META_GROUP, self::ADMIN_NEW_VOTES_KEY, (int) $current + 1 );
+		}
+
+		/**
+		 * @return void
+		 */
+		public static function reset_admin_new_votes() {
+			wp_ulike_update_meta_data( self::STATS_ITEM_ID, self::STATS_META_GROUP, self::ADMIN_NEW_VOTES_KEY, 0 );
 		}
 	}
 }
