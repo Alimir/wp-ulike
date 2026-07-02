@@ -39,7 +39,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 * @return string
 		 */
 		public static function get_page_title() {
-			return 'Copy likes to faster storage';
+			return 'Upgrade like storage';
 		}
 
 		/**
@@ -107,7 +107,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 				return array(
 					'phase'       => 'cleanup',
 					'title'       => 'Free up disk space',
-					'intro'       => 'Your likes already use the faster storage. Remove the old like tables when you are ready to reclaim disk space.',
+					'intro'       => 'Like records already use the faster storage. Remove the old log tables when you are ready to reclaim disk space.',
 					'reassurance' => array(
 						'WP ULike is fully working with the new storage.',
 						'Old tables stay until you remove them.',
@@ -140,11 +140,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			return array(
 				'phase'       => 'migrate',
 				'title'       => self::get_page_title(),
-				'intro'       => 'We recommend copying your existing likes to a faster table — especially on busy sites. Your like buttons and counts keep working exactly as they do now.',
+				'intro'       => 'We recommend moving your existing like records to a faster table — especially on busy sites. Counts and buttons keep working exactly as they do now.',
 				'reassurance' => array(
-					'Nothing is deleted — old data stays until you choose otherwise.',
-					'The copy runs in the background; your site stays online.',
-					'Like buttons and counts are unchanged throughout.',
+					'Nothing is deleted — old log tables stay until you choose otherwise.',
+					'Records move in the background; your site stays online.',
+					'Meta counts and buttons are unchanged throughout.',
 				),
 				'status'      => $status_label,
 				'progress'    => $progress_label,
@@ -185,24 +185,24 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 					'syncComplete'  => WP_Ulike_Pulse_Sync::is_sync_complete(),
 					'isPulse'       => WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode(),
 					'confirmEnable' => 'Switch to the faster storage for all reads? Your old tables are kept — nothing is deleted.',
-					'confirmDrop'   => 'Permanently delete old like tables? This cannot be undone. Make sure you have a database backup.',
+					'confirmDrop'   => 'Permanently delete old log tables? This cannot be undone. Make sure you have a database backup.',
 					'redirectUrl'   => self::get_help_url(),
 					'strings'       => array(
-						'started'                 => 'Copy started. You can leave this page — it will continue in the background.',
-						'syncComplete'            => 'Copy complete. Click “Finish upgrade” below to start using the faster storage for all reads.',
-						'finished'                => 'All done. Your likes now use the faster storage.',
+						'started'                 => 'Upgrade started. You can leave this page — records will keep moving in the background.',
+						'syncComplete'            => 'Records moved. Click “Finish upgrade” below to start using the faster storage for all reads.',
+						'finished'                => 'All done. Like records now use the faster storage.',
 						'dropped'                 => 'Old tables removed. Redirecting…',
 						'dismissed'               => 'Done. Redirecting…',
 						'dropFailed'              => 'Could not remove old tables. Please try again or use WP-CLI.',
-						'enableFailed'            => 'Could not finish the upgrade yet. Please wait until the copy is complete.',
-						'enableVerifyFailed'      => 'Copy finished but verification failed. Run “wp ulike pulse verify” for details, or contact support if failed rows are reported.',
-						'enableSyncIncomplete'    => 'Copy is not finished yet. Wait until status shows Complete, or run “wp ulike pulse sync”.',
+						'enableFailed'            => 'Could not finish the upgrade yet. Please wait until all records are moved.',
+						'enableVerifyFailed'      => 'Move finished but verification failed. Run “wp ulike pulse verify” for details, or contact support if failed rows are reported.',
+						'enableSyncIncomplete'    => 'Not finished yet. Wait until status shows Complete, or run “wp ulike pulse sync”.',
 						'actionFailed'            => 'Something went wrong. Please refresh the page and try again.',
 						'progressWaiting'         => 'Waiting to start…',
-						'progressCopied'          => '%1$s rows copied',
-						'progressCopiedSkipped'   => '%1$s rows copied (%2$s skipped)',
-						'progressComplete'        => '%1$s rows copied · complete',
-						'progressCompleteSkipped' => '%1$s rows copied (%2$s skipped) · complete',
+						'progressCopied'          => '%1$s records moved',
+						'progressCopiedSkipped'   => '%1$s records moved (%2$s skipped)',
+						'progressComplete'        => '%1$s records moved · complete',
+						'progressCompleteSkipped' => '%1$s records moved (%2$s skipped) · complete',
 						'progressEstimated'       => ' · ~%s%% estimated',
 					),
 				)
@@ -219,10 +219,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		}
 
 		/**
-		 * Human-readable copy status for the admin UI.
+		 * Human-readable sync status for the admin UI.
 		 *
 		 * @param string $status Raw status slug.
-		 * @param bool   $sync_complete Whether copy finished.
+		 * @param bool   $sync_complete Whether all records are moved.
 		 * @return string
 		 */
 		public static function status_label( $status, $sync_complete ) {
@@ -232,7 +232,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 
 			switch ( $status ) {
 				case 'running':
-					return 'Copying…';
+					return 'Moving records…';
 				case 'paused':
 					return 'Paused';
 				default:
@@ -256,7 +256,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 						<?php echo esc_html( 'WP ULike: faster like storage is ready' ); ?>
 					</h3>
 					<p class="wp-ulike-notice-description">
-						<?php echo esc_html( 'Copy your existing likes to a faster table for better performance on busy sites. Your like buttons and counts keep working — nothing is deleted.' ); ?>
+						<?php echo esc_html( 'Move your existing like records to a faster table for better performance on busy sites. Counts and buttons keep working — nothing is deleted.' ); ?>
 					</p>
 					<div class="wp-ulike-notice-submit">
 						<a class="wp-ulike-btn wp-ulike-btn-default wp-ulike-notice-btn wp-ulike-notice-cta-btn" href="<?php echo esc_url( $url ); ?>">
@@ -321,7 +321,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 				),
 				array(
 					'cmd'  => 'wp ulike pulse verify',
-					'desc' => 'Verify the copy (add --deep for COUNT scans)',
+					'desc' => 'Verify records (add --deep for COUNT scans)',
 				),
 				array(
 					'cmd'  => 'wp ulike pulse enable',

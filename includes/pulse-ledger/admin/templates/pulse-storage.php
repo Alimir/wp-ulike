@@ -31,16 +31,16 @@ $show_migrate = ! $is_pulse;
 	<h1><?php echo esc_html( $page_title ); ?></h1>
 
 	<?php if ( $show_cleanup ) : ?>
-	<p><?php echo esc_html( 'The upgrade is complete. Your likes now use the faster storage. Remove the old like tables when you want to free disk space.' ); ?></p>
+	<p><?php echo esc_html( 'The upgrade is complete. Like records now use the faster storage. Remove the old log tables when you want to free disk space.' ); ?></p>
 
 	<div class="notice notice-success inline" style="max-width:560px;margin-top:1.5em;padding:12px;">
-		<p style="margin:0;"><?php echo esc_html( 'Faster storage is active. All likes are read from the new table.' ); ?></p>
+		<p style="margin:0;"><?php echo esc_html( 'Faster storage is active. Like records are read from the new table.' ); ?></p>
 	</div>
 
 	<?php if ( $can_drop_legacy ) : ?>
 	<div class="notice notice-warning inline" style="max-width:560px;margin-top:1em;padding:12px;">
 		<p style="margin:0;">
-			<?php echo esc_html( 'Old tables are still on your server. Removing them is permanent — back up your database first.' ); ?>
+			<?php echo esc_html( 'Old log tables are still on your server. Removing them is permanent — back up your database first.' ); ?>
 		</p>
 		<ul style="margin:0.5em 0 0 1.2em;font-size:12px;">
 			<?php foreach ( $legacy_tables as $table_name ) : ?>
@@ -73,18 +73,18 @@ $show_migrate = ! $is_pulse;
 	</p>
 
 	<?php else : ?>
-	<p><?php echo esc_html( 'Likes are stored in a single, faster table. Your site keeps working while old data is copied over — safely and in the background. Nothing is deleted, and you can leave this page at any time.' ); ?></p>
+	<p><?php echo esc_html( 'Like records live in a single, faster table. Your site keeps working while existing vote logs are moved over — safely and in the background. Nothing is deleted, and you can leave this page at any time.' ); ?></p>
 
 	<?php if ( $sync_complete && ! $is_pulse ) : ?>
 	<div class="notice notice-success inline" id="wp-ulike-pulse-next-step" style="max-width:560px;margin-top:1.5em;padding:12px;">
 		<p style="margin:0;">
-			<strong><?php echo esc_html( 'Copy complete.' ); ?></strong>
-			<?php echo esc_html( 'One last step: click “Finish upgrade” to use the faster storage for all reads. Your old tables stay in place.' ); ?>
+			<strong><?php echo esc_html( 'Records moved.' ); ?></strong>
+			<?php echo esc_html( 'One last step: click “Finish upgrade” to use the faster storage for all reads. Old log tables stay in place.' ); ?>
 		</p>
 	</div>
 	<?php elseif ( $is_running ) : ?>
 	<div class="notice notice-info inline" style="max-width:560px;margin-top:1.5em;padding:12px;">
-		<p style="margin:0;"><?php echo esc_html( 'Copy in progress. You can leave this page — sync continues in the background.' ); ?></p>
+		<p style="margin:0;"><?php echo esc_html( 'Upgrade in progress. You can leave this page — records keep moving in the background.' ); ?></p>
 	</div>
 	<?php endif; ?>
 
@@ -108,7 +108,7 @@ $show_migrate = ! $is_pulse;
 	<p class="submit" style="margin-top:1.5em;">
 		<?php if ( $show_start ) : ?>
 		<button type="button" class="button button-primary" id="wp-ulike-pulse-start" <?php disabled( $is_running ); ?>>
-			<?php echo esc_html( 'Start copy' ); ?>
+			<?php echo esc_html( 'Start upgrade' ); ?>
 		</button>
 		<?php endif; ?>
 		<button type="button" class="button" id="wp-ulike-pulse-pause" <?php disabled( ! $is_running ); ?><?php echo $show_start ? '' : ' style="display:none;"'; ?>>

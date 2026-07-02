@@ -462,7 +462,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 
 			if ( $complete ) {
 				$parts = array(
-					sprintf( '%s rows copied', number_format_i18n( $imported ) ),
+					sprintf( '%s records moved', number_format_i18n( $imported ) ),
 				);
 
 				if ( $skipped > 0 ) {
@@ -478,12 +478,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 
 			if ( $skipped > 0 ) {
 				$label = sprintf(
-					'%1$s rows copied (%2$s skipped)',
+					'%1$s records moved (%2$s skipped)',
 					number_format_i18n( $imported ),
 					number_format_i18n( $skipped )
 				);
 			} elseif ( $processed > 0 || $imported > 0 ) {
-				$label = sprintf( '%s rows copied', number_format_i18n( $imported ) );
+				$label = sprintf( '%s records moved', number_format_i18n( $imported ) );
 			} else {
 				$label = 'Waiting to start…';
 			}

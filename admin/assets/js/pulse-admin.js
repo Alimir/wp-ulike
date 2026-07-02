@@ -150,7 +150,7 @@
 			updateUi({
 				migration_status: res.data.migration_status || 'running',
 				sync_complete: !!res.data.done,
-				status_label: res.data.done ? 'Complete' : 'Copying…',
+				status_label: res.data.done ? 'Complete' : 'Moving records…',
 				progress: res.data.progress || {}
 			});
 
