@@ -249,63 +249,19 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @since 2.0
 		 * @return String
 		 */
-	public function select_data( $table ){
-
-		$data_limit = apply_filters( 'wp_ulike_stats_data_limit', 30 );
-		
-		// Ensure data_limit is a positive integer for safety
-		$data_limit = max( 1, absint( $data_limit ) );
-
-		if ( wp_ulike_use_pulse_queries() ) {
-			return WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $table, $data_limit );
-		}
-
-		// Fetch the most recent date_time from the table
-		// MAX() query uses the date_time index efficiently (reverse index scan)
-		$table_escaped = esc_sql( $this->wpdb->prefix . $table );
-		$latest_date = $this->wpdb->get_var( "
-			SELECT MAX(date_time) FROM `{$table_escaped}`
-		" );
-
-		// If no data exists, return empty result set for chart consumers.
-		if( empty( $latest_date ) ) {
-			return array();
-		}
-
-		// Calculate start date in PHP for maximum index optimization
-		// Use $data_limit for date range to match the data limit filter
-		// This ensures MySQL gets a constant value to compare against (most index-friendly)
-		$latest_timestamp = strtotime( $latest_date );
-		
-		// Safety check: ensure timestamp is valid
-		if( false === $latest_timestamp ) {
-			return array();
-		}
-		
-		// DAY_IN_SECONDS is a WordPress core constant (defined since WP 3.5)
-		$start_date = date( 'Y-m-d H:i:s', $latest_timestamp - ( $data_limit * DAY_IN_SECONDS ) );
-
-		// Use index-friendly date range query with pre-calculated dates
-		// Direct comparison allows MySQL to use date_time index efficiently
-		// No LIMIT needed since date range naturally limits results to $data_limit days
-		// (GROUP BY DATE() returns at most one row per day)
-		$query = $this->wpdb->prepare( "
-			SELECT DATE(date_time) AS labels,
-			count(date_time) AS counts
-			FROM `{$table_escaped}`
-			WHERE date_time >= %s
-			AND date_time <= %s
-			GROUP BY labels
-			ORDER BY labels ASC",
-			$start_date,
-			$latest_date
+	public function select_data( $table ) {
+		$data_limit = max( 1, absint( apply_filters( 'wp_ulike_stats_data_limit', 30 ) ) );
+		$cache_key  = wp_ulike_query_cache_key(
+			sprintf( 'stats_chart_%s_%d', sanitize_key( $table ), $data_limit )
 		);
+		$cached     = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
-		$result = $this->wpdb->get_results( $query );
-
-		if( empty( $result ) ) {
-			return array();
+		if ( false !== $cached ) {
+			return $cached;
 		}
+
+		$result = WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $table, $data_limit );
+		wp_cache_set( $cache_key, $result, WP_ULIKE_SLUG, 300 );
 
 		return $result;
 	}
@@ -353,17 +309,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
 
-			// Make a cachable query to get new like count from all tables
-			if( false === $counter_value ){
-				if ( wp_ulike_use_pulse_queries() ) {
-					$counter_value = WP_Ulike_Pulse_Query::count_logs_for_table( $table, $date );
-				} else {
-					$table_escaped = esc_sql( $this->wpdb->prefix . $table );
-					$query = "SELECT COUNT(*) FROM `{$table_escaped}` WHERE 1=1";
-					$query .= wp_ulike_get_period_limit_sql( $date );
-
-					$counter_value = $this->wpdb->get_var( $query );
-				}
+			if ( false === $counter_value ) {
+				$counter_value = WP_Ulike_Pulse_Query::count_logs_for_table( $table, $date );
 				wp_cache_set( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
 			}
 
@@ -652,26 +599,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				return $cached;
 			}
 
-			$union_parts = array();
-
-			if ( wp_ulike_use_pulse_queries() ) {
-				$results = WP_Ulike_Pulse_Log_Bridge::get_peak_hours_rows( array_values( $tables ) );
-			} else {
-				foreach ( $tables as $table ) {
-					$table_escaped = esc_sql( $this->wpdb->prefix . $table );
-					$union_parts[] = "SELECT date_time FROM `{$table_escaped}` WHERE date_time >= NOW() - INTERVAL 30 DAY";
-				}
-
-				$query = sprintf(
-					"SELECT HOUR(date_time) AS hour_slot, COUNT(*) AS total_count
-					FROM ( %s ) AS combined
-					GROUP BY hour_slot
-					ORDER BY hour_slot ASC",
-					implode( ' UNION ALL ', $union_parts )
-				);
-
-				$results = $this->wpdb->get_results( $query );
-			}
+			$results = WP_Ulike_Pulse_Log_Bridge::get_peak_hours_rows( array_values( $tables ) );
 			$hours   = array_fill( 0, 24, 0 );
 
 			if ( ! empty( $results ) ) {

@@ -1060,7 +1060,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
         $cache_key = wp_ulike_query_cache_key( 'count_logs_period_' . $period );
 
         if( $period === 'all' ){
-            $count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
+            $count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
             if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
                 return absint($count_all_logs);
             }
@@ -1090,7 +1090,7 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
         }
 
         if( $period === 'all' ){
-            wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
+            wp_ulike_update_meta_data( 1, 'statistics', $cache_key, $counter_value );
         }
 
         return empty( $counter_value ) ? 0 : absint($counter_value);
