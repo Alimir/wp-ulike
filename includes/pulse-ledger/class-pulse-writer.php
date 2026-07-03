@@ -197,16 +197,17 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 		 *
 		 * @param int    $item_id       Item ID.
 		 * @param string $setting_type  wp_ulike_setting_type slug.
-		 * @return void
+		 * @return int Rows removed across pulse and legacy tables.
 		 */
 		public static function delete_item_votes( $item_id, $setting_type ) {
 			global $wpdb;
 
+			$deleted   = 0;
 			$item_id   = absint( $item_id );
 			$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $setting_type );
 
 			if ( WP_Ulike_Pulse_Schema::table_exists() ) {
-				$wpdb->delete(
+				$deleted += (int) $wpdb->delete(
 					self::table(),
 					array(
 						'item_id'   => $item_id,
@@ -216,17 +217,20 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 				);
 			}
 
-			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( $setting_type );
+			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type );
 			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 				$table  = esc_sql( $source['table'] );
 				$column = esc_sql( $source['column'] );
-				$wpdb->query(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$deleted += (int) $wpdb->query(
 					$wpdb->prepare(
 						"DELETE FROM `{$table}` WHERE `{$column}` = %d",
 						$item_id
 					)
 				);
 			}
+
+			return $deleted;
 		}
 
 		/**

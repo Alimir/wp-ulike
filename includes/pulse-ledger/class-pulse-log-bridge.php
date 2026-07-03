@@ -16,19 +16,28 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 	final class WP_Ulike_Pulse_Log_Bridge {
 
 		/**
-		 * @param string $table_suffix Legacy table suffix (ulike, ulike_comments, …).
+		 * Resolve a legacy table suffix or canonical item type to a source config.
+		 *
+		 * @param string $identifier Legacy suffix (ulike, ulike_comments) or item type (post, comment).
 		 * @return array<string,mixed>|null
 		 */
-		public static function source_for_suffix( $table_suffix ) {
+		public static function source_for_suffix( $identifier ) {
 			global $wpdb;
 
+			$identifier = str_replace( $wpdb->prefix, '', (string) $identifier );
+
 			foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
-				if ( str_replace( $wpdb->prefix, '', $source['table'] ) === $table_suffix ) {
+				if ( str_replace( $wpdb->prefix, '', $source['table'] ) === $identifier ) {
 					return $source;
 				}
 			}
 
-			return null;
+			$item_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $identifier );
+			if ( ! $item_type ) {
+				$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $identifier );
+			}
+
+			return WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type );
 		}
 
 		/**

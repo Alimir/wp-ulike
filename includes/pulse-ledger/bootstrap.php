@@ -30,14 +30,33 @@ if ( is_admin() && file_exists( __DIR__ . '/admin/class-pulse-admin.php' ) ) {
 WP_Ulike_Pulse_Sync_Scheduler::init();
 WP_Ulike_Pulse_CLI::register();
 
+add_action(
+	'plugins_loaded',
+	static function () {
+		if ( function_exists( 'wp_cache_add_global_groups' ) ) {
+			wp_cache_add_global_groups(
+				array(
+					WP_ULIKE_SLUG,
+					WP_Ulike_Query_Cache::STATS_GROUP,
+				)
+			);
+		}
+	},
+	1
+);
+
+add_action( 'admin_post_wp_ulike_flush_stats_cache', 'wp_ulike_admin_post_flush_stats_cache' );
+
 if ( is_admin() && class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 	WP_Ulike_Pulse_Admin::init();
 }
 
+add_action( 'wp_ulike_data_inserted', 'wp_ulike_track_admin_new_vote', 5, 1 );
+add_action( 'wp_ulike_data_inserted', 'wp_ulike_adjust_statistics_on_vote_insert', 8, 1 );
+add_action( 'wp_ulike_delete_vote_data', 'wp_ulike_adjust_statistics_on_vote_delete', 8, 4 );
 add_action( 'wp_ulike_data_inserted', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 1 );
 add_action( 'wp_ulike_data_updated', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 1 );
-add_action( 'wp_ulike_delete_vote_data', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 1 );
-add_action( 'wp_ulike_data_inserted', 'wp_ulike_track_admin_new_vote', 5, 1 );
+add_action( 'wp_ulike_delete_vote_data', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 4 );
 
 /**
  * Bump admin statistics badge on new vote inserts (not toggles/unlikes).
@@ -51,6 +70,56 @@ function wp_ulike_track_admin_new_vote( $args ) {
 	}
 
 	WP_Ulike_Query_Cache::increment_admin_new_votes();
+}
+
+/**
+ * +1 site statistics when a new vote log row is inserted.
+ *
+ * Distinct-mode status toggles fire wp_ulike_data_updated instead (row count unchanged).
+ *
+ * @param array<string,mixed> $args Hook payload.
+ * @return void
+ */
+function wp_ulike_adjust_statistics_on_vote_insert( $args ) {
+	if ( ! is_array( $args ) || empty( $args['type'] ) ) {
+		return;
+	}
+
+	$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $args['type'] );
+	WP_Ulike_Query_Cache::adjust_statistics_meta( 1, $item_type );
+}
+
+/**
+ * −N site statistics when vote rows are removed.
+ *
+ * @param int|string          $arg1 Item ID or pulse payload array.
+ * @param string|array|null   $arg2 Setting type slug or unused.
+ * @param mixed               $arg3 Unused settings object.
+ * @param int|null            $arg4 Rows deleted (bulk item cleanup).
+ * @return void
+ */
+function wp_ulike_adjust_statistics_on_vote_delete( $arg1, $arg2 = null, $arg3 = null, $arg4 = null ) {
+	if ( is_array( $arg1 ) ) {
+		if ( empty( $arg1['item_type'] ) ) {
+			return;
+		}
+
+		WP_Ulike_Query_Cache::adjust_statistics_meta(
+			-1,
+			WP_Ulike_Pulse_Registry::normalize_item_type( $arg1['item_type'] )
+		);
+		return;
+	}
+
+	$deleted_count = is_numeric( $arg4 ) ? (int) $arg4 : 0;
+	if ( $deleted_count <= 0 || ! is_string( $arg2 ) ) {
+		return;
+	}
+
+	WP_Ulike_Query_Cache::adjust_statistics_meta(
+		-$deleted_count,
+		WP_Ulike_Pulse_Registry::from_setting_type( $arg2 )
+	);
 }
 
 /**
@@ -97,6 +166,30 @@ function wp_ulike_pulse_bump_cache() {
  */
 function wp_ulike_pulse_flush_cache() {
 	WP_Ulike_Query_Cache::flush();
+}
+
+/**
+ * Invalidate statistics object cache only (admin aggregates).
+ *
+ * @return void
+ */
+function wp_ulike_flush_stats_cache() {
+	WP_Ulike_Query_Cache::flush_stats();
+}
+
+/**
+ * Admin-post handler for Help → Refresh statistics cache.
+ *
+ * Registered here (not only in Overview::init) so admin-post.php always has the hook.
+ *
+ * @return void
+ */
+function wp_ulike_admin_post_flush_stats_cache() {
+	if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
+		wp_die( esc_html__( 'Plugin not loaded.', 'wp-ulike' ), '', array( 'response' => 500 ) );
+	}
+
+	WP_Ulike_Overview::handle_flush_stats_cache();
 }
 
 /**

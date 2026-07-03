@@ -248,13 +248,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 		}
 
 		/**
-		 * Admin stats content-type keys mapped to legacy table suffixes.
+		 * Admin stats content-type keys mapped to canonical item types.
 		 *
 		 * @return array<string,string>
 		 */
 		public static function stats_table_map() {
-			global $wpdb;
-
 			$key_map = array(
 				'posts'      => 'posts',
 				'comments'   => 'comments',
@@ -264,8 +262,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 
 			$map = array();
 			foreach ( self::legacy_sources() as $slug => $source ) {
-				$key           = isset( $key_map[ $slug ] ) ? $key_map[ $slug ] : $slug;
-				$map[ $key ]   = str_replace( $wpdb->prefix, '', $source['table'] );
+				$key         = isset( $key_map[ $slug ] ) ? $key_map[ $slug ] : $slug;
+				$map[ $key ] = $source['item_type'];
 			}
 
 			return $map;

@@ -109,29 +109,55 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		public static function count_fingerprint_votes( $fingerprint, $item_id, $type ) {
 			global $wpdb;
 
-			$settings = wp_ulike_setting_type::get_instance( $type );
-			$table    = esc_sql( $wpdb->prefix . $settings->getTableName() );
-			$column   = esc_sql( $settings->getColumnName() );
-
-			$legacy = (int) $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM `{$table}` WHERE `{$column}` = %d AND fingerprint = %s",
-					absint( $item_id ),
-					$fingerprint
-				)
+			$mode   = self::read_mode();
+			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type(
+				WP_Ulike_Pulse_Registry::from_setting_type( $type )
 			);
 
-			if ( 'legacy' === self::read_mode() ) {
+			if ( 'pulse' === $mode ) {
+				return self::count_pulse_fingerprint_votes( $fingerprint, $item_id, $type );
+			}
+
+			$legacy = 0;
+			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				$table  = esc_sql( $source['table'] );
+				$column = esc_sql( $source['column'] );
+				$legacy = (int) $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT(*) FROM `{$table}` WHERE `{$column}` = %d AND fingerprint = %s",
+						absint( $item_id ),
+						$fingerprint
+					)
+				);
+			}
+
+			if ( 'legacy' === $mode || ! $source ) {
 				return $legacy;
 			}
 
+			return $legacy + self::count_pulse_fingerprint_votes(
+				$fingerprint,
+				$item_id,
+				$type,
+				WP_Ulike_Pulse_Config::dual_since()
+			);
+		}
+
+		/**
+		 * @param int|string $fingerprint Fingerprint.
+		 * @param int        $item_id     Item ID.
+		 * @param string     $type        Setting type.
+		 * @param string     $since       Optional datetime floor (merged mode).
+		 * @return int
+		 */
+		private static function count_pulse_fingerprint_votes( $fingerprint, $item_id, $type, $since = '' ) {
+			global $wpdb;
+
 			$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
 			$item_type   = WP_Ulike_Pulse_Registry::from_setting_type( $type );
-			$since_sql   = 'merged' === self::read_mode()
-				? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() )
-				: '';
+			$since_sql   = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
-			$pulse = (int) $wpdb->get_var(
+			return (int) $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT COUNT(*) FROM `{$pulse_table}`
 					WHERE item_id = %d AND item_type = %s AND fingerprint = %s AND engagement_kind = %s {$since_sql}",
@@ -141,8 +167,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WP_Ulike_Pulse_Registry::KIND_VOTE
 				)
 			);
-
-			return $legacy + $pulse;
 		}
 
 		/**
@@ -166,45 +190,55 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		}
 
 		/**
-		 * Count logs in one legacy table suffix (ulike, ulike_comments, …).
+		 * Count logs for one content type (post, comment, activity, topic).
+		 *
+		 * @param string $item_type Canonical item type.
+		 * @param mixed  $period    Period filter.
+		 * @return int
+		 */
+		public static function count_logs_for_type( $item_type, $period = 'all' ) {
+			global $wpdb;
+
+			$item_type    = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+			$period_limit = wp_ulike_get_period_limit_sql( $period );
+			$mode         = self::read_mode();
+			$source       = WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type );
+
+			if ( 'pulse' === $mode ) {
+				if ( ! $source ) {
+					return 0;
+				}
+				return self::count_pulse_logs_for_type( $item_type, $period );
+			}
+
+			$legacy = 0;
+			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				$table  = esc_sql( $source['table'] );
+				$legacy = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit}" );
+			}
+
+			if ( 'legacy' === $mode || ! $source ) {
+				return $legacy;
+			}
+
+			return $legacy + self::count_pulse_logs_for_type( $item_type, $period, WP_Ulike_Pulse_Config::dual_since() );
+		}
+
+		/**
+		 * Count logs by legacy table suffix (ulike, ulike_comments, …).
 		 *
 		 * @param string $table_suffix Table name without prefix.
 		 * @param mixed  $period       Period filter.
 		 * @return int
 		 */
 		public static function count_logs_for_table( $table_suffix, $period = 'all' ) {
-			global $wpdb;
+			$item_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $table_suffix );
 
-			$period_limit = wp_ulike_get_period_limit_sql( $period );
-			$mode         = self::read_mode();
-			$item_type    = null;
-
-			foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
-				if ( str_replace( $wpdb->prefix, '', $source['table'] ) === $table_suffix ) {
-					$item_type = $source['item_type'];
-					break;
-				}
+			if ( ! $item_type ) {
+				return 0;
 			}
 
-			if ( 'pulse' === $mode ) {
-				if ( ! $item_type ) {
-					return 0;
-				}
-				return self::count_pulse_logs_for_type( $item_type, $period );
-			}
-
-			$table = esc_sql( $wpdb->prefix . $table_suffix );
-			if ( ! WP_Ulike_Pulse_Registry::table_exists( $table ) ) {
-				$legacy = 0;
-			} else {
-				$legacy = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit}" );
-			}
-
-			if ( 'legacy' === $mode || ! $item_type ) {
-				return $legacy;
-			}
-
-			return $legacy + self::count_pulse_logs_for_type( $item_type, $period, WP_Ulike_Pulse_Config::dual_since() );
+			return self::count_logs_for_type( $item_type, $period );
 		}
 
 		/**

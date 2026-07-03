@@ -21,7 +21,12 @@ function wp_ulike_get_number_of_new_likes() {
 
     $cache_key = WP_Ulike_Query_Cache::ADMIN_NEW_VOTES_KEY;
     // Get new votes
-    $calculate_new_votes = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
+    $calculate_new_votes = wp_ulike_get_meta_data(
+		WP_Ulike_Query_Cache::STATS_ITEM_ID,
+		WP_Ulike_Query_Cache::STATS_META_GROUP,
+		$cache_key,
+		true
+	);
 
     if( empty( $calculate_new_votes ) ){
         if( $calculate_new_votes === '' ){
