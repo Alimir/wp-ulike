@@ -79,8 +79,64 @@ class wp_ulike_setting_type {
 		return ! empty( $this->typeSettings['setting'] ) ? $this->typeSettings['setting'] : NULL;
 	}
 
+	/**
+	 * Canonical item type (post, comment, activity, topic).
+	 *
+	 * @return string|null
+	 */
+	public function getItemType() {
+		return $this->getType();
+	}
+
+	/**
+	 * Legacy vote table suffix without prefix (ulike, ulike_comments, …).
+	 *
+	 * @return string|null
+	 */
+	public function getLegacyTableSuffix() {
+		return ! empty( $this->typeSettings['table'] ) ? $this->typeSettings['table'] : null;
+	}
+
+	/**
+	 * Prefixed legacy vote table name.
+	 *
+	 * @return string|null
+	 */
+	public function getLegacyTable() {
+		$suffix = $this->getLegacyTableSuffix();
+		if ( ! $suffix ) {
+			return null;
+		}
+
+		global $wpdb;
+		return $wpdb->prefix . $suffix;
+	}
+
+	/**
+	 * Whether the legacy vote table exists in the database.
+	 *
+	 * @return bool
+	 */
+	public function legacyTableExists() {
+		$table = $this->getLegacyTable();
+		return $table && WP_Ulike_Pulse_Registry::table_exists( $table );
+	}
+
+	/**
+	 * Identifier for admin logs / Log Bridge (accepts item type or legacy suffix).
+	 *
+	 * @return string|null
+	 */
+	public function getLogIdentifier() {
+		return $this->getItemType();
+	}
+
+	/**
+	 * @deprecated 5.0 Use getLegacyTableSuffix().
+	 * @return string|null
+	 */
 	public function getTableName(){
-		return ! empty( $this->typeSettings['table'] ) ? $this->typeSettings['table'] : NULL;
+		return $this->getLegacyTableSuffix();
 	}
 
 	public function getColumnName(){

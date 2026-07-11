@@ -181,11 +181,11 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				return null;
 			}
 
-			$table = $tables[ $type ];
+			$item_type = $tables[ $type ];
 
 			return array(
-				'chart'   => $this->dataset( $table ),
-				'metrics' => $this->get_type_count_logs( $table ),
+				'chart'   => $this->dataset( $item_type ),
+				'metrics' => $this->get_type_count_logs( $item_type ),
 			);
 		}
 
@@ -205,17 +205,17 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Count logs for a single table across standard time ranges.
+		 * Count logs for a single content type across standard time ranges.
 		 *
-		 * @param string $table Log table name (without prefix).
+		 * @param string $item_type Canonical item type (post, comment, …).
 		 * @return array
 		 */
-		private function get_type_count_logs( $table ) {
+		private function get_type_count_logs( $item_type ) {
 			return array(
-				'week'  => $this->count_logs( array( 'table' => $table, 'date' => 'week' ) ),
-				'month' => $this->count_logs( array( 'table' => $table, 'date' => 'month' ) ),
-				'year'  => $this->count_logs( array( 'table' => $table, 'date' => 'year' ) ),
-				'all'   => $this->count_logs( array( 'table' => $table, 'date' => 'all' ) ),
+				'week'  => $this->count_logs( array( 'type' => $item_type, 'date' => 'week' ) ),
+				'month' => $this->count_logs( array( 'type' => $item_type, 'date' => 'month' ) ),
+				'year'  => $this->count_logs( array( 'type' => $item_type, 'date' => 'year' ) ),
+				'all'   => $this->count_logs( array( 'type' => $item_type, 'date' => 'all' ) ),
 			);
 		}
 
@@ -223,12 +223,12 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * Get posts dataset
 		 *
 		 * @since 2.0
-		 * @param string $table
+		 * @param string $item_type Canonical item type.
 		 * @return void
 		 */
-		public function dataset( $table ){
+		public function dataset( $item_type ){
 			$output  = array();
-			$results = $this->select_data( $table );
+			$results = $this->select_data( $item_type );
 
 			foreach( $results as $result ){
 				if( isset( $result->labels ) && isset( $result->counts ) ){
@@ -245,18 +245,18 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * Get The Logs Data From Tables
 		 *
 		 * @author Alimir
-		 * @param string $table
+		 * @param string $item_type Canonical item type.
 		 * @since 2.0
 		 * @return String
 		 */
-	public function select_data( $table ) {
+	public function select_data( $item_type ) {
 		$data_limit  = max( 1, absint( apply_filters( 'wp_ulike_stats_data_limit', 30 ) ) );
-		$logical_key = sprintf( 'stats_chart_%s_%d', sanitize_key( $table ), $data_limit );
+		$logical_key = sprintf( 'stats_chart_%s_%d', sanitize_key( $item_type ), $data_limit );
 
 		return WP_Ulike_Query_Cache::remember_stats(
 			$logical_key,
-			static function () use ( $table, $data_limit ) {
-				return WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $table, $data_limit );
+			static function () use ( $item_type, $data_limit ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $item_type, $data_limit );
 			}
 		);
 	}
@@ -283,18 +283,18 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			//Main Data
 			$defaults  = array(
-				'type'  => 'post',
-				'table' => '',
-				'date'  => 'all',
+				'type' => 'post',
+				'date' => 'all',
 			);
 
 			$parsed_args = wp_parse_args( $args, $defaults );
 
-			$item_type = ! empty( $parsed_args['type'] ) ? $parsed_args['type'] : $parsed_args['table'];
-			if ( empty( $item_type ) ) {
-				$item_type = 'post';
+			// Backward compat: callers may still pass legacy `table` (suffix or item type).
+			if ( empty( $parsed_args['type'] ) && ! empty( $parsed_args['table'] ) ) {
+				$parsed_args['type'] = $parsed_args['table'];
 			}
 
+			$item_type = ! empty( $parsed_args['type'] ) ? $parsed_args['type'] : 'post';
 			$resolved_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $item_type );
 			$item_type     = $resolved_type ? $resolved_type : WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
 			$date          = isset( $parsed_args['date'] ) ? $parsed_args['date'] : 'all';

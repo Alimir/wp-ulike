@@ -404,7 +404,11 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					: WP_Ulike_Pulse_Writer::insert( $payload );
 			}
 
-			$table = $this->wpdb->prefix . $this->typeSettings->getTableName();
+			if ( ! $this->typeSettings->legacyTableExists() ) {
+				return false;
+			}
+
+			$table = $this->typeSettings->getLegacyTable();
 			$data  = array(
 				$this->typeSettings->getColumnName() => $item_id,
 				'date_time'                          => current_time( 'mysql', true ),
@@ -479,7 +483,11 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				);
 			}
 
-			$table  = $this->wpdb->prefix . $this->typeSettings->getTableName();
+			if ( ! $this->typeSettings->legacyTableExists() ) {
+				return false;
+			}
+
+			$table  = $this->typeSettings->getLegacyTable();
 			$data   = array( 'status' => $this->currentStatus, 'date_time' => current_time( 'mysql', true ) ); // No need for esc_sql
 			$where  = array(
 				$this->typeSettings->getColumnName() => $item_id,
@@ -517,8 +525,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				return WP_Ulike_Pulse_Writer::delete( $item_id, $item_type, $this->currentUser );
 			}
 
+			if ( ! $this->typeSettings->legacyTableExists() ) {
+				return false;
+			}
+
 			return $this->wpdb->delete(
-				$this->wpdb->prefix . $this->typeSettings->getTableName(),
+				$this->typeSettings->getLegacyTable(),
 				array( $this->typeSettings->getColumnName() => $item_id, 'user_id' => $this->currentUser )
 			);
 		}

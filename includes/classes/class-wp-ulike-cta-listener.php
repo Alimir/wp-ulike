@@ -132,11 +132,9 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 
 			// Display likers
 			if( $this->data['displayLikers'] && ( ! wp_ulike_setting_repo::restrictLikersBox( $this->settings_type->getType() ) || $this->user ) && ! in_array( $this->response['status'], array(4,5) ) ){
-				$template = wp_ulike_get_likers_template(
-					$this->settings_type->getTableName(),
-					$this->settings_type->getColumnName(),
+				$template = wp_ulike_get_likers_template_for_type(
+					$this->settings_type->getItemType(),
 					$this->data['id'],
-					$this->settings_type->getSettingKey(),
 					array(
                 		'style' => $this->data['likersTemplate']
             		)

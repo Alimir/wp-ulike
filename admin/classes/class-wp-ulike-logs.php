@@ -13,21 +13,37 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 
 	class wp_ulike_logs{
 		// Private variables
-		private $wpdb, $table, $page, $per_page, $sort;
+		private $wpdb, $identifier, $page, $per_page, $sort;
 
 		/**
 		 * Constructor
+		 *
+		 * @param string $identifier Item type (post, comment, …) or legacy table suffix.
 		 */
-		function __construct( $table, $page = 1, $per_page = 15, $sort = array(
+		function __construct( $identifier, $page = 1, $per_page = 15, $sort = array(
 			'type'  => 'DESC',
 			'field' => 'id'
 		) ){
 			global $wpdb;
-			$this->wpdb     = $wpdb;
-			$this->table    = $table;
-			$this->page     = $page;
-			$this->per_page = $per_page;
-			$this->sort     = $sort;
+			$this->wpdb       = $wpdb;
+			$this->identifier = WP_Ulike_Pulse_Registry::resolve_log_identifier( $identifier ) ?: $identifier;
+			$this->page       = $page;
+			$this->per_page   = $per_page;
+			$this->sort       = $sort;
+		}
+
+		/**
+		 * Prefixed legacy vote table for direct SQL fallback paths.
+		 *
+		 * @return string
+		 */
+		private function legacy_table_sql() {
+			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( $this->identifier );
+			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				return esc_sql( $source['table'] );
+			}
+
+			return esc_sql( $this->wpdb->prefix . $this->identifier );
 		}
 
 		/**
@@ -38,14 +54,14 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		public function get_results(){
 			if ( wp_ulike_use_pulse_queries() ) {
 				return WP_Ulike_Pulse_Log_Bridge::get_log_rows(
-					$this->table,
+					$this->identifier,
 					$this->page,
 					$this->per_page,
 					$this->sort
 				);
 			}
 
-			$table = esc_sql( $this->wpdb->prefix . $this->table );
+			$table = $this->legacy_table_sql();
 			$paged = absint( ( $this->page - 1 ) * $this->per_page );
 			$per_page = absint( $this->per_page );
 			
@@ -64,10 +80,10 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 */
 		public function get_row( $item_ID ){
 			if ( wp_ulike_use_pulse_queries() ) {
-				return WP_Ulike_Pulse_Log_Bridge::get_log_row( $this->table, $item_ID );
+				return WP_Ulike_Pulse_Log_Bridge::get_log_row( $this->identifier, $item_ID );
 			}
 
-			$table = esc_sql( $this->wpdb->prefix . $this->table );
+			$table = $this->legacy_table_sql();
 			$item_ID = absint( $item_ID );
 
 			return $this->wpdb->get_row( $this->wpdb->prepare( "
@@ -85,10 +101,10 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 */
 		public function get_all_rows(){
 			if ( wp_ulike_use_pulse_queries() ) {
-				return WP_Ulike_Pulse_Log_Bridge::get_all_log_rows( $this->table, $this->sort );
+				return WP_Ulike_Pulse_Log_Bridge::get_all_log_rows( $this->identifier, $this->sort );
 			}
 
-			$table = esc_sql( $this->wpdb->prefix . $this->table );
+			$table = $this->legacy_table_sql();
 			
 			// Whitelist allowed order fields
 			$allowed_fields = array( 'id', 'date_time', 'user_id', 'ip', 'status' );
@@ -113,12 +129,12 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 					}
 				}
 				if ( ! empty( $selected_ids ) ) {
-					WP_Ulike_Pulse_Log_Bridge::delete_log_rows( $this->table, $selected_ids );
+					WP_Ulike_Pulse_Log_Bridge::delete_log_rows( $this->identifier, $selected_ids );
 				}
 				return;
 			}
 
-			$table = esc_sql( $this->wpdb->prefix . $this->table );
+			$table = $this->legacy_table_sql();
 			$selectedIds = array();
 
 			foreach ($items as $key => $item) {
@@ -141,10 +157,10 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 */
 		public function delete_row( $item_id ){
 			if ( wp_ulike_use_pulse_queries() ) {
-				return WP_Ulike_Pulse_Log_Bridge::delete_log_row( $this->table, $item_id );
+				return WP_Ulike_Pulse_Log_Bridge::delete_log_row( $this->identifier, $item_id );
 			}
 
-			$table   = $this->wpdb->prefix . $this->table;
+			$table   = $this->legacy_table_sql();
 			$item_id = absint( $item_id );
 
 			return $this->wpdb->delete(
@@ -161,10 +177,10 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 */
 		private function get_total_records(){
 			if ( wp_ulike_use_pulse_queries() ) {
-				return WP_Ulike_Pulse_Log_Bridge::count_log_rows( $this->table );
+				return WP_Ulike_Pulse_Log_Bridge::count_log_rows( $this->identifier );
 			}
 
-			$table  = esc_sql( $this->wpdb->prefix . $this->table );
+			$table  = $this->legacy_table_sql();
 			return $this->wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
 		}
 

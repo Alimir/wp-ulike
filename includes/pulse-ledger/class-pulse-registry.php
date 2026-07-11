@@ -13,7 +13,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 
 	final class WP_Ulike_Pulse_Registry {
 
-		const KIND_VOTE = 'vote';
+		const KIND_VOTE  = 'vote';
+		const KIND_EMOJI = 'emoji';
+		const KIND_STAR  = 'star';
 
 		/**
 		 * Canonical item types.
@@ -303,6 +305,22 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 			}
 
 			return array( $profile['table'], $profile['column'], $profile['slug'] );
+		}
+
+		/**
+		 * Normalize a setting slug, item type, or legacy table suffix for Log Bridge.
+		 *
+		 * @param string $identifier Setting slug, item type, or legacy suffix.
+		 * @return string|null Canonical item type.
+		 */
+		public static function resolve_log_identifier( $identifier ) {
+			$by_suffix = self::type_by_table_suffix( $identifier );
+			if ( $by_suffix ) {
+				return $by_suffix;
+			}
+
+			$item_type = self::normalize_item_type( $identifier );
+			return self::legacy_source_for_type( $item_type ) ? $item_type : null;
 		}
 
 		/**

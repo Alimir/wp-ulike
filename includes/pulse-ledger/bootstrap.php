@@ -228,3 +228,13 @@ function wp_ulike_pulse_needs_migration() {
 function wp_ulike_use_pulse_queries() {
 	return WP_Ulike_Pulse_Query::available();
 }
+
+/**
+ * Whether vote reads may still include legacy log tables (legacy or dual/merged mode).
+ *
+ * @return bool
+ */
+function wp_ulike_pulse_reads_legacy_votes() {
+	$mode = wp_ulike_pulse_read_mode();
+	return in_array( $mode, array( 'legacy', 'merged' ), true );
+}

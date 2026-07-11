@@ -129,6 +129,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 					),
 				)
 			);
+			WP_Ulike_Query_Cache::seed_empty_statistics_meta();
 		}
 
 		/**

@@ -119,7 +119,43 @@ if( ! function_exists( 'wp_ulike_get_type_by_table' ) ){
 	 * @return void
 	 */
 	function wp_ulike_get_type_by_table( $table ){
-		return WP_Ulike_Pulse_Registry::type_by_table_suffix( $table );
+		$by_suffix = WP_Ulike_Pulse_Registry::type_by_table_suffix( $table );
+		if ( $by_suffix ) {
+			return $by_suffix;
+		}
+
+		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $table );
+		return WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type )
+			? $item_type
+			: null;
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_likers_template_for_type' ) ) {
+	/**
+	 * Render likers markup for a canonical content type.
+	 *
+	 * @param string $content_type post, comment, activity, topic, or setting slug.
+	 * @param int    $item_ID      Item ID.
+	 * @param array  $args         Template args.
+	 * @return string
+	 */
+	function wp_ulike_get_likers_template_for_type( $content_type, $item_ID, $args = array() ) {
+		$config = WP_Ulike_Pulse_Registry::likers_list_config( $content_type );
+		if ( ! $config ) {
+			return '';
+		}
+
+		list( $table, $column ) = $config;
+		$profile = WP_Ulike_Pulse_Registry::setting_profile( $content_type );
+
+		return wp_ulike_get_likers_template(
+			$table,
+			$column,
+			$item_ID,
+			$profile['setting'],
+			$args
+		);
 	}
 }
 
@@ -210,59 +246,13 @@ if( ! function_exists( 'wp_ulike_get_post_settings_by_type' ) ){
 	 * @return void
 	 */
 	function wp_ulike_get_post_settings_by_type( $post_type, $post_ID = NULL ){
-		switch ( $post_type ) {
-			case 'likeThis':
-			case 'post':
-				$settings = array(
-					'setting'  => 'posts_group',
-					'table'    => 'ulike',
-					'column'   => 'post_id',
-					'key'      => '_liked',
-					'slug'     => 'post',
-					'cookie'   => 'liked-'
-				);
-				break;
+		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $post_type );
+		$source    = WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type );
 
-			case 'likeThisComment':
-			case 'comment':
-				$settings = array(
-					'setting'  => 'comments_group',
-					'table'    => 'ulike_comments',
-					'column'   => 'comment_id',
-					'key'      => '_commentliked',
-					'slug'     => 'comment',
-					'cookie'   => 'comment-liked-'
-				);
-				break;
-
-			case 'likeThisActivity':
-			case 'buddypress':
-			case 'activity':
-				$settings = array(
-					'setting'  => 'buddypress_group',
-					'table'    => 'ulike_activities',
-					'column'   => 'activity_id',
-					'key'      => '_activityliked',
-					'slug'     => 'activity',
-					'cookie'   => 'activity-liked-',
-				);
-				break;
-
-			case 'likeThisTopic':
-			case 'bbpress':
-			case 'topic':
-				$settings = array(
-					'setting'  => 'bbpress_group',
-					'table'    => 'ulike_forums',
-					'column'   => 'topic_id',
-					'key'      => '_topicliked',
-					'slug'     => 'topic',
-					'cookie'   => 'topic-liked-'
-				);
-				break;
-
-			default:
-				$settings = array();
+		if ( ! $source ) {
+			$settings = array();
+		} else {
+			$settings = WP_Ulike_Pulse_Registry::setting_profile( $post_type );
 		}
 
 		return apply_filters( 'wp_ulike_get_post_settings_by_type', $settings, $post_ID );

@@ -233,6 +233,8 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 
 			$delta = (int) $delta;
 
+			self::ensure_statistics_meta_seeded( $item_type );
+
 			$total_key = 'count_logs_period_all';
 			$total     = self::get_statistics_meta( $total_key );
 
@@ -252,6 +254,58 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 
 			if ( is_numeric( $type_val ) ) {
 				self::set_statistics_meta( $type_key, max( 0, (int) $type_val + $delta ) );
+			}
+		}
+
+		/**
+		 * Seed zeroed all-time statistics meta for fresh pulse-only installs.
+		 *
+		 * @return void
+		 */
+		public static function seed_empty_statistics_meta() {
+			self::set_statistics_meta( 'count_logs_period_all', 0 );
+
+			foreach ( WP_Ulike_Pulse_Registry::stats_table_map() as $item_type ) {
+				self::set_statistics_meta(
+					sprintf( 'count_logs_for_%s_in_all_daterange', $item_type ),
+					0
+				);
+			}
+		}
+
+		/**
+		 * Lazy one-time seed when meta is missing (e.g. first vote before admin opens stats).
+		 *
+		 * Uses the active read path (legacy / merged / pulse) — not a blind COUNT on one table.
+		 *
+		 * @param string|null $item_type Canonical item type to seed when provided.
+		 * @return void
+		 */
+		private static function ensure_statistics_meta_seeded( $item_type = null ) {
+			if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) || ! WP_Ulike_Pulse_Query::available() ) {
+				return;
+			}
+
+			$total_key = 'count_logs_period_all';
+			if ( ! is_numeric( self::get_statistics_meta( $total_key ) ) ) {
+				self::set_statistics_meta(
+					$total_key,
+					WP_Ulike_Pulse_Query::count_logs_for_mode( 'all' )
+				);
+			}
+
+			if ( empty( $item_type ) ) {
+				return;
+			}
+
+			$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+			$type_key  = sprintf( 'count_logs_for_%s_in_all_daterange', $item_type );
+
+			if ( ! is_numeric( self::get_statistics_meta( $type_key ) ) ) {
+				self::set_statistics_meta(
+					$type_key,
+					WP_Ulike_Pulse_Query::count_logs_for_type( $item_type, 'all' )
+				);
 			}
 		}
 
