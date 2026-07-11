@@ -47,8 +47,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @param array  $sort         field + type.
 		 * @return array<int,object>
 		 */
-		public static function get_log_rows( $table_suffix, $page = 1, $per_page = 15, $sort = array() ) {
-			$rows   = self::query_log_rows( $table_suffix, $sort );
+		public static function get_log_rows( $table_suffix, $page = 1, $per_page = 15, $sort = array(), $search = '' ) {
+			$rows   = self::query_log_rows( $table_suffix, $sort, $search );
 			$offset = max( 0, ( absint( $page ) - 1 ) * absint( $per_page ) );
 			$limit  = absint( $per_page );
 
@@ -60,8 +60,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @param array  $sort         Sort args.
 		 * @return array<int,object>
 		 */
-		public static function get_all_log_rows( $table_suffix, $sort = array() ) {
-			return self::query_log_rows( $table_suffix, $sort );
+		public static function get_all_log_rows( $table_suffix, $sort = array(), $search = '' ) {
+			return self::query_log_rows( $table_suffix, $sort, $search );
 		}
 
 		/**
@@ -99,7 +99,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @param array  $sort         Sort args.
 		 * @return array<int,object>
 		 */
-		private static function query_log_rows( $table_suffix, $sort = array() ) {
+		private static function query_log_rows( $table_suffix, $sort = array(), $search = '' ) {
 			$source = self::source_for_suffix( $table_suffix );
 			if ( ! $source ) {
 				return array();
@@ -119,16 +119,61 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				);
 			}
 
-			return self::sort_rows( $rows, $sort );
+			$rows = self::sort_rows( $rows, $sort );
+
+			if ( '' !== $search ) {
+				$rows = self::filter_rows_by_search( $rows, $search );
+			}
+
+			return $rows;
+		}
+
+		/**
+		 * Case-insensitive substring match across user_id / ip / status.
+		 *
+		 * @param array<int,object> $rows   Rows.
+		 * @param string            $search Search term.
+		 * @return array<int,object>
+		 */
+		private static function filter_rows_by_search( array $rows, $search ) {
+			$term = function_exists( 'mb_strtolower' )
+				? mb_strtolower( (string) $search )
+				: strtolower( (string) $search );
+
+			if ( '' === $term ) {
+				return $rows;
+			}
+
+			return array_values(
+				array_filter(
+					$rows,
+					static function ( $row ) use ( $term ) {
+						foreach ( array( 'user_id', 'ip', 'status' ) as $field ) {
+							if ( isset( $row->{$field} ) ) {
+								$value = function_exists( 'mb_strtolower' )
+									? mb_strtolower( (string) $row->{$field} )
+									: strtolower( (string) $row->{$field} );
+								if ( false !== strpos( $value, $term ) ) {
+									return true;
+								}
+							}
+						}
+						return false;
+					}
+				)
+			);
 		}
 
 		/**
 		 * @param string $table_suffix Legacy table suffix.
 		 * @return int
 		 */
-		public static function count_log_rows( $table_suffix ) {
+		public static function count_log_rows( $table_suffix, $search = '' ) {
 			if ( wp_ulike_use_pulse_queries() ) {
-				return WP_Ulike_Pulse_Query::count_logs_for_table( $table_suffix, 'all' );
+				if ( '' === $search ) {
+					return WP_Ulike_Pulse_Query::count_logs_for_table( $table_suffix, 'all' );
+				}
+				return count( self::query_log_rows( $table_suffix, array(), $search ) );
 			}
 
 			return count( self::query_log_rows( $table_suffix ) );

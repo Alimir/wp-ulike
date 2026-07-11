@@ -391,20 +391,71 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				return self::count_pulse_unique_voters_for_type( $item_type, $period_limit, '' );
 			}
 
-			$legacy = 0;
-			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-				$table  = esc_sql( $source['table'] );
-				$legacy = (int) $wpdb->get_var( "SELECT COUNT(DISTINCT user_id) FROM `{$table}` WHERE 1=1 {$period_limit}" );
+			if ( ! $source || ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				// No legacy store: fall back to pulse reads since the cutover.
+				if ( 'legacy' === $mode ) {
+					return 0;
+				}
+				return self::count_pulse_unique_voters_for_type(
+					$item_type,
+					$period_limit,
+					WP_Ulike_Pulse_Config::dual_since()
+				);
 			}
 
-			if ( 'legacy' === $mode || ! $source ) {
-				return $legacy;
+			$table = esc_sql( $source['table'] );
+
+			if ( 'legacy' === $mode ) {
+				return (int) $wpdb->get_var( "SELECT COUNT(DISTINCT user_id) FROM `{$table}` WHERE 1=1 {$period_limit}" );
 			}
 
-			return $legacy + self::count_pulse_unique_voters_for_type(
-				$item_type,
-				$period_limit,
-				WP_Ulike_Pulse_Config::dual_since()
+			// Merged mode: dedup across legacy + pulse via UNION so a voter who
+			// appears in both stores is counted exactly once.
+			return self::count_merged_unique_voters_for_type( $item_type, $table, $period_limit );
+		}
+
+		/**
+		 * Distinct voters across all content types (mode-aware, deduped).
+		 *
+		 * Use this for site-wide "unique voters" KPIs — never sum per-type
+		 * distinct counts, which overcounts cross-type voters.
+		 *
+		 * @param mixed $period Period filter.
+		 * @return int
+		 */
+		public static function count_unique_voters_all_types( $period = 'all' ) {
+			global $wpdb;
+
+			$period_limit = wp_ulike_get_period_limit_sql( $period );
+			$mode         = self::read_mode();
+			$selects      = array();
+
+			if ( 'legacy' === $mode || 'merged' === $mode ) {
+				foreach ( self::log_table_names() as $table ) {
+					if ( ! WP_Ulike_Pulse_Registry::table_exists( $table ) ) {
+						continue;
+					}
+					$t          = esc_sql( $table );
+					$selects[] = "SELECT CAST(user_id AS CHAR) AS user_id FROM `{$t}` WHERE `status` IN ('like','dislike') AND user_id IS NOT NULL AND user_id != '' {$period_limit}";
+				}
+			}
+
+			if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
+				$pulse     = esc_sql( WP_Ulike_Pulse_Schema::table() );
+				$since_sql = 'merged' === $mode ? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() ) : '';
+				$selects[] = $wpdb->prepare(
+					"SELECT CAST(user_id AS CHAR) AS user_id FROM `{$pulse}` WHERE engagement_kind = %s AND status = 'active' AND user_id IS NOT NULL AND user_id != '' {$since_sql} {$period_limit}",
+					WP_Ulike_Pulse_Registry::KIND_VOTE
+				);
+			}
+
+			if ( empty( $selects ) ) {
+				return 0;
+			}
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- fragments use registered table names + prepared values.
+			return (int) $wpdb->get_var(
+				'SELECT COUNT(DISTINCT user_id) FROM (' . implode( ' UNION ', $selects ) . ') AS combined'
 			);
 		}
 
@@ -718,8 +769,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				if ( ! WP_Ulike_Pulse_Registry::table_exists( $table ) ) {
 					continue;
 				}
-				$t = esc_sql( $table );
-				$union[] = "SELECT user_id FROM `{$t}` WHERE status IN ({$status_in}) {$period_limit}";
+			$t = esc_sql( $table );
+			$union[] = "SELECT CAST(user_id AS CHAR) AS user_id FROM `{$t}` WHERE status IN ({$status_in}) {$period_limit}";
 			}
 
 			if ( 'pulse' === self::read_mode() || 'merged' === self::read_mode() ) {
@@ -736,7 +787,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					)
 				);
 				$status_sql = $filter['active_only'] ? "status = 'active'" : "status IN ('active','removed')";
-				$union[] = "SELECT user_id FROM `{$pulse}` WHERE engagement_kind = 'vote' AND engagement_key IN ({$key_in}) AND {$status_sql} {$since} {$period_limit}";
+				$union[] = "SELECT CAST(user_id AS CHAR) AS user_id FROM `{$pulse}` WHERE engagement_kind = 'vote' AND engagement_key IN ({$key_in}) AND {$status_sql} {$since} {$period_limit}";
 			}
 
 			if ( empty( $union ) ) {
@@ -912,10 +963,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			return (int) $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT COUNT(DISTINCT user_id) FROM (
-						SELECT l.user_id FROM `{$legacy_table}` l
+						SELECT CAST(l.user_id AS CHAR) AS user_id FROM `{$legacy_table}` l
 						WHERE {$legacy_status} AND l.`{$column}` = %d {$legacy_period}
 						UNION
-						SELECT e.user_id FROM `{$pulse_table}` e
+						SELECT CAST(e.user_id AS CHAR) AS user_id FROM `{$pulse_table}` e
 						WHERE e.item_id = %d AND e.item_type = %s AND e.engagement_kind = %s
 						AND e.date_time >= %s AND {$eng_status} {$eng_period}
 					) AS combined",
@@ -990,6 +1041,40 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WP_Ulike_Pulse_Registry::KIND_VOTE,
 					$mapped['engagement_key'],
 					$mapped['status']
+				)
+			);
+		}
+
+		/**
+		 * Merged-mode distinct voters for one type — UNION dedup across legacy
+		 * and pulse so voters active in both stores are counted once.
+		 *
+		 * @param string $item_type    Canonical item type.
+		 * @param string $legacy_table Escaped legacy table name.
+		 * @param string $period_limit Period SQL fragment.
+		 * @return int
+		 */
+		private static function count_merged_unique_voters_for_type( $item_type, $legacy_table, $period_limit ) {
+			global $wpdb;
+
+			$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+			$since       = WP_Ulike_Pulse_Config::dual_since();
+			$legacy_per  = str_replace( 'date_time', 'l.date_time', $period_limit );
+			$eng_per     = str_replace( 'date_time', 'e.date_time', $period_limit );
+
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(DISTINCT user_id) FROM (
+						SELECT CAST(l.user_id AS CHAR) AS user_id FROM `{$legacy_table}` l
+						WHERE l.status IN ('like','dislike') {$legacy_per}
+						UNION
+						SELECT CAST(e.user_id AS CHAR) AS user_id FROM `{$pulse_table}` e
+						WHERE e.item_type = %s AND e.engagement_kind = %s AND e.status = 'active'
+						AND e.date_time >= %s {$eng_per}
+					) AS combined",
+					WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ),
+					WP_Ulike_Pulse_Registry::KIND_VOTE,
+					$since
 				)
 			);
 		}
@@ -1297,7 +1382,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
 			$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $type );
-			$period    = str_replace( 'date_time', 'date_time', $period_limit );
+			$period    = $period_limit;
 			$limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d, %d', $offset, $limit ) : '';
 
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -1332,7 +1417,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
 			$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $type );
-			$period    = str_replace( 'date_time', 'date_time', $period_limit );
+			$period    = $period_limit;
 			$limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d, %d', $offset, $limit ) : '';
 
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -1418,20 +1503,14 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			return $limit > 0 ? array_slice( $rows, $offset, $limit ) : $rows;
 		}
 
-		/**
-		 * @param int    $item_id Item ID.
-		 * @param string $type    Setting type.
-		 * @param int    $limit   Limit.
-		 * @return array|null
-		 */
-		/**
-		 * @param int    $item_id Item ID.
-		 * @param string $type    Setting type.
-		 * @param int    $limit   Limit.
-		 * @param string $since   Optional datetime floor (merged mode).
-		 * @return array
-		 */
-		private static function fetch_pulse_likers( $item_id, $type, $limit, $since = '' ) {
+	/**
+	 * @param int    $item_id Item ID.
+	 * @param string $type    Setting type.
+	 * @param int    $limit   Limit.
+	 * @param string $since   Optional datetime floor (merged mode).
+	 * @return array
+	 */
+	private static function fetch_pulse_likers( $item_id, $type, $limit, $since = '' ) {
 			global $wpdb;
 
 			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
