@@ -19,6 +19,7 @@ new wp_ulike_admin_assets();
 WP_Ulike_Overview::class;
 WP_Ulike_Deactivation_Feedback::class;
 WP_Ulike_Activation_Pointer::class;
+WP_Ulike_Diagnostics::init();
 
 // include about menu functions
 require_once( WP_ULIKE_ADMIN_DIR . '/admin-functions.php');

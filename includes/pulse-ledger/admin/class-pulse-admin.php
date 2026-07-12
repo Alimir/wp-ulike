@@ -184,27 +184,27 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 					'isRunning'     => self::should_run_browser_batches(),
 					'syncComplete'  => WP_Ulike_Pulse_Sync::is_sync_complete(),
 					'isPulse'       => WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode(),
-					'confirmEnable' => 'Switch to the faster storage for all reads? Your old tables are kept — nothing is deleted.',
-					'confirmDrop'   => 'Permanently delete old log tables? This cannot be undone. Make sure you have a database backup.',
-					'redirectUrl'   => self::get_help_url(),
-					'strings'       => array(
-						'started'                 => 'Upgrade started. You can leave this page — records will keep moving in the background.',
-						'syncComplete'            => 'Records moved. Click “Finish upgrade” below to start using the faster storage for all reads.',
-						'finished'                => 'All done. Like records now use the faster storage.',
-						'dropped'                 => 'Old tables removed. Redirecting…',
-						'dismissed'               => 'Done. Redirecting…',
-						'dropFailed'              => 'Could not remove old tables. Please try again or use WP-CLI.',
-						'enableFailed'            => 'Could not finish the upgrade yet. Please wait until all records are moved.',
-						'enableVerifyFailed'      => 'Move finished but verification failed. Run “wp ulike pulse verify” for details, or contact support if failed rows are reported.',
-						'enableSyncIncomplete'    => 'Not finished yet. Wait until status shows Complete, or run “wp ulike pulse sync”.',
-						'actionFailed'            => 'Something went wrong. Please refresh the page and try again.',
-						'progressWaiting'         => 'Waiting to start…',
-						'progressCopied'          => '%1$s records moved',
-						'progressCopiedSkipped'   => '%1$s records moved (%2$s skipped)',
-						'progressComplete'        => '%1$s records moved · complete',
-						'progressCompleteSkipped' => '%1$s records moved (%2$s skipped) · complete',
-						'progressEstimated'       => ' · ~%s%% estimated',
-					),
+				'confirmEnable' => 'Switch to the faster storage for all reads? Your old tables are kept — nothing is deleted.',
+				'confirmDrop'   => 'Permanently delete old log tables? This cannot be undone. Make sure you have a database backup.',
+				'redirectUrl'   => self::get_help_url(),
+				'strings'       => array(
+					'started'                 => 'Upgrade started. You can leave this page — records will keep moving in the background.',
+					'syncComplete'            => 'Records moved. Click “Finish upgrade” below to start using the faster storage for all reads.',
+					'finished'                => 'All done. Like records now use the faster storage.',
+					'dropped'                 => 'Old tables removed. Redirecting…',
+					'dismissed'               => 'Done. Redirecting…',
+					'dropFailed'              => 'Could not remove old tables. Please try again or use WP-CLI.',
+					'enableFailed'            => 'Could not finish the upgrade yet. Please wait until all records are moved.',
+					'enableVerifyFailed'      => 'Move finished but verification failed. Run “wp ulike pulse verify” for details, or contact support if failed rows are reported.',
+					'enableSyncIncomplete'    => 'Not finished yet. Wait until status shows Complete, or run “wp ulike pulse sync”.',
+					'actionFailed'            => 'Something went wrong. Please refresh the page and try again.',
+					'progressWaiting'         => 'Waiting to start…',
+					'progressCopied'          => '%1$s records moved',
+					'progressCopiedSkipped'   => '%1$s records moved (%2$s skipped)',
+					'progressComplete'        => '%1$s records moved · complete',
+					'progressCompleteSkipped' => '%1$s records moved (%2$s skipped) · complete',
+					'progressEstimated'       => ' · ~%s%% estimated',
+				),
 				)
 			);
 		}
@@ -323,11 +323,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 					'cmd'  => 'wp ulike pulse verify',
 					'desc' => 'Verify records (add --deep for COUNT scans)',
 				),
-				array(
-					'cmd'  => 'wp ulike pulse enable',
-					'desc' => 'Finish upgrade',
-				),
-			);
+			array(
+				'cmd'  => 'wp ulike pulse enable',
+				'desc' => 'Finish upgrade',
+			),
+		);
 		}
 
 		/**

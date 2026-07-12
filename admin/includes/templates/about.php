@@ -168,27 +168,31 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 				<?php endif; ?>
 			</div>
 
-			<!-- Quick actions -->
-			<div class="wp-ulike-about-card">
-				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Quick actions', 'wp-ulike' ); ?></h2>
-				<div class="wp-ulike-about-actions">
-					<?php foreach ( (array) ( $data['quick_actions'] ?? array() ) as $action ) : ?>
-						<?php
-						$btn_class = ! empty( $action['primary'] ) ? 'button-primary' : 'button-secondary';
-						$external  = ! empty( $action['external'] );
-						$icon      = ! empty( $action['icon'] ) ? $action['icon'] : 'arrow-right-alt';
-						?>
-						<a
-							class="button <?php echo esc_attr( $btn_class ); ?> wp-ulike-about-actions__btn"
-							href="<?php echo esc_url( $action['url'] ?? '#' ); ?>"
-							<?php echo $external ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>
-						>
-							<span class="dashicons dashicons-<?php echo esc_attr( $icon ); ?>" aria-hidden="true"></span>
-							<?php echo esc_html( $action['label'] ?? '' ); ?>
-						</a>
-					<?php endforeach; ?>
-				</div>
+			<?php if ( class_exists( 'WP_Ulike_Diagnostics' ) ) : ?>
+				<?php WP_Ulike_Diagnostics::render_health_check_card(); ?>
+			<?php endif; ?>
+
+		<!-- Quick actions -->
+		<div class="wp-ulike-about-card">
+			<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Quick actions', 'wp-ulike' ); ?></h2>
+			<div class="wp-ulike-about-actions">
+				<?php foreach ( (array) ( $data['quick_actions'] ?? array() ) as $action ) : ?>
+					<?php
+					$btn_class = ! empty( $action['primary'] ) ? 'button-primary' : 'button-secondary';
+					$external  = ! empty( $action['external'] );
+					$icon      = ! empty( $action['icon'] ) ? $action['icon'] : 'arrow-right-alt';
+					?>
+					<a
+						class="button <?php echo esc_attr( $btn_class ); ?> wp-ulike-about-actions__btn"
+						href="<?php echo esc_url( $action['url'] ?? '#' ); ?>"
+						<?php echo $external ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>
+					>
+						<span class="dashicons dashicons-<?php echo esc_attr( $icon ); ?>" aria-hidden="true"></span>
+						<?php echo esc_html( $action['label'] ?? '' ); ?>
+					</a>
+				<?php endforeach; ?>
 			</div>
+		</div>
 
 			<?php if ( ! empty( $data['pro_modules'] ) ) : ?>
 				<div class="wp-ulike-about-card wp-ulike-about-card--pro">
