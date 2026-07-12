@@ -386,7 +386,29 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function insertData( $item_id ){
-			$table = $this->wpdb->prefix . $this->typeSettings->getTableName();
+			if ( wp_ulike_writes_pulse() ) {
+				$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
+				$payload   = array(
+					'item_id'       => $item_id,
+					'item_type'     => $item_type,
+					'setting_type'  => $this->typeSettings->getType(),
+					'legacy_status' => $this->currentStatus,
+					'ip'            => $this->maybeAnonymiseIp( $this->currentIP ),
+					'user_id'       => $this->currentUser,
+					'fingerprint'   => $this->currentFingerPrint,
+					'is_distinct'   => $this->isDistinct(),
+				);
+
+				return $this->isDistinct()
+					? WP_Ulike_Pulse_Writer::upsert( $payload )
+					: WP_Ulike_Pulse_Writer::insert( $payload );
+			}
+
+			if ( ! $this->typeSettings->legacyTableExists() ) {
+				return false;
+			}
+
+			$table = $this->typeSettings->getLegacyTable();
 			$data  = array(
 				$this->typeSettings->getColumnName() => $item_id,
 				'date_time'                          => current_time( 'mysql', true ),
@@ -445,7 +467,27 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function updateData( $item_id ){
-			$table  = $this->wpdb->prefix . $this->typeSettings->getTableName();
+			if ( wp_ulike_writes_pulse() ) {
+				$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
+				return WP_Ulike_Pulse_Writer::upsert(
+					array(
+						'item_id'       => $item_id,
+						'item_type'     => $item_type,
+						'setting_type'  => $this->typeSettings->getType(),
+						'legacy_status' => $this->currentStatus,
+						'ip'            => $this->maybeAnonymiseIp( $this->currentIP ),
+						'user_id'       => $this->currentUser,
+						'fingerprint'   => $this->currentFingerPrint,
+						'is_distinct'   => true,
+					)
+				);
+			}
+
+			if ( ! $this->typeSettings->legacyTableExists() ) {
+				return false;
+			}
+
+			$table  = $this->typeSettings->getLegacyTable();
 			$data   = array( 'status' => $this->currentStatus, 'date_time' => current_time( 'mysql', true ) ); // No need for esc_sql
 			$where  = array(
 				$this->typeSettings->getColumnName() => $item_id,
@@ -478,8 +520,17 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @return integer|false
 		 */
 		public function deleteData( $item_id ){
+			if ( wp_ulike_writes_pulse() ) {
+				$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
+				return WP_Ulike_Pulse_Writer::delete( $item_id, $item_type, $this->currentUser );
+			}
+
+			if ( ! $this->typeSettings->legacyTableExists() ) {
+				return false;
+			}
+
 			return $this->wpdb->delete(
-				$this->wpdb->prefix . $this->typeSettings->getTableName(),
+				$this->typeSettings->getLegacyTable(),
 				array( $this->typeSettings->getColumnName() => $item_id, 'user_id' => $this->currentUser )
 			);
 		}
@@ -604,67 +655,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
-		 * Update stats meta data
-		 *
-		 * @param integer $item_id
-		 * @return void
-		 */
-		public function updateStatsMetaData( $item_id ){
-			// Update total stats
-			if( ( ! $this->prevStatus || ! $this->isDistinct() ) ){
-				if( strpos( $this->currentStatus, 'un') === false  ){
-					// update all logs period
-					$meta_table = $this->wpdb->prefix . 'ulike_meta';
-					$this->wpdb->query( $this->wpdb->prepare( "
-						UPDATE `{$meta_table}`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = %s AND `meta_key` = %s",
-						'statistics',
-						'count_logs_period_all'
-					) );
-					// update new votes
-					$this->wpdb->query( $this->wpdb->prepare( "
-						UPDATE `{$meta_table}`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = %s AND `meta_key` = %s",
-						'statistics',
-						'calculate_new_votes'
-					) );
-					$table = esc_sql( $this->typeSettings->getTableName() );
-					$meta_key = 'count_logs_for_' . $table . '_table_in_all_daterange';
-					$this->wpdb->query( $this->wpdb->prepare( "
-						UPDATE `{$meta_table}`
-						SET `meta_value` = (`meta_value` + 1)
-						WHERE `meta_group` = %s AND `meta_key` = %s",
-						'statistics',
-						$meta_key
-					) );
-				}
-
-				// Save daily stats
-				// $current_time  = current_time( 'Ymd' );
-				// $current_key   = sanitize_key( $this->itemType . '_' . $this->currentStatus );
-				// $current_count = wp_ulike_get_meta_data( $current_time, 'statistics', $current_key, true );
-
-				// if( empty( $current_count ) ){
-				// 	wp_ulike_update_meta_data( $current_time, 'statistics', $current_key, 1 );
-				// } else {
-				// 	$this->wpdb->query( "
-				// 		UPDATE `{$this->wpdb->prefix}ulike_meta`
-				// 		SET `meta_value` = (`meta_value` + 1)
-				// 		WHERE `meta_group` = 'statistics' AND `meta_key` = '{$current_key}' AND `item_id` = {$current_time}
-				// 	" );
-				// }
-			}
-			// Delete object cache
-			if( wp_ulike_is_cache_exist() ){
-				wp_cache_delete( 'calculate_new_votes', WP_ULIKE_SLUG );
-				wp_cache_delete( 'count_logs_period_all', WP_ULIKE_SLUG );
-				wp_cache_delete( 1, 'wp_ulike_statistics_meta' );
-			}
-		}
-
-		/**
 		 * Update meta data
 		 *
 		 * @param integer $item_id
@@ -677,8 +667,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$this->updateUserMetaStatus( $item_id );
 			// Update likers list
 			$this->updateLikerMetaList( $item_id );
-			// Update stats meta data
-			$this->updateStatsMetaData( $item_id );
 		}
 
 	}

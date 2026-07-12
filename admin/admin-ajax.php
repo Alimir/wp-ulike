@@ -203,7 +203,7 @@ function wp_ulike_history_api(){
 	$perPage = isset( $_GET['perPage'] ) ? absint( $_GET['perPage'] ) : 15;
 
 	$settings = wp_ulike_setting_type::get_instance( $type );
-	$instance = new wp_ulike_logs( $settings->getTableName(), $page, $perPage  );
+	$instance = new wp_ulike_logs( $settings->getLogIdentifier(), $page, $perPage  );
 	$output   = $instance->get_rows();
 
 	wp_send_json( $output );
@@ -237,7 +237,7 @@ function wp_ulike_delete_history_api(){
 	}
 
 	$settings = wp_ulike_setting_type::get_instance( $type );
-	$instance = new wp_ulike_logs( $settings->getTableName()  );
+	$instance = new wp_ulike_logs( $settings->getLogIdentifier()  );
 
 	if( ! $instance->delete_row( $item_id ) ){
 		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );

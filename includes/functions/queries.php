@@ -47,14 +47,7 @@ if ( ! function_exists( 'wp_ulike_get_log_table_names' ) ) {
 	 * @return string[]
 	 */
 	function wp_ulike_get_log_table_names() {
-		global $wpdb;
-
-		return array(
-			$wpdb->prefix . 'ulike',
-			$wpdb->prefix . 'ulike_activities',
-			$wpdb->prefix . 'ulike_comments',
-			$wpdb->prefix . 'ulike_forums',
-		);
+		return WP_Ulike_Pulse_Registry::log_table_names();
 	}
 }
 
@@ -85,9 +78,8 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 		$info_args             = wp_ulike_get_table_info( $parsed_args['type'] );
 		$period_limit          = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
 
-		// Check object cache value
-		$cache_key = sanitize_key( sprintf( 'items_%s', md5( serialize( $parsed_args ) ) ) );
-		$results   = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+		$logical_key = 'items_' . md5( serialize( $parsed_args ) );
+		$results     = WP_Ulike_Query_Cache::get( $logical_key );
 		if( false !== $results ){
 			return $results;
 		}
@@ -170,41 +162,26 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			);
 
 		} else {
-			// create query condition from status
-			if( is_array( $parsed_args['status'] ) ){
-				$status_values = array_map(function($status) use ($wpdb) {
-					return $wpdb->prepare('%s', $status);
-				}, $parsed_args['status']);
+			$results = WP_Ulike_Pulse_Query::get_popular_items_from_logs(
+				$parsed_args,
+				$info_args,
+				$period_limit,
+				$user_condition,
+				$related_condition,
+				$limit_records
+			);
 
-				$status_type = "t.status IN (" . implode(',', $status_values) . ")";
-			} else {
-				$status_type = $wpdb->prepare( "t.status = %s", $parsed_args['status'] );
+			if ( ! empty( $results ) ) {
+				WP_Ulike_Query_Cache::set( $logical_key, $results );
 			}
 
-			// CRITICAL FIX: Escape all table/column names for security and performance
-			$table_name = esc_sql( $wpdb->prefix . $info_args['table'] );
-			$column_escaped = esc_sql( $info_args['column'] );
-			$related_table_escaped = esc_sql( $info_args['related_table_prefix'] );
-			$related_column_escaped = esc_sql( $info_args['related_column'] );
-			$order_by_escaped = esc_sql( $order_by );
-			$order_escaped = strtoupper( $parsed_args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
-
-			// generate query string - all identifiers properly escaped
-			$query  = "
-				SELECT COUNT(t.`{$column_escaped}`) AS counter,
-				t.`{$column_escaped}` AS item_ID
-				FROM `{$table_name}` t
-				INNER JOIN `{$related_table_escaped}` r ON t.`{$column_escaped}` = r.`{$related_column_escaped}` {$related_condition}
-				WHERE {$status_type} {$user_condition} {$period_limit}
-				GROUP BY item_ID
-				ORDER BY `{$order_by_escaped}` {$order_escaped} {$limit_records}";
-
+			return $results;
 		}
 
 		$results = !empty( $query ) ? $wpdb->get_results( $query ): null;
 
 		if( ! empty( $results ) ){
-			wp_cache_add( $cache_key, $results, WP_ULIKE_SLUG, 300 );
+			WP_Ulike_Query_Cache::set( $logical_key, $results );
 		}
 
 		return $results;
@@ -334,30 +311,13 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			);
 
 		} else {
-			// create query condition from status
-			$status_type  = '';
-			if( is_array( $parsed_args['status'] ) ){
-				$status_values = array_map(function($status) use ($wpdb) {
-					return $wpdb->prepare('%s', $status);
-				}, $parsed_args['status']);
-
-				$status_type = "t.status IN (" . implode(',', $status_values) . ")";
-			} else {
-				$status_type = $wpdb->prepare( "t.status = %s", $parsed_args['status'] );
-			}
-
-			// generate query string
-			$column = esc_sql( $info_args['column'] );
-			$table_name = $wpdb->prefix . esc_sql( $info_args['table'] );
-			$related_table = esc_sql( $info_args['related_table_prefix'] );
-			$related_column = esc_sql( $info_args['related_column'] );
-
-			$query  = "
-				SELECT COUNT(DISTINCT t.`{$column}`)
-				FROM `{$table_name}` t
-				INNER JOIN `{$related_table}` r ON t.`{$column}` = r.`{$related_column}` {$related_condition}
-				WHERE {$status_type} {$user_condition}
-				{$period_limit}";
+			return WP_Ulike_Pulse_Query::count_popular_items_total(
+				$parsed_args,
+				$info_args,
+				$period_limit,
+				$user_condition,
+				$related_condition
+			);
 		}
 
 		return !empty( $query ) ? (int) $wpdb->get_var( $query ): null;
@@ -397,35 +357,23 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 
 		// If meta cache is empty, try object cache, then database
 		if( empty( $get_likers ) && $get_likers !== '0' ){
-			$cache_key = sanitize_key( sprintf( '%s_%s_%d_likers_list', $table_name, $column_name, $item_ID ) );
-			$get_likers = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+			$logical_key = sprintf( '%s_%s_%d_likers_list', $table_name, $column_name, $item_ID );
+			$get_likers  = WP_Ulike_Query_Cache::get( $logical_key );
 
 			if( false === $get_likers ){
-				// Calculate max cache size based on limit parameter
-				// Formula: max(limit * 10, 100, 1000) - ensures reasonable cache size
 				$base_limit = is_null( $limit ) ? 100 : $limit;
 				$max_likers = min( max( $base_limit * 10, 100 ), 1000 );
 
-				$table_escaped = esc_sql( $wpdb->prefix . $table_name );
-				$column_escaped = esc_sql( $column_name );
-
-				// Get distinct user IDs - JOIN ensures only valid users (not guests) are included
-				$user_ids = $wpdb->get_col( $wpdb->prepare(
-					"SELECT DISTINCT t.`user_id`
-					FROM `{$table_escaped}` t
-					INNER JOIN {$wpdb->users} u ON u.ID = t.`user_id`
-					WHERE t.`status` IN ('like', 'dislike')
-					AND t.`{$column_escaped}` = %d
-					LIMIT %d",
+				$user_ids = WP_Ulike_Pulse_Query::rebuild_likers_list(
+					$wpdb->prefix . $table_name,
+					$column_name,
 					$item_ID,
 					$max_likers
-				) );
+				);
 
-				// Convert to comma-separated string for caching
 				$get_likers = ! empty( $user_ids ) ? implode( ',', $user_ids ) : '';
 
-				// Cache for 5 minutes
-				wp_cache_set( $cache_key, $get_likers, WP_ULIKE_SLUG, 300 );
+				WP_Ulike_Query_Cache::set( $logical_key, $get_likers );
 			}
 
 			// Update meta cache if we got data
@@ -469,22 +417,7 @@ if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
 	 * @return bool
 	 */
 	function wp_ulike_is_user_liked( $item_ID, $user_ID,  $type = 'likeThis' ) {
-		global $wpdb;
-		// Get ULike settings
-		$get_settings = wp_ulike_get_post_settings_by_type( $type );
-		$table_name = $wpdb->prefix . $get_settings['table'];
-
-		$query  =  $wpdb->prepare( "
-			SELECT COUNT(*)
-			FROM `{$table_name}`
-			WHERE `{$get_settings['column']}` = %s
-			AND `status` = 'like'
-			And `user_id` = %d",
-			$item_ID,
-			$user_ID
-		);
-
-		return $wpdb->get_var( $query );
+		return WP_Ulike_Pulse_Query::is_user_liked( $item_ID, $user_ID, $type );
 	}
 }
 
@@ -512,22 +445,11 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 
 		if( empty($user_info) || ! isset( $user_info[$parsed_args['item_id']] ) ){
-			$table_name  = $wpdb->prefix . $parsed_args['settings']->getTableName();
-			$column_name = $parsed_args['settings']->getColumnName();
-
-			$query  = $wpdb->prepare( "
-					SELECT `status`
-					FROM `{$table_name}`
-					WHERE `{$column_name}` = %s
-					AND `user_id` = %d
-					ORDER BY id DESC LIMIT 1
-				",
+			$user_status = WP_Ulike_Pulse_Reader::user_action(
 				$parsed_args['item_id'],
-				$parsed_args['current_user']
+				$parsed_args['current_user'],
+				$parsed_args['item_type']
 			);
-
-			// Get results
-			$user_status = $wpdb->get_var( $query );
 
 			// Check user info value
 			$user_info = empty( $user_info ) ? array() : $user_info;
@@ -552,27 +474,25 @@ if( ! function_exists( 'wp_ulike_get_user_latest_activity' ) ) {
 	 * @return array|null
 	 */
 	function wp_ulike_get_user_latest_activity( $item_id, $user_id, $type ) {
-		global $wpdb;
+		$row = WP_Ulike_Pulse_Query::get_user_latest_activity( $item_id, $user_id, $type );
+		if ( ! $row ) {
+			return null;
+		}
 
-		$settings    = wp_ulike_setting_type::get_instance( $type );
-		$table_name  = $wpdb->prefix . $settings->getTableName();
-		$column_name = $settings->getColumnName();
-
-		$query  = $wpdb->prepare( "
-				SELECT `date_time`, `status`
-				FROM `{$table_name}`
-				WHERE `{$column_name}` = %s
-				AND `user_id` = %d
-				ORDER BY id DESC LIMIT 1
-			",
-			$item_id,
-			$user_id
+		$result = array(
+			'date_time' => $row->date_time,
+			'status'    => isset( $row->status ) ? $row->status : '',
 		);
 
-		$result = $wpdb->get_row( $query, ARRAY_A );
-
-		if( ! empty( $result['date_time'] ) ){
+		if ( ! empty( $result['date_time'] ) ) {
 			$result['date_time'] = wp_ulike_date_i18n( $result['date_time'] );
+		}
+
+		if ( in_array( $result['status'], array( 'like', 'dislike', 'active', 'removed' ), true ) ) {
+			if ( 'active' === $result['status'] || 'removed' === $result['status'] ) {
+				$key = isset( $row->engagement_key ) ? $row->engagement_key : WP_Ulike_Pulse_Vote_Map::KEY_LIKE;
+				$result['status'] = WP_Ulike_Pulse_Vote_Map::row_to_legacy( $key, $result['status'] );
+			}
 		}
 
 		return $result;
@@ -587,40 +507,7 @@ if( ! function_exists( 'wp_ulike_get_user_item_count_per_day' ) ) {
 	 * @return array
 	 */
 	function wp_ulike_get_user_item_count_per_day( $args ) {
-		global $wpdb;
-
-		$defaults = array(
-			"item_id"      => '',
-			"current_user" => '',
-			"settings"     => ''
-		);
-		$parsed_args = wp_parse_args( $args, $defaults );
-
-		$table_name  = $wpdb->prefix . $parsed_args['settings']->getTableName();
-		$column_name = $parsed_args['settings']->getColumnName();
-
-		// Use index-friendly date range query instead of DATE() function
-		// Pre-calculate today's date range for maximum index optimization
-		$today = current_time( 'Y-m-d' );
-		$today_start = $today . ' 00:00:00';
-		$today_end = $today . ' 23:59:59';
-
-		$query = $wpdb->prepare( "
-			SELECT COUNT(*)
-			FROM `$table_name`
-			WHERE `$column_name` = %s
-			AND `user_id` = %d
-			AND date_time >= %s
-			AND date_time <= %s",
-			$parsed_args['item_id'],
-			$parsed_args['current_user'],
-			$today_start,
-			$today_end
-		);
-
-		$count_votes = $wpdb->get_var( $query );
-
-		return $count_votes ? $count_votes : 0;
+		return WP_Ulike_Pulse_Query::count_user_votes_today( $args );
 	}
 }
 
@@ -636,71 +523,8 @@ if( ! function_exists('wp_ulike_get_best_likers_info') ){
      * @return object
      */
 	function wp_ulike_get_best_likers_info( $limit, $period, $offset = 1, $status = array( 'like', 'dislike' ), $order = 'DESC' ) {
-		global $wpdb;
-
-		$status = wp_ulike_normalize_vote_statuses( $status );
-		$status_list = is_array( $status ) ? $status : array( $status );
-
-		if ( empty( $status_list ) ) {
-			return array();
-		}
-
-		$order = 'ASC' === strtoupper( (string) $order ) ? 'ASC' : 'DESC';
-
-		// Period limit SQL
-		$period_limit = wp_ulike_get_period_limit_sql($period);
-
-		// Limit clause
-		$limit_records = '';
-		if ((int)$limit > 0) {
-			$offset = $offset > 0 ? (($offset - 1) * $limit) : 0;
-			$limit_records = $wpdb->prepare("LIMIT %d, %d", $offset, $limit);
-		}
-
-		// Prepare status filter
-		if (is_array($status)) {
-			$status_values = array_map(function($status) use ($wpdb) {
-				return $wpdb->prepare('%s', $status);
-			}, $status);
-
-			$status_type = "status IN (" . implode(',', $status_values) . ")";
-		} else {
-			$status_type = $wpdb->prepare("status = %s", $status);
-		}
-
-		$dynamic_sums = array();
-		foreach ( $status_list as $stat ) {
-			$stat_escaped   = esc_sql( $stat );
-			$dynamic_sums[] = "SUM(CASE WHEN T.status = '{$stat_escaped}' THEN T.CountUser ELSE 0 END) AS `{$stat_escaped}Count`";
-		}
-		$dynamic_sums_sql = implode( ', ', $dynamic_sums );
-
-		$union_parts = array();
-		foreach ( wp_ulike_get_log_table_names() as $table ) {
-			$table_escaped = esc_sql( $table );
-			$union_parts[] = "
-				SELECT user_id, status, COUNT(*) AS CountUser
-				FROM `{$table_escaped}`
-				INNER JOIN {$wpdb->users}
-				ON {$wpdb->users}.ID = `{$table_escaped}`.user_id
-				WHERE {$status_type}
-				{$period_limit}
-				GROUP BY user_id, status";
-		}
-
-		$query = "
-			SELECT
-				T.user_id,
-				{$dynamic_sums_sql},
-				SUM(T.CountUser) AS SumUser
-			FROM (
-				" . implode( ' UNION ALL ', $union_parts ) . "
-			) AS T
-			GROUP BY T.user_id
-			ORDER BY SumUser {$order}
-			{$limit_records}";
-
-		return $wpdb->get_results( $query );
+		$results = WP_Ulike_Pulse_Query::get_best_likers( $limit, $period, $offset, $status, $order );
+		return is_array( $results ) ? $results : array();
 	}
 }
 
@@ -713,44 +537,7 @@ if( ! function_exists('wp_ulike_get_top_enagers_total_number') ){
 	 * @return integer
 	 */
     function wp_ulike_get_top_enagers_total_number( $period, $status = [ 'like', 'dislike' ] ){
-        global $wpdb;
-
-		$status = wp_ulike_normalize_vote_statuses( $status );
-
-        // Period limit SQL
-        $period_limit = wp_ulike_get_period_limit_sql( $period );
-
-		$status_type = '';
-		if( is_array( $status ) ){
-			$status_values = array_map(function($status) use ($wpdb) {
-				return $wpdb->prepare('%s', $status);
-			}, $status);
-
-			$status_type = "status IN (" . implode(',', $status_values) . ")";
-		} else {
-			$status_type = $wpdb->prepare( "status = %s", $status );
-		}
-
-		$union_parts = array();
-		foreach ( wp_ulike_get_log_table_names() as $table ) {
-			$table_escaped = esc_sql( $table );
-			$union_parts[] = "
-				SELECT user_id
-				FROM `{$table_escaped}`
-				INNER JOIN {$wpdb->users}
-				ON ( {$wpdb->users}.ID = `{$table_escaped}`.user_id )
-				WHERE {$status_type}
-				{$period_limit}
-				GROUP BY user_id";
-		}
-
-		$query = "
-			SELECT COUNT(DISTINCT user_id) AS total_users
-			FROM (
-				" . implode( ' UNION ', $union_parts ) . "
-			) AS combined_users";
-
-		return (int) $wpdb->get_var( $query );
+		return WP_Ulike_Pulse_Query::count_unique_engagers( $period, $status );
     }
 }
 
@@ -763,48 +550,7 @@ if( ! function_exists('wp_ulike_get_user_data') ){
 	 * @return object|null
 	 */
 	function wp_ulike_get_user_data( $user_ID, $args = array() ){
-		global $wpdb;
-
-		$defaults = array(
-			'type'     => 'post',
-			'period'   => 'all',
-			'order'    => 'DESC',
-			'status'   => 'like',
-			'page'     => 1,
-			'per_page' => 10
-		);
-		$parsed_args  = wp_parse_args( $args, $defaults );
-		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
-		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
-
-		$status_type  = '';
-		if( is_array( $parsed_args['status'] ) ){
-			$status_values = array_map(function($status) use ($wpdb) {
-				return $wpdb->prepare('%s', $status);
-			}, $parsed_args['status']);
-
-			$status_type = "`status` IN (" . implode(',', $status_values) . ")";
-		} else {
-			$status_type = $wpdb->prepare( "`status` = %s", $parsed_args['status'] );
-		}
-
-		$table_name = $wpdb->prefix . $parsed_args['table'];
-
-		// generate query string
-		$query  = $wpdb->prepare( "
-			SELECT `{$parsed_args['column']}` AS itemID, max(`date_time`) AS datetime, max(`status`) AS lastStatus
-			FROM `{$table_name}`
-			WHERE `user_id` = %d
-			AND {$status_type} {$period_limit}
-			GROUP BY itemID
-			ORDER BY datetime
-			{$parsed_args['order']} LIMIT %d, %d",
-			$user_ID,
-			( $parsed_args['page'] - 1 ) * $parsed_args['per_page'],
-			$parsed_args['per_page']
-		);
-
-		return $wpdb->get_results(  $query );
+		return WP_Ulike_Pulse_Query::get_user_data( $user_ID, $args );
 	}
 
 }
@@ -825,61 +571,7 @@ if( ! function_exists( 'wp_ulike_get_users' ) ){
 	 * @return array|null Array of user objects with activity data
 	 */
 	function wp_ulike_get_users( $args = array() ){
-		global $wpdb;
-
-		$defaults = array(
-			'type'     => 'post',
-			'period'   => 'all',
-			'order'    => 'DESC',
-			'status'   => 'like',
-			'page'     => 1,
-			'per_page' => 10
-		);
-		$parsed_args  = wp_parse_args( $args, $defaults );
-		$parsed_args  = array_merge( wp_ulike_get_table_info( $parsed_args['type'] ), $parsed_args );
-		$period_limit = wp_ulike_get_period_limit_sql( $parsed_args['period'] );
-
-		// Build status condition
-		$status_type = '';
-		if( is_array( $parsed_args['status'] ) ){
-			$status_values = array_map(function($status) use ($wpdb) {
-				return $wpdb->prepare('%s', $status);
-			}, $parsed_args['status']);
-			$status_type = "`status` IN (" . implode(',', $status_values) . ")";
-		} else {
-			$status_type = $wpdb->prepare( "`status` = %s", $parsed_args['status'] );
-		}
-
-		// Escape dynamic table/column names (user input)
-		$table_name = esc_sql( $wpdb->prefix . $parsed_args['table'] );
-		$column_name = esc_sql( $parsed_args['column'] );
-		$order_escaped = strtoupper( $parsed_args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
-
-		// Limit GROUP_CONCAT to prevent truncation and memory issues with large datasets
-		$group_concat_limit = 500;
-
-		// Calculate pagination
-		$offset = ( $parsed_args['page'] - 1 ) * $parsed_args['per_page'];
-		$limit = absint( $parsed_args['per_page'] );
-
-		$query = "
-			SELECT t.user_id AS userID,
-			       COUNT(t.user_id) AS score,
-			       MAX(t.date_time) AS datetime,
-			       MAX(t.status) AS lastStatus,
-			       SUBSTRING_INDEX(
-			           GROUP_CONCAT(DISTINCT t.`{$column_name}` ORDER BY t.`{$column_name}` DESC SEPARATOR ','),
-			           ',',
-			           {$group_concat_limit}
-			       ) AS itemsList
-			FROM `{$table_name}` t
-			INNER JOIN {$wpdb->users} u ON u.ID = t.user_id
-			WHERE {$status_type} {$period_limit}
-			GROUP BY t.user_id
-			ORDER BY score {$order_escaped}
-			LIMIT %d, %d";
-
-		return $wpdb->get_results( $wpdb->prepare( $query, $offset, $limit ) );
+		return WP_Ulike_Pulse_Query::get_users( $args );
 	}
 }
 
@@ -891,83 +583,18 @@ if( ! function_exists( 'wp_ulike_get_rating_value' ) ){
 	/**
 	 * Calculate rating value by user logs & date_time
 	 *
+	 * @deprecated 5.2.0 No longer supported.
+	 *
 	 * @author       	Alimir
 	 * @param           Integer $post_ID
 	 * @param           Boolean $is_decimal
 	 * @since           2.7
-	 * @return          String
+	 * @return          null
 	 */
-	function wp_ulike_get_rating_value($post_ID, $is_decimal = true){
-		global $wpdb;
-		$cache_key = 'get_rich_rating_value_' . $post_ID;
-		$cache_group = 'wp_ulike';
+	function wp_ulike_get_rating_value( $post_ID, $is_decimal = true ) {
+		_deprecated_function( __FUNCTION__, '5.2.0' );
 
-		if (false === ($rating_value = wp_cache_get($cache_key, $cache_group))) {
-			// CRITICAL OPTIMIZATION: The original query calculated AVG of ALL posts on every call
-			// This was extremely inefficient. We now:
-			// 1. Get the current post's like count directly
-			// 2. Use a cached/transient value for global average (calculated less frequently)
-			// 3. Only calculate global average if cache is empty
-
-			$table_escaped = esc_sql( $wpdb->prefix . 'ulike' );
-			$post_id_escaped = absint( $post_ID );
-
-			// Get current post's like count (fast, indexed query)
-			$count = $wpdb->get_var( $wpdb->prepare(
-				"SELECT COUNT(*) FROM `{$table_escaped}` WHERE post_id = %d",
-				$post_id_escaped
-			) );
-
-			// Get global average from cache/transient (calculated once, reused many times)
-			$avg = get_transient( 'wp_ulike_global_avg_likes' );
-			if ( false === $avg ) {
-				// Calculate global average only when cache is empty (expensive operation)
-				// This query is expensive but only runs when transient expires
-				$avg = $wpdb->get_var( "
-					SELECT AVG(post_count)
-					FROM (
-						SELECT COUNT(*) AS post_count
-						FROM `{$table_escaped}`
-						GROUP BY post_id
-					) AS counted
-				" );
-				// Cache for 1 hour (global average doesn't change frequently)
-				set_transient( 'wp_ulike_global_avg_likes', $avg, HOUR_IN_SECONDS );
-			}
-
-			// Get post date (cached by WordPress)
-			$post_date = get_post_field( 'post_date', $post_ID );
-			$date = $post_date ? strtotime( $post_date ) : 0;
-
-			// if there is no log data, set $rating_value = 5
-			if( $count == 0 || $avg == 0 ){
-				$rating_value = 5;
-			} else {
-				$decimal = 0;
-				if( $is_decimal ){
-					list( $whole, $decimal ) = explode( '.', number_format( ( $count*100 / ( $avg * 2 ) ), 1 ) );
-					$decimal = (int)$decimal;
-				}
-				if( $date > strtotime('-1 month')) {
-					if($count < $avg) $rating_value = 4 + ".$decimal";
-					else $rating_value = 5;
-				} else if(($date <= strtotime('-1 month')) && ($date > strtotime('-6 month'))) {
-					if($count < $avg) $rating_value = 3 + ".$decimal";
-					else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 4 + ".$decimal";
-					else $rating_value = 5;
-				} else {
-					if($count < ($avg/2)) $rating_value = 1 + ".$decimal";
-					else if(($count >= ($avg/2)) && ($count < $avg)) $rating_value = 2 + ".$decimal";
-					else if(($count >= $avg) && ($count < ($avg*3/2))) $rating_value = 3 + ".$decimal";
-					else if(($count >= ($avg*3/2)) && ($count < ($avg*2))) $rating_value = 4 + ".$decimal";
-					else $rating_value = 5;
-				}
-			}
-
-			wp_cache_add($cache_key, $rating_value, $cache_group, HOUR_IN_SECONDS);
-		}
-
-		return apply_filters( 'wp_ulike_rating_value', $rating_value, $post_ID );
+		return apply_filters( 'wp_ulike_rating_value', null, $post_ID );
 	}
 }
 
@@ -978,42 +605,30 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
      * @param string $period    Available values: all, today, yesterday
      * @return integer
      */
-    function wp_ulike_count_all_logs( $period = 'all' ){
-        global $wpdb;
-
+	function wp_ulike_count_all_logs( $period = 'all' ){
         // Convert array period
         if( is_array( $period ) ){
             $period = implode( '-', $period );
         }
 
-        $cache_key = sanitize_key( sprintf( 'count_logs_period_%s', $period ) );
+        $logical_key = 'count_logs_period_' . $period;
 
         if( $period === 'all' ){
-            $count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
+            $count_all_logs = WP_Ulike_Query_Cache::get_statistics_meta( $logical_key );
             if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
                 return absint($count_all_logs);
             }
         }
 
-        $counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
-
-        // Make a cachable query to get new like count from all tables
-        if( false === $counter_value ){
-			$period_limit = wp_ulike_get_period_limit_sql( $period );
-
-            $counter_value = $wpdb->get_var( "
-			SELECT
-			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike` WHERE 1=1 {$period_limit} ) +
-			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_activities` WHERE 1=1 {$period_limit} ) +
-			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_comments` WHERE 1=1 {$period_limit} ) +
-			( SELECT COUNT(*) FROM `{$wpdb->prefix}ulike_forums` WHERE 1=1 {$period_limit} )
-			" );
-
-            wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
-        }
+        $counter_value = WP_Ulike_Query_Cache::remember_stats(
+            $logical_key,
+            static function () use ( $period ) {
+                return WP_Ulike_Pulse_Query::count_logs_for_mode( $period );
+            }
+        );
 
         if( $period === 'all' ){
-            wp_ulike_update_meta_data( 1, 'statistics', 'count_logs_period_all', $counter_value );
+            WP_Ulike_Query_Cache::set_statistics_meta( $logical_key, $counter_value );
         }
 
         return empty( $counter_value ) ? 0 : absint($counter_value);
@@ -1032,27 +647,14 @@ if( ! function_exists('wp_ulike_count_current_fingerprint') ){
 	 * @return integer
 	 */
 	function wp_ulike_count_current_fingerprint( $current_fingerprint, $item_id, $type ) {
-		global $wpdb;
-		// Sanitize key & prepare cache key
-		$cache_key = 'fingerprint_' . md5( $type . '_' . $item_id . '_' . $current_fingerprint );
+		$logical_key = 'fingerprint_' . md5( $type . '_' . $item_id . '_' . $current_fingerprint );
 
-		// Try to get from cache
-		$existing_count = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
-		$settings       = wp_ulike_setting_type::get_instance( $type );
-
-		if ( false === $existing_count ) {
-			$table = $wpdb->prefix . $settings->getTableName();
-
-			$existing_count = (int) $wpdb->get_var( $wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table} WHERE {$settings->getColumnName()} = %d AND fingerprint = %s",
-				$item_id,
-				$current_fingerprint
-			) );
-
-			// Store in cache to avoid repeated queries for same request
-			wp_cache_add( $cache_key, $existing_count, WP_ULIKE_SLUG, 10 ); // TTL = 10 seconds
-		}
-
-		return (int) $existing_count;
+		return (int) WP_Ulike_Query_Cache::remember(
+			$logical_key,
+			static function () use ( $current_fingerprint, $item_id, $type ) {
+				return WP_Ulike_Pulse_Query::count_fingerprint_votes( $current_fingerprint, $item_id, $type );
+			},
+			WP_Ulike_Query_Cache::TTL_FINGERPRINT
+		);
 	}
 }

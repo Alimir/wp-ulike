@@ -213,6 +213,21 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				);
 			}
 
+			if ( class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
+				$storage_upgrade = WP_Ulike_Pulse_Admin::get_help_card_data();
+				if ( ! empty( $storage_upgrade ) && 'migrate' === ( $storage_upgrade['phase'] ?? '' ) ) {
+					$status_rows[] = array(
+						'group'  => 'setup',
+						'label'  => esc_html__( 'Like storage', 'wp-ulike' ),
+						'value'  => $storage_upgrade['status'] ?? '',
+						'state'  => $storage_upgrade['state'] ?? 'neutral',
+						'hint'   => $storage_upgrade['progress'] ?? '',
+					);
+				}
+			} else {
+				$storage_upgrade = null;
+			}
+
 			$status_rows = apply_filters( 'wp_ulike_about_status_rows', $status_rows, $health );
 
 			// Supplementary setup hint last (free installs with no votes yet).
@@ -280,6 +295,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			$summary = apply_filters( 'wp_ulike_about_summary', self::get_overview_summary( $health ), $health );
 
+			if ( ! isset( $storage_upgrade ) ) {
+				$storage_upgrade = class_exists( 'WP_Ulike_Pulse_Admin' ) ? WP_Ulike_Pulse_Admin::get_help_card_data() : null;
+			}
+
 			return array(
 				'health'                 => $health,
 				'is_pro'                 => $is_pro,
@@ -289,6 +308,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'quick_actions'          => $quick_actions,
 				'pro_modules'            => $pro_modules,
 				'status_rows'            => $status_rows,
+				'storage_upgrade'        => $storage_upgrade,
 				'help_links'             => $help_links,
 				'troubleshooting'        => self::get_troubleshooting_tips( $health ),
 				'sidebar_meta'           => apply_filters( 'wp_ulike_about_sidebar_meta', self::get_default_sidebar_meta( $health ), $health ),
@@ -308,6 +328,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'repair_tables_url'      => wp_nonce_url(
 					admin_url( 'admin-post.php?action=wp_ulike_repair_tables' ),
 					'wp_ulike_repair_tables'
+				),
+				'flush_stats_cache_url'  => wp_nonce_url(
+					admin_url( 'admin-post.php?action=wp_ulike_flush_stats_cache' ),
+					'wp_ulike_flush_stats_cache'
 				),
 				'backup_intro'           => apply_filters(
 					'wp_ulike_backup_intro',
@@ -488,15 +512,36 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		}
 
 		/**
+		 * Clear versioned statistics caches from Help.
+		 *
+		 * @return void
+		 */
+		public static function handle_flush_stats_cache() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Permission denied.', 'wp-ulike' ) );
+			}
+
+			check_admin_referer( 'wp_ulike_flush_stats_cache' );
+
+			WP_Ulike_Query_Cache::flush_stats();
+			delete_transient( self::get_health_report_cache_key() );
+
+			wp_safe_redirect(
+				add_query_arg(
+					'wp_ulike_stats_cache',
+					'flushed',
+					self::get_about_url()
+				)
+			);
+			exit;
+		}
+
+		/**
 		 * Create any missing WP ULike database tables.
 		 *
 		 * @return array{tables_ok: bool, missing_tables: string[]}
 		 */
 		public static function repair_database_tables() {
-			if ( ! class_exists( 'wp_ulike_activator' ) ) {
-				require_once WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-activator.php';
-			}
-
 			wp_ulike_activator::get_instance()->install_tables();
 			delete_transient( self::get_health_report_cache_key() );
 
@@ -509,15 +554,11 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return array<string, string> Label => full table name.
 		 */
 		public static function get_required_tables() {
-			global $wpdb;
+			if ( wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_storage_tables();
+			}
 
-			return array(
-				'posts'      => $wpdb->prefix . 'ulike',
-				'comments'   => $wpdb->prefix . 'ulike_comments',
-				'activities' => $wpdb->prefix . 'ulike_activities',
-				'forums'     => $wpdb->prefix . 'ulike_forums',
-				'meta'       => $wpdb->prefix . 'ulike_meta',
-			);
+			return WP_Ulike_Pulse_Registry::legacy_health_tables();
 		}
 
 		/**

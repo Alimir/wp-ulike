@@ -13,21 +13,53 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 
 	class wp_ulike_logs{
 		// Private variables
-		private $wpdb, $table, $page, $per_page, $sort;
+		private $wpdb, $identifier, $page, $per_page, $sort, $search;
 
 		/**
 		 * Constructor
+		 *
+		 * @param string $identifier Item type (post, comment, …) or legacy table suffix.
+		 * @param string $search     Optional case-insensitive search (user_id / ip / status).
 		 */
-		function __construct( $table, $page = 1, $per_page = 15, $sort = array(
+		function __construct( $identifier, $page = 1, $per_page = 15, $sort = array(
 			'type'  => 'DESC',
 			'field' => 'id'
-		) ){
+		), $search = '' ){
 			global $wpdb;
-			$this->wpdb     = $wpdb;
-			$this->table    = $table;
-			$this->page     = $page;
-			$this->per_page = $per_page;
-			$this->sort     = $sort;
+			$this->wpdb       = $wpdb;
+			$this->identifier = WP_Ulike_Pulse_Registry::resolve_log_identifier( $identifier ) ?: $identifier;
+			$this->page       = $page;
+			$this->per_page   = $per_page;
+			$this->sort       = $sort;
+			$this->search     = is_string( $search ) ? trim( $search ) : '';
+		}
+
+		/**
+		 * Build a LIKE-based WHERE fragment for the legacy direct-SQL path.
+		 *
+		 * @return string
+		 */
+		private function legacy_search_where() {
+			if ( '' === $this->search ) {
+				return '';
+			}
+			$like  = '%' . $this->wpdb->esc_like( $this->search ) . '%';
+			$where = $this->wpdb->prepare( ' WHERE user_id LIKE %s OR ip LIKE %s OR status LIKE %s', $like, $like, $like );
+			return $where;
+		}
+
+		/**
+		 * Prefixed legacy vote table for direct SQL fallback paths.
+		 *
+		 * @return string
+		 */
+		private function legacy_table_sql() {
+			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( $this->identifier );
+			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				return esc_sql( $source['table'] );
+			}
+
+			return esc_sql( $this->wpdb->prefix . $this->identifier );
 		}
 
 		/**
@@ -36,16 +68,27 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_results(){
-			$table = esc_sql( $this->wpdb->prefix . $this->table );
+			if ( wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_log_rows(
+					$this->identifier,
+					$this->page,
+					$this->per_page,
+					$this->sort,
+					$this->search
+				);
+			}
+
+			$table = $this->legacy_table_sql();
 			$paged = absint( ( $this->page - 1 ) * $this->per_page );
 			$per_page = absint( $this->per_page );
-			
+
 			// Whitelist allowed order fields
 			$allowed_fields = array( 'id', 'date_time', 'user_id', 'ip', 'status' );
 			$orderBy = in_array( $this->sort['field'], $allowed_fields, true ) ? esc_sql( $this->sort['field'] ) : 'id';
 			$orderType = strtoupper( $this->sort['type'] ) === 'ASC' ? 'ASC' : 'DESC';
+			$where = $this->legacy_search_where();
 
-			return $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM `{$table}` ORDER BY `{$orderBy}` {$orderType} LIMIT %d, %d", $paged, $per_page ) );
+			return $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM `{$table}`{$where} ORDER BY `{$orderBy}` {$orderType} LIMIT %d, %d", $paged, $per_page ) );
 		}
 
 		/**
@@ -54,7 +97,11 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_row( $item_ID ){
-			$table = esc_sql( $this->wpdb->prefix . $this->table );
+			if ( wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_log_row( $this->identifier, $item_ID );
+			}
+
+			$table = $this->legacy_table_sql();
 			$item_ID = absint( $item_ID );
 
 			return $this->wpdb->get_row( $this->wpdb->prepare( "
@@ -71,14 +118,19 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return object
 		 */
 		public function get_all_rows(){
-			$table = esc_sql( $this->wpdb->prefix . $this->table );
-			
+			if ( wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_all_log_rows( $this->identifier, $this->sort, $this->search );
+			}
+
+			$table = $this->legacy_table_sql();
+
 			// Whitelist allowed order fields
 			$allowed_fields = array( 'id', 'date_time', 'user_id', 'ip', 'status' );
 			$orderBy = in_array( $this->sort['field'], $allowed_fields, true ) ? esc_sql( $this->sort['field'] ) : 'id';
 			$orderType = strtoupper( $this->sort['type'] ) === 'ASC' ? 'ASC' : 'DESC';
+			$where = $this->legacy_search_where();
 
-			return $this->wpdb->get_results( "SELECT * FROM `{$table}` ORDER BY `{$orderBy}` {$orderType}" );
+			return $this->wpdb->get_results( "SELECT * FROM `{$table}`{$where} ORDER BY `{$orderBy}` {$orderType}" );
 		}
 
 		/**
@@ -88,7 +140,20 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return void
 		 */
 		public function delete_rows( $items ){
-			$table = esc_sql( $this->wpdb->prefix . $this->table );
+			if ( wp_ulike_use_pulse_queries() ) {
+				$selected_ids = array();
+				foreach ( $items as $item ) {
+					if ( ! empty( $item['id'] ) ) {
+						$selected_ids[] = absint( $item['id'] );
+					}
+				}
+				if ( ! empty( $selected_ids ) ) {
+					WP_Ulike_Pulse_Log_Bridge::delete_log_rows( $this->identifier, $selected_ids );
+				}
+				return;
+			}
+
+			$table = $this->legacy_table_sql();
 			$selectedIds = array();
 
 			foreach ($items as $key => $item) {
@@ -110,7 +175,11 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return integer|false
 		 */
 		public function delete_row( $item_id ){
-			$table   = $this->wpdb->prefix . $this->table;
+			if ( wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::delete_log_row( $this->identifier, $item_id );
+			}
+
+			$table   = $this->legacy_table_sql();
 			$item_id = absint( $item_id );
 
 			return $this->wpdb->delete(
@@ -126,8 +195,13 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @return string
 		 */
 		private function get_total_records(){
-			$table  = esc_sql( $this->wpdb->prefix . $this->table );
-			return $this->wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
+			if ( wp_ulike_use_pulse_queries() ) {
+				return WP_Ulike_Pulse_Log_Bridge::count_log_rows( $this->identifier, $this->search );
+			}
+
+			$table  = $this->legacy_table_sql();
+			$where  = $this->legacy_search_where();
+			return $this->wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`{$where}" );
 		}
 
 		/**

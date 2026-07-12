@@ -222,9 +222,12 @@ echo do_shortcode('[wp_ulike for="post" style="my-template"]');
 - `wp_ulike_get_the_id($post_id)` - Get post ID (WPML compatible)
   - **Parameters:** `$post_id` (int) - Optional post ID
   - **Returns:** (int) Post ID
-- `wp_ulike_get_rating_value($post_ID, $is_decimal)` - Get rating value
-  - **Parameters:** `$post_ID` (int), `$is_decimal` (bool) - Include decimals
-  - **Returns:** (string|float) Rating value (1-5)
+- `wp_ulike_get_rating_value($post_ID, $is_decimal)` - **Deprecated 5.2.0.** Returns `null`. Use like counts via `wp_ulike_get_post_likes()` instead.
+  - **Parameters:** `$post_ID` (int), `$is_decimal` (bool) - Ignored
+  - **Returns:** `null`
+- `wp_ulike_count_all_logs($period)` - Site-wide log totals (versioned cache via `WP_Ulike_Query_Cache`)
+  - **Parameters:** `$period` (string) - `all`, `today`, `yesterday`, `week`, etc.
+  - **Returns:** (int) Total log count across pulse (and legacy in dual mode)
 - `wp_ulike_is_user_liked($item_ID, $user_ID, $type)` - Check if user liked item
   - **Parameters:** `$item_ID` (int), `$user_ID` (int), `$type` (string) - Content type
   - **Returns:** (int) Count of likes (0 if not liked)
@@ -374,10 +377,10 @@ $button_text = wp_ulike_get_button_text('like', 'posts_group');
 // Get post ID (with WPML support)
 $post_id = wp_ulike_get_the_id($post_id);
 
-// Check if WPML is active
-$is_wpml = wp_ulike_is_wpml_active();
+// Site-wide log total (statistics dashboard, review notice)
+$total_logs = wp_ulike_count_all_logs();
 
-// Get rating value
+// Deprecated — returns null since 5.2.0
 $rating = wp_ulike_get_rating_value($post_id, true);
 
 ```
@@ -788,14 +791,20 @@ function add_custom_attributes($attributes) {
 }
 ```
 
-**Rating Value Filter:**
+**Rating Value Filter (deprecated API):**
 ```php
+// wp_ulike_get_rating_value() is deprecated since 5.2.0 and returns null.
+// The filter still runs if you call the deprecated function:
 add_filter('wp_ulike_rating_value', 'customize_rating', 10, 2);
 function customize_rating($rating_value, $post_ID) {
-    // Customize rating calculation
     return $rating_value;
 }
 ```
+
+**Statistics cache:**
+- Aggregate totals use `WP_Ulike_Query_Cache` with versioned keys (`pv{N}_…`).
+- Admin menu badge uses fixed meta key `calculate_new_votes` (not versioned).
+- Help → **Refresh statistics cache** clears the stats object-cache group.
 
 **Meta Data Filters (Dynamic):**
 ```php

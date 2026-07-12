@@ -45,11 +45,9 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 				throw new \Exception( esc_html__( 'Invalid item type.', 'wp-ulike' ) );
 			}
 
-			$template = wp_ulike_get_likers_template(
-				$this->settings_type->getTableName(),
-				$this->settings_type->getColumnName(),
+			$template = wp_ulike_get_likers_template_for_type(
+				$this->settings_type->getItemType(),
 				$this->data['id'],
-				$this->settings_type->getSettingKey(),
 				array(
                 	'style' => $this->data['likersTemplate']
             	)

@@ -29,12 +29,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		function __construct(){
 			global $wpdb;
 			$this->wpdb   = $wpdb;
-			$this->tables = array(
-				'posts'      => 'ulike',
-				'comments'   => 'ulike_comments',
-				'activities' => 'ulike_activities',
-				'topics'     => 'ulike_forums',
-			);
+			$this->tables = WP_Ulike_Pulse_Registry::stats_table_map();
 		}
 
 		/**
@@ -52,7 +47,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			// Tables buffer
 			$get_tables = $this->tables;
 
-			foreach ( $get_tables as $type => $table) {
+			foreach ( $get_tables as $type => $item_type ) {
 				if ( 'activities' === $type && ! defined( 'BP_VERSION' ) ) {
 					unset( $get_tables[ $type ] );
 					continue;
@@ -63,8 +58,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 					continue;
 				}
 
-				// If this table has no data, then unset it and continue...
-				if( ! $this->count_logs( array ( "table" => $table ) ) ) {
+				// If this type has no data, then unset it and continue...
+				if ( ! $this->count_logs( array( 'type' => $item_type ) ) ) {
 					unset( $get_tables[ $type ] );
 					continue;
 				}
@@ -186,11 +181,11 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				return null;
 			}
 
-			$table = $tables[ $type ];
+			$item_type = $tables[ $type ];
 
 			return array(
-				'chart'   => $this->dataset( $table ),
-				'metrics' => $this->get_type_count_logs( $table ),
+				'chart'   => $this->dataset( $item_type ),
+				'metrics' => $this->get_type_count_logs( $item_type ),
 			);
 		}
 
@@ -210,17 +205,17 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Count logs for a single table across standard time ranges.
+		 * Count logs for a single content type across standard time ranges.
 		 *
-		 * @param string $table Log table name (without prefix).
+		 * @param string $item_type Canonical item type (post, comment, …).
 		 * @return array
 		 */
-		private function get_type_count_logs( $table ) {
+		private function get_type_count_logs( $item_type ) {
 			return array(
-				'week'  => $this->count_logs( array( 'table' => $table, 'date' => 'week' ) ),
-				'month' => $this->count_logs( array( 'table' => $table, 'date' => 'month' ) ),
-				'year'  => $this->count_logs( array( 'table' => $table, 'date' => 'year' ) ),
-				'all'   => $this->count_logs( array( 'table' => $table, 'date' => 'all' ) ),
+				'week'  => $this->count_logs( array( 'type' => $item_type, 'date' => 'week' ) ),
+				'month' => $this->count_logs( array( 'type' => $item_type, 'date' => 'month' ) ),
+				'year'  => $this->count_logs( array( 'type' => $item_type, 'date' => 'year' ) ),
+				'all'   => $this->count_logs( array( 'type' => $item_type, 'date' => 'all' ) ),
 			);
 		}
 
@@ -228,12 +223,12 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * Get posts dataset
 		 *
 		 * @since 2.0
-		 * @param string $table
+		 * @param string $item_type Canonical item type.
 		 * @return void
 		 */
-		public function dataset( $table ){
+		public function dataset( $item_type ){
 			$output  = array();
-			$results = $this->select_data( $table );
+			$results = $this->select_data( $item_type );
 
 			foreach( $results as $result ){
 				if( isset( $result->labels ) && isset( $result->counts ) ){
@@ -250,65 +245,20 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * Get The Logs Data From Tables
 		 *
 		 * @author Alimir
-		 * @param string $table
+		 * @param string $item_type Canonical item type.
 		 * @since 2.0
 		 * @return String
 		 */
-	public function select_data( $table ){
+	public function select_data( $item_type ) {
+		$data_limit  = max( 1, absint( apply_filters( 'wp_ulike_stats_data_limit', 30 ) ) );
+		$logical_key = sprintf( 'stats_chart_%s_%d', sanitize_key( $item_type ), $data_limit );
 
-		$data_limit = apply_filters( 'wp_ulike_stats_data_limit', 30 );
-		
-		// Ensure data_limit is a positive integer for safety
-		$data_limit = max( 1, absint( $data_limit ) );
-
-		// Fetch the most recent date_time from the table
-		// MAX() query uses the date_time index efficiently (reverse index scan)
-		$table_escaped = esc_sql( $this->wpdb->prefix . $table );
-		$latest_date = $this->wpdb->get_var( "
-			SELECT MAX(date_time) FROM `{$table_escaped}`
-		" );
-
-		// If no data exists, return empty result set for chart consumers.
-		if( empty( $latest_date ) ) {
-			return array();
-		}
-
-		// Calculate start date in PHP for maximum index optimization
-		// Use $data_limit for date range to match the data limit filter
-		// This ensures MySQL gets a constant value to compare against (most index-friendly)
-		$latest_timestamp = strtotime( $latest_date );
-		
-		// Safety check: ensure timestamp is valid
-		if( false === $latest_timestamp ) {
-			return array();
-		}
-		
-		// DAY_IN_SECONDS is a WordPress core constant (defined since WP 3.5)
-		$start_date = date( 'Y-m-d H:i:s', $latest_timestamp - ( $data_limit * DAY_IN_SECONDS ) );
-
-		// Use index-friendly date range query with pre-calculated dates
-		// Direct comparison allows MySQL to use date_time index efficiently
-		// No LIMIT needed since date range naturally limits results to $data_limit days
-		// (GROUP BY DATE() returns at most one row per day)
-		$query = $this->wpdb->prepare( "
-			SELECT DATE(date_time) AS labels,
-			count(date_time) AS counts
-			FROM `{$table_escaped}`
-			WHERE date_time >= %s
-			AND date_time <= %s
-			GROUP BY labels
-			ORDER BY labels ASC",
-			$start_date,
-			$latest_date
+		return WP_Ulike_Query_Cache::remember_stats(
+			$logical_key,
+			static function () use ( $item_type, $data_limit ) {
+				return WP_Ulike_Pulse_Log_Bridge::get_chart_dataset( $item_type, $data_limit );
+			}
 		);
-
-		$result = $this->wpdb->get_results( $query );
-
-		if( empty( $result ) ) {
-			return array();
-		}
-
-		return $result;
 	}
 
 		/**
@@ -323,7 +273,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Count logs by table
+		 * Count logs by content type.
 		 *
 		 * @since 3.5
 		 * @param array $args
@@ -333,43 +283,46 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			//Main Data
 			$defaults  = array(
-				"table" => 'ulike',
-				"date"  => 'all'
+				'type' => 'post',
+				'date' => 'all',
 			);
 
 			$parsed_args = wp_parse_args( $args, $defaults );
 
-			// Extract variables
-			$table = isset( $parsed_args['table'] ) ? $parsed_args['table'] : 'ulike';
-			$date = isset( $parsed_args['date'] ) ? $parsed_args['date'] : 'all';
+			// Backward compat: callers may still pass legacy `table` (suffix or item type).
+			if ( empty( $parsed_args['type'] ) && ! empty( $parsed_args['table'] ) ) {
+				$parsed_args['type'] = $parsed_args['table'];
+			}
 
-			$cache_key = sanitize_key( sprintf( 'count_logs_for_%s_table_in_%s_daterange', $table, is_array($date) ? implode('_', $date) : $date ) );
+			$item_type = ! empty( $parsed_args['type'] ) ? $parsed_args['type'] : 'post';
+			$resolved_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $item_type );
+			$item_type     = $resolved_type ? $resolved_type : WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+			$date          = isset( $parsed_args['date'] ) ? $parsed_args['date'] : 'all';
+			$logical_key   = sprintf(
+				'count_logs_for_%s_in_%s_daterange',
+				$item_type,
+				is_array( $date ) ? implode( '_', $date ) : $date
+			);
 
-			if( $date === 'all' ){
-				$count_all_logs = wp_ulike_get_meta_data( 1, 'statistics', $cache_key, true );
-				if( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ){
-					return absint($count_all_logs);
+			if ( 'all' === $date ) {
+				$count_all_logs = WP_Ulike_Query_Cache::get_statistics_meta( $logical_key );
+				if ( ! empty( $count_all_logs ) || is_numeric( $count_all_logs ) ) {
+					return absint( $count_all_logs );
 				}
 			}
 
-			$counter_value = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+			$counter_value = WP_Ulike_Query_Cache::remember_stats(
+				$logical_key,
+				static function () use ( $item_type, $date ) {
+					return WP_Ulike_Pulse_Query::count_logs_for_type( $item_type, $date );
+				}
+			);
 
-			// Make a cachable query to get new like count from all tables
-			if( false === $counter_value ){
-				// CRITICAL FIX: Escape table name for security
-				$table_escaped = esc_sql( $this->wpdb->prefix . $table );
-				$query = "SELECT COUNT(*) FROM `{$table_escaped}` WHERE 1=1";
-				$query .= wp_ulike_get_period_limit_sql( $date );
-
-				$counter_value = $this->wpdb->get_var( $query );
-				wp_cache_add( $cache_key, $counter_value, WP_ULIKE_SLUG, 300 );
+			if ( 'all' === $date ) {
+				WP_Ulike_Query_Cache::set_statistics_meta( $logical_key, $counter_value );
 			}
 
-			if( $date === 'all' ){
-				wp_ulike_update_meta_data( 1, 'statistics', $cache_key, $counter_value );
-			}
-
-	        return  empty( $counter_value ) ? 0 : absint( $counter_value );
+			return empty( $counter_value ) ? 0 : absint( $counter_value );
 		}
 
 		/**
@@ -643,52 +596,36 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				return array();
 			}
 
-			$cache_key = sanitize_key( 'stats_peak_hours_' . md5( implode( ',', array_values( $tables ) ) ) );
-			$cached    = wp_cache_get( $cache_key, WP_ULIKE_SLUG );
+			$logical_key = 'stats_peak_hours_' . md5( implode( ',', array_values( $tables ) ) );
 
-			if ( false !== $cached ) {
-				return $cached;
-			}
+			return WP_Ulike_Query_Cache::remember_stats(
+				$logical_key,
+				static function () use ( $tables ) {
+					$results = WP_Ulike_Pulse_Log_Bridge::get_peak_hours_rows( array_values( $tables ) );
+					$hours   = array_fill( 0, 24, 0 );
 
-			$union_parts = array();
-
-			foreach ( $tables as $table ) {
-				$table_escaped = esc_sql( $this->wpdb->prefix . $table );
-				$union_parts[] = "SELECT date_time FROM `{$table_escaped}` WHERE date_time >= NOW() - INTERVAL 30 DAY";
-			}
-
-			$query = sprintf(
-				"SELECT HOUR(date_time) AS hour_slot, COUNT(*) AS total_count
-				FROM ( %s ) AS combined
-				GROUP BY hour_slot
-				ORDER BY hour_slot ASC",
-				implode( ' UNION ALL ', $union_parts )
-			);
-
-			$results = $this->wpdb->get_results( $query );
-			$hours   = array_fill( 0, 24, 0 );
-
-			if ( ! empty( $results ) ) {
-				foreach ( $results as $row ) {
-					$slot = (int) $row->hour_slot;
-					if ( $slot >= 0 && $slot <= 23 ) {
-						$hours[ $slot ] = absint( $row->total_count );
+					if ( ! empty( $results ) ) {
+						foreach ( $results as $row ) {
+							$slot = (int) $row->hour_slot;
+							if ( $slot >= 0 && $slot <= 23 ) {
+								$hours[ $slot ] = absint( $row->total_count );
+							}
+						}
 					}
-				}
-			}
 
-			$data = array();
-			for ( $h = 0; $h < 24; $h++ ) {
-				$data[] = array(
-					'hour'  => $h,
-					'label' => wp_date( 'g A', strtotime( sprintf( 'today %02d:00', $h ) ) ),
-					'count' => $hours[ $h ],
-				);
-			}
+					$data = array();
+					for ( $h = 0; $h < 24; $h++ ) {
+						$data[] = array(
+							'hour'  => $h,
+							'label' => wp_date( 'g A', strtotime( sprintf( 'today %02d:00', $h ) ) ),
+							'count' => $hours[ $h ],
+						);
+					}
 
-			wp_cache_set( $cache_key, $data, WP_ULIKE_SLUG, 15 * MINUTE_IN_SECONDS );
-
-			return $data;
+					return $data;
+				},
+				WP_Ulike_Query_Cache::TTL_PEAK_HOURS
+			);
 		}
 
 		/**
