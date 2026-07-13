@@ -346,7 +346,7 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
 
                 case 'dimensions':
                     if ( is_array( $value ) ) {
-                        $outputs = array_merge( $outputs, $this->generate_dimensions_css( $value, $selector, $important ) );
+                        $outputs = array_merge( $outputs, $this->generate_dimensions_css( $value, $selector, $important, $output_mode ) );
                     }
                     break;
 
@@ -549,36 +549,65 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
         /**
          * Generate dimensions CSS
          */
-        protected function generate_dimensions_css( $value, $selector, $important ) {
+        protected function generate_dimensions_css( $value, $selector, $important, $output_mode = '' ) {
             $outputs = array();
             $default_unit = isset( $value['unit'] ) ? $value['unit'] : 'px';
 
-            if ( isset( $value['width'] ) && $value['width'] !== '' && $value['width'] !== null ) {
-                $width = $value['width'];
-                if ( ! preg_match( '/^\d+(\.\d+)?(px|em|rem|%|vh|vw|pt)$/', $width ) ) {
-                    $width = $width . $default_unit;
+            $resolve_dimension = function( $raw ) use ( $default_unit ) {
+                if ( $raw === '' || $raw === null ) {
+                    return '';
                 }
+
+                if ( ! preg_match( '/^\d+(\.\d+)?(px|em|rem|%|vh|vw|pt)$/', (string) $raw ) ) {
+                    return $raw . $default_unit;
+                }
+
+                return (string) $raw;
+            };
+
+            if ( $output_mode && strpos( $output_mode, '--' ) === 0 ) {
+                $size = '';
+
+                if ( isset( $value['width'] ) && $value['width'] !== '' && $value['width'] !== null ) {
+                    $size = $resolve_dimension( $value['width'] );
+                } elseif ( isset( $value['height'] ) && $value['height'] !== '' && $value['height'] !== null ) {
+                    $size = $resolve_dimension( $value['height'] );
+                }
+
+                if ( $size ) {
+                    $css_value = $this->sanitize_css_value( $size, $output_mode );
+                    if ( $css_value ) {
+                        $outputs[] = array(
+                            'selector' => $selector,
+                            'property' => $output_mode,
+                            'value'    => $css_value . $important,
+                        );
+                    }
+                }
+
+                return $outputs;
+            }
+
+            if ( isset( $value['width'] ) && $value['width'] !== '' && $value['width'] !== null ) {
+                $width = $resolve_dimension( $value['width'] );
                 $css_value = $this->sanitize_css_value( $width, 'width' );
                 if ( $css_value ) {
                     $outputs[] = array(
                         'selector' => $selector,
                         'property' => 'width',
-                        'value' => $css_value . $important
+                        'value'    => $css_value . $important,
                     );
                 }
             }
 
             if ( isset( $value['height'] ) && $value['height'] !== '' && $value['height'] !== null ) {
-                $height = $value['height'];
-                if ( ! preg_match( '/^\d+(\.\d+)?(px|em|rem|%|vh|vw|pt)$/', $height ) ) {
-                    $height = $height . $default_unit;
-                }
+                $height = $resolve_dimension( $value['height'] );
                 $css_value = $this->sanitize_css_value( $height, 'height' );
                 if ( $css_value ) {
                     $outputs[] = array(
                         'selector' => $selector,
                         'property' => 'height',
-                        'value' => $css_value . $important
+                        'value'    => $css_value . $important,
                     );
                 }
             }
@@ -777,6 +806,12 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
             $valid_properties = apply_filters( 'wp_ulike_css_valid_properties', $base_properties );
 
             $property_lower = strtolower( $property );
+
+            // Allow CSS custom properties (e.g. --ulp-eng-reaction-size)
+            if ( preg_match( '/^--[a-z0-9_-]+$/', $property_lower ) ) {
+                return $property;
+            }
+
             if ( in_array( $property_lower, $valid_properties, true ) ) {
                 return $property_lower;
             }
@@ -815,6 +850,21 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
             // Property-specific validation
             if ( ! empty( $property ) ) {
                 $prop_lower = strtolower( $property );
+
+                // CSS custom properties (e.g. --ulp-eng-reaction-size)
+                if ( strpos( $prop_lower, '--' ) === 0 ) {
+                    if ( preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/', $sanitized ) ||
+                         preg_match( '/^(rgb|rgba|hsl|hsla)\([^)]+\)$/', $sanitized ) ||
+                         preg_match( '/^var\(--[a-zA-Z0-9_-]+\)$/', $sanitized ) ) {
+                        return $this->sanitize_color_value( $sanitized );
+                    }
+
+                    if ( preg_match( '/^(\d+(\.\d+)?(px|em|rem|%|vh|vw|pt|ch|ex|cm|mm|in|pc)|0|auto|calc\([^)]+\))$/i', $sanitized ) ) {
+                        return $this->sanitize_length_value( $sanitized );
+                    }
+
+                    return esc_attr( $sanitized );
+                }
 
                 // Color values (hex, rgb, rgba, hsl, hsla, named colors, CSS variables)
                 if ( strpos( $prop_lower, 'color' ) !== false || $prop_lower === 'border-color' ) {

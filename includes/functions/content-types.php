@@ -238,7 +238,8 @@ if( ! function_exists( 'wp_ulike_get_most_liked_comments' ) ){
 		return get_comments( apply_filters( 'wp_ulike_get_top_comments_query', array(
 			'comment__in' => $comment__in,
 			'orderby'     => 'comment__in',
-			'post_type'   => $post_type
+			'post_type'   => $post_type,
+			'status'      => 'approve',
 		) ) );
 
 	}

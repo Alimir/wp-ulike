@@ -149,7 +149,10 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( isset( $page['sections'] ) && is_array( $page['sections'] ) ) {
                     foreach ( $page['sections'] as &$section ) {
                         if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
-                            $section['fields'] = $this->apply_defaults_to_fields( $section['fields'], $values );
+                            $base_path = ! empty( $section['is_grouping_section'] ) && ! empty( $section['id'] )
+                                ? (string) $section['id']
+                                : '';
+                            $section['fields'] = $this->apply_defaults_to_fields( $section['fields'], $values, $base_path );
                         }
                     }
                 }
@@ -1342,6 +1345,14 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'general.new' => esc_html__( 'New', 'wp-ulike' ),
                 /* translators: Generic label for item */
                 'general.item' => esc_html__( 'Item', 'wp-ulike' ),
+
+                // Emoji reactions field
+                'fields.quick_add' => esc_html__( 'Quick add', 'wp-ulike' ),
+                'fields.emoji' => esc_html__( 'Emoji', 'wp-ulike' ),
+                'fields.label' => esc_html__( 'Label', 'wp-ulike' ),
+                'fields.reaction_label_placeholder' => esc_html__( 'Like', 'wp-ulike' ),
+                'fields.add_reaction' => esc_html__( 'Add reaction', 'wp-ulike' ),
+                'fields.choose_emoji' => esc_html__( 'Choose emoji', 'wp-ulike' ),
 
             );
 
