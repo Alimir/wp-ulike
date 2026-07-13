@@ -78,30 +78,43 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 				)
 			);
 
-			if ( $existing_id ) {
-				$updated = $wpdb->update(
-					self::table(),
-					array(
-						'engagement_key' => $data['engagement_key'],
-						'status'         => $data['status'],
-						'date_time'      => $data['date_time'],
-						'ip'             => $data['ip'],
-						'fingerprint'    => $data['fingerprint'],
-					),
-					array( 'id' => $existing_id ),
-					array( '%s', '%s', '%s', '%s', '%s' ),
-					array( '%d' )
-				);
+		if ( $existing_id ) {
+			$update_data   = array(
+				'engagement_key' => $data['engagement_key'],
+				'status'         => $data['status'],
+				'date_time'      => $data['date_time'],
+				'ip'             => $data['ip'],
+				'fingerprint'    => $data['fingerprint'],
+			);
+			$update_format = array( '%s', '%s', '%s', '%s', '%s' );
 
-				if ( false === $updated ) {
-					return false;
+			// Backfill geo/device columns only when explicitly provided (e.g.
+			// migration re-run). Live re-votes leave them null in the payload
+			// so we do NOT wipe geo data that Pro's hook wrote on the prior vote.
+			foreach ( array( 'country_code', 'device', 'os', 'browser' ) as $geo_col ) {
+				if ( null !== $data[ $geo_col ] ) {
+					$update_data[ $geo_col ]   = $data[ $geo_col ];
+					$update_format[]           = '%s';
 				}
-
-				if ( ! self::$migrating ) {
-					self::fire_updated( $existing_id, $payload, $row['legacy_status'] );
-				}
-				return $existing_id;
 			}
+
+			$updated = $wpdb->update(
+				self::table(),
+				$update_data,
+				array( 'id' => $existing_id ),
+				$update_format,
+				array( '%d' )
+			);
+
+			if ( false === $updated ) {
+				return false;
+			}
+
+			if ( ! self::$migrating ) {
+				self::fire_updated( $existing_id, $payload, $row['legacy_status'] );
+			}
+			return $existing_id;
+		}
 
 			return self::insert( $payload );
 		}
@@ -120,25 +133,35 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 				return 'skipped';
 			}
 
-			$legacy_status = isset( $legacy_row->status ) ? (string) $legacy_row->status : WP_Ulike_Pulse_Vote_Map::ACTION_LIKE;
-			$mapped        = WP_Ulike_Pulse_Vote_Map::legacy_to_row( $legacy_status );
+		$legacy_status = isset( $legacy_row->status ) ? (string) $legacy_row->status : WP_Ulike_Pulse_Vote_Map::ACTION_LIKE;
+		$mapped        = WP_Ulike_Pulse_Vote_Map::legacy_to_row( $legacy_status );
 
-			$payload = array(
-				'item_id'        => (int) $legacy_row->{$column},
-				'item_type'      => $source['item_type'],
-				'legacy_status'  => $legacy_status,
-				'engagement_key' => $mapped['engagement_key'],
-				'status'         => $mapped['status'],
-				'date_time'      => isset( $legacy_row->date_time ) ? (string) $legacy_row->date_time : current_time( 'mysql', true ),
-				'ip'             => isset( $legacy_row->ip ) ? (string) $legacy_row->ip : '',
-				'user_id'        => isset( $legacy_row->user_id ) ? (string) $legacy_row->user_id : '0',
-				'fingerprint'    => isset( $legacy_row->fingerprint ) ? (string) $legacy_row->fingerprint : null,
-				'country_code'   => isset( $legacy_row->country_code ) ? (string) $legacy_row->country_code : null,
-				'device'         => isset( $legacy_row->device ) ? (string) $legacy_row->device : null,
-				'os'             => isset( $legacy_row->os ) ? (string) $legacy_row->os : null,
-				'browser'        => isset( $legacy_row->browser ) ? (string) $legacy_row->browser : null,
-				'is_distinct'    => $is_distinct,
-			);
+		// Early Pro builds stored device as a `device_type` ENUM (D/M/T) before
+		// it was renamed to `device` (full UA-derived label). Fall back to it so
+		// those sites do not lose device data on migration.
+		$device = null;
+		if ( isset( $legacy_row->device ) ) {
+			$device = (string) $legacy_row->device;
+		} elseif ( isset( $legacy_row->device_type ) ) {
+			$device = (string) $legacy_row->device_type;
+		}
+
+		$payload = array(
+			'item_id'        => (int) $legacy_row->{$column},
+			'item_type'      => $source['item_type'],
+			'legacy_status'  => $legacy_status,
+			'engagement_key' => $mapped['engagement_key'],
+			'status'         => $mapped['status'],
+			'date_time'      => isset( $legacy_row->date_time ) ? (string) $legacy_row->date_time : current_time( 'mysql', true ),
+			'ip'             => isset( $legacy_row->ip ) ? (string) $legacy_row->ip : '',
+			'user_id'        => isset( $legacy_row->user_id ) ? (string) $legacy_row->user_id : '0',
+			'fingerprint'    => isset( $legacy_row->fingerprint ) ? (string) $legacy_row->fingerprint : null,
+			'country_code'   => isset( $legacy_row->country_code ) ? (string) $legacy_row->country_code : null,
+			'device'         => $device,
+			'os'             => isset( $legacy_row->os ) ? (string) $legacy_row->os : null,
+			'browser'        => isset( $legacy_row->browser ) ? (string) $legacy_row->browser : null,
+			'is_distinct'    => $is_distinct,
+		);
 
 			if ( $is_distinct ) {
 				self::$migrating = true;

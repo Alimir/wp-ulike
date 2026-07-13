@@ -82,21 +82,14 @@ class wp_ulike_uninstall {
 	}
 
 	/**
-	 * Unschedule WP-Cron and Action Scheduler jobs registered by the plugin.
+	 * Unschedule WP-Cron jobs registered by the plugin.
 	 *
 	 * @since 5.2.0
 	 * @access public
 	 * @return void
 	 */
 	public function clear_scheduled_tasks() {
-		$pulse_hook  = 'wp_ulike_pulse_sync_batch';
-		$pulse_group = 'wp_ulike_pulse';
-
-		wp_clear_scheduled_hook( $pulse_hook );
-
-		if ( function_exists( 'as_unschedule_all_actions' ) ) {
-			as_unschedule_all_actions( $pulse_hook, array(), $pulse_group );
-		}
+		wp_clear_scheduled_hook( 'wp_ulike_pulse_sync_batch' );
 	}
 
 	/**

@@ -30,6 +30,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 			add_action( 'wp_ajax_wp_ulike_pulse_sync_status', array( __CLASS__, 'ajax_status' ) );
 			add_action( 'wp_ajax_wp_ulike_pulse_sync_action', array( __CLASS__, 'ajax_action' ) );
+			add_action( 'wp_ajax_wp_ulike_pulse_dismiss_notice', array( __CLASS__, 'ajax_dismiss_notice' ) );
 			add_action( 'admin_notices', array( __CLASS__, 'storage_upgrade_notice' ) );
 		}
 
@@ -79,13 +80,16 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		/**
 		 * Whether the global admin notice should appear.
 		 *
-		 * Final dismiss state is handled by the shared wp_ulike_notices
-		 * infrastructure (transient `wp-ulike-notice-wp_ulike_storage_upgrade`),
-		 * so this gate only checks the pulse-specific conditions.
+		 * Respects the shared `admin_ui.dismissed` flag (set by the notice
+		 * close button or the storage-upgrade page's dismiss action).
 		 *
 		 * @return bool
 		 */
 		public static function should_show_notice() {
+			if ( WP_Ulike_Pulse_Config::is_admin_dismissed() ) {
+				return false;
+			}
+
 			return current_user_can( 'manage_options' ) && wp_ulike_pulse_needs_migration();
 		}
 
@@ -245,32 +249,62 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		}
 
 		/**
+		 * Render the storage-upgrade admin notice using standard WordPress markup.
+		 *
+		 * Uses the core `is-dismissible` close button. The inline script
+		 * persists dismissal via the shared `admin_ui.dismissed` flag so the
+		 * notice does not reappear on the next page load.
+		 *
 		 * @return void
 		 */
 		public static function storage_upgrade_notice() {
 			if ( ! self::should_show_notice() ) {
 				return;
 			}
+			?>
+			<div class="notice notice-info is-dismissible" data-wp-ulike-pulse-notice>
+				<p>
+					<strong><?php esc_html_e( 'WP ULike: faster like storage is ready', 'wp-ulike' ); ?></strong>
+				</p>
+				<p>
+					<?php esc_html_e( 'Move your existing like records to a faster table for better performance on busy sites. Counts and buttons keep working — nothing is deleted.', 'wp-ulike' ); ?>
+				</p>
+				<p>
+					<a class="button button-primary" href="<?php echo esc_url( self::get_page_url() ); ?>">
+						<?php esc_html_e( 'Begin upgrade', 'wp-ulike' ); ?>
+					</a>
+				</p>
+			</div>
+			<script>
+			( function () {
+				var notice = document.querySelector( '[data-wp-ulike-pulse-notice]' );
+				if ( ! notice ) { return; }
+				var btn = notice.querySelector( '.notice-dismiss' );
+				if ( ! btn ) { return; }
+				btn.addEventListener( 'click', function () {
+					var data = new FormData();
+					data.append( 'action', 'wp_ulike_pulse_dismiss_notice' );
+					data.append( 'nonce', '<?php echo esc_js( wp_create_nonce( 'wp_ulike_pulse_admin' ) ); ?>' );
+					navigator.sendBeacon( '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', data );
+				} );
+			} )();
+			</script>
+			<?php
+		}
 
-			$notice = new wp_ulike_notices(
-				array(
-					'id'          => 'wp_ulike_storage_upgrade',
-					'skin'        => 'upgrade',
-					'has_close'   => true,
-					'title'       => esc_html__( 'WP ULike: faster like storage is ready', 'wp-ulike' ),
-					'description' => esc_html__( 'Move your existing like records to a faster table for better performance on busy sites. Counts and buttons keep working — nothing is deleted.', 'wp-ulike' ),
-					'buttons'     => array(
-						array(
-							'label'      => esc_html__( 'Begin upgrade', 'wp-ulike' ),
-							'link'       => self::get_page_url(),
-							'target'     => '_self',
-							'color_name' => 'default',
-						),
-					),
-				)
-			);
+		/**
+		 * Persist dismissal of the storage-upgrade admin notice.
+		 *
+		 * @return void
+		 */
+		public static function ajax_dismiss_notice() {
+			check_ajax_referer( 'wp_ulike_pulse_admin', 'nonce' );
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
+			}
 
-			$notice->render();
+			WP_Ulike_Pulse_Config::mark_admin_dismissed();
+			wp_send_json_success();
 		}
 
 		/**

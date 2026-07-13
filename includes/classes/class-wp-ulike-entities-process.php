@@ -419,23 +419,23 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			);
 			$format = array( '%d', '%s', '%s', '%s', '%s', '%s'  ); // Adjust format specifiers
 
-			$row = $this->wpdb->insert( $table, $data, $format );
+		$row = $this->wpdb->insert( $table, $data, $format );
 
-			if ( false !== $row ) {
-				do_action( 'wp_ulike_data_inserted', [
-					'id'             => $this->wpdb->insert_id,  // New insert ID
-					'item_id'        => $item_id,                // Item ID for the inserted data
-					'table'          => $table,                  // Table name where the insert occurred
-					'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
-					'type'           => $this->typeSettings->getType(),        // Type of the item
-					'user_id'        => $this->currentUser,      // User who performed the action
-					'status'         => $this->currentStatus,    // Status of the action
-					'ip'             => $this->currentIP         // IP address of the user
-				] );
-			}
-
-			return $row;
+		if ( false !== $row ) {
+			do_action( 'wp_ulike_data_inserted', [
+				'id'             => $this->wpdb->insert_id,  // New insert ID
+				'item_id'        => $item_id,                // Item ID for the inserted data
+				'table'          => $table,                  // Table name where the insert occurred
+				'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
+				'type'           => $this->typeSettings->getType(),        // Type of the item
+				'user_id'        => $this->currentUser,      // User who performed the action
+				'status'         => $this->currentStatus,    // Status of the action
+				'ip'             => $this->maybeAnonymiseIp( $this->currentIP ) // IP address (anonymised if enabled, matching pulse path)
+			] );
 		}
+
+		return $row;
+	}
 
 		/**
 		 * Anonymise IP address if option enabled.
@@ -496,22 +496,37 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$format = array( '%s', '%s' ); // Format for 'status'
 			$where_format = array( '%d', '%s' ); // Ensure proper format for WHERE clause
 
-			$row = $this->wpdb->update( $table, $data, $where, $format, $where_format );
+		$row = $this->wpdb->update( $table, $data, $where, $format, $where_format );
 
-			if ( false !== $row ) {
-				do_action( 'wp_ulike_data_updated', [
-					'item_id'        => $item_id,                // Item ID for the inserted data
-					'table'          => $table,                  // Table name where the insert occurred
-					'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
-					'type'           => $this->typeSettings->getType(),        // Type of the item
-					'user_id'        => $this->currentUser,      // User who performed the action
-					'status'         => $this->currentStatus,    // Status of the action
-					'ip'             => $this->currentIP         // IP address of the user
-				] );
-			}
+		if ( false !== $row ) {
+			// Resolve the row id so the payload matches the pulse fire_updated()
+			// shape (which includes `id`). One lightweight indexed lookup, newest
+			// row first so append-mode (multiple rows per user) reports the id of
+			// the row that was just updated.
+			$column = esc_sql( $this->typeSettings->getColumnName() );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$row_id = (int) $this->wpdb->get_var(
+				$this->wpdb->prepare(
+					"SELECT id FROM `{$table}` WHERE `{$column}` = %d AND user_id = %s ORDER BY id DESC LIMIT 1",
+					$item_id,
+					$this->currentUser
+				)
+			);
 
-			return $row;
+			do_action( 'wp_ulike_data_updated', [
+				'id'             => $row_id,                 // Row ID (parity with pulse fire_updated)
+				'item_id'        => $item_id,                // Item ID for the inserted data
+				'table'          => $table,                  // Table name where the insert occurred
+				'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
+				'type'           => $this->typeSettings->getType(),        // Type of the item
+				'user_id'        => $this->currentUser,      // User who performed the action
+				'status'         => $this->currentStatus,    // Status of the action
+				'ip'             => $this->maybeAnonymiseIp( $this->currentIP ) // IP address (anonymised if enabled, matching pulse path)
+			] );
 		}
+
+		return $row;
+	}
 
 		/**
 		 * Delete log data
@@ -519,21 +534,37 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		 * @param integer $item_id
 		 * @return integer|false
 		 */
-		public function deleteData( $item_id ){
-			if ( wp_ulike_writes_pulse() ) {
-				$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
-				return WP_Ulike_Pulse_Writer::delete( $item_id, $item_type, $this->currentUser );
-			}
+	public function deleteData( $item_id ){
+		if ( wp_ulike_writes_pulse() ) {
+			$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
+			return WP_Ulike_Pulse_Writer::delete( $item_id, $item_type, $this->currentUser );
+		}
 
-			if ( ! $this->typeSettings->legacyTableExists() ) {
-				return false;
-			}
+		if ( ! $this->typeSettings->legacyTableExists() ) {
+			return false;
+		}
 
-			return $this->wpdb->delete(
-				$this->typeSettings->getLegacyTable(),
-				array( $this->typeSettings->getColumnName() => $item_id, 'user_id' => $this->currentUser )
+		$deleted = $this->wpdb->delete(
+			$this->typeSettings->getLegacyTable(),
+			array( $this->typeSettings->getColumnName() => $item_id, 'user_id' => $this->currentUser )
+		);
+
+		if ( $deleted ) {
+			// Match the pulse delete() hook shape so cache/stats listeners fire
+			// on legacy deletes too.
+			do_action(
+				'wp_ulike_delete_vote_data',
+				array(
+					'item_id'   => $item_id,
+					'item_type' => WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() ),
+					'user_id'   => $this->currentUser,
+					'storage'   => 'legacy',
+				)
 			);
 		}
+
+		return $deleted;
+	}
 
 		/**
 		 * Update and return counter value

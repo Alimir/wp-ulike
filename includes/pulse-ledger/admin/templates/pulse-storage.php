@@ -136,12 +136,10 @@ $show_migrate = ! $is_pulse;
 			<?php echo esc_html( 'Advanced: WP-CLI commands' ); ?>
 		</summary>
 		<div style="padding:12px 0 0;">
-			<p class="description" style="margin-top:0;">
-				<?php echo esc_html( 'For developers or very large sites with SSH access. The buttons above are enough for most installations.' ); ?>
-				<?php if ( 'WP-Cron' === WP_Ulike_Pulse_Sync_Scheduler::engine_label() ) : ?>
-					<?php echo esc_html( ' Background sync uses WP-Cron — on production sites, configure a real system cron hitting wp-cron.php or use WP-CLI batches so sync does not stall.' ); ?>
-				<?php endif; ?>
-			</p>
+		<p class="description" style="margin-top:0;">
+			<?php echo esc_html( 'For developers or very large sites with SSH access. The buttons above are enough for most installations.' ); ?>
+			<?php echo esc_html( ' Background sync uses WP-Cron — on production sites, configure a real system cron hitting wp-cron.php or use WP-CLI batches so sync does not stall.' ); ?>
+		</p>
 			<ul style="margin:0.75em 0 0;padding:0;list-style:none;font-size:12px;line-height:1.8;">
 				<?php foreach ( $cli_commands as $cli ) : ?>
 					<li>

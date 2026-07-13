@@ -552,26 +552,15 @@ if ( ! class_exists( 'WP_Ulike_Diagnostics' ) ) {
 			}
 			$checks[] = self::pass( __( 'Detected integrations', 'wp-ulike' ), $integrations ? implode( ', ', $integrations ) : __( 'none', 'wp-ulike' ) );
 
-			// Caching/optimization plugins (relevant for "button does nothing" cases).
-			$cache_plugins = self::detect_cache_plugins();
-			$checks[] = self::pass(
-				__( 'Caching / optimization plugins', 'wp-ulike' ),
-				$cache_plugins ? implode( ', ', $cache_plugins ) : __( 'none detected', 'wp-ulike' )
-			);
+		// Caching/optimization plugins (relevant for "button does nothing" cases).
+		$cache_plugins = self::detect_cache_plugins();
+		$checks[]      = self::pass(
+			__( 'Caching / optimization plugins', 'wp-ulike' ),
+			$cache_plugins ? implode( ', ', $cache_plugins ) : __( 'none detected', 'wp-ulike' )
+		);
 
-			// Action Scheduler availability (used by migration background runner).
-			if ( class_exists( 'ActionScheduler_Versions' ) || class_exists( 'ActionScheduler_Store' ) ) {
-				$checks[] = self::pass( __( 'Action Scheduler', 'wp-ulike' ), __( 'available — background migration supported', 'wp-ulike' ) );
-			} else {
-				$checks[] = self::warn(
-					__( 'Action Scheduler', 'wp-ulike' ),
-					__( 'not available', 'wp-ulike' ),
-					__( 'Action Scheduler is not present. Migration will use WP-Cron instead, which is slower on large sites. Install WooCommerce or another AS provider for faster background migration.', 'wp-ulike' )
-				);
-			}
-
-			return $checks;
-		}
+		return $checks;
+	}
 
 		/**
 		 * Detect common caching/optimization plugins and hosting-level caches.

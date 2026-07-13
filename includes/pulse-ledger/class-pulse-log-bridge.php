@@ -455,82 +455,133 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @param int    $per_page Rows per page.
 		 * @return array<int,array<string,mixed>>
 		 */
-		public static function get_privacy_rows( $user_id, $page = 1, $per_page = 100 ) {
-			global $wpdb;
+	public static function get_privacy_rows( $user_id, $page = 1, $per_page = 100 ) {
+		global $wpdb;
 
-			$user_id  = (string) $user_id;
-			$page     = max( 1, (int) $page );
-			$per_page = max( 1, (int) $per_page );
-			$offset   = ( $page - 1 ) * $per_page;
-			$mode     = WP_Ulike_Pulse_Query::read_mode();
-			$union    = array();
+		$user_id  = (string) $user_id;
+		$page     = max( 1, (int) $page );
+		$per_page = max( 1, (int) $per_page );
+		$offset   = ( $page - 1 ) * $per_page;
+		$mode     = WP_Ulike_Pulse_Query::read_mode();
+		$union    = array();
 
-			foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $slug => $source ) {
-				$suffix = str_replace( $wpdb->prefix, '', $source['table'] );
+		foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $slug => $source ) {
+			$suffix = str_replace( $wpdb->prefix, '', $source['table'] );
 
-				if ( ( 'legacy' === $mode || 'merged' === $mode )
-					&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-					$table = esc_sql( $source['table'] );
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					$union[] = $wpdb->prepare(
-						"SELECT %s AS src, id, date_time, status, ip, NULL AS _ek FROM `{$table}` WHERE user_id = %s",
-						$suffix,
-						$user_id
-					);
-				}
-
-				if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
-					$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-					$since_sql   = 'merged' === $mode
-						? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() )
-						: '';
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					$union[] = $wpdb->prepare(
-						"SELECT %s AS src, id, date_time, status, ip, engagement_key AS _ek
-						FROM `{$pulse_table}`
-						WHERE user_id = %s AND item_type = %s AND engagement_kind = %s {$since_sql}",
-						$suffix,
-						$user_id,
-						$source['item_type'],
-						WP_Ulike_Pulse_Registry::KIND_VOTE
-					);
-				}
-			}
-
-			if ( empty( $union ) ) {
-				return array();
-			}
-
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- fragments are prepared individually.
-			$sql = sprintf(
-				'SELECT src, id, date_time, status, ip, _ek FROM (%s) AS combined
-				ORDER BY date_time DESC, id DESC
-				LIMIT %d OFFSET %d',
-				implode( ' UNION ALL ', $union ),
-				$per_page,
-				$offset
-			);
-
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$results = $wpdb->get_results( $sql, ARRAY_A );
-
-			$rows = array();
-			foreach ( (array) $results as $row ) {
-				$status = $row['status'];
-				if ( isset( $row['_ek'] ) ) {
-					$status = WP_Ulike_Pulse_Vote_Map::row_to_legacy( $row['_ek'], $row['status'] );
-				}
-				$rows[] = array(
-					'src'       => $row['src'],
-					'id'        => (int) $row['id'],
-					'date_time' => $row['date_time'],
-					'status'    => $status,
-					'ip'        => $row['ip'],
+			if ( ( 'legacy' === $mode || 'merged' === $mode )
+				&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				$table     = esc_sql( $source['table'] );
+				$geo_cols  = self::legacy_personal_columns_sql( $source['table'] );
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$union[] = $wpdb->prepare(
+					"SELECT %s AS src, id, date_time, status, ip, NULL AS _ek, {$geo_cols}
+					FROM `{$table}` WHERE user_id = %s",
+					$suffix,
+					$user_id
 				);
 			}
 
-			return $rows;
+			if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
+				$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+				$since_sql   = 'merged' === $mode
+					? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() )
+					: '';
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$union[] = $wpdb->prepare(
+					"SELECT %s AS src, id, date_time, status, ip, engagement_key AS _ek,
+						fingerprint, country_code, device, os, browser
+					FROM `{$pulse_table}`
+					WHERE user_id = %s AND item_type = %s AND engagement_kind = %s {$since_sql}",
+					$suffix,
+					$user_id,
+					$source['item_type'],
+					WP_Ulike_Pulse_Registry::KIND_VOTE
+				);
+			}
 		}
+
+		if ( empty( $union ) ) {
+			return array();
+		}
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- fragments are prepared individually.
+		$sql = sprintf(
+			'SELECT src, id, date_time, status, ip, _ek, fingerprint, country_code, device, os, browser
+			FROM (%s) AS combined
+			ORDER BY date_time DESC, id DESC
+			LIMIT %d OFFSET %d',
+			implode( ' UNION ALL ', $union ),
+			$per_page,
+			$offset
+		);
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $sql, ARRAY_A );
+
+		$rows = array();
+		foreach ( (array) $results as $row ) {
+			$status = $row['status'];
+			if ( isset( $row['_ek'] ) && null !== $row['_ek'] ) {
+				$status = WP_Ulike_Pulse_Vote_Map::row_to_legacy( $row['_ek'], $row['status'] );
+			}
+			$rows[] = array(
+				'src'           => $row['src'],
+				'id'            => (int) $row['id'],
+				'date_time'     => $row['date_time'],
+				'status'        => $status,
+				'ip'            => $row['ip'],
+				'fingerprint'   => isset( $row['fingerprint'] ) ? $row['fingerprint'] : null,
+				'country_code'  => isset( $row['country_code'] ) ? $row['country_code'] : null,
+				'device'        => isset( $row['device'] ) ? $row['device'] : null,
+				'os'            => isset( $row['os'] ) ? $row['os'] : null,
+				'browser'       => isset( $row['browser'] ) ? $row['browser'] : null,
+			);
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Build the optional personal-data column list for a legacy vote table.
+	 *
+	 * Legacy tables always have `fingerprint` after the legacy upgrade, but the
+	 * geo/device columns (`country_code`, `device`, `os`, `browser`) are only
+	 * present when Pro ensured them. Missing columns are projected as NULL so
+	 * the UNION shape stays stable without SQL errors.
+	 *
+	 * @param string $table Full legacy table name.
+	 * @return string SQL fragment, e.g. "`fingerprint` AS fingerprint, NULL AS country_code, ...".
+	 */
+	private static $legacy_personal_columns_cache = array();
+
+	public static function legacy_personal_columns_sql( $table ) {
+		if ( ! isset( self::$legacy_personal_columns_cache[ $table ] ) ) {
+			global $wpdb;
+			$present = array();
+			$cols    = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+					WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s
+					AND COLUMN_NAME IN ('fingerprint','country_code','device','os','browser')",
+					DB_NAME,
+					$table
+				),
+				ARRAY_A
+			);
+			foreach ( (array) $cols as $c ) {
+				$present[ $c['COLUMN_NAME'] ] = true;
+			}
+			self::$legacy_personal_columns_cache[ $table ] = $present;
+		}
+
+		$present = self::$legacy_personal_columns_cache[ $table ];
+		$names   = array( 'fingerprint', 'country_code', 'device', 'os', 'browser' );
+		$parts   = array();
+		foreach ( $names as $name ) {
+			$parts[] = isset( $present[ $name ] ) ? "`{$name}` AS {$name}" : "NULL AS {$name}";
+		}
+		return implode( ', ', $parts );
+	}
 
 		/**
 		 * GDPR erase — remove all vote rows for a user.
@@ -538,44 +589,45 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @param string $user_id WordPress user ID as string.
 		 * @return int
 		 */
-		public static function erase_user_logs( $user_id ) {
-			global $wpdb;
+	public static function erase_user_logs( $user_id ) {
+		global $wpdb;
 
-			$user_id = (string) $user_id;
-			$total   = 0;
-			$mode = WP_Ulike_Pulse_Query::read_mode();
+		$user_id = (string) $user_id;
+		$total   = 0;
 
-			if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
-				$result = $wpdb->delete(
-					WP_Ulike_Pulse_Schema::table(),
-					array(
-						'user_id'         => $user_id,
-						'engagement_kind' => WP_Ulike_Pulse_Registry::KIND_VOTE,
-					),
-					array( '%s', '%s' )
-				);
-				if ( false !== $result ) {
-					$total += (int) $result;
-				}
+		// Pulse: remove ALL engagement kinds for this user (vote, emoji, star)
+		// whenever the table exists — regardless of read mode. A site can be in
+		// legacy read mode while a pulse table exists (partial migration), and a
+		// GDPR erase must not leave personal data behind in either store.
+		if ( WP_Ulike_Pulse_Schema::table_exists() ) {
+			$result = $wpdb->delete(
+				WP_Ulike_Pulse_Schema::table(),
+				array( 'user_id' => $user_id ),
+				array( '%s' )
+			);
+			if ( false !== $result ) {
+				$total += (int) $result;
 			}
-
-			if ( 'legacy' === $mode || 'merged' === $mode ) {
-				foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
-					if ( ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-						continue;
-					}
-					$table  = esc_sql( $source['table'] );
-					$result = $wpdb->query(
-						$wpdb->prepare( "DELETE FROM `{$table}` WHERE user_id = %s", $user_id )
-					);
-					if ( false !== $result ) {
-						$total += (int) $result;
-					}
-				}
-			}
-
-			return $total;
 		}
+
+		// Legacy: always delete when the tables exist, regardless of read mode.
+		// Legacy rows survive cutover until "Drop legacy tables" runs, and a
+		// privacy erase must never leave personal data behind in frozen tables.
+		foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
+			if ( ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				continue;
+			}
+			$table  = esc_sql( $source['table'] );
+			$result = $wpdb->query(
+				$wpdb->prepare( "DELETE FROM `{$table}` WHERE user_id = %s", $user_id )
+			);
+			if ( false !== $result ) {
+				$total += (int) $result;
+			}
+		}
+
+		return $total;
+	}
 
 		/**
 		 * Earliest vote timestamp across active storage.

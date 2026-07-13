@@ -417,15 +417,26 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 					continue;
 				}
 
-				if ( wp_ulike_setting_repo::isDistinct( $config['item_type'] ) ) {
-					if ( $imported + $skipped < 1 ) {
+			if ( wp_ulike_setting_repo::isDistinct( $config['item_type'] ) ) {
+				// Distinct migration collapses legacy append-history into one
+				// pulse row per (user, item). Compare the distinct pair count
+				// against pulse rows instead of the weak "imported + skipped >= 1"
+				// check, so partial import failures are caught.
+				$legacy_distinct = self::count_distinct_source_pairs( $config['table'], $config['column'] );
+				if ( $legacy_distinct > 0 ) {
+					$pulse_rows = self::count_pulse_rows( $config['item_type'] );
+					$minimum    = max( 0, $legacy_distinct - $skipped );
+					if ( $pulse_rows < $minimum ) {
 						$issues[ $slug ] = array(
-							'reason' => 'nothing_imported',
-							'legacy' => $legacy,
+							'reason'  => 'count_mismatch',
+							'legacy'  => $legacy_distinct,
+							'pulse'   => $pulse_rows,
+							'skipped' => $skipped,
 						);
 					}
-					continue;
 				}
+				continue;
+			}
 
 				$pulse   = self::count_pulse_rows( $config['item_type'] );
 				$minimum = max( 0, $legacy - $skipped );
@@ -643,11 +654,28 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 		 * @param string $table Full table name.
 		 * @return int
 		 */
-		private static function count_source_rows( $table ) {
-			global $wpdb;
-			$table = esc_sql( $table );
-			return (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
-		}
+	private static function count_source_rows( $table ) {
+		global $wpdb;
+		$table = esc_sql( $table );
+		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
+	}
+
+	/**
+	 * Count distinct (user_id, item) pairs in a legacy vote table. Distinct
+	 * migration collapses to one pulse row per pair, so this is the correct
+	 * parity target for distinct sources.
+	 *
+	 * @param string $table  Full legacy table name.
+	 * @param string $column Item column name.
+	 * @return int
+	 */
+	private static function count_distinct_source_pairs( $table, $column ) {
+		global $wpdb;
+		$table  = esc_sql( $table );
+		$column = esc_sql( $column );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return (int) $wpdb->get_var( "SELECT COUNT(DISTINCT `user_id`, `{$column}`) FROM `{$table}`" );
+	}
 
 		/**
 		 * @param string $item_type Item type.

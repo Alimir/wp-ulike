@@ -65,9 +65,10 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 		$prepare_args = array();
 
 		foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
-			$suffix         = str_replace( $wpdb->prefix, '', $source['table'] );
-			$table          = esc_sql( $source['table'] );
-			$union_parts[]  = "(SELECT '{$suffix}' AS src, id, date_time, status, ip FROM `{$table}` WHERE user_id = %s)";
+			$suffix        = str_replace( $wpdb->prefix, '', $source['table'] );
+			$table         = esc_sql( $source['table'] );
+			$geo_cols      = WP_Ulike_Pulse_Log_Bridge::legacy_personal_columns_sql( $source['table'] );
+			$union_parts[] = "(SELECT '{$suffix}' AS src, id, date_time, status, ip, {$geo_cols} FROM `{$table}` WHERE user_id = %s)";
 			$prepare_args[] = $uid;
 		}
 
@@ -91,6 +92,26 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 			if ( $anonymise_ip && '' !== $ip ) {
 				$ip = wp_privacy_anonymize_data( 'ip_address', $ip );
 			}
+
+			$pairs = array(
+				__( 'Date', 'wp-ulike' )   => isset( $row['date_time'] ) ? $row['date_time'] : '',
+				__( 'Status', 'wp-ulike' ) => isset( $row['status'] ) ? $row['status'] : '',
+				__( 'IP', 'wp-ulike' )     => $ip,
+			);
+
+			foreach ( array(
+				'fingerprint'  => __( 'Fingerprint', 'wp-ulike' ),
+				'country_code' => __( 'Country', 'wp-ulike' ),
+				'device'       => __( 'Device', 'wp-ulike' ),
+				'os'           => __( 'OS', 'wp-ulike' ),
+				'browser'      => __( 'Browser', 'wp-ulike' ),
+			) as $key => $name ) {
+				$value = isset( $row[ $key ] ) ? $row[ $key ] : '';
+				if ( null !== $value && '' !== $value ) {
+					$pairs[ $name ] = $value;
+				}
+			}
+
 			$data[] = array(
 				'group_id'    => 'wp-ulike',
 				'group_label' => __( 'WP ULike', 'wp-ulike' ),
@@ -98,13 +119,13 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 				'data'        => array(
 					array(
 						'name'  => $label,
-						'value' => sprintf(
-							/* translators: 1: datetime, 2: status, 3: IP */
-							__( 'Date: %1$s, Status: %2$s, IP: %3$s', 'wp-ulike' ),
-							isset( $row['date_time'] ) ? $row['date_time'] : '',
-							isset( $row['status'] ) ? $row['status'] : '',
-							$ip
-						),
+						'value' => implode( ', ', array_map(
+							static function ( $k, $v ) {
+								return $k . ': ' . $v;
+							},
+							array_keys( $pairs ),
+							array_values( $pairs )
+						) ),
 					),
 				),
 			);

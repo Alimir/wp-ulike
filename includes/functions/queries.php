@@ -390,6 +390,14 @@ if( ! function_exists( 'wp_ulike_get_likers_list_per_post' ) ){
 			$get_likers = ! empty( $get_likers ) ? explode( ',', $get_likers ) : array();
 		}
 
+		// Normalise: one entry per user. The likers_list meta is updated
+		// incrementally on each vote and can accumulate duplicate IDs (concurrent
+		// votes, mixed int/string keys, legacy comma strings). Dedupe here so the
+		// list never shows the same user twice regardless of source.
+		if ( ! empty( $get_likers ) ) {
+			$get_likers = array_values( array_filter( array_unique( array_map( 'absint', (array) $get_likers ) ) ) );
+		}
+
 		// Apply ordering if needed
 		if( ! empty( $get_likers ) && ! empty( $item_opts['setting'] ) ){
 			$order = wp_ulike_get_option( $item_opts['setting'] . '|likers_order', 'desc' );

@@ -835,51 +835,83 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$type    = wp_ulike_get_type_by_table( str_replace( $wpdb->prefix, '', $table_name ) );
 			$mode    = self::read_mode();
 
-			if ( 'pulse' === $mode ) {
-				$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-				return $wpdb->get_col(
-					$wpdb->prepare(
-						"SELECT DISTINCT user_id FROM `{$table}` WHERE item_id = %d AND item_type = %s
-						AND engagement_kind = %s AND status = %s AND engagement_key = %s
-						ORDER BY date_time DESC LIMIT %d",
-						$item_id,
-						WP_Ulike_Pulse_Registry::from_setting_type( $type ),
-						WP_Ulike_Pulse_Registry::KIND_VOTE,
-						WP_Ulike_Pulse_Vote_Map::ROW_ACTIVE,
-						WP_Ulike_Pulse_Vote_Map::KEY_LIKE,
-						absint( $limit )
-					)
-				);
-			}
+		if ( 'pulse' === $mode ) {
+			$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+			// Latest row per user, keep only active likes — one entry per user.
+			return $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT p.user_id
+					FROM `{$table}` p
+					INNER JOIN (
+						SELECT MAX(id) AS max_id
+						FROM `{$table}`
+						WHERE item_id = %d AND item_type = %s AND engagement_kind = %s
+						GROUP BY user_id
+					) latest ON p.id = latest.max_id
+					WHERE p.status = %s AND p.engagement_key = %s
+					ORDER BY p.date_time DESC LIMIT %d",
+					$item_id,
+					WP_Ulike_Pulse_Registry::from_setting_type( $type ),
+					WP_Ulike_Pulse_Registry::KIND_VOTE,
+					WP_Ulike_Pulse_Vote_Map::ROW_ACTIVE,
+					WP_Ulike_Pulse_Vote_Map::KEY_LIKE,
+					absint( $limit )
+				)
+			);
+		}
 
 			$users  = array();
 			$source = $type ? WP_Ulike_Pulse_Registry::legacy_source_for_type( $type ) : null;
 
-			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-				$table  = esc_sql( $source['table'] );
-				$column = esc_sql( $source['column'] );
-				$users  = $wpdb->get_col(
-					$wpdb->prepare(
-						"SELECT DISTINCT user_id FROM `{$table}` WHERE `{$column}` = %d AND status = %s ORDER BY date_time DESC LIMIT %d",
-						$item_id,
-						WP_Ulike_Pulse_Vote_Map::ACTION_LIKE,
-						absint( $limit )
-					)
-				);
-			}
-
-			if ( 'legacy' === $mode ) {
-				return $users;
-			}
-
-			$pulse_users = self::fetch_pulse_likers(
-				$item_id,
-				$type,
-				$limit,
-				WP_Ulike_Pulse_Config::dual_since()
+		if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+			$table  = esc_sql( $source['table'] );
+			$column = esc_sql( $source['column'] );
+			// Latest row per user whose latest action is a like — mirrors
+			// fetch_pulse_likers() so append-mode (one row per vote) and
+			// distinct-mode both surface each user at most once, with their
+			// most recent action deciding presence.
+			$users = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT p.user_id
+					FROM `{$table}` p
+					INNER JOIN (
+						SELECT MAX(id) AS max_id
+						FROM `{$table}`
+						WHERE `{$column}` = %d
+						GROUP BY user_id
+					) latest ON p.id = latest.max_id
+					WHERE p.status = %s
+					ORDER BY p.date_time DESC
+					LIMIT %d",
+					$item_id,
+					WP_Ulike_Pulse_Vote_Map::ACTION_LIKE,
+					absint( $limit )
+				)
 			);
-			return array_values( array_unique( array_merge( (array) $users, (array) $pulse_users ) ) );
 		}
+
+		if ( 'legacy' === $mode ) {
+			return $users;
+		}
+
+		$pulse_users = self::fetch_pulse_likers(
+			$item_id,
+			$type,
+			$limit,
+			WP_Ulike_Pulse_Config::dual_since()
+		);
+
+		// Merged mode: a user may have liked pre-cutover (legacy status=like)
+		// then unliked post-cutover (pulse status=removed). The legacy list
+		// would still include them, so subtract pulse "removed" users for this
+		// item before merging. Pulse active likers are already in $pulse_users.
+		$removed_users = self::fetch_pulse_unlikers( $item_id, $type, WP_Ulike_Pulse_Config::dual_since() );
+		if ( ! empty( $removed_users ) ) {
+			$users = array_diff( (array) $users, $removed_users );
+		}
+
+		return array_values( array_unique( array_merge( (array) $users, (array) $pulse_users ) ) );
+	}
 
 		/* ---------- Internal SQL helpers ---------- */
 
@@ -1543,24 +1575,75 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 	 * @return array
 	 */
 	private static function fetch_pulse_likers( $item_id, $type, $limit, $since = '' ) {
-			global $wpdb;
+		global $wpdb;
 
-			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
-			$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+		$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
-			return $wpdb->get_col(
-				$wpdb->prepare(
-					"SELECT DISTINCT user_id FROM `{$table}` WHERE item_id = %d AND item_type = %s
-					AND engagement_kind = %s AND status = %s AND engagement_key = %s{$since_sql}
-					ORDER BY date_time DESC LIMIT %d",
-					absint( $item_id ),
-					WP_Ulike_Pulse_Registry::from_setting_type( $type ),
-					WP_Ulike_Pulse_Registry::KIND_VOTE,
-					WP_Ulike_Pulse_Vote_Map::ROW_ACTIVE,
-					WP_Ulike_Pulse_Vote_Map::KEY_LIKE,
-					absint( $limit )
-				)
-			);
-		}
+		// One entry per user, latest action wins: take the newest row per
+		// (user) within the candidate window, then keep only those whose
+		// latest row is an active like. Standard SQL — avoids the
+		// `SELECT DISTINCT ... ORDER BY` non-determinism that could surface
+		// duplicate user IDs and stale likers (liked then unliked).
+		return $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT p.user_id
+				FROM `{$table}` p
+				INNER JOIN (
+					SELECT MAX(id) AS max_id
+					FROM `{$table}`
+					WHERE item_id = %d AND item_type = %s AND engagement_kind = %s{$since_sql}
+					GROUP BY user_id
+				) latest ON p.id = latest.max_id
+				WHERE p.status = %s AND p.engagement_key = %s
+				ORDER BY p.date_time DESC
+				LIMIT %d",
+				absint( $item_id ),
+				WP_Ulike_Pulse_Registry::from_setting_type( $type ),
+				WP_Ulike_Pulse_Registry::KIND_VOTE,
+				WP_Ulike_Pulse_Vote_Map::ROW_ACTIVE,
+				WP_Ulike_Pulse_Vote_Map::KEY_LIKE,
+				absint( $limit )
+			)
+		);
+	}
+
+	/**
+	 * Users who removed their like for an item on pulse since the dual cutoff.
+	 * Used by rebuild_likers_list() to exclude stale legacy likers in merged mode.
+	 *
+	 * @param int    $item_id Item ID.
+	 * @param string $type    Setting type.
+	 * @param string $since   Dual-since cutoff (mysql datetime).
+	 * @return array<int,string>
+	 */
+	private static function fetch_pulse_unlikers( $item_id, $type, $since = '' ) {
+		global $wpdb;
+
+		$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+
+		// Users whose LATEST action on this item is an unlike (status=removed).
+		// A user who unliked then re-liked has a newer active row, so they are
+		// NOT included here — keeping them in the likers list where they belong.
+		return $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT p.user_id
+				FROM `{$table}` p
+				INNER JOIN (
+					SELECT MAX(id) AS max_id
+					FROM `{$table}`
+					WHERE item_id = %d AND item_type = %s AND engagement_kind = %s{$since_sql}
+					GROUP BY user_id
+				) latest ON p.id = latest.max_id
+				WHERE p.status = %s AND p.engagement_key = %s",
+				absint( $item_id ),
+				WP_Ulike_Pulse_Registry::from_setting_type( $type ),
+				WP_Ulike_Pulse_Registry::KIND_VOTE,
+				WP_Ulike_Pulse_Vote_Map::ROW_REMOVED,
+				WP_Ulike_Pulse_Vote_Map::KEY_LIKE
+			)
+		);
+	}
 	}
 }
