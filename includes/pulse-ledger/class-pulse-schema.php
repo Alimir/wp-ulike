@@ -46,32 +46,32 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 				$collate = $wpdb->get_charset_collate();
 			}
 
-			return "CREATE TABLE `{$table}` (
-				`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-				`item_id` bigint(20) unsigned NOT NULL,
-				`item_type` varchar(32) NOT NULL,
-				`engagement_kind` varchar(20) NOT NULL DEFAULT 'vote',
-				`engagement_key` varchar(20) NOT NULL DEFAULT 'like',
-				`value` tinyint(3) unsigned DEFAULT NULL,
-				`status` varchar(10) NOT NULL DEFAULT 'active',
-				`date_time` datetime NOT NULL,
-				`ip` varchar(100) NOT NULL DEFAULT '',
-				`user_id` varchar(100) NOT NULL DEFAULT '0',
-				`fingerprint` varchar(64) DEFAULT NULL,
-				`country_code` char(2) DEFAULT NULL,
-				`device` varchar(50) DEFAULT NULL,
-				`os` varchar(50) DEFAULT NULL,
-				`browser` varchar(50) DEFAULT NULL,
-				`dedupe_token` char(64) DEFAULT NULL,
-				PRIMARY KEY (`id`),
-				UNIQUE KEY `idx_dedupe` (`dedupe_token`),
-				KEY `idx_item_active` (`item_type`,`item_id`,`engagement_kind`,`engagement_key`,`status`),
-				KEY `idx_user_vote` (`user_id`(50),`item_type`,`item_id`,`engagement_kind`),
-				KEY `idx_rankings` (`item_type`,`engagement_kind`,`engagement_key`,`status`,`date_time`,`item_id`),
-				KEY `idx_fingerprint` (`item_type`,`item_id`,`fingerprint`),
-				KEY `idx_country_date` (`country_code`,`date_time`),
-				KEY `idx_device_date` (`device`,`date_time`)
-			) {$collate};";
+		return "CREATE TABLE `{$table}` (
+			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`item_id` bigint(20) unsigned NOT NULL,
+			`item_type` varchar(32) NOT NULL,
+			`engagement_kind` varchar(20) NOT NULL DEFAULT 'vote',
+			`engagement_key` varchar(20) NOT NULL DEFAULT 'like',
+			`value` tinyint(3) unsigned DEFAULT NULL,
+			`status` enum('active','removed') NOT NULL DEFAULT 'active',
+			`date_time` datetime NOT NULL,
+			`ip` varchar(45) NOT NULL DEFAULT '',
+			`user_id` varchar(20) NOT NULL DEFAULT '0',
+			`fingerprint` varchar(64) DEFAULT NULL,
+			`country_code` char(2) DEFAULT NULL,
+			`device` varchar(50) DEFAULT NULL,
+			`os` varchar(50) DEFAULT NULL,
+			`browser` varchar(50) DEFAULT NULL,
+			`dedupe_token` binary(32) DEFAULT NULL,
+			PRIMARY KEY (`id`),
+			UNIQUE KEY `idx_dedupe` (`dedupe_token`),
+			KEY `idx_item_active` (`item_type`,`item_id`,`engagement_kind`,`engagement_key`,`status`),
+			KEY `idx_user_vote` (`user_id`,`item_type`,`item_id`,`engagement_kind`),
+			KEY `idx_rankings` (`item_type`,`engagement_kind`,`engagement_key`,`status`,`date_time`,`item_id`),
+			KEY `idx_fingerprint` (`item_type`,`item_id`,`fingerprint`),
+			KEY `idx_country_date` (`country_code`,`date_time`),
+			KEY `idx_device_date` (`device`,`date_time`)
+		) {$collate};";
 		}
 
 		/**
@@ -164,7 +164,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 				return null;
 			}
 
-			return hash( 'sha256', implode( '|', array( $item_type, $item_id, $user_id, $kind, $key ) ) );
+			return hash( 'sha256', implode( '|', array( $item_type, $item_id, $user_id, $kind, $key ) ), true );
 		}
 	}
 }

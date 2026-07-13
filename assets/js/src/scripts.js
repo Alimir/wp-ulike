@@ -25,8 +25,22 @@
 
     elementArray.forEach((element) => {
       if (element && !element.hasAttribute("data-ulike-initialized")) {
-        new WordpressUlike(element);
-        element.setAttribute("data-ulike-initialized", "true");
+        // Isolate each button init so one broken instance (CSS conflict,
+        // malformed markup, theme-injected wrappers) cannot leave the rest
+        // of the page unbound — see deactivation reports of "squished
+        // button that doesn't do anything".
+        try {
+          new WordpressUlike(element);
+          element.setAttribute("data-ulike-initialized", "true");
+        } catch (err) {
+          if (window.console && typeof window.console.error === "function") {
+            window.console.error("WP ULike: failed to initialize button", element, err);
+          }
+          // Mark as initialized so we don't retry on every mutation batch.
+          if (element && element.setAttribute) {
+            element.setAttribute("data-ulike-initialized", "error");
+          }
+        }
       }
     });
   };

@@ -79,6 +79,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		/**
 		 * Whether the global admin notice should appear.
 		 *
+		 * Final dismiss state is handled by the shared wp_ulike_notices
+		 * infrastructure (transient `wp-ulike-notice-wp_ulike_storage_upgrade`),
+		 * so this gate only checks the pulse-specific conditions.
+		 *
 		 * @return bool
 		 */
 		public static function should_show_notice() {
@@ -248,24 +252,25 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 				return;
 			}
 
-			$url = self::get_page_url();
-			?>
-			<div class="notice wp-ulike-notice wp-ulike-notice-control wp-ulike-notice-wrapper wp-ulike-notice-id-wp_ulike_storage_upgrade wp-ulike-notice-skin-upgrade">
-				<div class="wp-ulike-notice-info">
-					<h3 class="wp-ulike-notice-title">
-						<?php echo esc_html( 'WP ULike: faster like storage is ready' ); ?>
-					</h3>
-					<p class="wp-ulike-notice-description">
-						<?php echo esc_html( 'Move your existing like records to a faster table for better performance on busy sites. Counts and buttons keep working — nothing is deleted.' ); ?>
-					</p>
-					<div class="wp-ulike-notice-submit">
-						<a class="wp-ulike-btn wp-ulike-btn-default wp-ulike-notice-btn wp-ulike-notice-cta-btn" href="<?php echo esc_url( $url ); ?>">
-							<span class="wp-ulike-text"><?php echo esc_html( 'Begin upgrade' ); ?></span>
-						</a>
-					</div>
-				</div>
-			</div>
-			<?php
+			$notice = new wp_ulike_notices(
+				array(
+					'id'          => 'wp_ulike_storage_upgrade',
+					'skin'        => 'upgrade',
+					'has_close'   => true,
+					'title'       => esc_html__( 'WP ULike: faster like storage is ready', 'wp-ulike' ),
+					'description' => esc_html__( 'Move your existing like records to a faster table for better performance on busy sites. Counts and buttons keep working — nothing is deleted.', 'wp-ulike' ),
+					'buttons'     => array(
+						array(
+							'label'      => esc_html__( 'Begin upgrade', 'wp-ulike' ),
+							'link'       => self::get_page_url(),
+							'target'     => '_self',
+							'color_name' => 'default',
+						),
+					),
+				)
+			);
+
+			$notice->render();
 		}
 
 		/**

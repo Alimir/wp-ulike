@@ -133,6 +133,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 				'ip'             => isset( $legacy_row->ip ) ? (string) $legacy_row->ip : '',
 				'user_id'        => isset( $legacy_row->user_id ) ? (string) $legacy_row->user_id : '0',
 				'fingerprint'    => isset( $legacy_row->fingerprint ) ? (string) $legacy_row->fingerprint : null,
+				'country_code'   => isset( $legacy_row->country_code ) ? (string) $legacy_row->country_code : null,
+				'device'         => isset( $legacy_row->device ) ? (string) $legacy_row->device : null,
+				'os'             => isset( $legacy_row->os ) ? (string) $legacy_row->os : null,
+				'browser'        => isset( $legacy_row->browser ) ? (string) $legacy_row->browser : null,
 				'is_distinct'    => $is_distinct,
 			);
 

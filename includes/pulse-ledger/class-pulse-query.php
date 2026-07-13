@@ -250,7 +250,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @return int
 		 */
 		public static function count_logs_for_table( $table_suffix, $period = 'all' ) {
-			$item_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $table_suffix );
+			$item_type = WP_Ulike_Pulse_Registry::resolve_log_identifier( $table_suffix );
 
 			if ( ! $item_type ) {
 				return 0;
@@ -268,7 +268,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @return int
 		 */
 		public static function count_status_for_table( $table_suffix, $legacy_status, $period = 'all' ) {
-			$item_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $table_suffix );
+			$item_type = WP_Ulike_Pulse_Registry::resolve_log_identifier( $table_suffix );
 
 			if ( ! $item_type ) {
 				return 0;
@@ -285,7 +285,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @return int
 		 */
 		public static function count_unique_voters_for_table( $table_suffix, $period = 'all' ) {
-			$item_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $table_suffix );
+			$item_type = WP_Ulike_Pulse_Registry::resolve_log_identifier( $table_suffix );
 
 			if ( ! $item_type ) {
 				return 0;
@@ -656,12 +656,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$order        = strtoupper( $parsed_args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
 
 			if ( 'pulse' === $mode ) {
-				return self::query_user_items_pulse( $user_id, $parsed_args['type'], $status_sql, $period_limit, $order, $offset, $limit );
+				return self::query_user_items_pulse( $user_id, $parsed_args['type'], $parsed_args['status'], $period_limit, $order, $offset, $limit );
 			}
 
 			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( $parsed_args['type'] );
 			if ( ! $source || ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-				return self::query_user_items_pulse( $user_id, $parsed_args['type'], $status_sql, $period_limit, $order, $offset, $limit );
+				return self::query_user_items_pulse( $user_id, $parsed_args['type'], $parsed_args['status'], $period_limit, $order, $offset, $limit );
 			}
 
 			$table  = esc_sql( $source['table'] );
@@ -682,7 +682,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				return array_slice( (array) $legacy_rows, $offset, $limit );
 			}
 
-			$pulse_rows = self::query_user_items_pulse( $user_id, $parsed_args['type'], $status_sql, $period_limit, $order, 0, 0 );
+			$pulse_rows = self::query_user_items_pulse( $user_id, $parsed_args['type'], $parsed_args['status'], $period_limit, $order, 0, 0, WP_Ulike_Pulse_Config::dual_since() );
 			return self::merge_user_item_rows( (array) $legacy_rows, (array) $pulse_rows, $order, $offset, $limit );
 		}
 
@@ -711,12 +711,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$order        = strtoupper( $parsed_args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
 
 			if ( 'pulse' === $mode ) {
-				return self::query_users_pulse( $parsed_args['type'], $status_sql, $period_limit, $order, $offset, $limit );
+				return self::query_users_pulse( $parsed_args['type'], $parsed_args['status'], $period_limit, $order, $offset, $limit );
 			}
 
 			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( $parsed_args['type'] );
 			if ( ! $source || ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-				return self::query_users_pulse( $parsed_args['type'], $status_sql, $period_limit, $order, $offset, $limit );
+				return self::query_users_pulse( $parsed_args['type'], $parsed_args['status'], $period_limit, $order, $offset, $limit );
 			}
 
 			$table  = esc_sql( $source['table'] );
@@ -737,7 +737,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				return array_slice( (array) $legacy_rows, $offset, $limit );
 			}
 
-			$pulse_rows = self::query_users_pulse( $parsed_args['type'], $status_sql, $period_limit, $order, 0, 0 );
+			$pulse_rows = self::query_users_pulse( $parsed_args['type'], $parsed_args['status'], $period_limit, $order, 0, 0, WP_Ulike_Pulse_Config::dual_since() );
 			return self::merge_user_score_rows( (array) $legacy_rows, (array) $pulse_rows, $order, $offset, $limit );
 		}
 
@@ -764,7 +764,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				)
 			);
 
-			$union = array();
+		$union = array();
+		if ( 'legacy' === self::read_mode() || 'merged' === self::read_mode() ) {
 			foreach ( self::log_table_names() as $table ) {
 				if ( ! WP_Ulike_Pulse_Registry::table_exists( $table ) ) {
 					continue;
@@ -772,8 +773,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$t = esc_sql( $table );
 			$union[] = "SELECT CAST(user_id AS CHAR) AS user_id FROM `{$t}` WHERE status IN ({$status_in}) {$period_limit}";
 			}
+		}
 
-			if ( 'pulse' === self::read_mode() || 'merged' === self::read_mode() ) {
+		if ( 'pulse' === self::read_mode() || 'merged' === self::read_mode() ) {
 				$pulse = esc_sql( WP_Ulike_Pulse_Schema::table() );
 				$since = 'merged' === self::read_mode() ? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() ) : '';
 				$filter = WP_Ulike_Pulse_Vote_Map::pulse_filter_from_legacy_statuses( $statuses );
@@ -1370,14 +1372,15 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		/**
 		 * @param string|int $user_id      User ID.
 		 * @param string     $type         Setting type.
-		 * @param string     $status_sql   Legacy status SQL.
+		 * @param string|array $status     Legacy status filter (raw).
 		 * @param string     $period_limit Period SQL.
 		 * @param string     $order        ASC|DESC.
 		 * @param int        $offset       Offset.
 		 * @param int        $limit        Limit (0 = all).
+		 * @param string     $since        Optional dual-since cutoff (empty = no filter).
 		 * @return array
 		 */
-		private static function query_user_items_pulse( $user_id, $type, $status_sql, $period_limit, $order, $offset, $limit ) {
+		private static function query_user_items_pulse( $user_id, $type, $status, $period_limit, $order, $offset, $limit, $since = '' ) {
 			global $wpdb;
 
 			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
@@ -1385,13 +1388,27 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$period    = $period_limit;
 			$limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d, %d', $offset, $limit ) : '';
 
+			$filter     = WP_Ulike_Pulse_Vote_Map::pulse_filter_from_legacy_statuses( $status );
+			$key_in     = implode(
+				',',
+				array_map(
+					function ( $k ) use ( $wpdb ) {
+						return $wpdb->prepare( '%s', $k );
+					},
+					$filter['keys']
+				)
+			);
+			$status_sql = $filter['active_only'] ? "status = 'active'" : "status IN ('active','removed')";
+			$since_sql  = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT item_id AS itemID, MAX(date_time) AS datetime,
 					MAX(CASE WHEN status = 'active' THEN engagement_key ELSE status END) AS lastStatus
 					FROM `{$table}`
-					WHERE user_id = %s AND item_type = %s AND engagement_kind = %s {$period}
+					WHERE user_id = %s AND item_type = %s AND engagement_kind = %s
+					AND engagement_key IN ({$key_in}) AND {$status_sql}{$since_sql} {$period}
 					GROUP BY item_id
 					ORDER BY datetime {$order} {$limit_sql}",
 					(string) $user_id,
@@ -1404,21 +1421,35 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		}
 
 		/**
-		 * @param string $type         Setting type.
-		 * @param string $status_sql   Legacy status SQL (unused for pulse shape).
-		 * @param string $period_limit Period SQL.
-		 * @param string $order        ASC|DESC.
-		 * @param int    $offset       Offset.
-		 * @param int    $limit        Limit.
+		 * @param string       $type         Setting type.
+		 * @param string|array $status       Legacy status filter (raw).
+		 * @param string       $period_limit Period SQL.
+		 * @param string       $order        ASC|DESC.
+		 * @param int          $offset       Offset.
+		 * @param int          $limit        Limit.
+		 * @param string       $since        Optional dual-since cutoff (empty = no filter).
 		 * @return array
 		 */
-		private static function query_users_pulse( $type, $status_sql, $period_limit, $order, $offset, $limit ) {
+		private static function query_users_pulse( $type, $status, $period_limit, $order, $offset, $limit, $since = '' ) {
 			global $wpdb;
 
 			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
 			$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $type );
 			$period    = $period_limit;
 			$limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d, %d', $offset, $limit ) : '';
+
+			$filter     = WP_Ulike_Pulse_Vote_Map::pulse_filter_from_legacy_statuses( $status );
+			$key_in     = implode(
+				',',
+				array_map(
+					function ( $k ) use ( $wpdb ) {
+						return $wpdb->prepare( '%s', $k );
+					},
+					$filter['keys']
+				)
+			);
+			$status_sql = $filter['active_only'] ? "status = 'active'" : "status IN ('active','removed')";
+			$since_sql  = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$rows = $wpdb->get_results(
@@ -1428,7 +1459,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT t.item_id ORDER BY t.item_id DESC SEPARATOR ','), ',', 500) AS itemsList
 					FROM `{$table}` t
 					INNER JOIN {$wpdb->users} u ON u.ID = t.user_id
-					WHERE t.item_type = %s AND t.engagement_kind = %s {$period}
+					WHERE t.item_type = %s AND t.engagement_kind = %s
+					AND t.engagement_key IN ({$key_in}) AND {$status_sql}{$since_sql} {$period}
 					GROUP BY t.user_id
 					ORDER BY score {$order} {$limit_sql}",
 					$item_type,

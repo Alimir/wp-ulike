@@ -44,6 +44,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 		}
 
 		/**
+		 * Whether it is safe to permanently drop legacy tables.
+		 *
+		 * Forces a deep COUNT(*) verification — slow on huge tables but
+		 * justified because drop_legacy_tables() is irreversible.
+		 *
 		 * @return bool
 		 */
 		public static function can_drop_legacy() {
@@ -55,7 +60,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 				return false;
 			}
 
-			$verify = WP_Ulike_Pulse_Sync::verify();
+			$verify = WP_Ulike_Pulse_Sync::verify( true );
 			return ! empty( $verify['ok'] );
 		}
 

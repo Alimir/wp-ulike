@@ -171,13 +171,20 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		public static function count_log_rows( $table_suffix, $search = '' ) {
 			if ( wp_ulike_use_pulse_queries() ) {
 				if ( '' === $search ) {
-					return WP_Ulike_Pulse_Query::count_logs_for_table( $table_suffix, 'all' );
+					$item_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $table_suffix );
+					if ( ! $item_type ) {
+						$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $table_suffix );
+					}
+					if ( ! $item_type ) {
+						return 0;
+					}
+					return WP_Ulike_Pulse_Query::count_logs_for_type( $item_type, 'all' );
 				}
 				return count( self::query_log_rows( $table_suffix, array(), $search ) );
 			}
 
-			return count( self::query_log_rows( $table_suffix ) );
-		}
+		return count( self::query_log_rows( $table_suffix, array(), $search ) );
+	}
 
 		/**
 		 * @param string $table_suffix Legacy table suffix.
@@ -439,6 +446,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		/**
 		 * GDPR export rows for one user.
 		 *
+		 * Uses a single UNION ALL query across legacy + pulse sources so
+		 * pagination happens in SQL — not in PHP memory. This avoids blowing
+		 * the memory limit on power users with very large vote histories.
+		 *
 		 * @param string $user_id  WordPress user ID as string.
 		 * @param int    $page     Page (1-based).
 		 * @param int    $per_page Rows per page.
@@ -451,8 +462,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			$page     = max( 1, (int) $page );
 			$per_page = max( 1, (int) $per_page );
 			$offset   = ( $page - 1 ) * $per_page;
-			$rows     = array();
-			$mode = WP_Ulike_Pulse_Query::read_mode();
+			$mode     = WP_Ulike_Pulse_Query::read_mode();
+			$union    = array();
 
 			foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $slug => $source ) {
 				$suffix = str_replace( $wpdb->prefix, '', $source['table'] );
@@ -461,17 +472,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 					&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 					$table = esc_sql( $source['table'] );
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					$legacy = $wpdb->get_results(
-						$wpdb->prepare(
-							"SELECT id, date_time, status, ip FROM `{$table}` WHERE user_id = %s ORDER BY date_time DESC",
-							$user_id
-						),
-						ARRAY_A
+					$union[] = $wpdb->prepare(
+						"SELECT %s AS src, id, date_time, status, ip, NULL AS _ek FROM `{$table}` WHERE user_id = %s",
+						$suffix,
+						$user_id
 					);
-					foreach ( (array) $legacy as $row ) {
-						$row['src'] = $suffix;
-						$rows[]     = $row;
-					}
 				}
 
 				if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
@@ -480,37 +485,51 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 						? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() )
 						: '';
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					$pulse_rows = $wpdb->get_results(
-						$wpdb->prepare(
-							"SELECT id, date_time, engagement_key, status, ip
-							FROM `{$pulse_table}`
-							WHERE user_id = %s AND item_type = %s AND engagement_kind = %s {$since_sql}
-							ORDER BY date_time DESC",
-							$user_id,
-							$source['item_type'],
-							WP_Ulike_Pulse_Registry::KIND_VOTE
-						)
+					$union[] = $wpdb->prepare(
+						"SELECT %s AS src, id, date_time, status, ip, engagement_key AS _ek
+						FROM `{$pulse_table}`
+						WHERE user_id = %s AND item_type = %s AND engagement_kind = %s {$since_sql}",
+						$suffix,
+						$user_id,
+						$source['item_type'],
+						WP_Ulike_Pulse_Registry::KIND_VOTE
 					);
-					foreach ( (array) $pulse_rows as $row ) {
-						$rows[] = array(
-							'src'       => $suffix,
-							'id'        => $row->id,
-							'date_time' => $row->date_time,
-							'status'    => WP_Ulike_Pulse_Vote_Map::row_to_legacy( $row->engagement_key, $row->status ),
-							'ip'        => $row->ip,
-						);
-					}
 				}
 			}
 
-			usort(
-				$rows,
-				function ( $a, $b ) {
-					return strcmp( $b['date_time'], $a['date_time'] );
-				}
+			if ( empty( $union ) ) {
+				return array();
+			}
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- fragments are prepared individually.
+			$sql = sprintf(
+				'SELECT src, id, date_time, status, ip, _ek FROM (%s) AS combined
+				ORDER BY date_time DESC, id DESC
+				LIMIT %d OFFSET %d',
+				implode( ' UNION ALL ', $union ),
+				$per_page,
+				$offset
 			);
 
-			return array_slice( $rows, $offset, $per_page );
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$results = $wpdb->get_results( $sql, ARRAY_A );
+
+			$rows = array();
+			foreach ( (array) $results as $row ) {
+				$status = $row['status'];
+				if ( isset( $row['_ek'] ) ) {
+					$status = WP_Ulike_Pulse_Vote_Map::row_to_legacy( $row['_ek'], $row['status'] );
+				}
+				$rows[] = array(
+					'src'       => $row['src'],
+					'id'        => (int) $row['id'],
+					'date_time' => $row['date_time'],
+					'status'    => $status,
+					'ip'        => $row['ip'],
+				);
+			}
+
+			return $rows;
 		}
 
 		/**

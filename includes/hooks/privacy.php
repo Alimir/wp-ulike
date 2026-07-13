@@ -83,9 +83,14 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 	}
 
 	if ( ! empty( $rows ) ) {
+		$anonymise_ip = wp_ulike_setting_repo::isAnonymiseIpOn();
 		foreach ( $rows as $row ) {
 			$src   = isset( $row['src'] ) ? $row['src'] : '';
 			$label = isset( $labels[ $src ] ) ? $labels[ $src ] : __( 'Logs', 'wp-ulike' );
+			$ip    = isset( $row['ip'] ) ? $row['ip'] : '';
+			if ( $anonymise_ip && '' !== $ip ) {
+				$ip = wp_privacy_anonymize_data( 'ip_address', $ip );
+			}
 			$data[] = array(
 				'group_id'    => 'wp-ulike',
 				'group_label' => __( 'WP ULike', 'wp-ulike' ),
@@ -98,7 +103,7 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 							__( 'Date: %1$s, Status: %2$s, IP: %3$s', 'wp-ulike' ),
 							isset( $row['date_time'] ) ? $row['date_time'] : '',
 							isset( $row['status'] ) ? $row['status'] : '',
-							isset( $row['ip'] ) ? $row['ip'] : ''
+							$ip
 						),
 					),
 				),

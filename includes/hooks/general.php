@@ -18,7 +18,7 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 	 * Auto insert wp_ulike function in the posts/pages content
 	 *
 	 * Uses standard WordPress conditional tags to scope the auto-insert to
-	 * the main loop on the frontend, outside of feeds, embeds, and previews.
+	 * the main loop on the frontend, outside of feeds and embeds.
 	 *
 	 * @param string $content
 	 * @since 1.0
@@ -30,8 +30,9 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 			return apply_filters( 'wp_ulike_the_content', $content, $content );
 		}
 
-		// Standard WordPress context exclusions: feeds, embeds, previews.
-		if ( is_feed() || is_embed() || is_preview() ) {
+		// Standard WordPress context exclusions: feeds and embeds render in
+		// non-HTML / stripped contexts where the button would not work.
+		if ( is_feed() || is_embed() ) {
 			return apply_filters( 'wp_ulike_the_content', $content, $content );
 		}
 
