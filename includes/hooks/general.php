@@ -17,14 +17,21 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 	/**
 	 * Auto insert wp_ulike function in the posts/pages content
 	 *
+	 * Uses standard WordPress conditional tags to scope the auto-insert to
+	 * the main loop on the frontend, outside of feeds, embeds, and previews.
+	 *
 	 * @param string $content
 	 * @since 1.0
 	 * @return string
 	 */
 	function wp_ulike_put_posts( $content ) {
-		// Early exit optimization: Check if auto-display is enabled before any processing
-		// This prevents unnecessary function calls and option lookups when disabled
+		// Auto-display is off, or we're outside the main frontend loop.
 		if ( ! WpUlikeInit::is_frontend() || ! in_the_loop() || ! is_main_query() || ! wp_ulike_setting_repo::isAutoDisplayOn('post') ) {
+			return apply_filters( 'wp_ulike_the_content', $content, $content );
+		}
+
+		// Standard WordPress context exclusions: feeds, embeds, previews.
+		if ( is_feed() || is_embed() || is_preview() ) {
 			return apply_filters( 'wp_ulike_the_content', $content, $content );
 		}
 
