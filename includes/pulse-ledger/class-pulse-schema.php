@@ -79,18 +79,22 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 		 *
 		 * @return bool
 		 */
-		public static function install() {
-			if ( self::table_exists() ) {
-				return true;
-			}
+	public static function install() {
+		if ( self::table_exists() ) {
+			return true;
+		}
 
-			if ( ! function_exists( 'maybe_create_table' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-			}
+		if ( ! function_exists( 'maybe_create_table' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		}
 
-			$created = maybe_create_table( self::table(), self::ddl() );
+		$created = maybe_create_table( self::table(), self::ddl() );
 
-			if ( ! self::table_exists() ) {
+		// The table-existence cache was populated above; flush so the
+		// post-creation check reflects the new schema state.
+		WP_Ulike_Pulse_Registry::flush_table_exists_cache();
+
+		if ( ! self::table_exists() ) {
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 					global $wpdb;
 					error_log( 'WP ULike Pulse: failed to create table ' . self::table() . ' — ' . $wpdb->last_error );
@@ -164,7 +168,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 				return null;
 			}
 
-			return hash( 'sha256', implode( '|', array( $item_type, $item_id, $user_id, $kind, $key ) ), true );
-		}
+		return hash( 'sha256', implode( '|', array( $item_type, $item_id, $user_id, $kind, $key ) ), true );
 	}
+}
 }

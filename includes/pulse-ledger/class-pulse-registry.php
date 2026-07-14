@@ -18,6 +18,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 		const KIND_STAR  = 'star';
 
 		/**
+		 * Per-request memoization cache for table_exists().
+		 *
+		 * @var array<string,bool>
+		 */
+		private static $table_exists_cache = array();
+
+		/**
 		 * Canonical item types.
 		 */
 		const ITEM_POST     = 'post';
@@ -127,28 +134,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 			return $names;
 		}
 
-		/**
-		 * Legacy table suffix (without prefix) for a setting slug.
-		 *
-		 * @param string $type Setting slug or item type.
-		 * @return string|null
-		 */
-		public static function legacy_table_suffix( $type ) {
-			$source = self::legacy_source_for_type( $type );
-			if ( ! $source ) {
-				return null;
-			}
-
-			global $wpdb;
-			return str_replace( $wpdb->prefix, '', $source['table'] );
-		}
-
-		/**
-		 * Settings/UI profile per content type (table suffix, column, cookies, etc.).
-		 *
-		 * @param string $type Setting slug or canonical item type.
-		 * @return array<string,string>
-		 */
+	/**
+	 * Settings/UI profile per content type (table suffix, column, cookies, etc.).
+	 *
+	 * @param string $type Setting slug or canonical item type.
+	 * @return array<string,string>
+	 */
 		public static function setting_profile( $type ) {
 			$item_type = self::normalize_item_type( $type );
 			$source    = self::legacy_source_for_type( $item_type );
@@ -339,37 +330,42 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 				$tables[ $slug ] = $source['table'];
 			}
 
-			return $tables;
+		return $tables;
+	}
+
+	/**
+	 * Memoized table-existence check. Table existence does not change
+	 * during a request except during install/upgrade, which calls
+	 * flush_table_exists_cache() after creating tables.
+	 *
+	 * @param string $table Full or suffix table name.
+	 * @return bool
+	 */
+	public static function table_exists( $table ) {
+		global $wpdb;
+
+		$full = 0 === strpos( $table, $wpdb->prefix ) ? $table : $wpdb->prefix . $table;
+
+		if ( isset( self::$table_exists_cache[ $full ] ) ) {
+			return self::$table_exists_cache[ $full ];
 		}
 
-		/**
-		 * @param string $type Setting slug or item type.
-		 * @return string[]
-		 */
-		public static function meta_groups_for_type( $type ) {
-			$item_type = self::normalize_item_type( $type );
+		$found = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $full ) );
+		$exists = $found === $full;
 
-			foreach ( self::legacy_sources() as $source ) {
-				if ( $source['item_type'] === $item_type ) {
-					return $source['meta_groups'];
-				}
-			}
+		self::$table_exists_cache[ $full ] = $exists;
+		return $exists;
+	}
 
-			return array( $item_type );
-		}
-
-		/**
-		 * @param string $table Full or suffix table name.
-		 * @return bool
-		 */
-		public static function table_exists( $table ) {
-			global $wpdb;
-
-			$full = 0 === strpos( $table, $wpdb->prefix ) ? $table : $wpdb->prefix . $table;
-			$found = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $full ) );
-
-			return $found === $full;
-		}
+	/**
+	 * Clear the memoized table-existence cache.
+	 *
+	 * Call after install/upgrade routines create or drop tables so the
+	 * next table_exists() check reflects the new schema state.
+	 */
+	public static function flush_table_exists_cache() {
+		self::$table_exists_cache = array();
+	}
 
 		/**
 		 * @return bool
@@ -390,22 +386,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 			}
 
 			return false;
-		}
-
-		/**
-		 * @param string $item_type Canonical item type.
-		 * @return int
-		 */
-		public static function count_legacy_rows( $item_type ) {
-			global $wpdb;
-
-			$source = self::legacy_source_for_type( $item_type );
-			if ( ! $source || ! self::table_exists( $source['table'] ) ) {
-				return 0;
-			}
-
-			$table = esc_sql( $source['table'] );
-			return (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
 		}
 	}
 }

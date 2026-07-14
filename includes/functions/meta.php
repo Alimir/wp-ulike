@@ -309,7 +309,7 @@ if( ! function_exists( 'wp_ulike_get_meta_data_raw' ) ){
 
 		$meta_cache = wp_cache_get( $object_id, sprintf( 'wp_ulike_%s_meta', $meta_group ) );
 
-		if ( ! $meta_cache ) {
+		if ( false === $meta_cache ) {
 			$meta_cache = wp_ulike_update_meta_cache( array( $object_id ), $meta_group );
 			if ( isset( $meta_cache[ $object_id ] ) ) {
 				$meta_cache = $meta_cache[ $object_id ];

@@ -175,58 +175,58 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			self::$migrating = true;
 			try {
 				return self::insert( $payload );
-			} finally {
-				self::$migrating = false;
-			}
+		} finally {
+			self::$migrating = false;
+		}
+	}
+
+	/**
+	 * Delete distinct-mode vote row for a user (REST API delete_item).
+	 *
+	 * @param int|string $item_id   Item ID.
+	 * @param string     $item_type Item type.
+	 * @param string     $user_id   User ID.
+	 * @return int|false Rows affected.
+	 */
+	public static function delete( $item_id, $item_type, $user_id ) {
+		global $wpdb;
+
+		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+		$token     = WP_Ulike_Pulse_Schema::dedupe_token( $item_id, $item_type, $user_id );
+
+		if ( ! $token ) {
+			return false;
 		}
 
-		/**
-		 * Delete distinct-mode vote row (legacy deleteData equivalent).
-		 *
-		 * @param int|string $item_id   Item ID.
-		 * @param string     $item_type Item type.
-		 * @param string     $user_id   User ID.
-		 * @return int|false Rows affected.
-		 */
-		public static function delete( $item_id, $item_type, $user_id ) {
-			global $wpdb;
+		$deleted = $wpdb->delete(
+			self::table(),
+			array( 'dedupe_token' => $token ),
+			array( '%s' )
+		);
 
-			$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
-			$token     = WP_Ulike_Pulse_Schema::dedupe_token( $item_id, $item_type, $user_id );
-
-			if ( ! $token ) {
-				return false;
-			}
-
-			$deleted = $wpdb->delete(
-				self::table(),
-				array( 'dedupe_token' => $token ),
-				array( '%s' )
+		if ( $deleted ) {
+			do_action(
+				'wp_ulike_delete_vote_data',
+				array(
+					'item_id'   => $item_id,
+					'item_type' => $item_type,
+					'user_id'   => $user_id,
+					'storage'   => 'pulse',
+				)
 			);
-
-			if ( $deleted ) {
-				do_action(
-					'wp_ulike_delete_vote_data',
-					array(
-						'item_id'   => $item_id,
-						'item_type' => $item_type,
-						'user_id'   => $user_id,
-						'storage'   => 'pulse',
-					)
-				);
-			}
-
-			return $deleted;
 		}
 
-		/**
-		 * Delete all vote rows for an item (post/comment cleanup).
-		 *
-		 * @param int    $item_id       Item ID.
-		 * @param string $setting_type  wp_ulike_setting_type slug.
-		 * @return int Rows removed across pulse and legacy tables.
-		 */
-		public static function delete_item_votes( $item_id, $setting_type ) {
+		return $deleted;
+	}
+
+	/**
+	 * Delete all vote rows for an item (post/comment cleanup).
+	 *
+	 * @param int    $item_id       Item ID.
+	 * @param string $setting_type  wp_ulike_setting_type slug.
+	 * @return int Rows removed across pulse and legacy tables.
+	 */
+	public static function delete_item_votes( $item_id, $setting_type ) {
 			global $wpdb;
 
 			$deleted   = 0;
@@ -287,42 +287,52 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			$user_id = isset( $payload['user_id'] ) ? (string) $payload['user_id'] : '0';
 			$kind    = isset( $payload['engagement_kind'] ) ? sanitize_key( $payload['engagement_kind'] ) : WP_Ulike_Pulse_Registry::KIND_VOTE;
 
-			$dedupe = null;
-			if ( $distinct || ! empty( $payload['is_distinct'] ) ) {
-				$dedupe = WP_Ulike_Pulse_Schema::dedupe_token(
-					$item_id,
-					$item_type,
-					$user_id,
-					$kind,
-					$mapped['engagement_key']
-				);
-			}
-
-			$data = array(
-				'item_id'          => $item_id,
-				'item_type'        => $item_type,
-				'engagement_kind'  => $kind,
-				'engagement_key'   => $mapped['engagement_key'],
-				'value'            => isset( $payload['value'] ) ? absint( $payload['value'] ) : null,
-				'status'           => $mapped['status'],
-				'date_time'        => isset( $payload['date_time'] ) ? $payload['date_time'] : current_time( 'mysql', true ),
-				'ip'               => isset( $payload['ip'] ) ? (string) $payload['ip'] : '',
-				'user_id'          => $user_id,
-				'fingerprint'      => isset( $payload['fingerprint'] ) ? (string) $payload['fingerprint'] : null,
-				'country_code'     => isset( $payload['country_code'] ) ? substr( sanitize_text_field( $payload['country_code'] ), 0, 2 ) : null,
-				'device'           => isset( $payload['device'] ) ? substr( sanitize_text_field( $payload['device'] ), 0, 50 ) : null,
-				'os'               => isset( $payload['os'] ) ? substr( sanitize_text_field( $payload['os'] ), 0, 50 ) : null,
-				'browser'          => isset( $payload['browser'] ) ? substr( sanitize_text_field( $payload['browser'] ), 0, 50 ) : null,
-				'dedupe_token'     => $dedupe,
-			);
-
-			return array(
-				'data'          => $data,
-				'format'        => array( '%d', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ),
-				'dedupe_token'  => $dedupe,
-				'legacy_status' => isset( $payload['legacy_status'] ) ? $payload['legacy_status'] : WP_Ulike_Pulse_Vote_Map::row_to_legacy( $mapped['engagement_key'], $mapped['status'] ),
+		// Distinct rows get a kind-scoped dedupe token enforcing one-row-per-
+		// user+item+key. Append (multi-vote) rows omit the column so MySQL
+		// stores DEFAULT NULL — the idx_dedupe UNIQUE index allows multiple
+		// NULLs, so append rows never collide.
+		$dedupe = null;
+		if ( $distinct || ! empty( $payload['is_distinct'] ) ) {
+			$dedupe = WP_Ulike_Pulse_Schema::dedupe_token(
+				$item_id,
+				$item_type,
+				$user_id,
+				$kind,
+				$mapped['engagement_key']
 			);
 		}
+
+		$data = array(
+			'item_id'          => $item_id,
+			'item_type'        => $item_type,
+			'engagement_kind'  => $kind,
+			'engagement_key'   => $mapped['engagement_key'],
+			'value'            => isset( $payload['value'] ) ? absint( $payload['value'] ) : null,
+			'status'           => $mapped['status'],
+			'date_time'        => isset( $payload['date_time'] ) ? $payload['date_time'] : current_time( 'mysql', true ),
+			'ip'               => isset( $payload['ip'] ) ? (string) $payload['ip'] : '',
+			'user_id'          => $user_id,
+			'fingerprint'      => isset( $payload['fingerprint'] ) ? (string) $payload['fingerprint'] : null,
+			'country_code'     => isset( $payload['country_code'] ) ? substr( sanitize_text_field( $payload['country_code'] ), 0, 2 ) : null,
+			'device'           => isset( $payload['device'] ) ? substr( sanitize_text_field( $payload['device'] ), 0, 50 ) : null,
+			'os'               => isset( $payload['os'] ) ? substr( sanitize_text_field( $payload['os'] ), 0, 50 ) : null,
+			'browser'          => isset( $payload['browser'] ) ? substr( sanitize_text_field( $payload['browser'] ), 0, 50 ) : null,
+		);
+
+		$format = array( '%d', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' );
+
+		if ( null !== $dedupe ) {
+			$data['dedupe_token'] = $dedupe;
+			$format[]             = '%s';
+		}
+
+		return array(
+			'data'          => $data,
+			'format'        => $format,
+			'dedupe_token'  => $dedupe,
+			'legacy_status' => isset( $payload['legacy_status'] ) ? $payload['legacy_status'] : WP_Ulike_Pulse_Vote_Map::row_to_legacy( $mapped['engagement_key'], $mapped['status'] ),
+		);
+	}
 
 		/**
 		 * @return string

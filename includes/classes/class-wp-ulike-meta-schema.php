@@ -66,11 +66,17 @@ if ( ! class_exists( 'WP_Ulike_Meta_Schema' ) ) {
 				return true;
 			}
 
-			if ( ! function_exists( 'maybe_create_table' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-			}
-
-			return (bool) maybe_create_table( self::table(), self::ddl() );
+		if ( ! function_exists( 'maybe_create_table' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		}
+
+		$created = (bool) maybe_create_table( self::table(), self::ddl() );
+
+		// Flush the shared table-existence cache so subsequent checks
+		// see the newly created meta table.
+		WP_Ulike_Pulse_Registry::flush_table_exists_cache();
+
+		return $created;
+	}
 	}
 }

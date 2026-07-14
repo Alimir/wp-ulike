@@ -411,56 +411,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			// Merged mode: dedup across legacy + pulse via UNION so a voter who
 			// appears in both stores is counted exactly once.
-			return self::count_merged_unique_voters_for_type( $item_type, $table, $period_limit );
-		}
+		return self::count_merged_unique_voters_for_type( $item_type, $table, $period_limit );
+	}
 
-		/**
-		 * Distinct voters across all content types (mode-aware, deduped).
-		 *
-		 * Use this for site-wide "unique voters" KPIs — never sum per-type
-		 * distinct counts, which overcounts cross-type voters.
-		 *
-		 * @param mixed $period Period filter.
-		 * @return int
-		 */
-		public static function count_unique_voters_all_types( $period = 'all' ) {
-			global $wpdb;
-
-			$period_limit = wp_ulike_get_period_limit_sql( $period );
-			$mode         = self::read_mode();
-			$selects      = array();
-
-			if ( 'legacy' === $mode || 'merged' === $mode ) {
-				foreach ( self::log_table_names() as $table ) {
-					if ( ! WP_Ulike_Pulse_Registry::table_exists( $table ) ) {
-						continue;
-					}
-					$t          = esc_sql( $table );
-					$selects[] = "SELECT CAST(user_id AS CHAR) AS user_id FROM `{$t}` WHERE `status` IN ('like','dislike') AND user_id IS NOT NULL AND user_id != '' {$period_limit}";
-				}
-			}
-
-			if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
-				$pulse     = esc_sql( WP_Ulike_Pulse_Schema::table() );
-				$since_sql = 'merged' === $mode ? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() ) : '';
-				$selects[] = $wpdb->prepare(
-					"SELECT CAST(user_id AS CHAR) AS user_id FROM `{$pulse}` WHERE engagement_kind = %s AND status = 'active' AND user_id IS NOT NULL AND user_id != '' {$since_sql} {$period_limit}",
-					WP_Ulike_Pulse_Registry::KIND_VOTE
-				);
-			}
-
-			if ( empty( $selects ) ) {
-				return 0;
-			}
-
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- fragments use registered table names + prepared values.
-			return (int) $wpdb->get_var(
-				'SELECT COUNT(DISTINCT user_id) FROM (' . implode( ' UNION ', $selects ) . ') AS combined'
-			);
-		}
-
-		/**
-		 * @param array  $parsed_args       Query args.
+	/**
+	 * @param array  $parsed_args       Query args.
 		 * @param array  $info_args         Table info.
 		 * @param string $period_limit      SQL period.
 		 * @param string $user_condition    SQL user filter.

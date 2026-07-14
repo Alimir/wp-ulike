@@ -175,16 +175,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		}
 
 		/**
-		 * Get data info
-		 *
-		 * @return array
-		 */
-		public function getSettings(){
-			return $this->typeSettings;
-		}
-
-
-		/**
 		 * Update current status
 		 *
 		 * @param string $factor
@@ -528,12 +518,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		return $row;
 	}
 
-		/**
-		 * Delete log data
-		 *
-		 * @param integer $item_id
-		 * @return integer|false
-		 */
+	/**
+	 * Delete log data (used by Pro REST API delete_item).
+	 *
+	 * @param integer $item_id
+	 * @return integer|false
+	 */
 	public function deleteData( $item_id ){
 		if ( wp_ulike_writes_pulse() ) {
 			$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() );
@@ -550,8 +540,6 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		);
 
 		if ( $deleted ) {
-			// Match the pulse delete() hook shape so cache/stats listeners fire
-			// on legacy deletes too.
 			do_action(
 				'wp_ulike_delete_vote_data',
 				array(
@@ -566,13 +554,13 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 		return $deleted;
 	}
 
-		/**
-		 * Update and return counter value
-		 *
-		 * @param integer $item_id
-		 * @return integer
-		 */
-		public function updateCounterMeta( $item_id ){
+	/**
+	 * Update and return counter value
+	 *
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public function updateCounterMeta( $item_id ){
 			// delete cache to get fresh data
 			if( wp_ulike_is_cache_exist() && $item_id ){
 				wp_cache_delete( $item_id, sprintf( 'wp_ulike_%s_meta', $this->itemType ) );

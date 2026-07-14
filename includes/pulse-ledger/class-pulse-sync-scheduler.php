@@ -54,21 +54,5 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync_Scheduler' ) ) {
 				self::schedule();
 			}
 		}
-
-		/**
-		 * Human-readable background engine name.
-		 *
-		 * @return string
-		 */
-		public static function engine_label() {
-			return 'WP-Cron';
-		}
-
-		/**
-		 * @return bool
-		 */
-		public static function is_scheduled() {
-			return (bool) wp_next_scheduled( self::HOOK );
-		}
 	}
 }

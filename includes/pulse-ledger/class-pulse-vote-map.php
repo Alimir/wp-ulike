@@ -72,22 +72,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Vote_Map' ) ) {
 				return $active ? self::ACTION_DISLIKE : self::ACTION_UNDISLIKE;
 			}
 
-			return $active ? self::ACTION_LIKE : self::ACTION_UNLIKE;
-		}
+		return $active ? self::ACTION_LIKE : self::ACTION_UNLIKE;
+	}
 
-		/**
-		 * @param string $legacy_action Legacy action.
-		 * @return bool
-		 */
-		public static function is_remove_action( $legacy_action ) {
-			$legacy_action = sanitize_key( (string) $legacy_action );
-			return in_array( $legacy_action, array( self::ACTION_UNLIKE, self::ACTION_UNDISLIKE ), true );
-		}
-
-		/**
-		 * Active legacy statuses used in COUNT queries.
-		 *
-		 * @param string|array $status Requested filter.
+	/**
+	 * Active legacy statuses used in COUNT queries.
+	 *
+	 * @param string|array $status Requested filter.
 		 * @return array
 		 */
 		public static function normalize_status_filter( $status, $default = array( self::ACTION_LIKE, self::ACTION_DISLIKE ) ) {
