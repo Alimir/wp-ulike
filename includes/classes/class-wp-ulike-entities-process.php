@@ -411,17 +411,18 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 
 		$row = $this->wpdb->insert( $table, $data, $format );
 
-		if ( false !== $row ) {
-			do_action( 'wp_ulike_data_inserted', [
-				'id'             => $this->wpdb->insert_id,  // New insert ID
-				'item_id'        => $item_id,                // Item ID for the inserted data
-				'table'          => $table,                  // Table name where the insert occurred
-				'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
-				'type'           => $this->typeSettings->getType(),        // Type of the item
-				'user_id'        => $this->currentUser,      // User who performed the action
-				'status'         => $this->currentStatus,    // Status of the action
-				'ip'             => $this->maybeAnonymiseIp( $this->currentIP ) // IP address (anonymised if enabled, matching pulse path)
-			] );
+	if ( false !== $row ) {
+		do_action( 'wp_ulike_data_inserted', [
+			'id'             => $this->wpdb->insert_id,  // New insert ID
+			'item_id'        => $item_id,                // Item ID for the inserted data
+			'table'          => $table,                  // Table name where the insert occurred
+			'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
+			'type'           => $this->typeSettings->getType(),        // Type of the item
+			'user_id'        => $this->currentUser,      // User who performed the action
+			'status'         => $this->currentStatus,    // Status of the action
+			'ip'             => $this->maybeAnonymiseIp( $this->currentIP ), // IP address (anonymised if enabled, matching pulse path)
+			'storage'        => 'legacy',                // Storage path (legacy table); pulse path adds 'pulse'
+		] );
 		}
 
 		return $row;
@@ -503,16 +504,17 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				)
 			);
 
-			do_action( 'wp_ulike_data_updated', [
-				'id'             => $row_id,                 // Row ID (parity with pulse fire_updated)
-				'item_id'        => $item_id,                // Item ID for the inserted data
-				'table'          => $table,                  // Table name where the insert occurred
-				'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
-				'type'           => $this->typeSettings->getType(),        // Type of the item
-				'user_id'        => $this->currentUser,      // User who performed the action
-				'status'         => $this->currentStatus,    // Status of the action
-				'ip'             => $this->maybeAnonymiseIp( $this->currentIP ) // IP address (anonymised if enabled, matching pulse path)
-			] );
+		do_action( 'wp_ulike_data_updated', [
+			'id'             => $row_id,                 // Row ID (parity with pulse fire_updated)
+			'item_id'        => $item_id,                // Item ID for the inserted data
+			'table'          => $table,                  // Table name where the insert occurred
+			'related_column' => $this->typeSettings->getColumnName(), // Column name related to the insert
+			'type'           => $this->typeSettings->getType(),        // Type of the item
+			'user_id'        => $this->currentUser,      // User who performed the action
+			'status'         => $this->currentStatus,    // Status of the action
+			'ip'             => $this->maybeAnonymiseIp( $this->currentIP ), // IP address (anonymised if enabled, matching pulse path)
+			'storage'        => 'legacy',                // Storage path (legacy table); pulse path adds 'pulse'
+		] );
 		}
 
 		return $row;
@@ -539,17 +541,15 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			array( $this->typeSettings->getColumnName() => $item_id, 'user_id' => $this->currentUser )
 		);
 
-		if ( $deleted ) {
-			do_action(
-				'wp_ulike_delete_vote_data',
-				array(
-					'item_id'   => $item_id,
-					'item_type' => WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() ),
-					'user_id'   => $this->currentUser,
-					'storage'   => 'legacy',
-				)
-			);
-		}
+	if ( $deleted ) {
+		do_action(
+			'wp_ulike_delete_vote_data',
+			absint( $item_id ),
+			WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() ),
+			array( 'storage' => 'legacy', 'user_id' => $this->currentUser ),
+			(int) $deleted
+		);
+	}
 
 		return $deleted;
 	}

@@ -181,38 +181,58 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 	}
 
 	/**
-	 * Delete distinct-mode vote row for a user (REST API delete_item).
+	 * Delete distinct-mode vote row(s) for a user (REST API delete_item).
 	 *
-	 * @param int|string $item_id   Item ID.
-	 * @param string     $item_type Item type.
-	 * @param string     $user_id   User ID.
+	 * Matches by item + identity (user_id for logged-in, fingerprint for
+	 * guests) + kind=vote, so it removes whatever vote (like or dislike)
+	 * the user has on the item. Optionally scope to a specific engagement_key.
+	 *
+	 * @param int|string $item_id        Item ID.
+	 * @param string     $item_type      Item type.
+	 * @param string     $user_id        User ID.
+	 * @param string     $engagement_key Optional engagement key to scope ('like'|'dislike'). Empty = all vote rows.
+	 * @param string     $fingerprint    Guest fingerprint (used when user_id is 0/empty).
 	 * @return int|false Rows affected.
 	 */
-	public static function delete( $item_id, $item_type, $user_id ) {
+	public static function delete( $item_id, $item_type, $user_id, $engagement_key = '', $fingerprint = '' ) {
 		global $wpdb;
 
 		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
-		$token     = WP_Ulike_Pulse_Schema::dedupe_token( $item_id, $item_type, $user_id );
+		$user_id   = (string) $user_id;
 
-		if ( ! $token ) {
-			return false;
+		$where  = array(
+			'item_id'         => absint( $item_id ),
+			'item_type'       => $item_type,
+			'engagement_kind' => WP_Ulike_Pulse_Registry::KIND_VOTE,
+		);
+		$format = array( '%d', '%s', '%s' );
+
+		if ( '' !== $user_id && '0' !== $user_id ) {
+			$where['user_id'] = $user_id;
+			$format[]         = '%s';
+		} else {
+			$fingerprint = (string) $fingerprint;
+			if ( '' === $fingerprint ) {
+				return false;
+			}
+			$where['fingerprint'] = $fingerprint;
+			$format[]             = '%s';
 		}
 
-		$deleted = $wpdb->delete(
-			self::table(),
-			array( 'dedupe_token' => $token ),
-			array( '%s' )
-		);
+		if ( $engagement_key ) {
+			$where['engagement_key'] = sanitize_key( $engagement_key );
+			$format[]                = '%s';
+		}
+
+		$deleted = $wpdb->delete( self::table(), $where, $format );
 
 		if ( $deleted ) {
 			do_action(
 				'wp_ulike_delete_vote_data',
-				array(
-					'item_id'   => $item_id,
-					'item_type' => $item_type,
-					'user_id'   => $user_id,
-					'storage'   => 'pulse',
-				)
+				absint( $item_id ),
+				$item_type,
+				array( 'storage' => 'pulse', 'user_id' => $user_id ),
+				(int) $deleted
 			);
 		}
 
@@ -288,19 +308,22 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			$kind    = isset( $payload['engagement_kind'] ) ? sanitize_key( $payload['engagement_kind'] ) : WP_Ulike_Pulse_Registry::KIND_VOTE;
 
 		// Distinct rows get a kind-scoped dedupe token enforcing one-row-per-
-		// user+item+key. Append (multi-vote) rows omit the column so MySQL
-		// stores DEFAULT NULL — the idx_dedupe UNIQUE index allows multiple
-		// NULLs, so append rows never collide.
-		$dedupe = null;
-		if ( $distinct || ! empty( $payload['is_distinct'] ) ) {
-			$dedupe = WP_Ulike_Pulse_Schema::dedupe_token(
-				$item_id,
-				$item_type,
-				$user_id,
-				$kind,
-				$mapped['engagement_key']
-			);
-		}
+		// user+item+key. Append (multi-vote) rows get an explicit NULL —
+		// wpdb::insert() emits literal NULL for null values (WP 4.4+), and the
+		// idx_dedupe UNIQUE index allows multiple NULLs, so append rows never
+		// collide. Explicit NULL is used (rather than omitting the column) so
+		// the insert does not depend on the column DEFAULT being NULL.
+	$dedupe = null;
+	if ( $distinct || ! empty( $payload['is_distinct'] ) ) {
+		$dedupe = WP_Ulike_Pulse_Schema::dedupe_token(
+			$item_id,
+			$item_type,
+			$user_id,
+			$kind,
+			$mapped['engagement_key'],
+			isset( $payload['fingerprint'] ) ? (string) $payload['fingerprint'] : ''
+		);
+	}
 
 		$data = array(
 			'item_id'          => $item_id,
@@ -317,14 +340,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			'device'           => isset( $payload['device'] ) ? substr( sanitize_text_field( $payload['device'] ), 0, 50 ) : null,
 			'os'               => isset( $payload['os'] ) ? substr( sanitize_text_field( $payload['os'] ), 0, 50 ) : null,
 			'browser'          => isset( $payload['browser'] ) ? substr( sanitize_text_field( $payload['browser'] ), 0, 50 ) : null,
+			'dedupe_token'     => $dedupe,
 		);
 
-		$format = array( '%d', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' );
-
-		if ( null !== $dedupe ) {
-			$data['dedupe_token'] = $dedupe;
-			$format[]             = '%s';
-		}
+		$format = array( '%d', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' );
 
 		return array(
 			'data'          => $data,

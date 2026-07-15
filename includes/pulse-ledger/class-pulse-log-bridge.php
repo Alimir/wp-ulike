@@ -108,16 +108,21 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			$mode = WP_Ulike_Pulse_Query::read_mode();
 			$rows = array();
 
-			if ( 'pulse' === $mode || ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-				$rows = self::fetch_pulse_rows( $source, '' );
-			} elseif ( 'legacy' === $mode ) {
-				$rows = self::fetch_legacy_rows( $source );
-			} else {
-				$rows = array_merge(
-					self::fetch_legacy_rows( $source ),
-					self::fetch_pulse_rows( $source, WP_Ulike_Pulse_Config::dual_since() )
-				);
-			}
+		if ( 'pulse' === $mode || ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+			$rows = self::fetch_pulse_rows( $source, '' );
+		} elseif ( 'legacy' === $mode ) {
+			// Legacy votes + pulse emoji/star (emoji/star have no legacy
+			// counterpart) so the list matches the all-kinds count.
+			$rows = array_merge(
+				self::fetch_legacy_rows( $source ),
+				self::fetch_pulse_rows( $source, '', array( 'emoji', 'star' ) )
+			);
+		} else {
+			$rows = array_merge(
+				self::fetch_legacy_rows( $source ),
+				self::fetch_pulse_rows( $source, WP_Ulike_Pulse_Config::dual_since() )
+			);
+		}
 
 			$rows = self::sort_rows( $rows, $sort );
 
@@ -265,16 +270,26 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				}
 			}
 
-			if ( 'pulse' === $mode || 'merged' === $mode ) {
-				$since  = 'merged' === $mode ? WP_Ulike_Pulse_Config::dual_since() : '';
-				$pulse  = self::pulse_daily_counts( $source['item_type'], $data_limit, $since );
-				foreach ( $pulse as $date => $count ) {
-					if ( ! isset( $counts[ $date ] ) ) {
-						$counts[ $date ] = 0;
-					}
-					$counts[ $date ] += $count;
+		if ( 'pulse' === $mode || 'merged' === $mode ) {
+			$since  = 'merged' === $mode ? WP_Ulike_Pulse_Config::dual_since() : '';
+			$pulse  = self::pulse_daily_counts( $source['item_type'], $data_limit, $since );
+			foreach ( $pulse as $date => $count ) {
+				if ( ! isset( $counts[ $date ] ) ) {
+					$counts[ $date ] = 0;
 				}
+				$counts[ $date ] += $count;
 			}
+		} elseif ( 'legacy' === $mode ) {
+			// Emoji/star live in pulse even in legacy read mode; merge their
+			// daily counts so the chart reflects all interaction kinds.
+			$pulse = self::pulse_daily_counts( $source['item_type'], $data_limit, '' );
+			foreach ( $pulse as $date => $count ) {
+				if ( ! isset( $counts[ $date ] ) ) {
+					$counts[ $date ] = 0;
+				}
+				$counts[ $date ] += $count;
+			}
+		}
 
 			return self::counts_to_chart_rows( $counts );
 		}
@@ -305,18 +320,33 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 					}
 				}
 
-				if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
-					$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-					$since_sql   = 'merged' === $mode
-						? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() )
-						: '';
-					$union_parts[] = $wpdb->prepare(
-						"SELECT date_time FROM `{$pulse_table}`
-						WHERE item_type = %s AND engagement_kind = %s {$period_limit} {$since_sql}",
-						$source['item_type'],
-						WP_Ulike_Pulse_Registry::KIND_VOTE
-					);
-				}
+		if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
+			$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+			// Scope only vote rows to dual_since; emoji/star have no legacy
+			// counterpart and must never be since-filtered in merged mode.
+			$since_sql = '';
+			if ( 'merged' === $mode && WP_Ulike_Pulse_Config::dual_since() ) {
+				$since_sql = $wpdb->prepare(
+					" AND ( engagement_kind IN ('emoji','star') OR ( engagement_kind = %s AND date_time >= %s ) )",
+					WP_Ulike_Pulse_Registry::KIND_VOTE,
+					WP_Ulike_Pulse_Config::dual_since()
+				);
+			}
+			// All engagement kinds so peak hours reflect total activity.
+			$union_parts[] = $wpdb->prepare(
+				"SELECT date_time FROM `{$pulse_table}`
+				WHERE item_type = %s {$period_limit} {$since_sql}",
+				$source['item_type']
+			);
+		} elseif ( 'legacy' === $mode && WP_Ulike_Pulse_Schema::table_exists() ) {
+				// Legacy mode: votes come from legacy tables; add pulse emoji/star.
+				$pulse_table   = esc_sql( WP_Ulike_Pulse_Schema::table() );
+				$union_parts[] = $wpdb->prepare(
+					"SELECT date_time FROM `{$pulse_table}`
+					WHERE item_type = %s AND engagement_kind IN ('emoji','star') {$period_limit}",
+					$source['item_type']
+				);
+			}
 			}
 
 			if ( empty( $union_parts ) ) {
@@ -383,37 +413,44 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				return array();
 			}
 
-			$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-			$since_sql   = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
-			$latest      = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT MAX(date_time) FROM `{$pulse_table}` WHERE item_type = %s AND engagement_kind = %s {$since_sql}",
-					$item_type,
-					WP_Ulike_Pulse_Registry::KIND_VOTE
-				)
-			);
+	$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+	// Scope only vote rows to $since (dual_since); emoji/star have no legacy
+	// counterpart and must never be since-filtered in merged mode.
+	$since_sql   = '';
+	if ( $since ) {
+		$since_sql = $wpdb->prepare(
+			" AND ( engagement_kind IN ('emoji','star') OR ( engagement_kind = %s AND date_time >= %s ) )",
+			WP_Ulike_Pulse_Registry::KIND_VOTE,
+			$since
+		);
+	}
+	$latest      = $wpdb->get_var(
+		$wpdb->prepare(
+			"SELECT MAX(date_time) FROM `{$pulse_table}` WHERE item_type = %s {$since_sql}",
+			$item_type
+		)
+	);
 
-			if ( ! $latest ) {
-				return array();
-			}
+		if ( ! $latest ) {
+			return array();
+		}
 
-			$start  = date( 'Y-m-d H:i:s', strtotime( $latest ) - ( $data_limit * DAY_IN_SECONDS ) );
-			$counts = array();
+		$start  = date( 'Y-m-d H:i:s', strtotime( $latest ) - ( $data_limit * DAY_IN_SECONDS ) );
+		$counts = array();
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$rows = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT DATE(date_time) AS labels, COUNT(date_time) AS counts
-					FROM `{$pulse_table}`
-					WHERE item_type = %s AND engagement_kind = %s
-					AND date_time >= %s AND date_time <= %s {$since_sql}
-					GROUP BY labels ORDER BY labels ASC",
-					$item_type,
-					WP_Ulike_Pulse_Registry::KIND_VOTE,
-					$start,
-					$latest
-				)
-			);
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT DATE(date_time) AS labels, COUNT(date_time) AS counts
+				FROM `{$pulse_table}`
+				WHERE item_type = %s
+				AND date_time >= %s AND date_time <= %s {$since_sql}
+				GROUP BY labels ORDER BY labels ASC",
+				$item_type,
+				$start,
+				$latest
+			)
+		);
 
 			foreach ( (array) $rows as $row ) {
 				$counts[ $row->labels ] = (int) $row->counts;
@@ -468,36 +505,56 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $slug => $source ) {
 			$suffix = str_replace( $wpdb->prefix, '', $source['table'] );
 
-			if ( ( 'legacy' === $mode || 'merged' === $mode )
-				&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-				$table     = esc_sql( $source['table'] );
-				$geo_cols  = self::legacy_personal_columns_sql( $source['table'] );
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$union[] = $wpdb->prepare(
-					"SELECT %s AS src, id, date_time, status, ip, NULL AS _ek, {$geo_cols}
-					FROM `{$table}` WHERE user_id = %s",
-					$suffix,
-					$user_id
+		if ( ( 'legacy' === $mode || 'merged' === $mode )
+			&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+			$table     = esc_sql( $source['table'] );
+			$geo_cols  = self::legacy_personal_columns_sql( $source['table'] );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$union[] = $wpdb->prepare(
+				"SELECT %s AS src, id, date_time, status, ip, NULL AS _ek, 'vote' AS _kind, NULL AS _val, {$geo_cols}
+				FROM `{$table}` WHERE user_id = %s",
+				$suffix,
+				$user_id
+			);
+		}
+
+		// Emoji/star rows live in pulse in EVERY storage mode, and pulse-mode
+		// votes live there too. Always include pulse so the personal data
+		// export is complete; in merged mode scope only vote rows to
+		// dual_since (emoji/star have no legacy equivalent to double-count).
+		if ( WP_Ulike_Pulse_Schema::table_exists() ) {
+			$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+			$dual_since  = WP_Ulike_Pulse_Config::dual_since();
+
+			if ( 'legacy' === $mode ) {
+				// Votes come from legacy tables; pulse contributes emoji/star only.
+				$kind_clause = "AND engagement_kind IN ('emoji','star')";
+				$since_sql   = '';
+			} elseif ( 'merged' === $mode && $dual_since ) {
+				// Emoji/star: all rows. Votes: since dual_since only.
+				$kind_clause = '';
+				$since_sql   = $wpdb->prepare(
+					" AND ( engagement_kind IN ('emoji','star') OR ( engagement_kind = 'vote' AND date_time >= %s ) )",
+					$dual_since
 				);
+			} else {
+				// pulse mode: every row, every kind.
+				$kind_clause = '';
+				$since_sql   = '';
 			}
 
-			if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
-				$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-				$since_sql   = 'merged' === $mode
-					? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() )
-					: '';
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$union[] = $wpdb->prepare(
-					"SELECT %s AS src, id, date_time, status, ip, engagement_key AS _ek,
-						fingerprint, country_code, device, os, browser
-					FROM `{$pulse_table}`
-					WHERE user_id = %s AND item_type = %s AND engagement_kind = %s {$since_sql}",
-					$suffix,
-					$user_id,
-					$source['item_type'],
-					WP_Ulike_Pulse_Registry::KIND_VOTE
-				);
-			}
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$union[] = $wpdb->prepare(
+				"SELECT %s AS src, id, date_time, status, ip, engagement_key AS _ek,
+					engagement_kind AS _kind, value AS _val,
+					fingerprint, country_code, device, os, browser
+				FROM `{$pulse_table}`
+				WHERE user_id = %s AND item_type = %s {$kind_clause}{$since_sql}",
+				$suffix,
+				$user_id,
+				$source['item_type']
+			);
+		}
 		}
 
 		if ( empty( $union ) ) {
@@ -506,7 +563,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- fragments are prepared individually.
 		$sql = sprintf(
-			'SELECT src, id, date_time, status, ip, _ek, fingerprint, country_code, device, os, browser
+			'SELECT src, id, date_time, status, ip, _ek, _kind, _val, fingerprint, country_code, device, os, browser
 			FROM (%s) AS combined
 			ORDER BY date_time DESC, id DESC
 			LIMIT %d OFFSET %d',
@@ -521,7 +578,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		$rows = array();
 		foreach ( (array) $results as $row ) {
 			$status = $row['status'];
-			if ( isset( $row['_ek'] ) && null !== $row['_ek'] ) {
+			$kind   = isset( $row['_kind'] ) ? $row['_kind'] : 'vote';
+			// Only classic vote rows carry a legacy-compatible status mapping.
+			// Emoji/star rows keep their native status and surface their key/value.
+			if ( 'vote' === $kind && isset( $row['_ek'] ) && null !== $row['_ek'] ) {
 				$status = WP_Ulike_Pulse_Vote_Map::row_to_legacy( $row['_ek'], $row['status'] );
 			}
 			$rows[] = array(
@@ -529,6 +589,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				'id'            => (int) $row['id'],
 				'date_time'     => $row['date_time'],
 				'status'        => $status,
+				'engagement_kind' => $kind,
+				'engagement_key'  => isset( $row['_ek'] ) ? $row['_ek'] : null,
+				'value'          => isset( $row['_val'] ) ? $row['_val'] : null,
 				'ip'            => $row['ip'],
 				'fingerprint'   => isset( $row['fingerprint'] ) ? $row['fingerprint'] : null,
 				'country_code'  => isset( $row['country_code'] ) ? $row['country_code'] : null,
@@ -650,13 +713,17 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				}
 			}
 
-			if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
-				$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-				$selects[]   = $wpdb->prepare(
-					"SELECT MIN(`date_time`) AS dt FROM `{$pulse_table}` WHERE engagement_kind = %s",
-					WP_Ulike_Pulse_Registry::KIND_VOTE
-				);
-			}
+		if ( ( 'pulse' === $mode || 'merged' === $mode ) && WP_Ulike_Pulse_Schema::table_exists() ) {
+			$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+			$selects[]   = "SELECT MIN(`date_time`) AS dt FROM `{$pulse_table}`";
+		}
+
+		// In legacy read mode, emoji/star live in pulse too — include them so
+		// the earliest-activity timestamp reflects every interaction kind.
+		if ( 'legacy' === $mode && WP_Ulike_Pulse_Schema::table_exists() ) {
+			$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+			$selects[]   = "SELECT MIN(`date_time`) AS dt FROM `{$pulse_table}` WHERE engagement_kind IN ('emoji','star')";
+		}
 
 			if ( empty( $selects ) ) {
 				return null;
@@ -724,26 +791,30 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @param string              $since  Optional datetime filter.
 		 * @return array<int,object>
 		 */
-		private static function fetch_pulse_rows( $source, $since = '' ) {
-			global $wpdb;
+	private static function fetch_pulse_rows( $source, $since = '', $kinds = array() ) {
+		global $wpdb;
 
-			if ( ! WP_Ulike_Pulse_Schema::table_exists() ) {
-				return array();
-			}
+		if ( ! WP_Ulike_Pulse_Schema::table_exists() ) {
+			return array();
+		}
 
-			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
-			$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+		$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+		$kinds_sql = '';
+		if ( ! empty( $kinds ) ) {
+			$placeholders = implode( ',', array_fill( 0, count( $kinds ), '%s' ) );
+			$kinds_sql    = $wpdb->prepare( " AND engagement_kind IN ({$placeholders})", ...$kinds );
+		}
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$rows = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT * FROM `{$table}`
-					WHERE item_type = %s AND engagement_kind = %s {$since_sql}
-					ORDER BY date_time DESC, id DESC",
-					$source['item_type'],
-					WP_Ulike_Pulse_Registry::KIND_VOTE
-				)
-			);
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$rows = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT * FROM `{$table}`
+			WHERE item_type = %s {$since_sql}{$kinds_sql}
+			ORDER BY date_time DESC, id DESC",
+			$source['item_type']
+		)
+	);
 
 			$output = array();
 			foreach ( (array) $rows as $row ) {
@@ -780,12 +851,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			}
 
 			$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-			$row   = $wpdb->get_row(
+			// No engagement_kind filter so emoji/star single-row views resolve.
+			$row = $wpdb->get_row(
 				$wpdb->prepare(
-					"SELECT * FROM `{$table}` WHERE id = %d AND item_type = %s AND engagement_kind = %s",
+					"SELECT * FROM `{$table}` WHERE id = %d AND item_type = %s",
 					$row_id,
-					$source['item_type'],
-					WP_Ulike_Pulse_Registry::KIND_VOTE
+					$source['item_type']
 				)
 			);
 
@@ -804,10 +875,18 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			$legacy->user_id    = $row->user_id;
 			$legacy->ip         = isset( $row->ip ) ? $row->ip : '';
 			$legacy->fingerprint = isset( $row->fingerprint ) ? $row->fingerprint : '';
-			$legacy->status     = WP_Ulike_Pulse_Vote_Map::row_to_legacy(
-				$row->engagement_key,
-				$row->status
-			);
+
+			// Vote rows map to legacy like/dislike/unlike/undislike labels;
+			// emoji/star rows keep their engagement_key as the status label so
+			// the logs page shows the actual reaction / rating instead of "like".
+			if ( isset( $row->engagement_kind ) && WP_Ulike_Pulse_Registry::KIND_VOTE !== $row->engagement_kind ) {
+				$legacy->status = (string) $row->engagement_key;
+			} else {
+				$legacy->status = WP_Ulike_Pulse_Vote_Map::row_to_legacy(
+					$row->engagement_key,
+					$row->status
+				);
+			}
 
 			$column              = $source['column'];
 			$legacy->{$column}   = (int) $row->item_id;

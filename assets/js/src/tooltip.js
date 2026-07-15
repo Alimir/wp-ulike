@@ -496,10 +496,16 @@
       setTooltipState('loading');
     };
 
-    // If tooltip is created with hover trigger, check state immediately
-    // This handles the case when tooltip is created while user is already hovering
+    // If tooltip is created with hover trigger, only auto-show when the user
+    // is actually hovering the element at creation time (e.g. the tooltip was
+    // bound while the mouse was already over it). Without this guard the
+    // dataFetcher fires for every popover on page load, triggering eager
+    // AJAX calls before any hover happens.
     if (!options.trigger || options.trigger === "hover") {
       setTimeout(() => {
+        if (!element.matches(":hover")) {
+          return;
+        }
         const currentState = getTooltipState();
         if (!currentState || currentState === '') {
           handleShow(); // Will request data

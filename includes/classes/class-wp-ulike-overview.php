@@ -856,9 +856,13 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 *
 		 * @return string
 		 */
-		private static function get_health_report_cache_key() {
-			return 'wp_ulike_health_report_v1';
-		}
+	private static function get_health_report_cache_key() {
+		// Version the key with the pulse cache version so any vote/engagement
+		// bump (WP_Ulike_Query_Cache::bump) invalidates the health report
+		// immediately instead of waiting up to 5 minutes.
+		$version = class_exists( 'WP_Ulike_Query_Cache' ) ? WP_Ulike_Query_Cache::version() : 1;
+		return 'wp_ulike_health_report_v1_' . $version;
+	}
 
 		/**
 		 * Lightweight database table check (Site Health and similar).

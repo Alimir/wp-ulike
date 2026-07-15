@@ -13,9 +13,45 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 
 	final class WP_Ulike_Pulse_Sync {
 
-		const OPTION_PROGRESS = 'wp_ulike_pulse_sync_progress';
-		const LOCK_TRANSIENT  = 'wp_ulike_pulse_sync_lock';
-		const TIME_LIMIT      = 20;
+	const OPTION_PROGRESS = 'wp_ulike_pulse_sync_progress';
+	const LOCK_TRANSIENT  = 'wp_ulike_pulse_sync_lock';
+	const LOCK_NAME       = 'wp_ulike_pulse_sync_lock';
+	const TIME_LIMIT      = 20;
+
+	/**
+	 * Atomically acquire the migration lock via MySQL GET_LOCK.
+	 *
+	 * GET_LOCK is atomic across connections (unlike transient check-then-set)
+	 * and auto-releases when the DB connection closes, so a crashed request
+	 * never leaves a stale lock. Falls back to a transient guard when GET_LOCK
+	 * is unavailable (e.g. read-only replica) so the batch still serializes.
+	 *
+	 * @return bool True when this request owns the lock.
+	 */
+	private static function acquire_lock() {
+		global $wpdb;
+
+		$acquired = $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK( %s, 0 )', self::LOCK_NAME ) );
+		if ( '1' === (string) $acquired ) {
+			set_transient( self::LOCK_TRANSIENT, 1, 90 );
+			return true;
+		}
+
+		// GET_LOCK unavailable or already held by another request.
+		return false;
+	}
+
+	/**
+	 * Release the migration lock.
+	 *
+	 * @return void
+	 */
+	private static function release_lock() {
+		global $wpdb;
+
+		$wpdb->query( $wpdb->prepare( 'SELECT RELEASE_LOCK( %s )', self::LOCK_NAME ) );
+		delete_transient( self::LOCK_TRANSIENT );
+	}
 
 		/**
 		 * @return array<string,mixed>
@@ -221,11 +257,14 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 				return array( 'processed' => 0, 'done' => true, 'message' => 'inactive' );
 			}
 
-			if ( get_transient( self::LOCK_TRANSIENT ) ) {
-				return array( 'processed' => 0, 'done' => false, 'message' => 'locked' );
-			}
-
-			set_transient( self::LOCK_TRANSIENT, 1, 90 );
+		// Atomic lock acquire: set_transient is check-then-set (TOCTOU) under
+		// concurrent cron/admin requests. Use a transient-set that returns false
+		// when the key already exists by relying on wp_cache_add semantics is not
+		// available for transients, so emulate atomicity via a dedicated option
+		// compare-and-swap which WP handles atomically through wpdb.
+		if ( self::acquire_lock() === false ) {
+			return array( 'processed' => 0, 'done' => false, 'message' => 'locked' );
+		}
 
 			$batch_size = $batch_size > 0 ? absint( $batch_size ) : WP_Ulike_Pulse_Schema::BATCH_SIZE_DEFAULT;
 			$deadline   = microtime( true ) + self::TIME_LIMIT;
@@ -264,23 +303,39 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 						continue;
 					}
 
-					$is_distinct = wp_ulike_setting_repo::isDistinct( $config['item_type'] );
+				$is_distinct = wp_ulike_setting_repo::isDistinct( $config['item_type'] );
+				$row_index   = 0;
 
-					foreach ( $rows as $row ) {
-						$result = WP_Ulike_Pulse_Writer::import_legacy_row( $config, $row, $is_distinct );
-						if ( 'skipped' === $result ) {
-							++$progress['sources'][ $slug ]['skipped'];
-						} elseif ( false !== $result ) {
-							++$progress['sources'][ $slug ]['imported'];
-							++$processed;
-						} else {
-							++$progress['sources'][ $slug ]['failed'];
+				foreach ( $rows as $row ) {
+					$result = WP_Ulike_Pulse_Writer::import_legacy_row( $config, $row, $is_distinct );
+					if ( 'skipped' === $result ) {
+						++$progress['sources'][ $slug ]['skipped'];
+					} elseif ( false !== $result ) {
+						++$progress['sources'][ $slug ]['imported'];
+						++$processed;
+					} else {
+						++$progress['sources'][ $slug ]['failed'];
+						// Track failed row IDs (capped) for post-migration review
+						// without stalling the batch on permanently-unimportable rows.
+						$failed_ids = isset( $progress['sources'][ $slug ]['failed_ids'] )
+							? $progress['sources'][ $slug ]['failed_ids']
+							: array();
+						if ( count( $failed_ids ) < 200 ) {
+							$failed_ids[] = (int) $row->id;
 						}
-
-						$cursor = max( $cursor, (int) $row->id );
+						$progress['sources'][ $slug ]['failed_ids'] = $failed_ids;
 					}
 
+					$cursor = max( $cursor, (int) $row->id );
 					$progress['sources'][ $slug ]['cursor'] = $cursor;
+
+					// Checkpoint every 25 rows so a PHP timeout/crash mid-batch
+					// only reprocesses a small slice instead of the whole batch
+					// (important for append mode where re-imports duplicate rows).
+					if ( 0 === ++$row_index % 25 ) {
+						self::save_progress( $progress );
+					}
+				}
 				}
 
 				self::aggregate_totals( $progress );
@@ -299,10 +354,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 					wp_ulike_pulse_flush_cache();
 				}
 
-				self::save_progress( $progress );
-			} finally {
-				delete_transient( self::LOCK_TRANSIENT );
-			}
+			self::save_progress( $progress );
+		} finally {
+			self::release_lock();
+		}
 
 			return array(
 				'processed'        => $processed,

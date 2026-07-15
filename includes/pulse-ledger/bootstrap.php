@@ -90,6 +90,26 @@ function wp_ulike_adjust_statistics_on_vote_insert( $args ) {
 }
 
 /**
+ * +1 site statistics when a Pro engagement (emoji/star) row is inserted.
+ *
+ * Classic vote inserts are handled above via wp_ulike_data_inserted. Emoji/star
+ * rows live in pulse regardless of storage mode and must also increment the
+ * persisted all-time meta so wp_ulike_count_all_logs('all') stays accurate
+ * without a full re-count on every request.
+ *
+ * @param array<string,mixed> $args Engagement process payload (item_type required).
+ * @return void
+ */
+function wp_ulike_adjust_statistics_on_engagement_insert( $args ) {
+	if ( ! is_array( $args ) || empty( $args['item_type'] ) ) {
+		return;
+	}
+
+	WP_Ulike_Query_Cache::adjust_statistics_meta( 1, $args['item_type'] );
+}
+add_action( 'wp_ulike_engagement_inserted', 'wp_ulike_adjust_statistics_on_engagement_insert', 9, 1 );
+
+/**
  * −N site statistics when vote rows are removed.
  *
  * @param int|string          $arg1 Item ID or pulse payload array.

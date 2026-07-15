@@ -191,21 +191,24 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @param string $period Period key.
 		 * @return int
 		 */
-		public static function count_logs_for_mode( $period = 'all' ) {
-			$mode = self::read_mode();
+	public static function count_logs_for_mode( $period = 'all' ) {
+		$mode = self::read_mode();
 
-			if ( 'pulse' === $mode ) {
-				return self::count_pulse_logs( $period );
-			}
-
-			$legacy = self::count_all_legacy_logs( $period );
-
-			if ( 'legacy' === $mode ) {
-				return $legacy;
-			}
-
-			return $legacy + self::count_pulse_logs( $period, WP_Ulike_Pulse_Config::dual_since() );
+		if ( 'pulse' === $mode ) {
+			return self::count_pulse_logs( $period );
 		}
+
+		$legacy = self::count_all_legacy_logs( $period );
+
+		if ( 'legacy' === $mode ) {
+			// Legacy tables hold classic votes only; emoji/star live in pulse
+			// regardless of storage mode. Add them so legacy-mode sites using
+			// Pro engagement still see emoji/star activity in totals.
+			return $legacy + self::count_pulse_non_vote_logs( $period );
+		}
+
+		return $legacy + self::count_pulse_logs( $period, WP_Ulike_Pulse_Config::dual_since() );
+	}
 
 		/**
 		 * Count logs for one content type (post, comment, activity, topic).
@@ -235,15 +238,57 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				$legacy = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit}" );
 			}
 
+		if ( 'legacy' === $mode || ! $source ) {
+			// Emoji/star rows live in pulse even in legacy read mode and for
+			// types without a legacy table. Add them so per-type totals match.
+			return $legacy + self::count_pulse_non_vote_logs( $period, '', $item_type );
+		}
+
+		return $legacy + self::count_pulse_logs_for_type( $item_type, $period, WP_Ulike_Pulse_Config::dual_since() );
+	}
+
+		/**
+		 * Count classic vote rows (engagement_kind = vote) for one content
+		 * type across all statuses. Mode-aware (legacy + pulse-since-dual).
+		 *
+		 * Pro stats use this for the vote slice of "vote + emoji + star"
+		 * totals, because count_logs_for_type() already counts all kinds and
+		 * would double-count emoji/star if Pro added them on top.
+		 *
+		 * @param string $item_type Canonical item type.
+		 * @param mixed  $period    Period filter.
+		 * @return int
+		 */
+		public static function count_vote_logs_for_type( $item_type, $period = 'all' ) {
+			global $wpdb;
+
+			$item_type    = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+			$period_limit = wp_ulike_get_period_limit_sql( $period );
+			$mode         = self::read_mode();
+			$source       = WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type );
+
+			if ( 'pulse' === $mode ) {
+				if ( ! $source ) {
+					return 0;
+				}
+				return self::count_pulse_vote_logs_for_type( $item_type, $period );
+			}
+
+			$legacy = 0;
+			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				$table  = esc_sql( $source['table'] );
+				$legacy = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit}" );
+			}
+
 			if ( 'legacy' === $mode || ! $source ) {
 				return $legacy;
 			}
 
-			return $legacy + self::count_pulse_logs_for_type( $item_type, $period, WP_Ulike_Pulse_Config::dual_since() );
+			return $legacy + self::count_pulse_vote_logs_for_type( $item_type, $period, WP_Ulike_Pulse_Config::dual_since() );
 		}
 
-		/**
-		 * Count logs by legacy table suffix (ulike, ulike_comments, …).
+	/**
+	 * Count logs by legacy table suffix (ulike, ulike_comments, …).
 		 *
 		 * @param string $table_suffix Table name without prefix.
 		 * @param mixed  $period       Period filter.
@@ -468,21 +513,23 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$settings = wp_ulike_setting_type::get_instance( $type );
 			$mode     = self::read_mode();
 
-			if ( 'pulse' === $mode ) {
-				$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-				return $wpdb->get_row(
-					$wpdb->prepare(
-						"SELECT id, item_id, user_id, date_time,
-						engagement_key AS status, ip, fingerprint
-						FROM `{$table}`
-						WHERE item_id = %d AND item_type = %s AND user_id = %s
-						ORDER BY date_time DESC, id DESC LIMIT 1",
-						absint( $item_id ),
-						WP_Ulike_Pulse_Registry::from_setting_type( $type ),
-						(string) $user_id
-					)
-				);
-			}
+	if ( 'pulse' === $mode ) {
+		$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT id, item_id, user_id, date_time,
+				engagement_kind, engagement_key, engagement_key AS status, value,
+				ip, fingerprint, country_code, device
+				FROM `{$table}`
+				WHERE item_id = %d AND item_type = %s AND user_id = %s AND status = %s
+				ORDER BY date_time DESC, id DESC LIMIT 1",
+				absint( $item_id ),
+				WP_Ulike_Pulse_Registry::from_setting_type( $type ),
+				(string) $user_id,
+				'active'
+			)
+		);
+	}
 
 			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type(
 				WP_Ulike_Pulse_Registry::from_setting_type( $settings->getType() )
@@ -973,17 +1020,58 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @param string $since  Optional since.
 		 * @return int
 		 */
-		private static function count_pulse_logs( $period, $since = '' ) {
-			global $wpdb;
+	private static function count_pulse_logs( $period, $since = '' ) {
+		global $wpdb;
 
-			$period_limit = wp_ulike_get_period_limit_sql( $period );
-			$table        = esc_sql( WP_Ulike_Pulse_Schema::table() );
-			$since_sql    = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
-
-			return (int) $wpdb->get_var(
-				"SELECT COUNT(*) FROM `{$table}` WHERE engagement_kind = 'vote' {$since_sql} {$period_limit}"
+		$period_limit = wp_ulike_get_period_limit_sql( $period );
+		$table        = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		// In merged mode $since is dual_since. Vote rows are duplicated in
+		// legacy tables before the cutover, so scope only vote rows to
+		// $since. Emoji/star have no legacy counterpart — never since-filter.
+		$since_sql = '';
+		if ( $since ) {
+			$since_sql = $wpdb->prepare(
+				" AND ( engagement_kind IN ('emoji','star') OR ( engagement_kind = %s AND date_time >= %s ) )",
+				WP_Ulike_Pulse_Registry::KIND_VOTE,
+				$since
 			);
 		}
+
+		// Count all engagement kinds (vote + emoji + star) so the "all logs"
+		// total reflects every interaction, matching count_all_legacy_logs()
+		// which counts every legacy row regardless of status.
+		return (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$since_sql} {$period_limit}"
+		);
+	}
+
+	/**
+	 * Count pulse emoji/star rows (non-vote engagement) for legacy read mode,
+	 * where classic votes come from legacy tables but emoji/star live in pulse.
+	 *
+	 * @param mixed  $period    Period filter.
+	 * @param string $since     Optional since datetime.
+	 * @param string $item_type Optional canonical item type to scope the count.
+	 * @return int
+	 */
+	private static function count_pulse_non_vote_logs( $period, $since = '', $item_type = '' ) {
+		global $wpdb;
+
+		$period_limit = wp_ulike_get_period_limit_sql( $period );
+		$table        = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		$since_sql    = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+		$type_sql     = '';
+		if ( $item_type ) {
+			$type_sql = $wpdb->prepare(
+				' AND item_type = %s',
+				WP_Ulike_Pulse_Registry::normalize_item_type( $item_type )
+			);
+		}
+
+		return (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM `{$table}` WHERE engagement_kind IN ('emoji','star'){$type_sql}{$since_sql}{$period_limit}"
+		);
+	}
 
 		/**
 		 * @param string $item_type Canonical item type.
@@ -991,7 +1079,45 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @param string $since     Optional since datetime.
 		 * @return int
 		 */
-		private static function count_pulse_logs_for_type( $item_type, $period, $since = '' ) {
+	private static function count_pulse_logs_for_type( $item_type, $period, $since = '' ) {
+		global $wpdb;
+
+		$period_limit = wp_ulike_get_period_limit_sql( $period );
+		$table        = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		// Scope only vote rows to $since (dual_since); emoji/star have no
+		// legacy counterpart and must never be since-filtered in merged mode.
+		$since_sql = '';
+		if ( $since ) {
+			$since_sql = $wpdb->prepare(
+				" AND ( engagement_kind IN ('emoji','star') OR ( engagement_kind = %s AND date_time >= %s ) )",
+				WP_Ulike_Pulse_Registry::KIND_VOTE,
+				$since
+			);
+		}
+
+		// Count all engagement kinds (vote + emoji + star) so per-type "all
+		// logs" totals match the global count_pulse_logs() behavior. Per-item
+		// vote counters use count_item_votes()/count_pulse_item_votes().
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM `{$table}` WHERE item_type = %s{$since_sql}{$period_limit}",
+				WP_Ulike_Pulse_Registry::normalize_item_type( $item_type )
+			)
+		);
+	}
+
+		/**
+		 * Count classic vote rows (engagement_kind = vote) for one content
+		 * type across all statuses. Used by count_vote_logs_for_type() so the
+		 * Pro "vote + emoji + star" sum does not double-count emoji/star that
+		 * count_pulse_logs_for_type() already includes.
+		 *
+		 * @param string $item_type Canonical item type.
+		 * @param mixed  $period    Period filter.
+		 * @param string $since     Optional since datetime.
+		 * @return int
+		 */
+		private static function count_pulse_vote_logs_for_type( $item_type, $period, $since = '' ) {
 			global $wpdb;
 
 			$period_limit = wp_ulike_get_period_limit_sql( $period );
@@ -1000,7 +1126,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			return (int) $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) FROM `{$table}` WHERE item_type = %s AND engagement_kind = %s {$since_sql} {$period_limit}",
+					"SELECT COUNT(*) FROM `{$table}` WHERE item_type = %s AND engagement_kind = %s{$since_sql}{$period_limit}",
 					WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ),
 					WP_Ulike_Pulse_Registry::KIND_VOTE
 				)
@@ -1074,21 +1200,77 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @param string $since        Optional since datetime.
 		 * @return int
 		 */
-		private static function count_pulse_unique_voters_for_type( $item_type, $period_limit, $since ) {
-			global $wpdb;
+	private static function count_pulse_unique_voters_for_type( $item_type, $period_limit, $since ) {
+		global $wpdb;
 
-			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
-			$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+		$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
-			return (int) $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(DISTINCT user_id) FROM `{$table}`
-					WHERE item_type = %s AND engagement_kind = %s {$since_sql} {$period_limit}",
-					WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ),
-					WP_Ulike_Pulse_Registry::KIND_VOTE
-				)
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(DISTINCT user_id) FROM `{$table}`
+				WHERE item_type = %s AND engagement_kind = %s {$since_sql} {$period_limit}",
+				WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ),
+				WP_Ulike_Pulse_Registry::KIND_VOTE
+			)
+		);
+	}
+
+	/**
+	 * Count distinct users who interacted with a type across ALL engagement
+	 * kinds (vote + emoji + star), mode-aware. Used by Pro "unique
+	 * voters/engagers" cards so a user is counted once whether they voted,
+	 * reacted with emoji, or rated with stars.
+	 *
+	 * @param string $item_type Canonical item type.
+	 * @param mixed  $period    Period filter.
+	 * @return int
+	 */
+	public static function count_unique_interactors_for_type( $item_type, $period = 'all' ) {
+		global $wpdb;
+
+		$item_type    = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+		$period_limit = wp_ulike_get_period_limit_sql( $period );
+		$mode         = self::read_mode();
+		$source       = WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type );
+		$pulse_table  = esc_sql( WP_Ulike_Pulse_Schema::table() );
+
+		// Pulse slice: all engagement kinds. In merged mode, scope vote rows to
+		// dual_since (legacy holds pre-cutover votes); emoji/star have no legacy
+		// counterpart so they are never since-filtered. Apply the period window.
+		$pulse_per = $period_limit;
+		if ( 'merged' === $mode && WP_Ulike_Pulse_Config::dual_since() ) {
+			$since     = WP_Ulike_Pulse_Config::dual_since();
+			$pulse_sql = $wpdb->prepare(
+				"SELECT CAST(user_id AS CHAR) AS user_id FROM `{$pulse_table}`
+				WHERE item_type = %s AND status = 'active'
+				AND ( engagement_kind IN ('emoji','star') OR ( engagement_kind = %s AND date_time >= %s ) ) {$pulse_per}",
+				$item_type,
+				WP_Ulike_Pulse_Registry::KIND_VOTE,
+				$since
+			);
+		} else {
+			$pulse_sql = $wpdb->prepare(
+				"SELECT CAST(user_id AS CHAR) AS user_id FROM `{$pulse_table}`
+				WHERE item_type = %s AND status = 'active' {$pulse_per}",
+				$item_type
 			);
 		}
+
+		// Legacy slice: classic votes (legacy tables have no emoji/star).
+		$union = array( $pulse_sql );
+		if ( ( 'legacy' === $mode || 'merged' === $mode ) && $source
+			&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+			$legacy_table = esc_sql( $source['table'] );
+			$legacy_per   = str_replace( 'date_time', 'l.date_time', $period_limit );
+			$union[]      = "SELECT CAST(l.user_id AS CHAR) AS user_id FROM `{$legacy_table}` l WHERE l.status IN ('like','dislike') {$legacy_per}";
+		}
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return (int) $wpdb->get_var(
+			"SELECT COUNT(DISTINCT user_id) FROM (" . implode( ' UNION ', $union ) . ") AS combined"
+		);
+	}
 
 		/**
 		 * @param string $period Period key.
@@ -1285,24 +1467,24 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @param string $type    Setting type.
 		 * @return object|null
 		 */
-		private static function fetch_pulse_activity_row( $item_id, $user_id, $type ) {
-			global $wpdb;
+	private static function fetch_pulse_activity_row( $item_id, $user_id, $type ) {
+		global $wpdb;
 
-			$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-			return $wpdb->get_row(
-				$wpdb->prepare(
-					"SELECT id, item_id, user_id, date_time,
-					engagement_key, status, ip, fingerprint
-					FROM `{$table}`
-					WHERE item_id = %d AND item_type = %s AND user_id = %s AND engagement_kind = %s
-					ORDER BY date_time DESC, id DESC LIMIT 1",
-					absint( $item_id ),
-					WP_Ulike_Pulse_Registry::from_setting_type( $type ),
-					(string) $user_id,
-					WP_Ulike_Pulse_Registry::KIND_VOTE
-				)
-			);
-		}
+		$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT id, item_id, user_id, date_time,
+				engagement_kind, engagement_key, status, value, ip, fingerprint, country_code, device
+				FROM `{$table}`
+				WHERE item_id = %d AND item_type = %s AND user_id = %s AND status = %s
+				ORDER BY date_time DESC, id DESC LIMIT 1",
+				absint( $item_id ),
+				WP_Ulike_Pulse_Registry::from_setting_type( $type ),
+				(string) $user_id,
+				'active'
+			)
+		);
+	}
 
 		/**
 		 * @param int    $item_id     Item ID.
