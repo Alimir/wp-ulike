@@ -86,12 +86,6 @@ class WpUlikeInit {
     if ( ! WP_Ulike_Meta_Schema::table_exists() || ! WP_Ulike_Pulse_Schema::table_exists() ) {
       wp_ulike_activator::get_instance()->install_tables( false, false );
     }
-
-    // Align dedupe_token column on pre-existing pulse tables (idempotent,
-    // gated by an option marker — runs once).
-    if ( class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
-      WP_Ulike_Pulse_Schema::ensure_dedupe_token_column();
-    }
   }
 
   /**

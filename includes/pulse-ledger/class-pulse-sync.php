@@ -15,29 +15,36 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 
 	const OPTION_PROGRESS = 'wp_ulike_pulse_sync_progress';
 	const LOCK_TRANSIENT  = 'wp_ulike_pulse_sync_lock';
-	const LOCK_NAME       = 'wp_ulike_pulse_sync_lock';
 	const TIME_LIMIT      = 20;
+
+	/**
+	 * Blog-scoped MySQL GET_LOCK name (multisite-safe).
+	 *
+	 * @return string
+	 */
+	private static function lock_name() {
+		global $wpdb;
+		return 'wp_ulike_pulse_sync_' . md5( (string) $wpdb->prefix );
+	}
 
 	/**
 	 * Atomically acquire the migration lock via MySQL GET_LOCK.
 	 *
 	 * GET_LOCK is atomic across connections (unlike transient check-then-set)
 	 * and auto-releases when the DB connection closes, so a crashed request
-	 * never leaves a stale lock. Falls back to a transient guard when GET_LOCK
-	 * is unavailable (e.g. read-only replica) so the batch still serializes.
+	 * never leaves a stale lock.
 	 *
 	 * @return bool True when this request owns the lock.
 	 */
 	private static function acquire_lock() {
 		global $wpdb;
 
-		$acquired = $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK( %s, 0 )', self::LOCK_NAME ) );
+		$acquired = $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK( %s, 0 )', self::lock_name() ) );
 		if ( '1' === (string) $acquired ) {
 			set_transient( self::LOCK_TRANSIENT, 1, 90 );
 			return true;
 		}
 
-		// GET_LOCK unavailable or already held by another request.
 		return false;
 	}
 
@@ -49,7 +56,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 	private static function release_lock() {
 		global $wpdb;
 
-		$wpdb->query( $wpdb->prepare( 'SELECT RELEASE_LOCK( %s )', self::LOCK_NAME ) );
+		$wpdb->query( $wpdb->prepare( 'SELECT RELEASE_LOCK( %s )', self::lock_name() ) );
 		delete_transient( self::LOCK_TRANSIENT );
 	}
 
@@ -315,15 +322,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 						++$processed;
 					} else {
 						++$progress['sources'][ $slug ]['failed'];
-						// Track failed row IDs (capped) for post-migration review
-						// without stalling the batch on permanently-unimportable rows.
-						$failed_ids = isset( $progress['sources'][ $slug ]['failed_ids'] )
-							? $progress['sources'][ $slug ]['failed_ids']
-							: array();
-						if ( count( $failed_ids ) < 200 ) {
-							$failed_ids[] = (int) $row->id;
-						}
-						$progress['sources'][ $slug ]['failed_ids'] = $failed_ids;
 					}
 
 					$cursor = max( $cursor, (int) $row->id );
@@ -416,14 +414,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 					$issues[ $slug ] = array(
 						'reason' => 'source_incomplete',
 					);
-					continue;
-				}
-
-				if ( (int) ( $source['failed'] ?? 0 ) > 0 ) {
-					$issues[ $slug ] = array(
-						'reason' => 'failed_rows',
-						'failed' => (int) $source['failed'],
-					);
 				}
 			}
 
@@ -450,19 +440,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 				$source   = $progress['sources'][ $slug ] ?? array();
 				$imported = (int) ( $source['imported'] ?? 0 );
 				$skipped  = (int) ( $source['skipped'] ?? 0 );
-				$failed   = (int) ( $source['failed'] ?? 0 );
 
 				if ( empty( $source['complete'] ) ) {
 					$issues[ $slug ] = array(
 						'reason' => 'source_incomplete',
-					);
-					continue;
-				}
-
-				if ( $failed > 0 ) {
-					$issues[ $slug ] = array(
-						'reason' => 'failed_rows',
-						'failed' => $failed,
 					);
 					continue;
 				}

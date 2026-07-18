@@ -19,7 +19,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * Constructor
 		 *
 		 * @param string $identifier Item type (post, comment, …) or legacy table suffix.
-		 * @param string $search     Optional case-insensitive search (user_id / ip / status).
+		 * @param string $search     Optional case-insensitive search (user / IP / status / content title).
 		 */
 		function __construct( $identifier, $page = 1, $per_page = 15, $sort = array(
 			'type'  => 'DESC',
@@ -36,6 +36,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 
 		/**
 		 * Build a LIKE-based WHERE fragment for the legacy direct-SQL path.
+		 * Matches user, IP, status, and related content titles.
 		 *
 		 * @return string
 		 */
@@ -43,9 +44,63 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 			if ( '' === $this->search ) {
 				return '';
 			}
-			$like  = '%' . $this->wpdb->esc_like( $this->search ) . '%';
-			$where = $this->wpdb->prepare( ' WHERE user_id LIKE %s OR ip LIKE %s OR status LIKE %s', $like, $like, $like );
-			return $where;
+
+			$like    = '%' . $this->wpdb->esc_like( $this->search ) . '%';
+			$source  = WP_Ulike_Pulse_Registry::legacy_source_for_type( $this->identifier );
+			$column  = $source && ! empty( $source['column'] ) ? esc_sql( $source['column'] ) : 'post_id';
+			$item_type = $source && ! empty( $source['item_type'] ) ? $source['item_type'] : 'post';
+			$users   = esc_sql( $this->wpdb->users );
+			$posts   = esc_sql( $this->wpdb->posts );
+			$comments = esc_sql( $this->wpdb->comments );
+
+			$user_match = $this->wpdb->prepare(
+				"user_id IN (SELECT ID FROM `{$users}` WHERE user_login LIKE %s OR display_name LIKE %s OR user_email LIKE %s)",
+				$like,
+				$like,
+				$like
+			);
+
+			$content_match = '';
+			switch ( $item_type ) {
+				case 'comment':
+					$content_match = $this->wpdb->prepare(
+						"`{$column}` IN (SELECT comment_ID FROM `{$comments}` WHERE comment_content LIKE %s OR comment_author LIKE %s)",
+						$like,
+						$like
+					);
+					break;
+				case 'activity':
+					if ( function_exists( 'buddypress' ) || function_exists( 'bp_is_active' ) ) {
+						$bp_prefix = is_multisite() ? $this->wpdb->base_prefix : $this->wpdb->prefix;
+						$bp_table  = esc_sql( $bp_prefix . 'bp_activity' );
+						$content_match = $this->wpdb->prepare(
+							"`{$column}` IN (SELECT id FROM `{$bp_table}` WHERE content LIKE %s OR action LIKE %s)",
+							$like,
+							$like
+						);
+					}
+					break;
+				case 'topic':
+				case 'post':
+				default:
+					$content_match = $this->wpdb->prepare(
+						"`{$column}` IN (SELECT ID FROM `{$posts}` WHERE post_title LIKE %s)",
+						$like
+					);
+					break;
+			}
+
+			$parts = array(
+				$this->wpdb->prepare( 'user_id LIKE %s', $like ),
+				$this->wpdb->prepare( 'ip LIKE %s', $like ),
+				$this->wpdb->prepare( 'status LIKE %s', $like ),
+				$user_match,
+			);
+			if ( $content_match ) {
+				$parts[] = $content_match;
+			}
+
+			return ' WHERE ( ' . implode( ' OR ', $parts ) . ' )';
 		}
 
 		/**

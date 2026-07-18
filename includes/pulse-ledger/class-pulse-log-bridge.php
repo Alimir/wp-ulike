@@ -48,11 +48,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @return array<int,object>
 		 */
 		public static function get_log_rows( $table_suffix, $page = 1, $per_page = 15, $sort = array(), $search = '' ) {
-			$rows   = self::query_log_rows( $table_suffix, $sort, $search );
-			$offset = max( 0, ( absint( $page ) - 1 ) * absint( $per_page ) );
-			$limit  = absint( $per_page );
+			$per_page = max( 1, absint( $per_page ) );
+			$page     = max( 1, absint( $page ) );
+			$offset   = ( $page - 1 ) * $per_page;
 
-			return array_slice( $rows, $offset, $limit > 0 ? $limit : null );
+			return self::query_log_rows( $table_suffix, $sort, $search, $per_page, $offset );
 		}
 
 		/**
@@ -61,7 +61,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @return array<int,object>
 		 */
 		public static function get_all_log_rows( $table_suffix, $sort = array(), $search = '' ) {
-			return self::query_log_rows( $table_suffix, $sort, $search );
+			$max = (int) apply_filters( 'wp_ulike_logs_export_max', 5000 );
+			return self::query_log_rows( $table_suffix, $sort, $search, max( 1, $max ), 0 );
 		}
 
 		/**
@@ -95,78 +96,210 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		}
 
 		/**
-		 * @param string $table_suffix Legacy table suffix.
-		 * @param array  $sort         Sort args.
+		 * Paginated log rows via SQL (never loads the full table into PHP).
+		 *
+		 * @param string   $table_suffix Legacy table suffix.
+		 * @param array    $sort         Sort args.
+		 * @param string   $search       Search term.
+		 * @param int|null $limit        Max rows.
+		 * @param int      $offset       Offset.
 		 * @return array<int,object>
 		 */
-		private static function query_log_rows( $table_suffix, $sort = array(), $search = '' ) {
+		private static function query_log_rows( $table_suffix, $sort = array(), $search = '', $limit = 15, $offset = 0 ) {
+			global $wpdb;
+
 			$source = self::source_for_suffix( $table_suffix );
 			if ( ! $source ) {
 				return array();
 			}
 
-			$mode = WP_Ulike_Pulse_Query::read_mode();
-			$rows = array();
+			$allowed  = array( 'id', 'date_time', 'user_id', 'ip', 'status' );
+			$order_by = isset( $sort['field'] ) && in_array( $sort['field'], $allowed, true )
+				? esc_sql( $sort['field'] )
+				: 'date_time';
+			$order_dir = ( isset( $sort['type'] ) && 'ASC' === strtoupper( $sort['type'] ) ) ? 'ASC' : 'DESC';
 
-		if ( 'pulse' === $mode || ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-			$rows = self::fetch_pulse_rows( $source, '' );
-		} elseif ( 'legacy' === $mode ) {
-			// Legacy votes + pulse emoji/star (emoji/star have no legacy
-			// counterpart) so the list matches the all-kinds count.
-			$rows = array_merge(
-				self::fetch_legacy_rows( $source ),
-				self::fetch_pulse_rows( $source, '', array( 'emoji', 'star' ) )
-			);
-		} else {
-			$rows = array_merge(
-				self::fetch_legacy_rows( $source ),
-				self::fetch_pulse_rows( $source, WP_Ulike_Pulse_Config::dual_since() )
-			);
-		}
-
-			$rows = self::sort_rows( $rows, $sort );
-
+			$search_sql = '';
 			if ( '' !== $search ) {
-				$rows = self::filter_rows_by_search( $rows, $search );
+				$search_sql = self::search_sql_for_source( $source, $search );
 			}
 
-			return $rows;
+			$parts = self::log_union_parts( $source );
+			if ( empty( $parts ) ) {
+				return array();
+			}
+
+			$limit_sql = '';
+			if ( null !== $limit ) {
+				$limit_sql = $wpdb->prepare( ' LIMIT %d OFFSET %d', absint( $limit ), absint( $offset ) );
+			}
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$sql = 'SELECT * FROM ( ' . implode( ' UNION ALL ', $parts ) . " ) AS logs WHERE 1=1 {$search_sql} ORDER BY `{$order_by}` {$order_dir}, id DESC {$limit_sql}";
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$rows = $wpdb->get_results( $sql );
+			if ( empty( $rows ) ) {
+				return array();
+			}
+
+			$output = array();
+			foreach ( $rows as $row ) {
+				if ( isset( $row->_kind ) && 'vote' !== $row->_kind ) {
+					if ( isset( $row->_val ) && null !== $row->_val && '' !== $row->_val ) {
+						$row->value = (int) $row->_val;
+					}
+				}
+				unset( $row->_kind, $row->_val );
+				$output[] = $row;
+			}
+
+			return $output;
 		}
 
 		/**
-		 * Case-insensitive substring match across user_id / ip / status.
+		 * Build UNION ALL arms for admin log lists (legacy-shaped columns).
 		 *
-		 * @param array<int,object> $rows   Rows.
-		 * @param string            $search Search term.
-		 * @return array<int,object>
+		 * @param array<string,mixed> $source Legacy source.
+		 * @return array<int,string>
 		 */
-		private static function filter_rows_by_search( array $rows, $search ) {
-			$term = function_exists( 'mb_strtolower' )
-				? mb_strtolower( (string) $search )
-				: strtolower( (string) $search );
+		private static function log_union_parts( array $source ) {
+			global $wpdb;
 
-			if ( '' === $term ) {
-				return $rows;
+			$mode   = WP_Ulike_Pulse_Query::read_mode();
+			$column = esc_sql( $source['column'] );
+			$parts  = array();
+
+			if ( 'pulse' === $mode || 'merged' === $mode || ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				if ( WP_Ulike_Pulse_Schema::table_exists() ) {
+					$pulse = esc_sql( WP_Ulike_Pulse_Schema::table() );
+					$since = ( 'merged' === $mode ) ? WP_Ulike_Pulse_Config::dual_since() : '';
+					if ( 'merged' === $mode && $since ) {
+						$kind_sql = $wpdb->prepare(
+							" AND ( engagement_kind IN ('emoji','star') OR ( engagement_kind = %s AND date_time >= %s ) )",
+							WP_Ulike_Pulse_Registry::KIND_VOTE,
+							$since
+						);
+					} else {
+						$kind_sql = '';
+					}
+
+					$parts[] = $wpdb->prepare(
+						"SELECT id, date_time, user_id, ip, fingerprint,
+							CASE
+								WHEN engagement_kind <> 'vote' THEN engagement_key
+								WHEN engagement_key = 'dislike' AND status = 'active' THEN 'dislike'
+								WHEN engagement_key = 'dislike' THEN 'undislike'
+								WHEN status = 'active' THEN 'like'
+								ELSE 'unlike'
+							END AS status,
+							item_id AS `{$column}`,
+							engagement_kind AS _kind,
+							value AS _val
+						FROM `{$pulse}`
+						WHERE item_type = %s {$kind_sql}",
+						$source['item_type']
+					);
+				}
+			} elseif ( 'legacy' === $mode && WP_Ulike_Pulse_Schema::table_exists() ) {
+				$pulse   = esc_sql( WP_Ulike_Pulse_Schema::table() );
+				$parts[] = $wpdb->prepare(
+					"SELECT id, date_time, user_id, ip, fingerprint,
+						engagement_key AS status,
+						item_id AS `{$column}`,
+						engagement_kind AS _kind,
+						value AS _val
+					FROM `{$pulse}`
+					WHERE item_type = %s AND engagement_kind IN ('emoji','star')",
+					$source['item_type']
+				);
 			}
 
-			return array_values(
-				array_filter(
-					$rows,
-					static function ( $row ) use ( $term ) {
-						foreach ( array( 'user_id', 'ip', 'status' ) as $field ) {
-							if ( isset( $row->{$field} ) ) {
-								$value = function_exists( 'mb_strtolower' )
-									? mb_strtolower( (string) $row->{$field} )
-									: strtolower( (string) $row->{$field} );
-								if ( false !== strpos( $value, $term ) ) {
-									return true;
-								}
-							}
-						}
-						return false;
-					}
-				)
+			if ( ( 'legacy' === $mode || 'merged' === $mode )
+				&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
+				$table   = esc_sql( $source['table'] );
+				$parts[] = "SELECT id, date_time, user_id, ip, fingerprint, status,
+					`{$column}`,
+					'vote' AS _kind,
+					NULL AS _val
+					FROM `{$table}`";
+			}
+
+			return $parts;
+		}
+
+		/**
+		 * Search fragment for union log lists (user, IP, status, content title).
+		 *
+		 * @param array  $source Legacy source config.
+		 * @param string $search Search term.
+		 * @return string Prepared AND (...) SQL.
+		 */
+		private static function search_sql_for_source( array $source, $search ) {
+			global $wpdb;
+
+			$search = trim( (string) $search );
+			if ( '' === $search ) {
+				return '';
+			}
+
+			$like      = '%' . $wpdb->esc_like( $search ) . '%';
+			$column    = esc_sql( $source['column'] );
+			$item_type = isset( $source['item_type'] ) ? $source['item_type'] : '';
+			$users     = esc_sql( $wpdb->users );
+			$posts     = esc_sql( $wpdb->posts );
+			$comments  = esc_sql( $wpdb->comments );
+
+			$user_match = $wpdb->prepare(
+				"user_id IN (SELECT ID FROM `{$users}` WHERE user_login LIKE %s OR display_name LIKE %s OR user_email LIKE %s)",
+				$like,
+				$like,
+				$like
 			);
+
+			$content_match = '';
+			switch ( $item_type ) {
+				case WP_Ulike_Pulse_Registry::ITEM_COMMENT:
+					$content_match = $wpdb->prepare(
+						"`{$column}` IN (SELECT comment_ID FROM `{$comments}` WHERE comment_content LIKE %s OR comment_author LIKE %s)",
+						$like,
+						$like
+					);
+					break;
+
+				case WP_Ulike_Pulse_Registry::ITEM_ACTIVITY:
+					if ( function_exists( 'buddypress' ) || function_exists( 'bp_is_active' ) ) {
+						$bp_prefix = is_multisite() ? $wpdb->base_prefix : $wpdb->prefix;
+						$bp_table  = esc_sql( $bp_prefix . 'bp_activity' );
+						$content_match = $wpdb->prepare(
+							"`{$column}` IN (SELECT id FROM `{$bp_table}` WHERE content LIKE %s OR action LIKE %s)",
+							$like,
+							$like
+						);
+					}
+					break;
+
+				case WP_Ulike_Pulse_Registry::ITEM_TOPIC:
+				case WP_Ulike_Pulse_Registry::ITEM_POST:
+				default:
+					$content_match = $wpdb->prepare(
+						"`{$column}` IN (SELECT ID FROM `{$posts}` WHERE post_title LIKE %s)",
+						$like
+					);
+					break;
+			}
+
+			$parts = array(
+				$wpdb->prepare( 'CAST(user_id AS CHAR) LIKE %s', $like ),
+				$wpdb->prepare( 'ip LIKE %s', $like ),
+				$wpdb->prepare( 'CAST(status AS CHAR) LIKE %s', $like ),
+				$user_match,
+			);
+			if ( $content_match ) {
+				$parts[] = $content_match;
+			}
+
+			return ' AND ( ' . implode( ' OR ', $parts ) . ' )';
 		}
 
 		/**
@@ -174,22 +307,37 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		 * @return int
 		 */
 		public static function count_log_rows( $table_suffix, $search = '' ) {
-			if ( wp_ulike_use_pulse_queries() ) {
-				if ( '' === $search ) {
-					$item_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $table_suffix );
-					if ( ! $item_type ) {
-						$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $table_suffix );
-					}
-					if ( ! $item_type ) {
-						return 0;
-					}
-					return WP_Ulike_Pulse_Query::count_logs_for_type( $item_type, 'all' );
+			global $wpdb;
+
+			if ( '' === $search ) {
+				$item_type = WP_Ulike_Pulse_Registry::type_by_table_suffix( $table_suffix );
+				if ( ! $item_type ) {
+					$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $table_suffix );
 				}
-				return count( self::query_log_rows( $table_suffix, array(), $search ) );
+				if ( ! $item_type ) {
+					return 0;
+				}
+				return WP_Ulike_Pulse_Query::count_logs_for_type( $item_type, 'all' );
 			}
 
-		return count( self::query_log_rows( $table_suffix, array(), $search ) );
-	}
+			$source = self::source_for_suffix( $table_suffix );
+			if ( ! $source ) {
+				return 0;
+			}
+
+			// Reuse list SQL without LIMIT by counting the union.
+			$search_sql = self::search_sql_for_source( $source, $search );
+
+			$parts = self::log_union_parts( $source );
+			if ( empty( $parts ) ) {
+				return 0;
+			}
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			return (int) $wpdb->get_var(
+				'SELECT COUNT(*) FROM ( ' . implode( ' UNION ALL ', $parts ) . " ) AS logs WHERE 1=1 {$search_sql}"
+			);
+		}
 
 		/**
 		 * @param string $table_suffix Legacy table suffix.
@@ -772,60 +920,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 
 		/**
 		 * @param array<string,mixed> $source Legacy source.
-		 * @return array<int,object>
-		 */
-		private static function fetch_legacy_rows( $source ) {
-			global $wpdb;
-
-			if ( ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
-				return array();
-			}
-
-			$table = esc_sql( $source['table'] );
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			return $wpdb->get_results( "SELECT * FROM `{$table}`" );
-		}
-
-		/**
-		 * @param array<string,mixed> $source Legacy source.
-		 * @param string              $since  Optional datetime filter.
-		 * @return array<int,object>
-		 */
-	private static function fetch_pulse_rows( $source, $since = '', $kinds = array() ) {
-		global $wpdb;
-
-		if ( ! WP_Ulike_Pulse_Schema::table_exists() ) {
-			return array();
-		}
-
-		$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
-		$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
-		$kinds_sql = '';
-		if ( ! empty( $kinds ) ) {
-			$placeholders = implode( ',', array_fill( 0, count( $kinds ), '%s' ) );
-			$kinds_sql    = $wpdb->prepare( " AND engagement_kind IN ({$placeholders})", ...$kinds );
-		}
-
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-	$rows = $wpdb->get_results(
-		$wpdb->prepare(
-			"SELECT * FROM `{$table}`
-			WHERE item_type = %s {$since_sql}{$kinds_sql}
-			ORDER BY date_time DESC, id DESC",
-			$source['item_type']
-		)
-	);
-
-			$output = array();
-			foreach ( (array) $rows as $row ) {
-				$output[] = self::map_pulse_row( $row, $source );
-			}
-
-			return $output;
-		}
-
-		/**
-		 * @param array<string,mixed> $source Legacy source.
 		 * @param int                   $row_id Row ID.
 		 * @return object|null
 		 */
@@ -892,34 +986,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			$legacy->{$column}   = (int) $row->item_id;
 
 			return $legacy;
-		}
-
-		/**
-		 * @param array<int,object> $rows Rows.
-		 * @param array             $sort Sort args.
-		 * @return array<int,object>
-		 */
-		private static function sort_rows( array $rows, $sort ) {
-			$allowed_fields = array( 'id', 'date_time', 'user_id', 'ip', 'status' );
-			$field          = isset( $sort['field'] ) && in_array( $sort['field'], $allowed_fields, true )
-				? $sort['field']
-				: 'id';
-			$direction      = isset( $sort['type'] ) && 'ASC' === strtoupper( $sort['type'] ) ? 'ASC' : 'DESC';
-
-			usort(
-				$rows,
-				function ( $a, $b ) use ( $field, $direction ) {
-					$av = isset( $a->{$field} ) ? $a->{$field} : '';
-					$bv = isset( $b->{$field} ) ? $b->{$field} : '';
-					$cmp = strcmp( (string) $av, (string) $bv );
-					if ( 'id' === $field || is_numeric( $av ) ) {
-						$cmp = (int) $av <=> (int) $bv;
-					}
-					return 'ASC' === $direction ? $cmp : -$cmp;
-				}
-			);
-
-			return $rows;
 		}
 	}
 }

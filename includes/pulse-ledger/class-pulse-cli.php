@@ -338,6 +338,85 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 				);
 			}
 
+			// Query path sanity (must not fatally error; results may be empty).
+			try {
+				$user_rows = WP_Ulike_Pulse_Query::get_user_data(
+					1,
+					array(
+						'type'     => 'post',
+						'per_page' => 5,
+						'page'     => 1,
+					)
+				);
+				$checks[] = self::smoke_check(
+					'get_user_data(post) runs',
+					is_array( $user_rows ) || null === $user_rows,
+					is_array( $user_rows ) ? count( $user_rows ) . ' row(s)' : 'null'
+				);
+			} catch ( Exception $e ) {
+				$checks[] = self::smoke_check( 'get_user_data(post) runs', false, $e->getMessage() );
+			}
+
+			try {
+				$users = WP_Ulike_Pulse_Query::get_users(
+					array(
+						'type'     => 'post',
+						'per_page' => 5,
+						'page'     => 1,
+					)
+				);
+				$checks[] = self::smoke_check(
+					'get_users(post) runs',
+					is_array( $users ) || null === $users,
+					is_array( $users ) ? count( $users ) . ' row(s)' : 'null'
+				);
+			} catch ( Exception $e ) {
+				$checks[] = self::smoke_check( 'get_users(post) runs', false, $e->getMessage() );
+			}
+
+			try {
+				$likers = WP_Ulike_Pulse_Query::get_best_likers( 5, 'all', 1 );
+				$checks[] = self::smoke_check(
+					'get_best_likers runs',
+					is_array( $likers ) || null === $likers,
+					is_array( $likers ) ? count( $likers ) . ' row(s)' : 'null'
+				);
+			} catch ( Exception $e ) {
+				$checks[] = self::smoke_check( 'get_best_likers runs', false, $e->getMessage() );
+			}
+
+			if ( class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
+				try {
+					$logs = WP_Ulike_Pulse_Log_Bridge::get_log_rows( 'ulike', 1, 5 );
+					$checks[] = self::smoke_check(
+						'log bridge get_log_rows(ulike) paginates',
+						is_array( $logs ),
+						is_array( $logs ) ? count( $logs ) . ' row(s)' : 'fail'
+					);
+					$count = WP_Ulike_Pulse_Log_Bridge::count_log_rows( 'ulike' );
+					$checks[] = self::smoke_check(
+						'log bridge count_log_rows(ulike)',
+						is_numeric( $count ),
+						(string) $count
+					);
+				} catch ( Exception $e ) {
+					$checks[] = self::smoke_check( 'log bridge pagination', false, $e->getMessage() );
+				}
+			}
+
+			if ( WP_Ulike_Pulse_Config::MODE_DUAL === $mode ) {
+				try {
+					$posts = WP_Ulike_Pulse_Query::count_logs_for_type( 'post', 'all' );
+					$checks[] = self::smoke_check(
+						'Dual count_logs_for_type(post) is numeric',
+						is_numeric( $posts ),
+						(string) $posts
+					);
+				} catch ( Exception $e ) {
+					$checks[] = self::smoke_check( 'Dual count_logs_for_type(post)', false, $e->getMessage() );
+				}
+			}
+
 			foreach ( $checks as $check ) {
 				if ( ! $check['ok'] ) {
 					++$failed;

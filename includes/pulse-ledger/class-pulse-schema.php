@@ -56,7 +56,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 			`status` enum('active','removed') NOT NULL DEFAULT 'active',
 			`date_time` datetime NOT NULL,
 			`ip` varchar(45) NOT NULL DEFAULT '',
-			`user_id` varchar(20) NOT NULL DEFAULT '0',
+			`user_id` varchar(45) NOT NULL DEFAULT '0',
 			`fingerprint` varchar(64) DEFAULT NULL,
 			`country_code` char(2) DEFAULT NULL,
 			`device` varchar(50) DEFAULT NULL,
@@ -81,6 +81,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 		 */
 	public static function install() {
 		if ( self::table_exists() ) {
+			// Existing installs: keep column shape aligned on upgrade paths.
+			self::ensure_dedupe_token_column();
 			return true;
 		}
 
@@ -167,8 +169,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 			update_option( $marker, 1 );
 		}
 
-		/**
-		 * Bootstrap storage mode after pulse table exists.
+	/**
+	 * Bootstrap storage mode after pulse table exists.
 		 *
 		 * @param bool $is_fresh_install No prior wp_ulike_dbVersion.
 		 * @return void
@@ -210,7 +212,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 		}
 
 	/**
-	 * Build dedupe token for distinct-mode votes.
+	 * Build dedupe token for distinct-mode rows.
+	 *
+	 * One row per (item, identity, kind) — not per engagement_key — so
+	 * like↔dislike and emoji key switches update the same row (matching
+	 * legacy vote semantics and Pro emoji update-by-id).
 	 *
 	 * Identity is the logged-in user_id, or — for guests (user_id 0/empty) —
 	 * the fingerprint. Without this, every guest voting on the same item
@@ -220,7 +226,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 	 * @param string     $item_type   Canonical type.
 	 * @param string     $user_id     Voter identity (logged-in).
 	 * @param string     $kind        Engagement kind.
-	 * @param string     $key         Engagement key.
+	 * @param string     $key         Unused (kept for call-site BC).
 	 * @param string     $fingerprint Guest fingerprint (used when user_id is 0/empty).
 	 * @return string|null Null when no identity is available (cannot dedupe).
 	 */
@@ -229,7 +235,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
 		$user_id   = (string) $user_id;
 		$kind      = sanitize_key( $kind );
-		$key       = sanitize_key( $key );
+		unset( $key ); // Key must not be part of the token (like↔dislike / emoji switch).
 
 		if ( ! $item_id ) {
 			return null;
@@ -251,7 +257,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 			return null;
 		}
 
-		return hash( 'sha256', implode( '|', array( $item_type, $item_id, $identity, $kind, $key ) ), true );
+		return hash( 'sha256', implode( '|', array( $item_type, $item_id, $identity, $kind ) ), true );
 	}
 }
 }

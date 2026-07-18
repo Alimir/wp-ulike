@@ -54,7 +54,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 		}
 
 		/**
-		 * Upsert distinct-mode vote (one row per user+item+key).
+		 * Upsert distinct-mode row (one row per user+item+kind).
+		 *
+		 * Uses INSERT … ON DUPLICATE KEY UPDATE so concurrent distinct votes
+		 * cannot lose the second writer on a unique dedupe_token race.
 		 *
 		 * @param array<string,mixed> $payload Vote data.
 		 * @return int|false Row ID.
@@ -69,39 +72,118 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 
 			$table = esc_sql( self::table() );
 			$data  = $row['data'];
-			$token = $row['dedupe_token'];
 
-			$existing_id = (int) $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT id FROM `{$table}` WHERE dedupe_token = %s LIMIT 1",
-					$token
-				)
+			$values = array(
+				self::sql_literal( $data['item_id'], 'int' ),
+				self::sql_literal( $data['item_type'], 'string' ),
+				self::sql_literal( $data['engagement_kind'], 'string' ),
+				self::sql_literal( $data['engagement_key'], 'string' ),
+				self::sql_literal( $data['value'], 'int' ),
+				self::sql_literal( $data['status'], 'string' ),
+				self::sql_literal( $data['date_time'], 'string' ),
+				self::sql_literal( $data['ip'], 'string' ),
+				self::sql_literal( $data['user_id'], 'string' ),
+				self::sql_literal( $data['fingerprint'], 'string' ),
+				self::sql_literal( $data['country_code'], 'string' ),
+				self::sql_literal( $data['device'], 'string' ),
+				self::sql_literal( $data['os'], 'string' ),
+				self::sql_literal( $data['browser'], 'string' ),
+				self::sql_literal( $data['dedupe_token'], 'binary' ),
 			);
 
-		if ( $existing_id ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- literals escaped via sql_literal().
+			$sql = "INSERT INTO `{$table}` (
+					item_id, item_type, engagement_kind, engagement_key, value, status,
+					date_time, ip, user_id, fingerprint, country_code, device, os, browser, dedupe_token
+				) VALUES ( " . implode( ', ', $values ) . " )
+				ON DUPLICATE KEY UPDATE
+					engagement_key = VALUES(engagement_key),
+					status = VALUES(status),
+					date_time = VALUES(date_time),
+					ip = VALUES(ip),
+					fingerprint = VALUES(fingerprint),
+					value = VALUES(value),
+					country_code = IF(VALUES(country_code) IS NULL, country_code, VALUES(country_code)),
+					device = IF(VALUES(device) IS NULL, device, VALUES(device)),
+					os = IF(VALUES(os) IS NULL, os, VALUES(os)),
+					browser = IF(VALUES(browser) IS NULL, browser, VALUES(browser)),
+					id = LAST_INSERT_ID(id)";
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$result = $wpdb->query( $sql );
+			if ( false === $result ) {
+				return false;
+			}
+
+			$id = (int) $wpdb->insert_id;
+			if ( ! $id ) {
+				return false;
+			}
+
+			// Drop legacy key-scoped sibling rows (pre kind-scoped token) so
+			// like↔dislike / emoji switches cannot leave two active rows.
+			$retired = self::retire_sibling_distinct_rows( $id, $data );
+
+			if ( ! self::$migrating ) {
+				// MySQL: 1 = inserted, 2 = updated existing unique row.
+				// Retiring siblings means this is a logical update of an older
+				// key-scoped row even when the new token caused an INSERT.
+				if ( 1 === (int) $result && $retired < 1 ) {
+					self::fire_inserted( $id, $payload, $row['legacy_status'] );
+				} else {
+					self::fire_updated( $id, $payload, $row['legacy_status'] );
+				}
+			}
+
+			return $id;
+		}
+
+		/**
+		 * Update an existing pulse row by primary key (Pro emoji/star toggles).
+		 *
+		 * Emoji keeps one row per user+item+kind and may change engagement_key;
+		 * key-scoped upsert cannot express that switch safely.
+		 *
+		 * @param int                 $id      Row ID.
+		 * @param array<string,mixed> $payload Engagement payload.
+		 * @return int|false
+		 */
+		public static function update_by_id( $id, array $payload ) {
+			global $wpdb;
+
+			$id  = absint( $id );
+			$row = self::normalize_payload( $payload, ! empty( $payload['is_distinct'] ) );
+			if ( ! $id || ! $row ) {
+				return false;
+			}
+
+			$data          = $row['data'];
 			$update_data   = array(
 				'engagement_key' => $data['engagement_key'],
 				'status'         => $data['status'],
 				'date_time'      => $data['date_time'],
 				'ip'             => $data['ip'],
 				'fingerprint'    => $data['fingerprint'],
+				'value'          => $data['value'],
 			);
-			$update_format = array( '%s', '%s', '%s', '%s', '%s' );
+			$update_format = array( '%s', '%s', '%s', '%s', '%s', '%d' );
 
-			// Backfill geo/device columns only when explicitly provided (e.g.
-			// migration re-run). Live re-votes leave them null in the payload
-			// so we do NOT wipe geo data that Pro's hook wrote on the prior vote.
+			if ( null !== $data['dedupe_token'] ) {
+				$update_data['dedupe_token'] = $data['dedupe_token'];
+				$update_format[]            = '%s';
+			}
+
 			foreach ( array( 'country_code', 'device', 'os', 'browser' ) as $geo_col ) {
 				if ( null !== $data[ $geo_col ] ) {
-					$update_data[ $geo_col ]   = $data[ $geo_col ];
-					$update_format[]           = '%s';
+					$update_data[ $geo_col ] = $data[ $geo_col ];
+					$update_format[]         = '%s';
 				}
 			}
 
 			$updated = $wpdb->update(
 				self::table(),
 				$update_data,
-				array( 'id' => $existing_id ),
+				array( 'id' => $id ),
 				$update_format,
 				array( '%d' )
 			);
@@ -111,12 +193,35 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			}
 
 			if ( ! self::$migrating ) {
-				self::fire_updated( $existing_id, $payload, $row['legacy_status'] );
+				self::fire_updated( $id, $payload, $row['legacy_status'] );
 			}
-			return $existing_id;
+
+			return $id;
 		}
 
-			return self::insert( $payload );
+		/**
+		 * Escape a value for raw SQL (supports NULL).
+		 *
+		 * @param mixed  $value Value.
+		 * @param string $type  int|string|binary.
+		 * @return string
+		 */
+		private static function sql_literal( $value, $type ) {
+			global $wpdb;
+
+			if ( null === $value ) {
+				return 'NULL';
+			}
+
+			if ( 'int' === $type ) {
+				return (string) (int) $value;
+			}
+
+			if ( 'binary' === $type ) {
+				return "X'" . bin2hex( (string) $value ) . "'";
+			}
+
+			return $wpdb->prepare( '%s', (string) $value );
 		}
 
 		/**
@@ -162,6 +267,15 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			'browser'        => isset( $legacy_row->browser ) ? (string) $legacy_row->browser : null,
 			'is_distinct'    => $is_distinct,
 		);
+
+		// Keep migrated historical rows out of the dual "live" pulse slice.
+		// Legacy date_time may be site-local while dual_since is UTC; clamping
+		// prevents those rows from also matching date_time >= dual_since and
+		// double-counting in merged reads.
+		$since = WP_Ulike_Pulse_Config::dual_since();
+		if ( $since && isset( $payload['date_time'] ) && $payload['date_time'] >= $since ) {
+			$payload['date_time'] = gmdate( 'Y-m-d H:i:s', strtotime( $since . ' UTC' ) - 1 );
+		}
 
 			if ( $is_distinct ) {
 				self::$migrating = true;
@@ -240,13 +354,36 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 	}
 
 	/**
-	 * Delete all vote rows for an item (post/comment cleanup).
+	 * Delete classic vote rows for an item (keeps emoji/star intact).
 	 *
 	 * @param int    $item_id       Item ID.
 	 * @param string $setting_type  wp_ulike_setting_type slug.
 	 * @return int Rows removed across pulse and legacy tables.
 	 */
 	public static function delete_item_votes( $item_id, $setting_type ) {
+		return self::delete_item_rows( $item_id, $setting_type, WP_Ulike_Pulse_Registry::KIND_VOTE );
+	}
+
+	/**
+	 * Delete all pulse engagement rows for an item (votes + emoji + star) and legacy votes.
+	 *
+	 * Used on content deletion so Pro engagements are not left orphaned.
+	 *
+	 * @param int    $item_id      Item ID.
+	 * @param string $setting_type Setting type slug.
+	 * @return int Rows removed.
+	 */
+	public static function delete_item_all( $item_id, $setting_type ) {
+		return self::delete_item_rows( $item_id, $setting_type, null );
+	}
+
+	/**
+	 * @param int         $item_id       Item ID.
+	 * @param string      $setting_type  Setting type slug.
+	 * @param string|null $kind          Pulse engagement_kind or null for all kinds.
+	 * @return int
+	 */
+	private static function delete_item_rows( $item_id, $setting_type, $kind ) {
 			global $wpdb;
 
 			$deleted   = 0;
@@ -254,14 +391,18 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			$item_type = WP_Ulike_Pulse_Registry::from_setting_type( $setting_type );
 
 			if ( WP_Ulike_Pulse_Schema::table_exists() ) {
-				$deleted += (int) $wpdb->delete(
-					self::table(),
-					array(
-						'item_id'   => $item_id,
-						'item_type' => $item_type,
-					),
-					array( '%d', '%s' )
+				$where = array(
+					'item_id'   => $item_id,
+					'item_type' => $item_type,
 				);
+				$format = array( '%d', '%s' );
+
+				if ( null !== $kind ) {
+					$where['engagement_kind'] = $kind;
+					$format[]                 = '%s';
+				}
+
+				$deleted += (int) $wpdb->delete( self::table(), $where, $format );
 			}
 
 			$source = WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type );
@@ -307,8 +448,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			$user_id = isset( $payload['user_id'] ) ? (string) $payload['user_id'] : '0';
 			$kind    = isset( $payload['engagement_kind'] ) ? sanitize_key( $payload['engagement_kind'] ) : WP_Ulike_Pulse_Registry::KIND_VOTE;
 
-		// Distinct rows get a kind-scoped dedupe token enforcing one-row-per-
-		// user+item+key. Append (multi-vote) rows get an explicit NULL —
+		// Distinct rows get a kind-scoped dedupe token (one row per
+		// user+item+kind). Append (multi-vote) rows get an explicit NULL —
 		// wpdb::insert() emits literal NULL for null values (WP 4.4+), and the
 		// idx_dedupe UNIQUE index allows multiple NULLs, so append rows never
 		// collide. Explicit NULL is used (rather than omitting the column) so
@@ -354,6 +495,65 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 	}
 
 		/**
+		 * Remove other distinct rows for the same identity+item+kind.
+		 *
+		 * Covers sites that still have key-scoped tokens (like + dislike both
+		 * active) after the kind-scoped token change.
+		 *
+		 * @param int                 $keep_id Winning row ID.
+		 * @param array<string,mixed> $data    Normalized row data.
+		 * @return int Rows deleted.
+		 */
+		private static function retire_sibling_distinct_rows( $keep_id, array $data ) {
+			global $wpdb;
+
+			$keep_id = absint( $keep_id );
+			if ( ! $keep_id ) {
+				return 0;
+			}
+
+			$table = esc_sql( self::table() );
+			$user  = (string) $data['user_id'];
+
+			if ( '' !== $user && '0' !== $user ) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$deleted = $wpdb->query(
+					$wpdb->prepare(
+						"DELETE FROM `{$table}`
+						WHERE item_id = %d AND item_type = %s AND engagement_kind = %s
+						AND user_id = %s AND id != %d",
+						(int) $data['item_id'],
+						$data['item_type'],
+						$data['engagement_kind'],
+						$user,
+						$keep_id
+					)
+				);
+				return false === $deleted ? 0 : (int) $deleted;
+			}
+
+			$fingerprint = isset( $data['fingerprint'] ) ? (string) $data['fingerprint'] : '';
+			if ( '' === $fingerprint ) {
+				return 0;
+			}
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$deleted = $wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM `{$table}`
+					WHERE item_id = %d AND item_type = %s AND engagement_kind = %s
+					AND fingerprint = %s AND user_id IN ('0','') AND id != %d",
+					(int) $data['item_id'],
+					$data['item_type'],
+					$data['engagement_kind'],
+					$fingerprint,
+					$keep_id
+				)
+			);
+			return false === $deleted ? 0 : (int) $deleted;
+		}
+
+		/**
 		 * @return string
 		 */
 		private static function table() {
@@ -367,6 +567,15 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 		 * @return void
 		 */
 		private static function fire_inserted( $id, array $payload, $legacy_status ) {
+			$kind = isset( $payload['engagement_kind'] )
+				? sanitize_key( $payload['engagement_kind'] )
+				: WP_Ulike_Pulse_Registry::KIND_VOTE;
+
+			// Non-vote rows are written for Pro; Pro owns engagement_* hooks.
+			if ( WP_Ulike_Pulse_Registry::KIND_VOTE !== $kind ) {
+				return;
+			}
+
 			do_action(
 				'wp_ulike_data_inserted',
 				array(
@@ -390,6 +599,15 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 		 * @return void
 		 */
 		private static function fire_updated( $id, array $payload, $legacy_status ) {
+			$kind = isset( $payload['engagement_kind'] )
+				? sanitize_key( $payload['engagement_kind'] )
+				: WP_Ulike_Pulse_Registry::KIND_VOTE;
+
+			// Non-vote rows are written for Pro; Pro owns engagement_* hooks.
+			if ( WP_Ulike_Pulse_Registry::KIND_VOTE !== $kind ) {
+				return;
+			}
+
 			do_action(
 				'wp_ulike_data_updated',
 				array(
