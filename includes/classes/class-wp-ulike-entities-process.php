@@ -546,7 +546,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			'wp_ulike_delete_vote_data',
 			absint( $item_id ),
 			WP_Ulike_Pulse_Registry::from_setting_type( $this->typeSettings->getType() ),
-			array( 'storage' => 'legacy', 'user_id' => $this->currentUser ),
+			$this->typeSettings,
 			(int) $deleted
 		);
 	}

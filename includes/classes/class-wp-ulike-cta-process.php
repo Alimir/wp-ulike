@@ -143,9 +143,11 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 				'status'      => $this->getCurrentStatus(),
 				'has_log'     => ! $this->getPrevStatus() ? 0 : 1,
 				'slug'        => $this->parsedArgs['item_type'],
-				'item_type'   => $this->settings->getItemType(),
 				'table'       => $this->settings->getLegacyTableSuffix(),
-				'is_distinct' => $this->isDistinct()
+				'is_distinct' => $this->isDistinct(),
+				// Appended, not inserted, to keep positional args (do_action_ref_array)
+				// stable for existing add_action(..., $priority, $accepted_args>6) callbacks.
+				'item_type'   => $this->settings->getItemType(),
 			);
 		}
 

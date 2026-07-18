@@ -70,7 +70,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 			KEY `idx_rankings` (`item_type`,`engagement_kind`,`engagement_key`,`status`,`date_time`,`item_id`),
 			KEY `idx_fingerprint` (`item_type`,`item_id`,`fingerprint`),
 			KEY `idx_country_date` (`country_code`,`date_time`),
-			KEY `idx_device_date` (`device`,`date_time`)
+			KEY `idx_device_date` (`device`,`date_time`),
+			KEY `idx_type_status_date` (`item_type`,`status`,`date_time`),
+			KEY `idx_engager_ranking` (`engagement_kind`,`engagement_key`,`status`,`date_time`)
 		) {$collate};";
 		}
 

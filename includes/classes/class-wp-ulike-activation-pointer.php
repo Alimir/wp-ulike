@@ -207,6 +207,4 @@ if ( ! class_exists( 'WP_Ulike_Activation_Pointer' ) ) {
 			wp_send_json_success();
 		}
 	}
-
-	WP_Ulike_Activation_Pointer::init();
 }

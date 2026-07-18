@@ -345,7 +345,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 				'wp_ulike_delete_vote_data',
 				absint( $item_id ),
 				$item_type,
-				array( 'storage' => 'pulse', 'user_id' => $user_id ),
+				wp_ulike_setting_type::get_instance( $item_type ),
 				(int) $deleted
 			);
 		}

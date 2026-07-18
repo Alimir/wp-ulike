@@ -94,7 +94,12 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 		 * @return mixed
 		 */
 		public static function remember( $logical_key, $callback, $ttl = self::TTL_DEFAULT, $cache_empty = true ) {
-			$cached = self::get( $logical_key );
+			// Resolve the versioned key once and reuse it for both get/set --
+			// if we recomputed it after running the callback, a concurrent
+			// bump() in between would write this (now-stale) value under the
+			// NEW version's key instead of leaving it a clean cache miss.
+			$key    = self::key( $logical_key );
+			$cached = wp_cache_get( $key, self::group() );
 
 			if ( false !== $cached ) {
 				return $cached;
@@ -103,7 +108,7 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 			$value = call_user_func( $callback );
 
 			if ( $cache_empty || ! empty( $value ) || is_numeric( $value ) ) {
-				self::set( $logical_key, $value, $ttl );
+				wp_cache_set( $key, $value, self::group(), (int) $ttl );
 			}
 
 			return $value;
@@ -135,7 +140,10 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 		 * @return mixed
 		 */
 		public static function remember_stats( $logical_key, $callback, $ttl = self::TTL_DEFAULT, $cache_empty = true ) {
-			$cached = self::get_stats( $logical_key );
+			// See remember() -- resolve the versioned key once so a concurrent
+			// bump() between get/set can't poison the new version's slot.
+			$key    = self::key( $logical_key );
+			$cached = wp_cache_get( $key, self::stats_group() );
 
 			if ( false !== $cached ) {
 				return $cached;
@@ -144,7 +152,7 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 			$value = call_user_func( $callback );
 
 			if ( $cache_empty || ! empty( $value ) || is_numeric( $value ) ) {
-				self::set_stats( $logical_key, $value, $ttl );
+				wp_cache_set( $key, $value, self::stats_group(), (int) $ttl );
 			}
 
 			return $value;

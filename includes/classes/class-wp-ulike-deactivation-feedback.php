@@ -231,6 +231,4 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 			);
 		}
 	}
-
-	WP_Ulike_Deactivation_Feedback::init();
 }

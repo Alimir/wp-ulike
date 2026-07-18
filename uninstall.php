@@ -144,12 +144,15 @@ class wp_ulike_uninstall {
 
 		delete_option( 'widget_wp_ulike' );
 
-		// Remove all wp_ulike_* options (free, Pro, pulse, legacy, unknown).
+		// Remove wp_ulike_* options (free, pulse, legacy, unknown), but keep Pro's
+		// license options intact -- consistent with delete_user_meta() below, so
+		// uninstalling Free doesn't silently de-license a co-installed Pro.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM `{$wpdb->options}` WHERE option_name LIKE %s",
-				$wpdb->esc_like( 'wp_ulike_' ) . '%'
+				"DELETE FROM `{$wpdb->options}` WHERE option_name LIKE %s AND option_name NOT LIKE %s",
+				$wpdb->esc_like( 'wp_ulike_' ) . '%',
+				$wpdb->esc_like( 'wp_ulike_pro_' ) . '%'
 			)
 		);
 	}

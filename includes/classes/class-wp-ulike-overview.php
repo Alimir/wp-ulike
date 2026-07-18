@@ -1115,6 +1115,4 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			return true;
 		}
 	}
-
-	WP_Ulike_Overview::init();
 }

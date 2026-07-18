@@ -45,7 +45,13 @@ class WpUlikeInit {
    */
   public function plugins_loaded(){
     wp_ulike_maybe_backfill_first_activated_at();
-    $this->maybe_upgrade_database();
+
+    // Schema checks/upgrades only need to run where they can be observed and
+    // acted on (wp-admin, WP-Cron); skip them on plain, unauthenticated
+    // frontend requests to avoid extra queries and DDL on every pageview.
+    if ( self::is_admin_backend() || self::is_cron() ) {
+      $this->maybe_upgrade_database();
+    }
   }
 
   private function maybe_upgrade_database(){

@@ -456,7 +456,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			// Merged mode: dedup across legacy + pulse via UNION so a voter who
 			// appears in both stores is counted exactly once.
-		return self::count_merged_unique_voters_for_type( $item_type, $table, $period_limit );
+		return self::count_merged_unique_voters_for_type( $item_type, $table, $source['column'], $period_limit );
 	}
 
 	/**
@@ -1063,9 +1063,14 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		// then unliked post-cutover (pulse status=removed). The legacy list
 		// would still include them, so subtract pulse "removed" users for this
 		// item before merging. Pulse active likers are already in $pulse_users.
-		$removed_users = self::fetch_pulse_unlikers( $item_id, $type, WP_Ulike_Pulse_Config::dual_since() );
-		if ( ! empty( $removed_users ) ) {
-			$users = array_diff( (array) $users, $removed_users );
+		// $users is already capped at $limit above, so only that bounded set of
+		// candidate user IDs needs checking -- not every unlike ever recorded
+		// for the item (unbounded on a viral post with heavy like/unlike churn).
+		if ( ! empty( $users ) ) {
+			$removed_users = self::fetch_pulse_unlikers( $item_id, $type, WP_Ulike_Pulse_Config::dual_since(), (array) $users );
+			if ( ! empty( $removed_users ) ) {
+				$users = array_diff( (array) $users, $removed_users );
+			}
 		}
 
 		$merged = array_values( array_unique( array_merge( (array) $users, (array) $pulse_users ) ) );
@@ -1347,24 +1352,52 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * Merged-mode distinct voters for one type — UNION dedup across legacy
 		 * and pulse so voters active in both stores are counted once.
 		 *
+		 * A legacy (user, item) pair is excluded when that user's latest
+		 * post-cutover pulse action on the SAME item is an unlike/removal —
+		 * mirrors the per-item exclusion in count_merged_distinct_item() so a
+		 * user who liked pre-cutover then unliked post-cutover isn't still
+		 * counted as a unique voter for the type.
+		 *
 		 * @param string $item_type    Canonical item type.
 		 * @param string $legacy_table Escaped legacy table name.
+		 * @param string $legacy_column Legacy item-id column name (e.g. post_id).
 		 * @param string $period_limit Period SQL fragment.
 		 * @return int
 		 */
-		private static function count_merged_unique_voters_for_type( $item_type, $legacy_table, $period_limit ) {
+		private static function count_merged_unique_voters_for_type( $item_type, $legacy_table, $legacy_column, $period_limit ) {
 			global $wpdb;
 
 			$pulse_table = esc_sql( WP_Ulike_Pulse_Schema::table() );
+			$column      = esc_sql( $legacy_column );
 			$since       = WP_Ulike_Pulse_Config::dual_since();
 			$legacy_per  = str_replace( 'date_time', 'l.date_time', $period_limit );
 			$eng_per     = str_replace( 'date_time', 'e.date_time', $period_limit );
+
+			$unliked_sql = '';
+			if ( $since ) {
+				$unliked_sql = $wpdb->prepare(
+					" AND NOT EXISTS (
+						SELECT 1 FROM `{$pulse_table}` p
+						INNER JOIN (
+							SELECT item_id, user_id, MAX(id) AS max_id
+							FROM `{$pulse_table}`
+							WHERE item_type = %s AND engagement_kind = %s AND date_time >= %s
+							GROUP BY item_id, user_id
+						) latest ON p.id = latest.max_id
+						WHERE p.item_id = l.`{$column}` AND CAST(p.user_id AS CHAR) = CAST(l.user_id AS CHAR) AND p.status = %s
+					)",
+					WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ),
+					WP_Ulike_Pulse_Registry::KIND_VOTE,
+					$since,
+					WP_Ulike_Pulse_Vote_Map::ROW_REMOVED
+				);
+			}
 
 			return (int) $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT COUNT(DISTINCT user_id) FROM (
 						SELECT CAST(l.user_id AS CHAR) AS user_id FROM `{$legacy_table}` l
-						WHERE l.status IN ('like','dislike') {$legacy_per}
+						WHERE l.status IN ('like','dislike') {$legacy_per}{$unliked_sql}
 						UNION
 						SELECT CAST(e.user_id AS CHAR) AS user_id FROM `{$pulse_table}` e
 						WHERE e.item_type = %s AND e.engagement_kind = %s AND e.status = 'active'
@@ -1977,11 +2010,19 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 	 * @param string $since   Dual-since cutoff (mysql datetime).
 	 * @return array<int,string>
 	 */
-	private static function fetch_pulse_unlikers( $item_id, $type, $since = '' ) {
+	private static function fetch_pulse_unlikers( $item_id, $type, $since = '', $candidate_users = array() ) {
 		global $wpdb;
 
-		$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
-		$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+		// Nothing to check against -- avoid an unbounded scan of every unlike
+		// ever recorded for the item when the caller only cares whether a
+		// small, already-limited set of candidate user IDs is in it.
+		if ( empty( $candidate_users ) ) {
+			return array();
+		}
+
+		$table        = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		$since_sql    = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+		$placeholders = implode( ',', array_fill( 0, count( $candidate_users ), '%s' ) );
 
 		// Users whose LATEST action on this item is an unlike (status=removed).
 		// A user who unliked then re-liked has a newer active row, so they are
@@ -1993,15 +2034,22 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				INNER JOIN (
 					SELECT MAX(id) AS max_id
 					FROM `{$table}`
-					WHERE item_id = %d AND item_type = %s AND engagement_kind = %s{$since_sql}
+					WHERE item_id = %d AND item_type = %s AND engagement_kind = %s AND user_id IN ({$placeholders}){$since_sql}
 					GROUP BY user_id
 				) latest ON p.id = latest.max_id
 				WHERE p.status = %s AND p.engagement_key = %s",
-				absint( $item_id ),
-				WP_Ulike_Pulse_Registry::from_setting_type( $type ),
-				WP_Ulike_Pulse_Registry::KIND_VOTE,
-				WP_Ulike_Pulse_Vote_Map::ROW_REMOVED,
-				WP_Ulike_Pulse_Vote_Map::KEY_LIKE
+				array_merge(
+					array(
+						absint( $item_id ),
+						WP_Ulike_Pulse_Registry::from_setting_type( $type ),
+						WP_Ulike_Pulse_Registry::KIND_VOTE,
+					),
+					array_map( 'strval', $candidate_users ),
+					array(
+						WP_Ulike_Pulse_Vote_Map::ROW_REMOVED,
+						WP_Ulike_Pulse_Vote_Map::KEY_LIKE,
+					)
+				)
 			)
 		);
 	}

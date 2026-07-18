@@ -305,6 +305,18 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 						)
 					);
 
+					// $wpdb->get_results() returns null specifically on a DB error,
+					// vs an empty array when the source is genuinely fully migrated.
+					// Treating both as "complete" would silently stop migrating a
+					// source (and report success) on a transient DB error instead of
+					// retrying it on the next scheduled batch.
+					if ( null === $rows ) {
+						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+							error_log( sprintf( 'WP ULike Pulse: batch query failed for source %s — %s', $slug, $wpdb->last_error ) );
+						}
+						continue;
+					}
+
 					if ( empty( $rows ) ) {
 						$progress['sources'][ $slug ]['complete'] = true;
 						continue;

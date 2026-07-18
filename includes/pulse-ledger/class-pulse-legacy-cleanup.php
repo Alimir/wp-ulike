@@ -14,6 +14,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 	final class WP_Ulike_Pulse_Legacy_Cleanup {
 
 		const OPTION_DROPPED_AT = 'wp_ulike_pulse_legacy_dropped_at';
+		const VERIFY_CACHE_TRANSIENT = 'wp_ulike_pulse_can_drop_legacy';
+		const VERIFY_CACHE_TTL       = 60;
 
 		/**
 		 * @return bool
@@ -46,12 +48,16 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 		/**
 		 * Whether it is safe to permanently drop legacy tables.
 		 *
-		 * Forces a deep COUNT(*) verification — slow on huge tables but
-		 * justified because drop_legacy_tables() is irreversible.
+		 * Forces a deep COUNT(*)/COUNT(DISTINCT) verification -- slow on huge
+		 * (multi-million-row) tables. The admin page renders this on every
+		 * view, so the result is cached briefly; drop_legacy_tables() always
+		 * passes $bypass_cache=true to force a fresh check immediately before
+		 * the irreversible DROP, never trusting a possibly-stale cached "ok".
 		 *
+		 * @param bool $bypass_cache Force a fresh deep verify.
 		 * @return bool
 		 */
-		public static function can_drop_legacy() {
+		public static function can_drop_legacy( $bypass_cache = false ) {
 			if ( WP_Ulike_Pulse_Config::MODE_PULSE !== WP_Ulike_Pulse_Config::mode() ) {
 				return false;
 			}
@@ -60,8 +66,19 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 				return false;
 			}
 
+			if ( ! $bypass_cache ) {
+				$cached = get_transient( self::VERIFY_CACHE_TRANSIENT );
+				if ( false !== $cached ) {
+					return (bool) $cached;
+				}
+			}
+
 			$verify = WP_Ulike_Pulse_Sync::verify( true );
-			return ! empty( $verify['ok'] );
+			$ok     = ! empty( $verify['ok'] );
+
+			set_transient( self::VERIFY_CACHE_TRANSIENT, $ok, self::VERIFY_CACHE_TTL );
+
+			return $ok;
 		}
 
 		/**
@@ -70,7 +87,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 		public static function drop_legacy_tables() {
 			global $wpdb;
 
-			if ( ! self::can_drop_legacy() ) {
+			// Bypass the cache used for admin-page rendering: this action is
+			// irreversible, so it must re-verify against current data, not a
+			// result that may be up to VERIFY_CACHE_TTL seconds stale.
+			if ( ! self::can_drop_legacy( true ) ) {
 				return array(
 					'ok'      => false,
 					'dropped' => array(),
