@@ -87,13 +87,23 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             );
 
             // Add minified CSS/JS (always use minified versions) - Free plugin assets
+            // Cache-bust with plugin version so customizer preview picks up updates.
+            $ver = defined( 'WP_ULIKE_VERSION' ) ? WP_ULIKE_VERSION : '1.0.0';
             $assets['css'][] = array(
-                'url' => WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css',
-                'source' => 'free'
+                'url'    => add_query_arg( 'ver', $ver, WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css' ),
+                'source' => 'free',
+                'ver'    => $ver,
+            );
+            // Preview-only layout helpers (gallery labels, scroll, non-interactive buttons).
+            $assets['css'][] = array(
+                'url'    => add_query_arg( 'ver', $ver, WP_ULIKE_ASSETS_URL . '/css/customizer-preview.css' ),
+                'source' => 'free',
+                'ver'    => $ver,
             );
             $assets['js'][] = array(
-                'url' => WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js',
-                'source' => 'free'
+                'url'    => add_query_arg( 'ver', $ver, WP_ULIKE_ASSETS_URL . '/js/wp-ulike.min.js' ),
+                'source' => 'free',
+                'ver'    => $ver,
             );
 
             // Add free plugin localized script
@@ -714,9 +724,25 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             // Add base styles
             $html .= $this->get_preview_base_styles();
 
+            $body_class = 'ulp-customizer-preview';
+            if ( is_rtl() ) {
+                $body_class .= ' rtl';
+            }
+
             $html .= '</head>
-<body' . ( is_rtl() ? ' dir="rtl" class="rtl"' : '' ) . '>
+<body' . ( is_rtl() ? ' dir="rtl"' : '' ) . ' class="' . esc_attr( $body_class ) . '">
     ' . $preview_html;
+
+            // Localized config must load before plugin scripts.
+            if ( isset( $plugin_assets['localized_scripts'] ) && is_array( $plugin_assets['localized_scripts'] ) ) {
+                foreach ( $plugin_assets['localized_scripts'] as $var_name => $script_data ) {
+                    // Support both old format (direct array) and new format (with 'data' and 'source')
+                    $var_data = isset( $script_data['data'] ) ? $script_data['data'] : $script_data;
+                    $html .= '<script>
+                        window.' . esc_js( $var_name ) . ' = ' . wp_json_encode( $var_data ) . ';
+                    </script>';
+                }
+            }
 
             // Include JS files
             if ( ! empty( $js_urls ) && is_array( $js_urls ) ) {
@@ -728,16 +754,21 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 }
             }
 
-            // Add localized scripts from assets
-            if ( isset( $plugin_assets['localized_scripts'] ) && is_array( $plugin_assets['localized_scripts'] ) ) {
-                foreach ( $plugin_assets['localized_scripts'] as $var_name => $script_data ) {
-                    // Support both old format (direct array) and new format (with 'data' and 'source')
-                    $var_data = isset( $script_data['data'] ) ? $script_data['data'] : $script_data;
-                    $html .= '<script>
-                        window.' . esc_js( $var_name ) . ' = ' . wp_json_encode( $var_data ) . ';
-                    </script>';
-                }
-            }
+            // Button gallery: keep CSS :hover, but block real votes in the iframe.
+            $html .= '<script>
+(function () {
+  document.addEventListener("click", function (event) {
+    var btn = event.target && event.target.closest
+      ? event.target.closest(".ulp-customizer-button-preview .wp_ulike_btn")
+      : null;
+    if (!btn) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+  }, true);
+})();
+</script>';
 
             $html .= '</body>
 </html>';
@@ -774,9 +805,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
             background: #f5f5f5;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             min-height: 100vh;
+            overflow-y: auto;
         }
         .wpulike {
             margin: 0;
@@ -815,12 +847,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
             switch ( $template_type ) {
                 case 'button':
-                    // Use shortcode for button preview
-                    echo do_shortcode( '[wp_ulike id="1"]' );
+                    $this->render_button_preview();
                     break;
 
                 case 'toast':
-                    // Render toast notification types
                     $this->render_toast_preview();
                     break;
 
@@ -833,6 +863,66 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         }
 
         /**
+         * Gallery of every like/dislike vote template (not emoji/star).
+         *
+         * Uses real shortcode markup so customizer CSS targets match the frontend.
+         *
+         * @return void
+         */
+        protected function render_button_preview() {
+            $templates = function_exists( 'wp_ulike_generate_templates_list' )
+                ? wp_ulike_generate_templates_list()
+                : array();
+
+            $preview_posts = get_posts(
+                array(
+                    'numberposts' => 1,
+                    'post_status' => 'publish',
+                    'post_type'   => 'post',
+                )
+            );
+            $preview_id = ! empty( $preview_posts[0] ) ? (int) $preview_posts[0]->ID : 1;
+
+            // Customizer styles buttons only — suppress likers/engagers avatars.
+            $hide_likers = static function( $template_args ) {
+                if ( is_array( $template_args ) ) {
+                    $template_args['display_likers'] = 0;
+                }
+                return $template_args;
+            };
+            add_filter( 'wp_ulike_add_templates_args', $hide_likers, 999 );
+
+            echo '<div class="ulp-customizer-preview-root ulp-customizer-button-preview">';
+
+            foreach ( (array) $templates as $style => $template ) {
+                if ( empty( $template['callback'] ) || ! empty( $template['is_locked'] ) ) {
+                    continue;
+                }
+                // Emoji / star have their own customizer sections.
+                if ( ! empty( $template['is_engagement_template'] ) ) {
+                    continue;
+                }
+
+                $label = ! empty( $template['name'] ) ? $template['name'] : $style;
+                echo '<div class="ulp-customizer-button-preview-item">';
+                echo '<p class="ulp-customizer-preview-label">' . esc_html( $label ) . '</p>';
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode markup
+                echo do_shortcode(
+                    sprintf(
+                        '[wp_ulike id="%d" style="%s"]',
+                        $preview_id,
+                        esc_attr( $style )
+                    )
+                );
+                echo '</div>';
+            }
+
+            echo '</div>';
+
+            remove_filter( 'wp_ulike_add_templates_args', $hide_likers, 999 );
+        }
+
+        /**
          * Render toast notification preview
          *
          * @return void
@@ -842,18 +932,21 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 'wpulike-notification',
             );
             ?>
-            <div class="<?php echo esc_attr( implode( ' ', $notification_classes ) ); ?>">
-                <div class="wpulike-message">
-                    <strong><?php esc_html_e( 'Info', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please wait...', 'wp-ulike' ); ?>
-                </div>
-                <div class="wpulike-message wpulike-success">
-                    <strong><?php esc_html_e( 'Success', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'You liked this post.', 'wp-ulike' ); ?>
-                </div>
-                <div class="wpulike-message wpulike-error">
-                    <strong><?php esc_html_e( 'Error', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Something went wrong', 'wp-ulike' ); ?>
-                </div>
-                <div class="wpulike-message wpulike-warning">
-                    <strong><?php esc_html_e( 'Warning', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please check your settings.', 'wp-ulike' ); ?>
+            <div class="ulp-customizer-preview-root ulp-customizer-toast-preview">
+                <p class="ulp-customizer-preview-label"><?php esc_html_e( 'Toast Messages', 'wp-ulike' ); ?></p>
+                <div class="<?php echo esc_attr( implode( ' ', $notification_classes ) ); ?>">
+                    <div class="wpulike-message">
+                        <strong><?php esc_html_e( 'Info', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please wait...', 'wp-ulike' ); ?>
+                    </div>
+                    <div class="wpulike-message wpulike-success">
+                        <strong><?php esc_html_e( 'Success', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'You liked this post.', 'wp-ulike' ); ?>
+                    </div>
+                    <div class="wpulike-message wpulike-error">
+                        <strong><?php esc_html_e( 'Error', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Something went wrong', 'wp-ulike' ); ?>
+                    </div>
+                    <div class="wpulike-message wpulike-warning">
+                        <strong><?php esc_html_e( 'Warning', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please check your settings.', 'wp-ulike' ); ?>
+                    </div>
                 </div>
             </div>
             <?php

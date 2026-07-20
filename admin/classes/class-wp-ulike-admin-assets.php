@@ -133,16 +133,33 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 	 * @return array<string,mixed>|null
 	 */
 	private function get_migration_notice_config() {
+		$url = class_exists( 'WP_Ulike_Pulse_Admin' )
+			? WP_Ulike_Pulse_Admin::get_page_url()
+			: admin_url( 'admin.php?page=wp-ulike-pulse' );
+
+		// After full Pulse cutover, nudge cleanup when legacy tables remain.
+		if (
+			class_exists( 'WP_Ulike_Pulse_Config' )
+			&& WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode()
+			&& class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' )
+			&& WP_Ulike_Pulse_Legacy_Cleanup::legacy_tables_exist()
+			&& ! WP_Ulike_Pulse_Config::is_admin_dismissed()
+		) {
+			return array(
+				'id'       => 'free_pulse_cleanup',
+				'title'    => esc_html__( 'Free up disk space.', 'wp-ulike' ),
+				'message'  => esc_html__( 'Like records already use the faster storage. Remove the old log tables when you are ready to reclaim disk space.', 'wp-ulike' ),
+				'ctaLabel' => esc_html__( 'Review cleanup', 'wp-ulike' ),
+				'ctaUrl'   => esc_url( $url ),
+			);
+		}
+
 		$pending = ( function_exists( 'wp_ulike_pulse_reads_legacy_votes' ) && wp_ulike_pulse_reads_legacy_votes() )
 			|| ( function_exists( 'wp_ulike_pulse_needs_migration' ) && wp_ulike_pulse_needs_migration() );
 
 		if ( ! $pending ) {
 			return null;
 		}
-
-		$url = class_exists( 'WP_Ulike_Pulse_Admin' )
-			? WP_Ulike_Pulse_Admin::get_page_url()
-			: admin_url( 'admin.php?page=wp-ulike-pulse' );
 
 		return array(
 			'id'       => 'free_pulse_migration',

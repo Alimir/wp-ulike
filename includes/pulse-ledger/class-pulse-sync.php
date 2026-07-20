@@ -452,6 +452,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 				$source   = $progress['sources'][ $slug ] ?? array();
 				$imported = (int) ( $source['imported'] ?? 0 );
 				$skipped  = (int) ( $source['skipped'] ?? 0 );
+				// A "failed" row was genuinely attempted and already accounted
+				// for in progress -- the cursor has moved past it and it will
+				// never be retried, so (like skipped rows) it must not count
+				// against the expected pulse total, or verify() would report a
+				// permanent, unresolvable mismatch for a handful of rows that
+				// simply didn't make it (e.g. a transient DB error mid-batch).
+				$failed = (int) ( $source['failed'] ?? 0 );
 
 				if ( empty( $source['complete'] ) ) {
 					$issues[ $slug ] = array(
@@ -473,13 +480,14 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 				$legacy_distinct = self::count_distinct_source_pairs( $config['table'], $config['column'] );
 				if ( $legacy_distinct > 0 ) {
 					$pulse_rows = self::count_pulse_rows( $config['item_type'] );
-					$minimum    = max( 0, $legacy_distinct - $skipped );
+					$minimum    = max( 0, $legacy_distinct - $skipped - $failed );
 					if ( $pulse_rows < $minimum ) {
 						$issues[ $slug ] = array(
 							'reason'  => 'count_mismatch',
 							'legacy'  => $legacy_distinct,
 							'pulse'   => $pulse_rows,
 							'skipped' => $skipped,
+							'failed'  => $failed,
 						);
 					}
 				}
@@ -487,7 +495,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 			}
 
 				$pulse   = self::count_pulse_rows( $config['item_type'] );
-				$minimum = max( 0, $legacy - $skipped );
+				$minimum = max( 0, $legacy - $skipped - $failed );
 
 				if ( $pulse < $minimum ) {
 					$issues[ $slug ] = array(
@@ -495,6 +503,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 						'legacy'  => $legacy,
 						'pulse'   => $pulse,
 						'skipped' => $skipped,
+						'failed'  => $failed,
 					);
 				}
 			}

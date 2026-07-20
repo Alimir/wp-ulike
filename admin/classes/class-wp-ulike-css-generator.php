@@ -359,7 +359,25 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 case 'slider':
                 case 'spinner':
                 case 'number':
-                    // Allow false (disabled), but skip CSS generation for false/empty values
+                    // Allow false (disabled), but skip CSS generation for false/empty values.
+                    // Coerce legacy dimensions-shaped values (width/height) to a single number.
+                    if ( is_array( $value ) ) {
+                        $legacy = '';
+                        if ( isset( $value['width'] ) && $value['width'] !== '' && $value['width'] !== null ) {
+                            $legacy = $value['width'];
+                        } elseif ( isset( $value['height'] ) && $value['height'] !== '' && $value['height'] !== null ) {
+                            $legacy = $value['height'];
+                        }
+                        if ( $legacy === '' || $legacy === null ) {
+                            break;
+                        }
+                        if ( is_string( $legacy ) && preg_match( '/^(\d+(?:\.\d+)?)/', $legacy, $matches ) ) {
+                            $value = $matches[1];
+                        } else {
+                            $value = $legacy;
+                        }
+                    }
+
                     if ( $value !== '' && $value !== null && $value !== false ) {
                         $unit = isset( $field['unit'] ) ? $field['unit'] : '';
                         $property = $output_mode ? $output_mode : 'width';

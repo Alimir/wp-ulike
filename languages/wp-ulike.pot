@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-13T08:25:16+00:00\n"
+"POT-Creation-Date: 2026-07-20T12:20:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
@@ -17,13 +17,13 @@ msgstr ""
 #. Plugin Name of the plugin
 #: admin/classes/class-wp-ulike-admin-pages.php:123
 #: admin/classes/class-wp-ulike-admin-pages.php:124
-#: admin/classes/class-wp-ulike-customizer-api.php:212
+#: admin/classes/class-wp-ulike-customizer-api.php:222
 #: admin/includes/templates/about.php:310
 #: includes/classes/class-wp-ulike-customizer.php:43
-#: includes/classes/class-wp-ulike-overview.php:983
-#: includes/classes/class-wp-ulike-overview.php:999
-#: includes/hooks/privacy.php:91
-#: includes/hooks/privacy.php:176
+#: includes/classes/class-wp-ulike-overview.php:987
+#: includes/classes/class-wp-ulike-overview.php:1003
+#: includes/hooks/privacy.php:117
+#: includes/hooks/privacy.php:202
 #: includes/hooks/third-party.php:648
 msgid "WP ULike"
 msgstr ""
@@ -116,7 +116,7 @@ msgid "Devices"
 msgstr ""
 
 #: admin/admin-ajax.php:287
-#: includes/hooks/privacy.php:88
+#: includes/hooks/privacy.php:90
 msgid "Logs"
 msgstr ""
 
@@ -409,6 +409,7 @@ msgstr ""
 
 #: admin/admin-ajax.php:362
 #: admin/includes/templates/about.php:89
+#: includes/hooks/privacy.php:98
 msgid "Status"
 msgstr ""
 
@@ -437,14 +438,17 @@ msgid "View By"
 msgstr ""
 
 #: admin/admin-ajax.php:369
+#: includes/hooks/privacy.php:105
 msgid "Device"
 msgstr ""
 
 #: admin/admin-ajax.php:370
+#: includes/hooks/privacy.php:106
 msgid "OS"
 msgstr ""
 
 #: admin/admin-ajax.php:371
+#: includes/hooks/privacy.php:107
 msgid "Browser"
 msgstr ""
 
@@ -525,6 +529,7 @@ msgid "Dislikes"
 msgstr ""
 
 #: admin/admin-ajax.php:395
+#: includes/hooks/privacy.php:97
 msgid "Date"
 msgstr ""
 
@@ -533,6 +538,7 @@ msgid "User"
 msgstr ""
 
 #: admin/admin-ajax.php:397
+#: includes/hooks/privacy.php:99
 msgid "IP"
 msgstr ""
 
@@ -577,6 +583,7 @@ msgid "Growth"
 msgstr ""
 
 #: admin/admin-ajax.php:408
+#: includes/hooks/privacy.php:104
 msgid "Country"
 msgstr ""
 
@@ -1250,14 +1257,14 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-pages.php:167
 #: admin/classes/class-wp-ulike-settings-api.php:1343
 #: includes/classes/class-wp-ulike-overview.php:117
-#: includes/plugin.php:132
+#: includes/plugin.php:138
 msgid "Settings"
 msgstr ""
 
 #: admin/admin-ajax.php:598
 #: admin/classes/class-wp-ulike-admin-pages.php:106
 #: admin/includes/templates/about.php:28
-#: includes/plugin.php:134
+#: includes/plugin.php:140
 msgid "Help"
 msgstr ""
 
@@ -1479,139 +1486,277 @@ msgid "Back to engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:653
-msgid "{{count}} engaged users"
+msgid "No registered engagers yet"
 msgstr ""
 
 #: admin/admin-ajax.php:654
-msgid "{{count}} users engaged with {{title}}"
+msgid "No registered engagers for {{title}}"
 msgstr ""
 
 #: admin/admin-ajax.php:655
-msgid "{{count}} engager(s)"
+msgid "Guest votes are counted in totals but only registered members appear here."
 msgstr ""
 
 #: admin/admin-ajax.php:656
-msgid "No engagers"
+#: includes/classes/class-wp-ulike-customizer.php:54
+msgid "Like / Dislike Buttons"
 msgstr ""
 
 #: admin/admin-ajax.php:657
-msgid "No engagers yet"
+msgid "{{count}} engaged users"
 msgstr ""
 
 #: admin/admin-ajax.php:658
-msgid "{{count}} total"
+msgid "{{count}} users engaged with {{title}}"
 msgstr ""
 
 #: admin/admin-ajax.php:659
-msgid "Totals and charts for {{type}}"
+msgid "{{count}} engager(s)"
 msgstr ""
 
 #: admin/admin-ajax.php:660
-msgid "Trends and top content for {{type}}"
+msgid "No engagers"
 msgstr ""
 
 #: admin/admin-ajax.php:661
-msgid "Morning"
+msgid "No engagers yet"
 msgstr ""
 
 #: admin/admin-ajax.php:662
-msgid "Afternoon"
+msgid "{{count}} total"
 msgstr ""
 
 #: admin/admin-ajax.php:663
-msgid "Evening"
+msgid "Totals and charts for {{type}}"
 msgstr ""
 
 #: admin/admin-ajax.php:664
-msgid "Night"
+msgid "Trends and top content for {{type}}"
+msgstr ""
+
+#: admin/admin-ajax.php:665
+msgid "Morning"
+msgstr ""
+
+#: admin/admin-ajax.php:666
+msgid "Afternoon"
 msgstr ""
 
 #: admin/admin-ajax.php:667
-msgid "{{count}} {{interval}} ago"
+msgid "Evening"
 msgstr ""
 
 #: admin/admin-ajax.php:668
-msgid "year"
-msgstr ""
-
-#: admin/admin-ajax.php:669
-msgid "years"
-msgstr ""
-
-#: admin/admin-ajax.php:670
-msgid "month"
+msgid "Night"
 msgstr ""
 
 #: admin/admin-ajax.php:671
-msgid "months"
+msgid "Loading…"
 msgstr ""
 
 #: admin/admin-ajax.php:672
-msgid "week"
+msgid "Close"
 msgstr ""
 
 #: admin/admin-ajax.php:673
-msgid "weeks"
+msgid "See who"
 msgstr ""
 
 #: admin/admin-ajax.php:674
-msgid "day"
+msgid "Reaction"
 msgstr ""
 
 #: admin/admin-ajax.php:675
-msgid "days"
+msgid "Rating"
 msgstr ""
 
 #: admin/admin-ajax.php:676
-msgid "hour"
+msgid "Ratings"
 msgstr ""
 
 #: admin/admin-ajax.php:677
-msgid "hours"
+msgid "ratings"
 msgstr ""
 
 #: admin/admin-ajax.php:678
-msgid "minute"
+msgid "total"
 msgstr ""
 
 #: admin/admin-ajax.php:679
-msgid "minutes"
+msgid "Average rating"
 msgstr ""
 
 #: admin/admin-ajax.php:680
-msgid "second"
+msgid "Star rating"
 msgstr ""
 
 #: admin/admin-ajax.php:681
-msgid "seconds"
+msgid "Star ratings"
 msgstr ""
 
 #: admin/admin-ajax.php:682
-msgid "just now"
+msgid "Star rating template"
+msgstr ""
+
+#: admin/admin-ajax.php:683
+msgid "Star ratings in this period."
+msgstr ""
+
+#: admin/admin-ajax.php:684
+msgid "Emoji reactions"
+msgstr ""
+
+#: admin/admin-ajax.php:685
+msgid "Emoji template"
+msgstr ""
+
+#: admin/admin-ajax.php:686
+msgid "Emoji reactions in this period."
+msgstr ""
+
+#: admin/admin-ajax.php:687
+msgid "Reactions are up {{percent}}% compared to last week."
+msgstr ""
+
+#: admin/admin-ajax.php:688
+msgid "Ratings are up {{percent}}% compared to last week."
+msgstr ""
+
+#: admin/admin-ajax.php:689
+msgid "{{count}} emoji reactions this week — use Top content to find what resonates."
+msgstr ""
+
+#: admin/admin-ajax.php:690
+msgid "{{count}} star ratings this week — use Top content to find what resonates."
+msgstr ""
+
+#: admin/admin-ajax.php:691
+msgid "{{name}} is your top rater — consider a loyalty perk."
+msgstr ""
+
+#: admin/admin-ajax.php:692
+msgid "{{title}} averages ★ {{avg}} — replicate this format."
+msgstr ""
+
+#: admin/admin-ajax.php:693
+msgid "{{title}} leads with {{count}} reactions in this period."
+msgstr ""
+
+#: admin/admin-ajax.php:694
+msgid "★ {{avg}} site average"
+msgstr ""
+
+#: admin/admin-ajax.php:695
+msgid "Device Insights"
+msgstr ""
+
+#: admin/admin-ajax.php:696
+msgid "Intelligence Report"
+msgstr ""
+
+#: admin/admin-ajax.php:697
+msgid "WooCommerce Report"
+msgstr ""
+
+#: admin/admin-ajax.php:698
+#: admin/classes/class-wp-ulike-admin-assets.php:168
+msgid "Upgrade like storage"
+msgstr ""
+
+#: admin/admin-ajax.php:699
+msgid "Unable to load data"
+msgstr ""
+
+#: admin/admin-ajax.php:700
+msgid "Please refresh the page or try again later."
+msgstr ""
+
+#: admin/admin-ajax.php:703
+msgid "{{count}} {{interval}} ago"
+msgstr ""
+
+#: admin/admin-ajax.php:704
+msgid "year"
+msgstr ""
+
+#: admin/admin-ajax.php:705
+msgid "years"
+msgstr ""
+
+#: admin/admin-ajax.php:706
+msgid "month"
+msgstr ""
+
+#: admin/admin-ajax.php:707
+msgid "months"
+msgstr ""
+
+#: admin/admin-ajax.php:708
+msgid "week"
+msgstr ""
+
+#: admin/admin-ajax.php:709
+msgid "weeks"
+msgstr ""
+
+#: admin/admin-ajax.php:710
+msgid "day"
+msgstr ""
+
+#: admin/admin-ajax.php:711
+msgid "days"
 msgstr ""
 
 #: admin/admin-ajax.php:712
-#: admin/admin-ajax.php:742
-#: admin/admin-ajax.php:788
+msgid "hour"
+msgstr ""
+
+#: admin/admin-ajax.php:713
+msgid "hours"
+msgstr ""
+
+#: admin/admin-ajax.php:714
+msgid "minute"
+msgstr ""
+
+#: admin/admin-ajax.php:715
+msgid "minutes"
+msgstr ""
+
+#: admin/admin-ajax.php:716
+msgid "second"
+msgstr ""
+
+#: admin/admin-ajax.php:717
+msgid "seconds"
+msgstr ""
+
+#: admin/admin-ajax.php:718
+msgid "just now"
+msgstr ""
+
+#: admin/admin-ajax.php:748
+#: admin/admin-ajax.php:778
+#: admin/admin-ajax.php:824
 msgid "Error: Settings API not available."
 msgstr ""
 
-#: admin/admin-ajax.php:774
+#: admin/admin-ajax.php:810
 #: admin/classes/class-wp-ulike-settings-api.php:596
 #: admin/classes/class-wp-ulike-settings-api.php:604
 msgid "Invalid request data. Expected an object with setting values."
 msgstr ""
 
-#: admin/admin-ajax.php:819
-#: admin/admin-ajax.php:849
-#: admin/admin-ajax.php:889
-#: admin/admin-ajax.php:918
+#: admin/admin-ajax.php:855
+#: admin/admin-ajax.php:885
+#: admin/admin-ajax.php:925
+#: admin/admin-ajax.php:954
 msgid "Error: Customizer API not available."
 msgstr ""
 
-#: admin/admin-ajax.php:881
-#: admin/classes/class-wp-ulike-customizer-api.php:578
-#: admin/classes/class-wp-ulike-customizer-api.php:585
+#: admin/admin-ajax.php:917
+#: admin/classes/class-wp-ulike-customizer-api.php:588
+#: admin/classes/class-wp-ulike-customizer-api.php:595
 msgid "Invalid request data. Expected an object with customizer values."
 msgstr ""
 
@@ -1704,16 +1849,24 @@ msgstr ""
 msgid "Metrics Dashboard"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-assets.php:149
-msgid "Faster statistics with Pulse storage."
-msgstr ""
-
 #: admin/classes/class-wp-ulike-admin-assets.php:150
-msgid "Your statistics are already complete — WP ULike reads both legacy and Pulse data automatically. Migrating fully to Pulse storage makes charts faster and lets you clean up the old tables."
+msgid "Free up disk space."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-assets.php:151
-msgid "Upgrade like storage"
+msgid "Like records already use the faster storage. Remove the old log tables when you are ready to reclaim disk space."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-assets.php:152
+msgid "Review cleanup"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-assets.php:166
+msgid "Faster statistics with Pulse storage."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-assets.php:167
+msgid "Your statistics are already complete — WP ULike reads both legacy and Pulse data automatically. Migrating fully to Pulse storage makes charts faster and lets you clean up the old tables."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:92
@@ -1723,7 +1876,7 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-pages.php:99
 #: admin/includes/templates/about.php:108
 #: includes/classes/class-wp-ulike-overview.php:129
-#: includes/plugin.php:133
+#: includes/plugin.php:139
 msgid "Statistics"
 msgstr ""
 
@@ -2652,54 +2805,59 @@ msgstr ""
 msgid "Read More"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:606
+#: admin/classes/class-wp-ulike-customizer-api.php:616
 msgid "Customizer settings saved successfully."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:701
+#: admin/classes/class-wp-ulike-customizer-api.php:711
 msgid "WP ULike Customizer Preview"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:829
+#: admin/classes/class-wp-ulike-customizer-api.php:859
 msgid "Template preview not found."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:847
+#: admin/classes/class-wp-ulike-customizer-api.php:936
+#: includes/classes/class-wp-ulike-customizer.php:391
+msgid "Toast Messages"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-customizer-api.php:939
 #: includes/classes/class-wp-ulike-customizer.php:409
 msgid "Info"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:847
+#: admin/classes/class-wp-ulike-customizer-api.php:939
 msgid "Please wait..."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:850
+#: admin/classes/class-wp-ulike-customizer-api.php:942
 #: includes/classes/class-wp-ulike-customizer.php:449
 msgid "Success"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:850
+#: admin/classes/class-wp-ulike-customizer-api.php:942
 msgid "You liked this post."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:853
+#: admin/classes/class-wp-ulike-customizer-api.php:945
 #: includes/classes/class-wp-ulike-customizer.php:489
-#: includes/pro.php:300
+#: includes/pro.php:362
 msgid "Error"
 msgstr ""
 
 #. translators: Generic error message shown when something goes wrong
-#: admin/classes/class-wp-ulike-customizer-api.php:853
+#: admin/classes/class-wp-ulike-customizer-api.php:945
 #: admin/classes/class-wp-ulike-settings-api.php:1100
 msgid "Something went wrong"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:856
+#: admin/classes/class-wp-ulike-customizer-api.php:948
 #: includes/classes/class-wp-ulike-customizer.php:529
 msgid "Warning"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:856
+#: admin/classes/class-wp-ulike-customizer-api.php:948
 msgid "Please check your settings."
 msgstr ""
 
@@ -2989,32 +3147,15 @@ msgstr ""
 msgid "none detected"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-diagnostics.php:564
-#: admin/classes/class-wp-ulike-diagnostics.php:567
-msgid "Action Scheduler"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-diagnostics.php:564
-msgid "available — background migration supported"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-diagnostics.php:568
-msgid "not available"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-diagnostics.php:569
-msgid "Action Scheduler is not present. Migration will use WP-Cron instead, which is slower on large sites. Install WooCommerce or another AS provider for faster background migration."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-logs.php:343
+#: admin/classes/class-wp-ulike-logs.php:398
 msgid "Guest User"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-logs.php:378
+#: admin/classes/class-wp-ulike-logs.php:433
 msgid "Activity Permalink"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-logs.php:405
+#: admin/classes/class-wp-ulike-logs.php:460
 msgid "Not Found!"
 msgstr ""
 
@@ -3896,7 +4037,7 @@ msgstr ""
 
 #: admin/includes/templates/deactivation-feedback-dialog.php:57
 #: includes/classes/class-wp-ulike-overview.php:401
-#: includes/classes/class-wp-ulike-overview.php:1009
+#: includes/classes/class-wp-ulike-overview.php:1013
 msgid "Open Help"
 msgstr ""
 
@@ -3923,10 +4064,6 @@ msgstr ""
 
 #: includes/classes/class-wp-ulike-cta-listener.php:76
 msgid "Unable to obtain lock for this request."
-msgstr ""
-
-#: includes/classes/class-wp-ulike-customizer.php:54
-msgid "Button Templates"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-customizer.php:60
@@ -4037,10 +4174,6 @@ msgstr ""
 
 #: includes/classes/class-wp-ulike-customizer.php:312
 msgid "Counter"
-msgstr ""
-
-#: includes/classes/class-wp-ulike-customizer.php:391
-msgid "Toast Messages"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-customizer.php:443
@@ -4282,7 +4415,7 @@ msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:253
 #: includes/classes/class-wp-ulike-overview.php:734
-#: includes/plugin.php:166
+#: includes/plugin.php:172
 msgid "Documentation"
 msgstr ""
 
@@ -4451,27 +4584,27 @@ msgstr ""
 msgid "exceptions: %s"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:963
+#: includes/classes/class-wp-ulike-overview.php:967
 msgid "WP ULike database tables"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:980
+#: includes/classes/class-wp-ulike-overview.php:984
 msgid "WP ULike database tables are installed"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:988
+#: includes/classes/class-wp-ulike-overview.php:992
 msgid "All database tables required by WP ULike are present."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:996
+#: includes/classes/class-wp-ulike-overview.php:1000
 msgid "WP ULike database tables are missing"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:1004
+#: includes/classes/class-wp-ulike-overview.php:1008
 msgid "Some WP ULike tables are missing. Deactivate and reactivate the plugin, or open Help for details."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:1067
+#: includes/classes/class-wp-ulike-overview.php:1071
 msgid "Invalid settings file. Expected a JSON export from Help → Settings backup."
 msgstr ""
 
@@ -4615,17 +4748,16 @@ msgstr ""
 msgid "Request body is too large."
 msgstr ""
 
-#. translators: 1: datetime, 2: status, 3: IP
-#: includes/hooks/privacy.php:98
-msgid "Date: %1$s, Status: %2$s, IP: %3$s"
+#: includes/hooks/privacy.php:103
+msgid "Fingerprint"
 msgstr ""
 
 #. translators: %d: number of rows removed
-#: includes/hooks/privacy.php:157
+#: includes/hooks/privacy.php:183
 msgid "Removed %d WP ULike log row(s) for this user."
 msgstr ""
 
-#: includes/hooks/privacy.php:188
+#: includes/hooks/privacy.php:214
 msgid "WP ULike vote logs"
 msgstr ""
 
@@ -4710,39 +4842,60 @@ msgstr ""
 msgid "This user has not made any likes."
 msgstr ""
 
-#: includes/pro.php:300
+#. translators: 1: required Pro version, 2: current Pro version, 3: current storage mode
+#: includes/pro.php:86
+msgid "WP ULike is using the new faster like storage (%3$s mode). Please update <strong>WP ULike Pro</strong> to version %1$s or later — your installed Pro version (%2$s) reads from the old tables and may show stale or incomplete statistics until updated."
+msgstr ""
+
+#: includes/pro.php:92
+msgid "Go to Plugins"
+msgstr ""
+
+#: includes/pro.php:362
 msgid "Security check failed. Please try again."
 msgstr ""
 
-#: includes/pro.php:334
+#: includes/pro.php:396
 msgid "Invalid license has been cleared successfully. You can now enter your new valid license key in the WP ULike Pro settings."
 msgstr ""
 
-#: includes/pro.php:357
+#: includes/pro.php:419
 msgid "Important Update Notice"
 msgstr ""
 
-#: includes/pro.php:358
+#: includes/pro.php:420
 msgid "We noticed you're using a version of WP ULike Pro that may have been obtained from outside our official channels. Unfortunately, versions from these sources sometimes contain modified or injected code that could affect your site's performance and security. We strongly recommend updating to the official version to keep your site safe."
 msgstr ""
 
-#: includes/pro.php:359
+#: includes/pro.php:421
 msgid "Here's what to do: Clear your current license key using the button below, uninstall the current Pro version, then download and install the latest version from your account after purchasing. Once you install it, just enter your new license key in the settings."
 msgstr ""
 
-#: includes/pro.php:361
+#: includes/pro.php:423
 msgid "Clear License Key"
 msgstr ""
 
-#: includes/pro.php:369
+#: includes/pro.php:431
 msgid "View Pricing"
 msgstr ""
 
-#: includes/pro.php:372
+#: includes/pro.php:434
 msgid "We're currently offering a special price for users upgrading to the latest version. Questions? We're here to help—just reach out at"
 msgstr ""
 
-#: includes/pulse-ledger/bootstrap.php:189
+#: includes/pulse-ledger/admin/class-pulse-admin.php:267
+msgid "WP ULike: faster like storage is ready"
+msgstr ""
+
+#: includes/pulse-ledger/admin/class-pulse-admin.php:270
+msgid "Move your existing like records to a faster table for better performance on busy sites. Counts and buttons keep working — nothing is deleted."
+msgstr ""
+
+#: includes/pulse-ledger/admin/class-pulse-admin.php:274
+msgid "Begin upgrade"
+msgstr ""
+
+#: includes/pulse-ledger/bootstrap.php:193
 msgid "Plugin not loaded."
 msgstr ""
 

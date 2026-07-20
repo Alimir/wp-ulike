@@ -849,6 +849,48 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		public static function get_best_likers( $limit, $period, $offset = 1, $status = array( 'like', 'dislike' ), $order = 'DESC' ) {
 			global $wpdb;
 
+			$inner = self::vote_events_sql( $period, $status );
+			if ( null === $inner ) {
+				return null;
+			}
+
+			$offset_sql = '';
+			if ( (int) $limit > 0 ) {
+				$off        = $offset > 0 ? ( $offset - 1 ) * $limit : 0;
+				$offset_sql = $wpdb->prepare( ' LIMIT %d, %d', $off, $limit );
+			}
+
+			$order = strtoupper( $order ) === 'ASC' ? 'ASC' : 'DESC';
+
+			// Count only registered WordPress users. Guest votes store ip2long /
+			// fingerprint values in user_id — including them inflates Top Engagers
+			// pagination far beyond rows the UI can resolve.
+			$users = $wpdb->users;
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			return $wpdb->get_results(
+				"SELECT votes.user_id, COUNT(*) AS SumUser FROM ( {$inner} ) AS votes
+				INNER JOIN `{$users}` u ON u.ID = CAST(votes.user_id AS UNSIGNED)
+				GROUP BY votes.user_id ORDER BY SumUser {$order} {$offset_sql}"
+			);
+		}
+
+		/**
+		 * One deduped "vote occurred" row per (user, item_type, item_id), across
+		 * whichever legacy/pulse sources the current read mode uses. Shared by
+		 * get_best_likers()/count_unique_engagers() and by addon plugins that
+		 * need to combine vote counts with their own engagement data in one
+		 * exact SQL ranking, instead of approximating via separate top-N pools
+		 * merged in PHP (which can miss users on deep pages).
+		 *
+		 * @param mixed        $period Period filter.
+		 * @param string|array $status Legacy status filter (e.g. like/dislike).
+		 * @return string|null Parenthesized-safe SQL producing at least a
+		 *                     `user_id` column, or null if no source is available.
+		 */
+		public static function vote_events_sql( $period, $status = array( 'like', 'dislike' ) ) {
+			global $wpdb;
+
 			$period_limit = wp_ulike_get_period_limit_sql( $period );
 			$statuses     = WP_Ulike_Pulse_Vote_Map::normalize_status_filter( $status );
 			$status_in    = implode(
@@ -897,14 +939,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				return null;
 			}
 
-			$offset_sql = '';
-			if ( (int) $limit > 0 ) {
-				$off        = $offset > 0 ? ( $offset - 1 ) * $limit : 0;
-				$offset_sql = $wpdb->prepare( ' LIMIT %d, %d', $off, $limit );
-			}
-
-			$order = strtoupper( $order ) === 'ASC' ? 'ASC' : 'DESC';
-
 			// Merged mode: count distinct (user, item_type, item) so post#5 and
 			// comment#5 do not collapse, and dual stores do not double-count.
 			$inner = implode( ' UNION ALL ', $union );
@@ -912,11 +946,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				$inner = "SELECT DISTINCT user_id, item_type, item_id FROM ( {$inner} ) AS raw_votes";
 			}
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			return $wpdb->get_results(
-				"SELECT user_id, COUNT(*) AS SumUser FROM ( {$inner} ) AS votes
-				GROUP BY user_id ORDER BY SumUser {$order} {$offset_sql}"
-			);
+			return $inner;
 		}
 
 		/**
@@ -973,9 +1003,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				return 0;
 			}
 
+			$users = $wpdb->users;
+
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			return (int) $wpdb->get_var(
-				'SELECT COUNT(DISTINCT user_id) FROM ( ' . implode( ' UNION ', $union ) . ' ) AS engagers'
+				'SELECT COUNT(DISTINCT engagers.user_id) FROM ( ' . implode( ' UNION ', $union ) . " ) AS engagers
+				INNER JOIN `{$users}` u ON u.ID = CAST(engagers.user_id AS UNSIGNED)"
 			);
 		}
 
@@ -1647,7 +1680,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					$column = esc_sql( $source['column'] );
 					$join   = self::popular_content_join( $parsed_args, $info_args, $related_condition, 't', $column );
 					$period = str_replace( 'date_time', 't.date_time', $period_limit );
-					$since_sql = $since ? $wpdb->prepare( ' AND p.date_time >= %s', $since ) : '';
+					// Scope the inner MAX(id) subquery — that table has no alias `p`.
+					$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
 					$user_parts[] = "SELECT t.`{$column}` AS item_ID, CAST(t.user_id AS CHAR) AS user_id
 						FROM `{$table}` t {$join}

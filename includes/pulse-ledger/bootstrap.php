@@ -52,6 +52,7 @@ if ( is_admin() && class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 }
 
 add_action( 'wp_ulike_data_inserted', 'wp_ulike_track_admin_new_vote', 5, 1 );
+add_action( 'wp_ulike_data_updated', 'wp_ulike_track_admin_new_vote', 5, 1 );
 add_action( 'wp_ulike_data_inserted', 'wp_ulike_adjust_statistics_on_vote_insert', 8, 1 );
 add_action( 'wp_ulike_delete_vote_data', 'wp_ulike_adjust_statistics_on_vote_delete', 8, 4 );
 add_action( 'wp_ulike_data_inserted', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 1 );
@@ -59,7 +60,10 @@ add_action( 'wp_ulike_data_updated', array( 'WP_Ulike_Query_Cache', 'bump' ), 10
 add_action( 'wp_ulike_delete_vote_data', array( 'WP_Ulike_Query_Cache', 'bump' ), 10, 4 );
 
 /**
- * Bump admin statistics badge on new vote inserts (not toggles/unlikes).
+ * Bump admin statistics badge on active vote inserts/updates (not unlikes).
+ *
+ * Distinct-mode re-likes fire wp_ulike_data_updated (same row) — still count
+ * as new admin activity so the menu badge stays useful.
  *
  * @param array<string,mixed> $args Hook payload.
  * @return void
