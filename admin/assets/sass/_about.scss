@@ -75,7 +75,7 @@
 
 .wp-ulike-about-getting-started {
 	margin: 0;
-	padding-left: 1.25em;
+	padding-inline-start: 1.25em;
 	font-size: 14px;
 	line-height: 1.6;
 	color: #1d2327;
@@ -192,7 +192,7 @@
 			&::before {
 				content: '▸';
 				display: inline-block;
-				margin-right: 6px;
+				margin-inline-end: 6px;
 				transition: transform 0.15s ease;
 			}
 		}
@@ -772,7 +772,7 @@ hr.wp-ulike-about-card__body + hr,
 
 [dir='rtl'] .wp-ulike-about-meta dd,
 .rtl .wp-ulike-about-meta dd {
-	text-align: left;
+	text-align: start;
 }
 
 [dir='rtl'] .wp-ulike-about-troubleshoot__list,

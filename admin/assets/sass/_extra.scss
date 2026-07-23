@@ -77,8 +77,8 @@
   // About Menu Link
   .wp-ulike-menu-icon {
     .dashicons {
-      margin-left: 6px;
-      margin-right: 0;
+      margin-inline-start: 6px;
+      margin-inline-end: 0;
     }
   }
 
@@ -101,7 +101,7 @@
 
        >th,
        >td {
-         text-align: left;
+         text-align: start;
          padding: $table-cell-padding;
          vertical-align: top;
          border-top: 0;
@@ -253,7 +253,7 @@
       }
 
       .displaying-num {
-        margin-right: 10px;
+        margin-inline-end: 10px;
         font-weight: 600;
       }
     }

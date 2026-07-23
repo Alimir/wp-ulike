@@ -489,6 +489,10 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 			if( $counter_style != '' ){
 				$return_style .= '.wpulike-default .count-box,.wpulike-default .count-box{'.$counter_style.'}.wpulike-default .count-box:before{'.$before_style.'}';
+				if ( ! empty( $customstyle['counter_border'] ) ) {
+					$border = $customstyle['counter_border'];
+					$return_style .= '.rtl .wpulike-default .count-box:before{border-color:'.$border.' transparent transparent '.$border.';}';
+				}
 			}
 		} else {
 			$customizer_options = get_option( 'wp_ulike_customize' );
