@@ -26,7 +26,21 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 		 * older Pro versions query legacy tables directly and would show
 		 * stale/empty statistics after the Pulse migration.
 		 */
-		const REQUIRED_PRO_VERSION = '2.1.4';
+		const REQUIRED_PRO_VERSION = '2.3.0';
+
+		/**
+		 * License status strings mirrored from WP_Ulike_Pro_API.
+		 *
+		 * Defined locally so free plugin code never fatals when an older
+		 * or modified Pro build is missing newer STATUS_* class constants.
+		 */
+		const STATUS_INVALID       = 'invalid';
+		const STATUS_EXPIRED       = 'expired';
+		const STATUS_DISABLED      = 'disabled';
+		const STATUS_DEACTIVATED   = 'deactivated';
+		const STATUS_SITE_INACTIVE = 'site_inactive';
+		const STATUS_MISSING       = 'missing';
+		const STATUS_HTTP_ERROR    = 'http_error';
 
 		/**
 		 * Initialize the validator class.
@@ -117,9 +131,9 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 
 			// Invalid license statuses that should stop the free version
 			$invalid_statuses = [
-				WP_Ulike_Pro_API::STATUS_INVALID,
-				WP_Ulike_Pro_API::STATUS_DISABLED,
-				WP_Ulike_Pro_API::STATUS_MISSING,
+				self::STATUS_INVALID,
+				self::STATUS_DISABLED,
+				self::STATUS_MISSING,
 			];
 
 			$license_key_clean = trim( $license_key );
@@ -292,7 +306,7 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			// Check if it's nulled first (before API call)
 			$license_key_clean = trim( $license_key );
 			if ( self::is_nulled_license( $license_key_clean ) ) {
-				return WP_Ulike_Pro_API::STATUS_INVALID;
+				return self::STATUS_INVALID;
 			}
 
 			// Get license data using cached API data
@@ -305,7 +319,7 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 
 			// If API error or empty, but we have a license key, return invalid
 			// (user entered a key but API can't verify it - likely invalid/nulled)
-			return WP_Ulike_Pro_API::STATUS_INVALID;
+			return self::STATUS_INVALID;
 		}
 
 		/**

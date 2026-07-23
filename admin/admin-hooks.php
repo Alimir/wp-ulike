@@ -169,28 +169,29 @@ function wp_ulike_notice_manager(){
 			// Get license status using the validator class
 			$license_status = WP_Ulike_Pro_Validator::get_license_status();
 
-			// Show notice for users with invalid, expired, disabled, deactivated, or missing licenses
+			// Show notice for users with invalid, expired, disabled, deactivated, or missing licenses.
+			// Use validator constants — older Pro builds may omit STATUS_MISSING / STATUS_HTTP_ERROR.
 			$invalid_license_statuses = [
-				WP_Ulike_Pro_API::STATUS_INVALID,
-				WP_Ulike_Pro_API::STATUS_EXPIRED,
-				WP_Ulike_Pro_API::STATUS_DISABLED,
-				WP_Ulike_Pro_API::STATUS_DEACTIVATED,
-				WP_Ulike_Pro_API::STATUS_SITE_INACTIVE,
-				WP_Ulike_Pro_API::STATUS_MISSING,
-				WP_Ulike_Pro_API::STATUS_HTTP_ERROR,
+				WP_Ulike_Pro_Validator::STATUS_INVALID,
+				WP_Ulike_Pro_Validator::STATUS_EXPIRED,
+				WP_Ulike_Pro_Validator::STATUS_DISABLED,
+				WP_Ulike_Pro_Validator::STATUS_DEACTIVATED,
+				WP_Ulike_Pro_Validator::STATUS_SITE_INACTIVE,
+				WP_Ulike_Pro_Validator::STATUS_MISSING,
+				WP_Ulike_Pro_Validator::STATUS_HTTP_ERROR,
 			];
 
 			// Show notice if license status is invalid, expired, or nulled
 			if( $license_status !== false && $license_status !== null && in_array( $license_status, $invalid_license_statuses, true ) ){
 				$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
 
-				if( $license_status === WP_Ulike_Pro_API::STATUS_EXPIRED ){
+				if( $license_status === WP_Ulike_Pro_Validator::STATUS_EXPIRED ){
 					$status_message = esc_html__( 'Your license has expired', 'wp-ulike' );
-				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_DISABLED ){
+				} elseif( $license_status === WP_Ulike_Pro_Validator::STATUS_DISABLED ){
 					$status_message = esc_html__( 'Your license has been disabled', 'wp-ulike' );
-				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_INVALID || $license_status === WP_Ulike_Pro_API::STATUS_MISSING ){
+				} elseif( $license_status === WP_Ulike_Pro_Validator::STATUS_INVALID || $license_status === WP_Ulike_Pro_Validator::STATUS_MISSING ){
 					$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
-				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_HTTP_ERROR ){
+				} elseif( $license_status === WP_Ulike_Pro_Validator::STATUS_HTTP_ERROR ){
 					$status_message = esc_html__( 'Unable to verify your license', 'wp-ulike' );
 				}
 
