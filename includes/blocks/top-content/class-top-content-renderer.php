@@ -1376,7 +1376,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				array( 'value' => 'all', 'label' => esc_html__( 'All The Times', 'wp-ulike' ) ),
 				array( 'value' => 'year', 'label' => esc_html__( 'This Year', 'wp-ulike' ) ),
 				array( 'value' => 'last_year', 'label' => esc_html__( 'Last Year', 'wp-ulike' ) ),
-				array( 'value' => 'month', 'label' => esc_html__( 'Month', 'wp-ulike' ) ),
+				array( 'value' => 'month', 'label' => esc_html__( 'This Month', 'wp-ulike' ) ),
 				array( 'value' => 'last_month', 'label' => esc_html__( 'Last Month', 'wp-ulike' ) ),
 				array( 'value' => 'week', 'label' => esc_html__( 'This Week', 'wp-ulike' ) ),
 				array( 'value' => 'last_week', 'label' => esc_html__( 'Last Week', 'wp-ulike' ) ),

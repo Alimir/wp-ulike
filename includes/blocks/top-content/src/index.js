@@ -77,7 +77,7 @@ const STATIC_PERIOD_PRESETS = [
 	{ value: 'all', label: __( 'All The Times', 'wp-ulike' ) },
 	{ value: 'year', label: __( 'This Year', 'wp-ulike' ) },
 	{ value: 'last_year', label: __( 'Last Year', 'wp-ulike' ) },
-	{ value: 'month', label: __( 'Month', 'wp-ulike' ) },
+	{ value: 'month', label: __( 'This Month', 'wp-ulike' ) },
 	{ value: 'last_month', label: __( 'Last Month', 'wp-ulike' ) },
 	{ value: 'week', label: __( 'This Week', 'wp-ulike' ) },
 	{ value: 'last_week', label: __( 'Last Week', 'wp-ulike' ) },

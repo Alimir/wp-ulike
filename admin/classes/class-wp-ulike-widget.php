@@ -613,7 +613,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				<select name="<?php echo $this->get_field_name( 'period' ); ?>" style="width:100%;">
 					<option value="all" <?php selected( $instance['period'], "all" ); ?>><?php esc_html_e('All The Times', 'wp-ulike'); ?></option>
 					<option value="year" <?php selected( $instance['period'], "year" ); ?>><?php esc_html_e('Year', 'wp-ulike'); ?></option>
-					<option value="month" <?php selected( $instance['period'], "month" ); ?>><?php esc_html_e('Month', 'wp-ulike'); ?></option>
+					<option value="month" <?php selected( $instance['period'], "month" ); ?>><?php esc_html_e( 'This Month', 'wp-ulike' ); ?></option>
 					<option value="week" <?php selected( $instance['period'], "week" ); ?>><?php esc_html_e('Week', 'wp-ulike'); ?></option>
 					<option value="yesterday" <?php selected( $instance['period'], "yesterday" ); ?>><?php esc_html_e('Yesterday', 'wp-ulike'); ?></option>
 					<option value="today" <?php selected( $instance['period'], "today" ); ?>><?php esc_html_e('Today', 'wp-ulike'); ?></option>

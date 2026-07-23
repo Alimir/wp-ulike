@@ -329,7 +329,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 array(
                     'id'         => 'posts_group',
                     'type'       => 'fieldset',
-                    'title'      => esc_html__('Posts'),
+                    'title'      => esc_html__( 'Posts', 'wp-ulike' ),
                     'fields'     => array_values( apply_filters( 'wp_ulike_panel_post_type_options', $get_content_fields['posts'] ) ),
                     'sanitize'   => 'wp_ulike_sanitize_multiple_select',
                     'display_as' => 'section' // Mark as section menu
@@ -338,7 +338,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 array(
                     'id'         => 'comments_group',
                     'type'       => 'fieldset',
-                    'title'      => esc_html__('Comments'),
+                    'title'      => esc_html__( 'Comments', 'wp-ulike' ),
                     'fields'     => array_values( apply_filters( 'wp_ulike_panel_comment_type_options', $get_content_fields['comments'] ) ),
                     'display_as' => 'section' // Mark as section menu
                 ),
