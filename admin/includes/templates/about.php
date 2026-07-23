@@ -25,7 +25,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 <div class="wrap wp-ulike-about">
 
 	<h1 class="wp-ulike-about__title">
-		<?php esc_html_e( 'Help', 'wp-ulike' ); ?>
+		<?php esc_html_e( 'Overview', 'wp-ulike' ); ?>
 		<?php if ( $is_pro && ! empty( $data['pro_version'] ) ) : ?>
 			<span class="wp-ulike-about__badge wp-ulike-about__badge--pro"><?php echo esc_html( 'Pro ' . $data['pro_version'] ); ?></span>
 		<?php else : ?>
@@ -44,7 +44,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 	<?php elseif ( 'error_json' === $import_flash ) : ?>
 		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Invalid JSON format. Please check your JSON syntax.', 'wp-ulike' ); ?></p></div>
 	<?php elseif ( 'error_payload' === $import_flash ) : ?>
-		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'This file does not look like a WP ULike settings export. Use a file exported from Settings backup in the Help sidebar.', 'wp-ulike' ); ?></p></div>
+		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'This file does not look like a WP ULike settings export. Use a file exported from Settings backup in the Overview sidebar.', 'wp-ulike' ); ?></p></div>
 	<?php elseif ( 'error' === $import_flash ) : ?>
 		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings import failed. Please try again.', 'wp-ulike' ); ?></p></div>
 	<?php endif; ?>
@@ -105,7 +105,12 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 			<div class="wp-ulike-about-card">
 				<div class="wp-ulike-about-card__header">
 					<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'At a glance', 'wp-ulike' ); ?></h2>
-					<a class="wp-ulike-about-card__link" href="<?php echo esc_url( $health['statistics_url'] ?? admin_url( 'admin.php?page=wp-ulike-statistics' ) ); ?>"><?php esc_html_e( 'Statistics', 'wp-ulike' ); ?></a>
+					<span class="wp-ulike-about-card__links">
+						<a class="wp-ulike-about-card__link" href="<?php echo esc_url( $health['statistics_url'] ?? admin_url( 'admin.php?page=wp-ulike-statistics' ) ); ?>"><?php esc_html_e( 'Statistics', 'wp-ulike' ); ?></a>
+						<?php if ( class_exists( 'WP_Ulike_Health' ) ) : ?>
+							<a class="wp-ulike-about-card__link" href="<?php echo esc_url( WP_Ulike_Health::get_site_health_url() ); ?>"><?php echo esc_html( 'Site Health' ); ?></a>
+						<?php endif; ?>
+					</span>
 				</div>
 				<?php if ( ! empty( $data['summary'] ) ) : ?>
 					<p class="wp-ulike-about-summary"><?php echo wp_kses_post( $data['summary'] ); ?></p>
@@ -167,10 +172,6 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 					</p>
 				<?php endif; ?>
 			</div>
-
-			<?php if ( class_exists( 'WP_Ulike_Diagnostics' ) ) : ?>
-				<?php WP_Ulike_Diagnostics::render_health_check_card(); ?>
-			<?php endif; ?>
 
 		<!-- Quick actions -->
 		<div class="wp-ulike-about-card">
@@ -248,7 +249,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 					<?php endif; ?>
 					<p class="wp-ulike-about-upsell__actions">
 						<a class="button button-primary" href="<?php echo esc_url( $data['upgrade_url'] ?? add_query_arg( array( 'utm_source' => 'about-page', 'utm_campaign' => 'gopro', 'utm_medium' => 'wp-dash' ), WP_ULIKE_PLUGIN_URI . 'upgrade/' ) ); ?>" target="_blank" rel="noopener noreferrer">
-							<?php echo esc_html( $upsell['cta_label'] ?? __( 'Explore Pro', 'wp-ulike' ) ); ?>
+							<?php echo esc_html( $upsell['cta_label'] ?? __( 'Get Pro', 'wp-ulike' ) ); ?>
 						</a>
 					</p>
 				</div>

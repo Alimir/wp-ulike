@@ -605,3 +605,60 @@ function wp_ulike_clear_css_generator_cache( $new_values = null ) {
 }
 // Hook to clear CSS cache when customizer is saved
 add_action( 'wp_ulike_customizer_saved', 'wp_ulike_clear_css_generator_cache', 10, 1 );
+
+/**
+ * Auto-display option model (final):
+ *
+ * - Users see "Show Buttons On" (checked = button appears there).
+ * - DB keeps posts_group|auto_display_filter as a hide-list for is_wp_ulike().
+ * - No migration: if the key exists, invert it for the form; if missing, Singular only.
+ * - Save writes a hide-list again (lossless for existing saved values).
+ *
+ * @param array $values Optiwich values.
+ * @return array
+ */
+function wp_ulike_hydrate_auto_display_filter_for_ui( $values ) {
+	if ( ! is_array( $values ) || ! class_exists( 'wp_ulike_setting_repo' ) ) {
+		return $values;
+	}
+
+	if ( empty( $values['posts_group'] ) || ! is_array( $values['posts_group'] ) ) {
+		$values['posts_group'] = array();
+	}
+
+	if ( isset( $values['posts_group']['auto_display_filter'] ) ) {
+		// Existing site: stored hide-list → show-list for the form.
+		$values['posts_group']['auto_display_filter'] = wp_ulike_setting_repo::convertHideFiltersToShowOn(
+			(array) $values['posts_group']['auto_display_filter']
+		);
+	} else {
+		// Never saved: product default (Singular).
+		$values['posts_group']['auto_display_filter'] = wp_ulike_setting_repo::getAutoDisplayShowOnDefault();
+	}
+
+	return $values;
+}
+add_filter( 'wp_ulike_optiwich_values', 'wp_ulike_hydrate_auto_display_filter_for_ui' );
+
+/**
+ * Show-list from the form → hide-list for DB.
+ *
+ * @param array $values Values about to be saved.
+ * @return array
+ */
+function wp_ulike_sync_auto_display_filter_on_save( $values ) {
+	if ( ! is_array( $values ) || empty( $values['posts_group'] ) || ! is_array( $values['posts_group'] ) ) {
+		return $values;
+	}
+
+	if ( ! class_exists( 'wp_ulike_setting_repo' ) || ! isset( $values['posts_group']['auto_display_filter'] ) ) {
+		return $values;
+	}
+
+	$values['posts_group']['auto_display_filter'] = wp_ulike_setting_repo::convertShowOnToHideFilters(
+		(array) $values['posts_group']['auto_display_filter']
+	);
+
+	return $values;
+}
+add_filter( 'wp_ulike_optiwich_save_values', 'wp_ulike_sync_auto_display_filter_on_save' );

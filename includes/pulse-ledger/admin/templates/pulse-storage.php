@@ -42,11 +42,16 @@ $show_migrate = ! $is_pulse;
 		<p style="margin:0;">
 			<?php echo esc_html( 'Old log tables are still on your server. Removing them is permanent — back up your database first.' ); ?>
 		</p>
-		<ul style="margin:0.5em 0 0 1.2em;font-size:12px;">
-			<?php foreach ( $legacy_tables as $table_name ) : ?>
-				<li><code><?php echo esc_html( $table_name ); ?></code></li>
-			<?php endforeach; ?>
-		</ul>
+		<p style="margin:0.5em 0 0;font-size:12px;">
+			<?php
+			$count = count( (array) $legacy_tables );
+			echo esc_html(
+				1 === $count
+					? '1 old log table is still present.'
+					: $count . ' old log tables are still present.'
+			);
+			?>
+		</p>
 	</div>
 
 	<p class="submit" style="margin-top:1.5em;">
@@ -72,7 +77,7 @@ $show_migrate = ! $is_pulse;
 	<?php endif; ?>
 
 	<p class="description" style="max-width:560px;margin-top:0.5em;">
-		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php echo esc_html( '← Back to Help' ); ?></a>
+		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php echo esc_html( '← Back to Overview' ); ?></a>
 	</p>
 
 	<?php else : ?>
@@ -127,7 +132,7 @@ $show_migrate = ! $is_pulse;
 		<?php echo esc_html( 'Finishing the upgrade switches reads to the faster storage. Your old log tables stay in place — nothing is deleted, and your like buttons keep working throughout.' ); ?>
 	</p>
 	<p class="description" style="max-width:560px;margin-top:0.5em;">
-		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php echo esc_html( '← Back to Help' ); ?></a>
+		<a href="<?php echo esc_url( WP_Ulike_Pulse_Admin::get_help_url() ); ?>"><?php echo esc_html( '← Back to Overview' ); ?></a>
 	</p>
 	<?php endif; ?>
 

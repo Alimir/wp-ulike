@@ -17,9 +17,9 @@ new wp_ulike_admin_assets();
 
 // Trust, onboarding, health checks (autoload + file-level init hooks).
 WP_Ulike_Overview::init();
+WP_Ulike_Health::init();
 WP_Ulike_Deactivation_Feedback::init();
 WP_Ulike_Activation_Pointer::init();
-WP_Ulike_Diagnostics::init();
 
 // include about menu functions
 require_once( WP_ULIKE_ADMIN_DIR . '/admin-functions.php');

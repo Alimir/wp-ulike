@@ -46,13 +46,34 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 		}
 
 		/**
+		 * Whether the cleanup UI may offer the drop button (cheap — no COUNT scans).
+		 *
+		 * Uses progress-only verification. Deep COUNT(*) runs only at drop time
+		 * via can_drop_legacy( true ).
+		 *
+		 * @return bool
+		 */
+		public static function can_offer_drop() {
+			if ( WP_Ulike_Pulse_Config::MODE_PULSE !== WP_Ulike_Pulse_Config::mode() ) {
+				return false;
+			}
+
+			if ( ! self::legacy_tables_exist() ) {
+				return false;
+			}
+
+			$verify = WP_Ulike_Pulse_Sync::verify( false );
+
+			return ! empty( $verify['ok'] );
+		}
+
+		/**
 		 * Whether it is safe to permanently drop legacy tables.
 		 *
-		 * Forces a deep COUNT(*)/COUNT(DISTINCT) verification -- slow on huge
-		 * (multi-million-row) tables. The admin page renders this on every
-		 * view, so the result is cached briefly; drop_legacy_tables() always
-		 * passes $bypass_cache=true to force a fresh check immediately before
-		 * the irreversible DROP, never trusting a possibly-stale cached "ok".
+		 * Forces a deep COUNT(*)/COUNT(DISTINCT) verification — slow on huge
+		 * tables. Call only at drop time (or CLI), never on every page view.
+		 * drop_legacy_tables() always passes $bypass_cache=true so the
+		 * irreversible DROP never trusts a stale cached "ok".
 		 *
 		 * @param bool $bypass_cache Force a fresh deep verify.
 		 * @return bool

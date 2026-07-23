@@ -71,12 +71,16 @@
 		window.location.href = deactivateUrl || cfg.pluginsUrl;
 	}
 
-	function sendFeedback( reasonKey, details ) {
+	function sendFeedback( reasonKey, details, locations ) {
 		var body = new URLSearchParams( {
 			action: 'wp_ulike_deactivation_feedback',
 			nonce: cfg.nonce,
 			reason_key: reasonKey,
 			details: details || '',
+		} );
+
+		( locations || [] ).forEach( function ( loc ) {
+			body.append( 'locations[]', loc );
 		} );
 
 		return fetch( cfg.ajaxUrl, {
@@ -110,6 +114,16 @@
 			}
 		} );
 
+		qsa( '.wp-ulike-deactivate-feedback-chips', form ).forEach( function ( wrap ) {
+			var show = wrap.getAttribute( 'data-reason' ) === reason;
+			wrap.hidden = ! show;
+			if ( ! show ) {
+				qsa( 'input[type="checkbox"]', wrap ).forEach( function ( box ) {
+					box.checked = false;
+				} );
+			}
+		} );
+
 		var hint = form.querySelector( '.wp-ulike-deactivate-feedback-context' );
 		if ( hint ) {
 			hint.hidden = reason !== 'not_working';
@@ -118,6 +132,11 @@
 		var reasonError = form.querySelector( '.wp-ulike-deactivate-feedback-reason-error' );
 		if ( reasonError && reason ) {
 			reasonError.hidden = true;
+		}
+
+		var noteError = form.querySelector( '.wp-ulike-deactivate-feedback-note-error' );
+		if ( noteError ) {
+			noteError.hidden = true;
 		}
 	}
 
@@ -138,6 +157,15 @@
 		} else if ( ! busy && spinner ) {
 			spinner.remove();
 		}
+	}
+
+	function collectLocations( form ) {
+		return qsa(
+			'.wp-ulike-deactivate-feedback-chips:not([hidden]) input[type="checkbox"]:checked',
+			form
+		).map( function ( box ) {
+			return box.value;
+		} );
 	}
 
 	function openModal( link ) {
@@ -207,6 +235,7 @@
 		submitBtn.addEventListener( 'click', function () {
 			var checked = form.querySelector( 'input[name="reason_key"]:checked' );
 			var reasonError = form.querySelector( '.wp-ulike-deactivate-feedback-reason-error' );
+			var noteError = form.querySelector( '.wp-ulike-deactivate-feedback-note-error' );
 
 			if ( ! checked ) {
 				if ( reasonError ) {
@@ -219,14 +248,34 @@
 			var detailsInput = form.querySelector(
 				'.wp-ulike-deactivate-feedback-details:not([hidden]) input'
 			);
-			var details = detailsInput ? detailsInput.value : '';
+			var details = detailsInput ? detailsInput.value.trim() : '';
+			var locations = collectLocations( form );
+			var requireNote = checked.getAttribute( 'data-require-note' ) === '1';
+
+			if ( requireNote ) {
+				var hasSignal = details !== '' || ( reason === 'not_working' && locations.length > 0 );
+				if ( ! hasSignal ) {
+					if ( noteError ) {
+						noteError.textContent =
+							reason === 'not_working' && cfg.i18n.locationRequired
+								? cfg.i18n.locationRequired
+								: cfg.i18n.noteRequired || noteError.textContent;
+						noteError.hidden = false;
+					}
+					return;
+				}
+			}
+
+			if ( noteError ) {
+				noteError.hidden = true;
+			}
 
 			submitBtn.disabled = true;
 			if ( skipBtn ) {
 				skipBtn.disabled = true;
 			}
 			setButtonBusy( submitBtn, true );
-			sendFeedback( reason, details );
+			sendFeedback( reason, details, locations );
 		} );
 
 		// Elementor-style: skip = deactivate immediately, no feedback request.

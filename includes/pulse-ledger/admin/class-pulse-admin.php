@@ -63,7 +63,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 * @return void
 		 */
 		public static function register_page() {
-			if ( ! WP_Ulike_Pulse_Config::should_show_storage_upgrade_ui() ) {
+			// Keep the page registered while work remains, even if the notice was
+			// dismissed — Site Health "Review cleanup" links here.
+			if ( ! WP_Ulike_Pulse_Config::has_storage_upgrade_work() ) {
 				return;
 			}
 
@@ -315,7 +317,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 				return;
 			}
 
-			if ( ! WP_Ulike_Pulse_Config::should_show_storage_upgrade_ui() ) {
+			if ( ! WP_Ulike_Pulse_Config::has_storage_upgrade_work() ) {
 				wp_safe_redirect( self::get_help_url() );
 				exit;
 			}
@@ -329,7 +331,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			$status_label    = self::status_label( $sync_status, $sync_complete );
 			$legacy_tables   = WP_Ulike_Pulse_Legacy_Cleanup::existing_legacy_tables();
 			$show_cleanup    = $is_pulse && ! empty( $legacy_tables );
-			$can_drop_legacy = $show_cleanup && WP_Ulike_Pulse_Legacy_Cleanup::can_drop_legacy();
+			// Progress-only gate for the UI — deep COUNT(*) runs only on drop.
+			$can_drop_legacy = $show_cleanup && WP_Ulike_Pulse_Legacy_Cleanup::can_offer_drop();
 			$percent         = $sync_complete ? 100 : (float) ( $progress['percent_estimate'] ?? 0 );
 			$progress_label  = WP_Ulike_Pulse_Sync::progress_label( $progress );
 			$page_title      = self::get_page_title();

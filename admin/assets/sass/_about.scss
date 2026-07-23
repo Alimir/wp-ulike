@@ -73,6 +73,26 @@
 	}
 }
 
+.wp-ulike-about-getting-started {
+	margin: 0;
+	padding-left: 1.25em;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #1d2327;
+
+	li + li {
+		margin-top: 0.6em;
+	}
+
+	a {
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
 .wp-ulike-about-card {
 	background: #fff;
 	border: 1px solid #c3c4c7;
@@ -99,6 +119,13 @@
 
 	&__header &__title {
 		margin-bottom: 0;
+	}
+
+	&__links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px;
 	}
 
 	&__link {

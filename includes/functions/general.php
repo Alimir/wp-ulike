@@ -202,6 +202,22 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 						}
 					}
 				}
+
+				// Category/tag/author/search are also is_archive(). If "archive" is hidden
+				// but a more specific context is allowed, do not block that view.
+				if ( 'archive' === $value && class_exists( 'wp_ulike_setting_repo' ) ) {
+					$skip_archive_hide = false;
+					foreach ( wp_ulike_setting_repo::getAutoDisplayArchiveChildKeys() as $child ) {
+						if ( ! empty( $parsed_args[ 'is_' . $child ] ) && ! in_array( $child, $options, true ) ) {
+							$skip_archive_hide = true;
+							break;
+						}
+					}
+					if ( $skip_archive_hide ) {
+						continue;
+					}
+				}
+
 				return false;
 			}
 		}

@@ -1426,16 +1426,19 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				);
 			}
 
+			$legacy_actor = self::distinct_actor_sql( 'l' );
+			$pulse_actor  = self::distinct_actor_sql( 'e' );
+
 			return (int) $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(DISTINCT user_id) FROM (
-						SELECT CAST(l.user_id AS CHAR) AS user_id FROM `{$legacy_table}` l
+					"SELECT COUNT(DISTINCT actor) FROM (
+						SELECT {$legacy_actor} AS actor FROM `{$legacy_table}` l
 						WHERE l.status IN ('like','dislike') {$legacy_per}{$unliked_sql}
 						UNION
-						SELECT CAST(e.user_id AS CHAR) AS user_id FROM `{$pulse_table}` e
+						SELECT {$pulse_actor} AS actor FROM `{$pulse_table}` e
 						WHERE e.item_type = %s AND e.engagement_kind = %s AND e.status = 'active'
 						AND e.date_time >= %s {$eng_per}
-					) AS combined",
+					) AS combined WHERE actor IS NOT NULL",
 					WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ),
 					WP_Ulike_Pulse_Registry::KIND_VOTE,
 					$since
@@ -1449,16 +1452,38 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * @param string $since        Optional since datetime.
 		 * @return int
 		 */
+	/**
+	 * Distinct actor expression for unique-voter counts.
+	 *
+	 * Registered users key by user_id; guests (user_id 0/empty) key by fingerprint
+	 * so they are not collapsed into a single bucket.
+	 *
+	 * @param string $alias Optional table alias.
+	 * @return string
+	 */
+	private static function distinct_actor_sql( $alias = '' ) {
+		$prefix = $alias ? $alias . '.' : '';
+
+		return "CASE
+			WHEN {$prefix}user_id IS NOT NULL AND CAST({$prefix}user_id AS CHAR) NOT IN ('', '0') THEN CONCAT('u:', {$prefix}user_id)
+			WHEN {$prefix}fingerprint IS NOT NULL AND CAST({$prefix}fingerprint AS CHAR) NOT IN ('', '0') THEN CONCAT('f:', {$prefix}fingerprint)
+			ELSE NULL
+		END";
+	}
+
 	private static function count_pulse_unique_voters_for_type( $item_type, $period_limit, $since ) {
 		global $wpdb;
 
 		$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
 		$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
+		$actor_sql = self::distinct_actor_sql();
 
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT user_id) FROM `{$table}`
-				WHERE item_type = %s AND engagement_kind = %s {$since_sql} {$period_limit}",
+				"SELECT COUNT(DISTINCT actor) FROM (
+					SELECT {$actor_sql} AS actor FROM `{$table}`
+					WHERE item_type = %s AND engagement_kind = %s {$since_sql} {$period_limit}
+				) AS voters WHERE actor IS NOT NULL",
 				WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ),
 				WP_Ulike_Pulse_Registry::KIND_VOTE
 			)
@@ -1483,6 +1508,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		$mode         = self::read_mode();
 		$source       = WP_Ulike_Pulse_Registry::legacy_source_for_type( $item_type );
 		$pulse_table  = esc_sql( WP_Ulike_Pulse_Schema::table() );
+		$actor_sql    = self::distinct_actor_sql();
 
 		// Pulse slice: all engagement kinds. In merged mode, scope vote rows to
 		// dual_since (legacy holds pre-cutover votes); emoji/star have no legacy
@@ -1491,7 +1517,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		if ( 'merged' === $mode && WP_Ulike_Pulse_Config::dual_since() ) {
 			$since     = WP_Ulike_Pulse_Config::dual_since();
 			$pulse_sql = $wpdb->prepare(
-				"SELECT CAST(user_id AS CHAR) AS user_id FROM `{$pulse_table}`
+				"SELECT {$actor_sql} AS actor FROM `{$pulse_table}`
 				WHERE item_type = %s AND status = 'active'
 				AND ( engagement_kind IN ('emoji','star') OR ( engagement_kind = %s AND date_time >= %s ) ) {$pulse_per}",
 				$item_type,
@@ -1500,7 +1526,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			);
 		} else {
 			$pulse_sql = $wpdb->prepare(
-				"SELECT CAST(user_id AS CHAR) AS user_id FROM `{$pulse_table}`
+				"SELECT {$actor_sql} AS actor FROM `{$pulse_table}`
 				WHERE item_type = %s AND status = 'active' {$pulse_per}",
 				$item_type
 			);
@@ -1512,12 +1538,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 			$legacy_table = esc_sql( $source['table'] );
 			$legacy_per   = str_replace( 'date_time', 'l.date_time', $period_limit );
-			$union[]      = "SELECT CAST(l.user_id AS CHAR) AS user_id FROM `{$legacy_table}` l WHERE l.status IN ('like','dislike') {$legacy_per}";
+			$legacy_actor = self::distinct_actor_sql( 'l' );
+			$union[]      = "SELECT {$legacy_actor} AS actor FROM `{$legacy_table}` l WHERE l.status IN ('like','dislike') {$legacy_per}";
 		}
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		return (int) $wpdb->get_var(
-			"SELECT COUNT(DISTINCT user_id) FROM (" . implode( ' UNION ', $union ) . ") AS combined"
+			"SELECT COUNT(DISTINCT actor) FROM (" . implode( ' UNION ', $union ) . ") AS combined WHERE actor IS NOT NULL"
 		);
 	}
 

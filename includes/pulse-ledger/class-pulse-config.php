@@ -195,15 +195,14 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 		}
 
 		/**
-		 * Whether storage-upgrade admin UI (Help card, task page) should appear.
+		 * Whether there is migration or leftover-table cleanup work.
+		 *
+		 * Independent of dismiss — used to keep the task page registered so
+		 * Site Health / deep links still work after the admin notice is closed.
 		 *
 		 * @return bool
 		 */
-		public static function should_show_storage_upgrade_ui() {
-			if ( self::is_admin_dismissed() ) {
-				return false;
-			}
-
+		public static function has_storage_upgrade_work() {
 			$mode = self::mode();
 
 			if ( self::MODE_DUAL === $mode || self::needs_migration_ui() ) {
@@ -215,6 +214,19 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
 			}
 
 			return false;
+		}
+
+		/**
+		 * Whether storage-upgrade promos (notice, Overview card) should appear.
+		 *
+		 * @return bool
+		 */
+		public static function should_show_storage_upgrade_ui() {
+			if ( self::is_admin_dismissed() ) {
+				return false;
+			}
+
+			return self::has_storage_upgrade_work();
 		}
 
 		/**

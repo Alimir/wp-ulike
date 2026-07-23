@@ -137,7 +137,7 @@ No. The like button loads minimal code on your pages, and vote responses are lig
 = 5.2.0 =
 * Added: **Pulse** — a faster, unified like-storage engine. New installs start on Pulse automatically; existing sites keep working with an optional background upgrade.
 * Added: **Storage upgrade** screen (WP ULike → Storage Upgrade) with progress bar, pause/resume, finish step, and optional cleanup of old tables. WP-CLI support: `wp ulike pulse status|start|pause|sync|verify|enable|drop-legacy`.
-* Added: **Diagnostics** panel on Help to verify storage mode, tables, and read paths.
+* Added: **Site Health** integration (Tools → Site Health) for tables, storage/migration, leftover log-table cleanup, and a copyable Info dump. Help links there for actions.
 * Improved: Statistics, top lists, and vote logs now route through Pulse queries with mode-aware reads and a versioned, scoped query cache.
 * Improved: GDPR export/erase now covers Pulse rows alongside legacy logs.
 * Removed: Deprecated post rating value API (`wp_ulike_get_rating_value` now returns `null` with a deprecation notice).
