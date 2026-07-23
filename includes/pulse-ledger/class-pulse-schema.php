@@ -1,0 +1,265 @@
+<?php
+/**
+ * Pulse Ledger — ulike_pulse table schema only.
+ *
+ * @package WP_Ulike
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
+
+	final class WP_Ulike_Pulse_Schema {
+
+		const TABLE_SUFFIX = 'ulike_pulse';
+
+		const BATCH_SIZE_DEFAULT = 500;
+		const BATCH_SIZE_MIN     = 50;
+		const BATCH_SIZE_MAX     = 2000;
+
+		/**
+		 * @return string Full pulse table name.
+		 */
+		public static function table() {
+			global $wpdb;
+			return $wpdb->prefix . self::TABLE_SUFFIX;
+		}
+
+		/**
+		 * @return bool
+		 */
+		public static function table_exists() {
+			return WP_Ulike_Pulse_Registry::table_exists( self::table() );
+		}
+
+		/**
+		 * @return string CREATE TABLE SQL.
+		 */
+		public static function ddl() {
+			$table   = self::table();
+			$collate = '';
+
+			global $wpdb;
+			if ( $wpdb->has_cap( 'collation' ) ) {
+				$collate = $wpdb->get_charset_collate();
+			}
+
+		return "CREATE TABLE `{$table}` (
+			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`item_id` bigint(20) unsigned NOT NULL,
+			`item_type` varchar(32) NOT NULL,
+			`engagement_kind` varchar(20) NOT NULL DEFAULT 'vote',
+			`engagement_key` varchar(20) NOT NULL DEFAULT 'like',
+			`value` tinyint(3) unsigned DEFAULT NULL,
+			`status` enum('active','removed') NOT NULL DEFAULT 'active',
+			`date_time` datetime NOT NULL,
+			`ip` varchar(45) NOT NULL DEFAULT '',
+			`user_id` varchar(45) NOT NULL DEFAULT '0',
+			`fingerprint` varchar(64) DEFAULT NULL,
+			`country_code` char(2) DEFAULT NULL,
+			`device` varchar(50) DEFAULT NULL,
+			`os` varchar(50) DEFAULT NULL,
+			`browser` varchar(50) DEFAULT NULL,
+			`dedupe_token` binary(32) DEFAULT NULL,
+			PRIMARY KEY (`id`),
+			UNIQUE KEY `idx_dedupe` (`dedupe_token`),
+			KEY `idx_item_active` (`item_type`,`item_id`,`engagement_kind`,`engagement_key`,`status`),
+			KEY `idx_user_vote` (`user_id`,`item_type`,`item_id`,`engagement_kind`),
+			KEY `idx_rankings` (`item_type`,`engagement_kind`,`engagement_key`,`status`,`date_time`,`item_id`),
+			KEY `idx_fingerprint` (`item_type`,`item_id`,`fingerprint`),
+			KEY `idx_country_date` (`country_code`,`date_time`),
+			KEY `idx_device_date` (`device`,`date_time`),
+			KEY `idx_type_status_date` (`item_type`,`status`,`date_time`),
+			KEY `idx_engager_ranking` (`engagement_kind`,`engagement_key`,`status`,`date_time`)
+		) {$collate};";
+		}
+
+		/**
+		 * Create ulike_pulse when missing.
+		 *
+		 * @return bool
+		 */
+	public static function install() {
+		if ( self::table_exists() ) {
+			// Existing installs: keep column shape aligned on upgrade paths.
+			self::ensure_dedupe_token_column();
+			return true;
+		}
+
+		if ( ! function_exists( 'maybe_create_table' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		}
+
+		$created = maybe_create_table( self::table(), self::ddl() );
+
+		// The table-existence cache was populated above; flush so the
+		// post-creation check reflects the new schema state.
+		WP_Ulike_Pulse_Registry::flush_table_exists_cache();
+
+		// Align dedupe_token on existing tables (no-op for fresh installs).
+		self::ensure_dedupe_token_column();
+
+		if ( ! self::table_exists() ) {
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					global $wpdb;
+					error_log( 'WP ULike Pulse: failed to create table ' . self::table() . ' — ' . $wpdb->last_error );
+				}
+				return false;
+			}
+
+			return (bool) $created;
+		}
+
+		/**
+		 * Ensure the dedupe_token column matches the documented schema
+		 * (binary(32) DEFAULT NULL). `maybe_create_table` only creates the
+		 * table on first install — it never ALTERs existing columns, so sites
+		 * that created the table with an earlier column definition (e.g.
+		 * char(64) NOT NULL, or binary(32) NOT NULL) keep the old definition
+		 * and inserts of NULL/multi-byte tokens fail silently. This runs once
+		 * per site, gated by an option marker, and is a no-op afterwards.
+		 *
+		 * @return void
+		 */
+		public static function ensure_dedupe_token_column() {
+			global $wpdb;
+
+			$marker = 'wp_ulike_pulse_dedupe_col_v1';
+			if ( get_option( $marker ) ) {
+				return;
+			}
+
+			$table = self::table();
+
+			// Check existence directly instead of relying on the memoized
+			// WP_Ulike_Pulse_Registry::table_exists() — its static cache does
+			// not account for per-blog table names on multisite, so it can
+			// return a stale true when switching to a blog where the pulse
+			// table does not yet exist, which would make the SHOW COLUMNS
+			// query below error out. Do not set the marker when the table is
+			// missing so the alignment retries once it is created.
+			$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+			if ( ! $exists ) {
+				return;
+			}
+
+			$col = $wpdb->get_row( "SHOW COLUMNS FROM `{$table}` WHERE Field = 'dedupe_token'" );
+
+			if ( empty( $col ) ) {
+				update_option( $marker, 1 );
+				return;
+			}
+
+			$type = strtolower( (string) $col->Type );
+			$null = strtoupper( (string) $col->Null );
+
+			if ( 'binary(32)' === $type && 'YES' === $null ) {
+				update_option( $marker, 1 );
+				return;
+			}
+
+			// Align the column to binary(32) DEFAULT NULL. Existing NULL
+			// tokens stay NULL; existing non-binary tokens are converted.
+			$wpdb->query( "ALTER TABLE `{$table}` MODIFY `dedupe_token` binary(32) DEFAULT NULL" );
+
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && $wpdb->last_error ) {
+				error_log( 'WP ULike Pulse: dedupe_token column align failed — ' . $wpdb->last_error );
+			}
+
+			update_option( $marker, 1 );
+		}
+
+	/**
+	 * Bootstrap storage mode after pulse table exists.
+		 *
+		 * @param bool $is_fresh_install No prior wp_ulike_dbVersion.
+		 * @return void
+		 */
+		public static function bootstrap_mode( $is_fresh_install ) {
+			if ( ! self::table_exists() ) {
+				return;
+			}
+
+			$config = WP_Ulike_Pulse_Config::get();
+			if ( self::MODE_ALREADY_SET === self::detect_existing_mode( $config ) ) {
+				return;
+			}
+
+			if ( $is_fresh_install || ! WP_Ulike_Pulse_Registry::site_has_legacy_rows() ) {
+				WP_Ulike_Pulse_Config::init_fresh();
+				return;
+			}
+
+			WP_Ulike_Pulse_Config::init_dual();
+		}
+
+		const MODE_ALREADY_SET = 'set';
+
+		/**
+		 * @param array<string,mixed> $config Stored config.
+		 * @return string
+		 */
+		private static function detect_existing_mode( $config ) {
+			if ( ! empty( $config['mode'] ) && WP_Ulike_Pulse_Config::MODE_LEGACY !== $config['mode'] ) {
+				return self::MODE_ALREADY_SET;
+			}
+
+			if ( ! empty( $config['dual_since'] ) ) {
+				return self::MODE_ALREADY_SET;
+			}
+
+			return 'unset';
+		}
+
+	/**
+	 * Build dedupe token for distinct-mode rows.
+	 *
+	 * One row per (item, identity, kind) — not per engagement_key — so
+	 * like↔dislike and emoji key switches update the same row (matching
+	 * legacy vote semantics and Pro emoji update-by-id).
+	 *
+	 * Identity is the logged-in user_id, or — for guests (user_id 0/empty) —
+	 * the fingerprint. Without this, every guest voting on the same item
+	 * would share one token and collapse into a single pulse row.
+	 *
+	 * @param int|string $item_id     Item ID.
+	 * @param string     $item_type   Canonical type.
+	 * @param string     $user_id     Voter identity (logged-in).
+	 * @param string     $kind        Engagement kind.
+	 * @param string     $key         Unused (kept for call-site BC).
+	 * @param string     $fingerprint Guest fingerprint (used when user_id is 0/empty).
+	 * @return string|null Null when no identity is available (cannot dedupe).
+	 */
+	public static function dedupe_token( $item_id, $item_type, $user_id, $kind = 'vote', $key = 'like', $fingerprint = '' ) {
+		$item_id   = absint( $item_id );
+		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+		$user_id   = (string) $user_id;
+		$kind      = sanitize_key( $kind );
+		unset( $key ); // Key must not be part of the token (like↔dislike / emoji switch).
+
+		if ( ! $item_id ) {
+			return null;
+		}
+
+		// Logged-in users dedupe by user_id; guests dedupe by fingerprint so
+		// distinct mode does not merge every guest vote into one row.
+		$identity = '';
+		if ( '' !== $user_id && '0' !== $user_id ) {
+			$identity = 'u:' . $user_id;
+		} else {
+			$fingerprint = (string) $fingerprint;
+			if ( '' !== $fingerprint ) {
+				$identity = 'f:' . $fingerprint;
+			}
+		}
+
+		if ( '' === $identity ) {
+			return null;
+		}
+
+		return hash( 'sha256', implode( '|', array( $item_type, $item_id, $identity, $kind ) ), true );
+	}
+}
+}

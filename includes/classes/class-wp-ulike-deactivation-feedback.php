@@ -19,16 +19,18 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 		const SCRIPT_HANDLE = 'wp-ulike-deactivation-feedback';
 
 		/**
-		 * Reason keys accepted by TWT_Deactivation_Tracker::is_valid_reason_key().
+		 * Reason keys accepted locally. Keys unknown to the remote audit API are
+		 * mapped in send_to_api() (e.g. too_complicated → other).
 		 *
-		 * @return array<string, array<string, string>>
+		 * @return array<string, array<string, mixed>>
 		 */
 		public static function get_reasons() {
 			// Actionable reasons first; generic exit reasons last (reduces low-signal bias).
 			$reasons = array(
 				'not_working'    => array(
-					'title'       => __( "I couldn't get the plugin to work", 'wp-ulike' ),
-					'placeholder' => __( 'What happened? e.g. button missing, vote fails, theme conflict', 'wp-ulike' ),
+					'title'        => __( "I couldn't get the plugin to work", 'wp-ulike' ),
+					'placeholder'  => __( 'What happened? e.g. button missing, vote fails, theme conflict', 'wp-ulike' ),
+					'require_note' => true,
 				),
 				'found_better'   => array(
 					'title'       => __( 'I found a better plugin', 'wp-ulike' ),
@@ -49,6 +51,21 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 			);
 
 			return $reasons;
+		}
+
+		/**
+		 * Location chips for not_working feedback.
+		 *
+		 * @return array<string, string>
+		 */
+		public static function get_location_chips() {
+			return array(
+				'home'    => __( 'Homepage', 'wp-ulike' ),
+				'archive' => __( 'Archive / list', 'wp-ulike' ),
+				'page'    => __( 'Page', 'wp-ulike' ),
+				'single'  => __( 'Single post', 'wp-ulike' ),
+				'theme'   => __( 'Theme issue', 'wp-ulike' ),
+			);
 		}
 
 		/**
@@ -103,8 +120,10 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 					'pluginsUrl'  => admin_url( 'plugins.php' ),
 					'nonce'       => wp_create_nonce( 'wp_ulike_deactivation_feedback' ),
 					'i18n'        => array(
-						'submit' => __( 'Submit & deactivate', 'wp-ulike' ),
-						'skip'   => __( 'Skip & deactivate', 'wp-ulike' ),
+						'submit'           => __( 'Submit & deactivate', 'wp-ulike' ),
+						'skip'             => __( 'Skip & deactivate', 'wp-ulike' ),
+						'noteRequired'     => __( 'Please add a short note so we can improve WP ULike.', 'wp-ulike' ),
+						'locationRequired' => __( 'Select where it failed, or add a short note.', 'wp-ulike' ),
 					),
 				)
 			);
@@ -145,6 +164,31 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 			$details = '';
 			if ( isset( $_POST['details'] ) ) {
 				$details = sanitize_text_field( wp_unslash( $_POST['details'] ) );
+			}
+
+			$locations = array();
+			if ( isset( $_POST['locations'] ) ) {
+				$raw = wp_unslash( $_POST['locations'] );
+				if ( is_array( $raw ) ) {
+					$chip_keys = array_keys( self::get_location_chips() );
+					foreach ( $raw as $loc ) {
+						$loc = sanitize_key( $loc );
+						if ( in_array( $loc, $chip_keys, true ) ) {
+							$locations[] = $loc;
+						}
+					}
+				} elseif ( is_string( $raw ) && '' !== $raw ) {
+					foreach ( explode( ',', $raw ) as $loc ) {
+						$loc = sanitize_key( $loc );
+						if ( isset( self::get_location_chips()[ $loc ] ) ) {
+							$locations[] = $loc;
+						}
+					}
+				}
+			}
+
+			if ( ! empty( $locations ) ) {
+				$details = trim( 'locations:' . implode( ',', $locations ) . ( '' !== $details ? ' | ' . $details : '' ) );
 			}
 
 			self::send_to_api( $reason_key, $details );
@@ -231,6 +275,4 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 			);
 		}
 	}
-
-	WP_Ulike_Deactivation_Feedback::init();
 }

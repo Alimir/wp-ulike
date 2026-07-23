@@ -887,9 +887,18 @@
     jQuery.fn[pluginName] = function (options) {
       return this.each(function () {
         if (!this.hasAttribute || !this.hasAttribute("data-ulike-initialized")) {
-          new Plugin(this, options);
-          if (this.setAttribute) {
-            this.setAttribute("data-ulike-initialized", "true");
+          try {
+            new Plugin(this, options);
+            if (this.setAttribute) {
+              this.setAttribute("data-ulike-initialized", "true");
+            }
+          } catch (err) {
+            if (window.console && typeof window.console.error === "function") {
+              window.console.error("WP ULike: failed to initialize button", this, err);
+            }
+            if (this && this.setAttribute) {
+              this.setAttribute("data-ulike-initialized", "error");
+            }
           }
         }
       });

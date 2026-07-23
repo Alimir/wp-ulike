@@ -46,37 +46,51 @@ class WpUlikeInit {
   public function plugins_loaded(){
     wp_ulike_maybe_backfill_first_activated_at();
 
-    // Upgrade database
-    if ( self::is_admin_backend() ) {
+    // Schema checks/upgrades only need to run where they can be observed and
+    // acted on (wp-admin, WP-Cron); skip them on plain, unauthenticated
+    // frontend requests to avoid extra queries and DDL on every pageview.
+    if ( self::is_admin_backend() || self::is_cron() ) {
       $this->maybe_upgrade_database();
     }
   }
 
   private function maybe_upgrade_database(){
-    $current_version = get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION );
-    $activator = wp_ulike_activator::get_instance();
+    $stored = get_option( 'wp_ulike_dbVersion', false );
 
-    // Define upgrade path with version and method mapping
-    $upgrades = array(
-      '2.1' => 'upgrade_0',
-      '2.2' => 'upgrade_1',
-      '2.3' => 'upgrade_2',
-      '2.4' => 'upgrade_3',
-    );
+    // Fresh installs set wp_ulike_dbVersion during activation.
+    if ( false === $stored ) {
+      return;
+    }
 
-    // Execute upgrades sequentially, stopping on failure
-    foreach ( $upgrades as $version => $method ) {
-      if ( version_compare( $current_version, $version, '<' ) ) {
-        $result = $activator->$method();
-        if ( false === $result ) {
-          if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-            error_log( sprintf( 'WP ULike: Database upgrade to version %s failed. Current version: %s', $version, $current_version ) );
-          }
-          break; // Stop on failure to prevent partial upgrades
+    $target = WP_ULIKE_DB_VERSION;
+
+    if ( version_compare( $stored, '2.4', '<' ) ) {
+      if ( false === WP_Ulike_Legacy_Upgrade::run() ) {
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+          error_log( sprintf( 'WP ULike: Legacy database upgrade failed. Current version: %s', $stored ) );
         }
-        // Update current version after successful upgrade
-        $current_version = $version;
+        return;
       }
+
+      $stored = '2.4';
+      update_option( 'wp_ulike_dbVersion', $stored );
+    }
+
+    if ( version_compare( $stored, $target, '<' ) ) {
+      $activator = wp_ulike_activator::get_instance();
+
+      if ( false === $activator->install_tables( false, false ) ) {
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+          error_log( sprintf( 'WP ULike: Storage upgrade to %s failed. Current version: %s', $target, $stored ) );
+        }
+        return;
+      }
+
+      update_option( 'wp_ulike_dbVersion', $target );
+    }
+
+    if ( ! WP_Ulike_Meta_Schema::table_exists() || ! WP_Ulike_Pulse_Schema::table_exists() ) {
+      wp_ulike_activator::get_instance()->install_tables( false, false );
     }
   }
 
@@ -123,7 +137,7 @@ class WpUlikeInit {
     if (  $plugin_file === WP_ULIKE_BASENAME ) {
       $settings = array('settings'  => '<a href="admin.php?page=wp-ulike-settings">' . esc_html__('Settings', 'wp-ulike') . '</a>');
       $stats    = array('stats'     => '<a href="admin.php?page=wp-ulike-statistics">' . esc_html__('Statistics', 'wp-ulike') . '</a>');
-      $about    = array('overview'  => '<a href="admin.php?page=wp-ulike-about">' . esc_html__( 'Help', 'wp-ulike' ) . '</a>');
+      $about    = array('overview'  => '<a href="admin.php?page=wp-ulike-about">' . esc_html__( 'Overview', 'wp-ulike' ) . '</a>');
       // Merge on actions array
       $actions  = array_merge( $about, $actions );
       $actions  = array_merge( $stats, $actions );

@@ -114,8 +114,9 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 					"id"                   => $this->parsedArgs['item_id'],
 					"method"               => $this->parsedArgs['item_type'],
 					"type"                 => 'process',
-					"table"                => $this->settings->getTableName(),
+					"table"                => $this->settings->getLegacyTableSuffix(),
 					"column"               => $this->settings->getColumnName(),
+					"item_type"            => $this->settings->getItemType(),
 					"key"                  => $this->settings->getKey(),
 					"slug"                 => $this->settings->getType(),
 					"cookie"               => $this->settings->getCookieName(),
@@ -142,8 +143,11 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 				'status'      => $this->getCurrentStatus(),
 				'has_log'     => ! $this->getPrevStatus() ? 0 : 1,
 				'slug'        => $this->parsedArgs['item_type'],
-				'table'       => $this->settings->getTableName(),
-				'is_distinct' => $this->isDistinct()
+				'table'       => $this->settings->getLegacyTableSuffix(),
+				'is_distinct' => $this->isDistinct(),
+				// Appended, not inserted, to keep positional args (do_action_ref_array)
+				// stable for existing add_action(..., $priority, $accepted_args>6) callbacks.
+				'item_type'   => $this->settings->getItemType(),
 			);
 		}
 

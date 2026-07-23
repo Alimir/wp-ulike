@@ -433,12 +433,101 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
-	 * Check auto display filter
+	 * Context keys used by is_wp_ulike() / auto_display_filter.
+	 *
+	 * @return string[]
+	 */
+	public static function getAutoDisplayContextKeys(){
+		return array( 'home', 'single', 'archive', 'category', 'search', 'tag', 'author' );
+	}
+
+	/**
+	 * Product default for the Settings "Show Buttons On" control.
+	 *
+	 * @return string[]
+	 */
+	public static function getAutoDisplayShowOnDefault(){
+		return array( 'single' );
+	}
+
+	/**
+	 * Hide-list equivalent of getAutoDisplayShowOnDefault() (what is_wp_ulike() stores).
+	 *
+	 * @return string[]
+	 */
+	public static function getAutoDisplayFilterDefault(){
+		return self::convertShowOnToHideFilters( self::getAutoDisplayShowOnDefault() );
+	}
+
+	/**
+	 * Contexts where auto-display should be hidden (for is_wp_ulike).
+	 *
+	 * DB key stays posts_group|auto_display_filter and always stores a hide-list.
+	 * - Key present  → use saved value (existing sites unchanged).
+	 * - Key missing  → Singular-only product default.
+	 *
+	 * Settings UI speaks "show on"; admin-hooks convert at the boundary only.
 	 *
 	 * @return array
 	 */
 	public static function getPostAutoDisplayFilters(){
-		return self::getOption( 'posts_group|auto_display_filter', array( 'single', 'home' ) );
+		return self::getOption(
+			'posts_group|auto_display_filter',
+			self::getAutoDisplayFilterDefault()
+		);
+	}
+
+	/**
+	 * Whether to attach like buttons to the_excerpt (list / archive snippets).
+	 *
+	 * Unset = keep historical on (older versions always hooked the_excerpt).
+	 * After the user saves Content Types, the switcher value wins.
+	 *
+	 * @return bool
+	 */
+	public static function isAutoDisplayOnExcerpts(){
+		$stored = self::getOption( 'posts_group|auto_display_on_excerpts', null );
+
+		if ( null === $stored ) {
+			$enabled = true;
+		} else {
+			$enabled = (bool) $stored;
+		}
+
+		return (bool) apply_filters( 'wp_ulike_auto_display_on_excerpts', $enabled );
+	}
+
+	/**
+	 * Archive sub-contexts (also true when is_archive() is true in WordPress).
+	 *
+	 * @return string[]
+	 */
+	public static function getAutoDisplayArchiveChildKeys(){
+		return array( 'category', 'search', 'tag', 'author' );
+	}
+
+	/**
+	 * Show Buttons On → hide-list for DB / is_wp_ulike(). Lossless inverse.
+	 *
+	 * @param array $show_on Selected contexts to show on.
+	 * @return array
+	 */
+	public static function convertShowOnToHideFilters( $show_on ){
+		$show_on = array_map( 'strval', (array) $show_on );
+
+		return array_values( array_diff( self::getAutoDisplayContextKeys(), $show_on ) );
+	}
+
+	/**
+	 * Stored hide-list → Show Buttons On for Settings UI. Lossless inverse.
+	 *
+	 * @param array $hide Stored auto_display_filter values.
+	 * @return array
+	 */
+	public static function convertHideFiltersToShowOn( $hide ){
+		$hide = array_map( 'strval', (array) $hide );
+
+		return array_values( array_diff( self::getAutoDisplayContextKeys(), $hide ) );
 	}
 
 	/**

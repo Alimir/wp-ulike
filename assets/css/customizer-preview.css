@@ -1,0 +1,97 @@
+/**
+ * WP ULike — customizer iframe preview helpers (not loaded on the public site).
+ */
+
+.ulp-customizer-preview-root {
+	width: 100%;
+	align-self: stretch;
+}
+
+.ulp-customizer-preview-label {
+	margin: 0 0 0.75rem;
+	font-size: 0.6875rem;
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: #646970;
+}
+
+.ulp-customizer-button-preview {
+	width: 100%;
+	padding: 1rem 0.85rem 1.75rem;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0.85rem;
+}
+
+.ulp-customizer-button-preview-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 7.5rem;
+	padding: 1rem 0.9rem 1.15rem;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 10px;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+	text-align: center;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ulp-customizer-button-preview-item:hover {
+	border-color: #c3c4c7;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.ulp-customizer-button-preview .wpulike {
+	padding: 0;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ulp-customizer-button-preview .wp_ulike_general_class {
+	display: inline-flex;
+	align-items: center;
+}
+
+.ulp-customizer-button-preview .wp_ulike_likers_wrapper {
+	display: none !important;
+}
+
+.ulp-customizer-button-preview .wp_ulike_btn.wp_ulike_put_image {
+	flex-shrink: 0;
+	position: relative;
+}
+
+.ulp-customizer-toast-preview {
+	position: relative;
+	width: 100%;
+	max-width: 22rem;
+	margin: 0 auto;
+	padding: 1.5rem 1.25rem 2rem;
+	min-height: 22rem;
+}
+
+.ulp-customizer-toast-preview .wpulike-notification {
+	position: relative;
+	right: auto;
+	bottom: auto;
+	left: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 0.625rem;
+}
+
+.ulp-customizer-toast-preview .wpulike-message {
+	width: 100%;
+	margin: 0;
+}
+
+@media (min-width: 640px) {
+	.ulp-customizer-button-preview {
+		grid-template-columns: 1fr 1fr;
+	}
+}

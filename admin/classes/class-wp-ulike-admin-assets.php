@@ -90,22 +90,20 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 
 			wp_dequeue_script( 'svg-painter' );
 
-			$base_url = WP_ULIKE_ADMIN_URL . '/includes/statistics/';
+		wp_enqueue_style(
+			'wp_ulike_admin_react',
+			WP_ULIKE_ADMIN_URL . '/includes/statistics/stats.css',
+			array(),
+			WP_ULIKE_VERSION
+		);
 
-			wp_enqueue_style(
-				'wp_ulike_admin_react',
-				$base_url . 'stats.css',
-				array(),
-				WP_ULIKE_VERSION
-			);
-
-			wp_enqueue_script(
-				'wp_ulike_admin_react',
-				$base_url . 'stats.js',
-				array(),
-				WP_ULIKE_VERSION,
-				true
-			);
+		wp_enqueue_script(
+			'wp_ulike_admin_react',
+			WP_ULIKE_ADMIN_URL . '/includes/statistics/stats.js',
+			array(),
+			WP_ULIKE_VERSION,
+			true
+		);
 
 			wp_ulike_add_inline_script_data(
 					'wp_ulike_admin_react',
@@ -117,12 +115,60 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 						'title'     => esc_html__( 'Metrics Dashboard', 'wp-ulike' ),
 						'buildType' => 'free',
 						'loaderSvg' => $this->get_loader_svg(),
-						'userPrefs' => class_exists( 'WP_Ulike_Stats_User_Prefs' )
-							? WP_Ulike_Stats_User_Prefs::get_app_config()
-							: array(),
-					)
-				);
+					'userPrefs' => class_exists( 'WP_Ulike_Stats_User_Prefs' )
+						? WP_Ulike_Stats_User_Prefs::get_app_config()
+						: array(),
+					'migrationNotice' => $this->get_migration_notice_config(),
+				)
+			);
+	}
+
+	/**
+	 * Build the in-app migration nudge config, or null when not applicable.
+	 *
+	 * Statistics are correct in every storage mode (legacy/dual/pulse) because
+	 * vote reads route through the mode-aware Pulse_Query. This is a soft
+	 * performance/cleanup nudge shown inside the React app.
+	 *
+	 * @return array<string,mixed>|null
+	 */
+	private function get_migration_notice_config() {
+		$url = class_exists( 'WP_Ulike_Pulse_Admin' )
+			? WP_Ulike_Pulse_Admin::get_page_url()
+			: admin_url( 'admin.php?page=wp-ulike-pulse' );
+
+		// After full Pulse cutover, nudge cleanup when legacy tables remain.
+		if (
+			class_exists( 'WP_Ulike_Pulse_Config' )
+			&& WP_Ulike_Pulse_Config::MODE_PULSE === WP_Ulike_Pulse_Config::mode()
+			&& class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' )
+			&& WP_Ulike_Pulse_Legacy_Cleanup::legacy_tables_exist()
+			&& ! WP_Ulike_Pulse_Config::is_admin_dismissed()
+		) {
+			return array(
+				'id'       => 'free_pulse_cleanup',
+				'title'    => esc_html__( 'Free up disk space.', 'wp-ulike' ),
+				'message'  => esc_html__( 'Like records already use the faster storage. Remove the old log tables when you are ready to reclaim disk space.', 'wp-ulike' ),
+				'ctaLabel' => esc_html__( 'Review cleanup', 'wp-ulike' ),
+				'ctaUrl'   => esc_url( $url ),
+			);
 		}
+
+		$pending = ( function_exists( 'wp_ulike_pulse_reads_legacy_votes' ) && wp_ulike_pulse_reads_legacy_votes() )
+			|| ( function_exists( 'wp_ulike_pulse_needs_migration' ) && wp_ulike_pulse_needs_migration() );
+
+		if ( ! $pending ) {
+			return null;
+		}
+
+		return array(
+			'id'       => 'free_pulse_migration',
+			'title'    => esc_html__( 'Faster statistics with Pulse storage.', 'wp-ulike' ),
+			'message'  => esc_html__( 'Your statistics are already complete — WP ULike reads both legacy and Pulse data automatically. Migrating fully to Pulse storage makes charts faster and lets you clean up the old tables.', 'wp-ulike' ),
+			'ctaLabel' => esc_html__( 'Upgrade like storage', 'wp-ulike' ),
+			'ctaUrl'   => esc_url( $url ),
+		);
+	}
 
 		/**
 		 * Load Optiwich settings app

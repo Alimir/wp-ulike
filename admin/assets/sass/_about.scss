@@ -73,6 +73,26 @@
 	}
 }
 
+.wp-ulike-about-getting-started {
+	margin: 0;
+	padding-inline-start: 1.25em;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #1d2327;
+
+	li + li {
+		margin-top: 0.6em;
+	}
+
+	a {
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
 .wp-ulike-about-card {
 	background: #fff;
 	border: 1px solid #c3c4c7;
@@ -99,6 +119,13 @@
 
 	&__header &__title {
 		margin-bottom: 0;
+	}
+
+	&__links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px;
 	}
 
 	&__link {
@@ -131,6 +158,15 @@
 		background: linear-gradient(180deg, #fff 0%, #f6f7f7 100%);
 	}
 
+	&--task-optional {
+		background: #f0f6fc;
+	}
+
+	&--task-cleanup {
+		border-color: #68de7c;
+		background: #f6fff8;
+	}
+
 	&--muted {
 		background: #f6f7f7;
 		box-shadow: none;
@@ -156,7 +192,7 @@
 			&::before {
 				content: '▸';
 				display: inline-block;
-				margin-right: 6px;
+				margin-inline-end: 6px;
 				transition: transform 0.15s ease;
 			}
 		}
@@ -164,6 +200,67 @@
 		&[open] summary::before {
 			transform: rotate(90deg);
 		}
+	}
+}
+
+.wp-ulike-about-task {
+	&__header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		margin-bottom: 8px;
+
+		.wp-ulike-about-card__title {
+			margin-bottom: 0;
+		}
+	}
+
+	&__intro {
+		margin: 0 0 12px;
+		font-size: 13px;
+		color: #50575e;
+		line-height: 1.6;
+	}
+
+	&__reassurance {
+		margin: 0 0 14px;
+		padding: 0;
+		list-style: none;
+
+		li {
+			position: relative;
+			margin: 0 0 6px;
+			padding-inline-start: 22px;
+			font-size: 13px;
+			color: #50575e;
+			line-height: 1.5;
+
+			&::before {
+				content: '✓';
+				position: absolute;
+				inset-inline-start: 0;
+				top: 0;
+				color: #00a32a;
+				font-weight: 700;
+			}
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	&__status {
+		margin-bottom: 12px;
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin: 0;
 	}
 }
 
@@ -673,29 +770,9 @@ hr.wp-ulike-about-card__body + hr,
 	margin: 16px 0;
 }
 
-// Hide unrelated admin notices on About only
-body:has(.wp-ulike-about) {
-	#wpbody-content > .notice,
-	#wpbody-content > .error,
-	#wpbody-content > .updated,
-	#wpbody-content > .warning,
-	#wpbody-content > .info,
-	#wpbody-content > .notice-error,
-	#wpbody-content > .notice-warning,
-	#wpbody-content > .notice-info,
-	#wpbody-content > .notice-success,
-	#wpbody-content > .is-dismissible {
-		display: none !important;
-	}
-
-	.wrap.wp-ulike-about > .notice {
-		display: block !important;
-	}
-}
-
 [dir='rtl'] .wp-ulike-about-meta dd,
 .rtl .wp-ulike-about-meta dd {
-	text-align: left;
+	text-align: start;
 }
 
 [dir='rtl'] .wp-ulike-about-troubleshoot__list,

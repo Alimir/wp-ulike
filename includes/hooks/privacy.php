@@ -15,12 +15,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array<string, string> table_suffix => human label
  */
 function wp_ulike_privacy_log_tables() {
-	return array(
+	$labels = array(
 		'ulike'            => __( 'Posts', 'wp-ulike' ),
 		'ulike_comments'   => __( 'Comments', 'wp-ulike' ),
 		'ulike_activities' => __( 'Activities', 'wp-ulike' ),
 		'ulike_forums'     => __( 'Topics', 'wp-ulike' ),
 	);
+
+	global $wpdb;
+	$tables = array();
+
+	foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
+		$suffix            = str_replace( $wpdb->prefix, '', $source['table'] );
+		$tables[ $suffix ] = isset( $labels[ $suffix ] ) ? $labels[ $suffix ] : $suffix;
+	}
+
+	return $tables;
 }
 
 /**
@@ -41,34 +51,67 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 	}
 
 	$uid    = (string) (int) $user->ID;
-	global $wpdb;
-
 	$per_page = 100;
-	$offset   = ( $page - 1 ) * $per_page;
 	$data     = array();
 	$labels   = wp_ulike_privacy_log_tables();
-	$p        = $wpdb->prefix;
 
-	// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Fixed table names from plugin schema.
-	$union = "(SELECT 'ulike' AS src, id, date_time, status, ip FROM `{$p}ulike` WHERE user_id = %s)
-		UNION ALL
-		(SELECT 'ulike_comments' AS src, id, date_time, status, ip FROM `{$p}ulike_comments` WHERE user_id = %s)
-		UNION ALL
-		(SELECT 'ulike_activities' AS src, id, date_time, status, ip FROM `{$p}ulike_activities` WHERE user_id = %s)
-		UNION ALL
-		(SELECT 'ulike_forums' AS src, id, date_time, status, ip FROM `{$p}ulike_forums` WHERE user_id = %s)";
+	if ( wp_ulike_use_pulse_queries() ) {
+		$rows = WP_Ulike_Pulse_Log_Bridge::get_privacy_rows( $uid, $page, $per_page );
+	} else {
+		global $wpdb;
 
-	$sql  = "SELECT * FROM ( {$union} ) AS combined ORDER BY date_time DESC, src ASC, id DESC LIMIT %d OFFSET %d";
-	$rows = $wpdb->get_results(
-		$wpdb->prepare( $sql, $uid, $uid, $uid, $uid, $per_page, $offset ),
-		ARRAY_A
-	);
-	// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$offset       = ( $page - 1 ) * $per_page;
+		$union_parts  = array();
+		$prepare_args = array();
+
+		foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
+			$suffix        = str_replace( $wpdb->prefix, '', $source['table'] );
+			$table         = esc_sql( $source['table'] );
+			$geo_cols      = WP_Ulike_Pulse_Log_Bridge::legacy_personal_columns_sql( $source['table'] );
+			$union_parts[] = "(SELECT '{$suffix}' AS src, id, date_time, status, ip, {$geo_cols} FROM `{$table}` WHERE user_id = %s)";
+			$prepare_args[] = $uid;
+		}
+
+		if ( empty( $union_parts ) ) {
+			$rows = array();
+		} else {
+			$sql            = 'SELECT * FROM ( ' . implode( ' UNION ALL ', $union_parts ) . ' ) AS combined ORDER BY date_time DESC, src ASC, id DESC LIMIT %d OFFSET %d';
+			$prepare_args[] = $per_page;
+			$prepare_args[] = $offset;
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table names from plugin registry.
+			$rows = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_args ), ARRAY_A );
+		}
+	}
 
 	if ( ! empty( $rows ) ) {
+		$anonymise_ip = wp_ulike_setting_repo::isAnonymiseIpOn();
 		foreach ( $rows as $row ) {
 			$src   = isset( $row['src'] ) ? $row['src'] : '';
 			$label = isset( $labels[ $src ] ) ? $labels[ $src ] : __( 'Logs', 'wp-ulike' );
+			$ip    = isset( $row['ip'] ) ? $row['ip'] : '';
+			if ( $anonymise_ip && '' !== $ip ) {
+				$ip = wp_privacy_anonymize_data( 'ip_address', $ip );
+			}
+
+			$pairs = array(
+				__( 'Date', 'wp-ulike' )   => isset( $row['date_time'] ) ? $row['date_time'] : '',
+				__( 'Status', 'wp-ulike' ) => isset( $row['status'] ) ? $row['status'] : '',
+				__( 'IP', 'wp-ulike' )     => $ip,
+			);
+
+			foreach ( array(
+				'fingerprint'  => __( 'Fingerprint', 'wp-ulike' ),
+				'country_code' => __( 'Country', 'wp-ulike' ),
+				'device'       => __( 'Device', 'wp-ulike' ),
+				'os'           => __( 'OS', 'wp-ulike' ),
+				'browser'      => __( 'Browser', 'wp-ulike' ),
+			) as $key => $name ) {
+				$value = isset( $row[ $key ] ) ? $row[ $key ] : '';
+				if ( null !== $value && '' !== $value ) {
+					$pairs[ $name ] = $value;
+				}
+			}
+
 			$data[] = array(
 				'group_id'    => 'wp-ulike',
 				'group_label' => __( 'WP ULike', 'wp-ulike' ),
@@ -76,13 +119,13 @@ function wp_ulike_privacy_exporter( $email_address, $page = 1 ) {
 				'data'        => array(
 					array(
 						'name'  => $label,
-						'value' => sprintf(
-							/* translators: 1: datetime, 2: status, 3: IP */
-							__( 'Date: %1$s, Status: %2$s, IP: %3$s', 'wp-ulike' ),
-							isset( $row['date_time'] ) ? $row['date_time'] : '',
-							isset( $row['status'] ) ? $row['status'] : '',
-							isset( $row['ip'] ) ? $row['ip'] : ''
-						),
+						'value' => implode( ', ', array_map(
+							static function ( $k, $v ) {
+								return $k . ': ' . $v;
+							},
+							array_keys( $pairs ),
+							array_values( $pairs )
+						) ),
 					),
 				),
 			);
@@ -116,15 +159,20 @@ function wp_ulike_privacy_eraser( $email_address, $page = 1 ) {
 	}
 
 	$uid    = (string) (int) $user->ID;
-	global $wpdb;
 	$total  = 0;
 
-	foreach ( array_keys( wp_ulike_privacy_log_tables() ) as $suffix ) {
-		$table = $wpdb->prefix . $suffix;
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from fixed list.
-		$result = $wpdb->query( $wpdb->prepare( "DELETE FROM `{$table}` WHERE user_id = %s", $uid ) );
-		if ( false !== $result ) {
-			$total += (int) $result;
+	if ( wp_ulike_use_pulse_queries() ) {
+		$total = WP_Ulike_Pulse_Log_Bridge::erase_user_logs( $uid );
+	} else {
+		global $wpdb;
+
+		foreach ( array_keys( wp_ulike_privacy_log_tables() ) as $suffix ) {
+			$table = $wpdb->prefix . $suffix;
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from fixed list.
+			$result = $wpdb->query( $wpdb->prepare( "DELETE FROM `{$table}` WHERE user_id = %s", $uid ) );
+			if ( false !== $result ) {
+				$total += (int) $result;
+			}
 		}
 	}
 

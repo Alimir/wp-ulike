@@ -19,6 +19,30 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 	class WP_Ulike_Pro_Validator {
 
 		/**
+		 * Minimum Pro version compatible with this free version.
+		 *
+		 * Pro below this version on a site running the new Pulse storage
+		 * (dual or pulse mode) will show an admin notice prompting an update —
+		 * older Pro versions query legacy tables directly and would show
+		 * stale/empty statistics after the Pulse migration.
+		 */
+		const REQUIRED_PRO_VERSION = '2.3.0';
+
+		/**
+		 * License status strings mirrored from WP_Ulike_Pro_API.
+		 *
+		 * Defined locally so free plugin code never fatals when an older
+		 * or modified Pro build is missing newer STATUS_* class constants.
+		 */
+		const STATUS_INVALID       = 'invalid';
+		const STATUS_EXPIRED       = 'expired';
+		const STATUS_DISABLED      = 'disabled';
+		const STATUS_DEACTIVATED   = 'deactivated';
+		const STATUS_SITE_INACTIVE = 'site_inactive';
+		const STATUS_MISSING       = 'missing';
+		const STATUS_HTTP_ERROR    = 'http_error';
+
+		/**
 		 * Initialize the validator class.
 		 * Registers WordPress hooks for license clearing functionality.
 		 *
@@ -29,6 +53,58 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			add_action( 'admin_init', array( __CLASS__, 'handle_clear_license' ) );
 			// Show success notice after clearing license (must be before license check)
 			add_action( 'admin_notices', array( __CLASS__, 'show_license_cleared_notice' ) );
+			// Warn when an outdated Pro is active on dual/pulse storage
+			add_action( 'admin_notices', array( __CLASS__, 'maybe_show_outdated_pro_notice' ) );
+		}
+
+		/**
+		 * Detect outdated WP ULike Pro on Pulse storage and warn admins.
+		 *
+		 * Older Pro versions read statistics / device / geo / logs directly
+		 * from the legacy tables. On dual mode they under-count new votes;
+		 * on pulse-only mode they are stale then empty after legacy cleanup.
+		 *
+		 * @return void
+		 */
+		public static function maybe_show_outdated_pro_notice() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
+			if ( ! defined( 'WP_ULIKE_PRO_VERSION' ) ) {
+				return;
+			}
+
+			if ( ! class_exists( 'WP_Ulike_Pulse_Config' ) ) {
+				return;
+			}
+
+			$mode = WP_Ulike_Pulse_Config::mode();
+			if ( 'dual' !== $mode && 'pulse' !== $mode ) {
+				return;
+			}
+
+			if ( version_compare( WP_ULIKE_PRO_VERSION, self::REQUIRED_PRO_VERSION, '>=' ) ) {
+				return;
+			}
+
+			// Allow integrators to silence the notice (e.g. dev environments).
+			if ( ! apply_filters( 'wp_ulike_show_outdated_pro_notice', true ) ) {
+				return;
+			}
+
+			printf(
+				'<div class="notice notice-warning is-dismissible"><p>%s</p><p><a class="button button-primary" href="%s" target="_blank" rel="noopener noreferrer">%s</a></p></div>',
+				wp_kses_post( sprintf(
+					/* translators: 1: required Pro version, 2: current Pro version, 3: current storage mode */
+					__( 'WP ULike is using the new faster like storage (%3$s mode). Please update <strong>WP ULike Pro</strong> to version %1$s or later — your installed Pro version (%2$s) reads from the old tables and may show stale or incomplete statistics until updated.', 'wp-ulike' ),
+					esc_html( self::REQUIRED_PRO_VERSION ),
+					esc_html( WP_ULIKE_PRO_VERSION ),
+					esc_html( $mode )
+				) ),
+				esc_url( admin_url( 'plugins.php' ) ),
+				esc_html__( 'Go to Plugins', 'wp-ulike' )
+			);
 		}
 
 		/**
@@ -55,9 +131,9 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 
 			// Invalid license statuses that should stop the free version
 			$invalid_statuses = [
-				WP_Ulike_Pro_API::STATUS_INVALID,
-				WP_Ulike_Pro_API::STATUS_DISABLED,
-				WP_Ulike_Pro_API::STATUS_MISSING,
+				self::STATUS_INVALID,
+				self::STATUS_DISABLED,
+				self::STATUS_MISSING,
 			];
 
 			$license_key_clean = trim( $license_key );
@@ -230,7 +306,7 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			// Check if it's nulled first (before API call)
 			$license_key_clean = trim( $license_key );
 			if ( self::is_nulled_license( $license_key_clean ) ) {
-				return WP_Ulike_Pro_API::STATUS_INVALID;
+				return self::STATUS_INVALID;
 			}
 
 			// Get license data using cached API data
@@ -243,7 +319,7 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 
 			// If API error or empty, but we have a license key, return invalid
 			// (user entered a key but API can't verify it - likely invalid/nulled)
-			return WP_Ulike_Pro_API::STATUS_INVALID;
+			return self::STATUS_INVALID;
 		}
 
 		/**

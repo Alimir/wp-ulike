@@ -225,6 +225,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
 
             // Generate comment fields
             $get_content_fields['comments'] = $get_content_options;
+            unset( $get_content_fields['comments']['auto_display_on_excerpts'] );
             unset( $get_content_fields['comments']['auto_display_filter'] );
             unset( $get_content_fields['comments']['auto_display_filter_post_types'] );
             $get_content_fields['comments'] = wp_ulike_array_insert_after(
@@ -244,6 +245,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $buddypress_options = array();
             if ( function_exists('is_buddypress') ) {
                 $get_content_fields['buddypress'] = $get_content_options;
+                unset( $get_content_fields['buddypress']['auto_display_on_excerpts'] );
                 unset( $get_content_fields['buddypress']['auto_display_filter'] );
                 unset( $get_content_fields['buddypress']['auto_display_filter_post_types'] );
                 $get_content_fields['buddypress']['auto_display_position']['options'] = array(
@@ -315,6 +317,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $bbPress_options = array();
             if ( function_exists('is_bbpress') ) {
                 $get_content_fields['bbpress'] = $get_content_options;
+                unset( $get_content_fields['bbpress']['auto_display_on_excerpts'] );
                 unset( $get_content_fields['bbpress']['auto_display_filter'] );
                 unset( $get_content_fields['bbpress']['auto_display_filter_post_types'] );
                 $bbPress_options = array_values( apply_filters( 'wp_ulike_panel_bbpress_type_options', $get_content_fields['bbpress'] ) );
@@ -563,7 +566,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                             WP_ULIKE_PLUGIN_URI . 'templates/'
                         ) ),
                         esc_html__( 'Preview online', 'wp-ulike' ),
-                        esc_html__( 'Locked styles are optional Pro extras—your selected template works out of the box.', 'wp-ulike' )
+                        esc_html__( 'Unlock additional button styles with Pro.', 'wp-ulike' )
                     ),
                     'options' => $this->get_templates_option_array(),
                     'default' => 'wpulike-default',
@@ -584,36 +587,45 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'options' => wp_ulike_get_post_auto_display_position_labels(),
                     'dependency' => array( 'enable_auto_display', '==', 'true' ),
                 ),
+                // UI: "Show Buttons On". DB: hide-list (same key). Converted in admin-hooks.
                 'auto_display_filter' => array(
                     'id'          => 'auto_display_filter',
                     'type'        => 'select',
-                    'title'       => esc_html__( 'Hide Automatic Display On','wp-ulike' ),
-                    'desc'        => esc_html__('Hide the button on selected page types.', 'wp-ulike'),
+                    'title'       => esc_html__( 'Show Buttons On', 'wp-ulike' ),
+                    'desc'        => esc_html__( 'Checked places show the like button. Default is Singular (single posts & pages). Turn on Home or archives only if you need buttons there.', 'wp-ulike' ),
                     'chosen'      => true,
                     'multiple'    => true,
-                    'default'     => array( 'single', 'home' ),
+                    'default'     => array( 'single' ),
                     'options'     => array(
-                        'home'     => esc_html__('Home', 'wp-ulike'),
-                        'single'   => esc_html__('Singular', 'wp-ulike'),
-                        'archive'  => esc_html__('Archives', 'wp-ulike'),
-                        'category' => esc_html__('Categories', 'wp-ulike'),
-                        'search'   => esc_html__('Search Results', 'wp-ulike'),
-                        'tag'      => esc_html__('Tags', 'wp-ulike'),
-                        'author'   => esc_html__('Author Page', 'wp-ulike')
+                        'single'   => esc_html__( 'Singular (posts & pages)', 'wp-ulike' ),
+                        'home'     => esc_html__( 'Home', 'wp-ulike' ),
+                        'archive'  => esc_html__( 'Archives', 'wp-ulike' ),
+                        'category' => esc_html__( 'Categories', 'wp-ulike' ),
+                        'search'   => esc_html__( 'Search Results', 'wp-ulike' ),
+                        'tag'      => esc_html__( 'Tags', 'wp-ulike' ),
+                        'author'   => esc_html__( 'Author Page', 'wp-ulike' ),
                     ),
+                    'dependency' => array( 'enable_auto_display', '==', 'true' ),
+                ),
+                'auto_display_on_excerpts' => array(
+                    'id'         => 'auto_display_on_excerpts',
+                    'type'       => 'switcher',
+                    'default'    => false,
+                    'title'      => esc_html__( 'Also Show on Excerpts / List Views', 'wp-ulike' ),
+                    'desc'       => esc_html__( 'Off by default so archive lists do not repeat like buttons. Turn on only if you want buttons in excerpts.', 'wp-ulike' ),
                     'dependency' => array( 'enable_auto_display', '==', 'true' ),
                 ),
                 'auto_display_filter_post_types' => array(
                     'id'          => 'auto_display_filter_post_types',
                     'type'        => 'select',
-                    'title'       => esc_html__( 'Post Type Exceptions','wp-ulike' ),
+                    'title'       => esc_html__( 'Always Show On Post Types', 'wp-ulike' ),
                     'placeholder' => esc_html__( 'Select post types','wp-ulike' ),
-                    'desc'        => esc_html__( 'Always show the button on these post types, even if disabled elsewhere.','wp-ulike' ),
+                    'desc'        => esc_html__( 'Show the button on these post types even if Singular is unchecked above. (Many older sites use this for Posts.)', 'wp-ulike' ),
                     'chosen'      => true,
                     'multiple'    => true,
                     'default'     => array( 'post' ),
                     'options'     => 'post_types',
-                    'dependency'  => array( 'auto_display_filter|enable_auto_display', 'any|==', 'single|true' ),
+                    'dependency'  => array( 'enable_auto_display', '==', 'true' ),
                 ),
                 'button_type' => array(
                     'id'         => 'button_type',
@@ -719,13 +731,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'    => 'switcher',
                     'default' => true,
                     'title'   => esc_html__('Restrict to Logged-in Users', 'wp-ulike'),
-                    'desc'    => esc_html__('We recommend enabling this to prevent fake votes that can be generated by changing IP addresses.', 'wp-ulike'),
+                    'desc'    => 'We recommend enabling this to prevent fake votes that can be generated by changing IP addresses.',
                 ),
                 'logged_out_display_type' => array(
                     'id'         => 'logged_out_display_type',
                     'type'       => 'button_set',
                     'title'      => esc_html__( 'Logged-out Button Display', 'wp-ulike'),
-                    'desc'       => esc_html__('Choose how the vote button is shown to users who aren\'t logged in—either as a standard button or a template message prompting login.', 'wp-ulike'),
+                    'desc'       => 'Choose how the vote button is shown to users who aren\'t logged in—either as a standard button or a template message prompting login.',
                     'options'    => array(
                         'alert'  => esc_html__('Template', 'wp-ulike'),
                         'button' => esc_html__('Button', 'wp-ulike')
@@ -980,28 +992,21 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
          * @return array Pro lock field array
          */
         public function get_pro_lock_field( $section = 'profiles' ) {
-            // In-dashboard Pro preview only after enough engagement; "Go Pro" menu is always available.
-            if ( (int) wp_ulike_count_all_logs( 'all' ) < 25 ) {
-                return array();
-            }
-
             $configs = array(
                 'profiles' => array(
                     'id'          => 'wp_ulike_pro_profiles_lock',
-                    'title'       => esc_html__( 'Build Stronger Community Engagement', 'wp-ulike' ),
-                    'description' => esc_html__( 'Create Instagram-style user profiles that showcase user activity, likes, and engagement history. Transform anonymous visitors into recognized community members who return for more interactions.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'User Profiles', 'wp-ulike' ),
+                    'description' => esc_html( 'Show like history and engagement on Instagram-style profile pages.' ),
                     'features'    => array(
-                        esc_html__( 'Display user like history and engagement stats', 'wp-ulike' ),
-                        esc_html__( 'Customizable profile layouts and permalinks', 'wp-ulike' ),
-                        esc_html__( 'User badges and achievement systems', 'wp-ulike' ),
-                        esc_html__( 'Avatar management and profile customization', 'wp-ulike' ),
-                        esc_html__( 'Activity feeds showing user interactions', 'wp-ulike' )
+                        esc_html__( 'Like history and engagement stats', 'wp-ulike' ),
+                        esc_html__( 'Custom profile layouts', 'wp-ulike' ),
+                        esc_html__( 'Badges and activity feeds', 'wp-ulike' ),
                     ),
                     'field_pattern' => array(
                         array(
                             'type'  => 'switcher',
                             'title' => sprintf( esc_html__('Enable %s', 'wp-ulike'), esc_html__('User Profiles', 'wp-ulike') ),
-                            'desc'  => esc_html__('Create custom user profile pages where users can view and manage their information, activity, and preferences.', 'wp-ulike'),
+                            'desc'  => 'Create custom user profile pages where users can view and manage their information, activity, and preferences.',
                         ),
                         array(
                             'type'  => 'select',
@@ -1020,20 +1025,18 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ),
                 'forms' => array(
                     'id'          => 'wp_ulike_pro_forms_lock',
-                    'title'       => esc_html__( 'Convert More Visitors Into Active Users', 'wp-ulike' ),
-                    'description' => esc_html__( 'Replace clunky WordPress login forms with seamless AJAX-powered authentication. Reduce bounce rates and turn casual browsers into engaged community members who can like, share, and interact.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Ajax Login & Register', 'wp-ulike' ),
+                    'description' => esc_html( 'AJAX login and registration without full page reloads.' ),
                     'features'    => array(
-                        esc_html__( 'Zero-page-reload login and registration', 'wp-ulike' ),
-                        esc_html__( 'Custom branded login pages', 'wp-ulike' ),
-                        esc_html__( 'Email verification and security features', 'wp-ulike' ),
-                        esc_html__( 'Two-factor authentication support', 'wp-ulike' ),
-                        esc_html__( 'Spam protection with reCAPTCHA', 'wp-ulike' )
+                        esc_html__( 'Login and register without reload', 'wp-ulike' ),
+                        esc_html__( 'Custom branded pages', 'wp-ulike' ),
+                        esc_html__( 'Email verification & 2FA', 'wp-ulike' ),
                     ),
                     'field_pattern' => array(
                         array(
                             'type'  => 'select',
                             'title' => sprintf( esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Login', 'wp-ulike') ),
-                            'desc'  => esc_html__('Choose the page that contains your login form shortcode. This page will be used for user authentication.', 'wp-ulike'),
+                            'desc'  => 'Choose the page that contains your login form shortcode. This page will be used for user authentication.',
                         ),
                         array(
                             'type'  => 'text',
@@ -1052,20 +1055,18 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ),
                 'social_logins' => array(
                     'id'          => 'wp_ulike_pro_social_logins_lock',
-                    'title'       => esc_html__( 'Remove Registration Friction & Boost Signups', 'wp-ulike' ),
-                    'description' => esc_html__( 'Eliminate password fatigue with one-click social authentication. Users sign up faster, reducing abandonment rates and increasing your engaged user base ready to like and interact.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Social Login', 'wp-ulike' ),
+                    'description' => esc_html( 'One-click sign-in with Google, Facebook, GitHub, and more.' ),
                     'features'    => array(
-                        esc_html__( '14+ social networks including Google, Facebook, GitHub', 'wp-ulike' ),
-                        esc_html__( 'Automatic integration with login forms', 'wp-ulike' ),
-                        esc_html__( 'Customizable button designs and layouts', 'wp-ulike' ),
-                        esc_html__( 'Flexible positioning and display options', 'wp-ulike' ),
-                        esc_html__( 'One-click setup and configuration', 'wp-ulike' )
+                        esc_html__( '14+ social networks', 'wp-ulike' ),
+                        esc_html__( 'Works with login forms', 'wp-ulike' ),
+                        esc_html__( 'Customizable buttons', 'wp-ulike' ),
                     ),
                     'field_pattern' => array(
                         array(
                             'type'  => 'switcher',
                             'title' => esc_html__('Enable Social Logins', 'wp-ulike'),
-                            'desc'  => esc_html__('Allow users to log in or register using their social media accounts instead of creating a new account.', 'wp-ulike'),
+                            'desc'  => 'Allow users to log in or register using their social media accounts instead of creating a new account.',
                         ),
                         array(
                             'type'  => 'group',
@@ -1084,14 +1085,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ),
                 'share_buttons' => array(
                     'id'          => 'wp_ulike_pro_share_buttons_lock',
-                    'title'       => esc_html__( 'Turn Engagement Into Organic Traffic Growth', 'wp-ulike' ),
-                    'description' => esc_html__( 'Multiply your content reach by making every like button a potential share. When users engage with your content, they can instantly share it across 23+ social platforms, driving free organic traffic back to your site.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Social Share Buttons', 'wp-ulike' ),
+                    'description' => esc_html( 'Share buttons for 23+ networks next to your like buttons.' ),
                     'features'    => array(
-                        esc_html__( '23+ social networks including WhatsApp, Telegram, Reddit', 'wp-ulike' ),
-                        esc_html__( 'Auto-display alongside like buttons', 'wp-ulike' ),
-                        esc_html__( 'Customizable designs matching your brand', 'wp-ulike' ),
-                        esc_html__( 'Multiple button sets for different content types', 'wp-ulike' ),
-                        esc_html__( 'Shortcode placement anywhere on your site', 'wp-ulike' )
+                        esc_html__( '23+ social networks', 'wp-ulike' ),
+                        esc_html__( 'Auto-display with likes', 'wp-ulike' ),
+                        esc_html__( 'Shortcode placement', 'wp-ulike' ),
                     ),
                     'field_pattern' => array(
                         array(
@@ -1111,14 +1110,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ),
                 'emails' => array(
                     'id'          => 'wp_ulike_pro_emails_lock',
-                    'title'       => esc_html__( 'Professional Email Communication System', 'wp-ulike' ),
-                    'description' => esc_html__( 'Customize all email templates sent by WP ULike Pro including welcome emails, password resets, account verification, and notifications. Create branded, professional communications that match your site\'s style and improve user engagement.', 'wp-ulike' ),
+                    'title'       => esc_html__( 'Email Templates', 'wp-ulike' ),
+                    'description' => esc_html( 'Customize welcome, password reset, and notification emails.' ),
                     'features'    => array(
-                        esc_html__( 'Customizable email templates for all user actions', 'wp-ulike' ),
-                        esc_html__( 'HTML email support with rich formatting', 'wp-ulike' ),
-                        esc_html__( 'Variable system for dynamic content', 'wp-ulike' ),
-                        esc_html__( 'Welcome, password reset, and verification emails', 'wp-ulike' ),
-                        esc_html__( 'Custom sender name and email address', 'wp-ulike' )
+                        esc_html__( 'Custom email templates', 'wp-ulike' ),
+                        esc_html__( 'HTML formatting & variables', 'wp-ulike' ),
+                        esc_html__( 'Custom sender details', 'wp-ulike' ),
                     ),
                     'field_pattern' => array(
                         array(

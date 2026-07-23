@@ -6,7 +6,7 @@ Tags: like, engagement, feedback, voting, reactions
 Requires PHP: 7.2.5
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.1.2
+Stable tag: 5.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,8 +76,8 @@ Need profiles, share buttons, bulk vote tools, Elementor widgets, or REST API? P
 = Minimum Requirements =
 
 * WordPress 6.0 or greater
-* PHP 7.2 or greater
-* MySQL 5.0 or greater
+* PHP 7.2.5 or greater
+* MySQL 5.6 or greater
 
 = Recommended =
 
@@ -117,6 +117,9 @@ Yes. Use built-in templates and the live customizer. No code required. Pro adds 
 = Where do like buttons appear by default? =
 On single posts. Use blocks, shortcodes, or auto-display settings to place buttons elsewhere.
 
+= Like buttons appear on my homepage, archive, or PostX block grid — how do I hide them? =
+Open **WP ULike → Configuration → Content Types → Posts → Automatic Display** and use the **Hide Automatic Display On** list to select **Home / Front Page**, **Archives**, **Categories**, **Search Results**, **Tags**, and **Author Page**. The button will then only show on individual posts. For block grids (PostX, etc.), also check the **Plugin & theme conflicts** section on the **Help** screen.
+
 = What's the difference between WP ULike Free and Pro? =
 Free includes like buttons, a full statistics dashboard (Overview, reports, when-to-publish insights, logs, and tips), blocks, customizer, auto-display settings in Settings, backup, and privacy tools, with no vote limits. Pro adds who liked each post, engagement rates vs page views, full geography and content intelligence, WooCommerce sales comparisons, premium templates, Display Automation, profiles, share buttons, and more. [See the full comparison](https://wpulike.com/upgrade/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme). Both plugins stay active together.
 
@@ -130,6 +133,15 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 No. The like button loads minimal code on your pages, and vote responses are lightweight and optimized for speed. Statistics load in WordPress admin only and use smart caching as your site grows.
 
 == Changelog ==
+
+= 5.2.0 =
+* Added: **Pulse** — a faster, unified like-storage engine. New installs start on Pulse automatically; existing sites keep working with an optional background upgrade.
+* Added: **Storage upgrade** screen (WP ULike → Storage Upgrade) with progress bar, pause/resume, finish step, and optional cleanup of old tables. WP-CLI support: `wp ulike pulse status|start|pause|sync|verify|enable|drop-legacy`.
+* Added: **Site Health** integration (Tools → Site Health) for tables, storage/migration, leftover log-table cleanup, and a copyable Info dump. Help links there for actions.
+* Improved: Statistics, top lists, and vote logs now route through Pulse queries with mode-aware reads and a versioned, scoped query cache.
+* Improved: GDPR export/erase now covers Pulse rows alongside legacy logs.
+* Removed: Deprecated post rating value API (`wp_ulike_get_rating_value` now returns `null` with a deprecation notice).
+* Fixed: Multiple stability and performance fixes across admin and frontend.
 
 = 5.1.2 =
 * Fixed: Minor issue with the new Statistics dashboard.
@@ -202,6 +214,9 @@ No. The like button loads minimal code on your pages, and vote responses are lig
 * Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
+
+= 5.2.0 =
+A new faster like-storage engine (Pulse) is included. Existing sites keep working as before — your counts, buttons, and stats do not change. When ready, open **WP ULike → Storage Upgrade** to move old records to Pulse in the background. Purge your site cache after updating if you use a full-page cache plugin.
 
 = 5.1.1 =
 New Statistics dashboard with Overview, engagement reports, when-to-publish insights, and vote logs. Your votes and settings stay as they are. Purge your site cache after updating if you use a full-page cache plugin.

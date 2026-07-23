@@ -149,7 +149,10 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 if ( isset( $page['sections'] ) && is_array( $page['sections'] ) ) {
                     foreach ( $page['sections'] as &$section ) {
                         if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
-                            $section['fields'] = $this->apply_defaults_to_fields( $section['fields'], $values );
+                            $base_path = ! empty( $section['is_grouping_section'] ) && ! empty( $section['id'] )
+                                ? (string) $section['id']
+                                : '';
+                            $section['fields'] = $this->apply_defaults_to_fields( $section['fields'], $values, $base_path );
                         }
                     }
                 }
@@ -1289,47 +1292,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 /* translators: Label for style field */
                 'field.style' => esc_html__( 'Style', 'wp-ulike' ),
 
-                // Field Labels - Typography
-                /* translators: Label for font family field */
-                'field.typography.font_family' => esc_html__( 'Font Family', 'wp-ulike' ),
-                /* translators: Label for font size field */
-                'field.typography.font_size' => esc_html__( 'Font Size', 'wp-ulike' ),
-                /* translators: Label for font weight field */
-                'field.typography.font_weight' => esc_html__( 'Font Weight', 'wp-ulike' ),
-                /* translators: Label for line height field */
-                'field.typography.line_height' => esc_html__( 'Line Height', 'wp-ulike' ),
-                /* translators: Label for letter spacing field */
-                'field.typography.letter_spacing' => esc_html__( 'Letter Spacing', 'wp-ulike' ),
-                /* translators: Label for text align field */
-                'field.typography.text_align' => esc_html__( 'Text Align', 'wp-ulike' ),
-                /* translators: Label for text transform field */
-                'field.typography.text_transform' => esc_html__( 'Text Transform', 'wp-ulike' ),
-                /* translators: Label for text decoration field */
-                'field.typography.text_decoration' => esc_html__( 'Text Decoration', 'wp-ulike' ),
-
-                // Field Labels - Spacing
-                /* translators: Label for top spacing */
-                'field.spacing.top' => esc_html__( 'Top', 'wp-ulike' ),
-                /* translators: Label for right spacing */
-                'field.spacing.right' => esc_html__( 'Right', 'wp-ulike' ),
-                /* translators: Label for bottom spacing */
-                'field.spacing.bottom' => esc_html__( 'Bottom', 'wp-ulike' ),
-                /* translators: Label for left spacing */
-                'field.spacing.left' => esc_html__( 'Left', 'wp-ulike' ),
-
-                // Field Labels - Background
-                /* translators: Label for background color field */
-                'field.background.color' => esc_html__( 'Background Color', 'wp-ulike' ),
-                /* translators: Label for background image field */
-                'field.background.image' => esc_html__( 'Background Image', 'wp-ulike' ),
-                /* translators: Label for background repeat field */
-                'field.background.repeat' => esc_html__( 'Repeat', 'wp-ulike' ),
-                /* translators: Label for background position field */
-                'field.background.position' => esc_html__( 'Position', 'wp-ulike' ),
-                /* translators: Label for background size field */
-                'field.background.size' => esc_html__( 'Size', 'wp-ulike' ),
-                /* translators: Label for background attachment field */
-                'field.background.attachment' => esc_html__( 'Attachment', 'wp-ulike' ),
+                // Typography / spacing / background chrome labels use English fallbacks in Optiwich.
 
                 // General Labels
                 /* translators: Generic label for options (used in multiple contexts) */
@@ -1342,6 +1305,14 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'general.new' => esc_html__( 'New', 'wp-ulike' ),
                 /* translators: Generic label for item */
                 'general.item' => esc_html__( 'Item', 'wp-ulike' ),
+
+                // Emoji reactions field
+                'fields.quick_add' => esc_html__( 'Quick add', 'wp-ulike' ),
+                'fields.emoji' => esc_html__( 'Emoji', 'wp-ulike' ),
+                'fields.label' => esc_html__( 'Label', 'wp-ulike' ),
+                'fields.reaction_label_placeholder' => esc_html__( 'Like', 'wp-ulike' ),
+                'fields.add_reaction' => esc_html__( 'Add reaction', 'wp-ulike' ),
+                'fields.choose_emoji' => esc_html__( 'Choose emoji', 'wp-ulike' ),
 
             );
 

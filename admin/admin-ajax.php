@@ -203,7 +203,7 @@ function wp_ulike_history_api(){
 	$perPage = isset( $_GET['perPage'] ) ? absint( $_GET['perPage'] ) : 15;
 
 	$settings = wp_ulike_setting_type::get_instance( $type );
-	$instance = new wp_ulike_logs( $settings->getTableName(), $page, $perPage  );
+	$instance = new wp_ulike_logs( $settings->getLogIdentifier(), $page, $perPage  );
 	$output   = $instance->get_rows();
 
 	wp_send_json( $output );
@@ -237,7 +237,7 @@ function wp_ulike_delete_history_api(){
 	}
 
 	$settings = wp_ulike_setting_type::get_instance( $type );
-	$instance = new wp_ulike_logs( $settings->getTableName()  );
+	$instance = new wp_ulike_logs( $settings->getLogIdentifier()  );
 
 	if( ! $instance->delete_row( $item_id ) ){
 		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
@@ -595,18 +595,17 @@ function wp_ulike_localization_api(){
 		'Learn more'     => esc_html__( 'Learn more', 'wp-ulike' ),
 		'Pro'            => esc_html__( 'Pro', 'wp-ulike' ),
 		'Settings'       => esc_html__( 'Settings', 'wp-ulike' ),
-		'Help'           => esc_html__( 'Help', 'wp-ulike' ),
-		'Explore Pro'    => esc_html__( 'Explore Pro', 'wp-ulike' ),
-		'Explore Pro reports' => esc_html__( 'Explore Pro reports', 'wp-ulike' ),
-		'Go deeper with Pro' => esc_html__( 'Go deeper with Pro', 'wp-ulike' ),
-		'Preview advanced reports — upgrade when you need live data.' => esc_html__( 'Preview advanced reports — upgrade when you need live data.', 'wp-ulike' ),
+		'Help'           => esc_html__( 'Overview', 'wp-ulike' ),
+		'Get Pro'        => esc_html__( 'Get Pro', 'wp-ulike' ),
+		'Get Pro reports' => esc_html__( 'Get Pro reports', 'wp-ulike' ),
+		'Unlock live audience maps, top fans, and publishing insights with Pro.' => esc_html__( 'Unlock live audience maps, top fans, and publishing insights with Pro.', 'wp-ulike' ),
 		"See who's engaging most" => esc_html__( "See who's engaging most", 'wp-ulike' ),
 		'{{count}} engagements so far — unlock audience maps, top fans, and publishing insights.' => esc_html__( '{{count}} engagements so far — unlock audience maps, top fans, and publishing insights.', 'wp-ulike' ),
 		'Minimize Pro promo' => esc_html__( 'Minimize Pro promo', 'wp-ulike' ),
 		'Find your best posting times and top-performing topics' => esc_html__( 'Find your best posting times and top-performing topics', 'wp-ulike' ),
 		'Learn which devices and browsers your voters use' => esc_html__( 'Learn which devices and browsers your voters use', 'wp-ulike' ),
 		'Sidebar Pro card' => esc_html__( 'Sidebar Pro card', 'wp-ulike' ),
-		'Minimized to “Explore Pro” in the sidebar.' => esc_html__( 'Minimized to “Explore Pro” in the sidebar.', 'wp-ulike' ),
+		'Minimized to “Get Pro” in the sidebar.' => esc_html__( 'Minimized to “Get Pro” in the sidebar.', 'wp-ulike' ),
 		'Full card visible in the sidebar.' => esc_html__( 'Full card visible in the sidebar.', 'wp-ulike' ),
 		'Show full card' => esc_html__( 'Show full card', 'wp-ulike' ),
 		'Milestone'      => esc_html__( 'Milestone', 'wp-ulike' ),
@@ -650,6 +649,10 @@ function wp_ulike_localization_api(){
 		'Last active'    => esc_html__( 'Last active', 'wp-ulike' ),
 		'Reactions'      => esc_html__( 'Reactions', 'wp-ulike' ),
 		'Back to engagement' => esc_html__( 'Back to engagement', 'wp-ulike' ),
+		'No registered engagers yet' => esc_html__( 'No registered engagers yet', 'wp-ulike' ),
+		'No registered engagers for {{title}}' => esc_html__( 'No registered engagers for {{title}}', 'wp-ulike' ),
+		'Guest votes are counted in totals but only registered members appear here.' => esc_html__( 'Guest votes are counted in totals but only registered members appear here.', 'wp-ulike' ),
+		'Like / Dislike Buttons' => esc_html__( 'Like / Dislike Buttons', 'wp-ulike' ),
 		'{{count}} engaged users' => esc_html__( '{{count}} engaged users', 'wp-ulike' ),
 		'{{count}} users engaged with {{title}}' => esc_html__( '{{count}} users engaged with {{title}}', 'wp-ulike' ),
 		'{{count}} engager(s)' => esc_html__( '{{count}} engager(s)', 'wp-ulike' ),
@@ -662,6 +665,38 @@ function wp_ulike_localization_api(){
 		'Afternoon'      => esc_html__( 'Afternoon', 'wp-ulike' ),
 		'Evening'        => esc_html__( 'Evening', 'wp-ulike' ),
 		'Night'          => esc_html__( 'Night', 'wp-ulike' ),
+
+		// Engagement modes & engagers UI
+		'Loading…'       => esc_html__( 'Loading…', 'wp-ulike' ),
+		'Close'          => esc_html__( 'Close', 'wp-ulike' ),
+		'See who'        => esc_html__( 'See who', 'wp-ulike' ),
+		'Reaction'       => esc_html__( 'Reaction', 'wp-ulike' ),
+		'Rating'         => esc_html__( 'Rating', 'wp-ulike' ),
+		'Ratings'        => esc_html__( 'Ratings', 'wp-ulike' ),
+		'ratings'        => esc_html__( 'ratings', 'wp-ulike' ),
+		'total'          => esc_html__( 'total', 'wp-ulike' ),
+		'Average rating' => esc_html__( 'Average rating', 'wp-ulike' ),
+		'Star rating'    => esc_html__( 'Star rating', 'wp-ulike' ),
+		'Star ratings'   => esc_html__( 'Star ratings', 'wp-ulike' ),
+		'Star rating template' => esc_html__( 'Star rating template', 'wp-ulike' ),
+		'Star ratings in this period.' => esc_html__( 'Star ratings in this period.', 'wp-ulike' ),
+		'Emoji reactions' => esc_html__( 'Emoji reactions', 'wp-ulike' ),
+		'Emoji template'  => esc_html__( 'Emoji template', 'wp-ulike' ),
+		'Emoji reactions in this period.' => esc_html__( 'Emoji reactions in this period.', 'wp-ulike' ),
+		'Reactions are up {{percent}}% compared to last week.' => esc_html__( 'Reactions are up {{percent}}% compared to last week.', 'wp-ulike' ),
+		'Ratings are up {{percent}}% compared to last week.' => esc_html__( 'Ratings are up {{percent}}% compared to last week.', 'wp-ulike' ),
+		'{{count}} emoji reactions this week — use Top content to find what resonates.' => esc_html__( '{{count}} emoji reactions this week — use Top content to find what resonates.', 'wp-ulike' ),
+		'{{count}} star ratings this week — use Top content to find what resonates.' => esc_html__( '{{count}} star ratings this week — use Top content to find what resonates.', 'wp-ulike' ),
+		'{{name}} is your top rater — consider a loyalty perk.' => esc_html__( '{{name}} is your top rater — consider a loyalty perk.', 'wp-ulike' ),
+		'{{title}} averages ★ {{avg}} — replicate this format.' => esc_html__( '{{title}} averages ★ {{avg}} — replicate this format.', 'wp-ulike' ),
+		'{{title}} leads with {{count}} reactions in this period.' => esc_html__( '{{title}} leads with {{count}} reactions in this period.', 'wp-ulike' ),
+		'★ {{avg}} site average' => esc_html__( '★ {{avg}} site average', 'wp-ulike' ),
+		'Device Insights' => esc_html__( 'Device Insights', 'wp-ulike' ),
+		'Intelligence Report' => esc_html__( 'Intelligence Report', 'wp-ulike' ),
+		'WooCommerce Report' => esc_html__( 'WooCommerce Report', 'wp-ulike' ),
+		'Upgrade like storage' => esc_html__( 'Upgrade like storage', 'wp-ulike' ),
+		'Unable to load data' => esc_html__( 'Unable to load data', 'wp-ulike' ),
+		'Please refresh the page or try again later.' => esc_html__( 'Please refresh the page or try again later.', 'wp-ulike' ),
 
 		// Time ago
 		'timeAgo'       => esc_html__( '{{count}} {{interval}} ago', 'wp-ulike' ),

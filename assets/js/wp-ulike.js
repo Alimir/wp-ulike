@@ -1,4 +1,4 @@
-/*! WP ULike - v5.1.2
+/*! WP ULike - v5.2.0
  *  https://wpulike.com
  *  TechnoWich 2026;
  */
@@ -505,10 +505,16 @@
       setTooltipState('loading');
     };
 
-    // If tooltip is created with hover trigger, check state immediately
-    // This handles the case when tooltip is created while user is already hovering
+    // If tooltip is created with hover trigger, only auto-show when the user
+    // is actually hovering the element at creation time (e.g. the tooltip was
+    // bound while the mouse was already over it). Without this guard the
+    // dataFetcher fires for every popover on page load, triggering eager
+    // AJAX calls before any hover happens.
     if (!options.trigger || options.trigger === "hover") {
       setTimeout(() => {
+        if (!element.matches(":hover")) {
+          return;
+        }
         const currentState = getTooltipState();
         if (!currentState || currentState === '') {
           handleShow(); // Will request data
@@ -1754,9 +1760,18 @@
     jQuery.fn[pluginName] = function (options) {
       return this.each(function () {
         if (!this.hasAttribute || !this.hasAttribute("data-ulike-initialized")) {
-          new Plugin(this, options);
-          if (this.setAttribute) {
-            this.setAttribute("data-ulike-initialized", "true");
+          try {
+            new Plugin(this, options);
+            if (this.setAttribute) {
+              this.setAttribute("data-ulike-initialized", "true");
+            }
+          } catch (err) {
+            if (window.console && typeof window.console.error === "function") {
+              window.console.error("WP ULike: failed to initialize button", this, err);
+            }
+            if (this && this.setAttribute) {
+              this.setAttribute("data-ulike-initialized", "error");
+            }
           }
         }
       });
@@ -1794,8 +1809,22 @@
 
     elementArray.forEach((element) => {
       if (element && !element.hasAttribute("data-ulike-initialized")) {
-        new WordpressUlike(element);
-        element.setAttribute("data-ulike-initialized", "true");
+        // Isolate each button init so one broken instance (CSS conflict,
+        // malformed markup, theme-injected wrappers) cannot leave the rest
+        // of the page unbound — see deactivation reports of "squished
+        // button that doesn't do anything".
+        try {
+          new WordpressUlike(element);
+          element.setAttribute("data-ulike-initialized", "true");
+        } catch (err) {
+          if (window.console && typeof window.console.error === "function") {
+            window.console.error("WP ULike: failed to initialize button", element, err);
+          }
+          // Mark as initialized so we don't retry on every mutation batch.
+          if (element && element.setAttribute) {
+            element.setAttribute("data-ulike-initialized", "error");
+          }
+        }
       }
     });
   };

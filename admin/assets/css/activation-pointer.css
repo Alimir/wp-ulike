@@ -68,7 +68,7 @@
 .wp-ulike-activation-pointer__close {
 	position: absolute;
 	top: 6px;
-	right: 8px;
+	inset-inline-end: 8px;
 	padding: 0;
 	border: 0;
 	background: transparent;
@@ -78,14 +78,9 @@
 	cursor: pointer;
 }
 
-[dir="rtl"] .wp-ulike-activation-pointer__close,
-.rtl .wp-ulike-activation-pointer__close {
-	right: auto;
-	left: 8px;
-}
-
 .wp-ulike-activation-pointer__title {
-	margin: 0 28px 8px 0;
+	margin-block: 0 8px;
+	margin-inline: 0 28px;
 	padding: 0;
 	font-size: 14px;
 	line-height: 1.4;

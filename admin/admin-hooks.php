@@ -68,7 +68,7 @@ function wp_ulike_on_logout_hook() {
 		return;
 	}
 	// Refresh new votes
-	wp_ulike_update_meta_data( 1, 'statistics', 'calculate_new_votes', 0 );
+	WP_Ulike_Query_Cache::reset_admin_new_votes();
 }
 add_action('wp_logout', 'wp_ulike_on_logout_hook');
 
@@ -120,8 +120,7 @@ function wp_ulike_notice_manager(){
 
 	// Show review notice once the site has meaningful engagement (likes only).
 	if ( ! wp_ulike_get_transient( 'wp-ulike-notice-wp_ulike_leave_a_review' ) ) {
-		$cached_count = wp_ulike_get_meta_data( 1, 'statistics', 'count_logs_period_all', true );
-		$count_logs   = is_numeric( $cached_count ) ? absint( $cached_count ) : wp_ulike_count_all_logs();
+		$count_logs = wp_ulike_count_all_logs();
 
 		if ( $count_logs >= 25 ) {
 			$notice_list['wp_ulike_leave_a_review'] = new wp_ulike_notices(
@@ -170,28 +169,29 @@ function wp_ulike_notice_manager(){
 			// Get license status using the validator class
 			$license_status = WP_Ulike_Pro_Validator::get_license_status();
 
-			// Show notice for users with invalid, expired, disabled, deactivated, or missing licenses
+			// Show notice for users with invalid, expired, disabled, deactivated, or missing licenses.
+			// Use validator constants — older Pro builds may omit STATUS_MISSING / STATUS_HTTP_ERROR.
 			$invalid_license_statuses = [
-				WP_Ulike_Pro_API::STATUS_INVALID,
-				WP_Ulike_Pro_API::STATUS_EXPIRED,
-				WP_Ulike_Pro_API::STATUS_DISABLED,
-				WP_Ulike_Pro_API::STATUS_DEACTIVATED,
-				WP_Ulike_Pro_API::STATUS_SITE_INACTIVE,
-				WP_Ulike_Pro_API::STATUS_MISSING,
-				WP_Ulike_Pro_API::STATUS_HTTP_ERROR,
+				WP_Ulike_Pro_Validator::STATUS_INVALID,
+				WP_Ulike_Pro_Validator::STATUS_EXPIRED,
+				WP_Ulike_Pro_Validator::STATUS_DISABLED,
+				WP_Ulike_Pro_Validator::STATUS_DEACTIVATED,
+				WP_Ulike_Pro_Validator::STATUS_SITE_INACTIVE,
+				WP_Ulike_Pro_Validator::STATUS_MISSING,
+				WP_Ulike_Pro_Validator::STATUS_HTTP_ERROR,
 			];
 
 			// Show notice if license status is invalid, expired, or nulled
 			if( $license_status !== false && $license_status !== null && in_array( $license_status, $invalid_license_statuses, true ) ){
 				$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
 
-				if( $license_status === WP_Ulike_Pro_API::STATUS_EXPIRED ){
+				if( $license_status === WP_Ulike_Pro_Validator::STATUS_EXPIRED ){
 					$status_message = esc_html__( 'Your license has expired', 'wp-ulike' );
-				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_DISABLED ){
+				} elseif( $license_status === WP_Ulike_Pro_Validator::STATUS_DISABLED ){
 					$status_message = esc_html__( 'Your license has been disabled', 'wp-ulike' );
-				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_INVALID || $license_status === WP_Ulike_Pro_API::STATUS_MISSING ){
+				} elseif( $license_status === WP_Ulike_Pro_Validator::STATUS_INVALID || $license_status === WP_Ulike_Pro_Validator::STATUS_MISSING ){
 					$status_message = esc_html__( 'Your license needs attention', 'wp-ulike' );
-				} elseif( $license_status === WP_Ulike_Pro_API::STATUS_HTTP_ERROR ){
+				} elseif( $license_status === WP_Ulike_Pro_Validator::STATUS_HTTP_ERROR ){
 					$status_message = esc_html__( 'Unable to verify your license', 'wp-ulike' );
 				}
 
@@ -252,7 +252,7 @@ add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 
 /**
  * Register Go Pro submenu (free installs only).
- * Primary always-on upgrade path — in-dashboard upsells appear after 25 total engagements.
+ * Always-on upgrade path (matches always-on stats/settings Pro upsells).
  *
  * @return void
  */
@@ -606,3 +606,60 @@ function wp_ulike_clear_css_generator_cache( $new_values = null ) {
 }
 // Hook to clear CSS cache when customizer is saved
 add_action( 'wp_ulike_customizer_saved', 'wp_ulike_clear_css_generator_cache', 10, 1 );
+
+/**
+ * Auto-display option model (final):
+ *
+ * - Users see "Show Buttons On" (checked = button appears there).
+ * - DB keeps posts_group|auto_display_filter as a hide-list for is_wp_ulike().
+ * - No migration: if the key exists, invert it for the form; if missing, Singular only.
+ * - Save writes a hide-list again (lossless for existing saved values).
+ *
+ * @param array $values Optiwich values.
+ * @return array
+ */
+function wp_ulike_hydrate_auto_display_filter_for_ui( $values ) {
+	if ( ! is_array( $values ) || ! class_exists( 'wp_ulike_setting_repo' ) ) {
+		return $values;
+	}
+
+	if ( empty( $values['posts_group'] ) || ! is_array( $values['posts_group'] ) ) {
+		$values['posts_group'] = array();
+	}
+
+	if ( isset( $values['posts_group']['auto_display_filter'] ) ) {
+		// Existing site: stored hide-list → show-list for the form.
+		$values['posts_group']['auto_display_filter'] = wp_ulike_setting_repo::convertHideFiltersToShowOn(
+			(array) $values['posts_group']['auto_display_filter']
+		);
+	} else {
+		// Never saved: product default (Singular).
+		$values['posts_group']['auto_display_filter'] = wp_ulike_setting_repo::getAutoDisplayShowOnDefault();
+	}
+
+	return $values;
+}
+add_filter( 'wp_ulike_optiwich_values', 'wp_ulike_hydrate_auto_display_filter_for_ui' );
+
+/**
+ * Show-list from the form → hide-list for DB.
+ *
+ * @param array $values Values about to be saved.
+ * @return array
+ */
+function wp_ulike_sync_auto_display_filter_on_save( $values ) {
+	if ( ! is_array( $values ) || empty( $values['posts_group'] ) || ! is_array( $values['posts_group'] ) ) {
+		return $values;
+	}
+
+	if ( ! class_exists( 'wp_ulike_setting_repo' ) || ! isset( $values['posts_group']['auto_display_filter'] ) ) {
+		return $values;
+	}
+
+	$values['posts_group']['auto_display_filter'] = wp_ulike_setting_repo::convertShowOnToHideFilters(
+		(array) $values['posts_group']['auto_display_filter']
+	);
+
+	return $values;
+}
+add_filter( 'wp_ulike_optiwich_save_values', 'wp_ulike_sync_auto_display_filter_on_save' );
