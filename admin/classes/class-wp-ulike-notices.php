@@ -263,11 +263,16 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
          * @return boolean
          */
         private function is_visible_screen(){
+            if ( empty( $this->args['screen_filter'] ) ) {
+                return false;
+            }
+
             $current_screen = get_current_screen();
-            if( ! empty( $this->args['screen_filter'] ) && ! in_array(  $current_screen->id, $this->args['screen_filter'] ) ) {
+            if ( ! $current_screen || empty( $current_screen->id ) ) {
                 return true;
             }
-            return false;
+
+            return ! in_array( $current_screen->id, $this->args['screen_filter'], true );
         }
 
         /**

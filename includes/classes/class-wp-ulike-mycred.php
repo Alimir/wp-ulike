@@ -213,8 +213,8 @@ if ( class_exists( 'myCRED_Hook' ) ) :
 					$author_id 	= bbp_get_reply_author_id( $id );
 					break;
 				case '_commentliked':
-					$comment_id = get_comment( $id );
-					$author_id 	= $comment_id->user_id;
+					$comment = get_comment( $id );
+					$author_id = ( $comment && isset( $comment->user_id ) ) ? $comment->user_id : 0;
 					break;
 				case '_activityliked':
 					$author_id 	= $this->bp_get_auhtor_id( $id );

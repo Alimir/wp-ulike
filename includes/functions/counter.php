@@ -63,7 +63,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 	 */
 	function wp_ulike_get_counter_value_info( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
 		// Remove 'un' prefix from status
-		$status = ltrim( $status, 'un');
+		$status = ltrim( (string) $status, 'un' );
 
 		if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
 			return new WP_Error( 'broke', esc_html__( "Please enter some value for required variables.", 'wp-ulike' ) );

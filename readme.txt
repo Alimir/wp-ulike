@@ -3,7 +3,7 @@ Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
 Tags: like, engagement, feedback, voting, reactions
-Requires PHP: 7.2.5
+Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.0
 Stable tag: 5.2.0
@@ -76,7 +76,7 @@ Need profiles, share buttons, bulk vote tools, Elementor widgets, or REST API? P
 = Minimum Requirements =
 
 * WordPress 6.0 or greater
-* PHP 7.2.5 or greater
+* PHP 7.3.0 or greater
 * MySQL 5.6 or greater
 
 = Recommended =
@@ -142,6 +142,7 @@ No. The like button loads minimal code on your pages, and vote responses are lig
 * Improved: GDPR export/erase now covers Pulse rows alongside legacy logs.
 * Removed: Deprecated post rating value API (`wp_ulike_get_rating_value` now returns `null` with a deprecation notice).
 * Fixed: Multiple stability and performance fixes across admin and frontend.
+* Fixed: PHP 8 fatal (`Unknown named parameter $id`) on every vote when `wp_ulike_after_process` callbacks run — vote saved but AJAX returned 500.
 
 = 5.1.2 =
 * Fixed: Minor issue with the new Statistics dashboard.

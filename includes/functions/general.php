@@ -237,19 +237,18 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_get_auhtor_id($cp_ID,$type) {
-		if($type == '_liked' || $type == '_topicliked'){
-			$post_tmp = get_post($cp_ID);
-			return $post_tmp->post_author;
-		}
-		else if($type == '_commentliked'){
+		if ( $type == '_liked' || $type == '_topicliked' ) {
+			$post_tmp = get_post( $cp_ID );
+			return ( $post_tmp && isset( $post_tmp->post_author ) ) ? $post_tmp->post_author : 0;
+		} elseif ( $type == '_commentliked' ) {
 			$comment = get_comment( $cp_ID );
-			return $comment->user_id;
+			return ( $comment && isset( $comment->user_id ) ) ? $comment->user_id : 0;
+		} elseif ( $type == '_activityliked' && function_exists( 'bp_activity_get_specific' ) ) {
+			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID, 'display_comments' => true ) );
+			return ( ! empty( $activity['activities'][0]->user_id ) ) ? $activity['activities'][0]->user_id : 0;
 		}
-		else if( $type == '_activityliked' ){
-			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID, 'display_comments'  => true ) );
-			return $activity['activities'][0]->user_id;
-		}
-		else return;
+
+		return 0;
 	}
 }
 
@@ -570,7 +569,7 @@ if( ! function_exists('wp_ulike_html_entity_decode') ){
 	 * @return string
 	 */
 	function wp_ulike_html_entity_decode( $value ){
-		return html_entity_decode( $value );
+		return html_entity_decode( (string) $value );
 	}
 }
 
@@ -760,7 +759,7 @@ if( ! function_exists('wp_ulike_kses') ){
 		$allowedtags = array_map( 'wp_ulike_global_attributes', $allowedtags );
 
 		// Decode HTML entities (in case the input is encoded)
-		$value = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );
+		$value = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8' );
 
 		// Temporarily extend safe_style_css filter to allow modern CSS properties
 		add_filter( 'safe_style_css', 'wp_ulike_extend_safe_css_properties', 10, 1 );

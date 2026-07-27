@@ -194,6 +194,9 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			}
 
 			$this->currentStatus = apply_filters( 'wp_ulike_user_current_status', $this->currentStatus, $this->prevStatus, $args );
+			if ( ! is_string( $this->currentStatus ) || '' === $this->currentStatus ) {
+				$this->currentStatus = 'like';
+			}
 		}
 
 		/**

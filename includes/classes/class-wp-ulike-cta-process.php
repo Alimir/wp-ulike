@@ -54,7 +54,7 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 				return 1;
 			} elseif( ! $this->isDistinct() ){
 				return 4;
-			} elseif( strpos( $this->getCurrentStatus(), 'un') === 0 ){
+			} elseif( strpos( (string) $this->getCurrentStatus(), 'un' ) === 0 ){
 				return 2;
 			} else {
 				return 3;
@@ -145,8 +145,8 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 				'slug'        => $this->parsedArgs['item_type'],
 				'table'       => $this->settings->getLegacyTableSuffix(),
 				'is_distinct' => $this->isDistinct(),
-				// Appended, not inserted, to keep positional args (do_action_ref_array)
-				// stable for existing add_action(..., $priority, $accepted_args>6) callbacks.
+				// Appended last so positional order stays stable for callbacks
+				// that accept more than 6 args (keys are stripped at fire time).
 				'item_type'   => $this->settings->getItemType(),
 			);
 		}

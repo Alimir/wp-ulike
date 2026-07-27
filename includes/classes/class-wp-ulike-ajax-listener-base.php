@@ -17,7 +17,7 @@ abstract class wp_ulike_ajax_listener_base{
 	/**
 	* Form Data
 	*/
-	public $data;
+	public $data = array();
 
 	/**
 	* User info
