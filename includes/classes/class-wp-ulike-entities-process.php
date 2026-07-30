@@ -658,16 +658,16 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			$get_user   = get_userdata( $this->currentUser );
 			$is_updated = false;
 			if( $get_user ){
-				if( in_array( $get_user->ID, $get_likers ) ){
-					if( strpos( $this->currentStatus, 'un') !== false ){
+				// Likers box = active likes only (matches Pulse rebuild_likers_list).
+				$is_liker = ( 'like' === $this->currentStatus );
+				if( in_array( $get_user->ID, $get_likers, true ) ){
+					if( ! $is_liker ){
 						$get_likers = array_diff( $get_likers, array( $get_user->ID ) );
 						$is_updated = true;
 					}
-				} else {
-					if( strpos( $this->currentStatus, 'un') === false ){
-						array_push( $get_likers, $get_user->ID );
-						$is_updated = true;
-					}
+				} elseif ( $is_liker ) {
+					array_push( $get_likers, $get_user->ID );
+					$is_updated = true;
 				}
 				// If array list has been changed, then update meta data.
 				if( $is_updated ){

@@ -9,6 +9,45 @@ if ( ! defined( 'WPINC' ) ) {
     die('No Naughty Business Please !');
 }
 
+if ( ! function_exists( 'wp_ulike_shortcode_resolve_item_id' ) ) {
+	/**
+	 * Resolve current item ID for shortcodes when `id` is omitted.
+	 *
+	 * @param string $type post|comment|activity|topic
+	 * @return int
+	 */
+	function wp_ulike_shortcode_resolve_item_id( $type ) {
+		$type = sanitize_key( (string) $type );
+
+		switch ( $type ) {
+			case 'comment':
+				return (int) get_comment_ID();
+
+			case 'activity':
+				if ( function_exists( 'bp_get_activity_comment_id' ) ) {
+					$comment_id = bp_get_activity_comment_id();
+					return (int) ( null !== $comment_id ? $comment_id : bp_get_activity_id() );
+				}
+				return 0;
+
+			case 'topic':
+				if ( function_exists( 'bbp_get_reply_id' ) ) {
+					$reply_id = (int) bbp_get_reply_id();
+					if ( $reply_id ) {
+						return $reply_id;
+					}
+				}
+				if ( function_exists( 'bbp_get_topic_id' ) ) {
+					return (int) bbp_get_topic_id();
+				}
+				return (int) wp_ulike_get_the_id();
+
+			default:
+				return (int) wp_ulike_get_the_id();
+		}
+	}
+}
+
 if( ! function_exists( 'wp_ulike_shortcode' ) ){
 	/**
 	 * Create shortcode: [wp_ulike]
@@ -111,28 +150,19 @@ if( ! function_exists( 'wp_ulike_counter_shortcode' ) ){
             'past_time'  => $args['past_time']
         );
 
-        // Validate the "status" attribute
-        $allowed_statuses = array('like', 'unlike', 'dislike', 'undislike');
-        if (!in_array($attributes['status'], $allowed_statuses)) {
-            $attributes['status'] = 'like'; // Default to 'like' if the status is not one of the allowed values
+        // Validate type + status
+        $allowed_types = array( 'post', 'comment', 'activity', 'topic' );
+        if ( ! in_array( $attributes['type'], $allowed_types, true ) ) {
+            $attributes['type'] = 'post';
         }
 
-        if( empty( $args['id'] ) ){
-            switch ( $args['type'] ) {
-                case 'comment':
-                    $attributes['id'] = get_comment_ID();
-                    break;
+        $allowed_statuses = array( 'like', 'unlike', 'dislike', 'undislike' );
+        if ( ! in_array( $attributes['status'], $allowed_statuses, true ) ) {
+            $attributes['status'] = 'like';
+        }
 
-                case 'activity':
-                    if( function_exists( 'bp_get_activity_comment_id' ) ){
-                        $attributes['id'] = bp_get_activity_comment_id() !== NULL ? bp_get_activity_comment_id() : bp_get_activity_id();
-                    }
-                    break;
-
-                default:
-                    $attributes['id'] = wp_ulike_get_the_id();
-                    break;
-            }
+        if ( empty( $args['id'] ) ) {
+            $attributes['id'] = wp_ulike_shortcode_resolve_item_id( $attributes['type'] );
         }
 
         if( ! empty( $args['past_time'] ) ){
@@ -177,22 +207,8 @@ if( ! function_exists( 'wp_ulike_likers_box_shortcode' ) ){
             return esc_html__('Invalid type specified for [wp_ulike_likers_box] shortcode.', 'wp-ulike');
         }
 
-        if( empty( $args['id'] ) ){
-            switch ( $args['type'] ) {
-                case 'comment':
-                    $args['id'] = get_comment_ID();
-                    break;
-
-                case 'activity':
-                    if( function_exists( 'bp_get_activity_comment_id' ) ){
-                        $args['id'] = bp_get_activity_comment_id() !== NULL ? bp_get_activity_comment_id() : bp_get_activity_id();
-                    }
-                    break;
-
-                default:
-                    $args['id'] = wp_ulike_get_the_id();
-                    break;
-            }
+        if ( empty( $args['id'] ) ) {
+            $args['id'] = wp_ulike_shortcode_resolve_item_id( $args['type'] );
         }
 
         $get_settings = wp_ulike_get_post_settings_by_type( $args['type'] );
