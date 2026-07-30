@@ -21,7 +21,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 		 * @param string $identifier Item type (post, comment, …) or legacy table suffix.
 		 * @param string $search     Optional case-insensitive search (user / IP / status / content title).
 		 */
-		function __construct( $identifier, $page = 1, $per_page = 15, $sort = array(
+		function __construct( $identifier, $page = 1, $per_page = 20, $sort = array(
 			'type'  => 'DESC',
 			'field' => 'id'
 		), $search = '' ){

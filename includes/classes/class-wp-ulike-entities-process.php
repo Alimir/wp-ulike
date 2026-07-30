@@ -650,23 +650,32 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			// Get meta data
 			$get_likers = wp_ulike_get_meta_data( $item_id, $this->itemType, 'likers_list', true );
 
-			// Check empty array
-			if( empty( $get_likers ) ){
-				$get_likers = array();
-			}
+			// Normalise to unique ints before comparing. The stored list holds
+			// numeric STRINGS whenever it was rebuilt from the ledger
+			// (get_col() -> implode -> explode in wp_ulike_get_likers_list_per_post),
+			// so a strict in_array() against WP_User::ID (int) would never match:
+			// existing likers would be appended again, and unlikers would never
+			// be removed from the box.
+			$get_likers = empty( $get_likers )
+				? array()
+				: array_values( array_unique( array_map( 'absint', (array) $get_likers ) ) );
 
 			$get_user   = get_userdata( $this->currentUser );
 			$is_updated = false;
 			if( $get_user ){
-				// Likers box = active likes only (matches Pulse rebuild_likers_list).
-				$is_liker = ( 'like' === $this->currentStatus );
-				if( in_array( $get_user->ID, $get_likers, true ) ){
+				// Likers box = any ACTIVE vote, like or dislike. Pre-Pulse this
+				// list was rebuilt with `status IN ('like','dislike')`, so a
+				// disliker belonged in the box and only un-votes removed you.
+				// Keep this in step with WP_Ulike_Pulse_Query::rebuild_likers_list().
+				$is_liker = in_array( $this->currentStatus, array( 'like', 'dislike' ), true );
+				$user_id = (int) $get_user->ID;
+				if( in_array( $user_id, $get_likers, true ) ){
 					if( ! $is_liker ){
-						$get_likers = array_diff( $get_likers, array( $get_user->ID ) );
+						$get_likers = array_values( array_diff( $get_likers, array( $user_id ) ) );
 						$is_updated = true;
 					}
 				} elseif ( $is_liker ) {
-					array_push( $get_likers, $get_user->ID );
+					$get_likers[] = $user_id;
 					$is_updated = true;
 				}
 				// If array list has been changed, then update meta data.

@@ -104,29 +104,28 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 		 * @return string|false
 		 */
 		private static function from_merged( $item_id, $user_id, $item_type ) {
+			$pulse = self::pulse_latest_row( $item_id, $user_id, $item_type );
+
+			// A pulse row always wins when one exists. In dual/merged mode the
+			// pulse table is the ONLY write target (wp_ulike_writes_pulse() is
+			// true), so any pulse vote row for this user+item is by definition
+			// their latest action -- including rows copied over by migration.
+			//
+			// Do NOT compare legacy vs pulse timestamps. The two columns are not
+			// on the same clock: older plugin versions wrote legacy date_time in
+			// SITE-LOCAL time, while pulse always writes UTC. On a site with a
+			// positive UTC offset a legacy row therefore compares as "newer" than
+			// a vote cast seconds ago, so the fresh vote was discarded on page
+			// load -- the button flipped back to inactive after a refresh even
+			// though the AJAX response and the ledger were both correct.
+			if ( $pulse ) {
+				return WP_Ulike_Pulse_Vote_Map::row_to_legacy( $pulse->engagement_key, $pulse->status );
+			}
+
+			// No post-cutover activity: fall back to the pre-migration snapshot.
 			$legacy = self::legacy_latest_row( $item_id, $user_id, $item_type );
-			$pulse  = self::pulse_latest_row( $item_id, $user_id, $item_type );
 
-			if ( ! $legacy && ! $pulse ) {
-				return false;
-			}
-
-			if ( $legacy && ! $pulse ) {
-				return (string) $legacy->status;
-			}
-
-			if ( $pulse && ! $legacy ) {
-				return WP_Ulike_Pulse_Vote_Map::row_to_legacy( $pulse->engagement_key, $pulse->status );
-			}
-
-			$legacy_time = strtotime( $legacy->date_time );
-			$pulse_time  = strtotime( $pulse->date_time );
-
-			if ( $pulse_time >= $legacy_time ) {
-				return WP_Ulike_Pulse_Vote_Map::row_to_legacy( $pulse->engagement_key, $pulse->status );
-			}
-
-			return (string) $legacy->status;
+			return $legacy ? (string) $legacy->status : false;
 		}
 
 		/**

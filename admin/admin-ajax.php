@@ -168,7 +168,7 @@ function wp_ulike_tops_api() {
 	// @endif
 
 	$type  = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
-	$limit = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : 8;
+	$limit = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : 10;
 	$data  = wp_ulike_stats::get_instance()->get_tops_api_data( $type, $limit );
 
 	if ( null === $data ) {
@@ -200,7 +200,7 @@ function wp_ulike_history_api(){
 
 	$type    = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : 'post';
 	$page    = isset( $_GET['page'] ) ? absint( $_GET['page'] ) : 1;
-	$perPage = isset( $_GET['perPage'] ) ? absint( $_GET['perPage'] ) : 15;
+	$perPage = isset( $_GET['perPage'] ) ? absint( $_GET['perPage'] ) : 20;
 
 	$settings = wp_ulike_setting_type::get_instance( $type );
 	$instance = new wp_ulike_logs( $settings->getLogIdentifier(), $page, $perPage  );

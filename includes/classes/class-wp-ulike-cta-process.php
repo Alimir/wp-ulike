@@ -157,7 +157,13 @@ if ( ! class_exists( 'wp_ulike_cta_process' ) ) {
 		 * @return integer
 		 */
 		public function getCounterValue(){
-			$counter_val = wp_ulike_get_counter_value( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $this->getCurrentStatus(), $this->isDistinct() );
+			// Always report the ACTIVE tally for the direction just acted on:
+			// after an unlike the button must show the remaining like count, not
+			// the number of unlike events. wp_ulike_get_counter_value_info() now
+			// honours unlike/undislike literally (for [wp_ulike_counter status="unlike"]),
+			// so the base status has to be resolved here.
+			$counter_status = wp_ulike_get_base_vote_status( $this->getCurrentStatus() );
+			$counter_val    = wp_ulike_get_counter_value( $this->parsedArgs['item_id'], $this->parsedArgs['item_type'], $counter_status, $this->isDistinct() );
 
 			// Hide if zero
 			if( wp_ulike_setting_repo::isCounterZeroHidden( $this->parsedArgs['item_type'] ) && $counter_val == 0 ){

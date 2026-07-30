@@ -65,16 +65,20 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		// Preserve unlike/undislike for Pulse (removed rows). Meta counters only store active like|dislike.
 		$requested_status = sanitize_key( (string) $status );
 		$is_removed       = in_array( $requested_status, array( 'unlike', 'undislike' ), true );
-		$meta_status      = $is_removed
-			? ( 'undislike' === $requested_status ? 'dislike' : 'like' )
-			: ( '' !== $requested_status ? $requested_status : 'like' );
+		$meta_status      = wp_ulike_get_base_vote_status( $requested_status );
 
 		if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
 			return new WP_Error( 'broke', esc_html__( "Please enter some value for required variables.", 'wp-ulike' ) );
 		}
 
-		// Active counts may use meta cache; removed (unlike/undislike) always hit the ledger/logs.
-		$counter_value = $is_removed ? null : wp_ulike_meta_counter_value( $ID, $type, $meta_status, $is_distinct );
+		// Only like/dislike are safe to serve from the meta cache: those are the
+		// only counters updateCounterMeta() keeps in step on each vote. 'all' is
+		// written once on first read and then never incremented again, so a cached
+		// value silently freezes (e.g. reports 0 forever on an item that was read
+		// before it had any votes). Removed statuses (unlike/undislike) are never
+		// cached either. Both cases always hit the ledger/logs instead.
+		$is_cacheable  = ! $is_removed && 'all' !== $meta_status;
+		$counter_value = $is_cacheable ? wp_ulike_meta_counter_value( $ID, $type, $meta_status, $is_distinct ) : null;
 
 		if( is_null( $counter_value ) || ! empty( $date_range ) ){
 			global $wpdb;
@@ -107,8 +111,8 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 				$counter_value  = empty( $counter_value ) ? 0 : (int) $counter_value;
 			}
 
-			// Only cache active like/dislike counters in meta.
-			if( empty( $date_range ) && ! $is_removed ){
+			// Only cache active like/dislike counters in meta (see $is_cacheable).
+			if( empty( $date_range ) && $is_cacheable ){
 				wp_ulike_update_meta_counter_value( $ID, $counter_value, $type, $meta_status, $is_distinct );
 			}
 		}
@@ -142,6 +146,32 @@ if( ! function_exists( 'wp_ulike_get_counter_value' ) ){
 	function wp_ulike_get_counter_value( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
 		$counter_info = wp_ulike_get_counter_value_info( $ID, $type, $status, $is_distinct, $date_range );
 		return ! is_wp_error( $counter_info ) ? absint( $counter_info ) : 0;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_base_vote_status' ) ){
+	/**
+	 * Base (active) status behind a vote action: unlike → like, undislike → dislike.
+	 *
+	 * Displayed counters always show the active tally for the direction the user
+	 * acted on — after an unlike the button still shows the remaining like count,
+	 * not the number of unlike events. Callers that genuinely want the removed
+	 * tally (e.g. [wp_ulike_counter status="unlike"]) pass the raw status instead.
+	 *
+	 * @param string $status like|unlike|dislike|undislike|all
+	 * @return string
+	 */
+	function wp_ulike_get_base_vote_status( $status ){
+		$status = sanitize_key( (string) $status );
+
+		switch ( $status ) {
+			case 'unlike':
+				return 'like';
+			case 'undislike':
+				return 'dislike';
+		}
+
+		return '' !== $status ? $status : 'like';
 	}
 }
 

@@ -1028,7 +1028,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 		if ( 'pulse' === $mode ) {
 			$table = esc_sql( WP_Ulike_Pulse_Schema::table() );
-			// Latest row per user, keep only active likes — one entry per user.
+			// Latest row per user, keep any ACTIVE vote — like or dislike.
+			// Pre-Pulse this list was `status IN ('like','dislike')`, i.e. every
+			// voter whose latest action was not an un-vote. Filtering to
+			// engagement_key='like' silently dropped dislikers from the box.
 			return $wpdb->get_col(
 				$wpdb->prepare(
 					"SELECT p.user_id
@@ -1039,13 +1042,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 						WHERE item_id = %d AND item_type = %s AND engagement_kind = %s
 						GROUP BY user_id
 					) latest ON p.id = latest.max_id
-					WHERE p.status = %s AND p.engagement_key = %s
+					WHERE p.status = %s
 					ORDER BY p.date_time DESC LIMIT %d",
 					$item_id,
 					WP_Ulike_Pulse_Registry::from_setting_type( $type ),
 					WP_Ulike_Pulse_Registry::KIND_VOTE,
 					WP_Ulike_Pulse_Vote_Map::ROW_ACTIVE,
-					WP_Ulike_Pulse_Vote_Map::KEY_LIKE,
 					absint( $limit )
 				)
 			);
@@ -1057,7 +1059,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 			$table  = esc_sql( $source['table'] );
 			$column = esc_sql( $source['column'] );
-			// Latest row per user whose latest action is a like — mirrors
+			$active_status_sql = self::legacy_active_status_sql( 'p`.`status' );
+			// Latest row per user whose latest action is an active vote — mirrors
 			// fetch_pulse_likers() so append-mode (one row per vote) and
 			// distinct-mode both surface each user at most once, with their
 			// most recent action deciding presence.
@@ -1071,11 +1074,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 						WHERE `{$column}` = %d
 						GROUP BY user_id
 					) latest ON p.id = latest.max_id
-					WHERE p.status = %s
+					WHERE {$active_status_sql}
 					ORDER BY p.date_time DESC
 					LIMIT %d",
 					$item_id,
-					WP_Ulike_Pulse_Vote_Map::ACTION_LIKE,
 					absint( $limit )
 				)
 			);
@@ -1458,17 +1460,25 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 	 * Registered users key by user_id; guests (user_id 0/empty) key by fingerprint
 	 * so they are not collapsed into a single bucket.
 	 *
+	 * Wrapped in CONVERT(... USING utf8mb4): CONCAT() inherits the *column's*
+	 * collation, and legacy tables created by older WordPress versions often use
+	 * a different collation than the newer pulse table (e.g. utf8mb4_unicode_ci
+	 * vs utf8mb4_unicode_520_ci). UNION-ing the two arms then fails outright with
+	 * "Illegal mix of collations", which silently reported 0 unique voters in
+	 * dual/merged mode. CONVERT normalizes both arms to one collation. Do NOT use
+	 * an explicit `COLLATE utf8mb4_*` here -- that breaks on utf8mb3 legacy tables.
+	 *
 	 * @param string $alias Optional table alias.
 	 * @return string
 	 */
 	private static function distinct_actor_sql( $alias = '' ) {
 		$prefix = $alias ? $alias . '.' : '';
 
-		return "CASE
+		return "CONVERT(CASE
 			WHEN {$prefix}user_id IS NOT NULL AND CAST({$prefix}user_id AS CHAR) NOT IN ('', '0') THEN CONCAT('u:', {$prefix}user_id)
 			WHEN {$prefix}fingerprint IS NOT NULL AND CAST({$prefix}fingerprint AS CHAR) NOT IN ('', '0') THEN CONCAT('f:', {$prefix}fingerprint)
 			ELSE NULL
-		END";
+		END USING utf8mb4)";
 	}
 
 	private static function count_pulse_unique_voters_for_type( $item_type, $period_limit, $since ) {
@@ -2049,14 +2059,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WHERE item_id = %d AND item_type = %s AND engagement_kind = %s{$since_sql}
 					GROUP BY user_id
 				) latest ON p.id = latest.max_id
-				WHERE p.status = %s AND p.engagement_key = %s
+				WHERE p.status = %s
 				ORDER BY p.date_time DESC
 				LIMIT %d",
 				absint( $item_id ),
 				WP_Ulike_Pulse_Registry::from_setting_type( $type ),
 				WP_Ulike_Pulse_Registry::KIND_VOTE,
 				WP_Ulike_Pulse_Vote_Map::ROW_ACTIVE,
-				WP_Ulike_Pulse_Vote_Map::KEY_LIKE,
 				absint( $limit )
 			)
 		);
@@ -2098,7 +2107,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WHERE item_id = %d AND item_type = %s AND engagement_kind = %s AND user_id IN ({$placeholders}){$since_sql}
 					GROUP BY user_id
 				) latest ON p.id = latest.max_id
-				WHERE p.status = %s AND p.engagement_key = %s",
+				WHERE p.status = %s",
 				array_merge(
 					array(
 						absint( $item_id ),
@@ -2108,7 +2117,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					array_map( 'strval', $candidate_users ),
 					array(
 						WP_Ulike_Pulse_Vote_Map::ROW_REMOVED,
-						WP_Ulike_Pulse_Vote_Map::KEY_LIKE,
 					)
 				)
 			)

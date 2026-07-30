@@ -119,8 +119,8 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @param int    $limit Max items.
 		 * @return array|null
 		 */
-		public function get_tops_api_data( $type, $limit = 8 ) {
-			$limit = max( 1, min( 20, absint( $limit ) ) );
+		public function get_tops_api_data( $type, $limit = 10 ) {
+			$limit = max( 1, min( 100, absint( $limit ) ) );
 
 			$tables = $this->get_tables();
 			if ( ! isset( $tables[ $type ] ) ) {
