@@ -261,6 +261,11 @@ if( ! function_exists( 'wp_ulike_load_deprecated_classes' ) ){
 	add_action( 'plugins_loaded', 'wp_ulike_load_deprecated_classes', 999 );
 }
 
+/**
+ * Background refresh for Cloudflare IP ranges (never on the visitor request).
+ */
+add_action( 'wp_ulike_refresh_cloudflare_ips', array( 'WP_Ulike_Ip_Detector', 'refresh_cloudflare_ips' ) );
+
 
 if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 	/**

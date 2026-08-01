@@ -433,12 +433,13 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 	/**
 	 * A simple function to get user activity history
 	 *
+	 * Caches both votes and "never voted" for an item so multi-button pages
+	 * (and later views) do not re-query Pulse for the same miss.
+	 *
 	 * @param array $args
 	 * @return array
 	 */
 	function wp_ulike_get_user_item_history( $args ) {
-		global $wpdb;
-
 		$defaults = array(
 			"item_id"           => '',
 			"item_type"         => '',
@@ -447,28 +448,42 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 			"is_user_logged_in" => ''
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
-		// Meta key name
-		$meta_key  = sanitize_key( $parsed_args['item_type'] . '_status' );
-		// Get meta data
-		$user_info = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 
-		if( empty($user_info) || ! isset( $user_info[$parsed_args['item_id']] ) ){
+		$meta_key = sanitize_key( $parsed_args['item_type'] . '_status' );
+		$item_id  = $parsed_args['item_id'];
+		$bucket   = (string) $parsed_args['current_user'] . '|' . $meta_key;
+
+		// Request-level memo: one meta load / Pulse lookup per user+type+item.
+		static $runtime = array();
+		if ( ! isset( $runtime[ $bucket ] ) ) {
+			$stored = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
+			$runtime[ $bucket ] = is_array( $stored ) ? $stored : array();
+		}
+
+		if ( ! array_key_exists( $item_id, $runtime[ $bucket ] ) ) {
 			$user_status = WP_Ulike_Pulse_Reader::user_action(
-				$parsed_args['item_id'],
+				$item_id,
 				$parsed_args['current_user'],
 				$parsed_args['item_type']
 			);
 
-			// Check user info value
-			$user_info = empty( $user_info ) ? array() : $user_info;
+			// Empty string = known negative (never voted). array_key_exists skips re-query.
+			$runtime[ $bucket ][ $item_id ] = ! empty( $user_status ) ? $user_status : '';
 
-			if( ! empty( $user_status ) ){
-				$user_info[$parsed_args['item_id']] = $user_status;
-				wp_ulike_update_meta_data( $parsed_args['current_user'], 'user', $meta_key, $user_info );
+			// Persist real votes always. Persist "never voted" for logged-in users
+			// so later pageviews skip Pulse; skip creating guest meta rows for
+			// one-off anonymous views (request cache still covers multi-button pages).
+			if ( ! empty( $user_status ) || ! empty( $parsed_args['is_user_logged_in'] ) ) {
+				wp_ulike_update_meta_data(
+					$parsed_args['current_user'],
+					'user',
+					$meta_key,
+					$runtime[ $bucket ]
+				);
 			}
 		}
 
-		return $user_info;
+		return $runtime[ $bucket ];
 	}
 }
 

@@ -23,17 +23,25 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 		 */
 		public static function user_action( $item_id, $user_id, $item_type ) {
 			$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+			$cache_key = (string) $user_id . '|' . $item_type . '|' . (string) $item_id;
+
+			static $request_cache = array();
+			if ( array_key_exists( $cache_key, $request_cache ) ) {
+				return $request_cache[ $cache_key ];
+			}
+
 			$read_mode = WP_Ulike_Pulse_Config::read_mode();
 
 			if ( WP_Ulike_Pulse_Config::READ_PULSE === $read_mode ) {
-				return self::from_pulse( $item_id, $user_id, $item_type );
+				$result = self::from_pulse( $item_id, $user_id, $item_type );
+			} elseif ( WP_Ulike_Pulse_Config::READ_LEGACY === $read_mode ) {
+				$result = self::from_legacy( $item_id, $user_id, $item_type );
+			} else {
+				$result = self::from_merged( $item_id, $user_id, $item_type );
 			}
 
-			if ( WP_Ulike_Pulse_Config::READ_LEGACY === $read_mode ) {
-				return self::from_legacy( $item_id, $user_id, $item_type );
-			}
-
-			return self::from_merged( $item_id, $user_id, $item_type );
+			$request_cache[ $cache_key ] = $result;
+			return $result;
 		}
 
 		/**

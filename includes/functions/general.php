@@ -442,6 +442,10 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	 * @return string Combined CSS styles
 	 */
 	function wp_ulike_get_custom_style(){
+		static $cached_style = null;
+		if ( null !== $cached_style ) {
+			return $cached_style;
+		}
 
 		$return_style = '';
 
@@ -511,7 +515,8 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$return_style .= $custom_css;
 		}
 
-		return apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );
+		$cached_style = apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );
+		return $cached_style;
 	}
 
 }
