@@ -585,14 +585,14 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 $values = $request_or_values;
             } else {
                 wp_send_json_error( array(
-                    'message' => esc_html__( 'Invalid request data. Expected an object with customizer values.', 'wp-ulike' ),
+                    'message' => esc_html__( 'Invalid request data.', 'wp-ulike' ),
                 ), 400 );
                 return;
             }
 
             if ( ! is_array( $values ) ) {
                 wp_send_json_error( array(
-                    'message' => esc_html__( 'Invalid request data. Expected an object with customizer values.', 'wp-ulike' ),
+                    'message' => esc_html__( 'Invalid request data.', 'wp-ulike' ),
                 ), 400 );
                 return;
             }
@@ -613,7 +613,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             do_action( 'wp_ulike_customizer_saved', $values );
 
             wp_send_json_success( array(
-                'message' => esc_html__( 'Customizer settings saved successfully.', 'wp-ulike' ),
+                'message' => esc_html__( 'Settings saved successfully.', 'wp-ulike' ),
             ) );
         }
 

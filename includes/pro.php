@@ -96,8 +96,8 @@ if ( ! class_exists( 'WP_Ulike_Pro_Validator' ) ) {
 			printf(
 				'<div class="notice notice-warning is-dismissible"><p>%s</p><p><a class="button button-primary" href="%s" target="_blank" rel="noopener noreferrer">%s</a></p></div>',
 				wp_kses_post( sprintf(
-					/* translators: 1: required Pro version, 2: current Pro version, 3: current storage mode */
-					__( 'WP ULike is using the new faster like storage (%3$s mode). Please update <strong>WP ULike Pro</strong> to version %1$s or later — your installed Pro version (%2$s) reads from the old tables and may show stale or incomplete statistics until updated.', 'wp-ulike' ),
+					// English-only — temporary Pulse storage / Pro compatibility notice.
+					'WP ULike is using the new faster like storage (%3$s mode). Please update <strong>WP ULike Pro</strong> to version %1$s or later — your installed Pro version (%2$s) reads from the old tables and may show stale or incomplete statistics until updated.',
 					esc_html( self::REQUIRED_PRO_VERSION ),
 					esc_html( WP_ULIKE_PRO_VERSION ),
 					esc_html( $mode )

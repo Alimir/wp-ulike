@@ -257,6 +257,9 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 		 * persists dismissal via the shared `admin_ui.dismissed` flag so the
 		 * notice does not reappear on the next page load.
 		 *
+		 * Translated — short, high-visibility wp-admin notice (unlike the
+		 * English-only upgrade page itself).
+		 *
 		 * @return void
 		 */
 		public static function storage_upgrade_notice() {

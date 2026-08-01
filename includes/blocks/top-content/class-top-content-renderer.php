@@ -1315,11 +1315,11 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 			}
 
-			return esc_html__( 'All The Times', 'wp-ulike' );
+			return esc_html__( 'All time', 'wp-ulike' );
 		}
 
 		/**
-		 * "Last {{days}} Days" with a numeric placeholder (editor + empty state).
+		 * "Last {{count}} days" with a numeric placeholder (editor + empty state).
 		 *
 		 * @param int $days Number of days.
 		 * @return string
@@ -1328,9 +1328,9 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			$days = max( 1, absint( $days ) );
 
 			return str_replace(
-				'{{days}}',
+				'{{count}}',
 				(string) $days,
-				esc_html__( 'Last {{days}} Days', 'wp-ulike' )
+				esc_html__( 'Last {{count}} days', 'wp-ulike' )
 			);
 		}
 
@@ -1341,16 +1341,16 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 */
 		public static function get_period_presets() {
 			return array(
-				array( 'value' => 'all', 'label' => esc_html__( 'All The Times', 'wp-ulike' ) ),
-				array( 'value' => 'year', 'label' => esc_html__( 'This Year', 'wp-ulike' ) ),
-				array( 'value' => 'last_year', 'label' => esc_html__( 'Last Year', 'wp-ulike' ) ),
-				array( 'value' => 'month', 'label' => esc_html__( 'This Month', 'wp-ulike' ) ),
-				array( 'value' => 'last_month', 'label' => esc_html__( 'Last Month', 'wp-ulike' ) ),
-				array( 'value' => 'week', 'label' => esc_html__( 'This Week', 'wp-ulike' ) ),
-				array( 'value' => 'last_week', 'label' => esc_html__( 'Last Week', 'wp-ulike' ) ),
+				array( 'value' => 'all', 'label' => esc_html__( 'All time', 'wp-ulike' ) ),
+				array( 'value' => 'year', 'label' => esc_html__( 'This year', 'wp-ulike' ) ),
+				array( 'value' => 'last_year', 'label' => esc_html__( 'Last year', 'wp-ulike' ) ),
+				array( 'value' => 'month', 'label' => esc_html__( 'This month', 'wp-ulike' ) ),
+				array( 'value' => 'last_month', 'label' => esc_html__( 'Last month', 'wp-ulike' ) ),
+				array( 'value' => 'week', 'label' => esc_html__( 'This week', 'wp-ulike' ) ),
+				array( 'value' => 'last_week', 'label' => esc_html__( 'Last week', 'wp-ulike' ) ),
 				array( 'value' => 'today', 'label' => esc_html__( 'Today', 'wp-ulike' ) ),
 				array( 'value' => 'yesterday', 'label' => esc_html__( 'Yesterday', 'wp-ulike' ) ),
-				array( 'value' => 'day_before_yesterday', 'label' => esc_html__( 'Day Before Yesterday', 'wp-ulike' ) ),
+				array( 'value' => 'day_before_yesterday', 'label' => esc_html__( 'Day before yesterday', 'wp-ulike' ) ),
 			);
 		}
 

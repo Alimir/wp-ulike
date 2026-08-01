@@ -61,7 +61,7 @@ $settings_url = class_exists( 'WP_Ulike_Overview' )
 		<p class="wp-ulike-activation-pointer__actions">
 			<?php if ( ! empty( $preview_url ) ) : ?>
 				<a class="button button-primary" href="<?php echo esc_url( $preview_url ); ?>" target="_blank" rel="noopener noreferrer">
-					<?php esc_html_e( 'View a sample post', 'wp-ulike' ); ?>
+					<?php esc_html_e( 'View sample post', 'wp-ulike' ); ?>
 				</a>
 				<a class="button button-secondary" href="<?php echo esc_url( $settings_url ); ?>">
 					<?php esc_html_e( 'Open Settings', 'wp-ulike' ); ?>

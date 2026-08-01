@@ -315,9 +315,9 @@ function wp_ulike_localization_api(){
 		'Yearly Engagement Trends'    => esc_html__( 'Yearly Engagement Trends', 'wp-ulike' ),
 		'Overall Performance'         => esc_html__( 'Overall Performance', 'wp-ulike' ),
 		'All time'                    => esc_html__( 'All time', 'wp-ulike' ),
-		'This Week'                   => esc_html__( 'This Week', 'wp-ulike' ),
-		'This Month'                  => esc_html__( 'This Month', 'wp-ulike' ),
-		'This Year'                   => esc_html__( 'This Year', 'wp-ulike' ),
+		'This Week'                   => esc_html__( 'This week', 'wp-ulike' ),
+		'This Month'                  => esc_html__( 'This month', 'wp-ulike' ),
+		'This Year'                   => esc_html__( 'This year', 'wp-ulike' ),
 		'Today'                       => esc_html__( 'Today', 'wp-ulike' ),
 		'Yesterday'                   => esc_html__( 'Yesterday', 'wp-ulike' ),
 		'vs last week'                => esc_html__( 'vs last week', 'wp-ulike' ),
@@ -508,7 +508,7 @@ function wp_ulike_localization_api(){
 		'Best hours to post'  => esc_html__( 'Best hours to post', 'wp-ulike' ),
 		'Category performance' => esc_html__( 'Category performance', 'wp-ulike' ),
 		'Engagements'         => esc_html__( 'Engagements', 'wp-ulike' ),
-		'Hour'                => esc_html__( 'Hour', 'wp-ulike' ),
+		'Hour'                => esc_html__( 'hour', 'wp-ulike' ),
 		'Top categories'      => esc_html__( 'Top categories', 'wp-ulike' ),
 		'Shop spotlight'      => esc_html__( 'Shop spotlight', 'wp-ulike' ),
 		'Less'                => esc_html__( 'Less', 'wp-ulike' ),
@@ -693,7 +693,7 @@ function wp_ulike_localization_api(){
 		'Device Insights' => esc_html__( 'Device Insights', 'wp-ulike' ),
 		'Intelligence Report' => esc_html__( 'Intelligence Report', 'wp-ulike' ),
 		'WooCommerce Report' => esc_html__( 'WooCommerce Report', 'wp-ulike' ),
-		'Upgrade like storage' => esc_html__( 'Upgrade like storage', 'wp-ulike' ),
+		'Upgrade like storage' => 'Upgrade like storage',
 		'Unable to load data' => esc_html__( 'Unable to load data', 'wp-ulike' ),
 		'Please refresh the page or try again later.' => esc_html__( 'Please refresh the page or try again later.', 'wp-ulike' ),
 
@@ -743,7 +743,7 @@ function wp_ulike_schema_api(){
 		$schema = $settings_api->get_schema();
 		wp_send_json_success( $schema );
 	} else {
-		wp_send_json_error( esc_html__( 'Error: Settings API not available.', 'wp-ulike' ) );
+		wp_send_json_error( esc_html__( 'Error: API not available.', 'wp-ulike' ) );
 	}
 }
 add_action('wp_ajax_wp_ulike_schema_api','wp_ulike_schema_api');
@@ -773,7 +773,7 @@ function wp_ulike_settings_api(){
 		$values = $settings_api->get_settings( null );
 		wp_send_json_success( $values );
 	} else {
-		wp_send_json_error( esc_html__( 'Error: Settings API not available.', 'wp-ulike' ) );
+		wp_send_json_error( esc_html__( 'Error: API not available.', 'wp-ulike' ) );
 	}
 }
 add_action('wp_ajax_wp_ulike_settings_api','wp_ulike_settings_api');
@@ -821,7 +821,7 @@ function wp_ulike_save_settings_api(){
 					esc_html__( 'Could not read settings data (%s). Please refresh the page and try again.', 'wp-ulike' ),
 					esc_html( $json_error )
 				)
-				: esc_html__( 'Invalid request data. Expected an object with setting values.', 'wp-ulike' )
+				: esc_html__( 'Invalid request data.', 'wp-ulike' )
 		);
 	}
 
@@ -836,7 +836,7 @@ function wp_ulike_save_settings_api(){
 			wp_send_json_success( $result );
 		}
 	} else {
-		wp_send_json_error( esc_html__( 'Error: Settings API not available.', 'wp-ulike' ) );
+		wp_send_json_error( esc_html__( 'Error: API not available.', 'wp-ulike' ) );
 	}
 }
 add_action('wp_ajax_wp_ulike_save_settings_api','wp_ulike_save_settings_api');
@@ -867,7 +867,7 @@ function wp_ulike_customizer_schema_api(){
 		$schema = $customizer_api->get_schema();
 		wp_send_json_success( $schema );
 	} else {
-		wp_send_json_error( esc_html__( 'Error: Customizer API not available.', 'wp-ulike' ) );
+		wp_send_json_error( esc_html__( 'Error: API not available.', 'wp-ulike' ) );
 	}
 }
 add_action('wp_ajax_wp_ulike_customizer_schema_api','wp_ulike_customizer_schema_api');
@@ -897,7 +897,7 @@ function wp_ulike_customizer_values_api(){
 		$values = $customizer_api->get_values( null );
 		wp_send_json_success( $values );
 	} else {
-		wp_send_json_error( esc_html__( 'Error: Customizer API not available.', 'wp-ulike' ) );
+		wp_send_json_error( esc_html__( 'Error: API not available.', 'wp-ulike' ) );
 	}
 }
 add_action('wp_ajax_wp_ulike_customizer_values_api','wp_ulike_customizer_values_api');
@@ -945,7 +945,7 @@ function wp_ulike_save_customizer_api(){
 					esc_html__( 'Could not read settings data (%s). Please refresh the page and try again.', 'wp-ulike' ),
 					esc_html( $json_error )
 				)
-				: esc_html__( 'Invalid request data. Expected an object with customizer values.', 'wp-ulike' )
+				: esc_html__( 'Invalid request data.', 'wp-ulike' )
 		);
 	}
 
@@ -954,7 +954,7 @@ function wp_ulike_save_customizer_api(){
 		$customizer_api = new wp_ulike_customizer_api();
 		$customizer_api->save_values( $values );
 	} else {
-		wp_send_json_error( esc_html__( 'Error: Customizer API not available.', 'wp-ulike' ) );
+		wp_send_json_error( esc_html__( 'Error: API not available.', 'wp-ulike' ) );
 	}
 }
 add_action('wp_ajax_wp_ulike_save_customizer_api','wp_ulike_save_customizer_api');
@@ -983,7 +983,7 @@ function wp_ulike_customizer_preview_api(){
 		$customizer_api = new wp_ulike_customizer_api();
 		$customizer_api->get_preview( null );
 	} else {
-		wp_send_json_error( esc_html__( 'Error: Customizer API not available.', 'wp-ulike' ) );
+		wp_send_json_error( esc_html__( 'Error: API not available.', 'wp-ulike' ) );
 	}
 }
 add_action('wp_ajax_wp_ulike_customizer_preview_api','wp_ulike_customizer_preview_api');
