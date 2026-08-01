@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-23T12:35:20+00:00\n"
+"POT-Creation-Date: 2026-08-01T08:34:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
@@ -391,7 +391,7 @@ msgstr ""
 #: admin/classes/class-wp-ulike-admin-panel.php:649
 #: admin/classes/class-wp-ulike-admin-panel.php:656
 #: admin/classes/class-wp-ulike-admin-panel.php:682
-#: admin/classes/class-wp-ulike-settings-api.php:1313
+#: admin/classes/class-wp-ulike-settings-api.php:1325
 #: admin/classes/class-wp-ulike-widget.php:430
 msgid "Like"
 msgstr ""
@@ -695,7 +695,7 @@ msgstr ""
 #. translators: Generic error message shown when something goes wrong
 #: admin/admin-ajax.php:435
 #: admin/classes/class-wp-ulike-customizer-api.php:945
-#: admin/classes/class-wp-ulike-settings-api.php:1100
+#: admin/classes/class-wp-ulike-settings-api.php:1112
 msgid "Something went wrong"
 msgstr ""
 
@@ -800,947 +800,982 @@ msgid "Likes + dislikes per view"
 msgstr ""
 
 #: admin/admin-ajax.php:465
-msgid "Like vs dislike ratio"
+msgid "Engagements per view"
 msgstr ""
 
 #: admin/admin-ajax.php:466
-msgid "Like-only template"
+msgid "Reactions per view"
 msgstr ""
 
 #: admin/admin-ajax.php:467
-msgid "{{likes}} likes · {{dislikes}} dislikes"
+msgid "Ratings per view"
 msgstr ""
 
 #: admin/admin-ajax.php:468
-msgid "All likes in this period."
+msgid "Like vs dislike ratio"
 msgstr ""
 
 #: admin/admin-ajax.php:469
-msgid "Daily counts for this period."
+msgid "Positive vs negative engagements"
 msgstr ""
 
 #: admin/admin-ajax.php:470
-msgid "Enable it in General settings to see engagement rate and button impressions."
+msgid "Like-only template"
 msgstr ""
 
 #: admin/admin-ajax.php:471
-msgid "Enable view tracking in General settings if you have not already to see engagement rate and button impressions."
+msgid "{{likes}} likes · {{dislikes}} dislikes"
 msgstr ""
 
 #: admin/admin-ajax.php:472
-msgid "Engagement as a share of page views."
+msgid "{{positive}} positive · {{negative}} negative"
 msgstr ""
 
 #: admin/admin-ajax.php:473
-msgid "Impressions will appear as visitors view pages with your like button."
+msgid "All likes in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:474
-msgid "How page views convert to engagement."
+msgid "Daily counts for this period."
 msgstr ""
 
 #: admin/admin-ajax.php:475
-msgid "No button impressions in this period yet."
+msgid "Enable it in General settings to see engagement rate and button impressions."
 msgstr ""
 
 #: admin/admin-ajax.php:476
-msgid "Likes as a share of all reactions."
+msgid "Enable view tracking in General settings if you have not already to see engagement rate and button impressions."
 msgstr ""
 
 #: admin/admin-ajax.php:477
-msgid "{{likes}} of {{total}} reactions"
+msgid "Engagement as a share of page views."
 msgstr ""
 
 #: admin/admin-ajax.php:478
-msgid "Change compared to the previous period."
+msgid "Impressions will appear as visitors view pages with your like button."
 msgstr ""
 
 #: admin/admin-ajax.php:479
-msgid "{{rate}}% engagement rate"
+msgid "How page views convert to engagement."
 msgstr ""
 
 #: admin/admin-ajax.php:480
-msgid "How often your like button was shown. Compare with engagements."
+msgid "No button impressions in this period yet."
 msgstr ""
 
 #: admin/admin-ajax.php:481
-msgid "Reaction and voter metrics."
+msgid "Likes as a share of all reactions."
 msgstr ""
 
 #: admin/admin-ajax.php:482
-msgid "View tracking is off."
+msgid "Positive share of polarized engagements (votes, reactions, ratings)."
+msgstr ""
+
+#: admin/admin-ajax.php:483
+msgid "{{likes}} of {{total}} reactions"
+msgstr ""
+
+#: admin/admin-ajax.php:484
+msgid "Change compared to the previous period."
 msgstr ""
 
 #: admin/admin-ajax.php:485
-msgid "When to publish"
+msgid "{{rate}}% engagement rate"
 msgstr ""
 
 #: admin/admin-ajax.php:486
-msgid "When your audience is most likely to react."
+msgid "How often your like button was shown. Compare with engagements."
 msgstr ""
 
 #: admin/admin-ajax.php:487
-msgid "Sweet spot"
+msgid "Reaction and voter metrics."
 msgstr ""
 
 #: admin/admin-ajax.php:488
-msgid "Peak"
-msgstr ""
-
-#: admin/admin-ajax.php:489
-msgid "Hourly pattern"
-msgstr ""
-
-#: admin/admin-ajax.php:490
-msgid "Full report"
+msgid "View tracking is off."
 msgstr ""
 
 #: admin/admin-ajax.php:491
-msgid "{{day}} · {{time}}"
+msgid "When to publish"
 msgstr ""
 
 #: admin/admin-ajax.php:492
-msgid "{{share}}% of weekly activity"
+msgid "When your audience is most likely to react."
 msgstr ""
 
 #: admin/admin-ajax.php:493
-msgid "{{share}}% of all activity · {{range}}"
+msgid "Sweet spot"
 msgstr ""
 
 #: admin/admin-ajax.php:494
-msgid "{{count}} engagements in this slot"
+msgid "Peak"
 msgstr ""
 
 #: admin/admin-ajax.php:495
-msgid "Activity heatmap"
+msgid "Hourly pattern"
 msgstr ""
 
 #: admin/admin-ajax.php:496
-msgid "Engagement by day and hour"
+msgid "Full report"
 msgstr ""
 
 #: admin/admin-ajax.php:497
-msgid "When your audience engages"
+msgid "{{day}} · {{time}}"
 msgstr ""
 
 #: admin/admin-ajax.php:498
-msgid "Time windows"
+msgid "{{share}}% of weekly activity"
 msgstr ""
 
 #: admin/admin-ajax.php:499
-msgid "Best day(s)"
+msgid "{{share}}% of all activity · {{range}}"
 msgstr ""
 
 #: admin/admin-ajax.php:500
-msgid "Share of weekly activity"
+msgid "{{count}} engagements in this slot"
 msgstr ""
 
 #: admin/admin-ajax.php:501
-msgid "Best hour"
+msgid "Activity heatmap"
 msgstr ""
 
 #: admin/admin-ajax.php:502
-msgid "Best hours to post"
+msgid "Engagement by day and hour"
 msgstr ""
 
 #: admin/admin-ajax.php:503
-msgid "Category performance"
+msgid "When your audience engages"
 msgstr ""
 
 #: admin/admin-ajax.php:504
-msgid "Engagements"
+msgid "Time windows"
 msgstr ""
 
 #: admin/admin-ajax.php:505
-msgid "Hour"
+msgid "Best day(s)"
 msgstr ""
 
 #: admin/admin-ajax.php:506
-msgid "Top categories"
+msgid "Share of weekly activity"
 msgstr ""
 
 #: admin/admin-ajax.php:507
-msgid "Shop spotlight"
+msgid "Best hour"
 msgstr ""
 
 #: admin/admin-ajax.php:508
-msgid "Less"
+msgid "Best hours to post"
 msgstr ""
 
 #: admin/admin-ajax.php:509
-msgid "More"
+msgid "Category performance"
 msgstr ""
 
 #: admin/admin-ajax.php:510
-msgid "Publish on {{day}} around {{time}} for maximum engagement."
+msgid "Engagements"
 msgstr ""
 
 #: admin/admin-ajax.php:511
-msgid "Your audience is most active in the {{window}} window ({{range}})."
+msgid "Hour"
 msgstr ""
 
 #: admin/admin-ajax.php:512
-msgid "{{share}}% of engagers use mobile — optimize for small screens."
+msgid "Top categories"
 msgstr ""
 
 #: admin/admin-ajax.php:513
-msgid "{{share}}% engage from desktop — long-form content may perform better."
+msgid "Shop spotlight"
+msgstr ""
+
+#: admin/admin-ajax.php:514
+msgid "Less"
+msgstr ""
+
+#: admin/admin-ajax.php:515
+msgid "More"
 msgstr ""
 
 #: admin/admin-ajax.php:516
-msgid "WooCommerce"
+msgid "Publish on {{day}} around {{time}} for maximum engagement."
 msgstr ""
 
 #: admin/admin-ajax.php:517
-msgid "WooCommerce report unavailable"
+msgid "Your audience is most active in the {{window}} window ({{range}})."
 msgstr ""
 
 #: admin/admin-ajax.php:518
-msgid "Enable likes on products or reviews, or wait for store orders, to unlock commerce intelligence."
+msgid "{{share}}% of engagers use mobile — optimize for small screens."
 msgstr ""
 
 #: admin/admin-ajax.php:519
-msgid "Store snapshot"
-msgstr ""
-
-#: admin/admin-ajax.php:520
-msgid "Engagement correlated with sales"
-msgstr ""
-
-#: admin/admin-ajax.php:521
-msgid "Unique view: see whether shopper reactions align with orders and revenue."
+msgid "{{share}}% engage from desktop — long-form content may perform better."
 msgstr ""
 
 #: admin/admin-ajax.php:522
-msgid "Product likes"
+msgid "WooCommerce"
 msgstr ""
 
 #: admin/admin-ajax.php:523
-msgid "Likes and dislikes on WooCommerce products."
+msgid "WooCommerce report unavailable"
 msgstr ""
 
 #: admin/admin-ajax.php:524
-msgid "Product engagement"
+msgid "Enable likes on products or reviews, or wait for store orders, to unlock commerce intelligence."
 msgstr ""
 
 #: admin/admin-ajax.php:525
-msgid "Reactions on verified customer product reviews."
+msgid "Store snapshot"
 msgstr ""
 
 #: admin/admin-ajax.php:526
-msgid "Review engagement"
+msgid "Engagement correlated with sales"
 msgstr ""
 
 #: admin/admin-ajax.php:527
-msgid "Completed and processing orders."
+msgid "Unique view: see whether shopper reactions align with orders and revenue."
 msgstr ""
 
 #: admin/admin-ajax.php:528
-msgid "Orders"
+msgid "Product likes"
 msgstr ""
 
 #: admin/admin-ajax.php:529
-msgid "Net product revenue in this period."
+msgid "Likes and dislikes on WooCommerce products."
 msgstr ""
 
 #: admin/admin-ajax.php:530
-msgid "Revenue"
+msgid "Product engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:531
-msgid "Product units sold in this period."
+msgid "Reactions on verified customer product reviews."
 msgstr ""
 
 #: admin/admin-ajax.php:532
-msgid "Units sold"
+msgid "Review engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:533
-msgid "Average revenue per order in this period."
+msgid "Completed and processing orders."
 msgstr ""
 
 #: admin/admin-ajax.php:534
-msgid "Average order value"
+msgid "Orders"
 msgstr ""
 
 #: admin/admin-ajax.php:535
-msgid "Average product and review reactions per order — a pre-purchase interest signal."
+msgid "Net product revenue in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:536
-msgid "Engagement per order"
+msgid "Revenue"
 msgstr ""
 
 #: admin/admin-ajax.php:537
-msgid "Revenue generated per like or dislike — helps compare campaign ROI."
+msgid "Product units sold in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:538
-msgid "Revenue per engagement"
+msgid "Units sold"
 msgstr ""
 
 #: admin/admin-ajax.php:539
-msgid "Engagement vs orders trend"
+msgid "Average revenue per order in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:540
-msgid "Daily product reactions compared with store orders"
+msgid "Average order value"
 msgstr ""
 
 #: admin/admin-ajax.php:541
-msgid "Look for days when engagement rises before orders — a sign your social proof is working."
+msgid "Average product and review reactions per order — a pre-purchase interest signal."
 msgstr ""
 
 #: admin/admin-ajax.php:542
-msgid "Top products"
+msgid "Engagement per order"
 msgstr ""
 
 #: admin/admin-ajax.php:543
-msgid "Engagement and sales side by side"
+msgid "Revenue generated per like or dislike — helps compare campaign ROI."
 msgstr ""
 
 #: admin/admin-ajax.php:544
-msgid "No product engagement yet"
+msgid "Revenue per engagement"
 msgstr ""
 
 #: admin/admin-ajax.php:545
-msgid "Product"
+msgid "Engagement vs orders trend"
 msgstr ""
 
 #: admin/admin-ajax.php:546
-msgid "Match score"
+msgid "Daily product reactions compared with store orders"
 msgstr ""
 
 #: admin/admin-ajax.php:547
-msgid "Opportunities"
+msgid "Look for days when engagement rises before orders — a sign your social proof is working."
 msgstr ""
 
 #: admin/admin-ajax.php:548
-msgid "Where engagement and sales diverge"
+msgid "Top products"
 msgstr ""
 
 #: admin/admin-ajax.php:549
-msgid "High interest, lower sales — optimize merchandising, pricing, or checkout."
+msgid "Engagement and sales side by side"
 msgstr ""
 
 #: admin/admin-ajax.php:550
-msgid "Strong sellers with few likes — surface social proof with like buttons or badges."
+msgid "No product engagement yet"
 msgstr ""
 
 #: admin/admin-ajax.php:551
-msgid "Engagement and revenue by product category"
+msgid "Product"
 msgstr ""
 
 #: admin/admin-ajax.php:552
-msgid "Engagement vs sales intelligence"
+msgid "Match score"
 msgstr ""
 
 #: admin/admin-ajax.php:553
-msgid "See how product likes and review reactions relate to orders and revenue — available in Pro."
+msgid "Opportunities"
+msgstr ""
+
+#: admin/admin-ajax.php:554
+msgid "Where engagement and sales diverge"
+msgstr ""
+
+#: admin/admin-ajax.php:555
+msgid "High interest, lower sales — optimize merchandising, pricing, or checkout."
 msgstr ""
 
 #: admin/admin-ajax.php:556
-msgid "Actionable recommendations based on your data"
+msgid "Strong sellers with few likes — surface social proof with like buttons or badges."
 msgstr ""
 
 #: admin/admin-ajax.php:557
-msgid "Best time to publish"
+msgid "Engagement and revenue by product category"
 msgstr ""
 
 #: admin/admin-ajax.php:558
-msgid "{{day}} around {{time}} gets the most engagement — schedule content then."
+msgid "Engagement vs sales intelligence"
 msgstr ""
 
 #: admin/admin-ajax.php:559
-msgid "{{category}} drives {{share}}% of engagement — create more on this topic."
-msgstr ""
-
-#: admin/admin-ajax.php:560
-msgid "Low conversion"
-msgstr ""
-
-#: admin/admin-ajax.php:561
-msgid "Only {{rate}}% of viewers engage — improve button placement and CTAs."
+msgid "See how product likes and review reactions relate to orders and revenue — available in Pro."
 msgstr ""
 
 #: admin/admin-ajax.php:562
-msgid "Momentum"
+msgid "Actionable recommendations based on your data"
 msgstr ""
 
 #: admin/admin-ajax.php:563
-msgid "Sentiment drop"
+msgid "Best time to publish"
 msgstr ""
 
 #: admin/admin-ajax.php:564
-msgid "Positive reactions fell to {{ratio}}% — review content getting dislikes."
+msgid "{{day}} around {{time}} gets the most engagement — schedule content then."
+msgstr ""
+
+#: admin/admin-ajax.php:565
+msgid "{{category}} drives {{share}}% of engagement — create more on this topic."
+msgstr ""
+
+#: admin/admin-ajax.php:566
+msgid "Low conversion"
 msgstr ""
 
 #: admin/admin-ajax.php:567
-msgid "{{title}} leads with {{count}} likes in this period."
+msgid "Only {{rate}}% of viewers engage — improve button placement and CTAs."
 msgstr ""
 
 #: admin/admin-ajax.php:568
-msgid "{{title}} converts best at {{rate}}% — replicate this format."
+msgid "Momentum"
 msgstr ""
 
 #: admin/admin-ajax.php:569
-msgid "{{name}} is your most active user — consider a loyalty perk."
+msgid "Sentiment drop"
 msgstr ""
 
-#: admin/admin-ajax.php:572
-msgid "Refresh data"
+#: admin/admin-ajax.php:570
+msgid "Positive reactions fell to {{ratio}}% — review content getting dislikes."
 msgstr ""
 
 #: admin/admin-ajax.php:573
-msgid "Total engagements"
+msgid "{{title}} leads with {{count}} likes in this period."
 msgstr ""
 
 #: admin/admin-ajax.php:574
-msgid "Distinct people who engaged in this period."
+msgid "{{title}} converts best at {{rate}}% — replicate this format."
 msgstr ""
 
 #: admin/admin-ajax.php:575
-msgid "Current period"
-msgstr ""
-
-#: admin/admin-ajax.php:576
-msgid "Previous period"
-msgstr ""
-
-#: admin/admin-ajax.php:577
-msgid "Likes"
+msgid "{{name}} is your most active user — consider a loyalty perk."
 msgstr ""
 
 #: admin/admin-ajax.php:578
-msgid "Interactions"
+msgid "Refresh data"
 msgstr ""
 
 #: admin/admin-ajax.php:579
-msgid "Impressions"
+msgid "Total engagements"
+msgstr ""
+
+#: admin/admin-ajax.php:580
+msgid "Distinct people who engaged in this period."
+msgstr ""
+
+#: admin/admin-ajax.php:581
+msgid "Current period"
 msgstr ""
 
 #: admin/admin-ajax.php:582
+msgid "Previous period"
+msgstr ""
+
+#: admin/admin-ajax.php:583
+msgid "Likes"
+msgstr ""
+
+#: admin/admin-ajax.php:584
+msgid "Interactions"
+msgstr ""
+
+#: admin/admin-ajax.php:585
+msgid "Impressions"
+msgstr ""
+
+#: admin/admin-ajax.php:588
 #: admin/includes/templates/activation-pointer-dialog.php:37
 msgid "Dismiss"
 msgstr ""
 
-#: admin/admin-ajax.php:583
+#: admin/admin-ajax.php:589
 msgid "New Notifications"
 msgstr ""
 
-#: admin/admin-ajax.php:584
+#: admin/admin-ajax.php:590
 msgid "No new notifications"
 msgstr ""
 
-#: admin/admin-ajax.php:585
+#: admin/admin-ajax.php:591
 msgid "{{current}} of {{total}}"
 msgstr ""
 
-#: admin/admin-ajax.php:588
+#: admin/admin-ajax.php:594
 msgid "License Not Found!"
 msgstr ""
 
-#: admin/admin-ajax.php:589
+#: admin/admin-ajax.php:595
 msgid "Your license is invalid or missing. Enter a valid key or purchase Pro to continue."
 msgstr ""
 
-#: admin/admin-ajax.php:590
+#: admin/admin-ajax.php:596
 msgid "Get License"
 msgstr ""
 
 #. translators: Button text to upgrade to pro version
-#: admin/admin-ajax.php:593
+#: admin/admin-ajax.php:599
 #: admin/classes/class-wp-ulike-admin-panel.php:1166
-#: admin/classes/class-wp-ulike-settings-api.php:1249
+#: admin/classes/class-wp-ulike-settings-api.php:1261
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: admin/admin-ajax.php:594
+#: admin/admin-ajax.php:600
 msgid "Learn more"
 msgstr ""
 
 #. translators: Tag label for pro features
-#: admin/admin-ajax.php:595
-#: admin/classes/class-wp-ulike-settings-api.php:1253
+#: admin/admin-ajax.php:601
+#: admin/classes/class-wp-ulike-settings-api.php:1265
 #: admin/includes/templates/about.php:308
 msgid "Pro"
 msgstr ""
 
 #. translators: Generic label for settings
-#: admin/admin-ajax.php:596
+#: admin/admin-ajax.php:602
 #: admin/classes/class-wp-ulike-admin-pages.php:167
-#: admin/classes/class-wp-ulike-settings-api.php:1303
+#: admin/classes/class-wp-ulike-settings-api.php:1315
 #: includes/classes/class-wp-ulike-overview.php:117
 #: includes/plugin.php:138
 msgid "Settings"
 msgstr ""
 
-#: admin/admin-ajax.php:597
+#: admin/admin-ajax.php:603
 msgid "Help"
 msgstr ""
 
-#: admin/admin-ajax.php:598
+#: admin/admin-ajax.php:604
 #: admin/includes/templates/about.php:252
 #: includes/classes/class-wp-ulike-overview.php:79
 msgid "Get Pro"
 msgstr ""
 
-#: admin/admin-ajax.php:599
+#: admin/admin-ajax.php:605
 msgid "Get Pro reports"
 msgstr ""
 
-#: admin/admin-ajax.php:600
+#: admin/admin-ajax.php:606
 msgid "Unlock live audience maps, top fans, and publishing insights with Pro."
 msgstr ""
 
-#: admin/admin-ajax.php:601
+#: admin/admin-ajax.php:607
 msgid "See who's engaging most"
 msgstr ""
 
-#: admin/admin-ajax.php:602
+#: admin/admin-ajax.php:608
 msgid "{{count}} engagements so far — unlock audience maps, top fans, and publishing insights."
 msgstr ""
 
-#: admin/admin-ajax.php:603
+#: admin/admin-ajax.php:609
 msgid "Minimize Pro promo"
 msgstr ""
 
-#: admin/admin-ajax.php:604
+#: admin/admin-ajax.php:610
 msgid "Find your best posting times and top-performing topics"
 msgstr ""
 
-#: admin/admin-ajax.php:605
+#: admin/admin-ajax.php:611
 msgid "Learn which devices and browsers your voters use"
 msgstr ""
 
-#: admin/admin-ajax.php:606
+#: admin/admin-ajax.php:612
 msgid "Sidebar Pro card"
 msgstr ""
 
-#: admin/admin-ajax.php:607
+#: admin/admin-ajax.php:613
 msgid "Minimized to “Get Pro” in the sidebar."
 msgstr ""
 
-#: admin/admin-ajax.php:608
+#: admin/admin-ajax.php:614
 msgid "Full card visible in the sidebar."
 msgstr ""
 
-#: admin/admin-ajax.php:609
+#: admin/admin-ajax.php:615
 msgid "Show full card"
 msgstr ""
 
-#: admin/admin-ajax.php:610
+#: admin/admin-ajax.php:616
 msgid "Milestone"
 msgstr ""
 
-#: admin/admin-ajax.php:611
+#: admin/admin-ajax.php:617
 msgid "You have passed {{count}} total engagements — {{remaining}} to go until {{next}}."
 msgstr ""
 
-#: admin/admin-ajax.php:612
+#: admin/admin-ajax.php:618
 msgid "Your community has reached {{count}} total engagements!"
 msgstr ""
 
-#: admin/admin-ajax.php:613
+#: admin/admin-ajax.php:619
 msgid "Total"
 msgstr ""
 
-#: admin/admin-ajax.php:614
+#: admin/admin-ajax.php:620
 msgid "Engagement is up {{percent}}% compared to last week."
 msgstr ""
 
-#: admin/admin-ajax.php:615
+#: admin/admin-ajax.php:621
 msgid "Engagement is down {{percent}}% compared to last week."
 msgstr ""
 
-#: admin/admin-ajax.php:616
+#: admin/admin-ajax.php:622
 msgid "Getting started"
 msgstr ""
 
-#: admin/admin-ajax.php:617
+#: admin/admin-ajax.php:623
 msgid "{{count}} engagements so far — {{remaining}} more to reach {{target}}."
 msgstr ""
 
-#: admin/admin-ajax.php:618
+#: admin/admin-ajax.php:624
 msgid "{{count}} engagements today — keep it going."
 msgstr ""
 
-#: admin/admin-ajax.php:619
+#: admin/admin-ajax.php:625
 msgid "No engagements yet today — yesterday had {{count}}."
 msgstr ""
 
-#: admin/admin-ajax.php:620
+#: admin/admin-ajax.php:626
 msgid "Engagement is up {{percent}}% compared to yesterday."
 msgstr ""
 
-#: admin/admin-ajax.php:621
+#: admin/admin-ajax.php:627
 msgid "Engagement is down {{percent}}% compared to yesterday."
 msgstr ""
 
-#: admin/admin-ajax.php:622
+#: admin/admin-ajax.php:628
 msgid "Around {{time}} gets the most engagement — schedule content then."
 msgstr ""
 
-#: admin/admin-ajax.php:623
+#: admin/admin-ajax.php:629
 msgid "A quick look at where your audience engages from."
 msgstr ""
 
-#: admin/admin-ajax.php:624
+#: admin/admin-ajax.php:630
 msgid "See full map in Pro"
 msgstr ""
 
-#: admin/admin-ajax.php:625
+#: admin/admin-ajax.php:631
 msgid "Explore"
 msgstr ""
 
-#: admin/admin-ajax.php:626
+#: admin/admin-ajax.php:632
 msgid "Preferences for your stats dashboard experience."
 msgstr ""
 
-#: admin/admin-ajax.php:627
+#: admin/admin-ajax.php:633
 msgid "Announcements"
 msgstr ""
 
-#: admin/admin-ajax.php:628
+#: admin/admin-ajax.php:634
 msgid "Show announcement modals"
 msgstr ""
 
-#: admin/admin-ajax.php:629
+#: admin/admin-ajax.php:635
 msgid "Display popup announcements when you open the stats dashboard. Multiple announcements are shown one at a time."
 msgstr ""
 
-#: admin/admin-ajax.php:630
+#: admin/admin-ajax.php:636
 msgid "Dismissed announcements"
 msgstr ""
 
-#: admin/admin-ajax.php:631
+#: admin/admin-ajax.php:637
 msgid "No dismissed announcements."
 msgstr ""
 
-#: admin/admin-ajax.php:632
+#: admin/admin-ajax.php:638
 msgid "{{count}} dismissed announcement(s) stored for your account."
 msgstr ""
 
-#: admin/admin-ajax.php:633
+#: admin/admin-ajax.php:639
 msgid "Clear dismissed"
 msgstr ""
 
-#: admin/admin-ajax.php:634
+#: admin/admin-ajax.php:640
 msgid "Dismissals were cleared. Popup announcements will appear again the next time you open the stats dashboard."
 msgstr ""
 
-#: admin/admin-ajax.php:635
+#: admin/admin-ajax.php:641
 msgid "Plugin configuration"
 msgstr ""
 
-#: admin/admin-ajax.php:636
+#: admin/admin-ajax.php:642
 msgid "Open plugin settings"
 msgstr ""
 
-#: admin/admin-ajax.php:637
+#: admin/admin-ajax.php:643
 msgid "Help & documentation"
 msgstr ""
 
-#: admin/admin-ajax.php:638
+#: admin/admin-ajax.php:644
 msgid "Appearance"
 msgstr ""
 
-#: admin/admin-ajax.php:639
+#: admin/admin-ajax.php:645
 msgid "Theme preference is stored locally in this browser, not in your WordPress user account."
 msgstr ""
 
-#: admin/admin-ajax.php:640
+#: admin/admin-ajax.php:646
 msgid "Publishing schedule, category insights, and commerce analytics — available in Pro."
 msgstr ""
 
-#: admin/admin-ajax.php:641
+#: admin/admin-ajax.php:647
 msgid "Publishing schedule and category insights — available in Pro."
 msgstr ""
 
-#: admin/admin-ajax.php:642
+#: admin/admin-ajax.php:648
 msgid "See where your audience engages from with country breakdowns and trends."
 msgstr ""
 
-#: admin/admin-ajax.php:643
+#: admin/admin-ajax.php:649
 msgid "Device, OS, and browser breakdowns for every vote."
 msgstr ""
 
-#: admin/admin-ajax.php:644
+#: admin/admin-ajax.php:650
 msgid "Discover your most active members and reward loyal engagers."
 msgstr ""
 
-#: admin/admin-ajax.php:645
+#: admin/admin-ajax.php:651
 msgid "See exactly who engaged with each piece of content."
 msgstr ""
 
-#: admin/admin-ajax.php:646
+#: admin/admin-ajax.php:652
 msgid "Users who engaged with this content"
 msgstr ""
 
-#: admin/admin-ajax.php:647
+#: admin/admin-ajax.php:653
 msgid "Member"
 msgstr ""
 
-#: admin/admin-ajax.php:648
+#: admin/admin-ajax.php:654
 msgid "Last active"
 msgstr ""
 
-#: admin/admin-ajax.php:649
+#: admin/admin-ajax.php:655
 msgid "Reactions"
 msgstr ""
 
-#: admin/admin-ajax.php:650
+#: admin/admin-ajax.php:656
 msgid "Back to engagement"
 msgstr ""
 
-#: admin/admin-ajax.php:651
+#: admin/admin-ajax.php:657
 msgid "No registered engagers yet"
 msgstr ""
 
-#: admin/admin-ajax.php:652
+#: admin/admin-ajax.php:658
 msgid "No registered engagers for {{title}}"
 msgstr ""
 
-#: admin/admin-ajax.php:653
+#: admin/admin-ajax.php:659
 msgid "Guest votes are counted in totals but only registered members appear here."
 msgstr ""
 
-#: admin/admin-ajax.php:654
+#: admin/admin-ajax.php:660
 #: includes/classes/class-wp-ulike-customizer.php:54
 msgid "Like / Dislike Buttons"
 msgstr ""
 
-#: admin/admin-ajax.php:655
+#: admin/admin-ajax.php:661
 msgid "{{count}} engaged users"
 msgstr ""
 
-#: admin/admin-ajax.php:656
+#: admin/admin-ajax.php:662
 msgid "{{count}} users engaged with {{title}}"
 msgstr ""
 
-#: admin/admin-ajax.php:657
+#: admin/admin-ajax.php:663
 msgid "{{count}} engager(s)"
 msgstr ""
 
-#: admin/admin-ajax.php:658
+#: admin/admin-ajax.php:664
 msgid "No engagers"
 msgstr ""
 
-#: admin/admin-ajax.php:659
+#: admin/admin-ajax.php:665
 msgid "No engagers yet"
 msgstr ""
 
-#: admin/admin-ajax.php:660
+#: admin/admin-ajax.php:666
 msgid "{{count}} total"
 msgstr ""
 
-#: admin/admin-ajax.php:661
+#: admin/admin-ajax.php:667
 msgid "Totals and charts for {{type}}"
 msgstr ""
 
-#: admin/admin-ajax.php:662
+#: admin/admin-ajax.php:668
 msgid "Trends and top content for {{type}}"
 msgstr ""
 
-#: admin/admin-ajax.php:663
+#: admin/admin-ajax.php:669
 msgid "Morning"
 msgstr ""
 
-#: admin/admin-ajax.php:664
+#: admin/admin-ajax.php:670
 msgid "Afternoon"
 msgstr ""
 
-#: admin/admin-ajax.php:665
+#: admin/admin-ajax.php:671
 msgid "Evening"
 msgstr ""
 
-#: admin/admin-ajax.php:666
+#: admin/admin-ajax.php:672
 msgid "Night"
 msgstr ""
 
-#: admin/admin-ajax.php:669
+#: admin/admin-ajax.php:675
 msgid "Close"
 msgstr ""
 
-#: admin/admin-ajax.php:670
+#: admin/admin-ajax.php:676
 msgid "See who"
 msgstr ""
 
-#: admin/admin-ajax.php:671
+#: admin/admin-ajax.php:677
 msgid "Ratings"
 msgstr ""
 
-#: admin/admin-ajax.php:672
+#: admin/admin-ajax.php:678
 msgid "Average rating"
 msgstr ""
 
-#: admin/admin-ajax.php:673
+#: admin/admin-ajax.php:679
 #: includes/functions/templates.php:210
 msgid "Star Rating"
 msgstr ""
 
-#: admin/admin-ajax.php:674
+#: admin/admin-ajax.php:680
 msgid "Star rating template"
 msgstr ""
 
-#: admin/admin-ajax.php:675
+#: admin/admin-ajax.php:681
 msgid "Star ratings in this period."
 msgstr ""
 
-#: admin/admin-ajax.php:676
+#: admin/admin-ajax.php:682
 #: includes/functions/templates.php:202
 msgid "Emoji Reactions"
 msgstr ""
 
-#: admin/admin-ajax.php:677
+#: admin/admin-ajax.php:683
 msgid "Emoji template"
 msgstr ""
 
-#: admin/admin-ajax.php:678
+#: admin/admin-ajax.php:684
 msgid "Emoji reactions in this period."
 msgstr ""
 
-#: admin/admin-ajax.php:679
+#: admin/admin-ajax.php:685
 msgid "Reactions are up {{percent}}% compared to last week."
 msgstr ""
 
-#: admin/admin-ajax.php:680
+#: admin/admin-ajax.php:686
 msgid "Ratings are up {{percent}}% compared to last week."
 msgstr ""
 
-#: admin/admin-ajax.php:681
+#: admin/admin-ajax.php:687
 msgid "{{count}} emoji reactions this week — use Top content to find what resonates."
 msgstr ""
 
-#: admin/admin-ajax.php:682
+#: admin/admin-ajax.php:688
 msgid "{{count}} star ratings this week — use Top content to find what resonates."
 msgstr ""
 
-#: admin/admin-ajax.php:683
+#: admin/admin-ajax.php:689
 msgid "{{name}} is your top rater — consider a loyalty perk."
 msgstr ""
 
-#: admin/admin-ajax.php:684
+#: admin/admin-ajax.php:690
 msgid "{{title}} averages ★ {{avg}} — replicate this format."
 msgstr ""
 
-#: admin/admin-ajax.php:685
+#: admin/admin-ajax.php:691
 msgid "{{title}} leads with {{count}} reactions in this period."
 msgstr ""
 
-#: admin/admin-ajax.php:686
+#: admin/admin-ajax.php:692
 msgid "★ {{avg}} site average"
 msgstr ""
 
-#: admin/admin-ajax.php:687
+#: admin/admin-ajax.php:693
 msgid "Device Insights"
 msgstr ""
 
-#: admin/admin-ajax.php:688
+#: admin/admin-ajax.php:694
 msgid "Intelligence Report"
 msgstr ""
 
-#: admin/admin-ajax.php:689
+#: admin/admin-ajax.php:695
 msgid "WooCommerce Report"
 msgstr ""
 
-#: admin/admin-ajax.php:690
+#: admin/admin-ajax.php:696
 #: admin/classes/class-wp-ulike-admin-assets.php:168
 msgid "Upgrade like storage"
 msgstr ""
 
-#: admin/admin-ajax.php:691
+#: admin/admin-ajax.php:697
 msgid "Unable to load data"
 msgstr ""
 
-#: admin/admin-ajax.php:692
+#: admin/admin-ajax.php:698
 msgid "Please refresh the page or try again later."
 msgstr ""
 
-#: admin/admin-ajax.php:695
+#: admin/admin-ajax.php:701
 msgid "{{count}} {{interval}} ago"
 msgstr ""
 
-#: admin/admin-ajax.php:696
+#: admin/admin-ajax.php:702
 msgid "year"
 msgstr ""
 
-#: admin/admin-ajax.php:697
+#: admin/admin-ajax.php:703
 msgid "years"
 msgstr ""
 
-#: admin/admin-ajax.php:698
+#: admin/admin-ajax.php:704
 msgid "month"
 msgstr ""
 
-#: admin/admin-ajax.php:699
+#: admin/admin-ajax.php:705
 msgid "months"
 msgstr ""
 
-#: admin/admin-ajax.php:700
+#: admin/admin-ajax.php:706
 msgid "week"
 msgstr ""
 
-#: admin/admin-ajax.php:701
+#: admin/admin-ajax.php:707
 msgid "weeks"
 msgstr ""
 
-#: admin/admin-ajax.php:702
+#: admin/admin-ajax.php:708
 msgid "day"
 msgstr ""
 
-#: admin/admin-ajax.php:703
+#: admin/admin-ajax.php:709
 msgid "days"
 msgstr ""
 
-#: admin/admin-ajax.php:704
+#: admin/admin-ajax.php:710
 msgid "hour"
 msgstr ""
 
-#: admin/admin-ajax.php:705
+#: admin/admin-ajax.php:711
 msgid "hours"
 msgstr ""
 
-#: admin/admin-ajax.php:706
+#: admin/admin-ajax.php:712
 msgid "minute"
 msgstr ""
 
-#: admin/admin-ajax.php:707
+#: admin/admin-ajax.php:713
 msgid "minutes"
 msgstr ""
 
-#: admin/admin-ajax.php:708
+#: admin/admin-ajax.php:714
 msgid "second"
 msgstr ""
 
-#: admin/admin-ajax.php:709
+#: admin/admin-ajax.php:715
 msgid "seconds"
 msgstr ""
 
-#: admin/admin-ajax.php:710
+#: admin/admin-ajax.php:716
 msgid "just now"
 msgstr ""
 
-#: admin/admin-ajax.php:740
-#: admin/admin-ajax.php:770
-#: admin/admin-ajax.php:816
+#: admin/admin-ajax.php:746
+#: admin/admin-ajax.php:776
+#: admin/admin-ajax.php:839
 msgid "Error: Settings API not available."
 msgstr ""
 
-#: admin/admin-ajax.php:802
+#: admin/admin-ajax.php:810
+#: admin/admin-ajax.php:934
+msgid "No settings data was received. Please refresh the page and try again."
+msgstr ""
+
+#. translators: %s: JSON parser error message
+#: admin/admin-ajax.php:821
+#: admin/admin-ajax.php:945
+msgid "Could not read settings data (%s). Please refresh the page and try again."
+msgstr ""
+
+#: admin/admin-ajax.php:824
 #: admin/classes/class-wp-ulike-settings-api.php:596
 #: admin/classes/class-wp-ulike-settings-api.php:604
 msgid "Invalid request data. Expected an object with setting values."
 msgstr ""
 
-#: admin/admin-ajax.php:847
-#: admin/admin-ajax.php:877
-#: admin/admin-ajax.php:917
-#: admin/admin-ajax.php:946
+#: admin/admin-ajax.php:870
+#: admin/admin-ajax.php:900
+#: admin/admin-ajax.php:957
+#: admin/admin-ajax.php:986
 msgid "Error: Customizer API not available."
 msgstr ""
 
-#: admin/admin-ajax.php:909
+#: admin/admin-ajax.php:948
 #: admin/classes/class-wp-ulike-customizer-api.php:588
 #: admin/classes/class-wp-ulike-customizer-api.php:595
 msgid "Invalid request data. Expected an object with customizer values."
@@ -1874,7 +1909,7 @@ msgstr ""
 
 #. translators: Generic label for general section
 #: admin/classes/class-wp-ulike-admin-panel.php:54
-#: admin/classes/class-wp-ulike-settings-api.php:1301
+#: admin/classes/class-wp-ulike-settings-api.php:1313
 #: includes/classes/class-wp-ulike-overview.php:398
 #: includes/classes/class-wp-ulike-overview.php:407
 msgid "General"
@@ -2355,7 +2390,7 @@ msgstr ""
 
 #. translators: Tab label for text editor mode
 #: admin/classes/class-wp-ulike-admin-panel.php:638
-#: admin/classes/class-wp-ulike-settings-api.php:1225
+#: admin/classes/class-wp-ulike-settings-api.php:1237
 msgid "Text"
 msgstr ""
 
@@ -2426,6 +2461,10 @@ msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:726
 msgid "Hide the vote counter when no votes have been submitted."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:734
+msgid "Off by default so visitors can vote with one click. Turn on for members-only sites, or to reduce fake votes from rotating IPs."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:739
@@ -2707,7 +2746,7 @@ msgstr ""
 
 #. translators: Link text to read more about pro feature
 #: admin/classes/class-wp-ulike-admin-panel.php:1167
-#: admin/classes/class-wp-ulike-settings-api.php:1251
+#: admin/classes/class-wp-ulike-settings-api.php:1263
 msgid "Read More"
 msgstr ""
 
@@ -2785,266 +2824,270 @@ msgstr ""
 msgid "Authorization failed. Please refresh the page and try again."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-settings-api.php:626
+#: admin/classes/class-wp-ulike-settings-api.php:624
+msgid "Could not save settings. Please try again, or contact your host if this keeps happening."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-settings-api.php:638
 msgid "Settings saved successfully."
 msgstr ""
 
 #. translators: Error message with suggestion to refresh the page
-#: admin/classes/class-wp-ulike-settings-api.php:1102
+#: admin/classes/class-wp-ulike-settings-api.php:1114
 msgid "Something went wrong. Please try refreshing the page."
 msgstr ""
 
 #. translators: Error message when a request fails
-#: admin/classes/class-wp-ulike-settings-api.php:1104
+#: admin/classes/class-wp-ulike-settings-api.php:1116
 msgid "Unable to complete request"
 msgstr ""
 
 #. translators: Error message when server connection is forbidden
-#: admin/classes/class-wp-ulike-settings-api.php:1106
+#: admin/classes/class-wp-ulike-settings-api.php:1118
 msgid "Unable to connect to server. Please contact your administrator."
 msgstr ""
 
 #. translators: Error message when server endpoint is not found
-#: admin/classes/class-wp-ulike-settings-api.php:1108
+#: admin/classes/class-wp-ulike-settings-api.php:1120
 msgid "Server endpoint not found. Please check your configuration."
 msgstr ""
 
 #. translators: Generic server error message
-#: admin/classes/class-wp-ulike-settings-api.php:1110
+#: admin/classes/class-wp-ulike-settings-api.php:1122
 msgid "Server error. Please try again later."
 msgstr ""
 
 #. translators: Network connection error message
-#: admin/classes/class-wp-ulike-settings-api.php:1112
+#: admin/classes/class-wp-ulike-settings-api.php:1124
 msgid "Unable to connect to server. Please check your internet connection and try again."
 msgstr ""
 
 #. translators: CORS (Cross-Origin Resource Sharing) error message
-#: admin/classes/class-wp-ulike-settings-api.php:1114
+#: admin/classes/class-wp-ulike-settings-api.php:1126
 msgid "Connection blocked. Please contact your administrator."
 msgstr ""
 
 #. translators: Request timeout error message
-#: admin/classes/class-wp-ulike-settings-api.php:1116
+#: admin/classes/class-wp-ulike-settings-api.php:1128
 msgid "Request timed out. Please try again."
 msgstr ""
 
 #. translators: Error when settings configuration cannot be loaded
-#: admin/classes/class-wp-ulike-settings-api.php:1118
+#: admin/classes/class-wp-ulike-settings-api.php:1130
 msgid "Unable to load settings. Configuration data is missing."
 msgstr ""
 
 #. translators: Button text to save changes
-#: admin/classes/class-wp-ulike-settings-api.php:1122
+#: admin/classes/class-wp-ulike-settings-api.php:1134
 msgid "Save Changes"
 msgstr ""
 
 #. translators: Short button text to save changes (compact toolbar)
-#: admin/classes/class-wp-ulike-settings-api.php:1124
+#: admin/classes/class-wp-ulike-settings-api.php:1136
 msgid "Save"
 msgstr ""
 
 #. translators: Loading state text while saving
-#: admin/classes/class-wp-ulike-settings-api.php:1126
+#: admin/classes/class-wp-ulike-settings-api.php:1138
 msgid "Saving..."
 msgstr ""
 
 #. translators: Button text to reset settings to default values
-#: admin/classes/class-wp-ulike-settings-api.php:1128
+#: admin/classes/class-wp-ulike-settings-api.php:1140
 msgid "Reset to Defaults"
 msgstr ""
 
 #. translators: Short button text to reset settings (compact toolbar)
-#: admin/classes/class-wp-ulike-settings-api.php:1130
+#: admin/classes/class-wp-ulike-settings-api.php:1142
 msgid "Reset"
 msgstr ""
 
 #. translators: Loading state text while resetting
-#: admin/classes/class-wp-ulike-settings-api.php:1132
+#: admin/classes/class-wp-ulike-settings-api.php:1144
 msgid "Resetting..."
 msgstr ""
 
 #. translators: Button text to remove an item
-#: admin/classes/class-wp-ulike-settings-api.php:1134
+#: admin/classes/class-wp-ulike-settings-api.php:1146
 msgid "Remove"
 msgstr ""
 
 #. translators: Button text to upload a file
-#: admin/classes/class-wp-ulike-settings-api.php:1136
+#: admin/classes/class-wp-ulike-settings-api.php:1148
 msgid "Upload"
 msgstr ""
 
 #. translators: Button text to import settings
-#: admin/classes/class-wp-ulike-settings-api.php:1138
+#: admin/classes/class-wp-ulike-settings-api.php:1150
 #: admin/includes/templates/about.php:355
 msgid "Import"
 msgstr ""
 
 #. translators: Loading state text while importing
-#: admin/classes/class-wp-ulike-settings-api.php:1140
+#: admin/classes/class-wp-ulike-settings-api.php:1152
 msgid "Importing..."
 msgstr ""
 
 #. translators: Button text to export and download settings
-#: admin/classes/class-wp-ulike-settings-api.php:1142
+#: admin/classes/class-wp-ulike-settings-api.php:1154
 msgid "Export and Download"
 msgstr ""
 
 #. translators: Button text to add an item. %s will be replaced with the item type
-#: admin/classes/class-wp-ulike-settings-api.php:1144
+#: admin/classes/class-wp-ulike-settings-api.php:1156
 msgid "Add %s"
 msgstr ""
 
 #. translators: Button text to select media. %s will be replaced with media type (e.g., "image", "video")
-#: admin/classes/class-wp-ulike-settings-api.php:1148
+#: admin/classes/class-wp-ulike-settings-api.php:1160
 msgid "Select %s"
 msgstr ""
 
 #. translators: Button text to use selected media. %s will be replaced with media type
-#: admin/classes/class-wp-ulike-settings-api.php:1150
+#: admin/classes/class-wp-ulike-settings-api.php:1162
 msgid "Use this %s"
 msgstr ""
 
 #. translators: Error when selected media has no URL. %s will be replaced with media type
-#: admin/classes/class-wp-ulike-settings-api.php:1152
+#: admin/classes/class-wp-ulike-settings-api.php:1164
 msgid "Selected %s has no URL"
 msgstr ""
 
 #. translators: Message when no file is selected
-#: admin/classes/class-wp-ulike-settings-api.php:1154
+#: admin/classes/class-wp-ulike-settings-api.php:1166
 msgid "No file selected"
 msgstr ""
 
 #. translators: Error message for invalid URL format from media library
-#: admin/classes/class-wp-ulike-settings-api.php:1156
+#: admin/classes/class-wp-ulike-settings-api.php:1168
 msgid "Invalid URL format from media library"
 msgstr ""
 
 #. translators: Success message after settings action. %s will be replaced with the action (e.g., "saved", "reset")
-#: admin/classes/class-wp-ulike-settings-api.php:1160
+#: admin/classes/class-wp-ulike-settings-api.php:1172
 msgid "Settings %s successfully."
 msgstr ""
 
 #. translators: Success message after resetting settings to defaults
-#: admin/classes/class-wp-ulike-settings-api.php:1162
+#: admin/classes/class-wp-ulike-settings-api.php:1174
 msgid "Settings reset to defaults."
 msgstr ""
 
 #. translators: Confirmation dialog text before resetting all settings
-#: admin/classes/class-wp-ulike-settings-api.php:1164
+#: admin/classes/class-wp-ulike-settings-api.php:1176
 msgid "Reset all settings to defaults? This cannot be undone."
 msgstr ""
 
 #. translators: Warning message when user tries to leave with unsaved changes
-#: admin/classes/class-wp-ulike-settings-api.php:1166
+#: admin/classes/class-wp-ulike-settings-api.php:1178
 msgid "You have unsaved changes. Are you sure you want to leave?"
 msgstr ""
 
 #. translators: Status message shown when settings have unsaved changes
-#: admin/classes/class-wp-ulike-settings-api.php:1168
+#: admin/classes/class-wp-ulike-settings-api.php:1180
 msgid "You have unsaved changes."
 msgstr ""
 
 #. translators: Hint shown in footer when there are no unsaved changes
-#: admin/classes/class-wp-ulike-settings-api.php:1170
+#: admin/classes/class-wp-ulike-settings-api.php:1182
 msgid "Save when you are done editing these settings."
 msgstr ""
 
 #. translators: Placeholder text in the settings sidebar search field
-#: admin/classes/class-wp-ulike-settings-api.php:1174
+#: admin/classes/class-wp-ulike-settings-api.php:1186
 msgid "Search settings..."
 msgstr ""
 
 #. translators: Message shown when settings search returns no matches
-#: admin/classes/class-wp-ulike-settings-api.php:1176
+#: admin/classes/class-wp-ulike-settings-api.php:1188
 msgid "No settings found."
 msgstr ""
 
 #. translators: Error message listing validation errors before saving. %s will be replaced with error list
-#: admin/classes/class-wp-ulike-settings-api.php:1179
+#: admin/classes/class-wp-ulike-settings-api.php:1191
 msgid ""
 "Please fix the following errors before saving:\n"
 "%s"
 msgstr ""
 
 #. translators: Error when settings are imported locally but failed to save to server
-#: admin/classes/class-wp-ulike-settings-api.php:1181
+#: admin/classes/class-wp-ulike-settings-api.php:1193
 msgid "Settings imported locally but failed to save to server. Please try saving again."
 msgstr ""
 
 #. translators: 1: field type, 2: optional example suffix (e.g. ". (e.g., https://example.com)")
-#: admin/classes/class-wp-ulike-settings-api.php:1185
+#: admin/classes/class-wp-ulike-settings-api.php:1197
 msgid "Invalid %1$s format%2$s"
 msgstr ""
 
 #. translators: Error message for invalid URL protocol
-#: admin/classes/class-wp-ulike-settings-api.php:1187
+#: admin/classes/class-wp-ulike-settings-api.php:1199
 msgid "Invalid URL protocol. Only http, https, and data URLs are allowed."
 msgstr ""
 
 #. translators: Validation error for text exceeding maximum length. %d will be replaced with maximum length
-#: admin/classes/class-wp-ulike-settings-api.php:1189
+#: admin/classes/class-wp-ulike-settings-api.php:1201
 msgid "Text must be no more than %d characters"
 msgstr ""
 
 #. translators: Validation error for number below minimum. %d will be replaced with minimum value
-#: admin/classes/class-wp-ulike-settings-api.php:1191
+#: admin/classes/class-wp-ulike-settings-api.php:1203
 msgid "Value must be at least %d"
 msgstr ""
 
 #. translators: Validation error for number above maximum. %d will be replaced with maximum value
-#: admin/classes/class-wp-ulike-settings-api.php:1193
+#: admin/classes/class-wp-ulike-settings-api.php:1205
 msgid "Value must be at most %d"
 msgstr ""
 
 #. translators: Validation error when upload field requires a URL string
-#: admin/classes/class-wp-ulike-settings-api.php:1195
+#: admin/classes/class-wp-ulike-settings-api.php:1207
 msgid "Upload value must be a URL string"
 msgstr ""
 
 #. translators: Validation error for media field format
-#: admin/classes/class-wp-ulike-settings-api.php:1197
+#: admin/classes/class-wp-ulike-settings-api.php:1209
 msgid "Media value must be an object with a url property or a valid URL string"
 msgstr ""
 
 #. translators: Title for import settings section
-#: admin/classes/class-wp-ulike-settings-api.php:1201
+#: admin/classes/class-wp-ulike-settings-api.php:1213
 msgid "Import Settings"
 msgstr ""
 
 #. translators: Description text for import settings feature
-#: admin/classes/class-wp-ulike-settings-api.php:1203
+#: admin/classes/class-wp-ulike-settings-api.php:1215
 msgid "Paste your exported settings JSON below and click Import to restore your configuration. The import should contain only setting values (not schema structure)."
 msgstr ""
 
 #. translators: Placeholder text for import JSON textarea
-#: admin/classes/class-wp-ulike-settings-api.php:1205
+#: admin/classes/class-wp-ulike-settings-api.php:1217
 msgid "Paste your JSON settings here..."
 msgstr ""
 
 #. translators: Title for export settings section
-#: admin/classes/class-wp-ulike-settings-api.php:1207
+#: admin/classes/class-wp-ulike-settings-api.php:1219
 msgid "Export Settings"
 msgstr ""
 
 #. translators: Description text for export settings feature
-#: admin/classes/class-wp-ulike-settings-api.php:1209
+#: admin/classes/class-wp-ulike-settings-api.php:1221
 msgid "Copy the JSON below or download it as a file to backup your current settings. The export contains only your setting values (not the schema structure)."
 msgstr ""
 
 #. translators: Error message for invalid JSON format
-#: admin/classes/class-wp-ulike-settings-api.php:1211
+#: admin/classes/class-wp-ulike-settings-api.php:1223
 #: admin/includes/templates/about.php:45
 msgid "Invalid JSON format. Please check your JSON syntax."
 msgstr ""
 
 #. translators: Error when no values found in imported data
-#: admin/classes/class-wp-ulike-settings-api.php:1213
+#: admin/classes/class-wp-ulike-settings-api.php:1225
 msgid "No values found in the import data."
 msgstr ""
 
 #. translators: Security warning when dangerous content detected. %s will be replaced with threat list
-#: admin/classes/class-wp-ulike-settings-api.php:1215
+#: admin/classes/class-wp-ulike-settings-api.php:1227
 msgid ""
 "Security threat detected. The import contains potentially dangerous content:\n"
 "%s\n"
@@ -3053,7 +3096,7 @@ msgid ""
 msgstr ""
 
 #. translators: Validation error when imported data has invalid values. %s will be replaced with error list
-#: admin/classes/class-wp-ulike-settings-api.php:1217
+#: admin/classes/class-wp-ulike-settings-api.php:1229
 msgid ""
 "Validation failed. The imported data contains invalid values:\n"
 "%s\n"
@@ -3062,168 +3105,168 @@ msgid ""
 msgstr ""
 
 #. translators: Tip text for code editor usage
-#: admin/classes/class-wp-ulike-settings-api.php:1221
+#: admin/classes/class-wp-ulike-settings-api.php:1233
 msgid "Tip: Select text to wrap it, or click to insert at cursor position"
 msgstr ""
 
 #. translators: Tab label for visual editor mode
-#: admin/classes/class-wp-ulike-settings-api.php:1223
+#: admin/classes/class-wp-ulike-settings-api.php:1235
 msgid "Visual"
 msgstr ""
 
 #. translators: Tab label for preview mode
-#: admin/classes/class-wp-ulike-settings-api.php:1227
+#: admin/classes/class-wp-ulike-settings-api.php:1239
 msgid "Preview"
 msgstr ""
 
 #. translators: Message when there is no content to preview
-#: admin/classes/class-wp-ulike-settings-api.php:1229
+#: admin/classes/class-wp-ulike-settings-api.php:1241
 msgid "No content to preview"
 msgstr ""
 
 #. translators: Placeholder text for multi-select dropdown
-#: admin/classes/class-wp-ulike-settings-api.php:1233
+#: admin/classes/class-wp-ulike-settings-api.php:1245
 msgid "Select options..."
 msgstr ""
 
 #. translators: Placeholder text for single-select dropdown
-#: admin/classes/class-wp-ulike-settings-api.php:1235
+#: admin/classes/class-wp-ulike-settings-api.php:1247
 msgid "Select an option"
 msgstr ""
 
 #. translators: Error when no options are available for a field
-#: admin/classes/class-wp-ulike-settings-api.php:1239
+#: admin/classes/class-wp-ulike-settings-api.php:1251
 msgid "No options available for this field. Please check the schema definition."
 msgstr ""
 
 #. translators: Error when dynamic options cannot be resolved. Simplified message for users
-#: admin/classes/class-wp-ulike-settings-api.php:1241
+#: admin/classes/class-wp-ulike-settings-api.php:1253
 msgid "Options not available. Please check your configuration."
 msgstr ""
 
 #. translators: Label for pro feature
-#: admin/classes/class-wp-ulike-settings-api.php:1245
+#: admin/classes/class-wp-ulike-settings-api.php:1257
 msgid "Pro Feature"
 msgstr ""
 
 #. translators: Description text for pro feature
-#: admin/classes/class-wp-ulike-settings-api.php:1247
+#: admin/classes/class-wp-ulike-settings-api.php:1259
 msgid "This feature is available in WP ULike Pro"
 msgstr ""
 
 #. translators: Security threat type name - SQL Injection
-#: admin/classes/class-wp-ulike-settings-api.php:1257
+#: admin/classes/class-wp-ulike-settings-api.php:1269
 msgid "SQL Injection"
 msgstr ""
 
 #. translators: Security threat type name - XSS (Cross-Site Scripting)
-#: admin/classes/class-wp-ulike-settings-api.php:1259
+#: admin/classes/class-wp-ulike-settings-api.php:1271
 msgid "XSS"
 msgstr ""
 
 #. translators: Security threat type name - Command Injection
-#: admin/classes/class-wp-ulike-settings-api.php:1261
+#: admin/classes/class-wp-ulike-settings-api.php:1273
 msgid "Command Injection"
 msgstr ""
 
 #. translators: Button text to retry a failed action
-#: admin/classes/class-wp-ulike-settings-api.php:1265
+#: admin/classes/class-wp-ulike-settings-api.php:1277
 msgid "Retry"
 msgstr ""
 
 #. translators: Label for live preview feature
-#: admin/classes/class-wp-ulike-settings-api.php:1267
+#: admin/classes/class-wp-ulike-settings-api.php:1279
 msgid "Live Preview"
 msgstr ""
 
 #. translators: Error message when preview fails to load
-#: admin/classes/class-wp-ulike-settings-api.php:1269
+#: admin/classes/class-wp-ulike-settings-api.php:1281
 msgid "Failed to load preview"
 msgstr ""
 
 #. translators: Label for templates section
-#: admin/classes/class-wp-ulike-settings-api.php:1273
+#: admin/classes/class-wp-ulike-settings-api.php:1285
 msgid "Templates"
 msgstr ""
 
 #. translators: Heading for template list sidebar
-#: admin/classes/class-wp-ulike-settings-api.php:1275
+#: admin/classes/class-wp-ulike-settings-api.php:1287
 msgid "List View"
 msgstr ""
 
 #. translators: Tab label for section settings panel
-#: admin/classes/class-wp-ulike-settings-api.php:1277
+#: admin/classes/class-wp-ulike-settings-api.php:1289
 msgid "Section"
 msgstr ""
 
 #. translators: Mobile back button label
-#: admin/classes/class-wp-ulike-settings-api.php:1279
+#: admin/classes/class-wp-ulike-settings-api.php:1291
 msgid "Back to preview"
 msgstr ""
 
 #. translators: Message when no preview templates are available
-#: admin/classes/class-wp-ulike-settings-api.php:1281
+#: admin/classes/class-wp-ulike-settings-api.php:1293
 msgid "No preview templates available"
 msgstr ""
 
 #. translators: Instruction text for selecting a template section
-#: admin/classes/class-wp-ulike-settings-api.php:1283
+#: admin/classes/class-wp-ulike-settings-api.php:1295
 msgid "Select a template section to customize"
 msgstr ""
 
 #. translators: Label for width field
-#: admin/classes/class-wp-ulike-settings-api.php:1287
+#: admin/classes/class-wp-ulike-settings-api.php:1299
 msgid "Width"
 msgstr ""
 
 #. translators: Label for height field
-#: admin/classes/class-wp-ulike-settings-api.php:1289
+#: admin/classes/class-wp-ulike-settings-api.php:1301
 msgid "Height"
 msgstr ""
 
 #. translators: Label for color field
-#: admin/classes/class-wp-ulike-settings-api.php:1291
+#: admin/classes/class-wp-ulike-settings-api.php:1303
 msgid "Color"
 msgstr ""
 
 #. translators: Label for style field
-#: admin/classes/class-wp-ulike-settings-api.php:1293
+#: admin/classes/class-wp-ulike-settings-api.php:1305
 #: admin/classes/class-wp-ulike-widget.php:624
 msgid "Style"
 msgstr ""
 
 #. translators: Generic label for options (used in multiple contexts)
-#: admin/classes/class-wp-ulike-settings-api.php:1299
+#: admin/classes/class-wp-ulike-settings-api.php:1311
 msgid "Options"
 msgstr ""
 
 #. translators: Generic label for new item
-#: admin/classes/class-wp-ulike-settings-api.php:1305
+#: admin/classes/class-wp-ulike-settings-api.php:1317
 msgid "New"
 msgstr ""
 
 #. translators: Generic label for item
-#: admin/classes/class-wp-ulike-settings-api.php:1307
+#: admin/classes/class-wp-ulike-settings-api.php:1319
 msgid "Item"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-settings-api.php:1310
+#: admin/classes/class-wp-ulike-settings-api.php:1322
 msgid "Quick add"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-settings-api.php:1311
+#: admin/classes/class-wp-ulike-settings-api.php:1323
 msgid "Emoji"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-settings-api.php:1312
+#: admin/classes/class-wp-ulike-settings-api.php:1324
 msgid "Label"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-settings-api.php:1314
+#: admin/classes/class-wp-ulike-settings-api.php:1326
 msgid "Add reaction"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-settings-api.php:1315
+#: admin/classes/class-wp-ulike-settings-api.php:1327
 msgid "Choose emoji"
 msgstr ""
 
@@ -4247,39 +4290,39 @@ msgstr ""
 msgid "Invalid settings file. Expected a JSON export from Help → Settings backup."
 msgstr ""
 
-#: includes/functions/counter.php:69
+#: includes/functions/counter.php:71
 msgid "Please enter some value for required variables."
 msgstr ""
 
-#: includes/functions/counter.php:83
+#: includes/functions/counter.php:92
 msgid "Table info is empty."
 msgstr ""
 
-#: includes/functions/general.php:927
+#: includes/functions/general.php:926
 msgid "No Limit"
 msgstr ""
 
-#: includes/functions/general.php:928
+#: includes/functions/general.php:927
 msgid "Cookie"
 msgstr ""
 
-#: includes/functions/general.php:929
+#: includes/functions/general.php:928
 msgid "Username/IP"
 msgstr ""
 
-#: includes/functions/general.php:930
+#: includes/functions/general.php:929
 msgid "Username/IP + Cookie"
 msgstr ""
 
-#: includes/functions/general.php:957
+#: includes/functions/general.php:956
 msgid "Top of Content"
 msgstr ""
 
-#: includes/functions/general.php:958
+#: includes/functions/general.php:957
 msgid "Bottom of Content"
 msgstr ""
 
-#: includes/functions/general.php:959
+#: includes/functions/general.php:958
 msgid "Top and Bottom"
 msgstr ""
 
@@ -4392,11 +4435,11 @@ msgstr ""
 msgid "WP ULike vote logs"
 msgstr ""
 
-#: includes/hooks/shortcodes.php:177
+#: includes/hooks/shortcodes.php:207
 msgid "Invalid type specified for [wp_ulike_likers_box] shortcode."
 msgstr ""
 
-#: includes/hooks/shortcodes.php:202
+#: includes/hooks/shortcodes.php:218
 msgid "Error receiving input parameters"
 msgstr ""
 
