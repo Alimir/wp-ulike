@@ -790,8 +790,11 @@ function wp_ulike_save_settings_api(){
 	// @if DEV
 	/*
 	// @endif
-	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
-		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to save settings.', 'wp-ulike' ) );
+	}
+	if ( ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ) {
+		wp_send_json_error( esc_html__( 'Your session expired. Please refresh the page and try saving again.', 'wp-ulike' ) );
 	}
 	// @if DEV
 	*/
@@ -802,10 +805,24 @@ function wp_ulike_save_settings_api(){
 	if ( is_wp_error( $json ) ) {
 		wp_send_json_error( $json->get_error_message() );
 	}
+
+	if ( '' === trim( (string) $json ) ) {
+		wp_send_json_error( esc_html__( 'No settings data was received. Please refresh the page and try again.', 'wp-ulike' ) );
+	}
+
 	$values = json_decode( $json, true );
 
 	if ( ! is_array( $values ) ) {
-		wp_send_json_error( esc_html__( 'Invalid request data. Expected an object with setting values.', 'wp-ulike' ) );
+		$json_error = function_exists( 'json_last_error_msg' ) ? json_last_error_msg() : '';
+		wp_send_json_error(
+			'' !== $json_error
+				? sprintf(
+					/* translators: %s: JSON parser error message */
+					esc_html__( 'Could not read settings data (%s). Please refresh the page and try again.', 'wp-ulike' ),
+					esc_html( $json_error )
+				)
+				: esc_html__( 'Invalid request data. Expected an object with setting values.', 'wp-ulike' )
+		);
 	}
 
 	// Get settings API instance
@@ -897,8 +914,11 @@ function wp_ulike_save_customizer_api(){
 	// @if DEV
 	/*
 	// @endif
-	if( ! current_user_can( 'manage_options' ) || ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ){
-		wp_send_json_error( esc_html__( 'Error: You do not have permission to do that.', 'wp-ulike' ) );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( esc_html__( 'Error: You do not have permission to save settings.', 'wp-ulike' ) );
+	}
+	if ( ! wp_ulike_is_valid_nonce( WP_ULIKE_SLUG ) ) {
+		wp_send_json_error( esc_html__( 'Your session expired. Please refresh the page and try saving again.', 'wp-ulike' ) );
 	}
 	// @if DEV
 	*/
@@ -909,10 +929,24 @@ function wp_ulike_save_customizer_api(){
 	if ( is_wp_error( $json ) ) {
 		wp_send_json_error( $json->get_error_message() );
 	}
+
+	if ( '' === trim( (string) $json ) ) {
+		wp_send_json_error( esc_html__( 'No settings data was received. Please refresh the page and try again.', 'wp-ulike' ) );
+	}
+
 	$values = json_decode( $json, true );
 
 	if ( ! is_array( $values ) ) {
-		wp_send_json_error( esc_html__( 'Invalid request data. Expected an object with customizer values.', 'wp-ulike' ) );
+		$json_error = function_exists( 'json_last_error_msg' ) ? json_last_error_msg() : '';
+		wp_send_json_error(
+			'' !== $json_error
+				? sprintf(
+					/* translators: %s: JSON parser error message */
+					esc_html__( 'Could not read settings data (%s). Please refresh the page and try again.', 'wp-ulike' ),
+					esc_html( $json_error )
+				)
+				: esc_html__( 'Invalid request data. Expected an object with customizer values.', 'wp-ulike' )
+		);
 	}
 
 	// Get customizer API instance

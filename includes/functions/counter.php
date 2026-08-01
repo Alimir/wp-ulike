@@ -80,7 +80,11 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		$is_cacheable  = ! $is_removed && 'all' !== $meta_status;
 		$counter_value = $is_cacheable ? wp_ulike_meta_counter_value( $ID, $type, $meta_status, $is_distinct ) : null;
 
-		if( is_null( $counter_value ) || ! empty( $date_range ) ){
+		// Treat period "all" like no filter — widgets/shortcodes pass "all" for
+		// all-time totals; that must still hit meta, not a full Pulse COUNT.
+		$has_period_filter = ! empty( $date_range ) && 'all' !== $date_range;
+
+		if( is_null( $counter_value ) || $has_period_filter ){
 			global $wpdb;
 
 			// period limit SQL
@@ -112,7 +116,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			}
 
 			// Only cache active like/dislike counters in meta (see $is_cacheable).
-			if( empty( $date_range ) && $is_cacheable ){
+			if( ! $has_period_filter && $is_cacheable ){
 				wp_ulike_update_meta_counter_value( $ID, $counter_value, $type, $meta_status, $is_distinct );
 			}
 		}

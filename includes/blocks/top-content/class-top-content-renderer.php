@@ -407,7 +407,6 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				return array();
 			}
 
-			$query_args = self::prepare_popular_query_args( $query_args );
 			$query_args['offset'] = 0;
 			$info                 = wp_ulike_get_popular_items_info( $query_args );
 
@@ -475,12 +474,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		/**
 		 * Date range for wp_ulike_get_counter_value() when rendering list counters.
 		 *
-		 * Matches wp-ulike-pro frontend/templates (post.php, Elementor widgets): no period arg for
-		 * all-time so core reads meta counters — same as the public like button.
-		 *
-		 * WP ULike Pro Stats (class-stats-v2.php) passes $settings['period'] including "all", which
-		 * forces a log recount in core; that is intended for period-filtered dashboards, not for
-		 * matching button totals on the frontend.
+		 * All-time (empty/"all") returns null so core reads meta counters — same as the
+		 * public like button. Real period filters still recount from the vote ledger.
 		 *
 		 * Pro metabox "counter quantity" is added automatically via the wp_ulike_counter_value filter.
 		 *
@@ -516,33 +511,6 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				$is_distinct,
 				self::get_counter_date_range_for_display( $period )
 			);
-		}
-
-		/**
-		 * wp_ulike_get_popular_items_info() with period "all" uses the meta table (fast path).
-		 * Dislike rankings are often missing there; a date range forces the vote-log query instead.
-		 *
-		 * @param array<string, mixed> $query_args Query arguments.
-		 * @return array<string, mixed>
-		 */
-		private static function prepare_popular_query_args( $query_args ) {
-			$status = isset( $query_args['status'] ) ? $query_args['status'] : 'like';
-			if ( is_array( $status ) || 'dislike' !== $status ) {
-				return $query_args;
-			}
-
-			$period = isset( $query_args['period'] ) ? $query_args['period'] : 'all';
-			if ( ! empty( $period ) && 'all' !== $period ) {
-				return $query_args;
-			}
-
-			// Cannot pass "all" — core maps that to empty period_limit and reads ulike_meta, not vote logs.
-			$query_args['period'] = array(
-				'start' => '1970-01-01',
-				'end'   => gmdate( 'Y-m-d', time() + DAY_IN_SECONDS ),
-			);
-
-			return $query_args;
 		}
 
 		/**

@@ -613,7 +613,19 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             $values = apply_filters( 'wp_ulike_optiwich_save_values', $values );
 
             // Save as serialized array in option (autoload = 'no' to prevent loading on every page)
-            update_option( $this->option_domain, $values, 'no' );
+            $updated = update_option( $this->option_domain, $values, 'no' );
+
+            // update_option() returns false when unchanged or when the write fails — distinguish them.
+            if ( false === $updated ) {
+                $stored = get_option( $this->option_domain, null );
+                if ( maybe_serialize( $stored ) !== maybe_serialize( $values ) ) {
+                    return new WP_Error(
+                        'wp_ulike_settings_save_failed',
+                        esc_html__( 'Could not save settings. Please try again, or contact your host if this keeps happening.', 'wp-ulike' ),
+                        array( 'status' => 500 )
+                    );
+                }
+            }
 
             // Clear schema cache
             self::$schema_cache = null;
