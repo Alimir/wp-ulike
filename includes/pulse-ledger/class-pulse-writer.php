@@ -30,8 +30,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 		/**
 		 * Insert append-only vote row.
 		 *
+		 * When payload includes a dedupe_token (migration append rows), uses
+		 * INSERT … ON DUPLICATE KEY UPDATE so resume/retry cannot duplicate.
+		 *
 		 * @param array<string,mixed> $payload Vote data.
-		 * @return int|false Insert ID or false.
+		 * @return int|false|string Insert ID, false on failure, or 'skipped' when
+		 *                          a migrating append row already existed.
 		 */
 		public static function insert( array $payload ) {
 			global $wpdb;
@@ -39,6 +43,31 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			$row = self::normalize_payload( $payload, false );
 			if ( ! $row ) {
 				return false;
+			}
+
+			// Migration append rows carry a stable per-legacy-id token so a
+			// crashed batch that reprocesses the same cursor window cannot
+			// inflate pulse counts (idx_dedupe allows multiple NULLs).
+			if ( ! empty( $row['dedupe_token'] ) ) {
+				$result = self::query_insert_on_duplicate( $row['data'], 'keep' );
+				if ( false === $result ) {
+					return false;
+				}
+
+				$id = (int) $wpdb->insert_id;
+				if ( ! $id ) {
+					return false;
+				}
+
+				// MySQL: 2 = existing unique row updated (idempotent retry).
+				if ( 2 === (int) $result ) {
+					return self::$migrating ? 'skipped' : $id;
+				}
+
+				if ( ! self::$migrating ) {
+					self::fire_inserted( $id, $payload, $row['legacy_status'] );
+				}
+				return $id;
 			}
 
 			$result = $wpdb->insert( self::table(), $row['data'], $row['format'] );
@@ -70,47 +99,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 				return false;
 			}
 
-			$table = esc_sql( self::table() );
-			$data  = $row['data'];
-
-			$values = array(
-				self::sql_literal( $data['item_id'], 'int' ),
-				self::sql_literal( $data['item_type'], 'string' ),
-				self::sql_literal( $data['engagement_kind'], 'string' ),
-				self::sql_literal( $data['engagement_key'], 'string' ),
-				self::sql_literal( $data['value'], 'int' ),
-				self::sql_literal( $data['status'], 'string' ),
-				self::sql_literal( $data['date_time'], 'string' ),
-				self::sql_literal( $data['ip'], 'string' ),
-				self::sql_literal( $data['user_id'], 'string' ),
-				self::sql_literal( $data['fingerprint'], 'string' ),
-				self::sql_literal( $data['country_code'], 'string' ),
-				self::sql_literal( $data['device'], 'string' ),
-				self::sql_literal( $data['os'], 'string' ),
-				self::sql_literal( $data['browser'], 'string' ),
-				self::sql_literal( $data['dedupe_token'], 'binary' ),
-			);
-
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- literals escaped via sql_literal().
-			$sql = "INSERT INTO `{$table}` (
-					item_id, item_type, engagement_kind, engagement_key, value, status,
-					date_time, ip, user_id, fingerprint, country_code, device, os, browser, dedupe_token
-				) VALUES ( " . implode( ', ', $values ) . " )
-				ON DUPLICATE KEY UPDATE
-					engagement_key = VALUES(engagement_key),
-					status = VALUES(status),
-					date_time = VALUES(date_time),
-					ip = VALUES(ip),
-					fingerprint = VALUES(fingerprint),
-					value = VALUES(value),
-					country_code = IF(VALUES(country_code) IS NULL, country_code, VALUES(country_code)),
-					device = IF(VALUES(device) IS NULL, device, VALUES(device)),
-					os = IF(VALUES(os) IS NULL, os, VALUES(os)),
-					browser = IF(VALUES(browser) IS NULL, browser, VALUES(browser)),
-					id = LAST_INSERT_ID(id)";
-
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$result = $wpdb->query( $sql );
+			$data   = $row['data'];
+			$result = self::query_insert_on_duplicate( $data, 'update' );
 			if ( false === $result ) {
 				return false;
 			}
@@ -136,6 +126,63 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			}
 
 			return $id;
+		}
+
+		/**
+		 * INSERT … ON DUPLICATE KEY UPDATE helper for dedupe_token writes.
+		 *
+		 * @param array<string,mixed> $data Normalized row data.
+		 * @param string              $mode 'update' overwrites vote fields; 'keep' only
+		 *                                  re-resolves id (idempotent migration append).
+		 * @return int|false MySQL affected-rows semantics, or false on failure.
+		 */
+		private static function query_insert_on_duplicate( array $data, $mode = 'update' ) {
+			global $wpdb;
+
+			$table  = esc_sql( self::table() );
+			$values = array(
+				self::sql_literal( $data['item_id'], 'int' ),
+				self::sql_literal( $data['item_type'], 'string' ),
+				self::sql_literal( $data['engagement_kind'], 'string' ),
+				self::sql_literal( $data['engagement_key'], 'string' ),
+				self::sql_literal( $data['value'], 'int' ),
+				self::sql_literal( $data['status'], 'string' ),
+				self::sql_literal( $data['date_time'], 'string' ),
+				self::sql_literal( $data['ip'], 'string' ),
+				self::sql_literal( $data['user_id'], 'string' ),
+				self::sql_literal( $data['fingerprint'], 'string' ),
+				self::sql_literal( $data['country_code'], 'string' ),
+				self::sql_literal( $data['device'], 'string' ),
+				self::sql_literal( $data['os'], 'string' ),
+				self::sql_literal( $data['browser'], 'string' ),
+				self::sql_literal( $data['dedupe_token'], 'binary' ),
+			);
+
+			if ( 'keep' === $mode ) {
+				$duplicate = 'id = LAST_INSERT_ID(id)';
+			} else {
+				$duplicate = 'engagement_key = VALUES(engagement_key),
+					status = VALUES(status),
+					date_time = VALUES(date_time),
+					ip = VALUES(ip),
+					fingerprint = VALUES(fingerprint),
+					value = VALUES(value),
+					country_code = IF(VALUES(country_code) IS NULL, country_code, VALUES(country_code)),
+					device = IF(VALUES(device) IS NULL, device, VALUES(device)),
+					os = IF(VALUES(os) IS NULL, os, VALUES(os)),
+					browser = IF(VALUES(browser) IS NULL, browser, VALUES(browser)),
+					id = LAST_INSERT_ID(id)';
+			}
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- literals escaped via sql_literal().
+			$sql = "INSERT INTO `{$table}` (
+					item_id, item_type, engagement_kind, engagement_key, value, status,
+					date_time, ip, user_id, fingerprint, country_code, device, os, browser, dedupe_token
+				) VALUES ( " . implode( ', ', $values ) . " )
+				ON DUPLICATE KEY UPDATE {$duplicate}";
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			return $wpdb->query( $sql );
 		}
 
 		/**
@@ -285,6 +332,15 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 					self::$migrating = false;
 				}
 			}
+
+			// Append mode: pin each legacy PK to a migration dedupe token so
+			// resume after timeout/crash cannot insert the same row twice.
+			$legacy_id = isset( $legacy_row->id ) ? absint( $legacy_row->id ) : 0;
+			$token     = WP_Ulike_Pulse_Schema::migration_dedupe_token( $source['item_type'], $legacy_id );
+			if ( ! $token ) {
+				return 'skipped';
+			}
+			$payload['dedupe_token'] = $token;
 
 			self::$migrating = true;
 			try {
@@ -449,13 +505,17 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			$kind    = isset( $payload['engagement_kind'] ) ? sanitize_key( $payload['engagement_kind'] ) : WP_Ulike_Pulse_Registry::KIND_VOTE;
 
 		// Distinct rows get a kind-scoped dedupe token (one row per
-		// user+item+kind). Append (multi-vote) rows get an explicit NULL —
+		// user+item+kind). Live append (multi-vote) rows get NULL —
 		// wpdb::insert() emits literal NULL for null values (WP 4.4+), and the
 		// idx_dedupe UNIQUE index allows multiple NULLs, so append rows never
 		// collide. Explicit NULL is used (rather than omitting the column) so
 		// the insert does not depend on the column DEFAULT being NULL.
+		// Migration append rows may pass an explicit per-legacy-id token so
+		// resumed batches stay idempotent without collapsing live multi-votes.
 	$dedupe = null;
-	if ( $distinct || ! empty( $payload['is_distinct'] ) ) {
+	if ( isset( $payload['dedupe_token'] ) && null !== $payload['dedupe_token'] && '' !== $payload['dedupe_token'] ) {
+		$dedupe = $payload['dedupe_token'];
+	} elseif ( $distinct || ! empty( $payload['is_distinct'] ) ) {
 		$dedupe = WP_Ulike_Pulse_Schema::dedupe_token(
 			$item_id,
 			$item_type,

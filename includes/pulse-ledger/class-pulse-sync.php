@@ -340,8 +340,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Sync' ) ) {
 					$progress['sources'][ $slug ]['cursor'] = $cursor;
 
 					// Checkpoint every 25 rows so a PHP timeout/crash mid-batch
-					// only reprocesses a small slice instead of the whole batch
-					// (important for append mode where re-imports duplicate rows).
+					// only reprocesses a small slice instead of the whole batch.
+					// Append imports are also idempotent via migration dedupe tokens.
 					if ( 0 === ++$row_index % 25 ) {
 						self::save_progress( $progress );
 					}

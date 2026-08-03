@@ -261,5 +261,27 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 
 		return hash( 'sha256', implode( '|', array( $item_type, $item_id, $identity, $kind ) ), true );
 	}
+
+	/**
+	 * Stable dedupe token for one legacy log row during append-mode migration.
+	 *
+	 * Live append votes keep a NULL token (multiple votes allowed). Migrated
+	 * history rows need a unique token so a crashed/resumed batch cannot
+	 * insert the same legacy id twice via idx_dedupe.
+	 *
+	 * @param string $item_type Canonical item type (unique per legacy source).
+	 * @param int    $legacy_id Legacy table primary key.
+	 * @return string|null Binary sha256, or null when id is missing.
+	 */
+	public static function migration_dedupe_token( $item_type, $legacy_id ) {
+		$legacy_id = absint( $legacy_id );
+		if ( ! $legacy_id ) {
+			return null;
+		}
+
+		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+
+		return hash( 'sha256', implode( '|', array( 'migrate', $item_type, $legacy_id ) ), true );
+	}
 }
 }
