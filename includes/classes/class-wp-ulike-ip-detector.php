@@ -315,8 +315,9 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 		/**
 		 * Get Cloudflare IP ranges.
 		 *
-		 * Never blocks the front-end on HTTP. Serves bundled/cached ranges
-		 * immediately and refreshes from Cloudflare via a scheduled event.
+		 * Never blocks page loads on HTTP. Uses the transient when present;
+		 * otherwise serves bundled defaults and caches them until expiry.
+		 * Ranges change rarely — plugin updates refresh the defaults.
 		 *
 		 * @return array{v4: string[], v6: string[]}
 		 */
@@ -333,80 +334,11 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 				return self::$cloudflare_ips;
 			}
 
-			// Fast path: never wp_remote_get() during a visitor page load.
-			// Empty/missing transients (common after migrations) used to block
-			// for up to 20s (2 × 10s) on every request when set_transient failed.
+			// Transient miss/empty (common after migrations): use bundled ranges.
+			// Do not wp_remote_get() here — that used to add ~1s+ per request.
 			self::$cloudflare_ips = self::get_default_cloudflare_ips();
 			set_transient( $transient_key, self::$cloudflare_ips, WEEK_IN_SECONDS );
-			self::schedule_cloudflare_ips_refresh();
 
-			return self::$cloudflare_ips;
-		}
-
-		/**
-		 * Schedule a one-off background refresh of Cloudflare IP ranges.
-		 *
-		 * @return void
-		 */
-		public static function schedule_cloudflare_ips_refresh() {
-			if ( get_transient( 'wp_ulike_cloudflare_ips_refreshing' ) ) {
-				return;
-			}
-
-			set_transient( 'wp_ulike_cloudflare_ips_refreshing', 1, 10 * MINUTE_IN_SECONDS );
-
-			if ( ! wp_next_scheduled( 'wp_ulike_refresh_cloudflare_ips' ) ) {
-				wp_schedule_single_event( time() + 30, 'wp_ulike_refresh_cloudflare_ips' );
-			}
-		}
-
-		/**
-		 * Fetch Cloudflare IP ranges over HTTP and persist them.
-		 *
-		 * Intended for cron / background use only — not front-end requests.
-		 *
-		 * @return array{v4: string[], v6: string[]}
-		 */
-		public static function refresh_cloudflare_ips() {
-			$ip_addresses = array_fill_keys( array( 'v4', 'v6' ), array() );
-
-			foreach ( array_keys( $ip_addresses ) as $version ) {
-				$url      = 'https://www.cloudflare.com/ips-' . $version;
-				$response = wp_remote_get(
-					$url,
-					array(
-						'sslverify' => true,
-						'timeout'   => 3,
-					)
-				);
-
-				if ( is_wp_error( $response ) ) {
-					continue;
-				}
-
-				if ( '200' !== (string) wp_remote_retrieve_response_code( $response ) ) {
-					continue;
-				}
-
-				$ranges = array_values(
-					array_filter(
-						(array) preg_split( '/\R/', (string) wp_remote_retrieve_body( $response ) )
-					)
-				);
-
-				if ( ! empty( $ranges ) ) {
-					$ip_addresses[ $version ] = $ranges;
-				}
-			}
-
-			if ( ! self::ranges_are_usable( $ip_addresses ) ) {
-				$ip_addresses = self::get_default_cloudflare_ips();
-			}
-
-			set_transient( 'wp_ulike_cloudflare_ips', $ip_addresses, WEEK_IN_SECONDS );
-			delete_transient( 'wp_ulike_cloudflare_ips_refreshing' );
-
-			self::$cloudflare_ips = $ip_addresses;
 			return self::$cloudflare_ips;
 		}
 

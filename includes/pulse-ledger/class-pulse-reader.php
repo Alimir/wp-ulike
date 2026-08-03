@@ -14,6 +14,24 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 	final class WP_Ulike_Pulse_Reader {
 
 		/**
+		 * Per-request memo for user_action(). Must be cleared whenever a vote is
+		 * written, or a read-after-write in the same request returns pre-vote state.
+		 *
+		 * @var array<string,string|false>
+		 */
+		private static $request_cache = array();
+
+		/**
+		 * Drop memoized user actions. Called on every recorded vote via
+		 * wp_ulike_flush_user_state_cache().
+		 *
+		 * @return void
+		 */
+		public static function flush_request_cache() {
+			self::$request_cache = array();
+		}
+
+		/**
 		 * Resolve user's latest legacy action for an item.
 		 *
 		 * @param int|string $item_id   Item ID.
@@ -25,9 +43,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 			$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
 			$cache_key = (string) $user_id . '|' . $item_type . '|' . (string) $item_id;
 
-			static $request_cache = array();
-			if ( array_key_exists( $cache_key, $request_cache ) ) {
-				return $request_cache[ $cache_key ];
+			if ( array_key_exists( $cache_key, self::$request_cache ) ) {
+				return self::$request_cache[ $cache_key ];
 			}
 
 			$read_mode = WP_Ulike_Pulse_Config::read_mode();
@@ -40,7 +57,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 				$result = self::from_merged( $item_id, $user_id, $item_type );
 			}
 
-			$request_cache[ $cache_key ] = $result;
+			self::$request_cache[ $cache_key ] = $result;
 			return $result;
 		}
 

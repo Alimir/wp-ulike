@@ -404,6 +404,13 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_display_button( array $args, $deprecated_value = null ){
+		/**
+		 * Filter button args before the CTA template renders (e.g. Pro scopes
+		 * engagement templates to display-automation contexts).
+		 *
+		 * @param array $args Button arguments.
+		 */
+		$args     = apply_filters( 'wp_ulike_display_button_args', $args );
 		$template = new wp_ulike_cta_template( $args );
 
 		if( ! wp_ulike_is_true( $args['only_logged_in_users'] ) || is_user_logged_in() ) {

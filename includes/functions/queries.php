@@ -429,6 +429,108 @@ if( ! function_exists( 'wp_ulike_is_user_liked' ) ) {
 	}
 }
 
+if( ! function_exists( 'wp_ulike_user_item_history_store' ) ) {
+	/**
+	 * Shared request-level store behind wp_ulike_get_user_item_history().
+	 * Returned by reference so reader and flusher share one array.
+	 *
+	 * @return array
+	 */
+	function &wp_ulike_user_item_history_store(){
+		static $store = array();
+		return $store;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_user_item_history_pending' ) ) {
+	/**
+	 * Buckets whose memo has entries not yet written to user meta.
+	 * Shape: [ bucket => [ 'user' => string, 'meta_key' => string ] ]
+	 *
+	 * @return array
+	 */
+	function &wp_ulike_user_item_history_pending(){
+		static $pending = array();
+		return $pending;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_flush_user_state_cache' ) ) {
+	/**
+	 * Drop every request-level memo of "what has this user voted on".
+	 *
+	 * Runs after a vote is recorded so anything reading the status later in the
+	 * same request (integrations on wp_ulike_after_process, a second button for
+	 * the same item, wp_ulike_is_user_liked()) sees the new state rather than
+	 * the value memoised before the write.
+	 *
+	 * Pending writes are dropped with it: updateUserMetaStatus() has just written
+	 * the authoritative meta, so flushing stale memo content over it would undo
+	 * the vote that was just recorded.
+	 *
+	 * @return void
+	 */
+	function wp_ulike_flush_user_state_cache(){
+		$store = &wp_ulike_user_item_history_store();
+		$store = array();
+
+		$pending = &wp_ulike_user_item_history_pending();
+		$pending = array();
+
+		if( class_exists( 'WP_Ulike_Pulse_Reader' ) ){
+			WP_Ulike_Pulse_Reader::flush_request_cache();
+		}
+	}
+}
+
+if( ! function_exists( 'wp_ulike_persist_user_item_history' ) ) {
+	/**
+	 * Write the request's discovered vote statuses to user meta, once.
+	 *
+	 * Called on shutdown. Writing inside wp_ulike_get_user_item_history() instead
+	 * costs one UPDATE per item, so an archive of 20 items produced 20 writes --
+	 * each rewriting the whole serialized array -- for a single pageview.
+	 *
+	 * Existing keys are never overwritten: the meta re-read here is authoritative
+	 * (a vote recorded mid-request already wrote it), the memo only fills gaps.
+	 *
+	 * @return void
+	 */
+	function wp_ulike_persist_user_item_history(){
+		$pending = &wp_ulike_user_item_history_pending();
+
+		if( empty( $pending ) ){
+			return;
+		}
+
+		$store   = &wp_ulike_user_item_history_store();
+		$buckets = $pending;
+		$pending = array();
+
+		foreach( $buckets as $bucket => $info ){
+			if( ! isset( $store[ $bucket ] ) ){
+				continue;
+			}
+
+			$stored  = wp_ulike_get_meta_data( $info['user'], 'user', $info['meta_key'], true );
+			$stored  = is_array( $stored ) ? $stored : array();
+			$changed = false;
+
+			foreach( $store[ $bucket ] as $item_id => $status ){
+				if( ! array_key_exists( $item_id, $stored ) ){
+					$stored[ $item_id ] = $status;
+					$changed = true;
+				}
+			}
+
+			if( $changed ){
+				wp_ulike_update_meta_data( $info['user'], 'user', $info['meta_key'], $stored );
+			}
+		}
+	}
+	add_action( 'shutdown', 'wp_ulike_persist_user_item_history', 5 );
+}
+
 if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 	/**
 	 * A simple function to get user activity history
@@ -454,7 +556,11 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 		$bucket   = (string) $parsed_args['current_user'] . '|' . $meta_key;
 
 		// Request-level memo: one meta load / Pulse lookup per user+type+item.
-		static $runtime = array();
+		// Held in a shared store rather than a function static so a vote written
+		// later in the same request can invalidate it -- otherwise a read-after-
+		// write returns the pre-vote status.
+		$runtime = &wp_ulike_user_item_history_store();
+
 		if ( ! isset( $runtime[ $bucket ] ) ) {
 			$stored = wp_ulike_get_meta_data( $parsed_args['current_user'], 'user', $meta_key, true );
 			$runtime[ $bucket ] = is_array( $stored ) ? $stored : array();
@@ -473,12 +579,13 @@ if( ! function_exists( 'wp_ulike_get_user_item_history' ) ) {
 			// Persist real votes always. Persist "never voted" for logged-in users
 			// so later pageviews skip Pulse; skip creating guest meta rows for
 			// one-off anonymous views (request cache still covers multi-button pages).
+			// Queued, not written here: one write per request instead of one per
+			// item (see wp_ulike_persist_user_item_history).
 			if ( ! empty( $user_status ) || ! empty( $parsed_args['is_user_logged_in'] ) ) {
-				wp_ulike_update_meta_data(
-					$parsed_args['current_user'],
-					'user',
-					$meta_key,
-					$runtime[ $bucket ]
+				$pending = &wp_ulike_user_item_history_pending();
+				$pending[ $bucket ] = array(
+					'user'     => $parsed_args['current_user'],
+					'meta_key' => $meta_key,
 				);
 			}
 		}

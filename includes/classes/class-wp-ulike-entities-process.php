@@ -629,6 +629,12 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 
 			// Update meta value
 			wp_ulike_update_meta_data( $this->currentUser, 'user', $meta_key, $user_info );
+
+			// The user's status just changed -- drop the request-level memos so a
+			// later read in this same request does not serve the pre-vote value.
+			if( function_exists( 'wp_ulike_flush_user_state_cache' ) ){
+				wp_ulike_flush_user_state_cache();
+			}
 		}
 
 		/**
