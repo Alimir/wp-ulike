@@ -217,14 +217,8 @@ body.wp-ulike-deactivation-modal-open {
 	padding-bottom: 20px;
 }
 
-// RTL (WordPress sets dir="rtl" on html and body.rtl in admin).
-[dir='rtl'] .wp-ulike-deactivate-feedback-modal__dialog,
-.rtl .wp-ulike-deactivate-feedback-modal__dialog {
-	text-align: right;
-}
-
+// Spinner floats are neutralized; dialog uses text-align:start (follows dir).
 [dir='rtl'] .wp-ulike-deactivate-feedback-modal__footer .button[aria-busy='true'] .spinner,
 .rtl .wp-ulike-deactivate-feedback-modal__footer .button[aria-busy='true'] .spinner {
-	margin-inline-end: 0;
-	margin-inline-start: 0;
+	margin-inline: 0;
 }

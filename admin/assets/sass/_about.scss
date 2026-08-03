@@ -507,7 +507,7 @@
 
 		.button {
 			flex-shrink: 0;
-			margin-left: auto;
+			margin-inline-start: auto;
 		}
 	}
 
@@ -610,7 +610,7 @@
 		margin: 0;
 		font-weight: 600;
 		color: #1d2327;
-		text-align: right;
+		text-align: end;
 	}
 }
 
@@ -770,19 +770,17 @@ hr.wp-ulike-about-card__body + hr,
 	margin: 16px 0;
 }
 
-[dir='rtl'] .wp-ulike-about-meta dd,
-.rtl .wp-ulike-about-meta dd {
-	text-align: start;
-}
-
-[dir='rtl'] .wp-ulike-about-troubleshoot__list,
-.rtl .wp-ulike-about-troubleshoot__list {
-	padding-inline-start: 1.2em;
-	padding-inline-end: 0;
-}
-
+// Details chevrons: mirror closed state in RTL; open state stays downward.
 [dir='rtl'] .wp-ulike-about-card--details summary::before,
-.rtl .wp-ulike-about-card--details summary::before {
-	margin-inline-end: 6px;
-	margin-inline-start: 0;
+.rtl .wp-ulike-about-card--details summary::before,
+[dir='rtl'] .wp-ulike-about-backup__import summary::before,
+.rtl .wp-ulike-about-backup__import summary::before {
+	transform: scaleX(-1);
+}
+
+[dir='rtl'] .wp-ulike-about-card--details[open] summary::before,
+.rtl .wp-ulike-about-card--details[open] summary::before,
+[dir='rtl'] .wp-ulike-about-backup__import[open] summary::before,
+.rtl .wp-ulike-about-backup__import[open] summary::before {
+	transform: rotate(90deg);
 }

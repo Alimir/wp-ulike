@@ -1,60 +1,6 @@
-
 /**
  *	RTL support
+ *
+ * Prefer logical properties (margin/padding/border/inset-inline-*) in component
+ * stylesheets. Add physical overrides here only when logical CSS is insufficient.
  */
-
-.rtl {
-	form.wp-ulike {
-		p.submit {
-			margin-right: inherit;
-			margin-left: 20px;
-		}
-		.wp-ulike-settings-tabs {
-			h2 {
-				float: right;
-				border-right: 1px solid #e0e0e0;
-				border-left: none;
-			}
-		}
-	}
-	form.wrap {
-		.wp-ulike-settings-tabs {
-			h2 {
-				&:last-child {
-					border-left: 1px solid #ddd;
-				}
-			}
-		}
-	}
-	tr.hide-label {
-		td {
-			padding-right: 0;
-			padding-left: inherit !important;
-		}
-	}
-	.wp-ulike-about-page {
-		.ulike-badge {
-			right: inherit;
-			left: 0px;
-		}
-	}
-	.wp-ulike-notice {
-
-		.links {
-			a {
-				margin-right: 0;
-				margin-left: 8px;
-			}
-		}
-
-	}
-	.wp-ulike-notice-image {
-		margin-left: 25px;
-		margin-right: 0;
-	}
-
-	#adminmenu #toplevel_page_wp-ulike-settings a[href*="page=wp-ulike-go-pro"] {
-		margin: 3px 10px 0;
-	}
-
-}
