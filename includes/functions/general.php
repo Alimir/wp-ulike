@@ -171,10 +171,6 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 	 */
 	function is_wp_ulike( $options, $args = array(), $force_type = false ){
 
-		if( empty( $options ) ){
-			return true;
-		}
-
 		$defaults = apply_filters( 'wp_ulike_auto_diplay_filter_list' , array(
 				'is_home'        => is_front_page() || is_home(),
 				'is_single'      => is_singular(),
@@ -190,34 +186,47 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
 
-		foreach ( $options as $key => $value ) {
-			if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
-				if( $value === 'single' && ! $force_type ){
-					$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
-					if( ! empty( $post_types ) ){
-						foreach ($post_types as $p_key => $p_value) {
-							if( get_post_type() === $p_value ){
-								return true;
+		// Empty hide-list = allowed in all contexts; still apply post-type allowlist below.
+		if( ! empty( $options ) ){
+			foreach ( $options as $key => $value ) {
+				if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
+					// Singular is hidden, but listed post types are exceptions (legacy "Always Show On").
+					if( $value === 'single' && ! $force_type ){
+						$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
+						if( ! empty( $post_types ) ){
+							foreach ($post_types as $p_key => $p_value) {
+								if( get_post_type() === $p_value ){
+									return true;
+								}
 							}
 						}
 					}
-				}
 
-				// Category/tag/author/search are also is_archive(). If "archive" is hidden
-				// but a more specific context is allowed, do not block that view.
-				if ( 'archive' === $value && class_exists( 'wp_ulike_setting_repo' ) ) {
-					$skip_archive_hide = false;
-					foreach ( wp_ulike_setting_repo::getAutoDisplayArchiveChildKeys() as $child ) {
-						if ( ! empty( $parsed_args[ 'is_' . $child ] ) && ! in_array( $child, $options, true ) ) {
-							$skip_archive_hide = true;
-							break;
+					// Category/tag/author/search are also is_archive(). If "archive" is hidden
+					// but a more specific context is allowed, do not block that view.
+					if ( 'archive' === $value && class_exists( 'wp_ulike_setting_repo' ) ) {
+						$skip_archive_hide = false;
+						foreach ( wp_ulike_setting_repo::getAutoDisplayArchiveChildKeys() as $child ) {
+							if ( ! empty( $parsed_args[ 'is_' . $child ] ) && ! in_array( $child, $options, true ) ) {
+								$skip_archive_hide = true;
+								break;
+							}
+						}
+						if ( $skip_archive_hide ) {
+							continue;
 						}
 					}
-					if ( $skip_archive_hide ) {
-						continue;
-					}
-				}
 
+					return false;
+				}
+			}
+		}
+
+		// Singular is allowed: limit to selected post types when the list is non-empty.
+		// Fresh default is Singular + post types [post] → posts only, not pages.
+		if ( ! $force_type && ! empty( $parsed_args['is_single'] ) && class_exists( 'wp_ulike_setting_repo' ) ) {
+			$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
+			if ( ! empty( $post_types ) && ! in_array( get_post_type(), array_map( 'strval', $post_types ), true ) ) {
 				return false;
 			}
 		}

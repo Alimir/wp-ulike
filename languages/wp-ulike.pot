@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP ULike 5.2.0\n"
+"Project-Id-Version: WP ULike 5.2.1\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WP ULike Team <info@wpulike.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-01T09:53:50+00:00\n"
+"POT-Creation-Date: 2026-08-03T18:06:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
@@ -1981,6 +1981,7 @@ msgid "Home"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:158
+#: admin/classes/class-wp-ulike-admin-panel.php:600
 msgid "Singular"
 msgstr ""
 
@@ -2308,11 +2309,7 @@ msgid "Show Buttons On"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:595
-msgid "Checked places show the like button. Default is Singular (single posts & pages). Turn on Home or archives only if you need buttons there."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:600
-msgid "Singular (posts & pages)"
+msgid "Checked places show the like button. Default is Singular. Which singular post types appear is controlled by Post Types below."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:614
@@ -2324,7 +2321,7 @@ msgid "Off by default so archive lists do not repeat like buttons. Turn on only 
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:621
-msgid "Always Show On Post Types"
+msgid "Post Types"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:622
@@ -2332,7 +2329,7 @@ msgid "Select post types"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:623
-msgid "Show the button on these post types even if Singular is unchecked above. (Many older sites use this for Posts.)"
+msgid "On Singular views, only these post types get the button. Default is Posts. Add Pages (or other types) if you need them. If Singular is unchecked, these types still show as exceptions."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:633
@@ -4233,31 +4230,31 @@ msgstr ""
 msgid "Table info is empty."
 msgstr ""
 
-#: includes/functions/general.php:926
+#: includes/functions/general.php:947
 msgid "No Limit"
 msgstr ""
 
-#: includes/functions/general.php:927
+#: includes/functions/general.php:948
 msgid "Cookie"
 msgstr ""
 
-#: includes/functions/general.php:928
+#: includes/functions/general.php:949
 msgid "Username/IP"
 msgstr ""
 
-#: includes/functions/general.php:929
+#: includes/functions/general.php:950
 msgid "Username/IP + Cookie"
 msgstr ""
 
-#: includes/functions/general.php:956
+#: includes/functions/general.php:977
 msgid "Top of Content"
 msgstr ""
 
-#: includes/functions/general.php:957
+#: includes/functions/general.php:978
 msgid "Bottom of Content"
 msgstr ""
 
-#: includes/functions/general.php:958
+#: includes/functions/general.php:979
 msgid "Top and Bottom"
 msgstr ""
 

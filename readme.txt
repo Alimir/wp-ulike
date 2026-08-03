@@ -6,7 +6,7 @@ Tags: like button, post reactions, voting, engagement analytics, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.2.0
+Stable tag: 5.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,6 +148,11 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 
 == Changelog ==
 
+= 5.2.1 =
+* Fixed: **Post Types** now correctly limits Singular auto-display. With the default Posts-only setting, like buttons no longer appear on pages (and other unlisted types).
+* Improved: Clearer auto-display labels for Singular and Post Types in Settings.
+* Improved: Admin RTL compatibility and several small stability fixes.
+
 = 5.2.0 =
 * Added: **Pulse**, a faster, unified like-storage engine. New installs start on Pulse automatically; existing sites keep working with an optional background upgrade.
 * Added: **Storage upgrade** screen (WP ULike → Storage Upgrade) with progress bar, pause/resume, finish step, and optional cleanup of old tables. WP-CLI support: `wp ulike pulse status|start|pause|sync|verify|enable|drop-legacy`.
@@ -229,8 +234,7 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 * Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
-
-= 5.2.0 =
+= 5.2.1 =
 A new faster like-storage engine (Pulse) is included. Existing sites keep working as before. Your counts, buttons, and stats do not change. When ready, open **WP ULike → Storage Upgrade** to move old records to Pulse in the background. Purge your site cache after updating if you use a full-page cache plugin.
 
 = 5.1.1 =
