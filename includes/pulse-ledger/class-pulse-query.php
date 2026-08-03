@@ -518,7 +518,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		return $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT id, item_id, user_id, date_time,
-				engagement_kind, engagement_key, engagement_key AS status, value,
+				engagement_kind, engagement_key, status, value,
 				ip, fingerprint, country_code, device
 				FROM `{$table}`
 				WHERE item_id = %d AND item_type = %s AND user_id = %s
