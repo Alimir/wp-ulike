@@ -472,12 +472,40 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'    => esc_html__( 'Message shown when a vote cannot be saved due to a network or server error.', 'wp-ulike' ),
                     ),
                     array(
-                        'id'      => 'like_button_aria_label',
+                        'id'      => 'no_results_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'Like Button','wp-ulike'),
-                        'title'   => esc_html__( 'Like Button Aria Label', 'wp-ulike'),
-                        'desc'    => esc_html__( 'Accessibility label for screen readers. Helps visually impaired users understand what the button does.', 'wp-ulike')
-                    )
+                        'default' => esc_html__( 'No results were found in "%s" period', 'wp-ulike' ),
+                        'title'   => esc_html__( 'No Results Message', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Empty state for Top List and widgets. Use %s for the selected period.', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'user_no_likes_notice',
+                        'type'    => 'text',
+                        'default' => esc_html__( 'you haven\'t liked any post yet!', 'wp-ulike' ),
+                        'title'   => esc_html__( 'User Has No Likes Message', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Message shown in the widget when the current user has not liked any posts yet.', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'bp_multiple_likes_notice',
+                        'type'    => 'text',
+                        'default' => esc_html__( 'You have %1$d new %2$s likes', 'wp-ulike' ),
+                        'title'   => esc_html__( 'BuddyPress Multiple Likes Notification', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Use %1$d for the count and %2$s for the content type (e.g. Posts).', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'bp_single_like_notice',
+                        'type'    => 'text',
+                        'default' => esc_html__( '%1$s liked one of your %2$s', 'wp-ulike' ),
+                        'title'   => esc_html__( 'BuddyPress Single Like Notification', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Use %1$s for the user name and %2$s for the content type.', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'um_no_likes_notice',
+                        'type'    => 'text',
+                        'default' => esc_html__( 'This user has not made any likes.', 'wp-ulike' ),
+                        'title'   => esc_html__( 'Ultimate Member No Likes Message', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Empty state shown on Ultimate Member profile like tabs.', 'wp-ulike' ),
+                    ),
                 ) )
             );
 

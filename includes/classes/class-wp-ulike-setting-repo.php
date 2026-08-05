@@ -74,12 +74,59 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Get empty results notice
+	 *
+	 * @param string $period Period label.
+	 * @return string
+	 */
+	public static function getNoResultsNotice( $period = '' ){
+		$format = self::getOption( 'no_results_notice', esc_html__( 'No results were found in "%s" period', 'wp-ulike' ) );
+		return wp_ulike_kses( sprintf( $format, $period ) );
+	}
+
+	/**
+	 * Get current-user empty likes notice
+	 *
+	 * @return string
+	 */
+	public static function getUserNoLikesNotice(){
+		return wp_ulike_kses( self::getOption( 'user_no_likes_notice', esc_html__( 'you haven\'t liked any post yet!', 'wp-ulike' ) ) );
+	}
+
+	/**
+	 * Get Ultimate Member empty likes notice
+	 *
+	 * @return string
+	 */
+	public static function getUmNoLikesNotice(){
+		return wp_ulike_kses( self::getOption( 'um_no_likes_notice', esc_html__( 'This user has not made any likes.', 'wp-ulike' ) ) );
+	}
+
+	/**
+	 * Get BuddyPress multiple likes notification format
+	 *
+	 * @return string
+	 */
+	public static function getBpMultipleLikesNotice(){
+		return self::getOption( 'bp_multiple_likes_notice', esc_html__( 'You have %1$d new %2$s likes', 'wp-ulike' ) );
+	}
+
+	/**
+	 * Get BuddyPress single like notification format
+	 *
+	 * @return string
+	 */
+	public static function getBpSingleLikeNotice(){
+		return self::getOption( 'bp_single_like_notice', esc_html__( '%1$s liked one of your %2$s', 'wp-ulike' ) );
+	}
+
+	/**
 	 * Get aria label for like buttons
 	 *
 	 * @return string
 	 */
 	public static function getLikeAriaLabel(){
-		return esc_attr( self::getOption( 'like_button_aria_label', esc_html__( 'Like Button', 'wp-ulike' ) ) );
+		return esc_attr__( 'Like Button', 'wp-ulike' );
 	}
 
 	/**

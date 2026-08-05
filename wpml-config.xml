@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Free plugin WPML/Polylang admin-texts.
+  When WP ULike Pro is also active, Pro's wpml-config.xml is the complete
+  superset for wp_ulike_settings and should win (Pro loads after free).
+-->
+<wpml-config>
+  <admin-texts>
+    <key name="wp_ulike_settings">
+      <key name="filter_counter_value">
+        <key name="like_prefix"/>
+        <key name="unlike_prefix"/>
+        <key name="like_postfix"/>
+        <key name="unlike_postfix"/>
+      </key>
+      <key name="posts_group">
+        <key name="text_group">
+          <key name="like"/>
+          <key name="unlike"/>
+        </key>
+        <key name="login_template"/>
+        <key name="likers_template"/>
+      </key>
+      <key name="comments_group">
+        <key name="text_group">
+          <key name="like"/>
+          <key name="unlike"/>
+        </key>
+        <key name="login_template"/>
+        <key name="likers_template"/>
+      </key>
+      <key name="buddypress_group">
+        <key name="text_group">
+          <key name="like"/>
+          <key name="unlike"/>
+        </key>
+        <key name="login_template"/>
+        <key name="likers_template"/>
+        <key name="posts_notification_template"/>
+        <key name="comments_notification_template"/>
+      </key>
+      <key name="bbpress_group">
+        <key name="text_group">
+          <key name="like"/>
+          <key name="unlike"/>
+        </key>
+        <key name="login_template"/>
+        <key name="likers_template"/>
+      </key>
+      <key name="validate_notice"/>
+      <key name="already_registered_notice"/>
+      <key name="login_required_notice"/>
+      <key name="like_notice"/>
+      <key name="unlike_notice"/>
+      <key name="ajax_error_notice"/>
+      <key name="no_results_notice"/>
+      <key name="user_no_likes_notice"/>
+      <key name="bp_multiple_likes_notice"/>
+      <key name="bp_single_like_notice"/>
+      <key name="um_no_likes_notice"/>
+    </key>
+  </admin-texts>
+</wpml-config>

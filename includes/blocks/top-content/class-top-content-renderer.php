@@ -1271,14 +1271,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 * @return string
 		 */
 		private static function get_empty_message( $args ) {
-			$period_label = self::get_period_label( $args );
-
-			return sprintf(
-				'%s "%s" %s',
-				esc_html__( 'No results were found in', 'wp-ulike' ),
-				$period_label,
-				esc_html__( 'period', 'wp-ulike' )
-			);
+			return wp_ulike_setting_repo::getNoResultsNotice( self::get_period_label( $args ) );
 		}
 
 		/**
