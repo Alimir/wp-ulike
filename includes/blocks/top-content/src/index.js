@@ -74,16 +74,16 @@ const STATIC_SORT_ORDERS = [
 ];
 
 const STATIC_PERIOD_PRESETS = [
-	{ value: 'all', label: __( 'All The Times', 'wp-ulike' ) },
-	{ value: 'year', label: __( 'This Year', 'wp-ulike' ) },
-	{ value: 'last_year', label: __( 'Last Year', 'wp-ulike' ) },
-	{ value: 'month', label: __( 'Month', 'wp-ulike' ) },
-	{ value: 'last_month', label: __( 'Last Month', 'wp-ulike' ) },
-	{ value: 'week', label: __( 'This Week', 'wp-ulike' ) },
-	{ value: 'last_week', label: __( 'Last Week', 'wp-ulike' ) },
+	{ value: 'all', label: __( 'All time', 'wp-ulike' ) },
+	{ value: 'year', label: __( 'This year', 'wp-ulike' ) },
+	{ value: 'last_year', label: __( 'Last year', 'wp-ulike' ) },
+	{ value: 'month', label: __( 'This month', 'wp-ulike' ) },
+	{ value: 'last_month', label: __( 'Last month', 'wp-ulike' ) },
+	{ value: 'week', label: __( 'This week', 'wp-ulike' ) },
+	{ value: 'last_week', label: __( 'Last week', 'wp-ulike' ) },
 	{ value: 'today', label: __( 'Today', 'wp-ulike' ) },
 	{ value: 'yesterday', label: __( 'Yesterday', 'wp-ulike' ) },
-	{ value: 'day_before_yesterday', label: __( 'Day Before Yesterday', 'wp-ulike' ) },
+	{ value: 'day_before_yesterday', label: __( 'Day before yesterday', 'wp-ulike' ) },
 ];
 
 const STATIC_INTERVAL_UNITS = [
@@ -113,10 +113,10 @@ const stripLabelColon = ( text ) => {
 
 const uiLabel = ( text ) => stripLabelColon( text );
 
-/** "Last {{days}} Days" using the real day count (not a fixed preview number). */
+/** "Last {{count}} days" using the real day count (not a fixed preview number). */
 const formatLastDaysLabel = ( days ) => {
 	const count = Math.max( 1, parseInt( days, 10 ) || 1 );
-	return __( 'Last {{days}} Days', 'wp-ulike' ).replace( /\{\{days\}\}/g, String( count ) );
+	return __( 'Last {{count}} days', 'wp-ulike' ).replace( /\{\{count\}\}/g, String( count ) );
 };
 
 if ( ! getBlockType( metadata.name ) ) {

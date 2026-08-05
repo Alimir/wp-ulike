@@ -54,6 +54,7 @@ class wp_ulike_setting_type {
 			'bbpress' => 'topic',
 			'topics' => 'topic',
 			'likeThis' => 'post',
+			'posts' => 'post',
 		);
 		
 		return isset( $aliases[ $type ] ) ? $aliases[ $type ] : $type;

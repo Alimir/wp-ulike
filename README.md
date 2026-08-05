@@ -3,7 +3,7 @@
 **The Ultimate WordPress Engagement Plugin** - Add Like & Dislike buttons to posts, comments, WooCommerce products, BuddyPress activities, and bbPress topics. Track engagement with comprehensive statistics and analytics.
 
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org/)
-[![PHP](https://img.shields.io/badge/PHP-7.2.5%2B-purple.svg)](https://php.net/)
+[![PHP](https://img.shields.io/badge/PHP-7.3.0%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPLv2-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ---
@@ -1441,7 +1441,7 @@ document.addEventListener('WordpressUlikeNotificationAppend', function(event) {
 ## 📋 Requirements
 
 - **WordPress:** 6.0 or higher
-- **PHP:** 7.2.5 or higher (8.1+ recommended)
+- **PHP:** 7.3.0 or higher (8.1+ recommended)
 - **MySQL:** 5.0 or higher (5.6+ recommended)
 
 ---

@@ -52,8 +52,8 @@ if ( ! getBlockType( metadata.name ) ) {
 
 		// Item type options (only Post and Comment)
 		const itemTypeOptions = [
-			{ label: __( 'Post', 'wp-ulike' ), value: 'post' },
-			{ label: __( 'Comment', 'wp-ulike' ), value: 'comment' },
+			{ label: __( 'Posts', 'wp-ulike' ), value: 'post' },
+			{ label: __( 'Comments', 'wp-ulike' ), value: 'comment' },
 		];
 
 		// Fetch templates from REST API (only once)

@@ -3,10 +3,10 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       Add one-click like buttons to WordPress. Built-in statistics dashboard, top lists, and privacy tools. Setup in minutes.
- * Version:           5.2.0
+ * Version:           5.2.1
  * Author:            TechnoWich
  * Author URI:        https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
- * Requires PHP:      7.2.5
+ * Requires PHP:      7.3.0
  * Requires at least: 6.0
  * Text Domain:       wp-ulike
  * Domain Path:       /languages
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 			);
-define( 'WP_ULIKE_VERSION'      , '5.2.0' 					 		    	);
+define( 'WP_ULIKE_VERSION'      , '5.2.1' 					 		    	);
 define( 'WP_ULIKE_DB_VERSION'   , '2.5' 					 	 			);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 			);
 define( 'WP_ULIKE_NAME'         , 'WP ULike'	    						);
@@ -62,7 +62,7 @@ register_deactivation_hook( __FILE__, array( 'wp_ulike_register_action_hook', 'd
 // Load Pro license validator
 require_once WP_ULIKE_INC_DIR . '/pro.php';
 
-if ( ! version_compare( PHP_VERSION, '7.2.5', '>=' ) ) {
+if ( ! version_compare( PHP_VERSION, '7.3.0', '>=' ) ) {
 	add_action( 'admin_notices', 'wp_ulike_fail_php_version' );
 } elseif ( ! version_compare( get_bloginfo( 'version' ), '6.0', '>=' ) ) {
 	add_action( 'admin_notices', 'wp_ulike_fail_wp_version' );
@@ -86,7 +86,7 @@ if ( ! version_compare( PHP_VERSION, '7.2.5', '>=' ) ) {
  */
 function wp_ulike_fail_php_version() {
 	/* translators: %s: PHP version */
-	$message = sprintf( esc_html__( 'WP ULike requires PHP version %s+, plugin is currently NOT RUNNING.', 'wp-ulike' ), '7.2.5' );
+	$message = sprintf( esc_html__( 'WP ULike requires PHP version %s+, plugin is currently NOT RUNNING.', 'wp-ulike' ), '7.3.0' );
 	$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 	echo wp_kses_post( $html_message );
 }

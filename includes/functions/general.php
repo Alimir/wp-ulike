@@ -171,10 +171,6 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 	 */
 	function is_wp_ulike( $options, $args = array(), $force_type = false ){
 
-		if( empty( $options ) ){
-			return true;
-		}
-
 		$defaults = apply_filters( 'wp_ulike_auto_diplay_filter_list' , array(
 				'is_home'        => is_front_page() || is_home(),
 				'is_single'      => is_singular(),
@@ -190,34 +186,47 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
 
-		foreach ( $options as $key => $value ) {
-			if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
-				if( $value === 'single' && ! $force_type ){
-					$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
-					if( ! empty( $post_types ) ){
-						foreach ($post_types as $p_key => $p_value) {
-							if( get_post_type() === $p_value ){
-								return true;
+		// Empty hide-list = allowed in all contexts; still apply post-type allowlist below.
+		if( ! empty( $options ) ){
+			foreach ( $options as $key => $value ) {
+				if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
+					// Singular is hidden, but listed post types are exceptions (legacy "Always Show On").
+					if( $value === 'single' && ! $force_type ){
+						$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
+						if( ! empty( $post_types ) ){
+							foreach ($post_types as $p_key => $p_value) {
+								if( get_post_type() === $p_value ){
+									return true;
+								}
 							}
 						}
 					}
-				}
 
-				// Category/tag/author/search are also is_archive(). If "archive" is hidden
-				// but a more specific context is allowed, do not block that view.
-				if ( 'archive' === $value && class_exists( 'wp_ulike_setting_repo' ) ) {
-					$skip_archive_hide = false;
-					foreach ( wp_ulike_setting_repo::getAutoDisplayArchiveChildKeys() as $child ) {
-						if ( ! empty( $parsed_args[ 'is_' . $child ] ) && ! in_array( $child, $options, true ) ) {
-							$skip_archive_hide = true;
-							break;
+					// Category/tag/author/search are also is_archive(). If "archive" is hidden
+					// but a more specific context is allowed, do not block that view.
+					if ( 'archive' === $value && class_exists( 'wp_ulike_setting_repo' ) ) {
+						$skip_archive_hide = false;
+						foreach ( wp_ulike_setting_repo::getAutoDisplayArchiveChildKeys() as $child ) {
+							if ( ! empty( $parsed_args[ 'is_' . $child ] ) && ! in_array( $child, $options, true ) ) {
+								$skip_archive_hide = true;
+								break;
+							}
+						}
+						if ( $skip_archive_hide ) {
+							continue;
 						}
 					}
-					if ( $skip_archive_hide ) {
-						continue;
-					}
-				}
 
+					return false;
+				}
+			}
+		}
+
+		// Singular is allowed: limit to selected post types when the list is non-empty.
+		// Fresh default is Singular + post types [post] → posts only, not pages.
+		if ( ! $force_type && ! empty( $parsed_args['is_single'] ) && class_exists( 'wp_ulike_setting_repo' ) ) {
+			$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
+			if ( ! empty( $post_types ) && ! in_array( get_post_type(), array_map( 'strval', $post_types ), true ) ) {
 				return false;
 			}
 		}
@@ -237,19 +246,18 @@ if( ! function_exists( 'wp_ulike_get_auhtor_id' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_get_auhtor_id($cp_ID,$type) {
-		if($type == '_liked' || $type == '_topicliked'){
-			$post_tmp = get_post($cp_ID);
-			return $post_tmp->post_author;
-		}
-		else if($type == '_commentliked'){
+		if ( $type == '_liked' || $type == '_topicliked' ) {
+			$post_tmp = get_post( $cp_ID );
+			return ( $post_tmp && isset( $post_tmp->post_author ) ) ? $post_tmp->post_author : 0;
+		} elseif ( $type == '_commentliked' ) {
 			$comment = get_comment( $cp_ID );
-			return $comment->user_id;
+			return ( $comment && isset( $comment->user_id ) ) ? $comment->user_id : 0;
+		} elseif ( $type == '_activityliked' && function_exists( 'bp_activity_get_specific' ) ) {
+			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID, 'display_comments' => true ) );
+			return ( ! empty( $activity['activities'][0]->user_id ) ) ? $activity['activities'][0]->user_id : 0;
 		}
-		else if( $type == '_activityliked' ){
-			$activity = bp_activity_get_specific( array( 'activity_ids' => $cp_ID, 'display_comments'  => true ) );
-			return $activity['activities'][0]->user_id;
-		}
-		else return;
+
+		return 0;
 	}
 }
 
@@ -405,6 +413,13 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 	 * @return          String
 	 */
 	function wp_ulike_display_button( array $args, $deprecated_value = null ){
+		/**
+		 * Filter button args before the CTA template renders (e.g. Pro scopes
+		 * engagement templates to display-automation contexts).
+		 *
+		 * @param array $args Button arguments.
+		 */
+		$args     = apply_filters( 'wp_ulike_display_button_args', $args );
 		$template = new wp_ulike_cta_template( $args );
 
 		if( ! wp_ulike_is_true( $args['only_logged_in_users'] ) || is_user_logged_in() ) {
@@ -443,6 +458,10 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	 * @return string Combined CSS styles
 	 */
 	function wp_ulike_get_custom_style(){
+		static $cached_style = null;
+		if ( null !== $cached_style ) {
+			return $cached_style;
+		}
 
 		$return_style = '';
 
@@ -512,7 +531,8 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$return_style .= $custom_css;
 		}
 
-		return apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );
+		$cached_style = apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );
+		return $cached_style;
 	}
 
 }
@@ -570,7 +590,7 @@ if( ! function_exists('wp_ulike_html_entity_decode') ){
 	 * @return string
 	 */
 	function wp_ulike_html_entity_decode( $value ){
-		return html_entity_decode( $value );
+		return html_entity_decode( (string) $value );
 	}
 }
 
@@ -760,7 +780,7 @@ if( ! function_exists('wp_ulike_kses') ){
 		$allowedtags = array_map( 'wp_ulike_global_attributes', $allowedtags );
 
 		// Decode HTML entities (in case the input is encoded)
-		$value = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );
+		$value = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8' );
 
 		// Temporarily extend safe_style_css filter to allow modern CSS properties
 		add_filter( 'safe_style_css', 'wp_ulike_extend_safe_css_properties', 10, 1 );

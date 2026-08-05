@@ -228,7 +228,7 @@ function wp_ulike_notice_manager(){
 								'color_name' => 'default',
 							),
 							array(
-								'label'      => esc_html__( 'Maybe Later', 'wp-ulike' ),
+								'label'      => esc_html__( 'Maybe later', 'wp-ulike' ),
 								'type'       => 'skip',
 								'color_name' => 'info',
 								'expiration' => WEEK_IN_SECONDS,

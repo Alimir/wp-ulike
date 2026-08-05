@@ -131,14 +131,22 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			// UNION is always contained within each arm's own top-N taken
 			// independently (any row ranked <= N globally can only rank
 			// <= N within its own arm too) -- standard top-K-from-union
-			// technique. The outer WHERE/ORDER BY/LIMIT stay as a safety net.
+			// technique.
+			//
+			// Only valid when NO search is active. The search fragment filters
+			// on the legacy item column (e.g. post_id), which in the pulse arm
+			// is only an output alias of item_id -- and SQL cannot reference a
+			// SELECT alias from WHERE. Bounding the arms while filtering only
+			// on the outside would also drop legitimate matches ranked below
+			// each arm's top-N. So when searching, leave the arms unbounded and
+			// let the outer query do the filtering, ordering and pagination.
 			$arm_order_sql = '';
-			if ( null !== $limit ) {
+			if ( null !== $limit && '' === $search_sql ) {
 				$bound         = max( 1, absint( $offset ) + absint( $limit ) );
 				$arm_order_sql = $wpdb->prepare( " ORDER BY `{$order_by}` {$order_dir}, id DESC LIMIT %d", $bound );
 			}
 
-			$parts = self::log_union_parts( $source, $search_sql, $arm_order_sql );
+			$parts = self::log_union_parts( $source, $arm_order_sql );
 			if ( empty( $parts ) ) {
 				return array();
 			}
@@ -174,27 +182,26 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		/**
 		 * Build UNION ALL arms for admin log lists (legacy-shaped columns).
 		 *
+		 * Search filtering is deliberately NOT done here -- it references the
+		 * legacy item column, which the pulse arm only exposes as an output
+		 * alias, so it must stay on the outer query (see query_log_rows()).
+		 *
 		 * @param array<string,mixed> $source        Legacy source.
-		 * @param string              $search_sql    Fully-prepared " AND ( ... )" fragment from
-		 *                                            search_sql_for_source(), or ''. Pushed into
-		 *                                            every arm so each is narrowed before the
-		 *                                            UNION, instead of only after materializing it.
 		 * @param string              $arm_order_sql Fully-prepared " ORDER BY ... LIMIT n" fragment,
 		 *                                            or ''. Pushed into every arm so each materializes
 		 *                                            at most that many rows (see query_log_rows()).
 		 * @return array<int,string> Each element is a parenthesized SELECT, ready for `UNION ALL`.
 		 */
-		private static function log_union_parts( array $source, $search_sql = '', $arm_order_sql = '' ) {
+		private static function log_union_parts( array $source, $arm_order_sql = '' ) {
 			global $wpdb;
 
 			$mode   = WP_Ulike_Pulse_Query::read_mode();
 			$column = esc_sql( $source['column'] );
 			$parts  = array();
 
-			// $search_sql/$arm_order_sql are already fully escaped/prepared by
-			// the caller -- appended via string concatenation here, never fed
-			// back through $wpdb->prepare(), so a literal `%` in a search term
-			// (via esc_like()) can't be misread as a format placeholder.
+			// $arm_order_sql is already fully prepared by the caller -- appended
+			// via string concatenation, never fed back through $wpdb->prepare(),
+			// so it cannot be re-interpreted as a format placeholder.
 
 			if ( 'pulse' === $mode || 'merged' === $mode || ! WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 				if ( WP_Ulike_Pulse_Schema::table_exists() ) {
@@ -211,50 +218,65 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 					}
 
 					$base = $wpdb->prepare(
-						"SELECT id, date_time, user_id, ip, fingerprint,
-							CASE
+						"SELECT id, date_time,
+							CONVERT(user_id USING utf8mb4) AS user_id,
+							CONVERT(ip USING utf8mb4) AS ip,
+							CONVERT(fingerprint USING utf8mb4) AS fingerprint,
+							CONVERT(CASE
 								WHEN engagement_kind <> 'vote' THEN engagement_key
 								WHEN engagement_key = 'dislike' AND status = 'active' THEN 'dislike'
 								WHEN engagement_key = 'dislike' THEN 'undislike'
 								WHEN status = 'active' THEN 'like'
 								ELSE 'unlike'
-							END AS status,
+							END USING utf8mb4) AS status,
 							item_id AS `{$column}`,
-							engagement_kind AS _kind,
+							CONVERT(engagement_kind USING utf8mb4) AS _kind,
 							value AS _val
 						FROM `{$pulse}`
 						WHERE item_type = %s {$kind_sql}",
 						$source['item_type']
 					);
-					$parts[] = '(' . $base . $search_sql . $arm_order_sql . ')';
+					$parts[] = '(' . $base . $arm_order_sql . ')';
 				}
 			} elseif ( 'legacy' === $mode && WP_Ulike_Pulse_Schema::table_exists() ) {
 				$pulse = esc_sql( WP_Ulike_Pulse_Schema::table() );
 				$base  = $wpdb->prepare(
-					"SELECT id, date_time, user_id, ip, fingerprint,
-						engagement_key AS status,
+					"SELECT id, date_time,
+						CONVERT(user_id USING utf8mb4) AS user_id,
+						CONVERT(ip USING utf8mb4) AS ip,
+						CONVERT(fingerprint USING utf8mb4) AS fingerprint,
+						CONVERT(engagement_key USING utf8mb4) AS status,
 						item_id AS `{$column}`,
-						engagement_kind AS _kind,
+						CONVERT(engagement_kind USING utf8mb4) AS _kind,
 						value AS _val
 					FROM `{$pulse}`
 					WHERE item_type = %s AND engagement_kind IN ('emoji','star')",
 					$source['item_type']
 				);
-				$parts[] = '(' . $base . $search_sql . $arm_order_sql . ')';
+				$parts[] = '(' . $base . $arm_order_sql . ')';
 			}
 
 			if ( ( 'legacy' === $mode || 'merged' === $mode )
 				&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 				$table = esc_sql( $source['table'] );
-				$base  = "SELECT id, date_time, user_id, ip, fingerprint, status,
+				// CONVERT every string column: legacy tables from older WordPress
+				// installs often carry a different collation than the newer pulse
+				// table, and UNION-ing mismatched collations fails outright with
+				// "Illegal mix of collations" -- which made the admin Logs screen
+				// return zero rows in dual/merged mode.
+				$base  = "SELECT id, date_time,
+					CONVERT(user_id USING utf8mb4) AS user_id,
+					CONVERT(ip USING utf8mb4) AS ip,
+					CONVERT(fingerprint USING utf8mb4) AS fingerprint,
+					CONVERT(status USING utf8mb4) AS status,
 					`{$column}`,
-					'vote' AS _kind,
+					CONVERT('vote' USING utf8mb4) AS _kind,
 					NULL AS _val
 					FROM `{$table}`";
 				// This arm has no WHERE clause of its own (the legacy table is
 				// already scoped to one item type), so start one when a search
 				// filter needs appending.
-				$parts[] = '(' . $base . ( $search_sql ? " WHERE 1=1{$search_sql}" : '' ) . $arm_order_sql . ')';
+				$parts[] = '(' . $base . $arm_order_sql . ')';
 			}
 
 			return $parts;
@@ -357,12 +379,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				return 0;
 			}
 
-			// Reuse list SQL without LIMIT by counting the union. Push the
-			// search filter into each arm (no per-arm LIMIT here -- a true
-			// COUNT needs every matching row, not a bounded top-N).
+			// Reuse list SQL without LIMIT by counting the union. The search
+			// filter is applied on the OUTER query only: it references the
+			// legacy item column, which inside the pulse arm exists only as an
+			// output alias (see query_log_rows()).
 			$search_sql = self::search_sql_for_source( $source, $search );
 
-			$parts = self::log_union_parts( $source, $search_sql );
+			$parts = self::log_union_parts( $source );
 			if ( empty( $parts ) ) {
 				return 0;
 			}

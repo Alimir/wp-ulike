@@ -816,3 +816,19 @@ if ( ! function_exists( 'wp_ulike_array_is_list' ) ) {
 		return array_keys( $array ) === range( 0, count( $array ) - 1 );
 	}
 }
+
+if ( ! function_exists( 'wp_ulike_do_action_ref_array' ) ) {
+	/**
+	 * Fire a hook with positional arguments (PHP 8 safe).
+	 *
+	 * PHP 8+ treats string keys passed through call_user_func_array() as
+	 * named parameters. Reindex so existing callbacks keep working.
+	 *
+	 * @param string $hook Hook name.
+	 * @param array  $args Arguments in callback order (keys ignored).
+	 * @return void
+	 */
+	function wp_ulike_do_action_ref_array( $hook, $args = array() ) {
+		do_action_ref_array( $hook, array_values( (array) $args ) );
+	}
+}

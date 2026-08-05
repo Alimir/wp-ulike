@@ -14,6 +14,24 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 	final class WP_Ulike_Pulse_Reader {
 
 		/**
+		 * Per-request memo for user_action(). Must be cleared whenever a vote is
+		 * written, or a read-after-write in the same request returns pre-vote state.
+		 *
+		 * @var array<string,string|false>
+		 */
+		private static $request_cache = array();
+
+		/**
+		 * Drop memoized user actions. Called on every recorded vote via
+		 * wp_ulike_flush_user_state_cache().
+		 *
+		 * @return void
+		 */
+		public static function flush_request_cache() {
+			self::$request_cache = array();
+		}
+
+		/**
 		 * Resolve user's latest legacy action for an item.
 		 *
 		 * @param int|string $item_id   Item ID.
@@ -23,17 +41,24 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 		 */
 		public static function user_action( $item_id, $user_id, $item_type ) {
 			$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+			$cache_key = (string) $user_id . '|' . $item_type . '|' . (string) $item_id;
+
+			if ( array_key_exists( $cache_key, self::$request_cache ) ) {
+				return self::$request_cache[ $cache_key ];
+			}
+
 			$read_mode = WP_Ulike_Pulse_Config::read_mode();
 
 			if ( WP_Ulike_Pulse_Config::READ_PULSE === $read_mode ) {
-				return self::from_pulse( $item_id, $user_id, $item_type );
+				$result = self::from_pulse( $item_id, $user_id, $item_type );
+			} elseif ( WP_Ulike_Pulse_Config::READ_LEGACY === $read_mode ) {
+				$result = self::from_legacy( $item_id, $user_id, $item_type );
+			} else {
+				$result = self::from_merged( $item_id, $user_id, $item_type );
 			}
 
-			if ( WP_Ulike_Pulse_Config::READ_LEGACY === $read_mode ) {
-				return self::from_legacy( $item_id, $user_id, $item_type );
-			}
-
-			return self::from_merged( $item_id, $user_id, $item_type );
+			self::$request_cache[ $cache_key ] = $result;
+			return $result;
 		}
 
 		/**
@@ -104,29 +129,28 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Reader' ) ) {
 		 * @return string|false
 		 */
 		private static function from_merged( $item_id, $user_id, $item_type ) {
+			$pulse = self::pulse_latest_row( $item_id, $user_id, $item_type );
+
+			// A pulse row always wins when one exists. In dual/merged mode the
+			// pulse table is the ONLY write target (wp_ulike_writes_pulse() is
+			// true), so any pulse vote row for this user+item is by definition
+			// their latest action -- including rows copied over by migration.
+			//
+			// Do NOT compare legacy vs pulse timestamps. The two columns are not
+			// on the same clock: older plugin versions wrote legacy date_time in
+			// SITE-LOCAL time, while pulse always writes UTC. On a site with a
+			// positive UTC offset a legacy row therefore compares as "newer" than
+			// a vote cast seconds ago, so the fresh vote was discarded on page
+			// load -- the button flipped back to inactive after a refresh even
+			// though the AJAX response and the ledger were both correct.
+			if ( $pulse ) {
+				return WP_Ulike_Pulse_Vote_Map::row_to_legacy( $pulse->engagement_key, $pulse->status );
+			}
+
+			// No post-cutover activity: fall back to the pre-migration snapshot.
 			$legacy = self::legacy_latest_row( $item_id, $user_id, $item_type );
-			$pulse  = self::pulse_latest_row( $item_id, $user_id, $item_type );
 
-			if ( ! $legacy && ! $pulse ) {
-				return false;
-			}
-
-			if ( $legacy && ! $pulse ) {
-				return (string) $legacy->status;
-			}
-
-			if ( $pulse && ! $legacy ) {
-				return WP_Ulike_Pulse_Vote_Map::row_to_legacy( $pulse->engagement_key, $pulse->status );
-			}
-
-			$legacy_time = strtotime( $legacy->date_time );
-			$pulse_time  = strtotime( $pulse->date_time );
-
-			if ( $pulse_time >= $legacy_time ) {
-				return WP_Ulike_Pulse_Vote_Map::row_to_legacy( $pulse->engagement_key, $pulse->status );
-			}
-
-			return (string) $legacy->status;
+			return $legacy ? (string) $legacy->status : false;
 		}
 
 		/**

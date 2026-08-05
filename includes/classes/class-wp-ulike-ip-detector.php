@@ -263,51 +263,82 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 		}
 
 		/**
-		 * Get Cloudflare IP ranges
+		 * Bundled Cloudflare IP ranges (fallback; refreshed asynchronously).
 		 *
-		 * Fetches and caches Cloudflare's official IP ranges (IPv4 and IPv6).
-		 * Results are cached for 1 week via WordPress transients.
+		 * Source: https://www.cloudflare.com/ips-v4 / https://www.cloudflare.com/ips-v6
 		 *
-		 * @return array Array with 'v4' and 'v6' keys containing IP ranges
+		 * @return array{v4: string[], v6: string[]}
+		 */
+		public static function get_default_cloudflare_ips() {
+			return array(
+				'v4' => array(
+					'173.245.48.0/20',
+					'103.21.244.0/22',
+					'103.22.200.0/22',
+					'103.31.4.0/22',
+					'141.101.64.0/18',
+					'108.162.192.0/18',
+					'190.93.240.0/20',
+					'188.114.96.0/20',
+					'197.234.240.0/22',
+					'198.41.128.0/17',
+					'162.158.0.0/15',
+					'104.16.0.0/13',
+					'104.24.0.0/14',
+					'172.64.0.0/13',
+					'131.0.72.0/22',
+				),
+				'v6' => array(
+					'2400:cb00::/32',
+					'2606:4700::/32',
+					'2803:f800::/32',
+					'2405:b500::/32',
+					'2405:8100::/32',
+					'2a06:98c0::/29',
+					'2c0f:f248::/32',
+				),
+			);
+		}
+
+		/**
+		 * Whether cached Cloudflare ranges are usable.
+		 *
+		 * @param mixed $ip_addresses Transient value.
+		 * @return bool
+		 */
+		private static function ranges_are_usable( $ip_addresses ) {
+			return is_array( $ip_addresses )
+				&& ! empty( $ip_addresses['v4'] )
+				&& is_array( $ip_addresses['v4'] );
+		}
+
+		/**
+		 * Get Cloudflare IP ranges.
+		 *
+		 * Never blocks page loads on HTTP. Uses the transient when present;
+		 * otherwise serves bundled defaults and caches them until expiry.
+		 * Ranges change rarely — plugin updates refresh the defaults.
+		 *
+		 * @return array{v4: string[], v6: string[]}
 		 */
 		public static function get_cloudflare_ips() {
-			// Return cached IPs if available
 			if ( self::$cloudflare_ips !== null ) {
 				return self::$cloudflare_ips;
 			}
 
 			$transient_key = 'wp_ulike_cloudflare_ips';
-			$ip_addresses = get_transient( $transient_key );
+			$ip_addresses  = get_transient( $transient_key );
 
-			if ( false === $ip_addresses ) {
-				$ip_addresses = array_fill_keys( array( 'v4', 'v6' ), array() );
-
-				foreach ( array_keys( $ip_addresses ) as $version ) {
-					$url = 'https://www.cloudflare.com/ips-' . $version;
-					$response = wp_remote_get( $url, array( 'sslverify' => true, 'timeout' => 10 ) );
-
-					if ( is_wp_error( $response ) ) {
-						continue;
-					}
-
-					$status_code = wp_remote_retrieve_response_code( $response );
-					if ( '200' !== (string) $status_code ) {
-						continue;
-					}
-
-					$body = wp_remote_retrieve_body( $response );
-					$ranges = array_filter(
-						(array) preg_split( '/\R/', $body )
-					);
-
-					$ip_addresses[ $version ] = $ranges;
-				}
-
-				// Cache for 1 week
-				set_transient( $transient_key, $ip_addresses, WEEK_IN_SECONDS );
+			if ( self::ranges_are_usable( $ip_addresses ) ) {
+				self::$cloudflare_ips = $ip_addresses;
+				return self::$cloudflare_ips;
 			}
 
-			self::$cloudflare_ips = $ip_addresses;
+			// Transient miss/empty (common after migrations): use bundled ranges.
+			// Do not wp_remote_get() here — that used to add ~1s+ per request.
+			self::$cloudflare_ips = self::get_default_cloudflare_ips();
+			set_transient( $transient_key, self::$cloudflare_ips, WEEK_IN_SECONDS );
+
 			return self::$cloudflare_ips;
 		}
 

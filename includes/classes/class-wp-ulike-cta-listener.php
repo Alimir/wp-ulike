@@ -175,7 +175,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	* Provides hook for performing actions before a like/dislike
 	*/
 	private function beforeUpdateAction( $args = array() ){
-		do_action_ref_array('wp_ulike_before_process', $args );
+		wp_ulike_do_action_ref_array( 'wp_ulike_before_process', $args );
 	}
 
 	/**
@@ -183,7 +183,7 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	* Provides hook for performing actions after a like/dislike
 	*/
 	private function afterUpdateAction( $args = array() ){
-		do_action_ref_array( 'wp_ulike_after_process', $args );
+		wp_ulike_do_action_ref_array( 'wp_ulike_after_process', $args );
 	}
 
 	/**

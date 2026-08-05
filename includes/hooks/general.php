@@ -261,6 +261,15 @@ if( ! function_exists( 'wp_ulike_load_deprecated_classes' ) ){
 	add_action( 'plugins_loaded', 'wp_ulike_load_deprecated_classes', 999 );
 }
 
+/**
+ * Safety net for the request-level user-state memos.
+ *
+ * updateUserMetaStatus() already flushes on the normal vote path; this covers
+ * callers that change a user's status by editing the meta directly (e.g. the
+ * Pro REST endpoint removing a vote) and then fire wp_ulike_after_process.
+ */
+add_action( 'wp_ulike_after_process', 'wp_ulike_flush_user_state_cache', 1 );
+
 
 if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 	/**

@@ -137,7 +137,7 @@ if ( ! class_exists( 'WP_Ulike_Health' ) ) {
 			if ( $missing ) {
 				$description .= '<p>' . sprintf(
 					/* translators: %s: comma-separated table labels */
-					esc_html__( 'Missing: %s.', 'wp-ulike' ),
+					esc_html__( 'Missing: %s', 'wp-ulike' ),
 					$missing
 				) . '</p>';
 			}
@@ -153,7 +153,7 @@ if ( ! class_exists( 'WP_Ulike_Health' ) ) {
 				'actions'     => sprintf(
 					'<p><a href="%s">%s</a></p>',
 					esc_url( self::get_help_url() ),
-					esc_html__( 'Open Overview to repair tables', 'wp-ulike' )
+					esc_html__( 'Open Overview', 'wp-ulike' )
 				),
 				'test'        => 'wp_ulike_database_tables',
 			);
@@ -291,7 +291,7 @@ if ( ! class_exists( 'WP_Ulike_Health' ) ) {
 					'label' => __( 'WP ULike', 'wp-ulike' ),
 					'color' => 'orange',
 				),
-				'description' => '<p>' . esc_html__( 'Likes already use the faster Pulse storage. Old classic log tables are still on disk and can be removed when you are ready. Back up your database first.', 'wp-ulike' ) . '</p>'
+				'description' => '<p>' . esc_html__( 'Like records already use the faster storage. Remove the old log tables when you are ready to reclaim disk space. Back up your database first.', 'wp-ulike' ) . '</p>'
 					. '<p>' . sprintf(
 						/* translators: %d: number of leftover log tables */
 						esc_html( _n( '%d old log table is still present.', '%d old log tables are still present.', $legacy_count, 'wp-ulike' ) ),

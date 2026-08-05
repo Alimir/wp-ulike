@@ -130,6 +130,8 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 	 * vote reads route through the mode-aware Pulse_Query. This is a soft
 	 * performance/cleanup nudge shown inside the React app.
 	 *
+	 * English-only (same policy as the storage upgrade page / Overview help card).
+	 *
 	 * @return array<string,mixed>|null
 	 */
 	private function get_migration_notice_config() {
@@ -147,9 +149,9 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 		) {
 			return array(
 				'id'       => 'free_pulse_cleanup',
-				'title'    => esc_html__( 'Free up disk space.', 'wp-ulike' ),
-				'message'  => esc_html__( 'Like records already use the faster storage. Remove the old log tables when you are ready to reclaim disk space.', 'wp-ulike' ),
-				'ctaLabel' => esc_html__( 'Review cleanup', 'wp-ulike' ),
+				'title'    => 'Free up disk space',
+				'message'  => 'Like records already use the faster storage. Remove the old log tables when you are ready to reclaim disk space.',
+				'ctaLabel' => 'Review cleanup',
 				'ctaUrl'   => esc_url( $url ),
 			);
 		}
@@ -163,9 +165,9 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 
 		return array(
 			'id'       => 'free_pulse_migration',
-			'title'    => esc_html__( 'Faster statistics with Pulse storage.', 'wp-ulike' ),
-			'message'  => esc_html__( 'Your statistics are already complete — WP ULike reads both legacy and Pulse data automatically. Migrating fully to Pulse storage makes charts faster and lets you clean up the old tables.', 'wp-ulike' ),
-			'ctaLabel' => esc_html__( 'Upgrade like storage', 'wp-ulike' ),
+			'title'    => 'Faster statistics with Pulse storage',
+			'message'  => 'Your statistics are already complete — WP ULike reads both legacy and Pulse data automatically. Migrating fully to Pulse storage makes charts faster and lets you clean up the old tables.',
+			'ctaLabel' => 'Upgrade like storage',
 			'ctaUrl'   => esc_url( $url ),
 		);
 	}

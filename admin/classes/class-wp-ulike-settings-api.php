@@ -593,7 +593,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             } else {
                 return new WP_Error(
                     'invalid_data',
-                    esc_html__( 'Invalid request data. Expected an object with setting values.', 'wp-ulike' ),
+                    esc_html__( 'Invalid request data.', 'wp-ulike' ),
                     array( 'status' => 400 )
                 );
             }
@@ -601,7 +601,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             if ( ! is_array( $values ) ) {
                 return new WP_Error(
                     'invalid_data',
-                    esc_html__( 'Invalid request data. Expected an object with setting values.', 'wp-ulike' ),
+                    esc_html__( 'Invalid request data.', 'wp-ulike' ),
                     array( 'status' => 400 )
                 );
             }
@@ -613,7 +613,19 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             $values = apply_filters( 'wp_ulike_optiwich_save_values', $values );
 
             // Save as serialized array in option (autoload = 'no' to prevent loading on every page)
-            update_option( $this->option_domain, $values, 'no' );
+            $updated = update_option( $this->option_domain, $values, 'no' );
+
+            // update_option() returns false when unchanged or when the write fails — distinguish them.
+            if ( false === $updated ) {
+                $stored = get_option( $this->option_domain, null );
+                if ( maybe_serialize( $stored ) !== maybe_serialize( $values ) ) {
+                    return new WP_Error(
+                        'wp_ulike_settings_save_failed',
+                        esc_html__( 'Could not save settings. Please try again, or contact your host if this keeps happening.', 'wp-ulike' ),
+                        array( 'status' => 500 )
+                    );
+                }
+            }
 
             // Clear schema cache
             self::$schema_cache = null;
@@ -1198,7 +1210,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
 
                 // Backup/Import
                 /* translators: Title for import settings section */
-                'backup.import_title' => esc_html__( 'Import Settings', 'wp-ulike' ),
+                'backup.import_title' => esc_html__( 'Import settings', 'wp-ulike' ),
                 /* translators: Description text for import settings feature */
                 'backup.import_desc' => esc_html__( 'Paste your exported settings JSON below and click Import to restore your configuration. The import should contain only setting values (not schema structure).', 'wp-ulike' ),
                 /* translators: Placeholder text for import JSON textarea */

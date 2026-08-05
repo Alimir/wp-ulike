@@ -70,7 +70,7 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 	* Provides hook for performing actions before a voter process
 	*/
 	private function beforeGetListAction(){
-		do_action_ref_array('wp_ulike_before_voters_process', $this->data );
+		wp_ulike_do_action_ref_array( 'wp_ulike_before_voters_process', $this->data );
 	}
 
 	/**
@@ -78,7 +78,7 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 	* Provides hook for performing actions after a voter process
 	*/
 	private function afterGetListAction(){
-		do_action_ref_array( 'wp_ulike_after_voters_process', $this->data );
+		wp_ulike_do_action_ref_array( 'wp_ulike_after_voters_process', $this->data );
 	}
 
 	/**
