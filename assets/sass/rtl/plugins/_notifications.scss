@@ -1,34 +1,8 @@
 .rtl {
 	.wpulike-notification {
 		// Mirror default bottom-start corner; Customizer Position overrides via inset vars.
+		// Message icon gutter uses logical padding/inset in base styles.
 		--ulp-toast-right: auto;
 		--ulp-toast-left: var(--ulp-toast-offset-x);
-
-		.wpulike-message {
-			padding: 14px 65px 14px 15px;
-
-
-			&:before {
-				left: auto;
-				right: 0;
-			}
-		}
-	}
-
-	@media screen and (max-width:768px) {
-		.wpulike-notification {
-
-			.wpulike-message {
-				padding: 11px 55px 11px 11px;
-			}
-		}
-	}
-
-	@media screen and (max-width:320px) {
-		.wpulike-notification {
-			.wpulike-message {
-				padding: 9px 45px 9px 9px;
-			}
-		}
 	}
 }
