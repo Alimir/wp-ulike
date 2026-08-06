@@ -60,6 +60,31 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'content' => esc_html__( 'Wrapper', 'wp-ulike' ),
                     ),
                     array(
+                        'id'               => 'button_align',
+                        'type'             => 'button_set',
+                        'title'            => esc_html__( 'Alignment', 'wp-ulike' ),
+                        'options'          => array(
+                            'left'   => esc_html__( 'Left', 'wp-ulike' ),
+                            'center' => esc_html__( 'Center', 'wp-ulike' ),
+                            'right'  => esc_html__( 'Right', 'wp-ulike' )
+                        ),
+                        'output_css'       => array(
+                            'left'   => array(
+                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'text-align', 'value' => 'left' ),
+                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'justify-content', 'value' => 'flex-start' ),
+                            ),
+                            'center' => array(
+                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'text-align', 'value' => 'center' ),
+                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'justify-content', 'value' => 'center' ),
+                            ),
+                            'right'  => array(
+                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'text-align', 'value' => 'right' ),
+                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'justify-content', 'value' => 'flex-end' ),
+                            ),
+                        ),
+                        'output_important' => true,
+                    ),
+                    array(
                         'id'               => 'template_typography',
                         'type'             => 'typography',
                         'responsive'       => true,
@@ -206,31 +231,6 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                         'title'            => esc_html__( 'Margin', 'wp-ulike' ),
                         'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn',
                         'units'            => array('px', 'em', 'rem', '%')
-                    ),
-                    array(
-                        'id'               => 'button_align',
-                        'type'             => 'button_set',
-                        'title'            => esc_html__( 'Alignment', 'wp-ulike' ),
-                        'options'          => array(
-                            'left'   => esc_html__( 'Left', 'wp-ulike' ),
-                            'center' => esc_html__( 'Center', 'wp-ulike' ),
-                            'right'  => esc_html__( 'Right', 'wp-ulike' )
-                        ),
-                        'output_css'       => array(
-                            'left'   => array(
-                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'text-align', 'value' => 'left' ),
-                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'justify-content', 'value' => 'flex-start' ),
-                            ),
-                            'center' => array(
-                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'text-align', 'value' => 'center' ),
-                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'justify-content', 'value' => 'center' ),
-                            ),
-                            'right'  => array(
-                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'text-align', 'value' => 'right' ),
-                                array( 'selector' => '.wpulike:not(.wpulike-engagement-template)', 'property' => 'justify-content', 'value' => 'flex-end' ),
-                            ),
-                        ),
-                        'output_important' => true,
                     ),
                     array(
                         'id'            => 'button_group',
