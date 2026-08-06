@@ -884,6 +884,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                     $this->render_button_preview();
                     break;
 
+                case 'likers':
+                    $this->render_likers_preview();
+                    break;
+
                 case 'toast':
                     $this->render_toast_preview();
                     break;
@@ -954,6 +958,81 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             echo '</div>';
 
             remove_filter( 'wp_ulike_add_templates_args', $hide_likers, 999 );
+        }
+
+        /**
+         * Likers Box preview: Inline row + Popover popup (same markup/selectors as frontend).
+         *
+         * @return void
+         */
+        protected function render_likers_preview() {
+            $avatars_html = $this->get_likers_preview_avatars_html();
+
+            echo '<div class="ulp-customizer-preview-root ulp-customizer-likers-preview">';
+
+            // Inline layout — avatars under the button
+            echo '<div class="ulp-customizer-button-preview-item ulp-customizer-likers-inline">';
+            echo '<p class="ulp-customizer-preview-label">' . esc_html__( 'Inline', 'wp-ulike' ) . '</p>';
+            echo '<div class="wpulike wpulike-default">';
+            echo '<div class="wp_ulike_general_class wp_ulike_is_not_liked">';
+            echo '<button type="button" class="wp_ulike_btn wp_ulike_put_text" disabled aria-hidden="true"><span>' . esc_html__( 'Like', 'wp-ulike' ) . '</span></button>';
+            echo '<span class="count-box"><span class="wp_ulike_counter_up">12</span></span>';
+            echo '</div>';
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped avatar markup
+            echo '<div class="wp_ulike_likers_wrapper">' . $avatars_html . '</div>';
+            echo '</div>';
+            echo '</div>';
+
+            // Popover layout — tooltip above the counter (matches frontend position: top)
+            echo '<div class="ulp-customizer-button-preview-item ulp-customizer-likers-popover">';
+            echo '<p class="ulp-customizer-preview-label">' . esc_html__( 'Popover', 'wp-ulike' ) . '</p>';
+            echo '<div class="ulp-customizer-likers-popover-stage">';
+            // Match frontend tooltip.js: theme class on the same node as .ulf-tooltip
+            echo '<div class="ulf-tooltip ulf-white-theme ulf-tiny ulp-customizer-likers-tooltip" data-positioned="true" role="tooltip">';
+            echo '<div class="ulf-arrow ulf-arrow-bottom" aria-hidden="true"></div>';
+            echo '<div class="ulf-content">';
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped avatar markup
+            echo '<div class="wp_ulike_likers_wrapper">' . $avatars_html . '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="wpulike wpulike-default">';
+            echo '<div class="wp_ulike_general_class wp_ulike_is_not_liked">';
+            echo '<button type="button" class="wp_ulike_btn wp_ulike_put_text" disabled aria-hidden="true"><span>' . esc_html__( 'Like', 'wp-ulike' ) . '</span></button>';
+            echo '<span class="count-box"><span class="wp_ulike_counter_up">12</span></span>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+
+            echo '</div>';
+        }
+
+        /**
+         * Sample likers list markup for customizer preview (uses real Gravatar markup).
+         *
+         * @return string
+         */
+        protected function get_likers_preview_avatars_html() {
+            $emails = array(
+                'preview1@example.com',
+                'preview2@example.com',
+                'preview3@example.com',
+                'preview4@example.com',
+            );
+
+            $user_label = __( 'User', 'wp-ulike' );
+            $items      = '';
+            foreach ( $emails as $email ) {
+                $avatar = get_avatar( $email, 64, '', $user_label );
+                $items .= sprintf(
+                    '<span class="wp-ulike-liker"><a href="#" title="%1$s" onclick="return false;">%2$s</a></span>',
+                    esc_attr( $user_label ),
+                    $avatar // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_avatar()
+                );
+            }
+
+            return '<div class="wp-ulike-likers-list">' . $items . '</div>';
         }
 
         /**

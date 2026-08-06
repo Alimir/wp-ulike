@@ -18,8 +18,6 @@ One-click like buttons your visitors actually use, plus a built-in analytics das
 
 Most visitors read and leave without commenting, so you never learn what they liked. [WP ULike](https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) adds one-click voting that takes no effort to use, giving you a clear signal on what resonates. No signup walls, no vote limits, no heavy setup.
 
-Trusted on **60,000+ WordPress sites** and rated **4.8 out of 5**, actively developed since 2014.
-
 Install, activate, and voting goes live on posts. Open **WP ULike → Statistics** inside WordPress to see totals, top content, growth tips, and when your audience is most active.
 
 Optional IP anonymization, WordPress personal data export/erase, and flexible logging options help you align the plugin with your privacy policy.
@@ -51,7 +49,7 @@ The free plugin is a full voting solution, not a trial. No caps on votes, posts,
 Included with free:
 
 * Like buttons on posts via auto-display, `[wp_ulike]` shortcodes, or the **ULike Button** block
-* **Top List** block to showcase your most popular posts, comments, users, BuddyPress activities, and bbPress topics
+* **Top List** block and `[wp_ulike_top]` shortcode to showcase your most popular posts, comments, users, BuddyPress activities, and bbPress topics
 * **Statistics dashboard** with Overview, growth tips, engagement reports, publish-timing insights, vote logs, dark mode, and focus mode
 * **Button customizer** with real-time preview, four button styles, colors, icons, and RTL support
 * **Auto-display settings** for posts, comments, BuddyPress, bbPress, and WooCommerce
@@ -129,7 +127,19 @@ Yes. Use the built-in customizer with real-time preview to change colors, icons,
 On single posts. Use blocks, shortcodes, or auto-display settings to place buttons elsewhere.
 
 = How do I show a list of my most popular posts? =
-Add the **Top List** block to any page or post, pick what to rank (posts, comments, users, BuddyPress activities, or bbPress topics), and set how many to show. It builds a leaderboard of your most liked content, and it is included in the free plugin.
+Three ways (same engine, free):
+1. Add the **Top List** block in the block editor.
+2. Use the shortcode anywhere (Classic Editor, Elementor, widgets): `[wp_ulike_top]`
+3. Theme template tag: `<?php echo wp_ulike_get_top_content( array( 'limit' => 10, 'period' => 'weekly' ) ); ?>`
+
+Common shortcode examples:
+* `[wp_ulike_top limit="10" period="weekly"]`
+* `[wp_ulike_top cat="news,3" days="7" heading="Trending"]` (category slug or ID)
+* `[wp_ulike_top tag="recipes" exclude_current="1"]`
+* `[wp_ulike_top taxonomy="product_cat" terms="shoes" post_type="product"]`
+* `[wp_ulike_top author="12" exclude_cat="uncategorized" show_thumbnail="1"]`
+
+Filters: `cat`, `tag`, `taxonomy`+`terms`, `exclude_cat`, `exclude_tag`, `exclude` (post IDs), `exclude_current`, `author`, `post_type`, `period` / `days` / `hours` / `date_start`+`date_end`, plus display toggles (`show_count`, `show_thumbnail`, `show_rank`, `heading`, …).
 
 = Like buttons appear on my homepage, archive, or PostX block grid. How do I hide them? =
 Open **WP ULike → Configuration → Content Types → Posts → Automatic Display** and use the **Hide Automatic Display On** list to select **Home / Front Page**, **Archives**, **Categories**, **Search Results**, **Tags**, and **Author Page**. The button will then only show on individual posts. For block grids (PostX, etc.), also check the **Plugin & theme conflicts** section on the **Help** screen.

@@ -1112,15 +1112,15 @@
   left: -3.5px;
   right: auto;
 }
-.rtl .ulf-tooltip .ulf-white-theme .ulf-arrow-left,
-.rtl .ulf-tooltip .ulf-light-theme .ulf-arrow-left {
+.rtl .ulf-tooltip.ulf-white-theme .ulf-arrow-left,
+.rtl .ulf-tooltip.ulf-light-theme .ulf-arrow-left {
   border-top-color: #e2e8f0;
   border-right-color: #e2e8f0;
   border-bottom-color: transparent;
   border-left-color: transparent;
 }
-.rtl .ulf-tooltip .ulf-white-theme .ulf-arrow-right,
-.rtl .ulf-tooltip .ulf-light-theme .ulf-arrow-right {
+.rtl .ulf-tooltip.ulf-white-theme .ulf-arrow-right,
+.rtl .ulf-tooltip.ulf-light-theme .ulf-arrow-right {
   border-bottom-color: #e2e8f0;
   border-left-color: #e2e8f0;
   border-top-color: transparent;

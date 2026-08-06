@@ -62,6 +62,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'id'               => 'template_typography',
                         'type'             => 'typography',
+                        'responsive'       => true,
                         'color'            => false,
                         'output_important' => true,
                         'title'            => esc_html__( 'Typography', 'wp-ulike' ),
@@ -131,11 +132,32 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                     ),
                                 )
                             ),
+                            // Removed (vote cleared) — additive IDs; Active (liked) configs untouched.
+                            array(
+                                'title'     => esc_html__( 'Removed', 'wp-ulike' ),
+                                'fields'    => array(
+                                    array(
+                                        'id'          => 'removed_bg',
+                                        'type'        => 'color',
+                                        'output_mode' => 'background-color',
+                                        'title'       => esc_html__( 'Background', 'wp-ulike' ),
+                                        'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked',
+                                    ),
+                                    array(
+                                        'id'     => 'removed_border',
+                                        'type'   => 'border',
+                                        'title'  => esc_html__( 'Border', 'wp-ulike' ),
+                                        'output' => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked',
+                                        'units'  => array( 'px', 'em', 'rem' ),
+                                    ),
+                                ),
+                            ),
                         )
                     ),
                     array(
                         'id'               => 'template_padding',
                         'type'             => 'spacing',
+                        'responsive'       => true,
                         'output_important' => true,
                         'title'            => esc_html__( 'Padding', 'wp-ulike' ),
                         'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class',
@@ -144,6 +166,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'id'               => 'template_margin',
                         'type'             => 'spacing',
+                        'responsive'       => true,
                         'output_mode'      => 'margin',
                         'output_important' => true,
                         'title'            => esc_html__( 'Margin', 'wp-ulike' ),
@@ -186,6 +209,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                     array(
                                         'id'               => 'button_image_dimensions',
                                         'type'             => 'dimensions',
+                                        'responsive'       => true,
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn.wp_ulike_put_image::after',
@@ -268,11 +292,44 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                     ),
                                 )
                             ),
+                            array(
+                                'title'     => esc_html__( 'Removed', 'wp-ulike' ),
+                                'fields'    => array(
+                                    array(
+                                        'id'     => 'removed_color',
+                                        'type'   => 'color',
+                                        'title'  => esc_html__( 'Text Color', 'wp-ulike' ),
+                                        'output' => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .wp_ulike_btn, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .wp_ulike_btn',
+                                    ),
+                                    array(
+                                        'id'          => 'removed_bg',
+                                        'type'        => 'color',
+                                        'output_mode' => 'background-color',
+                                        'title'       => esc_html__( 'Background', 'wp-ulike' ),
+                                        'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .wp_ulike_btn, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .wp_ulike_btn',
+                                    ),
+                                    array(
+                                        'id'     => 'removed_border',
+                                        'type'   => 'border',
+                                        'title'  => esc_html__( 'Border', 'wp-ulike' ),
+                                        'output' => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .wp_ulike_btn, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .wp_ulike_btn',
+                                        'units'  => array( 'px', 'em', 'rem' ),
+                                    ),
+                                    array(
+                                        'id'               => 'removed_like_image',
+                                        'type'             => 'background',
+                                        'background_color' => false,
+                                        'title'            => esc_html__( 'Button Image', 'wp-ulike' ),
+                                        'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .wp_ulike_btn.wp_ulike_put_image::after, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .wp_ulike_btn.wp_ulike_put_image::after',
+                                    ),
+                                ),
+                            ),
                         )
                     ) ),
                     array(
                         'id'               => 'button_dimensions',
                         'type'             => 'dimensions',
+                        'responsive'       => true,
                         'output_important' => true,
                         'title'            => esc_html__( 'Button Dimensions', 'wp-ulike' ),
                         'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn',
@@ -281,6 +338,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'id'               => 'button_padding',
                         'type'             => 'spacing',
+                        'responsive'       => true,
                         'output_important' => true,
                         'title'            => esc_html__( 'Padding', 'wp-ulike' ),
                         'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn',
@@ -289,6 +347,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'id'               => 'button_margin',
                         'type'             => 'spacing',
+                        'responsive'       => true,
                         'output_mode'      => 'margin',
                         'output_important' => true,
                         'title'            => esc_html__( 'Margin', 'wp-ulike' ),
@@ -365,24 +424,118 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                     ),
                                 )
                             ),
+                            array(
+                                'title'     => esc_html__( 'Removed', 'wp-ulike' ),
+                                'fields'    => array(
+                                    array(
+                                        'id'     => 'removed_color',
+                                        'type'   => 'color',
+                                        'title'  => esc_html__( 'Text Color', 'wp-ulike' ),
+                                        'output' => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .count-box, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .count-box',
+                                    ),
+                                    array(
+                                        'id'          => 'removed_bg',
+                                        'type'        => 'color',
+                                        'output_mode' => 'background-color',
+                                        'title'       => esc_html__( 'Background', 'wp-ulike' ),
+                                        'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .count-box, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .count-box, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .count-box::before, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .count-box::before',
+                                    ),
+                                    array(
+                                        'id'     => 'removed_border',
+                                        'type'   => 'border',
+                                        'title'  => esc_html__( 'Border', 'wp-ulike' ),
+                                        'output' => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .count-box, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .count-box',
+                                        'units'  => array( 'px', 'em', 'rem' ),
+                                    ),
+                                ),
+                            ),
                         )
                     ),
                     array(
-                        'id'     => 'counter_padding',
-                        'type'   => 'spacing',
-                        'title'  => esc_html__( 'Padding', 'wp-ulike' ),
-                        'output' => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .count-box',
-                        'units'  => array('px', 'em', 'rem', '%')
+                        'id'         => 'counter_padding',
+                        'type'       => 'spacing',
+                        'responsive' => true,
+                        'title'      => esc_html__( 'Padding', 'wp-ulike' ),
+                        'output'     => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .count-box',
+                        'units'      => array('px', 'em', 'rem', '%')
                     ),
                     array(
                         'id'          => 'counter_margin',
                         'type'        => 'spacing',
+                        'responsive'  => true,
                         'output_mode' => 'margin',
                         'title'       => esc_html__( 'Margin', 'wp-ulike' ),
                         'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .count-box',
                         'units'       => array('px', 'em', 'rem', '%')
                     )
                 )
+            );
+
+            // Likers Box — matches settings naming; styles Inline + Popover.
+            $sections[] = array(
+                'parent'   => WP_ULIKE_SLUG,
+                'id'       => 'likers_box',
+                'title'    => esc_html__( 'Likers Box', 'wp-ulike' ),
+                'template' => 'likers',
+                'icon'     => 'user-group',
+                'fields'   => array(
+                    array(
+                        'id'      => 'likers_box_style_heading',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'General', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'               => 'likers_typography',
+                        'type'             => 'typography',
+                        'responsive'       => true,
+                        'color'            => false,
+                        'output_important' => true,
+                        'title'            => esc_html__( 'Typography', 'wp-ulike' ),
+                        'output'           => '.wp_ulike_likers_wrapper, .ulf-tooltip .wp_ulike_likers_wrapper',
+                        'units'            => array( 'px', 'em', 'rem' ),
+                    ),
+                    array(
+                        'id'          => 'likers_bg',
+                        'type'        => 'color',
+                        'output_mode' => 'background-color',
+                        'title'       => esc_html__( 'Background', 'wp-ulike' ),
+                        // Theme class is on the tooltip root (tooltip.js), not a nested child.
+                        'output'      => '.wp_ulike_likers_wrapper, .ulf-tooltip .wp_ulike_likers_wrapper, .ulf-tooltip.ulf-white-theme, .ulf-tooltip.ulf-light-theme',
+                    ),
+                    array(
+                        'id'     => 'likers_border',
+                        'type'   => 'border',
+                        'title'  => esc_html__( 'Border', 'wp-ulike' ),
+                        'output' => '.wp_ulike_likers_wrapper, .ulf-tooltip .wp_ulike_likers_wrapper, .ulf-tooltip.ulf-white-theme, .ulf-tooltip.ulf-light-theme',
+                        'units'  => array( 'px', 'em', 'rem' ),
+                    ),
+                    array(
+                        'id'               => 'likers_padding',
+                        'type'             => 'spacing',
+                        'responsive'       => true,
+                        'title'            => esc_html__( 'Padding', 'wp-ulike' ),
+                        'output'           => '.wp_ulike_likers_wrapper, .ulf-tooltip.ulf-white-theme .ulf-content, .ulf-tooltip.ulf-light-theme .ulf-content',
+                        'units'            => array( 'px', 'em', 'rem', '%' ),
+                    ),
+                    array(
+                        'id'               => 'likers_margin',
+                        'type'             => 'spacing',
+                        'responsive'       => true,
+                        'output_mode'      => 'margin',
+                        'title'            => esc_html__( 'Margin', 'wp-ulike' ),
+                        'output'           => '.wpulike .wp_ulike_likers_wrapper',
+                        'units'            => array( 'px', 'em', 'rem', '%' ),
+                    ),
+                    array(
+                        'id'               => 'likers_avatar_dimensions',
+                        'type'             => 'dimensions',
+                        'responsive'       => true,
+                        'output_important' => true,
+                        'title'            => esc_html__( 'Avatar Size', 'wp-ulike' ),
+                        'output'           => '.wp_ulike_likers_wrapper .wp-ulike-likers-list .wp-ulike-liker a > img, .wp_ulike_likers_wrapper .wp-ulike-likers-list li a > img, .ulf-tooltip .wp_ulike_likers_wrapper img',
+                        'units'            => array( 'px', 'em', 'rem' ),
+                    ),
+                ),
             );
 
             $sections[] = array(
@@ -395,6 +548,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                     array(
                         'id'               => 'toast_typography',
                         'type'             => 'typography',
+                        'responsive'       => true,
                         'color'            => false,
                         'output_important' => true,
                         'title'            => esc_html__( 'Typography', 'wp-ulike' ),
@@ -412,28 +566,30 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'id'     => 'info_color',
                                         'type'   => 'color',
                                         'title'  => esc_html__( 'Text Color', 'wp-ulike' ),
-                                        'output' => '.wpulike-notification .wpulike-message',
+                                        // Info is the base toast (no status class) — exclude success/error/warning.
+                                        'output' => '.wpulike-notification .wpulike-message:not(.wpulike-success):not(.wpulike-error):not(.wpulike-warning)',
                                     ),
                                     array(
                                         'id'          => 'info_bg',
                                         'type'        => 'color',
                                         'title'       => esc_html__( 'Background', 'wp-ulike' ),
                                         'output_mode' => 'background-color',
-                                        'output'      => '.wpulike-notification .wpulike-message',
+                                        'output'      => '.wpulike-notification .wpulike-message:not(.wpulike-success):not(.wpulike-error):not(.wpulike-warning)',
                                     ),
                                     array(
                                         'id'     => 'info_border',
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
-                                        'output' => '.wpulike-notification .wpulike-message',
+                                        'output' => '.wpulike-notification .wpulike-message:not(.wpulike-success):not(.wpulike-error):not(.wpulike-warning)',
                                         'units'  => array('px', 'em', 'rem')
                                     ),
                                     array(
                                         'id'               => 'info_icon_size',
                                         'type'             => 'dimensions',
+                                        'responsive'       => true,
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
-                                        'output'           => '.wpulike-notification .wpulike-message::before',
+                                        'output'           => '.wpulike-notification .wpulike-message:not(.wpulike-success):not(.wpulike-error):not(.wpulike-warning)::before',
                                         'units'            => array('px', 'em', 'rem', '%')
                                     ),
                                     array(
@@ -441,7 +597,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'type'             => 'background',
                                         'background_color' => false,
                                         'title'            => esc_html__( 'Icon Image', 'wp-ulike' ),
-                                        'output'           => '.wpulike-notification .wpulike-message::before',
+                                        'output'           => '.wpulike-notification .wpulike-message:not(.wpulike-success):not(.wpulike-error):not(.wpulike-warning)::before',
                                     ),
                                 )
                             ),
@@ -471,6 +627,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                     array(
                                         'id'               => 'success_icon_size',
                                         'type'             => 'dimensions',
+                                        'responsive'       => true,
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike-notification .wpulike-message.wpulike-success::before',
@@ -511,6 +668,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                     array(
                                         'id'               => 'error_icon_size',
                                         'type'             => 'dimensions',
+                                        'responsive'       => true,
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike-notification .wpulike-message.wpulike-error::before',
@@ -551,6 +709,7 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                     array(
                                         'id'               => 'warning_icon_size',
                                         'type'             => 'dimensions',
+                                        'responsive'       => true,
                                         'output_important' => true,
                                         'title'            => esc_html__( 'Image Dimensions', 'wp-ulike' ),
                                         'output'           => '.wpulike-notification .wpulike-message.wpulike-warning::before',

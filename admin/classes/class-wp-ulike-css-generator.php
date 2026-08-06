@@ -169,7 +169,8 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 return '';
             }
 
-            $selector_map = array(); // Map of selectors to their CSS properties
+            // media_key '' = desktop/base; otherwise full @media (...) string
+            $media_maps = array();
 
             // Process all pages and sections
             foreach ( $schema['pages'] as $page ) {
@@ -186,12 +187,71 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                     // All fields are at root level for compatibility with old user data
                     $section_path = '';
 
-                    $this->process_fields( $section['fields'], $values, $section_path, $selector_map );
+                    $this->process_fields( $section['fields'], $values, $section_path, $media_maps );
                 }
             }
 
-            // Convert map to CSS string
+            return $this->media_maps_to_css( $media_maps );
+        }
+
+        /**
+         * Convert media → selector → property maps to a CSS string.
+         * Order: desktop (base), then tablet, then mobile — matches Optiwich.
+         *
+         * @param array $media_maps Nested maps keyed by media query ('' for base).
+         * @return string
+         */
+        protected function media_maps_to_css( $media_maps ) {
+            $media_order = array(
+                '',
+                '@media (min-width: 768px) and (max-width: 1024px)',
+                '@media (max-width: 767px)',
+            );
+
+            $blocks = array();
+
+            foreach ( $media_order as $media_key ) {
+                if ( empty( $media_maps[ $media_key ] ) || ! is_array( $media_maps[ $media_key ] ) ) {
+                    continue;
+                }
+
+                $css_rules = $this->selector_map_to_rules( $media_maps[ $media_key ], $media_key ? '  ' : '' );
+                if ( empty( $css_rules ) ) {
+                    continue;
+                }
+
+                if ( $media_key === '' ) {
+                    $blocks[] = implode( "\n\n", $css_rules );
+                } else {
+                    $blocks[] = $media_key . " {\n" . implode( "\n\n", $css_rules ) . "\n}";
+                }
+            }
+
+            // Any unexpected media keys (future breakpoints) after the standard order.
+            foreach ( $media_maps as $media_key => $selector_map ) {
+                if ( in_array( $media_key, $media_order, true ) ) {
+                    continue;
+                }
+                if ( empty( $selector_map ) || ! is_array( $selector_map ) ) {
+                    continue;
+                }
+                $css_rules = $this->selector_map_to_rules( $selector_map, '  ' );
+                if ( ! empty( $css_rules ) ) {
+                    $blocks[] = $media_key . " {\n" . implode( "\n\n", $css_rules ) . "\n}";
+                }
+            }
+
+            return implode( "\n\n", $blocks );
+        }
+
+        /**
+         * @param array  $selector_map Selector => property => value
+         * @param string $indent       Indent for nested media blocks
+         * @return array List of CSS rule strings
+         */
+        protected function selector_map_to_rules( $selector_map, $indent = '' ) {
             $css_rules = array();
+
             foreach ( $selector_map as $selector => $properties ) {
                 if ( empty( $properties ) || ! is_array( $properties ) ) {
                     continue;
@@ -199,29 +259,28 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
 
                 $props = array();
                 foreach ( $properties as $property => $value ) {
-                    // Double-check that property and value are strings
                     if ( is_string( $property ) && is_string( $value ) ) {
-                        $props[] = '  ' . $property . ': ' . $value . ';';
+                        $props[] = $indent . '  ' . $property . ': ' . $value . ';';
                     }
                 }
 
                 if ( ! empty( $props ) ) {
-                    $css_rules[] = $selector . ' {' . "\n" . implode( "\n", $props ) . "\n" . '}';
+                    $css_rules[] = $indent . $selector . ' {' . "\n" . implode( "\n", $props ) . "\n" . $indent . '}';
                 }
             }
 
-            return implode( "\n\n", $css_rules );
+            return $css_rules;
         }
 
         /**
          * Process fields recursively
          *
-         * @param array $fields Fields array
-         * @param array $values Values array
-         * @param string $path Current path prefix
-         * @param array $selector_map Reference to selector map
+         * @param array  $fields     Fields array
+         * @param array  $values     Values array
+         * @param string $path       Current path prefix
+         * @param array  $media_maps Reference to media → selector → properties map
          */
-        protected function process_fields( $fields, $values, $path, &$selector_map ) {
+        protected function process_fields( $fields, $values, $path, &$media_maps ) {
             foreach ( $fields as $field ) {
                 if ( ! isset( $field['id'] ) ) {
                     continue;
@@ -237,7 +296,7 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 if ( $value === null || $value === '' || $value === false ) {
                     // Still process nested fields even if parent has no value
                     if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
-                        $this->process_fields( $field['fields'], $values, $field_path, $selector_map );
+                        $this->process_fields( $field['fields'], $values, $field_path, $media_maps );
                     }
                     continue;
                 }
@@ -246,7 +305,7 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 if ( isset( $field['type'] ) && $field['type'] === 'tabbed' && isset( $field['tabs'] ) ) {
                     foreach ( $field['tabs'] as $tab ) {
                         if ( isset( $tab['fields'] ) && is_array( $tab['fields'] ) ) {
-                            $this->process_fields( $tab['fields'], $values, $field_path, $selector_map );
+                            $this->process_fields( $tab['fields'], $values, $field_path, $media_maps );
                         }
                     }
                     continue;
@@ -257,7 +316,7 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                     $group_value = is_array( $value ) ? $value : array();
                     foreach ( $group_value as $index => $item ) {
                         if ( is_array( $item ) ) {
-                            $this->process_fields( $field['fields'], $item, $field_path . '[' . $index . ']', $selector_map );
+                            $this->process_fields( $field['fields'], $item, $field_path . '[' . $index . ']', $media_maps );
                         }
                     }
                     continue;
@@ -272,32 +331,122 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                             continue;
                         }
 
-                        if ( ! isset( $selector_map[ $selector ] ) ) {
-                            $selector_map[ $selector ] = array();
+                        $media_key = isset( $output['media'] ) && is_string( $output['media'] ) ? $output['media'] : '';
+                        if ( ! isset( $media_maps[ $media_key ] ) ) {
+                            $media_maps[ $media_key ] = array();
+                        }
+                        if ( ! isset( $media_maps[ $media_key ][ $selector ] ) ) {
+                            $media_maps[ $media_key ][ $selector ] = array();
                         }
 
                         $property = $this->sanitize_css_property( $output['property'] );
                         if ( $property ) {
-                            $selector_map[ $selector ][ $property ] = $this->sanitize_css_value( $output['value'], $property );
+                            $media_maps[ $media_key ][ $selector ][ $property ] = $this->sanitize_css_value( $output['value'], $property );
                         }
                     }
                 }
 
                 // Process nested fields
                 if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
-                    $this->process_fields( $field['fields'], $values, $field_path, $selector_map );
+                    $this->process_fields( $field['fields'], $values, $field_path, $media_maps );
                 }
             }
         }
 
         /**
+         * Whether a stored value is a responsive envelope { desktop, tablet?, mobile? }.
+         * Legacy flat spacing/dimensions/typography objects are NOT envelopes.
+         *
+         * @param mixed $value Field value
+         * @return bool
+         */
+        protected function is_responsive_envelope( $value ) {
+            if ( ! is_array( $value ) ) {
+                return false;
+            }
+
+            $has_device = isset( $value['desktop'] ) || isset( $value['tablet'] ) || isset( $value['mobile'] );
+            if ( ! $has_device ) {
+                return false;
+            }
+
+            $flat_keys = array(
+                'top', 'right', 'bottom', 'left', 'unit',
+                'width', 'height', 'style',
+                'fontfamily', 'fontsize', 'fontweight', 'lineheight', 'letterspacing',
+                'textalign', 'texttransform', 'textdecoration', 'color',
+                'backgroundcolor', 'background-color', 'backgroundimage',
+                'backgroundrepeat', 'backgroundposition', 'backgroundsize', 'backgroundattachment',
+            );
+
+            foreach ( array_keys( $value ) as $key ) {
+                if ( in_array( $key, array( 'desktop', 'tablet', 'mobile' ), true ) ) {
+                    continue;
+                }
+                if ( in_array( strtolower( (string) $key ), $flat_keys, true ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /**
+         * Responsive breakpoints (Elementor-style). Desktop = base (no media query).
+         *
+         * @return array device => media query string|null
+         */
+        protected function get_responsive_breakpoints() {
+            return array(
+                'desktop' => null,
+                // Exclusive mid-range — must not overlap mobile (max-width: 767px).
+                'tablet'  => '@media (min-width: 768px) and (max-width: 1024px)',
+                'mobile'  => '@media (max-width: 767px)',
+            );
+        }
+
+        /**
          * Generate CSS from a single field
+         *
+         * Supports legacy flat values and responsive envelopes when field.responsive is true.
          *
          * @param array $field Field definition
          * @param mixed $value Field value
-         * @return array Array of CSS outputs
+         * @return array Array of CSS outputs (optional `media` key for tablet/mobile)
          */
         protected function generate_css_from_field( $field, $value ) {
+            // Responsive envelope → per-device flat generation + media wrappers
+            if ( ! empty( $field['responsive'] ) && $this->is_responsive_envelope( $value ) ) {
+                $all_outputs = array();
+                $breakpoints = $this->get_responsive_breakpoints();
+
+                foreach ( $breakpoints as $device => $media ) {
+                    if ( ! isset( $value[ $device ] ) || $value[ $device ] === null || $value[ $device ] === '' ) {
+                        continue;
+                    }
+                    $device_outputs = $this->generate_css_from_flat_field( $field, $value[ $device ] );
+                    foreach ( $device_outputs as $output ) {
+                        if ( $media ) {
+                            $output['media'] = $media;
+                        }
+                        $all_outputs[] = $output;
+                    }
+                }
+
+                return $all_outputs;
+            }
+
+            return $this->generate_css_from_flat_field( $field, $value );
+        }
+
+        /**
+         * Generate CSS from a flat (non-envelope) field value.
+         *
+         * @param array $field Field definition
+         * @param mixed $value Flat field value
+         * @return array Array of CSS outputs
+         */
+        protected function generate_css_from_flat_field( $field, $value ) {
             $outputs = array();
 
             $selector = isset( $field['output'] ) ? $field['output'] : '';

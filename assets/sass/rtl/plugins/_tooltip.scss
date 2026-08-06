@@ -41,8 +41,9 @@
       }
     }
 
-    .ulf-white-theme,
-    .ulf-light-theme {
+    // Theme class is on the tooltip root (same node as .ulf-tooltip).
+    &.ulf-white-theme,
+    &.ulf-light-theme {
       .ulf-arrow-left {
         border-top-color: $tooltip-border-color;
         border-right-color: $tooltip-border-color;

@@ -263,8 +263,35 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				$taxonomy_terms = array_values( array_filter( array_map( 'absint', $attributes['taxonomyTerms'] ) ) );
 			}
 
+			$exclude_taxonomy = isset( $attributes['excludeTaxonomy'] ) ? sanitize_key( $attributes['excludeTaxonomy'] ) : '';
+			if ( $exclude_taxonomy && ! taxonomy_exists( $exclude_taxonomy ) ) {
+				$exclude_taxonomy = '';
+			}
+
+			$exclude_taxonomy_terms = array();
+			if ( ! empty( $attributes['excludeTaxonomyTerms'] ) && is_array( $attributes['excludeTaxonomyTerms'] ) ) {
+				$exclude_taxonomy_terms = array_values( array_filter( array_map( 'absint', $attributes['excludeTaxonomyTerms'] ) ) );
+			}
+
+			$exclude_post_ids = array();
+			if ( ! empty( $attributes['excludePostIds'] ) && is_array( $attributes['excludePostIds'] ) ) {
+				$exclude_post_ids = array_values( array_filter( array_map( 'absint', $attributes['excludePostIds'] ) ) );
+			}
+
+			if ( ! empty( $attributes['excludeCurrent'] ) ) {
+				$current_id = (int) get_the_ID();
+				if ( $current_id > 0 && ! in_array( $current_id, $exclude_post_ids, true ) ) {
+					$exclude_post_ids[] = $current_id;
+				}
+			}
+
+			$author_ids = array();
+			if ( ! empty( $attributes['authorIds'] ) && is_array( $attributes['authorIds'] ) ) {
+				$author_ids = array_values( array_filter( array_map( 'absint', $attributes['authorIds'] ) ) );
+			}
+
 			$limit = isset( $attributes['limit'] ) ? absint( $attributes['limit'] ) : 5;
-			$limit = min( 20, max( 1, $limit ) );
+			$limit = min( 50, max( 1, $limit ) );
 
 			$title_trim = isset( $attributes['titleTrim'] ) ? absint( $attributes['titleTrim'] ) : 12;
 			$title_trim = min( 50, max( 3, $title_trim ) );
@@ -280,29 +307,33 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			$show_engaged = ! empty( $attributes['showEngagedUsers'] ) && 'users' !== $content_type;
 
 			$sanitized = array(
-				'contentType'    => $content_type,
-				'sortBy'         => $sort_by,
-				'sortOrder'      => $sort_order,
-				'periodMode'     => $period_mode,
-				'periodPreset'   => $period_preset,
-				'period'         => self::resolve_period( $period_mode, $period_preset, $interval_value, $interval_unit, $date_start, $date_end ),
-				'intervalValue'  => $interval_value,
-				'intervalUnit'   => $interval_unit,
-				'dateStart'      => $date_start,
-				'dateEnd'        => $date_end,
-				'postTypes'      => $post_types,
-				'taxonomy'       => $taxonomy,
-				'taxonomyTerms'  => $taxonomy_terms,
-				'limit'          => $limit,
-				'showCount'      => ! empty( $attributes['showCount'] ),
-				'showThumbnail'  => ! empty( $attributes['showThumbnail'] ),
-				'showRank'         => ! isset( $attributes['showRank'] ) || ! empty( $attributes['showRank'] ),
-				'showHeading'      => ! isset( $attributes['showHeading'] ) || ! empty( $attributes['showHeading'] ),
-				'showEngagedUsers' => $show_engaged,
-				'titleTrim'        => $title_trim,
-				'thumbnailSize'    => $thumb_size,
-				'heading'          => isset( $attributes['heading'] ) ? sanitize_text_field( $attributes['heading'] ) : '',
-				'profileUrl'       => $profile_url,
+				'contentType'          => $content_type,
+				'sortBy'               => $sort_by,
+				'sortOrder'            => $sort_order,
+				'periodMode'           => $period_mode,
+				'periodPreset'         => $period_preset,
+				'period'               => self::resolve_period( $period_mode, $period_preset, $interval_value, $interval_unit, $date_start, $date_end ),
+				'intervalValue'        => $interval_value,
+				'intervalUnit'         => $interval_unit,
+				'dateStart'            => $date_start,
+				'dateEnd'              => $date_end,
+				'postTypes'            => $post_types,
+				'taxonomy'             => $taxonomy,
+				'taxonomyTerms'        => $taxonomy_terms,
+				'excludeTaxonomy'      => $exclude_taxonomy,
+				'excludeTaxonomyTerms' => $exclude_taxonomy_terms,
+				'excludePostIds'       => $exclude_post_ids,
+				'authorIds'            => $author_ids,
+				'limit'                => $limit,
+				'showCount'            => ! empty( $attributes['showCount'] ),
+				'showThumbnail'        => ! empty( $attributes['showThumbnail'] ),
+				'showRank'             => ! isset( $attributes['showRank'] ) || ! empty( $attributes['showRank'] ),
+				'showHeading'          => ! isset( $attributes['showHeading'] ) || ! empty( $attributes['showHeading'] ),
+				'showEngagedUsers'     => $show_engaged,
+				'titleTrim'            => $title_trim,
+				'thumbnailSize'        => $thumb_size,
+				'heading'              => isset( $attributes['heading'] ) ? sanitize_text_field( $attributes['heading'] ) : '',
+				'profileUrl'           => $profile_url,
 			);
 
 			return apply_filters( 'wp_ulike_top_content_block_attributes', $sanitized, $attributes );
@@ -344,8 +375,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 * @return int
 		 */
 		private static function get_fetch_limit( $args ) {
-			if ( self::needs_taxonomy_filter( $args ) ) {
-				return min( 100, $args['limit'] * 5 );
+			if ( self::needs_taxonomy_filter( $args ) || self::needs_exclude_taxonomy_filter( $args ) || ! empty( $args['excludePostIds'] ) || ! empty( $args['authorIds'] ) ) {
+				return min( 150, max( $args['limit'] * 5, $args['limit'] + 20 ) );
 			}
 
 			return $args['limit'] + 10;
@@ -612,7 +643,16 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				return array();
 			}
 
-			$item_ids   = array_keys( $counters );
+			$item_ids = array_keys( $counters );
+
+			if ( ! empty( $args['excludePostIds'] ) ) {
+				$item_ids = array_values( array_diff( $item_ids, array_map( 'intval', $args['excludePostIds'] ) ) );
+			}
+
+			if ( empty( $item_ids ) ) {
+				return array();
+			}
+
 			$query_args = array(
 				'post_type'      => is_array( $rel_type ) ? $rel_type : ( $rel_type ? array( $rel_type ) : get_post_types_by_support( array( 'title', 'editor', 'thumbnail' ) ) ),
 				'post_status'    => array( 'publish', 'inherit' ),
@@ -621,14 +661,13 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				'posts_per_page' => $fetch_limit,
 			);
 
-			if ( self::needs_taxonomy_filter( $args ) ) {
-				$query_args['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-					array(
-						'taxonomy' => $args['taxonomy'],
-						'field'    => 'term_id',
-						'terms'    => $args['taxonomyTerms'],
-					),
-				);
+			if ( ! empty( $args['authorIds'] ) ) {
+				$query_args['author__in'] = $args['authorIds'];
+			}
+
+			$tax_query = self::build_tax_query( $args );
+			if ( ! empty( $tax_query ) ) {
+				$query_args['tax_query'] = $tax_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 			}
 
 			$posts = get_posts( apply_filters( 'wp_ulike_top_content_posts_query', $query_args, $args ) );
@@ -966,25 +1005,64 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 
 		/**
 		 * @param array $args Args.
+		 * @return bool
+		 */
+		private static function needs_exclude_taxonomy_filter( $args ) {
+			return ! empty( $args['excludeTaxonomy'] ) && ! empty( $args['excludeTaxonomyTerms'] ) && in_array( $args['contentType'], array( 'post', 'comment' ), true );
+		}
+
+		/**
+		 * Build tax_query clauses for include / exclude term filters.
+		 *
+		 * @param array $args Args.
+		 * @return array
+		 */
+		private static function build_tax_query( $args ) {
+			$clauses = array();
+
+			if ( self::needs_taxonomy_filter( $args ) ) {
+				$clauses[] = array(
+					'taxonomy' => $args['taxonomy'],
+					'field'    => 'term_id',
+					'terms'    => $args['taxonomyTerms'],
+				);
+			}
+
+			if ( self::needs_exclude_taxonomy_filter( $args ) ) {
+				$clauses[] = array(
+					'taxonomy' => $args['excludeTaxonomy'],
+					'field'    => 'term_id',
+					'terms'    => $args['excludeTaxonomyTerms'],
+					'operator' => 'NOT IN',
+				);
+			}
+
+			if ( count( $clauses ) > 1 ) {
+				$clauses['relation'] = 'AND';
+			}
+
+			return $clauses;
+		}
+
+		/**
+		 * @param array $args Args.
 		 * @return int[]
 		 */
 		private static function get_taxonomy_post_ids( $args ) {
 			$post_types = self::get_post_type_filter( $args );
-			$posts      = get_posts(
-				array(
-					'fields'         => 'ids',
-					'posts_per_page' => 500,
-					'post_type'      => $post_types ? $post_types : 'any',
-					'post_status'    => 'publish',
-					'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-						array(
-							'taxonomy' => $args['taxonomy'],
-							'field'    => 'term_id',
-							'terms'    => $args['taxonomyTerms'],
-						),
-					),
-				)
+			$query      = array(
+				'fields'         => 'ids',
+				'posts_per_page' => 500,
+				'post_type'      => $post_types ? $post_types : 'any',
+				'post_status'    => 'publish',
 			);
+
+			$tax_query = self::build_tax_query( $args );
+			if ( ! empty( $tax_query ) ) {
+				$query['tax_query'] = $tax_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+			}
+
+			$posts = get_posts( $query );
 
 			return array_map( 'absint', $posts );
 		}
