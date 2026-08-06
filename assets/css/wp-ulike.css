@@ -699,7 +699,8 @@
   word-wrap: break-word;
   overflow: hidden;
   margin: 0 0 6px;
-  padding: 14px 15px 14px 65px;
+  padding-block: 14px;
+  padding-inline: 65px 15px;
   width: 290px;
   border-radius: 3px;
   background-color: #007bc3;
@@ -730,7 +731,7 @@
   background-image: url(../img/svg/info.svg);
   background-size: 25px;
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   width: 50px;
   top: 0;
   height: 100%;
@@ -767,8 +768,10 @@
 }
 @media screen and (max-width: 768px) {
   .wpulike-notification .wpulike-message {
-    padding: 11px 11px 11px 55px;
+    padding-block: 11px;
+    padding-inline: 55px 11px;
     font-size: 13px;
+    max-width: calc(100vw - var(--ulp-toast-offset-x) * 2);
   }
   .wpulike-notification .wpulike-message:before {
     background-size: 25px;
@@ -777,7 +780,8 @@
 }
 @media screen and (max-width: 320px) {
   .wpulike-notification .wpulike-message {
-    padding: 9px 9px 9px 45px;
+    padding-block: 9px;
+    padding-inline: 45px 9px;
     font-size: 12px;
     width: 100%;
     max-width: calc(100vw - var(--ulp-toast-offset-x) * 2);
@@ -1062,23 +1066,6 @@
 .rtl .wpulike-notification {
   --ulp-toast-right: auto;
   --ulp-toast-left: var(--ulp-toast-offset-x);
-}
-.rtl .wpulike-notification .wpulike-message {
-  padding: 14px 65px 14px 15px;
-}
-.rtl .wpulike-notification .wpulike-message:before {
-  left: auto;
-  right: 0;
-}
-@media screen and (max-width: 768px) {
-  .rtl .wpulike-notification .wpulike-message {
-    padding: 11px 55px 11px 11px;
-  }
-}
-@media screen and (max-width: 320px) {
-  .rtl .wpulike-notification .wpulike-message {
-    padding: 9px 45px 9px 9px;
-  }
 }
 
 .rtl .ulf-tooltip .ulf-arrow-bottom {
