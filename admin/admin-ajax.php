@@ -288,7 +288,7 @@ function wp_ulike_localization_api(){
 		'Insights'             => __( 'Insights', 'wp-ulike' ),
 		'View'                 => __( 'View', 'wp-ulike' ),
 		'Filters'              => __( 'Filters', 'wp-ulike' ),
-		'Clear all'            => __( 'Clear all', 'wp-ulike' ),
+		'Clear all'            => __( 'Clear', 'wp-ulike' ),
 		'Apply'                => __( 'Apply', 'wp-ulike' ),
 		'Cancel'               => __( 'Cancel', 'wp-ulike' ),
 		'Clear'                => __( 'Clear', 'wp-ulike' ),
@@ -422,7 +422,7 @@ function wp_ulike_localization_api(){
 		'Showing {{from}} to {{to}} of {{total}} results' => __( 'Showing {{from}} to {{to}} of {{total}} results', 'wp-ulike' ),
 		'per page'        => __( 'per page', 'wp-ulike' ),
 		'Total records'   => __( 'Total records', 'wp-ulike' ),
-		'Delete Selected' => __( 'Delete Selected', 'wp-ulike' ),
+		'Delete Selected' => __( 'Delete', 'wp-ulike' ),
 		'Download CSV'    => __( 'Download CSV', 'wp-ulike' ),
 		'Failed to delete the log entry.' => __( 'Failed to delete the log entry.', 'wp-ulike' ),
 		'An error occurred while deleting the log entry.' => __( 'An error occurred while deleting the log entry.', 'wp-ulike' ),
@@ -439,7 +439,7 @@ function wp_ulike_localization_api(){
 		'No Data Available'       => __( 'No Data Available', 'wp-ulike' ),
 		'No data yet. Records will appear here once engagement starts.' => __( 'No data yet. Records will appear here once engagement starts.', 'wp-ulike' ),
 		'Go to Home'              => __( 'Go to Home', 'wp-ulike' ),
-		'Refresh Page'            => __( 'Refresh Page', 'wp-ulike' ),
+		'Refresh Page'            => __( 'Refresh', 'wp-ulike' ),
 
 		// Geography
 		'User Engagement by Country' => __( 'User Engagement by Country', 'wp-ulike' ),
@@ -575,7 +575,7 @@ function wp_ulike_localization_api(){
 		'{{name}} is your most active user — consider a loyalty perk.' => __( '{{name}} is your most active user — consider a loyalty perk.', 'wp-ulike' ),
 
 		// Header & metrics
-		'Refresh data' => __( 'Refresh data', 'wp-ulike' ),
+		'Refresh data' => __( 'Refresh', 'wp-ulike' ),
 		'Total engagements' => __( 'Total engagements', 'wp-ulike' ),
 		'Distinct people who engaged in this period.' => __( 'Distinct people who engaged in this period.', 'wp-ulike' ),
 		'Current period' => __( 'Current period', 'wp-ulike' ),
@@ -636,7 +636,7 @@ function wp_ulike_localization_api(){
 		'Dismissed announcements' => __( 'Dismissed announcements', 'wp-ulike' ),
 		'No dismissed announcements.' => __( 'No dismissed announcements.', 'wp-ulike' ),
 		'{{count}} dismissed announcement(s) stored for your account.' => __( '{{count}} dismissed announcement(s) stored for your account.', 'wp-ulike' ),
-		'Clear dismissed' => __( 'Clear dismissed', 'wp-ulike' ),
+		'Clear dismissed' => __( 'Clear', 'wp-ulike' ),
 		'Dismissals were cleared. Popup announcements will appear again the next time you open the stats dashboard.' => __( 'Dismissals were cleared. Popup announcements will appear again the next time you open the stats dashboard.', 'wp-ulike' ),
 		'Plugin configuration' => __( 'Plugin configuration', 'wp-ulike' ),
 		'Open plugin settings' => __( 'Open plugin settings', 'wp-ulike' ),

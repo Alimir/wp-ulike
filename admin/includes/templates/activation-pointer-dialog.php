@@ -64,7 +64,7 @@ $settings_url = class_exists( 'WP_Ulike_Overview' )
 					<?php esc_html_e( 'View sample post', 'wp-ulike' ); ?>
 				</a>
 				<a class="button button-secondary" href="<?php echo esc_url( $settings_url ); ?>">
-					<?php esc_html_e( 'Settings', 'wp-ulike' ); ?>
+					<?php esc_html_e( 'Open Settings', 'wp-ulike' ); ?>
 				</a>
 			<?php else : ?>
 				<a class="button button-primary" href="<?php echo esc_url( $settings_url ); ?>">

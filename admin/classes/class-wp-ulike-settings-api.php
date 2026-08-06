@@ -1187,7 +1187,7 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 /* translators: Button text to upload a file */
                 'actions.upload' => __( 'Upload', 'wp-ulike' ),
                 /* translators: Button text to import settings */
-                'actions.import' => __( 'Import', 'wp-ulike' ),
+                'actions.import' => __( 'Import settings', 'wp-ulike' ),
                 /* translators: Loading state text while importing */
                 'actions.importing' => __( 'Importing...', 'wp-ulike' ),
                 /* translators: Button text to export and download settings */

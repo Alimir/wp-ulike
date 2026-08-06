@@ -362,7 +362,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 							<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $data['import_nonce'] ?? '' ); ?>" />
 							<label class="wp-ulike-about-backup__label" for="wp-ulike-settings-file"><?php esc_html_e( 'JSON file', 'wp-ulike' ); ?></label>
 							<input id="wp-ulike-settings-file" class="wp-ulike-about-backup__file" type="file" name="settings_file" accept="application/json,.json" required />
-							<button type="submit" class="button button-secondary"><?php esc_html_e( 'Import', 'wp-ulike' ); ?></button>
+							<button type="submit" class="button button-secondary"><?php esc_html_e( 'Import settings', 'wp-ulike' ); ?></button>
 						</form>
 					</details>
 				</div>

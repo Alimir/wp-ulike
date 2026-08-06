@@ -668,7 +668,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'          => 'auto_display_filter_post_types',
                     'type'        => 'select',
                     'title'       => esc_html__( 'Post Types', 'wp-ulike' ),
-                    'placeholder' => esc_html__( 'Select post types','wp-ulike' ),
+                    'placeholder' => esc_html__( 'Select post types', 'wp-ulike' ),
                     'desc'        => esc_html__( 'On Singular views, only these post types get the button. Default is Posts. Add Pages (or other types) if you need them. If Singular is unchecked, these types still show as exceptions.', 'wp-ulike' ),
                     'chosen'      => true,
                     'multiple'    => true,
@@ -1144,7 +1144,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'field_pattern' => array(
                         array(
                             'type'  => 'group',
-                            'title' => esc_html__('Add Share Items', 'wp-ulike'),
+                            'title' => esc_html__( 'Add Share Items', 'wp-ulike' ),
                         ),
                     ), // Share buttons uses group repeater style (matches Pro exactly - shows actual repeater)
                     'read_more_url' => add_query_arg(
