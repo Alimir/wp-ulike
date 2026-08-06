@@ -30,6 +30,7 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 				'not_working'    => array(
 					'title'        => __( "I couldn't get the plugin to work", 'wp-ulike' ),
 					'placeholder'  => __( 'What happened? e.g. button missing, vote fails, theme conflict', 'wp-ulike' ),
+					// Soft gate: note OR location chip (see JS). Skip always stays free.
 					'require_note' => true,
 				),
 				'found_better'   => array(
@@ -45,8 +46,10 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 					'placeholder' => '',
 				),
 				'other'          => array(
-					'title'       => __( 'Other', 'wp-ulike' ),
-					'placeholder' => __( 'Tell us more (optional)', 'wp-ulike' ),
+					'title'        => __( 'Other', 'wp-ulike' ),
+					'placeholder'  => __( 'Tell us more (optional)', 'wp-ulike' ),
+					// Only hard note on Other — empty "Other" is ~35% of exits and teaches nothing.
+					'require_note' => true,
 				),
 			);
 
@@ -155,7 +158,8 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 			check_ajax_referer( 'wp_ulike_deactivation_feedback', 'nonce' );
 
 			$reason_key = isset( $_POST['reason_key'] ) ? sanitize_key( wp_unslash( $_POST['reason_key'] ) ) : '';
-			$allowed    = array_keys( self::get_reasons() );
+			$reasons    = self::get_reasons();
+			$allowed    = array_keys( $reasons );
 
 			if ( ! in_array( $reason_key, $allowed, true ) ) {
 				wp_send_json_error( null, 400 );
@@ -184,6 +188,22 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 							$locations[] = $loc;
 						}
 					}
+				}
+			}
+
+			$reason = $reasons[ $reason_key ];
+
+			// Soft gate only when submitting feedback (Skip bypasses this entirely).
+			// not_working: note OR location. other: note. found_better stays optional.
+			if ( ! empty( $reason['require_note'] ) ) {
+				$has_signal = ( '' !== $details ) || ( 'not_working' === $reason_key && ! empty( $locations ) );
+				if ( ! $has_signal ) {
+					wp_send_json_error(
+						array(
+							'message' => __( 'Please add a short note so we can improve WP ULike.', 'wp-ulike' ),
+						),
+						400
+					);
 				}
 			}
 
