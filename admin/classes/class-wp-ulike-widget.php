@@ -572,7 +572,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function form( $instance ) {
 			//Set up some default widget settings.
 			$defaults = array(
-					'title'       => esc_html__('Most Liked', 'wp-ulike'),
+					'title'       => __('Most Liked', 'wp-ulike'),
 					'count'       => 10,
 					'size'        => 32,
 					'trim'        => 10,

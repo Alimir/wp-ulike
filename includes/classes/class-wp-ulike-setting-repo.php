@@ -25,7 +25,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getLoginNotice(){
-		return wp_ulike_kses( self::getOption( 'login_required_notice', esc_html__( 'You Should Login To Submit Your Like', 'wp-ulike' ) ) );
+		return wp_ulike_kses( self::getOption( 'login_required_notice', __( 'You Should Login To Submit Your Like', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -34,7 +34,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getValidationNotice(){
-		return wp_ulike_kses( self::getOption( 'validate_notice', esc_html__( 'Your vote cannot be submitted at this time.', 'wp-ulike' ) ) );
+		return wp_ulike_kses( self::getOption( 'validate_notice', __( 'Your vote cannot be submitted at this time.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -43,7 +43,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getPermissionNotice(){
-		return wp_ulike_kses( self::getOption( 'already_registered_notice', esc_html__( 'You have already registered a vote.', 'wp-ulike' ) ) );
+		return wp_ulike_kses( self::getOption( 'already_registered_notice', __( 'You have already registered a vote.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -52,7 +52,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getLikeNotice(){
-		return wp_ulike_kses( self::getOption( 'like_notice', esc_html__( 'Thanks! You Liked This.', 'wp-ulike' ) ) );
+		return wp_ulike_kses( self::getOption( 'like_notice', __( 'Thanks! You Liked This.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getUnLikeNotice(){
-		return wp_ulike_kses( self::getOption( 'unlike_notice', esc_html__( 'Sorry! You unliked this.', 'wp-ulike' ) ) );
+		return wp_ulike_kses( self::getOption( 'unlike_notice', __( 'Sorry! You unliked this.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -70,7 +70,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getAjaxErrorNotice(){
-		return wp_ulike_kses( self::getOption( 'ajax_error_notice', esc_html__( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ) ) );
+		return wp_ulike_kses( self::getOption( 'ajax_error_notice', __( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -80,7 +80,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getNoResultsNotice( $period = '' ){
-		$format = self::getOption( 'no_results_notice', esc_html__( 'No results were found in "%s" period', 'wp-ulike' ) );
+		$format = self::getOption( 'no_results_notice', __( 'No results were found in "%s" period', 'wp-ulike' ) );
 		return wp_ulike_kses( sprintf( $format, $period ) );
 	}
 
@@ -90,7 +90,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getUserNoLikesNotice(){
-		return wp_ulike_kses( self::getOption( 'user_no_likes_notice', esc_html__( 'you haven\'t liked any post yet!', 'wp-ulike' ) ) );
+		return wp_ulike_kses( self::getOption( 'user_no_likes_notice', __( 'you haven\'t liked any post yet!', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -99,7 +99,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getUmNoLikesNotice(){
-		return wp_ulike_kses( self::getOption( 'um_no_likes_notice', esc_html__( 'This user has not made any likes.', 'wp-ulike' ) ) );
+		return wp_ulike_kses( self::getOption( 'um_no_likes_notice', __( 'This user has not made any likes.', 'wp-ulike' ) ) );
 	}
 
 	/**
@@ -108,7 +108,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getBpMultipleLikesNotice(){
-		return self::getOption( 'bp_multiple_likes_notice', esc_html__( 'You have %1$d new %2$s likes', 'wp-ulike' ) );
+		return self::getOption( 'bp_multiple_likes_notice', __( 'You have %1$d new %2$s likes', 'wp-ulike' ) );
 	}
 
 	/**
@@ -117,7 +117,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getBpSingleLikeNotice(){
-		return self::getOption( 'bp_single_like_notice', esc_html__( '%1$s liked one of your %2$s', 'wp-ulike' ) );
+		return self::getOption( 'bp_single_like_notice', __( '%1$s liked one of your %2$s', 'wp-ulike' ) );
 	}
 
 	/**

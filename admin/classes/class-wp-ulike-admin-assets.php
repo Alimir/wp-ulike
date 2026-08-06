@@ -112,7 +112,7 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 						'nonce'     => wp_create_nonce( WP_ULIKE_SLUG ),
 						'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 						'logo'      => WP_ULIKE_ASSETS_URL . '/img/icon.svg',
-						'title'     => esc_html__( 'Metrics Dashboard', 'wp-ulike' ),
+						'title'     => __( 'Metrics Dashboard', 'wp-ulike' ),
 						'buildType' => 'free',
 						'loaderSvg' => $this->get_loader_svg(),
 					'userPrefs' => class_exists( 'WP_Ulike_Stats_User_Prefs' )

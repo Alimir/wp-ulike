@@ -116,11 +116,11 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 */
 		private static function get_sort_options() {
 			$options = array(
-				array( 'value' => 'like', 'label' => esc_html__( 'Like', 'wp-ulike' ) ),
+				array( 'value' => 'like', 'label' => __( 'Like', 'wp-ulike' ) ),
 			);
 
 			if ( self::is_pro_active() ) {
-				$options[] = array( 'value' => 'dislike', 'label' => esc_html__( 'Dislike', 'wp-ulike' ) );
+				$options[] = array( 'value' => 'dislike', 'label' => __( 'Dislike', 'wp-ulike' ) );
 			}
 
 			return apply_filters( 'wp_ulike_top_content_block_sort_options', $options );
@@ -134,20 +134,20 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 */
 		public static function get_top_type_label( $content_type ) {
 			$suffixes = array(
-				'post'     => esc_html__( 'Posts', 'wp-ulike' ),
-				'comment'  => esc_html__( 'Comments', 'wp-ulike' ),
-				'users'    => esc_html__( 'User(s)', 'wp-ulike' ),
-				'activity' => esc_html__( 'Activities', 'wp-ulike' ),
-				'topic'    => esc_html__( 'Topics', 'wp-ulike' ),
+				'post'     => __( 'Posts', 'wp-ulike' ),
+				'comment'  => __( 'Comments', 'wp-ulike' ),
+				'users'    => __( 'User(s)', 'wp-ulike' ),
+				'activity' => __( 'Activities', 'wp-ulike' ),
+				'topic'    => __( 'Topics', 'wp-ulike' ),
 			);
 
 			if ( ! isset( $suffixes[ $content_type ] ) ) {
-				return esc_html__( 'Top', 'wp-ulike' );
+				return __( 'Top', 'wp-ulike' );
 			}
 
 			return sprintf(
 				'%s %s',
-				esc_html__( 'Top', 'wp-ulike' ),
+				__( 'Top', 'wp-ulike' ),
 				$suffixes[ $content_type ]
 			);
 		}
@@ -724,7 +724,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 					'subtitle'      => sprintf(
 						'%s %s',
 						esc_html( stripslashes( $comment->comment_author ) ),
-						esc_html__( 'on', 'wp-ulike' )
+						__( 'on', 'wp-ulike' )
 					),
 					'url'           => get_comment_link( $comment_id ),
 					'count'         => $vote_data['count'],
@@ -1241,8 +1241,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 */
 		private static function get_status_label( $status ) {
 			$labels = array(
-				'like'    => esc_html__( 'Like', 'wp-ulike' ),
-				'dislike' => esc_html__( 'Dislike', 'wp-ulike' ),
+				'like'    => __( 'Like', 'wp-ulike' ),
+				'dislike' => __( 'Dislike', 'wp-ulike' ),
 			);
 
 			return isset( $labels[ $status ] ) ? $labels[ $status ] : $labels['like'];
@@ -1287,10 +1287,10 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 
 				$unit_labels = array(
-					'HOUR'  => esc_html__( 'hour', 'wp-ulike' ),
-					'DAY'   => esc_html__( 'day', 'wp-ulike' ),
-					'WEEK'  => esc_html__( 'week', 'wp-ulike' ),
-					'MONTH' => esc_html__( 'month', 'wp-ulike' ),
+					'HOUR'  => __( 'hour', 'wp-ulike' ),
+					'DAY'   => __( 'day', 'wp-ulike' ),
+					'WEEK'  => __( 'week', 'wp-ulike' ),
+					'MONTH' => __( 'month', 'wp-ulike' ),
 				);
 				$unit = isset( $unit_labels[ $args['intervalUnit'] ] ) ? $unit_labels[ $args['intervalUnit'] ] : $unit_labels['DAY'];
 
@@ -1308,7 +1308,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 			}
 
-			return esc_html__( 'All time', 'wp-ulike' );
+			return __( 'All time', 'wp-ulike' );
 		}
 
 		/**
@@ -1323,7 +1323,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			return str_replace(
 				'{{count}}',
 				(string) $days,
-				esc_html__( 'Last {{count}} days', 'wp-ulike' )
+				__( 'Last {{count}} days', 'wp-ulike' )
 			);
 		}
 
@@ -1334,16 +1334,16 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 */
 		public static function get_period_presets() {
 			return array(
-				array( 'value' => 'all', 'label' => esc_html__( 'All time', 'wp-ulike' ) ),
-				array( 'value' => 'year', 'label' => esc_html__( 'This year', 'wp-ulike' ) ),
-				array( 'value' => 'last_year', 'label' => esc_html__( 'Last year', 'wp-ulike' ) ),
-				array( 'value' => 'month', 'label' => esc_html__( 'This month', 'wp-ulike' ) ),
-				array( 'value' => 'last_month', 'label' => esc_html__( 'Last month', 'wp-ulike' ) ),
-				array( 'value' => 'week', 'label' => esc_html__( 'This week', 'wp-ulike' ) ),
-				array( 'value' => 'last_week', 'label' => esc_html__( 'Last week', 'wp-ulike' ) ),
-				array( 'value' => 'today', 'label' => esc_html__( 'Today', 'wp-ulike' ) ),
-				array( 'value' => 'yesterday', 'label' => esc_html__( 'Yesterday', 'wp-ulike' ) ),
-				array( 'value' => 'day_before_yesterday', 'label' => esc_html__( 'Day before yesterday', 'wp-ulike' ) ),
+				array( 'value' => 'all', 'label' => __( 'All time', 'wp-ulike' ) ),
+				array( 'value' => 'year', 'label' => __( 'This year', 'wp-ulike' ) ),
+				array( 'value' => 'last_year', 'label' => __( 'Last year', 'wp-ulike' ) ),
+				array( 'value' => 'month', 'label' => __( 'This month', 'wp-ulike' ) ),
+				array( 'value' => 'last_month', 'label' => __( 'Last month', 'wp-ulike' ) ),
+				array( 'value' => 'week', 'label' => __( 'This week', 'wp-ulike' ) ),
+				array( 'value' => 'last_week', 'label' => __( 'Last week', 'wp-ulike' ) ),
+				array( 'value' => 'today', 'label' => __( 'Today', 'wp-ulike' ) ),
+				array( 'value' => 'yesterday', 'label' => __( 'Yesterday', 'wp-ulike' ) ),
+				array( 'value' => 'day_before_yesterday', 'label' => __( 'Day before yesterday', 'wp-ulike' ) ),
 			);
 		}
 
@@ -1354,10 +1354,10 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 */
 		public static function get_interval_units() {
 			return array(
-				array( 'value' => 'DAY', 'label' => esc_html__( 'day', 'wp-ulike' ) ),
-				array( 'value' => 'WEEK', 'label' => esc_html__( 'week', 'wp-ulike' ) ),
-				array( 'value' => 'MONTH', 'label' => esc_html__( 'month', 'wp-ulike' ) ),
-				array( 'value' => 'HOUR', 'label' => esc_html__( 'hour', 'wp-ulike' ) ),
+				array( 'value' => 'DAY', 'label' => __( 'day', 'wp-ulike' ) ),
+				array( 'value' => 'WEEK', 'label' => __( 'week', 'wp-ulike' ) ),
+				array( 'value' => 'MONTH', 'label' => __( 'month', 'wp-ulike' ) ),
+				array( 'value' => 'HOUR', 'label' => __( 'hour', 'wp-ulike' ) ),
 			);
 		}
 
@@ -1405,13 +1405,13 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			$sort_options = self::get_sort_options();
 
 			$profile_urls = array(
-				array( 'value' => 'wp', 'label' => esc_html__( 'Profile', 'wp-ulike' ) ),
+				array( 'value' => 'wp', 'label' => __( 'Profile', 'wp-ulike' ) ),
 			);
 			if ( function_exists( 'bp_members_get_user_url' ) ) {
-				$profile_urls[] = array( 'value' => 'bp', 'label' => esc_html__( 'BuddyPress', 'wp-ulike' ) );
+				$profile_urls[] = array( 'value' => 'bp', 'label' => __( 'BuddyPress', 'wp-ulike' ) );
 			}
 			if ( function_exists( 'um_user_profile_url' ) ) {
-				$profile_urls[] = array( 'value' => 'um', 'label' => esc_html__( 'UltimateMember', 'wp-ulike' ) );
+				$profile_urls[] = array( 'value' => 'um', 'label' => __( 'UltimateMember', 'wp-ulike' ) );
 			}
 
 			return array(
@@ -1421,8 +1421,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				'contentTypes'   => $content_types,
 				'sortOptions'    => $sort_options,
 				'sortOrders'     => array(
-					array( 'value' => 'DESC', 'label' => esc_html__( 'Descending', 'wp-ulike' ) ),
-					array( 'value' => 'ASC', 'label' => esc_html__( 'Ascending', 'wp-ulike' ) ),
+					array( 'value' => 'DESC', 'label' => __( 'Descending', 'wp-ulike' ) ),
+					array( 'value' => 'ASC', 'label' => __( 'Ascending', 'wp-ulike' ) ),
 				),
 				'periodPresets'  => self::get_period_presets(),
 				'intervalUnits'  => self::get_interval_units(),

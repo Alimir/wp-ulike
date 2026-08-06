@@ -590,7 +590,7 @@ if( ! function_exists('wp_ulike_html_entity_decode') ){
 	 * @return string
 	 */
 	function wp_ulike_html_entity_decode( $value ){
-		return html_entity_decode( (string) $value );
+		return html_entity_decode( (string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	}
 }
 

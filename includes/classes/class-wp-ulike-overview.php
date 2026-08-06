@@ -1021,7 +1021,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function import_settings( $payload ) {
 			if ( ! array_key_exists( 'settings', $payload ) || ! is_array( $payload['settings'] ) ) {
-				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from Help → Settings backup.', 'wp-ulike' ) );
+				return new WP_Error( 'invalid_payload', __( 'Invalid settings file. Expected a JSON export from Help → Settings backup.', 'wp-ulike' ) );
 			}
 
 			$settings = $payload['settings'];

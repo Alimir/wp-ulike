@@ -424,89 +424,110 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             );
 
             $sections[] = array(
-                'id'     => 'strings',
-                'title'  => esc_html__( 'Strings','wp-ulike'),
-                'parent' => 'translations',
-                'icon'   => 'document-text',
-                'fields' => apply_filters( 'wp_ulike_panel_translations', array(
+                'id'            => 'strings',
+                'title'         => esc_html__( 'Strings','wp-ulike'),
+                'parent'        => 'translations',
+                'icon'          => 'document-text',
+                'field_browser' => true,
+                'fields'        => apply_filters( 'wp_ulike_panel_translations', array(
+                    array(
+                        'id'      => 'heading_vote_notices',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'Vote Notices', 'wp-ulike' ),
+                    ),
                     array(
                         'id'      => 'validate_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'Your vote cannot be submitted at this time.','wp-ulike'),
+                        'default' => __( 'Your vote cannot be submitted at this time.','wp-ulike'),
                         'title'   => esc_html__( 'Validation Notice Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Message shown when a vote cannot be processed due to validation errors.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'already_registered_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'You have already registered a vote.','wp-ulike'),
+                        'default' => __( 'You have already registered a vote.','wp-ulike'),
                         'title'   => esc_html__( 'Already Voted Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Message shown when a user tries to vote again after already voting.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'login_required_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'You Should Login To Submit Your Like','wp-ulike'),
+                        'default' => __( 'You Should Login To Submit Your Like','wp-ulike'),
                         'title'   => esc_html__( 'Login Required Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Message shown to visitors who need to log in before they can vote.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'like_notice',
                         'type'    => 'text',
-                        'default' => esc_html__('Thanks! You Liked This.','wp-ulike'),
+                        'default' => __('Thanks! You Liked This.','wp-ulike'),
                         'title'   => esc_html__( 'Liked Notice Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Confirmation message shown after a user successfully likes content.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'unlike_notice',
                         'type'    => 'text',
-                        'default' => esc_html__('Sorry! You unliked this.','wp-ulike'),
+                        'default' => __('Sorry! You unliked this.','wp-ulike'),
                         'title'   => esc_html__( 'Unliked Notice Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Confirmation message shown after a user removes their like.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'ajax_error_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ),
+                        'default' => __( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ),
                         'title'   => esc_html__( 'Connection Error Message', 'wp-ulike' ),
                         'desc'    => esc_html__( 'Message shown when a vote cannot be saved due to a network or server error.', 'wp-ulike' ),
                     ),
                     array(
+                        'id'      => 'heading_widgets_lists',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'Widgets & Lists', 'wp-ulike' ),
+                    ),
+                    array(
                         'id'      => 'no_results_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'No results were found in "%s" period', 'wp-ulike' ),
+                        'default' => __( 'No results were found in "%s" period', 'wp-ulike' ),
                         'title'   => esc_html__( 'No Results Message', 'wp-ulike' ),
                         'desc'    => esc_html__( 'Empty state for Top List and widgets. Use %s for the selected period.', 'wp-ulike' ),
                     ),
                     array(
                         'id'      => 'user_no_likes_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'you haven\'t liked any post yet!', 'wp-ulike' ),
+                        'default' => __( 'you haven\'t liked any post yet!', 'wp-ulike' ),
                         'title'   => esc_html__( 'User Has No Likes Message', 'wp-ulike' ),
                         'desc'    => esc_html__( 'Message shown in the widget when the current user has not liked any posts yet.', 'wp-ulike' ),
                     ),
                     array(
+                        'id'      => 'heading_buddypress',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'BuddyPress', 'wp-ulike' ),
+                    ),
+                    array(
                         'id'      => 'bp_multiple_likes_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'You have %1$d new %2$s likes', 'wp-ulike' ),
+                        'default' => __( 'You have %1$d new %2$s likes', 'wp-ulike' ),
                         'title'   => esc_html__( 'BuddyPress Multiple Likes Notification', 'wp-ulike' ),
                         'desc'    => esc_html__( 'Use %1$d for the count and %2$s for the content type (e.g. Posts).', 'wp-ulike' ),
                     ),
                     array(
                         'id'      => 'bp_single_like_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( '%1$s liked one of your %2$s', 'wp-ulike' ),
+                        'default' => __( '%1$s liked one of your %2$s', 'wp-ulike' ),
                         'title'   => esc_html__( 'BuddyPress Single Like Notification', 'wp-ulike' ),
                         'desc'    => esc_html__( 'Use %1$s for the user name and %2$s for the content type.', 'wp-ulike' ),
                     ),
                     array(
+                        'id'      => 'heading_ultimate_member',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'Ultimate Member', 'wp-ulike' ),
+                    ),
+                    array(
                         'id'      => 'um_no_likes_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'This user has not made any likes.', 'wp-ulike' ),
+                        'default' => __( 'This user has not made any likes.', 'wp-ulike' ),
                         'title'   => esc_html__( 'Ultimate Member No Likes Message', 'wp-ulike' ),
                         'desc'    => esc_html__( 'Empty state shown on Ultimate Member profile like tabs.', 'wp-ulike' ),
                     ),
-                ) )
+                ) ),
             );
 
             // Emails
@@ -681,7 +702,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'type'    => 'text',
                                     'title'   => esc_html__('Button Label','wp-ulike'),
                                     'desc'    => esc_html__('Text displayed on the like button (e.g., "Like", "👍", "Love").', 'wp-ulike'),
-                                    'default' => esc_html__('Like', 'wp-ulike')
+                                    'default' => __('Like', 'wp-ulike')
                                 ),
                             )
                         ),
@@ -693,7 +714,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'type'    => 'text',
                                     'title'   => esc_html__('Button Label','wp-ulike'),
                                     'desc'    => esc_html__('Text displayed on the button after liking (e.g., "Liked", "❤️", "Unlike").', 'wp-ulike'),
-                                    'default' => esc_html__('Liked', 'wp-ulike')
+                                    'default' => __('Liked', 'wp-ulike')
                                 ),
                             )
                         ),

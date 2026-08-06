@@ -35,7 +35,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             $this->args = wp_parse_args( $args, $defaults );
 
             if( empty( $this->args['id'] ) ){
-                return new WP_Error( 'missing_id', esc_html__( "You need to enter a unique id for notice.", 'wp-ulike' ) );
+                return new WP_Error( 'missing_id', __( 'You need to enter a unique id for notice.', 'wp-ulike' ) );
             }
 
             if( is_array( $this->args['dismissible'] ) ){

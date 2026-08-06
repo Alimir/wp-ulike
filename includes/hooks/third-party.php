@@ -355,20 +355,20 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 				preg_match('/action_([0-9]+)/', $action, $user_ID);
 			//Get user info
 			$user_ID     = isset( $user_ID[1] ) ? $user_ID[1] : $secondary_item_id;
-			$action_type = esc_html__( 'Posts' , 'wp-ulike' );
+			$action_type = __( 'Posts', 'wp-ulike' );
 			$custom_link = '';
 
 			// Check the the ulike types
 			switch ( $type[1] ) {
 				case 'commentliked':
 					$custom_link = get_comment_link( $item_id );
-					$action_type = esc_html__( 'Comments' , 'wp-ulike' );
+					$action_type = __( 'Comments', 'wp-ulike' );
 					break;
 
 				case 'activityliked':
 					if( function_exists('bp_activity_get_permalink') ){
 						$custom_link = bp_activity_get_permalink( $item_id );
-						$action_type = esc_html__( 'Activities' , 'wp-ulike' );
+						$action_type = __( 'Activities', 'wp-ulike' );
 					}
 					break;
 
@@ -376,10 +376,10 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 					if( function_exists('bbp_get_topic_permalink') ){
 						if( 'topic' === get_post_type( $item_id) ){
 							$custom_link = bbp_get_topic_permalink( $item_id );
-							$action_type = esc_html__( 'Topics' , 'wp-ulike' );
+							$action_type = __( 'Topics', 'wp-ulike' );
 						} else {
 							$custom_link = bbp_get_reply_url( $item_id );
-							$action_type = esc_html__( 'Replies' , 'wp-ulike' );
+							$action_type = __( 'Replies', 'wp-ulike' );
 						}
 					}
 					break;
@@ -434,22 +434,22 @@ if( ! function_exists( 'wp_ulike_notification_filters' ) ){
 		$notifications = array(
 			array(
 				'id'       => 'wp_ulike_activityliked_action',
-				'label'    => esc_html__( 'New activity liked', 'wp-ulike' ),
+				'label'    => __( 'New activity liked', 'wp-ulike' ),
 				'position' => 340,
 			),
 			array(
 				'id'       => 'wp_ulike_commentliked_action',
-				'label'    => esc_html__( 'New comment liked', 'wp-ulike' ),
+				'label'    => __( 'New comment liked', 'wp-ulike' ),
 				'position' => 345,
 			),
 			array(
 				'id'       => 'wp_ulike_liked_action',
-				'label'    => esc_html__( 'New post liked', 'wp-ulike' ),
+				'label'    => __( 'New post liked', 'wp-ulike' ),
 				'position' => 355,
 			),
 			array(
 				'id'       => 'wp_ulike_topicliked_action',
-				'label'    => esc_html__( 'New topic liked', 'wp-ulike' ),
+				'label'    => __( 'New topic liked', 'wp-ulike' ),
 				'position' => 365,
 			)
 		);
@@ -647,8 +647,8 @@ if( ! function_exists( 'wp_ulike_register_myCRED_hook' ) ){
 	 */
 	function wp_ulike_register_myCRED_hook( $installed ) {
 		$installed['wp_ulike'] = array(
-			'title'       => esc_html__( 'WP ULike', 'wp-ulike' ) . ' : ' .  esc_html__( 'Points for liking content', 'wp-ulike' ),
-			'description' => esc_html__( 'This hook award / deducts points from users who Like/Unlike any content of WordPress, bbPress, BuddyPress & ...', 'wp-ulike' ),
+			'title'       => __( 'WP ULike', 'wp-ulike' ) . ' : ' . __( 'Points for liking content', 'wp-ulike' ),
+			'description' => __( 'This hook award / deducts points from users who Like/Unlike any content of WordPress, bbPress, BuddyPress & ...', 'wp-ulike' ),
 			'callback'    => array( 'wp_ulike_myCRED' )
 		);
 		return $installed;
@@ -664,10 +664,10 @@ if( ! function_exists( 'wp_ulike_myCRED_references' ) ){
 	 * @return void
 	 */
 	function wp_ulike_myCRED_references( $list ) {
-		$list['wp_add_like'] 	= esc_html__( 'Liking Content', 'wp-ulike' );
-		$list['wp_get_like'] 	= esc_html__( 'Liked Content', 'wp-ulike' );
-		$list['wp_add_unlike'] = esc_html__( 'Unliking Content', 'wp-ulike' );
-		$list['wp_get_unlike'] = esc_html__( 'Unliked Content', 'wp-ulike' );
+		$list['wp_add_like']   = __( 'Liking Content', 'wp-ulike' );
+		$list['wp_get_like']   = __( 'Liked Content', 'wp-ulike' );
+		$list['wp_add_unlike'] = __( 'Unliking Content', 'wp-ulike' );
+		$list['wp_get_unlike'] = __( 'Unliked Content', 'wp-ulike' );
 		return $list;
 	}
 	add_filter( 'mycred_all_references', 'wp_ulike_myCRED_references' );
@@ -685,12 +685,12 @@ if( ! function_exists( 'wp_ulike_add_custom_profile_tab' ) ){
 	function wp_ulike_add_custom_profile_tab( $tabs ) {
 
 		$tabs['wp-ulike-posts'] = array(
-			'name' => esc_html__('Recent Posts Liked','wp-ulike'),
+			'name' => __( 'Recent Posts Liked', 'wp-ulike' ),
 			'icon' => 'um-faicon-thumbs-up',
 		);
 
 		$tabs['wp-ulike-comments'] = array(
-			'name' => esc_html__('Recent Comments Liked','wp-ulike'),
+			'name' => __( 'Recent Comments Liked', 'wp-ulike' ),
 			'icon' => 'um-faicon-thumbs-o-up',
 		);
 

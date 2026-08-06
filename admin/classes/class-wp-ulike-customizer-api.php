@@ -531,6 +531,19 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                     $field['title'] = html_entity_decode( $field['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                 }
 
+                // Form values must not keep HTML entities from esc_html__() defaults.
+                if ( isset( $field['default'] ) && is_string( $field['default'] ) ) {
+                    $field['default'] = html_entity_decode( $field['default'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                }
+
+                if ( isset( $field['placeholder'] ) && is_string( $field['placeholder'] ) ) {
+                    $field['placeholder'] = html_entity_decode( $field['placeholder'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                }
+
+                if ( isset( $field['options'] ) && is_array( $field['options'] ) ) {
+                    $field['options'] = $this->decode_html_entities_in_options( $field['options'] );
+                }
+
                 // Handle nested fields
                 if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
                     $field['fields'] = $this->decode_html_entities_in_fields( $field['fields'] );
@@ -550,6 +563,27 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             }
 
             return $fields;
+        }
+
+        /**
+         * Decode HTML entities in select/button_set option labels.
+         *
+         * @param array $options Field options.
+         * @return array
+         */
+        protected function decode_html_entities_in_options( $options ) {
+            foreach ( $options as $key => $option ) {
+                if ( is_string( $option ) ) {
+                    $options[ $key ] = html_entity_decode( $option, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                    continue;
+                }
+
+                if ( is_array( $option ) && isset( $option['label'] ) && is_string( $option['label'] ) ) {
+                    $options[ $key ]['label'] = html_entity_decode( $option['label'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                }
+            }
+
+            return $options;
         }
 
         /**
@@ -585,14 +619,14 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 $values = $request_or_values;
             } else {
                 wp_send_json_error( array(
-                    'message' => esc_html__( 'Invalid request data.', 'wp-ulike' ),
+                    'message' => __( 'Invalid request data.', 'wp-ulike' ),
                 ), 400 );
                 return;
             }
 
             if ( ! is_array( $values ) ) {
                 wp_send_json_error( array(
-                    'message' => esc_html__( 'Invalid request data.', 'wp-ulike' ),
+                    'message' => __( 'Invalid request data.', 'wp-ulike' ),
                 ), 400 );
                 return;
             }
@@ -613,7 +647,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             do_action( 'wp_ulike_customizer_saved', $values );
 
             wp_send_json_success( array(
-                'message' => esc_html__( 'Settings saved successfully.', 'wp-ulike' ),
+                'message' => __( 'Settings saved successfully.', 'wp-ulike' ),
             ) );
         }
 
