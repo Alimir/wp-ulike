@@ -76,100 +76,34 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
 		) {$collate};";
 		}
 
-		/**
-		 * Create ulike_pulse when missing.
-		 *
-		 * @return bool
-		 */
+	/**
+	 * Create ulike_pulse when missing.
+	 *
+	 * @return bool
+	 */
 	public static function install() {
+		global $wpdb;
+
 		if ( self::table_exists() ) {
-			// Existing installs: keep column shape aligned on upgrade paths.
-			self::ensure_dedupe_token_column();
 			return true;
 		}
 
-		if ( ! function_exists( 'maybe_create_table' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		}
+		// Direct query (not maybe_create_table): follow-up SHOW TABLES clears last_error.
+		$wpdb->query( self::ddl() );
+		$error = trim( (string) $wpdb->last_error );
 
-		$created = maybe_create_table( self::table(), self::ddl() );
-
-		// The table-existence cache was populated above; flush so the
-		// post-creation check reflects the new schema state.
 		WP_Ulike_Pulse_Registry::flush_table_exists_cache();
 
-		// Align dedupe_token on existing tables (no-op for fresh installs).
-		self::ensure_dedupe_token_column();
-
-		if ( ! self::table_exists() ) {
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					global $wpdb;
-					error_log( 'WP ULike Pulse: failed to create table ' . self::table() . ' — ' . $wpdb->last_error );
-				}
-				return false;
-			}
-
-			return (bool) $created;
+		if ( self::table_exists() ) {
+			return true;
 		}
 
-		/**
-		 * Ensure the dedupe_token column matches the documented schema
-		 * (binary(32) DEFAULT NULL). `maybe_create_table` only creates the
-		 * table on first install — it never ALTERs existing columns, so sites
-		 * that created the table with an earlier column definition (e.g.
-		 * char(64) NOT NULL, or binary(32) NOT NULL) keep the old definition
-		 * and inserts of NULL/multi-byte tokens fail silently. This runs once
-		 * per site, gated by an option marker, and is a no-op afterwards.
-		 *
-		 * @return void
-		 */
-		public static function ensure_dedupe_token_column() {
-			global $wpdb;
-
-			$marker = 'wp_ulike_pulse_dedupe_col_v1';
-			if ( get_option( $marker ) ) {
-				return;
-			}
-
-			$table = self::table();
-
-			// Check existence directly instead of relying on the memoized
-			// WP_Ulike_Pulse_Registry::table_exists() — its static cache does
-			// not account for per-blog table names on multisite, so it can
-			// return a stale true when switching to a blog where the pulse
-			// table does not yet exist, which would make the SHOW COLUMNS
-			// query below error out. Do not set the marker when the table is
-			// missing so the alignment retries once it is created.
-			$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-			if ( ! $exists ) {
-				return;
-			}
-
-			$col = $wpdb->get_row( "SHOW COLUMNS FROM `{$table}` WHERE Field = 'dedupe_token'" );
-
-			if ( empty( $col ) ) {
-				update_option( $marker, 1 );
-				return;
-			}
-
-			$type = strtolower( (string) $col->Type );
-			$null = strtoupper( (string) $col->Null );
-
-			if ( 'binary(32)' === $type && 'YES' === $null ) {
-				update_option( $marker, 1 );
-				return;
-			}
-
-			// Align the column to binary(32) DEFAULT NULL. Existing NULL
-			// tokens stay NULL; existing non-binary tokens are converted.
-			$wpdb->query( "ALTER TABLE `{$table}` MODIFY `dedupe_token` binary(32) DEFAULT NULL" );
-
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && $wpdb->last_error ) {
-				error_log( 'WP ULike Pulse: dedupe_token column align failed — ' . $wpdb->last_error );
-			}
-
-			update_option( $marker, 1 );
+		if ( $error ) {
+			$wpdb->last_error = $error;
 		}
+
+		return false;
+	}
 
 	/**
 	 * Bootstrap storage mode after pulse table exists.

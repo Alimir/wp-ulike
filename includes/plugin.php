@@ -79,6 +79,8 @@ class WpUlikeInit {
     $stored = get_option( 'wp_ulike_dbVersion', false );
 
     // Fresh installs set wp_ulike_dbVersion during activation.
+    // Do not CREATE on every admin load — that can spam MySQL when privileges fail.
+    // Missing tables are created only on activate, repair, or DB version upgrade.
     if ( false === $stored ) {
       return;
     }
@@ -108,10 +110,6 @@ class WpUlikeInit {
       }
 
       update_option( 'wp_ulike_dbVersion', $target );
-    }
-
-    if ( ! WP_Ulike_Meta_Schema::table_exists() || ! WP_Ulike_Pulse_Schema::table_exists() ) {
-      wp_ulike_activator::get_instance()->install_tables( false, false );
     }
   }
 

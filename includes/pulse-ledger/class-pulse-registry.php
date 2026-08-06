@@ -350,7 +350,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
 			return self::$table_exists_cache[ $full ];
 		}
 
-		$found = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $full ) );
+		$found  = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $full ) ) );
 		$exists = $found === $full;
 
 		self::$table_exists_cache[ $full ] = $exists;

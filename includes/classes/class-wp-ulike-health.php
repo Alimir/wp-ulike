@@ -142,6 +142,21 @@ if ( ! class_exists( 'WP_Ulike_Health' ) ) {
 				) . '</p>';
 			}
 
+			$install_errors = class_exists( 'wp_ulike_activator' )
+				? wp_ulike_activator::get_install_errors()
+				: array();
+
+			if ( ! empty( $install_errors ) ) {
+				$description .= '<p><strong>' . esc_html__( 'Database error:', 'wp-ulike' ) . '</strong></p><ul>';
+				foreach ( $install_errors as $label => $message ) {
+					$description .= '<li><code>' . esc_html( (string) $label ) . '</code>: '
+						. esc_html( (string) $message )
+						. '</li>';
+				}
+				$description .= '</ul>';
+				$description .= '<p>' . esc_html__( 'Share this error with your host or WP ULike support if repair does not help.', 'wp-ulike' ) . '</p>';
+			}
+
 			return array(
 				'label'       => __( 'WP ULike database tables are missing', 'wp-ulike' ),
 				'status'      => 'critical',
@@ -388,6 +403,10 @@ if ( ! class_exists( 'WP_Ulike_Health' ) ) {
 						? count( (array) $tables['missing'] ) . ' need repair (' . implode( ', ', array_map( 'strval', (array) $tables['missing'] ) ) . ')'
 						: 'all present',
 				),
+				'table_install_errors' => array(
+					'label' => 'Table install errors',
+					'value' => self::format_install_errors_for_info(),
+				),
 				'approx_legacy_rows' => array(
 					'label' => 'Legacy rows (approx.)',
 					'value' => ! empty( $tables['approx_legacy_rows'] )
@@ -426,6 +445,29 @@ if ( ! class_exists( 'WP_Ulike_Health' ) ) {
 			 * @param array $fields Field definitions for debug_information.
 			 */
 			return apply_filters( 'wp_ulike_site_health_info_fields', $fields );
+		}
+
+		/**
+		 * Plain-text CREATE TABLE errors for Site Health → Info.
+		 *
+		 * @return string
+		 */
+		private static function format_install_errors_for_info() {
+			if ( ! class_exists( 'wp_ulike_activator' ) ) {
+				return 'none';
+			}
+
+			$errors = wp_ulike_activator::get_install_errors();
+			if ( empty( $errors ) ) {
+				return 'none';
+			}
+
+			$parts = array();
+			foreach ( $errors as $label => $message ) {
+				$parts[] = $label . ': ' . $message;
+			}
+
+			return implode( ' | ', $parts );
 		}
 
 		/**
