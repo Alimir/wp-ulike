@@ -349,7 +349,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 $content_types_fields[] = array(
                     'id'         => 'buddypress_group',
                     'type'       => 'fieldset',
-                    'title'      => esc_html__('BuddyPress'),
+                    'title'      => esc_html__( 'BuddyPress', 'wp-ulike' ),
                     'fields'     => $buddypress_options,
                     'display_as' => 'section' // Mark as section menu
                 );
@@ -360,7 +360,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 $content_types_fields[] = array(
                     'id'         => 'bbpress_group',
                     'type'       => 'fieldset',
-                    'title'      => esc_html__('bbPress'),
+                    'title'      => esc_html__( 'bbPress', 'wp-ulike' ),
                     'fields'     => $bbPress_options,
                     'display_as' => 'section' // Mark as section menu
                 );

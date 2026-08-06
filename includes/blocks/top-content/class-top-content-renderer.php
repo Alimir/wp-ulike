@@ -1262,7 +1262,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 
 			return sprintf(
 				'<span class="wp-ulike-top-content__likers" aria-label="%1$s"><span class="wp-ulike-top-content__likers-avatars">%2$s%3$s</span></span>',
-				esc_attr__( 'Engaged Users', 'wp-ulike' ),
+				esc_attr( 'Engaged Users' ),
 				$avatars,
 				$more_html
 			);

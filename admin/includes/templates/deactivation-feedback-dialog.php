@@ -26,7 +26,7 @@ $total_votes   = function_exists( 'wp_ulike_count_all_logs' ) ? (int) wp_ulike_c
 		<?php endif; ?>
 		<form id="wp-ulike-deactivate-feedback-dialog-form" class="wp-ulike-deactivate-feedback-form">
 			<fieldset>
-				<legend class="screen-reader-text"><?php esc_html_e( 'Deactivation reason', 'wp-ulike' ); ?></legend>
+				<legend class="screen-reader-text"><?php echo esc_html( 'Deactivation reason' ); ?></legend>
 				<p class="wp-ulike-deactivate-feedback-reason-error" hidden role="alert">
 					<?php esc_html_e( 'Please select a reason before submitting.', 'wp-ulike' ); ?>
 				</p>
@@ -50,7 +50,7 @@ $total_votes   = function_exists( 'wp_ulike_count_all_logs' ) ? (int) wp_ulike_c
 							<p class="wp-ulike-deactivate-feedback-chips__label">
 								<?php esc_html_e( 'Where did it fail?', 'wp-ulike' ); ?>
 							</p>
-							<div class="wp-ulike-deactivate-feedback-chips__list" role="group" aria-label="<?php esc_attr_e( 'Where did it fail?', 'wp-ulike' ); ?>">
+							<div class="wp-ulike-deactivate-feedback-chips__list" role="group" aria-label="<?php echo esc_attr( 'Where did it fail?' ); ?>">
 								<?php foreach ( $location_chips as $chip_key => $chip_label ) : ?>
 									<label class="wp-ulike-deactivate-feedback-chip">
 										<input type="checkbox" name="locations[]" value="<?php echo esc_attr( $chip_key ); ?>" />

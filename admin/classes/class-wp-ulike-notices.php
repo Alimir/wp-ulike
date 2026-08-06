@@ -194,7 +194,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             if( $this->args['has_close'] ){
     ?>
             <a href="<?php echo esc_url( $this->get_nonce_url() ); ?>" class="notice-dismiss wp-ulike-skip-notice wp-ulike-close-notice">
-                <span class="screen-reader-text"><?php esc_html_e( 'Skip', 'wp-ulike' ); ?></span>
+                <span class="screen-reader-text"><?php echo esc_html( 'Skip' ); ?></span>
             </a>
     <?php }
 

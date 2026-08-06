@@ -309,7 +309,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 
 		</div>
 
-		<aside class="wp-ulike-about__aside" aria-label="<?php esc_attr_e( 'Plugin details and settings tools', 'wp-ulike' ); ?>">
+		<aside class="wp-ulike-about__aside" aria-label="<?php echo esc_attr( 'Plugin details and settings tools' ); ?>">
 			<div class="wp-ulike-about-card">
 				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Plugin info', 'wp-ulike' ); ?></h2>
 				<dl class="wp-ulike-about-meta">
