@@ -6,7 +6,7 @@ Tags: like button, post reactions, voting, engagement analytics, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.2.1
+Stable tag: 5.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,6 +157,13 @@ Free includes like buttons, a full statistics dashboard (Overview, reports, when
 No. Pro installs beside the free plugin and reads the same data. Your existing votes, counts, and settings carry over untouched. Pro also comes with a 14-day money-back guarantee.
 
 == Changelog ==
+
+= 5.2.2 =
+* Added: `[wp_ulike_top]` shortcode (and template tag) for Top List — same popular-content filters as the block.
+* Added: Customizable empty-list and toast notice texts in Settings (WPML-ready).
+* Improved: Button Customizer with responsive spacing, Likers Box preview, and clearer Removed-state styling.
+* Improved: Faster legacy-table cleanup after Pulse storage upgrade on large sites.
+* Improved: Settings translation field browser and a few admin polish fixes.
 
 = 5.2.1 =
 * Fixed: **Post Types** now correctly limits Singular auto-display. With the default Posts-only setting, like buttons no longer appear on pages (and other unlisted types).
