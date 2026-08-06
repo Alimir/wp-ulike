@@ -160,10 +160,15 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 
 = 5.2.2 =
 * Added: `[wp_ulike_top]` shortcode (and template tag) for Top List — same popular-content filters as the block.
-* Added: Customizable empty-list and toast notice texts in Settings (WPML-ready).
-* Improved: Button Customizer with responsive spacing, Likers Box preview, and clearer Removed-state styling.
-* Improved: Faster legacy-table cleanup after Pulse storage upgrade on large sites.
-* Improved: Settings translation field browser and a few admin polish fixes.
+* Added: Editable empty-state messages in Settings for Top List / widgets, plus BuddyPress and Ultimate Member like notices (WPML-ready).
+* Added: More flexible Button Customizer — dimensions, padding, margin, alignment, and a dedicated Counter section, all with per-device (desktop / tablet / mobile) controls.
+* Added: Toast Customizer for notice layout and placement (size, padding, radius, corner position, offsets) with live preview.
+* Added: Likers Customizer options (including avatar size) with a corrected Likers Box / tooltip preview.
+* Improved: Customizer preview safety (no accidental votes/navigation in the iframe) and clearer Active / Removed state styling.
+* Improved: Settings Field Browser for translation fields, with search fixes; Optiwich RTL and panel polish.
+* Improved: Faster legacy-table cleanup after Pulse storage upgrade on large sites (no slow COUNT(*) re-scans).
+* Improved: Database install/repair now surfaces specific MySQL errors on Overview and Site Health instead of a generic failure.
+* Fixed: Escaped quotes in translation strings used as form defaults and i18n/JSON data.
 
 = 5.2.1 =
 * Fixed: **Post Types** now correctly limits Singular auto-display. With the default Posts-only setting, like buttons no longer appear on pages (and other unlisted types).
