@@ -676,11 +676,19 @@
  * Notification styles
  */
 .wpulike-notification {
+  --ulp-toast-offset-x: 20px;
+  --ulp-toast-offset-y: 20px;
+  --ulp-toast-top: auto;
+  --ulp-toast-right: var(--ulp-toast-offset-x);
+  --ulp-toast-bottom: var(--ulp-toast-offset-y);
+  --ulp-toast-left: auto;
   position: fixed;
   z-index: 999999;
   pointer-events: none;
-  right: 20px;
-  bottom: 20px;
+  top: var(--ulp-toast-top);
+  right: var(--ulp-toast-right);
+  bottom: var(--ulp-toast-bottom);
+  left: var(--ulp-toast-left);
 }
 .wpulike-notification * {
   box-sizing: border-box;
@@ -768,14 +776,11 @@
   }
 }
 @media screen and (max-width: 320px) {
-  .wpulike-notification {
-    left: 10px;
-    right: 10px;
-  }
   .wpulike-notification .wpulike-message {
     padding: 9px 9px 9px 45px;
     font-size: 12px;
     width: 100%;
+    max-width: calc(100vw - var(--ulp-toast-offset-x) * 2);
   }
   .wpulike-notification .wpulike-message:before {
     background-size: 15px;
@@ -1055,8 +1060,8 @@
 }
 
 .rtl .wpulike-notification {
-  left: 20px;
-  right: inherit;
+  --ulp-toast-right: auto;
+  --ulp-toast-left: var(--ulp-toast-offset-x);
 }
 .rtl .wpulike-notification .wpulike-message {
   padding: 14px 65px 14px 15px;
@@ -1071,10 +1076,6 @@
   }
 }
 @media screen and (max-width: 320px) {
-  .rtl .wpulike-notification {
-    left: 10px;
-    right: 10px;
-  }
   .rtl .wpulike-notification .wpulike-message {
     padding: 9px 45px 9px 9px;
   }
@@ -1112,15 +1113,13 @@
   left: -3.5px;
   right: auto;
 }
-.rtl .ulf-tooltip.ulf-white-theme .ulf-arrow-left,
-.rtl .ulf-tooltip.ulf-light-theme .ulf-arrow-left {
+.rtl .ulf-tooltip.ulf-white-theme .ulf-arrow-left, .rtl .ulf-tooltip.ulf-light-theme .ulf-arrow-left {
   border-top-color: #e2e8f0;
   border-right-color: #e2e8f0;
   border-bottom-color: transparent;
   border-left-color: transparent;
 }
-.rtl .ulf-tooltip.ulf-white-theme .ulf-arrow-right,
-.rtl .ulf-tooltip.ulf-light-theme .ulf-arrow-right {
+.rtl .ulf-tooltip.ulf-white-theme .ulf-arrow-right, .rtl .ulf-tooltip.ulf-light-theme .ulf-arrow-right {
   border-bottom-color: #e2e8f0;
   border-left-color: #e2e8f0;
   border-top-color: transparent;

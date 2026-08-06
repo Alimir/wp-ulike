@@ -51,7 +51,28 @@ class WpUlikeInit {
     // frontend requests to avoid extra queries and DDL on every pageview.
     if ( self::is_admin_backend() || self::is_cron() ) {
       $this->maybe_upgrade_database();
+      $this->maybe_upgrade_customizer_css_cache();
     }
+  }
+
+  /**
+   * Bust customizer CSS cache once per plugin version when schema/output changes.
+   *
+   * Values-hash alone does not invalidate when field output rules change.
+   *
+   * @return void
+   */
+  private function maybe_upgrade_customizer_css_cache() {
+    $stored = get_option( 'wp_ulike_version', '' );
+    if ( $stored === WP_ULIKE_VERSION ) {
+      return;
+    }
+
+    if ( class_exists( 'wp_ulike_css_generator' ) ) {
+      ( new wp_ulike_css_generator() )->clear_cache();
+    }
+
+    update_option( 'wp_ulike_version', WP_ULIKE_VERSION, true );
   }
 
   private function maybe_upgrade_database(){

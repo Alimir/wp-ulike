@@ -86,9 +86,8 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 'localized_scripts' => array()
             );
 
-            // Add minified CSS/JS (always use minified versions) - Free plugin assets
-            // Cache-bust with plugin version so customizer preview picks up updates.
             $ver = defined( 'WP_ULIKE_VERSION' ) ? WP_ULIKE_VERSION : '1.0.0';
+
             $assets['css'][] = array(
                 'url'    => add_query_arg( 'ver', $ver, WP_ULIKE_ASSETS_URL . '/css/wp-ulike.min.css' ),
                 'source' => 'free',
@@ -259,6 +258,11 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                             // Also check for icon
                             if ( isset( $section['icon'] ) ) {
                                 $section_data['icon'] = $section['icon'];
+                            }
+                            if ( isset( $section['field_browser'] ) ) {
+                                $section_data['field_browser'] = (bool) $section['field_browser'];
+                                // Optiwich reads field_browser on the page for single-section customizer views.
+                                $page['field_browser'] = (bool) $section['field_browser'];
                             }
 
                             $page['sections'][] = $section_data;
@@ -788,19 +792,26 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 }
             }
 
-            // Button gallery: keep CSS :hover, but block real votes in the iframe.
+            // Keep :hover styles, but never navigate / submit / vote inside the preview iframe.
             $html .= '<script>
 (function () {
-  document.addEventListener("click", function (event) {
-    var btn = event.target && event.target.closest
-      ? event.target.closest(".ulp-customizer-button-preview .wp_ulike_btn")
-      : null;
-    if (!btn) {
-      return;
-    }
+  function block(event) {
     event.preventDefault();
     event.stopPropagation();
+  }
+  document.addEventListener("click", function (event) {
+    if (!event.target || !event.target.closest) {
+      return;
+    }
+    var el = event.target.closest(
+      "a[href], button, input[type=\\"submit\\"], input[type=\\"button\\"], .wp_ulike_btn, .ulp-share-btn, [data-ulpmodal], [data-ulpmodal-type], [data-social]"
+    );
+    if (!el) {
+      return;
+    }
+    block(event);
   }, true);
+  document.addEventListener("submit", block, true);
 })();
 </script>';
 
@@ -835,20 +846,19 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         }
         body {
             margin: 0;
-            padding: 20px;
+            padding: 16px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
             background: #f5f5f5;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
             min-height: 100vh;
             overflow-y: auto;
         }
+        .ulp-customizer-preview-root {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
         .wpulike {
             margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .wp-ulike-preview-not-found {
             padding: 2rem;
@@ -932,28 +942,90 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
             echo '<div class="ulp-customizer-preview-root ulp-customizer-button-preview">';
 
+            $first_style   = '';
+            $template_html = array();
+
             foreach ( (array) $templates as $style => $template ) {
-                if ( empty( $template['callback'] ) || ! empty( $template['is_locked'] ) ) {
+                if ( empty( $template['callback'] ) || ! is_callable( $template['callback'] ) ) {
                     continue;
                 }
                 // Emoji / star have their own customizer sections.
                 if ( ! empty( $template['is_engagement_template'] ) ) {
                     continue;
                 }
+                // Free teaser stubs are locked + fake callback — skip those.
+                // When Pro is installed, allow license-locked templates so dislike
+                // image controls still have a real up/down preview target.
+                if ( ! empty( $template['is_locked'] ) && ! defined( 'WP_ULIKE_PRO_VERSION' ) ) {
+                    continue;
+                }
 
-                $label = ! empty( $template['name'] ) ? $template['name'] : $style;
-                echo '<div class="ulp-customizer-button-preview-item">';
-                echo '<p class="ulp-customizer-preview-label">' . esc_html( $label ) . '</p>';
-                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode markup
-                echo do_shortcode(
+                $markup = do_shortcode(
                     sprintf(
                         '[wp_ulike id="%d" style="%s"]',
                         $preview_id,
                         esc_attr( $style )
                     )
                 );
+                if ( '' === trim( (string) $markup ) ) {
+                    continue;
+                }
+
+                if ( '' === $first_style ) {
+                    $first_style = $style;
+                }
+
+                $template_html[ $style ] = array(
+                    'label'  => ! empty( $template['name'] ) ? $template['name'] : $style,
+                    'markup' => $markup,
+                );
+            }
+
+            // Vote states for the first template — targets Active / Removed controls.
+            if ( $first_style && isset( $template_html[ $first_style ] ) ) {
+                $base = $template_html[ $first_style ]['markup'];
+                $states = array(
+                    'default' => array(
+                        'label'  => __( 'Normal', 'wp-ulike' ),
+                        'markup' => $base,
+                    ),
+                    'active'  => array(
+                        'label'  => __( 'Active', 'wp-ulike' ),
+                        'markup' => $this->mutate_button_preview_state( $base, 'active' ),
+                    ),
+                    'removed' => array(
+                        'label'  => __( 'Removed', 'wp-ulike' ),
+                        'markup' => $this->mutate_button_preview_state( $base, 'removed' ),
+                    ),
+                );
+
+                $first_label = $template_html[ $first_style ]['label'];
+                echo '<div class="ulp-customizer-button-preview-item ulp-customizer-button-states">';
+                echo '<p class="ulp-customizer-preview-label">' . esc_html( $first_label ) . '</p>';
+                echo '<div class="ulp-customizer-button-states-grid">';
+                foreach ( $states as $state ) {
+                    echo '<div class="ulp-customizer-button-state">';
+                    echo '<span class="ulp-customizer-button-state-name">' . esc_html( $state['label'] ) . '</span>';
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode markup
+                    echo $state['markup'];
+                    echo '</div>';
+                }
+                echo '</div></div>';
+            }
+
+            echo '<div class="ulp-customizer-button-templates">';
+            foreach ( $template_html as $style => $item ) {
+                // First template already shown in vote states.
+                if ( $style === $first_style ) {
+                    continue;
+                }
+                echo '<div class="ulp-customizer-button-preview-item">';
+                echo '<p class="ulp-customizer-preview-label">' . esc_html( $item['label'] ) . '</p>';
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode markup
+                echo $item['markup'];
                 echo '</div>';
             }
+            echo '</div>';
 
             echo '</div>';
 
@@ -961,7 +1033,43 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         }
 
         /**
-         * Likers Box preview: Inline row + Popover popup (same markup/selectors as frontend).
+         * Clone button markup into Active / Removed vote classes for preview.
+         *
+         * @param string $html  Default shortcode HTML.
+         * @param string $state active|removed.
+         * @return string
+         */
+        protected function mutate_button_preview_state( $html, $state ) {
+            if ( ! is_string( $html ) || '' === $html ) {
+                return '';
+            }
+
+            if ( 'active' === $state ) {
+                $html = str_replace(
+                    array( 'wp_ulike_is_not_liked', 'wp_ulike_is_unliked', 'wp_ulike_is_already_unliked' ),
+                    'wp_ulike_is_liked',
+                    $html
+                );
+                if ( false === strpos( $html, 'wp_ulike_btn_is_active' ) ) {
+                    $html = preg_replace( '/\bwp_ulike_btn\b/', 'wp_ulike_btn wp_ulike_btn_is_active', $html, 1 );
+                }
+                return is_string( $html ) ? $html : '';
+            }
+
+            if ( 'removed' === $state ) {
+                return str_replace(
+                    array( 'wp_ulike_is_not_liked', 'wp_ulike_is_liked', 'wp_ulike_is_already_liked', 'wp_ulike_btn_is_active' ),
+                    array( 'wp_ulike_is_unliked', 'wp_ulike_is_unliked', 'wp_ulike_is_unliked', '' ),
+                    $html
+                );
+            }
+
+            return $html;
+        }
+
+        /**
+         * Likers Box preview: Inline + Popover (stable mock markup).
+         * Extensions may append cards via `wp_ulike_customizer_likers_preview_extra`.
          *
          * @return void
          */
@@ -1003,7 +1111,13 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             echo '</div>';
             echo '</div>';
             echo '</div>';
-            echo '</div>';
+
+            /**
+             * Append extra Likers Box preview cards (e.g. Pro Pile).
+             *
+             * @since 5.2.2
+             */
+            do_action( 'wp_ulike_customizer_likers_preview_extra' );
 
             echo '</div>';
         }
@@ -1026,7 +1140,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             foreach ( $emails as $email ) {
                 $avatar = get_avatar( $email, 64, '', $user_label );
                 $items .= sprintf(
-                    '<span class="wp-ulike-liker"><a href="#" title="%1$s" onclick="return false;">%2$s</a></span>',
+                    '<span class="wp-ulike-liker"><a href="#" title="%1$s">%2$s</a></span>',
                     esc_attr( $user_label ),
                     $avatar // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_avatar()
                 );
@@ -1046,7 +1160,6 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             );
             ?>
             <div class="ulp-customizer-preview-root ulp-customizer-toast-preview">
-                <p class="ulp-customizer-preview-label"><?php esc_html_e( 'Toast Messages', 'wp-ulike' ); ?></p>
                 <div class="<?php echo esc_attr( implode( ' ', $notification_classes ) ); ?>">
                     <div class="wpulike-message">
                         <strong><?php esc_html_e( 'Info', 'wp-ulike' ); ?></strong> <?php esc_html_e( 'Please wait...', 'wp-ulike' ); ?>
