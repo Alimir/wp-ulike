@@ -253,6 +253,19 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn',
                                     ),
                                     array(
+                                        'id'          => 'normal_icon_color',
+                                        'type'        => 'color',
+                                        'output_mode' => 'filter',
+                                        'title'       => esc_html__( 'Icon Color', 'wp-ulike' ),
+                                        'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn.wp_ulike_put_image::after',
+                                        'output_also' => array(
+                                            array(
+                                                'selector' => '.wpulike-animated-heart .wp_ulike_general_class .wp_ulike_btn .wpulike-svg-heart',
+                                                'property' => 'fill',
+                                            ),
+                                        ),
+                                    ),
+                                    array(
                                         'id'     => 'normal_border',
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
@@ -296,6 +309,20 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn:hover',
                                     ),
                                     array(
+                                        'id'               => 'hover_icon_color',
+                                        'type'             => 'color',
+                                        'output_mode'      => 'filter',
+                                        'output_important' => true,
+                                        'title'            => esc_html__( 'Icon Color', 'wp-ulike' ),
+                                        'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn.wp_ulike_put_image:hover::after',
+                                        'output_also'      => array(
+                                            array(
+                                                'selector' => '.wpulike-animated-heart .wp_ulike_general_class .wp_ulike_btn:hover .wpulike-svg-heart',
+                                                'property' => 'fill',
+                                            ),
+                                        ),
+                                    ),
+                                    array(
                                         'id'               => 'hover_border',
                                         'type'             => 'border',
                                         'output_important' => true,
@@ -330,6 +357,20 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn.wp_ulike_btn_is_active',
                                     ),
                                     array(
+                                        'id'               => 'active_icon_color',
+                                        'type'             => 'color',
+                                        'output_mode'      => 'filter',
+                                        'output_important' => true,
+                                        'title'            => esc_html__( 'Icon Color', 'wp-ulike' ),
+                                        'output'           => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .wp_ulike_btn.wp_ulike_btn_is_active.wp_ulike_put_image::after',
+                                        'output_also'      => array(
+                                            array(
+                                                'selector' => '.wpulike-animated-heart .wp_ulike_general_class .wp_ulike_btn.wp_ulike_btn_is_active .wpulike-svg-heart',
+                                                'property' => 'fill',
+                                            ),
+                                        ),
+                                    ),
+                                    array(
                                         'id'     => 'active_border',
                                         'type'   => 'border',
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
@@ -360,6 +401,19 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output_mode' => 'background-color',
                                         'title'       => esc_html__( 'Background', 'wp-ulike' ),
                                         'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .wp_ulike_btn, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .wp_ulike_btn',
+                                    ),
+                                    array(
+                                        'id'          => 'removed_icon_color',
+                                        'type'        => 'color',
+                                        'output_mode' => 'filter',
+                                        'title'       => esc_html__( 'Icon Color', 'wp-ulike' ),
+                                        'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_unliked .wp_ulike_btn.wp_ulike_put_image::after, .wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class.wp_ulike_is_already_unliked .wp_ulike_btn.wp_ulike_put_image::after',
+                                        'output_also' => array(
+                                            array(
+                                                'selector' => '.wpulike-animated-heart .wp_ulike_general_class.wp_ulike_is_unliked .wp_ulike_btn .wpulike-svg-heart, .wpulike-animated-heart .wp_ulike_general_class.wp_ulike_is_already_unliked .wp_ulike_btn .wpulike-svg-heart',
+                                                'property' => 'fill',
+                                            ),
+                                        ),
                                     ),
                                     array(
                                         'id'     => 'removed_border',

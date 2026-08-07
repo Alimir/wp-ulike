@@ -505,6 +505,40 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
             switch ( $field_type ) {
                 case 'color':
                     $property = $output_mode ? $output_mode : 'color';
+
+                    // Icon colors on background-image SVGs → CSS filter chain.
+                    if ( 'filter' === $property ) {
+                        $filter_value = class_exists( 'wp_ulike_color_filter' )
+                            ? wp_ulike_color_filter::from_color( $value )
+                            : '';
+                        if ( $filter_value ) {
+                            $outputs[] = array(
+                                'selector' => $selector,
+                                'property' => 'filter',
+                                'value'    => $filter_value . $important,
+                            );
+                        }
+
+                        // Inline SVGs (Animated Heart) still take a real fill color.
+                        if ( ! empty( $field['output_also'] ) && is_array( $field['output_also'] ) ) {
+                            foreach ( $field['output_also'] as $extra ) {
+                                if ( empty( $extra['selector'] ) || ! is_string( $extra['selector'] ) ) {
+                                    continue;
+                                }
+                                $extra_prop = ! empty( $extra['property'] ) ? $extra['property'] : 'fill';
+                                $extra_val  = $this->sanitize_css_value( $value, $extra_prop );
+                                if ( $extra_val ) {
+                                    $outputs[] = array(
+                                        'selector' => $extra['selector'],
+                                        'property' => $extra_prop,
+                                        'value'    => $extra_val . $important,
+                                    );
+                                }
+                            }
+                        }
+                        break;
+                    }
+
                     $css_value = $this->sanitize_css_value( $value, $property );
                     if ( $css_value ) {
                         $outputs[] = array(
@@ -1050,7 +1084,7 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 'background', 'background-color', 'background-image', 'background-repeat',
                 'background-position', 'background-size', 'background-attachment',
                 'display', 'position', 'top', 'right', 'bottom', 'left', 'z-index',
-                'opacity', 'transform', 'transition', 'box-shadow', 'text-shadow',
+                'opacity', 'transform', 'transition', 'box-shadow', 'text-shadow', 'filter', 'fill',
                 'border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius',
                 'flex', 'flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-content',
                 'grid', 'grid-template-columns', 'grid-template-rows', 'grid-gap', 'gap'
@@ -1126,8 +1160,8 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                     return esc_attr( $sanitized );
                 }
 
-                // Color values (hex, rgb, rgba, hsl, hsla, named colors, CSS variables)
-                if ( strpos( $prop_lower, 'color' ) !== false || $prop_lower === 'border-color' ) {
+                // Color values (hex, rgb, rgba, hsl, hsla, named colors, CSS variables, SVG fill)
+                if ( strpos( $prop_lower, 'color' ) !== false || $prop_lower === 'border-color' || $prop_lower === 'fill' ) {
                     return $this->sanitize_color_value( $sanitized );
                 }
 

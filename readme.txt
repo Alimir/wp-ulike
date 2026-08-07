@@ -161,7 +161,7 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 = 5.2.2 =
 * Added: `[wp_ulike_top]` shortcode (and template tag) for Top List — same popular-content filters as the block.
 * Added: Editable empty-state messages in Settings for Top List / widgets, plus BuddyPress and Ultimate Member like notices (WPML-ready).
-* Added: More flexible Button Customizer — dimensions, padding, margin, alignment, and a dedicated Counter section, all with per-device (desktop / tablet / mobile) controls.
+* Added: More flexible Button Customizer — dimensions, padding, margin, alignment, Icon Color (per state), and a dedicated Counter section, all with per-device (desktop / tablet / mobile) controls.
 * Added: Toast Customizer for notice layout and placement (size, padding, radius, corner position, offsets) with live preview.
 * Added: Likers Customizer options (including avatar size) with a corrected Likers Box / tooltip preview.
 * Improved: Customizer preview safety (no accidental votes/navigation in the iframe) and clearer Active / Removed state styling.
