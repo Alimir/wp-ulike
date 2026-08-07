@@ -252,7 +252,6 @@ add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 
 /**
  * Register Go Pro submenu (free installs only).
- * Always-on upgrade path (matches always-on stats/settings Pro upsells).
  *
  * @return void
  */

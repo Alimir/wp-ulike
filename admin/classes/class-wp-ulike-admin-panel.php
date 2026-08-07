@@ -374,45 +374,50 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'fields' => $content_types_fields
             );
 
-            // Profiles
-            $sections[] = array(
-                'id'     => 'profiles',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Profiles','wp-ulike'),
-                'icon'   => 'user',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
-            );
+            // Pro panels when Pro is active; locked teasers after 10 likes on free.
+            $show_pro_sections = defined( 'WP_ULIKE_PRO_VERSION' ) || wp_ulike_should_show_pro_upsells();
 
-            // Login & Signup
-            $sections[] = array(
-                'id'     => 'login-signup',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Login & Signup','wp-ulike'),
-                'icon'   => 'key',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
-            );
+            if ( $show_pro_sections ) {
+                // Profiles
+                $sections[] = array(
+                    'id'     => 'profiles',
+                    'parent' => 'configuration',
+                    'title'  => esc_html__( 'Profiles','wp-ulike'),
+                    'icon'   => 'user',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
+                );
 
-            // Social login integration
-            $sections[] = array(
-                'id'     => 'social-logins',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Social Logins','wp-ulike'),
-                'icon'   => 'user-group',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
-            );
+                // Login & Signup
+                $sections[] = array(
+                    'id'     => 'login-signup',
+                    'parent' => 'configuration',
+                    'title'  => esc_html__( 'Login & Signup','wp-ulike'),
+                    'icon'   => 'key',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
+                );
 
-            // Share buttons
-            $sections[] = array(
-                'id'     => 'share-buttons',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Share Buttons','wp-ulike'),
-                'icon'   => 'share',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
-            );
+                // Social login integration
+                $sections[] = array(
+                    'id'     => 'social-logins',
+                    'parent' => 'configuration',
+                    'title'  => esc_html__( 'Social Logins','wp-ulike'),
+                    'icon'   => 'user-group',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
+                );
+
+                // Share buttons
+                $sections[] = array(
+                    'id'     => 'share-buttons',
+                    'parent' => 'configuration',
+                    'title'  => esc_html__( 'Share Buttons','wp-ulike'),
+                    'icon'   => 'share',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
+                );
+            }
 
             /**
              * Translations Section
@@ -530,15 +535,17 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 ) ),
             );
 
-            // Emails
-            $sections[] = array(
-                'id'     => 'emails',
-                'parent' => 'translations',
-                'title'  => esc_html__( 'Emails','wp-ulike'),
-                'icon'   => 'envelope',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_emails', $this->get_pro_lock_field( 'emails' ) )
-            );
+            // Emails (Pro)
+            if ( $show_pro_sections ) {
+                $sections[] = array(
+                    'id'     => 'emails',
+                    'parent' => 'translations',
+                    'title'  => esc_html__( 'Emails','wp-ulike'),
+                    'icon'   => 'envelope',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_emails', $this->get_pro_lock_field( 'emails' ) )
+                );
+            }
 
             /**
              * Developer Tools (section id kept as `customization` for filter/backward compatibility).
