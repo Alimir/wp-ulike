@@ -349,7 +349,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 $content_types_fields[] = array(
                     'id'         => 'buddypress_group',
                     'type'       => 'fieldset',
-                    'title'      => esc_html__('BuddyPress'),
+                    'title'      => esc_html__( 'BuddyPress', 'wp-ulike' ),
                     'fields'     => $buddypress_options,
                     'display_as' => 'section' // Mark as section menu
                 );
@@ -360,7 +360,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 $content_types_fields[] = array(
                     'id'         => 'bbpress_group',
                     'type'       => 'fieldset',
-                    'title'      => esc_html__('bbPress'),
+                    'title'      => esc_html__( 'bbPress', 'wp-ulike' ),
                     'fields'     => $bbPress_options,
                     'display_as' => 'section' // Mark as section menu
                 );
@@ -374,45 +374,50 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'fields' => $content_types_fields
             );
 
-            // Profiles
-            $sections[] = array(
-                'id'     => 'profiles',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Profiles','wp-ulike'),
-                'icon'   => 'user',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
-            );
+            // Pro panels when Pro is active; locked teasers after 10 likes on free.
+            $show_pro_sections = defined( 'WP_ULIKE_PRO_VERSION' ) || wp_ulike_should_show_pro_upsells();
 
-            // Login & Signup
-            $sections[] = array(
-                'id'     => 'login-signup',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Login & Signup','wp-ulike'),
-                'icon'   => 'key',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
-            );
+            if ( $show_pro_sections ) {
+                // Profiles
+                $sections[] = array(
+                    'id'     => 'profiles',
+                    'parent' => 'configuration',
+                    'title'  => esc_html__( 'Profiles','wp-ulike'),
+                    'icon'   => 'user',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
+                );
 
-            // Social login integration
-            $sections[] = array(
-                'id'     => 'social-logins',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Social Logins','wp-ulike'),
-                'icon'   => 'user-group',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
-            );
+                // Login & Signup
+                $sections[] = array(
+                    'id'     => 'login-signup',
+                    'parent' => 'configuration',
+                    'title'  => esc_html__( 'Login & Signup','wp-ulike'),
+                    'icon'   => 'key',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
+                );
 
-            // Share buttons
-            $sections[] = array(
-                'id'     => 'share-buttons',
-                'parent' => 'configuration',
-                'title'  => esc_html__( 'Share Buttons','wp-ulike'),
-                'icon'   => 'share',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
-            );
+                // Social login integration
+                $sections[] = array(
+                    'id'     => 'social-logins',
+                    'parent' => 'configuration',
+                    'title'  => esc_html__( 'Social Logins','wp-ulike'),
+                    'icon'   => 'user-group',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
+                );
+
+                // Share buttons
+                $sections[] = array(
+                    'id'     => 'share-buttons',
+                    'parent' => 'configuration',
+                    'title'  => esc_html__( 'Share Buttons','wp-ulike'),
+                    'icon'   => 'share',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
+                );
+            }
 
             /**
              * Translations Section
@@ -424,75 +429,126 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             );
 
             $sections[] = array(
-                'id'     => 'strings',
-                'title'  => esc_html__( 'Strings','wp-ulike'),
-                'parent' => 'translations',
-                'icon'   => 'document-text',
-                'fields' => apply_filters( 'wp_ulike_panel_translations', array(
+                'id'            => 'strings',
+                'title'         => esc_html__( 'Strings','wp-ulike'),
+                'parent'        => 'translations',
+                'icon'          => 'document-text',
+                'field_browser' => true,
+                'fields'        => apply_filters( 'wp_ulike_panel_translations', array(
+                    array(
+                        'id'      => 'heading_vote_notices',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'Vote Notices', 'wp-ulike' ),
+                    ),
                     array(
                         'id'      => 'validate_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'Your vote cannot be submitted at this time.','wp-ulike'),
+                        'default' => __( 'Your vote cannot be submitted at this time.','wp-ulike'),
                         'title'   => esc_html__( 'Validation Notice Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Message shown when a vote cannot be processed due to validation errors.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'already_registered_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'You have already registered a vote.','wp-ulike'),
+                        'default' => __( 'You have already registered a vote.','wp-ulike'),
                         'title'   => esc_html__( 'Already Voted Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Message shown when a user tries to vote again after already voting.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'login_required_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'You Should Login To Submit Your Like','wp-ulike'),
+                        'default' => __( 'You Should Login To Submit Your Like','wp-ulike'),
                         'title'   => esc_html__( 'Login Required Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Message shown to visitors who need to log in before they can vote.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'like_notice',
                         'type'    => 'text',
-                        'default' => esc_html__('Thanks! You Liked This.','wp-ulike'),
+                        'default' => __('Thanks! You Liked This.','wp-ulike'),
                         'title'   => esc_html__( 'Liked Notice Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Confirmation message shown after a user successfully likes content.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'unlike_notice',
                         'type'    => 'text',
-                        'default' => esc_html__('Sorry! You unliked this.','wp-ulike'),
+                        'default' => __('Sorry! You unliked this.','wp-ulike'),
                         'title'   => esc_html__( 'Unliked Notice Message', 'wp-ulike'),
                         'desc'    => esc_html__( 'Confirmation message shown after a user removes their like.', 'wp-ulike')
                     ),
                     array(
                         'id'      => 'ajax_error_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ),
+                        'default' => __( 'Could not save your vote. Please refresh the page and try again.', 'wp-ulike' ),
                         'title'   => esc_html__( 'Connection Error Message', 'wp-ulike' ),
                         'desc'    => esc_html__( 'Message shown when a vote cannot be saved due to a network or server error.', 'wp-ulike' ),
                     ),
                     array(
-                        'id'      => 'like_button_aria_label',
+                        'id'      => 'heading_widgets_lists',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'Widgets & Lists', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'no_results_notice',
                         'type'    => 'text',
-                        'default' => esc_html__( 'Like Button','wp-ulike'),
-                        'title'   => esc_html__( 'Like Button Aria Label', 'wp-ulike'),
-                        'desc'    => esc_html__( 'Accessibility label for screen readers. Helps visually impaired users understand what the button does.', 'wp-ulike')
-                    )
-                ) )
+                        'default' => __( 'No results were found in "%s" period', 'wp-ulike' ),
+                        'title'   => esc_html__( 'No Results Message', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Empty state for Top List and widgets. Use %s for the selected period.', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'user_no_likes_notice',
+                        'type'    => 'text',
+                        'default' => __( 'you haven\'t liked any post yet!', 'wp-ulike' ),
+                        'title'   => esc_html__( 'User Has No Likes Message', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Message shown in the widget when the current user has not liked any posts yet.', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'heading_buddypress',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'BuddyPress', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'bp_multiple_likes_notice',
+                        'type'    => 'text',
+                        'default' => __( 'You have %1$d new %2$s likes', 'wp-ulike' ),
+                        'title'   => esc_html__( 'BuddyPress Multiple Likes Notification', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Use %1$d for the count and %2$s for the content type (e.g. Posts).', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'bp_single_like_notice',
+                        'type'    => 'text',
+                        'default' => __( '%1$s liked one of your %2$s', 'wp-ulike' ),
+                        'title'   => esc_html__( 'BuddyPress Single Like Notification', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Use %1$s for the user name and %2$s for the content type.', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'heading_ultimate_member',
+                        'type'    => 'heading',
+                        'content' => esc_html__( 'Ultimate Member', 'wp-ulike' ),
+                    ),
+                    array(
+                        'id'      => 'um_no_likes_notice',
+                        'type'    => 'text',
+                        'default' => __( 'This user has not made any likes.', 'wp-ulike' ),
+                        'title'   => esc_html__( 'Ultimate Member No Likes Message', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Empty state shown on Ultimate Member profile like tabs.', 'wp-ulike' ),
+                    ),
+                ) ),
             );
 
-            // Emails
-            $sections[] = array(
-                'id'     => 'emails',
-                'parent' => 'translations',
-                'title'  => esc_html__( 'Emails','wp-ulike'),
-                'icon'   => 'envelope',
-                'is_pro' => true,
-                'fields' => apply_filters( 'wp_ulike_panel_emails', $this->get_pro_lock_field( 'emails' ) )
-            );
+            // Emails (Pro)
+            if ( $show_pro_sections ) {
+                $sections[] = array(
+                    'id'     => 'emails',
+                    'parent' => 'translations',
+                    'title'  => esc_html__( 'Emails','wp-ulike'),
+                    'icon'   => 'envelope',
+                    'is_pro' => true,
+                    'fields' => apply_filters( 'wp_ulike_panel_emails', $this->get_pro_lock_field( 'emails' ) )
+                );
+            }
 
             /**
-             * Customization Section
+             * Developer Tools (section id kept as `customization` for filter/backward compatibility).
              */
             $sections[] = array(
                 'id'    => 'customization',
@@ -619,7 +675,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'id'          => 'auto_display_filter_post_types',
                     'type'        => 'select',
                     'title'       => esc_html__( 'Post Types', 'wp-ulike' ),
-                    'placeholder' => esc_html__( 'Select post types','wp-ulike' ),
+                    'placeholder' => esc_html__( 'Select post types', 'wp-ulike' ),
                     'desc'        => esc_html__( 'On Singular views, only these post types get the button. Default is Posts. Add Pages (or other types) if you need them. If Singular is unchecked, these types still show as exceptions.', 'wp-ulike' ),
                     'chosen'      => true,
                     'multiple'    => true,
@@ -653,7 +709,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'type'    => 'text',
                                     'title'   => esc_html__('Button Label','wp-ulike'),
                                     'desc'    => esc_html__('Text displayed on the like button (e.g., "Like", "👍", "Love").', 'wp-ulike'),
-                                    'default' => esc_html__('Like', 'wp-ulike')
+                                    'default' => __('Like', 'wp-ulike')
                                 ),
                             )
                         ),
@@ -665,7 +721,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                                     'type'    => 'text',
                                     'title'   => esc_html__('Button Label','wp-ulike'),
                                     'desc'    => esc_html__('Text displayed on the button after liking (e.g., "Liked", "❤️", "Unlike").', 'wp-ulike'),
-                                    'default' => esc_html__('Liked', 'wp-ulike')
+                                    'default' => __('Liked', 'wp-ulike')
                                 ),
                             )
                         ),
@@ -996,7 +1052,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'profiles' => array(
                     'id'          => 'wp_ulike_pro_profiles_lock',
                     'title'       => esc_html__( 'User Profiles', 'wp-ulike' ),
-                    'description' => esc_html( 'Show like history and engagement on Instagram-style profile pages.' ),
+                    'description' => esc_html__( 'Show like history and engagement on Instagram-style profile pages.', 'wp-ulike' ),
                     'features'    => array(
                         esc_html__( 'Like history and engagement stats', 'wp-ulike' ),
                         esc_html__( 'Custom profile layouts', 'wp-ulike' ),
@@ -1006,7 +1062,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         array(
                             'type'  => 'switcher',
                             'title' => sprintf( esc_html__('Enable %s', 'wp-ulike'), esc_html__('User Profiles', 'wp-ulike') ),
-                            'desc'  => 'Create custom user profile pages where users can view and manage their information, activity, and preferences.',
+                            'desc'  => esc_html__( 'Create custom user profile pages where users can view and manage their information, activity, and preferences.', 'wp-ulike' ),
                         ),
                         array(
                             'type'  => 'select',
@@ -1026,7 +1082,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'forms' => array(
                     'id'          => 'wp_ulike_pro_forms_lock',
                     'title'       => esc_html__( 'Ajax Login & Register', 'wp-ulike' ),
-                    'description' => esc_html( 'AJAX login and registration without full page reloads.' ),
+                    'description' => esc_html__( 'AJAX login and registration without full page reloads.', 'wp-ulike' ),
                     'features'    => array(
                         esc_html__( 'Login and register without reload', 'wp-ulike' ),
                         esc_html__( 'Custom branded pages', 'wp-ulike' ),
@@ -1036,7 +1092,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         array(
                             'type'  => 'select',
                             'title' => sprintf( esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Login', 'wp-ulike') ),
-                            'desc'  => 'Choose the page that contains your login form shortcode. This page will be used for user authentication.',
+                            'desc'  => esc_html__( 'Choose the page that contains your login form shortcode. This page will be used for user authentication.', 'wp-ulike' ),
                         ),
                         array(
                             'type'  => 'text',
@@ -1056,7 +1112,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'social_logins' => array(
                     'id'          => 'wp_ulike_pro_social_logins_lock',
                     'title'       => esc_html__( 'Social Login', 'wp-ulike' ),
-                    'description' => esc_html( 'One-click sign-in with Google, Facebook, GitHub, and more.' ),
+                    'description' => esc_html__( 'One-click sign-in with Google, Facebook, GitHub, and more.', 'wp-ulike' ),
                     'features'    => array(
                         esc_html__( '14+ social networks', 'wp-ulike' ),
                         esc_html__( 'Works with login forms', 'wp-ulike' ),
@@ -1066,7 +1122,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         array(
                             'type'  => 'switcher',
                             'title' => esc_html__('Enable Social Logins', 'wp-ulike'),
-                            'desc'  => 'Allow users to log in or register using their social media accounts instead of creating a new account.',
+                            'desc'  => esc_html__( 'Allow users to log in or register using their social media accounts instead of creating a new account.', 'wp-ulike' ),
                         ),
                         array(
                             'type'  => 'group',
@@ -1086,7 +1142,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'share_buttons' => array(
                     'id'          => 'wp_ulike_pro_share_buttons_lock',
                     'title'       => esc_html__( 'Social Share Buttons', 'wp-ulike' ),
-                    'description' => esc_html( 'Share buttons for 23+ networks next to your like buttons.' ),
+                    'description' => esc_html__( 'Share buttons for 23+ networks next to your like buttons.', 'wp-ulike' ),
                     'features'    => array(
                         esc_html__( '23+ social networks', 'wp-ulike' ),
                         esc_html__( 'Auto-display with likes', 'wp-ulike' ),
@@ -1095,7 +1151,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'field_pattern' => array(
                         array(
                             'type'  => 'group',
-                            'title' => esc_html__('Add Share Items', 'wp-ulike'),
+                            'title' => esc_html__( 'Add Share Items', 'wp-ulike' ),
                         ),
                     ), // Share buttons uses group repeater style (matches Pro exactly - shows actual repeater)
                     'read_more_url' => add_query_arg(
@@ -1111,7 +1167,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 'emails' => array(
                     'id'          => 'wp_ulike_pro_emails_lock',
                     'title'       => esc_html__( 'Email Templates', 'wp-ulike' ),
-                    'description' => esc_html( 'Customize welcome, password reset, and notification emails.' ),
+                    'description' => esc_html__( 'Customize welcome, password reset, and notification emails.', 'wp-ulike' ),
                     'features'    => array(
                         esc_html__( 'Custom email templates', 'wp-ulike' ),
                         esc_html__( 'HTML formatting & variables', 'wp-ulike' ),

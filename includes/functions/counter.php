@@ -68,7 +68,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 		$meta_status      = wp_ulike_get_base_vote_status( $requested_status );
 
 		if( ( empty( $ID ) && !is_numeric($ID) ) || empty( $type ) ){
-			return new WP_Error( 'broke', esc_html__( "Please enter some value for required variables.", 'wp-ulike' ) );
+			return new WP_Error( 'broke', __( 'Please enter some value for required variables.', 'wp-ulike' ) );
 		}
 
 		// Only like/dislike are safe to serve from the meta cache: those are the
@@ -93,7 +93,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			// get table info
 			$table_info   = wp_ulike_get_table_info( $type );
 			if( empty( $table_info ) ){
-				return new WP_Error( 'broke', esc_html__( "Table info is empty.", 'wp-ulike' ) );
+				return new WP_Error( 'broke', __( 'Table info is empty.', 'wp-ulike' ) );
 			}
 
 			$table = isset( $table_info['table'] ) ? $table_info['table'] : '';

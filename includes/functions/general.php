@@ -513,12 +513,6 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 					$return_style .= '.rtl .wpulike-default .count-box:before{border-color:'.$border.' transparent transparent '.$border.';}';
 				}
 			}
-		} else {
-			$customizer_options = get_option( 'wp_ulike_customize' );
-
-			if( ! empty($customizer_options['button_align']) ){
-				$return_style .= sprintf( '.wpulike{text-align:%1$s !important; justify-content: %1$s !important;}', $customizer_options['button_align'] );
-			}
 		}
 
 		// Custom Spinner
@@ -590,7 +584,7 @@ if( ! function_exists('wp_ulike_html_entity_decode') ){
 	 * @return string
 	 */
 	function wp_ulike_html_entity_decode( $value ){
-		return html_entity_decode( (string) $value );
+		return html_entity_decode( (string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	}
 }
 

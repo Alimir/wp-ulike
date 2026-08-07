@@ -252,6 +252,8 @@
 			var locations = collectLocations( form );
 			var requireNote = checked.getAttribute( 'data-require-note' ) === '1';
 
+			// Soft gate: not_working accepts note OR location; other needs a note.
+			// Skip always deactivates with zero friction.
 			if ( requireNote ) {
 				var hasSignal = details !== '' || ( reason === 'not_working' && locations.length > 0 );
 				if ( ! hasSignal ) {

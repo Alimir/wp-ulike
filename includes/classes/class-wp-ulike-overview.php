@@ -584,7 +584,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			global $wpdb;
 
 			$result = $wpdb->get_var(
-				$wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name )
+				$wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) )
 			);
 
 			return $result === $table_name;
@@ -909,6 +909,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			if ( ! $force_refresh ) {
 				$cached = get_transient( self::get_health_report_cache_key() );
 				if ( is_array( $cached ) ) {
+					// Keep CREATE errors fresh — they change on activate/repair.
+					$cached['install_errors'] = class_exists( 'wp_ulike_activator' )
+						? wp_ulike_activator::get_install_errors()
+						: array();
 					return $cached;
 				}
 			}
@@ -943,6 +947,9 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			$report = array(
 				'tables_ok'              => $tables_health['tables_ok'],
 				'missing_tables'         => $tables_health['missing_tables'],
+				'install_errors'         => class_exists( 'wp_ulike_activator' )
+					? wp_ulike_activator::get_install_errors()
+					: array(),
 				'is_pro'                 => defined( 'WP_ULIKE_PRO_VERSION' ),
 				'auto_display'           => $auto_display,
 				'comments_auto_display'  => wp_ulike_setting_repo::isAutoDisplayOn( 'comment' ),
@@ -1021,7 +1028,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function import_settings( $payload ) {
 			if ( ! array_key_exists( 'settings', $payload ) || ! is_array( $payload['settings'] ) ) {
-				return new WP_Error( 'invalid_payload', esc_html__( 'Invalid settings file. Expected a JSON export from Help → Settings backup.', 'wp-ulike' ) );
+				return new WP_Error( 'invalid_payload', __( 'Invalid settings file. Expected a JSON export from Help → Settings backup.', 'wp-ulike' ) );
 			}
 
 			$settings = $payload['settings'];

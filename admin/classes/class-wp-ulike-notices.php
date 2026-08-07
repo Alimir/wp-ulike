@@ -35,7 +35,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             $this->args = wp_parse_args( $args, $defaults );
 
             if( empty( $this->args['id'] ) ){
-                return new WP_Error( 'missing_id', esc_html__( "You need to enter a unique id for notice.", 'wp-ulike' ) );
+                return new WP_Error( 'missing_id', __( 'You need to enter a unique id for notice.', 'wp-ulike' ) );
             }
 
             if( is_array( $this->args['dismissible'] ) ){
@@ -194,7 +194,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             if( $this->args['has_close'] ){
     ?>
             <a href="<?php echo esc_url( $this->get_nonce_url() ); ?>" class="notice-dismiss wp-ulike-skip-notice wp-ulike-close-notice">
-                <span class="screen-reader-text"><?php esc_html_e( 'Skip', 'wp-ulike' ); ?></span>
+                <span class="screen-reader-text"><?php echo esc_html( 'Skip' ); ?></span>
             </a>
     <?php }
 

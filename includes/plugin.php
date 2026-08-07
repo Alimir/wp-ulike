@@ -51,13 +51,36 @@ class WpUlikeInit {
     // frontend requests to avoid extra queries and DDL on every pageview.
     if ( self::is_admin_backend() || self::is_cron() ) {
       $this->maybe_upgrade_database();
+      $this->maybe_upgrade_customizer_css_cache();
     }
+  }
+
+  /**
+   * Bust customizer CSS cache once per plugin version when schema/output changes.
+   *
+   * Values-hash alone does not invalidate when field output rules change.
+   *
+   * @return void
+   */
+  private function maybe_upgrade_customizer_css_cache() {
+    $stored = get_option( 'wp_ulike_version', '' );
+    if ( $stored === WP_ULIKE_VERSION ) {
+      return;
+    }
+
+    if ( class_exists( 'wp_ulike_css_generator' ) ) {
+      ( new wp_ulike_css_generator() )->clear_cache();
+    }
+
+    update_option( 'wp_ulike_version', WP_ULIKE_VERSION, true );
   }
 
   private function maybe_upgrade_database(){
     $stored = get_option( 'wp_ulike_dbVersion', false );
 
     // Fresh installs set wp_ulike_dbVersion during activation.
+    // Do not CREATE on every admin load — that can spam MySQL when privileges fail.
+    // Missing tables are created only on activate, repair, or DB version upgrade.
     if ( false === $stored ) {
       return;
     }
@@ -87,10 +110,6 @@ class WpUlikeInit {
       }
 
       update_option( 'wp_ulike_dbVersion', $target );
-    }
-
-    if ( ! WP_Ulike_Meta_Schema::table_exists() || ! WP_Ulike_Pulse_Schema::table_exists() ) {
-      wp_ulike_activator::get_instance()->install_tables( false, false );
     }
   }
 

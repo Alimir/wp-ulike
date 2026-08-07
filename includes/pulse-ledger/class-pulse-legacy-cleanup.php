@@ -14,8 +14,6 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 	final class WP_Ulike_Pulse_Legacy_Cleanup {
 
 		const OPTION_DROPPED_AT = 'wp_ulike_pulse_legacy_dropped_at';
-		const VERIFY_CACHE_TRANSIENT = 'wp_ulike_pulse_can_drop_legacy';
-		const VERIFY_CACHE_TTL       = 60;
 
 		/**
 		 * @return bool
@@ -46,39 +44,31 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 		}
 
 		/**
-		 * Whether the cleanup UI may offer the drop button (cheap — no COUNT scans).
+		 * Whether the cleanup UI may offer the drop button.
 		 *
-		 * Uses progress-only verification. Deep COUNT(*) runs only at drop time
-		 * via can_drop_legacy( true ).
+		 * Same gate as can_drop_legacy() so the button never promises a drop
+		 * that the action will refuse.
 		 *
 		 * @return bool
 		 */
 		public static function can_offer_drop() {
-			if ( WP_Ulike_Pulse_Config::MODE_PULSE !== WP_Ulike_Pulse_Config::mode() ) {
-				return false;
-			}
-
-			if ( ! self::legacy_tables_exist() ) {
-				return false;
-			}
-
-			$verify = WP_Ulike_Pulse_Sync::verify( false );
-
-			return ! empty( $verify['ok'] );
+			return self::can_drop_legacy();
 		}
 
 		/**
 		 * Whether it is safe to permanently drop legacy tables.
 		 *
-		 * Forces a deep COUNT(*)/COUNT(DISTINCT) verification — slow on huge
-		 * tables. Call only at drop time (or CLI), never on every page view.
-		 * drop_legacy_tables() always passes $bypass_cache=true so the
-		 * irreversible DROP never trusts a stale cached "ok".
+		 * Requires Pulse mode + migration marked complete (progress-only).
+		 * Deep COUNT(*) scans are intentionally not required: once reads/writes
+		 * are on Pulse, legacy tables are unused leftovers. Re-scanning huge
+		 * tables timed out or false-negatived many sites at drop time.
 		 *
-		 * @param bool $bypass_cache Force a fresh deep verify.
+		 * @param bool $bypass_cache Unused; kept for call-site BC.
 		 * @return bool
 		 */
 		public static function can_drop_legacy( $bypass_cache = false ) {
+			unset( $bypass_cache );
+
 			if ( WP_Ulike_Pulse_Config::MODE_PULSE !== WP_Ulike_Pulse_Config::mode() ) {
 				return false;
 			}
@@ -87,19 +77,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 				return false;
 			}
 
-			if ( ! $bypass_cache ) {
-				$cached = get_transient( self::VERIFY_CACHE_TRANSIENT );
-				if ( false !== $cached ) {
-					return (bool) $cached;
-				}
-			}
+			// Same progress-only check used when enabling Pulse — no COUNT scans.
+			$verify = WP_Ulike_Pulse_Sync::verify( false );
 
-			$verify = WP_Ulike_Pulse_Sync::verify( true );
-			$ok     = ! empty( $verify['ok'] );
-
-			set_transient( self::VERIFY_CACHE_TRANSIENT, $ok, self::VERIFY_CACHE_TTL );
-
-			return $ok;
+			return ! empty( $verify['ok'] );
 		}
 
 		/**
@@ -108,10 +89,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Legacy_Cleanup' ) ) {
 		public static function drop_legacy_tables() {
 			global $wpdb;
 
-			// Bypass the cache used for admin-page rendering: this action is
-			// irreversible, so it must re-verify against current data, not a
-			// result that may be up to VERIFY_CACHE_TTL seconds stale.
-			if ( ! self::can_drop_legacy( true ) ) {
+			if ( ! self::can_drop_legacy() ) {
 				return array(
 					'ok'      => false,
 					'dropped' => array(),

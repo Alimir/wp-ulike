@@ -765,6 +765,19 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
     }
 }
 
+if ( ! function_exists( 'wp_ulike_should_show_pro_upsells' ) ) {
+	/**
+	 * Soft Pro teasers (locked settings tabs) after 10 likes on free installs.
+	 * Go Pro menu and stats sidebar banner stay always-on.
+	 *
+	 * @since 5.2.2
+	 * @return bool
+	 */
+	function wp_ulike_should_show_pro_upsells() {
+		return ! defined( 'WP_ULIKE_PRO_VERSION' ) && wp_ulike_count_all_logs() >= 10;
+	}
+}
+
 if( ! function_exists('wp_ulike_count_current_fingerprint') ){
 	/**
 	 * Check if user fingerprint has exceeded vote limit for the given item.

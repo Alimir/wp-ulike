@@ -63,7 +63,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			if( empty( $posts ) ){
 				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
-				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', 'wp-ulike' ), $period_info, esc_html__( 'period', 'wp-ulike' ) );
+				return '<li>' . wp_ulike_setting_repo::getNoResultsNotice( $period_info ) . '</li>';
 			}
 
 			foreach ($posts as $post) {
@@ -131,7 +131,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			if( empty( $comments ) ){
 				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
-				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', 'wp-ulike' ), $period_info, esc_html__( 'period', 'wp-ulike' ) );
+				return '<li>' . wp_ulike_setting_repo::getNoResultsNotice( $period_info ) . '</li>';
 			}
 
 			foreach ($comments as $comment) {
@@ -234,7 +234,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				endforeach;
 				$result = ob_get_clean();
 			} else {
-				$result = $before_item .  esc_html__( 'you haven\'t liked any post yet!','wp-ulike' ) . $after_item;
+				$result = $before_item . wp_ulike_setting_repo::getUserNoLikesNotice() . $after_item;
 			}
 
 			return $result;
@@ -286,7 +286,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			if( empty( $posts ) ){
 				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
-				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', 'wp-ulike' ), $period_info, esc_html__( 'period', 'wp-ulike' ) );
+				return '<li>' . wp_ulike_setting_repo::getNoResultsNotice( $period_info ) . '</li>';
 			}
 
 			foreach ($posts as $post) {
@@ -360,7 +360,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 
 			if( empty( $activities ) ){
 				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
-				return sprintf( '<li>%s "%s" %s</li>', esc_html__( 'No results were found in', 'wp-ulike' ), $period_info, esc_html__( 'period', 'wp-ulike' ) );
+				return '<li>' . wp_ulike_setting_repo::getNoResultsNotice( $period_info ) . '</li>';
 			}
 
 			foreach ($activities as $activity) {
@@ -572,7 +572,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 		public function form( $instance ) {
 			//Set up some default widget settings.
 			$defaults = array(
-					'title'       => esc_html__('Most Liked', 'wp-ulike'),
+					'title'       => __('Most Liked', 'wp-ulike'),
 					'count'       => 10,
 					'size'        => 32,
 					'trim'        => 10,

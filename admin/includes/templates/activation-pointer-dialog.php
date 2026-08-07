@@ -34,7 +34,7 @@ $settings_url = class_exists( 'WP_Ulike_Overview' )
 ?>
 <div id="wp-ulike-activation-pointer-template" hidden>
 	<div class="wp-ulike-activation-pointer__panel">
-		<button type="button" class="wp-ulike-activation-pointer__close" aria-label="<?php esc_attr_e( 'Dismiss', 'wp-ulike' ); ?>">
+		<button type="button" class="wp-ulike-activation-pointer__close" aria-label="<?php echo esc_attr( 'Dismiss' ); ?>">
 			<span aria-hidden="true">&times;</span>
 		</button>
 		<h3 class="wp-ulike-activation-pointer__title"><?php esc_html_e( 'Thanks for installing WP ULike!', 'wp-ulike' ); ?></h3>
@@ -71,7 +71,7 @@ $settings_url = class_exists( 'WP_Ulike_Overview' )
 					<?php esc_html_e( 'Open Settings', 'wp-ulike' ); ?>
 				</a>
 			<?php endif; ?>
-			<button type="button" class="button button-secondary wp-ulike-activation-pointer__dismiss">
+			<button type="button" class="wp-ulike-activation-pointer__dismiss">
 				<?php esc_html_e( 'Got it', 'wp-ulike' ); ?>
 			</button>
 		</p>

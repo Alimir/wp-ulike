@@ -334,7 +334,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Admin' ) ) {
 			$status_label    = self::status_label( $sync_status, $sync_complete );
 			$legacy_tables   = WP_Ulike_Pulse_Legacy_Cleanup::existing_legacy_tables();
 			$show_cleanup    = $is_pulse && ! empty( $legacy_tables );
-			// Progress-only gate for the UI — deep COUNT(*) runs only on drop.
+			// Progress-only gate (same as drop action — no deep COUNT scans).
 			$can_drop_legacy = $show_cleanup && WP_Ulike_Pulse_Legacy_Cleanup::can_offer_drop();
 			$percent         = $sync_complete ? 100 : (float) ( $progress['percent_estimate'] ?? 0 );
 			$progress_label  = WP_Ulike_Pulse_Sync::progress_label( $progress );

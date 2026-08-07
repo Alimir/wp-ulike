@@ -4,24 +4,28 @@
 
 .ulp-customizer-preview-root {
 	width: 100%;
-	align-self: stretch;
+	max-width: 100%;
+	margin: 0 auto;
+	box-sizing: border-box;
 }
 
 .ulp-customizer-preview-label {
-	margin: 0 0 0.75rem;
+	margin: 0 0 0.65rem;
 	font-size: 0.6875rem;
 	font-weight: 600;
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	color: #646970;
+	text-align: center;
+	width: 100%;
 }
 
 .ulp-customizer-button-preview {
 	width: 100%;
-	padding: 1rem 0.85rem 1.75rem;
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: 0.85rem;
+	padding: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
 }
 
 .ulp-customizer-button-preview-item {
@@ -29,32 +33,79 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	min-height: 7.5rem;
-	padding: 1rem 0.9rem 1.15rem;
+	min-height: 0;
+	padding: 0.85rem 0.75rem;
 	background: #fff;
 	border: 1px solid #dcdcde;
-	border-radius: 10px;
+	border-radius: 8px;
 	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
 	text-align: center;
-	transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.ulp-customizer-button-preview-item:hover {
-	border-color: #c3c4c7;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .ulp-customizer-button-preview .wpulike {
 	padding: 0;
 	margin: 0;
+	width: 100%;
+	max-width: 100%;
 	display: flex;
-	align-items: center;
+	/* Fallback center; Customizer button_align overrides with !important. */
 	justify-content: center;
 }
 
 .ulp-customizer-button-preview .wp_ulike_general_class {
 	display: inline-flex;
 	align-items: center;
+}
+
+.ulp-customizer-button-states-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.5rem;
+	width: 100%;
+	align-items: start;
+}
+
+.ulp-customizer-button-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	min-width: 0;
+}
+
+.ulp-customizer-button-state-name {
+	font-size: 0.625rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #8c8f94;
+}
+
+.ulp-customizer-button-templates {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.75rem;
+	width: 100%;
+}
+
+@media (max-width: 720px) {
+	.ulp-customizer-button-templates {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 420px) {
+	.ulp-customizer-button-templates {
+		grid-template-columns: 1fr;
+	}
+}
+
+.ulp-customizer-button-templates .ulp-customizer-button-preview-item {
+	padding: 0.7rem 0.55rem;
+}
+
+.ulp-customizer-button-templates .ulp-customizer-preview-label {
+	margin-bottom: 0.5rem;
 }
 
 .ulp-customizer-button-preview .wp_ulike_likers_wrapper {
@@ -66,32 +117,130 @@
 	position: relative;
 }
 
-.ulp-customizer-toast-preview {
-	position: relative;
+/* —— Likers Box section —— */
+.ulp-customizer-likers-preview {
 	width: 100%;
-	max-width: 22rem;
-	margin: 0 auto;
-	padding: 1.5rem 1.25rem 2rem;
-	min-height: 22rem;
+	padding: 0.75rem;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0.75rem;
 }
 
-.ulp-customizer-toast-preview .wpulike-notification {
-	position: relative;
-	right: auto;
-	bottom: auto;
-	left: auto;
+.ulp-customizer-likers-preview .ulp-customizer-button-preview-item {
+	align-items: center;
+	text-align: center;
+	min-height: 0;
+}
+
+.ulp-customizer-likers-preview .wpulike {
+	padding: 0;
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	width: auto;
+	max-width: 100%;
+}
+
+.ulp-customizer-likers-preview .wp_ulike_general_class {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ulp-customizer-likers-preview .wp_ulike_btn[disabled] {
+	pointer-events: none;
+	cursor: default;
+}
+
+.ulp-customizer-likers-inline .wpulike {
+	flex-direction: column;
+}
+
+.ulp-customizer-likers-inline .wp_ulike_likers_wrapper {
+	display: block !important;
+	width: auto;
+	max-width: 100%;
+	flex: 0 0 auto;
+	margin: 0.75rem auto 0;
+	text-align: center;
+}
+
+.ulp-customizer-likers-inline .wp-ulike-likers-list {
+	justify-content: center;
+}
+
+.ulp-customizer-likers-popover-stage {
 	display: flex;
 	flex-direction: column;
-	gap: 0.625rem;
+	align-items: center;
+	width: 100%;
+	padding: 0.25rem 0;
 }
 
-.ulp-customizer-toast-preview .wpulike-message {
-	width: 100%;
+.ulp-customizer-likers-popover .ulp-customizer-likers-tooltip {
+	position: relative;
+	display: block;
+	max-width: 100%;
+	margin: 0 auto 0.65rem;
+	pointer-events: none;
+}
+
+.ulp-customizer-likers-popover .ulf-tooltip.ulf-white-theme {
+	/* Layout only — Background / Border / Padding come from Customizer. */
+	position: relative;
+}
+
+.ulp-customizer-likers-popover .ulf-arrow {
+	opacity: 1;
+}
+
+.ulp-customizer-likers-popover .wp_ulike_likers_wrapper {
+	display: block !important;
 	margin: 0;
 }
 
-@media (min-width: 640px) {
-	.ulp-customizer-button-preview {
-		grid-template-columns: 1fr 1fr;
-	}
+.ulp-customizer-likers-popover .wp-ulike-likers-list {
+	justify-content: center;
+}
+
+.ulp-customizer-toast-preview {
+	/* Mini viewport so Position / Offset map to the same inset vars as the frontend. */
+	position: relative;
+	width: 100%;
+	max-width: 36rem;
+	min-height: 22rem;
+	margin: 0 auto;
+	padding: 0;
+	box-sizing: border-box;
+	background: #f0f0f1;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.ulp-customizer-toast-preview .wpulike-notification {
+	/* Stage-local placement; Position control sets top/right/bottom/left. */
+	position: absolute !important;
+	z-index: 1;
+	width: auto;
+	max-width: calc(100% - 1.5rem);
+	display: flex;
+	flex-direction: column;
+	gap: 0.65rem;
+	pointer-events: none;
+	/* Defaults match frontend bottom-right until Position is changed. */
+	--ulp-toast-offset-x: 20px;
+	--ulp-toast-offset-y: 20px;
+	top: auto;
+	right: var(--ulp-toast-offset-x);
+	bottom: var(--ulp-toast-offset-y);
+	left: auto;
+}
+
+.ulp-customizer-toast-preview .wpulike-message {
+	max-width: 100%;
+	box-sizing: border-box;
+	pointer-events: none;
 }

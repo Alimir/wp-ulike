@@ -52,7 +52,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 	<?php if ( 'success' === $repair_flash ) : ?>
 		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Database tables repaired successfully.', 'wp-ulike' ); ?></p></div>
 	<?php elseif ( 'failed' === $repair_flash ) : ?>
-		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Some database tables could not be created. Please contact your host or try deactivating and reactivating the plugin.', 'wp-ulike' ); ?></p></div>
+		<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Some database tables could not be created. See the database status section below (or Tools → Site Health) for the MySQL error details.', 'wp-ulike' ); ?></p></div>
 	<?php endif; ?>
 
 	<?php if ( 'flushed' === $stats_flash ) : ?>
@@ -155,6 +155,16 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 								<?php esc_html_e( 'One or more WP ULike tables are missing.', 'wp-ulike' ); ?>
 							<?php endif; ?>
 						</p>
+						<?php if ( ! empty( $health['install_errors'] ) && is_array( $health['install_errors'] ) ) : ?>
+							<ul>
+								<?php foreach ( $health['install_errors'] as $table_label => $db_error ) : ?>
+									<li>
+										<code><?php echo esc_html( (string) $table_label ); ?></code>:
+										<?php echo esc_html( (string) $db_error ); ?>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
 						<?php if ( ! empty( $data['repair_tables_url'] ) ) : ?>
 							<p>
 								<a class="button button-secondary" href="<?php echo esc_url( $data['repair_tables_url'] ); ?>">
@@ -299,7 +309,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 
 		</div>
 
-		<aside class="wp-ulike-about__aside" aria-label="<?php esc_attr_e( 'Plugin details and settings tools', 'wp-ulike' ); ?>">
+		<aside class="wp-ulike-about__aside" aria-label="<?php echo esc_attr( 'Plugin details and settings tools' ); ?>">
 			<div class="wp-ulike-about-card">
 				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Plugin info', 'wp-ulike' ); ?></h2>
 				<dl class="wp-ulike-about-meta">
@@ -352,7 +362,7 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 							<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $data['import_nonce'] ?? '' ); ?>" />
 							<label class="wp-ulike-about-backup__label" for="wp-ulike-settings-file"><?php esc_html_e( 'JSON file', 'wp-ulike' ); ?></label>
 							<input id="wp-ulike-settings-file" class="wp-ulike-about-backup__file" type="file" name="settings_file" accept="application/json,.json" required />
-							<button type="submit" class="button button-secondary"><?php esc_html_e( 'Import', 'wp-ulike' ); ?></button>
+							<button type="submit" class="button button-secondary"><?php esc_html_e( 'Import settings', 'wp-ulike' ); ?></button>
 						</form>
 					</details>
 				</div>

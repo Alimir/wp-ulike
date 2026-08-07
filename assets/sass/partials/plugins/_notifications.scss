@@ -3,11 +3,19 @@
  */
 
 .wpulike-notification {
+    --ulp-toast-offset-x: 20px;
+    --ulp-toast-offset-y: 20px;
+    --ulp-toast-top: auto;
+    --ulp-toast-right: var(--ulp-toast-offset-x);
+    --ulp-toast-bottom: var(--ulp-toast-offset-y);
+    --ulp-toast-left: auto;
     position: fixed;
     z-index: 999999;
     pointer-events: none;
-    right: 20px;
-    bottom: 20px;
+    top: var(--ulp-toast-top);
+    right: var(--ulp-toast-right);
+    bottom: var(--ulp-toast-bottom);
+    left: var(--ulp-toast-left);
 
     * {
         box-sizing: border-box;
@@ -19,7 +27,8 @@
         word-wrap: break-word;
         overflow: hidden;
         margin: 0 0 6px;
-        padding: 14px 15px 14px 65px;
+        padding-block: 14px;
+        padding-inline: 65px 15px;
         width: 290px;
         border-radius: 3px;
         background-color: #007bc3;
@@ -53,7 +62,7 @@
             background-image: url(../img/svg/info.svg);
             background-size: 25px;
             position: absolute;
-            left: 0;
+            inset-inline-start: 0;
             width: 50px;
             top: 0;
             height: 100%;
@@ -103,8 +112,10 @@
     .wpulike-notification {
 
         .wpulike-message {
-            padding: 11px 11px 11px 55px;
+            padding-block: 11px;
+            padding-inline: 55px 11px;
             font-size: 13px;
+            max-width: calc(100vw - (var(--ulp-toast-offset-x) * 2));
 
             &:before {
                 background-size: 25px;
@@ -116,13 +127,13 @@
 
 @media screen and (max-width:320px) {
     .wpulike-notification {
-        left: 10px;
-        right: 10px;
-
+        // Keep corner placement from inset vars; only stretch the message body.
         .wpulike-message {
-            padding: 9px 9px 9px 45px;
+            padding-block: 9px;
+            padding-inline: 45px 9px;
             font-size: 12px;
             width: 100%;
+            max-width: calc(100vw - (var(--ulp-toast-offset-x) * 2));
 
             &:before {
                 background-size: 15px;

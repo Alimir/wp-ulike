@@ -30,12 +30,16 @@ if ( ! class_exists( 'WP_Ulike_Meta_Schema' ) ) {
 			global $wpdb;
 
 			$table = self::table();
-			$found = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+			$found = $wpdb->get_var(
+				$wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) )
+			);
 
 			return $found === $table;
 		}
 
 		/**
+		 * Fresh-install DDL only (never ALTERs existing tables).
+		 *
 		 * @return string
 		 */
 		public static function ddl() {
@@ -47,36 +51,44 @@ if ( ! class_exists( 'WP_Ulike_Meta_Schema' ) ) {
 			return "CREATE TABLE `{$table}` (
 				`meta_id` bigint(20) unsigned NOT NULL auto_increment,
 				`item_id` bigint(20) unsigned NOT NULL default '0',
-				`meta_group` varchar(100) default NULL,
-				`meta_key` varchar(255) default NULL,
+				`meta_group` varchar(64) default NULL,
+				`meta_key` varchar(100) default NULL,
 				`meta_value` longtext,
 				PRIMARY KEY  (`meta_id`),
-				KEY `item_id` (`item_id`),
-				KEY `meta_key` (`meta_key`(191)),
 				KEY `item_id_meta_group` (`item_id`, `meta_group`),
 				KEY `meta_group_meta_key_item_id` (`meta_group`, `meta_key`, `item_id`)
 			) {$collate} AUTO_INCREMENT=1;";
 		}
 
 		/**
+		 * Create meta table when missing. No-op if it already exists.
+		 *
 		 * @return bool
 		 */
 		public static function install() {
+			global $wpdb;
+
 			if ( self::table_exists() ) {
 				return true;
 			}
 
-		if ( ! function_exists( 'maybe_create_table' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			// Direct query (not maybe_create_table): follow-up SHOW TABLES clears last_error.
+			$wpdb->query( self::ddl() );
+			$error = trim( (string) $wpdb->last_error );
+
+			if ( class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
+				WP_Ulike_Pulse_Registry::flush_table_exists_cache();
+			}
+
+			if ( self::table_exists() ) {
+				return true;
+			}
+
+			if ( $error ) {
+				$wpdb->last_error = $error;
+			}
+
+			return false;
 		}
-
-		$created = (bool) maybe_create_table( self::table(), self::ddl() );
-
-		// Flush the shared table-existence cache so subsequent checks
-		// see the newly created meta table.
-		WP_Ulike_Pulse_Registry::flush_table_exists_cache();
-
-		return $created;
-	}
 	}
 }

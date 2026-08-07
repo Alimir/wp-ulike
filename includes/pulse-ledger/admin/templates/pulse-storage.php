@@ -64,10 +64,10 @@ $show_migrate = ! $is_pulse;
 	</p>
 	<?php else : ?>
 	<p class="description" style="max-width:560px;margin-top:1em;">
-		<?php echo esc_html( 'Old tables were detected but could not be verified for safe removal yet. Your data is safe and nothing else is required — you can close this page.' ); ?>
+		<?php echo esc_html( 'Old tables were detected but migration progress is incomplete, so removal is not offered yet. Your data is safe — you can close this page and keep the old tables.' ); ?>
 	</p>
 	<p class="description" style="max-width:560px;margin-top:0.5em;font-size:12px;">
-		<?php echo esc_html( 'For details, an administrator can run: wp ulike pulse verify --deep' ); ?>
+		<?php echo esc_html( 'For details, an administrator can run: wp ulike pulse verify' ); ?>
 	</p>
 	<p class="submit" style="margin-top:1.5em;">
 		<button type="button" class="button button-primary" id="wp-ulike-pulse-dismiss">
