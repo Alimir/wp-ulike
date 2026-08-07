@@ -30,8 +30,9 @@ class WpUlikeInit {
     // init plugin
     $this->plugin();
 
-    // This hook is called once any activated plugins have been loaded.
-    add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+    // Priority 20: run after Pro (plugins_loaded:10) registers customizer filters,
+    // so schema CSS rewrites include Pro Icon Color selectors (Fave/Smiley/Clap).
+    add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ), 20 );
 
     $prefix = is_network_admin() ? 'network_admin_' : '';
     add_filter( "{$prefix}plugin_action_links", array( $this, 'add_links' ), 10, 2 );
@@ -56,15 +57,24 @@ class WpUlikeInit {
   }
 
   /**
-   * Bust customizer CSS cache once per plugin version when schema/output changes.
+   * Bust customizer CSS cache when plugin version or CSS schema revision changes.
    *
    * Values-hash alone does not invalidate when field output rules change.
+   * Also rewrites custom.css so file-based frontend delivery is not left stale.
    *
    * @return void
    */
   private function maybe_upgrade_customizer_css_cache() {
-    $stored = get_option( 'wp_ulike_version', '' );
-    if ( $stored === WP_ULIKE_VERSION ) {
+    $stored_version = get_option( 'wp_ulike_version', '' );
+    $stored_schema  = get_option( 'wp_ulike_customizer_schema_revision', '' );
+    $schema_rev     = class_exists( 'wp_ulike_css_generator' )
+      ? wp_ulike_css_generator::SCHEMA_REVISION
+      : '';
+
+    $version_changed = ( $stored_version !== WP_ULIKE_VERSION );
+    $schema_changed  = ( $schema_rev !== '' && $stored_schema !== $schema_rev );
+
+    if ( ! $version_changed && ! $schema_changed ) {
       return;
     }
 
@@ -72,7 +82,22 @@ class WpUlikeInit {
       ( new wp_ulike_css_generator() )->clear_cache();
     }
 
-    update_option( 'wp_ulike_version', WP_ULIKE_VERSION, true );
+    // Rebuild uploads/wp-ulike/custom.css when admin hooks are loaded.
+    // Skip persisting schema rev until rewrite is possible so cron does not
+    // mark the schema current while leaving a stale custom.css on disk.
+    if ( function_exists( 'wp_ulike_save_custom_css' ) ) {
+      wp_ulike_save_custom_css();
+      if ( $schema_changed ) {
+        update_option( 'wp_ulike_customizer_schema_revision', $schema_rev, true );
+      }
+    } elseif ( $schema_changed && wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) ) ) {
+      // Inline delivery only needs the option cache cleared.
+      update_option( 'wp_ulike_customizer_schema_revision', $schema_rev, true );
+    }
+
+    if ( $version_changed ) {
+      update_option( 'wp_ulike_version', WP_ULIKE_VERSION, true );
+    }
   }
 
   private function maybe_upgrade_database(){

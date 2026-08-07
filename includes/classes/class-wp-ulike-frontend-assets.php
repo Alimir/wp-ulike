@@ -62,7 +62,12 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 				//add your custom style from setting panel (now includes customizer CSS).
 				wp_add_inline_style( WP_ULIKE_SLUG, wp_ulike_get_custom_style() );
 			} else {
-				wp_enqueue_style( WP_ULIKE_SLUG . '-custom', WP_ULIKE_CUSTOM_URL . '/custom.css', array( WP_ULIKE_SLUG ), WP_ULIKE_VERSION );
+				// filemtime busts browser cache when custom.css is regenerated without a plugin version bump.
+				$custom_css_file = WP_ULIKE_CUSTOM_DIR . '/custom.css';
+				$custom_css_ver  = ( is_string( $custom_css_file ) && file_exists( $custom_css_file ) )
+					? (string) filemtime( $custom_css_file )
+					: WP_ULIKE_VERSION;
+				wp_enqueue_style( WP_ULIKE_SLUG . '-custom', WP_ULIKE_CUSTOM_URL . '/custom.css', array( WP_ULIKE_SLUG ), $custom_css_ver );
 			}
 
 	  	}

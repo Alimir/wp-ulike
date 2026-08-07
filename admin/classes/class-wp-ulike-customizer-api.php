@@ -987,15 +987,21 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 $states = array(
                     'default' => array(
                         'label'  => __( 'Normal', 'wp-ulike' ),
-                        'markup' => $base,
+                        'markup' => $this->mutate_button_preview_state( $base, 'default_forced' ),
                     ),
                     'active'  => array(
                         'label'  => __( 'Active', 'wp-ulike' ),
-                        'markup' => $this->mutate_button_preview_state( $base, 'active' ),
+                        'markup' => $this->mutate_button_preview_state(
+                            $this->mutate_button_preview_state( $base, 'default_forced' ),
+                            'active'
+                        ),
                     ),
                     'removed' => array(
                         'label'  => __( 'Removed', 'wp-ulike' ),
-                        'markup' => $this->mutate_button_preview_state( $base, 'removed' ),
+                        'markup' => $this->mutate_button_preview_state(
+                            $this->mutate_button_preview_state( $base, 'default_forced' ),
+                            'removed'
+                        ),
                     ),
                 );
 
@@ -1021,8 +1027,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 }
                 echo '<div class="ulp-customizer-button-preview-item">';
                 echo '<p class="ulp-customizer-preview-label">' . esc_html( $item['label'] ) . '</p>';
+                // Always show the idle (unliked) state — a liked preview post would
+                // otherwise lock templates like Animated Heart on the white active icon.
                 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode markup
-                echo $item['markup'];
+                echo $this->mutate_button_preview_state( $item['markup'], 'default_forced' );
                 echo '</div>';
             }
             echo '</div>';
@@ -1062,6 +1070,34 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                     array( 'wp_ulike_is_unliked', 'wp_ulike_is_unliked', 'wp_ulike_is_unliked', '' ),
                     $html
                 );
+            }
+
+            // Force idle markup (strip liked/active classes from a real liked preview post).
+            if ( 'default_forced' === $state || 'default' === $state ) {
+                $html = str_replace(
+                    array(
+                        'wp_ulike_is_liked',
+                        'wp_ulike_is_already_liked',
+                        'wp_ulike_is_unliked',
+                        'wp_ulike_is_already_unliked',
+                        ' image-unlike',
+                        'image-unlike',
+                        ' wp_ulike_btn_is_active',
+                        'wp_ulike_btn_is_active',
+                    ),
+                    array(
+                        'wp_ulike_is_not_liked',
+                        'wp_ulike_is_not_liked',
+                        'wp_ulike_is_not_liked',
+                        'wp_ulike_is_not_liked',
+                        '',
+                        '',
+                        '',
+                        '',
+                    ),
+                    $html
+                );
+                return is_string( $html ) ? $html : '';
             }
 
             return $html;

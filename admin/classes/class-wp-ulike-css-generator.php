@@ -36,7 +36,7 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
          * Bump when schema/output rules change so cached CSS regenerates
          * even if saved customizer values are unchanged.
          */
-        const SCHEMA_REVISION = '2';
+        const SCHEMA_REVISION = '3';
 
         /**
          * Constructor
@@ -1084,7 +1084,7 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 'background', 'background-color', 'background-image', 'background-repeat',
                 'background-position', 'background-size', 'background-attachment',
                 'display', 'position', 'top', 'right', 'bottom', 'left', 'z-index',
-                'opacity', 'transform', 'transition', 'box-shadow', 'text-shadow', 'filter', 'fill',
+                'opacity', 'transform', 'transition', 'box-shadow', 'text-shadow', 'filter', 'fill', 'stroke',
                 'border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius',
                 'flex', 'flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-content',
                 'grid', 'grid-template-columns', 'grid-template-rows', 'grid-gap', 'gap'
@@ -1160,8 +1160,8 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                     return esc_attr( $sanitized );
                 }
 
-                // Color values (hex, rgb, rgba, hsl, hsla, named colors, CSS variables, SVG fill)
-                if ( strpos( $prop_lower, 'color' ) !== false || $prop_lower === 'border-color' || $prop_lower === 'fill' ) {
+                // Color values (hex, rgb, rgba, hsl, hsla, named colors, CSS variables, SVG fill/stroke)
+                if ( strpos( $prop_lower, 'color' ) !== false || $prop_lower === 'border-color' || $prop_lower === 'fill' || $prop_lower === 'stroke' ) {
                     return $this->sanitize_color_value( $sanitized );
                 }
 

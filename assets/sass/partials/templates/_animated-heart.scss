@@ -46,8 +46,17 @@
       .wpulike-svg-heart {
         fill: #ffffff;
 
+        path {
+          fill: inherit;
+        }
+
         &-pop {
           animation-direction: normal;
+          fill: #ff6f63;
+
+          path {
+            fill: inherit;
+          }
         }
       }
     }
@@ -80,6 +89,10 @@
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
 
+    path {
+      fill: inherit;
+    }
+
     &-pop {
       position: absolute;
       width: 30%;
@@ -87,6 +100,10 @@
       opacity: 0;
       left: 0;
       animation: popHearts 1s ease forwards reverse;
+
+      path {
+        fill: inherit;
+      }
 
       &.one {
         left: 1%;
