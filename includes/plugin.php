@@ -47,12 +47,15 @@ class WpUlikeInit {
   public function plugins_loaded(){
     wp_ulike_maybe_backfill_first_activated_at();
 
-    // Schema checks/upgrades only need to run where they can be observed and
-    // acted on (wp-admin, WP-Cron); skip them on plain, unauthenticated
-    // frontend requests to avoid extra queries and DDL on every pageview.
+    // Upgrades only where they can be observed/acted on — never on plain frontend.
     if ( self::is_admin_backend() || self::is_cron() ) {
       $this->maybe_upgrade_database();
-      $this->maybe_upgrade_customizer_css_cache();
+    }
+
+    // Customizer CSS rewrite needs admin hooks (wp_ulike_save_custom_css) and a
+    // fully booted WP stack ($wp_rewrite, textdomain). Admin + init only.
+    if ( self::is_admin_backend() ) {
+      add_action( 'init', array( $this, 'maybe_upgrade_customizer_css_cache' ), 20 );
     }
   }
 
@@ -64,7 +67,7 @@ class WpUlikeInit {
    *
    * @return void
    */
-  private function maybe_upgrade_customizer_css_cache() {
+  public function maybe_upgrade_customizer_css_cache() {
     $stored_version = get_option( 'wp_ulike_version', '' );
     $stored_schema  = get_option( 'wp_ulike_customizer_schema_revision', '' );
     $schema_rev     = class_exists( 'wp_ulike_css_generator' )
@@ -82,20 +85,24 @@ class WpUlikeInit {
       ( new wp_ulike_css_generator() )->clear_cache();
     }
 
-    // Rebuild uploads/wp-ulike/custom.css when admin hooks are loaded.
-    // Skip persisting schema rev until rewrite is possible so cron does not
-    // mark the schema current while leaving a stale custom.css on disk.
+    $upgraded = false;
+
+    // File delivery: rewrite uploads/wp-ulike/custom.css (admin hooks required).
     if ( function_exists( 'wp_ulike_save_custom_css' ) ) {
       wp_ulike_save_custom_css();
       if ( $schema_changed ) {
         update_option( 'wp_ulike_customizer_schema_revision', $schema_rev, true );
       }
+      $upgraded = true;
     } elseif ( $schema_changed && wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) ) ) {
       // Inline delivery only needs the option cache cleared.
       update_option( 'wp_ulike_customizer_schema_revision', $schema_rev, true );
+      $upgraded = true;
     }
 
-    if ( $version_changed ) {
+    // Mark version current only after a successful upgrade path — never leave
+    // "version bumped, custom.css still stale" if save was unavailable.
+    if ( $upgraded && $version_changed ) {
       update_option( 'wp_ulike_version', WP_ULIKE_VERSION, true );
     }
   }

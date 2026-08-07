@@ -142,7 +142,11 @@ if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
                 }
 
                 $customizer_api = new wp_ulike_customizer_api();
-                $schema = $customizer_api->get_schema();
+                // Field/pages schema only — skip preview assets & localized scripts.
+                // Those can call get_permalink() (Pro) before $wp_rewrite exists.
+                $schema = $customizer_api->get_schema( null, array(
+                    'include_assets' => false,
+                ) );
 
                 // Validate schema structure
                 if ( ! is_array( $schema ) || ! isset( $schema['pages'] ) ) {

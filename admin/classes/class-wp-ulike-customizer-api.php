@@ -48,10 +48,27 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         /**
          * Get customizer schema
          * Returns schema structure extracted from customizer sections
+         *
+         * @param mixed $request        Optional REST request (unused; kept for callers).
+         * @param array $args {
+         *     Optional. Schema build options.
+         *
+         *     @type bool $include_assets Whether to attach preview CSS/JS + localized
+         *                                scripts. CSS generation does not need these and
+         *                                must avoid them before init / before $wp_rewrite
+         *                                exists (permalink helpers may fatally fail).
+         *                                Default true.
+         * }
+         * @return array
          */
-        public function get_schema( $request = null ) {
-            // Return cached schema if available (static cache for request-level sharing)
-            if ( self::$schema_cache !== null ) {
+        public function get_schema( $request = null, $args = array() ) {
+            $args = wp_parse_args( $args, array(
+                'include_assets' => true,
+            ) );
+
+            // Full schema (with assets) can reuse the request cache.
+            // CSS-only schema must not poison that cache with a stripped payload.
+            if ( $args['include_assets'] && self::$schema_cache !== null ) {
                 return self::$schema_cache;
             }
 
@@ -65,11 +82,11 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             // Decode HTML entities in titles and descriptions
             $schema = $this->decode_html_entities_in_schema( $schema );
 
-            // Add assets URLs to schema
-            $schema['assets'] = $this->get_plugin_assets();
-
-            // Cache the schema (static for request-level sharing)
-            self::$schema_cache = $schema;
+            // Preview assets / localized scripts (Optiwich UI only — not for CSS gen).
+            if ( $args['include_assets'] ) {
+                $schema['assets'] = $this->get_plugin_assets();
+                self::$schema_cache = $schema;
+            }
 
             return apply_filters( 'wp_ulike_optiwich_customizer_schema', $schema );
         }
