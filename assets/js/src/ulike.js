@@ -808,6 +808,10 @@
 
         if (buttonEl.classList.contains("wp_ulike_put_image")) {
           if (status === 4) {
+            // Restart CSS sprite animation (e.g. Twitter heart): class must
+            // leave and re-enter; add() alone is a no-op when already active.
+            buttonEl.classList.remove("wp_ulike_btn_is_active");
+            void buttonEl.offsetWidth;
             buttonEl.classList.add("image-unlike", "wp_ulike_btn_is_active");
           } else {
             buttonEl.classList.toggle("image-unlike");
