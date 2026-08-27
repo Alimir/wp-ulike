@@ -353,6 +353,40 @@ function wp_ulike_hide_admin_notifications( $notice_list ){
 }
 add_filter( 'wp_ulike_admin_notices_instances', 'wp_ulike_hide_admin_notifications', 20, 1 );
 
+function wp_ulike_normalize_who_can_vote_setting( $values ) {
+	if ( ! is_array( $values ) ) {
+		return $values;
+	}
+
+	$groups = array( 'posts_group', 'comments_group', 'buddypress_group', 'bbpress_group' );
+
+	foreach ( $groups as $group ) {
+		if ( empty( $values[ $group ] ) || ! is_array( $values[ $group ] ) ) {
+			continue;
+		}
+
+		if ( array_key_exists( 'enable_only_logged_in_users', $values[ $group ] ) ) {
+			$raw = $values[ $group ]['enable_only_logged_in_users'];
+			if ( 'everyone' !== $raw && 'logged_in' !== $raw ) {
+				$values[ $group ]['enable_only_logged_in_users'] = wp_ulike_setting_repo::isLoginRequiredValue( $raw )
+					? 'logged_in'
+					: 'everyone';
+			}
+		}
+
+		$requires_login = wp_ulike_setting_repo::isLoginRequiredValue(
+			$values[ $group ]['enable_only_logged_in_users'] ?? false
+		);
+
+		if ( $requires_login && ! array_key_exists( 'logged_out_display_type', $values[ $group ] ) ) {
+			$values[ $group ]['logged_out_display_type'] = 'button';
+		}
+	}
+
+	return $values;
+}
+add_filter( 'wp_ulike_optiwich_values', 'wp_ulike_normalize_who_can_vote_setting' );
+
 
 /**
  * Display custom column content

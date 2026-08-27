@@ -938,10 +938,20 @@ if ( ! function_exists( 'wp_ulike_get_logging_method_labels' ) ) {
 	 */
 	function wp_ulike_get_logging_method_labels() {
 		return array(
-			'do_not_log'        => esc_html__( 'No Limit', 'wp-ulike' ),
-			'by_cookie'         => esc_html__( 'Cookie', 'wp-ulike' ),
-			'by_username'       => esc_html__( 'Username/IP', 'wp-ulike' ),
-			'by_user_ip_cookie' => esc_html__( 'Username/IP + Cookie', 'wp-ulike' ),
+			'do_not_log'        => esc_html__( 'Unlimited votes', 'wp-ulike' ),
+			'by_cookie'         => esc_html__( 'One vote per browser (cookie)', 'wp-ulike' ),
+			'by_username'       => esc_html__( 'One vote per person (user/IP)', 'wp-ulike' ),
+			'by_user_ip_cookie' => esc_html__( 'Strict (user/IP + cookie)', 'wp-ulike' ),
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_unlike_rule_labels' ) ) {
+	function wp_ulike_get_unlike_rule_labels() {
+		return array(
+			'allow' => esc_html__( 'Allow unlike', 'wp-ulike' ),
+			'once'  => esc_html__( 'Unlike once, then lock', 'wp-ulike' ),
+			'lock'  => esc_html__( 'Lock the vote', 'wp-ulike' ),
 		);
 	}
 }

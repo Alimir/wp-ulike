@@ -130,12 +130,30 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
+	 * Whether a stored “who can vote” value requires a logged-in user.
+	 *
+	 * Accepts the current everyone/logged_in keys and older switcher 0/1/true/false values.
+	 *
+	 * @param mixed $value Raw setting value.
+	 * @return boolean
+	 */
+	public static function isLoginRequiredValue( $value ){
+		if ( 'everyone' === $value ) {
+			return false;
+		}
+		if ( 'logged_in' === $value ) {
+			return true;
+		}
+		return wp_ulike_is_true( $value );
+	}
+
+	/**
 	 * Require Login?
 	 *
 	 * @return boolean
 	 */
 	public static function requireLogin( $typeName ){
-		return wp_ulike_is_true( self::getOption( self::getSettingKey( $typeName ) . '|enable_only_logged_in_users', false ) );
+		return self::isLoginRequiredValue( self::getOption( self::getSettingKey( $typeName ) . '|enable_only_logged_in_users', false ) );
 	}
 
 	/**
@@ -160,6 +178,26 @@ class wp_ulike_setting_repo {
 	 */
 	public static function getMethod( $typeName ){
 		return self::getOption( self::getSettingKey( $typeName ) . '|logging_method', 'by_username' );
+	}
+
+	/**
+	 * Get unlike rule for methods that support reversing a vote.
+	 *
+	 * Cookie / No Limit already block unlike, so this only applies to
+	 * Username/IP and Username/IP + Cookie.
+	 *
+	 * @param string $typeName Item type.
+	 * @return string allow|once|lock|empty when the logging method cannot unlike
+	 */
+	public static function getUnlikeRule( $typeName ){
+		$method = self::getMethod( $typeName );
+		if ( in_array( $method, array( 'do_not_log', 'by_cookie' ), true ) ) {
+			return '';
+		}
+
+		$rule = self::getOption( self::getSettingKey( $typeName ) . '|unlike_rule', 'allow' );
+
+		return in_array( $rule, array( 'allow', 'once', 'lock' ), true ) ? $rule : 'allow';
 	}
 
 	/**
