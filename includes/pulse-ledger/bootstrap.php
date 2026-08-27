@@ -22,6 +22,7 @@ require_once __DIR__ . '/class-pulse-sync-scheduler.php';
 require_once __DIR__ . '/class-pulse-legacy-cleanup.php';
 require_once __DIR__ . '/class-pulse-meta-purge.php';
 require_once __DIR__ . '/class-guest-cache-purge.php';
+require_once __DIR__ . '/class-pulse-counter-repair.php';
 require_once __DIR__ . '/class-pulse-log-bridge.php';
 require_once __DIR__ . '/class-pulse-cli.php';
 

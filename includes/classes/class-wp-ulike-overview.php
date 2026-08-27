@@ -894,6 +894,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 					'icon'        => isset( $feature['icon'] ) ? $feature['icon'] : 'admin-generic',
 					'badge'       => isset( $feature['badge'] ) ? $feature['badge'] : '',
 					'enabled'     => $enabled,
+					// Only meaningful while the switch is on — it guards the
+					// off transition, and there is nothing to warn about when
+					// the module is already off.
+					'warning'     => $enabled && ! empty( $feature['warning'] ) ? $feature['warning'] : '',
 					// A link to somewhere that no longer exists is worse than none.
 					'url'         => $enabled && ! empty( $feature['url'] ) ? $feature['url'] : '',
 				);
@@ -963,6 +967,22 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function repair_database_tables() {
 			wp_ulike_activator::get_instance()->install_tables();
+
+			// Repair should leave the numbers people actually look at correct,
+			// not just the table structure. Cached like/dislike totals can fall
+			// out of step with the ledger (restored backup, rows deleted straight
+			// from the database, an interrupted migration) and nothing else puts
+			// them back. Bounded so a large site cannot stall this request --
+			// `wp ulike pulse recount --yes` finishes a big catch-up.
+			if ( class_exists( 'WP_Ulike_Pulse_Counter_Repair' ) && WP_Ulike_Pulse_Counter_Repair::can_run() ) {
+				WP_Ulike_Pulse_Counter_Repair::run(
+					array(
+						'dry_run'     => false,
+						'max_batches' => 10,
+					)
+				);
+			}
+
 			delete_transient( self::get_health_report_cache_key() );
 
 			return self::get_tables_health();
@@ -1446,7 +1466,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				$settings     = $settings_api->sanitize_import_values( $settings );
 			}
 
-			update_option( 'wp_ulike_settings', $settings );
+			// 'no' everywhere, like the settings save and the fresh-install seed.
+			// Importing must not be the one path that leaves this option
+			// autoloaded on an otherwise identical site.
+			update_option( 'wp_ulike_settings', $settings, 'no' );
 
 			if ( ! empty( $payload['customize'] ) && is_array( $payload['customize'] ) ) {
 				$customize = $payload['customize'];

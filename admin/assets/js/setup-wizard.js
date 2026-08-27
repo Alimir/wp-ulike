@@ -146,6 +146,45 @@
 		return body;
 	}
 
+	// What the close control and Escape do. The control is labelled "save these
+	// choices and close", so with something ticked it saves — that is the
+	// intent. With nothing ticked there is nothing to save, and "unchecked
+	// places stay off" is a legitimate answer, so it just closes. Refusing to
+	// close in that case left an admin trapped in a modal that also locks page
+	// scroll, on the plugin's own screens.
+	function closeWizard() {
+		if ( getSurfaces().length ) {
+			persist( false );
+			return;
+		}
+
+		dismiss();
+	}
+
+	function dismiss() {
+		if ( saving ) {
+			return;
+		}
+
+		saving = true;
+
+		var body = new URLSearchParams();
+		body.set( 'action', cfg.dismissAction );
+		body.set( 'nonce', cfg.nonce );
+
+		var done = function () {
+			saving = false;
+			close();
+		};
+
+		fetch( cfg.ajaxUrl, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+			body: body.toString(),
+		} ).then( done ).catch( done );
+	}
+
 	function persist( thenReload ) {
 		if ( saving ) {
 			return;
@@ -230,7 +269,7 @@
 	function onKeydown( event ) {
 		if ( event.key === 'Escape' ) {
 			event.preventDefault();
-			persist( false );
+			closeWizard();
 			return;
 		}
 
@@ -262,7 +301,7 @@
 		qsa( '[data-setup-dismiss]', dialog ).forEach( function ( button ) {
 			button.addEventListener( 'click', function ( event ) {
 				event.preventDefault();
-				persist( false );
+				closeWizard();
 			} );
 		} );
 

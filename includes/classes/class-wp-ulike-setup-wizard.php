@@ -254,10 +254,27 @@ if ( ! class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
 		}
 
 		/**
+		 * Close the wizard without choosing anything.
+		 *
+		 * Deliberately writes no settings. A fresh install has already been
+		 * seeded with working defaults, so "skip" means keep those -- not
+		 * silently switch on whatever happened to be ticked. It must never
+		 * require a surface selection either: the save path validates that
+		 * because saving nothing would be meaningless, but refusing to *close*
+		 * until something is ticked leaves an admin with no way out of a modal.
+		 *
 		 * @return void
 		 */
 		public static function ajax_dismiss() {
-			self::ajax_save();
+			check_ajax_referer( self::AJAX_SAVE, 'nonce' );
+
+			if ( ! self::user_can_setup() ) {
+				wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
+			}
+
+			self::clear_pending();
+
+			wp_send_json_success();
 		}
 
 		protected static function persist_choices( $surfaces, $who_can_vote, $unlike_rule, $show_likers ) {
@@ -324,7 +341,7 @@ if ( ! class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
 				$settings['bbpress_group']      = self::apply_vote_rules( $bbpress, $who_can_vote, $unlike_rule, $show_likers && $wants_bb );
 			}
 
-			update_option( 'wp_ulike_settings', $settings, false );
+			update_option( 'wp_ulike_settings', $settings, 'no' );
 			do_action( 'wp_ulike_settings_saved', $settings );
 		}
 

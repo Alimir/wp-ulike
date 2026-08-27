@@ -47,6 +47,8 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 		 * smoke    Read-only health checks for storage, stats, and dual mode.
 		 *          Use --all-sites on multisite to run on every network blog.
 		 * enable    Switch reads to pulse table (after migration).
+		 * recount  Rebuild cached like/dislike counters from the ledger
+		 *          (dry-run unless --yes; --all-sites).
 		 * purge-meta Null old device/OS/browser labels (dry-run unless --yes; --all-sites).
 		 * purge-guest-cache Drop cached vote maps for guests inactive past --days
 		 *          (dry-run unless --yes; --all-sites).
@@ -117,6 +119,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 				case 'dismiss':
 					WP_Ulike_Pulse_Config::mark_admin_dismissed();
 					WP_CLI::success( 'Storage upgrade admin UI hidden.' );
+					break;
+
+				case 'recount':
+					self::run_recount( $assoc_args );
 					break;
 
 				case 'purge-meta':
@@ -210,6 +216,57 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 					number_format_i18n( (int) $result['updated'] )
 				)
 			);
+		}
+
+		/**
+		 * Rebuild cached like/dislike counters from the ledger.
+		 *
+		 * Dry-run unless --yes is passed. Only rewrites `count_*` cache rows that
+		 * disagree with the ledger; votes are never touched.
+		 *
+		 * @param array<string,mixed> $assoc_args CLI flags.
+		 * @return void
+		 */
+		private static function run_recount( $assoc_args ) {
+			if ( ! empty( $assoc_args['all-sites'] ) ) {
+				self::run_on_all_sites( array( __CLASS__, 'run_recount' ), $assoc_args );
+				return;
+			}
+
+			$yes  = ! empty( $assoc_args['yes'] );
+			$size = isset( $assoc_args['batch-size'] ) ? absint( $assoc_args['batch-size'] ) : 0;
+
+			if ( ! WP_Ulike_Pulse_Counter_Repair::can_run() ) {
+				WP_CLI::warning( 'Skipped: needs the pulse table installed, reads switched to pulse, and no migration in progress.' );
+				return;
+			}
+
+			$result = WP_Ulike_Pulse_Counter_Repair::run(
+				array(
+					'dry_run'    => ! $yes,
+					'batch_size' => $size,
+				)
+			);
+
+			foreach ( ( isset( $result['samples'] ) ? $result['samples'] : array() ) as $sample ) {
+				WP_CLI::log( '  ' . $sample );
+			}
+
+			if ( empty( $result['ok'] ) ) {
+				self::cli_fail( 'Recount failed: ' . ( isset( $result['message'] ) ? $result['message'] : 'unknown' ) );
+				return;
+			}
+
+			$scanned = number_format_i18n( (int) $result['scanned'] );
+			$fixed   = number_format_i18n( (int) $result['fixed'] );
+
+			if ( ! $yes ) {
+				WP_CLI::log( sprintf( 'Checked %s counter(s); %s disagree with the ledger.', $scanned, $fixed ) );
+				WP_CLI::warning( 'Dry-run only. Re-run with --yes to apply.' );
+				return;
+			}
+
+			WP_CLI::success( sprintf( 'Checked %s counter(s); corrected %s.', $scanned, $fixed ) );
 		}
 
 		/**

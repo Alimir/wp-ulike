@@ -6,7 +6,7 @@ Tags: like button, post reactions, voting, engagement analytics, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 5.2.2
+Stable tag: 5.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,6 +157,23 @@ Free includes like buttons, a full statistics dashboard (Overview, reports, when
 No. Pro installs beside the free plugin and reads the same data. Your existing votes, counts, and settings carry over untouched. Pro also comes with a 14-day money-back guarantee.
 
 == Changelog ==
+
+= 5.2.3 =
+* Added: A short setup on first install — choose where likes appear, who can vote, and what a second click does. Existing sites never see it.
+* Added: Feature switches on Overview, so a site can turn off the parts of WP ULike it does not use. Anything that would stop recording data asks first.
+* Added: Optional clean-up of cached vote data left behind by one-off guests, offered on Overview only when there is a worthwhile amount to reclaim.
+* Added: A way to rebuild like and dislike totals from the stored votes — the Repair action on Overview, or `wp ulike pulse recount` for large sites.
+* Improved: Overview rebuilt around storage, health, and the numbers people actually open it for, and it no longer reads the vote tables to measure storage.
+* Improved: The per-visitor vote history kept for faster page loads is now capped, so it cannot grow without limit on busy sites.
+* Improved: Calmer wording on the activation pointer, and it now appears outside WP ULike screens too.
+* Improved: Suggestions for Pro on the dashboard wait until a site has real activity behind it.
+* Improved: Optiwich heading colour is now available in Settings.
+* Fixed: WP ULike is activated again on new sites added to a WordPress network.
+* Fixed: The first-install setup could not be closed when every placement was unticked.
+* Fixed: An unrecognised counter status — a shortcode typo, for example — no longer leaves an unused row behind in the plugin's own table.
+* Fixed: Personal data export could come back empty on sites whose tables were created with different database collations, instead of listing that person's votes.
+* Fixed: The Logs screen could come back empty on sites whose older tables predate the fingerprint column.
+* Fixed: Sites still on classic storage no longer write "table doesn't exist" errors to the debug log when totals are calculated.
 
 = 5.2.2 =
 * Added: `[wp_ulike_top]` shortcode (and template tag) for Top List — same popular-content filters as the block.

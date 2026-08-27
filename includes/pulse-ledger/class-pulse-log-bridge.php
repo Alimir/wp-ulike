@@ -264,10 +264,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				// table, and UNION-ing mismatched collations fails outright with
 				// "Illegal mix of collations" -- which made the admin Logs screen
 				// return zero rows in dual/merged mode.
+				$fp_sql = self::legacy_optional_column_sql( $source['table'], 'fingerprint' );
 				$base  = "SELECT id, date_time,
 					CONVERT(user_id USING utf8mb4) AS user_id,
 					CONVERT(ip USING utf8mb4) AS ip,
-					CONVERT(fingerprint USING utf8mb4) AS fingerprint,
+					{$fp_sql},
 					CONVERT(status USING utf8mb4) AS status,
 					`{$column}`,
 					CONVERT('vote' USING utf8mb4) AS _kind,
@@ -716,7 +717,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			$geo_cols  = self::legacy_personal_columns_sql( $source['table'] );
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$union[] = $wpdb->prepare(
-				"SELECT %s AS src, id, date_time, status, ip, NULL AS _ek, 'vote' AS _kind, NULL AS _val, {$geo_cols}
+				"SELECT %s AS src, id, date_time,
+					CONVERT( status USING utf8mb4 ) AS status,
+					CONVERT( ip USING utf8mb4 ) AS ip,
+					NULL AS _ek, 'vote' AS _kind, NULL AS _val, {$geo_cols}
 				FROM `{$table}` WHERE user_id = %s",
 				$suffix,
 				$user_id
@@ -750,9 +754,16 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$union[] = $wpdb->prepare(
-				"SELECT %s AS src, id, date_time, status, ip, engagement_key AS _ek,
-					engagement_kind AS _kind, value AS _val,
-					fingerprint, country_code, device, os, browser
+				"SELECT %s AS src, id, date_time,
+					CONVERT( status USING utf8mb4 ) AS status,
+					CONVERT( ip USING utf8mb4 ) AS ip,
+					CONVERT( engagement_key USING utf8mb4 ) AS _ek,
+					CONVERT( engagement_kind USING utf8mb4 ) AS _kind, value AS _val,
+					CONVERT( fingerprint USING utf8mb4 ) AS fingerprint,
+					CONVERT( country_code USING utf8mb4 ) AS country_code,
+					CONVERT( device USING utf8mb4 ) AS device,
+					CONVERT( os USING utf8mb4 ) AS os,
+					CONVERT( browser USING utf8mb4 ) AS browser
 				FROM `{$pulse_table}`
 				WHERE user_id = %s AND item_type = %s {$kind_clause}{$since_sql}",
 				$suffix,
@@ -822,6 +833,30 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 	 */
 	private static $legacy_personal_columns_cache = array();
 
+	/**
+	 * SQL for one optional legacy column, or NULL when the table lacks it.
+	 *
+	 * The legacy upgrade adds `fingerprint`, but a site whose upgrade never
+	 * completed still has tables without it. Selecting it regardless made the
+	 * whole logs query fail with "Unknown column", so the admin Logs screen
+	 * came back empty on exactly the sites least able to diagnose it.
+	 *
+	 * @param string $table  Legacy table name.
+	 * @param string $column Column to select.
+	 * @return string SQL fragment.
+	 */
+	private static function legacy_optional_column_sql( $table, $column ) {
+		// Warms and reuses the same cached INFORMATION_SCHEMA probe.
+		self::legacy_personal_columns_sql( $table );
+		$present = isset( self::$legacy_personal_columns_cache[ $table ] )
+			? self::$legacy_personal_columns_cache[ $table ]
+			: array();
+
+		return isset( $present[ $column ] )
+			? "CONVERT( `{$column}` USING utf8mb4 ) AS {$column}"
+			: "NULL AS {$column}";
+	}
+
 	public static function legacy_personal_columns_sql( $table ) {
 		if ( ! isset( self::$legacy_personal_columns_cache[ $table ] ) ) {
 			global $wpdb;
@@ -846,7 +881,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 		$names   = array( 'fingerprint', 'country_code', 'device', 'os', 'browser' );
 		$parts   = array();
 		foreach ( $names as $name ) {
-			$parts[] = isset( $present[ $name ] ) ? "`{$name}` AS {$name}" : "NULL AS {$name}";
+			// CONVERT keeps every arm of the UNION on one collation. Two tables
+			// created under different collations (a common result of years of
+			// upgrades) otherwise make MySQL reject the UNION outright, and the
+			// personal-data export came back empty instead of failing loudly.
+			$parts[] = isset( $present[ $name ] )
+				? "CONVERT( `{$name}` USING utf8mb4 ) AS {$name}"
+				: "NULL AS {$name}";
 		}
 		return implode( ', ', $parts );
 	}

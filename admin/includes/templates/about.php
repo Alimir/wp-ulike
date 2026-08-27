@@ -271,6 +271,9 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 											id="<?php echo esc_attr( $field_id ); ?>"
 											name="wp_ulike_features[]"
 											value="<?php echo esc_attr( $feature['key'] ); ?>"
+											<?php if ( ! empty( $feature['warning'] ) ) : ?>
+												data-wp-ulike-feature-warning="<?php echo esc_attr( $feature['warning'] ); ?>"
+											<?php endif; ?>
 											<?php checked( ! empty( $feature['enabled'] ) ); ?>
 										/>
 										<span aria-hidden="true"></span>
@@ -299,6 +302,17 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 
 					form.addEventListener( 'change', function ( event ) {
 						if ( ! event.target.matches( 'input[name="wp_ulike_features[]"]' ) ) {
+							return;
+						}
+
+						/* Some modules stop recording data or stop resolving URLs
+						   while off. Those carry a warning: confirm before the
+						   switch takes effect, and put the switch back if the
+						   answer is no. Turning a module back ON never asks. */
+						var warning = event.target.getAttribute( 'data-wp-ulike-feature-warning' );
+
+						if ( ! event.target.checked && warning && ! window.confirm( warning ) ) {
+							event.target.checked = true;
 							return;
 						}
 

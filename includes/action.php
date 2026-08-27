@@ -129,6 +129,11 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
 
       $unlike_once = array( 'unlike_rule' => 'once' );
 
+      // Not autoloaded, deliberately, and matching every other write to this
+      // option (settings save, import, setup wizard). A configured site stores
+      // 17-30 KB here, which is far too much to unserialize on every request
+      // -- including the many that never render a button. wp_ulike_get_option()
+      // memoises it, so a request that does need it still pays one lookup.
       add_option(
         'wp_ulike_settings',
         array(

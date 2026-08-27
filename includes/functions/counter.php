@@ -64,6 +64,17 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 	function wp_ulike_get_counter_value_info( $ID, $type, $status = 'like', $is_distinct = true, $date_range = NULL ){
 		// Preserve unlike/undislike for Pulse (removed rows). Meta counters only store active like|dislike.
 		$requested_status = sanitize_key( (string) $status );
+
+		// Anything outside the known set is treated as 'like'. sanitize_key()
+		// already makes an odd status harmless to the query, but the status also
+		// becomes part of a meta key, so an unrecognised one used to be written
+		// to the meta table as a counter row that nothing ever reads again --
+		// one junk row per distinct bad value, from a shortcode typo as easily
+		// as from someone probing the parameter.
+		if ( ! in_array( $requested_status, array( 'like', 'dislike', 'unlike', 'undislike', 'all' ), true ) ) {
+			$requested_status = 'like';
+		}
+
 		$is_removed       = in_array( $requested_status, array( 'unlike', 'undislike' ), true );
 		$meta_status      = wp_ulike_get_base_vote_status( $requested_status );
 
