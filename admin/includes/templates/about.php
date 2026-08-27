@@ -14,6 +14,8 @@ $data = class_exists( 'WP_Ulike_Overview' ) ? WP_Ulike_Overview::get_about_view_
 $import_flash   = isset( $_GET['wp_ulike_import'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_import'] ) ) : '';
 $repair_flash   = isset( $_GET['wp_ulike_repair'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_repair'] ) ) : '';
 $stats_flash    = isset( $_GET['wp_ulike_stats_cache'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_stats_cache'] ) ) : '';
+$features_flash = isset( $_GET['wp_ulike_features'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_features'] ) ) : '';
+$cleanup_flash  = isset( $_GET['wp_ulike_cleanup'] ) ? sanitize_key( wp_unslash( $_GET['wp_ulike_cleanup'] ) ) : '';
 $import_open = in_array( $import_flash, array( 'error_upload', 'error_json', 'error_payload', 'error' ), true );
 $is_pro         = ! empty( $data['is_pro'] );
 $health         = isset( $data['health'] ) ? $data['health'] : array();
@@ -59,6 +61,32 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Statistics cache refreshed. Totals and charts will rebuild on the next view.', 'wp-ulike' ); ?></p></div>
 	<?php endif; ?>
 
+	<?php if ( in_array( $cleanup_flash, array( 'cleaned', 'scheduled' ), true ) ) : ?>
+		<?php $removed = (int) get_transient( 'wp_ulike_guest_cleanup_result' ); ?>
+		<div class="notice notice-success is-dismissible">
+			<p>
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: %s: number of rows removed */
+						_n( 'Removed %s old guest lookup row. Votes and counts are untouched.', 'Removed %s old guest lookup rows. Votes and counts are untouched.', $removed, 'wp-ulike' ),
+						number_format_i18n( $removed )
+					)
+				);
+				?>
+				<?php if ( 'scheduled' === $cleanup_flash ) : ?>
+					<?php esc_html_e( 'WP ULike will keep trimming them once a day from now on.', 'wp-ulike' ); ?>
+				<?php endif; ?>
+			</p>
+		</div>
+	<?php elseif ( 'dismissed' === $cleanup_flash ) : ?>
+		<div class="notice notice-info is-dismissible"><p><?php esc_html_e( 'Left as it is. Nothing was removed and you will not be asked again.', 'wp-ulike' ); ?></p></div>
+	<?php endif; ?>
+
+	<?php if ( 'saved' === $features_flash ) : ?>
+		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Features updated. Your settings were kept, so switching a feature back on restores it exactly as it was.', 'wp-ulike' ); ?></p></div>
+	<?php endif; ?>
+
 	<div class="wp-ulike-about__layout">
 
 		<div class="wp-ulike-about__main">
@@ -101,12 +129,36 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 				</div>
 			<?php endif; ?>
 
+			<?php $cleanup = $data['guest_cleanup'] ?? null; ?>
+			<?php if ( ! empty( $cleanup ) ) : ?>
+				<div class="wp-ulike-about-card wp-ulike-about-card--task-cleanup" role="region" aria-label="<?php echo esc_attr( $cleanup['title'] ); ?>">
+					<div class="wp-ulike-about-task__header">
+						<h2 class="wp-ulike-about-card__title"><?php echo esc_html( $cleanup['title'] ); ?></h2>
+					</div>
+					<p class="wp-ulike-about-task__intro"><?php echo esc_html( $cleanup['intro'] ); ?></p>
+					<ul class="wp-ulike-about-task__reassurance">
+						<?php foreach ( (array) $cleanup['keeps'] as $point ) : ?>
+							<li><?php echo esc_html( $point ); ?></li>
+						<?php endforeach; ?>
+					</ul>
+					<form class="wp-ulike-about-task__actions" method="post" action="<?php echo esc_url( $cleanup['url'] ); ?>">
+						<input type="hidden" name="action" value="wp_ulike_guest_cleanup" />
+						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $cleanup['nonce'] ); ?>" />
+						<button type="submit" name="mode" value="auto" class="button button-primary"><?php echo esc_html( $cleanup['auto_label'] ); ?></button>
+						<button type="submit" name="mode" value="once" class="button button-secondary"><?php echo esc_html( $cleanup['run_label'] ); ?></button>
+						<button type="submit" name="mode" value="dismiss" class="button-link"><?php echo esc_html( $cleanup['dismiss_label'] ); ?></button>
+					</form>
+				</div>
+			<?php endif; ?>
+
 			<!-- Status -->
 			<div class="wp-ulike-about-card">
 				<div class="wp-ulike-about-card__header">
 					<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'At a glance', 'wp-ulike' ); ?></h2>
 					<span class="wp-ulike-about-card__links">
-						<a class="wp-ulike-about-card__link" href="<?php echo esc_url( $health['statistics_url'] ?? admin_url( 'admin.php?page=wp-ulike-statistics' ) ); ?>"><?php esc_html_e( 'Statistics', 'wp-ulike' ); ?></a>
+						<?php if ( ! empty( $health['preview_url'] ) ) : ?>
+							<a class="wp-ulike-about-card__link" href="<?php echo esc_url( $health['preview_url'] ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'View on site', 'wp-ulike' ); ?></a>
+						<?php endif; ?>
 						<?php if ( class_exists( 'WP_Ulike_Health' ) ) : ?>
 							<a class="wp-ulike-about-card__link" href="<?php echo esc_url( WP_Ulike_Health::get_site_health_url() ); ?>"><?php echo esc_html( 'Site Health' ); ?></a>
 						<?php endif; ?>
@@ -183,56 +235,81 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 				<?php endif; ?>
 			</div>
 
-		<!-- Quick actions -->
-		<div class="wp-ulike-about-card">
-			<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Quick actions', 'wp-ulike' ); ?></h2>
-			<div class="wp-ulike-about-actions">
-				<?php foreach ( (array) ( $data['quick_actions'] ?? array() ) as $action ) : ?>
-					<?php
-					$btn_class = ! empty( $action['primary'] ) ? 'button-primary' : 'button-secondary';
-					$external  = ! empty( $action['external'] );
-					$icon      = ! empty( $action['icon'] ) ? $action['icon'] : 'arrow-right-alt';
-					?>
-					<a
-						class="button <?php echo esc_attr( $btn_class ); ?> wp-ulike-about-actions__btn"
-						href="<?php echo esc_url( $action['url'] ?? '#' ); ?>"
-						<?php echo $external ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>
-					>
-						<span class="dashicons dashicons-<?php echo esc_attr( $icon ); ?>" aria-hidden="true"></span>
-						<?php echo esc_html( $action['label'] ?? '' ); ?>
-					</a>
-				<?php endforeach; ?>
-			</div>
-		</div>
-
-			<?php if ( ! empty( $data['pro_modules'] ) ) : ?>
-				<div class="wp-ulike-about-card wp-ulike-about-card--pro">
-					<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Pro tools', 'wp-ulike' ); ?></h2>
-					<ul class="wp-ulike-about-modules">
-						<?php foreach ( $data['pro_modules'] as $module ) : ?>
-							<li class="wp-ulike-about-modules__item">
-								<span class="dashicons dashicons-<?php echo esc_attr( $module['icon'] ?? 'admin-generic' ); ?>" aria-hidden="true"></span>
-								<div class="wp-ulike-about-modules__body">
-									<strong>
-										<?php echo esc_html( $module['title'] ?? '' ); ?>
-										<?php if ( ! empty( $module['badge'] ) ) : ?>
-											<span class="wp-ulike-about__badge wp-ulike-about__badge--pro"><?php echo esc_html( $module['badge'] ); ?></span>
+			<!-- Features -->
+			<?php $features = isset( $data['features'] ) && is_array( $data['features'] ) ? $data['features'] : array(); ?>
+			<?php if ( ! empty( $features ) ) : ?>
+				<div class="wp-ulike-about-card wp-ulike-features" role="region" aria-label="<?php esc_attr_e( 'Features', 'wp-ulike' ); ?>">
+					<div class="wp-ulike-about-card__header">
+						<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Features', 'wp-ulike' ); ?></h2>
+					</div>
+					<p class="wp-ulike-features__intro"><?php esc_html_e( 'Switch off what you do not use — its settings and menu items disappear from WP ULike. Nothing is deleted, so switching a feature back on restores it exactly as you had it.', 'wp-ulike' ); ?></p>
+					<form id="wp-ulike-features-form" method="post" action="<?php echo esc_url( isset( $data['features_url'] ) ? $data['features_url'] : admin_url( 'admin-post.php' ) ); ?>">
+						<input type="hidden" name="action" value="wp_ulike_save_features" />
+						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( isset( $data['features_nonce'] ) ? $data['features_nonce'] : '' ); ?>" />
+						<ul class="wp-ulike-features__grid">
+							<?php foreach ( $features as $feature ) : ?>
+								<?php $field_id = 'wp-ulike-feature-' . sanitize_key( $feature['key'] ); ?>
+								<li class="wp-ulike-features__item<?php echo empty( $feature['enabled'] ) ? ' wp-ulike-features__item--off' : ''; ?>">
+									<span class="dashicons dashicons-<?php echo esc_attr( $feature['icon'] ); ?>" aria-hidden="true"></span>
+									<span class="wp-ulike-features__body">
+										<label class="wp-ulike-features__label" for="<?php echo esc_attr( $field_id ); ?>">
+											<?php echo esc_html( $feature['label'] ); ?>
+											<?php if ( ! empty( $feature['badge'] ) ) : ?>
+												<span class="wp-ulike-about__badge wp-ulike-about__badge--pro"><?php echo esc_html( $feature['badge'] ); ?></span>
+											<?php endif; ?>
+										</label>
+										<?php if ( ! empty( $feature['description'] ) ) : ?>
+											<span class="wp-ulike-features__desc"><?php echo esc_html( $feature['description'] ); ?></span>
 										<?php endif; ?>
-									</strong>
-									<?php if ( ! empty( $module['description'] ) ) : ?>
-										<p><?php echo esc_html( $module['description'] ); ?></p>
-									<?php endif; ?>
-								</div>
-								<?php if ( ! empty( $module['url'] ) ) : ?>
-									<a class="button button-secondary" href="<?php echo esc_url( $module['url'] ); ?>">
-										<?php esc_html_e( 'Open', 'wp-ulike' ); ?>
-									</a>
-								<?php endif; ?>
-							</li>
-						<?php endforeach; ?>
-					</ul>
+										<?php if ( ! empty( $feature['url'] ) ) : ?>
+											<a class="wp-ulike-features__link" href="<?php echo esc_url( $feature['url'] ); ?>"><?php esc_html_e( 'Open', 'wp-ulike' ); ?></a>
+										<?php endif; ?>
+									</span>
+									<span class="wp-ulike-features__switch">
+										<input
+											type="checkbox"
+											id="<?php echo esc_attr( $field_id ); ?>"
+											name="wp_ulike_features[]"
+											value="<?php echo esc_attr( $feature['key'] ); ?>"
+											<?php checked( ! empty( $feature['enabled'] ) ); ?>
+										/>
+										<span aria-hidden="true"></span>
+									</span>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+						<noscript>
+							<p class="wp-ulike-features__actions">
+								<button type="submit" class="button button-secondary"><?php esc_html_e( 'Save Features', 'wp-ulike' ); ?></button>
+							</p>
+						</noscript>
+					</form>
 				</div>
-			<?php elseif ( ! empty( $data['show_pro_upsell'] ) && ! empty( $data['pro_upsell'] ) ) : ?>
+				<script>
+				/* Switching a feature adds or removes admin menu items and settings
+				   tabs, so the page has to reload for the change to be visible.
+				   Submitting the whole form does that; the inputs stay enabled
+				   because disabled ones are left out of the POST. */
+				( function () {
+					var form = document.getElementById( 'wp-ulike-features-form' );
+
+					if ( ! form ) {
+						return;
+					}
+
+					form.addEventListener( 'change', function ( event ) {
+						if ( ! event.target.matches( 'input[name="wp_ulike_features[]"]' ) ) {
+							return;
+						}
+
+						form.classList.add( 'is-saving' );
+						form.submit();
+					} );
+				} )();
+				</script>
+			<?php endif; ?>
+
+			<?php if ( ! empty( $data['show_pro_upsell'] ) && ! empty( $data['pro_upsell'] ) ) : ?>
 				<?php $upsell = $data['pro_upsell']; ?>
 				<div class="wp-ulike-about-card wp-ulike-about-card--upsell">
 					<div class="wp-ulike-about-upsell__header">
@@ -264,26 +341,6 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 					</p>
 				</div>
 			<?php endif; ?>
-
-			<!-- Help -->
-			<div class="wp-ulike-about-card">
-				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Help & resources', 'wp-ulike' ); ?></h2>
-				<ul class="wp-ulike-about-help">
-					<?php foreach ( (array) ( $data['help_links'] ?? array() ) as $link ) : ?>
-						<li>
-							<a href="<?php echo esc_url( $link['url'] ?? '#' ); ?>" target="_blank" rel="noopener noreferrer">
-								<span class="dashicons dashicons-<?php echo esc_attr( $link['icon'] ?? 'external' ); ?>" aria-hidden="true"></span>
-								<span class="wp-ulike-about-help__text">
-									<strong><?php echo esc_html( $link['title'] ?? '' ); ?></strong>
-									<?php if ( ! empty( $link['desc'] ) ) : ?>
-										<span><?php echo esc_html( $link['desc'] ); ?></span>
-									<?php endif; ?>
-								</span>
-							</a>
-						</li>
-					<?php endforeach; ?>
-				</ul>
-			</div>
 
 			<!-- Advanced (collapsed) -->
 			<?php $troubleshooting = (array) ( $data['troubleshooting'] ?? array() ); ?>
@@ -348,6 +405,26 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 						</div>
 					<?php endforeach; ?>
 				</dl>
+			</div>
+
+			<!-- Help -->
+			<div class="wp-ulike-about-card">
+				<h2 class="wp-ulike-about-card__title"><?php esc_html_e( 'Help & resources', 'wp-ulike' ); ?></h2>
+				<ul class="wp-ulike-about-help">
+					<?php foreach ( (array) ( $data['help_links'] ?? array() ) as $link ) : ?>
+						<li>
+							<a href="<?php echo esc_url( $link['url'] ?? '#' ); ?>" target="_blank" rel="noopener noreferrer">
+								<span class="dashicons dashicons-<?php echo esc_attr( $link['icon'] ?? 'external' ); ?>" aria-hidden="true"></span>
+								<span class="wp-ulike-about-help__text">
+									<strong><?php echo esc_html( $link['title'] ?? '' ); ?></strong>
+									<?php if ( ! empty( $link['desc'] ) ) : ?>
+										<span><?php echo esc_html( $link['desc'] ); ?></span>
+									<?php endif; ?>
+								</span>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
 			</div>
 
 			<div class="wp-ulike-about-card wp-ulike-about-card--muted wp-ulike-about-backup" id="wp-ulike-settings-backup">
