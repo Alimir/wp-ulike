@@ -96,13 +96,8 @@ if ( ! class_exists( 'WP_Ulike_Activation_Pointer' ) ) {
 			}
 
 			$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
-			if ( $page && 0 === strpos( $page, 'wp-ulike' ) ) {
-				return false;
-			}
 
-			global $pagenow;
-
-			return in_array( $pagenow, array( 'index.php', 'plugins.php' ), true );
+			return ! ( $page && 0 === strpos( $page, 'wp-ulike' ) );
 		}
 
 		/**

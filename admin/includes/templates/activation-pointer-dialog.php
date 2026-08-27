@@ -1,6 +1,6 @@
 <?php
 /**
- * One-line menu pointer after activation.
+ * Menu pointer after activation.
  *
  * @package WP_ULike
  */
@@ -19,20 +19,27 @@ $wizard_pending = class_exists( 'WP_Ulike_Setup_Wizard' ) && WP_Ulike_Setup_Wiza
 		<button type="button" class="wp-ulike-activation-pointer__close" aria-label="<?php esc_attr_e( 'Dismiss', 'wp-ulike' ); ?>">
 			<span aria-hidden="true">&times;</span>
 		</button>
-		<h3 class="wp-ulike-activation-pointer__title"><?php esc_html_e( 'WP ULike is on', 'wp-ulike' ); ?></h3>
+		<p class="wp-ulike-activation-pointer__kicker"><?php esc_html_e( 'WP ULike', 'wp-ulike' ); ?></p>
+		<h3 class="wp-ulike-activation-pointer__title">
+			<?php echo $wizard_pending
+				? esc_html__( 'Likes are ready.', 'wp-ulike' )
+				: esc_html__( 'Likes are back.', 'wp-ulike' ); ?>
+		</h3>
 		<p class="wp-ulike-activation-pointer__lead">
-			<?php
-			echo $wizard_pending
-				? esc_html__( 'Three answers and likes are live. Open Settings to finish.', 'wp-ulike' )
-				: esc_html__( 'Buttons stay on single posts. Home and Pages stay off until you turn them on in Content Types.', 'wp-ulike' );
-			?>
+			<?php echo $wizard_pending
+				? esc_html__( 'You choose where likes live. Anyone can leave one without signing in.', 'wp-ulike' )
+				: esc_html__( 'Likes are on your posts again. Home and Pages wait until you invite them.', 'wp-ulike' ); ?>
 		</p>
 		<p class="wp-ulike-activation-pointer__actions">
 			<a class="button button-primary" href="<?php echo esc_url( $settings_url ); ?>">
-				<?php echo $wizard_pending ? esc_html__( 'Finish setup', 'wp-ulike' ) : esc_html__( 'Content Types', 'wp-ulike' ); ?>
+				<?php echo $wizard_pending
+					? esc_html__( 'Continue', 'wp-ulike' )
+					: esc_html__( 'Open settings', 'wp-ulike' ); ?>
 			</a>
 			<button type="button" class="wp-ulike-activation-pointer__dismiss">
-				<?php esc_html_e( 'Got it', 'wp-ulike' ); ?>
+				<?php echo $wizard_pending
+					? esc_html__( 'Later', 'wp-ulike' )
+					: esc_html__( 'Got it', 'wp-ulike' ); ?>
 			</button>
 		</p>
 	</div>

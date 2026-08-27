@@ -76,7 +76,7 @@
 			popover.classList.add( 'is-rtl' );
 		} else {
 			popover.style.right = 'auto';
-			popover.style.left = Math.min( window.innerWidth - 320, rect.right + gap ) + 'px';
+			popover.style.left = Math.min( window.innerWidth - 340, rect.right + gap ) + 'px';
 			popover.classList.remove( 'is-rtl' );
 		}
 
