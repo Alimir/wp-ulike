@@ -2,23 +2,24 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP ULike 5.2.2\n"
+"Project-Id-Version: WP ULike 5.2.3\n"
 "Report-Msgid-Bugs-To: https://wpulike.com\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WP ULike Team <info@wpulike.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-06T22:18:13+00:00\n"
+"POT-Creation-Date: 2026-08-27T10:24:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
 
 #. Plugin Name of the plugin
-#: admin/classes/class-wp-ulike-admin-pages.php:123
-#: admin/classes/class-wp-ulike-admin-pages.php:124
-#: admin/classes/class-wp-ulike-customizer-api.php:221
-#: admin/includes/templates/about.php:321
+#: admin/classes/class-wp-ulike-admin-pages.php:133
+#: admin/classes/class-wp-ulike-admin-pages.php:134
+#: admin/classes/class-wp-ulike-customizer-api.php:238
+#: admin/includes/templates/about.php:392
+#: admin/includes/templates/activation-pointer-dialog.php:22
 #: includes/classes/class-wp-ulike-customizer.php:43
 #: includes/classes/class-wp-ulike-health.php:117
 #: includes/classes/class-wp-ulike-health.php:164
@@ -50,10 +51,12 @@ msgid "https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm
 msgstr ""
 
 #: admin/admin-ajax.php:23
-#: includes/classes/class-wp-ulike-overview.php:444
-#: includes/classes/class-wp-ulike-overview.php:465
-#: includes/classes/class-wp-ulike-overview.php:509
-#: includes/classes/class-wp-ulike-overview.php:534
+#: includes/classes/class-wp-ulike-overview.php:733
+#: includes/classes/class-wp-ulike-overview.php:792
+#: includes/classes/class-wp-ulike-overview.php:813
+#: includes/classes/class-wp-ulike-overview.php:857
+#: includes/classes/class-wp-ulike-overview.php:916
+#: includes/classes/class-wp-ulike-overview.php:945
 #: includes/classes/class-wp-ulike-voters-listener.php:41
 msgid "Permission denied."
 msgstr ""
@@ -86,8 +89,8 @@ msgstr ""
 
 #: admin/admin-ajax.php:278
 #: admin/classes/class-wp-ulike-admin-pages.php:106
-#: admin/includes/templates/about.php:28
-#: includes/plugin.php:159
+#: admin/includes/templates/about.php:30
+#: includes/plugin.php:190
 msgid "Overview"
 msgstr ""
 
@@ -321,10 +324,11 @@ msgstr ""
 
 #: admin/admin-ajax.php:342
 #: admin/classes/class-wp-ulike-admin-panel.php:72
-#: admin/classes/class-wp-ulike-admin-panel.php:306
-#: admin/classes/class-wp-ulike-admin-panel.php:332
-#: includes/classes/class-wp-ulike-overview.php:182
-#: includes/classes/class-wp-ulike-overview.php:689
+#: admin/classes/class-wp-ulike-admin-panel.php:311
+#: admin/classes/class-wp-ulike-admin-panel.php:345
+#: admin/includes/templates/setup-wizard-dialog.php:47
+#: includes/classes/class-wp-ulike-overview.php:626
+#: includes/classes/class-wp-ulike-overview.php:1116
 #: includes/hooks/privacy.php:19
 #: includes/hooks/third-party.php:358
 msgid "Posts"
@@ -332,10 +336,11 @@ msgstr ""
 
 #: admin/admin-ajax.php:343
 #: admin/classes/class-wp-ulike-admin-panel.php:73
-#: admin/classes/class-wp-ulike-admin-panel.php:307
-#: admin/classes/class-wp-ulike-admin-panel.php:341
-#: includes/classes/class-wp-ulike-overview.php:188
-#: includes/classes/class-wp-ulike-overview.php:690
+#: admin/classes/class-wp-ulike-admin-panel.php:312
+#: admin/classes/class-wp-ulike-admin-panel.php:358
+#: admin/includes/templates/setup-wizard-dialog.php:56
+#: includes/classes/class-wp-ulike-overview.php:632
+#: includes/classes/class-wp-ulike-overview.php:1117
 #: includes/hooks/privacy.php:20
 #: includes/hooks/third-party.php:365
 msgid "Comments"
@@ -343,7 +348,8 @@ msgstr ""
 
 #: admin/admin-ajax.php:344
 #: admin/classes/class-wp-ulike-admin-panel.php:74
-#: admin/classes/class-wp-ulike-admin-panel.php:308
+#: admin/classes/class-wp-ulike-admin-panel.php:313
+#: includes/classes/class-wp-ulike-overview.php:638
 #: includes/hooks/privacy.php:21
 #: includes/hooks/third-party.php:371
 msgid "Activities"
@@ -351,7 +357,8 @@ msgstr ""
 
 #: admin/admin-ajax.php:345
 #: admin/classes/class-wp-ulike-admin-panel.php:75
-#: admin/classes/class-wp-ulike-admin-panel.php:309
+#: admin/classes/class-wp-ulike-admin-panel.php:314
+#: includes/classes/class-wp-ulike-overview.php:646
 #: includes/hooks/privacy.php:22
 #: includes/hooks/third-party.php:379
 msgid "Topics"
@@ -390,21 +397,21 @@ msgid "{{count}} actions this week — see which visitors engage most often."
 msgstr ""
 
 #: admin/admin-ajax.php:356
-#: admin/admin-hooks.php:392
-#: admin/admin-hooks.php:467
-#: admin/classes/class-wp-ulike-admin-panel.php:698
-#: admin/classes/class-wp-ulike-admin-panel.php:705
-#: admin/classes/class-wp-ulike-admin-panel.php:731
-#: admin/classes/class-wp-ulike-customizer-api.php:1086
-#: admin/classes/class-wp-ulike-customizer-api.php:1109
+#: admin/admin-hooks.php:454
+#: admin/admin-hooks.php:529
+#: admin/classes/class-wp-ulike-admin-panel.php:850
+#: admin/classes/class-wp-ulike-admin-panel.php:857
+#: admin/classes/class-wp-ulike-admin-panel.php:883
+#: admin/classes/class-wp-ulike-customizer-api.php:1139
+#: admin/classes/class-wp-ulike-customizer-api.php:1162
 #: admin/classes/class-wp-ulike-settings-api.php:1365
 #: admin/classes/class-wp-ulike-widget.php:430
 msgid "Like"
 msgstr ""
 
 #: admin/admin-ajax.php:357
-#: admin/classes/class-wp-ulike-admin-panel.php:710
-#: admin/classes/class-wp-ulike-admin-panel.php:744
+#: admin/classes/class-wp-ulike-admin-panel.php:862
+#: admin/classes/class-wp-ulike-admin-panel.php:896
 msgid "Unlike"
 msgstr ""
 
@@ -421,8 +428,8 @@ msgid "Status Filter"
 msgstr ""
 
 #: admin/admin-ajax.php:361
-#: admin/includes/templates/about.php:89
-#: includes/classes/class-wp-ulike-overview.php:213
+#: admin/includes/templates/about.php:117
+#: includes/classes/class-wp-ulike-overview.php:203
 #: includes/hooks/privacy.php:98
 msgid "Status"
 msgstr ""
@@ -448,9 +455,9 @@ msgid "Content type"
 msgstr ""
 
 #: admin/admin-ajax.php:367
-#: admin/classes/class-wp-ulike-admin-panel.php:372
-#: includes/classes/class-wp-ulike-overview.php:380
-#: includes/classes/class-wp-ulike-overview.php:389
+#: admin/classes/class-wp-ulike-admin-panel.php:393
+#: includes/classes/class-wp-ulike-overview.php:372
+#: includes/classes/class-wp-ulike-overview.php:381
 msgid "Content Types"
 msgstr ""
 
@@ -550,7 +557,7 @@ msgid "Date"
 msgstr ""
 
 #: admin/admin-ajax.php:398
-#: admin/classes/class-wp-ulike-customizer-api.php:1138
+#: admin/classes/class-wp-ulike-customizer-api.php:1191
 msgid "User"
 msgstr ""
 
@@ -581,7 +588,7 @@ msgstr ""
 
 #: admin/admin-ajax.php:405
 #: admin/classes/class-wp-ulike-admin-panel.php:160
-#: admin/classes/class-wp-ulike-admin-panel.php:652
+#: admin/classes/class-wp-ulike-admin-panel.php:778
 msgid "Categories"
 msgstr ""
 
@@ -689,7 +696,7 @@ msgstr ""
 
 #. translators: Generic error message shown when something goes wrong
 #: admin/admin-ajax.php:435
-#: admin/classes/class-wp-ulike-customizer-api.php:1171
+#: admin/classes/class-wp-ulike-customizer-api.php:1224
 #: admin/classes/class-wp-ulike-settings-api.php:1152
 msgid "Something went wrong"
 msgstr ""
@@ -1237,6 +1244,7 @@ msgid "Impressions"
 msgstr ""
 
 #: admin/admin-ajax.php:588
+#: admin/includes/templates/activation-pointer-dialog.php:19
 msgid "Dismiss"
 msgstr ""
 
@@ -1266,7 +1274,7 @@ msgstr ""
 
 #. translators: Button text to upgrade to pro version
 #: admin/admin-ajax.php:599
-#: admin/classes/class-wp-ulike-admin-panel.php:1215
+#: admin/classes/class-wp-ulike-admin-panel.php:1426
 #: admin/classes/class-wp-ulike-settings-api.php:1301
 msgid "Upgrade to Pro"
 msgstr ""
@@ -1278,16 +1286,15 @@ msgstr ""
 #. translators: Tag label for pro features
 #: admin/admin-ajax.php:601
 #: admin/classes/class-wp-ulike-settings-api.php:1305
-#: admin/includes/templates/about.php:318
+#: admin/includes/templates/about.php:389
 msgid "Pro"
 msgstr ""
 
 #. translators: Generic label for settings
 #: admin/admin-ajax.php:602
-#: admin/classes/class-wp-ulike-admin-pages.php:167
+#: admin/classes/class-wp-ulike-admin-pages.php:177
 #: admin/classes/class-wp-ulike-settings-api.php:1355
-#: includes/classes/class-wp-ulike-overview.php:117
-#: includes/plugin.php:157
+#: includes/plugin.php:189
 msgid "Settings"
 msgstr ""
 
@@ -1296,8 +1303,8 @@ msgid "Help"
 msgstr ""
 
 #: admin/admin-ajax.php:604
-#: admin/includes/templates/about.php:262
-#: includes/classes/class-wp-ulike-overview.php:79
+#: admin/includes/templates/about.php:353
+#: includes/classes/class-wp-ulike-overview.php:106
 msgid "Get Pro"
 msgstr ""
 
@@ -1442,23 +1449,23 @@ msgid "Dismissals were cleared. Popup announcements will appear again the next t
 msgstr ""
 
 #: admin/admin-ajax.php:641
-msgid "Plugin configuration"
-msgstr ""
-
-#: admin/admin-ajax.php:642
 msgid "Open plugin settings"
 msgstr ""
 
-#: admin/admin-ajax.php:643
-msgid "Help & documentation"
-msgstr ""
-
-#: admin/admin-ajax.php:644
+#: admin/admin-ajax.php:642
 msgid "Appearance"
 msgstr ""
 
+#: admin/admin-ajax.php:643
+msgid "Light"
+msgstr ""
+
+#: admin/admin-ajax.php:644
+msgid "Dark"
+msgstr ""
+
 #: admin/admin-ajax.php:645
-msgid "Theme preference is stored locally in this browser, not in your WordPress user account."
+msgid "System"
 msgstr ""
 
 #: admin/admin-ajax.php:646
@@ -1746,15 +1753,14 @@ msgstr ""
 
 #: admin/admin-ajax.php:824
 #: admin/admin-ajax.php:948
-#: admin/classes/class-wp-ulike-customizer-api.php:626
-#: admin/classes/class-wp-ulike-customizer-api.php:633
+#: admin/classes/class-wp-ulike-customizer-api.php:643
+#: admin/classes/class-wp-ulike-customizer-api.php:650
 #: admin/classes/class-wp-ulike-settings-api.php:630
 #: admin/classes/class-wp-ulike-settings-api.php:638
 msgid "Invalid request data."
 msgstr ""
 
 #: admin/admin-functions.php:132
-#: admin/classes/class-wp-ulike-admin-panel.php:792
 #: includes/classes/class-wp-ulike-customizer.php:54
 #: includes/classes/class-wp-ulike-customizer.php:205
 msgid "Button"
@@ -1764,75 +1770,75 @@ msgstr ""
 msgid "Proudly Powered By"
 msgstr ""
 
-#: admin/admin-hooks.php:129
+#: admin/admin-hooks.php:157
 msgid "Congrats!"
 msgstr ""
 
 #. translators: %s: total like count
-#: admin/admin-hooks.php:132
+#: admin/admin-hooks.php:160
 msgid "You've logged %s likes with WP ULike so far. Nice work! If the plugin's been good to you, we'd love a 5-star review on WordPress.org. It helps us keep improving and helps others discover WP ULike too."
 msgstr ""
 
-#: admin/admin-hooks.php:139
+#: admin/admin-hooks.php:167
 msgid "Happy to help"
 msgstr ""
 
-#: admin/admin-hooks.php:144
-#: admin/admin-hooks.php:231
+#: admin/admin-hooks.php:172
+#: admin/admin-hooks.php:259
 msgid "Maybe later"
 msgstr ""
 
-#: admin/admin-hooks.php:150
+#: admin/admin-hooks.php:178
 msgid "Don't ask again"
 msgstr ""
 
-#: admin/admin-hooks.php:186
-#: admin/admin-hooks.php:193
+#: admin/admin-hooks.php:214
+#: admin/admin-hooks.php:221
 msgid "Your license needs attention"
 msgstr ""
 
-#: admin/admin-hooks.php:189
+#: admin/admin-hooks.php:217
 msgid "Your license has expired"
 msgstr ""
 
-#: admin/admin-hooks.php:191
+#: admin/admin-hooks.php:219
 msgid "Your license has been disabled"
 msgstr ""
 
-#: admin/admin-hooks.php:195
+#: admin/admin-hooks.php:223
 msgid "Unable to verify your license"
 msgstr ""
 
-#: admin/admin-hooks.php:202
+#: admin/admin-hooks.php:230
 msgid "Special offer: save %s on WP ULike Pro"
 msgstr ""
 
-#: admin/admin-hooks.php:206
+#: admin/admin-hooks.php:234
 msgid "We noticed your license needs a quick update. Renew with code %s to save %s on premium features, updates, and support."
 msgstr ""
 
-#: admin/admin-hooks.php:216
+#: admin/admin-hooks.php:244
 msgid "Claim %s discount"
 msgstr ""
 
-#: admin/admin-hooks.php:266
-#: admin/admin-hooks.php:267
+#: admin/admin-hooks.php:293
+#: admin/admin-hooks.php:294
 msgid "Go Pro"
 msgstr ""
 
-#: admin/admin-hooks.php:545
+#: admin/admin-hooks.php:607
 msgid "PHP Snippets"
 msgstr ""
 
-#: admin/admin-hooks.php:547
+#: admin/admin-hooks.php:609
 msgid "Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If you have lots of snippets, you may want to consider using Code Snippets plugin."
 msgstr ""
 
-#: admin/admin-hooks.php:556
+#: admin/admin-hooks.php:618
 msgid "Javascript Snippets"
 msgstr ""
 
-#: admin/admin-hooks.php:558
+#: admin/admin-hooks.php:620
 msgid "This code will output immediately before the closing &lt;/body&gt; tag in the document source. (Scripts must not be property wrapped in &lt;script&gt; tag.)"
 msgstr ""
 
@@ -1841,17 +1847,17 @@ msgid "Metrics Dashboard"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:92
+#: includes/functions/general.php:358
 msgid "Customize"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:99
-#: admin/includes/templates/about.php:109
-#: includes/classes/class-wp-ulike-overview.php:129
-#: includes/plugin.php:158
+#: includes/functions/general.php:348
+#: includes/plugin.php:195
 msgid "Statistics"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-pages.php:166
+#: admin/classes/class-wp-ulike-admin-pages.php:176
 msgid "WP ULike Settings"
 msgstr ""
 
@@ -1862,10 +1868,10 @@ msgstr ""
 #. translators: Generic label for general section
 #: admin/classes/class-wp-ulike-admin-panel.php:54
 #: admin/classes/class-wp-ulike-settings-api.php:1353
-#: includes/classes/class-wp-ulike-customizer.php:499
-#: includes/classes/class-wp-ulike-customizer.php:565
-#: includes/classes/class-wp-ulike-overview.php:398
-#: includes/classes/class-wp-ulike-overview.php:407
+#: includes/classes/class-wp-ulike-customizer.php:558
+#: includes/classes/class-wp-ulike-customizer.php:624
+#: includes/classes/class-wp-ulike-overview.php:390
+#: includes/classes/class-wp-ulike-overview.php:399
 msgid "General"
 msgstr ""
 
@@ -1878,12 +1884,12 @@ msgid "Show a brief confirmation message after users like/unlike."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:67
-#: admin/classes/class-wp-ulike-admin-panel.php:301
+#: admin/classes/class-wp-ulike-admin-panel.php:306
 msgid "Disable Notifications On"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:68
-#: admin/classes/class-wp-ulike-admin-panel.php:302
+#: admin/classes/class-wp-ulike-admin-panel.php:307
 msgid "Choose where notifications are disabled."
 msgstr ""
 
@@ -1954,7 +1960,7 @@ msgid "Stop saving user IP addresses in your database."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:146
-#: includes/classes/class-wp-ulike-overview.php:395
+#: includes/classes/class-wp-ulike-overview.php:387
 msgid "Site Uses Caching"
 msgstr ""
 
@@ -1971,32 +1977,32 @@ msgid "Prevent loading WP ULike CSS/JS on selected page types."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:157
-#: admin/classes/class-wp-ulike-admin-panel.php:650
+#: admin/classes/class-wp-ulike-admin-panel.php:776
 msgid "Home"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:158
-#: admin/classes/class-wp-ulike-admin-panel.php:649
+#: admin/classes/class-wp-ulike-admin-panel.php:775
 msgid "Singular"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:159
-#: admin/classes/class-wp-ulike-admin-panel.php:651
+#: admin/classes/class-wp-ulike-admin-panel.php:777
 msgid "Archives"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:161
-#: admin/classes/class-wp-ulike-admin-panel.php:653
+#: admin/classes/class-wp-ulike-admin-panel.php:779
 msgid "Search Results"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:162
-#: admin/classes/class-wp-ulike-admin-panel.php:654
+#: admin/classes/class-wp-ulike-admin-panel.php:780
 msgid "Tags"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:163
-#: admin/classes/class-wp-ulike-admin-panel.php:655
+#: admin/classes/class-wp-ulike-admin-panel.php:781
 msgid "Author Page"
 msgstr ""
 
@@ -2013,12 +2019,12 @@ msgid "WooCommerce Pages"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:172
-#: includes/classes/class-wp-ulike-overview.php:404
+#: includes/classes/class-wp-ulike-overview.php:396
 msgid "Hide Plugin Admin Notices"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:173
-msgid "Completely hide WP ULike admin notices for all users."
+msgid "Hide WP ULike admin notices everywhere, including WP ULike screens."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:178
@@ -2085,798 +2091,859 @@ msgid "Allow liking BuddyPress comments in the activity stream."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:265
+msgid "Community"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:270
 msgid "Add Activity Entries for Likes"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:266
+#: admin/classes/class-wp-ulike-admin-panel.php:271
 msgid "Create a BuddyPress activity item when someone likes content."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:276
+#: admin/classes/class-wp-ulike-admin-panel.php:281
 msgid "Post Activity Text"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:277
-#: admin/classes/class-wp-ulike-admin-panel.php:289
-#: admin/classes/class-wp-ulike-admin-panel.php:800
-#: admin/classes/class-wp-ulike-admin-panel.php:887
+#: admin/classes/class-wp-ulike-admin-panel.php:282
+#: admin/classes/class-wp-ulike-admin-panel.php:294
+#: admin/classes/class-wp-ulike-admin-panel.php:683
+#: admin/classes/class-wp-ulike-admin-panel.php:987
 msgid "Allowed Variables:"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:288
+#: admin/classes/class-wp-ulike-admin-panel.php:293
 msgid "Comment Activity Text"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:295
+#: admin/classes/class-wp-ulike-admin-panel.php:300
 msgid "Enable User Notifications"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:296
+#: admin/classes/class-wp-ulike-admin-panel.php:301
 msgid "Send a notification when your content receives a like."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:352
-#: admin/classes/class-wp-ulike-admin-panel.php:502
+#: admin/classes/class-wp-ulike-admin-panel.php:373
+#: admin/classes/class-wp-ulike-admin-panel.php:548
 #: admin/classes/class-wp-ulike-widget.php:325
 #: admin/classes/class-wp-ulike-widget.php:640
 msgid "BuddyPress"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:363
+#: admin/classes/class-wp-ulike-admin-panel.php:384
 #: admin/classes/class-wp-ulike-widget.php:257
 msgid "bbPress"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:381
+#: admin/classes/class-wp-ulike-admin-panel.php:407
 msgid "Profiles"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:391
+#: admin/classes/class-wp-ulike-admin-panel.php:418
 msgid "Login & Signup"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:401
+#: admin/classes/class-wp-ulike-admin-panel.php:429
 msgid "Social Logins"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:411
+#: admin/classes/class-wp-ulike-admin-panel.php:440
 msgid "Share Buttons"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:422
+#: admin/classes/class-wp-ulike-admin-panel.php:450
+msgid "Pro Features"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:468
 msgid "Translations"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:428
+#: admin/classes/class-wp-ulike-admin-panel.php:474
 msgid "Strings"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:436
+#: admin/classes/class-wp-ulike-admin-panel.php:482
 msgid "Vote Notices"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:441
+#: admin/classes/class-wp-ulike-admin-panel.php:487
 #: includes/classes/class-wp-ulike-setting-repo.php:37
 msgid "Your vote cannot be submitted at this time."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:442
+#: admin/classes/class-wp-ulike-admin-panel.php:488
 msgid "Validation Notice Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:443
+#: admin/classes/class-wp-ulike-admin-panel.php:489
 msgid "Message shown when a vote cannot be processed due to validation errors."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:448
+#: admin/classes/class-wp-ulike-admin-panel.php:494
 #: includes/classes/class-wp-ulike-setting-repo.php:46
 msgid "You have already registered a vote."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:449
+#: admin/classes/class-wp-ulike-admin-panel.php:495
 msgid "Already Voted Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:450
+#: admin/classes/class-wp-ulike-admin-panel.php:496
 msgid "Message shown when a user tries to vote again after already voting."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:455
+#: admin/classes/class-wp-ulike-admin-panel.php:501
 #: includes/classes/class-wp-ulike-setting-repo.php:28
 msgid "You Should Login To Submit Your Like"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:456
+#: admin/classes/class-wp-ulike-admin-panel.php:502
 msgid "Login Required Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:457
+#: admin/classes/class-wp-ulike-admin-panel.php:503
 msgid "Message shown to visitors who need to log in before they can vote."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:462
+#: admin/classes/class-wp-ulike-admin-panel.php:508
 #: includes/classes/class-wp-ulike-setting-repo.php:55
 msgid "Thanks! You Liked This."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:463
+#: admin/classes/class-wp-ulike-admin-panel.php:509
 msgid "Liked Notice Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:464
+#: admin/classes/class-wp-ulike-admin-panel.php:510
 msgid "Confirmation message shown after a user successfully likes content."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:469
+#: admin/classes/class-wp-ulike-admin-panel.php:515
 #: includes/classes/class-wp-ulike-setting-repo.php:64
 msgid "Sorry! You unliked this."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:470
+#: admin/classes/class-wp-ulike-admin-panel.php:516
 msgid "Unliked Notice Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:471
+#: admin/classes/class-wp-ulike-admin-panel.php:517
 msgid "Confirmation message shown after a user removes their like."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:476
+#: admin/classes/class-wp-ulike-admin-panel.php:522
 #: includes/classes/class-wp-ulike-setting-repo.php:73
 msgid "Could not save your vote. Please refresh the page and try again."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:477
+#: admin/classes/class-wp-ulike-admin-panel.php:523
 msgid "Connection Error Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:478
+#: admin/classes/class-wp-ulike-admin-panel.php:524
 msgid "Message shown when a vote cannot be saved due to a network or server error."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:483
+#: admin/classes/class-wp-ulike-admin-panel.php:529
 msgid "Widgets & Lists"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:488
+#: admin/classes/class-wp-ulike-admin-panel.php:534
 #: includes/classes/class-wp-ulike-setting-repo.php:83
 msgid "No results were found in \"%s\" period"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:489
+#: admin/classes/class-wp-ulike-admin-panel.php:535
 msgid "No Results Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:490
+#: admin/classes/class-wp-ulike-admin-panel.php:536
 msgid "Empty state for Top List and widgets. Use %s for the selected period."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:495
+#: admin/classes/class-wp-ulike-admin-panel.php:541
 #: includes/classes/class-wp-ulike-setting-repo.php:93
 msgid "you haven't liked any post yet!"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:496
+#: admin/classes/class-wp-ulike-admin-panel.php:542
 msgid "User Has No Likes Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:497
+#: admin/classes/class-wp-ulike-admin-panel.php:543
 msgid "Message shown in the widget when the current user has not liked any posts yet."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:507
+#: admin/classes/class-wp-ulike-admin-panel.php:553
 #: includes/classes/class-wp-ulike-setting-repo.php:111
 msgid "You have %1$d new %2$s likes"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:508
+#: admin/classes/class-wp-ulike-admin-panel.php:554
 msgid "BuddyPress Multiple Likes Notification"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:509
+#: admin/classes/class-wp-ulike-admin-panel.php:555
 msgid "Use %1$d for the count and %2$s for the content type (e.g. Posts)."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:514
+#: admin/classes/class-wp-ulike-admin-panel.php:560
 #: includes/classes/class-wp-ulike-setting-repo.php:120
 msgid "%1$s liked one of your %2$s"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:515
+#: admin/classes/class-wp-ulike-admin-panel.php:561
 msgid "BuddyPress Single Like Notification"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:516
+#: admin/classes/class-wp-ulike-admin-panel.php:562
 msgid "Use %1$s for the user name and %2$s for the content type."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:521
+#: admin/classes/class-wp-ulike-admin-panel.php:567
 msgid "Ultimate Member"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:526
+#: admin/classes/class-wp-ulike-admin-panel.php:572
 #: includes/classes/class-wp-ulike-setting-repo.php:102
 msgid "This user has not made any likes."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:527
+#: admin/classes/class-wp-ulike-admin-panel.php:573
 msgid "Ultimate Member No Likes Message"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:528
+#: admin/classes/class-wp-ulike-admin-panel.php:574
 msgid "Empty state shown on Ultimate Member profile like tabs."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:537
+#: admin/classes/class-wp-ulike-admin-panel.php:584
 msgid "Emails"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:548
+#: admin/classes/class-wp-ulike-admin-panel.php:596
 msgid "Developer Tools"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:555
+#: admin/classes/class-wp-ulike-admin-panel.php:603
 msgid "Scripts"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:565
+#: admin/classes/class-wp-ulike-admin-panel.php:613
 msgid "Custom CSS"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:566
+#: admin/classes/class-wp-ulike-admin-panel.php:614
 msgid "Add custom CSS to style the like button and related elements. This CSS will be loaded on all pages."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:571
+#: admin/classes/class-wp-ulike-admin-panel.php:619
 msgid "Custom Spinner"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:572
+#: admin/classes/class-wp-ulike-admin-panel.php:620
 msgid "Upload a custom loading animation image that appears while processing votes."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:579
+#: admin/classes/class-wp-ulike-admin-panel.php:627
 msgid "Enable Inline Custom CSS"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:580
+#: admin/classes/class-wp-ulike-admin-panel.php:628
 msgid "Output styles inline on the page instead of loading custom.css file. The CSS file will still be generated for debugging and inspection purposes."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:605
-msgid "Select a Template"
+#: admin/classes/class-wp-ulike-admin-panel.php:653
+msgid "Who can vote"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:608
-msgid "Pick a style for your like button."
+#: admin/classes/class-wp-ulike-admin-panel.php:659
+msgid "Who Can Vote"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:617
-msgid "Preview online"
+#: admin/classes/class-wp-ulike-admin-panel.php:661
+msgid "Everyone (default): visitors vote with one click, no account needed. Logged-in only: guests see a login popup. Set this separately for each content type."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:618
-msgid "Unlock additional button styles with Pro."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:627
-#: includes/classes/class-wp-ulike-overview.php:386
-msgid "Automatic Display"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:628
-msgid "Automatically show the like button on your content without manually adding shortcodes."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:633
-msgid "Button Position"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:634
-msgid "Choose where the like button appears relative to your content."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:643
-msgid "Show Buttons On"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:644
-msgid "Checked places show the like button. Default is Singular. Which singular post types appear is controlled by Post Types below."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:663
-msgid "Also Show on Excerpts / List Views"
+#: admin/classes/class-wp-ulike-admin-panel.php:662
+msgid "Everyone (default): visitors vote with one click, no account needed. Logged-in only: guests see a login prompt. Set this separately for each content type."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:664
-msgid "Off by default so archive lists do not repeat like buttons. Turn on only if you want buttons in excerpts."
+msgid "Everyone"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:670
-msgid "Post Types"
+#: admin/classes/class-wp-ulike-admin-panel.php:665
+#: admin/classes/class-wp-ulike-admin-panel.php:925
+msgid "Logged-in users only"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:671
-msgid "Select post types"
+msgid "What Guests See"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:672
+msgid "Login prompt (recommended): show a message with a login link. Button: show the like button; clicking it asks them to log in."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:674
+msgid "Login prompt"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:675
+msgid "Button (asks on click)"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:690
+#: includes/classes/class-wp-ulike-setting-repo.php:299
+msgid "You need to login in order to like this post: "
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:692
+#: includes/classes/class-wp-ulike-setting-repo.php:301
+msgid "click here"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:694
+#: admin/classes/class-wp-ulike-admin-panel.php:986
+msgid "Custom HTML Template"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:700
+msgid "Vote rules"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:705
+msgid "How each person is recognized so you can stop duplicate votes. This also affects whether unlike is available — use “After a like” below to lock or limit unlike."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:706
+msgid "How Votes Are Tracked"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:711
+msgid "Unlimited votes: anyone can like again after a refresh. Unlike is not available."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:712
+msgid "One vote per browser: a cookie remembers the vote. Re-clicks show “already voted.” Unlike is not available."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:713
+msgid "One vote per person: logged-in users are tracked by account, guests by IP. Unlike is available unless you lock it below."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:714
+msgid "Strict: same as one vote per person, plus a cookie so a changed IP or account cannot vote again."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:720
+msgid "After a Like"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:721
+msgid "Allow unlike: click again to remove the like, as often as they want. Unlike once: they can undo, then the vote stays. Lock: the first like cannot be removed."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:729
+msgid "Cookie Expiration"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:730
+msgid "Specify how long, in seconds, the cookie expires. Default: 31536000 (1 year)."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:737
+msgid "Maximum Votes Allowed"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:738
+msgid "Sets a maximum number of votes each user can submit on an item."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:747
+msgid "Where it shows"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:753
+#: includes/classes/class-wp-ulike-overview.php:378
+msgid "Automatic Display"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:754
+msgid "Automatically show the like button on your content without manually adding shortcodes."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:759
+msgid "Button Position"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:760
+msgid "Choose where the like button appears relative to your content."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:769
+msgid "Show Buttons On"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:770
+msgid "Checked places show the like button. Default is Singular posts only — Home and Pages stay off until you check them here and add Pages under Post Types."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:789
+msgid "Also Show on Excerpts / List Views"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:790
+msgid "Off by default so archive lists do not repeat like buttons. Turn on only if you want buttons in excerpts."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:796
+msgid "Post Types"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:797
+msgid "Select post types"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:798
 msgid "On Singular views, only these post types get the button. Default is Posts. Add Pages (or other types) if you need them. If Singular is unchecked, these types still show as exceptions."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:682
+#: admin/classes/class-wp-ulike-admin-panel.php:808
+msgid "Button look"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:813
+msgid "Select a Template"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:816
+msgid "Pick a style for your like button."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:825
+msgid "Preview online"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:826
+msgid "More button styles are available in Pro."
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:834
 msgid "Button Type"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:683
+#: admin/classes/class-wp-ulike-admin-panel.php:835
 msgid "Choose whether to display an image icon or text label on the button."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:686
-#: includes/classes/class-wp-ulike-customizer.php:375
+#: admin/classes/class-wp-ulike-admin-panel.php:838
+#: includes/classes/class-wp-ulike-customizer.php:434
 msgid "Image"
 msgstr ""
 
 #. translators: Tab label for text editor mode
-#: admin/classes/class-wp-ulike-admin-panel.php:687
+#: admin/classes/class-wp-ulike-admin-panel.php:839
 #: admin/classes/class-wp-ulike-settings-api.php:1277
 msgid "Text"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:694
+#: admin/classes/class-wp-ulike-admin-panel.php:846
 msgid "Set custom button text. HTML is allowed."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:695
+#: admin/classes/class-wp-ulike-admin-panel.php:847
 msgid "Button Text"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:703
-#: admin/classes/class-wp-ulike-admin-panel.php:715
+#: admin/classes/class-wp-ulike-admin-panel.php:855
+#: admin/classes/class-wp-ulike-admin-panel.php:867
 msgid "Button Label"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:704
+#: admin/classes/class-wp-ulike-admin-panel.php:856
 msgid "Text displayed on the like button (e.g., \"Like\", \"👍\", \"Love\")."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:716
+#: admin/classes/class-wp-ulike-admin-panel.php:868
 msgid "Text displayed on the button after liking (e.g., \"Liked\", \"❤️\", \"Unlike\")."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:717
+#: admin/classes/class-wp-ulike-admin-panel.php:869
 msgid "Liked"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:727
-#: admin/classes/class-wp-ulike-admin-panel.php:736
-#: admin/classes/class-wp-ulike-admin-panel.php:749
+#: admin/classes/class-wp-ulike-admin-panel.php:879
+#: admin/classes/class-wp-ulike-admin-panel.php:888
+#: admin/classes/class-wp-ulike-admin-panel.php:901
 msgid "Button Image"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:728
+#: admin/classes/class-wp-ulike-admin-panel.php:880
 msgid "Upload custom images for the like and unlike button states."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:737
-#: admin/classes/class-wp-ulike-admin-panel.php:750
+#: admin/classes/class-wp-ulike-admin-panel.php:889
+#: admin/classes/class-wp-ulike-admin-panel.php:902
 msgid "Upload an image icon for the button state."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:762
+#: admin/classes/class-wp-ulike-admin-panel.php:914
+#: includes/classes/class-wp-ulike-customizer.php:444
+msgid "Counter"
+msgstr ""
+
+#: admin/classes/class-wp-ulike-admin-panel.php:919
 msgid "Control when the vote counter is shown next to the button."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:763
+#: admin/classes/class-wp-ulike-admin-panel.php:920
 msgid "Counter Display"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:766
+#: admin/classes/class-wp-ulike-admin-panel.php:923
 msgid "Always Visible"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:767
+#: admin/classes/class-wp-ulike-admin-panel.php:924
 msgid "Hidden"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:768
-#: admin/classes/class-wp-ulike-admin-panel.php:782
-msgid "Restrict to Logged-in Users"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:774
+#: admin/classes/class-wp-ulike-admin-panel.php:931
 msgid "Hide Zero Counter"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:775
+#: admin/classes/class-wp-ulike-admin-panel.php:932
 msgid "Hide the vote counter when no votes have been submitted."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:783
-msgid "Off by default so visitors can vote with one click. Turn on for members-only sites, or to reduce fake votes from rotating IPs."
+#: admin/classes/class-wp-ulike-admin-panel.php:938
+msgid "Likers box"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:788
-msgid "Logged-out Button Display"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:791
-msgid "Template"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:806
-#: includes/classes/class-wp-ulike-setting-repo.php:261
-msgid "You need to login in order to like this post: "
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:808
-#: includes/classes/class-wp-ulike-setting-repo.php:263
-msgid "click here"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:810
-#: admin/classes/class-wp-ulike-admin-panel.php:886
-msgid "Custom HTML Template"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:816
-msgid "Select how votes are tracked. You can allow unlimited votes, or restrict users using cookies, their username/IP, or both to prevent duplicate or repeated votes."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:817
-msgid "Logging Method"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:820
-msgid "\"No Limit\": There will be no restrictions and users can submit their points each time they refresh the page. In this option, it will not be possible to resubmit reverse points (un-like/un-dislike)."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:820
-msgid "\"Cookie\": By saving users' cookies, it is possible to submit points only once per user and in case of re-clicking, the appropriate message will be displayed."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:820
-msgid "Username/IP: By saving the username/IP of users, It supports the reverse feature  (un-like and un-dislike) and users can change their reactions and are only allowed to have a specific point type."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:820
-msgid "Username/IP + Cookie: Same as username/IP description, However, if the user IP or username changes and the cookie is set, it does not allow the user to like /dislike."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:825
-msgid "Cookie Expiration"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:826
-msgid "Specify how long, in seconds, the cookie expires. Default: 31536000 (1 year)."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:833
-msgid "Maximum Votes Allowed"
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:834
-msgid "Sets a maximum number of votes each user can submit on an item."
-msgstr ""
-
-#: admin/classes/class-wp-ulike-admin-panel.php:843
+#: admin/classes/class-wp-ulike-admin-panel.php:943
 msgid "Display a list of users who have voted, allowing you to see who engaged with each item."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:844
+#: admin/classes/class-wp-ulike-admin-panel.php:944
 msgid "Display Likers Box"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:849
+#: admin/classes/class-wp-ulike-admin-panel.php:949
 msgid "Likers List Order"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:850
+#: admin/classes/class-wp-ulike-admin-panel.php:950
 msgid "Sort users in the likers box by newest first (descending) or oldest first (ascending)."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:853
+#: admin/classes/class-wp-ulike-admin-panel.php:953
 msgid "Ascending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:854
+#: admin/classes/class-wp-ulike-admin-panel.php:954
 msgid "Descending"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:862
+#: admin/classes/class-wp-ulike-admin-panel.php:962
 msgid "Hide For Anonymous Users"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:863
+#: admin/classes/class-wp-ulike-admin-panel.php:963
 msgid "Hide the likers box from visitors who are not logged in."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:869
+#: admin/classes/class-wp-ulike-admin-panel.php:969
 msgid "Likers Box Layout"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:870
+#: admin/classes/class-wp-ulike-admin-panel.php:970
 msgid "Inline: Show avatars directly below the button. Popover: Show avatars in a popup when hovering over the counter."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:873
-#: admin/classes/class-wp-ulike-customizer-api.php:1083
+#: admin/classes/class-wp-ulike-admin-panel.php:973
+#: admin/classes/class-wp-ulike-customizer-api.php:1136
 msgid "Inline"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:874
-#: admin/classes/class-wp-ulike-customizer-api.php:1096
+#: admin/classes/class-wp-ulike-admin-panel.php:974
+#: admin/classes/class-wp-ulike-customizer-api.php:1149
 msgid "Popover"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:900
-#: includes/classes/class-wp-ulike-customizer.php:517
+#: admin/classes/class-wp-ulike-admin-panel.php:1000
+#: includes/classes/class-wp-ulike-customizer.php:576
 msgid "Avatar Size"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:901
+#: admin/classes/class-wp-ulike-admin-panel.php:1001
 msgid "Set the size of user avatars displayed in the likers box."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:909
+#: admin/classes/class-wp-ulike-admin-panel.php:1009
 msgid "Likers to Show"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:910
+#: admin/classes/class-wp-ulike-admin-panel.php:1010
 msgid "Number of users displayed in the likers box"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1004
+#: admin/classes/class-wp-ulike-admin-panel.php:1215
 msgid "Enable Old Meta Values"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1005
+#: admin/classes/class-wp-ulike-admin-panel.php:1216
 msgid "By activating this option, users who have upgraded to version +4 and deleted their old logs can add the number of old likes to the new figures."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1005
+#: admin/classes/class-wp-ulike-admin-panel.php:1216
 msgid "Attention: If you have been using WP ULike +v4 from the beginning Or you haven't deleted any logs yet, do not enable this option."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1010
+#: admin/classes/class-wp-ulike-admin-panel.php:1221
 msgid "Enable Deprecated Options"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1011
+#: admin/classes/class-wp-ulike-admin-panel.php:1222
 msgid "By activating this option, users who have upgraded to version +4.1 and lost their old options can restore and enable previous settings."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1011
+#: admin/classes/class-wp-ulike-admin-panel.php:1222
 msgid "Attention: If you have been using WP ULike +v4.1 from the beginning, do not enable this option."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1024
+#: admin/classes/class-wp-ulike-admin-panel.php:1235
 msgid "Integrations"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1047
-#: admin/classes/class-wp-ulike-admin-panel.php:1057
+#: admin/classes/class-wp-ulike-admin-panel.php:1258
+#: admin/classes/class-wp-ulike-admin-panel.php:1268
 msgid "User Profiles"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1048
+#: admin/classes/class-wp-ulike-admin-panel.php:1259
 msgid "Show like history and engagement on Instagram-style profile pages."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1050
+#: admin/classes/class-wp-ulike-admin-panel.php:1261
 msgid "Like history and engagement stats"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1051
+#: admin/classes/class-wp-ulike-admin-panel.php:1262
 msgid "Custom profile layouts"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1052
+#: admin/classes/class-wp-ulike-admin-panel.php:1263
 msgid "Badges and activity feeds"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1057
+#: admin/classes/class-wp-ulike-admin-panel.php:1268
 msgid "Enable %s"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1058
+#: admin/classes/class-wp-ulike-admin-panel.php:1269
 msgid "Create custom user profile pages where users can view and manage their information, activity, and preferences."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1062
-#: admin/classes/class-wp-ulike-admin-panel.php:1087
+#: admin/classes/class-wp-ulike-admin-panel.php:1273
+#: admin/classes/class-wp-ulike-admin-panel.php:1298
 msgid "Select %s Page"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1062
+#: admin/classes/class-wp-ulike-admin-panel.php:1273
 msgid "Profile"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1077
+#: admin/classes/class-wp-ulike-admin-panel.php:1288
 msgid "Ajax Login & Register"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1078
+#: admin/classes/class-wp-ulike-admin-panel.php:1289
 msgid "AJAX login and registration without full page reloads."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1080
+#: admin/classes/class-wp-ulike-admin-panel.php:1291
 msgid "Login and register without reload"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1081
+#: admin/classes/class-wp-ulike-admin-panel.php:1292
 msgid "Custom branded pages"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1082
+#: admin/classes/class-wp-ulike-admin-panel.php:1293
 msgid "Email verification & 2FA"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1087
+#: admin/classes/class-wp-ulike-admin-panel.php:1298
 msgid "Login"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1088
+#: admin/classes/class-wp-ulike-admin-panel.php:1299
 msgid "Choose the page that contains your login form shortcode. This page will be used for user authentication."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1092
+#: admin/classes/class-wp-ulike-admin-panel.php:1303
 msgid "Login Redirect URL"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1107
+#: admin/classes/class-wp-ulike-admin-panel.php:1318
 msgid "Social Login"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1108
+#: admin/classes/class-wp-ulike-admin-panel.php:1319
 msgid "One-click sign-in with Google, Facebook, GitHub, and more."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1110
+#: admin/classes/class-wp-ulike-admin-panel.php:1321
 msgid "14+ social networks"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1111
+#: admin/classes/class-wp-ulike-admin-panel.php:1322
 msgid "Works with login forms"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1112
+#: admin/classes/class-wp-ulike-admin-panel.php:1323
 msgid "Customizable buttons"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1117
+#: admin/classes/class-wp-ulike-admin-panel.php:1328
 msgid "Enable Social Logins"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1118
+#: admin/classes/class-wp-ulike-admin-panel.php:1329
 msgid "Allow users to log in or register using their social media accounts instead of creating a new account."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1122
+#: admin/classes/class-wp-ulike-admin-panel.php:1333
 msgid "Social networks"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1137
+#: admin/classes/class-wp-ulike-admin-panel.php:1348
 msgid "Social Share Buttons"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1138
+#: admin/classes/class-wp-ulike-admin-panel.php:1349
 msgid "Share buttons for 23+ networks next to your like buttons."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1140
+#: admin/classes/class-wp-ulike-admin-panel.php:1351
 msgid "23+ social networks"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1141
+#: admin/classes/class-wp-ulike-admin-panel.php:1352
 msgid "Auto-display with likes"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1142
+#: admin/classes/class-wp-ulike-admin-panel.php:1353
 msgid "Shortcode placement"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1147
+#: admin/classes/class-wp-ulike-admin-panel.php:1358
 msgid "Add Share Items"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1162
+#: admin/classes/class-wp-ulike-admin-panel.php:1373
 msgid "Email Templates"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1163
+#: admin/classes/class-wp-ulike-admin-panel.php:1374
 msgid "Customize welcome, password reset, and notification emails."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1165
+#: admin/classes/class-wp-ulike-admin-panel.php:1376
 msgid "Custom email templates"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1166
+#: admin/classes/class-wp-ulike-admin-panel.php:1377
 msgid "HTML formatting & variables"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1167
+#: admin/classes/class-wp-ulike-admin-panel.php:1378
 msgid "Custom sender details"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1172
+#: admin/classes/class-wp-ulike-admin-panel.php:1383
 msgid "Subject Line"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-admin-panel.php:1176
+#: admin/classes/class-wp-ulike-admin-panel.php:1387
 msgid "Admin E-mail Address"
 msgstr ""
 
 #. translators: Link text to read more about pro feature
-#: admin/classes/class-wp-ulike-admin-panel.php:1216
+#: admin/classes/class-wp-ulike-admin-panel.php:1427
 #: admin/classes/class-wp-ulike-settings-api.php:1303
 msgid "Read More"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:654
+#: admin/classes/class-wp-ulike-customizer-api.php:671
 #: admin/classes/class-wp-ulike-settings-api.php:672
 msgid "Settings saved successfully."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:749
+#: admin/classes/class-wp-ulike-customizer-api.php:766
 msgid "WP ULike Customizer Preview"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:907
+#: admin/classes/class-wp-ulike-customizer-api.php:924
 msgid "Template preview not found."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:989
+#: admin/classes/class-wp-ulike-customizer-api.php:1006
 #: includes/classes/class-wp-ulike-customizer.php:102
 #: includes/classes/class-wp-ulike-customizer.php:240
-#: includes/classes/class-wp-ulike-customizer.php:409
+#: includes/classes/class-wp-ulike-customizer.php:468
 msgid "Normal"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:993
+#: admin/classes/class-wp-ulike-customizer-api.php:1010
 #: includes/classes/class-wp-ulike-customizer.php:142
-#: includes/classes/class-wp-ulike-customizer.php:317
-#: includes/classes/class-wp-ulike-customizer.php:434
+#: includes/classes/class-wp-ulike-customizer.php:347
+#: includes/classes/class-wp-ulike-customizer.php:493
 msgid "Active"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:997
+#: admin/classes/class-wp-ulike-customizer-api.php:1017
 #: includes/classes/class-wp-ulike-customizer.php:162
-#: includes/classes/class-wp-ulike-customizer.php:349
-#: includes/classes/class-wp-ulike-customizer.php:459
+#: includes/classes/class-wp-ulike-customizer.php:394
+#: includes/classes/class-wp-ulike-customizer.php:518
 msgid "Removed"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:1165
-#: includes/classes/class-wp-ulike-customizer.php:688
+#: admin/classes/class-wp-ulike-customizer-api.php:1218
+#: includes/classes/class-wp-ulike-customizer.php:747
 msgid "Info"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:1165
+#: admin/classes/class-wp-ulike-customizer-api.php:1218
 msgid "Please wait..."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:1168
-#: includes/classes/class-wp-ulike-customizer.php:730
+#: admin/classes/class-wp-ulike-customizer-api.php:1221
+#: includes/classes/class-wp-ulike-customizer.php:789
 msgid "Success"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:1168
+#: admin/classes/class-wp-ulike-customizer-api.php:1221
 msgid "You liked this post."
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:1171
-#: includes/classes/class-wp-ulike-customizer.php:771
+#: admin/classes/class-wp-ulike-customizer-api.php:1224
+#: includes/classes/class-wp-ulike-customizer.php:830
 #: includes/pro.php:376
 msgid "Error"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:1174
-#: includes/classes/class-wp-ulike-customizer.php:812
+#: admin/classes/class-wp-ulike-customizer-api.php:1227
+#: includes/classes/class-wp-ulike-customizer.php:871
 msgid "Warning"
 msgstr ""
 
-#: admin/classes/class-wp-ulike-customizer-api.php:1174
+#: admin/classes/class-wp-ulike-customizer-api.php:1227
 msgid "Please check your settings."
 msgstr ""
 
@@ -2993,8 +3060,8 @@ msgstr ""
 #. translators: Title for import settings section
 #: admin/classes/class-wp-ulike-settings-api.php:1190
 #: admin/classes/class-wp-ulike-settings-api.php:1253
-#: admin/includes/templates/about.php:359
-#: admin/includes/templates/about.php:365
+#: admin/includes/templates/about.php:450
+#: admin/includes/templates/about.php:456
 msgid "Import settings"
 msgstr ""
 
@@ -3147,7 +3214,7 @@ msgstr ""
 
 #. translators: Error message for invalid JSON format
 #: admin/classes/class-wp-ulike-settings-api.php:1263
-#: admin/includes/templates/about.php:45
+#: admin/includes/templates/about.php:47
 msgid "Invalid JSON format. Please check your JSON syntax."
 msgstr ""
 
@@ -3286,7 +3353,7 @@ msgstr ""
 
 #. translators: Label for width field
 #: admin/classes/class-wp-ulike-settings-api.php:1339
-#: includes/classes/class-wp-ulike-customizer.php:581
+#: includes/classes/class-wp-ulike-customizer.php:640
 msgid "Width"
 msgstr ""
 
@@ -3451,153 +3518,187 @@ msgstr ""
 msgid "Thumbnail/Avatar size:"
 msgstr ""
 
-#: admin/includes/templates/about.php:37
+#: admin/includes/templates/about.php:39
 msgid "Like buttons and a Statistics dashboard for your WordPress site. Open Statistics for charts and growth tips, or use the shortcuts below to configure display and check status."
 msgstr ""
 
-#: admin/includes/templates/about.php:41
+#: admin/includes/templates/about.php:43
 msgid "Settings imported and saved successfully!"
 msgstr ""
 
-#: admin/includes/templates/about.php:43
+#: admin/includes/templates/about.php:45
 msgid "No settings file was uploaded. Choose a JSON file and try again."
 msgstr ""
 
-#: admin/includes/templates/about.php:47
+#: admin/includes/templates/about.php:49
 msgid "This file does not look like a WP ULike settings export. Use a file exported from Settings backup in the Overview sidebar."
 msgstr ""
 
-#: admin/includes/templates/about.php:49
+#: admin/includes/templates/about.php:51
 msgid "Settings import failed. Please try again."
 msgstr ""
 
-#: admin/includes/templates/about.php:53
+#: admin/includes/templates/about.php:55
 msgid "Database tables repaired successfully."
 msgstr ""
 
-#: admin/includes/templates/about.php:55
+#: admin/includes/templates/about.php:57
 msgid "Some database tables could not be created. See the database status section below (or Tools → Site Health) for the MySQL error details."
 msgstr ""
 
-#: admin/includes/templates/about.php:59
+#: admin/includes/templates/about.php:61
 msgid "Statistics cache refreshed. Totals and charts will rebuild on the next view."
 msgstr ""
 
-#: admin/includes/templates/about.php:107
+#. translators: %s: number of rows removed
+#: admin/includes/templates/about.php:72
+msgid "Removed %s old guest lookup row. Votes and counts are untouched."
+msgid_plural "Removed %s old guest lookup rows. Votes and counts are untouched."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/includes/templates/about.php:78
+msgid "WP ULike will keep trimming them once a day from now on."
+msgstr ""
+
+#: admin/includes/templates/about.php:83
+msgid "Left as it is. Nothing was removed and you will not be asked again."
+msgstr ""
+
+#: admin/includes/templates/about.php:87
+msgid "Features updated. Your settings were kept, so switching a feature back on restores it exactly as it was."
+msgstr ""
+
+#: admin/includes/templates/about.php:157
 msgid "At a glance"
 msgstr ""
 
-#: admin/includes/templates/about.php:143
+#: admin/includes/templates/about.php:160
+msgid "View on site"
+msgstr ""
+
+#: admin/includes/templates/about.php:195
 msgid "Database tables need repair"
 msgstr ""
 
 #. translators: %s: comma-separated table labels
-#: admin/includes/templates/about.php:149
+#: admin/includes/templates/about.php:201
 msgid "Missing tables: %s."
 msgstr ""
 
-#: admin/includes/templates/about.php:155
+#: admin/includes/templates/about.php:207
 msgid "One or more WP ULike tables are missing."
 msgstr ""
 
-#: admin/includes/templates/about.php:171
+#: admin/includes/templates/about.php:223
 msgid "Repair database tables"
 msgstr ""
 
-#: admin/includes/templates/about.php:180
+#: admin/includes/templates/about.php:232
 msgid "Refresh statistics cache"
 msgstr ""
 
-#: admin/includes/templates/about.php:188
-msgid "Quick actions"
+#: admin/includes/templates/about.php:241
+#: admin/includes/templates/about.php:243
+msgid "Features"
 msgstr ""
 
-#: admin/includes/templates/about.php:210
-#: includes/classes/class-wp-ulike-overview.php:148
-msgid "Pro tools"
+#: admin/includes/templates/about.php:245
+msgid "Switch off what you do not use — its settings and menu items disappear from WP ULike. Nothing is deleted, so switching a feature back on restores it exactly as you had it."
 msgstr ""
 
-#: admin/includes/templates/about.php:228
+#: admin/includes/templates/about.php:265
 msgid "Open"
 msgstr ""
 
-#: admin/includes/templates/about.php:270
-msgid "Help & resources"
+#: admin/includes/templates/about.php:286
+msgid "Save Features"
 msgstr ""
 
-#: admin/includes/templates/about.php:291
+#: admin/includes/templates/about.php:362
 msgid "Troubleshooting tips"
 msgstr ""
 
-#: admin/includes/templates/about.php:305
+#: admin/includes/templates/about.php:376
 msgid "No extra tips right now. Your setup looks good."
 msgstr ""
 
-#: admin/includes/templates/about.php:314
+#: admin/includes/templates/about.php:385
 msgid "Plugin info"
 msgstr ""
 
-#: admin/includes/templates/about.php:317
+#: admin/includes/templates/about.php:388
 msgid "Edition"
 msgstr ""
 
-#: admin/includes/templates/about.php:318
+#: admin/includes/templates/about.php:389
 msgid "Free"
 msgstr ""
 
-#: admin/includes/templates/about.php:326
+#: admin/includes/templates/about.php:397
 msgid "Pro package"
 msgstr ""
 
-#: admin/includes/templates/about.php:331
+#: admin/includes/templates/about.php:402
 msgid "WordPress"
 msgstr ""
 
-#: admin/includes/templates/about.php:335
+#: admin/includes/templates/about.php:406
 msgid "Database schema"
 msgstr ""
 
-#: admin/includes/templates/about.php:354
+#: admin/includes/templates/about.php:426
+msgid "Help & resources"
+msgstr ""
+
+#: admin/includes/templates/about.php:445
 msgid "Settings backup"
 msgstr ""
 
-#: admin/includes/templates/about.php:357
+#: admin/includes/templates/about.php:448
 msgid "Export"
 msgstr ""
 
-#: admin/includes/templates/about.php:360
-#: includes/classes/class-wp-ulike-overview.php:356
+#: admin/includes/templates/about.php:451
+#: includes/classes/class-wp-ulike-overview.php:348
 msgid "Import will replace your current WP ULike settings and customizer values. Continue?"
 msgstr ""
 
-#: admin/includes/templates/about.php:363
+#: admin/includes/templates/about.php:454
 msgid "JSON file"
 msgstr ""
 
-#: admin/includes/templates/activation-pointer-dialog.php:40
-msgid "Thanks for installing WP ULike!"
+#: admin/includes/templates/activation-pointer-dialog.php:25
+msgid "Likes are ready."
+msgstr ""
+
+#: admin/includes/templates/activation-pointer-dialog.php:26
+msgid "Likes are back."
+msgstr ""
+
+#: admin/includes/templates/activation-pointer-dialog.php:30
+msgid "You choose where likes live. Anyone can leave one without signing in."
+msgstr ""
+
+#: admin/includes/templates/activation-pointer-dialog.php:31
+msgid "Likes are on your posts again. Home and Pages wait until you invite them."
+msgstr ""
+
+#: admin/includes/templates/activation-pointer-dialog.php:36
+#: admin/includes/templates/setup-wizard-dialog.php:190
+#: includes/classes/class-wp-ulike-setup-wizard.php:174
+msgid "Continue"
+msgstr ""
+
+#: admin/includes/templates/activation-pointer-dialog.php:37
+msgid "Open settings"
+msgstr ""
+
+#: admin/includes/templates/activation-pointer-dialog.php:41
+msgid "Later"
 msgstr ""
 
 #: admin/includes/templates/activation-pointer-dialog.php:42
-msgid "Like buttons appear on single posts by default. Home and blog lists stay off until you enable them under Content Types. Open a post to try a button, then adjust where they show."
-msgstr ""
-
-#. translators: 1: Overview page URL, 2: Documentation URL.
-#: admin/includes/templates/activation-pointer-dialog.php:48
-msgid "Need a hand? Visit <a href=\"%1$s\">Overview</a> in this menu or read the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener noreferrer\">documentation</a>."
-msgstr ""
-
-#: admin/includes/templates/activation-pointer-dialog.php:64
-#: includes/classes/class-wp-ulike-overview.php:375
-msgid "View sample post"
-msgstr ""
-
-#: admin/includes/templates/activation-pointer-dialog.php:67
-#: admin/includes/templates/activation-pointer-dialog.php:71
-msgid "Open Settings"
-msgstr ""
-
-#: admin/includes/templates/activation-pointer-dialog.php:75
 msgid "Got it"
 msgstr ""
 
@@ -3635,19 +3736,212 @@ msgstr ""
 #: admin/includes/templates/deactivation-feedback-dialog.php:81
 #: includes/classes/class-wp-ulike-health.php:171
 #: includes/classes/class-wp-ulike-health.php:252
-#: includes/classes/class-wp-ulike-overview.php:415
+#: includes/classes/class-wp-ulike-overview.php:407
 msgid "Open Overview"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-activation-pointer.php:171
+#: admin/includes/templates/setup-wizard-dialog.php:17
+msgid "Guests see a login popup, not a working like."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:18
+msgid "Guests see a login prompt, not a working like."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:24
+msgid "Save these choices and close"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:28
+msgid "30 seconds"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:29
+msgid "Get likes working on your site"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:30
+msgid "Three answers. We turn the rest on for you."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:32
+msgid "Setup progress"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:33
+msgid "Where"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:34
+msgid "Who"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:35
+msgid "After"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:40
+msgid "What should people like?"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:41
+msgid "Unchecked places stay off. You will not hunt for this later."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:48
+#: admin/includes/templates/setup-wizard-dialog.php:136
+msgid "Recommended"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:50
+msgid "Each blog post."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:57
+msgid "Readers like a reply they agree with."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:63
+#: includes/classes/class-wp-ulike-deactivation-feedback.php:66
+msgid "Homepage"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:64
+msgid "Latest-posts front page. Can look busy."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:70
+msgid "Pages"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:71
+msgid "About, Contact, and other pages."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:78
+msgid "Products"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:79
+msgid "WooCommerce product pages."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:87
+msgid "Activity"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:88
+msgid "BuddyPress stream and activity comments."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:96
+msgid "Forums"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:97
+msgid "bbPress topics and replies."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:106
+msgid "Who can like?"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:107
+msgid "Pick members-only only if this is a private or membership site."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:112
+msgid "Anyone visiting"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:113
+msgid "Blogs, shops, and public sites. One click."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:119
+msgid "Members only"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:127
+msgid "After they like"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:128
+msgid "Undo a mis-click, then keep the vote. Names are optional social proof."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:130
+msgid "Can they take a like back?"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:135
+#: includes/functions/general.php:1156
+msgid "Unlike once, then lock"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:138
+msgid "Undo a mis-click. Then the vote stays."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:144
+msgid "Unlike anytime"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:145
+msgid "Click again whenever to remove the like."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:151
+msgid "Lock the first like"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:152
+msgid "No undo. Best for contests."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:158
+#: admin/includes/templates/setup-wizard-dialog.php:159
+msgid "Show who liked?"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:163
+msgid "Yes, show names"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:164
+msgid "Social proof. Best for communities and forums."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:170
+msgid "No, keep it clean"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:171
+msgid "Just the button and count. Best for blogs and shops."
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:182
+msgid "You are set"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:187
+msgid "Use these choices"
+msgstr ""
+
+#: admin/includes/templates/setup-wizard-dialog.php:189
+#: includes/classes/class-wp-ulike-setup-wizard.php:173
+msgid "Back"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-activation-pointer.php:173
 msgid "WP ULike is active on your network."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-activation-pointer.php:172
-msgid "Open a site dashboard to see the getting-started guide next to the WP ULike menu."
+#: includes/classes/class-wp-ulike-activation-pointer.php:174
+msgid "Open a site dashboard to find WP ULike in the menu."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-activation-pointer.php:174
+#: includes/classes/class-wp-ulike-activation-pointer.php:176
 msgid "Go to site dashboard"
 msgstr ""
 
@@ -3685,8 +3979,8 @@ msgid "Right"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-customizer.php:93
-#: includes/classes/class-wp-ulike-customizer.php:507
-#: includes/classes/class-wp-ulike-customizer.php:573
+#: includes/classes/class-wp-ulike-customizer.php:566
+#: includes/classes/class-wp-ulike-customizer.php:632
 msgid "Typography"
 msgstr ""
 
@@ -3695,17 +3989,17 @@ msgstr ""
 #: includes/classes/class-wp-ulike-customizer.php:148
 #: includes/classes/class-wp-ulike-customizer.php:168
 #: includes/classes/class-wp-ulike-customizer.php:252
-#: includes/classes/class-wp-ulike-customizer.php:294
-#: includes/classes/class-wp-ulike-customizer.php:329
-#: includes/classes/class-wp-ulike-customizer.php:361
-#: includes/classes/class-wp-ulike-customizer.php:420
-#: includes/classes/class-wp-ulike-customizer.php:446
-#: includes/classes/class-wp-ulike-customizer.php:471
-#: includes/classes/class-wp-ulike-customizer.php:525
-#: includes/classes/class-wp-ulike-customizer.php:700
-#: includes/classes/class-wp-ulike-customizer.php:741
-#: includes/classes/class-wp-ulike-customizer.php:782
-#: includes/classes/class-wp-ulike-customizer.php:823
+#: includes/classes/class-wp-ulike-customizer.php:310
+#: includes/classes/class-wp-ulike-customizer.php:359
+#: includes/classes/class-wp-ulike-customizer.php:406
+#: includes/classes/class-wp-ulike-customizer.php:479
+#: includes/classes/class-wp-ulike-customizer.php:505
+#: includes/classes/class-wp-ulike-customizer.php:530
+#: includes/classes/class-wp-ulike-customizer.php:584
+#: includes/classes/class-wp-ulike-customizer.php:759
+#: includes/classes/class-wp-ulike-customizer.php:800
+#: includes/classes/class-wp-ulike-customizer.php:841
+#: includes/classes/class-wp-ulike-customizer.php:882
 msgid "Background"
 msgstr ""
 
@@ -3713,38 +4007,38 @@ msgstr ""
 #: includes/classes/class-wp-ulike-customizer.php:135
 #: includes/classes/class-wp-ulike-customizer.php:154
 #: includes/classes/class-wp-ulike-customizer.php:174
-#: includes/classes/class-wp-ulike-customizer.php:258
-#: includes/classes/class-wp-ulike-customizer.php:302
-#: includes/classes/class-wp-ulike-customizer.php:335
-#: includes/classes/class-wp-ulike-customizer.php:367
-#: includes/classes/class-wp-ulike-customizer.php:427
-#: includes/classes/class-wp-ulike-customizer.php:452
-#: includes/classes/class-wp-ulike-customizer.php:477
-#: includes/classes/class-wp-ulike-customizer.php:532
-#: includes/classes/class-wp-ulike-customizer.php:707
-#: includes/classes/class-wp-ulike-customizer.php:748
-#: includes/classes/class-wp-ulike-customizer.php:789
-#: includes/classes/class-wp-ulike-customizer.php:830
+#: includes/classes/class-wp-ulike-customizer.php:274
+#: includes/classes/class-wp-ulike-customizer.php:332
+#: includes/classes/class-wp-ulike-customizer.php:380
+#: includes/classes/class-wp-ulike-customizer.php:426
+#: includes/classes/class-wp-ulike-customizer.php:486
+#: includes/classes/class-wp-ulike-customizer.php:511
+#: includes/classes/class-wp-ulike-customizer.php:536
+#: includes/classes/class-wp-ulike-customizer.php:591
+#: includes/classes/class-wp-ulike-customizer.php:766
+#: includes/classes/class-wp-ulike-customizer.php:807
+#: includes/classes/class-wp-ulike-customizer.php:848
+#: includes/classes/class-wp-ulike-customizer.php:889
 msgid "Border"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-customizer.php:121
-#: includes/classes/class-wp-ulike-customizer.php:281
+#: includes/classes/class-wp-ulike-customizer.php:297
 msgid "Hover"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-customizer.php:187
 #: includes/classes/class-wp-ulike-customizer.php:221
-#: includes/classes/class-wp-ulike-customizer.php:391
-#: includes/classes/class-wp-ulike-customizer.php:540
-#: includes/classes/class-wp-ulike-customizer.php:604
+#: includes/classes/class-wp-ulike-customizer.php:450
+#: includes/classes/class-wp-ulike-customizer.php:599
+#: includes/classes/class-wp-ulike-customizer.php:663
 msgid "Padding"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-customizer.php:197
 #: includes/classes/class-wp-ulike-customizer.php:231
-#: includes/classes/class-wp-ulike-customizer.php:400
-#: includes/classes/class-wp-ulike-customizer.php:549
+#: includes/classes/class-wp-ulike-customizer.php:459
+#: includes/classes/class-wp-ulike-customizer.php:608
 msgid "Margin"
 msgstr ""
 
@@ -3753,89 +4047,92 @@ msgid "Dimensions"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-customizer.php:245
-#: includes/classes/class-wp-ulike-customizer.php:287
-#: includes/classes/class-wp-ulike-customizer.php:322
-#: includes/classes/class-wp-ulike-customizer.php:354
-#: includes/classes/class-wp-ulike-customizer.php:414
-#: includes/classes/class-wp-ulike-customizer.php:439
-#: includes/classes/class-wp-ulike-customizer.php:464
-#: includes/classes/class-wp-ulike-customizer.php:693
-#: includes/classes/class-wp-ulike-customizer.php:735
-#: includes/classes/class-wp-ulike-customizer.php:776
-#: includes/classes/class-wp-ulike-customizer.php:817
+#: includes/classes/class-wp-ulike-customizer.php:303
+#: includes/classes/class-wp-ulike-customizer.php:352
+#: includes/classes/class-wp-ulike-customizer.php:399
+#: includes/classes/class-wp-ulike-customizer.php:473
+#: includes/classes/class-wp-ulike-customizer.php:498
+#: includes/classes/class-wp-ulike-customizer.php:523
+#: includes/classes/class-wp-ulike-customizer.php:752
+#: includes/classes/class-wp-ulike-customizer.php:794
+#: includes/classes/class-wp-ulike-customizer.php:835
+#: includes/classes/class-wp-ulike-customizer.php:876
 msgid "Text Color"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:267
-#: includes/classes/class-wp-ulike-customizer.php:716
-#: includes/classes/class-wp-ulike-customizer.php:757
-#: includes/classes/class-wp-ulike-customizer.php:798
-#: includes/classes/class-wp-ulike-customizer.php:839
+#: includes/classes/class-wp-ulike-customizer.php:260
+#: includes/classes/class-wp-ulike-customizer.php:319
+#: includes/classes/class-wp-ulike-customizer.php:367
+#: includes/classes/class-wp-ulike-customizer.php:414
+msgid "Icon Color"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-customizer.php:283
+#: includes/classes/class-wp-ulike-customizer.php:775
+#: includes/classes/class-wp-ulike-customizer.php:816
+#: includes/classes/class-wp-ulike-customizer.php:857
+#: includes/classes/class-wp-ulike-customizer.php:898
 msgid "Image Dimensions"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:275
-#: includes/classes/class-wp-ulike-customizer.php:311
-#: includes/classes/class-wp-ulike-customizer.php:343
+#: includes/classes/class-wp-ulike-customizer.php:291
+#: includes/classes/class-wp-ulike-customizer.php:341
+#: includes/classes/class-wp-ulike-customizer.php:388
 msgid "Like Image"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:385
-msgid "Counter"
-msgstr ""
-
-#: includes/classes/class-wp-ulike-customizer.php:492
+#: includes/classes/class-wp-ulike-customizer.php:551
 msgid "Likers"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:559
+#: includes/classes/class-wp-ulike-customizer.php:618
 msgid "Toast"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:592
+#: includes/classes/class-wp-ulike-customizer.php:651
 msgid "Border Radius"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:612
+#: includes/classes/class-wp-ulike-customizer.php:671
 msgid "Layout"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:617
+#: includes/classes/class-wp-ulike-customizer.php:676
 msgid "Position"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:619
+#: includes/classes/class-wp-ulike-customizer.php:678
 msgid "Bottom Right"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:620
+#: includes/classes/class-wp-ulike-customizer.php:679
 msgid "Bottom Left"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:621
+#: includes/classes/class-wp-ulike-customizer.php:680
 msgid "Top Right"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:622
+#: includes/classes/class-wp-ulike-customizer.php:681
 msgid "Top Left"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:658
+#: includes/classes/class-wp-ulike-customizer.php:717
 msgid "Vertical Offset"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:670
+#: includes/classes/class-wp-ulike-customizer.php:729
 msgid "Horizontal Offset"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:681
+#: includes/classes/class-wp-ulike-customizer.php:740
 msgid "Styles"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-customizer.php:724
-#: includes/classes/class-wp-ulike-customizer.php:765
-#: includes/classes/class-wp-ulike-customizer.php:806
-#: includes/classes/class-wp-ulike-customizer.php:847
+#: includes/classes/class-wp-ulike-customizer.php:783
+#: includes/classes/class-wp-ulike-customizer.php:824
+#: includes/classes/class-wp-ulike-customizer.php:865
+#: includes/classes/class-wp-ulike-customizer.php:906
 msgid "Icon Image"
 msgstr ""
 
@@ -3869,10 +4166,6 @@ msgstr ""
 
 #: includes/classes/class-wp-ulike-deactivation-feedback.php:50
 msgid "Tell us more (optional)"
-msgstr ""
-
-#: includes/classes/class-wp-ulike-deactivation-feedback.php:66
-msgid "Homepage"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-deactivation-feedback.php:67
@@ -3929,7 +4222,7 @@ msgstr ""
 
 #. translators: %s: comma-separated table labels
 #: includes/classes/class-wp-ulike-health.php:140
-#: includes/classes/class-wp-ulike-overview.php:200
+#: includes/classes/class-wp-ulike-overview.php:170
 msgid "Missing: %s"
 msgstr ""
 
@@ -4026,12 +4319,12 @@ msgid "Review cleanup"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-health.php:499
-#: includes/classes/class-wp-ulike-overview.php:195
+#: includes/classes/class-wp-ulike-overview.php:165
 msgid "Needs attention"
 msgstr ""
 
 #: includes/classes/class-wp-ulike-health.php:507
-#: includes/classes/class-wp-ulike-overview.php:195
+#: includes/classes/class-wp-ulike-overview.php:165
 msgid "Ready"
 msgstr ""
 
@@ -4096,269 +4389,313 @@ msgid "%plural% is to be awarded even when item authors Like/Unlike their own it
 msgstr ""
 
 #. translators: %s: votes logged today
-#: includes/classes/class-wp-ulike-overview.php:62
+#: includes/classes/class-wp-ulike-overview.php:89
 msgid "%s votes today — unlock who liked each post, audience maps, and star ratings in search with Pro."
 msgstr ""
 
 #. translators: %s: total stored votes
-#: includes/classes/class-wp-ulike-overview.php:68
+#: includes/classes/class-wp-ulike-overview.php:95
 msgid "%s votes stored so far. Upgrade to Pro for deeper reports, Display Automation, and SEO markup."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:72
+#: includes/classes/class-wp-ulike-overview.php:99
 msgid "Need more than basic likes? Pro adds voter names, geography, placement presets, and schema stars in search."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:76
-#: includes/classes/class-wp-ulike-overview.php:677
+#: includes/classes/class-wp-ulike-overview.php:103
+#: includes/classes/class-wp-ulike-overview.php:1104
 msgid "WP ULike Pro"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:78
+#: includes/classes/class-wp-ulike-overview.php:105
 msgid "One license unlocks deeper analytics, automation, and SEO tools across your site."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:83
+#: includes/classes/class-wp-ulike-overview.php:110
 msgid "Deeper statistics"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:84
+#: includes/classes/class-wp-ulike-overview.php:111
 msgid "See who liked each post, top countries, engagement rates, store reports, and CSV export."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:89
+#: includes/classes/class-wp-ulike-overview.php:116
 msgid "Display Automation"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:90
+#: includes/classes/class-wp-ulike-overview.php:117
 msgid "Quick Start presets and per-rule placement for posts, products, and custom hooks."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:94
+#: includes/classes/class-wp-ulike-overview.php:121
 msgid "Schema star ratings"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:95
+#: includes/classes/class-wp-ulike-overview.php:122
 msgid "Turn vote counts into star ratings in Google with Schema.org and FAQ markup."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:123
-msgid "Customize buttons"
-msgstr ""
-
-#: includes/classes/class-wp-ulike-overview.php:138
-msgid "View on site"
-msgstr ""
-
-#: includes/classes/class-wp-ulike-overview.php:163
+#: includes/classes/class-wp-ulike-overview.php:145
 msgid "Votes today"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:169
+#: includes/classes/class-wp-ulike-overview.php:151
 msgid "New since last visit"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:175
+#: includes/classes/class-wp-ulike-overview.php:157
 msgid "Total votes"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:178
+#: includes/classes/class-wp-ulike-overview.php:160
 msgid "Snapshot only—open Statistics for charts."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:183
-#: includes/classes/class-wp-ulike-overview.php:189
-msgid "Auto-display on"
-msgstr ""
-
-#: includes/classes/class-wp-ulike-overview.php:183
-msgid "Off / manual"
-msgstr ""
-
-#: includes/classes/class-wp-ulike-overview.php:189
-msgid "Off"
-msgstr ""
-
-#: includes/classes/class-wp-ulike-overview.php:194
+#: includes/classes/class-wp-ulike-overview.php:164
 msgid "Database"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:224
+#: includes/classes/class-wp-ulike-overview.php:186
+msgid "Storage used"
+msgstr ""
+
+#. translators: %s: total number of stored votes
+#: includes/classes/class-wp-ulike-overview.php:191
+msgid "Across %s stored votes, including indexes."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:214
 msgid "Caching"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:225
+#: includes/classes/class-wp-ulike-overview.php:215
 msgid "Compatibility mode on"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:235
+#: includes/classes/class-wp-ulike-overview.php:225
 msgid "Like storage"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:251
+#: includes/classes/class-wp-ulike-overview.php:241
 msgid "Quick check"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:252
+#: includes/classes/class-wp-ulike-overview.php:242
 msgid "Test on a single post, not the homepage"
 msgstr ""
 
 #. translators: 1: template name, 2: button position
-#: includes/classes/class-wp-ulike-overview.php:257
+#: includes/classes/class-wp-ulike-overview.php:247
 msgid "Template: %1$s · Position: %2$s"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:267
-#: includes/classes/class-wp-ulike-overview.php:747
-#: includes/plugin.php:191
+#: includes/classes/class-wp-ulike-overview.php:257
+#: includes/classes/class-wp-ulike-overview.php:1174
+#: includes/plugin.php:227
 msgid "Documentation"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:268
+#: includes/classes/class-wp-ulike-overview.php:258
 msgid "Setup, shortcodes, and developer hooks."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:273
+#: includes/classes/class-wp-ulike-overview.php:263
 msgid "Free vs Pro breakdown"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:274
+#: includes/classes/class-wp-ulike-overview.php:264
 msgid "Compare free and Pro features before you upgrade."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:286
+#: includes/classes/class-wp-ulike-overview.php:276
 msgid "Support"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:287
+#: includes/classes/class-wp-ulike-overview.php:277
 msgid "Get help from the WP ULike team."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:299
+#: includes/classes/class-wp-ulike-overview.php:289
 msgid "Leave a review"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:300
+#: includes/classes/class-wp-ulike-overview.php:290
 msgid "Share feedback on WordPress.org."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:352
+#: includes/classes/class-wp-ulike-overview.php:344
 msgid "Download your settings and customizer values as JSON."
 msgstr ""
 
+#: includes/classes/class-wp-ulike-overview.php:367
+msgid "View sample post"
+msgstr ""
+
 #. translators: %s: Automatic Display setting label
-#: includes/classes/class-wp-ulike-overview.php:385
+#: includes/classes/class-wp-ulike-overview.php:377
 msgid "No button on the page? Add [wp_ulike] or the ULike block, or enable “%s” under Settings → Posts."
 msgstr ""
 
 #. translators: %s: Site Uses Caching setting label
-#: includes/classes/class-wp-ulike-overview.php:394
+#: includes/classes/class-wp-ulike-overview.php:386
 msgid "Stale vote counts with a cache plugin? Enable “%s” in Settings → General, then purge cache."
 msgstr ""
 
 #. translators: %s: Hide Plugin Admin Notices setting label
-#: includes/classes/class-wp-ulike-overview.php:403
+#: includes/classes/class-wp-ulike-overview.php:395
 msgid "Too many admin notices? Turn on “%s” in Settings → General."
 msgstr ""
 
+#: includes/classes/class-wp-ulike-overview.php:628
+msgid "Off / manual"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:634
+#: includes/classes/class-wp-ulike-overview.php:643
+#: includes/classes/class-wp-ulike-overview.php:649
+msgid "Off"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:669
+msgid "Auto-display on"
+msgstr ""
+
+#. translators: %s: row count the scan stopped at
+#: includes/classes/class-wp-ulike-overview.php:699
+msgid "more than %s"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:706
+msgid "Reclaim space from old guest records"
+msgstr ""
+
+#. translators: 1: row count, 2: number of days
+#: includes/classes/class-wp-ulike-overview.php:709
+msgid "The likes lookup table has grown to about %1$s rows. Guest records in it that have not been used in %2$s days can be removed without touching votes, counts, or totals."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:714
+msgid "Every vote, count, and total stays exactly as it is — those live in a separate table and are never touched."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:715
+msgid "Nobody gets to vote twice. If a guest does come back, WP ULike looks their history up directly and rebuilds the row."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:716
+msgid "Your reports and charts do not change. This removes no history, only a lookup shortcut."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:718
+msgid "Clean up now"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:719
+msgid "Clean up now and keep it tidy daily"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:720
+msgid "No thanks, keep everything"
+msgstr ""
+
 #. translators: 1: vote count, 2: statistics admin URL
-#: includes/classes/class-wp-ulike-overview.php:609
+#: includes/classes/class-wp-ulike-overview.php:1036
 msgid "You have <strong>%1$s</strong> new votes since your last visit to Statistics. <a href=\"%2$s\">Open Statistics</a> for charts and filters."
 msgstr ""
 
 #. translators: 1: votes today, 2: statistics admin URL
-#: includes/classes/class-wp-ulike-overview.php:620
+#: includes/classes/class-wp-ulike-overview.php:1047
 msgid "<strong>%1$s</strong> votes today on your site. Numbers below are a quick snapshot—<a href=\"%2$s\">Statistics</a> has the full breakdown."
 msgstr ""
 
 #. translators: 1: sample post URL, 2: Content Types settings URL
-#: includes/classes/class-wp-ulike-overview.php:647
+#: includes/classes/class-wp-ulike-overview.php:1074
 msgid "No votes recorded yet. Test the button on a <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">single post</a> (not the homepage). Adjust display under <a href=\"%2$s\">Settings → Content Types → Posts</a>."
 msgstr ""
 
 #. translators: %s: Content Types settings URL
-#: includes/classes/class-wp-ulike-overview.php:657
+#: includes/classes/class-wp-ulike-overview.php:1084
 msgid "No votes recorded yet. Buttons show on single posts by default, not on the homepage. Check display under <a href=\"%s\">Settings → Content Types → Posts</a>."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:663
+#: includes/classes/class-wp-ulike-overview.php:1090
 msgid "Your setup looks ready. Configure buttons below or open Statistics when you start receiving votes."
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:675
+#: includes/classes/class-wp-ulike-overview.php:1102
 msgid "Engagement snapshot"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:676
+#: includes/classes/class-wp-ulike-overview.php:1103
 msgid "Site setup"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:718
+#: includes/classes/class-wp-ulike-overview.php:1145
 msgid "PHP"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:726
+#: includes/classes/class-wp-ulike-overview.php:1153
 msgid "Detected on site"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:733
+#: includes/classes/class-wp-ulike-overview.php:1160
 msgid "Active theme"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:740
+#: includes/classes/class-wp-ulike-overview.php:1167
 msgid "Caching helper"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:741
+#: includes/classes/class-wp-ulike-overview.php:1168
 msgid "On (Settings → General)"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:748
+#: includes/classes/class-wp-ulike-overview.php:1175
 msgid "Setup & hooks"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:792
+#: includes/classes/class-wp-ulike-overview.php:1219
 msgid "Manual (shortcode or block)"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:795
+#: includes/classes/class-wp-ulike-overview.php:1222
 msgid "Auto on posts"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:798
+#: includes/classes/class-wp-ulike-overview.php:1225
 msgid "homepage hidden"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:799
+#: includes/classes/class-wp-ulike-overview.php:1226
 msgid "singular views filtered"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:800
+#: includes/classes/class-wp-ulike-overview.php:1227
 msgid "archives hidden"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:801
+#: includes/classes/class-wp-ulike-overview.php:1228
 msgid "categories hidden"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:802
+#: includes/classes/class-wp-ulike-overview.php:1229
 msgid "search hidden"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:803
+#: includes/classes/class-wp-ulike-overview.php:1230
 msgid "tags hidden"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:804
+#: includes/classes/class-wp-ulike-overview.php:1231
 msgid "author pages hidden"
 msgstr ""
 
 #. translators: %s: comma-separated post type slugs
-#: includes/classes/class-wp-ulike-overview.php:817
+#: includes/classes/class-wp-ulike-overview.php:1244
 msgid "exceptions: %s"
 msgstr ""
 
-#: includes/classes/class-wp-ulike-overview.php:1031
+#: includes/classes/class-wp-ulike-overview.php:1459
 msgid "Invalid settings file. Expected a JSON export from Help → Settings backup."
 msgstr ""
 
@@ -4366,39 +4703,143 @@ msgstr ""
 msgid "Like Button"
 msgstr ""
 
-#: includes/functions/counter.php:71
+#: includes/classes/class-wp-ulike-setup-wizard.php:175
+msgid "Start using WP ULike"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:176
+msgid "Saving…"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:177
+msgid "Could not save. Please try again."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:178
+msgid "Pick at least one place so people can find the button."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:179
+msgid ", "
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:180
+msgid "anyone can like"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:181
+msgid "members only"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:182
+msgid "show who liked"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:183
+msgid "names stay hidden"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:184
+msgid "Open a matching page and try a like."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:185
+msgid "Likes on %1$s. %2$s. %3$s. %4$s."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:187
+msgid "posts"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:188
+msgid "comments"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:189
+msgid "the homepage"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:190
+msgid "pages"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:191
+msgid "products"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:192
+msgid "activity"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:193
+msgid "forums"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:196
+msgid "unlike once, then lock"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:197
+msgid "unlike anytime"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-setup-wizard.php:198
+msgid "first like stays"
+msgstr ""
+
+#: includes/functions/counter.php:82
 msgid "Please enter some value for required variables."
 msgstr ""
 
-#: includes/functions/counter.php:96
+#: includes/functions/counter.php:107
 msgid "Table info is empty."
 msgstr ""
 
-#: includes/functions/general.php:941
-msgid "No Limit"
+#: includes/functions/general.php:349
+msgid "Charts, top content, and engagement reports. While off, views, device, and country are not recorded."
 msgstr ""
 
-#: includes/functions/general.php:942
-msgid "Cookie"
+#: includes/functions/general.php:355
+msgid "Turning Statistics off also stops recording views, device, and country for new votes. Existing reports are kept, but the period it stays off cannot be filled in later. Turn it off?"
 msgstr ""
 
-#: includes/functions/general.php:943
-msgid "Username/IP"
+#: includes/functions/general.php:359
+msgid "Visual designer for button styles, colors, and templates."
 msgstr ""
 
-#: includes/functions/general.php:944
-msgid "Username/IP + Cookie"
+#: includes/functions/general.php:1139
+msgid "Unlimited votes"
 msgstr ""
 
-#: includes/functions/general.php:971
+#: includes/functions/general.php:1140
+msgid "One vote per browser (cookie)"
+msgstr ""
+
+#: includes/functions/general.php:1141
+msgid "One vote per person (user/IP)"
+msgstr ""
+
+#: includes/functions/general.php:1142
+msgid "Strict (user/IP + cookie)"
+msgstr ""
+
+#: includes/functions/general.php:1155
+msgid "Allow unlike"
+msgstr ""
+
+#: includes/functions/general.php:1157
+msgid "Lock the vote"
+msgstr ""
+
+#: includes/functions/general.php:1184
 msgid "Top of Content"
 msgstr ""
 
-#: includes/functions/general.php:972
+#: includes/functions/general.php:1185
 msgid "Bottom of Content"
 msgstr ""
 
-#: includes/functions/general.php:973
+#: includes/functions/general.php:1186
 msgid "Top and Bottom"
 msgstr ""
 
@@ -4623,7 +5064,7 @@ msgstr ""
 msgid "Begin upgrade"
 msgstr ""
 
-#: includes/pulse-ledger/bootstrap.php:193
+#: includes/pulse-ledger/bootstrap.php:198
 msgid "Plugin not loaded."
 msgstr ""
 
