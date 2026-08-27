@@ -648,6 +648,24 @@ function wp_ulike_save_custom_css( $values = null ){
 }
 // Hook to save CSS file when settings are saved
 add_action( 'wp_ulike_settings_saved', 'wp_ulike_save_custom_css', 15, 1 );
+
+/**
+ * Rebuild the generated stylesheet when the Customize switch changes.
+ *
+ * Sites that serve custom.css as a file keep serving the last generated copy
+ * until something regenerates it. Without this, switching Customize off left
+ * its styling on the front end until the next settings save -- and switching it
+ * back on left the site un-styled for just as long.
+ *
+ * @param array $changed Feature keys whose state changed.
+ * @return void
+ */
+function wp_ulike_rebuild_custom_css_on_feature_change( $changed ) {
+    if ( is_array( $changed ) && in_array( 'customize', $changed, true ) ) {
+        wp_ulike_save_custom_css();
+    }
+}
+add_action( 'wp_ulike_features_saved', 'wp_ulike_rebuild_custom_css_on_feature_change', 15, 1 );
 // Hook to save CSS file when customizer is saved
 add_action( 'wp_ulike_customizer_saved', 'wp_ulike_save_custom_css', 15, 1 );
 

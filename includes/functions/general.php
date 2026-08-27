@@ -356,9 +356,12 @@ if( ! function_exists( 'wp_ulike_get_features' ) ){
 			),
 			'customize'  => array(
 				'label'       => __( 'Customize', 'wp-ulike' ),
-				'description' => __( 'Visual designer for button styles, colors, and templates.', 'wp-ulike' ),
+				'description' => __( 'Visual designer for button styles, colors, and templates. While off, its styling is not applied on the front end.', 'wp-ulike' ),
 				'icon'        => 'admin-appearance',
 				'url'         => admin_url( 'admin.php?page=wp-ulike-customize' ),
+				// Nothing is deleted, but the site's buttons visibly change back
+				// to their default look, so this should not be a surprise.
+				'warning'     => __( 'Turning Customize off also stops its styling being applied, so buttons go back to their default look on the front end. Your saved design is kept and returns when you switch it back on. Turn it off?', 'wp-ulike' ),
 			),
 		);
 
@@ -640,6 +643,14 @@ if( ! function_exists( 'wp_ulike_get_customizer_css' ) ){
 	 * @return string Generated CSS from customizer
 	 */
 	function wp_ulike_get_customizer_css() {
+		// A site that has switched Customize off is not using the visual
+		// designer, so its output must not keep styling the front end -- the
+		// switch would otherwise hide the screen while its CSS stayed on every
+		// page. Returning early also skips generating and caching that CSS.
+		if ( function_exists( 'wp_ulike_is_feature_enabled' ) && ! wp_ulike_is_feature_enabled( 'customize' ) ) {
+			return '';
+		}
+
 		if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
 			return '';
 		}
@@ -656,8 +667,14 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	 * @return string Combined CSS styles
 	 */
 	function wp_ulike_get_custom_style(){
+		// Memoised per request, but keyed on the Customize switch: the request
+		// that toggles the switch regenerates the stylesheet, and that must not
+		// reuse a value computed earlier in the same request under the old state.
+		$feature_key = ( function_exists( 'wp_ulike_is_feature_enabled' ) && ! wp_ulike_is_feature_enabled( 'customize' ) ) ? 'off' : 'on';
+
 		static $cached_style = null;
-		if ( null !== $cached_style ) {
+		static $cached_key   = null;
+		if ( null !== $cached_style && $cached_key === $feature_key ) {
 			return $cached_style;
 		}
 
@@ -669,8 +686,11 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$return_style .= $customizer_css;
 		}
 
-		// Display deprecated styles (for backward compatibility)
-		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) && wp_ulike_get_option( 'enable_deprecated_options' ) ) {
+		// Display deprecated styles (for backward compatibility). These come from
+		// the old customize screen, so they follow the same switch. Custom CSS and
+		// the spinner below are Settings fields and keep working either way.
+		$customize_on = ! function_exists( 'wp_ulike_is_feature_enabled' ) || wp_ulike_is_feature_enabled( 'customize' );
+		if( $customize_on && wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) && wp_ulike_get_option( 'enable_deprecated_options' ) ) {
 			//get custom options
 			$customstyle   = get_option( 'wp_ulike_customize' );
 			$btn_style     = '';
@@ -724,6 +744,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 		}
 
 		$cached_style = apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );
+		$cached_key   = $feature_key;
 		return $cached_style;
 	}
 
