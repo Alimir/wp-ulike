@@ -40,6 +40,11 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
     *                                       activated on an individual blog.
     */
     public static function activate( $network_wide ) {
+      $wizard_file = WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-setup-wizard.php';
+      if ( is_readable( $wizard_file ) ) {
+        require_once $wizard_file;
+      }
+
       if ( function_exists( 'is_multisite' ) && is_multisite() ) {
         if ( $network_wide  ) {
           // Get all blog ids
@@ -90,14 +95,45 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
     private static function single_activate() {
       wp_ulike_activator::get_instance()->activate();
 
+      $is_fresh_install = false;
+
       if ( ! get_option( 'wp_ulike_first_activated_at', false ) ) {
+        $had_settings = ( false !== get_option( 'wp_ulike_settings', false ) );
+        self::seed_fresh_install_settings();
         update_option( 'wp_ulike_first_activated_at', time(), false );
+        $is_fresh_install = ! $had_settings;
       }
 
-      WP_Ulike_Activation_Pointer::flag_for_current_user();
+      if ( $is_fresh_install && class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
+        WP_Ulike_Setup_Wizard::mark_pending();
+      }
+
+      if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+        WP_Ulike_Activation_Pointer::flag_for_current_user();
+      }
 
       // Fire action
       do_action( 'wp_ulike_activated', get_current_blog_id() );
+    }
+
+    private static function seed_fresh_install_settings() {
+      if ( false !== get_option( 'wp_ulike_settings', false ) ) {
+        return;
+      }
+
+      $unlike_once = array( 'unlike_rule' => 'once' );
+
+      add_option(
+        'wp_ulike_settings',
+        array(
+          'posts_group'      => $unlike_once,
+          'comments_group'   => $unlike_once,
+          'buddypress_group' => $unlike_once,
+          'bbpress_group'    => $unlike_once,
+        ),
+        '',
+        'no'
+      );
     }
 
     /**

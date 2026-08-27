@@ -19,6 +19,7 @@ new wp_ulike_admin_assets();
 WP_Ulike_Overview::init();
 WP_Ulike_Health::init();
 WP_Ulike_Deactivation_Feedback::init();
+WP_Ulike_Setup_Wizard::init();
 WP_Ulike_Activation_Pointer::init();
 
 // include about menu functions
