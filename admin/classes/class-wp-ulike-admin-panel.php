@@ -170,7 +170,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'    => 'disable_admin_notice',
                         'type'  => 'switcher',
                         'title' => esc_html__('Hide Plugin Admin Notices', 'wp-ulike'),
-                        'desc'  => esc_html__('Completely hide WP ULike admin notices for all users.', 'wp-ulike')
+                        'desc'  => esc_html__('Hide WP ULike admin notices everywhere, including WP ULike screens.', 'wp-ulike')
                     ),
                     array(
                         'id'          => 'enable_admin_posts_columns',
@@ -400,41 +400,49 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             $show_pro_sections = $is_pro_active || wp_ulike_should_show_pro_upsells();
 
             if ( $is_pro_active ) {
-                $sections[] = array(
-                    'id'     => 'profiles',
-                    'parent' => 'configuration',
-                    'title'  => esc_html__( 'Profiles','wp-ulike'),
-                    'icon'   => 'user',
-                    'is_pro' => true,
-                    'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
-                );
+                if ( wp_ulike_is_feature_enabled( 'profiles' ) ) {
+                    $sections[] = array(
+                        'id'     => 'profiles',
+                        'parent' => 'configuration',
+                        'title'  => esc_html__( 'Profiles','wp-ulike'),
+                        'icon'   => 'user',
+                        'is_pro' => true,
+                        'fields' => apply_filters( 'wp_ulike_panel_profiles', $this->get_pro_lock_field( 'profiles' ) )
+                    );
+                }
 
-                $sections[] = array(
-                    'id'     => 'login-signup',
-                    'parent' => 'configuration',
-                    'title'  => esc_html__( 'Login & Signup','wp-ulike'),
-                    'icon'   => 'key',
-                    'is_pro' => true,
-                    'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
-                );
+                if ( wp_ulike_is_feature_enabled( 'login_signup' ) ) {
+                    $sections[] = array(
+                        'id'     => 'login-signup',
+                        'parent' => 'configuration',
+                        'title'  => esc_html__( 'Login & Signup','wp-ulike'),
+                        'icon'   => 'key',
+                        'is_pro' => true,
+                        'fields' => apply_filters( 'wp_ulike_panel_forms', $this->get_pro_lock_field( 'forms' ) )
+                    );
+                }
 
-                $sections[] = array(
-                    'id'     => 'social-logins',
-                    'parent' => 'configuration',
-                    'title'  => esc_html__( 'Social Logins','wp-ulike'),
-                    'icon'   => 'user-group',
-                    'is_pro' => true,
-                    'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
-                );
+                if ( wp_ulike_is_feature_enabled( 'social_logins' ) ) {
+                    $sections[] = array(
+                        'id'     => 'social-logins',
+                        'parent' => 'configuration',
+                        'title'  => esc_html__( 'Social Logins','wp-ulike'),
+                        'icon'   => 'user-group',
+                        'is_pro' => true,
+                        'fields' => apply_filters( 'wp_ulike_panel_social_logins', $this->get_pro_lock_field( 'social_logins' ) )
+                    );
+                }
 
-                $sections[] = array(
-                    'id'     => 'share-buttons',
-                    'parent' => 'configuration',
-                    'title'  => esc_html__( 'Share Buttons','wp-ulike'),
-                    'icon'   => 'share',
-                    'is_pro' => true,
-                    'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
-                );
+                if ( wp_ulike_is_feature_enabled( 'share_buttons' ) ) {
+                    $sections[] = array(
+                        'id'     => 'share-buttons',
+                        'parent' => 'configuration',
+                        'title'  => esc_html__( 'Share Buttons','wp-ulike'),
+                        'icon'   => 'share',
+                        'is_pro' => true,
+                        'fields' => apply_filters( 'wp_ulike_panel_share_buttons', $this->get_pro_lock_field( 'share_buttons' ) )
+                    );
+                }
             } elseif ( $show_pro_sections ) {
                 $sections[] = array(
                     'id'     => 'pro-features',
@@ -569,7 +577,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
             );
 
             // Emails (Pro) — free teasers live on the single Pro Features page.
-            if ( $is_pro_active ) {
+            if ( $is_pro_active && wp_ulike_is_feature_enabled( 'login_signup' ) ) {
                 $sections[] = array(
                     'id'     => 'emails',
                     'parent' => 'translations',

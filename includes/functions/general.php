@@ -297,6 +297,197 @@ if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_features_option_name' ) ){
+	/**
+	 * Option holding the keys of features the site has switched off.
+	 *
+	 * Deliberately separate from `wp_ulike_settings`: the settings panel saves
+	 * that array as a whole, so flags stored inside it could be lost on a save.
+	 *
+	 * @return string
+	 */
+	function wp_ulike_get_features_option_name(){
+		return 'wp_ulike_disabled_features';
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_features' ) ){
+	/**
+	 * Registry of switchable features.
+	 *
+	 * Free registers only its own pages. Add-ons register their modules on the
+	 * `wp_ulike_features` filter from inside their own plugin, so no add-on
+	 * labels or checks live here.
+	 *
+	 * Recognised keys per feature:
+	 *  - label, description, icon : how the switch presents itself.
+	 *  - badge                    : optional edition badge, e.g. "Pro".
+	 *  - url                      : where the feature is configured, if anywhere.
+	 *
+	 * A switch records whether the site uses a feature at all, and every feature
+	 * starts on. It must not be wired to a setting that records whether the
+	 * feature is *configured* — that would read as off on a site that has simply
+	 * not set the feature up yet, and then hide the settings needed to set it up.
+	 *
+	 * Settings is never registered — hiding it would leave no way back.
+	 *
+	 * @return array<string,array<string,mixed>> Keyed by feature slug.
+	 */
+	function wp_ulike_get_features(){
+		static $cache = null;
+
+		if( is_array( $cache ) ){
+			return $cache;
+		}
+
+		$features = array(
+			'statistics' => array(
+				'label'       => __( 'Statistics', 'wp-ulike' ),
+				'description' => __( 'Charts, top content, and engagement reports.', 'wp-ulike' ),
+				'icon'        => 'chart-bar',
+				'url'         => admin_url( 'admin.php?page=wp-ulike-statistics' ),
+			),
+			'customize'  => array(
+				'label'       => __( 'Customize', 'wp-ulike' ),
+				'description' => __( 'Visual designer for button styles, colors, and templates.', 'wp-ulike' ),
+				'icon'        => 'admin-appearance',
+				'url'         => admin_url( 'admin.php?page=wp-ulike-customize' ),
+			),
+		);
+
+		$features = apply_filters( 'wp_ulike_features', $features );
+		$features = is_array( $features ) ? $features : array();
+
+		// Memoize only once every add-on has had a chance to register.
+		if( did_action( 'init' ) ){
+			$cache = $features;
+		}
+
+		return $features;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_disabled_features' ) ){
+	/**
+	 * Feature keys the site has switched off.
+	 *
+	 * @return string[]
+	 */
+	function wp_ulike_get_disabled_features(){
+		$disabled = get_option( wp_ulike_get_features_option_name(), array() );
+
+		return is_array( $disabled ) ? array_values( array_filter( array_map( 'strval', $disabled ) ) ) : array();
+	}
+}
+
+if( ! function_exists( 'wp_ulike_update_disabled_features' ) ){
+	/**
+	 * Persist the switched-off feature keys.
+	 *
+	 * @param string[] $keys Feature keys to disable.
+	 * @return void
+	 */
+	function wp_ulike_update_disabled_features( $keys ){
+		$keys = is_array( $keys ) ? array_values( array_unique( array_map( 'sanitize_key', $keys ) ) ) : array();
+
+		update_option( wp_ulike_get_features_option_name(), $keys, true );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_is_feature_enabled' ) ){
+	/**
+	 * Whether a feature is switched on.
+	 *
+	 * Unknown keys read as enabled so a feature that has not been registered
+	 * yet — or ships without a switch — keeps working untouched.
+	 *
+	 * @param string $key Feature slug.
+	 * @return boolean
+	 */
+	function wp_ulike_is_feature_enabled( $key ){
+		$enabled = ! in_array( $key, wp_ulike_get_disabled_features(), true );
+
+		return (bool) apply_filters( 'wp_ulike_is_feature_enabled', $enabled, $key );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_save_feature_states' ) ){
+	/**
+	 * Persist the on/off state of every registered feature.
+	 *
+	 * Keys already in the disabled list that no longer belong to a registered
+	 * feature are kept, so a temporarily inactive add-on does not come back
+	 * switched on.
+	 *
+	 * @param string[] $enabled_keys Feature keys that should be switched on.
+	 * @return string[] Keys whose state actually changed.
+	 */
+	function wp_ulike_save_feature_states( $enabled_keys ){
+		$enabled_keys = is_array( $enabled_keys ) ? $enabled_keys : array();
+		$disabled     = wp_ulike_get_disabled_features();
+		$changed      = array();
+
+		foreach( wp_ulike_get_features() as $key => $feature ){
+			$was     = wp_ulike_is_feature_enabled( $key );
+			$enabled = in_array( $key, $enabled_keys, true );
+
+			if( $was !== $enabled ){
+				$changed[] = $key;
+			}
+
+			$disabled = array_diff( $disabled, array( $key ) );
+
+			if( ! $enabled ){
+				$disabled[] = $key;
+			}
+		}
+
+		wp_ulike_update_disabled_features( $disabled );
+
+		/**
+		 * Fires after feature switches are saved.
+		 *
+		 * Lets a module react to being switched on or off — flushing rewrite
+		 * rules, for instance — without the switch UI knowing why.
+		 *
+		 * @param string[] $changed Feature keys whose state changed.
+		 */
+		do_action( 'wp_ulike_features_saved', $changed );
+
+		return $changed;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_preserve_unsubmitted_settings' ) ){
+	/**
+	 * Keep stored settings that a save payload does not mention.
+	 *
+	 * The settings screen writes the whole option in one go. A feature that is
+	 * switched off has its tab unregistered, so its fields can be missing from
+	 * the next save — and "missing" has to mean "leave alone", not "delete", or
+	 * switching the feature back on would not restore what the user had.
+	 *
+	 * Only the settings screen runs through this. Importing a settings file
+	 * writes the option directly and still replaces everything, as it should.
+	 *
+	 * @param array $values Incoming settings payload.
+	 * @return array
+	 */
+	function wp_ulike_preserve_unsubmitted_settings( $values ){
+		if( ! is_array( $values ) ){
+			return $values;
+		}
+
+		$stored = get_option( 'wp_ulike_settings', array() );
+
+		if( ! is_array( $stored ) || empty( $stored ) ){
+			return $values;
+		}
+
+		return array_merge( $stored, $values );
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	/**
 	 * Get likers box template info.
@@ -422,7 +613,7 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 		$args     = apply_filters( 'wp_ulike_display_button_args', $args );
 		$template = new wp_ulike_cta_template( $args );
 
-		if( ! wp_ulike_is_true( $args['only_logged_in_users'] ) || is_user_logged_in() ) {
+		if( ! wp_ulike_setting_repo::isLoginRequiredValue( $args['only_logged_in_users'] ) || is_user_logged_in() ) {
 			// Return ulike template
 			return $template->display();
 		} else {
@@ -947,6 +1138,11 @@ if ( ! function_exists( 'wp_ulike_get_logging_method_labels' ) ) {
 }
 
 if ( ! function_exists( 'wp_ulike_get_unlike_rule_labels' ) ) {
+	/**
+	 * Translated labels for unlike-rule options.
+	 *
+	 * @return array<string, string>
+	 */
 	function wp_ulike_get_unlike_rule_labels() {
 		return array(
 			'allow' => esc_html__( 'Allow unlike', 'wp-ulike' ),

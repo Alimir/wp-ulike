@@ -87,6 +87,34 @@ function wp_ulike_update_menu_badge_count( $count ) {
 }
 add_filter( 'wp_ulike_menu_badge_count', 'wp_ulike_update_menu_badge_count' );
 
+/**
+ * Hide the new-likes badge while Statistics is hidden.
+ *
+ * Opening Statistics is what resets the counter, so without the page the badge
+ * would keep growing with no way to clear it.
+ *
+ * @param bool $display
+ * @return bool
+ */
+function wp_ulike_maybe_hide_new_likes_badge( $display ) {
+	return wp_ulike_is_feature_enabled( 'statistics' ) ? $display : false;
+}
+add_filter( 'wp_ulike_display_admin_new_likes', 'wp_ulike_maybe_hide_new_likes_badge' );
+
+/**
+ * Refresh the cached Overview report after settings are saved.
+ *
+ * It stores admin URLs that depend on menu visibility options.
+ *
+ * @return void
+ */
+function wp_ulike_flush_overview_health_cache() {
+	if ( class_exists( 'WP_Ulike_Overview' ) ) {
+		WP_Ulike_Overview::flush_health_cache();
+	}
+}
+add_action( 'wp_ulike_settings_saved', 'wp_ulike_flush_overview_health_cache' );
+
 
 /**
  * Update the admin sub menu title
@@ -342,17 +370,17 @@ add_action( 'admin_print_footer_scripts', 'wp_ulike_go_pro_submenu_scripts' );
  * @return array|null
  */
 function wp_ulike_hide_admin_notifications( $notice_list ){
-	$screen = get_current_screen();
-
-	if ( ! $screen ) {
-		return $notice_list;
-	}
-
 	$hide_admin_notice = wp_ulike_get_option( 'disable_admin_notice', false );
-	return wp_ulike_is_true( $hide_admin_notice ) && strpos( $screen->base, WP_ULIKE_SLUG ) === false ? array() : $notice_list;
+	return wp_ulike_is_true( $hide_admin_notice ) ? array() : $notice_list;
 }
 add_filter( 'wp_ulike_admin_notices_instances', 'wp_ulike_hide_admin_notifications', 20, 1 );
 
+/**
+ * Map legacy switcher 0/1 values to everyone/logged_in for the settings UI.
+ *
+ * @param array $values Stored settings.
+ * @return array
+ */
 function wp_ulike_normalize_who_can_vote_setting( $values ) {
 	if ( ! is_array( $values ) ) {
 		return $values;
@@ -378,6 +406,7 @@ function wp_ulike_normalize_who_can_vote_setting( $values ) {
 			$values[ $group ]['enable_only_logged_in_users'] ?? false
 		);
 
+		// Historical default was a button + toast. Keep that on save if unset.
 		if ( $requires_login && ! array_key_exists( 'logged_out_display_type', $values[ $group ] ) ) {
 			$values[ $group ]['logged_out_display_type'] = 'button';
 		}
@@ -696,3 +725,4 @@ function wp_ulike_sync_auto_display_filter_on_save( $values ) {
 	return $values;
 }
 add_filter( 'wp_ulike_optiwich_save_values', 'wp_ulike_sync_auto_display_filter_on_save' );
+add_filter( 'wp_ulike_optiwich_save_values', 'wp_ulike_preserve_unsubmitted_settings', 20 );

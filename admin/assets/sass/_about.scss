@@ -770,6 +770,152 @@ hr.wp-ulike-about-card__body + hr,
 	margin: 16px 0;
 }
 
+.wp-ulike-features {
+	&__intro {
+		margin: 0 0 14px;
+		font-size: 13px;
+		line-height: 1.6;
+		color: #50575e;
+	}
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 12px;
+		margin: 0 0 16px;
+		padding: 0;
+		list-style: none;
+
+		@media (max-width: 782px) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	// Switching submits the form and reloads; hold the card still until it does.
+	form.is-saving {
+		pointer-events: none;
+		opacity: 0.6;
+		transition: opacity 0.15s ease-in-out;
+	}
+
+	&__item {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		margin: 0;
+		padding: 12px;
+		background: #f6f7f7;
+		border: 1px solid #dcdcde;
+		border-radius: 2px;
+
+		> .dashicons {
+			flex-shrink: 0;
+			margin-top: 1px;
+			color: #2271b1;
+		}
+
+		&--off {
+			background: #fff;
+
+			> .dashicons {
+				color: #a7aaad;
+			}
+		}
+	}
+
+	&__body {
+		flex: 1;
+		min-width: 0;
+	}
+
+	&__label {
+		display: block;
+		margin-bottom: 4px;
+		font-size: 13px;
+		font-weight: 600;
+		color: #1d2327;
+		cursor: pointer;
+	}
+
+	&__desc {
+		display: block;
+		font-size: 12px;
+		line-height: 1.5;
+		color: #646970;
+	}
+
+	&__link {
+		display: inline-block;
+		margin-top: 6px;
+		font-size: 12px;
+		text-decoration: none;
+	}
+
+	&__switch {
+		position: relative;
+		flex-shrink: 0;
+		width: 34px;
+		height: 18px;
+		margin-inline-start: auto;
+
+		input {
+			position: absolute;
+			top: 0;
+			inset-inline-start: 0;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		> span {
+			display: block;
+			width: 34px;
+			height: 18px;
+			background: #c3c4c7;
+			border-radius: 9px;
+			transition: background 0.15s ease-in-out;
+			pointer-events: none;
+
+			&::before {
+				content: "";
+				position: absolute;
+				top: 2px;
+				inset-inline-start: 2px;
+				width: 14px;
+				height: 14px;
+				background: #fff;
+				border-radius: 50%;
+				transition: transform 0.15s ease-in-out;
+			}
+		}
+
+		input:checked + span {
+			background: #2271b1;
+
+			&::before {
+				transform: translateX(16px);
+			}
+		}
+
+		input:focus + span {
+			box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+		}
+	}
+
+	&__actions {
+		margin: 0;
+	}
+}
+
+// Switch knob travels toward the inline end, which is leftward in RTL.
+[dir='rtl'] .wp-ulike-features__switch input:checked + span::before,
+.rtl .wp-ulike-features__switch input:checked + span::before {
+	transform: translateX(-16px);
+}
+
 // Details chevrons: mirror closed state in RTL; open state stays downward.
 [dir='rtl'] .wp-ulike-about-card--details summary::before,
 .rtl .wp-ulike-about-card--details summary::before,
