@@ -27,7 +27,7 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
      * @since     1.0.0
      */
     private function __construct() {
-      add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
+      add_action( 'wp_initialize_site', array( $this, 'activate_initialized_site' ), 20, 1 );
     }
 
 
@@ -116,6 +116,12 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
       do_action( 'wp_ulike_activated', get_current_blog_id() );
     }
 
+    /**
+     * Defaults that should apply only to brand-new installs.
+     * Existing sites keep historical unlike (unlimited toggle) until they change it.
+     *
+     * @return void
+     */
     private static function seed_fresh_install_settings() {
       if ( false !== get_option( 'wp_ulike_settings', false ) ) {
         return;
@@ -147,17 +153,24 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
     }
 
     /**
-     * Fired when a new site is activated with a WPMU environment.
+     * New network site. Requires WordPress 6.0+ (`wp_initialize_site`).
      *
-     * @param    int    $blog_id    ID of the new blog.
-    */
-    public function activate_new_site( $blog_id ) {
-      if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
+     * @param WP_Site $new_site New site.
+     * @return void
+     */
+    public function activate_initialized_site( $new_site ) {
+      $blog_id = ( is_object( $new_site ) && isset( $new_site->blog_id ) )
+        ? (int) $new_site->blog_id
+        : 0;
+
+      if ( $blog_id < 1 ) {
         return;
       }
 
       switch_to_blog( $blog_id );
-      self::single_activate();
+      if ( false === get_option( 'wp_ulike_dbVersion', false ) ) {
+        self::single_activate();
+      }
       restore_current_blog();
     }
 
