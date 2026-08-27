@@ -121,6 +121,10 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					'migrationNotice' => $this->get_migration_notice_config(),
 				)
 			);
+
+			if ( class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
+				WP_Ulike_Stats_User_Prefs::enqueue_theme_boot_script( 'wp_ulike_admin_react' );
+			}
 	}
 
 	/**
