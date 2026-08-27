@@ -14,6 +14,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 	final class WP_Ulike_Pulse_CLI {
 
 		/**
+		 * When true, site-level failures warn instead of exiting (network loops).
+		 *
+		 * @var bool
+		 */
+		private static $continue_on_error = false;
+
+		/**
 		 * @return void
 		 */
 		public static function register() {
@@ -39,7 +46,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 		 * verify   Compare legacy vs pulse counts (--deep for COUNT scans).
 		 * smoke    Read-only health checks for storage, stats, and dual mode.
 		 *          Use --all-sites on multisite to run on every network blog.
-		 * enable   Switch reads to pulse table (after migration).
+		 * enable    Switch reads to pulse table (after migration).
+		 * purge-meta Null old device/OS/browser labels (dry-run unless --yes; --all-sites).
+		 * purge-guest-cache Drop cached vote maps for guests inactive past --days
+		 *          (dry-run unless --yes; --all-sites).
 		 *
 		 * @param array $args       Positional args.
 		 * @param array $assoc_args Associative args.
@@ -109,6 +119,14 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 					WP_CLI::success( 'Storage upgrade admin UI hidden.' );
 					break;
 
+				case 'purge-meta':
+					self::run_purge_meta( $assoc_args );
+					break;
+
+				case 'purge-guest-cache':
+					self::run_purge_guest_cache( $assoc_args );
+					break;
+
 				case 'status':
 				default:
 					$config   = WP_Ulike_Pulse_Config::get();
@@ -117,9 +135,207 @@ if ( ! class_exists( 'WP_Ulike_Pulse_CLI' ) ) {
 					WP_CLI::log( 'Read: ' . WP_Ulike_Pulse_Config::read_mode() );
 					WP_CLI::log( 'Migration: ' . ( $config['migration']['status'] ?? 'idle' ) );
 					WP_CLI::log( 'Progress: ' . WP_Ulike_Pulse_Sync::progress_label( $progress ) );
+					WP_CLI::log(
+						'Meta purge: ' . ( WP_Ulike_Pulse_Meta_Purge::is_enabled()
+							? 'enabled (' . WP_Ulike_Pulse_Meta_Purge::days() . ' days)'
+							: 'disabled' )
+					);
+					WP_CLI::log(
+						'Guest cache purge: ' . ( WP_Ulike_Guest_Cache_Purge::can_run()
+							? ( WP_Ulike_Guest_Cache_Purge::is_enabled()
+								? 'daily (' . WP_Ulike_Guest_Cache_Purge::days() . ' days)'
+								: 'available, not scheduled' )
+							: 'unavailable' )
+					);
 					WP_CLI::log( wp_json_encode( $progress, JSON_PRETTY_PRINT ) );
 					break;
 			}
+		}
+
+		/**
+		 * Null device/OS/browser on pulse rows older than --days (default 90).
+		 *
+		 * Dry-run unless --yes is passed. Does not change votes, fingerprints,
+		 * IPs, or dedupe tokens. InnoDB may not shrink until OPTIMIZE TABLE.
+		 *
+		 * @param array<string,mixed> $assoc_args CLI flags.
+		 * @return void
+		 */
+		private static function run_purge_meta( $assoc_args ) {
+			if ( ! empty( $assoc_args['all-sites'] ) ) {
+				self::run_on_all_sites( array( __CLASS__, 'run_purge_meta' ), $assoc_args );
+				return;
+			}
+
+			$days = isset( $assoc_args['days'] ) ? absint( $assoc_args['days'] ) : 0;
+			$size = isset( $assoc_args['batch-size'] ) ? absint( $assoc_args['batch-size'] ) : 0;
+			$yes  = ! empty( $assoc_args['yes'] );
+
+			if ( ! WP_Ulike_Pulse_Schema::table_exists() ) {
+				self::cli_fail( 'Pulse table is not installed.' );
+				return;
+			}
+
+			$days   = WP_Ulike_Pulse_Meta_Purge::days( $days );
+			$cutoff = WP_Ulike_Pulse_Meta_Purge::cutoff( $days );
+
+			WP_CLI::log( sprintf( 'Retention: %d days (rows older than %s UTC).', $days, $cutoff ) );
+			WP_CLI::log( 'Columns: device, os, browser. Identity, IP, and vote fields are left intact.' );
+
+			if ( ! $yes ) {
+				$pending = WP_Ulike_Pulse_Meta_Purge::has_work( $days );
+				WP_CLI::log( $pending ? 'Eligible rows found.' : 'No eligible rows.' );
+				WP_CLI::warning( 'Dry-run only. Re-run with --yes to apply. Disk is not reclaimed until OPTIMIZE TABLE (can lock; run off-peak).' );
+				return;
+			}
+
+			$result = WP_Ulike_Pulse_Meta_Purge::run(
+				array(
+					'dry_run'    => false,
+					'days'       => $days,
+					'batch_size' => $size,
+				)
+			);
+
+			WP_CLI::log( wp_json_encode( $result ) );
+
+			if ( empty( $result['ok'] ) ) {
+				self::cli_fail( 'Purge failed: ' . ( $result['message'] ?? 'unknown' ) );
+				return;
+			}
+
+			WP_CLI::success(
+				sprintf(
+					'Cleared metadata on %s row(s). InnoDB may not reclaim disk until OPTIMIZE TABLE (run off-peak; it can lock the table).',
+					number_format_i18n( (int) $result['updated'] )
+				)
+			);
+		}
+
+		/**
+		 * Drop cached vote maps for guests with no vote since --days (default 90).
+		 *
+		 * Dry-run unless --yes is passed. Removes cache rows only: the votes
+		 * themselves stay in the pulse ledger and a returning guest's status is
+		 * re-read from there.
+		 *
+		 * @param array<string,mixed> $assoc_args CLI flags.
+		 * @return void
+		 */
+		private static function run_purge_guest_cache( $assoc_args ) {
+			if ( ! empty( $assoc_args['all-sites'] ) ) {
+				self::run_on_all_sites( array( __CLASS__, 'run_purge_guest_cache' ), $assoc_args );
+				return;
+			}
+
+			// Running the command is itself the request, so the scheduling
+			// preference is irrelevant here — only whether the pass is correct
+			// on this site at all.
+			if ( ! WP_Ulike_Guest_Cache_Purge::can_run() ) {
+				self::cli_fail( 'Guest cache purge is unavailable. It requires pulse read mode with no migration running.' );
+				return;
+			}
+
+			$days = isset( $assoc_args['days'] ) ? absint( $assoc_args['days'] ) : 0;
+			$size = isset( $assoc_args['batch-size'] ) ? absint( $assoc_args['batch-size'] ) : 0;
+			$yes  = ! empty( $assoc_args['yes'] );
+
+			$days   = WP_Ulike_Guest_Cache_Purge::days( $days );
+			$cutoff = WP_Ulike_Guest_Cache_Purge::cutoff( $days );
+
+			WP_CLI::log( sprintf( 'Retention: %d days (guests with no vote since %s UTC).', $days, $cutoff ) );
+			WP_CLI::log( 'Removes cached vote maps only. Votes, counters, and logged-in users are untouched.' );
+
+			$result = WP_Ulike_Guest_Cache_Purge::run(
+				array(
+					'dry_run'     => ! $yes,
+					'days'        => $days,
+					'batch_size'  => $size,
+					'max_batches' => $yes ? 0 : 5,
+				)
+			);
+
+			WP_CLI::log( wp_json_encode( $result ) );
+
+			if ( empty( $result['ok'] ) ) {
+				self::cli_fail( 'Purge failed: ' . ( $result['message'] ?? 'unknown' ) );
+				return;
+			}
+
+			if ( ! $yes ) {
+				WP_CLI::warning( 'Dry-run only (first few batches sampled). Re-run with --yes to apply.' );
+				return;
+			}
+
+			WP_CLI::success(
+				sprintf(
+					'Removed %s cached guest row(s). InnoDB may not reclaim disk until OPTIMIZE TABLE (run off-peak; it can lock the table).',
+					number_format_i18n( (int) $result['deleted'] )
+				)
+			);
+		}
+
+		/**
+		 * Run a CLI subcommand on every network site.
+		 *
+		 * @param callable            $callback   Receives $assoc_args without all-sites.
+		 * @param array<string,mixed> $assoc_args CLI flags.
+		 * @return void
+		 */
+		private static function run_on_all_sites( $callback, $assoc_args ) {
+			if ( ! is_multisite() ) {
+				WP_CLI::error( 'The --all-sites flag requires WordPress multisite.' );
+			}
+
+			unset( $assoc_args['all-sites'] );
+			self::$continue_on_error = true;
+
+			$site_ids = get_sites(
+				array(
+					'number'   => 0,
+					'archived' => 0,
+					'spam'     => 0,
+					'deleted'  => 0,
+					'fields'   => 'ids',
+				)
+			);
+
+			if ( empty( $site_ids ) ) {
+				WP_CLI::warning( 'No sites found in the network.' );
+				return;
+			}
+
+			$current_blog = get_current_blog_id();
+
+			foreach ( $site_ids as $blog_id ) {
+				$blog_id = (int) $blog_id;
+				switch_to_blog( $blog_id );
+
+				WP_CLI::log( '' );
+				WP_CLI::log( sprintf( 'Site %d: %s', $blog_id, get_site_url( $blog_id, '/' ) ) );
+				call_user_func( $callback, $assoc_args );
+
+				restore_current_blog();
+			}
+
+			if ( get_current_blog_id() !== $current_blog ) {
+				switch_to_blog( $current_blog );
+			}
+
+			self::$continue_on_error = false;
+		}
+
+		/**
+		 * @param string $message Error text.
+		 * @return void
+		 */
+		private static function cli_fail( $message ) {
+			if ( self::$continue_on_error ) {
+				WP_CLI::warning( $message );
+				return;
+			}
+
+			WP_CLI::error( $message );
 		}
 
 		/**

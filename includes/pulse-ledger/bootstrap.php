@@ -20,6 +20,8 @@ require_once __DIR__ . '/class-pulse-query.php';
 require_once __DIR__ . '/class-pulse-sync.php';
 require_once __DIR__ . '/class-pulse-sync-scheduler.php';
 require_once __DIR__ . '/class-pulse-legacy-cleanup.php';
+require_once __DIR__ . '/class-pulse-meta-purge.php';
+require_once __DIR__ . '/class-guest-cache-purge.php';
 require_once __DIR__ . '/class-pulse-log-bridge.php';
 require_once __DIR__ . '/class-pulse-cli.php';
 
@@ -28,6 +30,8 @@ if ( is_admin() && file_exists( __DIR__ . '/admin/class-pulse-admin.php' ) ) {
 }
 
 WP_Ulike_Pulse_Sync_Scheduler::init();
+WP_Ulike_Pulse_Meta_Purge::init();
+WP_Ulike_Guest_Cache_Purge::init();
 WP_Ulike_Pulse_CLI::register();
 
 add_action(

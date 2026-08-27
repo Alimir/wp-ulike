@@ -90,6 +90,8 @@ class wp_ulike_uninstall {
 	 */
 	public function clear_scheduled_tasks() {
 		wp_clear_scheduled_hook( 'wp_ulike_pulse_sync_batch' );
+		wp_clear_scheduled_hook( 'wp_ulike_pulse_purge_meta' );
+		wp_clear_scheduled_hook( 'wp_ulike_purge_guest_cache' );
 	}
 
 	/**
