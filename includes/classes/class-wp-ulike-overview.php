@@ -17,6 +17,8 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 	 */
 	class WP_Ulike_Overview {
 
+		const STORAGE_CACHE_KEY = 'wp_ulike_table_disk_usage';
+
 		/**
 		 * About admin screen URL.
 		 *
@@ -48,6 +50,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function flush_health_cache() {
 			delete_transient( self::get_health_report_cache_key() );
+			delete_transient( self::STORAGE_CACHE_KEY );
 		}
 
 		/**
@@ -426,18 +429,83 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		}
 
 		/**
+		 * Disk and row metadata for every WP ULike table.
+		 *
+		 * Reads information_schema only — never the tables themselves — so the
+		 * cost is the same on an empty site as on one with millions of votes.
+		 * `DATABASE()` is avoided on purpose: binding the schema name lets MySQL
+		 * use the information_schema primary key instead of scanning every table
+		 * on a busy shared or multisite database.
+		 *
+		 * Cached for half a day. Storage for a dashboard figure does not need
+		 * to move with every vote, and the health report is flushed more often
+		 * than that (feature saves, cache refresh) so this cache is what keeps
+		 * those clicks from repeating the lookup.
+		 *
+		 * @param bool $force Ignore the cache.
+		 * @return array{bytes:int,rows:array<string,int>,meta_rows:int}
+		 */
+		public static function get_table_disk_usage( $force = false ) {
+			static $memo = null;
+
+			if ( ! $force && is_array( $memo ) ) {
+				return $memo;
+			}
+
+			if ( ! $force ) {
+				$cached = get_transient( self::STORAGE_CACHE_KEY );
+
+				if ( is_array( $cached ) && isset( $cached['bytes'] ) ) {
+					$memo = $cached;
+
+					return $memo;
+				}
+			}
+
+			$empty = array(
+				'bytes'     => 0,
+				'rows'      => array(),
+				'meta_rows' => 0,
+			);
+
+			$tables = self::storage_table_names();
+
+			if ( empty( $tables ) ) {
+				$memo = $empty;
+
+				return $memo;
+			}
+
+			$usage = self::query_table_disk_usage( $tables );
+
+			if ( empty( $usage['bytes'] ) && empty( $usage['rows'] ) ) {
+				$usage = self::query_table_status_fallback( $tables );
+			}
+
+			set_transient( self::STORAGE_CACHE_KEY, $usage, 12 * HOUR_IN_SECONDS );
+			$memo = $usage;
+
+			return $memo;
+		}
+
+		/**
 		 * Disk footprint of every WP ULike table, in bytes.
 		 *
-		 * Data plus indexes, from information_schema — the same figure a host's
-		 * database tools report, so it matches what people see elsewhere. Returns
-		 * 0 when information_schema is unreadable, which happens on some managed
-		 * hosts; callers treat 0 as "don't show a size" rather than "empty".
+		 * Returns 0 when table metadata is unreadable; callers treat 0 as
+		 * "don't show a size" rather than "empty".
 		 *
 		 * @return int
 		 */
 		public static function get_storage_bytes() {
-			global $wpdb;
+			$usage = self::get_table_disk_usage();
 
+			return (int) ( $usage['bytes'] ?? 0 );
+		}
+
+		/**
+		 * @return string[]
+		 */
+		private static function storage_table_names() {
 			$tables = array();
 
 			if ( class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
@@ -456,27 +524,91 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				}
 			}
 
-			$tables = array_unique( array_filter( $tables ) );
+			return array_values( array_unique( array_filter( $tables ) ) );
+		}
 
-			if ( empty( $tables ) ) {
-				return 0;
-			}
+		/**
+		 * @param string[] $tables Table names.
+		 * @return array{bytes:int,rows:array<string,int>,meta_rows:int}
+		 */
+		private static function query_table_disk_usage( $tables ) {
+			global $wpdb;
 
 			$placeholders = implode( ', ', array_fill( 0, count( $tables ), '%s' ) );
+			$schema       = (string) $wpdb->dbname;
 
 			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			$bytes = $wpdb->get_var(
+			$rows = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT SUM( DATA_LENGTH + INDEX_LENGTH )
+					"SELECT TABLE_NAME, DATA_LENGTH, INDEX_LENGTH, TABLE_ROWS
 					 FROM information_schema.TABLES
-					 WHERE TABLE_SCHEMA = DATABASE()
+					 WHERE TABLE_SCHEMA = %s
 					   AND TABLE_NAME IN ( {$placeholders} )",
-					$tables
+					array_merge( array( $schema ), $tables )
 				)
 			);
 			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-			return null === $bytes ? 0 : (int) $bytes;
+			return self::summarize_table_usage( $tables, is_array( $rows ) ? $rows : array() );
+		}
+
+		/**
+		 * Hosts that hide information_schema still answer SHOW TABLE STATUS.
+		 *
+		 * @param string[] $tables Table names.
+		 * @return array{bytes:int,rows:array<string,int>,meta_rows:int}
+		 */
+		private static function query_table_status_fallback( $tables ) {
+			global $wpdb;
+
+			$status_rows = array();
+
+			foreach ( $tables as $table ) {
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$row = $wpdb->get_row( $wpdb->prepare( 'SHOW TABLE STATUS LIKE %s', $wpdb->esc_like( $table ) ) );
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+				if ( ! $row ) {
+					continue;
+				}
+
+				$status_rows[] = (object) array(
+					'TABLE_NAME'   => $table,
+					'DATA_LENGTH'  => $row->Data_length ?? 0,
+					'INDEX_LENGTH' => $row->Index_length ?? 0,
+					'TABLE_ROWS'   => $row->Rows ?? 0,
+				);
+			}
+
+			return self::summarize_table_usage( $tables, $status_rows );
+		}
+
+		/**
+		 * @param string[] $tables Known table names.
+		 * @param object[] $rows   Metadata rows.
+		 * @return array{bytes:int,rows:array<string,int>,meta_rows:int}
+		 */
+		private static function summarize_table_usage( $tables, $rows ) {
+			$bytes     = 0;
+			$row_map   = array();
+			$meta_name = class_exists( 'WP_Ulike_Meta_Schema' ) ? WP_Ulike_Meta_Schema::table() : '';
+
+			foreach ( $rows as $row ) {
+				$name = isset( $row->TABLE_NAME ) ? (string) $row->TABLE_NAME : '';
+
+				if ( '' === $name || ! in_array( $name, $tables, true ) ) {
+					continue;
+				}
+
+				$bytes            += (int) $row->DATA_LENGTH + (int) $row->INDEX_LENGTH;
+				$row_map[ $name ]  = (int) $row->TABLE_ROWS;
+			}
+
+			return array(
+				'bytes'     => $bytes,
+				'rows'      => $row_map,
+				'meta_rows' => ( '' !== $meta_name && isset( $row_map[ $meta_name ] ) ) ? $row_map[ $meta_name ] : 0,
+			);
 		}
 
 		/**
@@ -559,8 +691,8 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			$rows = WP_Ulike_Guest_Cache_Purge::estimate();
 			$days = WP_Ulike_Guest_Cache_Purge::days();
 
-			// The count stops at a ceiling to keep this page fast, so say "more
-			// than" rather than quoting the ceiling as if it were the total.
+			// InnoDB's TABLE_ROWS is approximate; past this ceiling quote
+			// "more than" rather than a multi-million guess as an exact count.
 			$amount = WP_Ulike_Guest_Cache_Purge::estimate_is_capped()
 				? sprintf(
 					/* translators: %s: row count the scan stopped at */
@@ -574,7 +706,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'title' => esc_html__( 'Reclaim space from old guest records', 'wp-ulike' ),
 				'intro' => sprintf(
 					/* translators: 1: row count, 2: number of days */
-					esc_html__( 'WP ULike is holding %1$s lookup rows for guests who voted without an account. Each one just remembers what a visitor had already liked, so their button shows the right state on return. Rows for guests who have not voted in %2$s days no longer serve anyone and can be removed.', 'wp-ulike' ),
+					esc_html__( 'The likes lookup table has grown to about %1$s rows. Guest records in it that have not been used in %2$s days can be removed without touching votes, counts, or totals.', 'wp-ulike' ),
 					$amount,
 					number_format_i18n( $days )
 				),

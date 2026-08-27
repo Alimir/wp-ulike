@@ -49,10 +49,9 @@ if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
 		// Below this there is nothing worth interrupting anyone about.
 		const SUGGEST_THRESHOLD = 20000;
 
-		// Hard ceiling on how many rows the estimate will scan. The whole point of
-		// the number is to answer "is there enough here to be worth offering", and
-		// that answer does not improve past this — while an unbounded COUNT over a
-		// multi-million row table would stall the page it is drawn on.
+		// Display ceiling only. The estimate is table metadata, not a scan, so
+		// this never bounds query cost — it just keeps the card from quoting a
+		// multi-million InnoDB approximation as if it were an exact count.
 		const ESTIMATE_CAP = 250000;
 
 		/**
@@ -127,22 +126,18 @@ if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
 		}
 
 		/**
-		 * Roughly how many guest cache rows exist.
+		 * Rough size of the lookup table, used only to decide whether to offer cleanup.
 		 *
-		 * Counting the *dormant* ones exactly means joining the pulse table per
-		 * identity, which is far too expensive to do on a page load. This counts
-		 * guest rows instead — an honest upper bound on what a pass could remove,
-		 * and enough to answer "is there anything here worth doing".
-		 *
-		 * Stops counting at ESTIMATE_CAP, so the cost is the same on a site with
-		 * 300,000 rows as on one with 30 million. Cached for a day on top of that.
+		 * Never counts or joins the table itself. InnoDB's TABLE_ROWS from table
+		 * metadata is approximate and includes counters as well as guest maps,
+		 * which is the right upper bound for "is there enough here to be worth
+		 * a moment of anyone's attention" and the wrong number to spend a page
+		 * load computing exactly.
 		 *
 		 * @param bool $force Recount now, ignoring the cache.
 		 * @return int
 		 */
 		public static function estimate( $force = false ) {
-			global $wpdb;
-
 			if ( ! $force ) {
 				$cached = get_transient( self::ESTIMATE_KEY );
 
@@ -151,27 +146,26 @@ if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
 				}
 			}
 
-			if ( ! self::can_run() || ! WP_Ulike_Meta_Schema::table_exists() ) {
+			if ( ! self::can_run() ) {
 				return 0;
 			}
 
-			$table = WP_Ulike_Meta_Schema::table();
+			$count = 0;
 
-			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			$count = (int) $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM (
-						SELECT 1
-						FROM `{$table}` m
-						LEFT JOIN `{$wpdb->users}` u ON u.ID = m.item_id
-						WHERE m.meta_group = 'user'
-						  AND u.ID IS NULL
-						LIMIT %d
-					) capped",
-					self::ESTIMATE_CAP + 1
-				)
-			);
-			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			if ( class_exists( 'WP_Ulike_Overview' ) ) {
+				$usage = WP_Ulike_Overview::get_table_disk_usage( $force );
+				$count = (int) ( $usage['meta_rows'] ?? 0 );
+			} elseif ( class_exists( 'WP_Ulike_Meta_Schema' ) && WP_Ulike_Meta_Schema::table_exists() ) {
+				global $wpdb;
+
+				$table = WP_Ulike_Meta_Schema::table();
+
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$row = $wpdb->get_row( $wpdb->prepare( 'SHOW TABLE STATUS LIKE %s', $wpdb->esc_like( $table ) ) );
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+				$count = ( $row && isset( $row->Rows ) ) ? (int) $row->Rows : 0;
+			}
 
 			set_transient( self::ESTIMATE_KEY, $count, DAY_IN_SECONDS );
 
@@ -488,38 +482,39 @@ if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
 		}
 
 		/**
-		 * Status meta keys present in the `user` group.
+		 * Status meta keys in the `user` group.
 		 *
-		 * Read from the table rather than hardcoded so add-on content types are
-		 * covered, and so the scan can filter on an indexed `IN` list instead of
-		 * a `LIKE '%_status'` that cannot use the index.
+		 * Known keys only — a DISTINCT over meta_group on a multi-million row
+		 * table is how this pass would stall even after the site opted in.
+		 * Add-on content types register theirs on the filter.
 		 *
 		 * @return string[]
 		 */
 		private static function status_meta_keys() {
-			global $wpdb;
+			$keys = array( 'post_status', 'comment_status', 'activity_status', 'topic_status' );
 
-			$table = WP_Ulike_Meta_Schema::table();
-
-			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			$keys = $wpdb->get_col(
-				"SELECT DISTINCT meta_key FROM `{$table}` WHERE meta_group = 'user'"
-			);
-			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			/**
+			 * Filters the user-group status keys the guest cache purge walks.
+			 *
+			 * @param string[] $keys Meta keys, e.g. post_status.
+			 */
+			$keys = apply_filters( 'wp_ulike_guest_cache_status_meta_keys', $keys );
 
 			if ( ! is_array( $keys ) ) {
 				return array();
 			}
 
-			$status_keys = array();
+			$clean = array();
+
 			foreach ( $keys as $key ) {
-				$key = (string) $key;
-				if ( '_status' === substr( $key, -7 ) ) {
-					$status_keys[] = $key;
+				$key = sanitize_key( (string) $key );
+
+				if ( '' !== $key ) {
+					$clean[] = $key;
 				}
 			}
 
-			return $status_keys;
+			return array_values( array_unique( $clean ) );
 		}
 	}
 }
