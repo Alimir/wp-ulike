@@ -410,8 +410,15 @@
 .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active .wpulike-svg-heart {
   fill: #ffffff;
 }
+.wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active .wpulike-svg-heart path {
+  fill: inherit;
+}
 .wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active .wpulike-svg-heart-pop {
   animation-direction: normal;
+  fill: #ff6f63;
+}
+.wpulike-animated-heart button.wp_ulike_btn.wp_ulike_btn_is_active .wpulike-svg-heart-pop path {
+  fill: inherit;
 }
 .wpulike-animated-heart button.wp_ulike_btn:active {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
@@ -433,6 +440,9 @@
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
+.wpulike-animated-heart .wpulike-svg-heart path {
+  fill: inherit;
+}
 .wpulike-animated-heart .wpulike-svg-heart-pop {
   position: absolute;
   width: 30%;
@@ -440,6 +450,9 @@
   opacity: 0;
   left: 0;
   animation: popHearts 1s ease forwards reverse;
+}
+.wpulike-animated-heart .wpulike-svg-heart-pop path {
+  fill: inherit;
 }
 .wpulike-animated-heart .wpulike-svg-heart-pop.one {
   left: 1%;

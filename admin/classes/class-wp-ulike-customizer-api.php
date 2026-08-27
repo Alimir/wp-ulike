@@ -48,10 +48,27 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
         /**
          * Get customizer schema
          * Returns schema structure extracted from customizer sections
+         *
+         * @param mixed $request        Optional REST request (unused; kept for callers).
+         * @param array $args {
+         *     Optional. Schema build options.
+         *
+         *     @type bool $include_assets Whether to attach preview CSS/JS + localized
+         *                                scripts. CSS generation does not need these and
+         *                                must avoid them before init / before $wp_rewrite
+         *                                exists (permalink helpers may fatally fail).
+         *                                Default true.
+         * }
+         * @return array
          */
-        public function get_schema( $request = null ) {
-            // Return cached schema if available (static cache for request-level sharing)
-            if ( self::$schema_cache !== null ) {
+        public function get_schema( $request = null, $args = array() ) {
+            $args = wp_parse_args( $args, array(
+                'include_assets' => true,
+            ) );
+
+            // Full schema (with assets) can reuse the request cache.
+            // CSS-only schema must not poison that cache with a stripped payload.
+            if ( $args['include_assets'] && self::$schema_cache !== null ) {
                 return self::$schema_cache;
             }
 
@@ -65,11 +82,11 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             // Decode HTML entities in titles and descriptions
             $schema = $this->decode_html_entities_in_schema( $schema );
 
-            // Add assets URLs to schema
-            $schema['assets'] = $this->get_plugin_assets();
-
-            // Cache the schema (static for request-level sharing)
-            self::$schema_cache = $schema;
+            // Preview assets / localized scripts (Optiwich UI only — not for CSS gen).
+            if ( $args['include_assets'] ) {
+                $schema['assets'] = $this->get_plugin_assets();
+                self::$schema_cache = $schema;
+            }
 
             return apply_filters( 'wp_ulike_optiwich_customizer_schema', $schema );
         }
@@ -987,15 +1004,21 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 $states = array(
                     'default' => array(
                         'label'  => __( 'Normal', 'wp-ulike' ),
-                        'markup' => $base,
+                        'markup' => $this->mutate_button_preview_state( $base, 'default_forced' ),
                     ),
                     'active'  => array(
                         'label'  => __( 'Active', 'wp-ulike' ),
-                        'markup' => $this->mutate_button_preview_state( $base, 'active' ),
+                        'markup' => $this->mutate_button_preview_state(
+                            $this->mutate_button_preview_state( $base, 'default_forced' ),
+                            'active'
+                        ),
                     ),
                     'removed' => array(
                         'label'  => __( 'Removed', 'wp-ulike' ),
-                        'markup' => $this->mutate_button_preview_state( $base, 'removed' ),
+                        'markup' => $this->mutate_button_preview_state(
+                            $this->mutate_button_preview_state( $base, 'default_forced' ),
+                            'removed'
+                        ),
                     ),
                 );
 
@@ -1021,8 +1044,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 }
                 echo '<div class="ulp-customizer-button-preview-item">';
                 echo '<p class="ulp-customizer-preview-label">' . esc_html( $item['label'] ) . '</p>';
+                // Always show the idle (unliked) state — a liked preview post would
+                // otherwise lock templates like Animated Heart on the white active icon.
                 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode markup
-                echo $item['markup'];
+                echo $this->mutate_button_preview_state( $item['markup'], 'default_forced' );
                 echo '</div>';
             }
             echo '</div>';
@@ -1062,6 +1087,34 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                     array( 'wp_ulike_is_unliked', 'wp_ulike_is_unliked', 'wp_ulike_is_unliked', '' ),
                     $html
                 );
+            }
+
+            // Force idle markup (strip liked/active classes from a real liked preview post).
+            if ( 'default_forced' === $state || 'default' === $state ) {
+                $html = str_replace(
+                    array(
+                        'wp_ulike_is_liked',
+                        'wp_ulike_is_already_liked',
+                        'wp_ulike_is_unliked',
+                        'wp_ulike_is_already_unliked',
+                        ' image-unlike',
+                        'image-unlike',
+                        ' wp_ulike_btn_is_active',
+                        'wp_ulike_btn_is_active',
+                    ),
+                    array(
+                        'wp_ulike_is_not_liked',
+                        'wp_ulike_is_not_liked',
+                        'wp_ulike_is_not_liked',
+                        'wp_ulike_is_not_liked',
+                        '',
+                        '',
+                        '',
+                        '',
+                    ),
+                    $html
+                );
+                return is_string( $html ) ? $html : '';
             }
 
             return $html;
