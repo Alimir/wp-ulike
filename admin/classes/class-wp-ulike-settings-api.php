@@ -1176,6 +1176,8 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'actions.save_short' => __( 'Save', 'wp-ulike' ),
                 /* translators: Loading state text while saving */
                 'actions.saving' => __( 'Saving...', 'wp-ulike' ),
+                /* translators: Loading state text when saved successfully */
+                'actions.saved' => __( 'Saved', 'wp-ulike' ),
                 /* translators: Button text to reset settings to default values */
                 'actions.reset' => __( 'Reset to Defaults', 'wp-ulike' ),
                 /* translators: Short button text to reset settings (compact toolbar) */
