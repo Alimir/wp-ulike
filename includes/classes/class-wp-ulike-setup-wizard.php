@@ -99,6 +99,11 @@ if ( ! class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
 
 			$on_plugin_screen = ( 0 === strpos( $page, 'wp-ulike' ) );
 
+			// License is the Pro-first next step. Do not cover the key form.
+			if ( 'wp-ulike-pro-license' === $page ) {
+				$on_plugin_screen = false;
+			}
+
 			return (bool) apply_filters( 'wp_ulike_setup_wizard_should_show', $on_plugin_screen );
 		}
 
@@ -331,7 +336,12 @@ if ( ! class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
 			if ( function_exists( 'is_buddypress' ) ) {
 				$buddypress = self::group( $settings, 'buddypress_group' );
 				$buddypress['enable_auto_display'] = $wants_bp;
-				$buddypress['enable_comments']     = $wants_bp && $wants_comments;
+				// Activity checkbox is "stream and activity comments". The
+				// Comments checkbox is WordPress post comments only.
+				$buddypress['enable_comments']     = $wants_bp;
+				if ( $wants_bp && empty( $buddypress['auto_display_position'] ) ) {
+					$buddypress['auto_display_position'] = 'content';
+				}
 				$settings['buddypress_group']      = self::apply_vote_rules( $buddypress, $who_can_vote, $unlike_rule, $show_likers && $wants_bp );
 			}
 
@@ -376,6 +386,10 @@ if ( ! class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
 		}
 
 		protected static function settings_url() {
+			if ( defined( 'WP_ULIKE_PRO_VERSION' ) && ! get_option( 'wp_ulike_pro_license_key' ) ) {
+				return admin_url( 'admin.php?page=wp-ulike-pro-license' );
+			}
+
 			if ( class_exists( 'WP_Ulike_Overview' ) ) {
 				return WP_Ulike_Overview::get_settings_url( 'content-types' );
 			}

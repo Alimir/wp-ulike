@@ -175,6 +175,7 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 * Fixed: The Logs screen could come back empty on sites whose older tables predate the fingerprint column.
 * Fixed: Sites still on classic storage no longer write "table doesn't exist" errors to the debug log when totals are calculated.
 * Fixed: Network Activate pages through sites with get_sites() and always restores the current site after each one.
+* Fixed: After setup, BuddyPress / BuddyBoss activity likes could stay hidden while activity comments still showed. The stream now uses the same Content default as comments.
 * Improved: Clearer Statistics switch copy. The switch still stops extra report data from being collected.
 
 = 5.2.2 =
