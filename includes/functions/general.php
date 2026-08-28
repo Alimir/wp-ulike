@@ -346,13 +346,10 @@ if( ! function_exists( 'wp_ulike_get_features' ) ){
 		$features = array(
 			'statistics' => array(
 				'label'       => __( 'Statistics', 'wp-ulike' ),
-				'description' => __( 'Charts, top content, and engagement reports. While off, views, device, and country are not recorded.', 'wp-ulike' ),
+				'description' => __( 'Charts, top content, and engagement reports.', 'wp-ulike' ),
 				'icon'        => 'chart-bar',
 				'url'         => admin_url( 'admin.php?page=wp-ulike-statistics' ),
-				// Switching this off is the one change here that loses something
-				// permanently: recording stops, so the gap cannot be filled in
-				// afterwards. Say so before it happens, not after.
-				'warning'     => __( 'Turning Statistics off also stops recording views, device, and country for new votes. Existing reports are kept, but the period it stays off cannot be filled in later. Turn it off?', 'wp-ulike' ),
+				'warning'     => __( 'Turning Statistics off hides the dashboard. Votes keep working and existing reports stay. Turn it off?', 'wp-ulike' ),
 			),
 			'customize'  => array(
 				'label'       => __( 'Customize', 'wp-ulike' ),
@@ -418,6 +415,23 @@ if( ! function_exists( 'wp_ulike_is_feature_enabled' ) ){
 		$enabled = ! in_array( $key, wp_ulike_get_disabled_features(), true );
 
 		return (bool) apply_filters( 'wp_ulike_is_feature_enabled', $enabled, $key );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_should_record_analytics_meta' ) ){
+	/**
+	 * Whether views, device, OS, browser, and country may be stored.
+	 *
+	 * Follows the Statistics switch. Pro already checks this before writing;
+	 * the Pulse writer also refuses those columns when this is false so an
+	 * older add-on cannot keep filling them after the site turned reports off.
+	 *
+	 * @return bool
+	 */
+	function wp_ulike_should_record_analytics_meta(){
+		$record = ! function_exists( 'wp_ulike_is_feature_enabled' ) || wp_ulike_is_feature_enabled( 'statistics' );
+
+		return (bool) apply_filters( 'wp_ulike_should_record_analytics_meta', $record );
 	}
 }
 

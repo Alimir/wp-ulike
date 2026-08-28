@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-28T06:40:17+00:00\n"
+"POT-Creation-Date: 2026-08-28T07:57:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
@@ -1847,7 +1847,7 @@ msgid "Metrics Dashboard"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:92
-#: includes/functions/general.php:358
+#: includes/functions/general.php:355
 msgid "Customize"
 msgstr ""
 
@@ -3880,7 +3880,7 @@ msgid "Can they take a like back?"
 msgstr ""
 
 #: admin/includes/templates/setup-wizard-dialog.php:135
-#: includes/functions/general.php:1177
+#: includes/functions/general.php:1191
 msgid "Unlike once, then lock"
 msgstr ""
 
@@ -4532,8 +4532,16 @@ msgstr ""
 msgid "Download your settings and customizer values as JSON."
 msgstr ""
 
+#: includes/classes/class-wp-ulike-overview.php:365
+msgid "No votes yet? Open a published post (not the homepage) and click the like button once to confirm everything works."
+msgstr ""
+
 #: includes/classes/class-wp-ulike-overview.php:367
 msgid "View sample post"
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:370
+msgid "Likes usually show on single posts, not on the homepage or archives. Test on a post or change display in Settings."
 msgstr ""
 
 #. translators: %s: Automatic Display setting label
@@ -4549,6 +4557,10 @@ msgstr ""
 #. translators: %s: Hide Plugin Admin Notices setting label
 #: includes/classes/class-wp-ulike-overview.php:395
 msgid "Too many admin notices? Turn on “%s” in Settings → General."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:405
+msgid "Database tables may be incomplete. Use “Repair database tables” on Overview, or deactivate and reactivate WP ULike once."
 msgstr ""
 
 #: includes/classes/class-wp-ulike-overview.php:628
@@ -4611,6 +4623,15 @@ msgstr ""
 #. translators: 1: votes today, 2: statistics admin URL
 #: includes/classes/class-wp-ulike-overview.php:1047
 msgid "<strong>%1$s</strong> votes today on your site. Numbers below are a quick snapshot—<a href=\"%2$s\">Statistics</a> has the full breakdown."
+msgstr ""
+
+#. translators: %s: total vote count
+#: includes/classes/class-wp-ulike-overview.php:1057
+msgid "Buttons are active on posts and you have %s total votes stored. Use Statistics when you need date ranges and detailed reports."
+msgstr ""
+
+#: includes/classes/class-wp-ulike-overview.php:1063
+msgid "Like buttons are not on posts automatically yet. Turn on auto-display in Settings, or add the ULike block / shortcode where you want votes."
 msgstr ""
 
 #. translators: 1: sample post URL, 2: Content Types settings URL
@@ -4801,54 +4822,54 @@ msgid "Table info is empty."
 msgstr ""
 
 #: includes/functions/general.php:349
-msgid "Charts, top content, and engagement reports. While off, views, device, and country are not recorded."
+msgid "Charts, top content, and engagement reports."
 msgstr ""
 
-#: includes/functions/general.php:355
-msgid "Turning Statistics off also stops recording views, device, and country for new votes. Existing reports are kept, but the period it stays off cannot be filled in later. Turn it off?"
+#: includes/functions/general.php:352
+msgid "Turning Statistics off hides the dashboard. Votes keep working and existing reports stay. Turn it off?"
 msgstr ""
 
-#: includes/functions/general.php:359
+#: includes/functions/general.php:356
 msgid "Visual designer for button styles, colors, and templates. While off, its styling is not applied on the front end."
 msgstr ""
 
-#: includes/functions/general.php:364
+#: includes/functions/general.php:361
 msgid "Turning Customize off also stops its styling being applied, so buttons go back to their default look on the front end. Your saved design is kept and returns when you switch it back on. Turn it off?"
 msgstr ""
 
-#: includes/functions/general.php:1160
+#: includes/functions/general.php:1174
 msgid "Unlimited votes"
 msgstr ""
 
-#: includes/functions/general.php:1161
+#: includes/functions/general.php:1175
 msgid "One vote per browser (cookie)"
 msgstr ""
 
-#: includes/functions/general.php:1162
+#: includes/functions/general.php:1176
 msgid "One vote per person (user/IP)"
 msgstr ""
 
-#: includes/functions/general.php:1163
+#: includes/functions/general.php:1177
 msgid "Strict (user/IP + cookie)"
 msgstr ""
 
-#: includes/functions/general.php:1176
+#: includes/functions/general.php:1190
 msgid "Allow unlike"
 msgstr ""
 
-#: includes/functions/general.php:1178
+#: includes/functions/general.php:1192
 msgid "Lock the vote"
 msgstr ""
 
-#: includes/functions/general.php:1205
+#: includes/functions/general.php:1219
 msgid "Top of Content"
 msgstr ""
 
-#: includes/functions/general.php:1206
+#: includes/functions/general.php:1220
 msgid "Bottom of Content"
 msgstr ""
 
-#: includes/functions/general.php:1207
+#: includes/functions/general.php:1221
 msgid "Top and Bottom"
 msgstr ""
 

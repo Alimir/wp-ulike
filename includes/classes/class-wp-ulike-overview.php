@@ -362,12 +362,12 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			$tips = array(
 				array(
-					'text' => esc_html( 'No votes yet? Open a published post (not the homepage) and click the like button once to confirm everything works.' ),
+					'text' => esc_html__( 'No votes yet? Open a published post (not the homepage) and click the like button once to confirm everything works.', 'wp-ulike' ),
 					'url'  => ! empty( $health['preview_url'] ) ? $health['preview_url'] : '',
 					'link' => esc_html__( 'View sample post', 'wp-ulike' ),
 				),
 				array(
-					'text' => esc_html( 'Likes usually show on single posts, not on the homepage or archives. Test on a post or change display in Settings.' ),
+					'text' => esc_html__( 'Likes usually show on single posts, not on the homepage or archives. Test on a post or change display in Settings.', 'wp-ulike' ),
 					'url'  => $content_types_url,
 					'link' => esc_html__( 'Content Types', 'wp-ulike' ),
 				),
@@ -402,7 +402,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			if ( empty( $health['tables_ok'] ) ) {
 				$tips[] = array(
-					'text' => esc_html( 'Database tables may be incomplete. Use “Repair database tables” on Overview, or deactivate and reactivate WP ULike once.' ),
+					'text' => esc_html__( 'Database tables may be incomplete. Use “Repair database tables” on Overview, or deactivate and reactivate WP ULike once.', 'wp-ulike' ),
 					'url'  => self::get_about_url(),
 					'link' => esc_html__( 'Open Overview', 'wp-ulike' ),
 				);
@@ -1054,13 +1054,13 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			if ( ! empty( $health['auto_display'] ) && $total > 0 ) {
 				return sprintf(
 					/* translators: %s: total vote count */
-					esc_html( 'Buttons are active on posts and you have %s total votes stored. Use Statistics when you need date ranges and detailed reports.' ),
+					esc_html__( 'Buttons are active on posts and you have %s total votes stored. Use Statistics when you need date ranges and detailed reports.', 'wp-ulike' ),
 					number_format_i18n( $total )
 				);
 			}
 
 			if ( empty( $health['auto_display'] ) ) {
-				return esc_html( 'Like buttons are not on posts automatically yet. Turn on auto-display in Settings, or add the ULike block / shortcode where you want votes.' );
+				return esc_html__( 'Like buttons are not on posts automatically yet. Turn on auto-display in Settings, or add the ULike block / shortcode where you want votes.', 'wp-ulike' );
 			}
 
 			if ( (int) ( $health['log_count'] ?? 0 ) === 0 ) {
