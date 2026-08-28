@@ -169,14 +169,10 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 * Improved: Suggestions for Pro on the dashboard wait until a site has real activity behind it.
 * Improved: Optiwich heading colour is now available in Settings.
 * Fixed: WP ULike is activated again on new sites added to a WordPress network.
-* Fixed: The first-install setup could not be closed when every placement was unticked.
 * Fixed: An unrecognised counter status — a shortcode typo, for example — no longer leaves an unused row behind in the plugin's own table.
 * Fixed: Personal data export could come back empty on sites whose tables were created with different database collations, instead of listing that person's votes.
 * Fixed: The Logs screen could come back empty on sites whose older tables predate the fingerprint column.
 * Fixed: Sites still on classic storage no longer write "table doesn't exist" errors to the debug log when totals are calculated.
-* Fixed: Network Activate pages through sites with get_sites() and always restores the current site after each one.
-* Fixed: After setup, BuddyPress / BuddyBoss activity likes could stay hidden while activity comments still showed. The stream now uses the same Content default as comments.
-* Improved: Clearer Statistics switch copy. The switch still stops extra report data from being collected.
 
 = 5.2.2 =
 * Added: `[wp_ulike_top]` shortcode (and template tag) for Top List — same popular-content filters as the block.
