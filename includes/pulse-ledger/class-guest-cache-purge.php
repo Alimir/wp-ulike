@@ -101,7 +101,9 @@ if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
 				return false;
 			}
 
-			$enabled = (bool) get_option( self::ENABLED_OPTION, false );
+			// Options come back as strings. (bool) '0' is true in PHP, so a
+			// stored off switch would keep running until we compare as an int.
+			$enabled = 1 === (int) get_option( self::ENABLED_OPTION, 0 );
 
 			/**
 			 * Filters whether dormant guest cache rows are pruned on a schedule.
@@ -112,6 +114,28 @@ if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
 			 * @param bool $enabled Stored preference.
 			 */
 			return (bool) apply_filters( 'wp_ulike_purge_guest_cache_enabled', $enabled );
+		}
+
+		/**
+		 * Whether the site owner has already chosen on or off (not just default).
+		 *
+		 * @return bool
+		 */
+		public static function preference_stored() {
+			return false !== get_option( self::ENABLED_OPTION, false );
+		}
+
+		/**
+		 * Whether the schedule is on through the filter rather than this site's
+		 * own choice, i.e. a host or agency runs it fleet-wide.
+		 *
+		 * Overview hides its stop button in that case: the option it would write
+		 * is already off, so the button would report success and change nothing.
+		 *
+		 * @return bool
+		 */
+		public static function is_forced_on() {
+			return self::is_enabled() && 1 !== (int) get_option( self::ENABLED_OPTION, 0 );
 		}
 
 		/**

@@ -81,6 +81,10 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 		</div>
 	<?php elseif ( 'dismissed' === $cleanup_flash ) : ?>
 		<div class="notice notice-info is-dismissible"><p><?php esc_html_e( 'Left as it is. Nothing was removed and you will not be asked again.', 'wp-ulike' ); ?></p></div>
+	<?php elseif ( 'stopped' === $cleanup_flash ) : ?>
+		<div class="notice notice-info is-dismissible"><p><?php esc_html_e( 'Daily cleanup is off. Nothing else changed.', 'wp-ulike' ); ?></p></div>
+	<?php elseif ( 'resumed' === $cleanup_flash ) : ?>
+		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Daily cleanup is on again.', 'wp-ulike' ); ?></p></div>
 	<?php endif; ?>
 
 	<?php if ( 'saved' === $features_flash ) : ?>
@@ -136,17 +140,20 @@ $group_order    = array( 'engagement', 'setup', 'pro' );
 						<h2 class="wp-ulike-about-card__title"><?php echo esc_html( $cleanup['title'] ); ?></h2>
 					</div>
 					<p class="wp-ulike-about-task__intro"><?php echo esc_html( $cleanup['intro'] ); ?></p>
-					<ul class="wp-ulike-about-task__reassurance">
-						<?php foreach ( (array) $cleanup['keeps'] as $point ) : ?>
-							<li><?php echo esc_html( $point ); ?></li>
-						<?php endforeach; ?>
-					</ul>
 					<form class="wp-ulike-about-task__actions" method="post" action="<?php echo esc_url( $cleanup['url'] ); ?>">
 						<input type="hidden" name="action" value="wp_ulike_guest_cleanup" />
 						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $cleanup['nonce'] ); ?>" />
-						<button type="submit" name="mode" value="auto" class="button button-primary"><?php echo esc_html( $cleanup['auto_label'] ); ?></button>
-						<button type="submit" name="mode" value="once" class="button button-secondary"><?php echo esc_html( $cleanup['run_label'] ); ?></button>
-						<button type="submit" name="mode" value="dismiss" class="button-link"><?php echo esc_html( $cleanup['dismiss_label'] ); ?></button>
+						<?php if ( 'enabled' === ( $cleanup['state'] ?? '' ) ) : ?>
+							<?php if ( ! empty( $cleanup['stop_label'] ) ) : ?>
+								<button type="submit" name="mode" value="disable" class="button"><?php echo esc_html( $cleanup['stop_label'] ); ?></button>
+							<?php endif; ?>
+						<?php elseif ( 'disabled' === ( $cleanup['state'] ?? '' ) ) : ?>
+							<button type="submit" name="mode" value="enable" class="button button-primary"><?php echo esc_html( $cleanup['start_label'] ); ?></button>
+						<?php else : ?>
+							<button type="submit" name="mode" value="auto" class="button button-primary"><?php echo esc_html( $cleanup['auto_label'] ); ?></button>
+							<button type="submit" name="mode" value="once" class="button button-secondary"><?php echo esc_html( $cleanup['run_label'] ); ?></button>
+							<button type="submit" name="mode" value="dismiss" class="button-link"><?php echo esc_html( $cleanup['dismiss_label'] ); ?></button>
+						<?php endif; ?>
 					</form>
 				</div>
 			<?php endif; ?>

@@ -684,7 +684,49 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return array<string,mixed>|null
 		 */
 		public static function get_guest_cleanup_data() {
-			if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) || ! WP_Ulike_Guest_Cache_Purge::should_suggest() ) {
+			if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
+				return null;
+			}
+
+			$base = array(
+				'url'   => admin_url( 'admin-post.php' ),
+				'nonce' => wp_create_nonce( 'wp_ulike_guest_cleanup' ),
+			);
+
+			if ( WP_Ulike_Guest_Cache_Purge::is_enabled() ) {
+				return array_merge(
+					$base,
+					array(
+						'state'      => 'enabled',
+						'title'      => esc_html__( 'Daily guest cleanup is on', 'wp-ulike' ),
+						'intro'      => esc_html__( 'Unused guest lookup rows are cleared once a day. Votes and totals stay as they are.', 'wp-ulike' ),
+						'stop_label' => WP_Ulike_Guest_Cache_Purge::is_forced_on()
+							? ''
+							: esc_html__( 'Stop daily cleanup', 'wp-ulike' ),
+					)
+				);
+			}
+
+			// Turned off by hand: keep the way back visible, but only while there
+			// is still something to reclaim. Once the table is tidy this card has
+			// nothing to offer and a permanent "it is off" panel is just noise.
+			if (
+				WP_Ulike_Guest_Cache_Purge::preference_stored()
+				&& WP_Ulike_Guest_Cache_Purge::can_run()
+				&& WP_Ulike_Guest_Cache_Purge::estimate() >= WP_Ulike_Guest_Cache_Purge::SUGGEST_THRESHOLD
+			) {
+				return array_merge(
+					$base,
+					array(
+						'state'       => 'disabled',
+						'title'       => esc_html__( 'Daily guest cleanup is off', 'wp-ulike' ),
+						'intro'       => esc_html__( 'Unused guest lookup rows stay until you turn this on again. Votes and totals stay as they are.', 'wp-ulike' ),
+						'start_label' => esc_html__( 'Turn daily cleanup on', 'wp-ulike' ),
+					)
+				);
+			}
+
+			if ( ! WP_Ulike_Guest_Cache_Purge::should_suggest() ) {
 				return null;
 			}
 
@@ -695,31 +737,28 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			// "more than" rather than a multi-million guess as an exact count.
 			$amount = WP_Ulike_Guest_Cache_Purge::estimate_is_capped()
 				? sprintf(
-					/* translators: %s: row count the scan stopped at */
+					/* translators: %s: row count the estimate stopped at */
 					esc_html__( 'more than %s', 'wp-ulike' ),
 					number_format_i18n( WP_Ulike_Guest_Cache_Purge::ESTIMATE_CAP )
 				)
 				: number_format_i18n( $rows );
 
-			return array(
-				'rows'  => $rows,
-				'title' => esc_html__( 'Reclaim space from old guest records', 'wp-ulike' ),
-				'intro' => sprintf(
-					/* translators: 1: row count, 2: number of days */
-					esc_html__( 'The likes lookup table has grown to about %1$s rows. Guest records in it that have not been used in %2$s days can be removed without touching votes, counts, or totals.', 'wp-ulike' ),
-					$amount,
-					number_format_i18n( $days )
-				),
-				'keeps' => array(
-					esc_html__( 'Every vote, count, and total stays exactly as it is — those live in a separate table and are never touched.', 'wp-ulike' ),
-					esc_html__( 'Nobody gets to vote twice. If a guest does come back, WP ULike looks their history up directly and rebuilds the row.', 'wp-ulike' ),
-					esc_html__( 'Your reports and charts do not change. This removes no history, only a lookup shortcut.', 'wp-ulike' ),
-				),
-				'run_label'     => esc_html__( 'Clean up now', 'wp-ulike' ),
-				'auto_label'    => esc_html__( 'Clean up now and keep it tidy daily', 'wp-ulike' ),
-				'dismiss_label' => esc_html__( 'No thanks, keep everything', 'wp-ulike' ),
-				'url'           => admin_url( 'admin-post.php' ),
-				'nonce'         => wp_create_nonce( 'wp_ulike_guest_cleanup' ),
+			return array_merge(
+				$base,
+				array(
+					'state'         => 'offer',
+					'rows'          => $rows,
+					'title'         => esc_html__( 'Reclaim space from old guest records', 'wp-ulike' ),
+					'intro'         => sprintf(
+						/* translators: 1: row count, 2: number of days */
+						esc_html__( 'The likes lookup table has grown to about %1$s rows. Guest records unused for %2$s days can be removed. Votes, counts, and reports stay as they are.', 'wp-ulike' ),
+						$amount,
+						number_format_i18n( $days )
+					),
+					'run_label'     => esc_html__( 'Clean up now', 'wp-ulike' ),
+					'auto_label'    => esc_html__( 'Clean up now and keep it tidy daily', 'wp-ulike' ),
+					'dismiss_label' => esc_html__( 'No thanks, keep everything', 'wp-ulike' ),
+				)
 			);
 		}
 
@@ -750,6 +789,12 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			if ( 'dismiss' === $mode ) {
 				WP_Ulike_Guest_Cache_Purge::dismiss();
 				$result = 'dismissed';
+			} elseif ( 'disable' === $mode ) {
+				WP_Ulike_Guest_Cache_Purge::set_enabled( false );
+				$result = 'stopped';
+			} elseif ( 'enable' === $mode && WP_Ulike_Guest_Cache_Purge::can_run() ) {
+				WP_Ulike_Guest_Cache_Purge::set_enabled( true );
+				$result = 'resumed';
 			} elseif ( in_array( $mode, array( 'once', 'auto' ), true ) && WP_Ulike_Guest_Cache_Purge::can_run() ) {
 				if ( 'auto' === $mode ) {
 					WP_Ulike_Guest_Cache_Purge::set_enabled( true );
