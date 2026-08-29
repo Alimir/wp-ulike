@@ -513,11 +513,15 @@ if( ! function_exists( 'wp_ulike_preserve_unsubmitted_settings' ) ){
 	 * Only the settings screen runs through this. Importing a settings file
 	 * writes the option directly and still replaces everything, as it should.
 	 *
+	 * An empty payload is Reset to Defaults, which clears the option so every
+	 * field falls back to its declared default. Merging there would silently
+	 * turn Reset into a no-op.
+	 *
 	 * @param array $values Incoming settings payload.
 	 * @return array
 	 */
 	function wp_ulike_preserve_unsubmitted_settings( $values ){
-		if( ! is_array( $values ) ){
+		if( ! is_array( $values ) || empty( $values ) ){
 			return $values;
 		}
 
