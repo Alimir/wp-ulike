@@ -2,7 +2,7 @@
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: like button, post reactions, voting, engagement analytics, popular posts
+Tags: like button, like, voting, reactions, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.0
