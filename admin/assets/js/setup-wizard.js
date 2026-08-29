@@ -60,7 +60,7 @@
 		return i18n.recap
 			.replace( '%1$s', places.join( i18n.listJoin ) )
 			.replace( '%2$s', selectedValue( 'who_can_vote' ) === 'logged_in' ? i18n.whoLoggedIn : i18n.whoEveryone )
-			.replace( '%3$s', i18n.after[ selectedValue( 'unlike_rule' ) ] || i18n.after.once )
+			.replace( '%3$s', i18n.after[ selectedValue( 'unlike_rule' ) ] || i18n.after.allow )
 			.replace( '%4$s', selectedValue( 'show_likers' ) === 'yes' ? i18n.likersOn : i18n.likersOff );
 	}
 
@@ -138,7 +138,7 @@
 		body.set( 'action', cfg.saveAction );
 		body.set( 'nonce', cfg.nonce );
 		body.set( 'who_can_vote', selectedValue( 'who_can_vote' ) || 'everyone' );
-		body.set( 'unlike_rule', selectedValue( 'unlike_rule' ) || 'once' );
+		body.set( 'unlike_rule', selectedValue( 'unlike_rule' ) || 'allow' );
 		body.set( 'show_likers', selectedValue( 'show_likers' ) || 'no' );
 		getSurfaces().forEach( function ( value ) {
 			body.append( 'surfaces[]', value );

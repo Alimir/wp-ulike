@@ -129,20 +129,20 @@ $guest_hint      = defined( 'WP_ULIKE_PRO_VERSION' )
 					<div class="wp-ulike-setup__block">
 						<div class="wp-ulike-setup__choices wp-ulike-setup__choices--single" role="radiogroup" aria-label="<?php esc_attr_e( 'Can they take a like back?', 'wp-ulike' ); ?>">
 							<label class="wp-ulike-setup__choice">
-								<input type="radio" name="unlike_rule" value="once" checked>
+								<input type="radio" name="unlike_rule" value="allow" checked>
 								<span class="wp-ulike-setup__choice-body">
 									<span class="wp-ulike-setup__choice-top">
-										<span class="wp-ulike-setup__choice-title"><?php esc_html_e( 'Unlike once, then lock', 'wp-ulike' ); ?></span>
+										<span class="wp-ulike-setup__choice-title"><?php esc_html_e( 'Unlike anytime', 'wp-ulike' ); ?></span>
 										<span class="wp-ulike-setup__badge"><?php esc_html_e( 'Recommended', 'wp-ulike' ); ?></span>
 									</span>
-									<span class="wp-ulike-setup__choice-hint"><?php esc_html_e( 'Undo a mis-click. Then the vote stays.', 'wp-ulike' ); ?></span>
+									<span class="wp-ulike-setup__choice-hint"><?php esc_html_e( 'Click again whenever to remove the like.', 'wp-ulike' ); ?></span>
 								</span>
 							</label>
 							<label class="wp-ulike-setup__choice">
-								<input type="radio" name="unlike_rule" value="allow">
+								<input type="radio" name="unlike_rule" value="once">
 								<span class="wp-ulike-setup__choice-body">
-									<span class="wp-ulike-setup__choice-title"><?php esc_html_e( 'Unlike anytime', 'wp-ulike' ); ?></span>
-									<span class="wp-ulike-setup__choice-hint"><?php esc_html_e( 'Click again whenever to remove the like.', 'wp-ulike' ); ?></span>
+									<span class="wp-ulike-setup__choice-title"><?php esc_html_e( 'Unlike once, then lock', 'wp-ulike' ); ?></span>
+									<span class="wp-ulike-setup__choice-hint"><?php esc_html_e( 'Undo a mis-click. Then the vote stays.', 'wp-ulike' ); ?></span>
 								</span>
 							</label>
 							<label class="wp-ulike-setup__choice">
