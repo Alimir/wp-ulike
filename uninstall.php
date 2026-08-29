@@ -105,9 +105,18 @@ class wp_ulike_uninstall {
 	 * @return void
 	 */
 	public function clear_scheduled_tasks() {
-		wp_clear_scheduled_hook( 'wp_ulike_pulse_sync_batch' );
-		wp_clear_scheduled_hook( 'wp_ulike_pulse_purge_meta' );
-		wp_clear_scheduled_hook( 'wp_ulike_purge_guest_cache' );
+		// Kept in step with wp_ulike_get_scheduled_hooks(). Listed literally
+		// because uninstall.php runs without the plugin's own files loaded.
+		$hooks = array(
+			'wp_ulike_pulse_sync_batch',
+			'wp_ulike_pulse_purge_meta',
+			'wp_ulike_purge_guest_cache',
+			'wp_ulike_refresh_cloudflare_ips',
+		);
+
+		foreach ( $hooks as $hook ) {
+			wp_clear_scheduled_hook( $hook );
+		}
 	}
 
 	/**

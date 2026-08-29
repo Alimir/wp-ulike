@@ -297,6 +297,25 @@ if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_scheduled_hooks' ) ){
+	/**
+	 * Every WP-Cron hook this plugin schedules.
+	 *
+	 * One list so deactivation and uninstall cannot drift apart and leave an
+	 * orphaned event behind in a site's cron array.
+	 *
+	 * @return string[]
+	 */
+	function wp_ulike_get_scheduled_hooks(){
+		return array(
+			'wp_ulike_pulse_sync_batch',
+			'wp_ulike_pulse_purge_meta',
+			'wp_ulike_purge_guest_cache',
+			'wp_ulike_refresh_cloudflare_ips',
+		);
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_features_option_name' ) ){
 	/**
 	 * Option holding the keys of features the site has switched off.
