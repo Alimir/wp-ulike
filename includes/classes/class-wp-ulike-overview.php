@@ -1511,9 +1511,9 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				$settings     = $settings_api->sanitize_import_values( $settings );
 			}
 
-			// 'no' everywhere, like the settings save and the fresh-install seed.
-			// Importing must not be the one path that leaves this option
-			// autoloaded on an otherwise identical site.
+			// 'no' everywhere, like the settings save. Importing must not be the
+			// one path that leaves this option autoloaded on an otherwise
+			// identical site.
 			update_option( 'wp_ulike_settings', $settings, 'no' );
 
 			if ( ! empty( $payload['customize'] ) && is_array( $payload['customize'] ) ) {
