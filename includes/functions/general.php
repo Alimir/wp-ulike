@@ -297,6 +297,240 @@ if( ! function_exists( 'wp_ulike_get_user_access_capability' ) ){
 	}
 }
 
+if( ! function_exists( 'wp_ulike_get_scheduled_hooks' ) ){
+	/**
+	 * Every WP-Cron hook this plugin schedules.
+	 *
+	 * One list so deactivation and uninstall cannot drift apart and leave an
+	 * orphaned event behind in a site's cron array.
+	 *
+	 * @return string[]
+	 */
+	function wp_ulike_get_scheduled_hooks(){
+		return array(
+			'wp_ulike_pulse_sync_batch',
+			'wp_ulike_pulse_purge_meta',
+			'wp_ulike_purge_guest_cache',
+			'wp_ulike_refresh_cloudflare_ips',
+		);
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_features_option_name' ) ){
+	/**
+	 * Option holding the keys of features the site has switched off.
+	 *
+	 * Deliberately separate from `wp_ulike_settings`: the settings panel saves
+	 * that array as a whole, so flags stored inside it could be lost on a save.
+	 *
+	 * @return string
+	 */
+	function wp_ulike_get_features_option_name(){
+		return 'wp_ulike_disabled_features';
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_features' ) ){
+	/**
+	 * Registry of switchable features.
+	 *
+	 * Free registers only its own pages. Add-ons register their modules on the
+	 * `wp_ulike_features` filter from inside their own plugin, so no add-on
+	 * labels or checks live here.
+	 *
+	 * Recognised keys per feature:
+	 *  - label, description, icon : how the switch presents itself.
+	 *  - badge                    : optional edition badge, e.g. "Pro".
+	 *  - url                      : where the feature is configured, if anywhere.
+	 *  - warning                  : confirmation shown before switching OFF, for
+	 *                               modules where off means data stops being
+	 *                               recorded or URLs stop resolving.
+	 *
+	 * A switch records whether the site uses a feature at all, and every feature
+	 * starts on. It must not be wired to a setting that records whether the
+	 * feature is *configured* — that would read as off on a site that has simply
+	 * not set the feature up yet, and then hide the settings needed to set it up.
+	 *
+	 * Settings is never registered — hiding it would leave no way back.
+	 *
+	 * @return array<string,array<string,mixed>> Keyed by feature slug.
+	 */
+	function wp_ulike_get_features(){
+		static $cache = null;
+
+		if( is_array( $cache ) ){
+			return $cache;
+		}
+
+		$features = array(
+			'statistics' => array(
+				'label'       => __( 'Statistics', 'wp-ulike' ),
+				'description' => __( 'Charts, top content, and engagement reports.', 'wp-ulike' ),
+				'icon'        => 'chart-bar',
+				'url'         => admin_url( 'admin.php?page=wp-ulike-statistics' ),
+				'warning'     => __( 'Turning Statistics off hides the dashboard. Votes keep working and existing reports stay. Turn it off?', 'wp-ulike' ),
+			),
+			'customize'  => array(
+				'label'       => __( 'Customize', 'wp-ulike' ),
+				'description' => __( 'Visual designer for button styles, colors, and templates. While off, its styling is not applied on the front end.', 'wp-ulike' ),
+				'icon'        => 'admin-appearance',
+				'url'         => admin_url( 'admin.php?page=wp-ulike-customize' ),
+				// Nothing is deleted, but the site's buttons visibly change back
+				// to their default look, so this should not be a surprise.
+				'warning'     => __( 'Turning Customize off also stops its styling being applied, so buttons go back to their default look on the front end. Your saved design is kept and returns when you switch it back on. Turn it off?', 'wp-ulike' ),
+			),
+		);
+
+		$features = apply_filters( 'wp_ulike_features', $features );
+		$features = is_array( $features ) ? $features : array();
+
+		// Memoize only once every add-on has had a chance to register.
+		if( did_action( 'init' ) ){
+			$cache = $features;
+		}
+
+		return $features;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_get_disabled_features' ) ){
+	/**
+	 * Feature keys the site has switched off.
+	 *
+	 * @return string[]
+	 */
+	function wp_ulike_get_disabled_features(){
+		$disabled = get_option( wp_ulike_get_features_option_name(), array() );
+
+		return is_array( $disabled ) ? array_values( array_filter( array_map( 'strval', $disabled ) ) ) : array();
+	}
+}
+
+if( ! function_exists( 'wp_ulike_update_disabled_features' ) ){
+	/**
+	 * Persist the switched-off feature keys.
+	 *
+	 * @param string[] $keys Feature keys to disable.
+	 * @return void
+	 */
+	function wp_ulike_update_disabled_features( $keys ){
+		$keys = is_array( $keys ) ? array_values( array_unique( array_map( 'sanitize_key', $keys ) ) ) : array();
+
+		update_option( wp_ulike_get_features_option_name(), $keys, true );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_is_feature_enabled' ) ){
+	/**
+	 * Whether a feature is switched on.
+	 *
+	 * Unknown keys read as enabled so a feature that has not been registered
+	 * yet — or ships without a switch — keeps working untouched.
+	 *
+	 * @param string $key Feature slug.
+	 * @return boolean
+	 */
+	function wp_ulike_is_feature_enabled( $key ){
+		$enabled = ! in_array( $key, wp_ulike_get_disabled_features(), true );
+
+		return (bool) apply_filters( 'wp_ulike_is_feature_enabled', $enabled, $key );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_should_record_analytics_meta' ) ){
+	/**
+	 * Whether views, device, OS, browser, and country may be stored.
+	 *
+	 * Follows the Statistics switch. Pro already checks this before writing;
+	 * the Pulse writer also refuses those columns when this is false so an
+	 * older add-on cannot keep filling them after the site turned reports off.
+	 *
+	 * @return bool
+	 */
+	function wp_ulike_should_record_analytics_meta(){
+		$record = ! function_exists( 'wp_ulike_is_feature_enabled' ) || wp_ulike_is_feature_enabled( 'statistics' );
+
+		return (bool) apply_filters( 'wp_ulike_should_record_analytics_meta', $record );
+	}
+}
+
+if( ! function_exists( 'wp_ulike_save_feature_states' ) ){
+	/**
+	 * Persist the on/off state of every registered feature.
+	 *
+	 * Keys already in the disabled list that no longer belong to a registered
+	 * feature are kept, so a temporarily inactive add-on does not come back
+	 * switched on.
+	 *
+	 * @param string[] $enabled_keys Feature keys that should be switched on.
+	 * @return string[] Keys whose state actually changed.
+	 */
+	function wp_ulike_save_feature_states( $enabled_keys ){
+		$enabled_keys = is_array( $enabled_keys ) ? $enabled_keys : array();
+		$disabled     = wp_ulike_get_disabled_features();
+		$changed      = array();
+
+		foreach( wp_ulike_get_features() as $key => $feature ){
+			$was     = wp_ulike_is_feature_enabled( $key );
+			$enabled = in_array( $key, $enabled_keys, true );
+
+			if( $was !== $enabled ){
+				$changed[] = $key;
+			}
+
+			$disabled = array_diff( $disabled, array( $key ) );
+
+			if( ! $enabled ){
+				$disabled[] = $key;
+			}
+		}
+
+		wp_ulike_update_disabled_features( $disabled );
+
+		/**
+		 * Fires after feature switches are saved.
+		 *
+		 * Lets a module react to being switched on or off — flushing rewrite
+		 * rules, for instance — without the switch UI knowing why.
+		 *
+		 * @param string[] $changed Feature keys whose state changed.
+		 */
+		do_action( 'wp_ulike_features_saved', $changed );
+
+		return $changed;
+	}
+}
+
+if( ! function_exists( 'wp_ulike_preserve_unsubmitted_settings' ) ){
+	/**
+	 * Keep stored settings that a save payload does not mention.
+	 *
+	 * The settings screen writes the whole option in one go. A feature that is
+	 * switched off has its tab unregistered, so its fields can be missing from
+	 * the next save — and "missing" has to mean "leave alone", not "delete", or
+	 * switching the feature back on would not restore what the user had.
+	 *
+	 * Only the settings screen runs through this. Importing a settings file
+	 * writes the option directly and still replaces everything, as it should.
+	 *
+	 * @param array $values Incoming settings payload.
+	 * @return array
+	 */
+	function wp_ulike_preserve_unsubmitted_settings( $values ){
+		if( ! is_array( $values ) ){
+			return $values;
+		}
+
+		$stored = get_option( 'wp_ulike_settings', array() );
+
+		if( ! is_array( $stored ) || empty( $stored ) ){
+			return $values;
+		}
+
+		return array_merge( $stored, $values );
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	/**
 	 * Get likers box template info.
@@ -422,7 +656,7 @@ if( ! function_exists( 'wp_ulike_display_button' ) ){
 		$args     = apply_filters( 'wp_ulike_display_button_args', $args );
 		$template = new wp_ulike_cta_template( $args );
 
-		if( ! wp_ulike_is_true( $args['only_logged_in_users'] ) || is_user_logged_in() ) {
+		if( ! wp_ulike_setting_repo::isLoginRequiredValue( $args['only_logged_in_users'] ) || is_user_logged_in() ) {
 			// Return ulike template
 			return $template->display();
 		} else {
@@ -442,6 +676,14 @@ if( ! function_exists( 'wp_ulike_get_customizer_css' ) ){
 	 * @return string Generated CSS from customizer
 	 */
 	function wp_ulike_get_customizer_css() {
+		// A site that has switched Customize off is not using the visual
+		// designer, so its output must not keep styling the front end -- the
+		// switch would otherwise hide the screen while its CSS stayed on every
+		// page. Returning early also skips generating and caching that CSS.
+		if ( function_exists( 'wp_ulike_is_feature_enabled' ) && ! wp_ulike_is_feature_enabled( 'customize' ) ) {
+			return '';
+		}
+
 		if ( ! class_exists( 'wp_ulike_css_generator' ) ) {
 			return '';
 		}
@@ -458,8 +700,14 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 	 * @return string Combined CSS styles
 	 */
 	function wp_ulike_get_custom_style(){
+		// Memoised per request, but keyed on the Customize switch: the request
+		// that toggles the switch regenerates the stylesheet, and that must not
+		// reuse a value computed earlier in the same request under the old state.
+		$feature_key = ( function_exists( 'wp_ulike_is_feature_enabled' ) && ! wp_ulike_is_feature_enabled( 'customize' ) ) ? 'off' : 'on';
+
 		static $cached_style = null;
-		if ( null !== $cached_style ) {
+		static $cached_key   = null;
+		if ( null !== $cached_style && $cached_key === $feature_key ) {
 			return $cached_style;
 		}
 
@@ -471,8 +719,11 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			$return_style .= $customizer_css;
 		}
 
-		// Display deprecated styles (for backward compatibility)
-		if( wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) && wp_ulike_get_option( 'enable_deprecated_options' ) ) {
+		// Display deprecated styles (for backward compatibility). These come from
+		// the old customize screen, so they follow the same switch. Custom CSS and
+		// the spinner below are Settings fields and keep working either way.
+		$customize_on = ! function_exists( 'wp_ulike_is_feature_enabled' ) || wp_ulike_is_feature_enabled( 'customize' );
+		if( $customize_on && wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) && wp_ulike_get_option( 'enable_deprecated_options' ) ) {
 			//get custom options
 			$customstyle   = get_option( 'wp_ulike_customize' );
 			$btn_style     = '';
@@ -526,6 +777,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 		}
 
 		$cached_style = apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );
+		$cached_key   = $feature_key;
 		return $cached_style;
 	}
 
@@ -938,10 +1190,25 @@ if ( ! function_exists( 'wp_ulike_get_logging_method_labels' ) ) {
 	 */
 	function wp_ulike_get_logging_method_labels() {
 		return array(
-			'do_not_log'        => esc_html__( 'No Limit', 'wp-ulike' ),
-			'by_cookie'         => esc_html__( 'Cookie', 'wp-ulike' ),
-			'by_username'       => esc_html__( 'Username/IP', 'wp-ulike' ),
-			'by_user_ip_cookie' => esc_html__( 'Username/IP + Cookie', 'wp-ulike' ),
+			'do_not_log'        => esc_html__( 'Unlimited votes', 'wp-ulike' ),
+			'by_cookie'         => esc_html__( 'One vote per browser (cookie)', 'wp-ulike' ),
+			'by_username'       => esc_html__( 'One vote per person (user/IP)', 'wp-ulike' ),
+			'by_user_ip_cookie' => esc_html__( 'Strict (user/IP + cookie)', 'wp-ulike' ),
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_unlike_rule_labels' ) ) {
+	/**
+	 * Translated labels for unlike-rule options.
+	 *
+	 * @return array<string, string>
+	 */
+	function wp_ulike_get_unlike_rule_labels() {
+		return array(
+			'allow' => esc_html__( 'Allow unlike', 'wp-ulike' ),
+			'once'  => esc_html__( 'Unlike once, then lock', 'wp-ulike' ),
+			'lock'  => esc_html__( 'Lock the vote', 'wp-ulike' ),
 		);
 	}
 }

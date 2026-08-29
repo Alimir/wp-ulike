@@ -711,12 +711,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 						SELECT itemID, MAX(datetime) AS datetime,
 							SUBSTRING_INDEX( GROUP_CONCAT( lastStatus ORDER BY datetime DESC SEPARATOR '\\0' ), '\\0', 1 ) AS lastStatus
 						FROM (
-							SELECT `{$column}` AS itemID, date_time AS datetime, status AS lastStatus
+							SELECT `{$column}` AS itemID, date_time AS datetime,
+								CONVERT( status USING utf8mb4 ) AS lastStatus
 							FROM `{$table}`
 							WHERE user_id = %d AND {$status_sql} {$period_limit}
 							UNION ALL
 							SELECT item_id AS itemID, date_time AS datetime,
-								CASE WHEN status = 'active' THEN engagement_key ELSE status END AS lastStatus
+								CONVERT( CASE WHEN status = 'active' THEN engagement_key ELSE status END USING utf8mb4 ) AS lastStatus
 							FROM `{$pulse}`
 							WHERE user_id = %s AND item_type = %s AND engagement_kind = %s
 							AND engagement_key IN ({$key_in}) AND status IN ('active','removed'){$since_sql} {$period_limit}
@@ -815,13 +816,14 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 							SELECT userID, item_id, MAX(datetime) AS datetime,
 								SUBSTRING_INDEX( GROUP_CONCAT( lastStatus ORDER BY datetime DESC SEPARATOR '\\0' ), '\\0', 1 ) AS lastStatus
 							FROM (
-								SELECT CAST(t.user_id AS CHAR) AS userID, t.`{$column}` AS item_id, t.date_time AS datetime, t.status AS lastStatus
+								SELECT CONVERT( CAST(t.user_id AS CHAR) USING utf8mb4 ) AS userID, t.`{$column}` AS item_id, t.date_time AS datetime,
+									CONVERT( t.status USING utf8mb4 ) AS lastStatus
 								FROM `{$table}` t
 								INNER JOIN {$wpdb->users} u ON u.ID = t.user_id
 								WHERE {$status_t} {$period_t}
 								UNION ALL
-								SELECT CAST(p.user_id AS CHAR) AS userID, p.item_id AS item_id, p.date_time AS datetime,
-									CASE WHEN p.status = 'active' THEN p.engagement_key ELSE p.status END AS lastStatus
+								SELECT CONVERT( CAST(p.user_id AS CHAR) USING utf8mb4 ) AS userID, p.item_id AS item_id, p.date_time AS datetime,
+									CONVERT( CASE WHEN p.status = 'active' THEN p.engagement_key ELSE p.status END USING utf8mb4 ) AS lastStatus
 								FROM `{$pulse}` p
 								INNER JOIN {$wpdb->users} u ON u.ID = p.user_id
 								WHERE p.item_type = %s AND p.engagement_kind = %s
@@ -1279,6 +1281,14 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 	 */
 	private static function count_pulse_non_vote_logs( $period, $since = '', $item_type = '' ) {
 		global $wpdb;
+
+		// Reached in legacy mode too, where the pulse table may never have been
+		// created. Without this the totals query and the admin badge rebuild
+		// each logged a "table doesn't exist" database error on every run.
+		// No table means no emoji or star rows to add.
+		if ( ! WP_Ulike_Pulse_Schema::table_exists() ) {
+			return 0;
+		}
 
 		$period_limit = wp_ulike_get_period_limit_sql( $period );
 		$table        = esc_sql( WP_Ulike_Pulse_Schema::table() );

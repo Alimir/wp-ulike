@@ -18,3 +18,5 @@ dist/
 **/.DS_Store
 
 .env
+
+.cursor/rules/no-co-authored-commit.mdc

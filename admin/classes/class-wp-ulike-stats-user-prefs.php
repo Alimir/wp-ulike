@@ -28,6 +28,7 @@ if ( ! class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
 				'show_modals'              => true,
 				'dismissed_notifications'  => array(),
 				'sidebar_pro_minimized'    => false,
+				'theme'                    => 'system',
 			);
 		}
 
@@ -83,6 +84,11 @@ if ( ! class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
 				}
 			}
 
+			$theme = isset( $prefs['theme'] ) ? sanitize_key( $prefs['theme'] ) : $defaults['theme'];
+			if ( ! in_array( $theme, array( 'light', 'dark', 'system' ), true ) ) {
+				$theme = $defaults['theme'];
+			}
+
 			return array(
 				'show_modals'             => array_key_exists( 'show_modals', $prefs )
 					? (bool) $prefs['show_modals']
@@ -91,6 +97,7 @@ if ( ! class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
 				'sidebar_pro_minimized'   => array_key_exists( 'sidebar_pro_minimized', $prefs )
 					? (bool) $prefs['sidebar_pro_minimized']
 					: $defaults['sidebar_pro_minimized'],
+				'theme'                   => $theme,
 			);
 		}
 
@@ -100,7 +107,40 @@ if ( ! class_exists( 'WP_Ulike_Stats_User_Prefs' ) ) {
 		 * @return array
 		 */
 		public static function get_app_config() {
-			return self::get_prefs();
+			$prefs   = self::get_prefs();
+			$user_id = get_current_user_id();
+			$stored  = $user_id ? get_user_meta( $user_id, self::META_KEY, true ) : array();
+
+			// Keep theme unset until the user has saved one, so the React app
+			// can migrate a legacy localStorage preference into user meta.
+			if ( ! is_array( $stored ) || ! array_key_exists( 'theme', $stored ) ) {
+				unset( $prefs['theme'] );
+			}
+
+			return $prefs;
+		}
+
+		/**
+		 * Inline script that applies the saved color scheme before React boots.
+		 *
+		 * @return string
+		 */
+		public static function get_theme_boot_script() {
+			return '(function(){var p=(window.StatsAppConfig&&window.StatsAppConfig.userPrefs)||{};var t=p.theme;if(t!=="light"&&t!=="dark"&&t!=="system"){try{var s=JSON.parse(localStorage.getItem("ulikeStatsUserPrefs")||"null");t=s&&s.theme?s.theme:localStorage.getItem("theme");}catch(e){t=localStorage.getItem("theme");}}if(t!=="light"&&t!=="dark"&&t!=="system"){t="system";}var dark=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",dark);document.documentElement.setAttribute("data-theme",dark?"dark":"light");})();';
+		}
+
+		/**
+		 * Attach the theme boot script after StatsAppConfig is printed.
+		 *
+		 * @param string $handle Script handle used for the stats bundle.
+		 * @return void
+		 */
+		public static function enqueue_theme_boot_script( $handle ) {
+			if ( ! $handle || ( ! wp_script_is( $handle, 'registered' ) && ! wp_script_is( $handle, 'enqueued' ) ) ) {
+				return;
+			}
+
+			wp_add_inline_script( $handle, self::get_theme_boot_script(), 'before' );
 		}
 	}
 }

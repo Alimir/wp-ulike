@@ -95,7 +95,9 @@ if ( ! class_exists( 'WP_Ulike_Activation_Pointer' ) ) {
 				return false;
 			}
 
-			return true;
+			$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+
+			return ! ( $page && 0 === strpos( $page, 'wp-ulike' ) );
 		}
 
 		/**
@@ -169,7 +171,7 @@ if ( ! class_exists( 'WP_Ulike_Activation_Pointer' ) ) {
 			printf(
 				'<div class="notice notice-info is-dismissible"><p><strong>%1$s</strong> %2$s <a href="%3$s">%4$s</a></p></div>',
 				esc_html__( 'WP ULike is active on your network.', 'wp-ulike' ),
-				esc_html__( 'Open a site dashboard to see the getting-started guide next to the WP ULike menu.', 'wp-ulike' ),
+				esc_html__( 'Open a site dashboard to find WP ULike in the menu.', 'wp-ulike' ),
 				esc_url( $dashboard_url ),
 				esc_html__( 'Go to site dashboard', 'wp-ulike' )
 			);

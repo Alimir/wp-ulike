@@ -504,6 +504,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Writer' ) ) {
 			$user_id = isset( $payload['user_id'] ) ? (string) $payload['user_id'] : '0';
 			$kind    = isset( $payload['engagement_kind'] ) ? sanitize_key( $payload['engagement_kind'] ) : WP_Ulike_Pulse_Registry::KIND_VOTE;
 
+			// Live writes only. Migration must keep historical geo on imported rows
+			// even if the site currently has Statistics switched off.
+			if ( ! self::$migrating && function_exists( 'wp_ulike_should_record_analytics_meta' ) && ! wp_ulike_should_record_analytics_meta() ) {
+				unset( $payload['country_code'], $payload['device'], $payload['os'], $payload['browser'] );
+			}
+
 		// Distinct rows get a kind-scoped dedupe token (one row per
 		// user+item+kind). Live append (multi-vote) rows get NULL —
 		// wpdb::insert() emits literal NULL for null values (WP 4.4+), and the

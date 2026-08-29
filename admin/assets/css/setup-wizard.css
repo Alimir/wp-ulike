@@ -1,0 +1,317 @@
+/**
+ * Fresh-install setup wizard — WP admin tokens, Optiwich rhythm.
+ */
+
+.wp-ulike-setup {
+	position: fixed;
+	inset: 0;
+	z-index: 100100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px 16px;
+	box-sizing: border-box;
+}
+
+.wp-ulike-setup__backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(29, 35, 39, 0.45);
+}
+
+.wp-ulike-setup__card {
+	position: relative;
+	z-index: 1;
+	width: min(42rem, calc(100vw - 32px));
+	max-height: min(40rem, calc(100vh - 48px));
+	overflow: auto;
+	padding: 28px 28px 20px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 2px;
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+	box-sizing: border-box;
+}
+
+.wp-ulike-setup__close {
+	position: absolute;
+	top: 10px;
+	inset-inline-end: 12px;
+	width: 2rem;
+	height: 2rem;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: #646970;
+	font-size: 22px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.wp-ulike-setup__close:hover,
+.wp-ulike-setup__close:focus-visible {
+	color: #1d2327;
+}
+
+.wp-ulike-setup__kicker {
+	margin: 0 0 6px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: #646970;
+}
+
+.wp-ulike-setup__title {
+	margin: 0 28px 8px 0;
+	padding: 0;
+	font-size: 22px;
+	font-weight: 400;
+	line-height: 1.3;
+	color: #1d2327;
+}
+
+.wp-ulike-setup__lead {
+	margin: 0 0 20px;
+	font-size: 13px;
+	line-height: 1.55;
+	color: #50575e;
+}
+
+.wp-ulike-setup__steps {
+	display: flex;
+	gap: 8px;
+	margin: 0 0 22px;
+	padding: 0;
+	list-style: none;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.wp-ulike-setup__steps li {
+	position: relative;
+	flex: 1;
+	margin: 0;
+	padding: 0 0 10px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: #8c8f94;
+	text-align: center;
+	cursor: default;
+}
+
+.wp-ulike-setup__steps li.is-done {
+	cursor: pointer;
+}
+
+.wp-ulike-setup__steps li::after {
+	content: "";
+	position: absolute;
+	inset-inline: 0;
+	bottom: -1px;
+	height: 2px;
+	background: transparent;
+}
+
+.wp-ulike-setup__steps li.is-current,
+.wp-ulike-setup__steps li.is-done {
+	color: #1d2327;
+}
+
+.wp-ulike-setup__steps li.is-current::after {
+	background: var(--wp-admin-theme-color, #3858e9);
+}
+
+.wp-ulike-setup__steps li.is-done::after {
+	background: #c3c4c7;
+}
+
+.wp-ulike-setup__panel-title {
+	margin: 0 0 6px;
+	padding: 0;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: #1d2327;
+}
+
+.wp-ulike-setup__panel-desc {
+	margin: 0 0 14px;
+	font-size: 13px;
+	line-height: 1.55;
+	color: #50575e;
+}
+
+.wp-ulike-setup__choices {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.wp-ulike-setup__choices--grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.wp-ulike-setup__block {
+	margin-top: 16px;
+}
+
+.wp-ulike-setup__block:first-child {
+	margin-top: 0;
+}
+
+.wp-ulike-setup__block-title {
+	margin: 0 0 8px;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: #1d2327;
+}
+
+.wp-ulike-setup__choice {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	margin: 0;
+	padding: 12px 14px;
+	border: 1px solid #dcdcde;
+	border-radius: 2px;
+	background: #fff;
+	cursor: pointer;
+}
+
+.wp-ulike-setup__choice:hover {
+	border-color: #c3c4c7;
+	background: #f6f7f7;
+}
+
+.wp-ulike-setup__choice:has(input:checked) {
+	border-color: var(--wp-admin-theme-color, #3858e9);
+	background: var(--wp-admin-theme-color-background, #f0f1f8);
+}
+
+.wp-ulike-setup__choice:has(input:focus-visible) {
+	box-shadow: 0 0 0 1px #fff, 0 0 0 3px var(--wp-admin-theme-color, #3858e9);
+}
+
+.wp-ulike-setup__choice input {
+	margin: 4px 0 0;
+	flex-shrink: 0;
+}
+
+.wp-ulike-setup__choice-body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.wp-ulike-setup__choice-top {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.wp-ulike-setup__choice-title {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: #1d2327;
+}
+
+.wp-ulike-setup__choice-hint {
+	font-size: 12px;
+	line-height: 1.5;
+	color: #50575e;
+}
+
+.wp-ulike-setup__badge {
+	display: inline-block;
+	padding: 1px 7px;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.5;
+	border-radius: 2px;
+	background: #f0f0f1;
+	color: #50575e;
+}
+
+.wp-ulike-setup__error {
+	margin: 10px 0 0;
+	font-size: 12px;
+	line-height: 1.45;
+	color: #d63638;
+}
+
+.wp-ulike-setup__recap {
+	margin: 16px 0 0;
+	padding: 10px 12px;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #1d2327;
+	background: #f6f7f7;
+	border-radius: 2px;
+}
+
+.wp-ulike-setup__success {
+	margin-top: 8px;
+}
+
+.wp-ulike-setup__footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 22px;
+	padding-top: 16px;
+	border-top: 1px solid #dcdcde;
+}
+
+.wp-ulike-setup__skip {
+	padding: 0;
+	color: #646970;
+}
+
+.wp-ulike-setup__nav {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.wp-ulike-setup__nav .button {
+	min-height: 32px;
+}
+
+body.wp-ulike-setup-open {
+	overflow: hidden;
+}
+
+@media (max-width: 600px) {
+	.wp-ulike-setup__card {
+		padding: 22px 18px 16px;
+	}
+
+	.wp-ulike-setup__choices--grid {
+		grid-template-columns: 1fr;
+	}
+
+	.wp-ulike-setup__footer {
+		flex-direction: column-reverse;
+		align-items: stretch;
+	}
+
+	.wp-ulike-setup__nav .button {
+		flex: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-ulike-setup,
+	.wp-ulike-setup * {
+		transition: none !important;
+	}
+}

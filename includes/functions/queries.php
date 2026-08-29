@@ -483,6 +483,32 @@ if( ! function_exists( 'wp_ulike_flush_user_state_cache' ) ) {
 	}
 }
 
+if( ! function_exists( 'wp_ulike_cap_user_status_history' ) ) {
+	/**
+	 * Keep only the newest entries in a stored user status map.
+	 *
+	 * These rows are a cache in front of the Pulse ledger, so a dropped entry is
+	 * simply re-read from Pulse on the next view. Capping bounds the serialized
+	 * array that every vote by that identity has to read and rewrite in full.
+	 *
+	 * @param array $history item_id => status, oldest entry first.
+	 * @return array
+	 */
+	function wp_ulike_cap_user_status_history( $history ){
+		if( ! is_array( $history ) ){
+			return array();
+		}
+
+		$limit = (int) apply_filters( 'wp_ulike_user_status_history_limit', 500 );
+
+		if( $limit < 1 || count( $history ) <= $limit ){
+			return $history;
+		}
+
+		return array_slice( $history, -$limit, null, true );
+	}
+}
+
 if( ! function_exists( 'wp_ulike_persist_user_item_history' ) ) {
 	/**
 	 * Write the request's discovered vote statuses to user meta, once.
@@ -524,7 +550,12 @@ if( ! function_exists( 'wp_ulike_persist_user_item_history' ) ) {
 			}
 
 			if( $changed ){
-				wp_ulike_update_meta_data( $info['user'], 'user', $info['meta_key'], $stored );
+				wp_ulike_update_meta_data(
+					$info['user'],
+					'user',
+					$info['meta_key'],
+					wp_ulike_cap_user_status_history( $stored )
+				);
 			}
 		}
 	}
@@ -767,14 +798,14 @@ if( ! function_exists('wp_ulike_count_all_logs') ){
 
 if ( ! function_exists( 'wp_ulike_should_show_pro_upsells' ) ) {
 	/**
-	 * Soft Pro teasers (locked settings tabs) after 10 likes on free installs.
-	 * Go Pro menu and stats sidebar banner stay always-on.
+	 * Soft Pro teasers (one locked Settings page) after real engagement.
+	 * Go Pro menu and the statistics sidebar banner stay always-on.
 	 *
 	 * @since 5.2.2
 	 * @return bool
 	 */
 	function wp_ulike_should_show_pro_upsells() {
-		return ! defined( 'WP_ULIKE_PRO_VERSION' ) && wp_ulike_count_all_logs() >= 10;
+		return ! defined( 'WP_ULIKE_PRO_VERSION' ) && wp_ulike_count_all_logs() >= 1000;
 	}
 }
 

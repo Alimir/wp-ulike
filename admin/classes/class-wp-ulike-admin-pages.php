@@ -87,7 +87,7 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 		 * @return array Default submenus array.
 		 */
 		private function get_default_submenus() {
-			return array(
+			$submenus = array(
 				'customize'  => array(
 					'title'       => esc_html__( 'Customize', 'wp-ulike' ),
 					'parent_slug' => 'wp-ulike-settings',
@@ -110,6 +110,16 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 					'menu_slug'   => 'wp-ulike-about',
 				),
 			);
+
+			if ( function_exists( 'wp_ulike_is_feature_enabled' ) ) {
+				foreach ( array( 'customize', 'statistics' ) as $optional_page ) {
+					if ( ! wp_ulike_is_feature_enabled( $optional_page ) ) {
+						unset( $submenus[ $optional_page ] );
+					}
+				}
+			}
+
+			return $submenus;
 		}
 
 		/**

@@ -27,7 +27,7 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
      * @since     1.0.0
      */
     private function __construct() {
-      add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
+      add_action( 'wp_initialize_site', array( $this, 'activate_initialized_site' ), 20, 1 );
     }
 
 
@@ -40,19 +40,13 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
     *                                       activated on an individual blog.
     */
     public static function activate( $network_wide ) {
-      if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-        if ( $network_wide  ) {
-          // Get all blog ids
-          $blog_ids = self::get_blog_ids();
-          foreach ( $blog_ids as $blog_id ) {
+      $wizard_file = WP_ULIKE_INC_DIR . '/classes/class-wp-ulike-setup-wizard.php';
+      if ( is_readable( $wizard_file ) ) {
+        require_once $wizard_file;
+      }
 
-            switch_to_blog( $blog_id );
-            self::single_activate();
-          }
-          restore_current_blog();
-        } else {
-          self::single_activate();
-        }
+      if ( function_exists( 'is_multisite' ) && is_multisite() && $network_wide ) {
+        self::for_each_site( array( __CLASS__, 'single_activate' ) );
       } else {
         self::single_activate();
       }
@@ -67,20 +61,10 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
      *                                       deactivated on an individual blog.
      */
     public static function deactivate( $network_wide ) {
-      if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-        if ( $network_wide ) {
-          // Get all blog ids
-          $blog_ids = self::get_blog_ids();
-          foreach ( $blog_ids as $blog_id ) {
-              switch_to_blog( $blog_id );
-              self::single_deactivate();
-          }
-          restore_current_blog();
-        } else {
-          self::single_deactivate();
-        }
+      if ( function_exists( 'is_multisite' ) && is_multisite() && $network_wide ) {
+        self::for_each_site( array( __CLASS__, 'single_deactivate' ) );
       } else {
-          self::single_deactivate();
+        self::single_deactivate();
       }
     }
 
@@ -90,14 +74,56 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
     private static function single_activate() {
       wp_ulike_activator::get_instance()->activate();
 
+      $is_fresh_install = false;
+
       if ( ! get_option( 'wp_ulike_first_activated_at', false ) ) {
+        $had_settings = ( false !== get_option( 'wp_ulike_settings', false ) );
+        self::seed_fresh_install_settings();
         update_option( 'wp_ulike_first_activated_at', time(), false );
+        $is_fresh_install = ! $had_settings;
       }
 
-      WP_Ulike_Activation_Pointer::flag_for_current_user();
+      if ( $is_fresh_install && class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
+        WP_Ulike_Setup_Wizard::mark_pending();
+      }
+
+      if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+        WP_Ulike_Activation_Pointer::flag_for_current_user();
+      }
 
       // Fire action
       do_action( 'wp_ulike_activated', get_current_blog_id() );
+    }
+
+    /**
+     * Defaults that should apply only to brand-new installs.
+     * Existing sites keep historical unlike (unlimited toggle) until they change it.
+     *
+     * @return void
+     */
+    private static function seed_fresh_install_settings() {
+      if ( false !== get_option( 'wp_ulike_settings', false ) ) {
+        return;
+      }
+
+      $unlike_once = array( 'unlike_rule' => 'once' );
+
+      // Not autoloaded, deliberately, and matching every other write to this
+      // option (settings save, import, setup wizard). A configured site stores
+      // 17-30 KB here, which is far too much to unserialize on every request
+      // -- including the many that never render a button. wp_ulike_get_option()
+      // memoises it, so a request that does need it still pays one lookup.
+      add_option(
+        'wp_ulike_settings',
+        array(
+          'posts_group'      => $unlike_once,
+          'comments_group'   => $unlike_once,
+          'buddypress_group' => $unlike_once,
+          'bbpress_group'    => $unlike_once,
+        ),
+        '',
+        'no'
+      );
     }
 
     /**
@@ -111,37 +137,92 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
     }
 
     /**
-     * Fired when a new site is activated with a WPMU environment.
+     * New network site. Requires WordPress 6.0+ (`wp_initialize_site`).
      *
-     * @param    int    $blog_id    ID of the new blog.
-    */
-    public function activate_new_site( $blog_id ) {
-      if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
+     * @param WP_Site $new_site New site.
+     * @return void
+     */
+    public function activate_initialized_site( $new_site ) {
+      if ( ! is_multisite() || ! self::is_network_active() ) {
+        return;
+      }
+
+      $blog_id = ( $new_site instanceof WP_Site ) ? (int) $new_site->blog_id : 0;
+
+      if ( $blog_id < 1 ) {
         return;
       }
 
       switch_to_blog( $blog_id );
-      self::single_activate();
-      restore_current_blog();
+      try {
+        if ( false === get_option( 'wp_ulike_dbVersion', false ) ) {
+          self::single_activate();
+        }
+      } finally {
+        restore_current_blog();
+      }
     }
 
     /**
-     * Get all blog ids of blogs in the current network that are:
-     * - not archived
-     * - not spam
-     * - not deleted
+     * Whether this plugin is network-activated.
      *
-     * @return   array|false    The blog ids, false if no matches.
+     * New-site activation must not run when WP ULike is only on one blog.
+     *
+     * @return bool
      */
-    private static function get_blog_ids() {
-      global $wpdb;
+    private static function is_network_active() {
+      if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+      }
 
-      // get an array of blog ids
-      $sql = "SELECT blog_id FROM $wpdb->blogs
-      WHERE archived = '0' AND spam = '0'
-      AND deleted = '0'";
+      return is_plugin_active_for_network( WP_ULIKE_BASENAME );
+    }
 
-      return $wpdb->get_col( $sql );
+    /**
+     * Run a callback on every live site in the current network.
+     *
+     * Uses get_sites() (WP 4.6+), scoped to this network, paged, ordered by
+     * id. switch_to_blog() is always paired with restore_current_blog() —
+     * never "switch back" with a second switch_to_blog().
+     *
+     * @param callable $callback No-arg callback, runs in that site's context.
+     * @return void
+     */
+    private static function for_each_site( $callback ) {
+      $page     = 0;
+      $per_page = 100;
+      $network  = get_current_network_id();
+
+      do {
+        $site_ids = get_sites(
+          array(
+            'number'     => $per_page,
+            'offset'     => $page * $per_page,
+            'network_id' => $network,
+            'archived'   => 0,
+            'spam'       => 0,
+            'deleted'    => 0,
+            'fields'     => 'ids',
+            'orderby'    => 'id',
+            'order'      => 'ASC',
+          )
+        );
+
+        if ( empty( $site_ids ) ) {
+          break;
+        }
+
+        foreach ( $site_ids as $blog_id ) {
+          switch_to_blog( (int) $blog_id );
+          try {
+            call_user_func( $callback );
+          } finally {
+            restore_current_blog();
+          }
+        }
+
+        ++$page;
+      } while ( count( $site_ids ) === $per_page );
     }
 
     /**

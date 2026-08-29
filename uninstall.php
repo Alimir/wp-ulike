@@ -38,22 +38,38 @@ class wp_ulike_uninstall {
 	 */
 	public function uninstall_sites() {
 
-		global $wpdb;
+		$page     = 0;
+		$per_page = 100;
 
-		// Save current blog ID.
-		$current  = $wpdb->blogid;
-		$blog_ids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
+		// network_id 0 = every network (WP_Site_Query). Include archived /
+		// spam / deleted so leftover tables are not left behind.
+		do {
+			$blog_ids = get_sites(
+				array(
+					'number'     => $per_page,
+					'offset'     => $page * $per_page,
+					'network_id' => 0,
+					'fields'     => 'ids',
+					'orderby'    => 'id',
+					'order'      => 'ASC',
+				)
+			);
 
-		// Create tables for each blog ID.
-		foreach ( $blog_ids as $blog_id ) {
+			if ( empty( $blog_ids ) ) {
+				break;
+			}
 
-			switch_to_blog( $blog_id );
-			$this->uninstall_site();
+			foreach ( $blog_ids as $blog_id ) {
+				switch_to_blog( (int) $blog_id );
+				try {
+					$this->uninstall_site();
+				} finally {
+					restore_current_blog();
+				}
+			}
 
-		}
-
-		// Go back to current blog.
-		switch_to_blog( $current );
+			++$page;
+		} while ( count( $blog_ids ) === $per_page );
 
 	}
 
@@ -89,7 +105,18 @@ class wp_ulike_uninstall {
 	 * @return void
 	 */
 	public function clear_scheduled_tasks() {
-		wp_clear_scheduled_hook( 'wp_ulike_pulse_sync_batch' );
+		// Kept in step with wp_ulike_get_scheduled_hooks(). Listed literally
+		// because uninstall.php runs without the plugin's own files loaded.
+		$hooks = array(
+			'wp_ulike_pulse_sync_batch',
+			'wp_ulike_pulse_purge_meta',
+			'wp_ulike_purge_guest_cache',
+			'wp_ulike_refresh_cloudflare_ips',
+		);
+
+		foreach ( $hooks as $hook ) {
+			wp_clear_scheduled_hook( $hook );
+		}
 	}
 
 	/**

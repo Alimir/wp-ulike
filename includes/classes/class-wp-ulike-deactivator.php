@@ -12,7 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class wp_ulike_deactivator {
 
 	public static function deactivate() {
-
+		foreach ( wp_ulike_get_scheduled_hooks() as $hook ) {
+			wp_clear_scheduled_hook( $hook );
+		}
 	}
 
 }

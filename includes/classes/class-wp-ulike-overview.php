@@ -17,6 +17,8 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 	 */
 	class WP_Ulike_Overview {
 
+		const STORAGE_CACHE_KEY = 'wp_ulike_table_disk_usage';
+
 		/**
 		 * About admin screen URL.
 		 *
@@ -24,6 +26,31 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function get_about_url() {
 			return admin_url( 'admin.php?page=wp-ulike-about' );
+		}
+
+		/**
+		 * Statistics screen URL, or empty when the page is hidden from the menu.
+		 *
+		 * Callers treat an empty string as "do not link to Statistics".
+		 *
+		 * @return string
+		 */
+		public static function get_statistics_url() {
+			if ( function_exists( 'wp_ulike_is_feature_enabled' ) && ! wp_ulike_is_feature_enabled( 'statistics' ) ) {
+				return '';
+			}
+
+			return admin_url( 'admin.php?page=wp-ulike-statistics' );
+		}
+
+		/**
+		 * Drop the cached health report (URLs depend on menu visibility settings).
+		 *
+		 * @return void
+		 */
+		public static function flush_health_cache() {
+			delete_transient( self::get_health_report_cache_key() );
+			delete_transient( self::STORAGE_CACHE_KEY );
 		}
 
 		/**
@@ -112,51 +139,6 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			$is_pro     = defined( 'WP_ULIKE_PRO_VERSION' );
 			$pro_label  = $is_pro && defined( 'WP_ULIKE_PRO_VERSION' ) ? WP_ULIKE_PRO_VERSION : '';
 
-			$quick_actions = array(
-				array(
-					'label'  => esc_html__( 'Settings', 'wp-ulike' ),
-					'url'    => self::get_settings_url( 'content-types' ),
-					'icon'   => 'admin-settings',
-					'primary'=> false,
-				),
-				array(
-					'label'  => esc_html__( 'Customize buttons', 'wp-ulike' ),
-					'url'    => admin_url( 'admin.php?page=wp-ulike-customize' ),
-					'icon'   => 'admin-appearance',
-					'primary'=> false,
-				),
-				array(
-					'label'  => esc_html__( 'Statistics', 'wp-ulike' ),
-					'url'    => admin_url( 'admin.php?page=wp-ulike-statistics' ),
-					'icon'   => 'chart-bar',
-					'primary'=> false,
-				),
-			);
-
-			if ( ! empty( $health['preview_url'] ) ) {
-				$quick_actions[] = array(
-					'label'   => esc_html__( 'View on site', 'wp-ulike' ),
-					'url'     => $health['preview_url'],
-					'icon'    => 'visibility',
-					'primary' => true,
-					'external'=> true,
-				);
-			}
-
-			if ( $is_pro ) {
-				$quick_actions[] = array(
-					'label'   => esc_html__( 'Pro tools', 'wp-ulike' ),
-					'url'     => admin_url( 'admin.php?page=wp-ulike-pro-tools' ),
-					'icon'    => 'admin-tools',
-					'primary' => false,
-				);
-			}
-
-			$quick_actions = apply_filters( 'wp_ulike_about_quick_actions', $quick_actions, $health );
-
-			// Pro can inject optional module cards via filter; none by default.
-			$pro_modules = apply_filters( 'wp_ulike_about_pro_modules', array(), $health );
-
 			$status_rows = array(
 				array(
 					'group'  => 'engagement',
@@ -179,18 +161,6 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				),
 				array(
 					'group'  => 'setup',
-					'label'  => esc_html__( 'Posts', 'wp-ulike' ),
-					'value'  => ! empty( $health['auto_display'] ) ? esc_html__( 'Auto-display on', 'wp-ulike' ) : esc_html__( 'Off / manual', 'wp-ulike' ),
-					'state'  => ! empty( $health['auto_display'] ) ? 'good' : 'neutral',
-				),
-				array(
-					'group'  => 'setup',
-					'label'  => esc_html__( 'Comments', 'wp-ulike' ),
-					'value'  => ! empty( $health['comments_auto_display'] ) ? esc_html__( 'Auto-display on', 'wp-ulike' ) : esc_html__( 'Off', 'wp-ulike' ),
-					'state'  => ! empty( $health['comments_auto_display'] ) ? 'good' : 'neutral',
-				),
-				array(
-					'group'  => 'setup',
 					'label'  => esc_html__( 'Database', 'wp-ulike' ),
 					'value'  => ! empty( $health['tables_ok'] ) ? esc_html__( 'Ready', 'wp-ulike' ) : esc_html__( 'Needs attention', 'wp-ulike' ),
 					'state'  => ! empty( $health['tables_ok'] ) ? 'good' : 'bad',
@@ -203,6 +173,26 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 						: '',
 				),
 			);
+
+			$status_rows = array_merge( $status_rows, self::get_content_type_rows( $health ) );
+
+			// Storage last in the setup group: it is the figure people come looking
+			// for once a site is large, and noise on one that is not.
+			$storage_bytes = (int) ( $health['storage_bytes'] ?? 0 );
+
+			if ( $storage_bytes > 0 ) {
+				$status_rows[] = array(
+					'group' => 'setup',
+					'label' => esc_html__( 'Storage used', 'wp-ulike' ),
+					'value' => size_format( $storage_bytes, $storage_bytes >= GB_IN_BYTES ? 1 : 0 ),
+					'state' => 'neutral',
+					'hint'  => sprintf(
+						/* translators: %s: total number of stored votes */
+						esc_html__( 'Across %s stored votes, including indexes.', 'wp-ulike' ),
+						number_format_i18n( (int) ( $health['log_count'] ?? 0 ) )
+					),
+				);
+			}
 
 			// Minimal Site Health signal (replaces the old Overview Health card).
 			if ( class_exists( 'WP_Ulike_Health' ) ) {
@@ -319,8 +309,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'pro_version'            => $pro_label,
 				'summary'                => $summary,
 				'status_groups'          => self::get_status_group_labels(),
-				'quick_actions'          => $quick_actions,
-				'pro_modules'            => $pro_modules,
+				'guest_cleanup'          => self::get_guest_cleanup_data(),
+				'features'               => self::get_features_view_data(),
+				'features_url'           => admin_url( 'admin-post.php' ),
+				'features_nonce'         => wp_create_nonce( 'wp_ulike_save_features' ),
 				'status_rows'            => $status_rows,
 				'storage_upgrade'        => $storage_upgrade,
 				'help_links'             => $help_links,
@@ -370,12 +362,12 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			$tips = array(
 				array(
-					'text' => esc_html( 'No votes yet? Open a published post (not the homepage) and click the like button once to confirm everything works.' ),
+					'text' => esc_html__( 'No votes yet? Open a published post (not the homepage) and click the like button once to confirm everything works.', 'wp-ulike' ),
 					'url'  => ! empty( $health['preview_url'] ) ? $health['preview_url'] : '',
 					'link' => esc_html__( 'View sample post', 'wp-ulike' ),
 				),
 				array(
-					'text' => esc_html( 'Likes usually show on single posts, not on the homepage or archives. Test on a post or change display in Settings.' ),
+					'text' => esc_html__( 'Likes usually show on single posts, not on the homepage or archives. Test on a post or change display in Settings.', 'wp-ulike' ),
 					'url'  => $content_types_url,
 					'link' => esc_html__( 'Content Types', 'wp-ulike' ),
 				),
@@ -410,7 +402,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 
 			if ( empty( $health['tables_ok'] ) ) {
 				$tips[] = array(
-					'text' => esc_html( 'Database tables may be incomplete. Use “Repair database tables” on Overview, or deactivate and reactivate WP ULike once.' ),
+					'text' => esc_html__( 'Database tables may be incomplete. Use “Repair database tables” on Overview, or deactivate and reactivate WP ULike once.', 'wp-ulike' ),
 					'url'  => self::get_about_url(),
 					'link' => esc_html__( 'Open Overview', 'wp-ulike' ),
 				);
@@ -432,6 +424,407 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			add_action( 'wp_ajax_wp_ulike_export_settings', array( __CLASS__, 'handle_export_settings' ) );
 			add_action( 'admin_post_wp_ulike_import_settings', array( __CLASS__, 'handle_import_settings' ) );
 			add_action( 'admin_post_wp_ulike_repair_tables', array( __CLASS__, 'handle_repair_tables' ) );
+			add_action( 'admin_post_wp_ulike_save_features', array( __CLASS__, 'handle_save_features' ) );
+			add_action( 'admin_post_wp_ulike_guest_cleanup', array( __CLASS__, 'handle_guest_cleanup' ) );
+		}
+
+		/**
+		 * Disk and row metadata for every WP ULike table.
+		 *
+		 * Reads information_schema only — never the tables themselves — so the
+		 * cost is the same on an empty site as on one with millions of votes.
+		 * `DATABASE()` is avoided on purpose: binding the schema name lets MySQL
+		 * use the information_schema primary key instead of scanning every table
+		 * on a busy shared or multisite database.
+		 *
+		 * Cached for half a day. Storage for a dashboard figure does not need
+		 * to move with every vote, and the health report is flushed more often
+		 * than that (feature saves, cache refresh) so this cache is what keeps
+		 * those clicks from repeating the lookup.
+		 *
+		 * @param bool $force Ignore the cache.
+		 * @return array{bytes:int,rows:array<string,int>,meta_rows:int}
+		 */
+		public static function get_table_disk_usage( $force = false ) {
+			static $memo = null;
+
+			if ( ! $force && is_array( $memo ) ) {
+				return $memo;
+			}
+
+			if ( ! $force ) {
+				$cached = get_transient( self::STORAGE_CACHE_KEY );
+
+				if ( is_array( $cached ) && isset( $cached['bytes'] ) ) {
+					$memo = $cached;
+
+					return $memo;
+				}
+			}
+
+			$empty = array(
+				'bytes'     => 0,
+				'rows'      => array(),
+				'meta_rows' => 0,
+			);
+
+			$tables = self::storage_table_names();
+
+			if ( empty( $tables ) ) {
+				$memo = $empty;
+
+				return $memo;
+			}
+
+			$usage = self::query_table_disk_usage( $tables );
+
+			if ( empty( $usage['bytes'] ) && empty( $usage['rows'] ) ) {
+				$usage = self::query_table_status_fallback( $tables );
+			}
+
+			set_transient( self::STORAGE_CACHE_KEY, $usage, 12 * HOUR_IN_SECONDS );
+			$memo = $usage;
+
+			return $memo;
+		}
+
+		/**
+		 * Disk footprint of every WP ULike table, in bytes.
+		 *
+		 * Returns 0 when table metadata is unreadable; callers treat 0 as
+		 * "don't show a size" rather than "empty".
+		 *
+		 * @return int
+		 */
+		public static function get_storage_bytes() {
+			$usage = self::get_table_disk_usage();
+
+			return (int) ( $usage['bytes'] ?? 0 );
+		}
+
+		/**
+		 * @return string[]
+		 */
+		private static function storage_table_names() {
+			$tables = array();
+
+			if ( class_exists( 'WP_Ulike_Pulse_Schema' ) ) {
+				$tables[] = WP_Ulike_Pulse_Schema::table();
+			}
+
+			if ( class_exists( 'WP_Ulike_Meta_Schema' ) ) {
+				$tables[] = WP_Ulike_Meta_Schema::table();
+			}
+
+			if ( class_exists( 'WP_Ulike_Pulse_Registry' ) ) {
+				foreach ( WP_Ulike_Pulse_Registry::legacy_sources() as $source ) {
+					if ( ! empty( $source['table'] ) ) {
+						$tables[] = $source['table'];
+					}
+				}
+			}
+
+			return array_values( array_unique( array_filter( $tables ) ) );
+		}
+
+		/**
+		 * @param string[] $tables Table names.
+		 * @return array{bytes:int,rows:array<string,int>,meta_rows:int}
+		 */
+		private static function query_table_disk_usage( $tables ) {
+			global $wpdb;
+
+			$placeholders = implode( ', ', array_fill( 0, count( $tables ), '%s' ) );
+			$schema       = (string) $wpdb->dbname;
+
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT TABLE_NAME, DATA_LENGTH, INDEX_LENGTH, TABLE_ROWS
+					 FROM information_schema.TABLES
+					 WHERE TABLE_SCHEMA = %s
+					   AND TABLE_NAME IN ( {$placeholders} )",
+					array_merge( array( $schema ), $tables )
+				)
+			);
+			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+			return self::summarize_table_usage( $tables, is_array( $rows ) ? $rows : array() );
+		}
+
+		/**
+		 * Hosts that hide information_schema still answer SHOW TABLE STATUS.
+		 *
+		 * @param string[] $tables Table names.
+		 * @return array{bytes:int,rows:array<string,int>,meta_rows:int}
+		 */
+		private static function query_table_status_fallback( $tables ) {
+			global $wpdb;
+
+			$status_rows = array();
+
+			foreach ( $tables as $table ) {
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$row = $wpdb->get_row( $wpdb->prepare( 'SHOW TABLE STATUS LIKE %s', $wpdb->esc_like( $table ) ) );
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+				if ( ! $row ) {
+					continue;
+				}
+
+				$status_rows[] = (object) array(
+					'TABLE_NAME'   => $table,
+					'DATA_LENGTH'  => $row->Data_length ?? 0,
+					'INDEX_LENGTH' => $row->Index_length ?? 0,
+					'TABLE_ROWS'   => $row->Rows ?? 0,
+				);
+			}
+
+			return self::summarize_table_usage( $tables, $status_rows );
+		}
+
+		/**
+		 * @param string[] $tables Known table names.
+		 * @param object[] $rows   Metadata rows.
+		 * @return array{bytes:int,rows:array<string,int>,meta_rows:int}
+		 */
+		private static function summarize_table_usage( $tables, $rows ) {
+			$bytes     = 0;
+			$row_map   = array();
+			$meta_name = class_exists( 'WP_Ulike_Meta_Schema' ) ? WP_Ulike_Meta_Schema::table() : '';
+
+			foreach ( $rows as $row ) {
+				$name = isset( $row->TABLE_NAME ) ? (string) $row->TABLE_NAME : '';
+
+				if ( '' === $name || ! in_array( $name, $tables, true ) ) {
+					continue;
+				}
+
+				$bytes            += (int) $row->DATA_LENGTH + (int) $row->INDEX_LENGTH;
+				$row_map[ $name ]  = (int) $row->TABLE_ROWS;
+			}
+
+			return array(
+				'bytes'     => $bytes,
+				'rows'      => $row_map,
+				'meta_rows' => ( '' !== $meta_name && isset( $row_map[ $meta_name ] ) ) ? $row_map[ $meta_name ] : 0,
+			);
+		}
+
+		/**
+		 * Auto-display rows for every content type this site can actually use.
+		 *
+		 * Activities and Topics only appear when BuddyPress or bbPress is present:
+		 * a row reading "Off" for something the site cannot do reads as a fault.
+		 *
+		 * @param array $health Health report.
+		 * @return array<int,array<string,mixed>>
+		 */
+		private static function get_content_type_rows( $health ) {
+			$types = array(
+				array(
+					'label'     => esc_html__( 'Posts', 'wp-ulike' ),
+					'on'        => ! empty( $health['auto_display'] ),
+					'off_label' => esc_html__( 'Off / manual', 'wp-ulike' ),
+					'available' => true,
+				),
+				array(
+					'label'     => esc_html__( 'Comments', 'wp-ulike' ),
+					'on'        => ! empty( $health['comments_auto_display'] ),
+					'off_label' => esc_html__( 'Off', 'wp-ulike' ),
+					'available' => true,
+				),
+				array(
+					'label'     => esc_html__( 'Activities', 'wp-ulike' ),
+					// Same detection the Content Types screen uses to decide
+					// whether to offer these settings at all.
+					'available' => function_exists( 'is_buddypress' ),
+					'type'      => 'activity',
+					'off_label' => esc_html__( 'Off', 'wp-ulike' ),
+				),
+				array(
+					'label'     => esc_html__( 'Topics', 'wp-ulike' ),
+					'available' => function_exists( 'is_bbpress' ),
+					'type'      => 'topic',
+					'off_label' => esc_html__( 'Off', 'wp-ulike' ),
+				),
+			);
+
+			$rows = array();
+
+			foreach ( $types as $type ) {
+				if ( empty( $type['available'] ) ) {
+					continue;
+				}
+
+				// Resolved only for types the site actually has: asking the repo
+				// about an unregistered type answers from a null settings key.
+				$on = isset( $type['on'] )
+					? $type['on']
+					: (bool) wp_ulike_setting_repo::isAutoDisplayOn( $type['type'] );
+
+				$rows[] = array(
+					'group' => 'setup',
+					'label' => $type['label'],
+					'value' => $on ? esc_html__( 'Auto-display on', 'wp-ulike' ) : $type['off_label'],
+					'state' => $on ? 'good' : 'neutral',
+				);
+			}
+
+			return $rows;
+		}
+
+		/**
+		 * The guest cache cleanup offer, or null when there is nothing to offer.
+		 *
+		 * Deliberately absent on the vast majority of sites: it appears only once
+		 * a site has accumulated enough dormant guest rows for the cleanup to be
+		 * worth a moment of anyone's attention.
+		 *
+		 * @return array<string,mixed>|null
+		 */
+		public static function get_guest_cleanup_data() {
+			if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
+				return null;
+			}
+
+			$base = array(
+				'url'   => admin_url( 'admin-post.php' ),
+				'nonce' => wp_create_nonce( 'wp_ulike_guest_cleanup' ),
+			);
+
+			if ( WP_Ulike_Guest_Cache_Purge::is_enabled() ) {
+				return array_merge(
+					$base,
+					array(
+						'state'      => 'enabled',
+						'title'      => esc_html__( 'Daily guest cleanup is on', 'wp-ulike' ),
+						'intro'      => esc_html__( 'Unused guest lookup rows are cleared once a day. Votes and totals stay as they are.', 'wp-ulike' ),
+						'stop_label' => WP_Ulike_Guest_Cache_Purge::is_forced_on()
+							? ''
+							: esc_html__( 'Stop daily cleanup', 'wp-ulike' ),
+					)
+				);
+			}
+
+			// Turned off by hand: keep the way back visible, but only while there
+			// is still something to reclaim. Once the table is tidy this card has
+			// nothing to offer and a permanent "it is off" panel is just noise.
+			if (
+				WP_Ulike_Guest_Cache_Purge::preference_stored()
+				&& WP_Ulike_Guest_Cache_Purge::can_run()
+				&& WP_Ulike_Guest_Cache_Purge::estimate() >= WP_Ulike_Guest_Cache_Purge::SUGGEST_THRESHOLD
+			) {
+				return array_merge(
+					$base,
+					array(
+						'state'       => 'disabled',
+						'title'       => esc_html__( 'Daily guest cleanup is off', 'wp-ulike' ),
+						'intro'       => esc_html__( 'Unused guest lookup rows stay until you turn this on again. Votes and totals stay as they are.', 'wp-ulike' ),
+						'start_label' => esc_html__( 'Turn daily cleanup on', 'wp-ulike' ),
+					)
+				);
+			}
+
+			if ( ! WP_Ulike_Guest_Cache_Purge::should_suggest() ) {
+				return null;
+			}
+
+			$rows = WP_Ulike_Guest_Cache_Purge::estimate();
+			$days = WP_Ulike_Guest_Cache_Purge::days();
+
+			// InnoDB's TABLE_ROWS is approximate; past this ceiling quote
+			// "more than" rather than a multi-million guess as an exact count.
+			$amount = WP_Ulike_Guest_Cache_Purge::estimate_is_capped()
+				? sprintf(
+					/* translators: %s: row count the estimate stopped at */
+					esc_html__( 'more than %s', 'wp-ulike' ),
+					number_format_i18n( WP_Ulike_Guest_Cache_Purge::ESTIMATE_CAP )
+				)
+				: number_format_i18n( $rows );
+
+			return array_merge(
+				$base,
+				array(
+					'state'         => 'offer',
+					'rows'          => $rows,
+					'title'         => esc_html__( 'Reclaim space from old guest records', 'wp-ulike' ),
+					'intro'         => sprintf(
+						/* translators: 1: row count, 2: number of days */
+						esc_html__( 'The likes lookup table has grown to about %1$s rows. Guest records unused for %2$s days can be removed. Votes, counts, and reports stay as they are.', 'wp-ulike' ),
+						$amount,
+						number_format_i18n( $days )
+					),
+					'run_label'     => esc_html__( 'Clean up now', 'wp-ulike' ),
+					'auto_label'    => esc_html__( 'Clean up now and keep it tidy daily', 'wp-ulike' ),
+					'dismiss_label' => esc_html__( 'No thanks, keep everything', 'wp-ulike' ),
+				)
+			);
+		}
+
+		/**
+		 * Run, schedule, or decline the guest cache cleanup.
+		 *
+		 * @return void
+		 */
+		public static function handle_guest_cleanup() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Permission denied.', 'wp-ulike' ) );
+			}
+
+			check_admin_referer( 'wp_ulike_guest_cleanup' );
+
+			// Dismissing is always allowed; anything that deletes is not. Read mode
+			// can change between the card being drawn and this request arriving, and
+			// outside pulse read mode "last activity" is unreliable enough that the
+			// pass would clear rows for guests who are still active.
+			if ( ! class_exists( 'WP_Ulike_Guest_Cache_Purge' ) ) {
+				wp_safe_redirect( self::get_about_url() );
+				exit;
+			}
+
+			$mode   = isset( $_POST['mode'] ) ? sanitize_key( wp_unslash( $_POST['mode'] ) ) : '';
+			$result = 'none';
+
+			if ( 'dismiss' === $mode ) {
+				WP_Ulike_Guest_Cache_Purge::dismiss();
+				$result = 'dismissed';
+			} elseif ( 'disable' === $mode ) {
+				WP_Ulike_Guest_Cache_Purge::set_enabled( false );
+				$result = 'stopped';
+			} elseif ( 'enable' === $mode && WP_Ulike_Guest_Cache_Purge::can_run() ) {
+				WP_Ulike_Guest_Cache_Purge::set_enabled( true );
+				$result = 'resumed';
+			} elseif ( in_array( $mode, array( 'once', 'auto' ), true ) && WP_Ulike_Guest_Cache_Purge::can_run() ) {
+				if ( 'auto' === $mode ) {
+					WP_Ulike_Guest_Cache_Purge::set_enabled( true );
+				}
+
+				// One bounded pass now so the effect is immediate and visible.
+				// Anything left over is picked up by the next run, or by pressing
+				// the button again on a site that only wanted the one-off.
+				$pass = WP_Ulike_Guest_Cache_Purge::run(
+					array(
+						'dry_run'     => false,
+						'max_batches' => WP_Ulike_Guest_Cache_Purge::CRON_BATCHES,
+					)
+				);
+
+				WP_Ulike_Guest_Cache_Purge::flush_estimate();
+
+				$result = 'auto' === $mode ? 'scheduled' : 'cleaned';
+
+				set_transient(
+					'wp_ulike_guest_cleanup_result',
+					(int) ( $pass['deleted'] ?? 0 ),
+					MINUTE_IN_SECONDS * 5
+				);
+			}
+
+			self::flush_health_cache();
+
+			wp_safe_redirect( add_query_arg( 'wp_ulike_cleanup', $result, self::get_about_url() ) );
+			exit;
 		}
 
 		/**
@@ -525,6 +918,69 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		}
 
 		/**
+		 * Switchable features, decorated for the Overview card.
+		 *
+		 * @return array<int,array<string,mixed>>
+		 */
+		public static function get_features_view_data() {
+			if ( ! function_exists( 'wp_ulike_get_features' ) ) {
+				return array();
+			}
+
+			$features = array();
+
+			foreach ( wp_ulike_get_features() as $key => $feature ) {
+				$enabled = wp_ulike_is_feature_enabled( $key );
+
+				$features[] = array(
+					'key'         => $key,
+					'label'       => isset( $feature['label'] ) ? $feature['label'] : $key,
+					'description' => isset( $feature['description'] ) ? $feature['description'] : '',
+					'icon'        => isset( $feature['icon'] ) ? $feature['icon'] : 'admin-generic',
+					'badge'       => isset( $feature['badge'] ) ? $feature['badge'] : '',
+					'enabled'     => $enabled,
+					// Only meaningful while the switch is on — it guards the
+					// off transition, and there is nothing to warn about when
+					// the module is already off.
+					'warning'     => $enabled && ! empty( $feature['warning'] ) ? $feature['warning'] : '',
+					// A link to somewhere that no longer exists is worse than none.
+					'url'         => $enabled && ! empty( $feature['url'] ) ? $feature['url'] : '',
+				);
+			}
+
+			return $features;
+		}
+
+		/**
+		 * Save the feature switches from Overview.
+		 *
+		 * @return void
+		 */
+		public static function handle_save_features() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Permission denied.', 'wp-ulike' ) );
+			}
+
+			check_admin_referer( 'wp_ulike_save_features' );
+
+			$submitted = isset( $_POST['wp_ulike_features'] ) && is_array( $_POST['wp_ulike_features'] )
+				? array_map( 'sanitize_key', wp_unslash( $_POST['wp_ulike_features'] ) )
+				: array();
+
+			wp_ulike_save_feature_states( $submitted );
+			self::flush_health_cache();
+
+			wp_safe_redirect(
+				add_query_arg(
+					'wp_ulike_features',
+					'saved',
+					self::get_about_url()
+				)
+			);
+			exit;
+		}
+
+		/**
 		 * Clear versioned statistics caches from Help.
 		 *
 		 * @return void
@@ -556,6 +1012,22 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 */
 		public static function repair_database_tables() {
 			wp_ulike_activator::get_instance()->install_tables();
+
+			// Repair should leave the numbers people actually look at correct,
+			// not just the table structure. Cached like/dislike totals can fall
+			// out of step with the ledger (restored backup, rows deleted straight
+			// from the database, an interrupted migration) and nothing else puts
+			// them back. Bounded so a large site cannot stall this request --
+			// `wp ulike pulse recount --yes` finishes a big catch-up.
+			if ( class_exists( 'WP_Ulike_Pulse_Counter_Repair' ) && WP_Ulike_Pulse_Counter_Repair::can_run() ) {
+				WP_Ulike_Pulse_Counter_Repair::run(
+					array(
+						'dry_run'     => false,
+						'max_batches' => 10,
+					)
+				);
+			}
+
 			delete_transient( self::get_health_report_cache_key() );
 
 			return self::get_tables_health();
@@ -600,9 +1072,9 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			$today     = (int) ( $health['today_votes'] ?? 0 );
 			$new       = (int) ( $health['new_votes'] ?? 0 );
 			$total     = (int) ( $health['log_count'] ?? 0 );
-			$stats_url = esc_url( $health['statistics_url'] ?? admin_url( 'admin.php?page=wp-ulike-statistics' ) );
+			$stats_url = esc_url( $health['statistics_url'] ?? self::get_statistics_url() );
 
-			if ( $new > 0 ) {
+			if ( $new > 0 && $stats_url ) {
 				return wp_kses_post(
 					sprintf(
 						/* translators: 1: vote count, 2: statistics admin URL */
@@ -613,7 +1085,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				);
 			}
 
-			if ( $today > 0 ) {
+			if ( $today > 0 && $stats_url ) {
 				return wp_kses_post(
 					sprintf(
 						/* translators: 1: votes today, 2: statistics admin URL */
@@ -627,13 +1099,13 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			if ( ! empty( $health['auto_display'] ) && $total > 0 ) {
 				return sprintf(
 					/* translators: %s: total vote count */
-					esc_html( 'Buttons are active on posts and you have %s total votes stored. Use Statistics when you need date ranges and detailed reports.' ),
+					esc_html__( 'Buttons are active on posts and you have %s total votes stored. Use Statistics when you need date ranges and detailed reports.', 'wp-ulike' ),
 					number_format_i18n( $total )
 				);
 			}
 
 			if ( empty( $health['auto_display'] ) ) {
-				return esc_html( 'Like buttons are not on posts automatically yet. Turn on auto-display in Settings, or add the ULike block / shortcode where you want votes.' );
+				return esc_html__( 'Like buttons are not on posts automatically yet. Turn on auto-display in Settings, or add the ULike block / shortcode where you want votes.', 'wp-ulike' );
 			}
 
 			if ( (int) ( $health['log_count'] ?? 0 ) === 0 ) {
@@ -953,6 +1425,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'is_pro'                 => defined( 'WP_ULIKE_PRO_VERSION' ),
 				'auto_display'           => $auto_display,
 				'comments_auto_display'  => wp_ulike_setting_repo::isAutoDisplayOn( 'comment' ),
+				'storage_bytes'          => self::get_storage_bytes(),
 				'preview_url'            => $preview_url,
 				'plugin_version'         => WP_ULIKE_VERSION,
 				'db_version'             => get_option( 'wp_ulike_dbVersion', WP_ULIKE_DB_VERSION ),
@@ -960,7 +1433,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				'today_votes'            => wp_ulike_count_all_logs( 'today' ),
 				'new_votes'              => $new_votes,
 				'cache_enabled'          => $cache_enabled,
-				'statistics_url'         => admin_url( 'admin.php?page=wp-ulike-statistics' ),
+				'statistics_url'         => self::get_statistics_url(),
 				'post_display_summary'   => self::get_post_display_summary(),
 				'post_template_name'     => self::get_post_template_label(),
 				'post_button_position'   => self::get_post_button_position_label(),
@@ -1038,7 +1511,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				$settings     = $settings_api->sanitize_import_values( $settings );
 			}
 
-			update_option( 'wp_ulike_settings', $settings );
+			// 'no' everywhere, like the settings save and the fresh-install seed.
+			// Importing must not be the one path that leaves this option
+			// autoloaded on an otherwise identical site.
+			update_option( 'wp_ulike_settings', $settings, 'no' );
 
 			if ( ! empty( $payload['customize'] ) && is_array( $payload['customize'] ) ) {
 				$customize = $payload['customize'];

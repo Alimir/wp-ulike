@@ -342,6 +342,14 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				}
 			}
 
+			if ( $status && ! empty( $args['prev_status'] ) ) {
+				$unlike_rule = wp_ulike_setting_repo::getUnlikeRule( $args['type'] );
+				if ( 'lock' === $unlike_rule ) {
+					$status = false;
+				} elseif ( 'once' === $unlike_rule && strpos( (string) $args['prev_status'], 'un' ) === 0 ) {
+					$status = false;
+				}
+			}
 
 			return apply_filters( 'wp_ulike_permission_status', $status, $args, $settings );
 		}
@@ -625,6 +633,10 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 				$user_info = array( $item_id => $this->currentStatus );
 			} else {
 				$user_info[$item_id] = $this->currentStatus;
+			}
+
+			if( function_exists( 'wp_ulike_cap_user_status_history' ) ){
+				$user_info = wp_ulike_cap_user_status_history( $user_info );
 			}
 
 			// Update meta value

@@ -30,7 +30,8 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 			return apply_filters( 'wp_ulike_the_content', $content, $content );
 		}
 
-		// Excerpts / list snippets are opt-in (off by default) to avoid like spam on archives.
+		// Excerpts / list snippets follow their own setting, which defaults to on
+		// (see wp_ulike_setting_repo::isAutoDisplayOnExcerpts).
 		if ( 'the_excerpt' === current_filter() && ! wp_ulike_setting_repo::isAutoDisplayOnExcerpts() ) {
 			return apply_filters( 'wp_ulike_the_content', $content, $content );
 		}
