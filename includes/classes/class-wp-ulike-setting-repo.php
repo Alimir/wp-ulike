@@ -573,10 +573,12 @@ class wp_ulike_setting_repo {
 	public static function isAutoDisplayOnExcerpts(){
 		$stored = self::getOption( 'posts_group|auto_display_on_excerpts', null );
 
+		// Unset keeps the historical on state. A saved switch uses the real
+		// boolean, including the string "false" / "0" a form might submit.
 		if ( null === $stored ) {
 			$enabled = true;
 		} else {
-			$enabled = (bool) $stored;
+			$enabled = function_exists( 'wp_ulike_is_true' ) ? wp_ulike_is_true( $stored ) : (bool) $stored;
 		}
 
 		return (bool) apply_filters( 'wp_ulike_auto_display_on_excerpts', $enabled );

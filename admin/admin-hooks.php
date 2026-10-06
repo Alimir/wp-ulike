@@ -717,6 +717,15 @@ function wp_ulike_hydrate_auto_display_filter_for_ui( $values ) {
 		$values['posts_group']['auto_display_filter'] = wp_ulike_setting_repo::getAutoDisplayShowOnDefault();
 	}
 
+	// The switch must show the value the front end uses. A missing key is on
+	// (older versions always hooked the_excerpt). Casting here also turns a
+	// stored "false" into an off switch instead of a checked one.
+	if ( ! array_key_exists( 'auto_display_on_excerpts', $values['posts_group'] ) ) {
+		$values['posts_group']['auto_display_on_excerpts'] = true;
+	} else {
+		$values['posts_group']['auto_display_on_excerpts'] = wp_ulike_is_true( $values['posts_group']['auto_display_on_excerpts'] );
+	}
+
 	return $values;
 }
 add_filter( 'wp_ulike_optiwich_values', 'wp_ulike_hydrate_auto_display_filter_for_ui' );
