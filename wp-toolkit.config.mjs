@@ -78,7 +78,8 @@ export default {
 	i18n: {
 		domain: 'wp-ulike',
 		potFile: 'languages/wp-ulike.pot',
-		exclude: 'build,node_modules,admin/includes/statistics,admin/includes/optiwich,includes/blocks',
+		skipJs: false,
+		exclude: 'build,node_modules,admin/includes/statistics,admin/includes/optiwich,includes/blocks/button,includes/blocks/top-content',
 		headers: {
 			'Report-Msgid-Bugs-To': 'https://wpulike.com',
 			'Language-Team': 'WP ULike Team <info@wpulike.com>',
