@@ -439,32 +439,42 @@ if( ! function_exists( 'wp_ulike_notification_filters' ) ){
 	function wp_ulike_notification_filters(){
 		$notifications = array(
 			array(
-				'id'       => 'wp_ulike__activityliked_action',
+				'id'       => 'wp_ulike_activityliked_action',
 				'label'    => __( 'New activity liked', 'wp-ulike' ),
 				'position' => 340,
 			),
 			array(
-				'id'       => 'wp_ulike__commentliked_action',
+				'id'       => 'wp_ulike_commentliked_action',
 				'label'    => __( 'New comment liked', 'wp-ulike' ),
 				'position' => 345,
 			),
 			array(
-				'id'       => 'wp_ulike__liked_action',
+				'id'       => 'wp_ulike_liked_action',
 				'label'    => __( 'New post liked', 'wp-ulike' ),
 				'position' => 355,
 			),
 			array(
-				'id'       => 'wp_ulike__topicliked_action',
+				'id'       => 'wp_ulike_topicliked_action',
 				'label'    => __( 'New topic liked', 'wp-ulike' ),
 				'position' => 365,
 			)
 		);
 
 		foreach ( $notifications as $notification ) {
-			if( ! wp_ulike_bbp_is_component_exist( $notification['id'] ) ){
-				continue;
+			// The action is built as 'wp_ulike' . $type . '_action' with a $type that
+			// starts with an underscore, so rows are normally wp_ulike_liked_action.
+			// The double underscore spelling is also registered for sites that hold it.
+			$ids = array(
+				$notification['id'],
+				str_replace( 'wp_ulike_', 'wp_ulike__', $notification['id'] ),
+			);
+			foreach ( $ids as $id ) {
+				if ( ! wp_ulike_bbp_is_component_exist( $id ) ) {
+					continue;
+				}
+				$notification['id'] = $id;
+				bp_nouveau_notifications_register_filter( $notification );
 			}
-			bp_nouveau_notifications_register_filter( $notification );
 		}
 	}
 	add_action( 'bp_nouveau_notifications_init_filters', 'wp_ulike_notification_filters' );

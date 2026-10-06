@@ -240,7 +240,7 @@ if ( ! function_exists( 'wp_ulike_render_gallery_image_button' ) ) {
 		}
 
 		// Pro appends its button through wp_get_attachment_image. Same image, one button.
-		if ( false !== strpos( $content, 'wpulike' ) ) {
+		if ( preg_match( '/class=(["\'])[^"\']*\bwpulike\b/', $content ) ) {
 			return $content;
 		}
 
