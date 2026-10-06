@@ -1130,3 +1130,8 @@
   right: auto;
   transform: translate(-50%, -50%);
 }
+
+.wp-block-gallery .wpulike {
+  margin: 0;
+  padding: 4px 0 0;
+}
