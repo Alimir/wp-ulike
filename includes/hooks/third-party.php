@@ -629,7 +629,16 @@ if( ! function_exists( 'wp_ulike_purge_cache' ) ){
 		$reffer_url = wp_get_referer();
 
 		if( $type === '_liked' ){
-			$controller->purgeForPost( array( $ID ), $reffer_url );
+			$post_ids = array( (int) $ID );
+			// Gallery buttons vote on the attachment. The cached page is the
+			// parent post, and several cache plugins only purge by post ID.
+			if ( 'attachment' === get_post_type( $ID ) ) {
+				$parent_id = (int) wp_get_post_parent_id( $ID );
+				if ( $parent_id > 0 && ! in_array( $parent_id, $post_ids, true ) ) {
+					$post_ids[] = $parent_id;
+				}
+			}
+			$controller->purgeForPost( $post_ids, $reffer_url );
 		} elseif( $type === '_commentliked' ){
 			$comment = get_comment( $ID );
 			if( isset( $comment->comment_post_ID ) ){
