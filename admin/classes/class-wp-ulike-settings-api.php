@@ -76,10 +76,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             // Build schema from admin panel
             $schema = $this->build_schema_from_panel();
 
-            // Apply default values from settings
-            $values = $this->get_values();
-            $schema = $this->apply_defaults_to_schema( $schema, $values );
-
             // Resolve non-AJAX select field options (for fields without ajax: true)
             $schema = $this->resolve_static_select_options( $schema );
 
@@ -135,81 +131,6 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
             $pages = $this->build_pages_structure( $sections );
 
             return array( 'pages' => apply_filters( 'wp_ulike_optiwich_pages', $pages ) );
-        }
-
-        /**
-         * Apply default values from settings to schema
-         */
-        protected function apply_defaults_to_schema( $schema, $values ) {
-            if ( ! isset( $schema['pages'] ) || ! is_array( $schema['pages'] ) ) {
-                return $schema;
-            }
-
-            foreach ( $schema['pages'] as &$page ) {
-                if ( isset( $page['sections'] ) && is_array( $page['sections'] ) ) {
-                    foreach ( $page['sections'] as &$section ) {
-                        if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
-                            $base_path = ! empty( $section['is_grouping_section'] ) && ! empty( $section['id'] )
-                                ? (string) $section['id']
-                                : '';
-                            $section['fields'] = $this->apply_defaults_to_fields( $section['fields'], $values, $base_path );
-                        }
-                    }
-                }
-            }
-
-            return $schema;
-        }
-
-        /**
-         * Apply default values to fields recursively
-         */
-        protected function apply_defaults_to_fields( $fields, $values, $path = '' ) {
-            foreach ( $fields as &$field ) {
-                if ( ! isset( $field['id'] ) ) {
-                    continue;
-                }
-
-                $field_path = $path ? $path . '.' . $field['id'] : $field['id'];
-
-                // Get value from settings if exists, otherwise use default
-                $current_value = $this->get_value_at_path( $values, $field_path );
-                if ( $current_value !== null ) {
-                    $field['default'] = $current_value;
-                }
-
-                // Handle nested fields
-                if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
-                    $field['fields'] = $this->apply_defaults_to_fields( $field['fields'], $values, $field_path );
-                }
-
-                if ( isset( $field['tabs'] ) && is_array( $field['tabs'] ) ) {
-                    foreach ( $field['tabs'] as &$tab ) {
-                        if ( isset( $tab['fields'] ) && is_array( $tab['fields'] ) ) {
-                            $tab['fields'] = $this->apply_defaults_to_fields( $tab['fields'], $values, $field_path );
-                        }
-                    }
-                }
-            }
-
-            return $fields;
-        }
-
-        /**
-         * Get value at path (dot notation)
-         */
-        protected function get_value_at_path( $array, $path ) {
-            $keys = explode( '.', $path );
-            $current = $array;
-
-            foreach ( $keys as $key ) {
-                if ( ! is_array( $current ) || ! isset( $current[ $key ] ) ) {
-                    return null;
-                }
-                $current = $current[ $key ];
-            }
-
-            return $current;
         }
 
         /**

@@ -77,11 +77,16 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
       $is_fresh_install = false;
 
       if ( ! get_option( 'wp_ulike_first_activated_at', false ) ) {
-        $had_settings = ( false !== get_option( 'wp_ulike_settings', false ) );
-        self::seed_fresh_install_settings();
+        $is_fresh_install = ( false === get_option( 'wp_ulike_settings', false ) );
         update_option( 'wp_ulike_first_activated_at', time(), false );
-        $is_fresh_install = ! $had_settings;
       }
+
+      // Claim the option before anything else can, so it is never autoloaded.
+      // Field defaults belong to the settings schema, not here -- this stays
+      // empty on purpose. A configured site stores 17-30 KB, which is far too
+      // much to unserialize on every request, including the many that never
+      // render a button. No-op once the option exists.
+      add_option( 'wp_ulike_settings', array(), '', 'no' );
 
       if ( $is_fresh_install && class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
         WP_Ulike_Setup_Wizard::mark_pending();
@@ -93,37 +98,6 @@ if ( ! class_exists( 'wp_ulike_register_action_hook' ) ) :
 
       // Fire action
       do_action( 'wp_ulike_activated', get_current_blog_id() );
-    }
-
-    /**
-     * Defaults that should apply only to brand-new installs.
-     * Existing sites keep historical unlike (unlimited toggle) until they change it.
-     *
-     * @return void
-     */
-    private static function seed_fresh_install_settings() {
-      if ( false !== get_option( 'wp_ulike_settings', false ) ) {
-        return;
-      }
-
-      $unlike_once = array( 'unlike_rule' => 'once' );
-
-      // Not autoloaded, deliberately, and matching every other write to this
-      // option (settings save, import, setup wizard). A configured site stores
-      // 17-30 KB here, which is far too much to unserialize on every request
-      // -- including the many that never render a button. wp_ulike_get_option()
-      // memoises it, so a request that does need it still pays one lookup.
-      add_option(
-        'wp_ulike_settings',
-        array(
-          'posts_group'      => $unlike_once,
-          'comments_group'   => $unlike_once,
-          'buddypress_group' => $unlike_once,
-          'bbpress_group'    => $unlike_once,
-        ),
-        '',
-        'no'
-      );
     }
 
     /**

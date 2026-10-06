@@ -736,7 +736,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'       => 'spinner',
                     'title'      => esc_html__( 'Maximum Votes Allowed', 'wp-ulike' ),
                     'desc'       => esc_html__( 'Sets a maximum number of votes each user can submit on an item.', 'wp-ulike' ),
-                    'default'    => 10,
+                    'default'    => 50, // Must match wp_ulike_setting_repo::getVoteLimitNumber().
                     'min'        => 1,
                     'max'        => 1000,
                     'dependency' => array( 'logging_method', '==', 'do_not_log' ),
@@ -999,7 +999,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'type'       => 'number',
                     'title'      => esc_html__( 'Avatar Size', 'wp-ulike'),
                     'desc'       => esc_html__('Set the size of user avatars displayed in the likers box.', 'wp-ulike'),
-                    'default'    => 32,
+                    'default'    => 64, // Must match the avatar_size fallback in wp_ulike_get_likers_template().
                     'unit'       => 'px',
                     'dependency' => array( 'enable_likers_box', '==', 'true' ),
                 ),

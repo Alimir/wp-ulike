@@ -244,9 +244,9 @@ if ( ! class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
 				$who_can_vote = 'everyone';
 			}
 
-			$unlike_rule = isset( $_POST['unlike_rule'] ) ? sanitize_key( wp_unslash( $_POST['unlike_rule'] ) ) : 'once';
+			$unlike_rule = isset( $_POST['unlike_rule'] ) ? sanitize_key( wp_unslash( $_POST['unlike_rule'] ) ) : 'allow';
 			if ( ! in_array( $unlike_rule, array( 'allow', 'once', 'lock' ), true ) ) {
-				$unlike_rule = 'once';
+				$unlike_rule = 'allow';
 			}
 
 			$show_likers = isset( $_POST['show_likers'] ) ? sanitize_key( wp_unslash( $_POST['show_likers'] ) ) : 'no';
