@@ -26,7 +26,9 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 	 */
 	function wp_ulike_put_posts( $content ) {
 		// Auto-display is off, or we're outside the main frontend loop.
-		if ( ! WpUlikeInit::is_frontend() || ! in_the_loop() || ! is_main_query() || ! wp_ulike_setting_repo::isAutoDisplayOn('post') ) {
+		// Query Loop blocks use their own query, so they are handled in
+		// wp_ulike_render_block_auto_display() instead of here.
+		if ( ! wp_ulike_auto_display_context_allows_button() || ! in_the_loop() || ! is_main_query() ) {
 			return apply_filters( 'wp_ulike_the_content', $content, $content );
 		}
 
@@ -36,36 +38,248 @@ if( ! function_exists( 'wp_ulike_put_posts' ) ){
 			return apply_filters( 'wp_ulike_the_content', $content, $content );
 		}
 
-		// Standard WordPress context exclusions: feeds and embeds render in
-		// non-HTML / stripped contexts where the button would not work.
-		if ( is_feed() || is_embed() ) {
-			return apply_filters( 'wp_ulike_the_content', $content, $content );
-		}
-
-		// Stack variable
-		$output = $content;
-		if(	is_wp_ulike( wp_ulike_setting_repo::getPostAutoDisplayFilters() ) ){
-			// Get button
-			$button = wp_ulike('put');
-			switch ( wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' ) ) {
-				case 'top':
-					$output = $button . $content;
-					break;
-
-				case 'top_bottom':
-					$output = $button . $content . $button;
-					break;
-
-				default:
-					$output = $content . $button;
-					break;
-			}
-		}
+		// Post type limits for the classic loop stay inside is_wp_ulike().
+		$output = wp_ulike_place_auto_button( $content, wp_ulike( 'put' ) );
 
 		return apply_filters( 'wp_ulike_the_content', $output, $content );
 	}
 	add_filter( 'the_content', 'wp_ulike_put_posts', 15 );
 	add_filter( 'the_excerpt', 'wp_ulike_put_posts', 15 );
+}
+
+if ( ! function_exists( 'wp_ulike_auto_display_context_allows_button' ) ) {
+	/**
+	 * Shared front-end gates for automatic like buttons.
+	 *
+	 * @return bool
+	 */
+	function wp_ulike_auto_display_context_allows_button() {
+		if ( ! WpUlikeInit::is_frontend() || is_feed() || is_embed() ) {
+			return false;
+		}
+
+		// isAutoDisplayOn() runs wp_ulike_enable_auto_display, which Pro Display
+		// Automation uses to turn the free button off when a rule replaces it.
+		if ( ! wp_ulike_setting_repo::isAutoDisplayOn( 'post' ) ) {
+			return false;
+		}
+
+		return (bool) is_wp_ulike( wp_ulike_setting_repo::getPostAutoDisplayFilters() );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_auto_display_allows_post' ) ) {
+	/**
+	 * Whether this post type is allowed to receive an automatic button.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return bool
+	 */
+	function wp_ulike_auto_display_allows_post( $post_id ) {
+		$post_id = (int) $post_id;
+		if ( $post_id < 1 ) {
+			return false;
+		}
+
+		$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
+		if ( empty( $post_types ) ) {
+			return true;
+		}
+
+		return in_array( (string) get_post_type( $post_id ), array_map( 'strval', $post_types ), true );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_place_auto_button' ) ) {
+	/**
+	 * Place a button against content using the saved position.
+	 *
+	 * @param string $content Post or excerpt HTML.
+	 * @param string $button  Button HTML.
+	 * @return string
+	 */
+	function wp_ulike_place_auto_button( $content, $button ) {
+		if ( ! is_string( $button ) || '' === $button ) {
+			return $content;
+		}
+
+		switch ( wp_ulike_get_option( 'posts_group|auto_display_position', 'bottom' ) ) {
+			case 'top':
+				return $button . $content;
+
+			case 'top_bottom':
+				return $button . $content . $button;
+
+			default:
+				return $content . $button;
+		}
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_markup_has_non_gallery_button' ) ) {
+	/**
+	 * Whether HTML already contains a like button that is not a gallery image button.
+	 *
+	 * Gallery buttons use wpulike-gallery and must not hide the post button.
+	 *
+	 * @param string $content HTML.
+	 * @return bool
+	 */
+	function wp_ulike_markup_has_non_gallery_button( $content ) {
+		if ( ! is_string( $content ) || ! preg_match_all( '/class=(["\'])([^"\']*\bwpulike\b[^"\']*)\1/', $content, $matches ) ) {
+			return false;
+		}
+
+		foreach ( $matches[2] as $classes ) {
+			if ( false === strpos( $classes, 'wpulike-gallery' ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_render_block_auto_display' ) ) {
+	/**
+	 * Buttons for block lists and Gallery images.
+	 *
+	 * Classic loops still use the_content / the_excerpt. A Query Loop is not the
+	 * main query, and the Excerpt block never calls the_excerpt, so those need
+	 * this path. Gallery images are opt-in and keep one count per attachment.
+	 *
+	 * @param string        $content  Rendered block HTML.
+	 * @param array         $block    Parsed block.
+	 * @param WP_Block|null $instance Block instance, when WordPress provides it.
+	 * @return string
+	 */
+	function wp_ulike_render_block_auto_display( $content, $block, $instance = null ) {
+		if ( ! is_string( $content ) || ! is_array( $block ) || empty( $block['blockName'] ) ) {
+			return $content;
+		}
+
+		if ( 'core/image' === $block['blockName'] ) {
+			return wp_ulike_render_gallery_image_button( $content, $block, $instance );
+		}
+
+		if ( ! in_array( $block['blockName'], array( 'core/post-content', 'core/post-excerpt' ), true ) ) {
+			return $content;
+		}
+
+		if ( ! wp_ulike_auto_display_context_allows_button() ) {
+			return $content;
+		}
+
+		$post_id = (int) get_the_ID();
+		if ( ! wp_ulike_auto_display_allows_post( $post_id ) ) {
+			return $content;
+		}
+
+		// The main loop already inserted the button through the_content.
+		if ( 'core/post-content' === $block['blockName'] && in_the_loop() && is_main_query() ) {
+			return $content;
+		}
+
+		// Home, archives, and search are the list views people asked for.
+		// A related-posts query on a single article is a different post, and
+		// stays off so one page does not grow a button under every teaser.
+		$is_list_context = is_front_page() || is_home() || is_archive() || is_search();
+		if ( ! $is_list_context && is_singular() && (int) get_queried_object_id() !== $post_id ) {
+			return $content;
+		}
+
+		if ( 'core/post-excerpt' === $block['blockName'] ) {
+			// The article itself already gets a button from the content. Excerpt
+			// blocks are for the list, where the_excerpt never runs.
+			if ( ! $is_list_context || ! wp_ulike_setting_repo::isAutoDisplayOnExcerpts() ) {
+				return $content;
+			}
+		}
+
+		// Pro Display Automation can already have inserted its button through
+		// the_content. A gallery button inside the post does not count.
+		if ( wp_ulike_markup_has_non_gallery_button( $content ) ) {
+			return $content;
+		}
+
+		$output = wp_ulike_place_auto_button( $content, wp_ulike( 'put', array( 'id' => $post_id ) ) );
+
+		return apply_filters( 'wp_ulike_the_content', $output, $content );
+	}
+	add_filter( 'render_block', 'wp_ulike_render_block_auto_display', 20, 3 );
+}
+
+if ( ! function_exists( 'wp_ulike_render_gallery_image_button' ) ) {
+	/**
+	 * Append a like button to one image inside a Gallery block.
+	 *
+	 * The Gallery block sidebar stores this choice. Existing galleries have no
+	 * attribute, so they render exactly as before. Pro's "Like Buttons on Images"
+	 * uses wp_get_attachment_image and is left alone; if that markup is already
+	 * in the image, this does not add a second button.
+	 *
+	 * @param string        $content  Rendered image HTML.
+	 * @param array         $block    Parsed image block.
+	 * @param WP_Block|null $instance Block instance.
+	 * @return string
+	 */
+	function wp_ulike_render_gallery_image_button( $content, $block, $instance = null ) {
+		if ( ! WpUlikeInit::is_frontend() || is_feed() || is_embed() || is_admin() ) {
+			return $content;
+		}
+
+		$enabled = ( $instance instanceof WP_Block ) && ! empty( $instance->context['wpUlikeGallery'] );
+		if ( ! $enabled ) {
+			return $content;
+		}
+
+		// data-id is set only on images nested in a Gallery. A normal Image block never has it.
+		$attachment_id = isset( $block['attrs']['data-id'] ) ? (int) $block['attrs']['data-id'] : 0;
+		if ( $attachment_id < 1 || 'attachment' !== get_post_type( $attachment_id ) ) {
+			return $content;
+		}
+
+		// Pro appends its button through wp_get_attachment_image. Same image, one button.
+		if ( preg_match( '/class=(["\'])[^"\']*\bwpulike\b/', $content ) ) {
+			return $content;
+		}
+
+		$button = wp_ulike(
+			'put',
+			array(
+				'id'            => $attachment_id,
+				'wrapper_class' => 'wpulike-gallery',
+			)
+		);
+
+		if ( ! is_string( $button ) || '' === $button ) {
+			return $content;
+		}
+
+		if ( preg_match( '/<\/figcaption>/i', $content ) ) {
+			$updated = preg_replace_callback(
+				'/<\/figcaption>/i',
+				static function () use ( $button ) {
+					return '</figcaption>' . $button;
+				},
+				$content,
+				1
+			);
+		} elseif ( preg_match( '/<\/figure>/i', $content ) ) {
+			$updated = preg_replace_callback(
+				'/<\/figure>/i',
+				static function () use ( $button ) {
+					return $button . '</figure>';
+				},
+				$content,
+				1
+			);
+		} else {
+			$updated = $content . $button;
+		}
+
+		return is_string( $updated ) ? $updated : $content;
+	}
 }
 
 /*******************************************************

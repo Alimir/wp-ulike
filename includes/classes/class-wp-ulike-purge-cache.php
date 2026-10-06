@@ -357,10 +357,13 @@ if ( ! class_exists( 'wp_ulike_purge_cache' ) ) {
 			}
 			foreach ($post_ids as $postId) {
 				$cacheableTypes = nitropack_get_cacheable_object_types();
-				$post = get_post($postId);
-				$postType = $post->post_type ?? 'post';
-				$postTitle = $post->post_title ?? '';
-				if (in_array($postType, $cacheableTypes)) {
+				$post = get_post( $postId );
+				if ( ! $post instanceof WP_Post ) {
+					continue;
+				}
+				$postType = $post->post_type;
+				$postTitle = $post->post_title;
+				if (in_array($postType, $cacheableTypes, true)) {
 					nitropack_invalidate(null, "single:{$postId}", sprintf('Invalidating "%s" after user engagement (likes/dislikes) via WP ULike.', $postTitle));
 				}
 			}

@@ -356,18 +356,16 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 	 */
 	function wp_ulike_format_buddypress_notifications( $content, $item_id, $secondary_item_id, $total_items, $format, $action, $component, $id ) {
 		// check for ulike notifications
-		if ( strpos( $action, 'wp_ulike_' ) !== false ) {
-			//Extracting ulike type from the action value.
-			preg_match('/wp_ulike_(.*?)_action/', $action, $type);
-				//Extracting user id from old action name values.
-				preg_match('/action_([0-9]+)/', $action, $user_ID);
-			//Get user info
+		if ( strpos( $action, 'wp_ulike_' ) !== false && preg_match( '/wp_ulike_(.+)_action/', $action, $type ) ) {
+			// The stored action is wp_ulike__liked_action because the key already
+			// starts with an underscore. Older rows may omit that extra underscore.
+			preg_match( '/action_([0-9]+)/', $action, $user_ID );
 			$user_ID     = isset( $user_ID[1] ) ? $user_ID[1] : $secondary_item_id;
 			$action_type = __( 'Posts', 'wp-ulike' );
 			$custom_link = '';
+			$action_key  = ltrim( $type[1], '_' );
 
-			// Check the the ulike types
-			switch ( $type[1] ) {
+			switch ( $action_key ) {
 				case 'commentliked':
 					$custom_link = get_comment_link( $item_id );
 					$action_type = __( 'Comments', 'wp-ulike' );
@@ -463,10 +461,20 @@ if( ! function_exists( 'wp_ulike_notification_filters' ) ){
 		);
 
 		foreach ( $notifications as $notification ) {
-			if( ! wp_ulike_bbp_is_component_exist( $notification['id'] ) ){
-				continue;
+			// The action is built as 'wp_ulike' . $type . '_action' with a $type that
+			// starts with an underscore, so rows are normally wp_ulike_liked_action.
+			// The double underscore spelling is also registered for sites that hold it.
+			$ids = array(
+				$notification['id'],
+				str_replace( 'wp_ulike_', 'wp_ulike__', $notification['id'] ),
+			);
+			foreach ( $ids as $id ) {
+				if ( ! wp_ulike_bbp_is_component_exist( $id ) ) {
+					continue;
+				}
+				$notification['id'] = $id;
+				bp_nouveau_notifications_register_filter( $notification );
 			}
-			bp_nouveau_notifications_register_filter( $notification );
 		}
 	}
 	add_action( 'bp_nouveau_notifications_init_filters', 'wp_ulike_notification_filters' );
@@ -629,7 +637,16 @@ if( ! function_exists( 'wp_ulike_purge_cache' ) ){
 		$reffer_url = wp_get_referer();
 
 		if( $type === '_liked' ){
-			$controller->purgeForPost( array( $ID ), $reffer_url );
+			$post_ids = array( (int) $ID );
+			// Gallery buttons vote on the attachment. The cached page is the
+			// parent post, and several cache plugins only purge by post ID.
+			if ( 'attachment' === get_post_type( $ID ) ) {
+				$parent_id = (int) wp_get_post_parent_id( $ID );
+				if ( $parent_id > 0 && ! in_array( $parent_id, $post_ids, true ) ) {
+					$post_ids[] = $parent_id;
+				}
+			}
+			$controller->purgeForPost( $post_ids, $reffer_url );
 		} elseif( $type === '_commentliked' ){
 			$comment = get_comment( $ID );
 			if( isset( $comment->comment_post_ID ) ){

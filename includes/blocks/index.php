@@ -329,6 +329,68 @@ function wp_ulike_block_editor_assets() {
 add_action( 'enqueue_block_editor_assets', 'wp_ulike_block_editor_assets', 20 );
 
 /**
+ * Per-gallery like buttons. Off unless the Gallery block sidebar is checked,
+ * so published galleries do not change. Pro's attachment switch stays on
+ * wp_get_attachment_image and is not replaced by this.
+ *
+ * @param array  $args Block type arguments.
+ * @param string $name Block name.
+ * @return array
+ */
+function wp_ulike_register_gallery_like_support( $args, $name ) {
+	if ( 'core/gallery' === $name ) {
+		if ( empty( $args['attributes'] ) || ! is_array( $args['attributes'] ) ) {
+			$args['attributes'] = array();
+		}
+		$args['attributes']['wpUlike'] = array(
+			'type'    => 'boolean',
+			'default' => false,
+		);
+		if ( empty( $args['provides_context'] ) || ! is_array( $args['provides_context'] ) ) {
+			$args['provides_context'] = array();
+		}
+		$args['provides_context']['wpUlikeGallery'] = 'wpUlike';
+	}
+
+	if ( 'core/image' === $name ) {
+		if ( empty( $args['uses_context'] ) || ! is_array( $args['uses_context'] ) ) {
+			$args['uses_context'] = array();
+		}
+		if ( ! in_array( 'wpUlikeGallery', $args['uses_context'], true ) ) {
+			$args['uses_context'][] = 'wpUlikeGallery';
+		}
+	}
+
+	return $args;
+}
+add_filter( 'register_block_type_args', 'wp_ulike_register_gallery_like_support', 10, 2 );
+
+/**
+ * Gallery sidebar toggle. Loaded in the editor only.
+ *
+ * @return void
+ */
+function wp_ulike_enqueue_gallery_like_controls() {
+	$js_path = WP_ULIKE_INC_DIR . '/blocks/gallery-controls.js';
+	if ( ! is_readable( $js_path ) ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'wp-ulike-gallery-controls',
+		WP_ULIKE_INC_URL . '/blocks/gallery-controls.js',
+		array( 'wp-hooks', 'wp-element', 'wp-compose', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+		WP_ULIKE_VERSION,
+		true
+	);
+
+	if ( function_exists( 'wp_set_script_translations' ) ) {
+		wp_set_script_translations( 'wp-ulike-gallery-controls', 'wp-ulike' );
+	}
+}
+add_action( 'enqueue_block_editor_assets', 'wp_ulike_enqueue_gallery_like_controls' );
+
+/**
  * Enqueue frontend assets when block is used (fallback if main class doesn't load)
  */
 function wp_ulike_block_frontend_assets() {
