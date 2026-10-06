@@ -3,14 +3,14 @@
  * Plugin Name:       WP ULike
  * Plugin URI:        https://wpulike.com/?utm_source=wp-plugins&utm_campaign=plugin-uri&utm_medium=wp-dash
  * Description:       Add one-click like buttons to WordPress. Built-in statistics dashboard, top lists, and privacy tools. Setup in minutes.
- * Version:           5.2.3
+ * Version:           5.2.4
  * Author:            TechnoWich
  * Author URI:        https://technowich.com/?utm_source=wp-plugins&utm_campaign=author-uri&utm_medium=wp-dash
  * Requires PHP:      7.3.0
  * Requires at least: 6.0
  * Text Domain:       wp-ulike
  * Domain Path:       /languages
- * Tested up to:      7.0
+ * Tested up to:      7.1
  * License: GPL-2.0+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Do not change these values
 define( 'WP_ULIKE_PLUGIN_URI'   , 'https://wpulike.com/' 		 			);
-define( 'WP_ULIKE_VERSION'      , '5.2.3' 					 		    	);
+define( 'WP_ULIKE_VERSION'      , '5.2.4' 					 		    	);
 define( 'WP_ULIKE_DB_VERSION'   , '2.5' 					 	 			);
 define( 'WP_ULIKE_SLUG'         , 'wp-ulike' 					 			);
 define( 'WP_ULIKE_NAME'         , 'WP ULike'	    						);

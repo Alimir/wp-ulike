@@ -5,8 +5,8 @@ Author: TechnoWich
 Tags: like button, like, voting, reactions, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
-Tested up to: 7.0
-Stable tag: 5.2.3
+Tested up to: 7.1
+Stable tag: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,7 +142,10 @@ Common shortcode examples:
 Filters: `cat`, `tag`, `taxonomy`+`terms`, `exclude_cat`, `exclude_tag`, `exclude` (post IDs), `exclude_current`, `author`, `post_type`, `period` / `days` / `hours` / `date_start`+`date_end`, plus display toggles (`show_count`, `show_thumbnail`, `show_rank`, `heading`, …).
 
 = Like buttons appear on my homepage, archive, or PostX block grid. How do I hide them? =
-Open **WP ULike → Configuration → Content Types → Posts → Automatic Display** and use the **Hide Automatic Display On** list to select **Home / Front Page**, **Archives**, **Categories**, **Search Results**, **Tags**, and **Author Page**. The button will then only show on individual posts. For block grids (PostX, etc.), also check the **Plugin & theme conflicts** section on the **Help** screen.
+Open **WP ULike → Configuration → Content Types → Posts → Automatic Display** and use **Show Buttons On**. Uncheck **Home**, **Archives**, **Categories**, **Search Results**, **Tags**, or **Author Page**. Checked places are where the button appears. For block grids (PostX, etc.), also check the **Plugin & theme conflicts** section on the **Help** screen.
+
+= Can visitors like images in a Gallery? =
+Select the Gallery block and open **WP ULike** in the block sidebar. Turn on **Show a like button on each image**. Each image has its own count. Galleries left off stay unchanged.
 
 = Can I use emoji reactions or star ratings instead of like buttons? =
 Yes, with Pro. The free plugin ships 4 like-button styles. Pro adds emoji reactions and 5-star ratings as their own reaction types, so you can pick what fits each page. [Browse the templates](https://wpulike.com/templates/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme).
@@ -157,6 +160,12 @@ Free includes like buttons, a full statistics dashboard (Overview, reports, when
 No. Pro installs beside the free plugin and reads the same data. Your existing votes, counts, and settings carry over untouched. Pro also comes with a 14-day money-back guarantee.
 
 == Changelog ==
+
+= 5.2.4 =
+* Added: Gallery block control, Show a like button on each image. Each image has its own count. Existing galleries stay unchanged.
+* Improved: Block post lists (Query Loop) on the homepage, archives, and search now get the same automatic button as a classic loop, including Excerpt blocks.
+* Improved: The excerpts switch in Settings shows the value the site is actually using.
+* Improved: Tested with WordPress 7.1.
 
 = 5.2.3 =
 * Added: A short setup on first install — choose where likes appear, who can vote, and what a second click does. Existing sites never see it.
