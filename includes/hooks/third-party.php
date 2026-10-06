@@ -356,18 +356,16 @@ if( ! function_exists( 'wp_ulike_format_buddypress_notifications' ) ){
 	 */
 	function wp_ulike_format_buddypress_notifications( $content, $item_id, $secondary_item_id, $total_items, $format, $action, $component, $id ) {
 		// check for ulike notifications
-		if ( strpos( $action, 'wp_ulike_' ) !== false ) {
-			//Extracting ulike type from the action value.
-			preg_match('/wp_ulike_(.*?)_action/', $action, $type);
-				//Extracting user id from old action name values.
-				preg_match('/action_([0-9]+)/', $action, $user_ID);
-			//Get user info
+		if ( strpos( $action, 'wp_ulike_' ) !== false && preg_match( '/wp_ulike_(.+)_action/', $action, $type ) ) {
+			// The stored action is wp_ulike__liked_action because the key already
+			// starts with an underscore. Older rows may omit that extra underscore.
+			preg_match( '/action_([0-9]+)/', $action, $user_ID );
 			$user_ID     = isset( $user_ID[1] ) ? $user_ID[1] : $secondary_item_id;
 			$action_type = __( 'Posts', 'wp-ulike' );
 			$custom_link = '';
+			$action_key  = ltrim( $type[1], '_' );
 
-			// Check the the ulike types
-			switch ( $type[1] ) {
+			switch ( $action_key ) {
 				case 'commentliked':
 					$custom_link = get_comment_link( $item_id );
 					$action_type = __( 'Comments', 'wp-ulike' );
@@ -441,22 +439,22 @@ if( ! function_exists( 'wp_ulike_notification_filters' ) ){
 	function wp_ulike_notification_filters(){
 		$notifications = array(
 			array(
-				'id'       => 'wp_ulike_activityliked_action',
+				'id'       => 'wp_ulike__activityliked_action',
 				'label'    => __( 'New activity liked', 'wp-ulike' ),
 				'position' => 340,
 			),
 			array(
-				'id'       => 'wp_ulike_commentliked_action',
+				'id'       => 'wp_ulike__commentliked_action',
 				'label'    => __( 'New comment liked', 'wp-ulike' ),
 				'position' => 345,
 			),
 			array(
-				'id'       => 'wp_ulike_liked_action',
+				'id'       => 'wp_ulike__liked_action',
 				'label'    => __( 'New post liked', 'wp-ulike' ),
 				'position' => 355,
 			),
 			array(
-				'id'       => 'wp_ulike_topicliked_action',
+				'id'       => 'wp_ulike__topicliked_action',
 				'label'    => __( 'New topic liked', 'wp-ulike' ),
 				'position' => 365,
 			)
