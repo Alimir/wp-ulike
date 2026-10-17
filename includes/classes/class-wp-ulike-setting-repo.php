@@ -487,7 +487,14 @@ class wp_ulike_setting_repo {
 		/* Remove ?> from end of snippet */
 		$code = preg_replace( '|\</script>[\s]*$|', '', $code );
 
-		return strval( $code );
+		if ( ! is_string( $code ) ) {
+			return '';
+		}
+
+		// A closing script tag in the middle would break out of the footer tag.
+		$code = preg_replace( '#</script#i', '<\\/script', $code );
+
+		return is_string( $code ) ? $code : '';
 	}
 
 	/**

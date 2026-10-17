@@ -48,6 +48,12 @@ if ( ! function_exists( 'wp_ulike_get_option' ) ) {
 		// Static cache for parsed nested options to avoid repeated parsing
 		static $parsed_options_cache = array();
 
+		// Custom CSS and snippets live in their own option. Read them there
+		// even when an older copy is still sitting in wp_ulike_settings.
+		if ( is_string( $option ) && '' !== $option && class_exists( 'wp_ulike_developer_options' ) && wp_ulike_developer_options::owns( $option ) ) {
+			return wp_ulike_developer_options::get( $option, $default );
+		}
+
 		// Return all settings if no option specified
 		if ( empty( $option ) ) {
 			$settings = get_option( 'wp_ulike_settings' );
@@ -372,7 +378,7 @@ if( ! function_exists( 'wp_ulike_get_features' ) ){
 			),
 			'customize'  => array(
 				'label'       => __( 'Customize', 'wp-ulike' ),
-				'description' => __( 'Visual designer for button styles, colors, and templates. While off, its styling is not applied on the front end.', 'wp-ulike' ),
+				'description' => __( 'Visual designer for button styles, colors, and templates, plus custom CSS and snippets. While off, designer styling is not applied. Custom CSS and snippets still work and stay editable there.', 'wp-ulike' ),
 				'icon'        => 'admin-appearance',
 				'url'         => admin_url( 'admin.php?page=wp-ulike-customize' ),
 				// Nothing is deleted, but the site's buttons visibly change back
@@ -725,7 +731,7 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 
 		// Display deprecated styles (for backward compatibility). These come from
 		// the old customize screen, so they follow the same switch. Custom CSS and
-		// the spinner below are Settings fields and keep working either way.
+		// the spinner are stored separately and keep loading either way.
 		$customize_on = ! function_exists( 'wp_ulike_is_feature_enabled' ) || wp_ulike_is_feature_enabled( 'customize' );
 		if( $customize_on && wp_ulike_get_setting( 'wp_ulike_customize', 'custom_style' ) && wp_ulike_get_option( 'enable_deprecated_options' ) ) {
 			//get custom options
@@ -770,14 +776,9 @@ if( ! function_exists( 'wp_ulike_get_custom_style' ) ){
 			}
 		}
 
-		// Custom Spinner
-		if( '' != ( $custom_spinner = wp_ulike_get_option( 'custom_spinner' ) ) ) {
-			$return_style .= '.wpulike .wp_ulike_is_loading button.wp_ulike_btn, #buddypress .activity-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn, #bbpress-forums .bbp-reply-content .wpulike .wp_ulike_is_loading button.wp_ulike_btn {background-image: url('.esc_url($custom_spinner).') !important;}';
-		}
-
-		// Custom Styles from settings (lowest priority)
-		if( '' != ( $custom_css = wp_ulike_get_option( 'custom_css' ) ) ) {
-			$return_style .= $custom_css;
+		// Custom spinner and custom CSS (lowest priority). Own option, not settings.
+		if ( class_exists( 'wp_ulike_developer_options' ) ) {
+			$return_style .= wp_ulike_developer_options::additional_css();
 		}
 
 		$cached_style = apply_filters( 'wp_ulike_custom_css', wp_strip_all_tags( $return_style ) );

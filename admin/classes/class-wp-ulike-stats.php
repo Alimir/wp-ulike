@@ -113,24 +113,178 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		}
 
 		/**
-		 * Top content for a single type (free — no filters).
+		 * Top content for a single type (free — no filters, paged).
 		 *
-		 * @param string $type Content type key.
-		 * @param int    $limit Max items.
+		 * @param string $type  Content type key.
+		 * @param int    $limit Items per page.
+		 * @param int    $page  1-based page.
 		 * @return array|null
 		 */
-		public function get_tops_api_data( $type, $limit = 10 ) {
+		public function get_tops_api_data( $type, $limit = 10, $page = 1 ) {
 			$limit = max( 1, min( 100, absint( $limit ) ) );
+			$page  = max( 1, min( 10000, absint( $page ) ) );
+
+			if ( 'engagers' === $type ) {
+				return array(
+					'items' => $this->top_engagers( $limit, $page ),
+					'total' => $this->count_top_engagers(),
+				);
+			}
 
 			$tables = $this->get_tables();
 			if ( ! isset( $tables[ $type ] ) ) {
 				return null;
 			}
 
-			$items = $this->normalize_top_items( $this->get_top( $type ), $type );
+			$args = $this->top_list_args( $type );
+			if ( empty( $args ) ) {
+				return array(
+					'items' => array(),
+					'total' => 0,
+				);
+			}
+
+			$items = $this->normalize_top_items( $this->get_top( $type, $limit, $page ), $type );
+
 			return array(
-				'items' => array_slice( $items, 0, $limit ),
-				'total' => count( $items ),
+				'items' => $items,
+				'total' => $this->count_top_items( $args ),
+			);
+		}
+
+		/**
+		 * Shared popular-items args for a free top list (no paging).
+		 *
+		 * @param string $type Content type key.
+		 * @return array
+		 */
+		private function top_list_args( $type ) {
+			switch ( $type ) {
+				case 'posts':
+					$post_type = get_post_types_by_support( array( 'title', 'editor', 'thumbnail' ) );
+					$post_type = apply_filters( 'wp_ulike_supported_post_types_for_top_posts_list', $post_type );
+					return array(
+						'type'     => 'post',
+						'rel_type' => $post_type,
+						'status'   => 'like',
+						'period'   => 'all',
+					);
+				case 'comments':
+					return array(
+						'type'     => 'comment',
+						'rel_type' => '',
+						'status'   => 'like',
+						'period'   => 'all',
+					);
+				case 'activities':
+					if ( ! defined( 'BP_VERSION' ) ) {
+						return array();
+					}
+					return array(
+						'type'     => 'activity',
+						'rel_type' => '',
+						'status'   => 'like',
+						'period'   => 'all',
+					);
+				case 'topics':
+					if ( ! function_exists( 'is_bbpress' ) ) {
+						return array();
+					}
+					return array(
+						'type'     => 'topic',
+						'rel_type' => array( 'topic', 'reply' ),
+						'status'   => 'like',
+						'period'   => 'all',
+					);
+			}
+
+			return array();
+		}
+
+		/**
+		 * Cached count for a free top list.
+		 *
+		 * @param array $args Popular-items args without paging.
+		 * @return int
+		 */
+		private function count_top_items( $args ) {
+			return $this->cached_total(
+				'stats_tops_total_' . md5( serialize( $args ) ),
+				static function () use ( $args ) {
+					return (int) wp_ulike_get_popular_items_total_number( $args );
+				}
+			);
+		}
+
+		/**
+		 * Totals scan the whole log. Keep them in a transient so page flips do
+		 * not rerun the scan on hosts without a persistent object cache. The
+		 * versioned key changes whenever votes change.
+		 *
+		 * @param string   $logical_key Short stable identifier.
+		 * @param callable $callback    Produces the total on a miss.
+		 * @return int
+		 */
+		private function cached_total( $logical_key, $callback ) {
+			$transient = 'wp_ulike_t_' . md5( WP_Ulike_Query_Cache::key( $logical_key ) );
+			$cached    = get_transient( $transient );
+
+			if ( false !== $cached ) {
+				return (int) $cached;
+			}
+
+			$total = (int) call_user_func( $callback );
+			set_transient( $transient, $total, 5 * MINUTE_IN_SECONDS );
+
+			return $total;
+		}
+
+		/**
+		 * Registered members ranked by all-time likes (free — no filters, paged).
+		 *
+		 * @param int $limit Items per page.
+		 * @param int $page  1-based page.
+		 * @return array
+		 */
+		public function top_engagers( $limit = 10, $page = 1 ) {
+			$limit = max( 1, absint( $limit ) );
+			$page  = max( 1, absint( $page ) );
+			$rows  = WP_Ulike_Query_Cache::remember(
+				sprintf( 'stats_top_engagers_like_%d_%d', $limit, $page ),
+				static function () use ( $limit, $page ) {
+					return wp_ulike_get_best_likers_info( $limit, 'all', $page, array( 'like' ) );
+				}
+			);
+
+			$result = array();
+			foreach ( $rows as $row ) {
+				$user_id = absint( $row->user_id );
+				$user    = $user_id ? get_userdata( $user_id ) : false;
+				if ( ! $user ) {
+					continue;
+				}
+
+				$result[] = array(
+					'title'       => $user->display_name,
+					'permalink'   => get_edit_user_link( $user_id ),
+					'likes_count' => absint( $row->SumUser ),
+				);
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Cached count of registered members with at least one like.
+		 *
+		 * @return int
+		 */
+		private function count_top_engagers() {
+			return $this->cached_total(
+				'stats_tops_total_engagers_like',
+				static function () {
+					return (int) wp_ulike_get_top_enagers_total_number( 'all', array( 'like' ) );
+				}
 			);
 		}
 
@@ -332,20 +486,16 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 * @since 3.5
 		 * @return array
 		 */
-		public function get_top( $type ){
+		public function get_top( $type, $limit = 10, $page = 1 ){
 			switch( $type ){
 				case 'posts':
-					return $this->top_posts();
-					break;
+					return $this->top_posts( $limit, $page );
 				case 'comments':
-					return $this->top_comments();
-				break;
+					return $this->top_comments( $limit, $page );
 				case 'activities':
-					return $this->top_activities();
-				break;
+					return $this->top_activities( $limit, $page );
 				case 'topics':
-					return $this->top_topics();
-				break;
+					return $this->top_topics( $limit, $page );
 				default:
 					return;
 			}
@@ -356,17 +506,14 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @return array
 		 */
-		public function top_posts() {
-			$post_type = get_post_types_by_support( array( 'title', 'editor', 'thumbnail' ) );
-			$post_type = apply_filters( 'wp_ulike_supported_post_types_for_top_posts_list', $post_type );
+		public function top_posts( $limit = 10, $page = 1 ) {
+			$args = $this->top_list_args( 'posts' );
 
-			$item_info = wp_ulike_get_popular_items_info( array(
-				'type'     => 'post',
-				'rel_type' => $post_type,
-				'status'   => 'like',
-				'period'   => 'all',
-				'limit'    => 10,
-			) );
+			$post_type = $args['rel_type'];
+			$args['limit']  = max( 1, absint( $limit ) );
+			$args['offset'] = max( 1, absint( $page ) );
+
+			$item_info = wp_ulike_get_popular_items_info( $args );
 
 			if ( empty( $item_info ) ) {
 				return array();
@@ -385,15 +532,11 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				'post_status'    => array( 'publish', 'inherit' ),
 				'post__in'       => $ids,
 				'orderby'        => 'post__in',
-				'posts_per_page' => 10,
+				'posts_per_page' => count( $ids ),
 			) ) );
 
 			$result = array();
 			foreach ( $posts as $post ) {
-				if ( empty( $post->post_title ) ) {
-					continue;
-				}
-
 				$post_id = wp_ulike_get_the_id( $post->ID );
 				$result[] = array(
 					'title'       => stripslashes( $post->post_title ),
@@ -410,16 +553,14 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @return array
 		 */
-		public function top_comments() {
+		public function top_comments( $limit = 10, $page = 1 ) {
 			$post_type = get_post_types_by_support( array( 'title', 'editor', 'thumbnail' ) );
+			$args      = $this->top_list_args( 'comments' );
 
-			$item_info = wp_ulike_get_popular_items_info( array(
-				'type'     => 'comment',
-				'rel_type' => '',
-				'status'   => 'like',
-				'period'   => 'all',
-				'limit'    => 10,
-			) );
+			$args['limit']  = max( 1, absint( $limit ) );
+			$args['offset'] = max( 1, absint( $page ) );
+
+			$item_info = wp_ulike_get_popular_items_info( $args );
 
 			if ( empty( $item_info ) ) {
 				return array();
@@ -477,20 +618,19 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @return void
 		 */
-		public function top_activities() {
+		public function top_activities( $limit = 10, $page = 1 ) {
 			if ( ! defined( 'BP_VERSION' ) ) {
 				return array();
 			}
 
 			global $wpdb;
 
-			$item_info = wp_ulike_get_popular_items_info( array(
-				'type'     => 'activity',
-				'rel_type' => '',
-				'status'   => 'like',
-				'period'   => 'all',
-				'limit'    => 10,
-			) );
+			$args = $this->top_list_args( 'activities' );
+
+			$args['limit']  = max( 1, absint( $limit ) );
+			$args['offset'] = max( 1, absint( $page ) );
+
+			$item_info = wp_ulike_get_popular_items_info( $args );
 
 			if ( empty( $item_info ) ) {
 				return array();
@@ -534,20 +674,18 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 		 *
 		 * @return void
 		 */
-		public function top_topics() {
+		public function top_topics( $limit = 10, $page = 1 ) {
 			if ( ! function_exists( 'is_bbpress' ) ) {
 				return array();
 			}
 
-			$post_types = array( 'topic', 'reply' );
+			$args = $this->top_list_args( 'topics' );
 
-			$item_info = wp_ulike_get_popular_items_info( array(
-				'type'     => 'topic',
-				'rel_type' => $post_types,
-				'status'   => 'like',
-				'period'   => 'all',
-				'limit'    => 10,
-			) );
+			$post_types     = $args['rel_type'];
+			$args['limit']  = max( 1, absint( $limit ) );
+			$args['offset'] = max( 1, absint( $page ) );
+
+			$item_info = wp_ulike_get_popular_items_info( $args );
 
 			if ( empty( $item_info ) ) {
 				return array();
@@ -566,7 +704,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 				'post_status'    => array( 'publish', 'inherit' ),
 				'post__in'       => $ids,
 				'orderby'        => 'post__in',
-				'posts_per_page' => 10,
+				'posts_per_page' => count( $ids ),
 			) ) );
 
 			$result = array();

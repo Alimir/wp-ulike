@@ -157,7 +157,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 				INNER JOIN `{$related_table}` r ON t.item_id = r.`{$related_column}` {$related_condition}
 				WHERE t.meta_group = %s AND t.meta_value > 0 {$status_type}
 				GROUP BY item_ID
-				ORDER BY `{$order_by_escaped}` {$order_escaped} {$limit_records}",
+				ORDER BY `{$order_by_escaped}` {$order_escaped}, item_ID DESC {$limit_records}",
 				$parsed_args['type']
 			);
 

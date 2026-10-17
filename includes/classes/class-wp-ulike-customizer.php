@@ -438,6 +438,13 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                             ),
                         )
                     ) ),
+                    array(
+                        'id'      => 'custom_spinner',
+                        'type'    => 'upload',
+                        'library' => 'image',
+                        'title'   => esc_html__( 'Custom Spinner', 'wp-ulike' ),
+                        'desc'    => esc_html__( 'Image shown on the button while a vote is saving.', 'wp-ulike' ),
+                    ),
                     // Start Counter Section
                     array(
                         'type'    => 'heading',
@@ -913,10 +920,21 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                 ),
             );
 
+            if ( class_exists( 'wp_ulike_developer_options' ) ) {
+                $sections[] = wp_ulike_developer_options::customizer_section();
+            }
+
             do_action( 'wp_ulike_customize_ended' );
 
             // Allow pro version and other extensions to add/modify sections
             $sections = apply_filters( 'wp_ulike_customizer_sections', $sections );
+
+            // With Customize switched off only custom CSS and snippets stay editable.
+            if ( function_exists( 'wp_ulike_is_feature_enabled' ) && ! wp_ulike_is_feature_enabled( 'customize' ) ) {
+                $sections = array_values( array_filter( $sections, function ( $section ) {
+                    return isset( $section['id'] ) && 'developer' === $section['id'];
+                } ) );
+            }
 
             // Cache sections
             $this->sections_cache = $sections;

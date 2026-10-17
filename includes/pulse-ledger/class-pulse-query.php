@@ -873,7 +873,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			return $wpdb->get_results(
 				"SELECT votes.user_id, COUNT(*) AS SumUser FROM ( {$inner} ) AS votes
 				INNER JOIN `{$users}` u ON u.ID = CAST(votes.user_id AS UNSIGNED)
-				GROUP BY votes.user_id ORDER BY SumUser {$order} {$offset_sql}"
+				GROUP BY votes.user_id ORDER BY SumUser {$order}, votes.user_id ASC {$offset_sql}"
 			);
 		}
 
@@ -1628,7 +1628,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			return $wpdb->get_results(
 				"SELECT {$count} AS counter, t.`{$column}` AS item_ID FROM `{$table}` t {$join}
 				WHERE t.status IN ({$status_in}) {$user_condition} {$period_limit}
-				GROUP BY t.`{$column}` ORDER BY `{$order_by}` {$order} {$limit_records}"
+				GROUP BY t.`{$column}` ORDER BY `{$order_by}` {$order}, item_ID DESC {$limit_records}"
 			);
 		}
 
@@ -1675,7 +1675,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					"SELECT {$count} AS counter, t.item_id AS item_ID FROM `{$table}` t {$join}
 					WHERE t.item_type = %s AND t.engagement_kind = %s AND t.engagement_key IN ({$key_in})
 					AND {$status_sql} {$user_condition} {$period_sql}{$since_sql}
-					GROUP BY t.item_id ORDER BY `{$order_by}` {$order} {$limit_records}",
+					GROUP BY t.item_id ORDER BY `{$order_by}` {$order}, item_ID DESC {$limit_records}",
 					$item_type,
 					WP_Ulike_Pulse_Registry::KIND_VOTE
 				)
@@ -1778,7 +1778,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				return $wpdb->get_results(
 					'SELECT item_ID, COUNT(DISTINCT user_id) AS counter FROM ( ' . implode( ' UNION ALL ', $user_parts ) . " ) AS combined
-					GROUP BY item_ID ORDER BY `{$order_by}` {$order} {$limit_records}"
+					GROUP BY item_ID ORDER BY `{$order_by}` {$order}, item_ID DESC {$limit_records}"
 				);
 			}
 
@@ -1827,7 +1827,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			return $wpdb->get_results(
 				'SELECT item_ID, SUM(counter) AS counter FROM ( ' . implode( ' UNION ALL ', $parts ) . " ) AS combined
-				GROUP BY item_ID ORDER BY `{$order_by}` {$order} {$limit_records}"
+				GROUP BY item_ID ORDER BY `{$order_by}` {$order}, item_ID DESC {$limit_records}"
 			);
 		}
 

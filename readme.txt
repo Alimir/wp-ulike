@@ -6,7 +6,7 @@ Tags: like button, like, voting, reactions, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 5.2.4
+Stable tag: 5.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,6 +160,19 @@ Free includes like buttons, a full statistics dashboard (Overview, reports, when
 No. Pro installs beside the free plugin and reads the same data. Your existing votes, counts, and settings carry over untouched. Pro also comes with a 14-day money-back guarantee.
 
 == Changelog ==
+
+= 5.3.0 =
+* Added: Custom CSS, the custom loading image, and PHP and JavaScript snippets now live in the Customizer, in a Settings section pinned at the bottom of the list, with a syntax-highlighted code editor and a live preview of the CSS and loading image.
+* Added: Statistics lists have page numbers, and the free Statistics now include Top Members.
+* Added: Collapse menu control on the Settings, Statistics, and Customizer sidebars, with hover submenus when collapsed.
+* Improved: The Customizer fills the screen under the admin bar, and the sidebars share one look across Settings, Statistics, and the Customizer.
+* Improved: Statistics lists keep the same order when likes are tied, so an item no longer shows up on two pages or none.
+* Improved: Top posts now include posts without a title, shown as Untitled.
+* Improved: Your existing custom CSS, loading image, and snippets are copied over automatically on update. The old copy is kept, and nothing is deleted.
+* Improved: PHP and JavaScript snippets can only be changed by accounts that can post unfiltered HTML, and a PHP snippet that fails no longer stops the page.
+* Improved: Backups include custom CSS and snippets, and backups made with older versions still restore.
+* Improved: Custom CSS still loads when the Customize switch is off, and the Customize screen stays open for editing it.
+* Developer: The `wp_ulike_panel_customization` filter is deprecated. Use `wp_ulike_developer_section_fields` for fields in the Customizer Settings section.
 
 = 5.2.4 =
 * Added: Gallery block control, Show a like button on each image. Each image has its own count. Existing galleries stay unchanged.

@@ -592,37 +592,64 @@ function wp_ulike_manage_comment_sortable_columns_order( $query ) {
 add_action( 'pre_get_comments', 'wp_ulike_manage_comment_sortable_columns_order', 10, 1 );
 
 
-function wp_ulike_panel_customization_section( $options ) {
-	if( wp_ulike_setting_repo::isCodeSnippetsDisabled() ){
-		return $options;
+/**
+ * Ignore developer keys in a settings save once the new option holds them.
+ *
+ * The old copy in wp_ulike_settings is left as it was, so a rollback still
+ * finds the values the site had at update time. Until the new option has a
+ * key, the incoming value is kept.
+ *
+ * @param array $values Settings payload.
+ * @return array
+ */
+function wp_ulike_strip_developer_from_settings( $values ) {
+	if ( ! is_array( $values ) || ! class_exists( 'wp_ulike_developer_options' ) ) {
+		return $values;
 	}
 
-	$options[] = array(
-		'id'    => 'php_snippets',
-		'type'  => 'code_editor',
-		'settings' => array(
-			'theme'  => 'mbo',
-			'mode'   => 'php',
-		),
-		'title'    => esc_html__('PHP Snippets','wp-ulike'),
-		'sanitize' => 'wp_ulike_html_entity_decode',
-		'desc'     => esc_html__('Add PHP snippets without opening and closing tags (&lt;?php and ?&gt;). If you have lots of snippets, you may want to consider using Code Snippets plugin.', 'wp-ulike')
-	);
-	$options[] = array(
-		'id'    => 'js_snippets',
-		'type'  => 'code_editor',
-		'settings' => array(
-			'theme'  => 'mbo',
-			'mode'   => 'javascript',
-		),
-		'title'    => esc_html__('Javascript Snippets','wp-ulike'),
-		'sanitize' => 'wp_ulike_html_entity_decode',
-		'desc'     => esc_html__('This code will output immediately before the closing &lt;/body&gt; tag in the document source. (Scripts must not be property wrapped in &lt;script&gt; tag.)', 'wp-ulike')
-	);
+	$stored = get_option( wp_ulike_developer_options::OPTION, array() );
 
-	return $options;
+	if ( ! is_array( $stored ) ) {
+		return $values;
+	}
+
+	$legacy = get_option( 'wp_ulike_settings', array() );
+	$legacy = is_array( $legacy ) ? $legacy : array();
+
+	foreach ( wp_ulike_developer_options::keys() as $key ) {
+		if ( ! array_key_exists( $key, $stored ) ) {
+			continue;
+		}
+		if ( array_key_exists( $key, $legacy ) ) {
+			$values[ $key ] = $legacy[ $key ];
+		} else {
+			unset( $values[ $key ] );
+		}
+	}
+
+	return $values;
 }
-add_filter( 'wp_ulike_panel_customization', 'wp_ulike_panel_customization_section', 10, 1 );
+add_filter( 'wp_ulike_optiwich_save_values', 'wp_ulike_strip_developer_from_settings', 30 );
+
+/**
+ * Show developer options inside the customizer form without writing them
+ * into the visual customizer option.
+ *
+ * @param array $values Customizer values.
+ * @return array
+ */
+function wp_ulike_merge_developer_customizer_values( $values ) {
+	if ( ! is_array( $values ) ) {
+		$values = array();
+	}
+
+	if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
+		return $values;
+	}
+
+	return array_merge( $values, wp_ulike_developer_options::form_values() );
+}
+add_filter( 'wp_ulike_optiwich_customizer_values', 'wp_ulike_merge_developer_customizer_values' );
 
 /**
  * Stores css content in custom css file when settings or customizer are saved
@@ -668,6 +695,7 @@ function wp_ulike_rebuild_custom_css_on_feature_change( $changed ) {
 add_action( 'wp_ulike_features_saved', 'wp_ulike_rebuild_custom_css_on_feature_change', 15, 1 );
 // Hook to save CSS file when customizer is saved
 add_action( 'wp_ulike_customizer_saved', 'wp_ulike_save_custom_css', 15, 1 );
+add_action( 'wp_ulike_backup_imported', 'wp_ulike_save_custom_css', 15 );
 
 /**
  * Clear CSS generator cache when customizer is saved

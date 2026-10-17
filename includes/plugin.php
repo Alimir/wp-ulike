@@ -45,6 +45,12 @@ class WpUlikeInit {
    * @return void
    */
   public function plugins_loaded(){
+    // Move custom CSS and snippets out of the old settings option before any
+    // front-end read or stylesheet rewrite. One automatic pass after update.
+    if ( class_exists( 'wp_ulike_developer_options' ) ) {
+      wp_ulike_developer_options::migrate();
+    }
+
     wp_ulike_maybe_backfill_first_activated_at();
 
     // Upgrades only where they can be observed/acted on — never on plain frontend.
