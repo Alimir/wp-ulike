@@ -64,6 +64,10 @@ if ( ! class_exists( 'wp_ulike_frontend_assets' ) ) {
 			} else {
 				// filemtime busts browser cache when custom.css is regenerated without a plugin version bump.
 				$custom_css_file = WP_ULIKE_CUSTOM_DIR . '/custom.css';
+				// An empty file means nothing custom is set. Skip the extra request.
+				if ( file_exists( $custom_css_file ) && 0 === filesize( $custom_css_file ) ) {
+					return;
+				}
 				$custom_css_ver  = ( is_string( $custom_css_file ) && file_exists( $custom_css_file ) )
 					? (string) filemtime( $custom_css_file )
 					: WP_ULIKE_VERSION;

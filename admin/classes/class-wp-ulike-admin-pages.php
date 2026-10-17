@@ -112,10 +112,10 @@ if ( ! class_exists( 'wp_ulike_admin_pages' ) ) {
 			);
 
 			if ( function_exists( 'wp_ulike_is_feature_enabled' ) ) {
-				foreach ( array( 'customize', 'statistics' ) as $optional_page ) {
-					if ( ! wp_ulike_is_feature_enabled( $optional_page ) ) {
-						unset( $submenus[ $optional_page ] );
-					}
+				// The Customize screen stays reachable when its switch is off: it
+				// is the only place for custom CSS and snippets, and shows just those.
+				if ( ! wp_ulike_is_feature_enabled( 'statistics' ) ) {
+					unset( $submenus['statistics'] );
 				}
 			}
 

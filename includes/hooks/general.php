@@ -503,16 +503,12 @@ if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 			return;
 		}
 
-		if ( class_exists( '\\ParseError' ) ) {
-			try {
-				eval( $php_snippets ); // phpcs:ignore
-			} catch( \ParseError $e ) { // phpcs:ignore
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( 'WP ULike PHP Snippet Error: ' . $e->getMessage() );
-				}
+		try {
+			eval( $php_snippets ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_eval
+		} catch ( \Throwable $e ) { // phpcs:ignore
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'WP ULike PHP Snippet Error: ' . $e->getMessage() );
 			}
-		} else {
-			eval( $php_snippets ); // phpcs:ignore
 		}
 	}
 	add_action( 'wp_ulike_loaded', 'wp_ulike_run_php_snippets' );

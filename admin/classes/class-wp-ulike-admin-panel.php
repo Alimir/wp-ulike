@@ -588,48 +588,6 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                 );
             }
 
-            /**
-             * Developer Tools (section id kept as `customization` for filter/backward compatibility).
-             */
-            $sections[] = array(
-                'id'    => 'customization',
-                'title' => esc_html__( 'Developer Tools','wp-ulike'),
-                'icon'  => 'code-bracket',
-            );
-
-            $sections[] = array(
-                'id'     => 'scripts',
-                'parent' => 'customization',
-                'title'  => esc_html__( 'Scripts','wp-ulike'),
-                'icon'   => 'document-text',
-                'fields' => apply_filters( 'wp_ulike_panel_customization', array(
-                    array(
-                        'id'    => 'custom_css',
-                        'type'  => 'code_editor',
-                        'settings' => array(
-                            'theme'  => 'mbo',
-                            'mode'   => 'css',
-                        ),
-                        'title' => esc_html__('Custom CSS','wp-ulike'),
-                        'desc'  => esc_html__('Add custom CSS to style the like button and related elements. This CSS will be loaded on all pages.', 'wp-ulike'),
-                    ),
-                    array(
-                        'id'           => 'custom_spinner',
-                        'type'         => 'upload',
-                        'title'        => esc_html__('Custom Spinner','wp-ulike'),
-                        'desc'         => esc_html__('Upload a custom loading animation image that appears while processing votes.', 'wp-ulike'),
-                        'library'      => 'image',
-                        'placeholder'  => 'http://'
-                    ),
-                    array(
-                        'id'    => 'enable_inline_custom_css',
-                        'type'  => 'switcher',
-                        'title' => esc_html__('Enable Inline Custom CSS', 'wp-ulike'),
-                        'desc'  => esc_html__('Output styles inline on the page instead of loading custom.css file. The CSS file will still be generated for debugging and inspection purposes.', 'wp-ulike')
-                    )
-                ) )
-            );
-
             do_action( 'wp_ulike_panel_sections_ended' );
 
             $sections = $this->sort_configuration_child_sections( $sections );

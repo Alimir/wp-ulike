@@ -195,11 +195,20 @@ if ( ! class_exists( 'wp_ulike_admin_assets' ) ) {
 					WP_ULIKE_VERSION
 				);
 
+				$optiwich_deps = array();
+
+				// WordPress CodeMirror. Optiwich turns it on for CSS, JavaScript, and PHP fields.
+				if ( preg_match( '/customize/i', $this->hook ) && function_exists( 'wp_enqueue_code_editor' ) ) {
+					if ( false !== wp_enqueue_code_editor( array( 'type' => 'text/css' ) ) ) {
+						$optiwich_deps[] = 'code-editor';
+					}
+				}
+
 				// Enqueue Optiwich JS
 				wp_enqueue_script(
 					'wp-ulike-optiwich',
 					WP_ULIKE_ADMIN_URL . '/includes/optiwich/optiwich.umd.js',
-					array(),
+					$optiwich_deps,
 					WP_ULIKE_VERSION,
 					true
 				);

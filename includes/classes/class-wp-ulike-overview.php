@@ -1455,6 +1455,10 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 		 * @return string
 		 */
 		public static function export_settings_json() {
+			if ( class_exists( 'wp_ulike_developer_options' ) ) {
+				wp_ulike_developer_options::migrate();
+			}
+
 			$settings  = get_option( 'wp_ulike_settings', array() );
 			$customize = get_option( 'wp_ulike_customize', array() );
 
@@ -1476,11 +1480,20 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				$customize = array();
 			}
 
+			$developer = array();
+
+			if ( class_exists( 'wp_ulike_developer_options' ) ) {
+				wp_ulike_developer_options::extract( $settings );
+				wp_ulike_developer_options::extract( $customize );
+				$developer = wp_ulike_developer_options::form_values();
+			}
+
 			$data = array(
 				'version'   => WP_ULIKE_VERSION,
 				'exported'  => gmdate( 'c' ),
 				'settings'  => $settings,
 				'customize' => $customize,
+				'developer' => $developer,
 			);
 
 			/**
@@ -1504,7 +1517,18 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				return new WP_Error( 'invalid_payload', __( 'Invalid settings file. Expected a JSON export from Help → Settings backup.', 'wp-ulike' ) );
 			}
 
-			$settings = $payload['settings'];
+			$settings  = $payload['settings'];
+			$developer = array();
+
+			if ( class_exists( 'wp_ulike_developer_options' ) ) {
+				$from_settings = wp_ulike_developer_options::extract( $settings );
+
+				if ( isset( $payload['developer'] ) && is_array( $payload['developer'] ) ) {
+					$developer = $payload['developer'];
+				} else {
+					$developer = is_array( $from_settings ) ? $from_settings : array();
+				}
+			}
 
 			if ( class_exists( 'wp_ulike_settings_api' ) ) {
 				$settings_api = new wp_ulike_settings_api();
@@ -1519,12 +1543,23 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 			if ( ! empty( $payload['customize'] ) && is_array( $payload['customize'] ) ) {
 				$customize = $payload['customize'];
 
+				if ( class_exists( 'wp_ulike_developer_options' ) && ! isset( $payload['developer'] ) ) {
+					$from_customize = wp_ulike_developer_options::extract( $customize );
+					if ( is_array( $from_customize ) ) {
+						$developer = array_merge( $from_customize, $developer );
+					}
+				}
+
 				if ( class_exists( 'wp_ulike_customizer_api' ) ) {
 					$customizer_api = new wp_ulike_customizer_api();
 					$customize      = $customizer_api->sanitize_import_values( $customize );
 				}
 
 				update_option( 'wp_ulike_customize', $customize );
+			}
+
+			if ( class_exists( 'wp_ulike_developer_options' ) ) {
+				wp_ulike_developer_options::replace( $developer );
 			}
 
 			/**

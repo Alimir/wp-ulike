@@ -1143,6 +1143,10 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'settings.unsaved_changes' => __( 'You have unsaved changes.', 'wp-ulike' ),
                 /* translators: Hint shown in footer when there are no unsaved changes */
                 'settings.save_hint' => __( 'Save when you are done editing these settings.', 'wp-ulike' ),
+                /* translators: Collapse a sidebar (settings menu, customizer list) to icons */
+                'settings.collapse_sidebar' => __( 'Collapse menu', 'wp-ulike' ),
+                /* translators: Expand a collapsed sidebar */
+                'settings.expand_sidebar' => __( 'Expand menu', 'wp-ulike' ),
 
                 // Settings — sidebar search (user-visible copy)
                 /* translators: Placeholder text in the settings sidebar search field */
@@ -1202,6 +1206,12 @@ if ( ! class_exists( 'wp_ulike_settings_api' ) ) {
                 'code_editor.preview' => __( 'Preview', 'wp-ulike' ),
                 /* translators: Message when there is no content to preview */
                 'code_editor.no_content' => __( 'No content to preview', 'wp-ulike' ),
+                /* translators: Language name shown above a CSS editor */
+                'code_editor.language_css' => __( 'CSS', 'wp-ulike' ),
+                /* translators: Language name shown above a JavaScript editor */
+                'code_editor.language_javascript' => __( 'JavaScript', 'wp-ulike' ),
+                /* translators: Language name shown above a PHP editor */
+                'code_editor.language_php' => __( 'PHP', 'wp-ulike' ),
 
                 // Select Field
                 /* translators: Placeholder text for multi-select dropdown */

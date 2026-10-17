@@ -169,7 +169,8 @@ function wp_ulike_tops_api() {
 
 	$type  = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
 	$limit = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : 10;
-	$data  = wp_ulike_stats::get_instance()->get_tops_api_data( $type, $limit );
+	$page  = isset( $_GET['page'] ) ? absint( $_GET['page'] ) : 1;
+	$data  = wp_ulike_stats::get_instance()->get_tops_api_data( $type, $limit, $page );
 
 	if ( null === $data ) {
 		wp_send_json_error( __( 'Invalid content type.', 'wp-ulike' ) );
@@ -417,6 +418,9 @@ function wp_ulike_localization_api(){
 		'Selected period' => __( 'Selected period', 'wp-ulike' ),
 		'Untitled'        => __( 'Untitled', 'wp-ulike' ),
 		'Unknown User'    => __( 'Unknown User', 'wp-ulike' ),
+
+		'Collapse menu' => __( 'Collapse menu', 'wp-ulike' ),
+		'Expand menu'   => __( 'Expand menu', 'wp-ulike' ),
 
 		// Pagination & logs
 		'Showing {{from}} to {{to}} of {{total}} results' => __( 'Showing {{from}} to {{to}} of {{total}} results', 'wp-ulike' ),

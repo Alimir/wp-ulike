@@ -178,7 +178,16 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             // Build pages structure from sections
             $pages = $this->build_pages_structure( $sections );
 
-            return array( 'pages' => apply_filters( 'wp_ulike_optiwich_customizer_pages', $pages ) );
+            $schema = array(
+                'pages' => apply_filters( 'wp_ulike_optiwich_customizer_pages', $pages ),
+            );
+
+            if ( class_exists( 'wp_ulike_developer_options' ) ) {
+                $schema['preview_styles'] = wp_ulike_developer_options::preview_styles();
+                $schema['preserve_empty'] = wp_ulike_developer_options::keys();
+            }
+
+            return $schema;
         }
 
         /**
@@ -257,6 +266,9 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                     if ( isset( $section['icon'] ) ) {
                         $page['icon'] = $section['icon'];
                     }
+                    if ( isset( $section['nav_placement'] ) ) {
+                        $page['nav_placement'] = $section['nav_placement'];
+                    }
 
                     // Process fields in this section
                     if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
@@ -276,10 +288,22 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                             if ( isset( $section['icon'] ) ) {
                                 $section_data['icon'] = $section['icon'];
                             }
+                            if ( isset( $section['nav_placement'] ) ) {
+                                $section_data['nav_placement'] = $section['nav_placement'];
+                            }
+                            if ( isset( $section['panel'] ) ) {
+                                $section_data['panel'] = $section['panel'];
+                            }
                             if ( isset( $section['field_browser'] ) ) {
                                 $section_data['field_browser'] = (bool) $section['field_browser'];
                                 // Optiwich reads field_browser on the page for single-section customizer views.
                                 $page['field_browser'] = (bool) $section['field_browser'];
+                            }
+                            if ( isset( $section['desc'] ) ) {
+                                $section_data['desc'] = $section['desc'];
+                            }
+                            if ( isset( $section['subtitle'] ) ) {
+                                $section_data['subtitle'] = $section['subtitle'];
                             }
 
                             $page['sections'][] = $section_data;
@@ -529,8 +553,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
                 if ( isset( $page['sections'] ) && is_array( $page['sections'] ) ) {
                     foreach ( $page['sections'] as &$section ) {
-                        if ( isset( $section['title'] ) ) {
-                            $section['title'] = html_entity_decode( $section['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                        foreach ( array( 'title', 'desc', 'subtitle' ) as $text_key ) {
+                            if ( isset( $section[ $text_key ] ) && is_string( $section[ $text_key ] ) ) {
+                                $section[ $text_key ] = html_entity_decode( $section[ $text_key ], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                            }
                         }
 
                         if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
@@ -550,6 +576,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
             foreach ( $fields as &$field ) {
                 if ( isset( $field['title'] ) ) {
                     $field['title'] = html_entity_decode( $field['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                }
+
+                if ( isset( $field['desc'] ) && is_string( $field['desc'] ) ) {
+                    $field['desc'] = html_entity_decode( $field['desc'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
                 }
 
                 // Form values must not keep HTML entities from esc_html__() defaults.
@@ -652,6 +682,17 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 return;
             }
 
+            // Code is stored in its own option. Pull it out before HTML
+            // sanitizing, which would destroy CSS, JavaScript, and PHP.
+            // A payload with none of these keys (customizer reset saves {})
+            // leaves the code store untouched.
+            if ( class_exists( 'wp_ulike_developer_options' ) ) {
+                $developer = wp_ulike_developer_options::extract( $values );
+                if ( is_array( $developer ) ) {
+                    wp_ulike_developer_options::save( $developer );
+                }
+            }
+
             // Security: Recursively sanitize all string values to prevent XSS
             $values = $this->sanitize_customizer_values( $values );
 
@@ -679,6 +720,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
          * @return mixed Sanitized values.
          */
         public function sanitize_import_values( $values ) {
+            if ( is_array( $values ) && class_exists( 'wp_ulike_developer_options' ) ) {
+                wp_ulike_developer_options::extract( $values );
+            }
+
             return $this->sanitize_customizer_values( $values );
         }
 
@@ -778,6 +823,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
             // Add base styles
             $html .= $this->get_preview_base_styles();
+
+            if ( class_exists( 'wp_ulike_developer_options' ) ) {
+                $html .= wp_ulike_developer_options::preview_style_tags();
+            }
 
             $body_class = 'ulp-customizer-preview';
             if ( is_rtl() ) {
@@ -917,6 +966,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
                 case 'toast':
                     $this->render_toast_preview();
+                    break;
+
+                case 'scripts':
+                    $this->render_button_preview();
                     break;
 
                 default:
