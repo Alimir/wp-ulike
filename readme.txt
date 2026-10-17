@@ -6,7 +6,7 @@ Tags: like button, like, voting, reactions, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 5.3.0
+Stable tag: 5.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -161,7 +161,7 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 
 == Changelog ==
 
-= 5.3.0 =
+= 5.2.5 =
 * Added: Custom CSS, the custom loading image, and PHP and JavaScript snippets now live in the Customizer, in a Settings section pinned at the bottom of the list, with a syntax-highlighted code editor and a live preview of the CSS and loading image.
 * Added: Statistics lists have page numbers, and the free Statistics now include Top Members.
 * Added: Collapse menu control on the Settings, Statistics, and Customizer sidebars, with hover submenus when collapsed.

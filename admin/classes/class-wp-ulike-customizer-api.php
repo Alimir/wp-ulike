@@ -553,16 +553,10 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
                 if ( isset( $page['sections'] ) && is_array( $page['sections'] ) ) {
                     foreach ( $page['sections'] as &$section ) {
-                        if ( isset( $section['title'] ) ) {
-                            $section['title'] = html_entity_decode( $section['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-                        }
-
-                        if ( isset( $section['desc'] ) && is_string( $section['desc'] ) ) {
-                            $section['desc'] = html_entity_decode( $section['desc'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-                        }
-
-                        if ( isset( $section['subtitle'] ) && is_string( $section['subtitle'] ) ) {
-                            $section['subtitle'] = html_entity_decode( $section['subtitle'], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                        foreach ( array( 'title', 'desc', 'subtitle' ) as $text_key ) {
+                            if ( isset( $section[ $text_key ] ) && is_string( $section[ $text_key ] ) ) {
+                                $section[ $text_key ] = html_entity_decode( $section[ $text_key ], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+                            }
                         }
 
                         if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {

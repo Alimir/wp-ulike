@@ -507,7 +507,7 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 		 */
 		protected static function filtered_fields( $fields ) {
 			$fields = apply_filters( 'wp_ulike_developer_section_fields', $fields );
-			$fields = apply_filters_deprecated( 'wp_ulike_panel_customization', array( $fields ), '5.3.0', 'wp_ulike_developer_section_fields' );
+			$fields = apply_filters_deprecated( 'wp_ulike_panel_customization', array( $fields ), '5.2.5', 'wp_ulike_developer_section_fields' );
 
 			return is_array( $fields ) ? $fields : array();
 		}

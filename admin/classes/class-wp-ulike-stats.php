@@ -529,7 +529,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			$posts = get_posts( apply_filters( 'wp_ulike_get_top_posts_query', array(
 				'post_type'      => $post_type,
-				'post_status'    => array( 'publish', 'inherit' ),
+				'post_status'    => array( 'publish', 'inherit', 'private' ),
 				'post__in'       => $ids,
 				'orderby'        => 'post__in',
 				'posts_per_page' => count( $ids ),
@@ -701,7 +701,7 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 
 			$posts = get_posts( apply_filters( 'wp_ulike_get_top_posts_query', array(
 				'post_type'      => $post_types,
-				'post_status'    => array( 'publish', 'inherit' ),
+				'post_status'    => array( 'publish', 'inherit', 'private' ),
 				'post__in'       => $ids,
 				'orderby'        => 'post__in',
 				'posts_per_page' => count( $ids ),
