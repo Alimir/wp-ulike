@@ -663,7 +663,8 @@ function wp_ulike_save_custom_css( $values = null ){
     $css_string = wp_ulike_get_custom_style();
     $css_string = wp_ulike_minify_css( $css_string );
 
-    if ( ! empty( $css_string ) && wp_ulike_put_contents_dir( $css_string, 'custom.css' ) ) {
+    // An empty string is written too, so CSS the user removed cannot linger in the file.
+    if ( wp_ulike_put_contents_dir( $css_string, 'custom.css' ) ) {
         // File created successfully - directory is writable
         update_option( 'wp_ulike_use_inline_custom_css' , 0 );
         return true;
