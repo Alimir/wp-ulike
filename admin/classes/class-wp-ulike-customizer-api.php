@@ -184,6 +184,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
 
             if ( class_exists( 'wp_ulike_developer_options' ) ) {
                 $schema['preview_styles'] = wp_ulike_developer_options::preview_styles();
+                $schema['preserve_empty'] = wp_ulike_developer_options::keys();
             }
 
             return $schema;
