@@ -138,10 +138,34 @@
 			img.loading = 'lazy';
 			wrap.appendChild( img );
 		}
-		var kind = el( 'span', 'wp-ulike-hub-panel__kind is-' + ( 'dislike' === item.kind ? 'dislike' : 'like' ) );
+		// Reaction emoji or star score when there is one, otherwise the heart.
+		var kind = item.badge
+			? el( 'span', 'wp-ulike-hub-panel__kind is-badge', item.badge )
+			: el( 'span', 'wp-ulike-hub-panel__kind is-' + ( 'dislike' === item.kind ? 'dislike' : 'like' ) );
 		kind.setAttribute( 'aria-hidden', 'true' );
 		wrap.appendChild( kind );
 		return wrap;
+	}
+
+	/**
+	 * Fill a translated pattern ("%1$s liked %2$s") with the person and the
+	 * item, in whatever order the language puts them.
+	 */
+	function sentence( item ) {
+		var text = el( 'span', 'wp-ulike-hub-panel__text' );
+		var parts = String( item.text || '' ).split( /(%[12]\$s)/ );
+
+		parts.forEach( function ( part ) {
+			if ( '%1$s' === part ) {
+				text.appendChild( el( 'strong', 'wp-ulike-hub-panel__name', item.name ) );
+			} else if ( '%2$s' === part ) {
+				text.appendChild( el( 'span', 'wp-ulike-hub-panel__target', item.title ) );
+			} else if ( part ) {
+				text.appendChild( document.createTextNode( part ) );
+			}
+		} );
+
+		return text;
 	}
 
 	function row( item ) {
@@ -154,11 +178,7 @@
 		link.appendChild( avatar( item ) );
 
 		var body = el( 'span', 'wp-ulike-hub-panel__body' );
-		var text = el( 'span', 'wp-ulike-hub-panel__text' );
-		text.appendChild( el( 'strong', 'wp-ulike-hub-panel__name', item.name ) );
-		text.appendChild( document.createTextNode( ' ' + item.verb + ' ' ) );
-		text.appendChild( el( 'span', 'wp-ulike-hub-panel__target', item.title ) );
-		body.appendChild( text );
+		body.appendChild( sentence( item ) );
 
 		var meta = el( 'span', 'wp-ulike-hub-panel__meta' );
 		if ( item.isNew ) {

@@ -37,6 +37,11 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		const ITEMS          = 6;
 
 		/**
+		 * Like totals worth celebrating.
+		 */
+		const MILESTONES = array( 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000 );
+
+		/**
 		 * @var bool|null Per-request answer of is_enabled().
 		 */
 		private static $enabled = null;
@@ -280,7 +285,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 						_n( '%s today', '%s today', $today, 'wp-ulike' ),
 						number_format_i18n( $today )
 					),
-					'logsUrl'  => self::statistics_url() . '#/history/posts',
+					'logsUrl'  => self::logs_url( isset( $items[0]['type'] ) ? $items[0]['type'] : 'post' ),
 					'statsUrl' => self::statistics_url(),
 				)
 			);
@@ -338,7 +343,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			 * Hints for the ULike Hub panel. Lower priority shows first; one at a time.
 			 *
 			 * Each hint: id (unique; change it to show a hint again), priority, icon
-			 * (tip, trend, star, warning), text, and an optional action with label and url.
+			 * (tip, trend, star, milestone, warning), text, and an optional action with label and url.
 			 *
 			 * @param array<int, array<string, mixed>> $hints Hints.
 			 */
@@ -463,6 +468,11 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				return $hints;
 			}
 
+			$milestone = self::get_milestone_hint();
+			if ( $milestone ) {
+				$hints[] = $milestone;
+			}
+
 			// Today's most liked post.
 			if ( function_exists( 'wp_ulike_get_popular_items_info' ) ) {
 				$top = wp_ulike_get_popular_items_info(
@@ -534,21 +544,80 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			return $hints;
 		}
 
+		/**
+		 * A post in the latest activity that just passed a like milestone.
+		 *
+		 * "Just" means its total is within 10% above the milestone, so an old
+		 * popular post does not announce a milestone it reached long ago.
+		 * Reads cached counters for at most a handful of posts.
+		 *
+		 * @return array<string, mixed>|null
+		 */
+		protected static function get_milestone_hint() {
+			if ( ! function_exists( 'wp_ulike_get_counter_value' ) ) {
+				return null;
+			}
+
+			$checked = array();
+			foreach ( self::get_recent_rows() as $row ) {
+				$post_id = (int) $row['item_id'];
+				if ( 'post' !== $row['item_type'] || isset( $checked[ $post_id ] ) ) {
+					continue;
+				}
+				$checked[ $post_id ] = true;
+
+				$count   = (int) wp_ulike_get_counter_value( $post_id, 'post', 'like', wp_ulike_setting_repo::isDistinct( 'post' ) );
+				$reached = 0;
+				foreach ( self::MILESTONES as $milestone ) {
+					if ( $count >= $milestone ) {
+						$reached = $milestone;
+					}
+				}
+
+				if ( ! $reached || $count > $reached * 1.1 ) {
+					continue;
+				}
+
+				$title = wp_strip_all_tags( get_the_title( $post_id ) );
+				if ( '' === $title ) {
+					continue;
+				}
+
+				return array(
+					'id'       => 'milestone_' . $post_id . '_' . $reached,
+					'priority' => 35,
+					'icon'     => 'milestone',
+					'text'     => sprintf(
+						/* translators: 1: post title, 2: number of likes */
+						__( '“%1$s” just passed %2$s likes. Nice work!', 'wp-ulike' ),
+						$title,
+						number_format_i18n( $reached )
+					),
+					'action'   => array(
+						'label' => __( 'View', 'wp-ulike' ),
+						'url'   => get_permalink( $post_id ),
+					),
+				);
+			}
+
+			return null;
+		}
+
 		/* ------------------------------------------------------------------
 		 * Latest activity
 		 * ------------------------------------------------------------------ */
 
 		/**
-		 * Latest engagements, ready to display. Cached until the next vote.
+		 * Latest raw engagement rows. Cached until the next vote.
 		 *
-		 * @return array<int, array<string, string>>
+		 * @return array<int, array<string, mixed>>
 		 */
-		public static function get_items() {
+		protected static function get_recent_rows() {
 			if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				return array();
 			}
 
-			$cache_key = 'hub_items_' . self::get_total();
+			$cache_key = 'hub_rows_' . self::get_total();
 			$rows      = wp_cache_get( $cache_key, self::CACHE_GROUP );
 
 			if ( false === $rows ) {
@@ -556,8 +625,18 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				wp_cache_set( $cache_key, $rows, self::CACHE_GROUP, 5 * MINUTE_IN_SECONDS );
 			}
 
+			return (array) $rows;
+		}
+
+		/**
+		 * Latest engagements, ready to display.
+		 *
+		 * @return array<int, array<string, string>>
+		 */
+		public static function get_items() {
 			$items = array();
-			foreach ( (array) $rows as $row ) {
+
+			foreach ( self::get_recent_rows() as $row ) {
 				$item = self::format_row( $row );
 				if ( $item ) {
 					$items[] = $item;
@@ -565,6 +644,23 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			}
 
 			return $items;
+		}
+
+		/**
+		 * Statistics → Logs tab for an item type.
+		 *
+		 * @param string $item_type post, comment, activity or topic.
+		 * @return string
+		 */
+		public static function logs_url( $item_type = 'post' ) {
+			$tabs = array(
+				'post'     => 'posts',
+				'comment'  => 'comments',
+				'activity' => 'activities',
+				'topic'    => 'topics',
+			);
+
+			return self::statistics_url() . '#/history/' . ( isset( $tabs[ $item_type ] ) ? $tabs[ $item_type ] : 'posts' );
 		}
 
 		/**
@@ -586,7 +682,8 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			return array(
 				'name'   => $user ? $user->display_name : __( 'A visitor', 'wp-ulike' ),
 				'avatar' => $user ? (string) get_avatar_url( $user->ID, array( 'size' => 64 ) ) : '',
-				'verb'   => self::verb( (string) $row['engagement_kind'], (string) $row['engagement_key'], $target['type'] ),
+				'text'   => self::sentence( (string) $row['engagement_kind'], (string) $row['engagement_key'], $target['type'] ),
+				'badge'  => self::badge( $row ),
 				'title'  => $target['title'],
 				'url'    => $target['url'],
 				'time'   => $timestamp && $timestamp < $now - MINUTE_IN_SECONDS
@@ -594,31 +691,84 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 					? sprintf( __( '%s ago', 'wp-ulike' ), human_time_diff( $timestamp, $now ) )
 					: __( 'just now', 'wp-ulike' ),
 				'kind'   => 'dislike' === $row['engagement_key'] ? 'dislike' : 'like',
+				'type'   => (string) $row['item_type'],
 			);
 		}
 
 		/**
+		 * Small badge on the avatar: the reaction emoji, or the star score.
+		 * Empty for likes and dislikes, which use the heart.
+		 *
+		 * @param array<string, mixed> $row Engagement row.
+		 * @return string
+		 */
+		protected static function badge( $row ) {
+			if ( 'star' === $row['engagement_kind'] && ! empty( $row['value'] ) ) {
+				return absint( $row['value'] ) . '★';
+			}
+
+			if ( 'emoji' === $row['engagement_kind'] ) {
+				return self::reaction_emoji( (string) $row['item_type'], (string) $row['engagement_key'] );
+			}
+
+			return '';
+		}
+
+		/**
+		 * Emoji for a Pro reaction slug, from Pro's own reaction settings.
+		 *
+		 * @param string $item_type Content type.
+		 * @param string $slug      Reaction slug.
+		 * @return string
+		 */
+		protected static function reaction_emoji( $item_type, $slug ) {
+			static $map = array();
+
+			if ( ! method_exists( 'WP_Ulike_Pro_Engagement_Settings', 'get_configured_reactions' ) ) {
+				return '';
+			}
+
+			if ( ! isset( $map[ $item_type ] ) ) {
+				$map[ $item_type ] = array();
+				foreach ( (array) WP_Ulike_Pro_Engagement_Settings::get_configured_reactions( $item_type ) as $reaction ) {
+					if ( ! empty( $reaction['slug'] ) && ! empty( $reaction['emoji'] ) ) {
+						$map[ $item_type ][ $reaction['slug'] ] = (string) $reaction['emoji'];
+					}
+				}
+			}
+
+			return isset( $map[ $item_type ][ $slug ] ) ? $map[ $item_type ][ $slug ] : '';
+		}
+
+		/**
+		 * Full sentence pattern, so each language can order the words its own way.
+		 * %1$s is the person, %2$s the item; the panel fills both in.
+		 *
 		 * @param string $kind vote, emoji or star.
 		 * @param string $key  like, dislike, or a reaction key.
 		 * @param string $type post, comment or activity.
 		 * @return string
 		 */
-		protected static function verb( $kind, $key, $type ) {
+		protected static function sentence( $kind, $key, $type ) {
 			$on_comment = 'comment' === $type;
 
 			if ( 'star' === $kind ) {
-				return $on_comment ? __( 'rated a comment on', 'wp-ulike' ) : __( 'rated', 'wp-ulike' );
+				/* translators: 1: person, 2: post title */
+				return $on_comment ? __( '%1$s rated a comment on %2$s', 'wp-ulike' ) : __( '%1$s rated %2$s', 'wp-ulike' );
 			}
 
 			if ( 'emoji' === $kind ) {
-				return $on_comment ? __( 'reacted to a comment on', 'wp-ulike' ) : __( 'reacted to', 'wp-ulike' );
+				/* translators: 1: person, 2: post title */
+				return $on_comment ? __( '%1$s reacted to a comment on %2$s', 'wp-ulike' ) : __( '%1$s reacted to %2$s', 'wp-ulike' );
 			}
 
 			if ( 'dislike' === $key ) {
-				return $on_comment ? __( 'disliked a comment on', 'wp-ulike' ) : __( 'disliked', 'wp-ulike' );
+				/* translators: 1: person, 2: post title */
+				return $on_comment ? __( '%1$s disliked a comment on %2$s', 'wp-ulike' ) : __( '%1$s disliked %2$s', 'wp-ulike' );
 			}
 
-			return $on_comment ? __( 'liked a comment on', 'wp-ulike' ) : __( 'liked', 'wp-ulike' );
+			/* translators: 1: person, 2: post title */
+			return $on_comment ? __( '%1$s liked a comment on %2$s', 'wp-ulike' ) : __( '%1$s liked %2$s', 'wp-ulike' );
 		}
 
 		/**

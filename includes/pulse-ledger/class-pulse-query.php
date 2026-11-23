@@ -958,7 +958,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * the cost stays flat however large the vote tables grow.
 		 *
 		 * @param int $limit Rows to return (1-20).
-		 * @return array<int, array{user_id:string,item_type:string,item_id:int,engagement_kind:string,engagement_key:string,date_time:string}>
+		 * @return array<int, array{user_id:string,item_type:string,item_id:int,engagement_kind:string,engagement_key:string,value:int|null,date_time:string}>
 		 */
 		public static function recent_engagements( $limit = 6 ) {
 			global $wpdb;
@@ -975,7 +975,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					$t   = esc_sql( $source['table'] );
 					$col = esc_sql( $source['column'] );
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table and column come from the registry.
-					$found = $wpdb->get_results( $wpdb->prepare( "SELECT CAST(user_id AS CHAR) AS user_id, %s AS item_type, `{$col}` AS item_id, 'vote' AS engagement_kind, status AS engagement_key, date_time FROM `{$t}` WHERE status IN ('like','dislike') ORDER BY id DESC LIMIT %d", $source['item_type'], $limit ), ARRAY_A );
+					$found = $wpdb->get_results( $wpdb->prepare( "SELECT CAST(user_id AS CHAR) AS user_id, %s AS item_type, `{$col}` AS item_id, 'vote' AS engagement_kind, status AS engagement_key, NULL AS value, date_time FROM `{$t}` WHERE status IN ('like','dislike') ORDER BY id DESC LIMIT %d", $source['item_type'], $limit ), ARRAY_A );
 					if ( $found ) {
 						$rows = array_merge( $rows, $found );
 					}
@@ -985,7 +985,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			if ( 'pulse' === $mode || 'merged' === $mode ) {
 				$pulse = esc_sql( WP_Ulike_Pulse_Schema::table() );
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from the schema class.
-				$found = $wpdb->get_results( $wpdb->prepare( "SELECT CAST(user_id AS CHAR) AS user_id, item_type, item_id, engagement_kind, engagement_key, date_time FROM `{$pulse}` WHERE status = 'active' ORDER BY id DESC LIMIT %d", $limit ), ARRAY_A );
+				$found = $wpdb->get_results( $wpdb->prepare( "SELECT CAST(user_id AS CHAR) AS user_id, item_type, item_id, engagement_kind, engagement_key, value, date_time FROM `{$pulse}` WHERE status = 'active' ORDER BY id DESC LIMIT %d", $limit ), ARRAY_A );
 				if ( $found ) {
 					$rows = array_merge( $rows, $found );
 				}

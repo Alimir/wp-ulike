@@ -19,23 +19,29 @@
 		gap: 4px;
 	}
 
+	// WP ULike logo, drawn as a mask so it takes the admin bar's colors.
 	.wp-ulike-hub__icon {
 		position: relative;
 		float: none;
-		margin-right: 0;
+		margin: 0;
 		top: 0;
 
 		&::before {
-			content: "\f487"; // dashicons-heart
-			top: 2px;
-			color: rgba(240, 246, 252, 0.6);
-			transition: color 0.15s ease;
+			content: "";
+			display: inline-block;
+			top: 3px;
+			width: 20px;
+			height: 20px;
+			background-color: rgba(240, 246, 252, 0.6);
+			-webkit-mask: url("../../../assets/img/menu-icon.svg") center / contain no-repeat;
+			mask: url("../../../assets/img/menu-icon.svg") center / contain no-repeat;
+			transition: background-color 0.15s ease;
 		}
 	}
 
 	&.has-new .wp-ulike-hub__icon::before,
 	&:hover .wp-ulike-hub__icon::before {
-		color: var(--hub-red);
+		background-color: var(--hub-red);
 	}
 
 	.wp-ulike-hub__count {
@@ -129,7 +135,8 @@
 		display: flex;
 		gap: 10px;
 		margin: 2px 12px 6px;
-		padding: 12px 34px 12px 12px;
+		padding: 12px;
+		padding-inline-end: 34px;
 		border-radius: 10px;
 		background: var(--hub-surface-hover);
 		border: 1px solid var(--hub-line);
@@ -162,6 +169,12 @@
 		content: "\f238"; // chart-line
 	}
 
+	.is-milestone .wp-ulike-hub-hint__icon::before {
+		content: "\f313"; // awards
+		background: rgba(240, 195, 60, 0.16);
+		color: #f0c33c;
+	}
+
 	.is-star .wp-ulike-hub-hint__icon::before {
 		content: "\f155"; // star-filled
 	}
@@ -174,6 +187,18 @@
 
 	.wp-ulike-hub-hint__body {
 		min-width: 0;
+	}
+
+	// Each sentence takes the direction of its own text, so an English tip or
+	// title reads correctly on a right-to-left site (and the other way round).
+	.wp-ulike-hub-hint__text,
+	.wp-ulike-hub-panel__text {
+		unicode-bidi: plaintext;
+	}
+
+	.wp-ulike-hub-panel__name,
+	.wp-ulike-hub-panel__target {
+		unicode-bidi: isolate;
 	}
 
 	.wp-ulike-hub-hint__text {
@@ -194,6 +219,10 @@
 
 		&::after {
 			content: " →";
+		}
+
+		[dir="rtl"] &::after {
+			content: " ←";
 		}
 
 		&:hover,
@@ -324,6 +353,25 @@
 		}
 	}
 
+	.wp-ulike-hub-panel__kind.is-badge {
+		width: auto;
+		min-width: 16px;
+		height: 18px;
+		padding: 0 3px;
+		border-radius: 9px;
+		background: var(--hub-bg);
+		color: #f0c33c;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 14px;
+		text-align: center;
+		white-space: nowrap;
+
+		&::before {
+			content: none;
+		}
+	}
+
 	.wp-ulike-hub-panel__body {
 		display: flex;
 		flex-direction: column;
@@ -415,11 +463,14 @@
 	}
 
 	.wp-ulike-hub-panel__empty-icon::before {
-		content: "\f487";
+		content: "";
 		display: inline-block;
-		font: normal 28px/1 dashicons;
-		color: var(--hub-red);
-		opacity: 0.8;
+		width: 30px;
+		height: 30px;
+		background-color: var(--hub-red);
+		opacity: 0.85;
+		-webkit-mask: url("../../../assets/img/menu-icon.svg") center / contain no-repeat;
+		mask: url("../../../assets/img/menu-icon.svg") center / contain no-repeat;
 	}
 
 	// Footer -------------------------------------------------------------
@@ -474,7 +525,9 @@
 
 		.wp-ulike-hub__icon::before {
 			top: 0;
-			font-size: 30px;
+			width: 28px;
+			height: 28px;
+			margin-top: 9px;
 		}
 
 		// A sheet under the bar, so it never runs off the screen.
