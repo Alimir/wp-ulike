@@ -171,7 +171,7 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 
 WP ULike works fully offline and stores all votes in your own database. It contacts two external services, each only when you choose to:
 
-**Deactivation feedback (wpulike.com).** When you deactivate the plugin, a short optional survey appears. Nothing is sent if you click "Skip & deactivate". If you click "Submit & deactivate", the plugin sends the reason you picked, any note you typed, your site URL, the WP ULike, WordPress and PHP versions, and how many days the plugin was active to `https://wpulike.com/api/audit/v1/deactivation-feedback`. It is used only to improve the plugin. [Terms of service](https://wpulike.com/terms/) | [Privacy policy](https://wpulike.com/privacy-policy/)
+**Deactivation feedback (wpulike.com).** Deactivating shows an optional survey. Only if you click "Submit & deactivate" does it send your reason and note, site URL, WP ULike, WordPress and PHP versions, and days active, used only to improve the plugin. [Terms of service](https://wpulike.com/terms/) | [Privacy policy](https://wpulike.com/privacy-policy/)
 
 **Support chat (HelpWich).** WP ULike's admin pages show a chat button. Nothing loads until you click it; after that, the HelpWich chat widget loads on WP ULike admin pages for your account and receives only what you type or send in the chat. It never loads on the front end or for visitors. [Terms of service](https://helpwich.com/terms) | [Privacy policy](https://helpwich.com/privacy)
 
