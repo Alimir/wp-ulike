@@ -196,7 +196,8 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 			// Soft gate only when submitting feedback (Skip bypasses this entirely).
 			// not_working: note OR location. other: note. found_better stays optional.
 			if ( ! empty( $reason['require_note'] ) ) {
-				$has_signal = ( '' !== $details ) || ( 'not_working' === $reason_key && ! empty( $locations ) );
+				// Same 4-character minimum as the dialog; "j" or "122" teaches nothing.
+				$has_signal = ( mb_strlen( $details ) >= 4 ) || ( 'not_working' === $reason_key && ! empty( $locations ) );
 				if ( ! $has_signal ) {
 					wp_send_json_error(
 						array(
@@ -283,10 +284,13 @@ if ( ! class_exists( 'WP_Ulike_Deactivation_Feedback' ) ) {
 		private static function send_to_api( $reason_key, $details ) {
 			$body = self::build_api_payload( $reason_key, $details );
 
+			// Fire and forget: the browser waits for this request before it
+			// deactivates, so a slow feedback API must not hold the user up.
 			wp_remote_post(
 				self::get_api_url(),
 				array(
-					'timeout' => 15,
+					'timeout'  => 3,
+					'blocking' => false,
 					'headers' => array(
 						'Content-Type' => 'application/json; charset=utf-8',
 					),
