@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-23T09:10:12+00:00\n"
+"POT-Creation-Date: 2026-11-23T10:36:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wp-ulike\n"
@@ -1849,13 +1849,13 @@ msgid "Metrics Dashboard"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:92
-#: includes/functions/general.php:459
+#: includes/functions/general.php:463
 msgid "Customize"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-pages.php:99
 #: includes/classes/class-wp-ulike-hub.php:301
-#: includes/functions/general.php:452
+#: includes/functions/general.php:456
 #: includes/plugin.php:201
 msgid "Statistics"
 msgstr ""
@@ -2036,7 +2036,7 @@ msgid "ULike Hub"
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:179
-msgid "A heart in the admin bar with your new likes, the latest activity, and a helpful tip. Only people who can see Statistics see it."
+msgid "Adds the WP ULike icon to the admin bar, with a count of new votes, the latest activity, and a helpful tip. Only people who can see Statistics see it."
 msgstr ""
 
 #: admin/classes/class-wp-ulike-admin-panel.php:185
@@ -3904,7 +3904,7 @@ msgid "Click again whenever to remove the like."
 msgstr ""
 
 #: admin/includes/templates/setup-wizard-dialog.php:144
-#: includes/functions/general.php:1298
+#: includes/functions/general.php:1302
 msgid "Unlike once, then lock"
 msgstr ""
 
@@ -5172,55 +5172,55 @@ msgstr ""
 msgid "Table info is empty."
 msgstr ""
 
-#: includes/functions/general.php:453
+#: includes/functions/general.php:457
 msgid "Charts, top content, and engagement reports."
 msgstr ""
 
-#: includes/functions/general.php:456
+#: includes/functions/general.php:460
 msgid "Turning Statistics off hides the dashboard. Votes keep working and existing reports stay. Turn it off?"
 msgstr ""
 
-#: includes/functions/general.php:460
+#: includes/functions/general.php:464
 msgid "Visual designer for button styles, colors, and templates, plus custom CSS and snippets. While off, designer styling is not applied. Custom CSS and snippets still work and stay editable there."
 msgstr ""
 
-#: includes/functions/general.php:465
+#: includes/functions/general.php:469
 msgid "Turning Customize off also stops its styling being applied, so buttons go back to their default look on the front end. Your saved design is kept and returns when you switch it back on. Turn it off?"
 msgstr ""
 
-#: includes/functions/general.php:1281
+#: includes/functions/general.php:1285
 msgid "Unlimited votes"
 msgstr ""
 
-#: includes/functions/general.php:1282
+#: includes/functions/general.php:1286
 msgid "One vote per browser (cookie)"
 msgstr ""
 
-#: includes/functions/general.php:1283
+#: includes/functions/general.php:1287
 msgid "One vote per person (user/IP)"
 msgstr ""
 
-#: includes/functions/general.php:1284
+#: includes/functions/general.php:1288
 msgid "Strict (user/IP + cookie)"
 msgstr ""
 
-#: includes/functions/general.php:1297
+#: includes/functions/general.php:1301
 msgid "Allow unlike"
 msgstr ""
 
-#: includes/functions/general.php:1299
+#: includes/functions/general.php:1303
 msgid "Lock the vote"
 msgstr ""
 
-#: includes/functions/general.php:1326
+#: includes/functions/general.php:1330
 msgid "Top of Content"
 msgstr ""
 
-#: includes/functions/general.php:1327
+#: includes/functions/general.php:1331
 msgid "Bottom of Content"
 msgstr ""
 
-#: includes/functions/general.php:1328
+#: includes/functions/general.php:1332
 msgid "Top and Bottom"
 msgstr ""
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * ULike Hub: a heart in the admin bar with what matters right now.
+ * ULike Hub: the WP ULike icon in the admin bar with what matters right now.
  *
  * The panel shows one useful hint (a setup fix, today's top post, the weekly
  * trend) and the latest likes. Built so it costs nothing on busy sites:
