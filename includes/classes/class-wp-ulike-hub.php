@@ -42,6 +42,11 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		const SCAN_ROWS      = 60;
 
 		/**
+		 * A milestone tip needs a vote on the post within this window.
+		 */
+		const MILESTONE_FRESH = WEEK_IN_SECONDS;
+
+		/**
 		 * Like totals worth celebrating.
 		 */
 		const MILESTONES = array( 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000 );
@@ -540,7 +545,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 
 				if ( ! empty( $top[0]->item_ID ) && ! empty( $top[0]->counter ) && (int) $top[0]->counter >= 3 ) {
 					$post_id = (int) $top[0]->item_ID;
-					$title   = wp_strip_all_tags( get_the_title( $post_id ) );
+					$title   = self::plain_text( get_the_title( $post_id ) );
 
 					if ( '' !== $title ) {
 						$hints[] = array(
@@ -623,6 +628,13 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				}
 				$checked[ $post_id ] = true;
 
+				// Rows are newest first, so this is the post's latest vote. On a quiet
+				// site that can be years old: only celebrate fresh activity.
+				$voted_at = (int) mysql2date( 'U', (string) $row['date_time'] );
+				if ( ! $voted_at || $voted_at < (int) current_time( 'timestamp' ) - self::MILESTONE_FRESH ) {
+					continue;
+				}
+
 				$count   = (int) wp_ulike_get_counter_value( $post_id, 'post', 'like', wp_ulike_setting_repo::isDistinct( 'post' ) );
 				$reached = 0;
 				foreach ( self::MILESTONES as $milestone ) {
@@ -635,7 +647,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 					continue;
 				}
 
-				$title = wp_strip_all_tags( get_the_title( $post_id ) );
+				$title = self::plain_text( get_the_title( $post_id ) );
 				if ( '' === $title ) {
 					continue;
 				}
