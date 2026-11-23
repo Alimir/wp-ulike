@@ -104,6 +104,7 @@
 	}
 
 	&.wp-ulike-btn-is-loading {
+		position: relative;
 		opacity: 0.75;
 		cursor: wait;
 		pointer-events: none;
@@ -115,10 +116,14 @@
 		&::after {
 			content: '';
 			position: absolute;
+			top: 50%;
+			left: 50%;
+			box-sizing: border-box;
 			width: 14px;
 			height: 14px;
-			border: 2px solid transparent;
-			border-top-color: currentColor;
+			margin: -7px 0 0 -7px;
+			border: 2px solid currentColor;
+			border-right-color: transparent;
 			border-radius: 50%;
 			animation: wp-ulike-spin 0.8s linear infinite;
 		}

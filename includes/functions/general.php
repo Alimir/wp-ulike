@@ -165,6 +165,77 @@ if ( ! function_exists( 'wp_ulike_get_likers_template_for_type' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
+	/**
+	 * Whether the current visitor may see an item, and so the voters on it.
+	 *
+	 * Item IDs come straight from requests, so drafts, private posts,
+	 * unapproved comments, and hidden activity must not resolve.
+	 *
+	 * @param int    $item_ID   Item ID.
+	 * @param string $item_type post, comment, activity, topic, or setting slug.
+	 * @return bool
+	 */
+	function wp_ulike_is_item_viewable( $item_ID, $item_type ) {
+		$item_ID   = absint( $item_ID );
+		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
+
+		switch ( $item_type ) {
+			case WP_Ulike_Pulse_Registry::ITEM_COMMENT:
+				$comment    = $item_ID ? get_comment( $item_ID ) : null;
+				$is_visible = $comment
+					&& ( '1' === (string) $comment->comment_approved || current_user_can( 'edit_comment', $comment->comment_ID ) )
+					&& wp_ulike_is_post_viewable( $comment->comment_post_ID );
+				break;
+
+			case WP_Ulike_Pulse_Registry::ITEM_ACTIVITY:
+				$is_visible = false;
+				if ( $item_ID && class_exists( 'BP_Activity_Activity' ) ) {
+					$activity = new BP_Activity_Activity( $item_ID );
+					if ( ! empty( $activity->id ) && empty( $activity->is_spam ) ) {
+						$is_visible = function_exists( 'bp_activity_user_can_read' )
+							? bp_activity_user_can_read( $activity, get_current_user_id() )
+							: empty( $activity->hide_sitewide );
+					}
+				}
+				break;
+
+			case WP_Ulike_Pulse_Registry::ITEM_TOPIC:
+				$is_visible = wp_ulike_is_post_viewable( $item_ID );
+				if ( $is_visible && function_exists( 'bbp_user_can_view_forum' ) ) {
+					$forum_ID   = function_exists( 'bbp_is_reply' ) && bbp_is_reply( $item_ID )
+						? bbp_get_reply_forum_id( $item_ID )
+						: bbp_get_topic_forum_id( $item_ID );
+					$is_visible = empty( $forum_ID ) || bbp_user_can_view_forum( array( 'forum_id' => $forum_ID ) );
+				}
+				break;
+
+			default:
+				$is_visible = wp_ulike_is_post_viewable( $item_ID );
+		}
+
+		return (bool) apply_filters( 'wp_ulike_is_item_viewable', $is_visible, $item_ID, $item_type );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
+	/**
+	 * Whether the current visitor may read a post's content.
+	 *
+	 * @param int $post_ID Post ID.
+	 * @return bool
+	 */
+	function wp_ulike_is_post_viewable( $post_ID ) {
+		$post = $post_ID ? get_post( $post_ID ) : null;
+
+		if ( ! $post || post_password_required( $post ) ) {
+			return false;
+		}
+
+		return is_post_publicly_viewable( $post ) || current_user_can( 'read_post', $post->ID );
+	}
+}
+
 if( ! function_exists( 'is_wp_ulike' ) ){
 	/**
 	 * Check wp ulike callback
@@ -196,6 +267,14 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 		if( ! empty( $options ) ){
 			foreach ( $options as $key => $value ) {
 				if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
+					// A static front page is singular too. When Home is shown, posts
+					// listed on it get buttons despite a hidden Singular. The page's
+					// own content still follows Singular, as it did before.
+					// Asset loading ($force_type) keeps its plain context rules.
+					if ( ! $force_type && 'single' === $value && ! empty( $parsed_args['is_home'] ) && ! in_array( 'home', $options, true ) && is_front_page() && ! is_home() && (int) get_the_ID() !== (int) get_queried_object_id() ) {
+						continue;
+					}
+
 					// Singular is hidden, but listed post types are exceptions (legacy "Always Show On").
 					if( $value === 'single' && ! $force_type ){
 						$post_types = wp_ulike_setting_repo::getPostTypesFilterList();
@@ -558,6 +637,10 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 
 		if( empty( $options ) || empty( $item_ID ) ){
 			return;
+		}
+
+		if( ! wp_ulike_is_item_viewable( $item_ID, wp_ulike_get_type_by_table( $table_name ) ) ){
+			return '';
 		}
 
 		//Main data

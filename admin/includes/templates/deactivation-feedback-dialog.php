@@ -26,7 +26,7 @@ $total_votes   = function_exists( 'wp_ulike_count_all_logs' ) ? (int) wp_ulike_c
 		<?php endif; ?>
 		<form id="wp-ulike-deactivate-feedback-dialog-form" class="wp-ulike-deactivate-feedback-form">
 			<fieldset>
-				<legend class="screen-reader-text"><?php echo esc_html( 'Deactivation reason' ); ?></legend>
+				<legend class="screen-reader-text"><?php esc_html_e( 'Deactivation reason', 'wp-ulike' ); ?></legend>
 				<p class="wp-ulike-deactivate-feedback-reason-error" hidden role="alert">
 					<?php esc_html_e( 'Please select a reason before submitting.', 'wp-ulike' ); ?>
 				</p>
@@ -50,7 +50,7 @@ $total_votes   = function_exists( 'wp_ulike_count_all_logs' ) ? (int) wp_ulike_c
 							<p class="wp-ulike-deactivate-feedback-chips__label">
 								<?php esc_html_e( 'Where did it fail?', 'wp-ulike' ); ?>
 							</p>
-							<div class="wp-ulike-deactivate-feedback-chips__list" role="group" aria-label="<?php echo esc_attr( 'Where did it fail?' ); ?>">
+							<div class="wp-ulike-deactivate-feedback-chips__list" role="group" aria-label="<?php esc_attr_e( 'Where did it fail?', 'wp-ulike' ); ?>">
 								<?php foreach ( $location_chips as $chip_key => $chip_label ) : ?>
 									<label class="wp-ulike-deactivate-feedback-chip">
 										<input type="checkbox" name="locations[]" value="<?php echo esc_attr( $chip_key ); ?>" />
@@ -77,7 +77,7 @@ $total_votes   = function_exists( 'wp_ulike_count_all_logs' ) ? (int) wp_ulike_c
 							echo wp_kses_post(
 								sprintf(
 									/* translators: %s: Overview admin page link */
-									__( 'Buttons appear on single posts by default—not on the homepage. %s for a quick setup checklist.', 'wp-ulike' ),
+									__( 'Buttons appear on single posts by default—not on the homepage. Check Home, Archives and Categories under Content Types → Show Buttons On, or add the ULike Button block inside your Query Loop. %s for a quick setup checklist.', 'wp-ulike' ),
 									'<a href="' . esc_url( class_exists( 'WP_Ulike_Overview' ) ? WP_Ulike_Overview::get_about_url() : admin_url( 'admin.php?page=wp-ulike-about' ) ) . '">' . esc_html__( 'Open Overview', 'wp-ulike' ) . '</a>'
 								)
 							);

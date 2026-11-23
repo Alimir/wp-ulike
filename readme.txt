@@ -2,15 +2,15 @@
 Contributors: alimir
 Donate link: https://wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme
 Author: TechnoWich
-Tags: like button, like, voting, reactions, popular posts
+Tags: like button, like, voting, engagement, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 5.2.5
+Stable tag: 5.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-One-click like buttons your visitors actually use, plus a built-in analytics dashboard that shows what your audience loves. No vote limits.
+Add like buttons to posts, comments and WooCommerce products, then see what your readers love in a built-in stats dashboard. Free, no vote limits.
 
 == Description ==
 
@@ -62,6 +62,10 @@ Regular updates, WordPress coding standards, and security best practices (nonces
 
 Pro is optional. It extends the free plugin when you need more depth or design. Both plugins stay installed and active.
 
+Watch the 1-minute tour of what Pro adds:
+
+https://www.youtube.com/watch?v=YAB-_dcvxLA
+
 * **Swap likes for emoji reactions or 5-star ratings** and pick the reaction style that fits each page
 * **See who liked each post** and how engaged readers really are (top fans, engagement vs page views)
 * **Know what to publish next** with content intelligence, heatmaps, and top-country reports
@@ -90,15 +94,19 @@ Need profiles, share buttons, bulk vote tools, Elementor widgets, or REST API? P
 1. **From WordPress admin:** Plugins → Add New, search "WP ULike", Install, Activate.
 2. **Manual:** unzip the download, upload to `wp-content/plugins/`, activate from Plugins.
 
-Works out of the box. [Documentation](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) | Support
+Works out of the box. [Documentation](https://docs.wpulike.com/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) | [Support forum](https://wordpress.org/support/plugin/wp-ulike/)
 
 == Screenshots ==
 
-1. **Statistics Overview:** totals, today's activity, week-over-week growth, and helpful tips on one screen.
+1. **Likes on posts and comments:** one click, no sign-up, and the count updates instantly.
 
-2. **Live customizer:** pick a template and change colors, spacing, and icons with real-time preview.
+2. **Top List block:** show your most liked posts on any page with the block or the `[wp_ulike_top]` shortcode.
 
-3. **Content settings:** turn auto-display on for posts, comments, WooCommerce, BuddyPress, and bbPress.
+3. **Statistics Overview:** totals, trends, top content, and the best time to publish, inside WordPress.
+
+4. **Live customizer:** pick a button style and change colors, icons, and spacing with a real-time preview.
+
+5. **Content settings:** choose where buttons appear on posts, comments, WooCommerce, BuddyPress, and bbPress.
 
 == Frequently Asked Questions ==
 
@@ -115,7 +123,7 @@ Yes. Compatible with major caching plugins (WP Rocket, W3 Total Cache, LiteSpeed
 No. The like button loads minimal code on your pages, and vote responses are lightweight and optimized for speed. The frontend uses vanilla JavaScript with no jQuery. Statistics load in WordPress admin only and use smart caching as your site grows.
 
 = Is WP ULike secure? =
-We follow WordPress security practices: nonces, hardened AJAX, optional IP anonymization. Details at wpulike.com/security.
+We follow WordPress security practices: nonces, hardened AJAX, optional IP anonymization. Found a security issue? Please report it privately through [wpulike.com/support](https://wpulike.com/support/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) rather than the public forum.
 
 = Can I use WP ULike on a multisite setup? =
 Yes. Each site gets its own settings and stats.
@@ -159,7 +167,22 @@ Free includes like buttons, a full statistics dashboard (Overview, reports, when
 = If I buy Pro, do I lose my existing likes? =
 No. Pro installs beside the free plugin and reads the same data. Your existing votes, counts, and settings carry over untouched. Pro also comes with a 14-day money-back guarantee.
 
+== External services ==
+
+WP ULike works fully offline and stores all votes in your own database. It contacts two external services, each only when you choose to:
+
+**Deactivation feedback (wpulike.com).** Deactivating shows an optional survey. Only if you click "Submit & deactivate" does it send your reason and note, site URL, WP ULike, WordPress and PHP versions, and days active, used only to improve the plugin. [Terms of service](https://wpulike.com/terms/) | [Privacy policy](https://wpulike.com/privacy-policy/)
+
+**Support chat (HelpWich).** WP ULike's admin pages show a chat button. Nothing loads until you click it; after that, the HelpWich chat widget loads on WP ULike admin pages for your account and receives only what you type or send in the chat. It never loads on the front end or for visitors. [Terms of service](https://helpwich.com/terms) | [Privacy policy](https://helpwich.com/privacy)
+
 == Changelog ==
+
+= 5.2.6 =
+* Added: ULike Hub, a heart in the admin bar with your new likes, the latest activity grouped by post ("Sara and 12 others liked…"), and a helpful tip. Each person sees their own new likes (never their own votes), and the count updates live on admin screens. Turn it off in Settings → General.
+* Improved: Block theme post lists that show only a title, image, or date (like the Twenty Twenty-Five photo and grid blogs) now get the automatic like button on the homepage, archives, and search.
+* Improved: Choosing Home now also covers the posts listed on a static front page.
+* Improved: Dismissed admin notices stay dismissed, even after a cleanup plugin clears transients.
+* Fixed: Likers lists no longer show voters on drafts, private or password-protected posts, unapproved comments, or hidden activity to visitors who cannot see that item. Thanks to Nguyen Vu Thanh Danh (ngvuthdanh) for reporting it.
 
 = 5.2.5 =
 * Added: Custom CSS, the custom loading image, and PHP and JavaScript snippets now live in the Customizer, in a Settings section pinned at the bottom of the list, with a syntax-highlighted code editor and a live preview of the CSS and loading image.
@@ -294,6 +317,9 @@ No. Pro installs beside the free plugin and reads the same data. Your existing v
 * Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
+= 5.2.6 =
+On block themes, post lists with Home or Archives turned on now show like buttons even without an excerpt. Purge your page cache after updating if you use a full-page cache plugin.
+
 = 5.2.1 =
 A new faster like-storage engine (Pulse) is included. Existing sites keep working as before. Your counts, buttons, and stats do not change. When ready, open **WP ULike → Storage Upgrade** to move old records to Pulse in the background. Purge your site cache after updating if you use a full-page cache plugin.
 

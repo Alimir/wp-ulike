@@ -255,7 +255,8 @@
 			// Soft gate: not_working accepts note OR location; other needs a note.
 			// Skip always deactivates with zero friction.
 			if ( requireNote ) {
-				var hasSignal = details !== '' || ( reason === 'not_working' && locations.length > 0 );
+				// A note shorter than 4 characters ("j", "122") tells us nothing.
+				var hasSignal = details.length >= 4 || ( reason === 'not_working' && locations.length > 0 );
 				if ( ! hasSignal ) {
 					if ( noteError ) {
 						noteError.textContent =

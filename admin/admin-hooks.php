@@ -59,20 +59,6 @@ function wp_ulike_remove_photo_class($avatar) {
 add_filter('get_avatar', 'wp_ulike_remove_photo_class');
 
 /**
- * On user logged out
- *
- * @return void
- */
-function wp_ulike_on_logout_hook() {
-	if ( ! is_super_admin() ) {
-		return;
-	}
-	// Refresh new votes
-	WP_Ulike_Query_Cache::reset_admin_new_votes();
-}
-add_action('wp_logout', 'wp_ulike_on_logout_hook');
-
-/**
  *  Undocumented function
  *
  * @since 3.6.0
@@ -147,26 +133,29 @@ function wp_ulike_notice_manager(){
 	$notice_list = [];
 
 	// Show review notice once the site has meaningful engagement (likes only).
-	if ( ! wp_ulike_get_transient( 'wp-ulike-notice-wp_ulike_leave_a_review' ) ) {
+	if ( ! wp_ulike_is_notice_dismissed( 'wp_ulike_leave_a_review' ) ) {
 		$count_logs = wp_ulike_count_all_logs();
 
 		if ( $count_logs >= 25 ) {
 			$notice_list['wp_ulike_leave_a_review'] = new wp_ulike_notices(
 				array(
-					'id'          => 'wp_ulike_leave_a_review',
-					'title'       => esc_html__( 'Congrats!', 'wp-ulike' ),
-					'description' => sprintf(
+					'id'            => 'wp_ulike_leave_a_review',
+					'title'         => esc_html__( 'Congrats!', 'wp-ulike' ),
+					'description'   => sprintf(
 						/* translators: %s: total like count */
 						esc_html__( 'You\'ve logged %s likes with WP ULike so far. Nice work! If the plugin\'s been good to you, we\'d love a 5-star review on WordPress.org. It helps us keep improving and helps others discover WP ULike too.', 'wp-ulike' ),
 						'<strong>' . number_format_i18n( $count_logs ) . '</strong>'
 					),
-					'skin'        => 'default',
-					'has_close'   => true,
-					'buttons'     => array(
+					'skin'          => 'default',
+					'has_close'     => true,
+					'screen_filter' => array( 'dashboard' ),
+					'buttons'       => array(
 						array(
 							'label'      => esc_html__( 'Happy to help', 'wp-ulike' ),
 							'link'       => 'https://wordpress.org/support/plugin/wp-ulike/reviews/#new-post',
 							'color_name' => 'default',
+							'dismiss'    => true,
+							'expiration' => YEAR_IN_SECONDS * 10,
 						),
 						array(
 							'label'      => esc_html__( 'Maybe later', 'wp-ulike' ),

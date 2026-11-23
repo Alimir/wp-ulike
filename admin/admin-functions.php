@@ -36,14 +36,15 @@ function wp_ulike_get_number_of_new_likes() {
         return 0;
     }
 
-    // Refresh likes
-	if( isset( $_GET["page"] ) && stripos( sanitize_text_field( wp_unslash( $_GET["page"] ) ), "wp-ulike-statistics" ) !== false && is_super_admin() ) {
-        WP_Ulike_Query_Cache::reset_admin_new_votes();
+    // Seen state is per user (and per site), so one admin opening Statistics
+    // no longer clears the count for everyone else.
+	if( isset( $_GET["page"] ) && stripos( sanitize_text_field( wp_unslash( $_GET["page"] ) ), "wp-ulike-statistics" ) !== false ) {
+        WP_Ulike_Hub::mark_seen();
 
         return 0;
     }
 
-	return $calculate_new_votes;
+	return WP_Ulike_Hub::get_unseen();
 }
 
 /**
@@ -251,6 +252,51 @@ function wp_ulike_is_plugin_screen(){
     }
 
     return true;
+}
+
+/**
+ * Check whether an admin notice is dismissed.
+ *
+ * Stored in an option, not a transient: cleanup plugins routinely delete
+ * transients, which brought dismissed notices back.
+ *
+ * @param string $notice_id
+ * @return bool
+ */
+function wp_ulike_is_notice_dismissed( $notice_id ){
+	$dismissed = (array) get_option( 'wp_ulike_dismissed_notices', array() );
+	$key       = sanitize_key( $notice_id );
+	$until     = isset( $dismissed[ $key ] ) ? (int) $dismissed[ $key ] : 0;
+
+	if ( $until > time() ) {
+		return true;
+	}
+
+	// Older releases stored dismissals as transients; move them over with their remaining time.
+	$legacy = 'wp-ulike-notice-' . $notice_id;
+	if ( ! wp_ulike_get_transient( $legacy ) ) {
+		return false;
+	}
+
+	$timeout = (int) get_option( '_transient_timeout_' . $legacy );
+	wp_ulike_dismiss_notice( $notice_id, max( 0, $timeout - time() ) );
+	wp_ulike_delete_transient( $legacy );
+
+	return true;
+}
+
+/**
+ * Dismiss an admin notice.
+ *
+ * @param string $notice_id
+ * @param int    $expiration Seconds until the notice can show again.
+ * @return bool
+ */
+function wp_ulike_dismiss_notice( $notice_id, $expiration = YEAR_IN_SECONDS ){
+	$dismissed = (array) get_option( 'wp_ulike_dismissed_notices', array() );
+	$dismissed[ sanitize_key( $notice_id ) ] = time() + ( absint( $expiration ) ?: YEAR_IN_SECONDS );
+
+	return update_option( 'wp_ulike_dismissed_notices', $dismissed, false );
 }
 
 /**

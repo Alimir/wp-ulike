@@ -173,6 +173,13 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'desc'  => esc_html__('Hide WP ULike admin notices everywhere, including WP ULike screens.', 'wp-ulike')
                     ),
                     array(
+                        'id'      => 'enable_hub',
+                        'type'    => 'switcher',
+                        'title'   => esc_html__('ULike Hub', 'wp-ulike'),
+                        'desc'    => esc_html__('A heart in the admin bar with your new likes, the latest activity, and a helpful tip. Only people who can see Statistics see it.', 'wp-ulike'),
+                        'default' => true,
+                    ),
+                    array(
                         'id'          => 'enable_admin_posts_columns',
                         'type'        => 'select',
                         'title'       => esc_html__( 'Show Admin Columns','wp-ulike' ),

@@ -1,0 +1,57 @@
+// Local launcher for the WP ULike support chat, shown until the admin opts in.
+// Matches the HelpWich beacon launcher (same size, spot and color) so the chat
+// does not jump or change look once it loads. Override with --wp-ulike-help-color.
+.wp-ulike-help-beacon {
+	--wp-ulike-help-color: #c9484a;
+
+	position: fixed;
+	inset-block-end: 24px;
+	inset-inline-end: 24px;
+	z-index: 99989; // Below WP modals (100000+); the beacon itself sits on top once loaded.
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 56px;
+	height: 56px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: var(--wp-ulike-help-color);
+	color: #fff;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+	cursor: pointer;
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+	&:hover {
+		transform: scale(1.05);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--wp-ulike-help-color);
+		outline-offset: 3px;
+	}
+
+	&.is-loading {
+		cursor: wait;
+		opacity: 0.8;
+	}
+
+	&[hidden] {
+		display: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+
+		&:hover {
+			transform: none;
+		}
+	}
+
+	@media screen and (max-width: 782px) {
+		inset-block-end: 16px;
+		inset-inline-end: 16px;
+	}
+}
