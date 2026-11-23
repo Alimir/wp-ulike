@@ -162,6 +162,11 @@ if ( ! function_exists( 'wp_ulike_render_block_auto_display' ) ) {
 			return wp_ulike_render_gallery_image_button( $content, $block, $instance );
 		}
 
+		// One Query Loop item. Post Template renders each post as 'core/null'.
+		if ( 'core/null' === $block['blockName'] ) {
+			return wp_ulike_render_query_loop_item_button( $content, $block );
+		}
+
 		if ( ! in_array( $block['blockName'], array( 'core/post-content', 'core/post-excerpt' ), true ) ) {
 			return $content;
 		}
@@ -207,6 +212,102 @@ if ( ! function_exists( 'wp_ulike_render_block_auto_display' ) ) {
 		return apply_filters( 'wp_ulike_the_content', $output, $content );
 	}
 	add_filter( 'render_block', 'wp_ulike_render_block_auto_display', 20, 3 );
+}
+
+if ( ! function_exists( 'wp_ulike_blocks_contain' ) ) {
+	/**
+	 * Whether a parsed block tree contains a block whose name matches.
+	 *
+	 * @param array    $blocks Parsed blocks.
+	 * @param callable $match  Receives a block name, returns bool.
+	 * @return bool
+	 */
+	function wp_ulike_blocks_contain( $blocks, $match ) {
+		foreach ( (array) $blocks as $child ) {
+			if ( ! is_array( $child ) ) {
+				continue;
+			}
+			if ( ! empty( $child['blockName'] ) && $match( $child['blockName'] ) ) {
+				return true;
+			}
+			if ( ! empty( $child['innerBlocks'] ) && wp_ulike_blocks_contain( $child['innerBlocks'], $match ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_render_query_loop_item_button' ) ) {
+	/**
+	 * Button for a Query Loop item that has no Excerpt or Content block.
+	 *
+	 * Many block theme lists show only a title, image or date (Twenty Twenty-Five
+	 * photo and grid blogs). The Excerpt / Content paths never run there, so
+	 * home and archive views stayed empty even with those contexts enabled.
+	 * Post Template renders each item as 'core/null' with its own inner blocks
+	 * and the item as the global post; Term Template also uses 'core/null', but
+	 * its items hold no core/post-* blocks.
+	 *
+	 * @param string $content Rendered item HTML (inside the <li>).
+	 * @param array  $block   Parsed item block.
+	 * @return string
+	 */
+	function wp_ulike_render_query_loop_item_button( $content, $block ) {
+		$inner = isset( $block['innerBlocks'] ) ? $block['innerBlocks'] : array();
+
+		$is_post_item = wp_ulike_blocks_contain(
+			$inner,
+			static function ( $name ) {
+				return 0 === strpos( $name, 'core/post-' );
+			}
+		);
+		if ( ! $is_post_item ) {
+			return $content;
+		}
+
+		// Items with Excerpt or Content get their button from those blocks.
+		// WooCommerce Product Collection also uses Post Template; its cards have
+		// their own fixed layout, so they are left alone.
+		$has_text_block = wp_ulike_blocks_contain(
+			$inner,
+			static function ( $name ) {
+				return in_array( $name, array( 'core/post-excerpt', 'core/post-content' ), true )
+					|| 0 === strpos( $name, 'woocommerce/' );
+			}
+		);
+		if ( $has_text_block ) {
+			return $content;
+		}
+
+		// Same list-only rules as the Excerpt block: home, archives and search,
+		// and only while list snippets are switched on.
+		$is_list_context = is_front_page() || is_home() || is_archive() || is_search();
+		if ( ! $is_list_context || ! wp_ulike_setting_repo::isAutoDisplayOnExcerpts() ) {
+			return $content;
+		}
+
+		if ( ! wp_ulike_auto_display_context_allows_button() ) {
+			return $content;
+		}
+
+		$post_id = (int) get_the_ID();
+		if ( ! wp_ulike_auto_display_allows_post( $post_id ) ) {
+			return $content;
+		}
+
+		// A ULike Button block or shortcode in the loop already shows this post's
+		// button. Match the post ID: Pro's "Like Buttons on Images" puts a button
+		// for the featured image (an attachment) here, which must not count.
+		if ( is_string( $content ) && preg_match( '/data-ulike-id=(["\'])' . $post_id . '\1[^>]*data-ulike-type=(["\'])post\2/', $content ) ) {
+			return $content;
+		}
+
+		$output = wp_ulike_place_auto_button( $content, wp_ulike( 'put', array( 'id' => $post_id ) ) );
+
+		return apply_filters( 'wp_ulike_the_content', $output, $content );
+	}
 }
 
 if ( ! function_exists( 'wp_ulike_render_gallery_image_button' ) ) {
