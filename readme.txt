@@ -173,7 +173,7 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 
 **Deactivation feedback (wpulike.com).** When you deactivate the plugin, a short optional survey appears. Nothing is sent if you click "Skip & deactivate". If you click "Submit & deactivate", the plugin sends the reason you picked, any note you typed, your site URL, the WP ULike, WordPress and PHP versions, and how many days the plugin was active to `https://wpulike.com/api/audit/v1/deactivation-feedback`. It is used only to improve the plugin. [Terms of service](https://wpulike.com/terms/) | [Privacy policy](https://wpulike.com/privacy-policy/)
 
-**Support chat (HelpWich).** WP ULike's own admin pages show a chat button. Nothing is loaded from HelpWich until you click it. Your click is saved for your user account, and from then on the HelpWich chat widget (`https://app.helpwich.com/beacon.js`) loads on WP ULike admin pages for you. The widget receives the address of the admin page you are on and anything you type or send in the chat, such as your messages, name or email. It never loads on your site's front end or for visitors. [Terms of service](https://helpwich.com/terms) | [Privacy policy](https://helpwich.com/privacy)
+**Support chat (HelpWich).** WP ULike's admin pages show a chat button. Nothing loads until you click it; after that, the chat widget (`https://app.helpwich.com/beacon.js`) loads on WP ULike admin pages for your account and receives only what you type or send in the chat. It never loads on the front end or for visitors. [Terms of service](https://helpwich.com/terms) | [Privacy policy](https://helpwich.com/privacy)
 
 == Changelog ==
 
