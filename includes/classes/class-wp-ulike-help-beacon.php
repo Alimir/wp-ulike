@@ -41,7 +41,6 @@ if ( ! class_exists( 'WP_Ulike_Help_Beacon' ) ) {
 
 		const BEACON_SRC = 'https://app.helpwich.com/beacon.js';
 
-
 		/**
 		 * @return void
 		 */
@@ -56,41 +55,17 @@ if ( ! class_exists( 'WP_Ulike_Help_Beacon' ) ) {
 		}
 
 		/**
-		 * Beacon key. An empty value turns the feature off.
-		 *
-		 * @return string
-		 */
-		public static function get_key() {
-			return (string) apply_filters( 'wp_ulike_help_beacon_key', self::BEACON_KEY );
-		}
-
-		/**
 		 * Opened instead when the widget cannot load (offline, blocked by a firewall).
-		 *
-		 * @return string
 		 */
-		public static function get_fallback_url() {
-			return (string) apply_filters( 'wp_ulike_help_beacon_fallback_url', 'https://wordpress.org/support/plugin/' . WP_ULIKE_SLUG . '/' );
-		}
+		const FALLBACK_URL = 'https://wordpress.org/support/plugin/wp-ulike/';
 
 		/**
-		 * Whether support chat is available on the current screen.
-		 *
-		 * Off with define( 'WP_ULIKE_DISABLE_HELP_BEACON', true ) or the
-		 * wp_ulike_help_beacon_enabled filter, e.g. for agencies handing a site over.
+		 * Only on WP ULike's own screens.
 		 *
 		 * @return bool
 		 */
 		public static function is_enabled() {
-			if ( defined( 'WP_ULIKE_DISABLE_HELP_BEACON' ) && WP_ULIKE_DISABLE_HELP_BEACON ) {
-				return false;
-			}
-
-			if ( '' === self::get_key() || ! self::is_plugin_screen() ) {
-				return false;
-			}
-
-			return (bool) apply_filters( 'wp_ulike_help_beacon_enabled', true );
+			return self::is_plugin_screen();
 		}
 
 		/**
@@ -138,9 +113,9 @@ if ( ! class_exists( 'WP_Ulike_Help_Beacon' ) ) {
 				self::SCRIPT_HANDLE,
 				'wpUlikeHelpBeacon',
 				array(
-					'key'         => self::get_key(),
-					'src'         => esc_url_raw( apply_filters( 'wp_ulike_help_beacon_src', self::BEACON_SRC ) ),
-					'fallbackUrl' => esc_url_raw( self::get_fallback_url() ),
+					'key'         => self::BEACON_KEY,
+					'src'         => self::BEACON_SRC,
+					'fallbackUrl' => self::FALLBACK_URL,
 					'optedIn'     => self::has_opted_in(),
 					'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
 					'action'      => self::AJAX_ACTION,
