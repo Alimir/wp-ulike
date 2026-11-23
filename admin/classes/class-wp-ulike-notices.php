@@ -28,6 +28,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 'buttons'        => array(),
                 'dismissible'    => array(
                     'url_key'    => 'wp-ulike-hide-core-plugin-notice',
+                    'expiry_key' => 'wp-ulike-notice-expiration',
                     'action'     => 'wp_ulike_hide_notices_nonce',
                     'expiration' => YEAR_IN_SECONDS
                 )
@@ -39,6 +40,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             }
 
             if( is_array( $this->args['dismissible'] ) ){
+                $this->args['dismissible'] = wp_parse_args( $this->args['dismissible'], $defaults['dismissible'] );
                 $this->flush_dismissible();
             }
         }
@@ -134,6 +136,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 'color_name'    => 'default',
                 'link'          => '#',
                 'expiration'    => '',
+                'dismiss'       => false,        // Dismiss the notice when a link button is clicked
                 'btn_attrs'     => '',
                 'ajax_request'  => array(
                     'action'  => ''
@@ -147,12 +150,18 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
 
                 if( !empty( $btn_args['type']  ) && 'skip' === $btn_args['type'] ){
                     $current_default_args['extra_classes'] .= ' wp-ulike-skip-notice wp-ulike-btn-ghost';
-                    $current_default_args['link']           = '';
+                    $current_default_args['link']           = $this->get_nonce_url( isset( $btn_args['expiration'] ) ? $btn_args['expiration'] : 0 );
+                    $current_default_args['target']         = '_self';
                 } else {
                     $current_default_args['extra_classes'] = 'wp-ulike-notice-cta-btn';
                 }
 
                 $btn_args = wp_parse_args( $btn_args, $current_default_args );
+
+                if( $btn_args['dismiss'] ){
+                    $btn_args['extra_classes'] .= ' wp-ulike-skip-notice';
+                }
+                unset( $btn_args['dismiss'] );
 
                 // Maybe add custom expiration to the btn
                 if( $btn_args['expiration'] ){
@@ -194,7 +203,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             if( $this->args['has_close'] ){
     ?>
             <a href="<?php echo esc_url( $this->get_nonce_url() ); ?>" class="notice-dismiss wp-ulike-skip-notice wp-ulike-close-notice">
-                <span class="screen-reader-text"><?php echo esc_html( 'Skip' ); ?></span>
+                <span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice', 'wp-ulike' ); ?></span>
             </a>
     <?php }
 
@@ -211,18 +220,24 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET[ '_notice_nonce' ] ) ),  $this->args['dismissible']['action'] ) ) {
                     wp_die( esc_html__( 'Authorization failed. Please refresh the page and try again.', 'wp-ulike' ) );
                 }
-                wp_ulike_set_transient( $this->get_transient_key(), 1, $this->args['dismissible']['expiration'] );
+                $expiry_key = $this->args['dismissible']['expiry_key'];
+                $expiration = isset( $_GET[ $expiry_key ] ) ? absint( $_GET[ $expiry_key ] ) : 0;
+                wp_ulike_dismiss_notice( $this->args['id'], $expiration ?: $this->args['dismissible']['expiration'] );
                 $this->args['dismissible'] = false;
             }
         }
 
         /**
-         * Undocumented function
+         * Dismiss URL, used directly when JavaScript is unavailable.
          *
-         * @return void
+         * @param int $expiration Optional. Seconds until the notice can show again.
+         * @return string
          */
-        private function get_nonce_url(){
-            $actionurl = add_query_arg( $this->args['dismissible']['url_key'], $this->args['id'] );
+        private function get_nonce_url( $expiration = 0 ){
+            $actionurl = add_query_arg( array(
+                $this->args['dismissible']['url_key']    => $this->args['id'],
+                $this->args['dismissible']['expiry_key'] => $expiration ? absint( $expiration ) : false,
+            ) );
             return wp_nonce_url( $actionurl, $this->args['dismissible']['action'], '_notice_nonce' );
         }
 
@@ -232,7 +247,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
          * @return boolean
          */
         private function is_dismissible(){
-            if( ! is_array( $this->args['dismissible'] ) || wp_ulike_get_transient( $this->get_transient_key() ) ){
+            if( ! is_array( $this->args['dismissible'] ) || wp_ulike_is_notice_dismissed( $this->args['id'] ) ){
                 return true;
             }
             return false;

@@ -254,6 +254,51 @@ function wp_ulike_is_plugin_screen(){
 }
 
 /**
+ * Check whether an admin notice is dismissed.
+ *
+ * Stored in an option, not a transient: cleanup plugins routinely delete
+ * transients, which brought dismissed notices back.
+ *
+ * @param string $notice_id
+ * @return bool
+ */
+function wp_ulike_is_notice_dismissed( $notice_id ){
+	$dismissed = (array) get_option( 'wp_ulike_dismissed_notices', array() );
+	$key       = sanitize_key( $notice_id );
+	$until     = isset( $dismissed[ $key ] ) ? (int) $dismissed[ $key ] : 0;
+
+	if ( $until > time() ) {
+		return true;
+	}
+
+	// Older releases stored dismissals as transients; move them over with their remaining time.
+	$legacy = 'wp-ulike-notice-' . $notice_id;
+	if ( ! wp_ulike_get_transient( $legacy ) ) {
+		return false;
+	}
+
+	$timeout = (int) get_option( '_transient_timeout_' . $legacy );
+	wp_ulike_dismiss_notice( $notice_id, max( 0, $timeout - time() ) );
+	wp_ulike_delete_transient( $legacy );
+
+	return true;
+}
+
+/**
+ * Dismiss an admin notice.
+ *
+ * @param string $notice_id
+ * @param int    $expiration Seconds until the notice can show again.
+ * @return bool
+ */
+function wp_ulike_dismiss_notice( $notice_id, $expiration = YEAR_IN_SECONDS ){
+	$dismissed = (array) get_option( 'wp_ulike_dismissed_notices', array() );
+	$dismissed[ sanitize_key( $notice_id ) ] = time() + ( absint( $expiration ) ?: YEAR_IN_SECONDS );
+
+	return update_option( 'wp_ulike_dismissed_notices', $dismissed, false );
+}
+
+/**
  * Create stylish admin notices
  *
  * @param array $args

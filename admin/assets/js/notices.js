@@ -38,13 +38,13 @@
 
 	document.addEventListener( 'click', function ( event ) {
 		var ctaButton = event.target.closest( '.wp-ulike-notice-cta-btn' );
+		var ajaxAction = ctaButton ? ctaButton.getAttribute( 'data-ajax-action' ) : '';
 
-		if ( ctaButton ) {
-			var ajaxAction = ctaButton.getAttribute( 'data-ajax-action' );
+		if ( ajaxAction ) {
 			var noticeId = ctaButton.getAttribute( 'data-notice-id' );
 			var nonce = ctaButton.getAttribute( 'data-notice-nonce' );
 
-			if ( ! ajaxAction || ! noticeId || ! nonce ) {
+			if ( ! noticeId || ! nonce ) {
 				return;
 			}
 
@@ -78,8 +78,6 @@
 			return;
 		}
 
-		event.preventDefault();
-
 		var wrapper = getNoticeWrapper( skipButton );
 		var dismissId = wrapper ? wrapper.getAttribute( 'data-notice-id' ) : '';
 		var dismissNonce = wrapper ? wrapper.getAttribute( 'data-dismiss-nonce' ) : '';
@@ -91,15 +89,33 @@
 			return;
 		}
 
+		// CTA links (e.g. "Happy to help") still open their page.
+		var fallbackUrl = skipButton === ctaButton ? '' : skipButton.getAttribute( 'href' );
+
+		if ( fallbackUrl ) {
+			event.preventDefault();
+		}
+
+		hideNoticeWrapper( wrapper );
+
+		// If the AJAX save fails, dismiss through the link instead.
+		function fallBack() {
+			if ( fallbackUrl ) {
+				window.location.href = fallbackUrl;
+			}
+		}
+
 		postNoticeRequest( {
 			action: 'wp_ulike_dismissed_notice',
 			id: dismissId,
 			nonce: dismissNonce,
 			expiration: expiration || '',
-		} ).then( function ( response ) {
-			if ( response && response.success ) {
-				hideNoticeWrapper( wrapper );
-			}
-		} );
+		} )
+			.then( function ( response ) {
+				if ( ! response || ! response.success ) {
+					fallBack();
+				}
+			} )
+			.catch( fallBack );
 	} );
 } )();

@@ -29,7 +29,7 @@ function wp_ulike_ajax_notice_handler() {
 
 	$expiration = isset( $_POST['expiration'] ) ? absint( $_POST['expiration'] ) : YEAR_IN_SECONDS;
 
-	wp_ulike_set_transient( 'wp-ulike-notice-' . sanitize_text_field( wp_unslash( $_POST['id'] ) ), 1, $expiration );
+	wp_ulike_dismiss_notice( sanitize_text_field( wp_unslash( $_POST['id'] ) ), $expiration );
 	wp_send_json_success( __( 'It\'s OK.', 'wp-ulike' ) );
 }
 add_action( 'wp_ajax_wp_ulike_dismissed_notice', 'wp_ulike_ajax_notice_handler' );
