@@ -176,7 +176,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'id'      => 'enable_hub',
                         'type'    => 'switcher',
                         'title'   => esc_html__('ULike Hub', 'wp-ulike'),
-                        'desc'    => esc_html__('A heart in the admin bar with your new likes, the latest activity, and a helpful tip. Only people who can see Statistics see it.', 'wp-ulike'),
+                        'desc'    => esc_html__('Adds the WP ULike icon to the admin bar, with a count of new votes, the latest activity, and a helpful tip. Only people who can see Statistics see it.', 'wp-ulike'),
                         'default' => true,
                     ),
                     array(
