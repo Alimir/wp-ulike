@@ -304,7 +304,7 @@
 		border-radius: 50%;
 		background: var(--hub-surface-hover);
 
-		img {
+		> img {
 			display: block;
 			width: 32px;
 			height: 32px;
@@ -369,6 +369,21 @@
 
 		&::before {
 			content: none;
+		}
+
+		// WordPress swaps emoji for images in browsers that fail its support
+		// test, and the emoji stylesheet is often removed on the front end.
+		img.emoji {
+			display: inline-block !important;
+			width: 12px !important;
+			height: 12px !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			border: 0 !important;
+			border-radius: 0 !important;
+			box-shadow: none !important;
+			background: none !important;
+			vertical-align: -2px !important;
 		}
 	}
 

@@ -419,10 +419,10 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				return array(
 					'id'     => sanitize_key( $hint['id'] ),
 					'icon'   => isset( $hint['icon'] ) ? sanitize_key( $hint['icon'] ) : 'tip',
-					'text'   => wp_strip_all_tags( (string) $hint['text'] ),
+					'text'   => self::plain_text( $hint['text'] ),
 					'action' => ! empty( $hint['action']['url'] ) && ! empty( $hint['action']['label'] )
 						? array(
-							'label' => wp_strip_all_tags( (string) $hint['action']['label'] ),
+							'label' => self::plain_text( $hint['action']['label'] ),
 							'url'   => esc_url_raw( $hint['action']['url'] ),
 						)
 						: null,
@@ -1049,9 +1049,20 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		 * @return string
 		 */
 		protected static function post_title( $post_id ) {
-			$title = wp_strip_all_tags( get_the_title( $post_id ) );
+			$title = self::plain_text( get_the_title( $post_id ) );
 
 			return '' !== $title ? $title : __( '(no title)', 'wp-ulike' );
+		}
+
+		/**
+		 * Plain text for the panel, which renders with textContent: titles come
+		 * HTML-encoded ("&amp;", "&#8217;") and would show the entity as-is.
+		 *
+		 * @param string $text Text that may hold tags or entities.
+		 * @return string
+		 */
+		protected static function plain_text( $text ) {
+			return html_entity_decode( wp_strip_all_tags( (string) $text ), ENT_QUOTES, 'UTF-8' );
 		}
 
 		/**
