@@ -18,6 +18,7 @@
 	var countEl = node.querySelector( '.wp-ulike-hub__count' );
 	var labelEl = node.querySelector( '.wp-ulike-hub__label' );
 	var loadedAt = 0;
+	var stale = false;
 	var loading = false;
 	var hoverTimer = 0;
 	var REFRESH_AFTER = 60000;
@@ -251,11 +252,13 @@
 	}
 
 	function load() {
-		if ( loading || ( loadedAt && Date.now() - loadedAt < REFRESH_AFTER ) ) {
+		if ( loading || ( ! stale && loadedAt && Date.now() - loadedAt < REFRESH_AFTER ) ) {
 			return;
 		}
 
 		loading = true;
+		// Cleared at the start, so votes arriving mid-request mark the result stale.
+		stale = false;
 		if ( ! loadedAt ) {
 			skeleton();
 		}
@@ -283,6 +286,10 @@
 		node.addEventListener( type, load, { passive: true } );
 	} );
 	node.addEventListener( 'mouseenter', function () {
+		// The admin bar may open the menu before the delay ends; never show it empty.
+		if ( ! loadedAt && ! loading && ! panel.firstChild ) {
+			skeleton();
+		}
 		clearTimeout( hoverTimer );
 		hoverTimer = setTimeout( load, HOVER_DELAY );
 	} );
@@ -304,7 +311,7 @@
 				}
 				// New votes since the panel last loaded: fetch fresh rows on next open.
 				if ( parseInt( badge.unseen, 10 ) > 0 ) {
-					loadedAt = 0;
+					stale = true;
 				}
 				setBadge( badge );
 			} );
