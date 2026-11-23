@@ -169,8 +169,9 @@ if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
 	/**
 	 * Whether the current visitor may see an item, and so the voters on it.
 	 *
-	 * Item IDs come straight from requests, so drafts, private posts,
-	 * unapproved comments, and hidden activity must not resolve.
+	 * Drafts, private posts, password-protected posts, unapproved comments,
+	 * and hidden activity must not resolve. An id with no post, comment, or
+	 * activity is not hidden content: template demos store votes on those ids.
 	 *
 	 * @param int    $item_ID   Item ID.
 	 * @param string $item_type post, comment, activity, topic, or setting slug.
@@ -182,20 +183,25 @@ if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
 
 		switch ( $item_type ) {
 			case WP_Ulike_Pulse_Registry::ITEM_COMMENT:
-				$comment    = $item_ID ? get_comment( $item_ID ) : null;
-				$is_visible = $comment
-					&& ( '1' === (string) $comment->comment_approved || current_user_can( 'edit_comment', $comment->comment_ID ) )
-					&& wp_ulike_is_post_viewable( $comment->comment_post_ID );
+				$comment = $item_ID ? get_comment( $item_ID ) : null;
+				// No comment: nothing private to hide.
+				$is_visible = ! $comment
+					|| (
+						( '1' === (string) $comment->comment_approved || current_user_can( 'edit_comment', $comment->comment_ID ) )
+						&& wp_ulike_is_post_viewable( $comment->comment_post_ID )
+					);
 				break;
 
 			case WP_Ulike_Pulse_Registry::ITEM_ACTIVITY:
-				$is_visible = false;
+				$is_visible = true;
 				if ( $item_ID && class_exists( 'BP_Activity_Activity' ) ) {
 					$activity = new BP_Activity_Activity( $item_ID );
-					if ( ! empty( $activity->id ) && empty( $activity->is_spam ) ) {
-						$is_visible = function_exists( 'bp_activity_user_can_read' )
-							? bp_activity_user_can_read( $activity, get_current_user_id() )
-							: empty( $activity->hide_sitewide );
+					if ( ! empty( $activity->id ) ) {
+						$is_visible = empty( $activity->is_spam ) && (
+							function_exists( 'bp_activity_user_can_read' )
+								? bp_activity_user_can_read( $activity, get_current_user_id() )
+								: empty( $activity->hide_sitewide )
+						);
 					}
 				}
 				break;
@@ -222,13 +228,20 @@ if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 	/**
 	 * Whether the current visitor may read a post's content.
 	 *
+	 * No post is not a hidden post. Votes are sometimes stored on ids that
+	 * are not posts, including the public template demos.
+	 *
 	 * @param int $post_ID Post ID.
 	 * @return bool
 	 */
 	function wp_ulike_is_post_viewable( $post_ID ) {
 		$post = $post_ID ? get_post( $post_ID ) : null;
 
-		if ( ! $post || post_password_required( $post ) ) {
+		if ( ! $post ) {
+			return true;
+		}
+
+		if ( post_password_required( $post ) ) {
 			return false;
 		}
 
