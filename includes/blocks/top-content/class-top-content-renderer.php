@@ -1225,6 +1225,11 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				return '';
 			}
 
+			// Published items can still be password-protected.
+			if ( ! wp_ulike_is_item_viewable( (int) $item['item_id'], $args['contentType'] ) ) {
+				return '';
+			}
+
 			$max_visible = 4;
 			$user_ids  = wp_ulike_get_likers_list_per_post( $config[0], $config[1], (int) $item['item_id'], $max_visible + 1 );
 

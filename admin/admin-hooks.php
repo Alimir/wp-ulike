@@ -59,17 +59,6 @@ function wp_ulike_remove_photo_class($avatar) {
 add_filter('get_avatar', 'wp_ulike_remove_photo_class');
 
 /**
- * On user logged out
- *
- * @return void
- */
-function wp_ulike_on_logout_hook( $user_id = 0 ) {
-	// Start the next session with a fresh count for this user only.
-	WP_Ulike_Hub::mark_seen( $user_id );
-}
-add_action('wp_logout', 'wp_ulike_on_logout_hook');
-
-/**
  *  Undocumented function
  *
  * @since 3.6.0
