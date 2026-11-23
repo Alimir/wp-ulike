@@ -1,0 +1,529 @@
+// ULike Hub: heart in the admin bar with a hint and the latest activity.
+// Loaded only for users who see it.
+// Matches the admin bar's own dark look; WP ULike red marks what is new.
+
+#wpadminbar #wp-admin-bar-wp-ulike-hub {
+	--hub-red: #c9484a;
+	--hub-red-soft: rgba(201, 72, 74, 0.16);
+	--hub-bg: #1d2327;
+	--hub-surface: #2c3338;
+	--hub-surface-hover: #3c434a;
+	--hub-text: #f0f0f1;
+	--hub-muted: #a7aaad;
+	--hub-line: rgba(255, 255, 255, 0.08);
+
+	// Top bar item -------------------------------------------------------
+	> .ab-item {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.wp-ulike-hub__icon {
+		position: relative;
+		float: none;
+		margin-right: 0;
+		top: 0;
+
+		&::before {
+			content: "\f487"; // dashicons-heart
+			top: 2px;
+			color: rgba(240, 246, 252, 0.6);
+			transition: color 0.15s ease;
+		}
+	}
+
+	&.has-new .wp-ulike-hub__icon::before,
+	&:hover .wp-ulike-hub__icon::before {
+		color: var(--hub-red);
+	}
+
+	.wp-ulike-hub__count {
+		display: inline-block;
+		min-width: 18px;
+		height: 18px;
+		padding: 0 5px;
+		border-radius: 9px;
+		background: var(--hub-red);
+		color: #fff;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 18px;
+		text-align: center;
+		box-sizing: border-box;
+		animation: hub-pop 0.35s ease-out;
+
+		&.is-empty {
+			display: none;
+		}
+	}
+
+	// Panel container ----------------------------------------------------
+	.ab-sub-wrapper {
+		min-width: 0;
+	}
+
+	#wp-admin-bar-wp-ulike-hub-panel {
+		> .ab-item,
+		> .ab-empty-item {
+			height: auto;
+			padding: 0;
+			line-height: normal;
+			white-space: normal;
+		}
+	}
+
+	.wp-ulike-hub-panel {
+		width: 360px;
+		max-width: calc(100vw - 16px);
+		padding: 4px 0 0;
+		background: var(--hub-surface);
+		color: var(--hub-text);
+		font-size: 13px;
+		line-height: 1.45;
+		cursor: default;
+
+		* {
+			box-sizing: border-box;
+			line-height: inherit;
+		}
+	}
+
+	.wp-ulike-hub-panel__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		padding: 10px 16px 8px;
+	}
+
+	.wp-ulike-hub-panel__title {
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--hub-text);
+	}
+
+	.wp-ulike-hub-panel__today {
+		padding: 2px 8px;
+		border-radius: 999px;
+		background: var(--hub-red-soft);
+		color: #f2a5a6;
+		font-size: 11px;
+		font-weight: 600;
+	}
+
+
+	// Section label --------------------------------------------------------
+	.wp-ulike-hub-panel__label {
+		margin: 10px 16px 4px;
+		color: var(--hub-muted);
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+
+	// Hint card ------------------------------------------------------------
+	.wp-ulike-hub-hint {
+		position: relative;
+		display: flex;
+		gap: 10px;
+		margin: 2px 12px 6px;
+		padding: 12px 34px 12px 12px;
+		border-radius: 10px;
+		background: var(--hub-surface-hover);
+		border: 1px solid var(--hub-line);
+		transition: opacity 0.2s ease, transform 0.2s ease;
+
+		&.is-leaving {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+
+		&.is-warning {
+			background: rgba(219, 166, 23, 0.12);
+			border-color: rgba(219, 166, 23, 0.3);
+		}
+	}
+
+	.wp-ulike-hub-hint__icon::before {
+		display: block;
+		width: 28px;
+		height: 28px;
+		border-radius: 8px;
+		background: var(--hub-red-soft);
+		color: #f2a5a6;
+		font: normal 18px/28px dashicons;
+		text-align: center;
+		content: "\f339"; // lightbulb
+	}
+
+	.is-trend .wp-ulike-hub-hint__icon::before {
+		content: "\f238"; // chart-line
+	}
+
+	.is-star .wp-ulike-hub-hint__icon::before {
+		content: "\f155"; // star-filled
+	}
+
+	.is-warning .wp-ulike-hub-hint__icon::before {
+		content: "\f534"; // warning
+		background: rgba(219, 166, 23, 0.18);
+		color: #f0c33c;
+	}
+
+	.wp-ulike-hub-hint__body {
+		min-width: 0;
+	}
+
+	.wp-ulike-hub-hint__text {
+		margin: 0;
+		color: var(--hub-text);
+		font-size: 13px;
+	}
+
+	.wp-ulike-hub-hint__action {
+		display: inline-block;
+		height: auto;
+		margin-top: 6px;
+		padding: 0;
+		color: #f2a5a6;
+		font-size: 12px;
+		font-weight: 600;
+		text-decoration: none;
+
+		&::after {
+			content: " →";
+		}
+
+		&:hover,
+		&:focus {
+			color: #fff;
+			text-decoration: underline;
+		}
+	}
+
+	.wp-ulike-hub-hint__close {
+		position: absolute;
+		top: 6px;
+		inset-inline-end: 6px;
+		width: 24px;
+		height: 24px;
+		padding: 0;
+		border: 0;
+		border-radius: 6px;
+		background: transparent;
+		color: var(--hub-muted);
+		cursor: pointer;
+
+		&::before {
+			content: "\f335"; // dismiss
+			font: normal 16px/24px dashicons;
+		}
+
+		&:hover,
+		&:focus-visible {
+			background: rgba(255, 255, 255, 0.08);
+			color: var(--hub-text);
+			outline: none;
+		}
+	}
+
+	// Rows ---------------------------------------------------------------
+	.wp-ulike-hub-panel__list {
+		margin: 0;
+		padding: 0 6px;
+		list-style: none;
+	}
+
+	.wp-ulike-hub-panel__row {
+		margin: 0;
+		padding: 0;
+		float: none;
+	}
+
+	.wp-ulike-hub-panel__link {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+		height: auto;
+		margin: 0;
+		padding: 9px 10px;
+		border-radius: 8px;
+		color: var(--hub-text);
+		text-decoration: none;
+		white-space: normal;
+		transition: background-color 0.15s ease;
+
+		&:hover,
+		&:focus {
+			background: var(--hub-surface-hover);
+			color: var(--hub-text);
+			outline: none;
+		}
+
+		&:focus-visible {
+			box-shadow: inset 0 0 0 2px #72aee6;
+		}
+	}
+
+	.wp-ulike-hub-panel__avatar {
+		position: relative;
+		flex: 0 0 32px;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		background: var(--hub-surface-hover);
+
+		img {
+			display: block;
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+		}
+
+		&.is-guest {
+			background: linear-gradient(135deg, #e86a6c, var(--hub-red));
+
+			&::before {
+				content: "\f110"; // dashicons-admin-users
+				position: absolute;
+				inset: 0;
+				font: normal 18px/32px dashicons;
+				text-align: center;
+				color: rgba(255, 255, 255, 0.92);
+			}
+		}
+	}
+
+	.wp-ulike-hub-panel__kind {
+		position: absolute;
+		inset-inline-end: -3px;
+		inset-block-end: -3px;
+		width: 16px;
+		height: 16px;
+		border: 2px solid var(--hub-surface);
+		border-radius: 50%;
+		background: var(--hub-red);
+
+		&::before {
+			content: "\f487";
+			position: absolute;
+			inset: 0;
+			font: normal 9px/12px dashicons;
+			text-align: center;
+			color: #fff;
+		}
+
+		&.is-dislike {
+			background: #50575e;
+
+			&::before {
+				transform: rotate(180deg);
+			}
+		}
+	}
+
+	.wp-ulike-hub-panel__body {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		min-width: 0;
+	}
+
+	.wp-ulike-hub-panel__text {
+		color: var(--hub-muted);
+		overflow-wrap: anywhere;
+	}
+
+	.wp-ulike-hub-panel__name,
+	.wp-ulike-hub-panel__target {
+		color: var(--hub-text);
+		font-weight: 600;
+	}
+
+	.wp-ulike-hub-panel__meta {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		color: var(--hub-muted);
+		font-size: 12px;
+	}
+
+	.wp-ulike-hub-panel__new {
+		padding: 0 6px;
+		border-radius: 4px;
+		background: var(--hub-red);
+		color: #fff;
+		font-size: 10px;
+		font-weight: 600;
+		line-height: 16px;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+	}
+
+	.wp-ulike-hub-panel__row.is-new .wp-ulike-hub-panel__link {
+		background: var(--hub-red-soft);
+
+		&:hover,
+		&:focus {
+			background: rgba(201, 72, 74, 0.24);
+		}
+	}
+
+	// Loading ------------------------------------------------------------
+	.is-skeleton {
+		display: flex;
+		gap: 12px;
+		padding: 9px 10px;
+
+		.wp-ulike-hub-panel__avatar,
+		.wp-ulike-hub-panel__line {
+			background: linear-gradient(90deg, #3c434a 0%, #4a525a 50%, #3c434a 100%);
+			background-size: 200% 100%;
+			animation: hub-shimmer 1.2s linear infinite;
+		}
+
+		.wp-ulike-hub-panel__body {
+			flex: 1;
+			padding-top: 3px;
+		}
+
+		.wp-ulike-hub-panel__line {
+			display: block;
+			height: 10px;
+			width: 90%;
+			border-radius: 5px;
+
+			&.is-short {
+				width: 40%;
+			}
+		}
+	}
+
+	// Empty and error ----------------------------------------------------
+	.wp-ulike-hub-panel__empty {
+		margin: 0;
+		padding: 20px 24px 18px;
+		color: var(--hub-muted);
+		text-align: center;
+
+		p {
+			margin: 8px 0 0;
+			color: var(--hub-muted);
+		}
+	}
+
+	.wp-ulike-hub-panel__empty-icon::before {
+		content: "\f487";
+		display: inline-block;
+		font: normal 28px/1 dashicons;
+		color: var(--hub-red);
+		opacity: 0.8;
+	}
+
+	// Footer -------------------------------------------------------------
+	.wp-ulike-hub-panel__footer {
+		display: flex;
+		gap: 8px;
+		margin-top: 6px;
+		padding: 10px 12px 12px;
+		border-top: 1px solid var(--hub-line);
+	}
+
+	.wp-ulike-hub-panel__button {
+		flex: 1;
+		height: auto;
+		margin: 0;
+		padding: 7px 10px;
+		border-radius: 6px;
+		background: var(--hub-surface-hover);
+		color: var(--hub-text);
+		font-size: 12px;
+		font-weight: 600;
+		line-height: 1.4;
+		text-align: center;
+		text-decoration: none;
+		transition: background-color 0.15s ease;
+
+		&:hover,
+		&:focus {
+			background: #50575e;
+			color: #fff;
+		}
+
+		&.is-primary {
+			background: var(--hub-red);
+			color: #fff;
+
+			&:hover,
+			&:focus {
+				background: #b03d3f;
+			}
+		}
+	}
+
+	// Small screens: keep the heart visible like core's comments icon.
+	@media screen and (max-width: 782px) {
+		display: block;
+
+		> .ab-item {
+			width: auto;
+			padding: 0 8px;
+		}
+
+		.wp-ulike-hub__icon::before {
+			top: 0;
+			font-size: 30px;
+		}
+
+		// A sheet under the bar, so it never runs off the screen.
+		.ab-sub-wrapper {
+			position: fixed;
+			top: 46px;
+			left: 8px;
+			right: 8px;
+			width: auto;
+			box-sizing: border-box;
+			border-radius: 0 0 12px 12px;
+			overflow: hidden;
+		}
+
+		.wp-ulike-hub-panel {
+			width: 100%;
+			max-width: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.wp-ulike-hub__count,
+		.is-skeleton .wp-ulike-hub-panel__avatar,
+		.is-skeleton .wp-ulike-hub-panel__line {
+			animation: none;
+		}
+	}
+}
+
+@keyframes hub-pop {
+	0% {
+		transform: scale(0.6);
+	}
+
+	70% {
+		transform: scale(1.12);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes hub-shimmer {
+	from {
+		background-position: 200% 0;
+	}
+
+	to {
+		background-position: -200% 0;
+	}
+}

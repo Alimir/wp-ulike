@@ -63,12 +63,9 @@ add_filter('get_avatar', 'wp_ulike_remove_photo_class');
  *
  * @return void
  */
-function wp_ulike_on_logout_hook() {
-	if ( ! is_super_admin() ) {
-		return;
-	}
-	// Refresh new votes
-	WP_Ulike_Query_Cache::reset_admin_new_votes();
+function wp_ulike_on_logout_hook( $user_id = 0 ) {
+	// Start the next session with a fresh count for this user only.
+	WP_Ulike_Hub::mark_seen( $user_id );
 }
 add_action('wp_logout', 'wp_ulike_on_logout_hook');
 

@@ -29,3 +29,5 @@ include_once( 'hooks/third-party.php' );
 
 // Blocks
 include_once( 'blocks/index.php' );
+// ULike Hub: new likes and hints in the admin bar (users who can see Statistics only).
+WP_Ulike_Hub::init();

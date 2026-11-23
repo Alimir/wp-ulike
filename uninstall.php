@@ -221,6 +221,15 @@ class wp_ulike_uninstall {
 
 		global $wpdb;
 
+		// Per-site user options (ULike Hub): stored as {blog prefix}wp_ulike_hub_*.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM `{$wpdb->usermeta}` WHERE meta_key LIKE %s",
+				$wpdb->esc_like( $wpdb->get_blog_prefix() . 'wp_ulike_hub_' ) . '%'
+			)
+		);
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(

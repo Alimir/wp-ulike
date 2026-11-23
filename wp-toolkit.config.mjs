@@ -24,6 +24,7 @@ export default {
 				'assets/css/wp-ulike.css': 'assets/sass/wp-ulike.scss',
 				'admin/assets/css/admin.css': 'admin/assets/sass/admin.scss',
 				'admin/assets/css/plugins.css': 'admin/assets/sass/plugins.scss',
+				'admin/assets/css/hub.css': 'admin/assets/sass/hub.scss',
 			},
 			minifySeparate: ['assets/css/wp-ulike.css'],
 		},

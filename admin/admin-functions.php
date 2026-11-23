@@ -36,14 +36,15 @@ function wp_ulike_get_number_of_new_likes() {
         return 0;
     }
 
-    // Refresh likes
-	if( isset( $_GET["page"] ) && stripos( sanitize_text_field( wp_unslash( $_GET["page"] ) ), "wp-ulike-statistics" ) !== false && is_super_admin() ) {
-        WP_Ulike_Query_Cache::reset_admin_new_votes();
+    // Seen state is per user (and per site), so one admin opening Statistics
+    // no longer clears the count for everyone else.
+	if( isset( $_GET["page"] ) && stripos( sanitize_text_field( wp_unslash( $_GET["page"] ) ), "wp-ulike-statistics" ) !== false ) {
+        WP_Ulike_Hub::mark_seen();
 
         return 0;
     }
 
-	return $calculate_new_votes;
+	return WP_Ulike_Hub::get_unseen();
 }
 
 /**
