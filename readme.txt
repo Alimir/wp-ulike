@@ -320,9 +320,6 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 * Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
-= 5.2.6.1 =
-Likers lists show again on buttons that use custom IDs.
-
 = 5.2.6 =
 On block themes, post lists with Home or Archives turned on now show like buttons even without an excerpt. Purge your page cache after updating if you use a full-page cache plugin.
 
