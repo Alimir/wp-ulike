@@ -6,7 +6,7 @@ Tags: like button, like, voting, engagement, popular posts
 Requires PHP: 7.3.0
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 5.2.5
+Stable tag: 5.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -177,6 +177,20 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 
 == Changelog ==
 
+= 5.2.6 =
+* Added: A support chat button on WP ULike's admin pages. Nothing loads from the chat service until you click it, and the choice is saved for your account. Turn it off with `WP_ULIKE_DISABLE_HELP_BEACON` or the `wp_ulike_help_beacon_enabled` filter.
+* Improved: Block theme post lists that show only a title, image, or date (such as the Twenty Twenty-Five photo and grid blogs) now get the automatic button on the homepage, archives, and search when those places are turned on. WooCommerce product grids are left as they are.
+* Improved: Choosing Home now also shows buttons on the posts listed on a static front page. The page itself still follows your Post Types setting.
+* Improved: Dismissed admin notices stay dismissed, even when a cleanup plugin clears transients. Earlier dismissals carry over with their remaining time.
+* Improved: The review notice appears on the Dashboard only, and "Happy to help" dismisses it.
+* Improved: Notice buttons work without JavaScript, and the loading spinner sits in the middle of the button.
+* Improved: Deactivating the plugin no longer waits for the feedback server to answer.
+* Improved: The deactivation survey explains where to turn on Home, Archives, and Categories, and asks for a note of at least 4 characters.
+* Improved: Untranslated labels in the deactivation survey and admin notices are now translatable.
+* Fixed: Likers lists no longer show voters on drafts, private or password-protected posts, unapproved comments, or hidden activity to visitors who cannot see that item. Thanks to Nguyen Vu Thanh Danh (ngvuthdanh) for reporting it.
+* Developer: New filters `wp_ulike_help_beacon_key`, `wp_ulike_help_beacon_src`, and `wp_ulike_help_beacon_fallback_url`.
+* Docs: readme lists the external services WP ULike can contact and what each one receives.
+
 = 5.2.5 =
 * Added: Custom CSS, the custom loading image, and PHP and JavaScript snippets now live in the Customizer, in a Settings section pinned at the bottom of the list, with a syntax-highlighted code editor and a live preview of the CSS and loading image.
 * Added: Statistics lists have page numbers, and the free Statistics now include Top Members.
@@ -310,6 +324,9 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 * Fixed: Stability fixes across the 5.0 release.
 
 == Upgrade Notice ==
+= 5.2.6 =
+On block themes, post lists with Home or Archives turned on now show like buttons even without an excerpt. Purge your page cache after updating if you use a full-page cache plugin.
+
 = 5.2.1 =
 A new faster like-storage engine (Pulse) is included. Existing sites keep working as before. Your counts, buttons, and stats do not change. When ready, open **WP ULike → Storage Upgrade** to move old records to Pulse in the background. Purge your site cache after updating if you use a full-page cache plugin.
 
