@@ -16,9 +16,13 @@
 
 	var panel = node.querySelector( '.wp-ulike-hub-panel' );
 	var countEl = node.querySelector( '.wp-ulike-hub__count' );
+	var labelEl = node.querySelector( '.wp-ulike-hub__label' );
 	var loadedAt = 0;
 	var loading = false;
+	var hoverTimer = 0;
 	var REFRESH_AFTER = 60000;
+	// A pointer crossing the admin bar should not open the panel or clear the badge.
+	var HOVER_DELAY = 200;
 
 	if ( ! panel ) {
 		return;
@@ -51,11 +55,21 @@
 		} );
 	}
 
-	function clearBadge() {
-		node.classList.remove( 'has-new' );
+	/**
+	 * @param {{unseen: number, count: string, label: string}} badge From the server.
+	 */
+	function setBadge( badge ) {
+		if ( ! badge ) {
+			return;
+		}
+		var unseen = parseInt( badge.unseen, 10 ) || 0;
+		node.classList.toggle( 'has-new', unseen > 0 );
 		if ( countEl ) {
-			countEl.textContent = '0';
-			countEl.classList.add( 'is-empty' );
+			countEl.textContent = badge.count;
+			countEl.classList.toggle( 'is-empty', ! unseen );
+		}
+		if ( labelEl ) {
+			labelEl.textContent = badge.label;
 		}
 	}
 
@@ -253,7 +267,7 @@
 				}
 				loadedAt = Date.now();
 				render( json.data );
-				clearBadge();
+				setBadge( json.data.badge );
 			} )
 			.catch( function () {
 				loadedAt = 0;
@@ -264,8 +278,35 @@
 			} );
 	}
 
-	// Hover, keyboard focus, or a tap on touch screens opens the menu.
-	[ 'mouseenter', 'focusin', 'touchstart' ].forEach( function ( type ) {
+	// Keyboard focus and taps open the menu on purpose; a hover has to rest first.
+	[ 'focusin', 'touchstart' ].forEach( function ( type ) {
 		node.addEventListener( type, load, { passive: true } );
 	} );
+	node.addEventListener( 'mouseenter', function () {
+		clearTimeout( hoverTimer );
+		hoverTimer = setTimeout( load, HOVER_DELAY );
+	} );
+	node.addEventListener( 'mouseleave', function () {
+		clearTimeout( hoverTimer );
+	} );
+
+	// Admin screens already run WordPress Heartbeat; the badge rides along.
+	// Pages without Heartbeat (most front-end views) refresh on page load.
+	if ( window.jQuery ) {
+		window.jQuery( document )
+			.on( 'heartbeat-send', function ( event, data ) {
+				data.wp_ulike_hub = 1;
+			} )
+			.on( 'heartbeat-tick', function ( event, data ) {
+				var badge = data && data.wp_ulike_hub;
+				if ( ! badge ) {
+					return;
+				}
+				// New votes since the panel last loaded: fetch fresh rows on next open.
+				if ( parseInt( badge.unseen, 10 ) > 0 ) {
+					loadedAt = 0;
+				}
+				setBadge( badge );
+			} );
+	}
 } )();

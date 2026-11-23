@@ -178,7 +178,7 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 == Changelog ==
 
 = 5.2.6 =
-* Added: ULike Hub, a heart in the admin bar with your new likes, the latest activity grouped by post ("Sara and 12 others liked…"), and a helpful tip. Each person sees their own new likes. Turn it off in Settings → General.
+* Added: ULike Hub, a heart in the admin bar with your new likes, the latest activity grouped by post ("Sara and 12 others liked…"), and a helpful tip. Each person sees their own new likes (never their own votes), and the count updates live on admin screens. Turn it off in Settings → General.
 * Improved: Block theme post lists that show only a title, image, or date (like the Twenty Twenty-Five photo and grid blogs) now get the automatic like button on the homepage, archives, and search.
 * Improved: Choosing Home now also covers the posts listed on a static front page.
 * Improved: Dismissed admin notices stay dismissed, even after a cleanup plugin clears transients.

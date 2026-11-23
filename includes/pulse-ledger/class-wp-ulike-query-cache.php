@@ -384,15 +384,15 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 		/**
 		 * Admin menu badge: votes since last statistics visit (fixed key, not versioned).
 		 *
-		 * @return void
+		 * @return bool Whether the vote was counted.
 		 */
 		public static function increment_admin_new_votes() {
 			if ( ! apply_filters( 'wp_ulike_display_admin_new_likes', true ) ) {
-				return;
+				return false;
 			}
 
 			if ( self::should_defer_bump() ) {
-				return;
+				return false;
 			}
 
 			$current = wp_ulike_get_meta_data( self::STATS_ITEM_ID, self::STATS_META_GROUP, self::ADMIN_NEW_VOTES_KEY, true );
@@ -401,6 +401,13 @@ if ( ! class_exists( 'WP_Ulike_Query_Cache' ) ) {
 			}
 
 			wp_ulike_update_meta_data( self::STATS_ITEM_ID, self::STATS_META_GROUP, self::ADMIN_NEW_VOTES_KEY, (int) $current + 1 );
+
+			/**
+			 * A vote by the current user was added to the new votes counter.
+			 */
+			do_action( 'wp_ulike_new_vote_counted' );
+
+			return true;
 		}
 
 		/**

@@ -60,6 +60,8 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 			add_action( 'wp_ajax_' . self::AJAX_PANEL, array( __CLASS__, 'ajax_panel' ) );
 			add_action( 'wp_ajax_' . self::AJAX_DISMISS, array( __CLASS__, 'ajax_dismiss_hint' ) );
+			add_action( 'wp_ulike_new_vote_counted', array( __CLASS__, 'skip_own_vote' ) );
+			add_filter( 'heartbeat_received', array( __CLASS__, 'heartbeat' ), 10, 2 );
 		}
 
 		/**
@@ -154,6 +156,62 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			update_user_option( $user_id, self::SEEN_META_KEY, self::get_total() );
 		}
 
+		/**
+		 * The current user's own vote is not news to them: move their seen
+		 * mark past it. Only users who see the Hub get the write.
+		 *
+		 * @return void
+		 */
+		public static function skip_own_vote() {
+			$user_id = get_current_user_id();
+			if ( ! $user_id || ! self::is_setting_on() || ! self::current_user_can_view() ) {
+				return;
+			}
+
+			$total = self::get_total();
+			$seen  = (int) get_user_option( self::SEEN_META_KEY, $user_id );
+
+			// Same reset rule as get_unseen(), applied to the count before this vote.
+			if ( $seen > $total - 1 ) {
+				$seen = 0;
+			}
+
+			update_user_option( $user_id, self::SEEN_META_KEY, min( $seen + 1, $total ) );
+		}
+
+		/**
+		 * Badge text for a number of new votes.
+		 *
+		 * @param int $unseen New votes.
+		 * @return array{count:string,label:string}
+		 */
+		protected static function badge_text( $unseen ) {
+			return array(
+				'count' => $unseen > 99 ? '99+' : number_format_i18n( $unseen ),
+				'label' => sprintf(
+					/* translators: %s: number of new likes */
+					_n( 'ULike Hub: %s new like', 'ULike Hub: %s new likes', $unseen, 'wp-ulike' ),
+					number_format_i18n( $unseen )
+				),
+			);
+		}
+
+		/**
+		 * Live badge on admin screens, riding WordPress's own Heartbeat request.
+		 *
+		 * @param array<string, mixed> $response Heartbeat response.
+		 * @param array<string, mixed> $data     Data sent by the browser.
+		 * @return array<string, mixed>
+		 */
+		public static function heartbeat( $response, $data ) {
+			if ( ! empty( $data['wp_ulike_hub'] ) && self::is_setting_on() && self::current_user_can_view() ) {
+				$unseen                   = self::get_unseen();
+				$response['wp_ulike_hub'] = array( 'unseen' => $unseen ) + self::badge_text( $unseen );
+			}
+
+			return $response;
+		}
+
 		/* ------------------------------------------------------------------
 		 * Admin bar
 		 * ------------------------------------------------------------------ */
@@ -168,21 +226,15 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			}
 
 			$unseen = self::get_unseen();
-			$label  = $unseen > 99 ? '99+' : number_format_i18n( $unseen );
+			$badge  = self::badge_text( $unseen );
 
 			$title  = '<span class="ab-icon wp-ulike-hub__icon" aria-hidden="true"></span>';
 			$title .= sprintf(
-				'<span class="ab-label wp-ulike-hub__count%1$s">%2$s</span>',
+				'<span class="ab-label wp-ulike-hub__count%1$s" aria-hidden="true">%2$s</span>',
 				$unseen ? '' : ' is-empty',
-				esc_html( $label )
+				esc_html( $badge['count'] )
 			);
-			$title .= '<span class="screen-reader-text">' . esc_html(
-				sprintf(
-					/* translators: %s: number of new likes */
-					_n( 'ULike Hub: %s new like', 'ULike Hub: %s new likes', $unseen, 'wp-ulike' ),
-					number_format_i18n( $unseen )
-				)
-			) . '</span>';
+			$title .= '<span class="screen-reader-text wp-ulike-hub__label">' . esc_html( $badge['label'] ) . '</span>';
 
 			$admin_bar->add_node(
 				array(
@@ -281,6 +333,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				array(
 					'hint'     => self::get_hint(),
 					'items'    => $items,
+					'badge'    => array( 'unseen' => 0 ) + self::badge_text( 0 ),
 					'today'    => sprintf(
 						/* translators: %s: number of votes today */
 						_n( '%s today', '%s today', $today, 'wp-ulike' ),
@@ -662,9 +715,15 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		 */
 		public static function get_items( $unseen = 0 ) {
 			$groups = array();
+			$me     = (string) get_current_user_id();
+			$rank   = 0;
 
 			foreach ( self::get_recent_rows() as $index => $row ) {
-				$key = $row['item_type'] . '|' . $row['item_id'] . '|' . $row['engagement_kind'] . '|' . ( 'vote' === $row['engagement_kind'] ? $row['engagement_key'] : '' );
+				$key     = $row['item_type'] . '|' . $row['item_id'] . '|' . $row['engagement_kind'] . '|' . ( 'vote' === $row['engagement_kind'] ? $row['engagement_key'] : '' );
+				$is_mine = (string) $row['user_id'] === $me;
+
+				// Your own votes are not in $unseen (skip_own_vote), so they take no rank.
+				$row_rank = $is_mine ? PHP_INT_MAX : $rank++;
 
 				if ( ! isset( $groups[ $key ] ) ) {
 					if ( count( array_filter( $groups ) ) >= self::ITEMS ) {
@@ -674,14 +733,22 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 					$target         = self::describe_item( (string) $row['item_type'], (int) $row['item_id'] );
 					$groups[ $key ] = $target ? array(
 						'row'    => $row,
+						'named'  => null,
 						'target' => $target,
-						'first'  => $index,
+						'first'  => PHP_INT_MAX,
 						'people' => array(),
 					) : false;
 				}
 
 				if ( ! $groups[ $key ] ) {
 					continue;
+				}
+
+				$groups[ $key ]['first'] = min( $groups[ $key ]['first'], $row_rank );
+
+				// Name the newest person who is not you; "Sara and 3 others" may include you.
+				if ( null === $groups[ $key ]['named'] && ! $is_mine ) {
+					$groups[ $key ]['named'] = $row;
 				}
 
 				// Guests share user ID 0, so each guest vote counts as one person.
@@ -691,7 +758,13 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 
 			$items = array();
 			foreach ( array_filter( $groups ) as $group ) {
-				$item          = self::format_row( $group['row'], $group['target'], self::others_count( $group['row'], count( $group['people'] ) ) );
+				$row = $group['row'];
+				if ( $group['named'] && count( $group['people'] ) > 1 ) {
+					$row              = $group['named'];
+					$row['date_time'] = $group['row']['date_time'];
+				}
+
+				$item          = self::format_row( $row, $group['target'], self::others_count( $row, count( $group['people'] ) ) );
 				$item['isNew'] = $group['first'] < $unseen;
 				$items[]       = $item;
 			}
@@ -746,14 +819,23 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		protected static function format_row( $row, $target, $others = 0 ) {
 			$user_id = is_numeric( $row['user_id'] ) ? (int) $row['user_id'] : 0;
 			$user    = $user_id > 0 ? get_userdata( $user_id ) : false;
+			$is_you  = $user && get_current_user_id() === $user_id;
 
 			$timestamp = (int) mysql2date( 'U', (string) $row['date_time'] );
 			$now       = (int) current_time( 'timestamp' );
 
+			if ( $is_you ) {
+				$name = __( 'You', 'wp-ulike' );
+			} else {
+				$name = $user ? $user->display_name : __( 'A visitor', 'wp-ulike' );
+			}
+
 			return array(
-				'name'   => $user ? $user->display_name : __( 'A visitor', 'wp-ulike' ),
+				'name'   => $name,
 				'avatar' => $user ? (string) get_avatar_url( $user->ID, array( 'size' => 64 ) ) : '',
-				'text'   => self::sentence( (string) $row['engagement_kind'], (string) $row['engagement_key'], $target['type'], $others ),
+				'text'   => $is_you && ! $others
+					? self::own_sentence( (string) $row['engagement_kind'], (string) $row['engagement_key'], 'comment' === $target['type'] )
+					: self::sentence( (string) $row['engagement_kind'], (string) $row['engagement_key'], $target['type'], $others ),
 				'badge'  => self::badge( $row ),
 				'title'  => $target['title'],
 				'url'    => $target['url'],
@@ -845,6 +927,35 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 
 			/* translators: 1: person, 2: post title */
 			return $on_comment ? __( '%1$s liked a comment on %2$s', 'wp-ulike' ) : __( '%1$s liked %2$s', 'wp-ulike' );
+		}
+
+		/**
+		 * Sentence for the current user's own vote. Separate strings, since many
+		 * languages change the verb for "you".
+		 *
+		 * @param string $kind       vote, emoji or star.
+		 * @param string $key        like, dislike, or a reaction key.
+		 * @param bool   $on_comment Whether the item is a comment.
+		 * @return string
+		 */
+		protected static function own_sentence( $kind, $key, $on_comment ) {
+			if ( 'star' === $kind ) {
+				/* translators: 1: "You", 2: post title */
+				return $on_comment ? _x( '%1$s rated a comment on %2$s', 'current user', 'wp-ulike' ) : _x( '%1$s rated %2$s', 'current user', 'wp-ulike' );
+			}
+
+			if ( 'emoji' === $kind ) {
+				/* translators: 1: "You", 2: post title */
+				return $on_comment ? _x( '%1$s reacted to a comment on %2$s', 'current user', 'wp-ulike' ) : _x( '%1$s reacted to %2$s', 'current user', 'wp-ulike' );
+			}
+
+			if ( 'dislike' === $key ) {
+				/* translators: 1: "You", 2: post title */
+				return $on_comment ? _x( '%1$s disliked a comment on %2$s', 'current user', 'wp-ulike' ) : _x( '%1$s disliked %2$s', 'current user', 'wp-ulike' );
+			}
+
+			/* translators: 1: "You", 2: post title */
+			return $on_comment ? _x( '%1$s liked a comment on %2$s', 'current user', 'wp-ulike' ) : _x( '%1$s liked %2$s', 'current user', 'wp-ulike' );
 		}
 
 		/**
