@@ -232,7 +232,11 @@ if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 			return false;
 		}
 
-		return is_post_publicly_viewable( $post ) || current_user_can( 'read_post', $post->ID );
+		// Status only, not post type: buttons often sit on published posts of
+		// types without single pages (testimonials, team members, listings).
+		$status = get_post_status( $post );
+
+		return ( $status && is_post_status_viewable( $status ) ) || current_user_can( 'read_post', $post->ID );
 	}
 }
 
