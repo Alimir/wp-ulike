@@ -957,13 +957,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		 * Each source reads backwards on its primary key with a small LIMIT, so
 		 * the cost stays flat however large the vote tables grow.
 		 *
-		 * @param int $limit Rows to return (1-20).
+		 * @param int $limit Rows to return (1-100).
 		 * @return array<int, array{user_id:string,item_type:string,item_id:int,engagement_kind:string,engagement_key:string,value:int|null,date_time:string}>
 		 */
 		public static function recent_engagements( $limit = 6 ) {
 			global $wpdb;
 
-			$limit = max( 1, min( 20, (int) $limit ) );
+			$limit = max( 1, min( 100, (int) $limit ) );
 			$mode  = self::read_mode();
 			$rows  = array();
 

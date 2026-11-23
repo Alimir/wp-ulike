@@ -37,6 +37,11 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		const ITEMS          = 6;
 
 		/**
+		 * Recent votes read to build the ITEMS grouped rows.
+		 */
+		const SCAN_ROWS      = 60;
+
+		/**
 		 * Like totals worth celebrating.
 		 */
 		const MILESTONES = array( 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000 );
@@ -266,15 +271,11 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			}
 
 			$unseen = self::get_unseen();
-			$items  = self::get_items();
-
-			foreach ( $items as $index => $item ) {
-				$items[ $index ]['isNew'] = $index < $unseen;
-			}
+			$items  = self::get_items( $unseen );
 
 			self::mark_seen();
 
-			$today = function_exists( 'wp_ulike_count_all_logs' ) ? (int) wp_ulike_count_all_logs( 'today' ) : 0;
+			$today = self::get_today_count();
 
 			wp_send_json_success(
 				array(
@@ -564,6 +565,9 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				if ( 'post' !== $row['item_type'] || isset( $checked[ $post_id ] ) ) {
 					continue;
 				}
+				if ( count( $checked ) >= self::ITEMS ) {
+					break;
+				}
 				$checked[ $post_id ] = true;
 
 				$count   = (int) wp_ulike_get_counter_value( $post_id, 'post', 'like', wp_ulike_setting_repo::isDistinct( 'post' ) );
@@ -621,7 +625,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			$rows      = wp_cache_get( $cache_key, self::CACHE_GROUP );
 
 			if ( false === $rows ) {
-				$rows = WP_Ulike_Pulse_Query::recent_engagements( self::ITEMS );
+				$rows = WP_Ulike_Pulse_Query::recent_engagements( self::SCAN_ROWS );
 				wp_cache_set( $cache_key, $rows, self::CACHE_GROUP, 5 * MINUTE_IN_SECONDS );
 			}
 
@@ -629,21 +633,91 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		}
 
 		/**
-		 * Latest engagements, ready to display.
+		 * Votes cast today. The pulse table has no date-only index, so the count
+		 * is kept for 5 minutes instead of running on every panel open.
 		 *
-		 * @return array<int, array<string, string>>
+		 * @return int
 		 */
-		public static function get_items() {
-			$items = array();
+		protected static function get_today_count() {
+			if ( ! function_exists( 'wp_ulike_count_all_logs' ) ) {
+				return 0;
+			}
 
-			foreach ( self::get_recent_rows() as $row ) {
-				$item = self::format_row( $row );
-				if ( $item ) {
-					$items[] = $item;
+			$key   = 'wp_ulike_hub_today_' . current_time( 'Ymd' );
+			$count = get_transient( $key );
+
+			if ( false === $count ) {
+				$count = (int) wp_ulike_count_all_logs( 'today' );
+				set_transient( $key, $count, 5 * MINUTE_IN_SECONDS );
+			}
+
+			return (int) $count;
+		}
+
+		/**
+		 * Latest activity, one row per item and action ("Sara and 12 others liked X").
+		 *
+		 * @param int $unseen New votes for this user; rows holding one of them are marked new.
+		 * @return array<int, array<string, mixed>>
+		 */
+		public static function get_items( $unseen = 0 ) {
+			$groups = array();
+
+			foreach ( self::get_recent_rows() as $index => $row ) {
+				$key = $row['item_type'] . '|' . $row['item_id'] . '|' . $row['engagement_kind'] . '|' . ( 'vote' === $row['engagement_kind'] ? $row['engagement_key'] : '' );
+
+				if ( ! isset( $groups[ $key ] ) ) {
+					if ( count( array_filter( $groups ) ) >= self::ITEMS ) {
+						continue;
+					}
+
+					$target         = self::describe_item( (string) $row['item_type'], (int) $row['item_id'] );
+					$groups[ $key ] = $target ? array(
+						'row'    => $row,
+						'target' => $target,
+						'first'  => $index,
+						'people' => array(),
+					) : false;
 				}
+
+				if ( ! $groups[ $key ] ) {
+					continue;
+				}
+
+				// Guests share user ID 0, so each guest vote counts as one person.
+				$person = is_numeric( $row['user_id'] ) && (int) $row['user_id'] < 1 ? 'guest-' . $index : (string) $row['user_id'];
+				$groups[ $key ]['people'][ $person ] = true;
+			}
+
+			$items = array();
+			foreach ( array_filter( $groups ) as $group ) {
+				$item          = self::format_row( $group['row'], $group['target'], self::others_count( $group['row'], count( $group['people'] ) ) );
+				$item['isNew'] = $group['first'] < $unseen;
+				$items[]       = $item;
 			}
 
 			return $items;
+		}
+
+		/**
+		 * People besides the newest one. Likes and dislikes use the item's total,
+		 * so 1,000 likes read "and 999 others"; reactions and ratings count the
+		 * recent votes read here.
+		 *
+		 * @param array<string, mixed> $row    Newest engagement row of the group.
+		 * @param int                  $people Distinct people in the recent rows.
+		 * @return int
+		 */
+		protected static function others_count( $row, $people ) {
+			$others = $people - 1;
+
+			if ( 'vote' === $row['engagement_kind'] && function_exists( 'wp_ulike_get_counter_value' ) ) {
+				$status = 'dislike' === $row['engagement_key'] ? 'dislike' : 'like';
+				$total  = (int) wp_ulike_get_counter_value( (int) $row['item_id'], (string) $row['item_type'], $status, wp_ulike_setting_repo::isDistinct( (string) $row['item_type'] ) );
+				$others = max( $others, $total - 1 );
+			}
+
+			return max( 0, $others );
 		}
 
 		/**
@@ -664,15 +738,12 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		}
 
 		/**
-		 * @param array<string, mixed> $row Engagement row.
-		 * @return array<string, string>|null
+		 * @param array<string, mixed>  $row    Newest engagement row of the group.
+		 * @param array<string, string> $target Item from describe_item().
+		 * @param int                   $others People besides the newest one.
+		 * @return array<string, string>
 		 */
-		protected static function format_row( $row ) {
-			$target = self::describe_item( (string) $row['item_type'], (int) $row['item_id'] );
-			if ( ! $target ) {
-				return null;
-			}
-
+		protected static function format_row( $row, $target, $others = 0 ) {
 			$user_id = is_numeric( $row['user_id'] ) ? (int) $row['user_id'] : 0;
 			$user    = $user_id > 0 ? get_userdata( $user_id ) : false;
 
@@ -682,7 +753,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			return array(
 				'name'   => $user ? $user->display_name : __( 'A visitor', 'wp-ulike' ),
 				'avatar' => $user ? (string) get_avatar_url( $user->ID, array( 'size' => 64 ) ) : '',
-				'text'   => self::sentence( (string) $row['engagement_kind'], (string) $row['engagement_key'], $target['type'] ),
+				'text'   => self::sentence( (string) $row['engagement_kind'], (string) $row['engagement_key'], $target['type'], $others ),
 				'badge'  => self::badge( $row ),
 				'title'  => $target['title'],
 				'url'    => $target['url'],
@@ -744,13 +815,18 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		 * Full sentence pattern, so each language can order the words its own way.
 		 * %1$s is the person, %2$s the item; the panel fills both in.
 		 *
-		 * @param string $kind vote, emoji or star.
-		 * @param string $key  like, dislike, or a reaction key.
-		 * @param string $type post, comment or activity.
+		 * @param string $kind   vote, emoji or star.
+		 * @param string $key    like, dislike, or a reaction key.
+		 * @param string $type   post, comment or activity.
+		 * @param int    $others People besides the named one.
 		 * @return string
 		 */
-		protected static function sentence( $kind, $key, $type ) {
+		protected static function sentence( $kind, $key, $type, $others = 0 ) {
 			$on_comment = 'comment' === $type;
+
+			if ( $others > 0 ) {
+				return str_replace( '%3$s', number_format_i18n( $others ), self::group_sentence( $kind, $key, $on_comment, $others ) );
+			}
 
 			if ( 'star' === $kind ) {
 				/* translators: 1: person, 2: post title */
@@ -769,6 +845,47 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 
 			/* translators: 1: person, 2: post title */
 			return $on_comment ? __( '%1$s liked a comment on %2$s', 'wp-ulike' ) : __( '%1$s liked %2$s', 'wp-ulike' );
+		}
+
+		/**
+		 * Sentence for several people, e.g. "%1$s and %3$s others liked %2$s".
+		 *
+		 * @param string $kind       vote, emoji or star.
+		 * @param string $key        like, dislike, or a reaction key.
+		 * @param bool   $on_comment Whether the item is a comment.
+		 * @param int    $others     People besides the named one.
+		 * @return string
+		 */
+		protected static function group_sentence( $kind, $key, $on_comment, $others ) {
+			if ( 'star' === $kind ) {
+				return $on_comment
+					/* translators: 1: person, 2: post title, 3: number of other people */
+					? _n( '%1$s and %3$s other rated a comment on %2$s', '%1$s and %3$s others rated a comment on %2$s', $others, 'wp-ulike' )
+					/* translators: 1: person, 2: post title, 3: number of other people */
+					: _n( '%1$s and %3$s other rated %2$s', '%1$s and %3$s others rated %2$s', $others, 'wp-ulike' );
+			}
+
+			if ( 'emoji' === $kind ) {
+				return $on_comment
+					/* translators: 1: person, 2: post title, 3: number of other people */
+					? _n( '%1$s and %3$s other reacted to a comment on %2$s', '%1$s and %3$s others reacted to a comment on %2$s', $others, 'wp-ulike' )
+					/* translators: 1: person, 2: post title, 3: number of other people */
+					: _n( '%1$s and %3$s other reacted to %2$s', '%1$s and %3$s others reacted to %2$s', $others, 'wp-ulike' );
+			}
+
+			if ( 'dislike' === $key ) {
+				return $on_comment
+					/* translators: 1: person, 2: post title, 3: number of other people */
+					? _n( '%1$s and %3$s other disliked a comment on %2$s', '%1$s and %3$s others disliked a comment on %2$s', $others, 'wp-ulike' )
+					/* translators: 1: person, 2: post title, 3: number of other people */
+					: _n( '%1$s and %3$s other disliked %2$s', '%1$s and %3$s others disliked %2$s', $others, 'wp-ulike' );
+			}
+
+			return $on_comment
+				/* translators: 1: person, 2: post title, 3: number of other people */
+				? _n( '%1$s and %3$s other liked a comment on %2$s', '%1$s and %3$s others liked a comment on %2$s', $others, 'wp-ulike' )
+				/* translators: 1: person, 2: post title, 3: number of other people */
+				: _n( '%1$s and %3$s other liked %2$s', '%1$s and %3$s others liked %2$s', $others, 'wp-ulike' );
 		}
 
 		/**
