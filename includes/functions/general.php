@@ -267,12 +267,11 @@ if( ! function_exists( 'is_wp_ulike' ) ){
 		if( ! empty( $options ) ){
 			foreach ( $options as $key => $value ) {
 				if( isset( $parsed_args[ 'is_' . $value ] ) && ! empty( $parsed_args[ 'is_' . $value ] ) ) {
-					// A static front page is singular too. When Home is shown, the
-					// homepage wins over a hidden Singular; the post-type allowlist
-					// below still decides, so the page itself stays bare unless its
-					// type is listed, while posts listed on it get buttons.
+					// A static front page is singular too. When Home is shown, posts
+					// listed on it get buttons despite a hidden Singular. The page's
+					// own content still follows Singular, as it did before.
 					// Asset loading ($force_type) keeps its plain context rules.
-					if ( ! $force_type && 'single' === $value && ! empty( $parsed_args['is_home'] ) && ! in_array( 'home', $options, true ) && is_front_page() && ! is_home() ) {
+					if ( ! $force_type && 'single' === $value && ! empty( $parsed_args['is_home'] ) && ! in_array( 'home', $options, true ) && is_front_page() && ! is_home() && (int) get_the_ID() !== (int) get_queried_object_id() ) {
 						continue;
 					}
 
