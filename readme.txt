@@ -173,23 +173,16 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 
 **Deactivation feedback (wpulike.com).** When you deactivate the plugin, a short optional survey appears. Nothing is sent if you click "Skip & deactivate". If you click "Submit & deactivate", the plugin sends the reason you picked, any note you typed, your site URL, the WP ULike, WordPress and PHP versions, and how many days the plugin was active to `https://wpulike.com/api/audit/v1/deactivation-feedback`. It is used only to improve the plugin. [Terms of service](https://wpulike.com/terms/) | [Privacy policy](https://wpulike.com/privacy-policy/)
 
-**Support chat (HelpWich).** WP ULike's own admin pages show a chat button. Nothing is loaded from HelpWich until you click it. Your click is saved for your user account, and from then on the HelpWich chat widget (`https://app.helpwich.com/beacon.js`) loads on WP ULike admin pages for you. The widget receives the address of the admin page you are on and anything you type or send in the chat, such as your messages, name or email. It never loads on your site's front end or for visitors. Developers can turn it off with `define( 'WP_ULIKE_DISABLE_HELP_BEACON', true );` or the `wp_ulike_help_beacon_enabled` filter. [Terms of service](https://helpwich.com/terms) | [Privacy policy](https://helpwich.com/privacy)
+**Support chat (HelpWich).** WP ULike's own admin pages show a chat button. Nothing is loaded from HelpWich until you click it. Your click is saved for your user account, and from then on the HelpWich chat widget (`https://app.helpwich.com/beacon.js`) loads on WP ULike admin pages for you. The widget receives the address of the admin page you are on and anything you type or send in the chat, such as your messages, name or email. It never loads on your site's front end or for visitors. [Terms of service](https://helpwich.com/terms) | [Privacy policy](https://helpwich.com/privacy)
 
 == Changelog ==
 
 = 5.2.6 =
-* Added: A support chat button on WP ULike's admin pages. Nothing loads from the chat service until you click it, and the choice is saved for your account. Turn it off with `WP_ULIKE_DISABLE_HELP_BEACON` or the `wp_ulike_help_beacon_enabled` filter.
-* Improved: Block theme post lists that show only a title, image, or date (such as the Twenty Twenty-Five photo and grid blogs) now get the automatic button on the homepage, archives, and search when those places are turned on. WooCommerce product grids are left as they are.
-* Improved: Choosing Home now also shows buttons on the posts listed on a static front page. The page itself still follows your Post Types setting.
-* Improved: Dismissed admin notices stay dismissed, even when a cleanup plugin clears transients. Earlier dismissals carry over with their remaining time.
-* Improved: The review notice appears on the Dashboard only, and "Happy to help" dismisses it.
-* Improved: Notice buttons work without JavaScript, and the loading spinner sits in the middle of the button.
-* Improved: Deactivating the plugin no longer waits for the feedback server to answer.
-* Improved: The deactivation survey explains where to turn on Home, Archives, and Categories, and asks for a note of at least 4 characters.
-* Improved: Untranslated labels in the deactivation survey and admin notices are now translatable.
+* Added: ULike Hub, a heart in the admin bar with your new likes, the latest activity, and a helpful tip. Each person sees their own new likes. Turn it off in Settings → General.
+* Improved: Block theme post lists that show only a title, image, or date (like the Twenty Twenty-Five photo and grid blogs) now get the automatic like button on the homepage, archives, and search.
+* Improved: Choosing Home now also covers the posts listed on a static front page.
+* Improved: Dismissed admin notices stay dismissed, even after a cleanup plugin clears transients.
 * Fixed: Likers lists no longer show voters on drafts, private or password-protected posts, unapproved comments, or hidden activity to visitors who cannot see that item. Thanks to Nguyen Vu Thanh Danh (ngvuthdanh) for reporting it.
-* Developer: New filters `wp_ulike_help_beacon_key`, `wp_ulike_help_beacon_src`, and `wp_ulike_help_beacon_fallback_url`.
-* Docs: readme lists the external services WP ULike can contact and what each one receives.
 
 = 5.2.5 =
 * Added: Custom CSS, the custom loading image, and PHP and JavaScript snippets now live in the Customizer, in a Settings section pinned at the bottom of the list, with a syntax-highlighted code editor and a live preview of the CSS and loading image.
