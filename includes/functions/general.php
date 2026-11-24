@@ -1234,22 +1234,42 @@ if( ! function_exists('wp_ulike_put_contents') ){
 			return false;
 		}
 
-		/**
-		 * Initialize the WP_Filesystem
-		 */
-		global $wp_filesystem;
-		if ( empty( $wp_filesystem ) ) {
-			require_once ( ABSPATH.'/wp-admin/includes/file.php' );
-			WP_Filesystem();
+		$file_dir = dirname( $file_location );
+
+		// The destination is often inside uploads while WP_CONTENT_DIR itself is
+		// not writable. Test the destination directory so WordPress can choose
+		// the direct method instead of falling back to FTP for the whole site.
+		if ( ! wp_mkdir_p( $file_dir ) ) {
+			return false;
 		}
 
-		// Write the content, if possible
-		if ( wp_mkdir_p( dirname( $file_location ) ) && ! $wp_filesystem->put_contents( $file_location, $content, $chmode ) ) {
-			// If writing the content in the file was not successful
-			return false;
-		} else {
-			return true;
+		/**
+		 * Initialize the WP_Filesystem.
+		 *
+		 * WP_Filesystem() returns false when it cannot connect, but still leaves
+		 * an unconnected object in $wp_filesystem. Do not call put_contents() on
+		 * that object: FTP methods would receive an invalid connection.
+		 */
+		global $wp_filesystem;
+
+		$filesystem_ready = $wp_filesystem instanceof WP_Filesystem_Base
+			&& method_exists( $wp_filesystem, 'put_contents' )
+			&& ! ( is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() );
+
+		if ( ! $filesystem_ready ) {
+			require_once ( ABSPATH.'/wp-admin/includes/file.php' );
+			if ( ! WP_Filesystem( false, $file_dir, true ) ) {
+				return false;
+			}
 		}
+
+		if ( ! $wp_filesystem instanceof WP_Filesystem_Base || ! method_exists( $wp_filesystem, 'put_contents' ) ) {
+			return false;
+		}
+
+		// Write the content, if possible. An empty string truncates an existing
+		// file, so removed custom CSS cannot linger in custom.css.
+		return (bool) $wp_filesystem->put_contents( $file_location, $content, $chmode );
 
 	}
 }

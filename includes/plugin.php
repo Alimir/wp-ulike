@@ -95,11 +95,13 @@ class WpUlikeInit {
 
     // File delivery: rewrite uploads/wp-ulike/custom.css (admin hooks required).
     if ( function_exists( 'wp_ulike_save_custom_css' ) ) {
-      wp_ulike_save_custom_css();
+      $saved = wp_ulike_save_custom_css();
       if ( $schema_changed ) {
         update_option( 'wp_ulike_customizer_schema_revision', $schema_rev, true );
       }
-      $upgraded = true;
+      // A failed file write is still a completed upgrade when the save helper
+      // switched delivery to inline CSS. Only retry when neither path is active.
+      $upgraded = $saved || wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) );
     } elseif ( $schema_changed && wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) ) ) {
       // Inline delivery only needs the option cache cleared.
       update_option( 'wp_ulike_customizer_schema_revision', $schema_rev, true );
