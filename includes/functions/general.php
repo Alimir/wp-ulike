@@ -224,6 +224,37 @@ if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_ulike_is_public_comment' ) ) {
+	/**
+	 * Whether a comment may appear on a public list.
+	 *
+	 * Held, spam, and trashed comments stay out for every viewer, including
+	 * administrators. The parent post must be publicly viewable and must not
+	 * be password-protected. The check ignores the current user's password
+	 * cookie so a cached Top List cannot leak a protected comment.
+	 *
+	 * @param int|WP_Comment $comment Comment ID or object.
+	 * @return bool
+	 */
+	function wp_ulike_is_public_comment( $comment ) {
+		$comment = get_comment( $comment );
+		if ( ! $comment ) {
+			return false;
+		}
+
+		if ( '1' !== (string) $comment->comment_approved ) {
+			return false;
+		}
+
+		$post = get_post( $comment->comment_post_ID );
+		if ( ! $post || '' !== (string) $post->post_password ) {
+			return false;
+		}
+
+		return is_post_publicly_viewable( $post );
+	}
+}
+
 if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 	/**
 	 * Whether the current visitor may read a post's content.
@@ -720,7 +751,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 						$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
 					}
 					if( strpos( $out_template, '%USER_NAME%' ) !== false) {
-						$USER_NAME 		= esc_attr( $user_info->display_name );
+						$USER_NAME 		= wp_ulike_encode_shortcode_brackets( esc_attr( $user_info->display_name ) );
 						$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
 					}
 					if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
@@ -993,17 +1024,18 @@ if( ! function_exists('wp_ulike_acquire_lock') ){
 	 */
     function wp_ulike_acquire_lock( $item_type, $item_id ) {
         $lock_file = wp_ulike_lock_file( $item_type, $item_id );
-        $fp = fopen( $lock_file, 'w+' );
+        // flock() needs a native handle; WP_Filesystem has no locking API.
+        $fp = fopen( $lock_file, 'w+' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
         if ( ! $fp || ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
-            if ($fp) {
-                fclose($fp);
+            if ( $fp ) {
+                fclose( $fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
             }
             return false;
         }
 
         ftruncate( $fp, 0 );
-        fwrite( $fp, microtime( true ) );
+        fwrite( $fp, microtime( true ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
 
         return $fp;
     }
@@ -1022,17 +1054,11 @@ if( ! function_exists('wp_ulike_release_lock') ){
         if ( is_resource( $fp ) ) {
             fflush( $fp );
             flock( $fp, LOCK_UN );
-            fclose( $fp );
+            fclose( $fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
             $lock_file = wp_ulike_lock_file( $item_type, $item_id );
 
-            // Use WordPress core function for file deletion (available since WP 4.2.0)
-            if ( function_exists( 'wp_delete_file' ) ) {
-                wp_delete_file( $lock_file );
-            } elseif ( file_exists( $lock_file ) ) {
-                // Fallback for older WordPress versions (though plugin requires 6.0+)
-                @unlink( $lock_file );
-            }
+            wp_delete_file( $lock_file );
 
             return true;
         }

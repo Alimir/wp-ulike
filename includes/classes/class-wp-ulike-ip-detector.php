@@ -46,22 +46,16 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 		private static $cloudflare_ip_cache = array();
 
 		/**
-		 * Cached private IP validation results
-		 *
-		 * @var array
-		 */
-		private static $private_ip_cache = array();
-
-		/**
 		 * Get user IP address
 		 *
 		 * Handles Cloudflare, proxy headers, and direct connections.
 		 * Results are cached per request for performance.
 		 *
-		 * Security Note: For non-security-critical use cases (like tracking likes),
-		 * this implementation prioritizes functionality over strict security.
-		 * Proxy headers are checked but not validated against a trusted proxy whitelist.
-		 * This is acceptable for engagement tracking but should not be used for authentication.
+		 * Forwarded client headers (X-Forwarded-For and similar) are read only when
+		 * REMOTE_ADDR is Cloudflare or a proxy listed in WP_ULIKE_TRUSTED_PROXIES
+		 * / the `wp_ulike_trusted_proxies` filter. Otherwise the header is
+		 * client-controlled and one visitor can present a new address on every
+		 * vote. Direct connections use REMOTE_ADDR.
 		 *
 		 * @return string
 		 */
@@ -71,81 +65,191 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 				return self::$cached_ip;
 			}
 
-			$ip = '127.0.0.1';
+			$remote_addr = self::get_remote_addr();
+			$ip          = '' !== $remote_addr ? $remote_addr : '127.0.0.1';
 
-			// Check Cloudflare header first (most reliable when behind Cloudflare)
-			// Cloudflare is trusted because we validate REMOTE_ADDR against their IP ranges
+			// Cloudflare sets CF-Connecting-IP and overwrites a client-supplied value.
+			// Trust it only when the TCP peer is actually on Cloudflare's network.
 			$cf_ip = isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) : '';
-			if ( ! empty( $cf_ip ) ) {
-				// Validate that request is actually from Cloudflare
-				$remote_addr = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-				if ( ! empty( $remote_addr ) && self::is_cloudflare_ip( $remote_addr ) ) {
-					if ( self::validate_ip( $cf_ip ) ) {
-						$ip = $cf_ip;
-						self::$cached_ip = apply_filters( 'wp_ulike_get_user_ip', $ip );
-						return self::$cached_ip;
-					}
+			if ( '' !== $remote_addr && self::is_cloudflare_ip( $remote_addr ) && self::validate_ip( $cf_ip ) && ! self::is_configured_proxy( $cf_ip ) ) {
+				$ip = $cf_ip;
+			} elseif ( '' !== $remote_addr && self::is_trusted_proxy( $remote_addr ) ) {
+				$forwarded = self::get_forwarded_client_ip();
+				if ( '' !== $forwarded ) {
+					$ip = $forwarded;
 				}
 			}
 
-			// Check other proxy headers (in order of reliability)
-			// Note: These headers can be spoofed, but for engagement tracking this is acceptable
-			$proxy_headers = array(
-				'HTTP_X_REAL_IP',           // Nginx, Apache with mod_remoteip
-				'HTTP_X_FORWARDED_FOR',      // Most common proxy header
-				'HTTP_X_FORWARDED',          // Standard Forwarded header (RFC 7239)
-				'HTTP_X_CLUSTER_CLIENT_IP',  // Cluster/load balancer
-				'HTTP_FORWARDED_FOR',        // Legacy
-				'HTTP_FORWARDED',            // Legacy
-				'HTTP_CLIENT_IP',            // Legacy
-			);
-
-			foreach ( $proxy_headers as $header ) {
-				if ( ! isset( $_SERVER[ $header ] ) ) {
-					continue;
-				}
-				$header_value = sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) );
-				if ( ! empty( $header_value ) ) {
-					// X-Forwarded-For can contain multiple IPs (client, proxy1, proxy2)
-					// Take the first (leftmost) IP which is the original client
-					if ( strpos( $header_value, ',' ) !== false ) {
-						$ips = array_map( 'trim', explode( ',', $header_value ) );
-						$header_value = ! empty( $ips[0] ) ? $ips[0] : '';
-					}
-
-					// Validate IP and ensure it's not a private/local IP (unless from localhost)
-					if ( ! empty( $header_value ) && self::validate_ip( $header_value ) ) {
-						// Additional check: reject private IPs from proxy headers (potential spoofing)
-						// But allow if REMOTE_ADDR is also private (local development)
-						$remote_addr = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-						$is_remote_private = self::is_private_ip( $remote_addr );
-
-						if ( self::is_private_ip( $header_value ) && ! $is_remote_private ) {
-							// Private IP in header but not from localhost - likely spoofed, skip
-							continue;
-						}
-
-						$ip = $header_value;
-						break;
-					}
-				}
-			}
-
-			// Fallback to REMOTE_ADDR (most reliable for direct connections)
-			if ( $ip === '127.0.0.1' || ! self::validate_ip( $ip ) ) {
-				$remote_addr = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-				if ( ! empty( $remote_addr ) && self::validate_ip( $remote_addr ) ) {
-					$ip = $remote_addr;
-				}
-			}
-
-			// Final validation - ensure we have a valid IP
 			if ( ! self::validate_ip( $ip ) ) {
 				$ip = '127.0.0.1';
 			}
 
 			self::$cached_ip = apply_filters( 'wp_ulike_get_user_ip', $ip );
 			return self::$cached_ip;
+		}
+
+		/**
+		 * TCP peer address, ignoring every client-supplied forwarding header.
+		 *
+		 * @return string Empty when REMOTE_ADDR is missing or not an IP.
+		 */
+		private static function get_remote_addr() {
+			$remote_addr = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+			return self::validate_ip( $remote_addr ) ? $remote_addr : '';
+		}
+
+		/**
+		 * Proxy addresses allowed to supply a forwarded client IP.
+		 *
+		 * Cloudflare ranges are trusted separately, after REMOTE_ADDR is checked
+		 * against them. Add a reverse proxy here when it does not write the
+		 * real client address into REMOTE_ADDR.
+		 *
+		 *     define( 'WP_ULIKE_TRUSTED_PROXIES', '10.0.0.0/8,127.0.0.1' );
+		 *
+		 * @return string[] IP addresses or CIDR ranges.
+		 */
+		public static function get_trusted_proxies() {
+			static $cached = null;
+
+			if ( null !== $cached ) {
+				return $cached;
+			}
+
+			$proxies = array();
+			if ( defined( 'WP_ULIKE_TRUSTED_PROXIES' ) ) {
+				$raw = WP_ULIKE_TRUSTED_PROXIES;
+				if ( is_string( $raw ) ) {
+					$proxies = preg_split( '/[\s,]+/', $raw, -1, PREG_SPLIT_NO_EMPTY );
+				} elseif ( is_array( $raw ) ) {
+					$proxies = $raw;
+				}
+			}
+
+			/**
+			 * Trusted reverse proxies.
+			 *
+			 * Forwarded headers are ignored unless REMOTE_ADDR matches one of
+			 * these values or a Cloudflare range.
+			 *
+			 * @param string[] $proxies IP addresses or CIDR ranges.
+			 */
+			$proxies = apply_filters( 'wp_ulike_trusted_proxies', $proxies );
+			if ( ! is_array( $proxies ) ) {
+				$proxies = array();
+			}
+
+			$clean = array();
+			foreach ( $proxies as $proxy ) {
+				$proxy = trim( (string) $proxy );
+				if ( '' !== $proxy ) {
+					$clean[] = $proxy;
+				}
+			}
+
+			$cached = $clean;
+			return $cached;
+		}
+
+		/**
+		 * Whether an address is a proxy this site has chosen to trust.
+		 *
+		 * Does not include Cloudflare. Callers that already know the peer is
+		 * Cloudflare should use is_cloudflare_ip() so a client IP is not rejected
+		 * just because it also appears in a configured range.
+		 *
+		 * @param string $ip IP address.
+		 * @return bool
+		 */
+		private static function is_configured_proxy( $ip ) {
+			if ( ! self::validate_ip( $ip ) ) {
+				return false;
+			}
+
+			foreach ( self::get_trusted_proxies() as $proxy ) {
+				if ( self::ip_in_range( $ip, $proxy ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Whether REMOTE_ADDR is allowed to assert a forwarded client address.
+		 *
+		 * @param string $ip IP address.
+		 * @return bool
+		 */
+		public static function is_trusted_proxy( $ip ) {
+			if ( ! self::validate_ip( $ip ) ) {
+				return false;
+			}
+
+			return self::is_cloudflare_ip( $ip ) || self::is_configured_proxy( $ip );
+		}
+
+		/**
+		 * Client address from a forwarding header sent by a trusted peer.
+		 *
+		 * The list is read from the right. Hops this site trusts are skipped,
+		 * so a visitor cannot prepend a fake address in front of the one the
+		 * proxy appended.
+		 *
+		 * @return string Empty when no usable client address is present.
+		 */
+		private static function get_forwarded_client_ip() {
+			$headers = array(
+				'HTTP_X_FORWARDED_FOR',
+				'HTTP_X_FORWARDED',
+				'HTTP_FORWARDED_FOR',
+				'HTTP_FORWARDED',
+				'HTTP_X_REAL_IP',
+				'HTTP_X_CLUSTER_CLIENT_IP',
+				'HTTP_CLIENT_IP',
+			);
+
+			foreach ( $headers as $header ) {
+				if ( empty( $_SERVER[ $header ] ) ) {
+					continue;
+				}
+
+				$header_value = sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) );
+				if ( '' === $header_value ) {
+					continue;
+				}
+
+				$client = self::client_ip_from_forwarded_list( $header_value );
+				if ( '' !== $client ) {
+					return $client;
+				}
+			}
+
+			return '';
+		}
+
+		/**
+		 * First untrusted address in a comma-separated forwarding list.
+		 *
+		 * @param string $header_value Raw header value.
+		 * @return string
+		 */
+		private static function client_ip_from_forwarded_list( $header_value ) {
+			$parts = array_reverse( array_map( 'trim', explode( ',', $header_value ) ) );
+
+			foreach ( $parts as $candidate ) {
+				if ( 0 === stripos( $candidate, 'for=' ) ) {
+					$candidate = trim( substr( $candidate, 4 ), " \t\"[]" );
+				}
+
+				if ( ! self::validate_ip( $candidate ) || self::is_trusted_proxy( $candidate ) ) {
+					continue;
+				}
+
+				return $candidate;
+			}
+
+			return '';
 		}
 
 		/**
@@ -161,47 +265,6 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 				return false;
 			}
 			return filter_var( $ip, FILTER_VALIDATE_IP ) !== false;
-		}
-
-		/**
-		 * Check if an IP address is a private/local IP
-		 *
-		 * Results are cached per request for performance.
-		 *
-		 * @param string $ip IP address to check
-		 * @return bool
-		 */
-		private static function is_private_ip( $ip ) {
-			// Return cached result if available
-			if ( isset( self::$private_ip_cache[ $ip ] ) ) {
-				return self::$private_ip_cache[ $ip ];
-			}
-
-			$result = false;
-
-			if ( ! self::validate_ip( $ip ) ) {
-				self::$private_ip_cache[ $ip ] = false;
-				return false;
-			}
-
-			// IPv4 private ranges - use native PHP filter (fastest method)
-			if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
-				$result = ! filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE );
-			}
-			// IPv6 private ranges (link-local, unique-local, etc.)
-			elseif ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ) {
-				// Fast check for loopback first
-				if ( $ip === '::1' || $ip === '0:0:0:0:0:0:0:1' ) {
-					$result = true;
-				} else {
-					// Check for link-local (fe80::/10) and unique-local (fc00::/7)
-					$result = self::ip_in_range( $ip, 'fe80::/10' ) || self::ip_in_range( $ip, 'fc00::/7' );
-				}
-			}
-
-			// Cache result
-			self::$private_ip_cache[ $ip ] = $result;
-			return $result;
 		}
 
 		/**

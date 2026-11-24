@@ -192,11 +192,17 @@ final class wp_ulike_cta_listener extends wp_ulike_ajax_listener_base {
 	private function validates(){
 		// Return false when ID not exist
 		if( empty( $this->data['id'] ) || empty( $this->data['type'] ) ){
-			throw new \Exception( wp_ulike_setting_repo::getValidationNotice() );
+			throw new \Exception( wp_ulike_setting_repo::getValidationNotice() ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Sent as JSON and shown with textContent.
+		}
+		// Held comments, private posts, spam activity, and other hidden items
+		// are not a public voting target. Missing ids stay allowed: template
+		// demos store votes on ids that are not posts or comments.
+		if ( ! wp_ulike_is_item_viewable( $this->data['id'], $this->data['type'] ) ) {
+			throw new \Exception( wp_ulike_setting_repo::getValidationNotice() ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Sent as JSON and shown with textContent.
 		}
 		// check blacklist
 		if( ! wp_ulike_blacklist_validator::isValid( array( $this->data['client_address'] ) ) ){
-			throw new \Exception( wp_ulike_setting_repo::getValidationNotice() );
+			throw new \Exception( wp_ulike_setting_repo::getValidationNotice() ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Sent as JSON and shown with textContent.
 		}
 	}
 }

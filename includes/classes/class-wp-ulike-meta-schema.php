@@ -73,7 +73,7 @@ if ( ! class_exists( 'WP_Ulike_Meta_Schema' ) ) {
 			}
 
 			// Direct query (not maybe_create_table): follow-up SHOW TABLES clears last_error.
-			$wpdb->query( self::ddl() );
+			$wpdb->query( self::ddl() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Fixed CREATE TABLE statement.
 			$error = trim( (string) $wpdb->last_error );
 
 			if ( class_exists( 'WP_Ulike_Pulse_Registry' ) ) {

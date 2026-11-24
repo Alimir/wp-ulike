@@ -136,7 +136,7 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 				if ( ! array_key_exists( $key, $values ) ) {
 					continue;
 				}
-				if ( self::is_snippet( $type ) && ! self::can_store_snippets() ) {
+				if ( self::is_snippet( $type ) && ! self::can_store_snippets( $type ) ) {
 					continue;
 				}
 				$stored[ $key ] = self::sanitize( $type, $values[ $key ] );
@@ -160,7 +160,7 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 					if ( ! array_key_exists( $key, $values ) ) {
 						continue;
 					}
-					if ( self::is_snippet( $type ) && ! self::can_store_snippets() ) {
+					if ( self::is_snippet( $type ) && ! self::can_store_snippets( $type ) ) {
 						continue;
 					}
 					$stored[ $key ] = self::sanitize( $type, $values[ $key ] );
@@ -168,11 +168,9 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 			}
 
 			// A save from an account that cannot publish code must not wipe snippets.
-			if ( ! self::can_store_snippets() ) {
-				foreach ( array( 'php_snippets', 'js_snippets' ) as $key ) {
-					if ( array_key_exists( $key, $previous ) ) {
-						$stored[ $key ] = $previous[ $key ];
-					}
+			foreach ( array( 'php_snippets' => 'php', 'js_snippets' => 'js' ) as $key => $type ) {
+				if ( ! self::can_store_snippets( $type ) && array_key_exists( $key, $previous ) ) {
+					$stored[ $key ] = $previous[ $key ];
 				}
 			}
 
@@ -418,8 +416,10 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 		 * @return array<string,mixed>
 		 */
 		public static function customizer_section() {
-			$snippets_on = ! class_exists( 'wp_ulike_setting_repo' ) || ! wp_ulike_setting_repo::isCodeSnippetsDisabled();
-			$editable    = self::snippets_editable();
+			$snippets_on  = self::snippets_enabled( 'js' );
+			$php_on       = self::snippets_enabled( 'php' );
+			$editable     = self::snippets_editable( 'js' );
+			$php_editable = self::snippets_editable( 'php' );
 
 			$fields = array(
 				array(
@@ -452,19 +452,21 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 					'type'    => 'heading',
 					'content' => esc_html__( 'Snippets', 'wp-ulike' ),
 				);
-				$fields[] = array(
-					'id'       => 'php_snippets',
-					'type'     => 'code_editor',
-					'title'    => esc_html__( 'PHP', 'wp-ulike' ),
-					'desc'     => $editable
-						? esc_html__( 'Runs on your site for every visitor. Leave out the opening and closing PHP tags. For a lot of snippets, the Code Snippets plugin is a better home.', 'wp-ulike' )
-						: $locked_desc,
-					'settings' => array(
-						'mode'     => 'php',
-						'rows'     => 12,
-						'readonly' => ! $editable,
-					),
-				);
+				if ( $php_on ) {
+					$fields[] = array(
+						'id'       => 'php_snippets',
+						'type'     => 'code_editor',
+						'title'    => esc_html__( 'PHP', 'wp-ulike' ),
+						'desc'     => $php_editable
+							? esc_html__( 'Runs on your site for every visitor. Leave out the opening and closing PHP tags. For a lot of snippets, the Code Snippets plugin is a better home.', 'wp-ulike' )
+							: $locked_desc,
+						'settings' => array(
+							'mode'     => 'php',
+							'rows'     => 12,
+							'readonly' => ! $php_editable,
+						),
+					);
+				}
 				$fields[] = array(
 					'id'       => 'js_snippets',
 					'type'     => 'code_editor',
@@ -574,8 +576,8 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 		 *
 		 * @return bool
 		 */
-		protected static function can_store_snippets() {
-			if ( class_exists( 'wp_ulike_setting_repo' ) && wp_ulike_setting_repo::isCodeSnippetsDisabled() ) {
+		protected static function can_store_snippets( $type = 'js' ) {
+			if ( ! self::snippets_enabled( $type ) ) {
 				return false;
 			}
 
@@ -583,13 +585,37 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 				return true;
 			}
 
-			return self::snippets_editable();
+			return self::snippets_editable( $type );
 		}
 
 		/**
+		 * @param string $type php|js.
 		 * @return bool
 		 */
-		protected static function snippets_editable() {
+		protected static function snippets_enabled( $type = 'js' ) {
+			if ( ! class_exists( 'wp_ulike_setting_repo' ) ) {
+				return true;
+			}
+
+			return 'php' === $type
+				? ! wp_ulike_setting_repo::isPhpSnippetsDisabled()
+				: ! wp_ulike_setting_repo::isCodeSnippetsDisabled();
+		}
+
+		/**
+		 * @param string $type php|js.
+		 * @return bool
+		 */
+		protected static function snippets_editable( $type = 'js' ) {
+			if ( 'php' === $type ) {
+				// DISALLOW_FILE_EDIT removes edit_plugins, so the wp-config.php
+				// opt-in falls back to site administrators.
+				$can_edit_code = current_user_can( 'edit_plugins' )
+					|| ( class_exists( 'wp_ulike_setting_repo' ) && wp_ulike_setting_repo::isPhpSnippetsAllowed() && current_user_can( 'manage_options' ) );
+
+				return current_user_can( 'unfiltered_html' ) && $can_edit_code;
+			}
+
 			return current_user_can( 'unfiltered_html' );
 		}
 

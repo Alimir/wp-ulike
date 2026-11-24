@@ -178,7 +178,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_info' ) ){
 			return $results;
 		}
 
-		$results = !empty( $query ) ? $wpdb->get_results( $query ): null;
+		$results = ! empty( $query ) ? $wpdb->get_results( $query ) : null; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $query is built with $wpdb->prepare() above.
 
 		if( ! empty( $results ) ){
 			WP_Ulike_Query_Cache::set( $logical_key, $results );
@@ -320,7 +320,7 @@ if( ! function_exists( 'wp_ulike_get_popular_items_total_number' ) ){
 			);
 		}
 
-		return !empty( $query ) ? (int) $wpdb->get_var( $query ): null;
+		return ! empty( $query ) ? (int) $wpdb->get_var( $query ) : null; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $query is built with $wpdb->prepare() above.
 	}
 }
 

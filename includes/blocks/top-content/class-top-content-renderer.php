@@ -200,7 +200,9 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				<?php endif; ?>
 			</section>
 			<?php
-			return ob_get_clean();
+			// do_blocks() runs before do_shortcode(). Brackets in visitor text
+			// (comment names, titles, display names) must not survive as shortcodes.
+			return wp_ulike_encode_shortcode_brackets( ob_get_clean() );
 		}
 
 		/**
@@ -727,6 +729,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 						'comment__in' => array_keys( $counters ),
 						'orderby'     => 'comment__in',
 						'number'      => $fetch_limit,
+						'status'      => 'approve',
 						'post_type'   => is_array( $rel_type ) ? $rel_type : ( $rel_type ? $rel_type : '' ),
 					),
 					$args
@@ -750,6 +753,12 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 					continue;
 				}
 
+				// Query status can be removed by a filter. Never list a comment
+				// WordPress is holding, or one on a private or password-protected post.
+				if ( ! wp_ulike_is_public_comment( $comment ) ) {
+					continue;
+				}
+
 				$comment_id = (int) $comment->comment_ID;
 				$vote_data  = self::build_item_vote_data( $comment_id, 'comment', $args, $is_distinct );
 
@@ -762,8 +771,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 					'title'         => wp_trim_words( get_the_title( $comment->comment_post_ID ), $args['titleTrim'], '…' ),
 					'subtitle'      => sprintf(
 						'%s %s',
-						esc_html( stripslashes( $comment->comment_author ) ),
-						__( 'on', 'wp-ulike' )
+						wp_ulike_encode_shortcode_brackets( esc_html( stripslashes( $comment->comment_author ) ) ),
+						esc_html__( 'on', 'wp-ulike' )
 					),
 					'url'           => get_comment_link( $comment_id ),
 					'count'         => $vote_data['count'],
@@ -880,7 +889,15 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 					continue;
 				}
 
+				// Spam and sitewide-hidden activity is not a public ranking.
+				if ( ! empty( $activity->is_spam ) || ! empty( $activity->hide_sitewide ) ) {
+					continue;
+				}
+
 				$activity_id = (int) $activity->id;
+				if ( ! wp_ulike_is_item_viewable( $activity_id, 'activity' ) ) {
+					continue;
+				}
 				$vote_data   = self::build_item_vote_data( $activity_id, 'activity', $args, $is_distinct );
 
 				if ( null === $vote_data ) {
@@ -945,6 +962,10 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 
 				$post_id   = (int) $post->ID;
+				if ( ! wp_ulike_is_item_viewable( $post_id, 'topic' ) ) {
+					continue;
+				}
+
 				$vote_data = self::build_item_vote_data( $post_id, 'topic', $args, $is_distinct );
 
 				if ( null === $vote_data ) {
@@ -1089,7 +1110,10 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				: '';
 
 			$subtitle_html = ! empty( $item['subtitle'] )
-				? sprintf( '<span class="wp-ulike-top-content__subtitle">%s</span>', wp_kses_post( $item['subtitle'] ) )
+				? sprintf(
+					'<span class="wp-ulike-top-content__subtitle">%s</span>',
+					wp_ulike_encode_shortcode_brackets( wp_kses_post( $item['subtitle'] ) )
+				)
 				: '';
 
 			$media_html = ! empty( $item['thumbnail'] ) ? '<span class="wp-ulike-top-content__media">' . $item['thumbnail'] . '</span>' : '';
@@ -1098,7 +1122,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 
 			$title_inner = sprintf(
 				'<span class="wp-ulike-top-content__title">%s</span>%s',
-				esc_html( $item['title'] ),
+				wp_ulike_encode_shortcode_brackets( esc_html( $item['title'] ) ),
 				$subtitle_html
 			);
 

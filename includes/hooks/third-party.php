@@ -41,7 +41,7 @@ if( ! function_exists( 'wp_ulike_put_buddypress' ) ){
 			switch ( $action ) {
 				case 'bp_activity_entry_meta':
 					if ( $position === 'meta' ){
-						echo wp_ulike_buddypress('put', array(
+						echo wp_ulike_buddypress('put', array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button().
 							'id' => bp_get_activity_id()
 						));
 					}
@@ -49,7 +49,7 @@ if( ! function_exists( 'wp_ulike_put_buddypress' ) ){
 
 				case 'bp_activity_entry_content':
 					if ( $position === 'content' ){
-						echo wp_ulike_buddypress('put', array(
+						echo wp_ulike_buddypress('put', array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button().
 							'id' => bp_get_activity_id()
 						));
 					}
@@ -118,7 +118,7 @@ if( ! function_exists( 'wp_ulike_buddypress_comment_options_display' ) ){
 	function wp_ulike_buddypress_comment_options_display(){
 		if( wp_ulike_setting_repo::isActivityCommentAutoDisplayOn() ){
 			if ( wp_ulike_get_option( 'buddypress_group|auto_display_position', 'content' ) === 'meta' ){
-				echo wp_ulike_buddypress('put', array(
+				echo wp_ulike_buddypress('put', array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button().
 					'id' => bp_get_activity_comment_id()
 				));
 			}
@@ -265,7 +265,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 						$post_template = str_replace( "%POST_COUNT%", $POST_COUNT, $post_template );
 					}
 					if ( strpos( $post_template, '%POST_TITLE%' ) !== false ) {
-						$POST_TITLE    = get_the_title( $cp_ID );
+						$POST_TITLE    = wp_ulike_encode_shortcode_brackets( esc_html( get_the_title( $cp_ID ) ) );
 						$post_template = str_replace( "%POST_TITLE%", $POST_TITLE, $post_template );
 					}
 					bp_activity_add( apply_filters( 'wp_ulike_post_bp_notification_args',  array(
@@ -290,7 +290,7 @@ if( ! function_exists( 'wp_ulike_add_bp_notifications' ) ){
 						$comment_template  = str_replace( "%COMMENT_PERMALINK%", $COMMENT_PERMALINK, $comment_template );
 					}
 					if ( strpos( $comment_template, '%COMMENT_AUTHOR%' ) !== false ) {
-						$COMMENT_AUTHOR   = get_comment_author( $cp_ID );
+						$COMMENT_AUTHOR   = wp_ulike_encode_shortcode_brackets( esc_html( get_comment_author( $cp_ID ) ) );
 						$comment_template = str_replace( "%COMMENT_AUTHOR%", $COMMENT_AUTHOR, $comment_template );
 					}
 					if ( strpos( $comment_template, '%COMMENT_COUNT%' ) !== false ) {
@@ -538,32 +538,32 @@ if( ! function_exists( 'wp_ulike_put_bbpress' ) ){
 			$position = wp_ulike_get_option( 'bbpress_group|auto_display_position', 'bottom' );
 
 			if( $position === 'top_bottom' ){
-				echo wp_ulike_bbpress('put');
+				echo wp_ulike_bbpress('put'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button().
 				return;
 			}
 
 			switch ( $action ) {
 				case 'bbp_theme_before_reply_content':
 					if( $position === 'top' ){
-						echo wp_ulike_bbpress('put');
+						echo wp_ulike_bbpress('put'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button().
 					}
 					return;
 
 				case 'bbp_theme_after_reply_content':
 					if( $position === 'bottom' ){
-						echo wp_ulike_bbpress('put');
+						echo wp_ulike_bbpress('put'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button().
 					}
 					return;
 
 				case 'bbp_theme_before_topic_content':
 					if( $position === 'top' && ! ( bbp_is_single_topic() && bbp_show_lead_topic() ) ){
-						echo wp_ulike_bbpress('put');
+						echo wp_ulike_bbpress('put'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button().
 					}
 					return;
 
 				case 'bbp_theme_after_topic_content':
 					if( $position === 'bottom' && ! ( bbp_is_single_topic() && bbp_show_lead_topic() ) ){
-						echo wp_ulike_bbpress('put');
+						echo wp_ulike_bbpress('put'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button().
 					}
 					return;
 			}
@@ -761,14 +761,14 @@ if( ! function_exists( 'wp_ulike_posts_um_profile_content' ) ){
 		if( $query->have_posts() ):
 				while( $query->have_posts() ): $query->the_post();
 					echo '<div class="um-item">';
-					echo '<div class="um-item-link">
-							<i class="um-icon-ios-paper"></i>
-							<a href="'.get_permalink().'">'.get_the_title().'</a>
-							</div>';
-					echo '<div class="um-item-meta">
-							<span>'.get_the_date().'</span>
-							<span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_post_likes( wp_ulike_get_the_id() ).'</span>
-							</div>';
+					echo '<div class="um-item-link">';
+					echo '<i class="um-icon-ios-paper"></i>';
+					echo '<a href="' . esc_url( get_permalink() ) . '">' . esc_html( wp_ulike_encode_shortcode_brackets( get_the_title() ) ) . '</a>';
+					echo '</div>';
+					echo '<div class="um-item-meta">';
+					echo '<span>' . esc_html( get_the_date() ) . '</span>';
+					echo '<span class="badge"><i class="um-faicon-thumbs-o-up"></i> ' . esc_html( wp_ulike_get_post_likes( wp_ulike_get_the_id() ) ) . '</span>';
+					echo '</div>';
 					echo '</div>';
 				endwhile;
 		else:
@@ -809,6 +809,7 @@ if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
 		$query_args = array(
 			'comment__in'    => $get_items,
 			'orderby'        => 'comment__in',
+			'status'         => 'approve',
 			'posts_per_page' => $args['limit']
 		);
 
@@ -819,16 +820,19 @@ if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
 		// Comment Loop
 		if ( $comments ) {
 				foreach ( $comments as $comment ) {
+					if ( ! wp_ulike_is_public_comment( $comment ) ) {
+						continue;
+					}
 					echo '<div class="um-item">';
-					echo '<div class="um-item-link">
-							<i class="um-icon-ios-chatboxes"></i>
-							<a href="'.get_comment_link($comment->comment_ID).'">'.$comment->comment_content .'</a>
-							<em style="font-size:.7em;padding:0 10px;"><span class="um-faicon-quote-left"></span> '.$comment->comment_author.' <span class="um-faicon-quote-right"></span></em>
-							</div>';
-					echo '<div class="um-item-meta">
-							<span>'.get_comment_date( '', $comment->comment_ID ).'</span>
-							<span class="badge"><i class="um-faicon-thumbs-o-up"></i> '.wp_ulike_get_comment_likes( $comment->comment_ID ).'</span>
-							</div>';
+					echo '<div class="um-item-link">';
+					echo '<i class="um-icon-ios-chatboxes"></i>';
+					echo '<a href="' . esc_url( get_comment_link( $comment->comment_ID ) ) . '">' . wp_kses_post( wp_ulike_encode_shortcode_brackets( $comment->comment_content ) ) . '</a>';
+					echo '<em style="font-size:.7em;padding:0 10px;"><span class="um-faicon-quote-left"></span> ' . esc_html( wp_ulike_encode_shortcode_brackets( $comment->comment_author ) ) . ' <span class="um-faicon-quote-right"></span></em>';
+					echo '</div>';
+					echo '<div class="um-item-meta">';
+					echo '<span>' . esc_html( get_comment_date( '', $comment->comment_ID ) ) . '</span>';
+					echo '<span class="badge"><i class="um-faicon-thumbs-o-up"></i> ' . esc_html( wp_ulike_get_comment_likes( $comment->comment_ID ) ) . '</span>';
+					echo '</div>';
 					echo '</div>';
 				}
 		} else {

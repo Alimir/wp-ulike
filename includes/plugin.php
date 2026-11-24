@@ -367,7 +367,13 @@ class WpUlikeInit {
     $locale = apply_filters( 'plugin_locale', $locale, WP_ULIKE_SLUG );
 
     load_textdomain( WP_ULIKE_SLUG, WP_LANG_DIR . '/' . WP_ULIKE_SLUG . '/' . WP_ULIKE_SLUG . '-' . $locale . '.mo' );
-    load_plugin_textdomain( WP_ULIKE_SLUG, false, $lang_dir );
+
+    // WordPress.org language packs load on their own. This keeps .mo files
+    // placed in the plugin's languages folder working.
+    $bundled_mofile = WP_PLUGIN_DIR . '/' . trim( $lang_dir, '/' ) . '/' . WP_ULIKE_SLUG . '-' . $locale . '.mo';
+    if ( is_readable( $bundled_mofile ) ) {
+      load_textdomain( WP_ULIKE_SLUG, $bundled_mofile );
+    }
   }
 
   /**

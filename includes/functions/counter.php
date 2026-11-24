@@ -119,7 +119,7 @@ if( ! function_exists( 'wp_ulike_get_counter_value_info' ) ){
 			if ( wp_ulike_use_pulse_queries() ) {
 				$counter_value = WP_Ulike_Pulse_Query::count_item_votes( $ID, $type, $query_status, $is_distinct, $date_range );
 			} else {
-				$counter_value  = $wpdb->get_var( $wpdb->prepare(
+				$counter_value  = $wpdb->get_var( $wpdb->prepare( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 					"SELECT COUNT({$count_type}) FROM `{$table_escaped}` WHERE {$status_condition} AND `{$column_escaped}` = %d {$period_limit}",
 					$ID
 				) );

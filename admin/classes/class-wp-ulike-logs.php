@@ -143,7 +143,8 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 			$orderType = strtoupper( $this->sort['type'] ) === 'ASC' ? 'ASC' : 'DESC';
 			$where = $this->legacy_search_where();
 
-			return $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM `{$table}`{$where} ORDER BY `{$orderBy}` {$orderType} LIMIT %d, %d", $paged, $per_page ) );
+			$wpdb = $this->wpdb;
+			return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `{$table}`{$where} ORDER BY `{$orderBy}` {$orderType} LIMIT %d, %d", $paged, $per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- Table and column names come from the type registry; the search clause is prepared.
 		}
 
 		/**
@@ -159,12 +160,8 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 			$table = $this->legacy_table_sql();
 			$item_ID = absint( $item_ID );
 
-			return $this->wpdb->get_row( $this->wpdb->prepare( "
-				SELECT *
-				FROM `{$table}`
-				WHERE `id` = %d",
-				$item_ID
-			) );
+			$wpdb = $this->wpdb;
+			return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `{$table}` WHERE `id` = %d", $item_ID ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- Table and column names come from the type registry; the search clause is prepared.
 		}
 
 		/**
@@ -185,7 +182,7 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 			$orderType = strtoupper( $this->sort['type'] ) === 'ASC' ? 'ASC' : 'DESC';
 			$where = $this->legacy_search_where();
 
-			return $this->wpdb->get_results( "SELECT * FROM `{$table}`{$where} ORDER BY `{$orderBy}` {$orderType}" );
+			return $this->wpdb->get_results( "SELECT * FROM `{$table}`{$where} ORDER BY `{$orderBy}` {$orderType}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- Table and column names come from the type registry; the search clause is prepared.
 		}
 
 		/**
@@ -218,8 +215,8 @@ if ( ! class_exists( 'wp_ulike_logs' ) ) {
 			}
 			if( ! empty( $selectedIds ) ){
 				$placeholders = implode( ',', array_fill( 0, count( $selectedIds ), '%d' ) );
-				$query = "DELETE FROM `{$table}` WHERE `id` IN({$placeholders})";
-				$this->wpdb->query( $this->wpdb->prepare( $query, $selectedIds ) );
+				$wpdb = $this->wpdb;
+				$wpdb->query( $wpdb->prepare( "DELETE FROM `{$table}` WHERE `id` IN({$placeholders})", $selectedIds ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- Table and column names come from the type registry; the search clause is prepared.
 			}
 		}
 

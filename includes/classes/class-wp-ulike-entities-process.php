@@ -506,7 +506,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 			// row first so append-mode (multiple rows per user) reports the id of
 			// the row that was just updated.
 			$column = esc_sql( $this->typeSettings->getColumnName() );
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			$row_id = (int) $this->wpdb->get_var(
 				$this->wpdb->prepare(
 					"SELECT id FROM `{$table}` WHERE `{$column}` = %d AND user_id = %s ORDER BY id DESC LIMIT 1",
@@ -514,6 +514,7 @@ if ( ! class_exists( 'wp_ulike_entities_process' ) ) {
 					$this->currentUser
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
 		do_action( 'wp_ulike_data_updated', [
 			'id'             => $row_id,                 // Row ID (parity with pulse fire_updated)

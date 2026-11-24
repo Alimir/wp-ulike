@@ -81,7 +81,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					? self::legacy_active_status_sql( 'status' )
 					: $wpdb->prepare( '`status` = %s', $status );
 
-				$legacy = (int) $wpdb->get_var(
+				$legacy = (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 					$wpdb->prepare(
 						"SELECT COUNT({$count}) FROM `{$table}` WHERE {$where} AND `{$column}` = %d {$period_limit}",
 						$item_id
@@ -235,7 +235,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$legacy = 0;
 			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 				$table  = esc_sql( $source['table'] );
-				$legacy = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit}" );
+				$legacy = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			}
 
 		if ( 'legacy' === $mode || ! $source ) {
@@ -277,7 +277,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$legacy = 0;
 			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 				$table  = esc_sql( $source['table'] );
-				$legacy = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit}" );
+				$legacy = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$period_limit}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			}
 
 			if ( 'legacy' === $mode || ! $source ) {
@@ -364,7 +364,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				$since_sql = 'merged' === $mode ? $wpdb->prepare( ' AND date_time >= %s', WP_Ulike_Pulse_Config::dual_since() ) : '';
 				$pulse_ids = array_map(
 					'absint',
-					(array) $wpdb->get_col(
+					(array) $wpdb->get_col( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 						$wpdb->prepare(
 							"SELECT DISTINCT item_id FROM `{$pulse}` WHERE item_type = %s AND engagement_kind = %s {$since_sql}",
 							$item_type,
@@ -399,7 +399,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$legacy = 0;
 			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 				$table  = esc_sql( $source['table'] );
-				$legacy = (int) $wpdb->get_var(
+				$legacy = (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 					$wpdb->prepare(
 						"SELECT COUNT(*) FROM `{$table}` WHERE status = %s {$period_limit}",
 						$legacy_status
@@ -451,7 +451,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$table = esc_sql( $source['table'] );
 
 			if ( 'legacy' === $mode ) {
-				return (int) $wpdb->get_var( "SELECT COUNT(DISTINCT user_id) FROM `{$table}` WHERE 1=1 {$period_limit}" );
+				return (int) $wpdb->get_var( "SELECT COUNT(DISTINCT user_id) FROM `{$table}` WHERE 1=1 {$period_limit}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			}
 
 			// Merged mode: dedup across legacy + pulse via UNION so a voter who
@@ -673,7 +673,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			if ( 'legacy' === $mode ) {
 				$limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d, %d', $offset, $limit ) : '';
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 				return $wpdb->get_results(
 					$wpdb->prepare(
 						"SELECT `{$column}` AS itemID, MAX(date_time) AS datetime, MAX(status) AS lastStatus
@@ -684,6 +684,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 						$user_id
 					)
 				);
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 			}
 
 			// Merged: newest row wins per item (incl. pulse removed), then filter.
@@ -704,7 +705,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d, %d', $offset, $limit ) : '';
 			$active_w  = $filter['active_only'] ? " WHERE lastStatus <> 'removed'" : '';
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			return $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT itemID, datetime, lastStatus FROM (
@@ -731,6 +732,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WP_Ulike_Pulse_Registry::KIND_VOTE
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -771,7 +773,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			if ( 'legacy' === $mode ) {
 				$limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d, %d', $offset, $limit ) : '';
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 				return $wpdb->get_results(
 					"SELECT t.user_id AS userID, COUNT(t.user_id) AS score, MAX(t.date_time) AS datetime,
 					MAX(t.status) AS lastStatus,
@@ -782,6 +784,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					GROUP BY t.user_id
 					ORDER BY score {$order}{$limit_sql}"
 				);
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 			}
 
 			// Merged: collapse to one row per (user, item); drop superseded unlikes.
@@ -805,7 +808,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d, %d', $offset, $limit ) : '';
 			$active_w  = $filter['active_only'] ? " WHERE lastStatus <> 'removed'" : '';
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			return $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT userID, COUNT(*) AS score, MAX(datetime) AS datetime,
@@ -838,6 +841,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WP_Ulike_Pulse_Registry::KIND_VOTE
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -869,12 +873,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			// pagination far beyond rows the UI can resolve.
 			$users = $wpdb->users;
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			return $wpdb->get_results(
 				"SELECT votes.user_id, COUNT(*) AS SumUser FROM ( {$inner} ) AS votes
 				INNER JOIN `{$users}` u ON u.ID = CAST(votes.user_id AS UNSIGNED)
 				GROUP BY votes.user_id ORDER BY SumUser {$order}, votes.user_id ASC {$offset_sql}"
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -1067,11 +1072,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			$users = $wpdb->users;
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			return (int) $wpdb->get_var(
 				'SELECT COUNT(DISTINCT engagers.user_id) FROM ( ' . implode( ' UNION ', $union ) . " ) AS engagers
 				INNER JOIN `{$users}` u ON u.ID = CAST(engagers.user_id AS UNSIGNED)"
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -1126,7 +1132,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			// fetch_pulse_likers() so append-mode (one row per vote) and
 			// distinct-mode both surface each user at most once, with their
 			// most recent action deciding presence.
-			$users = $wpdb->get_col(
+			$users = $wpdb->get_col( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 				$wpdb->prepare(
 					"SELECT p.user_id
 					FROM `{$table}` p
@@ -1214,7 +1220,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 
 			$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
-			return (int) $wpdb->get_var(
+			return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 				$wpdb->prepare(
 					"SELECT COUNT({$count}) FROM `{$table}`
 					WHERE item_id = %d AND item_type = %s AND engagement_kind = %s
@@ -1281,7 +1287,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 				);
 			}
 
-			return (int) $wpdb->get_var(
+			return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 				$wpdb->prepare(
 					"SELECT COUNT(DISTINCT user_id) FROM (
 						SELECT CAST(l.user_id AS CHAR) AS user_id FROM `{$legacy_table}` l
@@ -1325,7 +1331,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		// Count all engagement kinds (vote + emoji + star) so the "all logs"
 		// total reflects every interaction, matching count_all_legacy_logs()
 		// which counts every legacy row regardless of status.
-		return (int) $wpdb->get_var(
+		return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			"SELECT COUNT(*) FROM `{$table}` WHERE 1=1 {$since_sql} {$period_limit}"
 		);
 	}
@@ -1361,7 +1367,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			);
 		}
 
-		return (int) $wpdb->get_var(
+		return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			"SELECT COUNT(*) FROM `{$table}` WHERE engagement_kind IN ('emoji','star'){$type_sql}{$since_sql}{$period_limit}"
 		);
 	}
@@ -1391,7 +1397,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		// Count all engagement kinds (vote + emoji + star) so per-type "all
 		// logs" totals match the global count_pulse_logs() behavior. Per-item
 		// vote counters use count_item_votes()/count_pulse_item_votes().
-		return (int) $wpdb->get_var(
+		return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM `{$table}` WHERE item_type = %s{$since_sql}{$period_limit}",
 				WP_Ulike_Pulse_Registry::normalize_item_type( $item_type )
@@ -1417,7 +1423,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$table        = esc_sql( WP_Ulike_Pulse_Schema::table() );
 			$since_sql    = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
-			return (int) $wpdb->get_var(
+			return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 				$wpdb->prepare(
 					"SELECT COUNT(*) FROM `{$table}` WHERE item_type = %s AND engagement_kind = %s{$since_sql}{$period_limit}",
 					WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ),
@@ -1440,7 +1446,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$table     = esc_sql( WP_Ulike_Pulse_Schema::table() );
 			$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
-			return (int) $wpdb->get_var(
+			return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 				$wpdb->prepare(
 					"SELECT COUNT(*) FROM `{$table}`
 					WHERE item_type = %s AND engagement_kind = %s
@@ -1501,7 +1507,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$legacy_actor = self::distinct_actor_sql( 'l' );
 			$pulse_actor  = self::distinct_actor_sql( 'e' );
 
-			return (int) $wpdb->get_var(
+			return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 				$wpdb->prepare(
 					"SELECT COUNT(DISTINCT actor) FROM (
 						SELECT {$legacy_actor} AS actor FROM `{$legacy_table}` l
@@ -1558,7 +1564,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		$since_sql = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 		$actor_sql = self::distinct_actor_sql();
 
-		return (int) $wpdb->get_var(
+		return (int) $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			$wpdb->prepare(
 				"SELECT COUNT(DISTINCT actor) FROM (
 					SELECT {$actor_sql} AS actor FROM `{$table}`
@@ -1622,10 +1628,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$union[]      = "SELECT {$legacy_actor} AS actor FROM `{$legacy_table}` l WHERE l.status IN ('like','dislike') {$legacy_per}";
 		}
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 		return (int) $wpdb->get_var(
 			"SELECT COUNT(DISTINCT actor) FROM (" . implode( ' UNION ', $union ) . ") AS combined WHERE actor IS NOT NULL"
 		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 		/**
@@ -1643,7 +1650,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					continue;
 				}
 				$t = esc_sql( $table );
-				$total += (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$t}` WHERE 1=1 {$period_limit}" );
+				$total += (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$t}` WHERE 1=1 {$period_limit}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			}
 
 			return $total;
@@ -1684,12 +1691,13 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$order    = strtoupper( $parsed_args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
 			$join     = self::popular_content_join( $parsed_args, $info_args, $related_condition, 't', $column );
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			return $wpdb->get_results(
 				"SELECT {$count} AS counter, t.`{$column}` AS item_ID FROM `{$table}` t {$join}
 				WHERE t.status IN ({$status_in}) {$user_condition} {$period_limit}
 				GROUP BY t.`{$column}` ORDER BY `{$order_by}` {$order}, item_ID DESC {$limit_records}"
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -1729,7 +1737,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$period_sql = str_replace( 'date_time', 't.date_time', $period_limit );
 			$since_sql  = $since ? $wpdb->prepare( ' AND t.date_time >= %s', $since ) : '';
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			return $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT {$count} AS counter, t.item_id AS item_ID FROM `{$table}` t {$join}
@@ -1740,6 +1748,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WP_Ulike_Pulse_Registry::KIND_VOTE
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -1835,11 +1844,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					return array();
 				}
 
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 				return $wpdb->get_results(
 					'SELECT item_ID, COUNT(DISTINCT user_id) AS counter FROM ( ' . implode( ' UNION ALL ', $user_parts ) . " ) AS combined
 					GROUP BY item_ID ORDER BY `{$order_by}` {$order}, item_ID DESC {$limit_records}"
 				);
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 			}
 
 			if ( $source && WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
@@ -1884,11 +1894,12 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			}
 
 			// Non-distinct: row counts from each store are additive (append logging).
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			return $wpdb->get_results(
 				'SELECT item_ID, SUM(counter) AS counter FROM ( ' . implode( ' UNION ALL ', $parts ) . " ) AS combined
 				GROUP BY item_ID ORDER BY `{$order_by}` {$order}, item_ID DESC {$limit_records}"
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -2031,7 +2042,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$status_sql = $filter['active_only'] ? "status = 'active'" : "status IN ('active','removed')";
 			$since_sql  = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT item_id AS itemID, MAX(date_time) AS datetime,
@@ -2046,6 +2057,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WP_Ulike_Pulse_Registry::KIND_VOTE
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
 			return is_array( $rows ) ? $rows : array();
 		}
@@ -2081,7 +2093,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 			$status_sql = $filter['active_only'] ? "status = 'active'" : "status IN ('active','removed')";
 			$since_sql  = $since ? $wpdb->prepare( ' AND date_time >= %s', $since ) : '';
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT t.user_id AS userID, COUNT(*) AS score, MAX(t.date_time) AS datetime,
@@ -2097,6 +2109,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 					WP_Ulike_Pulse_Registry::KIND_VOTE
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
 			return is_array( $rows ) ? $rows : array();
 		}
@@ -2119,7 +2132,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		// latest row is an active like. Standard SQL — avoids the
 		// `SELECT DISTINCT ... ORDER BY` non-determinism that could surface
 		// duplicate user IDs and stale likers (liked then unliked).
-		return $wpdb->get_col(
+		return $wpdb->get_col( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			$wpdb->prepare(
 				"SELECT p.user_id
 				FROM `{$table}` p
@@ -2167,7 +2180,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
 		// Users whose LATEST action on this item is an unlike (status=removed).
 		// A user who unliked then re-liked has a newer active row, so they are
 		// NOT included here — keeping them in the likers list where they belong.
-		return $wpdb->get_col(
+		return $wpdb->get_col( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			$wpdb->prepare(
 				"SELECT p.user_id
 				FROM `{$table}` p

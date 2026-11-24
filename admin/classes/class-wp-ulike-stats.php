@@ -577,11 +577,16 @@ if ( ! class_exists( 'wp_ulike_stats' ) ) {
 			$comments = get_comments( apply_filters( 'wp_ulike_get_top_comments_query', array(
 				'comment__in' => $ids,
 				'orderby'     => 'comment__in',
+				'status'      => 'approve',
 				'post_type'   => $post_type,
 			) ) );
 
 			$result = array();
 			foreach ( $comments as $comment ) {
+				if ( ! wp_ulike_is_public_comment( $comment ) ) {
+					continue;
+				}
+
 				$author       = stripslashes( $comment->comment_author );
 				$post_title   = get_the_title( $comment->comment_post_ID );
 				$comment_text = wp_strip_all_tags( $comment->comment_content );

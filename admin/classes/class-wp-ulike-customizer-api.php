@@ -816,7 +816,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 foreach ( $css_urls as $css_url ) {
                     if ( ! empty( $css_url ) ) {
                         $css_url = $this->normalize_url( $css_url );
-                        $html .= '<link rel="stylesheet" href="' . esc_url( $css_url ) . '">';
+                        $html .= '<link rel="stylesheet" href="' . esc_url( $css_url ) . '">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Standalone preview document for the customizer iframe.
                     }
                 }
             }
@@ -853,7 +853,7 @@ if ( ! class_exists( 'wp_ulike_customizer_api' ) ) {
                 foreach ( $js_urls as $js_url ) {
                     if ( ! empty( $js_url ) ) {
                         $js_url = $this->normalize_url( $js_url );
-                        $html .= '<script src="' . esc_url( $js_url ) . '"></script>';
+                        $html .= '<script src="' . esc_url( $js_url ) . '"></script>'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- Standalone preview document for the customizer iframe.
                     }
                 }
             }

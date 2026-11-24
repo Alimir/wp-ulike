@@ -174,6 +174,35 @@ if( ! function_exists( 'wp_ulike_get_user_ip' ) ){
 	}
 }
 
+if ( ! function_exists( 'wp_ulike_encode_shortcode_brackets' ) ) {
+	/**
+	 * Neutralize shortcode brackets in text that will be printed into post content.
+	 *
+	 * Blocks run on `the_content` at priority 9, and `do_shortcode()` runs at
+	 * priority 11. `esc_html()` leaves `[` and `]` intact, so a visitor-supplied
+	 * value such as a comment author name is parsed as a shortcode.
+	 *
+	 * The entities are zero-padded (`&#091;` / `&#093;`). `do_shortcode()`
+	 * finishes by turning the shorter `&#91;` / `&#93;` back into brackets, which
+	 * would make the text a shortcode again on a later pass. The padded form
+	 * still displays as `[` and `]`.
+	 *
+	 * @param string $text Text or HTML.
+	 * @return string
+	 */
+	function wp_ulike_encode_shortcode_brackets( $text ) {
+		if ( ! is_string( $text ) || '' === $text ) {
+			return $text;
+		}
+
+		if ( false === strpos( $text, '[' ) && false === strpos( $text, ']' ) ) {
+			return $text;
+		}
+
+		return str_replace( array( '[', ']' ), array( '&#091;', '&#093;' ), $text );
+	}
+}
+
 if( ! function_exists( 'wp_ulike_validate_ip' ) ){
 	/**
 	 * Ensures an ip address is both a valid IP and does not fall within a private network range.
@@ -311,7 +340,7 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
                     $end_timestamp = strtotime( $date_range['end'] );
                     $end_date = ( false === $end_timestamp )
                         ? $date_range['end'] . ' 23:59:59'
-                        : date( 'Y-m-d 23:59:59', $end_timestamp );
+                        : gmdate( 'Y-m-d 23:59:59', $end_timestamp );
                 }
 
                 $period_limit = $wpdb->prepare(
@@ -336,7 +365,7 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
                 break;
 
             case "yesterday":
-                $yesterday = date( 'Y-m-d', current_time( 'timestamp' ) - DAY_IN_SECONDS );
+                $yesterday = gmdate( 'Y-m-d', current_time( 'timestamp' ) - DAY_IN_SECONDS );
                 $period_limit = $wpdb->prepare(
                     " AND date_time >= %s AND date_time <= %s",
                     $yesterday . ' 00:00:00',
@@ -345,7 +374,7 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
                 break;
 
             case "day_before_yesterday":
-                $day_before = date( 'Y-m-d', current_time( 'timestamp' ) - ( 2 * DAY_IN_SECONDS ) );
+                $day_before = gmdate( 'Y-m-d', current_time( 'timestamp' ) - ( 2 * DAY_IN_SECONDS ) );
                 $period_limit = $wpdb->prepare(
                     " AND date_time >= %s AND date_time <= %s",
                     $day_before . ' 00:00:00',
@@ -357,13 +386,13 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
                 // Respect WordPress start_of_week setting (0=Sunday, 1=Monday, etc.)
                 $start_of_week = (int) get_option( 'start_of_week', 1 );
                 $today_timestamp = current_time( 'timestamp' );
-                $day_of_week = (int) date( 'w', $today_timestamp );
+                $day_of_week = (int) gmdate( 'w', $today_timestamp );
                 $days_to_subtract = ( $day_of_week - $start_of_week + 7 ) % 7;
 
                 // Add 7 days for last_week
                 $days_offset = ( $date_range === 'last_week' ) ? 7 : 0;
-                $week_start = date( 'Y-m-d', $today_timestamp - ( ( $days_to_subtract + $days_offset ) * DAY_IN_SECONDS ) );
-                $week_end = date( 'Y-m-d', strtotime( $week_start . ' +6 days' ) );
+                $week_start = gmdate( 'Y-m-d', $today_timestamp - ( ( $days_to_subtract + $days_offset ) * DAY_IN_SECONDS ) );
+                $week_end = gmdate( 'Y-m-d', strtotime( $week_start . ' +6 days' ) );
 
                 $period_limit = $wpdb->prepare(
                     " AND date_time >= %s AND date_time <= %s",
@@ -381,8 +410,8 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
 
             case "last_month":
                 $current_timestamp = current_time( 'timestamp' );
-                $last_month_start = date( 'Y-m-01 00:00:00', strtotime( 'first day of last month', $current_timestamp ) );
-                $last_month_end = date( 'Y-m-t 23:59:59', strtotime( 'last day of last month', $current_timestamp ) );
+                $last_month_start = gmdate( 'Y-m-01 00:00:00', strtotime( 'first day of last month', $current_timestamp ) );
+                $last_month_end = gmdate( 'Y-m-t 23:59:59', strtotime( 'last day of last month', $current_timestamp ) );
                 $period_limit = $wpdb->prepare(
                     " AND date_time >= %s AND date_time <= %s",
                     $last_month_start,
@@ -399,7 +428,7 @@ if( ! function_exists('wp_ulike_get_period_limit_sql') ){
                 break;
 
             case "last_year":
-                $last_year = date( 'Y', strtotime( '-1 year', current_time( 'timestamp' ) ) );
+                $last_year = gmdate( 'Y', strtotime( '-1 year', current_time( 'timestamp' ) ) );
                 $period_limit = $wpdb->prepare(
                     " AND date_time >= %s AND date_time <= %s",
                     $last_year . '-01-01 00:00:00',
@@ -617,10 +646,11 @@ if ( ! function_exists( 'wp_ulike_get_earliest_log_timestamp' ) ) {
 			return null;
 		}
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- subqueries use registered table names only.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- subqueries use registered table names only.
 		$value = $wpdb->get_var(
 			'SELECT MIN(dt) FROM (' . implode( ' UNION ALL ', $selects ) . ') AS ulike_earliest WHERE dt IS NOT NULL'
 		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $value ) ) {
 			return null;

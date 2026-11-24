@@ -145,7 +145,7 @@ if( ! function_exists( 'wp_ulike_update_meta_data' ) ){
 			}
 		}
 
-		$meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %d", $meta_group, $meta_key, $object_id ) );
+		$meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $id_column FROM $table WHERE meta_group = %s AND meta_key = %s AND $column = %d", $meta_group, $meta_key, $object_id ) ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 		if ( empty( $meta_ids ) ) {
 			return wp_ulike_add_meta_data( $object_id, $raw_meta_group, $raw_meta_key, $passed_value );
 		}
@@ -463,16 +463,16 @@ if( ! function_exists( 'wp_ulike_delete_meta_data' ) ){
 			$query .= $wpdb->prepare( ' AND meta_value = %s', $meta_value );
 		}
 
-		$meta_ids = $wpdb->get_col( $query );
+		$meta_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Each part of $query is built with $wpdb->prepare().
 		if ( ! count( $meta_ids ) ) {
 			return false;
 		}
 
 		if ( $delete_all ) {
 			if ( '' !== $meta_value && null !== $meta_value && false !== $meta_value ) {
-				$object_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $type_column FROM $table WHERE meta_group = %s AND meta_key = %s AND meta_value = %s", $meta_group, $meta_key, $meta_value ) );
+				$object_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $type_column FROM $table WHERE meta_group = %s AND meta_key = %s AND meta_value = %s", $meta_group, $meta_key, $meta_value ) ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			} else {
-				$object_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $type_column FROM $table WHERE meta_group = %s AND meta_key = %s", $meta_group, $meta_key ) );
+				$object_ids = $wpdb->get_col( $wpdb->prepare( "SELECT $type_column FROM $table WHERE meta_group = %s AND meta_key = %s", $meta_group, $meta_key ) ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 			}
 		}
 
@@ -482,7 +482,7 @@ if( ! function_exists( 'wp_ulike_delete_meta_data' ) ){
 			$meta_ids = array_map( 'absint', $meta_ids );
 			$placeholders = implode( ',', array_fill( 0, count( $meta_ids ), '%d' ) );
 			$query = $wpdb->prepare( "DELETE FROM `{$table}` WHERE `{$id_column}` IN( {$placeholders} )", $meta_ids );
-			$count = $wpdb->query( $query );
+			$count = $wpdb->query( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $query is built with $wpdb->prepare().
 		} else {
 			$count = 0;
 		}
