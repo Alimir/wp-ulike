@@ -126,10 +126,10 @@ No. The like button loads minimal code on your pages, and vote responses are lig
 We follow WordPress security practices: nonces, hardened AJAX, optional IP anonymization. Found a security issue? Please report it privately through [wpulike.com/support](https://wpulike.com/support/?utm_source=wp-repo&utm_medium=link&utm_campaign=readme) rather than the public forum.
 
 = All guest votes come from the same IP address. How do I fix it? =
-Your site is behind a reverse proxy (such as nginx, Varnish, or a load balancer) that does not pass the visitor address to WordPress. Cloudflare works out of the box. For other proxies, add their address to `wp-config.php`, for example `define( 'WP_ULIKE_TRUSTED_PROXIES', '10.0.0.5' );`. Separate several addresses or ranges with commas, like `'10.0.0.0/8,127.0.0.1'`.
+Your site is behind a reverse proxy (such as nginx, Varnish, or a load balancer) that does not pass the visitor address to WordPress. Cloudflare works out of the box, and WP ULike shows a notice on its admin pages when it spots a proxy on your own network. For other proxies, add their address to `wp-config.php`, for example `define( 'WP_ULIKE_TRUSTED_PROXIES', '10.0.0.5' );`. Separate several addresses or ranges with commas, like `'10.0.0.0/8,127.0.0.1'`.
 
-= My PHP snippets stopped running. Why? =
-PHP snippets follow your site's rule for editing plugin files, so they are off when `DISALLOW_FILE_EDIT` or `DISALLOW_FILE_MODS` is set. Your snippets are still saved. To turn them back on, add `define( 'WP_ULIKE_ALLOW_PHP_SNIPPETS', true );` to `wp-config.php`.
+= Why can't I edit my PHP snippets? =
+PHP snippets follow your site's rule for editing plugin files, so they are read-only when `DISALLOW_FILE_EDIT` or `DISALLOW_FILE_MODS` is set. Saved snippets keep running. To edit them, add `define( 'WP_ULIKE_ALLOW_PHP_SNIPPETS', true );` to `wp-config.php`.
 
 = Can I use WP ULike on a multisite setup? =
 Yes. Each site gets its own settings and stats.
@@ -185,7 +185,7 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 
 = 5.2.7 =
 * Security: Hardened public lists, voting, and guest address detection. Thanks to Patchstack for the responsible report.
-* Changed: PHP snippets can be edited only by accounts that can edit plugin files, and they are turned off when `DISALLOW_FILE_EDIT` or `DISALLOW_FILE_MODS` is set. See the FAQ to turn them back on.
+* Changed: PHP snippets can be edited only by accounts that can edit plugin files. Saved snippets keep running.
 * Tweak: Code brought in line with the latest WordPress coding standards.
 
 = 5.2.6.1 =
@@ -332,7 +332,7 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 
 == Upgrade Notice ==
 = 5.2.7 =
-Security update. Please update now, then purge your page cache if you use a full-page cache plugin. If guest votes or PHP snippets behave differently afterwards, see the FAQ.
+Security update. Please update now, then purge your page cache if you use a full-page cache plugin. If guest votes behave differently afterwards, see the FAQ.
 
 = 5.2.6 =
 On block themes, post lists with Home or Archives turned on now show like buttons even without an excerpt. Purge your page cache after updating if you use a full-page cache plugin.

@@ -270,6 +270,40 @@ function wp_ulike_notice_manager(){
 add_action( 'admin_notices', 'wp_ulike_notice_manager' );
 
 /**
+ * Tell the admin when guest votes arrive through a proxy that is not trusted.
+ *
+ * @return void
+ */
+function wp_ulike_untrusted_proxy_notice() {
+	$screen = get_current_screen();
+	if ( ! $screen || false === strpos( $screen->id, 'wp-ulike' ) || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$proxy = get_transient( 'wp_ulike_untrusted_proxy' );
+	if ( ! $proxy || ! WP_Ulike_Ip_Detector::validate_ip( $proxy ) || WP_Ulike_Ip_Detector::is_trusted_proxy( $proxy ) ) {
+		return;
+	}
+
+	$code = sprintf( "define( 'WP_ULIKE_TRUSTED_PROXIES', '%s' );", $proxy );
+	?>
+	<div class="notice notice-warning">
+		<p>
+			<strong><?php esc_html_e( 'WP ULike: guest votes come through a proxy', 'wp-ulike' ); ?></strong>
+		</p>
+		<p>
+			<?php
+			/* translators: %s: proxy IP address. */
+			echo esc_html( sprintf( __( 'Guest votes reach your site through %s, so WP ULike cannot see each visitor\'s address and guests may share one vote. If this is your own server or load balancer, add this line to wp-config.php:', 'wp-ulike' ), $proxy ) );
+			?>
+		</p>
+		<p><code><?php echo esc_html( $code ); ?></code></p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'wp_ulike_untrusted_proxy_notice' );
+
+/**
  * Register Go Pro submenu (free installs only).
  *
  * @return void

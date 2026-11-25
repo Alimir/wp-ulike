@@ -181,6 +181,10 @@ if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
 		$item_ID   = absint( $item_ID );
 		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
 
+		if ( wp_ulike_item_shown( $item_ID, $item_type ) ) {
+			return (bool) apply_filters( 'wp_ulike_is_item_viewable', true, $item_ID, $item_type );
+		}
+
 		switch ( $item_type ) {
 			case WP_Ulike_Pulse_Registry::ITEM_COMMENT:
 				$comment = $item_ID ? get_comment( $item_ID ) : null;
@@ -224,6 +228,71 @@ if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_ulike_item_shown' ) ) {
+	/**
+	 * Whether this request renders a button for an item, or a visitor sent its token.
+	 *
+	 * Custom ids can match unpublished content. When the site itself placed
+	 * the button, its votes and likers stay open for the rest of the request.
+	 *
+	 * @param int    $item_ID   Item ID.
+	 * @param string $item_type Item or button type.
+	 * @param bool   $mark      Mark the item as shown.
+	 * @return bool
+	 */
+	function wp_ulike_item_shown( $item_ID, $item_type, $mark = false ) {
+		static $shown = array();
+
+		$key = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ) . ':' . absint( $item_ID );
+		if ( $mark ) {
+			$shown[ $key ] = true;
+		}
+
+		return isset( $shown[ $key ] );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_item_token' ) ) {
+	/**
+	 * Token a button carries for its item.
+	 *
+	 * Unlike a nonce it never expires, so cached pages keep working, and it
+	 * cannot be made without the site's salt.
+	 *
+	 * @param string $type    Button type, as sent back in requests.
+	 * @param int    $item_ID Item ID.
+	 * @return string
+	 */
+	function wp_ulike_get_item_token( $type, $item_ID ) {
+		return substr( wp_hash( 'wp_ulike_item|' . $type . '|' . absint( $item_ID ), 'nonce' ), -12, 10 );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_is_item_token_valid' ) ) {
+	/**
+	 * Whether a request carries the token of a button the site rendered.
+	 *
+	 * Older and third-party templates send a nonce, accepted while it is valid.
+	 *
+	 * @param string $token   Token or nonce from the request.
+	 * @param string $type    Button type from the request.
+	 * @param int    $item_ID Item ID.
+	 * @return bool
+	 */
+	function wp_ulike_is_item_token_valid( $token, $type, $item_ID ) {
+		$token = (string) $token;
+		if ( '' === $token || ! $item_ID ) {
+			return false;
+		}
+
+		if ( ! hash_equals( wp_ulike_get_item_token( $type, $item_ID ), $token ) && ! wp_verify_nonce( $token, $type . $item_ID ) ) {
+			return false;
+		}
+
+		return wp_ulike_item_shown( $item_ID, $type, true );
+	}
+}
+
 if ( ! function_exists( 'wp_ulike_is_public_comment' ) ) {
 	/**
 	 * Whether a comment may appear on a public list.
@@ -260,7 +329,10 @@ if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 	 * Whether the current visitor may read a post's content.
 	 *
 	 * No post is not a hidden post. Votes are sometimes stored on ids that
-	 * are not posts, including the public template demos.
+	 * are not posts, including the public template demos. Internal records
+	 * (revisions, menu items, auto-drafts, orders) share the same id range,
+	 * so a custom id that matches one stays usable. Unpublished content of
+	 * any post type stays hidden.
 	 *
 	 * @param int $post_ID Post ID.
 	 * @return bool
@@ -268,7 +340,7 @@ if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 	function wp_ulike_is_post_viewable( $post_ID ) {
 		$post = $post_ID ? get_post( $post_ID ) : null;
 
-		if ( ! $post ) {
+		if ( ! $post || 'auto-draft' === $post->post_status ) {
 			return true;
 		}
 
@@ -280,7 +352,18 @@ if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 		// types without single pages (testimonials, team members, listings).
 		$status = get_post_status( $post );
 
-		return ( $status && is_post_status_viewable( $status ) ) || current_user_can( 'read_post', $post->ID );
+		if ( ( $status && is_post_status_viewable( $status ) ) || current_user_can( 'read_post', $post->ID ) ) {
+			return true;
+		}
+
+		if ( is_post_type_viewable( $post->post_type ) ) {
+			return false;
+		}
+
+		// Internal records have no edit screen; unpublished content managed in wp-admin does.
+		$type = get_post_type_object( $post->post_type );
+
+		return ! ( ( ! $type || $type->show_ui ) && in_array( $status, array( 'draft', 'pending', 'future', 'private', 'trash' ), true ) );
 	}
 }
 

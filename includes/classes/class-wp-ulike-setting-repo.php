@@ -507,24 +507,7 @@ class wp_ulike_setting_repo {
 	}
 
 	/**
-	 * PHP snippets follow the site's rule for editing plugin files, unless
-	 * WP_ULIKE_ALLOW_PHP_SNIPPETS is set to true in wp-config.php.
-	 *
-	 * @return boolean
-	 */
-	public static function isPhpSnippetsDisabled(){
-		if ( self::isCodeSnippetsDisabled() ) {
-			return true;
-		}
-
-		$files_locked = ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT )
-			|| ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS );
-
-		return $files_locked && ! self::isPhpSnippetsAllowed();
-	}
-
-	/**
-	 * Owner opt-in from wp-config.php to keep PHP snippets on a site that
+	 * Owner opt-in from wp-config.php to edit PHP snippets on a site that
 	 * disallows file edits.
 	 *
 	 * @return boolean

@@ -416,8 +416,7 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 		 * @return array<string,mixed>
 		 */
 		public static function customizer_section() {
-			$snippets_on  = self::snippets_enabled( 'js' );
-			$php_on       = self::snippets_enabled( 'php' );
+			$snippets_on  = self::snippets_enabled();
 			$editable     = self::snippets_editable( 'js' );
 			$php_editable = self::snippets_editable( 'php' );
 
@@ -452,21 +451,19 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 					'type'    => 'heading',
 					'content' => esc_html__( 'Snippets', 'wp-ulike' ),
 				);
-				if ( $php_on ) {
-					$fields[] = array(
-						'id'       => 'php_snippets',
-						'type'     => 'code_editor',
-						'title'    => esc_html__( 'PHP', 'wp-ulike' ),
-						'desc'     => $php_editable
-							? esc_html__( 'Runs on your site for every visitor. Leave out the opening and closing PHP tags. For a lot of snippets, the Code Snippets plugin is a better home.', 'wp-ulike' )
-							: $locked_desc,
-						'settings' => array(
-							'mode'     => 'php',
-							'rows'     => 12,
-							'readonly' => ! $php_editable,
-						),
-					);
-				}
+				$fields[] = array(
+					'id'       => 'php_snippets',
+					'type'     => 'code_editor',
+					'title'    => esc_html__( 'PHP', 'wp-ulike' ),
+					'desc'     => $php_editable
+						? esc_html__( 'Runs on your site for every visitor. Leave out the opening and closing PHP tags. For a lot of snippets, the Code Snippets plugin is a better home.', 'wp-ulike' )
+						: $locked_desc,
+					'settings' => array(
+						'mode'     => 'php',
+						'rows'     => 12,
+						'readonly' => ! $php_editable,
+					),
+				);
 				$fields[] = array(
 					'id'       => 'js_snippets',
 					'type'     => 'code_editor',
@@ -577,7 +574,7 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 		 * @return bool
 		 */
 		protected static function can_store_snippets( $type = 'js' ) {
-			if ( ! self::snippets_enabled( $type ) ) {
+			if ( ! self::snippets_enabled() ) {
 				return false;
 			}
 
@@ -589,17 +586,14 @@ if ( ! class_exists( 'wp_ulike_developer_options' ) ) {
 		}
 
 		/**
-		 * @param string $type php|js.
 		 * @return bool
 		 */
-		protected static function snippets_enabled( $type = 'js' ) {
+		protected static function snippets_enabled() {
 			if ( ! class_exists( 'wp_ulike_setting_repo' ) ) {
 				return true;
 			}
 
-			return 'php' === $type
-				? ! wp_ulike_setting_repo::isPhpSnippetsDisabled()
-				: ! wp_ulike_setting_repo::isCodeSnippetsDisabled();
+			return ! wp_ulike_setting_repo::isCodeSnippetsDisabled();
 		}
 
 		/**

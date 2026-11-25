@@ -78,6 +78,8 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 				if ( '' !== $forwarded ) {
 					$ip = $forwarded;
 				}
+			} elseif ( '' !== $remote_addr && wp_doing_ajax() ) {
+				self::remember_untrusted_proxy( $remote_addr );
 			}
 
 			if ( ! self::validate_ip( $ip ) ) {
@@ -86,6 +88,25 @@ if ( ! class_exists( 'WP_Ulike_Ip_Detector' ) ) {
 
 			self::$cached_ip = apply_filters( 'wp_ulike_get_user_ip', $ip );
 			return self::$cached_ip;
+		}
+
+		/**
+		 * Note a private-network peer that forwards visitor addresses, so the
+		 * admin can be told which proxy to trust. A visitor on the public
+		 * internet cannot connect from a private address.
+		 *
+		 * @param string $remote_addr TCP peer address.
+		 * @return void
+		 */
+		private static function remember_untrusted_proxy( $remote_addr ) {
+			$is_private = false === filter_var( $remote_addr, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE );
+			if ( ! $is_private || '' === self::get_forwarded_client_ip() ) {
+				return;
+			}
+
+			if ( get_transient( 'wp_ulike_untrusted_proxy' ) !== $remote_addr ) {
+				set_transient( 'wp_ulike_untrusted_proxy', $remote_addr, DAY_IN_SECONDS );
+			}
 		}
 
 		/**

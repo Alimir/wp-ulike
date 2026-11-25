@@ -518,6 +518,8 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		$column = isset( $get_settings['column'] ) ? $get_settings['column'] : '';
 		$setting = isset( $get_settings['setting'] ) ? $get_settings['setting'] : '';
 
+		wp_ulike_item_shown( $args['ID'], $args['type'], true );
+
 		if( $args['disable_pophover'] || $args['likers_style'] == 'default' ){
 			printf(
 				'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>',
@@ -597,7 +599,7 @@ if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 	 * @return void
 	 */
 	function wp_ulike_run_php_snippets(){
-		if( wp_ulike_setting_repo::isPhpSnippetsDisabled() ){
+		if( wp_ulike_setting_repo::isCodeSnippetsDisabled() ){
 			return;
 		}
 
@@ -608,8 +610,7 @@ if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 		}
 
 		try {
-			// Only accounts with edit_plugins can save this code, and it never runs
-			// when DISALLOW_FILE_EDIT or DISALLOW_FILE_MODS is set.
+			// Only accounts that can edit plugin files can save this code.
 			eval( $php_snippets ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found, WordPress.PHP.DiscouragedPHPFunctions.runtime_eval, Squiz.PHP.Eval.Discouraged
 		} catch ( \Throwable $e ) { // phpcs:ignore
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
