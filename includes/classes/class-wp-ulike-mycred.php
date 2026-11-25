@@ -240,29 +240,29 @@ if ( class_exists( 'myCRED_Hook' ) ) :
         <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'add_like' => 'creds' ) ); ?>"><?php esc_html_e( 'Points', 'wp-ulike' ); ?></label>
-                <input type="text" name="<?php echo $this->field_name( array( 'add_like' => 'creds' ) ); ?>"
-                    id="<?php echo $this->field_id( array( 'add_like' => 'creds' ) ); ?>"
-                    value="<?php echo $this->core->number( $prefs['add_like']['creds'] ); ?>" class="form-control" />
+                    for="<?php echo esc_attr( $this->field_id( array( 'add_like' => 'creds' ) ) ); ?>"><?php esc_html_e( 'Points', 'wp-ulike' ); ?></label>
+                <input type="text" name="<?php echo esc_attr( $this->field_name( array( 'add_like' => 'creds' ) ) ); ?>"
+                    id="<?php echo esc_attr( $this->field_id( array( 'add_like' => 'creds' ) ) ); ?>"
+                    value="<?php echo esc_attr( $this->core->number( $prefs['add_like']['creds'] ) ); ?>" class="form-control" />
                 <span class="description"><?php esc_html_e( 'Use zero to disable.', 'wp-ulike' ); ?></span>
             </div>
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'add_like', 'limit' ) ); ?>"><?php esc_html_e( 'Limit', 'wp-ulike' ); ?></label>
-                <?php echo $this->hook_limit_setting( $this->field_name( array( 'add_like', 'limit' ) ), $this->field_id( array( 'add_like', 'limit' ) ), $prefs['add_like']['limit'] ); ?>
+                    for="<?php echo esc_attr( $this->field_id( array( 'add_like', 'limit' ) ) ); ?>"><?php esc_html_e( 'Limit', 'wp-ulike' ); ?></label>
+                <?php echo $this->hook_limit_setting( $this->field_name( array( 'add_like', 'limit' ) ), $this->field_id( array( 'add_like', 'limit' ) ), $prefs['add_like']['limit'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- myCRED builds and escapes this select. ?>
             </div>
         </div>
         <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'add_like' => 'log' ) ); ?>"><?php esc_html_e( 'Log template', 'wp-ulike' ); ?></label>
-                <input type="text" name="<?php echo $this->field_name( array( 'add_like' => 'log' ) ); ?>"
-                    id="<?php echo $this->field_id( array( 'add_like' => 'log' ) ); ?>"
+                    for="<?php echo esc_attr( $this->field_id( array( 'add_like' => 'log' ) ) ); ?>"><?php esc_html_e( 'Log template', 'wp-ulike' ); ?></label>
+                <input type="text" name="<?php echo esc_attr( $this->field_name( array( 'add_like' => 'log' ) ) ); ?>"
+                    id="<?php echo esc_attr( $this->field_id( array( 'add_like' => 'log' ) ) ); ?>"
                     placeholder="<?php esc_html_e( 'required', 'wp-ulike' ); ?>"
                     value="<?php echo esc_attr( $prefs['add_like']['log'] ); ?>" class="form-control" />
-                <span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+                <span class="description"><?php echo wp_kses_post( $this->available_template_tags( array( 'general' ) ) ); ?></span>
             </div>
         </div>
     </div>
@@ -273,29 +273,29 @@ if ( class_exists( 'myCRED_Hook' ) ) :
         <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'get_like' => 'creds' ) ); ?>"><?php esc_html_e( 'Points', 'wp-ulike' ); ?></label>
-                <input type="text" name="<?php echo $this->field_name( array( 'get_like' => 'creds' ) ); ?>"
-                    id="<?php echo $this->field_id( array( 'get_like' => 'creds' ) ); ?>"
-                    value="<?php echo $this->core->number( $prefs['get_like']['creds'] ); ?>" class="form-control" />
+                    for="<?php echo esc_attr( $this->field_id( array( 'get_like' => 'creds' ) ) ); ?>"><?php esc_html_e( 'Points', 'wp-ulike' ); ?></label>
+                <input type="text" name="<?php echo esc_attr( $this->field_name( array( 'get_like' => 'creds' ) ) ); ?>"
+                    id="<?php echo esc_attr( $this->field_id( array( 'get_like' => 'creds' ) ) ); ?>"
+                    value="<?php echo esc_attr( $this->core->number( $prefs['get_like']['creds'] ) ); ?>" class="form-control" />
                 <span class="description"><?php esc_html_e( 'Use zero to disable.', 'wp-ulike' ); ?></span>
             </div>
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'get_like', 'limit' ) ); ?>"><?php esc_html_e( 'Limit', 'wp-ulike' ); ?></label>
-                <?php echo $this->hook_limit_setting( $this->field_name( array( 'get_like', 'limit' ) ), $this->field_id( array( 'get_like', 'limit' ) ), $prefs['get_like']['limit'] ); ?>
+                    for="<?php echo esc_attr( $this->field_id( array( 'get_like', 'limit' ) ) ); ?>"><?php esc_html_e( 'Limit', 'wp-ulike' ); ?></label>
+                <?php echo $this->hook_limit_setting( $this->field_name( array( 'get_like', 'limit' ) ), $this->field_id( array( 'get_like', 'limit' ) ), $prefs['get_like']['limit'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- myCRED builds and escapes this select. ?>
             </div>
         </div>
         <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'get_like' => 'log' ) ); ?>"><?php esc_html_e( 'Log template', 'wp-ulike' ); ?></label>
-                <input type="text" name="<?php echo $this->field_name( array( 'get_like' => 'log' ) ); ?>"
-                    id="<?php echo $this->field_id( array( 'get_like' => 'log' ) ); ?>"
+                    for="<?php echo esc_attr( $this->field_id( array( 'get_like' => 'log' ) ) ); ?>"><?php esc_html_e( 'Log template', 'wp-ulike' ); ?></label>
+                <input type="text" name="<?php echo esc_attr( $this->field_name( array( 'get_like' => 'log' ) ) ); ?>"
+                    id="<?php echo esc_attr( $this->field_id( array( 'get_like' => 'log' ) ) ); ?>"
                     placeholder="<?php esc_html_e( 'required', 'wp-ulike' ); ?>"
                     value="<?php echo esc_attr( $prefs['get_like']['log'] ); ?>" class="form-control" />
-                <span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+                <span class="description"><?php echo wp_kses_post( $this->available_template_tags( array( 'general' ) ) ); ?></span>
             </div>
         </div>
     </div>
@@ -306,29 +306,29 @@ if ( class_exists( 'myCRED_Hook' ) ) :
         <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'add_unlike' => 'creds' ) ); ?>"><?php esc_html_e( 'Points', 'wp-ulike' ); ?></label>
-                <input type="text" name="<?php echo $this->field_name( array( 'add_unlike' => 'creds' ) ); ?>"
-                    id="<?php echo $this->field_id( array( 'add_unlike' => 'creds' ) ); ?>"
-                    value="<?php echo $this->core->number( $prefs['add_unlike']['creds'] ); ?>" class="form-control" />
+                    for="<?php echo esc_attr( $this->field_id( array( 'add_unlike' => 'creds' ) ) ); ?>"><?php esc_html_e( 'Points', 'wp-ulike' ); ?></label>
+                <input type="text" name="<?php echo esc_attr( $this->field_name( array( 'add_unlike' => 'creds' ) ) ); ?>"
+                    id="<?php echo esc_attr( $this->field_id( array( 'add_unlike' => 'creds' ) ) ); ?>"
+                    value="<?php echo esc_attr( $this->core->number( $prefs['add_unlike']['creds'] ) ); ?>" class="form-control" />
                 <span class="description"><?php esc_html_e( 'Use zero to disable.', 'wp-ulike' ); ?></span>
             </div>
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'add_unlike', 'limit' ) ); ?>"><?php esc_html_e( 'Limit', 'wp-ulike' ); ?></label>
-                <?php echo $this->hook_limit_setting( $this->field_name( array( 'add_unlike', 'limit' ) ), $this->field_id( array( 'add_unlike', 'limit' ) ), $prefs['add_unlike']['limit'] ); ?>
+                    for="<?php echo esc_attr( $this->field_id( array( 'add_unlike', 'limit' ) ) ); ?>"><?php esc_html_e( 'Limit', 'wp-ulike' ); ?></label>
+                <?php echo $this->hook_limit_setting( $this->field_name( array( 'add_unlike', 'limit' ) ), $this->field_id( array( 'add_unlike', 'limit' ) ), $prefs['add_unlike']['limit'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- myCRED builds and escapes this select. ?>
             </div>
         </div>
         <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'add_unlike' => 'log' ) ); ?>"><?php esc_html_e( 'Log template', 'wp-ulike' ); ?></label>
-                <input type="text" name="<?php echo $this->field_name( array( 'add_unlike' => 'log' ) ); ?>"
-                    id="<?php echo $this->field_id( array( 'add_unlike' => 'log' ) ); ?>"
+                    for="<?php echo esc_attr( $this->field_id( array( 'add_unlike' => 'log' ) ) ); ?>"><?php esc_html_e( 'Log template', 'wp-ulike' ); ?></label>
+                <input type="text" name="<?php echo esc_attr( $this->field_name( array( 'add_unlike' => 'log' ) ) ); ?>"
+                    id="<?php echo esc_attr( $this->field_id( array( 'add_unlike' => 'log' ) ) ); ?>"
                     placeholder="<?php esc_html_e( 'required', 'wp-ulike' ); ?>"
                     value="<?php echo esc_attr( $prefs['add_unlike']['log'] ); ?>" class="form-control" />
-                <span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+                <span class="description"><?php echo wp_kses_post( $this->available_template_tags( array( 'general' ) ) ); ?></span>
             </div>
         </div>
     </div>
@@ -339,29 +339,29 @@ if ( class_exists( 'myCRED_Hook' ) ) :
         <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'get_unlike' => 'creds' ) ); ?>"><?php esc_html_e( 'Points', 'wp-ulike' ); ?></label>
-                <input type="text" name="<?php echo $this->field_name( array( 'get_unlike' => 'creds' ) ); ?>"
-                    id="<?php echo $this->field_id( array( 'get_unlike' => 'creds' ) ); ?>"
-                    value="<?php echo $this->core->number( $prefs['get_unlike']['creds'] ); ?>" class="form-control" />
+                    for="<?php echo esc_attr( $this->field_id( array( 'get_unlike' => 'creds' ) ) ); ?>"><?php esc_html_e( 'Points', 'wp-ulike' ); ?></label>
+                <input type="text" name="<?php echo esc_attr( $this->field_name( array( 'get_unlike' => 'creds' ) ) ); ?>"
+                    id="<?php echo esc_attr( $this->field_id( array( 'get_unlike' => 'creds' ) ) ); ?>"
+                    value="<?php echo esc_attr( $this->core->number( $prefs['get_unlike']['creds'] ) ); ?>" class="form-control" />
                 <span class="description"><?php esc_html_e( 'Use zero to disable.', 'wp-ulike' ); ?></span>
             </div>
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'get_unlike', 'limit' ) ); ?>"><?php esc_html_e( 'Limit', 'wp-ulike' ); ?></label>
-                <?php echo $this->hook_limit_setting( $this->field_name( array( 'get_unlike', 'limit' ) ), $this->field_id( array( 'get_unlike', 'limit' ) ), $prefs['get_unlike']['limit'] ); ?>
+                    for="<?php echo esc_attr( $this->field_id( array( 'get_unlike', 'limit' ) ) ); ?>"><?php esc_html_e( 'Limit', 'wp-ulike' ); ?></label>
+                <?php echo $this->hook_limit_setting( $this->field_name( array( 'get_unlike', 'limit' ) ), $this->field_id( array( 'get_unlike', 'limit' ) ), $prefs['get_unlike']['limit'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- myCRED builds and escapes this select. ?>
             </div>
         </div>
         <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label
-                    for="<?php echo $this->field_id( array( 'get_unlike' => 'log' ) ); ?>"><?php esc_html_e( 'Log template', 'wp-ulike' ); ?></label>
-                <input type="text" name="<?php echo $this->field_name( array( 'get_unlike' => 'log' ) ); ?>"
-                    id="<?php echo $this->field_id( array( 'get_unlike' => 'log' ) ); ?>"
+                    for="<?php echo esc_attr( $this->field_id( array( 'get_unlike' => 'log' ) ) ); ?>"><?php esc_html_e( 'Log template', 'wp-ulike' ); ?></label>
+                <input type="text" name="<?php echo esc_attr( $this->field_name( array( 'get_unlike' => 'log' ) ) ); ?>"
+                    id="<?php echo esc_attr( $this->field_id( array( 'get_unlike' => 'log' ) ) ); ?>"
                     placeholder="<?php esc_html_e( 'required', 'wp-ulike' ); ?>"
                     value="<?php echo esc_attr( $prefs['get_unlike']['log'] ); ?>" class="form-control" />
-                <span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+                <span class="description"><?php echo wp_kses_post( $this->available_template_tags( array( 'general' ) ) ); ?></span>
             </div>
         </div>
     </div>
@@ -372,11 +372,11 @@ if ( class_exists( 'myCRED_Hook' ) ) :
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group">
                 <div class="checkbox">
-                    <label for="<?php echo $this->field_id( array( 'limits' => 'self_reply' ) ); ?>"><input
-                            type="checkbox" name="<?php echo $this->field_name( array( 'limits' => 'self_reply' ) ); ?>"
-                            id="<?php echo $this->field_id( array( 'limits' => 'self_reply' ) ); ?>"
+                    <label for="<?php echo esc_attr( $this->field_id( array( 'limits' => 'self_reply' ) ) ); ?>"><input
+                            type="checkbox" name="<?php echo esc_attr( $this->field_name( array( 'limits' => 'self_reply' ) ) ); ?>"
+                            id="<?php echo esc_attr( $this->field_id( array( 'limits' => 'self_reply' ) ) ); ?>"
                             <?php checked( $prefs['limits']['self_reply'], 1 ); ?> value="1" />
-                        <?php echo $this->core->template_tags_general( esc_html__( '%plural% is to be awarded even when item authors Like/Unlike their own item.', 'wp-ulike' ) ); ?></label>
+                        <?php echo wp_kses_post( $this->core->template_tags_general( esc_html__( '%plural% is to be awarded even when item authors Like/Unlike their own item.', 'wp-ulike' ) ) ); ?></label>
                 </div>
             </div>
         </div>

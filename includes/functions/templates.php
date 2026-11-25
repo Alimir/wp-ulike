@@ -233,27 +233,27 @@ if( ! function_exists( 'wp_ulike_set_default_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div class="wpulike wpulike-default <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
-			<div class="<?php echo $general_class; ?>">
+		<div class="wpulike wpulike-default <?php echo esc_attr( $wrapper_class ); ?>" <?php echo esc_attr( $attributes ); ?>>
+			<div class="<?php echo esc_attr( $general_class ); ?>">
 				<button type="button"
-					aria-label="<?php echo wp_ulike_setting_repo::getLikeAriaLabel(); ?>"
-					data-ulike-id="<?php echo $ID; ?>"
-					data-ulike-nonce="<?php echo wp_create_nonce( $type . $ID ); ?>"
-					data-ulike-type="<?php echo $type; ?>"
-					data-ulike-template="<?php echo $style; ?>"
-					data-ulike-display-likers="<?php echo $display_likers; ?>"
-					data-ulike-likers-style="<?php echo $likers_style; ?>"
-					class="<?php echo $button_class; ?>">
+					aria-label="<?php echo esc_attr( wp_ulike_setting_repo::getLikeAriaLabel() ); ?>"
+					data-ulike-id="<?php echo esc_attr( $ID ); ?>"
+					data-ulike-nonce="<?php echo esc_attr( wp_ulike_get_item_token( $type, $ID ) ); ?>"
+					data-ulike-type="<?php echo esc_attr( $type ); ?>"
+					data-ulike-template="<?php echo esc_attr( $style ); ?>"
+					data-ulike-display-likers="<?php echo esc_attr( $display_likers ); ?>"
+					data-ulike-likers-style="<?php echo esc_attr( $likers_style ); ?>"
+					class="<?php echo esc_attr( $button_class ); ?>">
 					<?php
-						echo $up_vote_inner_text;
+						echo $up_vote_inner_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Filtered with wp_ulike_kses() in WP_Ulike_Cta_Template.
 						do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
 						if($button_type == 'text'){
-							echo '<span>' . $button_text . '</span>';
+							echo '<span>' . $button_text . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Filtered with wp_ulike_kses() in getButtonText().
 						}
 					?>
 				</button>
 				<?php
-					echo $display_counters ? sprintf( '<span class="count-box wp_ulike_counter_up" data-ulike-counter-value="%s"></span>', $formatted_total_likes ) : '';
+					echo $display_counters ? sprintf( '<span class="count-box wp_ulike_counter_up" data-ulike-counter-value="%s"></span>', esc_attr( $formatted_total_likes ) ) : '';
 					do_action( 'wp_ulike_after_up_vote_button', $wp_ulike_template );
 				?>
 			</div>
@@ -282,27 +282,27 @@ if( ! function_exists( 'wp_ulike_set_simple_heart_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div class="wpulike wpulike-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
-			<div class="<?php echo $general_class; ?>">
+		<div class="wpulike wpulike-heart <?php echo esc_attr( $wrapper_class ); ?>" <?php echo esc_attr( $attributes ); ?>>
+			<div class="<?php echo esc_attr( $general_class ); ?>">
 				<button type="button"
-					aria-label="<?php echo wp_ulike_setting_repo::getLikeAriaLabel(); ?>"
-					data-ulike-id="<?php echo $ID; ?>"
-					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
-					data-ulike-type="<?php echo $type; ?>"
-					data-ulike-template="<?php echo $style; ?>"
-					data-ulike-display-likers="<?php echo $display_likers; ?>"
-					data-ulike-likers-style="<?php echo $likers_style; ?>"
-					class="<?php echo $button_class; ?>">
+					aria-label="<?php echo esc_attr( wp_ulike_setting_repo::getLikeAriaLabel() ); ?>"
+					data-ulike-id="<?php echo esc_attr( $ID ); ?>"
+					data-ulike-nonce="<?php echo esc_attr( wp_ulike_get_item_token( $type, $ID ) ); ?>"
+					data-ulike-type="<?php echo esc_attr( $type ); ?>"
+					data-ulike-template="<?php echo esc_attr( $style ); ?>"
+					data-ulike-display-likers="<?php echo esc_attr( $display_likers ); ?>"
+					data-ulike-likers-style="<?php echo esc_attr( $likers_style ); ?>"
+					class="<?php echo esc_attr( $button_class ); ?>">
 					<?php
-						echo $up_vote_inner_text;
+						echo $up_vote_inner_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Filtered with wp_ulike_kses() in WP_Ulike_Cta_Template.
 						do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
 						if( $button_type == 'text' ){
-							echo '<span>' . $button_text . '</span>';
+							echo '<span>' . $button_text . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Filtered with wp_ulike_kses() in getButtonText().
 						}
 					?>
 				</button>
 				<?php
-					echo $display_counters ? sprintf( '<span class="count-box wp_ulike_counter_up" data-ulike-counter-value="%s"></span>', $formatted_total_likes ) : '';
+					echo $display_counters ? sprintf( '<span class="count-box wp_ulike_counter_up" data-ulike-counter-value="%s"></span>', esc_attr( $formatted_total_likes ) ) : '';
 					do_action( 'wp_ulike_after_up_vote_button', $wp_ulike_template );
 				?>
 			</div>
@@ -331,24 +331,24 @@ if( ! function_exists( 'wp_ulike_set_robeen_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div class="wpulike wpulike-robeen <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
-			<div class="<?php echo $general_class; ?>">
+		<div class="wpulike wpulike-robeen <?php echo esc_attr( $wrapper_class ); ?>" <?php echo esc_attr( $attributes ); ?>>
+			<div class="<?php echo esc_attr( $general_class ); ?>">
 				<button type="button"
-					aria-label="<?php echo wp_ulike_setting_repo::getLikeAriaLabel(); ?>"
-					data-ulike-id="<?php echo $ID; ?>"
-					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
-					data-ulike-type="<?php echo $type; ?>"
-					data-ulike-template="<?php echo $style; ?>"
-					data-ulike-display-likers="<?php echo $display_likers; ?>"
-					data-ulike-likers-style="<?php echo $likers_style; ?>"
-					class="<?php echo $button_class; ?>">
+					aria-label="<?php echo esc_attr( wp_ulike_setting_repo::getLikeAriaLabel() ); ?>"
+					data-ulike-id="<?php echo esc_attr( $ID ); ?>"
+					data-ulike-nonce="<?php echo esc_attr( wp_ulike_get_item_token( $type, $ID ) ); ?>"
+					data-ulike-type="<?php echo esc_attr( $type ); ?>"
+					data-ulike-template="<?php echo esc_attr( $style ); ?>"
+					data-ulike-display-likers="<?php echo esc_attr( $display_likers ); ?>"
+					data-ulike-likers-style="<?php echo esc_attr( $likers_style ); ?>"
+					class="<?php echo esc_attr( $button_class ); ?>">
 					<?php
-						echo $up_vote_inner_text;
+						echo $up_vote_inner_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Filtered with wp_ulike_kses() in WP_Ulike_Cta_Template.
 						do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
 					?>
 				</button>
 				<?php
-					echo $display_counters ? sprintf( '<span class="count-box wp_ulike_counter_up" data-ulike-counter-value="%s"></span>', $formatted_total_likes ) : '';
+					echo $display_counters ? sprintf( '<span class="count-box wp_ulike_counter_up" data-ulike-counter-value="%s"></span>', esc_attr( $formatted_total_likes ) ) : '';
 					do_action( 'wp_ulike_after_up_vote_button', $wp_ulike_template );
 				?>
 			</div>
@@ -378,20 +378,20 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 		// Extract input array
 		extract( $wp_ulike_template );
 	?>
-		<div class="wpulike wpulike-animated-heart <?php echo $wrapper_class; ?>" <?php echo $attributes; ?>>
-			<div class="<?php echo $general_class; ?>">
+		<div class="wpulike wpulike-animated-heart <?php echo esc_attr( $wrapper_class ); ?>" <?php echo esc_attr( $attributes ); ?>>
+			<div class="<?php echo esc_attr( $general_class ); ?>">
 				<button type="button"
-					aria-label="<?php echo wp_ulike_setting_repo::getLikeAriaLabel(); ?>"
-					data-ulike-id="<?php echo $ID; ?>"
-					data-ulike-nonce="<?php echo wp_create_nonce( $type  . $ID ); ?>"
-					data-ulike-type="<?php echo $type; ?>"
-					data-ulike-template="<?php echo $style; ?>"
-					data-ulike-display-likers="<?php echo $display_likers; ?>"
-					data-ulike-likers-style="<?php echo $likers_style; ?>"
+					aria-label="<?php echo esc_attr( wp_ulike_setting_repo::getLikeAriaLabel() ); ?>"
+					data-ulike-id="<?php echo esc_attr( $ID ); ?>"
+					data-ulike-nonce="<?php echo esc_attr( wp_ulike_get_item_token( $type, $ID ) ); ?>"
+					data-ulike-type="<?php echo esc_attr( $type ); ?>"
+					data-ulike-template="<?php echo esc_attr( $style ); ?>"
+					data-ulike-display-likers="<?php echo esc_attr( $display_likers ); ?>"
+					data-ulike-likers-style="<?php echo esc_attr( $likers_style ); ?>"
 					data-ulike-append="<?php echo esc_attr( '<svg class="wpulike-svg-heart wpulike-svg-heart-pop one" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop two" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop three" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop four" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop five" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop six" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop seven" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop eight" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg><svg class="wpulike-svg-heart wpulike-svg-heart-pop nine" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>' ); ?>"
-					class="<?php echo $button_class; ?>">
+					class="<?php echo esc_attr( $button_class ); ?>">
 					<?php
-						echo $up_vote_inner_text;
+						echo $up_vote_inner_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Filtered with wp_ulike_kses() in WP_Ulike_Cta_Template.
 						do_action( 'wp_ulike_inside_like_button', $wp_ulike_template );
 					?>
 					<svg class="wpulike-svg-heart wpulike-svg-heart-icon" viewBox="0 -28 512.00002 512" xmlns="http://www.w3.org/2000/svg">
@@ -400,7 +400,7 @@ if( ! function_exists( 'wp_ulike_set_animated_heart_template' ) ){
 					</svg>
 				</button>
 				<?php
-					echo $display_counters ? sprintf( '<span class="count-box wp_ulike_counter_up" data-ulike-counter-value="%s"></span>', $formatted_total_likes ) : '';
+					echo $display_counters ? sprintf( '<span class="count-box wp_ulike_counter_up" data-ulike-counter-value="%s"></span>', esc_attr( $formatted_total_likes ) ) : '';
 					do_action( 'wp_ulike_after_up_vote_button', $wp_ulike_template );
 				?>
 			</div>

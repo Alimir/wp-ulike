@@ -95,11 +95,13 @@ class WpUlikeInit {
 
     // File delivery: rewrite uploads/wp-ulike/custom.css (admin hooks required).
     if ( function_exists( 'wp_ulike_save_custom_css' ) ) {
-      wp_ulike_save_custom_css();
+      $saved = wp_ulike_save_custom_css();
       if ( $schema_changed ) {
         update_option( 'wp_ulike_customizer_schema_revision', $schema_rev, true );
       }
-      $upgraded = true;
+      // A failed file write is still a completed upgrade when the save helper
+      // switched delivery to inline CSS. Only retry when neither path is active.
+      $upgraded = $saved || wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) );
     } elseif ( $schema_changed && wp_ulike_is_true( get_option( 'wp_ulike_use_inline_custom_css', true ) ) ) {
       // Inline delivery only needs the option cache cleared.
       update_option( 'wp_ulike_customizer_schema_revision', $schema_rev, true );
@@ -365,7 +367,13 @@ class WpUlikeInit {
     $locale = apply_filters( 'plugin_locale', $locale, WP_ULIKE_SLUG );
 
     load_textdomain( WP_ULIKE_SLUG, WP_LANG_DIR . '/' . WP_ULIKE_SLUG . '/' . WP_ULIKE_SLUG . '-' . $locale . '.mo' );
-    load_plugin_textdomain( WP_ULIKE_SLUG, false, $lang_dir );
+
+    // WordPress.org language packs load on their own. This keeps .mo files
+    // placed in the plugin's languages folder working.
+    $bundled_mofile = WP_PLUGIN_DIR . '/' . trim( $lang_dir, '/' ) . '/' . WP_ULIKE_SLUG . '-' . $locale . '.mo';
+    if ( is_readable( $bundled_mofile ) ) {
+      load_textdomain( WP_ULIKE_SLUG, $bundled_mofile );
+    }
   }
 
   /**

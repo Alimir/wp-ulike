@@ -60,7 +60,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
             }
 
             if( ! is_array( $this->args['image'] ) ){
-                return $before . $this->args['image'] . $after;
+                return $before . wp_kses_post( $this->args['image'] ) . $after;
             }
 
             $attrs = '';
@@ -85,7 +85,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 return;
             }
 
-            return $before . $this->args['title'] . $after;
+            return $before . wp_kses_post( $this->args['title'] ) . $after;
         }
 
         /**
@@ -341,7 +341,8 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 return;
             }
 
-            echo sprintf(
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- Each part is built by a get_*() helper above that escapes its own values.
+            printf(
                 '<div class="notice wp-ulike-notice wp-ulike-notice-control wp-ulike-notice-wrapper %1$s %2$s" %3$s data-notice-id="%4$s" data-dismiss-nonce="%5$s" data-dismiss-expiration="%6$s">%7$s<div class="wp-ulike-notice-info">%8$s%9$s<div class="wp-ulike-notice-submit">%10$s</div></div>%11$s</div>',
                 esc_attr( $this->get_unique_class() ),
                 esc_attr( $this->get_skin() ),
@@ -355,6 +356,7 @@ if ( ! class_exists( 'wp_ulike_notices' ) ) {
                 $this->get_buttons(),
                 $this->get_dismissible()
             );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
         }
 

@@ -288,7 +288,7 @@ if ( ! class_exists( 'WP_Ulike_Overview' ) ) {
 				array(
 					'title' => esc_html__( 'Leave a review', 'wp-ulike' ),
 					'desc'  => esc_html__( 'Share feedback on WordPress.org.', 'wp-ulike' ),
-					'url'   => 'https://wordpress.org/support/plugin/wp-ulike/reviews/?filter=5',
+					'url'   => 'https://wordpress.org/support/plugin/wp-ulike/reviews/#new-post',
 					'icon'  => 'star-filled',
 				),
 			);

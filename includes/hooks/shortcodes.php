@@ -222,6 +222,8 @@ if( ! function_exists( 'wp_ulike_likers_box_shortcode' ) ){
             $args['template'] = wp_ulike_kses( $args['template'] );
         }
 
+        wp_ulike_item_shown( $args['id'], $args['type'], true );
+
         $output = sprintf( '<div class="wp_ulike_manual_likers_wrapper wp_%s_likers_%d">%s</div>', esc_attr( $args['type'] ), esc_attr( $args['id'] ),
             wp_ulike_get_likers_template( $get_settings['table'], $get_settings['column'], $args['id'], $get_settings['setting'], $args ) );
 

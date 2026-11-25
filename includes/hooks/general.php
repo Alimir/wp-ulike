@@ -489,7 +489,7 @@ if( ! function_exists( 'wp_ulike_generate_microdata' ) ){
 				break;
 		}
 
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Structured-data markup returned by wp_ulike_*_microdata filters.
 	}
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_generate_microdata' );
 }
@@ -518,10 +518,15 @@ if( ! function_exists( 'wp_ulike_display_inline_likers_template' ) ){
 		$column = isset( $get_settings['column'] ) ? $get_settings['column'] : '';
 		$setting = isset( $get_settings['setting'] ) ? $get_settings['setting'] : '';
 
+		wp_ulike_item_shown( $args['ID'], $args['type'], true );
+
 		if( $args['disable_pophover'] || $args['likers_style'] == 'default' ){
-			echo sprintf(
-			'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>',
-			esc_attr($args['type']), esc_attr( $args['ID'] ), wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting, array( 'style' => 'default' ) ) );
+			printf(
+				'<div class="wp_ulike_likers_wrapper wp_%s_likers_%s">%s</div>',
+				esc_attr( $args['type'] ),
+				esc_attr( $args['ID'] ),
+				wp_ulike_get_likers_template( $table, $column, $args['ID'], $setting, array( 'style' => 'default' ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Template escapes each field it fills in.
+			);
 		}
 
 		do_action( 'wp_ulike_inline_display_likers_box', $args, $get_settings );
@@ -559,7 +564,7 @@ if( ! function_exists( 'wp_ulike_update_button_icon' ) ){
 			$return_style .= '.wpulike_down_vote .wp_ulike_btn.wp_ulike_put_image.wp_ulike_btn_is_active:after { background-image: url('.esc_url($image_group['undislike']).') !important; filter:none; }';
 		}
 
-		echo !empty( $return_style ) ? sprintf( '<style>%s</style>', wp_strip_all_tags( $return_style ) ) : '';
+		echo ! empty( $return_style ) ? sprintf( '<style>%s</style>', wp_strip_all_tags( $return_style ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built from esc_url() values, tags stripped.
 	}
 	add_action( 'wp_ulike_inside_template', 'wp_ulike_update_button_icon', 1 );
 }
@@ -605,7 +610,8 @@ if( ! function_exists( 'wp_ulike_run_php_snippets' ) ){
 		}
 
 		try {
-			eval( $php_snippets ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_eval
+			// Only accounts that can edit plugin files can save this code.
+			eval( $php_snippets ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found, WordPress.PHP.DiscouragedPHPFunctions.runtime_eval, Squiz.PHP.Eval.Discouraged
 		} catch ( \Throwable $e ) { // phpcs:ignore
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'WP ULike PHP Snippet Error: ' . $e->getMessage() );
@@ -634,7 +640,7 @@ if( ! function_exists( 'wp_ulike_run_javascript_snippets' ) ){
 
 		$js_snippets = trim( $js_snippets, "\n" );
 
-		printf( "<script type='text/javascript' id='%s'>\n%s\n</script>\n", 'wp_ulike_js_snippets', $js_snippets );
+		wp_print_inline_script_tag( "\n" . $js_snippets . "\n", array( 'id' => 'wp_ulike_js_snippets' ) );
 
 	}
 	add_action( 'wp_footer', 'wp_ulike_run_javascript_snippets', 100 );

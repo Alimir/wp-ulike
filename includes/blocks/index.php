@@ -501,7 +501,7 @@ function wp_ulike_get_templates_for_block() {
 	// Find the default template name
 	$default_template_name = __( 'Use Settings Default', 'wp-ulike' );
 	if ( isset( $templates[ $default_template_key ] ) && isset( $templates[ $default_template_key ]['name'] ) ) {
-		$default_template_name = sprintf( __( 'Use Settings Default (%s)', 'wp-ulike' ), $templates[ $default_template_key ]['name'] );
+		$default_template_name = sprintf( /* translators: %s: template name. */ __( 'Use Settings Default (%s)', 'wp-ulike' ), $templates[ $default_template_key ]['name'] );
 	}
 
 	if ( ! empty( $templates ) ) {

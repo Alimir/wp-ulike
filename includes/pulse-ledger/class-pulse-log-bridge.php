@@ -391,10 +391,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				return 0;
 			}
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			return (int) $wpdb->get_var(
 				'SELECT COUNT(*) FROM ( ' . implode( ' UNION ALL ', $parts ) . " ) AS logs WHERE 1=1 {$search_sql}"
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -559,7 +560,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				return array();
 			}
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- fragments use registered table names only.
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- fragments use registered table names only.
 			return $wpdb->get_results(
 				sprintf(
 					'SELECT HOUR(date_time) AS hour_slot, COUNT(*) AS total_count
@@ -569,6 +570,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 					implode( ' UNION ALL ', $union_parts )
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		/**
@@ -585,10 +587,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				return array();
 			}
 
-			$start = date( 'Y-m-d H:i:s', strtotime( $latest ) - ( $data_limit * DAY_IN_SECONDS ) );
+			$start = gmdate( 'Y-m-d H:i:s', strtotime( $latest ) - ( $data_limit * DAY_IN_SECONDS ) );
 			$counts = array();
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT DATE(date_time) AS labels, COUNT(date_time) AS counts
@@ -598,6 +600,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 					$latest
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
 			foreach ( (array) $rows as $row ) {
 				$counts[ $row->labels ] = (int) $row->counts;
@@ -630,7 +633,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			$since
 		);
 	}
-	$latest      = $wpdb->get_var(
+	$latest      = $wpdb->get_var( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- SQL fragments here are fixed strings, esc_sql() identifiers, or built with $wpdb->prepare().
 		$wpdb->prepare(
 			"SELECT MAX(date_time) FROM `{$pulse_table}` WHERE item_type = %s {$since_sql}",
 			$item_type
@@ -641,10 +644,10 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			return array();
 		}
 
-		$start  = date( 'Y-m-d H:i:s', strtotime( $latest ) - ( $data_limit * DAY_IN_SECONDS ) );
+		$start  = gmdate( 'Y-m-d H:i:s', strtotime( $latest ) - ( $data_limit * DAY_IN_SECONDS ) );
 		$counts = array();
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT DATE(date_time) AS labels, COUNT(date_time) AS counts
@@ -657,6 +660,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				$latest
 			)
 		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
 			foreach ( (array) $rows as $row ) {
 				$counts[ $row->labels ] = (int) $row->counts;
@@ -715,7 +719,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			&& WP_Ulike_Pulse_Registry::table_exists( $source['table'] ) ) {
 			$table     = esc_sql( $source['table'] );
 			$geo_cols  = self::legacy_personal_columns_sql( $source['table'] );
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			$union[] = $wpdb->prepare(
 				"SELECT %s AS src, id, date_time,
 					CONVERT( status USING utf8mb4 ) AS status,
@@ -725,6 +729,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				$suffix,
 				$user_id
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		// Emoji/star rows live in pulse in EVERY storage mode, and pulse-mode
@@ -752,7 +757,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				$since_sql   = '';
 			}
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- identifiers come from the plugin table registry; values are prepared.
 			$union[] = $wpdb->prepare(
 				"SELECT %s AS src, id, date_time,
 					CONVERT( status USING utf8mb4 ) AS status,
@@ -770,6 +775,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				$user_id,
 				$source['item_type']
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		}
 		}
 
@@ -777,7 +783,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			return array();
 		}
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- fragments are prepared individually.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- fragments are prepared individually.
 		$sql = sprintf(
 			'SELECT src, id, date_time, status, ip, _ek, _kind, _val, fingerprint, country_code, device, os, browser
 			FROM (%s) AS combined
@@ -787,6 +793,7 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 			$per_page,
 			$offset
 		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$results = $wpdb->get_results( $sql, ARRAY_A );
@@ -975,10 +982,11 @@ if ( ! class_exists( 'WP_Ulike_Pulse_Log_Bridge' ) ) {
 				return null;
 			}
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- subqueries use registered table names only.
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- subqueries use registered table names only.
 			$value = $wpdb->get_var(
 				'SELECT MIN(dt) FROM (' . implode( ' UNION ALL ', $selects ) . ') AS ulike_earliest WHERE dt IS NOT NULL'
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
 			if ( empty( $value ) ) {
 				return null;

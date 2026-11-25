@@ -538,9 +538,9 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     array(
                         'id'      => 'no_results_notice',
                         'type'    => 'text',
-                        'default' => __( 'No results were found in "%s" period', 'wp-ulike' ),
+                        'default' => /* translators: %s: period name, for example This week. */ __( 'No results were found in "%s" period', 'wp-ulike' ),
                         'title'   => esc_html__( 'No Results Message', 'wp-ulike' ),
-                        'desc'    => esc_html__( 'Empty state for Top List and widgets. Use %s for the selected period.', 'wp-ulike' ),
+                        'desc'    => /* translators: %s: the literal placeholder %s, shown as-is. */ esc_html__( 'Empty state for Top List and widgets. Use %s for the selected period.', 'wp-ulike' ),
                     ),
                     array(
                         'id'      => 'user_no_likes_notice',
@@ -557,16 +557,16 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     array(
                         'id'      => 'bp_multiple_likes_notice',
                         'type'    => 'text',
-                        'default' => __( 'You have %1$d new %2$s likes', 'wp-ulike' ),
+                        'default' => /* translators: 1: number of likes, 2: content type, for example Posts. */ __( 'You have %1$d new %2$s likes', 'wp-ulike' ),
                         'title'   => esc_html__( 'BuddyPress Multiple Likes Notification', 'wp-ulike' ),
-                        'desc'    => esc_html__( 'Use %1$d for the count and %2$s for the content type (e.g. Posts).', 'wp-ulike' ),
+                        'desc'    => /* translators: 1 and 2: literal placeholders, shown as-is. */ esc_html__( 'Use %1$d for the count and %2$s for the content type (e.g. Posts).', 'wp-ulike' ),
                     ),
                     array(
                         'id'      => 'bp_single_like_notice',
                         'type'    => 'text',
-                        'default' => __( '%1$s liked one of your %2$s', 'wp-ulike' ),
+                        'default' => /* translators: 1: user name, 2: content type. */ __( '%1$s liked one of your %2$s', 'wp-ulike' ),
                         'title'   => esc_html__( 'BuddyPress Single Like Notification', 'wp-ulike' ),
-                        'desc'    => esc_html__( 'Use %1$s for the user name and %2$s for the content type.', 'wp-ulike' ),
+                        'desc'    => /* translators: 1 and 2: literal placeholders, shown as-is. */ esc_html__( 'Use %1$s for the user name and %2$s for the content type.', 'wp-ulike' ),
                     ),
                     array(
                         'id'      => 'heading_ultimate_member',
@@ -1230,12 +1230,12 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'field_pattern' => array(
                         array(
                             'type'  => 'switcher',
-                            'title' => sprintf( esc_html__('Enable %s', 'wp-ulike'), esc_html__('User Profiles', 'wp-ulike') ),
+                            'title' => sprintf( /* translators: %s: feature name. */ esc_html__('Enable %s', 'wp-ulike'), esc_html__('User Profiles', 'wp-ulike') ),
                             'desc'  => esc_html__( 'Create custom user profile pages where users can view and manage their information, activity, and preferences.', 'wp-ulike' ),
                         ),
                         array(
                             'type'  => 'select',
-                            'title' => sprintf( esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Profile', 'wp-ulike') ),
+                            'title' => sprintf( /* translators: %s: page name, for example Login. */ esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Profile', 'wp-ulike') ),
                         ),
                     ), // First 2 fields from profiles section
                     'read_more_url' => add_query_arg(
@@ -1260,7 +1260,7 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                     'field_pattern' => array(
                         array(
                             'type'  => 'select',
-                            'title' => sprintf( esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Login', 'wp-ulike') ),
+                            'title' => sprintf( /* translators: %s: page name, for example Login. */ esc_html__('Select %s Page', 'wp-ulike'), esc_html__('Login', 'wp-ulike') ),
                             'desc'  => esc_html__( 'Choose the page that contains your login form shortcode. This page will be used for user authentication.', 'wp-ulike' ),
                         ),
                         array(

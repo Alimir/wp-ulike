@@ -181,6 +181,10 @@ if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
 		$item_ID   = absint( $item_ID );
 		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
 
+		if ( wp_ulike_item_shown( $item_ID, $item_type ) ) {
+			return (bool) apply_filters( 'wp_ulike_is_item_viewable', true, $item_ID, $item_type );
+		}
+
 		switch ( $item_type ) {
 			case WP_Ulike_Pulse_Registry::ITEM_COMMENT:
 				$comment = $item_ID ? get_comment( $item_ID ) : null;
@@ -224,12 +228,111 @@ if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_ulike_item_shown' ) ) {
+	/**
+	 * Whether this request renders a button for an item, or a visitor sent its token.
+	 *
+	 * Custom ids can match unpublished content. When the site itself placed
+	 * the button, its votes and likers stay open for the rest of the request.
+	 *
+	 * @param int    $item_ID   Item ID.
+	 * @param string $item_type Item or button type.
+	 * @param bool   $mark      Mark the item as shown.
+	 * @return bool
+	 */
+	function wp_ulike_item_shown( $item_ID, $item_type, $mark = false ) {
+		static $shown = array();
+
+		$key = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type ) . ':' . absint( $item_ID );
+		if ( $mark ) {
+			$shown[ $key ] = true;
+		}
+
+		return isset( $shown[ $key ] );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_item_token' ) ) {
+	/**
+	 * Token a button carries for its item.
+	 *
+	 * Unlike a nonce it never expires, so cached pages keep working, and it
+	 * cannot be made without the site's salt.
+	 *
+	 * @param string $type    Button type, as sent back in requests.
+	 * @param int    $item_ID Item ID.
+	 * @return string
+	 */
+	function wp_ulike_get_item_token( $type, $item_ID ) {
+		return substr( wp_hash( 'wp_ulike_item|' . $type . '|' . absint( $item_ID ), 'nonce' ), -12, 10 );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_is_item_token_valid' ) ) {
+	/**
+	 * Whether a request carries the token of a button the site rendered.
+	 *
+	 * Older and third-party templates send a nonce, accepted while it is valid.
+	 *
+	 * @param string $token   Token or nonce from the request.
+	 * @param string $type    Button type from the request.
+	 * @param int    $item_ID Item ID.
+	 * @return bool
+	 */
+	function wp_ulike_is_item_token_valid( $token, $type, $item_ID ) {
+		$token = (string) $token;
+		if ( '' === $token || ! $item_ID ) {
+			return false;
+		}
+
+		if ( ! hash_equals( wp_ulike_get_item_token( $type, $item_ID ), $token ) && ! wp_verify_nonce( $token, $type . $item_ID ) ) {
+			return false;
+		}
+
+		return wp_ulike_item_shown( $item_ID, $type, true );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_is_public_comment' ) ) {
+	/**
+	 * Whether a comment may appear on a public list.
+	 *
+	 * Held, spam, and trashed comments stay out for every viewer, including
+	 * administrators. The parent post must be publicly viewable and must not
+	 * be password-protected. The check ignores the current user's password
+	 * cookie so a cached Top List cannot leak a protected comment.
+	 *
+	 * @param int|WP_Comment $comment Comment ID or object.
+	 * @return bool
+	 */
+	function wp_ulike_is_public_comment( $comment ) {
+		$comment = get_comment( $comment );
+		if ( ! $comment ) {
+			return false;
+		}
+
+		if ( '1' !== (string) $comment->comment_approved ) {
+			return false;
+		}
+
+		$post = get_post( $comment->comment_post_ID );
+		if ( ! $post || '' !== (string) $post->post_password ) {
+			return false;
+		}
+
+		return is_post_publicly_viewable( $post );
+	}
+}
+
 if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 	/**
 	 * Whether the current visitor may read a post's content.
 	 *
 	 * No post is not a hidden post. Votes are sometimes stored on ids that
-	 * are not posts, including the public template demos.
+	 * are not posts, including the public template demos. Internal records
+	 * (revisions, menu items, auto-drafts, orders) share the same id range,
+	 * so a custom id that matches one stays usable. Unpublished content of
+	 * any post type stays hidden.
 	 *
 	 * @param int $post_ID Post ID.
 	 * @return bool
@@ -237,7 +340,7 @@ if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 	function wp_ulike_is_post_viewable( $post_ID ) {
 		$post = $post_ID ? get_post( $post_ID ) : null;
 
-		if ( ! $post ) {
+		if ( ! $post || 'auto-draft' === $post->post_status ) {
 			return true;
 		}
 
@@ -249,7 +352,18 @@ if ( ! function_exists( 'wp_ulike_is_post_viewable' ) ) {
 		// types without single pages (testimonials, team members, listings).
 		$status = get_post_status( $post );
 
-		return ( $status && is_post_status_viewable( $status ) ) || current_user_can( 'read_post', $post->ID );
+		if ( ( $status && is_post_status_viewable( $status ) ) || current_user_can( 'read_post', $post->ID ) ) {
+			return true;
+		}
+
+		if ( is_post_type_viewable( $post->post_type ) ) {
+			return false;
+		}
+
+		// Internal records have no edit screen; unpublished content managed in wp-admin does.
+		$type = get_post_type_object( $post->post_type );
+
+		return ! ( ( ! $type || $type->show_ui ) && in_array( $status, array( 'draft', 'pending', 'future', 'private', 'trash' ), true ) );
 	}
 }
 
@@ -720,7 +834,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 						$out_template 	= str_replace( "%USER_AVATAR%", $USER_AVATAR, $out_template );
 					}
 					if( strpos( $out_template, '%USER_NAME%' ) !== false) {
-						$USER_NAME 		= esc_attr( $user_info->display_name );
+						$USER_NAME 		= wp_ulike_encode_shortcode_brackets( esc_attr( $user_info->display_name ) );
 						$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
 					}
 					if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
@@ -993,17 +1107,18 @@ if( ! function_exists('wp_ulike_acquire_lock') ){
 	 */
     function wp_ulike_acquire_lock( $item_type, $item_id ) {
         $lock_file = wp_ulike_lock_file( $item_type, $item_id );
-        $fp = fopen( $lock_file, 'w+' );
+        // flock() needs a native handle; WP_Filesystem has no locking API.
+        $fp = fopen( $lock_file, 'w+' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
         if ( ! $fp || ! flock( $fp, LOCK_EX | LOCK_NB ) ) {
-            if ($fp) {
-                fclose($fp);
+            if ( $fp ) {
+                fclose( $fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
             }
             return false;
         }
 
         ftruncate( $fp, 0 );
-        fwrite( $fp, microtime( true ) );
+        fwrite( $fp, microtime( true ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
 
         return $fp;
     }
@@ -1022,17 +1137,11 @@ if( ! function_exists('wp_ulike_release_lock') ){
         if ( is_resource( $fp ) ) {
             fflush( $fp );
             flock( $fp, LOCK_UN );
-            fclose( $fp );
+            fclose( $fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
             $lock_file = wp_ulike_lock_file( $item_type, $item_id );
 
-            // Use WordPress core function for file deletion (available since WP 4.2.0)
-            if ( function_exists( 'wp_delete_file' ) ) {
-                wp_delete_file( $lock_file );
-            } elseif ( file_exists( $lock_file ) ) {
-                // Fallback for older WordPress versions (though plugin requires 6.0+)
-                @unlink( $lock_file );
-            }
+            wp_delete_file( $lock_file );
 
             return true;
         }
@@ -1234,22 +1343,42 @@ if( ! function_exists('wp_ulike_put_contents') ){
 			return false;
 		}
 
-		/**
-		 * Initialize the WP_Filesystem
-		 */
-		global $wp_filesystem;
-		if ( empty( $wp_filesystem ) ) {
-			require_once ( ABSPATH.'/wp-admin/includes/file.php' );
-			WP_Filesystem();
+		$file_dir = dirname( $file_location );
+
+		// The destination is often inside uploads while WP_CONTENT_DIR itself is
+		// not writable. Test the destination directory so WordPress can choose
+		// the direct method instead of falling back to FTP for the whole site.
+		if ( ! wp_mkdir_p( $file_dir ) ) {
+			return false;
 		}
 
-		// Write the content, if possible
-		if ( wp_mkdir_p( dirname( $file_location ) ) && ! $wp_filesystem->put_contents( $file_location, $content, $chmode ) ) {
-			// If writing the content in the file was not successful
-			return false;
-		} else {
-			return true;
+		/**
+		 * Initialize the WP_Filesystem.
+		 *
+		 * WP_Filesystem() returns false when it cannot connect, but still leaves
+		 * an unconnected object in $wp_filesystem. Do not call put_contents() on
+		 * that object: FTP methods would receive an invalid connection.
+		 */
+		global $wp_filesystem;
+
+		$filesystem_ready = $wp_filesystem instanceof WP_Filesystem_Base
+			&& method_exists( $wp_filesystem, 'put_contents' )
+			&& ! ( is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() );
+
+		if ( ! $filesystem_ready ) {
+			require_once ( ABSPATH.'/wp-admin/includes/file.php' );
+			if ( ! WP_Filesystem( false, $file_dir, true ) ) {
+				return false;
+			}
 		}
+
+		if ( ! $wp_filesystem instanceof WP_Filesystem_Base || ! method_exists( $wp_filesystem, 'put_contents' ) ) {
+			return false;
+		}
+
+		// Write the content, if possible. An empty string truncates an existing
+		// file, so removed custom CSS cannot linger in custom.css.
+		return (bool) $wp_filesystem->put_contents( $file_location, $content, $chmode );
 
 	}
 }

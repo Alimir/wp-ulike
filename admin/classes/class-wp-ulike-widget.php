@@ -135,6 +135,10 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			}
 
 			foreach ($comments as $comment) {
+				if ( ! wp_ulike_is_public_comment( $comment ) ) {
+					continue;
+				}
+
 				$comment_author      = stripslashes($comment->comment_author);
 				$post_title          = get_the_title($comment->comment_post_ID);
 				$comment_permalink   = get_comment_link($comment->comment_ID);
@@ -144,13 +148,18 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					'%s %s <span class="comment-info"><span class="comment-author-link">%s</span> %s <a href="%s">%s</a></span> %s %s',
 					$before_item,
 					$show_thumb ? get_avatar( $comment->comment_author_email, $sizeOf ) : '',
-					esc_html( $comment_author ),
+					wp_ulike_encode_shortcode_brackets( esc_html( $comment_author ) ),
 					esc_html__('on','wp-ulike'),
 					esc_url( $comment_permalink ),
 					esc_html( wp_trim_words( $post_title, $trim, '...' ) ),
 					$show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $comment_likes_count, 'like' ) . '</span>' : '',
 					$after_item
 				);
+			}
+
+			if ( '' === $result ) {
+				$period_info = is_array( $period ) ? esc_html( implode( ' - ', $period ) ) : esc_html( $period );
+				return '<li>' . wp_ulike_setting_repo::getNoResultsNotice( $period_info ) . '</li>';
 			}
 
 			return $result;
@@ -229,7 +238,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 					?>
 					<a href="<?php echo esc_url( get_the_permalink( $post_id ) ); ?>"><?php echo esc_html( get_the_title( $post_id ) ); ?></a>
 				<?php
-					echo $show_count ? '<span class="wp_counter_span">' . wp_ulike_format_number( $this->get_counter_value($post_id, 'post', 'like', $period ), 'like' ) . '</span>' : '';
+					echo $show_count ? '<span class="wp_counter_span">' . wp_kses_post( wp_ulike_format_number( $this->get_counter_value( $post_id, 'post', 'like', $period ), 'like' ) ) . '</span>' : '';
 					echo wp_kses_post( $after_item );
 				endforeach;
 				$result = ob_get_clean();
@@ -535,29 +544,34 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				"after_item"  => '</li>'
 			);
 
-			echo $args['before_widget'];
+			echo $args['before_widget']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Wrapper markup from register_sidebar().
 
 			if ( ! empty( $title ) ) {
-				echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
+				echo $args['before_title'] . esc_html( $title ) . $args['after_title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Wrapper markup from register_sidebar().
 			}
 
 			echo '<ul class="most_liked_' . esc_attr( $type ) . ' wp_ulike_style_' . esc_attr( $style ) . '">';
 			if( $type == "post" ){
-				echo $this->most_liked_posts( $settings );
+				$list_html = $this->most_liked_posts( $settings );
 			} elseif( $type == "comment" ){
-				echo $this->most_liked_comments( $settings );
+				$list_html = $this->most_liked_comments( $settings );
 			} elseif( $type == "activity" ){
-				echo $this->most_liked_activities( $settings );
+				$list_html = $this->most_liked_activities( $settings );
 			} elseif( $type == "topic" ){
-				echo $this->most_liked_topics( $settings );
+				$list_html = $this->most_liked_topics( $settings );
 			} elseif( $type == "users" ){
-				echo $this->most_liked_users( $settings );
+				$list_html = $this->most_liked_users( $settings );
 			} elseif( $type == "last_posts_liked" ){
-				echo $this->last_posts_liked_by_current_user( $settings );
+				$list_html = $this->last_posts_liked_by_current_user( $settings );
+			} else {
+				$list_html = '';
 			}
+
+			// Legacy Widget blocks are rendered by do_blocks(), before do_shortcode().
+			echo wp_ulike_encode_shortcode_brackets( $list_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- List markup built and escaped by the most_liked_*() methods.
 			echo '</ul>';
 
-			echo $args['after_widget'];
+			echo $args['after_widget']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Wrapper markup from register_sidebar().
 		}
 
 		/**
@@ -587,13 +601,13 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			$instance = wp_parse_args( (array) $instance, $defaults );
 			?>
 			<p>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e('Title:', 'wp-ulike'); ?></label>
-				<input id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title']); ?>" type="text">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e('Title:', 'wp-ulike'); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( $instance['title']); ?>" type="text">
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'type' ); ?>"><?php esc_html_e('Type:', 'wp-ulike'); ?></label>
-				<select name="<?php echo $this->get_field_name( 'type' ); ?>" style="width:100%;">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'type' ) ); ?>"><?php esc_html_e('Type:', 'wp-ulike'); ?></label>
+				<select name="<?php echo esc_attr( $this->get_field_name( 'type' ) ); ?>" style="width:100%;">
 					<option value="post" <?php selected( $instance['type'], "post" ); ?>><?php esc_html_e('Most Liked Posts', 'wp-ulike'); ?></option>
 					<option value="comment" <?php selected( $instance['type'], "comment" ); ?>><?php esc_html_e('Most Liked Comments', 'wp-ulike'); ?></option>
 					<option value="activity" <?php selected( $instance['type'], "activity" ); ?>><?php esc_html_e('Most Liked Activities', 'wp-ulike'); ?></option>
@@ -604,13 +618,13 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php esc_html_e('Number of items to show:', 'wp-ulike'); ?></label>
-				<input id="<?php echo $this->get_field_id( 'count' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'count' ); ?>" value="<?php echo esc_attr( $instance['count'] ); ?>"  step="1" min="1" size="3" type="number">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_html_e('Number of items to show:', 'wp-ulike'); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>" class="tiny-text" name="<?php echo esc_attr( $this->get_field_name( 'count' ) ); ?>" value="<?php echo esc_attr( $instance['count'] ); ?>"  step="1" min="1" size="3" type="number">
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'period' ); ?>"><?php esc_html_e('Period:', 'wp-ulike'); ?></label>
-				<select name="<?php echo $this->get_field_name( 'period' ); ?>" style="width:100%;">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'period' ) ); ?>"><?php esc_html_e('Period:', 'wp-ulike'); ?></label>
+				<select name="<?php echo esc_attr( $this->get_field_name( 'period' ) ); ?>" style="width:100%;">
 					<option value="all" <?php selected( $instance['period'], "all" ); ?>><?php esc_html_e( 'All time', 'wp-ulike' ); ?></option>
 					<option value="year" <?php selected( $instance['period'], "year" ); ?>><?php esc_html_e( 'This year', 'wp-ulike' ); ?></option>
 					<option value="month" <?php selected( $instance['period'], "month" ); ?>><?php esc_html_e( 'This month', 'wp-ulike' ); ?></option>
@@ -621,40 +635,40 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'style' ); ?>"><?php esc_html_e('Style', 'wp-ulike'); ?></label>
-				<select name="<?php echo $this->get_field_name( 'style' ); ?>" style="width:100%;">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'style' ) ); ?>"><?php esc_html_e('Style', 'wp-ulike'); ?></label>
+				<select name="<?php echo esc_attr( $this->get_field_name( 'style' ) ); ?>" style="width:100%;">
 					<option value="simple" <?php selected( $instance['style'], "simple" ); ?>><?php esc_html_e('Simple', 'wp-ulike'); ?></option>
 					<option value="love" <?php selected( $instance['style'], "love" ); ?>><?php esc_html_e('Heart', 'wp-ulike'); ?></option>
 				</select>
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'trim' ); ?>"><?php esc_html_e('Title Trim (Length):', 'wp-ulike'); ?></label>
-				<input id="<?php echo $this->get_field_id( 'trim' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'trim' ); ?>" value="<?php echo esc_attr( $instance['trim'] ); ?>"  step="1" min="1" size="3" type="number">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'trim' ) ); ?>"><?php esc_html_e('Title Trim (Length):', 'wp-ulike'); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'trim' ) ); ?>" class="tiny-text" name="<?php echo esc_attr( $this->get_field_name( 'trim' ) ); ?>" value="<?php echo esc_attr( $instance['trim'] ); ?>"  step="1" min="1" size="3" type="number">
 			</p>
 
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'profile_url' ); ?>"><?php esc_html_e('Profile URL:', 'wp-ulike'); ?></label>
-				<select name="<?php echo $this->get_field_name( 'profile_url' ); ?>" style="width:100%;">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'profile_url' ) ); ?>"><?php esc_html_e('Profile URL:', 'wp-ulike'); ?></label>
+				<select name="<?php echo esc_attr( $this->get_field_name( 'profile_url' ) ); ?>" style="width:100%;">
 					<option value="bp" <?php selected( $instance['profile_url'], "bp" ); ?>><?php esc_html_e('BuddyPress', 'wp-ulike'); ?></option>
 					<option value="um" <?php selected( $instance['profile_url'], "um" ); ?>><?php esc_html_e('UltimateMember', 'wp-ulike'); ?></option>
 				</select>
 			</p>
 
 			<p>
-				<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id( 'show_count' ); ?>" name="<?php echo $this->get_field_name( 'show_count' ); ?>" <?php if($instance['show_count'] == true) echo 'checked="checked"'; ?> />
-				<label for="<?php echo $this->get_field_id( 'show_count' ); ?>"><?php esc_html_e('Activate Like Counter', 'wp-ulike'); ?></label>
+				<input class="checkbox" type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'show_count' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'show_count' ) ); ?>" <?php if($instance['show_count'] == true) echo 'checked="checked"'; ?> />
+				<label for="<?php echo esc_attr( $this->get_field_id( 'show_count' ) ); ?>"><?php esc_html_e('Activate Like Counter', 'wp-ulike'); ?></label>
 			</p>
 
 			<p>
-				<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id( 'show_thumb' ); ?>" name="<?php echo $this->get_field_name( 'show_thumb' ); ?>" <?php if($instance['show_thumb'] == true) echo 'checked="checked"'; ?> />
-				<label for="<?php echo $this->get_field_id( 'show_thumb' ); ?>"><?php esc_html_e('Activate Thumbnail/Avatar', 'wp-ulike'); ?></label>
+				<input class="checkbox" type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'show_thumb' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'show_thumb' ) ); ?>" <?php if($instance['show_thumb'] == true) echo 'checked="checked"'; ?> />
+				<label for="<?php echo esc_attr( $this->get_field_id( 'show_thumb' ) ); ?>"><?php esc_html_e('Activate Thumbnail/Avatar', 'wp-ulike'); ?></label>
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'size' ); ?>"><?php esc_html_e('Thumbnail/Avatar size:', 'wp-ulike'); ?><small> (min. 8)</small></label>
-				<input id="<?php echo $this->get_field_id( 'size' ); ?>" class="tiny-text" name="<?php echo $this->get_field_name( 'size' ); ?>" value="<?php echo esc_attr( $instance['size'] ); ?>" step="1" min="8" size="3" type="number">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>"><?php esc_html_e('Thumbnail/Avatar size:', 'wp-ulike'); ?><small> (min. 8)</small></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" class="tiny-text" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" value="<?php echo esc_attr( $instance['size'] ); ?>" step="1" min="8" size="3" type="number">
 			</p>
 
 			<?php

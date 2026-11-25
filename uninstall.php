@@ -192,22 +192,32 @@ class wp_ulike_uninstall {
 	 */
 	public function delete_files() {
 
-		global $wp_filesystem;
-
-		// Get filesystem.
-		if ( empty( $wp_filesystem ) ) {
-
-			if ( ! function_exists( 'WP_Filesystem' ) ) {
-				require_once ABSPATH . '/wp-admin/includes/file.php';
-			}
-
-			WP_Filesystem();
-
+		$uploads = wp_get_upload_dir();
+		if ( empty( $uploads['basedir'] ) ) {
+			return;
 		}
 
-		$wp_content = $wp_filesystem->wp_content_dir();
+		$dir = trailingslashit( $uploads['basedir'] ) . 'wp-ulike';
+		if ( ! is_dir( $dir ) ) {
+			return;
+		}
 
-		$wp_filesystem->delete( $wp_content . '/uploads/wp-ulike', true );
+		global $wp_filesystem;
+
+		if ( ! function_exists( 'WP_Filesystem' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+
+		// A failed WP_Filesystem() still leaves an unconnected object in
+		// $wp_filesystem; FTP methods would then receive a null connection.
+		if ( ! WP_Filesystem( false, $dir, true ) ) {
+			return;
+		}
+
+		$target = 'direct' === $wp_filesystem->method ? $dir : $wp_filesystem->find_folder( $dir );
+		if ( $target ) {
+			$wp_filesystem->delete( $target, true );
+		}
 	}
 
 	/**

@@ -187,7 +187,7 @@ if ( ! class_exists( 'WP_Ulike_Setup_Wizard' ) ) {
 						'likersOn'    => __( 'show who liked', 'wp-ulike' ),
 						'likersOff'   => __( 'names stay hidden', 'wp-ulike' ),
 						'tryNext'     => __( 'Open a matching page and try a like.', 'wp-ulike' ),
-						'recap'       => __( 'Likes on %1$s. %2$s. %3$s. %4$s.', 'wp-ulike' ),
+						'recap'       => /* translators: 1: places, 2: who can like, 3: likers visibility, 4: next step. */ __( 'Likes on %1$s. %2$s. %3$s. %4$s.', 'wp-ulike' ),
 						'places'      => array(
 							'post'       => __( 'posts', 'wp-ulike' ),
 							'comment'    => __( 'comments', 'wp-ulike' ),

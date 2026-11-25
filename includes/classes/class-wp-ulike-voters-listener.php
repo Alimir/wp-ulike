@@ -87,7 +87,10 @@ final class wp_ulike_voters_listener extends wp_ulike_ajax_listener_base {
 	private function validates()
 	{
 		// Return false when ID not exist
-		if( empty( $this->data['id'] ) ) return false;
+		if( empty( $this->data['id'] ) || empty( $this->data['type'] ) ) return false;
+		// Same visibility rule as voting: do not list voters on hidden items.
+		if ( ! wp_ulike_is_item_token_valid( $this->data['nonce'], $this->data['type'], $this->data['id'] )
+			&& ! wp_ulike_is_item_viewable( $this->data['id'], $this->data['type'] ) ) return false;
 		// Return false when anonymous display is off
 		if( wp_ulike_setting_repo::restrictLikersBox( $this->settings_type->getType() ) && ! $this->user ) return false;
 		// Return false display is off

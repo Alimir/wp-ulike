@@ -69,7 +69,7 @@ if( ! function_exists( 'wp_ulike' ) ){
 		if( $type === 'put' ) {
 			return $output;
 		} else {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button(); each value is escaped there.
 		}
 	}
 }
@@ -196,7 +196,7 @@ if( ! function_exists( 'wp_ulike_comments' ) ){
         if( $type === 'put' ) {
         	return $output;
         } else {
-        	echo $output;
+        	echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button(); each value is escaped there.
         }
 
 	}
@@ -326,7 +326,7 @@ if( ! function_exists( 'wp_ulike_buddypress' ) ){
         if( $type === 'put' ) {
         	return $output;
         } else {
-        	echo $output;
+        	echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button(); each value is escaped there.
         }
 
 	}
@@ -543,7 +543,7 @@ if( ! function_exists( 'wp_ulike_bbpress' ) ){
         if( $type === 'put' ) {
         	return $output;
         } else {
-        	echo $output;
+        	echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Button HTML from wp_ulike_display_button(); each value is escaped there.
         }
 
 	}

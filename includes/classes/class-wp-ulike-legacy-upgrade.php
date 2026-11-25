@@ -107,7 +107,7 @@ if ( ! class_exists( 'WP_Ulike_Legacy_Upgrade' ) ) {
 		private static function run_query( $query ) {
 			global $wpdb;
 
-			if ( false !== $wpdb->query( $query ) ) {
+			if ( false !== $wpdb->query( $query ) ) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Fixed upgrade statements built by this class.
 				return true;
 			}
 

@@ -80,7 +80,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getNoResultsNotice( $period = '' ){
-		$format = self::getOption( 'no_results_notice', __( 'No results were found in "%s" period', 'wp-ulike' ) );
+		$format = self::getOption( 'no_results_notice', /* translators: %s: period name, for example This week. */ __( 'No results were found in "%s" period', 'wp-ulike' ) );
 		return wp_ulike_kses( sprintf( $format, $period ) );
 	}
 
@@ -108,7 +108,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getBpMultipleLikesNotice(){
-		return self::getOption( 'bp_multiple_likes_notice', __( 'You have %1$d new %2$s likes', 'wp-ulike' ) );
+		return self::getOption( 'bp_multiple_likes_notice', /* translators: 1: number of likes, 2: content type, for example Posts. */ __( 'You have %1$d new %2$s likes', 'wp-ulike' ) );
 	}
 
 	/**
@@ -117,7 +117,7 @@ class wp_ulike_setting_repo {
 	 * @return string
 	 */
 	public static function getBpSingleLikeNotice(){
-		return self::getOption( 'bp_single_like_notice', __( '%1$s liked one of your %2$s', 'wp-ulike' ) );
+		return self::getOption( 'bp_single_like_notice', /* translators: 1: user name, 2: content type. */ __( '%1$s liked one of your %2$s', 'wp-ulike' ) );
 	}
 
 	/**
@@ -504,6 +504,16 @@ class wp_ulike_setting_repo {
 	 */
 	public static function isCodeSnippetsDisabled(){
 		return is_multisite() || ( defined('WP_ULIKE_DISABLE_CODE_SNIPPETS') && WP_ULIKE_DISABLE_CODE_SNIPPETS === true );
+	}
+
+	/**
+	 * Owner opt-in from wp-config.php to edit PHP snippets on a site that
+	 * disallows file edits.
+	 *
+	 * @return boolean
+	 */
+	public static function isPhpSnippetsAllowed(){
+		return defined( 'WP_ULIKE_ALLOW_PHP_SNIPPETS' ) && true === WP_ULIKE_ALLOW_PHP_SNIPPETS;
 	}
 
 	/**

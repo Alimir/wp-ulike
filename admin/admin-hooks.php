@@ -216,12 +216,13 @@ function wp_ulike_notice_manager(){
 					array(
 						'id'          => 'wp_ulike_pro_license_discount',
 						'title'       => sprintf(
+							/* translators: %s: discount percentage, for example 30%. */
 							esc_html__( 'Special offer: save %s on WP ULike Pro', 'wp-ulike' ),
 							'30%'
 						),
-						'description' => sprintf(
-							'<strong>%s</strong> ' . esc_html__( 'We noticed your license needs a quick update. Renew with code %s to save %s on premium features, updates, and support.', 'wp-ulike' ),
-							$status_message,
+						'description' => '<strong>' . $status_message . '</strong> ' . sprintf(
+							/* translators: 1: coupon code, 2: discount percentage. */
+							esc_html__( 'We noticed your license needs a quick update. Renew with code %1$s to save %2$s on premium features, updates, and support.', 'wp-ulike' ),
 							'<code style="background: #fff3cd; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 13px; letter-spacing: 0.5px;">GET30OFF</code>',
 							'30%'
 						),
@@ -230,6 +231,7 @@ function wp_ulike_notice_manager(){
 						'buttons'     => array(
 							array(
 								'label'      => sprintf(
+									/* translators: %s: discount percentage, for example 30%. */
 									esc_html__( 'Claim %s discount', 'wp-ulike' ),
 									'30%'
 								),
@@ -266,6 +268,40 @@ function wp_ulike_notice_manager(){
     }
 }
 add_action( 'admin_notices', 'wp_ulike_notice_manager' );
+
+/**
+ * Tell the admin when guest votes arrive through a proxy that is not trusted.
+ *
+ * @return void
+ */
+function wp_ulike_untrusted_proxy_notice() {
+	$screen = get_current_screen();
+	if ( ! $screen || false === strpos( $screen->id, 'wp-ulike' ) || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$proxy = get_transient( 'wp_ulike_untrusted_proxy' );
+	if ( ! $proxy || ! WP_Ulike_Ip_Detector::validate_ip( $proxy ) || WP_Ulike_Ip_Detector::is_trusted_proxy( $proxy ) ) {
+		return;
+	}
+
+	$code = sprintf( "define( 'WP_ULIKE_TRUSTED_PROXIES', '%s' );", $proxy );
+	?>
+	<div class="notice notice-warning">
+		<p>
+			<strong><?php esc_html_e( 'WP ULike: guest votes come through a proxy', 'wp-ulike' ); ?></strong>
+		</p>
+		<p>
+			<?php
+			/* translators: %s: proxy IP address. */
+			echo esc_html( sprintf( __( 'Guest votes reach your site through %s, so WP ULike cannot see each visitor\'s address and guests may share one vote. If this is your own server or load balancer, add this line to wp-config.php:', 'wp-ulike' ), $proxy ) );
+			?>
+		</p>
+		<p><code><?php echo esc_html( $code ); ?></code></p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'wp_ulike_untrusted_proxy_notice' );
 
 /**
  * Register Go Pro submenu (free installs only).
@@ -418,7 +454,7 @@ function wp_ulike_manage_posts_custom_column( $column, $post_id ) {
     if ( $column === 'wp-ulike-thumbs-up' ){
 		$is_distinct = wp_ulike_setting_repo::isDistinct('post');
 		$post_id     = wp_ulike_get_the_id( $post_id );
-        echo sprintf( '<span class="wp-ulike-counter-box">%d</span>',  wp_ulike_get_counter_value( $post_id, 'post', 'like', $is_distinct ) );
+        printf( '<span class="wp-ulike-counter-box">%d</span>', absint( wp_ulike_get_counter_value( $post_id, 'post', 'like', $is_distinct ) ) );
     }
 }
 add_action( 'manage_posts_custom_column' , 'wp_ulike_manage_posts_custom_column', 10, 2 );
@@ -547,7 +583,7 @@ add_filter( 'manage_edit-comments_sortable_columns', 'wp_ulike_comments_sortable
 function wp_ulike_comment_column_content( $column, $comment_ID ) {
     if ( $column === 'wp-ulike-thumbs-up' ){
 		$is_distinct = wp_ulike_setting_repo::isDistinct('comment');
-        echo sprintf( '<span class="wp-ulike-counter-box">%d</span>',  wp_ulike_get_counter_value( $comment_ID, 'comment', 'like', $is_distinct ) );
+        printf( '<span class="wp-ulike-counter-box">%d</span>', absint( wp_ulike_get_counter_value( $comment_ID, 'comment', 'like', $is_distinct ) ) );
     }
 }
 add_filter( 'manage_comments_custom_column', 'wp_ulike_comment_column_content', 10, 2 );
