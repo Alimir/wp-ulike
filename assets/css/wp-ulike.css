@@ -922,24 +922,24 @@
   letter-spacing: -0.01em;
 }
 .ulf-white-theme .ulf-arrow-bottom {
-  background: #ffffff;
-  border-bottom-color: #e2e8f0;
-  border-right-color: #e2e8f0;
+  background-color: inherit;
+  border-bottom-color: inherit;
+  border-right-color: inherit;
 }
 .ulf-white-theme .ulf-arrow-top {
-  background: #ffffff;
-  border-top-color: #e2e8f0;
-  border-left-color: #e2e8f0;
+  background-color: inherit;
+  border-top-color: inherit;
+  border-left-color: inherit;
 }
 .ulf-white-theme .ulf-arrow-left {
-  background: #ffffff;
-  border-bottom-color: #e2e8f0;
-  border-left-color: #e2e8f0;
+  background-color: inherit;
+  border-bottom-color: inherit;
+  border-left-color: inherit;
 }
 .ulf-white-theme .ulf-arrow-right {
-  background: #ffffff;
-  border-top-color: #e2e8f0;
-  border-right-color: #e2e8f0;
+  background-color: inherit;
+  border-top-color: inherit;
+  border-right-color: inherit;
 }
 .ulf-white-theme .ulf-spinner-circle {
   background-color: #8e8e8e;
@@ -958,24 +958,24 @@
   letter-spacing: -0.01em;
 }
 .ulf-light-theme .ulf-arrow-bottom {
-  background: #ffffff;
-  border-bottom-color: #e2e8f0;
-  border-right-color: #e2e8f0;
+  background-color: inherit;
+  border-bottom-color: inherit;
+  border-right-color: inherit;
 }
 .ulf-light-theme .ulf-arrow-top {
-  background: #ffffff;
-  border-top-color: #e2e8f0;
-  border-left-color: #e2e8f0;
+  background-color: inherit;
+  border-top-color: inherit;
+  border-left-color: inherit;
 }
 .ulf-light-theme .ulf-arrow-left {
-  background: #ffffff;
-  border-bottom-color: #e2e8f0;
-  border-left-color: #e2e8f0;
+  background-color: inherit;
+  border-bottom-color: inherit;
+  border-left-color: inherit;
 }
 .ulf-light-theme .ulf-arrow-right {
-  background: #ffffff;
-  border-top-color: #e2e8f0;
-  border-right-color: #e2e8f0;
+  background-color: inherit;
+  border-top-color: inherit;
+  border-right-color: inherit;
 }
 .ulf-light-theme .ulf-spinner-circle {
   background-color: #8e8e8e;
@@ -1119,14 +1119,14 @@
   right: auto;
 }
 .rtl .ulf-tooltip.ulf-white-theme .ulf-arrow-left, .rtl .ulf-tooltip.ulf-light-theme .ulf-arrow-left {
-  border-top-color: #e2e8f0;
-  border-right-color: #e2e8f0;
+  border-top-color: inherit;
+  border-right-color: inherit;
   border-bottom-color: transparent;
   border-left-color: transparent;
 }
 .rtl .ulf-tooltip.ulf-white-theme .ulf-arrow-right, .rtl .ulf-tooltip.ulf-light-theme .ulf-arrow-right {
-  border-bottom-color: #e2e8f0;
-  border-left-color: #e2e8f0;
+  border-bottom-color: inherit;
+  border-left-color: inherit;
   border-top-color: transparent;
   border-right-color: transparent;
 }

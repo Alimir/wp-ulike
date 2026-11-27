@@ -188,6 +188,7 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 * Added: Likers box avatars link to each person's profile out of the box. The new `%PROFILE_URL%` variable uses BuddyPress, BuddyBoss, PeepSo, Ultimate Member, UsersWP, WP User Manager, ProfileGrid, wpForo, or bbPress when active, and the WordPress author page otherwise. `%AUTHOR_URL%` always uses the author page.
 * Added: The Top List block and the users widget can link to any of the supported profile plugins.
 * Fixed: Profile variables for plugins that are not installed no longer produce broken links. They fall back to the author page, and people with no published posts get no author page link instead of an empty archive.
+* Fixed: The likers popover arrow follows the Likers Background and Border colors in the customizer, including in RTL.
 * Changed: PHP snippets can be edited only by accounts that can edit plugin files. Saved snippets keep running.
 * Tweak: Code brought in line with the latest WordPress coding standards.
 

@@ -45,15 +45,15 @@
     &.ulf-white-theme,
     &.ulf-light-theme {
       .ulf-arrow-left {
-        border-top-color: $tooltip-border-color;
-        border-right-color: $tooltip-border-color;
+        border-top-color: inherit;
+        border-right-color: inherit;
         border-bottom-color: transparent;
         border-left-color: transparent;
       }
 
       .ulf-arrow-right {
-        border-bottom-color: $tooltip-border-color;
-        border-left-color: $tooltip-border-color;
+        border-bottom-color: inherit;
+        border-left-color: inherit;
         border-top-color: transparent;
         border-right-color: transparent;
       }

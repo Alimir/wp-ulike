@@ -140,28 +140,29 @@ $color-spinner-dark: #a8a8a8;
     letter-spacing: -0.01em;
   }
 
+  // The arrow is a direct child of the tooltip, so Likers Background / Border reach it.
   .ulf-arrow-bottom {
-    background: $color-white;
-    border-bottom-color: $tooltip-border-color;
-    border-right-color: $tooltip-border-color;
+    background-color: inherit;
+    border-bottom-color: inherit;
+    border-right-color: inherit;
   }
 
   .ulf-arrow-top {
-    background: $color-white;
-    border-top-color: $tooltip-border-color;
-    border-left-color: $tooltip-border-color;
+    background-color: inherit;
+    border-top-color: inherit;
+    border-left-color: inherit;
   }
 
   .ulf-arrow-left {
-    background: $color-white;
-    border-bottom-color: $tooltip-border-color;
-    border-left-color: $tooltip-border-color;
+    background-color: inherit;
+    border-bottom-color: inherit;
+    border-left-color: inherit;
   }
 
   .ulf-arrow-right {
-    background: $color-white;
-    border-top-color: $tooltip-border-color;
-    border-right-color: $tooltip-border-color;
+    background-color: inherit;
+    border-top-color: inherit;
+    border-right-color: inherit;
   }
 
   .ulf-spinner-circle {
@@ -183,28 +184,29 @@ $color-spinner-dark: #a8a8a8;
     letter-spacing: -0.01em;
   }
 
+  // The arrow is a direct child of the tooltip, so Likers Background / Border reach it.
   .ulf-arrow-bottom {
-    background: $color-white;
-    border-bottom-color: $tooltip-border-color;
-    border-right-color: $tooltip-border-color;
+    background-color: inherit;
+    border-bottom-color: inherit;
+    border-right-color: inherit;
   }
 
   .ulf-arrow-top {
-    background: $color-white;
-    border-top-color: $tooltip-border-color;
-    border-left-color: $tooltip-border-color;
+    background-color: inherit;
+    border-top-color: inherit;
+    border-left-color: inherit;
   }
 
   .ulf-arrow-left {
-    background: $color-white;
-    border-bottom-color: $tooltip-border-color;
-    border-left-color: $tooltip-border-color;
+    background-color: inherit;
+    border-bottom-color: inherit;
+    border-left-color: inherit;
   }
 
   .ulf-arrow-right {
-    background: $color-white;
-    border-top-color: $tooltip-border-color;
-    border-right-color: $tooltip-border-color;
+    background-color: inherit;
+    border-top-color: inherit;
+    border-right-color: inherit;
   }
 
   .ulf-spinner-circle {
