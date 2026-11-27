@@ -180,6 +180,14 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'default' => true,
                     ),
                     array(
+                        'id'         => 'enable_hub_news',
+                        'type'       => 'switcher',
+                        'title'      => esc_html__('WP ULike News in the Hub', 'wp-ulike'),
+                        'desc'       => esc_html__('Shows short messages from the WP ULike team in the Hub, such as new features and offers. Twice a day your site downloads them from wpulike.com; nothing about your site is sent. Turn off to stop the download.', 'wp-ulike'),
+                        'default'    => true,
+                        'dependency' => array( 'enable_hub', '==', 'true' ),
+                    ),
+                    array(
                         'id'          => 'enable_admin_posts_columns',
                         'type'        => 'select',
                         'title'       => esc_html__( 'Show Admin Columns','wp-ulike' ),

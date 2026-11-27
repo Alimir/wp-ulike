@@ -1,8 +1,11 @@
 /**
- * ULike Hub: heart in the admin bar with one hint and the latest activity.
+ * ULike Hub: heart in the admin bar with one tip, team news, and the latest activity.
  *
- * Loads on first open only, so page loads never query votes.
- * Opening it marks likes as seen for this user.
+ * Page loads never query votes. The last panel is kept for the browser
+ * session and shown at once; it is fetched again only when the vote counter
+ * has moved or it is a few minutes old. Fetching is read-only, so it starts
+ * as soon as the pointer reaches the heart. Votes are marked as seen only
+ * when the panel is actually opened.
  */
 ( function () {
 	'use strict';
@@ -17,17 +20,65 @@
 	var panel = node.querySelector( '.wp-ulike-hub-panel' );
 	var countEl = node.querySelector( '.wp-ulike-hub__count' );
 	var labelEl = node.querySelector( '.wp-ulike-hub__label' );
-	var loadedAt = 0;
-	var stale = false;
-	var loading = false;
-	var hoverTimer = 0;
-	var REFRESH_AFTER = 60000;
-	// A pointer crossing the admin bar should not open the panel or clear the badge.
-	var HOVER_DELAY = 200;
 
 	if ( ! panel ) {
 		return;
 	}
+
+	var MAX_AGE = 5 * 60000;
+	// A pointer crossing the admin bar should not clear the badge.
+	var OPEN_DELAY = 200;
+
+	var total = parseInt( cfg.total, 10 ) || 0;
+	var unseen = parseInt( cfg.unseen, 10 ) || 0;
+	var data = null;
+	var loadedAt = 0;
+	var shownFrom = -1;
+	var shownAt = 0;
+	var request = null;
+	var openTimer = 0;
+	var rtf = null;
+
+	try {
+		rtf = new Intl.RelativeTimeFormat( cfg.locale || undefined, { numeric: 'auto', style: 'short' } );
+	} catch ( e ) {
+		rtf = null;
+	}
+
+	/* Session copy ------------------------------------------------------ */
+
+	function restore() {
+		try {
+			var saved = JSON.parse( window.sessionStorage.getItem( cfg.cacheKey ) || 'null' );
+			if ( saved && saved.data ) {
+				data = saved.data;
+				loadedAt = saved.at || 0;
+				// Seen since it was saved, maybe on another screen.
+				if ( ! unseen ) {
+					clearNew();
+				}
+			}
+		} catch ( e ) {}
+	}
+
+	function clearNew() {
+		( data.items || [] ).forEach( function ( item ) {
+			item.isNew = false;
+		} );
+		data.badge = { unseen: 0 };
+	}
+
+	function persist() {
+		try {
+			window.sessionStorage.setItem( cfg.cacheKey, JSON.stringify( { at: loadedAt, data: data } ) );
+		} catch ( e ) {}
+	}
+
+	function isFresh() {
+		return !! data && data.total === total && ( parseInt( data.badge && data.badge.unseen, 10 ) || 0 ) === unseen && Date.now() - loadedAt < MAX_AGE;
+	}
+
+	/* Helpers ----------------------------------------------------------- */
 
 	function el( tag, className, text ) {
 		var element = document.createElement( tag );
@@ -40,8 +91,24 @@
 		return element;
 	}
 
-	function post( action, extra ) {
-		var body = new URLSearchParams( { action: action, nonce: cfg.nonce } );
+	function safeUrl( url ) {
+		return typeof url === 'string' && /^https?:\/\//i.test( url ) ? url : '';
+	}
+
+	function link( className, text, url ) {
+		var a = el( 'a', className, text );
+		a.href = url;
+		try {
+			if ( new URL( url ).origin !== window.location.origin ) {
+				a.target = '_blank';
+				a.rel = 'noopener noreferrer';
+			}
+		} catch ( e ) {}
+		return a;
+	}
+
+	function post( action, extra, keepalive ) {
+		var body = new URLSearchParams( { action: action, nonce: cfg.nonce, screen: cfg.screen } );
 		Object.keys( extra || {} ).forEach( function ( key ) {
 			body.set( key, extra[ key ] );
 		} );
@@ -49,11 +116,29 @@
 		return fetch( cfg.ajaxUrl, {
 			method: 'POST',
 			credentials: 'same-origin',
+			keepalive: !! keepalive,
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
 			body: body.toString(),
 		} ).then( function ( response ) {
 			return response.json();
 		} );
+	}
+
+	function ago( ts ) {
+		var seconds = Math.round( ( Date.now() / 1000 ) - ts );
+		if ( ! ts || seconds < 60 ) {
+			return cfg.i18n.justNow;
+		}
+		if ( ! rtf ) {
+			return '';
+		}
+		var units = [ [ 'year', 31536000 ], [ 'month', 2592000 ], [ 'week', 604800 ], [ 'day', 86400 ], [ 'hour', 3600 ], [ 'minute', 60 ] ];
+		for ( var i = 0; i < units.length; i++ ) {
+			if ( seconds >= units[ i ][ 1 ] ) {
+				return rtf.format( -Math.floor( seconds / units[ i ][ 1 ] ), units[ i ][ 0 ] );
+			}
+		}
+		return cfg.i18n.justNow;
 	}
 
 	/**
@@ -63,7 +148,7 @@
 		if ( ! badge ) {
 			return;
 		}
-		var unseen = parseInt( badge.unseen, 10 ) || 0;
+		unseen = parseInt( badge.unseen, 10 ) || 0;
 		node.classList.toggle( 'has-new', unseen > 0 );
 		if ( countEl ) {
 			countEl.textContent = badge.count;
@@ -74,11 +159,13 @@
 		}
 	}
 
-	function header( today ) {
+	/* Pieces ------------------------------------------------------------ */
+
+	function header( today, trend, quiet ) {
 		var wrap = el( 'div', 'wp-ulike-hub-panel__header' );
 		wrap.appendChild( el( 'span', 'wp-ulike-hub-panel__title', cfg.i18n.title ) );
 		if ( today ) {
-			wrap.appendChild( el( 'span', 'wp-ulike-hub-panel__today', today ) );
+			wrap.appendChild( el( 'span', 'wp-ulike-hub-panel__today' + ( trend ? ' is-' + trend : '' ) + ( quiet ? ' is-quiet' : '' ), today ) );
 		}
 		return wrap;
 	}
@@ -102,57 +189,140 @@
 		panel.appendChild( el( 'span', 'screen-reader-text', cfg.i18n.loading ) );
 	}
 
-	function hintCard( hint ) {
-		var card = el( 'div', 'wp-ulike-hub-hint is-' + ( hint.icon || 'tip' ) );
-		card.setAttribute( 'data-hint', hint.id );
-
-		card.appendChild( el( 'span', 'wp-ulike-hub-hint__icon' ) );
-
-		var body = el( 'div', 'wp-ulike-hub-hint__body' );
-		body.appendChild( el( 'p', 'wp-ulike-hub-hint__text', hint.text ) );
-		if ( hint.action ) {
-			var action = el( 'a', 'wp-ulike-hub-hint__action', hint.action.label );
-			action.href = hint.action.url;
-			body.appendChild( action );
-		}
-		card.appendChild( body );
-
-		var close = el( 'button', 'wp-ulike-hub-hint__close' );
+	function closeButton( id, onDone ) {
+		var close = el( 'button', 'wp-ulike-hub-close' );
 		close.type = 'button';
 		close.setAttribute( 'aria-label', cfg.i18n.dismiss );
 		close.addEventListener( 'click', function ( event ) {
 			event.preventDefault();
 			event.stopPropagation();
-			card.classList.add( 'is-leaving' );
-			post( cfg.dismissAction, { hint: hint.id } )
-				.then( function ( json ) {
-					var next = json && json.success && json.data ? json.data.hint : null;
-					if ( next ) {
-						card.replaceWith( hintCard( next ) );
-					} else {
-						card.remove();
-					}
-				} )
-				.catch( function () {
-					card.remove();
-				} );
+			dismiss( id, false, onDone );
 		} );
-		card.appendChild( close );
+		return close;
+	}
+
+	function dismiss( id, done, onDone ) {
+		var target = panel.querySelector( '[data-dismiss="' + id + '"]' );
+		if ( target ) {
+			target.classList.add( 'is-leaving' );
+		}
+		post( cfg.dismissAction, done ? { hint: id, done: 1 } : { hint: id }, done )
+			.then( function ( json ) {
+				if ( json && json.success && data ) {
+					data.hint = json.data.hint;
+					data.news = json.data.news;
+					persist();
+				}
+			} )
+			.catch( function () {} )
+			.then( function () {
+				if ( onDone ) {
+					onDone();
+				}
+			} );
+	}
+
+	function refreshTop() {
+		var top = panel.querySelector( '.wp-ulike-hub-panel__top' );
+		if ( top && data ) {
+			top.replaceWith( topSection( data ) );
+		}
+	}
+
+	function hintCard( hint ) {
+		var card = el( 'div', 'wp-ulike-hub-hint is-' + ( hint.icon || 'tip' ) );
+		card.setAttribute( 'data-dismiss', hint.id );
+
+		card.appendChild( el( 'span', 'wp-ulike-hub-hint__icon' ) );
+
+		var body = el( 'div', 'wp-ulike-hub-hint__body' );
+		body.appendChild( el( 'p', 'wp-ulike-hub-hint__text', hint.text ) );
+		var url = hint.action && safeUrl( hint.action.url );
+		if ( url ) {
+			var action = link( 'wp-ulike-hub-hint__action', hint.action.label, url );
+			if ( hint.done ) {
+				action.addEventListener( 'click', function () {
+					dismiss( hint.id, true, refreshTop );
+				} );
+			}
+			body.appendChild( action );
+		}
+		card.appendChild( body );
+		card.appendChild( closeButton( hint.id, refreshTop ) );
 
 		return card;
 	}
 
-	function avatar( item ) {
-		var wrap = el( 'span', 'wp-ulike-hub-panel__avatar' + ( item.avatar ? '' : ' is-guest' ) );
-		if ( item.avatar ) {
+	function newsRow( news ) {
+		var row = el( 'div', 'wp-ulike-hub-news' );
+		row.setAttribute( 'data-dismiss', news.id );
+
+		var ring = el( 'span', 'wp-ulike-hub-news__ring' );
+		ring.setAttribute( 'aria-hidden', 'true' );
+		ring.appendChild( el( 'span', 'wp-ulike-hub-news__logo' ) );
+		row.appendChild( ring );
+
+		var body = el( 'div', 'wp-ulike-hub-news__body' );
+		var meta = el( 'p', 'wp-ulike-hub-news__meta' );
+		meta.appendChild( el( 'strong', '', cfg.i18n.team ) );
+		var when = news.time ? ago( news.time ) : '';
+		if ( when ) {
+			meta.appendChild( el( 'span', 'wp-ulike-hub-news__time', when ) );
+		}
+		body.appendChild( meta );
+
+		if ( news.title ) {
+			body.appendChild( el( 'p', 'wp-ulike-hub-news__title', news.title ) );
+		}
+		if ( news.text ) {
+			body.appendChild( el( 'p', 'wp-ulike-hub-news__text', news.text ) );
+		}
+		var url = news.action && safeUrl( news.action.url );
+		if ( url ) {
+			body.appendChild( link( 'wp-ulike-hub-news__action', news.action.label, url ) );
+		}
+		row.appendChild( body );
+		row.appendChild( closeButton( news.id, refreshTop ) );
+		row.setAttribute( 'aria-label', cfg.i18n.fromTeam );
+
+		return row;
+	}
+
+	function topSection( payload ) {
+		var wrap = el( 'div', 'wp-ulike-hub-panel__top' );
+		if ( payload.news ) {
+			wrap.appendChild( newsRow( payload.news ) );
+		}
+		if ( payload.hint ) {
+			wrap.appendChild( hintCard( payload.hint ) );
+		}
+		return wrap;
+	}
+
+	function face( url ) {
+		var wrap = el( 'span', 'wp-ulike-hub-panel__face' + ( url ? '' : ' is-guest' ) );
+		var src = safeUrl( url );
+		if ( src ) {
 			var img = el( 'img' );
-			img.src = item.avatar;
+			img.src = src;
 			img.alt = '';
 			img.width = 32;
 			img.height = 32;
 			img.loading = 'lazy';
+			img.decoding = 'async';
 			wrap.appendChild( img );
 		}
+		return wrap;
+	}
+
+	function avatar( item ) {
+		var wrap = el( 'span', 'wp-ulike-hub-panel__avatar' + ( item.stack ? ' is-stack' : '' ) );
+		// Several people: two faces, overlapped.
+		if ( item.stack ) {
+			wrap.appendChild( face( item.avatar2 ) );
+		}
+		wrap.appendChild( face( item.avatar ) );
+
 		// Reaction emoji or star score when there is one, otherwise the heart.
 		var kind = item.badge
 			? el( 'span', 'wp-ulike-hub-panel__kind is-badge', item.badge )
@@ -185,55 +355,97 @@
 
 	function row( item ) {
 		var li = el( 'li', 'wp-ulike-hub-panel__row' + ( item.isNew ? ' is-new' : '' ) );
-		var link = el( item.url ? 'a' : 'div', 'wp-ulike-hub-panel__link' );
-		if ( item.url ) {
-			link.href = item.url;
-		}
+		var url = safeUrl( item.url );
+		var wrap = url ? link( 'wp-ulike-hub-panel__link', '', url ) : el( 'div', 'wp-ulike-hub-panel__link' );
 
-		link.appendChild( avatar( item ) );
+		wrap.appendChild( avatar( item ) );
 
 		var body = el( 'span', 'wp-ulike-hub-panel__body' );
 		body.appendChild( sentence( item ) );
+		body.appendChild( el( 'span', 'wp-ulike-hub-panel__meta', ago( item.ts ) ) );
+		wrap.appendChild( body );
 
-		var meta = el( 'span', 'wp-ulike-hub-panel__meta' );
-		if ( item.isNew ) {
-			meta.appendChild( el( 'span', 'wp-ulike-hub-panel__new', cfg.i18n.new ) );
+		var thumb = safeUrl( item.thumb );
+		if ( thumb ) {
+			var img = el( 'img', 'wp-ulike-hub-panel__thumb' );
+			img.src = thumb;
+			img.alt = '';
+			img.width = 40;
+			img.height = 40;
+			img.loading = 'lazy';
+			img.decoding = 'async';
+			wrap.appendChild( img );
 		}
-		meta.appendChild( el( 'span', '', item.time ) );
-		body.appendChild( meta );
 
-		link.appendChild( body );
-		li.appendChild( link );
+		li.appendChild( wrap );
 		return li;
 	}
 
-	function footer( data ) {
+	/**
+	 * Group rows the way activity feeds do: new, today, this week, earlier.
+	 */
+	function sections( items ) {
+		var startOfDay = new Date();
+		startOfDay.setHours( 0, 0, 0, 0 );
+		var today = startOfDay.getTime() / 1000;
+		var week = today - 6 * 86400;
+		var order = [ 'new', 'today', 'week', 'earlier' ];
+		var groups = { new: [], today: [], week: [], earlier: [] };
+
+		items.forEach( function ( item ) {
+			if ( item.isNew ) {
+				groups.new.push( item );
+			} else if ( item.ts >= today ) {
+				groups.today.push( item );
+			} else if ( item.ts >= week ) {
+				groups.week.push( item );
+			} else {
+				groups.earlier.push( item );
+			}
+		} );
+
+		var fragment = document.createDocumentFragment();
+		order.forEach( function ( key ) {
+			if ( ! groups[ key ].length ) {
+				return;
+			}
+			fragment.appendChild( el( 'p', 'wp-ulike-hub-panel__label' + ( 'new' === key ? ' is-new' : '' ), cfg.i18n[ key ] ) );
+			var list = el( 'ul', 'wp-ulike-hub-panel__list' );
+			groups[ key ].forEach( function ( item ) {
+				list.appendChild( row( item ) );
+			} );
+			fragment.appendChild( list );
+		} );
+
+		return fragment;
+	}
+
+	function footer( payload ) {
 		var wrap = el( 'div', 'wp-ulike-hub-panel__footer' );
-		var logs = el( 'a', 'wp-ulike-hub-panel__button', cfg.i18n.logs );
-		logs.href = data.logsUrl;
+		// No votes yet: the logs would be empty.
+		if ( payload.items && payload.items.length ) {
+			var logs = el( 'a', 'wp-ulike-hub-panel__button', cfg.i18n.logs );
+			logs.href = payload.logsUrl;
+			wrap.appendChild( logs );
+		}
 		var stats = el( 'a', 'wp-ulike-hub-panel__button is-primary', cfg.i18n.stats );
-		stats.href = data.statsUrl;
-		wrap.appendChild( logs );
+		stats.href = payload.statsUrl;
 		wrap.appendChild( stats );
 		return wrap;
 	}
 
-	function render( data ) {
+	function render( payload ) {
+		shownFrom = loadedAt;
+		shownAt = Date.now();
 		panel.textContent = '';
 		panel.removeAttribute( 'aria-busy' );
-		panel.appendChild( header( data.today ) );
+		panel.appendChild( header( payload.today, payload.trend, payload.quiet ) );
+		panel.appendChild( topSection( payload ) );
 
-		if ( data.hint ) {
-			panel.appendChild( hintCard( data.hint ) );
-		}
-
-		if ( data.items && data.items.length ) {
-			panel.appendChild( el( 'p', 'wp-ulike-hub-panel__label', cfg.i18n.latest ) );
-			var list = el( 'ul', 'wp-ulike-hub-panel__list' );
-			data.items.forEach( function ( item ) {
-				list.appendChild( row( item ) );
-			} );
-			panel.appendChild( list );
+		if ( payload.items && payload.items.length ) {
+			var feed = el( 'div', 'wp-ulike-hub-panel__feed' );
+			feed.appendChild( sections( payload.items ) );
+			panel.appendChild( feed );
 		} else {
 			var empty = el( 'div', 'wp-ulike-hub-panel__empty' );
 			empty.appendChild( el( 'span', 'wp-ulike-hub-panel__empty-icon' ) );
@@ -241,7 +453,7 @@
 			panel.appendChild( empty );
 		}
 
-		panel.appendChild( footer( data ) );
+		panel.appendChild( footer( payload ) );
 	}
 
 	function renderError() {
@@ -251,68 +463,120 @@
 		panel.appendChild( el( 'p', 'wp-ulike-hub-panel__empty', cfg.i18n.error ) );
 	}
 
-	function load() {
-		if ( loading || ( ! stale && loadedAt && Date.now() - loadedAt < REFRESH_AFTER ) ) {
-			return;
+	/* Loading ----------------------------------------------------------- */
+
+	function fetchPanel() {
+		if ( request ) {
+			return request;
 		}
 
-		loading = true;
-		// Cleared at the start, so votes arriving mid-request mark the result stale.
-		stale = false;
-		if ( ! loadedAt ) {
-			skeleton();
-		}
-
-		post( cfg.panelAction )
+		request = post( cfg.panelAction )
 			.then( function ( json ) {
 				if ( ! json || ! json.success ) {
 					throw new Error( 'load' );
 				}
+				data = json.data;
 				loadedAt = Date.now();
-				render( json.data );
-				setBadge( json.data.badge );
+				total = Math.max( total, parseInt( data.total, 10 ) || 0 );
+				persist();
+				render( data );
+				setBadge( data.badge );
 			} )
 			.catch( function () {
-				loadedAt = 0;
-				renderError();
+				if ( ! data ) {
+					renderError();
+				}
 			} )
 			.then( function () {
-				loading = false;
+				request = null;
 			} );
+
+		return request;
 	}
 
-	// Keyboard focus and taps open the menu on purpose; a hover has to rest first.
-	[ 'focusin', 'touchstart' ].forEach( function ( type ) {
-		node.addEventListener( type, load, { passive: true } );
-	} );
-	node.addEventListener( 'mouseenter', function () {
-		// The admin bar may open the menu before the delay ends; never show it empty.
-		if ( ! loadedAt && ! loading && ! panel.firstChild ) {
-			skeleton();
+	function prefetch() {
+		if ( ! isFresh() ) {
+			fetchPanel();
 		}
-		clearTimeout( hoverTimer );
-		hoverTimer = setTimeout( load, HOVER_DELAY );
+	}
+
+	function markSeen() {
+		if ( ! unseen || ! data ) {
+			return;
+		}
+		post( cfg.seenAction, { total: data.total } )
+			.then( function ( json ) {
+				if ( json && json.success ) {
+					setBadge( json.data.badge );
+					// The open panel keeps its "New" rows; the saved copy does not.
+					if ( data && ! unseen ) {
+						clearNew();
+						persist();
+					}
+				}
+			} )
+			.catch( function () {} );
+	}
+
+	/**
+	 * Draw the panel, without redrawing one that is already up to date:
+	 * that would drop keyboard focus and the scroll position.
+	 */
+	function show() {
+		if ( ! data ) {
+			if ( ! panel.firstChild ) {
+				skeleton();
+			}
+		} else if ( shownFrom !== loadedAt || Date.now() - shownAt > 60000 ) {
+			render( data );
+		}
+	}
+
+	function open() {
+		clearTimeout( openTimer );
+		show();
+
+		if ( isFresh() ) {
+			markSeen();
+		} else {
+			fetchPanel().then( markSeen );
+		}
+	}
+
+	restore();
+
+	// Keyboard focus and taps open the menu on purpose; a hover has to rest first.
+	node.addEventListener( 'focusin', function ( event ) {
+		// Moving between links inside the open panel is not a new open.
+		if ( ! panel.contains( event.target ) ) {
+			open();
+		}
+	} );
+	node.addEventListener( 'touchstart', open, { passive: true } );
+	node.addEventListener( 'mouseenter', function () {
+		// The admin bar may show the menu before the delay ends; never show it empty.
+		show();
+		prefetch();
+		clearTimeout( openTimer );
+		openTimer = setTimeout( open, OPEN_DELAY );
 	} );
 	node.addEventListener( 'mouseleave', function () {
-		clearTimeout( hoverTimer );
+		clearTimeout( openTimer );
 	} );
 
 	// Admin screens already run WordPress Heartbeat; the badge rides along.
 	// Pages without Heartbeat (most front-end views) refresh on page load.
 	if ( window.jQuery ) {
 		window.jQuery( document )
-			.on( 'heartbeat-send', function ( event, data ) {
-				data.wp_ulike_hub = 1;
+			.on( 'heartbeat-send', function ( event, payload ) {
+				payload.wp_ulike_hub = 1;
 			} )
-			.on( 'heartbeat-tick', function ( event, data ) {
-				var badge = data && data.wp_ulike_hub;
+			.on( 'heartbeat-tick', function ( event, payload ) {
+				var badge = payload && payload.wp_ulike_hub;
 				if ( ! badge ) {
 					return;
 				}
-				// New votes since the panel last loaded: fetch fresh rows on next open.
-				if ( parseInt( badge.unseen, 10 ) > 0 ) {
-					stale = true;
-				}
+				total = parseInt( badge.total, 10 ) || total;
 				setBadge( badge );
 			} );
 	}

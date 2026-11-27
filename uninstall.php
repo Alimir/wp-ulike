@@ -112,6 +112,8 @@ class wp_ulike_uninstall {
 			'wp_ulike_pulse_purge_meta',
 			'wp_ulike_purge_guest_cache',
 			'wp_ulike_refresh_cloudflare_ips',
+			'wp_ulike_hub_refresh_facts',
+			'wp_ulike_hub_refresh_news',
 		);
 
 		foreach ( $hooks as $hook ) {

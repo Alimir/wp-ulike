@@ -1,16 +1,22 @@
-// ULike Hub: heart in the admin bar with a hint and the latest activity.
+// ULike Hub: heart in the admin bar with a tip, team news, and the latest activity.
 // Loaded only for users who see it.
 // Matches the admin bar's own dark look; WP ULike red marks what is new.
+// The activity list reads like a social feed: sections by time, faces on the
+// left, the post on the right.
 
 #wpadminbar #wp-admin-bar-wp-ulike-hub {
 	--hub-red: #c9484a;
 	--hub-red-soft: rgba(201, 72, 74, 0.16);
+	--hub-red-text: #f2a5a6;
+	--hub-gold: #f0c33c;
+	--hub-green: #68de7c;
 	--hub-bg: #1d2327;
 	--hub-surface: #2c3338;
 	--hub-surface-hover: #3c434a;
 	--hub-text: #f0f0f1;
 	--hub-muted: #a7aaad;
 	--hub-line: rgba(255, 255, 255, 0.08);
+	--hub-ring: conic-gradient(from 210deg, #f0c33c, #e86a6c, #c9484a, #a43fd0, #f0c33c);
 
 	// Top bar item -------------------------------------------------------
 	> .ab-item {
@@ -19,28 +25,29 @@
 		gap: 4px;
 	}
 
-	// WP ULike logo, drawn as a mask so it takes the admin bar's colors.
+	// WP ULike logo, drawn as a mask in currentColor, so it takes core's icon
+	// color, hover color and admin color scheme. The logo is wide and short:
+	// the box crops its empty top and bottom so it reads at core's icon size.
 	.wp-ulike-hub__icon {
-		position: relative;
 		float: none;
-		margin: 0;
 		top: 0;
+		height: auto;
+		margin: 0;
+		padding: 0;
 
 		&::before {
 			content: "";
-			display: inline-block;
-			top: 3px;
-			width: 20px;
-			height: 20px;
-			background-color: rgba(240, 246, 252, 0.6);
-			-webkit-mask: url("../../../assets/img/menu-icon.svg") center / contain no-repeat;
-			mask: url("../../../assets/img/menu-icon.svg") center / contain no-repeat;
-			transition: background-color 0.15s ease;
+			display: block;
+			top: 0;
+			width: 24px;
+			height: 16px;
+			background-color: currentColor;
+			-webkit-mask: url("../../../assets/img/menu-icon.svg") center / 24px 24px no-repeat;
+			mask: url("../../../assets/img/menu-icon.svg") center / 24px 24px no-repeat;
 		}
 	}
 
-	&.has-new .wp-ulike-hub__icon::before,
-	&:hover .wp-ulike-hub__icon::before {
+	&.has-new .wp-ulike-hub__icon::before {
 		background-color: var(--hub-red);
 	}
 
@@ -80,7 +87,7 @@
 	}
 
 	.wp-ulike-hub-panel {
-		width: 360px;
+		width: 380px;
 		max-width: calc(100vw - 16px);
 		padding: 4px 0 0;
 		background: var(--hub-surface);
@@ -93,6 +100,10 @@
 			box-sizing: border-box;
 			line-height: inherit;
 		}
+
+		:where(p) {
+			margin: 0;
+		}
 	}
 
 	.wp-ulike-hub-panel__header {
@@ -104,94 +115,78 @@
 	}
 
 	.wp-ulike-hub-panel__title {
-		font-size: 13px;
+		font-size: 14px;
 		font-weight: 600;
 		color: var(--hub-text);
 	}
 
 	.wp-ulike-hub-panel__today {
+		display: inline-flex;
+		align-items: center;
+		gap: 3px;
 		padding: 2px 8px;
 		border-radius: 999px;
 		background: var(--hub-red-soft);
-		color: #f2a5a6;
+		color: var(--hub-red-text);
 		font-size: 11px;
 		font-weight: 600;
+
+		&.is-up::after,
+		&.is-down::after {
+			font: normal 12px/1 dashicons;
+		}
+
+		&.is-up {
+			background: rgba(104, 222, 124, 0.14);
+			color: var(--hub-green);
+
+			&::after {
+				content: "\f342"; // arrow-up-alt2
+			}
+		}
+
+		&.is-down::after {
+			content: "\f346"; // arrow-down-alt2
+		}
+
+		&.is-quiet {
+			background: var(--hub-line);
+			color: var(--hub-muted);
+		}
 	}
 
-
-	// Section label --------------------------------------------------------
+	// Section labels -----------------------------------------------------
 	.wp-ulike-hub-panel__label {
-		margin: 10px 16px 4px;
-		color: var(--hub-muted);
-		font-size: 11px;
+		margin: 12px 16px 2px;
+		color: var(--hub-text);
+		font-size: 13px;
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-	}
 
-	// Hint card ------------------------------------------------------------
-	.wp-ulike-hub-hint {
-		position: relative;
-		display: flex;
-		gap: 10px;
-		margin: 2px 12px 6px;
-		padding: 12px;
-		padding-inline-end: 34px;
-		border-radius: 10px;
-		background: var(--hub-surface-hover);
-		border: 1px solid var(--hub-line);
-		transition: opacity 0.2s ease, transform 0.2s ease;
-
-		&.is-leaving {
-			opacity: 0;
-			transform: translateY(-4px);
-		}
-
-		&.is-warning {
-			background: rgba(219, 166, 23, 0.12);
-			border-color: rgba(219, 166, 23, 0.3);
+		&.is-new::before {
+			content: "";
+			display: inline-block;
+			width: 7px;
+			height: 7px;
+			margin-inline-end: 6px;
+			border-radius: 50%;
+			background: var(--hub-red);
+			vertical-align: 1px;
 		}
 	}
 
-	.wp-ulike-hub-hint__icon::before {
-		display: block;
-		width: 28px;
-		height: 28px;
-		border-radius: 8px;
-		background: var(--hub-red-soft);
-		color: #f2a5a6;
-		font: normal 18px/28px dashicons;
-		text-align: center;
-		content: "\f339"; // lightbulb
-	}
-
-	.is-trend .wp-ulike-hub-hint__icon::before {
-		content: "\f238"; // chart-line
-	}
-
-	.is-milestone .wp-ulike-hub-hint__icon::before {
-		content: "\f313"; // awards
-		background: rgba(240, 195, 60, 0.16);
-		color: #f0c33c;
-	}
-
-	.is-star .wp-ulike-hub-hint__icon::before {
-		content: "\f155"; // star-filled
-	}
-
-	.is-warning .wp-ulike-hub-hint__icon::before {
-		content: "\f534"; // warning
-		background: rgba(219, 166, 23, 0.18);
-		color: #f0c33c;
-	}
-
-	.wp-ulike-hub-hint__body {
-		min-width: 0;
+	.wp-ulike-hub-panel__feed {
+		max-height: min(440px, calc(100vh - 240px));
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-width: thin;
+		scrollbar-color: var(--hub-surface-hover) transparent;
 	}
 
 	// Each sentence takes the direction of its own text, so an English tip or
 	// title reads correctly on a right-to-left site (and the other way round).
 	.wp-ulike-hub-hint__text,
+	.wp-ulike-hub-news__title,
+	.wp-ulike-hub-news__text,
 	.wp-ulike-hub-panel__text {
 		unicode-bidi: plaintext;
 	}
@@ -201,38 +196,8 @@
 		unicode-bidi: isolate;
 	}
 
-	.wp-ulike-hub-hint__text {
-		margin: 0;
-		color: var(--hub-text);
-		font-size: 13px;
-	}
-
-	.wp-ulike-hub-hint__action {
-		display: inline-block;
-		height: auto;
-		margin-top: 6px;
-		padding: 0;
-		color: #f2a5a6;
-		font-size: 12px;
-		font-weight: 600;
-		text-decoration: none;
-
-		&::after {
-			content: " →";
-		}
-
-		[dir="rtl"] &::after {
-			content: " ←";
-		}
-
-		&:hover,
-		&:focus {
-			color: #fff;
-			text-decoration: underline;
-		}
-	}
-
-	.wp-ulike-hub-hint__close {
+	// Close button (tips and news) ---------------------------------------
+	.wp-ulike-hub-close {
 		position: absolute;
 		top: 6px;
 		inset-inline-end: 6px;
@@ -258,6 +223,222 @@
 		}
 	}
 
+	.wp-ulike-hub-panel__top:empty {
+		display: none;
+	}
+
+	.is-leaving {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+
+	// Team news: a story-style row ---------------------------------------
+	.wp-ulike-hub-news {
+		position: relative;
+		display: flex;
+		gap: 12px;
+		margin: 2px 6px 4px;
+		padding: 10px;
+		padding-inline-end: 34px;
+		border-radius: 10px;
+		transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.15s ease;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.03);
+		}
+	}
+
+	.wp-ulike-hub-news__ring {
+		flex: 0 0 40px;
+		width: 40px;
+		height: 40px;
+		padding: 2px;
+		border-radius: 50%;
+		background: var(--hub-ring);
+	}
+
+	.wp-ulike-hub-news__logo {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border: 2px solid var(--hub-surface);
+		border-radius: 50%;
+		background: var(--hub-bg);
+		position: relative;
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 7px;
+			background-color: var(--hub-red);
+			-webkit-mask: url("../../../assets/img/menu-icon.svg") center / contain no-repeat;
+			mask: url("../../../assets/img/menu-icon.svg") center / contain no-repeat;
+		}
+	}
+
+	.wp-ulike-hub-news__body {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.wp-ulike-hub-news__meta {
+		display: flex;
+		align-items: baseline;
+		gap: 6px;
+		color: var(--hub-text);
+		font-size: 13px;
+
+		strong {
+			font-weight: 600;
+		}
+	}
+
+	.wp-ulike-hub-news__time {
+		color: var(--hub-muted);
+		font-size: 12px;
+	}
+
+	.wp-ulike-hub-news__title {
+		color: var(--hub-text);
+		font-weight: 600;
+	}
+
+	.wp-ulike-hub-news__text {
+		color: var(--hub-muted);
+		overflow-wrap: anywhere;
+	}
+
+	.wp-ulike-hub-news__action {
+		align-self: flex-start;
+		height: auto;
+		margin-top: 6px;
+		padding: 5px 12px;
+		border-radius: 8px;
+		background: var(--hub-red);
+		color: #fff;
+		font-size: 12px;
+		font-weight: 600;
+		line-height: 1.4;
+		text-decoration: none;
+		transition: background-color 0.15s ease;
+
+		&:hover,
+		&:focus {
+			background: #b03d3f;
+			color: #fff;
+		}
+
+		&:focus-visible {
+			box-shadow: 0 0 0 2px var(--hub-surface), 0 0 0 4px #72aee6;
+			outline: none;
+		}
+	}
+
+	// Tip card -----------------------------------------------------------
+	.wp-ulike-hub-hint {
+		position: relative;
+		display: flex;
+		gap: 10px;
+		margin: 2px 12px 6px;
+		padding: 12px;
+		padding-inline-end: 34px;
+		border-radius: 10px;
+		background: var(--hub-surface-hover);
+		border: 1px solid var(--hub-line);
+		transition: opacity 0.2s ease, transform 0.2s ease;
+
+		&.is-warning {
+			background: rgba(219, 166, 23, 0.12);
+			border-color: rgba(219, 166, 23, 0.3);
+		}
+
+		// Pro tips get the brand ring as a thin border.
+		&.is-pro {
+			border: 1px solid transparent;
+			background:
+				linear-gradient(var(--hub-surface-hover), var(--hub-surface-hover)) padding-box,
+				linear-gradient(120deg, rgba(240, 195, 60, 0.55), rgba(201, 72, 74, 0.55), rgba(164, 63, 208, 0.55)) border-box;
+		}
+	}
+
+	.wp-ulike-hub-hint__icon::before {
+		display: block;
+		width: 28px;
+		height: 28px;
+		border-radius: 8px;
+		background: var(--hub-red-soft);
+		color: var(--hub-red-text);
+		font: normal 18px/28px dashicons;
+		text-align: center;
+		content: "\f339"; // lightbulb
+	}
+
+	.is-trend .wp-ulike-hub-hint__icon::before {
+		content: "\f238"; // chart-line
+	}
+
+	.is-milestone .wp-ulike-hub-hint__icon::before {
+		content: "\f313"; // awards
+		background: rgba(240, 195, 60, 0.16);
+		color: var(--hub-gold);
+	}
+
+	.is-star .wp-ulike-hub-hint__icon::before {
+		content: "\f155"; // star-filled
+	}
+
+	.is-heart .wp-ulike-hub-hint__icon::before {
+		content: "\f487"; // heart
+	}
+
+	.is-pro .wp-ulike-hub-hint__icon::before {
+		content: "\f155"; // star-filled
+		background: linear-gradient(135deg, #f0c33c, #c9484a 60%, #a43fd0);
+		color: #fff;
+	}
+
+	.is-warning .wp-ulike-hub-hint__icon::before {
+		content: "\f534"; // warning
+		background: rgba(219, 166, 23, 0.18);
+		color: var(--hub-gold);
+	}
+
+	.wp-ulike-hub-hint__body {
+		min-width: 0;
+	}
+
+	.wp-ulike-hub-hint__text {
+		color: var(--hub-text);
+		font-size: 13px;
+	}
+
+	.wp-ulike-hub-hint__action {
+		display: inline-block;
+		height: auto;
+		margin-top: 6px;
+		padding: 0;
+		color: var(--hub-red-text);
+		font-size: 12px;
+		font-weight: 600;
+		text-decoration: none;
+
+		&::after {
+			content: " →";
+		}
+
+		[dir="rtl"] &::after {
+			content: " ←";
+		}
+
+		&:hover,
+		&:focus {
+			color: #fff;
+			text-decoration: underline;
+		}
+	}
+
 	// Rows ---------------------------------------------------------------
 	.wp-ulike-hub-panel__list {
 		margin: 0;
@@ -273,11 +454,11 @@
 
 	.wp-ulike-hub-panel__link {
 		display: flex;
-		align-items: flex-start;
+		align-items: center;
 		gap: 12px;
 		height: auto;
 		margin: 0;
-		padding: 9px 10px;
+		padding: 8px 10px;
 		border-radius: 8px;
 		color: var(--hub-text);
 		text-decoration: none;
@@ -298,39 +479,70 @@
 
 	.wp-ulike-hub-panel__avatar {
 		position: relative;
-		flex: 0 0 32px;
-		width: 32px;
-		height: 32px;
+		flex: 0 0 40px;
+		width: 40px;
+		height: 40px;
+	}
+
+	.wp-ulike-hub-panel__face {
+		position: absolute;
+		inset: 0;
 		border-radius: 50%;
 		background: var(--hub-surface-hover);
+		overflow: hidden;
 
 		> img {
 			display: block;
-			width: 32px;
-			height: 32px;
-			border-radius: 50%;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
 		}
 
 		&.is-guest {
 			background: linear-gradient(135deg, #e86a6c, var(--hub-red));
 
 			&::before {
-				content: "\f110"; // dashicons-admin-users
+				content: "\f110"; // admin-users
 				position: absolute;
 				inset: 0;
-				font: normal 18px/32px dashicons;
-				text-align: center;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font: normal 20px/1 dashicons;
 				color: rgba(255, 255, 255, 0.92);
 			}
 		}
 	}
 
+	// Two people: the second face sits behind and above, like a stack.
+	.is-stack .wp-ulike-hub-panel__face {
+		width: 30px;
+		height: 30px;
+		inset: auto;
+
+		&:first-child {
+			top: 0;
+			inset-inline-end: 0;
+		}
+
+		&:nth-child(2) {
+			bottom: 0;
+			inset-inline-start: 0;
+			box-shadow: 0 0 0 2px var(--hub-surface);
+		}
+
+		&.is-guest::before {
+			font-size: 16px;
+		}
+	}
+
 	.wp-ulike-hub-panel__kind {
 		position: absolute;
+		z-index: 1;
 		inset-inline-end: -3px;
 		inset-block-end: -3px;
-		width: 16px;
-		height: 16px;
+		width: 18px;
+		height: 18px;
 		border: 2px solid var(--hub-surface);
 		border-radius: 50%;
 		background: var(--hub-red);
@@ -339,7 +551,7 @@
 			content: "\f487";
 			position: absolute;
 			inset: 0;
-			font: normal 9px/12px dashicons;
+			font: normal 10px/14px dashicons;
 			text-align: center;
 			color: #fff;
 		}
@@ -355,15 +567,15 @@
 
 	.wp-ulike-hub-panel__kind.is-badge {
 		width: auto;
-		min-width: 16px;
-		height: 18px;
+		min-width: 18px;
+		height: 20px;
 		padding: 0 3px;
-		border-radius: 9px;
+		border-radius: 10px;
 		background: var(--hub-bg);
-		color: #f0c33c;
+		color: var(--hub-gold);
 		font-size: 11px;
 		font-weight: 600;
-		line-height: 14px;
+		line-height: 16px;
 		text-align: center;
 		white-space: nowrap;
 
@@ -389,14 +601,19 @@
 
 	.wp-ulike-hub-panel__body {
 		display: flex;
+		flex: 1;
 		flex-direction: column;
-		gap: 3px;
+		gap: 2px;
 		min-width: 0;
 	}
 
 	.wp-ulike-hub-panel__text {
 		color: var(--hub-muted);
 		overflow-wrap: anywhere;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 	}
 
 	.wp-ulike-hub-panel__name,
@@ -406,23 +623,17 @@
 	}
 
 	.wp-ulike-hub-panel__meta {
-		display: flex;
-		align-items: center;
-		gap: 6px;
 		color: var(--hub-muted);
 		font-size: 12px;
 	}
 
-	.wp-ulike-hub-panel__new {
-		padding: 0 6px;
-		border-radius: 4px;
-		background: var(--hub-red);
-		color: #fff;
-		font-size: 10px;
-		font-weight: 600;
-		line-height: 16px;
-		text-transform: uppercase;
-		letter-spacing: 0.02em;
+	.wp-ulike-hub-panel__thumb {
+		flex: 0 0 40px;
+		width: 40px;
+		height: 40px;
+		border-radius: 6px;
+		object-fit: cover;
+		background: var(--hub-surface-hover);
 	}
 
 	.wp-ulike-hub-panel__row.is-new .wp-ulike-hub-panel__link {
@@ -437,8 +648,9 @@
 	// Loading ------------------------------------------------------------
 	.is-skeleton {
 		display: flex;
+		align-items: center;
 		gap: 12px;
-		padding: 9px 10px;
+		padding: 8px 16px;
 
 		.wp-ulike-hub-panel__avatar,
 		.wp-ulike-hub-panel__line {
@@ -447,9 +659,8 @@
 			animation: hub-shimmer 1.2s linear infinite;
 		}
 
-		.wp-ulike-hub-panel__body {
-			flex: 1;
-			padding-top: 3px;
+		.wp-ulike-hub-panel__avatar {
+			border-radius: 50%;
 		}
 
 		.wp-ulike-hub-panel__line {
@@ -460,6 +671,7 @@
 
 			&.is-short {
 				width: 40%;
+				margin-top: 4px;
 			}
 		}
 	}
@@ -529,20 +741,21 @@
 		}
 	}
 
-	// Small screens: keep the heart visible like core's comments icon.
+	// Small screens: keep the logo visible like core's comments icon.
 	@media screen and (max-width: 782px) {
 		display: block;
 
 		> .ab-item {
 			width: auto;
+			height: 46px;
 			padding: 0 8px;
 		}
 
 		.wp-ulike-hub__icon::before {
-			top: 0;
-			width: 28px;
-			height: 28px;
-			margin-top: 9px;
+			width: 32px;
+			height: 22px;
+			-webkit-mask-size: 32px 32px;
+			mask-size: 32px 32px;
 		}
 
 		// A sheet under the bar, so it never runs off the screen.
@@ -561,6 +774,10 @@
 			width: 100%;
 			max-width: none;
 		}
+
+		.wp-ulike-hub-panel__feed {
+			max-height: calc(100vh - 260px);
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -568,6 +785,11 @@
 		.is-skeleton .wp-ulike-hub-panel__avatar,
 		.is-skeleton .wp-ulike-hub-panel__line {
 			animation: none;
+		}
+
+		.wp-ulike-hub-news,
+		.wp-ulike-hub-hint {
+			transition: none;
 		}
 	}
 }

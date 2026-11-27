@@ -2,15 +2,17 @@
 /**
  * ULike Hub: the WP ULike icon in the admin bar with what matters right now.
  *
- * The panel shows one useful hint (a setup fix, today's top post, the weekly
- * trend) and the latest likes. Built so it costs nothing on busy sites:
+ * The panel shows one useful tip, at most one message from the WP ULike team,
+ * and the latest likes. Built so it costs nothing on busy sites:
  * - Visitors and users who cannot see Statistics never run any of it.
  * - The badge is the existing site-wide vote counter minus a per-user "seen"
  *   mark: a vote adds no extra write, a page load reads two cached values.
- * - Hints and likes load only when the panel opens, from cached statistics
- *   and a primary-key read with a small LIMIT.
+ * - The panel reads stored snapshots only: the latest activity
+ *   (WP_Ulike_Hub_Feed), numbers counted in the background
+ *   (WP_Ulike_Hub_Insights), and downloaded messages (WP_Ulike_Hub_News).
+ * - The browser keeps the last panel for the session and shows it at once.
  *
- * Other features add hints through the `wp_ulike_hub_hints` filter.
+ * Other features add tips through the `wp_ulike_hub_hints` filter.
  *
  * @package WP_ULike
  */
@@ -29,27 +31,18 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		const NODE_ID        = 'wp-ulike-hub';
 		const HANDLE         = 'wp-ulike-hub';
 		const AJAX_PANEL     = 'wp_ulike_hub_panel';
+		const AJAX_SEEN      = 'wp_ulike_hub_seen';
 		const AJAX_DISMISS   = 'wp_ulike_hub_dismiss_hint';
 		const OPTION_KEY     = 'enable_hub';
 		const SEEN_META_KEY  = 'wp_ulike_hub_seen';
 		const HINTS_META_KEY = 'wp_ulike_hub_hints';
-		const CACHE_GROUP    = 'wp_ulike';
-		const ITEMS          = 6;
 
 		/**
-		 * Recent votes read to build the ITEMS grouped rows.
+		 * Tips that stand in for an admin notice, and share its dismissal.
 		 */
-		const SCAN_ROWS      = 60;
-
-		/**
-		 * A milestone tip needs a vote on the post within this window.
-		 */
-		const MILESTONE_FRESH = WEEK_IN_SECONDS;
-
-		/**
-		 * Like totals worth celebrating.
-		 */
-		const MILESTONES = array( 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000 );
+		const NOTICE_HINTS = array(
+			'review' => 'wp_ulike_leave_a_review',
+		);
 
 		/**
 		 * @var bool|null Per-request answer of is_enabled().
@@ -64,9 +57,14 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 			add_action( 'wp_ajax_' . self::AJAX_PANEL, array( __CLASS__, 'ajax_panel' ) );
+			add_action( 'wp_ajax_' . self::AJAX_SEEN, array( __CLASS__, 'ajax_seen' ) );
 			add_action( 'wp_ajax_' . self::AJAX_DISMISS, array( __CLASS__, 'ajax_dismiss_hint' ) );
 			add_action( 'wp_ulike_new_vote_counted', array( __CLASS__, 'skip_own_vote' ) );
 			add_filter( 'heartbeat_received', array( __CLASS__, 'heartbeat' ), 10, 2 );
+
+			WP_Ulike_Hub_Feed::init();
+			WP_Ulike_Hub_Insights::init();
+			WP_Ulike_Hub_News::init();
 		}
 
 		/**
@@ -75,9 +73,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		 * @return bool
 		 */
 		public static function is_setting_on() {
-			$value = wp_ulike_get_option( self::OPTION_KEY, true );
-
-			return function_exists( 'wp_ulike_is_true' ) ? wp_ulike_is_true( $value ) : (bool) $value;
+			return wp_ulike_is_true( wp_ulike_get_option( self::OPTION_KEY, true ) );
 		}
 
 		/**
@@ -147,18 +143,25 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		}
 
 		/**
-		 * Mark everything up to now as seen for one user, on this site only.
+		 * Mark votes as seen for one user, on this site only.
 		 *
-		 * @param int $user_id User ID, current user when 0.
+		 * @param int      $user_id User ID, current user when 0.
+		 * @param int|null $upto    Counter value the user saw; everything when null.
 		 * @return void
 		 */
-		public static function mark_seen( $user_id = 0 ) {
+		public static function mark_seen( $user_id = 0, $upto = null ) {
 			$user_id = $user_id ? (int) $user_id : get_current_user_id();
 			if ( ! $user_id || ! self::get_unseen( $user_id ) ) {
 				return;
 			}
 
-			update_user_option( $user_id, self::SEEN_META_KEY, self::get_total() );
+			$total = self::get_total();
+			$upto  = null === $upto ? $total : min( max( 0, (int) $upto ), $total );
+			$seen  = (int) get_user_option( self::SEEN_META_KEY, $user_id );
+
+			if ( $upto > ( $seen > $total ? 0 : $seen ) ) {
+				update_user_option( $user_id, self::SEEN_META_KEY, $upto );
+			}
 		}
 
 		/**
@@ -211,7 +214,10 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		public static function heartbeat( $response, $data ) {
 			if ( ! empty( $data['wp_ulike_hub'] ) && self::is_setting_on() && self::current_user_can_view() ) {
 				$unseen                   = self::get_unseen();
-				$response['wp_ulike_hub'] = array( 'unseen' => $unseen ) + self::badge_text( $unseen );
+				$response['wp_ulike_hub'] = array(
+					'unseen' => $unseen,
+					'total'  => self::get_total(),
+				) + self::badge_text( $unseen );
 			}
 
 			return $response;
@@ -294,18 +300,30 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				array(
 					'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
 					'panelAction'   => self::AJAX_PANEL,
+					'seenAction'    => self::AJAX_SEEN,
 					'dismissAction' => self::AJAX_DISMISS,
 					'nonce'         => wp_create_nonce( 'wp_ulike_hub' ),
+					'total'         => self::get_total(),
+					'unseen'        => self::get_unseen(),
+					'screen'        => is_admin() ? 'admin' : 'site',
+					// Keys the browser copy of the panel to this user, site, screen and language.
+					'cacheKey'      => 'wpUlikeHub:' . get_current_blog_id() . ':' . get_current_user_id() . ':' . ( is_admin() ? 'admin' : 'site' ) . ':' . determine_locale() . ':' . WP_ULIKE_VERSION,
+					'locale'        => str_replace( '_', '-', determine_locale() ),
 					'i18n'          => array(
-						'title'   => __( 'ULike Hub', 'wp-ulike' ),
-						'latest'  => __( 'Latest activity', 'wp-ulike' ),
-						'loading' => __( 'Loading…', 'wp-ulike' ),
-						'empty'   => __( 'No likes yet. They will show up here as they come in.', 'wp-ulike' ),
-						'error'   => __( 'Could not load. Try again in a moment.', 'wp-ulike' ),
-						'logs'    => __( 'View logs', 'wp-ulike' ),
-						'stats'   => __( 'Statistics', 'wp-ulike' ),
-						'new'     => __( 'New', 'wp-ulike' ),
-						'dismiss' => __( 'Dismiss this tip', 'wp-ulike' ),
+						'title'    => __( 'ULike Hub', 'wp-ulike' ),
+						'loading'  => __( 'Loading…', 'wp-ulike' ),
+						'empty'    => __( 'No likes yet. They will show up here as they come in.', 'wp-ulike' ),
+						'error'    => __( 'Could not load. Try again in a moment.', 'wp-ulike' ),
+						'logs'     => __( 'View logs', 'wp-ulike' ),
+						'stats'    => __( 'Statistics', 'wp-ulike' ),
+						'new'      => __( 'New', 'wp-ulike' ),
+						'today'    => __( 'Today', 'wp-ulike' ),
+						'week'     => __( 'This week', 'wp-ulike' ),
+						'earlier'  => __( 'Earlier', 'wp-ulike' ),
+						'justNow'  => __( 'just now', 'wp-ulike' ),
+						'dismiss'  => __( 'Dismiss', 'wp-ulike' ),
+						'team'     => __( 'WP ULike', 'wp-ulike' ),
+						'fromTeam' => __( 'From the WP ULike team', 'wp-ulike' ),
 					),
 				)
 			);
@@ -316,7 +334,7 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		 * ------------------------------------------------------------------ */
 
 		/**
-		 * Panel data. Opening the panel marks likes as seen for this user.
+		 * Panel data. Read-only, so the browser may fetch it ahead of a click.
 		 *
 		 * @return void
 		 */
@@ -328,26 +346,46 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 			}
 
 			$unseen = self::get_unseen();
+			$live   = WP_Ulike_Hub_Insights::live();
+			$hints  = self::pick_hints( $live, self::on_admin_screen() );
 			$items  = self::get_items( $unseen );
-
-			self::mark_seen();
-
-			$today = self::get_today_count();
 
 			wp_send_json_success(
 				array(
-					'hint'     => self::get_hint(),
+					'total'    => self::get_total(),
+					'hint'     => $hints['hint'],
+					'news'     => $hints['news'],
 					'items'    => $items,
-					'badge'    => array( 'unseen' => 0 ) + self::badge_text( 0 ),
-					'today'    => sprintf(
+					'badge'    => array( 'unseen' => $unseen ) + self::badge_text( $unseen ),
+					'today'    => null === $live['today'] ? '' : sprintf(
 						/* translators: %s: number of votes today */
-						_n( '%s today', '%s today', $today, 'wp-ulike' ),
-						number_format_i18n( $today )
+						_n( '%s today', '%s today', $live['today'], 'wp-ulike' ),
+						number_format_i18n( $live['today'] )
 					),
+					'quiet'    => 0 === $live['today'],
+					'trend'    => self::day_trend( $live ),
 					'logsUrl'  => self::logs_url( isset( $items[0]['type'] ) ? $items[0]['type'] : 'post' ),
 					'statsUrl' => self::statistics_url(),
 				)
 			);
+		}
+
+		/**
+		 * The panel was opened: mark what it showed as seen.
+		 *
+		 * @return void
+		 */
+		public static function ajax_seen() {
+			check_ajax_referer( 'wp_ulike_hub', 'nonce' );
+
+			if ( ! self::is_setting_on() || ! self::current_user_can_view() ) {
+				wp_send_json_error( null, 403 );
+			}
+
+			self::mark_seen( 0, isset( $_POST['total'] ) ? absint( $_POST['total'] ) : null );
+
+			$unseen = self::get_unseen();
+			wp_send_json_success( array( 'badge' => array( 'unseen' => $unseen ) + self::badge_text( $unseen ) ) );
 		}
 
 		/**
@@ -365,22 +403,40 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				wp_send_json_error( null, 400 );
 			}
 
-			$dismissed        = self::get_dismissed_hints();
-			$dismissed[ $id ] = time();
+			if ( isset( self::NOTICE_HINTS[ $id ] ) ) {
+				// Used the link: done for good. Closed it: ask again in two weeks,
+				// like the notice's "Maybe later".
+				if ( current_user_can( 'manage_options' ) && function_exists( 'wp_ulike_dismiss_notice' ) ) {
+					wp_ulike_dismiss_notice( self::NOTICE_HINTS[ $id ], empty( $_POST['done'] ) ? 2 * WEEK_IN_SECONDS : 10 * YEAR_IN_SECONDS );
+				}
+			} else {
+				$dismissed        = self::get_dismissed_hints();
+				$dismissed[ $id ] = time();
 
-			// Keep the list small: drop the oldest beyond 50 entries.
-			if ( count( $dismissed ) > 50 ) {
-				asort( $dismissed );
-				$dismissed = array_slice( $dismissed, -50, null, true );
+				// Keep the list small: drop the oldest beyond 50 entries.
+				if ( count( $dismissed ) > 50 ) {
+					asort( $dismissed );
+					$dismissed = array_slice( $dismissed, -50, null, true );
+				}
+
+				update_user_option( get_current_user_id(), self::HINTS_META_KEY, $dismissed );
 			}
 
-			update_user_option( get_current_user_id(), self::HINTS_META_KEY, $dismissed );
+			wp_send_json_success( self::pick_hints( WP_Ulike_Hub_Insights::live(), self::on_admin_screen() ) );
+		}
 
-			wp_send_json_success( array( 'hint' => self::get_hint() ) );
+		/**
+		 * Whether the panel asking is open on an admin screen. Every panel request
+		 * goes through admin-ajax.php, so the page says where it is.
+		 *
+		 * @return bool
+		 */
+		protected static function on_admin_screen() {
+			return isset( $_POST['screen'] ) && 'admin' === $_POST['screen']; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked by the caller.
 		}
 
 		/* ------------------------------------------------------------------
-		 * Hints
+		 * Tips and messages
 		 * ------------------------------------------------------------------ */
 
 		/**
@@ -393,21 +449,30 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		}
 
 		/**
-		 * The most useful hint this user has not dismissed, or null.
+		 * The most useful tip and the first team message this user has not
+		 * dismissed. At most one of the two promotes something: a team message
+		 * takes the place of a Pro tip. Neither shows on the front end.
 		 *
-		 * @return array<string, mixed>|null
+		 * @param array<string, mixed> $live     Live numbers.
+		 * @param bool                 $on_admin Whether the panel is open on an admin screen.
+		 * @return array{hint:?array,news:?array}
 		 */
-		public static function get_hint() {
-			/**
-			 * Hints for the ULike Hub panel. Lower priority shows first; one at a time.
-			 *
-			 * Each hint: id (unique; change it to show a hint again), priority, icon
-			 * (tip, trend, star, milestone, warning), text, and an optional action with label and url.
-			 *
-			 * @param array<int, array<string, mixed>> $hints Hints.
-			 */
-			$hints     = (array) apply_filters( 'wp_ulike_hub_hints', self::get_cached_core_hints() );
+		public static function pick_hints( $live, $on_admin = true ) {
 			$dismissed = self::get_dismissed_hints();
+			$news      = $on_admin && current_user_can( 'manage_options' ) ? WP_Ulike_Hub_News::pick( $dismissed, $live ) : null;
+			$quiet     = ! $on_admin || $news || WP_Ulike_Hub_Insights::promo_cooling_down( $dismissed ) || wp_ulike_is_true( wp_ulike_get_option( 'disable_admin_notice', false ) );
+
+			/**
+			 * Tips for the ULike Hub panel. Lower priority shows first; one at a time.
+			 *
+			 * Each tip: id (unique; change it to show a tip again), priority, icon
+			 * (tip, trend, star, milestone, warning, heart, pro), text, and an
+			 * optional action with label and url. Set promo to true for tips that
+			 * sell something, so they follow the Hub's limits on promotion.
+			 *
+			 * @param array<int, array<string, mixed>> $hints Tips.
+			 */
+			$hints = (array) apply_filters( 'wp_ulike_hub_hints', WP_Ulike_Hub_Insights::hints() );
 
 			usort(
 				$hints,
@@ -416,15 +481,22 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 				}
 			);
 
+			$picked = null;
 			foreach ( $hints as $hint ) {
 				if ( empty( $hint['id'] ) || empty( $hint['text'] ) || isset( $dismissed[ sanitize_key( $hint['id'] ) ] ) ) {
 					continue;
 				}
+				if ( ! empty( $hint['promo'] ) && $quiet ) {
+					continue;
+				}
 
-				return array(
-					'id'     => sanitize_key( $hint['id'] ),
+				$id     = sanitize_key( $hint['id'] );
+				$picked = array(
+					'id'     => $id,
 					'icon'   => isset( $hint['icon'] ) ? sanitize_key( $hint['icon'] ) : 'tip',
 					'text'   => self::plain_text( $hint['text'] ),
+					'promo'  => ! empty( $hint['promo'] ),
+					'done'   => isset( self::NOTICE_HINTS[ $id ] ),
 					'action' => ! empty( $hint['action']['url'] ) && ! empty( $hint['action']['label'] )
 						? array(
 							'label' => self::plain_text( $hint['action']['label'] ),
@@ -432,292 +504,41 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 						)
 						: null,
 				);
+				break;
 			}
 
-			return null;
+			return array(
+				'hint' => $picked,
+				'news' => $news,
+			);
 		}
 
 		/**
-		 * Built-in hints, shared by all users with the same access for 10 minutes.
+		 * Today against yesterday, for the header chip.
 		 *
-		 * @return array<int, array<string, mixed>>
+		 * @param array<string, mixed> $live Live numbers.
+		 * @return string up, down, or empty.
 		 */
-		protected static function get_cached_core_hints() {
-			$key   = 'wp_ulike_hub_hints_' . ( current_user_can( 'manage_options' ) ? 'admin' : 'viewer' );
-			$hints = get_transient( $key );
-
-			if ( ! is_array( $hints ) ) {
-				$hints = self::get_core_hints();
-				set_transient( $key, $hints, 10 * MINUTE_IN_SECONDS );
+		protected static function day_trend( $live ) {
+			if ( null === $live['today'] || null === $live['yesterday'] || $live['yesterday'] < 5 ) {
+				return '';
 			}
 
-			return $hints;
-		}
+			// Today is unfinished; compare it with the same share of yesterday.
+			$midnight = ( new DateTimeImmutable( 'today', wp_timezone() ) )->getTimestamp();
+			$elapsed  = ( time() - $midnight ) / DAY_IN_SECONDS;
+			$pace     = $live['yesterday'] * max( 0.05, $elapsed );
 
-		/**
-		 * Built-in hints. Each one reads settings or cached statistics only.
-		 *
-		 * @return array<int, array<string, mixed>>
-		 */
-		protected static function get_core_hints() {
-			$hints        = array();
-			$all_time     = function_exists( 'wp_ulike_count_all_logs' ) ? (int) wp_ulike_count_all_logs() : 0;
-			$settings_url = admin_url( 'admin.php?page=wp-ulike-settings&settings-page=content-types&settings-section=posts_group' );
-
-			// Setup hints are for free sites run by an admin. Pro places buttons in
-			// other ways too (Display Automation, widgets), so it skips them.
-			$setup_hints = current_user_can( 'manage_options' ) && ! defined( 'WP_ULIKE_PRO_VERSION' );
-
-			if ( $setup_hints && ! wp_ulike_setting_repo::isAutoDisplayOn( 'post' ) ) {
-				// Votes exist, so buttons are placed some other way (block, shortcode).
-				if ( 0 === $all_time ) {
-					$hints[] = array(
-						'id'       => 'setup_display_off',
-						'priority' => 10,
-						'icon'     => 'warning',
-						'text'     => __( 'Like buttons are not added to your posts automatically.', 'wp-ulike' ),
-						'action'   => array(
-							'label' => __( 'Turn on', 'wp-ulike' ),
-							'url'   => $settings_url,
-						),
-					);
-				}
-			} elseif ( $setup_hints ) {
-				// Buttons only on single posts, not on the blog lists.
-				$hidden = (array) wp_ulike_setting_repo::getPostAutoDisplayFilters();
-				if ( in_array( 'home', $hidden, true ) && in_array( 'archive', $hidden, true ) ) {
-					$hints[] = array(
-						'id'       => 'setup_lists_hidden',
-						'priority' => 20,
-						'icon'     => 'tip',
-						'text'     => __( 'Buttons show on single posts only. Visitors browsing your homepage and archives can like too.', 'wp-ulike' ),
-						'action'   => array(
-							'label' => __( 'Show on lists', 'wp-ulike' ),
-							'url'   => $settings_url,
-						),
-					);
-				}
+			if ( $live['today'] >= $pace * 1.2 ) {
+				return 'up';
 			}
 
-			// No votes yet, a few days in: make sure the button is visible.
-			if ( 0 === $all_time ) {
-				$days = function_exists( 'wp_ulike_get_days_since_activation' ) ? wp_ulike_get_days_since_activation() : null;
-				$post = get_posts(
-					array(
-						'numberposts'      => 1,
-						'post_status'      => 'publish',
-						'fields'           => 'ids',
-						'suppress_filters' => false,
-					)
-				);
-
-				if ( null !== $days && $days >= 2 && ! empty( $post ) ) {
-					$hints[] = array(
-						'id'       => 'setup_no_votes',
-						'priority' => 30,
-						'icon'     => 'tip',
-						'text'     => __( 'No likes yet. Open a post and check that the like button shows below the content.', 'wp-ulike' ),
-						'action'   => array(
-							'label' => __( 'Open a post', 'wp-ulike' ),
-							'url'   => get_permalink( $post[0] ),
-						),
-					);
-				}
-
-				return $hints;
-			}
-
-			$milestone = self::get_milestone_hint();
-			if ( $milestone ) {
-				$hints[] = $milestone;
-			}
-
-			// Today's most liked post.
-			if ( function_exists( 'wp_ulike_get_popular_items_info' ) ) {
-				$top = wp_ulike_get_popular_items_info(
-					array(
-						'type'     => 'post',
-						'rel_type' => '',
-						'period'   => 'today',
-						'limit'    => 1,
-					)
-				);
-
-				if ( ! empty( $top[0]->item_ID ) && ! empty( $top[0]->counter ) && (int) $top[0]->counter >= 3 ) {
-					$post_id = (int) $top[0]->item_ID;
-					$title   = self::plain_text( get_the_title( $post_id ) );
-
-					if ( '' !== $title ) {
-						$hints[] = array(
-							'id'       => 'top_today_' . current_time( 'Ymd' ) . '_' . $post_id,
-							'priority' => 40,
-							'icon'     => 'star',
-							'text'     => sprintf(
-								/* translators: 1: post title, 2: number of likes */
-								_n( '“%1$s” is today’s most liked post, with %2$s like.', '“%1$s” is today’s most liked post, with %2$s likes.', (int) $top[0]->counter, 'wp-ulike' ),
-								$title,
-								number_format_i18n( (int) $top[0]->counter )
-							),
-							'action'   => array(
-								'label' => __( 'View', 'wp-ulike' ),
-								'url'   => get_permalink( $post_id ),
-							),
-						);
-					}
-				}
-			}
-
-			// This week against last week, once there is enough to compare.
-			$week      = (int) wp_ulike_count_all_logs( 'week' );
-			$last_week = (int) wp_ulike_count_all_logs( 'last_week' );
-
-			if ( $week >= 10 && $last_week >= 10 ) {
-				$change = (int) round( ( $week - $last_week ) / $last_week * 100 );
-
-				if ( abs( $change ) >= 10 ) {
-					$hints[] = array(
-						'id'       => 'trend_' . current_time( 'oW' ),
-						'priority' => 50,
-						'icon'     => 'trend',
-						'text'     => $change > 0
-							? sprintf(
-								/* translators: 1: votes this week, 2: percent */
-								__( '%1$s votes this week, up %2$s%% on last week.', 'wp-ulike' ),
-								number_format_i18n( $week ),
-								number_format_i18n( $change )
-							)
-							: sprintf(
-								/* translators: 1: votes this week, 2: percent */
-								__( '%1$s votes this week, down %2$s%% on last week.', 'wp-ulike' ),
-								number_format_i18n( $week ),
-								number_format_i18n( abs( $change ) )
-							),
-						'action'   => array(
-							'label' => __( 'See why', 'wp-ulike' ),
-							'url'   => self::statistics_url(),
-						),
-					);
-				}
-			}
-
-			return $hints;
-		}
-
-		/**
-		 * A post in the latest activity that just passed a like milestone.
-		 *
-		 * "Just" means its total is within 10% above the milestone, so an old
-		 * popular post does not announce a milestone it reached long ago.
-		 * Reads cached counters for at most a handful of posts.
-		 *
-		 * @return array<string, mixed>|null
-		 */
-		protected static function get_milestone_hint() {
-			if ( ! function_exists( 'wp_ulike_get_counter_value' ) ) {
-				return null;
-			}
-
-			$checked = array();
-			foreach ( self::get_recent_rows() as $row ) {
-				$post_id = (int) $row['item_id'];
-				if ( 'post' !== $row['item_type'] || isset( $checked[ $post_id ] ) ) {
-					continue;
-				}
-				if ( count( $checked ) >= self::ITEMS ) {
-					break;
-				}
-				$checked[ $post_id ] = true;
-
-				// Rows are newest first, so this is the post's latest vote. On a quiet
-				// site that can be years old: only celebrate fresh activity.
-				$voted_at = (int) mysql2date( 'U', (string) $row['date_time'] );
-				if ( ! $voted_at || $voted_at < (int) current_time( 'timestamp' ) - self::MILESTONE_FRESH ) {
-					continue;
-				}
-
-				$count   = (int) wp_ulike_get_counter_value( $post_id, 'post', 'like', wp_ulike_setting_repo::isDistinct( 'post' ) );
-				$reached = 0;
-				foreach ( self::MILESTONES as $milestone ) {
-					if ( $count >= $milestone ) {
-						$reached = $milestone;
-					}
-				}
-
-				if ( ! $reached || $count > $reached * 1.1 ) {
-					continue;
-				}
-
-				$title = self::plain_text( get_the_title( $post_id ) );
-				if ( '' === $title ) {
-					continue;
-				}
-
-				return array(
-					'id'       => 'milestone_' . $post_id . '_' . $reached,
-					'priority' => 35,
-					'icon'     => 'milestone',
-					'text'     => sprintf(
-						/* translators: 1: post title, 2: number of likes */
-						__( '“%1$s” just passed %2$s likes. Nice work!', 'wp-ulike' ),
-						$title,
-						number_format_i18n( $reached )
-					),
-					'action'   => array(
-						'label' => __( 'View', 'wp-ulike' ),
-						'url'   => get_permalink( $post_id ),
-					),
-				);
-			}
-
-			return null;
+			return $live['today'] <= $pace * 0.8 && $elapsed > 0.25 ? 'down' : '';
 		}
 
 		/* ------------------------------------------------------------------
 		 * Latest activity
 		 * ------------------------------------------------------------------ */
-
-		/**
-		 * Latest raw engagement rows. Cached until the next vote.
-		 *
-		 * @return array<int, array<string, mixed>>
-		 */
-		protected static function get_recent_rows() {
-			if ( ! class_exists( 'WP_Ulike_Pulse_Query' ) ) {
-				return array();
-			}
-
-			$cache_key = 'hub_rows_' . self::get_total();
-			$rows      = wp_cache_get( $cache_key, self::CACHE_GROUP );
-
-			if ( false === $rows ) {
-				$rows = WP_Ulike_Pulse_Query::recent_engagements( self::SCAN_ROWS );
-				wp_cache_set( $cache_key, $rows, self::CACHE_GROUP, 5 * MINUTE_IN_SECONDS );
-			}
-
-			return (array) $rows;
-		}
-
-		/**
-		 * Votes cast today. The pulse table has no date-only index, so the count
-		 * is kept for 5 minutes instead of running on every panel open.
-		 *
-		 * @return int
-		 */
-		protected static function get_today_count() {
-			if ( ! function_exists( 'wp_ulike_count_all_logs' ) ) {
-				return 0;
-			}
-
-			$key   = 'wp_ulike_hub_today_' . current_time( 'Ymd' );
-			$count = get_transient( $key );
-
-			if ( false === $count ) {
-				$count = (int) wp_ulike_count_all_logs( 'today' );
-				set_transient( $key, $count, 5 * MINUTE_IN_SECONDS );
-			}
-
-			return (int) $count;
-		}
 
 		/**
 		 * Latest activity, one row per item and action ("Sara and 12 others liked X").
@@ -726,83 +547,92 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		 * @return array<int, array<string, mixed>>
 		 */
 		public static function get_items( $unseen = 0 ) {
-			$groups = array();
-			$me     = (string) get_current_user_id();
-			$rank   = 0;
+			$feed = WP_Ulike_Hub_Feed::get();
+			$me   = get_current_user_id();
 
-			foreach ( self::get_recent_rows() as $index => $row ) {
-				$key     = $row['item_type'] . '|' . $row['item_id'] . '|' . $row['engagement_kind'] . '|' . ( 'vote' === $row['engagement_kind'] ? $row['engagement_key'] : '' );
-				$is_mine = (string) $row['user_id'] === $me;
+			// Votes newer than the snapshot are not in it.
+			$unseen -= max( 0, self::get_total() - (int) $feed['total'] );
 
-				// Your own votes are not in $unseen (skip_own_vote), so they take no rank.
-				$row_rank = $is_mine ? PHP_INT_MAX : $rank++;
-
-				if ( ! isset( $groups[ $key ] ) ) {
-					if ( count( array_filter( $groups ) ) >= self::ITEMS ) {
-						continue;
-					}
-
-					$target         = self::describe_item( (string) $row['item_type'], (int) $row['item_id'] );
-					$groups[ $key ] = $target ? array(
-						'row'    => $row,
-						'named'  => null,
-						'target' => $target,
-						'first'  => PHP_INT_MAX,
-						'people' => array(),
-					) : false;
+			// Your own votes are not in $unseen (skip_own_vote), so they take no rank.
+			$first = array();
+			$rank  = 0;
+			foreach ( $feed['rows'] as $row ) {
+				$row_rank = $row[0] === $me ? PHP_INT_MAX : $rank++;
+				if ( $row[1] >= 0 && ( ! isset( $first[ $row[1] ] ) || $row_rank < $first[ $row[1] ] ) ) {
+					$first[ $row[1] ] = $row_rank;
 				}
-
-				if ( ! $groups[ $key ] ) {
-					continue;
-				}
-
-				$groups[ $key ]['first'] = min( $groups[ $key ]['first'], $row_rank );
-
-				// Name the newest person who is not you; "Sara and 3 others" may include you.
-				if ( null === $groups[ $key ]['named'] && ! $is_mine ) {
-					$groups[ $key ]['named'] = $row;
-				}
-
-				// Guests share user ID 0, so each guest vote counts as one person.
-				$person = is_numeric( $row['user_id'] ) && (int) $row['user_id'] < 1 ? 'guest-' . $index : (string) $row['user_id'];
-				$groups[ $key ]['people'][ $person ] = true;
 			}
 
 			$items = array();
-			foreach ( array_filter( $groups ) as $group ) {
-				$row = $group['row'];
-				if ( $group['named'] && count( $group['people'] ) > 1 ) {
-					$row              = $group['named'];
-					$row['date_time'] = $group['row']['date_time'];
+			foreach ( $feed['groups'] as $index => $group ) {
+				$people = $group['people'];
+				$count  = count( $people );
+
+				// Name the newest person who is not you; "Sara and 3 others" may include you.
+				$shown = $people[0];
+				if ( $count > 1 ) {
+					foreach ( $people as $person ) {
+						if ( $person !== $me ) {
+							$shown = $person;
+							break;
+						}
+					}
 				}
 
-				$item          = self::format_row( $row, $group['target'], self::others_count( $row, count( $group['people'] ) ) );
-				$item['isNew'] = $group['first'] < $unseen;
-				$items[]       = $item;
+				$others = $count - 1;
+				if ( 'vote' === $group['kind'] ) {
+					$others = max( $others, (int) $group['total'] - 1 );
+				}
+
+				$second = null;
+				foreach ( $people as $person ) {
+					if ( $person !== $shown ) {
+						$second = $person;
+						break;
+					}
+				}
+
+				$is_you     = $shown && $shown === $me;
+				$on_comment = 'comment' === $group['target']['type'];
+
+				$items[] = array(
+					'name'    => $is_you ? __( 'You', 'wp-ulike' ) : self::user_name( $feed, $shown ),
+					'avatar'  => self::user_avatar( $feed, $shown ),
+					'avatar2' => $others > 0 && null !== $second ? self::user_avatar( $feed, $second ) : '',
+					'stack'   => $others > 0,
+					'text'    => $is_you && ! $others
+						? self::own_sentence( $group['kind'], $group['key'], $on_comment )
+						: self::sentence( $group['kind'], $group['key'], $group['target']['type'], $others ),
+					'badge'   => self::badge( $group ),
+					'title'   => $group['target']['title'],
+					'url'     => esc_url_raw( $group['target']['url'] ),
+					'thumb'   => esc_url_raw( $group['target']['thumb'] ),
+					'ts'      => (int) $group['ts'],
+					'kind'    => 'dislike' === $group['key'] ? 'dislike' : 'like',
+					'type'    => $group['type'],
+					'isNew'   => isset( $first[ $index ] ) && $first[ $index ] < $unseen,
+				);
 			}
 
 			return $items;
 		}
 
 		/**
-		 * People besides the newest one. Likes and dislikes use the item's total,
-		 * so 1,000 likes read "and 999 others"; reactions and ratings count the
-		 * recent votes read here.
-		 *
-		 * @param array<string, mixed> $row    Newest engagement row of the group.
-		 * @param int                  $people Distinct people in the recent rows.
-		 * @return int
+		 * @param array<string, mixed> $feed    Activity snapshot.
+		 * @param int                  $user_id User ID, 0 for a guest.
+		 * @return string
 		 */
-		protected static function others_count( $row, $people ) {
-			$others = $people - 1;
+		protected static function user_name( $feed, $user_id ) {
+			return $user_id && isset( $feed['users'][ $user_id ] ) ? $feed['users'][ $user_id ]['name'] : __( 'A visitor', 'wp-ulike' );
+		}
 
-			if ( 'vote' === $row['engagement_kind'] && function_exists( 'wp_ulike_get_counter_value' ) ) {
-				$status = 'dislike' === $row['engagement_key'] ? 'dislike' : 'like';
-				$total  = (int) wp_ulike_get_counter_value( (int) $row['item_id'], (string) $row['item_type'], $status, wp_ulike_setting_repo::isDistinct( (string) $row['item_type'] ) );
-				$others = max( $others, $total - 1 );
-			}
-
-			return max( 0, $others );
+		/**
+		 * @param array<string, mixed> $feed    Activity snapshot.
+		 * @param int|null             $user_id User ID, 0 for a guest.
+		 * @return string Empty for guests, who get the default avatar.
+		 */
+		protected static function user_avatar( $feed, $user_id ) {
+			return $user_id && isset( $feed['users'][ $user_id ] ) ? esc_url_raw( $feed['users'][ $user_id ]['avatar'] ) : '';
 		}
 
 		/**
@@ -823,57 +653,19 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		}
 
 		/**
-		 * @param array<string, mixed>  $row    Newest engagement row of the group.
-		 * @param array<string, string> $target Item from describe_item().
-		 * @param int                   $others People besides the newest one.
-		 * @return array<string, string>
-		 */
-		protected static function format_row( $row, $target, $others = 0 ) {
-			$user_id = is_numeric( $row['user_id'] ) ? (int) $row['user_id'] : 0;
-			$user    = $user_id > 0 ? get_userdata( $user_id ) : false;
-			$is_you  = $user && get_current_user_id() === $user_id;
-
-			$timestamp = (int) mysql2date( 'U', (string) $row['date_time'] );
-			$now       = (int) current_time( 'timestamp' );
-
-			if ( $is_you ) {
-				$name = __( 'You', 'wp-ulike' );
-			} else {
-				$name = $user ? $user->display_name : __( 'A visitor', 'wp-ulike' );
-			}
-
-			return array(
-				'name'   => $name,
-				'avatar' => $user ? (string) get_avatar_url( $user->ID, array( 'size' => 64 ) ) : '',
-				'text'   => $is_you && ! $others
-					? self::own_sentence( (string) $row['engagement_kind'], (string) $row['engagement_key'], 'comment' === $target['type'] )
-					: self::sentence( (string) $row['engagement_kind'], (string) $row['engagement_key'], $target['type'], $others ),
-				'badge'  => self::badge( $row ),
-				'title'  => $target['title'],
-				'url'    => $target['url'],
-				'time'   => $timestamp && $timestamp < $now - MINUTE_IN_SECONDS
-					/* translators: %s: human time difference, e.g. "3 mins" */
-					? sprintf( __( '%s ago', 'wp-ulike' ), human_time_diff( $timestamp, $now ) )
-					: __( 'just now', 'wp-ulike' ),
-				'kind'   => 'dislike' === $row['engagement_key'] ? 'dislike' : 'like',
-				'type'   => (string) $row['item_type'],
-			);
-		}
-
-		/**
 		 * Small badge on the avatar: the reaction emoji, or the star score.
 		 * Empty for likes and dislikes, which use the heart.
 		 *
-		 * @param array<string, mixed> $row Engagement row.
+		 * @param array<string, mixed> $group Activity group.
 		 * @return string
 		 */
-		protected static function badge( $row ) {
-			if ( 'star' === $row['engagement_kind'] && ! empty( $row['value'] ) ) {
-				return absint( $row['value'] ) . '★';
+		protected static function badge( $group ) {
+			if ( 'star' === $group['kind'] && ! empty( $group['value'] ) ) {
+				return absint( $group['value'] ) . '★';
 			}
 
-			if ( 'emoji' === $row['engagement_kind'] ) {
-				return self::reaction_emoji( (string) $row['item_type'], (string) $row['engagement_key'] );
+			if ( 'emoji' === $group['kind'] ) {
+				return self::reaction_emoji( (string) $group['type'], (string) $group['key'] );
 			}
 
 			return '';
@@ -1012,68 +804,13 @@ if ( ! class_exists( 'WP_Ulike_Hub' ) ) {
 		}
 
 		/**
-		 * Title and link for an item, or null when it no longer exists.
-		 *
-		 * @param string $item_type post, comment, activity or topic.
-		 * @param int    $item_id   Item ID.
-		 * @return array{type:string,title:string,url:string}|null
-		 */
-		protected static function describe_item( $item_type, $item_id ) {
-			if ( $item_id < 1 ) {
-				return null;
-			}
-
-			switch ( $item_type ) {
-				case 'comment':
-					$comment = get_comment( $item_id );
-					if ( ! $comment ) {
-						return null;
-					}
-
-					return array(
-						'type'  => 'comment',
-						'title' => self::post_title( (int) $comment->comment_post_ID ),
-						'url'   => (string) get_comment_link( $comment ),
-					);
-
-				case 'activity':
-					return array(
-						'type'  => 'activity',
-						'title' => __( 'an activity update', 'wp-ulike' ),
-						'url'   => function_exists( 'bp_activity_get_permalink' ) ? (string) bp_activity_get_permalink( $item_id ) : '',
-					);
-
-				default:
-					if ( ! get_post( $item_id ) ) {
-						return null;
-					}
-
-					return array(
-						'type'  => 'post',
-						'title' => self::post_title( $item_id ),
-						'url'   => (string) get_permalink( $item_id ),
-					);
-			}
-		}
-
-		/**
-		 * @param int $post_id Post ID.
-		 * @return string
-		 */
-		protected static function post_title( $post_id ) {
-			$title = self::plain_text( get_the_title( $post_id ) );
-
-			return '' !== $title ? $title : __( '(no title)', 'wp-ulike' );
-		}
-
-		/**
 		 * Plain text for the panel, which renders with textContent: titles come
 		 * HTML-encoded ("&amp;", "&#8217;") and would show the entity as-is.
 		 *
 		 * @param string $text Text that may hold tags or entities.
 		 * @return string
 		 */
-		protected static function plain_text( $text ) {
+		public static function plain_text( $text ) {
 			return html_entity_decode( wp_strip_all_tags( (string) $text ), ENT_QUOTES, 'UTF-8' );
 		}
 

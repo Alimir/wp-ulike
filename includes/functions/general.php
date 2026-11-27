@@ -534,6 +534,8 @@ if( ! function_exists( 'wp_ulike_get_scheduled_hooks' ) ){
 			'wp_ulike_pulse_purge_meta',
 			'wp_ulike_purge_guest_cache',
 			'wp_ulike_refresh_cloudflare_ips',
+			'wp_ulike_hub_refresh_facts',
+			'wp_ulike_hub_refresh_news',
 		);
 	}
 }

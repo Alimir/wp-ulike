@@ -133,7 +133,8 @@ function wp_ulike_notice_manager(){
 	$notice_list = [];
 
 	// Show review notice once the site has meaningful engagement (likes only).
-	if ( ! wp_ulike_is_notice_dismissed( 'wp_ulike_leave_a_review' ) ) {
+	// With the ULike Hub on, the request is a Hub tip instead of a dashboard banner.
+	if ( ! WP_Ulike_Hub::is_enabled() && ! wp_ulike_is_notice_dismissed( 'wp_ulike_leave_a_review' ) ) {
 		$count_logs = wp_ulike_count_all_logs();
 
 		if ( $count_logs >= 25 ) {
