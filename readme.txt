@@ -189,12 +189,9 @@ WP ULike stores all votes in your own database and keeps working without an inte
 * Security: Hardened public lists, voting, and guest address detection. Thanks to Patchstack for the responsible report.
 * Added: Likers box avatars link to each person's profile out of the box. The new `%PROFILE_URL%` variable uses BuddyPress, BuddyBoss, PeepSo, Ultimate Member, UsersWP, WP User Manager, ProfileGrid, wpForo, or bbPress when active, and the WordPress author page otherwise. `%AUTHOR_URL%` always uses the author page.
 * Added: The Top List block and the users widget can link to any of the supported profile plugins.
-* Improved: ULike Hub opens instantly on busy sites. Activity is shared in one cached snapshot, numbers refresh in the background, and reopening the panel shows the last copy right away.
-* Improved: ULike Hub groups activity into New, Today, This week, and Earlier, shows the post's image and stacked faces, and marks how today compares with yesterday.
-* Added: Smarter Hub tips: first likes, milestones for the site and for single posts, posts trending in the last hour, dislike spikes, and how this week compares with the same days last week.
-* Added: Short messages from the WP ULike team in the Hub, shown to administrators one at a time, in the dashboard only. Turn them off with "WP ULike News in the Hub" in Settings.
-* Improved: The Hub icon takes the toolbar's own color and size, so it reads like the icons next to it.
-* Changed: The review request moved from a dashboard notice into the Hub, and keeps your earlier answer.
+* Improved: ULike Hub opens instantly, even on large sites, with a fresh new look and smarter tips.
+* Added: Occasional WP ULike news in the Hub for administrators. You can turn it off in Settings.
+* Changed: The review request now lives in the Hub instead of a dashboard notice.
 * Fixed: Profile variables for plugins that are not installed no longer produce broken links. They fall back to the author page, and people with no published posts get no author page link instead of an empty archive.
 * Fixed: The likers popover arrow follows the Likers Background and Border colors in the customizer, including in RTL.
 * Added: An Outline color for the Wrapper and Counter in the customizer, so the thin gray frame on the Heart template and the Simple counter's frame and pointer can match dark sites.

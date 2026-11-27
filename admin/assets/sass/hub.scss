@@ -184,16 +184,15 @@
 
 	// Each sentence takes the direction of its own text, so an English tip or
 	// title reads correctly on a right-to-left site (and the other way round).
+	// Names and titles too, so "Hello world!" keeps its "!" at the end.
 	.wp-ulike-hub-hint__text,
 	.wp-ulike-hub-news__title,
 	.wp-ulike-hub-news__text,
-	.wp-ulike-hub-panel__text {
-		unicode-bidi: plaintext;
-	}
-
+	.wp-ulike-hub-panel__text,
+	.wp-ulike-hub-panel__today,
 	.wp-ulike-hub-panel__name,
 	.wp-ulike-hub-panel__target {
-		unicode-bidi: isolate;
+		unicode-bidi: plaintext;
 	}
 
 	// Close button (tips and news) ---------------------------------------

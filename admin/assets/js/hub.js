@@ -40,7 +40,7 @@
 	var rtf = null;
 
 	try {
-		rtf = new Intl.RelativeTimeFormat( cfg.locale || undefined, { numeric: 'auto', style: 'short' } );
+		rtf = new Intl.RelativeTimeFormat( cfg.locale || undefined, { numeric: 'auto', style: 'long' } );
 	} catch ( e ) {
 		rtf = null;
 	}
