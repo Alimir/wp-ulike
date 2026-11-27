@@ -115,6 +115,14 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'output' => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class',
                                         'units'  => array('px', 'em', 'rem')
                                     ),
+                                    array(
+                                        'id'          => 'normal_outline',
+                                        'type'        => 'color',
+                                        'title'       => esc_html__( 'Outline', 'wp-ulike' ),
+                                        'subtitle'    => esc_html__( 'The thin inner frame on templates that have one, such as Heart.', 'wp-ulike' ),
+                                        'output_mode' => '--wpulike-outline',
+                                        'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class',
+                                    ),
                                 )
                             ),
                             array(
@@ -493,6 +501,14 @@ if ( ! class_exists( 'wp_ulike_customizer' ) ) {
                                         'title'  => esc_html__( 'Border', 'wp-ulike' ),
                                         'output' => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .count-box',
                                         'units'  => array('px', 'em', 'rem')
+                                    ),
+                                    array(
+                                        'id'          => 'normal_outline',
+                                        'type'        => 'color',
+                                        'title'       => esc_html__( 'Outline', 'wp-ulike' ),
+                                        'subtitle'    => esc_html__( 'The thin frame and pointer on templates that have one, such as Simple.', 'wp-ulike' ),
+                                        'output_mode' => '--wpulike-counter-outline',
+                                        'output'      => '.wpulike:not(.wpulike-engagement-template) .wp_ulike_general_class .count-box',
                                     ),
                                 )
                             ),

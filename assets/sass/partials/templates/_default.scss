@@ -65,7 +65,7 @@
         line-height: 30px;
         display: inline-block;
         padding: 0 10px;
-        box-shadow: 0 0 0 1px #bdbdbd inset;
+        box-shadow: 0 0 0 1px var(--wpulike-counter-outline, #bdbdbd) inset;
         color: #616161;
         vertical-align: middle;
         text-align: center;
@@ -76,10 +76,10 @@
             position: absolute;
             border: 1px solid transparent;
             background: #FFFFFF;
-            border-bottom-color: #bdbdbd;
+            border-bottom-color: var(--wpulike-counter-outline, #bdbdbd);
             left: -5px;
             top: 50%;
-            border-left-color: #bdbdbd;
+            border-left-color: var(--wpulike-counter-outline, #bdbdbd);
             transform: rotate(45deg) translateY(-50%);
             width: 5px;
             height: 5px;
@@ -99,7 +99,7 @@
             button.wp_ulike_btn {
                 border-radius: 0;
                 background-color: #ffffff;
-                box-shadow: 0 0 0 1px #bdbdbd inset;
+                box-shadow: 0 0 0 1px var(--wpulike-outline, #bdbdbd) inset;
                 font-size: initial;
                 padding: 1em;
             }

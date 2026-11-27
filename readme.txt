@@ -189,6 +189,7 @@ WP ULike works fully offline and stores all votes in your own database. It conta
 * Added: The Top List block and the users widget can link to any of the supported profile plugins.
 * Fixed: Profile variables for plugins that are not installed no longer produce broken links. They fall back to the author page, and people with no published posts get no author page link instead of an empty archive.
 * Fixed: The likers popover arrow follows the Likers Background and Border colors in the customizer, including in RTL.
+* Added: An Outline color for the Wrapper and Counter in the customizer, so the thin gray frame on the Heart template and the Simple counter's frame and pointer can match dark sites.
 * Changed: PHP snippets can be edited only by accounts that can edit plugin files. Saved snippets keep running.
 * Tweak: Code brought in line with the latest WordPress coding standards.
 

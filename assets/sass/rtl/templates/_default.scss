@@ -7,7 +7,7 @@
             &:before {
                 right: -1px;
                 left: auto;
-                border-color: #bdbdbd #bdbdbd transparent transparent;
+                border-color: var(--wpulike-counter-outline, #bdbdbd) var(--wpulike-counter-outline, #bdbdbd) transparent transparent;
             }
         }
     }
