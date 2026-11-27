@@ -947,9 +947,9 @@ if ( ! class_exists( 'wp_ulike_admin_panel' ) ) {
                         'theme' => 'shadowfox',
                         'mode'  => 'htmlmixed',
                     ),
-                    'default'  => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
+                    'default'  => '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="%PROFILE_URL%" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>',
                     'title'    => esc_html__('Custom HTML Template', 'wp-ulike'),
-                    'desc'     => esc_html__('Allowed Variables:', 'wp-ulike') . ' <code>%USER_AVATAR%</code> , <code>%BP_PROFILE_URL%</code> , <code>%UM_PROFILE_URL%</code> , <code>%USER_NAME%</code> , <code>%START_WHILE%</code> , <code>%END_WHILE%</code>',
+                    'desc'     => wp_ulike_get_likers_template_help(),
                     'dependency'=> array( 'enable_likers_box|likers_style', '==|any', 'true|default,popover'  ),
                 ),
                 // 'disable_likers_pophover' => array(

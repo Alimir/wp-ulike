@@ -302,7 +302,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 			$thumb_size = min( 96, max( 24, $thumb_size ) );
 
 			$profile_url = isset( $attributes['profileUrl'] ) ? sanitize_key( $attributes['profileUrl'] ) : 'wp';
-			if ( ! in_array( $profile_url, array( 'wp', 'bp', 'um' ), true ) ) {
+			if ( 'wp' !== $profile_url && ! array_key_exists( $profile_url, wp_ulike_get_profile_providers() ) ) {
 				$profile_url = 'wp';
 			}
 
@@ -1334,16 +1334,7 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 		 * @return string
 		 */
 		private static function get_user_profile_url( $user_id, $profile_url ) {
-			if ( 'bp' === $profile_url && function_exists( 'bp_members_get_user_url' ) ) {
-				return bp_members_get_user_url( $user_id );
-			}
-
-			if ( 'um' === $profile_url && function_exists( 'um_fetch_user' ) && function_exists( 'um_user_profile_url' ) ) {
-				um_fetch_user( $user_id );
-				return um_user_profile_url();
-			}
-
-			return get_author_posts_url( $user_id );
+			return wp_ulike_get_user_profile_url( $user_id, $profile_url );
 		}
 
 		/**
@@ -1515,14 +1506,12 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 
 			$sort_options = self::get_sort_options();
 
-			$profile_urls = array(
-				array( 'value' => 'wp', 'label' => __( 'Profile', 'wp-ulike' ) ),
-			);
-			if ( function_exists( 'bp_members_get_user_url' ) ) {
-				$profile_urls[] = array( 'value' => 'bp', 'label' => __( 'BuddyPress', 'wp-ulike' ) );
-			}
-			if ( function_exists( 'um_user_profile_url' ) ) {
-				$profile_urls[] = array( 'value' => 'um', 'label' => __( 'UltimateMember', 'wp-ulike' ) );
+			$profile_urls = array();
+			foreach ( wp_ulike_get_profile_choices() as $value => $label ) {
+				$profile_urls[] = array(
+					'value' => 'author' === $value ? 'wp' : $value,
+					'label' => $label,
+				);
 			}
 
 			return array(

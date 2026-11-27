@@ -757,6 +757,217 @@ if( ! function_exists( 'wp_ulike_preserve_unsubmitted_settings' ) ){
 	}
 }
 
+if ( ! function_exists( 'wp_ulike_get_profile_providers' ) ) {
+	/**
+	 * Profile plugins a user can link to, in the order %PROFILE_URL% tries them.
+	 *
+	 * `url` receives a user ID and returns a URL. It is null when the plugin is not active.
+	 *
+	 * @return array<string, array{label: string, token: string, url: callable|null}>
+	 */
+	function wp_ulike_get_profile_providers() {
+		$providers = array(
+			'bp'          => array(
+				'label' => 'BuddyPress / BuddyBoss',
+				'token' => '%BP_PROFILE_URL%',
+				'url'   => function_exists( 'bp_members_get_user_url' ) ? 'bp_members_get_user_url' : ( function_exists( 'bp_core_get_user_domain' ) ? 'bp_core_get_user_domain' : null ),
+			),
+			'peepso'      => array(
+				'label' => 'PeepSo',
+				'token' => '%PEEPSO_PROFILE_URL%',
+				'url'   => is_callable( array( 'PeepSoUser', 'get_instance' ) ) ? static function ( $user_id ) {
+					$user = PeepSoUser::get_instance( $user_id );
+					return is_object( $user ) ? $user->get_profileurl() : '';
+				} : null,
+			),
+			'um'          => array(
+				'label' => 'Ultimate Member',
+				'token' => '%UM_PROFILE_URL%',
+				'url'   => function_exists( 'um_user_profile_url' ) ? 'um_user_profile_url' : null,
+			),
+			'uwp'         => array(
+				'label' => 'UsersWP',
+				'token' => '%UWP_PROFILE_URL%',
+				'url'   => function_exists( 'uwp_build_profile_tab_url' ) ? 'uwp_build_profile_tab_url' : null,
+			),
+			'wpum'        => array(
+				'label' => 'WP User Manager',
+				'token' => '%WPUM_PROFILE_URL%',
+				'url'   => function_exists( 'wpum_get_profile_url' ) ? static function ( $user_id ) {
+					$user = get_userdata( $user_id );
+					return $user ? wpum_get_profile_url( $user ) : '';
+				} : null,
+			),
+			'profilegrid' => array(
+				'label' => 'ProfileGrid',
+				'token' => '%PROFILEGRID_PROFILE_URL%',
+				'url'   => class_exists( 'PM_request' ) ? static function ( $user_id ) {
+					$request = new PM_request();
+					return $request->pm_get_user_profile_url( $user_id );
+				} : null,
+			),
+			'wpforo'      => array(
+				'label' => 'wpForo',
+				'token' => '%WPFORO_PROFILE_URL%',
+				'url'   => function_exists( 'wpforo_member' ) ? static function ( $user_id ) {
+					return wpforo_member( $user_id, 'profile_url' );
+				} : null,
+			),
+			'bbp'         => array(
+				'label' => 'bbPress',
+				'token' => '%BBP_PROFILE_URL%',
+				'url'   => function_exists( 'bbp_get_user_profile_url' ) ? 'bbp_get_user_profile_url' : null,
+			),
+		);
+
+		$providers = (array) apply_filters( 'wp_ulike_profile_providers', $providers );
+		foreach ( $providers as $key => $provider ) {
+			$providers[ $key ] = wp_parse_args( (array) $provider, array( 'label' => $key, 'token' => '', 'url' => null ) );
+		}
+
+		return $providers;
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_author_page_url' ) ) {
+	/**
+	 * Author archive URL, or an empty string when the user has no published posts.
+	 *
+	 * @param int   $user_id   User ID.
+	 * @param int[] $prime_ids User IDs to count in the same query once a count is needed.
+	 * @return string
+	 */
+	function wp_ulike_get_author_page_url( $user_id, $prime_ids = array() ) {
+		static $post_counts = array(), $pending = array();
+
+		$pending = array_merge( $pending, array_map( 'absint', (array) $prime_ids ) );
+		$user_id = absint( $user_id );
+		if ( ! $user_id ) {
+			return '';
+		}
+
+		if ( ! isset( $post_counts[ $user_id ] ) ) {
+			$ids          = array_diff( array_unique( array_merge( $pending, array( $user_id ) ) ), array_keys( $post_counts ), array( 0 ) );
+			$post_counts += count_many_users_posts( array_values( $ids ), 'post', true );
+			$pending      = array();
+		}
+
+		return empty( $post_counts[ $user_id ] ) ? '' : get_author_posts_url( $user_id );
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_user_profile_url' ) ) {
+	/**
+	 * Profile URL for a user.
+	 *
+	 * `auto` uses the first active profile plugin. A provider that is not active, and
+	 * `author` or `wp`, use the author page. Empty when there is nothing to link to.
+	 *
+	 * @param int    $user_id  User ID.
+	 * @param string $provider Provider key, `auto`, or `author`.
+	 * @return string
+	 */
+	function wp_ulike_get_user_profile_url( $user_id, $provider = 'auto' ) {
+		$user_id   = absint( $user_id );
+		$providers = wp_ulike_get_profile_providers();
+		$callbacks = 'auto' === $provider ? wp_list_pluck( $providers, 'url' ) : array( isset( $providers[ $provider ]['url'] ) ? $providers[ $provider ]['url'] : null );
+		$url       = '';
+
+		foreach ( $callbacks as $callback ) {
+			if ( $user_id && is_callable( $callback ) ) {
+				$url = call_user_func( $callback, $user_id );
+				$url = is_string( $url ) ? $url : '';
+				if ( '' !== $url ) {
+					break;
+				}
+			}
+		}
+
+		if ( '' === $url ) {
+			$url = wp_ulike_get_author_page_url( $user_id );
+		}
+
+		$url = apply_filters( 'wp_ulike_user_profile_url', $url, $user_id, $provider );
+		return is_string( $url ) ? $url : '';
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_profile_choices' ) ) {
+	/**
+	 * Author page plus each active profile plugin, for profile link selects.
+	 *
+	 * @return array<string, string>
+	 */
+	function wp_ulike_get_profile_choices() {
+		$choices = array( 'author' => __( 'Author page', 'wp-ulike' ) );
+		foreach ( wp_ulike_get_profile_providers() as $key => $provider ) {
+			if ( is_callable( $provider['url'] ) ) {
+				$choices[ $key ] = $provider['label'];
+			}
+		}
+
+		return $choices;
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_replace_profile_tokens' ) ) {
+	/**
+	 * Fill the profile URL variables in one likers template row.
+	 *
+	 * @param string $template Row template.
+	 * @param int    $user_id  User ID.
+	 * @return string
+	 */
+	function wp_ulike_replace_profile_tokens( $template, $user_id ) {
+		$tokens = array(
+			'%PROFILE_URL%' => 'auto',
+			'%AUTHOR_URL%'  => 'author',
+		) + array_flip(
+			array_filter(
+				wp_list_pluck( wp_ulike_get_profile_providers(), 'token' ),
+				static function ( $token ) {
+					return is_string( $token ) && '' !== $token;
+				}
+			)
+		);
+
+		foreach ( $tokens as $token => $provider ) {
+			if ( false !== strpos( $template, $token ) ) {
+				$url      = wp_ulike_get_user_profile_url( $user_id, $provider );
+				$template = str_replace( $token, '' !== $url ? esc_url( $url ) : '#', $template );
+			}
+		}
+
+		return $template;
+	}
+}
+
+if ( ! function_exists( 'wp_ulike_get_likers_template_help' ) ) {
+	/**
+	 * Allowed variables for the likers Custom HTML Template, listing only active profile plugins.
+	 *
+	 * @return string
+	 */
+	function wp_ulike_get_likers_template_help() {
+		$tokens = array( '%USER_AVATAR%', '%USER_NAME%', '%PROFILE_URL%', '%AUTHOR_URL%' );
+		foreach ( wp_ulike_get_profile_providers() as $provider ) {
+			if ( is_callable( $provider['url'] ) && is_string( $provider['token'] ) && '' !== $provider['token'] ) {
+				$tokens[] = $provider['token'];
+			}
+		}
+		$tokens[] = '%START_WHILE%';
+		$tokens[] = '%END_WHILE%';
+
+		return sprintf(
+			/* translators: 1: list of template variables, 2: automatic profile variable, 3: author page variable. */
+			esc_html__( 'Allowed Variables: %1$s. %2$s links to the profile from your profile plugin, or to the WordPress author page when you have none. %3$s always links to the author page. People with no published posts get no author page link.', 'wp-ulike' ),
+			'<code>' . implode( '</code> , <code>', array_map( 'esc_html', $tokens ) ) . '</code>',
+			'<code>%PROFILE_URL%</code>',
+			'<code>%AUTHOR_URL%</code>'
+		);
+	}
+}
+
 if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 	/**
 	 * Get likers box template info.
@@ -805,7 +1016,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 			$get_users  = array_slice( $get_users, 0, $parsed_args['counter'] );
 
 			// Get likers html template
- 			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="#" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
+ 			$get_template   = ! empty( $parsed_args['template'] ) ?  $parsed_args['template'] : '<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="%PROFILE_URL%" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>' ;
  			$inner_template = wp_ulike_get_template_between( $get_template, "%START_WHILE%", "%END_WHILE%" );
 
 			// CRITICAL OPTIMIZATION: Batch load all users at once to avoid N+1 queries
@@ -824,6 +1035,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 			foreach ( $users_data as $user_obj ) {
 				$users_cache[ $user_obj->ID ] = $user_obj;
 			}
+			wp_ulike_get_author_page_url( 0, $user_ids );
 
 			foreach ( $get_users as $user ) {
 				$user_id = absint( $user );
@@ -843,16 +1055,7 @@ if( ! function_exists( 'wp_ulike_get_likers_template' ) ){
 						$USER_NAME 		= wp_ulike_encode_shortcode_brackets( esc_attr( $user_info->display_name ) );
 						$out_template 	= str_replace( "%USER_NAME%", $USER_NAME, $out_template );
 					}
-					if( strpos( $out_template, '%UM_PROFILE_URL%' ) !== false && function_exists('um_fetch_user') ) {
-						global $ultimatemember;
-						um_fetch_user( $user_info->ID );
-						$UM_PROFILE_URL = um_user_profile_url();
-						$out_template 	= str_replace( "%UM_PROFILE_URL%", $UM_PROFILE_URL, $out_template );
-					}
-					if( strpos( $out_template, '%BP_PROFILE_URL%' ) !== false && function_exists('bp_members_get_user_url') ) {
-						$BP_PROFILE_URL = bp_members_get_user_url( $user_info->ID );
-						$out_template 	= str_replace( "%BP_PROFILE_URL%", $BP_PROFILE_URL, $out_template );
-					}
+					$out_template = wp_ulike_replace_profile_tokens( $out_template, $user_info->ID );
 					$users_list .= $out_template;
 				endif;
 			}

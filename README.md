@@ -114,6 +114,23 @@ Show a list of users who liked the content.
 [wp_ulike_likers_box type="post" counter="5" avatar_size="48"]
 ```
 
+**Template variables** (Settings → content type → Likers box → Custom HTML Template):
+
+| Variable | Output |
+| --- | --- |
+| `%USER_AVATAR%` | Avatar image |
+| `%USER_NAME%` | Display name |
+| `%PROFILE_URL%` | Profile from the first active profile plugin, otherwise the WordPress author page |
+| `%AUTHOR_URL%` | WordPress author page |
+| `%BP_PROFILE_URL%`, `%PEEPSO_PROFILE_URL%`, `%UM_PROFILE_URL%`, `%UWP_PROFILE_URL%`, `%WPUM_PROFILE_URL%`, `%PROFILEGRID_PROFILE_URL%`, `%WPFORO_PROFILE_URL%`, `%BBP_PROFILE_URL%` | Profile from that plugin. If the plugin is not active, the author page is used |
+| `%START_WHILE%` … `%END_WHILE%` | Repeated once per liker |
+
+Author page links are only added for people with published posts. Anyone else gets `#`, so visitors never land on an empty archive.
+
+```html
+<div class="wp-ulike-likers-list">%START_WHILE%<span class="wp-ulike-liker"><a href="%PROFILE_URL%" title="%USER_NAME%">%USER_AVATAR%</a></span>%END_WHILE%</div>
+```
+
 ---
 
 ## 💻 Developer Functions
@@ -956,6 +973,30 @@ add_filter('wp_ulike_get_user_ip', 'custom_user_ip', 10, 1);
 function custom_user_ip($ip) {
     // Modify or override user IP detection
     return $ip;
+}
+```
+
+**Add a Profile Plugin:**
+```php
+// Adds %MY_PROFILE_URL% to the likers template and "My Profiles" to profile link selects.
+// Providers are tried in array order for %PROFILE_URL%.
+add_filter('wp_ulike_profile_providers', function($providers) {
+    $providers['my_profiles'] = array(
+        'label' => 'My Profiles',
+        'token' => '%MY_PROFILE_URL%',
+        'url'   => function_exists('my_profile_url') ? 'my_profile_url' : null, // Receives a user ID.
+    );
+    return $providers;
+});
+```
+
+**Modify a User Profile URL:**
+```php
+add_filter('wp_ulike_user_profile_url', 'custom_profile_url', 10, 3);
+function custom_profile_url($url, $user_id, $provider) {
+    // $provider is 'auto', 'author', 'wp', or a provider key such as 'um'.
+    // An empty string means the user gets no link.
+    return $url;
 }
 ```
 

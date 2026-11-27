@@ -435,15 +435,9 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 				$get_user_id        = stripslashes($liker->user_id);
 				$get_user_info      = get_userdata($get_user_id);
 				$get_likes_count    = $liker->SumUser;
-				$return_profile_url = '#';
+				$return_profile_url = wp_ulike_get_user_profile_url( $liker->user_id, $profile_url );
+				$return_profile_url = '' !== $return_profile_url ? $return_profile_url : '#';
 				$echo_likes_count   = $show_count ? ' (' . absint( $get_likes_count ) . ' ' . esc_html__('Like','wp-ulike').')' : '';
-
-				if( $profile_url == 'bp' && function_exists('bp_members_get_user_url') ) {
-					$return_profile_url = bp_members_get_user_url( $liker->user_id );
-				} elseif( $profile_url == 'um' && function_exists('um_fetch_user') ) {
-					um_fetch_user( $liker->user_id );
-					$return_profile_url = um_user_profile_url();
-				}
 
 				if( ! empty( $get_user_info ) ){
 					$result .= $before_item;
@@ -651,8 +645,9 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			<p>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'profile_url' ) ); ?>"><?php esc_html_e('Profile URL:', 'wp-ulike'); ?></label>
 				<select name="<?php echo esc_attr( $this->get_field_name( 'profile_url' ) ); ?>" style="width:100%;">
-					<option value="bp" <?php selected( $instance['profile_url'], "bp" ); ?>><?php esc_html_e('BuddyPress', 'wp-ulike'); ?></option>
-					<option value="um" <?php selected( $instance['profile_url'], "um" ); ?>><?php esc_html_e('UltimateMember', 'wp-ulike'); ?></option>
+					<?php foreach ( wp_ulike_get_profile_choices() as $choice => $label ) : ?>
+						<option value="<?php echo esc_attr( $choice ); ?>" <?php selected( $instance['profile_url'], $choice ); ?>><?php echo esc_html( $label ); ?></option>
+					<?php endforeach; ?>
 				</select>
 			</p>
 
@@ -691,7 +686,7 @@ if ( ! class_exists( 'wp_ulike_widget' ) ) {
 			$instance['type']        = isset( $new_instance['type'] ) ? sanitize_text_field( $new_instance['type'] ) : 'post';
 			$instance['period']      = isset( $new_instance['period'] ) ? sanitize_text_field( $new_instance['period'] ) : 'all';
 			$instance['style']       = isset( $new_instance['style'] ) ? sanitize_text_field( $new_instance['style'] ) : 'simple';
-			$instance['profile_url'] = isset( $new_instance['profile_url'] ) ? sanitize_text_field( $new_instance['profile_url'] ) : 'bp';
+			$instance['profile_url'] = isset( $new_instance['profile_url'] ) ? sanitize_key( $new_instance['profile_url'] ) : 'author';
 
 			// Sanitize numeric fields
 			$instance['count'] = isset( $new_instance['count'] ) ? absint( $new_instance['count'] ) : 10;
