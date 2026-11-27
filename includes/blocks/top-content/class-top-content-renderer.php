@@ -895,7 +895,9 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 
 				$activity_id = (int) $activity->id;
-				if ( ! wp_ulike_is_item_viewable( $activity_id, 'activity' ) ) {
+				// This is a read-only listing: an unrelated button rendered elsewhere
+				// on the page must not vouch for this activity id being public.
+				if ( ! wp_ulike_is_item_viewable( $activity_id, 'activity', false ) ) {
 					continue;
 				}
 				$vote_data   = self::build_item_vote_data( $activity_id, 'activity', $args, $is_distinct );
@@ -962,7 +964,8 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				}
 
 				$post_id   = (int) $post->ID;
-				if ( ! wp_ulike_is_item_viewable( $post_id, 'topic' ) ) {
+				// Read-only listing: don't let an unrelated rendered button vouch for this topic.
+				if ( ! wp_ulike_is_item_viewable( $post_id, 'topic', false ) ) {
 					continue;
 				}
 
@@ -1249,8 +1252,9 @@ if ( ! class_exists( 'WP_Ulike_Top_Content_Renderer' ) ) {
 				return '';
 			}
 
-			// Published items can still be password-protected.
-			if ( ! wp_ulike_is_item_viewable( (int) $item['item_id'], $args['contentType'] ) ) {
+			// Published items can still be password-protected. Read-only listing:
+			// don't let an unrelated rendered button vouch for this item.
+			if ( ! wp_ulike_is_item_viewable( (int) $item['item_id'], $args['contentType'], false ) ) {
 				return '';
 			}
 

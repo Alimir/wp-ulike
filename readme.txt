@@ -129,7 +129,7 @@ We follow WordPress security practices: nonces, hardened AJAX, optional IP anony
 Your site is behind a reverse proxy (such as nginx, Varnish, or a load balancer) that does not pass the visitor address to WordPress. Cloudflare works out of the box, and WP ULike shows a notice on its admin pages when it spots a proxy on your own network. For other proxies, add their address to `wp-config.php`, for example `define( 'WP_ULIKE_TRUSTED_PROXIES', '10.0.0.5' );`. Separate several addresses or ranges with commas, like `'10.0.0.0/8,127.0.0.1'`.
 
 = Why can't I edit my PHP snippets? =
-PHP snippets follow your site's rule for editing plugin files, so they are read-only when `DISALLOW_FILE_EDIT` or `DISALLOW_FILE_MODS` is set. Saved snippets keep running. To edit them, add `define( 'WP_ULIKE_ALLOW_PHP_SNIPPETS', true );` to `wp-config.php`.
+Editing PHP snippets requires an account that can post unfiltered HTML and edit plugin files. They also follow your site's rule for editing plugin files, so they are read-only when `DISALLOW_FILE_EDIT` or `DISALLOW_FILE_MODS` is set. Saved snippets keep running either way. To edit them on a site with that rule set, add `define( 'WP_ULIKE_ALLOW_PHP_SNIPPETS', true );` to `wp-config.php` (an account also needs to manage options). PHP snippets are unavailable on multisite, on every subsite.
 
 = Can I use WP ULike on a multisite setup? =
 Yes. Each site gets its own settings and stats.

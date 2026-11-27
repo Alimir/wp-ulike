@@ -173,15 +173,21 @@ if ( ! function_exists( 'wp_ulike_is_item_viewable' ) ) {
 	 * and hidden activity must not resolve. An id with no post, comment, or
 	 * activity is not hidden content: template demos store votes on those ids.
 	 *
-	 * @param int    $item_ID   Item ID.
-	 * @param string $item_type post, comment, activity, topic, or setting slug.
+	 * @param int    $item_ID     Item ID.
+	 * @param string $item_type   post, comment, activity, topic, or setting slug.
+	 * @param bool   $honor_shown Whether a button/likers box the site already rendered
+	 *                            for this id in this request should satisfy the check.
+	 *                            Read-only listings (Top Lists, engaged-users avatars)
+	 *                            must pass false: the registry only reflects that *some*
+	 *                            id was rendered deliberately, not that *this* listing's
+	 *                            id is one the site chose to expose.
 	 * @return bool
 	 */
-	function wp_ulike_is_item_viewable( $item_ID, $item_type ) {
+	function wp_ulike_is_item_viewable( $item_ID, $item_type, $honor_shown = true ) {
 		$item_ID   = absint( $item_ID );
 		$item_type = WP_Ulike_Pulse_Registry::normalize_item_type( $item_type );
 
-		if ( wp_ulike_item_shown( $item_ID, $item_type ) ) {
+		if ( $honor_shown && wp_ulike_item_shown( $item_ID, $item_type ) ) {
 			return (bool) apply_filters( 'wp_ulike_is_item_viewable', true, $item_ID, $item_type );
 		}
 

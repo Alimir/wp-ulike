@@ -763,7 +763,7 @@ if( ! function_exists( 'wp_ulike_posts_um_profile_content' ) ){
 					echo '<div class="um-item">';
 					echo '<div class="um-item-link">';
 					echo '<i class="um-icon-ios-paper"></i>';
-					echo '<a href="' . esc_url( get_permalink() ) . '">' . esc_html( wp_ulike_encode_shortcode_brackets( get_the_title() ) ) . '</a>';
+					echo '<a href="' . esc_url( get_permalink() ) . '">' . wp_ulike_encode_shortcode_brackets( esc_html( get_the_title() ) ) . '</a>';
 					echo '</div>';
 					echo '<div class="um-item-meta">';
 					echo '<span>' . esc_html( get_the_date() ) . '</span>';
@@ -827,7 +827,7 @@ if( ! function_exists( 'wp_ulike_comments_um_profile_content' ) ){
 					echo '<div class="um-item-link">';
 					echo '<i class="um-icon-ios-chatboxes"></i>';
 					echo '<a href="' . esc_url( get_comment_link( $comment->comment_ID ) ) . '">' . wp_kses_post( wp_ulike_encode_shortcode_brackets( $comment->comment_content ) ) . '</a>';
-					echo '<em style="font-size:.7em;padding:0 10px;"><span class="um-faicon-quote-left"></span> ' . esc_html( wp_ulike_encode_shortcode_brackets( $comment->comment_author ) ) . ' <span class="um-faicon-quote-right"></span></em>';
+					echo '<em style="font-size:.7em;padding:0 10px;"><span class="um-faicon-quote-left"></span> ' . wp_ulike_encode_shortcode_brackets( esc_html( $comment->comment_author ) ) . ' <span class="um-faicon-quote-right"></span></em>';
 					echo '</div>';
 					echo '<div class="um-item-meta">';
 					echo '<span>' . esc_html( get_comment_date( '', $comment->comment_ID ) ) . '</span>';
